@@ -9,6 +9,8 @@ import TextArea from 'antd/lib/input/TextArea';
 // import { Console } from 'node:console';
 import AuthUtil from '../../../../utils/AuthUtil';
 import { downloadTemplate } from '../../setOut/downloadTemplate';
+import { patternTypeOptions } from '../../../../configuration/DictionaryOptions';
+import useRequest from '@ahooksjs/use-request';
 interface Column extends ColumnType<object> {
     editable?: boolean;
 }
@@ -28,6 +30,11 @@ export default function Lofting(): React.ReactNode {
     const getForm = (): FormInstance | null => {
         return formRef?.current;
     }
+    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
+        const data: [] = await RequestUtil.get(`/tower-science/drawProductSegment/getSegmentBySegmentGroupId`,{segmentGroupId:params.productSegmentId});
+        resole(data);
+    }), {})
+    const paragraphList: [] = data || [];
     const columns = [
         {
             key: 'id',
@@ -46,7 +53,13 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{record.segmentName}</span>
+                <Form.Item name={['data',index, "segmentId"]} initialValue={ record.segmentId }>
+                    <Select onChange={ () => rowChange(index) }>
+                        { paragraphList.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
+                        }) }
+                    </Select>
+                </Form.Item>
             )
         },
         {
@@ -56,7 +69,15 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             dataIndex: 'patternName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{record.patternName}</span>
+                <Form.Item name={['data',index, "pattern"]} initialValue={ record.pattern }>
+                   <Select onChange={ () => rowChange(index) }>
+                        { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id  }>
+                                { name }
+                            </Select.Option>
+                        }) }
+                    </Select>
+                </Form.Item>
             )
         },
         {
@@ -159,8 +180,8 @@ export default function Lofting(): React.ReactNode {
         { 
             title: '单段件数', 
             dataIndex: 'basicsPartNum',
-             key: 'basicsPartNum',
-             width: 120,
+            key: 'basicsPartNum',
+            width: 120,
             editable: true,
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "basicsPartNum"]} initialValue={_===-1?0:_}>
@@ -203,15 +224,10 @@ export default function Lofting(): React.ReactNode {
         
     ];
     const checkColor = (record: Record<string, any>, dataIndex: string) => {
-        // const red: number = record.redColumn.indexOf(dataIndex);
-        // if(red !== -1) {
-        //     return 'red';
-        // } else {
-        //     return 'normal'
-        // }
-        if( ([-1,0,'-1','0'].indexOf(record.length))!== -1){
-            return 'red'
-        }else{
+        const red: number = record.redColumn.indexOf(dataIndex);
+        if(red !== -1) {
+            return 'red';
+        } else {
             return 'normal'
         }
     }
@@ -267,8 +283,8 @@ export default function Lofting(): React.ReactNode {
             }
             else return {
                 ...col,
-                render:(_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                    <p>{ _ }</p>
+                render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                    <p className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  ''}>{_===-1?0:_}</p>
                 )
             }
         }
@@ -335,7 +351,7 @@ export default function Lofting(): React.ReactNode {
                         <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                             <Popconfirm
                                 title="确认删除?"
-                                onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure/${record.id}`).then(()=>{
+                                onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure`,{ids: record.id}).then(()=>{
                                     message.success('删除成功！');
                                     setRefresh(!refresh);
                                 })}
@@ -348,7 +364,7 @@ export default function Lofting(): React.ReactNode {
                         </Space>
                     )
                 }] }
-                requestData={{productSegmentId:params.productSegmentId,...filterValue}}
+                requestData={{segmentGroupId:params.productSegmentId,...filterValue}}
                 headTabs={ [] }
                 // onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
@@ -424,13 +440,14 @@ export default function Lofting(): React.ReactNode {
                             } else {
                                 const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
                                 let values = getForm()?.getFieldsValue(true).data;
-                                if(values) {
+                                if(values.length>0 && newRowChangeList.length>0) {
                                     let changeValues = values.filter((item: any, index: number) => {
                                         return newRowChangeList.indexOf(index) !== -1;
                                     }).map((item:any)=>{
                                         return {
                                             ...item,
-                                            productCategory: params.id
+                                            productCategory: params.id,
+                                            segmentGroupId: params.productSegmentId
                                         }
                                     })
                                     RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [ ...changeValues ]).then(res => {
@@ -439,6 +456,11 @@ export default function Lofting(): React.ReactNode {
                                         setRowChangeList([]);
                                         setRefresh(!refresh);    
                                     });
+                                }else{
+                                    setColumns(columnsSetting);
+                                    setEditorLock('编辑');
+                                    setRowChangeList([]);
+                                    setRefresh(!refresh); 
                                 }
                                 
                             }
@@ -447,21 +469,15 @@ export default function Lofting(): React.ReactNode {
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
                         <Popconfirm
                             title="确认删除?"
-                            onConfirm={ () => { 
-                                if(selectedKeys.length > 0) {
-                                    // RequestUtil.delete(`/tower-science/productStructure?productStructureId=${ record.id }`).then(res => {
-                                    //     message.success('删除成功');
-                                    //     history.go(0);
-                                    // }) 
-                                } else {
-                                    message.warning('请选择要删除的数据')
-                                }
-                                    
-                            }}
-                            okText="确认"
+                            onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure`,{ids: selectedKeys}).then(()=>{
+                                message.success('删除成功！');
+                                setRefresh(!refresh);
+                            })}
+                            okText="提交"
                             cancelText="取消"
+                            disabled={!(selectedKeys.length>0)}
                         >
-                            <Button type="primary" ghost>删除</Button>
+                            <Button type="primary" ghost  disabled={!(selectedKeys.length>0)}>删除</Button>
                         </Popconfirm>
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回上一级</Button>
                     </Space>
@@ -497,10 +513,11 @@ export default function Lofting(): React.ReactNode {
         setTableDataSource([]);
     }} width={1200} onOk={
         ()=>{
-            const values = form.getFieldsValue(true).data.map((item:any)=>{
+            const values = form.getFieldsValue(true).dataV.map((item:any)=>{
                 return {
                     ...item,
-                    productCategory: params.id
+                    productCategory: params.id,
+                    segmentGroupId: params.productSegmentId
                 }
             })
             RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [ ...values ]).then(res => {
@@ -513,59 +530,64 @@ export default function Lofting(): React.ReactNode {
     }>
         <Form form={form}>
             <Button onClick={()=>{
-                tableDataSource.push([{}])
+                tableDataSource.push([{length:0}])
                 setTableDataSource([...tableDataSource])
+                console.log(tableDataSource)
             }} type='primary' ghost>添加一行</Button>
             <Table
                 columns={[
                     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-                    { title: '段号', dataIndex: 'segmentName', key: 'segmentName', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-                        <Form.Item>
-                            <Input size="small"/>
+                    { title: '段号', dataIndex: 'segmentId', key: 'segmentId', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                        <Form.Item name={['dataV',index, "segmentId"]} initialValue={ _a }>
+                            <Select>
+                                { paragraphList.map((item: any) => {
+                                    return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
+                                }) }
+                            </Select>
                         </Form.Item>
                     )},
                     { title: '构件编号', dataIndex: 'code', key: 'code',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['data',index, "code"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "code"]} initialValue={ _ }>
                             <Input size="small"/>
                         </Form.Item>
                     ) },
                     { title: '材料名称', dataIndex: 'materialName', key: 'materialName',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['data',index, "materialName"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "materialName"]} initialValue={ _ }>
                             <Input size="small" />
                         </Form.Item>
                     ) },
                     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['data',index, "structureTexture"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "structureTexture"]} initialValue={ _ }>
                             <Input size="small" />
                         </Form.Item>
                     ) },
                     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['data',index, "structureSpec"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "structureSpec"]} initialValue={ _ }>
                             <Input size="small" />
                         </Form.Item>
                     ) },
                     { title: '长度（mm）', dataIndex: 'length', key: 'length',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['data',index, "length"]} initialValue={ _ }>
-                            <Input size="small" />
+                        <Form.Item name={['dataV',index, "length"]} initialValue={ record.length }>
+                            <InputNumber size="small" min={0}/>
                         </Form.Item>
                     ) },
                     { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['data',index, "basicsPartNum"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "basicsPartNum"]} initialValue={ _ }>
                             <Input size="small"/>
                         </Form.Item>
                     ) },
                     { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['data',index, "basicsWeight"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "basicsWeight"]} initialValue={ _ }>
                             <Input size="small" />
                         </Form.Item>
                     ) },
                     { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['data',index, "totalWeight"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "totalWeight"]} initialValue={ _ }>
                             <Input size="small" />
                         </Form.Item>
                     ) },
                     { title: '备注', dataIndex: 'description', key: 'description',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['data',index, "description"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "description"]} initialValue={ _ }>
                             <TextArea showCount rows={1} />
                         </Form.Item>
                     ) },

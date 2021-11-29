@@ -484,13 +484,13 @@ export default function Lofting(): React.ReactNode {
                         onChange: SelectChange
                     }
                 }}
-                requestData={{ productSegmentId: params.productSegmentId, ...filterValue }}
+                requestData={{ productSegmentGroupId: params.productSegmentId, ...filterValue }}
                 extraOperation={ <Space direction="horizontal" size="small">
                     <Button type="primary" ghost>导出</Button>
                     <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板') } ghost>模板下载</Button>
                     <Popconfirm
                         title="确认完成放样?"
-                        onConfirm={ () => RequestUtil.post(`/tower-science/productSegment/complete?productSegmentId=${ params.productSegmentId }`).then(res => {
+                        onConfirm={ () => RequestUtil.post(`/tower-science/productSegment/complete?productSegmentGroupId=${ params.productSegmentId }`).then(res => {
                             history.goBack();
                         }) }
                         okText="确认"
@@ -510,7 +510,7 @@ export default function Lofting(): React.ReactNode {
                                 'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                             }
                         }
-                        data={ { productSegmentId: params.productSegmentId } }
+                        data={ { productSegmentGroupId: params.productSegmentId } }
                         showUploadList={ false }
                         onChange={ (info) => {
                             if(info.file.response && !info.file.response?.success) {
@@ -561,10 +561,10 @@ export default function Lofting(): React.ReactNode {
                         title="确认删除?"
                         onConfirm={ () => { 
                             if(selectedKeys.length > 0) {
-                                // RequestUtil.delete(`/tower-science/productStructure?productStructureId=${ record.id }`).then(res => {
-                                //     message.success('删除成功');
-                                //     history.go(0);
-                                // }) 
+                                RequestUtil.delete(`/tower-science/productStructure?productStructureIdList=${selectedKeys.join(',')}`).then(res => {
+                                    message.success('删除成功');
+                                    history.go(0);
+                                }) 
                             } else {
                                 message.warning('请选择要删除的数据')
                             }

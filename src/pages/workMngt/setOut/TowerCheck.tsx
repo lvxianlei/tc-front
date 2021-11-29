@@ -293,7 +293,7 @@ export default function TowerCheck(): React.ReactNode {
         <Page
             path="/tower-science/productStructure/list"
             columns={ columnsSetting }
-            requestData={{ productSegmentId: params.productSegmentId }}
+            requestData={{ productSegmentGroupId: params.productSegmentId }}
             headTabs={ [] }
             refresh={ refresh }
             extraOperation={ <Space direction="horizontal" size="small">
@@ -301,7 +301,7 @@ export default function TowerCheck(): React.ReactNode {
                 <Popconfirm
                     title="确认完成校核?"
                     onConfirm={ () => { 
-                        RequestUtil.post<{}>(`/tower-science/productSegment/completed/check?productSegmentId=${ params.productSegmentId }`).then(res => {
+                        RequestUtil.post<{}>(`/tower-science/productSegment/completed/check?productSegmentGroupId=${ params.productSegmentId }`).then(res => {
                             history.goBack();
                         }) 
                     } }
@@ -310,9 +310,6 @@ export default function TowerCheck(): React.ReactNode {
                 >
                     <Button type="primary" ghost>完成校核</Button>
                 </Popconfirm>
-                
-                <Button type="primary" onClick={ () => downloadTemplate(`/tower-science/productSegment/segmentModelDownload?productSegmentId=${ params.productSegmentId }`, '模型', {}, true )} ghost>模型下载</Button>
-                <Button type="primary" onClick={ () => downloadTemplate(`/tower-science/productSegment/segmentDrawDownload?productSegmentId=${ params.productSegmentId }`, '样图', {}, true) } ghost>样图下载</Button>
                 <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
             </Space> }
             searchFormItems={ [

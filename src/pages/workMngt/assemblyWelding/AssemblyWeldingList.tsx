@@ -101,7 +101,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                         return '待开始';
                     case 2:
                         return '组焊中';
-                    case 4:
+                    case 3:
                         return '已完成';
                 }
             }    

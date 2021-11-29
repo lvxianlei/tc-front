@@ -101,6 +101,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
                     {
+                        value: null,
+                        label: "-"
+                    },
+                    {
                         value: -1,
                         label: "-"
                     },
@@ -171,6 +175,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'loftingStatus',
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
+                    {
+                        value: null,
+                        label: "-"
+                    },
                     {
                         value: -1,
                         label: "-"
@@ -359,7 +367,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
         columns={columnsSetting}
         onFilterSubmit={onFilterSubmit}
         filterValue={filterValue}
-        // extraOperation={<Button type="primary">导出</Button>}
+        exportPath="/tower-science/loftingTask/planLoftingExport"
         searchFormItems={[
             {
                 name: 'priority',

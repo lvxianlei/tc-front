@@ -28,7 +28,6 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     filterValue?: {} //查询条件
     readonly exportPath?: string; //导出接口
     sourceKey?: string,
-    isSunmryLine?: (result: IResponseData) => void;//添加计算行
 }
 
 export interface IResponseData {
@@ -72,10 +71,6 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                 size: pagination.pageSize || this.state.tablePagination?.pageSize,
                 type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
             })
-            // //添加底部计算行
-            // if (this.props.isSunmryLine) {
-            //     this.props.isSunmryLine(resData)
-            // }
             this.setState({
                 ...filterValues,
                 resData,

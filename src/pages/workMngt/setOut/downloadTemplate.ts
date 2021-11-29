@@ -6,7 +6,7 @@ import AuthUtil from "../../../utils/AuthUtil";
  * @protected
  * @description 下载模板
  */
-export function downloadTemplate(path: string, name: string, requestData?: {}, type: boolean = false,): Promise<void> {
+export function downloadTemplate(path: string, name: string, requestData?: {}, type: boolean = false, requestType: string = ""): Promise<void> {
     return fetch(`${ process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/') }${ path.replace(/^\/*/, '') }`, {
         mode: 'cors',
         method: 'POST',
@@ -16,7 +16,7 @@ export function downloadTemplate(path: string, name: string, requestData?: {}, t
           'Tenant-Id': AuthUtil.getTenantId(),
           'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
         },
-        body: stringify(requestData || {})
+        body: requestType === "array"?JSON.stringify(requestData||{}): stringify(requestData||{})
     }).then((res) => {
         if (res.status === 200) {
             return res.blob();
