@@ -555,6 +555,15 @@
             "disabled": true
         },
         {
+            "title": "税率(%)",
+            "dataIndex": "taxRate"
+        },
+        {
+            "title": "税额(元)",
+            "dataIndex": "taxMoney",
+            "type": "number"
+        },
+        {
             "title": "金额(元)",
             "dataIndex": "moneyCount",
             "type": "number",
