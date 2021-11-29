@@ -74,8 +74,6 @@ export default function BoltCheck(): React.ReactNode {
     const successCheck = async () => {
         await RequestUtil.put('/tower-science/boltRecord/completeCheck', {
             productCategoryId: params.id,
-        }, {
-            'Content-Type': 'application/x-www-form-urlencoded',
         })
     }
     return (
