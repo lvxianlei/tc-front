@@ -191,11 +191,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             <PopTableContent data={{
                 ...(addMaterial as any),
                 columns: (addMaterial as any).columns.map((item: any) => {
-                    if (item.dataIndex === "standardName") {
+                    if (item.dataIndex === "standard") {
                         return ({
                             ...item,
                             type: "select",
-                            enum: []
+                            enum: materialStandardEnum
                         })
                     }
                     return item

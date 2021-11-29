@@ -433,14 +433,14 @@
     { // 付款申请
       "name": "付款申请",
       "path": "/project/payment",
-      "module": "./pages/payment/index",
+      "module": "./pages/project/payment/index",
       "exact": true,
       "authority": "project_payment_application"
     },
     { // 付款申请详情
       "name": "付款申请详情",
       "path": "/project/payment/detail/:id",
-      "module": "./pages/payment/Overview",
+      "module": "./pages/project/payment/Overview",
       "exact": true,
       "authority": "project"
     },
@@ -1934,14 +1934,14 @@
     },
     { // 请款申请管理
       "name": "请款申请管理",
-      "path":  "/fundApply/infomation",
+      "path": "/fundApply/infomation",
       "module": "./pages/fundApplyInfomation/index",
       "exact": true,
       "authority": "payment_application_management_list"
     },
     { // 请款申请管理
       "name": "付款记录",
-      "path":  "/fundApply/record",
+      "path": "/fundApply/record",
       "module": "./pages/fundApplyInfomation/fundRecord",
       "exact": true,
       "authority": "payment_application_management_payment_record"
