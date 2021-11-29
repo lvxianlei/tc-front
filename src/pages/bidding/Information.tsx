@@ -30,6 +30,7 @@ const columns = [
         title: '项目名称',
         width: 120,
         dataIndex: 'projectName',
+        isResizable: true,
         render: (_: undefined, record: any): React.ReactNode => {
             return <Link to={`/bidding/information/detail/${record.id}`}>{record.projectName}</Link>
         }

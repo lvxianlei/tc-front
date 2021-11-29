@@ -122,10 +122,15 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
         return {
             rowKey: this.getTableRowKey(),
             bordered: false,
-            pagination: false,
+            pagination: {
+                ...this.state.tablePagination || false,
+                showSizeChanger: true,
+                showTotal: (total) => `共${total} 条记录`,
+            },
             onChange: this.onTableChange,
             dataSource: this.getTableDataSource(item),
-            columns: this.getTableColumns(item)
+            columns: this.getTableColumns(item),
+            onRow: () => ({ className: styles.tableRow })
         };
     }
 
@@ -196,12 +201,6 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
                     <Space className={layoutStyles.width100} direction="vertical" size="large">
                         {this.renderExtraOperationContent(item)}
                         {this.renderTableContent(item)}
-                        <Pagination
-                            {...this.state.tablePagination}
-                            showSizeChanger={true}
-                            style={{ float: "right" }}
-                            showTotal={(total) => `共${total} 条记录`}
-                        />
                     </Space>
                 </Card>
             </Space>
