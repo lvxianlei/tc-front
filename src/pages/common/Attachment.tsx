@@ -133,7 +133,8 @@ export default forwardRef(function ({
                             originalName: uploadOSSUrlInfo?.originalName || "",
                             fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
                             fileSize: uploadOSSUrlInfo?.fileSize || "",
-                            downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
+                            downloadUrl: uploadOSSUrlInfo?.downloadUrl || "",
+                            id: uploadOSSUrlInfo?.id || "",
                         })
                     }
                     return item

@@ -27,13 +27,14 @@ interface Column extends ColumnType<object> {
 
 export default function BoltList(): React.ReactNode {
     const history = useHistory();
-    const params = useParams<{ id: string, boltId: string }>();
+    const params = useParams<{ id: string, boltId: string, status: string, boltLeader: string }>();
     const [dataSource, setDataSource] = useState<[]>([]);
     const [editorLock, setEditorLock] = useState('编辑');
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
     const [form] = Form.useForm();
+    const userId = AuthUtil.getUserId();
 
     const columns = [
         {
@@ -235,7 +236,7 @@ export default function BoltList(): React.ReactNode {
                             okText="确认"
                             cancelText="取消"
                         >
-                            <Button type="link">删除</Button>
+                            <Button type="link"  hidden={params.status === '2' && params.boltLeader === userId ? false : true}>删除</Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -277,7 +278,7 @@ export default function BoltList(): React.ReactNode {
                 <Button type="primary" onClick={() => downloadTemplate('/tower-science/boltRecord/exportTemplate', '螺栓导入模板')} ghost>模板下载</Button>
             </Space>
             <Space direction="horizontal" size="small" className={`${styles.topbtn} ${styles.btnRight}`}>
-                <Button type="primary" ghost onClick={() => {
+                <Button type="primary"  hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost onClick={() => {
                     if (editorLock === '编辑') {
                         setColumns(columns);
                         setEditorLock('锁定');
@@ -329,7 +330,7 @@ export default function BoltList(): React.ReactNode {
                             'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                         }
                     }
-                    data={{ basicHeightId: params.id, productCategoryId: params.id }}
+                    data={{ basicHeightId: params.id, productCategoryId: params.boltId }}
                     showUploadList={false}
                     onChange={(info) => {
                         if (info.file.response && !info.file.response?.success) {
@@ -346,9 +347,9 @@ export default function BoltList(): React.ReactNode {
                         }
                     }}
                 >
-                    <Button type="primary" ghost>导入</Button>
+                    <Button type="primary"  hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost>导入</Button>
                 </Upload>
-                {editorLock === '锁定' ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => getDataSource()} />}
+                {editorLock === '锁定' ? <Button type="primary"  hidden={params.status === '2' && params.boltLeader === userId ? false : true} disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => getDataSource()} />}
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </Space>
             <Form form={form}>
