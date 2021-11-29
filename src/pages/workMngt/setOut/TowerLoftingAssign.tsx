@@ -247,7 +247,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                     }]} style={ { width: '50%', display: 'inline-block' } }>
                                     <Select placeholder="请选择" style={{width:'120px'}}>
                                         { this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                            return <Select.Option key={ item.id } value={ item.id + '-' + item.name }>{ item.name }</Select.Option>
                                         }) }
                                     </Select>
                                 </Form.Item>
@@ -269,7 +269,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                     }]} style={ { width: '50%', display: 'inline-block' } }>
                                     <Select placeholder="请选择" style={{width:'120px'}}>
                                         { this.state?.checkUser && this.state.checkUser.map((item: any) => {
-                                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                            return <Select.Option key={ item.id } value={ item.id + '-' + item.name }>{ item.name }</Select.Option>
                                         }) }
                                     </Select>
                                 </Form.Item>
