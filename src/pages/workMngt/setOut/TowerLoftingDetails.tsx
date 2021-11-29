@@ -222,7 +222,7 @@ export default function TowerLoftingDetails(): React.ReactNode {
         path="/tower-science/productStructure/list"
         columns={ columns }
         headTabs={ [] }
-        requestData={ { productSegmentId: params.productSegmentId } }
+        requestData={ { productSegmentGroupId: params.productSegmentId } }
         extraOperation={ 
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
                 {/* <Button type="primary">导出</Button> */}

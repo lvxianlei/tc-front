@@ -29,6 +29,10 @@ interface IData {
     readonly id?: string;
 }
 
+export interface ISegmentNameList {
+    readonly id?: string;
+}
+
 export default function AssemblyWeldingListing(): React.ReactNode {
     const towerColumns = [
         { 
@@ -160,6 +164,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const location = useLocation<{ status: number }>();
     const match = useRouteMatch();
     const [ isExport, setIsExport ] = useState(false);
+    const [ segmentNameList, setSegmentNameList ] = useState<ISegmentNameList[]>([]);
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, ...pagination });
@@ -183,10 +188,15 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 { location.state.status === 2 ? <>
                     <Button type="primary" onClick={ () => setIsExport(true) } ghost>导出</Button>
                     <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '组焊模板') } ghost>模板下载</Button>
-                    <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/submitForVerification`, { weldingId: params.id }).then(res => {
+                    <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
                         history.goBack();
                     }) } >完成组焊清单</Button>
-                    <Button type="primary" onClick={ () => { setVisible(true); setName('添加组焊'); } }>添加组焊</Button>
+                    <Button type="primary" onClick={ async () => { 
+                        setVisible(true); 
+                        setName('添加组焊'); 
+                        const data: ISegmentNameList[] = await RequestUtil.get(`/tower-science/welding/getWeldingSegment?weldingId=${ params.id }`);
+                        setSegmentNameList(data);
+                    } }>添加组焊</Button>
                     <Upload 
                         action={ () => {
                             const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
@@ -241,7 +251,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <CommonTable dataSource={ paragraphData } columns={ paragraphColumns } pagination={ false }/>
             </DetailContent>
         </Spin>
-        { visible ? <AssemblyWeldingNew id={ params.id } segmentId={ record.id } record={ record } productCategoryId={ params.productCategoryId } name={ name } updateList={ () => history.go(0) } visible={ visible } modalCancel={ () => setVisible(false) }/> : null}
+        { visible ? <AssemblyWeldingNew id={ params.id } segmentId={ record.id } record={ record } productCategoryId={ params.productCategoryId } name={ name } updateList={ () => history.go(0) } visible={ visible } modalCancel={ () => setVisible(false) } segmentNameList={segmentNameList}/> : null}
         <Modal 
             visible={urlVisible} 
             onOk={()=>{

@@ -103,6 +103,11 @@ module.exports = {
         defaults: false, // load '.env.defaults' as the default values if empty.
       })
     ),
+    // addWebpackPlugin(
+    //   new TerserPlugin({
+    //     parallel: true
+    //   })
+    // ),
     addWebpackPlugin(new AntdDayjsWebpackPlugin()),
     addWebpackPlugin(new DefinePlugin({
       "process.env.REACT_APP_ENV": envConfig.parsed.REQUEST_API_PATH_PREFIX

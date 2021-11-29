@@ -9,7 +9,7 @@ import { Space, Button, Modal, Row, Col, Input, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import UploadModal from './UploadModal';
 import { FileProps } from '../../common/Attachment';
@@ -21,6 +21,7 @@ export default function ModelList(): React.ReactNode {
     const [ visible, setVisible ] = useState(false);
     const [ segmentName, setSegmentName ] = useState('');
     const [ segmentId, setSegmentId ] = useState('');
+    const location = useLocation<{ status: number }>();
 
     const columns = [
         {
@@ -60,18 +61,18 @@ export default function ModelList(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 250,
+            width: 150,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     <Button type="link" onClick={ async ()  => {
                         const data: FileProps = await RequestUtil.get(`/tower-science/productSegment/segmentModelDownload?segmentRecordId=${ record.id }`);
                         window.open(data?.downloadUrl)
                     }}>下载</Button>
-                    <Button type="link" onClick={ () => {
+                    { location.state.status === 1 || location.state.status === 2 ? <Button type="link" onClick={ () => {
                         setVisible(true);
                         setSegmentName(record.segmentName);
                         setSegmentId(record.id)
-                    } }>编辑</Button>
+                    } }>编辑</Button> : null}
                 </Space> 
             )
         }
@@ -86,7 +87,7 @@ export default function ModelList(): React.ReactNode {
             requestData={{ productCategoryId: params.id }}
             extraOperation={ <Space direction="horizontal" size="small">
                 <Button type="primary" ghost>导出</Button>
-                <UploadModal id={ params.id } path="/tower-science/productSegment/segmentModelUpload" updateList={ () => setRefresh(!refresh) }/>
+                { location.state.status === 1 || location.state.status === 2 ? <UploadModal id={ params.id } path="/tower-science/productSegment/segmentModelUpload" updateList={ () => setRefresh(!refresh) } /> : null}
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </Space> }
             searchFormItems={ [] }

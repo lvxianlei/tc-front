@@ -61,9 +61,9 @@ export default function PoleInformation(): React.ReactNode {
                     case 1:
                         return '待开始';
                     case 2:
-                        return '配段中';
+                        return '待配段';
                     case 3:
-                        return '出单中';
+                        return '待出单';
                     case 4:
                         return '已完成';
                 }
