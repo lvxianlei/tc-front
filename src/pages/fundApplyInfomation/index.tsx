@@ -157,7 +157,7 @@
                                  <span style={{marginLeft:"20px"}}>请款金额总计：{data ?data.totalSumMoney : null}元</span>
                              }
                  </>}
-                //   isSunmryLine={addList}
+                  isSunmryLine={addList}
                  columns={[
                      ...fundListColumns.map((item: any) => {
                          if (item.dataIndex === 'payStatus') {

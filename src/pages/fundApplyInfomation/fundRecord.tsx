@@ -120,7 +120,7 @@
                  extraOperation={(data: any) => <>
                     金额合计：{data ? Number(data.totalSumMoney).toFixed(2) : null}元
                 </>}
-                // isSunmryLine={addList}
+                isSunmryLine={addList}
                  columns={[
                      ...fundRecordColumns.map((item: any) => {
                         if (item.dataIndex === 'payType') {
