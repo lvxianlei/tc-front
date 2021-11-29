@@ -1,10 +1,11 @@
 import React, { useRef, useState, } from "react"
 import { Button, message, Modal, Popconfirm, Image, } from 'antd'
-import { Attachment, Page } from '../../common'
+import { Attachment, CommonTable, Page } from '../../common'
 import { useHistory, useParams, } from "react-router-dom"
 import RequestUtil from "../../../utils/RequestUtil"
 import { downLoadFile } from "../../../utils";
 import { AttachmentRef, FileProps } from '../../common/Attachment';
+import useRequest from "@ahooksjs/use-request"
 export default function TemplateDetail() {
     const history = useHistory()
     const params: any = useParams<{ id: string, productCategoryId: string }>()
@@ -12,6 +13,14 @@ export default function TemplateDetail() {
     const [isImgModal, setIsImgModal] = useState<boolean>(false);
     const [imgUrl, setImgUrl] = useState<string>('');
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
+    const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any[] = await RequestUtil.get(`/tower-science/loftingTemplate/record/${params.id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }))
     const columns: any[] = [
         {
             title: '序号',
@@ -119,40 +128,33 @@ export default function TemplateDetail() {
     }
     return (
         <>
-            <Page
-                path={`/tower-science/loftingTemplate/record/${params.id}`}
-                columns={columns}
-                refresh={refresh}
-                extraOperation={
-                    <div>
-                        {/* <Button type="primary" ghost>上传</Button> */}
-                        <Attachment isTable={false} ref={attchsRef} onDoneChange={(dataInfo: FileProps[]) => {
-                            console.log(attchsRef.current.getDataSource(), '0000000')
-                            let fileList = attchsRef.current.getDataSource().map((item, index) => {
-                                return {
-                                    name: item.originalName,
-                                    fileId: item.id,
-                                    templateId: params.id,
-                                    productCategoryId: params.productCategoryId,
-                                    createUser: sessionStorage.getItem('USER_ID') || '',
-                                    createUserName: sessionStorage.getItem('USER_NAME') || '',
-                                }
-                            })
-                            if (!fileList.length) {
-                                return;
-                            }
-                            RequestUtil.post(`/tower-science/loftingTemplate/upload`, [...fileList]).then(res => {
-                                if (res) {
-                                    message.success('上传成功');
-                                    setRefresh(!refresh);
-                                }
-                            })
-                        }}><Button type="primary" ghost>上传</Button></Attachment>
-                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
-                    </div>
-                }
-                searchFormItems={[]}
-            />
+            <div>
+                {/* <Button type="primary" ghost>上传</Button> */}
+                <Attachment isTable={false} ref={attchsRef} onDoneChange={(dataInfo: FileProps[]) => {
+                    console.log(attchsRef.current.getDataSource(), '0000000')
+                    let fileList = attchsRef.current.getDataSource().map((item, index) => {
+                        return {
+                            name: item.originalName,
+                            fileId: item.id,
+                            templateId: params.id,
+                            productCategoryId: params.productCategoryId,
+                            createUser: sessionStorage.getItem('USER_ID') || '',
+                            createUserName: sessionStorage.getItem('USER_NAME') || '',
+                        }
+                    })
+                    if (!fileList.length) {
+                        return;
+                    }
+                    RequestUtil.post(`/tower-science/loftingTemplate/upload`, [...fileList]).then(res => {
+                        if (res) {
+                            message.success('上传成功');
+                            setRefresh(!refresh);
+                        }
+                    })
+                }}><Button type="primary" ghost>上传</Button></Attachment>
+                <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
+            </div>
+            <CommonTable columns={columns} dataSource={data} />
             <Modal visible={isImgModal} onCancel={() => { cancelModal() }} footer={false}>
                 <Image src={imgUrl} preview={false} />
             </Modal>
