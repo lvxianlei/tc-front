@@ -7,7 +7,7 @@ import { Page } from '../../common';
 export default function BoltCheck(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const history = useHistory()
-    const columns:any = [
+    const columns: any = [
         {
             title: '序号',
             dataIndex: 'index',
@@ -74,6 +74,8 @@ export default function BoltCheck(): React.ReactNode {
     const successCheck = async () => {
         await RequestUtil.put('/tower-science/boltRecord/completeCheck', {
             productCategoryId: params.id,
+        }, {
+            'Content-Type': 'application/x-www-form-urlencoded',
         })
     }
     return (
