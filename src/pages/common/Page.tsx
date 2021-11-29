@@ -62,7 +62,8 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         };
     }
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        this.setState({ loading: true })
+        // 切换tab清空列表数据
+        this.setState({ loading: true, tableDataSource: [] })
         try {
             const sourceDataKey: string[] = this.props.sourceKey?.split(".") || [];
             //是否底部计算

@@ -222,10 +222,6 @@
         {
             "title": "确认方",
             "dataIndex": "confirmer"
-        },
-        {
-            "title": "备注",
-            "dataIndex": "description"
         }
     ]
 }
