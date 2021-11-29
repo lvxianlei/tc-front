@@ -99,7 +99,7 @@ export default forwardRef(function ({
         }
     }), { manual: true })
 
-    useEffect(() => setAttachs(dataSource.map(item => ({ ...item, uid: item.id, loading: false }))), [JSON.stringify(dataSource)])
+    useEffect(() => setAttachs(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || []), [JSON.stringify(dataSource)])
 
     const deleteAttachData = useCallback((uid: string) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== uid : item.id !== uid)), [setAttachs, attchs])
 
