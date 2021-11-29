@@ -25,8 +25,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     requestData?: {}
     refresh?: boolean//刷新
     filterValue?: {} //查询条件
-    sourceKey?: string,
-    isSunmryLine?: (result:IResponseData) => void;//添加计算行
+    sourceKey?: string
 }
 
 export interface IResponseData {
@@ -67,10 +66,6 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                 size: pagination.pageSize || this.state.tablePagination?.pageSize,
                 type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
             })
-            //添加底部计算行
-            if(this.props.isSunmryLine){
-                this.props.isSunmryLine(resData)
-            }
             this.setState({
                 ...filterValues,
                 resData,

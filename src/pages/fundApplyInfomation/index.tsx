@@ -3,7 +3,7 @@
  * 2021/11/22
  */
  import React, { useState ,useRef} from 'react';
- import { Button, Input, DatePicker, Radio,Select ,Form,TreeSelect} from 'antd'
+ import { Button, Input, DatePicker, Radio,Select ,Form,TreeSelect,Table} from 'antd'
  // import { useHistory } from 'react-router-dom'
  import { Page } from '../common'
  import { fundListColumns, approvalStatus,payStatuOptions } from "./fundListHead.json"
@@ -50,7 +50,6 @@
          value.payStatus=payStatus;
          return value
      }
-     
      // tab切换
      const operationChange = (event: any) => {
          setPayStatus(parseFloat(`${event.target.value}`));
@@ -61,13 +60,20 @@
         setAddVisible(false);
         setRefresh(!refresh);
      }
-     //表格增加底部计算
-    const addList = (data:any)=> {
-        //如果没有数据
-        if(!data.payApplyListVOIPage.records.length){
+    //查看详情
+    const viewShow = (record:{id:string})=>{
+        setVisibleOverView(true);
+        setPayApplyId(record.id);
+        setTimeout(()=>{
+            viewRef.current?.getDetail()
+        }) 
+    }
+    //table footer
+    const footerElement = (data:any)=>{
+        if(!data.length){
             return;
         }
-        const records = data.payApplyListVOIPage.records;
+        const records = data;
         let sumMoney=0,
                 money=0,
                 payMoney=0;
@@ -80,21 +86,14 @@
         fundListColumns.forEach((item:any)=>{
             list[item.dataIndex]=""
         });
-        list.id=1000;
+        list.key="10001";
         list.payApplyNumber = "合计";
-        list.Sunmry=true;
         list.sumMoney=sumMoney;
         list.money=money;
         list.payMoney=payMoney;
-        records.push(list)
-    }
-    //查看详情
-    const viewShow = (record:{id:string})=>{
-        setVisibleOverView(true);
-        setPayApplyId(record.id);
-        setTimeout(()=>{
-            viewRef.current?.getDetail()
-        }) 
+        return (
+            <Table showHeader={false} columns={fundListColumns} dataSource={[list]}></Table>
+        )
     }
      return (
          <>
@@ -157,7 +156,10 @@
                                  <span style={{marginLeft:"20px"}}>请款金额总计：{data ?data.totalSumMoney : null}元</span>
                              }
                  </>}
-                  isSunmryLine={addList}
+                //   isSunmryLine={addList}
+                  tableProps={
+                    {footer:footerElement}
+                }
                  columns={[
                      ...fundListColumns.map((item: any) => {
                          if (item.dataIndex === 'payStatus') {
