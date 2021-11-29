@@ -7,7 +7,7 @@ import { Page } from '../../common';
 export default function BoltCheck(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const history = useHistory()
-    const columns:any = [
+    const columns: any = [
         {
             title: '序号',
             dataIndex: 'index',

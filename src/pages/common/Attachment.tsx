@@ -99,7 +99,7 @@ export default forwardRef(function ({
         }
     }), { manual: true })
 
-    useEffect(() => setAttachs(dataSource.map(item => ({ ...item, uid: item.id, loading: false }))), [JSON.stringify(dataSource)])
+    useEffect(() => setAttachs(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || []), [JSON.stringify(dataSource)])
 
     const deleteAttachData = useCallback((uid: string) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== uid : item.id !== uid)), [setAttachs, attchs])
 
@@ -133,7 +133,8 @@ export default forwardRef(function ({
                             originalName: uploadOSSUrlInfo?.originalName || "",
                             fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
                             fileSize: uploadOSSUrlInfo?.fileSize || "",
-                            downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
+                            downloadUrl: uploadOSSUrlInfo?.downloadUrl || "",
+                            id: uploadOSSUrlInfo?.id || "",
                         })
                     }
                     return item

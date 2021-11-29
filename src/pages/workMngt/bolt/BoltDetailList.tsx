@@ -2,11 +2,12 @@ import { Button, Col, Input, message, Modal, Popconfirm, Row, Select } from 'ant
 import TextArea from 'rc-textarea';
 import React, { useState } from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
+import AuthUtil from '../../../utils/AuthUtil';
 import RequestUtil from '../../../utils/RequestUtil';
 import { Page } from '../../common';
 
 export default function BoltCheck(): React.ReactNode {
-    const params = useParams<{ id: string, }>();
+    const params = useParams<{ id: string, status: string,boltLeader:string }>();
     const history = useHistory()
     const columns: any[] = [
         {
@@ -69,11 +70,13 @@ export default function BoltCheck(): React.ReactNode {
                             cancelText="否"
                         >
                             <span
+                                hidden={params.status === '2' && params.boltLeader === userId ? false : true}
                                 style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
                             >删除</span>
                         </Popconfirm>
                         <span
                             style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
+                            hidden={params.status === '2' && params.boltLeader === userId ? false : true}
                             onClick={() => {
                                 setId(item.id)
                                 setbasicHeight(item.basicHeight)
@@ -86,7 +89,7 @@ export default function BoltCheck(): React.ReactNode {
                         <span
                             style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
                             onClick={() => {
-                                history.push(`/workMngt/boltList/boltListing/${params.id}/${item.id}`)
+                                history.push(`/workMngt/boltList/boltListing/${params.id}/${item.id}/${params.boltLeader}/${params.status}`)
                             }}
                         >螺栓明细</span>
                     </div>
@@ -94,6 +97,7 @@ export default function BoltCheck(): React.ReactNode {
             }
         },
     ]
+    const userId = AuthUtil.getUserId();
     const [id, setId] = useState<string | null>(null);//添加弹框显示
     const [visible, setVisible] = useState<boolean>(false);//添加弹框显示
     const [basicHeight, setbasicHeight] = useState<number | string>('');//呼高
@@ -172,8 +176,20 @@ export default function BoltCheck(): React.ReactNode {
                 exportPath={`/tower-science/boltRecord/exportBoltList/${params.id}`}
                 extraOperation={
                     <div>
-                        <Button type="primary" ghost onClick={() => { successCheck() }} style={{ marginLeft: 10, }}>完成</Button>
-                        <Button type="primary" ghost onClick={() => { setVisible(true); getBoltlist() }} style={{ marginLeft: 10, }}>添加</Button>
+                        <Button
+                            type="primary"
+                            ghost
+                            onClick={() => { successCheck() }}
+                            style={{ marginLeft: 10, }}
+                            hidden={params.status === '2' && params.boltLeader === userId ? false : true}
+                        >完成</Button>
+                        <Button
+                            type="primary"
+                            ghost
+                            onClick={() => { setVisible(true); getBoltlist() }}
+                            style={{ marginLeft: 10, }}
+                            hidden={params.status === '2' && params.boltLeader === userId ? false : true}
+                        >添加</Button>
                         <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
                     </div>
                 }
