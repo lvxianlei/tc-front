@@ -73,7 +73,7 @@ export default function Edit() {
         <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
     ]}>
         <Spin spinning={loading}>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="开票信息" />
             <BaseInfo
                 form={baseInfo}
                 columns={invoicingInfoHead.map((item: any) => {
