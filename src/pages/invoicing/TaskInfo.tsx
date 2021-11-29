@@ -33,6 +33,12 @@ export default function Overview() {
                         }))
                     })
                 }
+                if (item.dataIndex === "weigh") {
+                    if (data?.weigh > data?.reasonWeight) {
+                        return ({ ...item, contentStyle: { backgroundColor: "red" } })
+                    }
+                    return item
+                }
                 return item
             })} dataSource={data || {}} />
 

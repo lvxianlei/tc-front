@@ -34,7 +34,7 @@ export default function Edit() {
                 return item
             })} dataSource={data || {}} />
             <DetailTitle title="开票明细" />
-            <CommonTable columns={billingHead} dataSource={data?.invoicingDetailVos || []} />
+            <CommonTable haveIndex columns={billingHead} dataSource={data?.invoicingDetailVos || []} />
             <Attachment dataSource={data?.attachInfoVos} />
         </Spin>
     </DetailContent>

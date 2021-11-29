@@ -443,6 +443,34 @@
             "disabled": true
         },
         {
+            "title": "合同开票状态",
+            "dataIndex": "contractType",
+            "disabled": true,
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "不下计划"
+                },
+                {
+                    "value": 2,
+                    "label": "未下计划"
+                },
+                {
+                    "value": 3,
+                    "label": "未下完计划"
+                },
+                {
+                    "value": 4,
+                    "label": "未发完货"
+                },
+                {
+                    "value": 5,
+                    "label": "已发完货"
+                }
+            ]
+        },
+        {
             "title": "币种",
             "dataIndex": "",
             "disabled": true
@@ -490,15 +518,19 @@
     ],
     "billingHead": [
         {
+            "title": "发票号码",
+            "dataIndex": "ticketNumber"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "ticketTypeName"
+        },
+        {
             "title": "产品名称(票面)",
             "dataIndex": "productName"
         },
         {
-            "title": "生产名称(实际)",
-            "dataIndex": "productionName"
-        },
-        {
-            "title": "规格型号",
+            "title": "型号规格",
             "dataIndex": "model"
         },
         {
@@ -510,32 +542,32 @@
             "dataIndex": "company"
         },
         {
-            "title": "重量(吨)",
+            "title": "数量",
             "dataIndex": "weight",
-            "type": "number",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入重量..."
-                }
-            ]
+            "type": "number"
         },
         {
             "title": "单价（元/吨）",
             "dataIndex": "money",
-            "type": "number",
-            "disabled": true
+            "type": "number"
         },
         {
             "title": "金额(元)",
             "dataIndex": "moneyCount",
-            "type": "number",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入金额..."
-                }
-            ]
+            "type": "number"
+        },
+        {
+            "title": "税率(%)",
+            "dataIndex": "taxRate"
+        },
+        {
+            "title": "税额(元)",
+            "dataIndex": "taxMoney",
+            "type": "number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
         }
     ],
     "billingHeader": [
