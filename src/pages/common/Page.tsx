@@ -76,9 +76,6 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
             // if (this.props.isSunmryLine) {
             //     this.props.isSunmryLine(resData)
             // }
-            console.log( this.props.sourceKey ? sourceDataKey.reduce((acc, key) => {
-                return acc && key in acc ? acc[key] : null;
-            }, (resData as any)) : resData.records || resData)
             this.setState({
                 ...filterValues,
                 resData,
