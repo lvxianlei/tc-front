@@ -53,12 +53,13 @@
             viewRef.current?.getDetail()
         }) 
     }
-        //table footer
-    const footerElement = (data:any)=>{
-        if(!data.length){
+    //表格增加底部计算
+    const addList = (data:any)=> {
+        //如果没有数据
+        if(!data.paymentDetailListVOIPage.records.length){
             return;
         }
-        const records = data;
+        const records = data.paymentDetailListVOIPage.records;
         let payMoney=0;
         records.forEach((item:any) => {
             payMoney= (payMoney*100+Number(item.payMoney)*100)/100;
@@ -67,13 +68,11 @@
         fundRecordColumns.forEach((item:any)=>{
             list[item.dataIndex]=""
         });
-        list.key=1000;
+        list.id=1000;
         list.paymentNumber = "合计";
         list.Sunmry=true;
         list.payMoney=payMoney;
-        return (
-            <Table showHeader={false} columns={fundRecordColumns} dataSource={[list]}></Table>
-        )
+        records.push(list)
     }
      return (
          <>
@@ -121,10 +120,7 @@
                  extraOperation={(data: any) => <>
                     金额合计：{data ? Number(data.totalSumMoney).toFixed(2) : null}元
                 </>}
-                // isSunmryLine={addList}
-                tableProps={
-                    {footer:footerElement}
-                }
+                isSunmryLine={addList}
                  columns={[
                      ...fundRecordColumns.map((item: any) => {
                         if (item.dataIndex === 'payType') {

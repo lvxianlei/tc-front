@@ -39,7 +39,8 @@ export default function AddModal(props: AddModalProps): JSX.Element {
             payApplyId:props.payApplyId || 0,
             attachInfoDTOList:attchsRef.current?.getDataSource()
         });
-        setLoading(false)
+        setLoading(false);
+        addFund.resetFields();
         props.onOk && props.onOk()
       }catch{
         setLoading(false)
