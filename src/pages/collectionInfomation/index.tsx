@@ -154,7 +154,7 @@ export default function CollectionInfomation(): React.ReactNode {
                                 {approvalStatus.map((item: any, index: number) => <Radio.Button value={item.value} key={`${index}_${item.value}`}>{item.label}</Radio.Button>)}
                             </Radio.Group>
                         </div>
-                        <div style={{marginLeft: '1200px'}}>
+                        <div style={{marginLeft: '20px'}}>
                             <Button type="primary" style={{marginRight: 20}} onClick={() => setVisible(true)}>新增</Button>
                             <Upload 
                                 accept=".xls,.xlsx"

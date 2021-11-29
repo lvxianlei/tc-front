@@ -29,38 +29,41 @@ export default function SampleDrawList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'taskNum',
+            key: 'name',
             title: '大样图工艺卡名称',
             width: 100,
-            dataIndex: 'taskNum'
+            dataIndex: 'name'
         },
         {
-            key: 'externalTaskNum',
+            key: 'segmentName',
             title: '段包信息',
             width: 100,
-            dataIndex: 'externalTaskNum'
+            dataIndex: 'segmentName'
         },
         {
-            key: 'saleOrderNumber',
+            key: 'createTime',
             title: '上传时间',
             width: 100,
-            dataIndex: 'saleOrderNumber'
+            dataIndex: 'createTime'
         },
         {
-            key: 'internalNumber',
+            key: 'createUserName',
             title: '上传人',
             width: 100,
-            dataIndex: 'internalNumber'
+            dataIndex: 'createUserName'
         },
         {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            width: 230,
+            width: 50,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentModelDownload', '小样图', {segmentRecordId: record.id}) } ghost>下载</Button>
+                    <Button type="link" onClick={ async () => {
+                        const data: any = await RequestUtil.get(`/tower-science/productSegment/segmentModelDownload?segmentRecordId=${ record.id }`);
+                        window.open(data?.downloadUrl)}
+                    } >下载</Button>
                 </Space>
             )
         }
@@ -71,7 +74,7 @@ export default function SampleDrawList(): React.ReactNode {
             columns={columns}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={ { smallSampleStatus: location.state } }
+            requestData={ { productCategoryId: params.id } }
             tableProps={{
                 pagination: false,
                 rowSelection: {
@@ -83,7 +86,7 @@ export default function SampleDrawList(): React.ReactNode {
             extraOperation={
                 <Space>
                 {/* <Button type="primary">导出</Button> */}
-                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentModelDownload', '小样图', {segmentRecordId: selectedKeys}) } ghost>下载</Button>
+                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/batchSegmentModelDownload', '大样图工艺卡', {segmentRecordIdList: selectedKeys} , true, "array") } ghost disabled={!(selectedKeys.length>0)}>下载</Button>
                 <Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>
                 </Space>
             }

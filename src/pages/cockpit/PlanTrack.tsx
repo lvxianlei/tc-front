@@ -91,6 +91,10 @@ export default function PlanTrack(): React.ReactNode {
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
                     {
+                        value: null,
+                        label: "-"
+                    },
+                    {
                         value: -1,
                         label: "-"
                     },
@@ -137,6 +141,10 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'loftingStatus',
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
+                    {
+                        value: null,
+                        label: "-"
+                    },
                     {
                         value: -1,
                         label: "-"
@@ -210,7 +218,7 @@ export default function PlanTrack(): React.ReactNode {
         columns={columnsSetting}
         filterValue={filterValue}
         onFilterSubmit={onFilterSubmit}
-        // extraOperation={<Button type="primary">导出</Button>}
+        exportPath="/tower-science/loftingTask/planTrackExport"
         searchFormItems={[
             {
                 name: 'priority',

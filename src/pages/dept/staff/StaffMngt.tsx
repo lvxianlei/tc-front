@@ -84,12 +84,6 @@ export default function StaffMngt(): React.ReactNode {
             dataIndex: 'email'
         },
         {
-            key: 'entryDate',
-            title: '入职时间',
-            width: 200,
-            dataIndex: 'entryDate'
-        },
-        {
             key: 'account',
             title: '关联用户账号',
             width: 200,

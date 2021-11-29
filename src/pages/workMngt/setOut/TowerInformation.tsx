@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form, TreeSelect, Modal } from 'antd';
+import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form, TreeSelect, Modal, Table } from 'antd';
 import { CommonTable, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -17,6 +17,11 @@ import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
+import { useForm } from 'antd/es/form/Form';
+
+interface ISectionData {
+
+}
 
 export default function TowerInformation(): React.ReactNode {
     const history = useHistory();
@@ -27,8 +32,10 @@ export default function TowerInformation(): React.ReactNode {
     const location = useLocation<{ loftingLeader: string, status: number }>();
     const userId = AuthUtil.getUserId();
     const [ visible, setVisible ] = useState(false);
-    const [ sectionData, setSectionData ] = useState([]);
-    
+    const [ sectionData, setSectionData ] = useState<ISectionData[]>([]);
+    const [ form ] = useForm();
+    const [ recordStatus, setRecordStatus ] = useState();
+     
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         resole(data);
@@ -106,16 +113,17 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'name'
         },
         {
-            key: '',
+            key: 'pattern',
             title: '段模式',
             width: 150,
-            dataIndex: ''
+            dataIndex: 'pattern'
         },
         {
             key: 'plannedDeliveryTime',
             title: '计划交付时间',
             dataIndex: 'plannedDeliveryTime',
             width: 200,
+            
         },
         {
             key: 'loftingUserName',
@@ -179,12 +187,25 @@ export default function TowerInformation(): React.ReactNode {
                     }
                     {
                         record.status === 1 ? 
-                        <Button type="link" onClick={ () => RequestUtil.post(``).then(res => {
-                            onRefresh();
-                        }) }>删除</Button> : <Button type="link" disabled>删除</Button>
+                        <Popconfirm
+                            title="确认删除?"
+                            onConfirm={ () => RequestUtil.delete(`/tower-science/productSegment?productSegmentGroupId=${ record.id }`).then(res => {
+                                onRefresh();
+                            }) }
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button type="link">删除</Button>
+                        </Popconfirm> : <Button type="link" disabled>删除</Button>
                     }
-                    <TowerLoftingAssign type="detail" title="指派信息" detailData={ record } id={ params.id } update={ onRefresh } />
-                    <Button type="link" onClick={() => setVisible(false)}>段模式</Button>
+                    <TowerLoftingAssign type={record.status === 1 ? '' : 'detail'} title="指派信息" detailData={ {...record, loftingUser: record.loftingUser + '-' + record.loftingUserName, checkUser: record.checkUser + '-' + record.checkUserName } } id={ params.id } update={ onRefresh } rowId={ record.id }/>
+                    <Button type="link" onClick={async () => {
+                        const data: ISectionData[] = await RequestUtil.get(`/tower-science/productSegment/segmentList`, { productSegmentGroupId: record.id });
+                        setSectionData(data);
+                        setVisible(true);
+                        form.setFieldsValue({ data: [...data] });
+                        setRecordStatus(record.status)
+                    }}>段模式</Button>  
                 </Space>
             )
         }
@@ -193,21 +214,28 @@ export default function TowerInformation(): React.ReactNode {
     const sectionColumns = [
         { 
             title: '段号', 
-            dataIndex: 'name', 
-            key: 'name'
+            dataIndex: 'segmentName', 
+            key: 'segmentName',
+            width: '50%'
         },
         { 
             title: '模式', 
-            dataIndex: 'singleNumberCount', 
-            key: 'singleNumberCount',
+            dataIndex: 'pattern', 
+            key: 'pattern',
+            width: '50%',
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                    { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                        return <Select.Option key={ index } value={ id + ',' + name }>
-                            { name }
-                        </Select.Option>
-                    }) }
-                </Select>
+                <Form.Item name={[ 'data', index, 'pattern' ]} rules={[{
+                    required: true,
+                    message: '请选择模式'
+                }]}>
+                    <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} disabled={ recordStatus === 3 }>
+                        { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id }>
+                                { name }
+                            </Select.Option>
+                        }) }
+                    </Select>
+                </Form.Item>
             )
         }
     ]
@@ -217,7 +245,11 @@ export default function TowerInformation(): React.ReactNode {
     }
 
     const saveSection = () => {
-
+        const value = form.getFieldsValue(true).data;
+        RequestUtil.post(`/tower-science/productSegment/updateSegmentPattern`, [...value]).then(res => {
+            setVisible(false);
+            setRefresh(!refresh);
+        })
     }
 
     return <>
@@ -229,8 +261,9 @@ export default function TowerInformation(): React.ReactNode {
             requestData={{ productCategoryId: params.id }}
             extraOperation={ <Space direction="horizontal" size="small">
                 <Button type="primary" ghost>导出</Button>
-                <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/modalList` }><Button type="primary" ghost>模型</Button></Link><Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/processCardList` }><Button type="primary" ghost>大样图工艺卡</Button></Link>
-                <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram` }><Button type="primary" ghost>NC程序</Button></Link>
+                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/modalList`, state: { status: location.state.status } }}><Button type="primary" ghost>模型</Button></Link>
+                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/processCardList`, state: { status: location.state.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
+                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram`, state: { status: location.state.status } }}><Button type="primary" ghost>NC程序</Button></Link>
                 {
                     userId === location.state.loftingLeader ? <>
                     <Popconfirm
@@ -328,9 +361,14 @@ export default function TowerInformation(): React.ReactNode {
         />
         <Modal title="段模式" visible={ visible } onCancel={ () => setVisible(false) } footer={<Space direction="horizontal" size="small" >
             <Button onClick={ () => setVisible(false) }>关闭</Button>
-            <Button type="primary" onClick={ saveSection } ghost>保存</Button>
+            {
+                recordStatus === 3 ? 
+                null : <Button type="primary" onClick={ saveSection } ghost>保存</Button>
+            }
         </Space> }>
-            <CommonTable columns={ sectionColumns } showHeader={ false } pagination={ false } dataSource={ sectionData } />
+            <Form form={ form }>
+                <Table columns={ sectionColumns } showHeader={ false } pagination={ false } dataSource={ sectionData } />
+            </Form>
         </Modal>
     </>
 }

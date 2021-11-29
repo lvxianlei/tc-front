@@ -1,11 +1,12 @@
 import React from 'react';
-import { Button, Space, Modal, Input, Row, Col, FormInstance, Form, Popconfirm, InputNumber, Radio, message } from 'antd';
+import { Button, Space, Modal, Input, Row, Col, FormInstance, Form, Popconfirm, InputNumber, Radio, message, Select } from 'antd';
 import { DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './AssemblyWelding.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { FixedType } from 'rc-table/lib/interface';
+import { ISegmentNameList } from './AssemblyWeldingListing';
 
 export interface AssemblyWeldingNewProps {}
 export interface IAssemblyWeldingNewRouteProps extends RouteComponentProps<AssemblyWeldingNewProps>, WithTranslation {
@@ -17,6 +18,7 @@ export interface IAssemblyWeldingNewRouteProps extends RouteComponentProps<Assem
     readonly updateList: () => void;
     readonly visible: boolean;
     readonly modalCancel: () => void;
+    readonly segmentNameList: ISegmentNameList[]
 }
 
 export interface AssemblyWeldingNewState {
@@ -492,11 +494,11 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                                     "required": true,
                                     "message": "请输入段号"
                                 }]} initialValue={ this.state.baseData?.segmentName }>
-                                    <Input onChange={ () => {
-                                        this.setState({
-                                            weldingDetailedStructureList: []
-                                        })
-                                    } } placeholder="请输入" />
+                                    <Select placeholder="请选择" style={{width:'100%'}}>
+                                        { this.props.segmentNameList.map((item: any) => {
+                                            return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
+                                        }) }
+                                    </Select>
                                 </Form.Item>
                             </Col>
                             <Col span={ 12 } offset={ 2 }>

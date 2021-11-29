@@ -4,15 +4,15 @@
  * @description 工作管理-放样列表-塔型信息-NC程序
 */
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Space, Input, DatePicker, Button, Popconfirm, message, Spin } from 'antd';
 import { Attachment, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { downloadTemplate } from './downloadTemplate';
-import { FileProps } from '../../common/Attachment';
+import { AttachmentRef, FileProps } from '../../common/Attachment';
 
 interface IData {
     readonly ncCount: string; 
@@ -68,9 +68,7 @@ export default function NCProgram(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Popconfirm
                     title="确认删除?"
-                    onConfirm={ () => RequestUtil.delete(`/tower-science/productNc`, {
-                        id: record.id
-                    }).then(res => {
+                    onConfirm={ () => RequestUtil.delete(`/tower-science/productNc?fileId=${ record.fileId }`).then(res => {
                         message.success('删除成功');
                         history.go(0);
                     }) }
@@ -87,9 +85,11 @@ export default function NCProgram(): React.ReactNode {
     const params = useParams<{ id: string, productSegmentId: string }>();
     const [ refresh, setRefresh ] = useState(false);
     const [ data, setData ] = useState<IData>();
+    const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
+    const location = useLocation<{ status: number }>();
 
     const getData = async () => {
-        const data = await RequestUtil.get<IData>(`/tower-science/productNc/count?productSegmentId=${ params.productSegmentId }`);
+        const data = await RequestUtil.get<IData>(`/tower-science/productNc/count?productCategoryId=${ params.id }`);
         setData(data)
     }
     const { loading }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
@@ -112,10 +112,10 @@ export default function NCProgram(): React.ReactNode {
         extraOperation={ <Space direction="horizontal" size="small">
             <Button type="primary" ghost onClick={ () => downloadTemplate(`/tower-science/productNc/downloadSummary?productCategoryId=${ params.id }`, "NC文件汇总" , {}, true ) }>下载</Button>
             <p>NC程序数 { data?.ncCount || 0 }/{ data?.structureCount || 0 }</p>
-            <Attachment isTable={ false } onDoneChange={ (dataInfo: FileProps[]) => {
+            { location.state.status === 1 || location.state.status === 2 ? <Attachment ref={ attachRef } isTable={ false } dataSource={[]} onDoneChange={ (dataInfo: FileProps[]) => {
                 RequestUtil.post(`/tower-science/productNc/importProductNc`, {
-                    attachInfoList: [...dataInfo],
-                    segmentId: params.productSegmentId
+                    fileVOList: [...dataInfo],
+                    productCategoryId: params.id
                 }).then(res => {
                     if(res) {
                         message.success('上传成功');
@@ -123,7 +123,7 @@ export default function NCProgram(): React.ReactNode {
                         getData();
                     }
                 })
-            } }><Button type="primary" ghost>批量上传</Button></Attachment>
+            } }><Button type="primary" ghost>批量上传</Button></Attachment> : null}
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space>}
         searchFormItems={ [
@@ -140,7 +140,7 @@ export default function NCProgram(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="段号/构件编号"/>
+                children: <Input placeholder="NC程序名/构件编号"/>
             }
         ] }
         onFilterSubmit = { (values: Record<string, any>) => {

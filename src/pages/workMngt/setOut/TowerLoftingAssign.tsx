@@ -7,6 +7,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import moment from 'moment';
 
 export interface TowerLoftingAssignProps {}
 export interface ITowerLoftingAssignRouteProps extends RouteComponentProps<TowerLoftingAssignProps>, WithTranslation {
@@ -16,6 +17,7 @@ export interface ITowerLoftingAssignRouteProps extends RouteComponentProps<Tower
     readonly state?: number
     readonly type?: string;  //detail为展示，此时需传detailData
     readonly detailData?: IAppointed;
+    readonly rowId?: string;
 }
 
 export interface TowerLoftingAssignState {
@@ -40,7 +42,12 @@ interface IAppointed {
     readonly loftingUser?: string;
     readonly checkUserDepartment?: string;
     readonly checkUser?: string;
+    readonly loftingUserDepartmentName?: string;
+    readonly loftingUserName?: string;
+    readonly checkUserDepartmentName?: string;
+    readonly checkUserName?: string;
     readonly plannedDeliveryTime?: string;
+    readonly patternName?: string;
 }
 
 class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, TowerLoftingAssignState> {
@@ -79,6 +86,8 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             visible: true,
             appointed: data
         })
+        this.props.detailData?.loftingUserDepartment && this.onDepartmentChange(this.props.detailData?.loftingUserDepartment || '', '放样');
+        this.props.detailData?.checkUserDepartment && this.onDepartmentChange(this.props.detailData?.checkUserDepartment || '', '校对');
         this.getForm()?.setFieldsValue({ ...data });
     }
     
@@ -94,6 +103,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 let values = this.getForm()?.getFieldsValue(true);
                 values = {
                     ...values,
+                    id: this.props.rowId,
                     plannedDeliveryTime: values?.plannedDeliveryTime && values?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
                     productCategoryId: this.state.appointed?.productCategoryId,
                     productCategoryName: this.state.appointed?.productCategoryName,
@@ -120,7 +130,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     /**
      * onDepartmentChange
      */
-    public onDepartmentChange = async (value: Record<string, any>, title: string) => {
+    public onDepartmentChange = async (value: string, title: string) => {
         const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
         let appointed = this.getForm()?.getFieldsValue(true);
         if(title === '校对'){
@@ -192,23 +202,23 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式">
-                                { this.state.appointed?.pattern === 1 ? '新放' :  this.state.appointed?.pattern === 2 ? '重新出卡' : '套用' }
+                                { this.state.appointed?.patternName }
                             </Descriptions.Item>
                             { this.props.type === 'detail' ?
                                 <><Descriptions.Item label="段信息">
                                     { this.props.detailData?.name || '' }
                                 </Descriptions.Item>
                                 <Descriptions.Item label="放样人">
-                                    { this.props.detailData?.loftingUserDepartment || '' } - {  this.props.detailData?.loftingUser || '' }
+                                    { this.props.detailData?.loftingUserDepartmentName || '' } - {  this.props.detailData?.loftingUserName || '' }
                                 </Descriptions.Item>
                                 <Descriptions.Item label="校核人">
-                                    { this.props.detailData?.checkUserDepartment || '' } - {  this.props.detailData?.checkUser || '' }
+                                    { this.props.detailData?.checkUserDepartmentName || '' } - {  this.props.detailData?.checkUserName || '' }
                                 </Descriptions.Item>
                                 <Descriptions.Item label="交付时间">
                                     { this.props.detailData?.plannedDeliveryTime || '' }
                                 </Descriptions.Item></>
                                 : <><Descriptions.Item label="段信息">
-                                <Form.Item name="name"
+                                <Form.Item name="name" initialValue={ this.props.detailData?.name }
                                     rules={[{
                                         required: true,
                                         message: '请输入段信息'
@@ -221,16 +231,16 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="放样人">
-                                <Form.Item name="loftingUserDepartment"
+                                <Form.Item name="loftingUserDepartment" initialValue={ this.props.detailData?.loftingUserDepartment }
                                     rules={[{
                                         required: true,
                                         message: '请选择部门'
                                     }]} style={ { width: '50%', display: 'inline-block' } }>
-                                    <TreeSelect placeholder="请选择" style={{width:'120px'}} onChange={ (value: any) => { this.onDepartmentChange(value,'放样') } } className={ styles.width200 }>
+                                    <TreeSelect placeholder="请选择" style={{width:'120px'}} onChange={ (value: string) => { this.onDepartmentChange(value,'放样') } } className={ styles.width200 }>
                                         { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                     </TreeSelect>
                                 </Form.Item>
-                                <Form.Item name="loftingUser"
+                                <Form.Item name="loftingUser" initialValue={ this.props.detailData?.loftingUser }
                                     rules={[{
                                         required: true,
                                         message: '请选择人员'
@@ -243,7 +253,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="校核人">
-                                <Form.Item name="checkUserDepartment"
+                                <Form.Item name="checkUserDepartment" initialValue={ this.props.detailData?.checkUserDepartment }
                                     rules={[{
                                         required: true,
                                         message: '请选择部门'
@@ -252,7 +262,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                         { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                     </TreeSelect>
                                 </Form.Item>
-                                <Form.Item name="checkUser"
+                                <Form.Item name="checkUser" initialValue={ this.props.detailData?.checkUser }
                                     rules={[{
                                         required: true,
                                         message: '请选择人员'
@@ -265,7 +275,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="交付时间">
-                                <Form.Item name="plannedDeliveryTime"
+                                <Form.Item name="plannedDeliveryTime" initialValue={ moment(this.props.detailData?.plannedDeliveryTime) }
                                     rules={[{
                                         required: true,
                                         message: '请选择交付时间'
