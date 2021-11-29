@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Spin, Form, Button, Modal, Select, Input, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common'
+import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../common'
 import { PopTable } from "../common/FormItemType"
 import { baseInfoData } from './biddingHeadData.json'
 import RequestUtil from '../../utils/RequestUtil'
@@ -169,25 +169,7 @@ export default function InformationDetail(): React.ReactNode {
                 col={4} />
             <DetailTitle title="物资清单" />
             <CommonTable columns={tableColumns} dataSource={data?.bidPackageInfoVOS} />
-            <DetailTitle title="附件" />
-            <CommonTable columns={[
-                {
-                    title: '操作',
-                    width: 60,
-                    dataIndex: 'opration',
-                    render: (_a: any, _b: any, index: number): React.ReactNode => (<Button
-                        type="link"
-                        onClick={() => downLoadFile(_b.filePath)}
-                    >下载</Button>)
-                },
-                { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-                { title: '文件名', dataIndex: 'name' },
-                { title: '大小', dataIndex: 'fileSize' },
-                { title: '上传人', dataIndex: 'userName' },
-                { title: '上传时间', dataIndex: 'fileUploadTime' }
-            ]}
-                dataSource={data?.attachVos || []}
-            />
+            <Attachment title="附件" dataSource={data?.attachVos} />
         </DetailContent>
     </>
 }
