@@ -166,7 +166,7 @@ export default function PickTower(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={async () => {
                         setVisible(true);
-                            let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}/${record.productNumber}`)
+                            let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}`)
                             const detailData: IMaterialDetail[]|undefined = data&&data.materialDrawProductSegmentList&&data.materialDrawProductSegmentList.map((item:IMaterialDetail)=>{
                                 return {
                                     ...item,
