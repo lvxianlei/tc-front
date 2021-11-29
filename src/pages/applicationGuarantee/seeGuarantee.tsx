@@ -49,7 +49,23 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                             form={addCollectionForm}
                             dataSource={props?.userData?.guaranteeInitVO || {}}
                             col={ 2 }
-                            columns={ seeBaseForm}
+                            columns={
+                                seeBaseForm.map((item: any) => {
+                                    if (item.dataIndex === 'guaranteeType') {
+                                        return ({
+                                            ...item,
+                                            type: "select",
+                                            enum: [
+                                                { value: 1, label: "履约保函" },
+                                                { value: 2, label: "投标保函" },
+                                                { value: 3, label: "质保金保函" },
+                                                { value: 4, label: "预付款保函" }
+                                            ]
+                                        })
+                                    }
+                                    return item;
+                                })
+                            }
                         />
                     </>
                 )

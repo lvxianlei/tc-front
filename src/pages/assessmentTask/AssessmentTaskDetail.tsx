@@ -125,9 +125,6 @@ export default function AssessmentTaskDetail(): React.ReactNode {
     const detailData: IDetail = data || {};
     const [visible, setVisible] = useState(false);
     const [rejectReason, setRejectReason] = useState("");
-    const [pictureVisible, setPictureVisible] = useState<boolean>(false);
-    const [pictureUrl, setPictureUrl] = useState('');
-    const handlePictureModalCancel = () => { setPictureVisible(false) };
 
     if (loading) {
         return <Spin spinning={loading}>
@@ -190,9 +187,6 @@ export default function AssessmentTaskDetail(): React.ReactNode {
                 <Col span={4}>拒绝原因<span style={{ color: 'red' }}>*</span></Col>
                 <Col span={19} offset={1}><Input placeholder="请输入" value={rejectReason} onChange={(e) => setRejectReason(e.target.value)} /></Col>
             </Row>
-        </Modal>
-        <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
-            <Image src={pictureUrl} preview={false} />
         </Modal>
     </>
 }

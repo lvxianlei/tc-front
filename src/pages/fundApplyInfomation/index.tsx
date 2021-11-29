@@ -68,12 +68,13 @@
             viewRef.current?.getDetail()
         }) 
     }
-    //table footer
-    const footerElement = (data:any)=>{
-        if(!data.length){
+    //表格增加底部计算
+    const addList = (data:any)=> {
+        //如果没有数据
+        if(!data.payApplyListVOIPage.records.length){
             return;
         }
-        const records = data;
+        const records = data.payApplyListVOIPage.records;
         let sumMoney=0,
                 money=0,
                 payMoney=0;
@@ -86,14 +87,13 @@
         fundListColumns.forEach((item:any)=>{
             list[item.dataIndex]=""
         });
-        list.key="10001";
+        list.id=1000;
         list.payApplyNumber = "合计";
+        list.Sunmry=true;
         list.sumMoney=sumMoney;
         list.money=money;
         list.payMoney=payMoney;
-        return (
-            <Table showHeader={false} columns={fundListColumns} dataSource={[list]}></Table>
-        )
+        records.push(list)
     }
      return (
          <>
@@ -113,7 +113,7 @@
                          children: <Form.Item name="costType">
                              <Select placeholder="费用类型" style={{ width: "100px" }}>
                                      { costTypeOptions && costTypeOptions.map(({ id, name }, index) => {
-                                     return <Select.Option key={index} value={id}>
+                                     return <Select.Option key={index} value={name}>
                                          {name}
                                      </Select.Option>
                                  }) }
@@ -156,10 +156,7 @@
                                  <span style={{marginLeft:"20px"}}>请款金额总计：{data ?data.totalSumMoney : null}元</span>
                              }
                  </>}
-                //   isSunmryLine={addList}
-                  tableProps={
-                    {footer:footerElement}
-                }
+                  isSunmryLine={addList}
                  columns={[
                      ...fundListColumns.map((item: any) => {
                          if (item.dataIndex === 'payStatus') {

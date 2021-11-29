@@ -28,6 +28,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     filterValue?: {} //查询条件
     readonly exportPath?: string; //导出接口
     sourceKey?: string,
+    isSunmryLine?: (result:IResponseData) => void;//添加计算行
 }
 
 export interface IResponseData {
@@ -61,16 +62,34 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         };
     }
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        this.setState({ loading: true })
+        // 切换tab清空列表数据
+        this.setState({ loading: true, tableDataSource: [] })
         try {
-            const sourceDataKey: string[] = this.props.sourceKey?.split(".") || []
+            const sourceDataKey: string[] = this.props.sourceKey?.split(".") || [];
+            //是否底部计算
+            let new_pageSize = pagination.pageSize || this.state.tablePagination?.pageSize;
+            const isSunmryLine:boolean = !!this.props.isSunmryLine
+            if(isSunmryLine){
+                //每一个pagesize-1
+                new_pageSize = Number(new_pageSize)-1
+            }
             const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
                 ...this.props.requestData,
                 ...filterValues,
                 current: pagination.current || this.state.tablePagination?.current,
-                size: pagination.pageSize || this.state.tablePagination?.pageSize,
+                size: new_pageSize,
                 type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
-            })
+            });
+            //表格增加底部计算
+            if(this.props.isSunmryLine){
+                this.props.isSunmryLine(resData)
+            }
+            //外层没有size，取sourceKey第一层
+            let Size = resData.size ||(resData as any )[sourceDataKey[0]].size;
+            if(isSunmryLine){
+                //每一个pagesize-1
+                Size = Number(Size)+1
+            }
             this.setState({
                 ...filterValues,
                 resData,
@@ -80,10 +99,11 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                 tablePagination: {
                     ...this.state.tablePagination,
                     current: resData.current,
-                    pageSize: resData.size,
-                    total: resData.total
+                    pageSize: Size,
+                    //外层没有size，取sourceKey第一层
+                    total: resData.total ||(resData as any )[sourceDataKey[0]].total
                 },
-                loading: false
+                loading:false
             });
         } catch (error) {
             this.setState({ loading: false })
