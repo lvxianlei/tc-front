@@ -330,12 +330,12 @@
                         "label": "确认任务",
                         "icon": "technology",
                         "path": "/confirmTask",
-                        "authority": "confirm_task",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "确认任务",
                                 "path": "/confirmTask/ConfirmTaskMngt",
-                                "authority": "confirm_task_list"
+                                "authority": "approvalm"
                             }
                         ]
                     },
