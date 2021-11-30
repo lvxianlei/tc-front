@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Spin, Button, Space, Modal, Image, Form, Input } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { DetailTitle, DetailContent, CommonTable, Attachment } from '../common';
+import { DetailTitle, DetailContent, Attachment, AttachmentRef } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './AnnouncementMngt.module.less';
@@ -13,31 +13,24 @@ import { FileProps } from '../common/Attachment';
 
 export default function AnnouncementNew(): React.ReactNode {
     const [form] = Form.useForm();
-    const [attachInfo, setAttachInfo] = useState<FileProps[]>([]);
+    const attachRef = useRef<AttachmentRef>()
+    // const [attachInfo, setAttachInfo] = useState<FileProps[]>([]);
     const location = useLocation<{ type: string }>();
     const [staffList, setStaffList] = useState<string[]>([]);
     const [detailData, setDetailData] = useState<IAnnouncement>({});
 
     const history = useHistory();
     const params = useParams<{ id: string }>();
-    const { loading, data } = useRequest<IAnnouncement>(() => new Promise(async (resole, reject) => {
+    const { loading } = useRequest<IAnnouncement>(() => new Promise(async (resole, reject) => {
         if (location.state.type === 'edit') {
             let data = await RequestUtil.get<IAnnouncement>(`/tower-system/notice/getNoticeById/${params.id}`);
             setDetailData(data);
-            setAttachInfo(data.attachVos || []);
             setStaffList(data.staffList || [])
             resole(data);
         } else {
             resole({});
         }
     }), {})
-    const [pictureVisible, setPictureVisible] = useState<boolean>(false);
-    const [pictureUrl, setPictureUrl] = useState('');
-    const handlePictureModalCancel = () => { setPictureVisible(false) };
-
-    const deleteAttachData = (id: number) => {
-        setAttachInfo(attachInfo.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-    }
 
     if (loading) {
         return <Spin spinning={loading}>
@@ -53,7 +46,7 @@ export default function AnnouncementNew(): React.ReactNode {
                     RequestUtil.post<IAnnouncement>(`/tower-system/notice`, {
                         id: detailData.id,
                         ...value,
-                        attachInfoDtos: attachInfo,
+                        fileIds: attachRef.current?.getDataSource().map(item => item.id),
                         staffList: staffList,
                         state: state
                     }).then(res => {
@@ -63,7 +56,7 @@ export default function AnnouncementNew(): React.ReactNode {
                     RequestUtil.put<IAnnouncement>(`/tower-system/notice`, {
                         id: detailData.id,
                         ...value,
-                        attachInfoDtos: attachInfo,
+                        fileIds: attachRef.current?.getDataSource().map(item => item.id),
                         staffList: staffList,
                         state: state
                     }).then(res => {
@@ -77,9 +70,9 @@ export default function AnnouncementNew(): React.ReactNode {
     return <>
         <DetailContent operation={[
             <Space direction="horizontal" size="small" className={styles.bottomBtn}>
-                <Button type="primary" onClick={() => save(1)}>立即发布</Button>
-                <Button type="primary" onClick={() => save(0)}>保存草稿</Button>
-                <Button type="ghost" onClick={() => history.goBack()}>取消</Button>
+                <Button key="save" type="primary" onClick={() => save(1)}>立即发布</Button>
+                <Button key="saveC" type="primary" onClick={() => save(0)}>保存草稿</Button>
+                <Button key="cancel" type="ghost" onClick={() => history.goBack()}>取消</Button>
             </Space>
         ]}>
             <DetailTitle title="基本信息" key={1} />
@@ -118,37 +111,7 @@ export default function AnnouncementNew(): React.ReactNode {
                     }} />} disabled />
                 </Form.Item>
             </Form>
-            <Attachment dataSource={ attachInfo } onDoneChange={
-                (attachs: FileProps[]) => {
-                    setAttachInfo([...attachInfo, ...attachs]);
-                }
-            }><Button key="enclosure" type="primary" ghost>添加</Button></Attachment>
-            <CommonTable columns={[
-                {
-                    key: 'name',
-                    title: '附件名称',
-                    dataIndex: 'name',
-                    width: 350
-                },
-                {
-                    key: 'operation',
-                    title: '操作',
-                    dataIndex: 'operation',
-                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        <Space direction="horizontal" size="small">
-                            <Button type="link" onClick={() => downLoadFile(record.id ? record.filePath : record.link)}>下载</Button>
-                            {record.fileSuffix === 'pdf' ? <Button type='link' onClick={() => { window.open(record.id ? record.filePath : record.link) }}>预览</Button> : null}
-                            {['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) ? <Button type='link' onClick={() => { setPictureUrl(record.id ? record.filePath : record.link); setPictureVisible(true); }}>预览</Button> : null}
-                            <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-                        </Space>
-                    )
-                }
-            ]}
-                dataSource={attachInfo}
-                pagination={false} />
+            <Attachment ref={attachRef} edit />
         </DetailContent>
-        <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
-            <Image src={pictureUrl} preview={false} />
-        </Modal>
     </>
 }
