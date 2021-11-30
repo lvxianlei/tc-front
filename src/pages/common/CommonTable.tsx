@@ -120,7 +120,7 @@ export function ResizableTitle({ isResizable = false, width = 120, ...props }: R
 export default function CommonTable({ columns, dataSource = [], rowKey, haveIndex = false, ...props }: CommonTableProps): JSX.Element {
     const formatColumns = columns.map((item: any) => generateRender(item.type || "text", item))
     const columnsResult = haveIndex ? [{
-        title: "",
+        title: "序号",
         dataIndex: "index",
         width: 50,
         className: styles.tableCell,

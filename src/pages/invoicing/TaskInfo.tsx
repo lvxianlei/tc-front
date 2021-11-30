@@ -34,7 +34,7 @@ export default function Overview() {
                     })
                 }
                 if (item.dataIndex === "weigh") {
-                    if (data?.weigh > data?.reasonWeight) {
+                    if (parseFloat(data?.weigh) > parseFloat(data?.reasonWeight)) {
                         return ({ ...item, contentStyle: { backgroundColor: "red" } })
                     }
                     return item
