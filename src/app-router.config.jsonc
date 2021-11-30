@@ -2018,6 +2018,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 人资-员工关系-转正考核-查看
+      "name": "转正考核",
+      "path": "/employeeRelation/full/view/:id",
+      "module": "./pages/employeeRelation/full/View",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-转正考核-转正
+      "name": "转正考核",
+      "path": "/employeeRelation/full/sure/:id",
+      "module": "./pages/employeeRelation/full/Sure",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 人资-员工关系-员工调动
       "name": "员工调动",
       "path": "/employeeRelation/transfer",

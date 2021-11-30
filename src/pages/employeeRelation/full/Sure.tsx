@@ -1,14 +1,14 @@
 import React, { useRef } from 'react'
-import { Button, Spin, Space, Form, Select, DatePicker, Row, Col} from 'antd';
+import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
-import { baseInfoData, quitInfoData } from './quit.json';
+import { baseInfoData } from './full.json';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 
 
-export default function Operation(): React.ReactNode {
+export default function Sure(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>();
     const [form] = Form.useForm();
@@ -33,42 +33,47 @@ export default function Operation(): React.ReactNode {
                         })
                         
                     }}>保存</Button>
-                    <Button key="primary" onClick={() => history.goBack()}>保存并办理完成</Button>
+                    <Button key="primary" onClick={() => history.goBack()}>保存并提交审批</Button>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
             ]}>
-            <DetailTitle title="员工离职信息"/>
+            <DetailTitle title="员工基本信息"/>
             <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
-            <DetailTitle title="办理离职信息"/>
+            <DetailTitle title="转正管理"/>
             <Form form={ form } { ...formItemLayout }>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label='是否办理离职手续' rules={[{
+                        <Form.Item label='转正日期' rules={[{
                             required:true, 
-                            message:'请选择是否办理离职手续'
+                            message:'请选择转正日期'
                         }]} initialValue={1}>
-                            <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={0} key="0">是</Select.Option>
-                                <Select.Option value={1} key="1">否</Select.Option>
-                            </Select>
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
+                                console.log(e)
+                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
+                                // form.setFieldsValue()
+                            }}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='是否领取解除劳动合同书' initialValue={1}>
-                            <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={0} key="0">是</Select.Option>
-                                <Select.Option value={1} key="1">否</Select.Option>
+                        <Form.Item label='考核结果' rules={[{
+                            required:true, 
+                            message:'请选择考核结果'
+                        }]}>
+                            <Select placeholder="请选择" style={{ width: '100%' }} disabled>
+                                <Select.Option value={0} key="0">提前转正</Select.Option>
+                                <Select.Option value={1} key="1">正常转正</Select.Option>
+                                <Select.Option value={2} key="2">延期转正</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label='办理日期' rules={[{
+                        <Form.Item label='转正评语' rules={[{
                             required:true, 
-                            message:'请选择办理日期'
+                            message:'请填写转正评语'
                         }]}>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}/>
+                            <Input.TextArea maxLength={400} showCount/>
                         </Form.Item>
                     </Col>
                 </Row>
