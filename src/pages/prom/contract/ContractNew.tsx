@@ -51,7 +51,7 @@ export class ContractNew extends AbstractContractSetting<IContractNewRouteProps,
             customerPhone: values.customerPhone
         };
         values.signCustomerId = this.state.contract?.signCustomerId;
-        if(planValue.length>0){
+        if (planValue.length > 0) {
             if (totalRate < 100) {
                 message.error('计划回款总占比必须等于100');
                 return Promise.reject(false);
@@ -75,9 +75,13 @@ export class ContractNew extends AbstractContractSetting<IContractNewRouteProps,
                 if (!values.contractTotalWeight) {
                     values.contractTotalWeight = "0"
                 }
-                return await RequestUtil.post('/tower-market/contract', { ...values, projectId: (this.props.match.params as any).projectId });
+                return await RequestUtil.post('/tower-market/contract', {
+                    ...values,
+                    projectId: (this.props.match.params as any).projectId,
+                    fileIds: this.getAttchsRef()?.getDataSource().map(item=>item.id)
+                });
             }
-        }else{
+        } else {
             message.error('回款计划无数据，需新增！');
             return Promise.reject(false);
         }
