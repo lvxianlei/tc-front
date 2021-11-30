@@ -2039,6 +2039,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 人资-员工关系-办理离职-办理离职
+      "name": "办理离职",
+      "path": "/employeeRelation/quitProcedures/operation/:id",
+      "module": "./pages/employeeRelation/quitProcedures/Operation",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-办理离职-查看
+      "name": "查看",
+      "path": "/employeeRelation/quitProcedures/view/:id",
+      "module": "./pages/employeeRelation/quitProcedures/View",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 人资-员工关系-员工复职
       "name": "员工复职",
       "path": "/employeeRelation/reinstate",
