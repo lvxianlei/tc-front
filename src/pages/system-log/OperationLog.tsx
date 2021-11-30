@@ -3,75 +3,56 @@ import { Select, Form } from 'antd'
 import { useLocation } from 'react-router-dom'
 import { Page } from '../common';
 
-export default function Login(): React.ReactNode {
+export default function OperationLog(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state: {} }>();
 
     const columns = [
         {
             key: 'index',
-            title: '登录时间',
+            title: '操作时间',
             dataIndex: 'index',
             width: 100
         },
         {
             key: 'taskNum',
-            title: '登录人员',
+            title: '操作用户',
             width: 100,
             dataIndex: 'taskNum'
         },
         {
             key: 'status',
-            title: '终端类型',
+            title: '模块',
             width: 100,
-            dataIndex: 'status',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 1,
-                        label: "WEB端"
-                    },
-                    {
-                        value: 2,
-                        label: "移动端"
-                    }
-                  ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'status'
         },
         {
             key: 'updateStatusTime',
-            title: '浏览器/终端版本',
+            title: '功能',
             width: 200,
             dataIndex: 'updateStatusTime'
         },
         {
             key: 'confirmName',
-            title: '操作系统',
+            title: '变更数据',
             width: 200,
             dataIndex: 'confirmName'
         },
         {
             key: 'contractName',
-            title: '设备名称',
+            title: '操作IP',
             width: 100,
             dataIndex: 'contractName'
         },
         {
             key: 'aeName',
-            title: 'MAC地址',
+            title: '操作终端',
             width: 100,
             dataIndex: 'aeName'
         },
         {
             key: 'aeName',
-            title: '登录IP',
-            width: 100,
-            dataIndex: 'aeName'
-        },
-        {
-            key: 'aeName',
-            title: '地址',
+            title: '备注',
             width: 200,
             dataIndex: 'aeName'
         }
@@ -88,7 +69,7 @@ export default function Login(): React.ReactNode {
             path="/tower-science/drawTask"
             columns={ columns }
             filterValue={ filterValue }
-            onFilterSubmit={ onFilterSubmit }
+            onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
                     name: 'status',
@@ -96,8 +77,8 @@ export default function Login(): React.ReactNode {
                     children: <Form.Item name="status" initialValue={ location.state }>
                         <Select style={{width:"100px"}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>WEB端</Select.Option>
-                            <Select.Option value={2} key={2}>移动端</Select.Option>
+                            <Select.Option value={1} key={1}>营销中心</Select.Option>
+                            <Select.Option value={2} key={2}>应用中心</Select.Option>
                         </Select>
                     </Form.Item>
                 }
