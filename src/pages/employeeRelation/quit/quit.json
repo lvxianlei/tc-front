@@ -1,0 +1,51 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "contractName",
+            "title": "员工名称"
+        },
+        {
+            "dataIndex": "customerName",
+            "title": "公司"
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "部门"
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "岗位"
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "班组"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "入职日期"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "员工性质"
+        }
+        ,
+        {
+            "dataIndex": "designPhone",
+            "title": "离职日期"
+        }
+        ,
+        {
+            "dataIndex": "designPhone",
+            "title": "离职类型"
+        }
+        ,
+        {
+            "dataIndex": "designPhone",
+            "title": "离职原因"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "备注"
+        }
+    ]
+}

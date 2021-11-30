@@ -93,8 +93,8 @@ export default function QuitList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>编辑</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quit/view/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quit/${record.id}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>编辑</Button>
                 </Space>
             )
         }
@@ -121,7 +121,7 @@ export default function QuitList(): React.ReactNode {
                 filterValue={ filterValue }
                 requestData={{ productCategory: params.id }}
                 extraOperation={
-                    <Button type="primary" onClick={()=>history.push('/workMngt/pickList')} ghost>新增员工离职</Button>
+                    <Button type="primary" onClick={()=>history.push('/employeeRelation/quit/0')} ghost>新增员工离职</Button>
                 }
                 searchFormItems={[
                     {
