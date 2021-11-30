@@ -148,7 +148,7 @@ export default function TemplateDetail() {
                     RequestUtil.post(`/tower-science/loftingTemplate/upload`, [...fileList]).then(res => {
                         if (res) {
                             message.success('上传成功');
-                            setRefresh(!refresh);
+                            history.go(0)
                         }
                     })
                 }}><Button type="primary" ghost>上传</Button></Attachment>
