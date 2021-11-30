@@ -27,7 +27,7 @@ export default function Invoicing() {
                     return <>
                         <Button type="link" onClick={() => history.push(`/invoicing/taskInfo/${record.id}`)}>查看任务信息</Button>
                         {record.taskType === 1 && <Button type="link" onClick={() => history.push(`/invoicing/edit/${record.id}`)}>填写开票信息</Button>}
-                        {record.taskType === 2 && <Button type="link" onClick={() => history.push(`/invoicing/${record.id}`)}>查看开票信息</Button>}
+                        {record.taskType === 2 && <Button type="link" onClick={() => history.push(`/invoicing/detail/${record.id}`)}>查看开票信息</Button>}
                     </>
                 }
             }]}
