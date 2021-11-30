@@ -537,10 +537,10 @@ export default function Lofting(): React.ReactNode {
                         } else {
                             const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
                             let values = form.getFieldsValue(true).data;
-                            if(values) {
-                                let changeValues = values.filter((item: any, index: number) => {
-                                    return newRowChangeList.indexOf(index) !== -1;
-                                })
+                            let changeValues = values.filter((item: any, index: number) => {
+                                return newRowChangeList.indexOf(index) !== -1;
+                            })
+                            if(changeValues && changeValues.length > 0) {
                                 RequestUtil.post(`/tower-science/productStructure/save`, [ ...changeValues ]).then(res => {
                                     setColumns(columnsSetting);
                                     setEditorLock('编辑');
