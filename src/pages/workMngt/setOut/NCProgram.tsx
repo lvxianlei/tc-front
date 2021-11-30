@@ -42,12 +42,6 @@ export default function NCProgram(): React.ReactNode {
             width: 120
         },
         {
-            key: 'ncName',
-            title: 'NC程序名称',
-            width: 200,
-            dataIndex: 'ncName'
-        },
-        {
             key: 'createTime',
             title: '上传时间',
             width: 150,
