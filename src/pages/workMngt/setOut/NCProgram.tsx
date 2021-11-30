@@ -100,7 +100,7 @@ export default function NCProgram(): React.ReactNode {
     return <Page
         path="/tower-science/productNc"
         requestData={{ id: params.productSegmentId, productCategoryId: params.id }}
-        columns={ columns }
+        columns={ location.state.status === 1 || location.state.status === 2 ? columns : columns.splice(0, 5) }
         headTabs={ [] }
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
