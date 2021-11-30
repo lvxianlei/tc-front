@@ -1,12 +1,11 @@
 /**
  * 查看保函申请
  */
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Modal, Form, Button, ModalFuncProps } from 'antd';
-import { BaseInfo, DetailTitle, CommonTable } from '../common';
+import { BaseInfo, DetailTitle, CommonTable, Attachment, AttachmentRef } from '../common';
 import { downLoadFile } from "../../utils"
 import { seeBaseForm, guaranteeForm, recoveryForm, seeEnclosure, seeApprovalRecord } from './applicationColunm.json';
-
 interface UserData {
     guaranteeInitVO?: object // 基本信息
     guaranteeVO?: object // 保函信息
@@ -23,6 +22,7 @@ interface OverViewProps {
 export default function SeeGuarantee(props: OverViewProps): JSX.Element {
     const [addCollectionForm] = Form.useForm(); 
     const [attachVosData, setAttachVosData] = useState<any[]>([])
+    const fillGuarantee = useRef<AttachmentRef>();
 
     const deleteAttachData = (id: number) => {
         setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
@@ -108,14 +108,10 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
             {
                 props?.userData?.attachInfoVOList && (
                     <>
-                        <DetailTitle title="附件" />
-                        <CommonTable columns={[{
-                            title: "操作", dataIndex: "opration",
-                            render: (_: any, record: any) => (<>
-                                <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>预览</Button>
-                                <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
-                            </>)
-                        }, ...seeEnclosure]} dataSource={props?.userData?.attachInfoVOList || []} />
+                        <Attachment
+                            dataSource={ props?.userData?.attachInfoVOList || [] }
+                            ref={fillGuarantee}
+                        />
                     </>
                 )
             }

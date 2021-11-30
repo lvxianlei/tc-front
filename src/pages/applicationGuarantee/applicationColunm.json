@@ -14,7 +14,7 @@
         },
         {
             "title": "申请部门",
-            "dataIndex": "applyDeptId"
+            "dataIndex": "applyDeptName"
         },
         {
             "title": "项目名称",
