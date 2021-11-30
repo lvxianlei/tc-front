@@ -118,9 +118,9 @@ export default function SetOutList(): React.ReactNode {
     const location = useLocation<{ state: number }>();
     return <Page
         path="/tower-science/loftingList/loftingPage"
+        exportPath={`/tower-science/loftingList/loftingPage`}
         columns={columns}
         headTabs={[]}
-        extraOperation={ <Button type="primary" ghost>导出</Button> }
         requestData={{ status: location.state }}
         refresh={refresh}
         searchFormItems={[
