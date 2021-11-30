@@ -106,7 +106,8 @@
         },
         {
             "title": "已付金额",
-            "dataIndex": "money"
+            "dataIndex": "money",
+            "type": "number"
         },
         {
             "title": "应付款余额",
