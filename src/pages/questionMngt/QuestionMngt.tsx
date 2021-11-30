@@ -6,7 +6,7 @@ import { FixedType } from 'rc-table/lib/interface';
 
 export default function QuestionMngt(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: number }>();
+    const location = useLocation<{ state: number, type: string }>();
     const history = useHistory();
     const columns = [
         {
@@ -139,7 +139,7 @@ export default function QuestionMngt(): React.ReactNode {
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
-            requestData={ { status: location.state } }
+            requestData={ { status: location.state, type: location.state.type } }
             searchFormItems={[
                 {
                     name: 'updateTime',
