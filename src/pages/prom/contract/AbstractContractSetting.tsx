@@ -3,10 +3,10 @@
  * @copyright © 2021 
  */
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, TablePaginationConfig, RadioChangeEvent, message, Image } from 'antd';
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Cascader, TablePaginationConfig, RadioChangeEvent, message, Image } from 'antd';
 import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
 import moment from 'moment';
-import React from 'react';
+import React, { createRef } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import AbstractFillableComponent, {
@@ -23,11 +23,10 @@ import { CascaderOptionType } from 'antd/lib/cascader';
 import { RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
 import Modal from 'antd/lib/modal/Modal';
-import AuthUtil from '../../../utils/AuthUtil';
 import { currencyTypeOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IContract } from '../../IContract';
 import layoutStyles from '../../../layout/Layout.module.less';
-import { downLoadFile } from '../../../utils';
+import { Attachment, AttachmentRef } from '../../common';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     readonly tablePagination: TablePaginationConfig;
     readonly contract: IContractInfo;
@@ -38,6 +37,7 @@ export interface IAbstractContractSettingState extends IAbstractFillableComponen
     readonly col: [];
     readonly url: { link?: string | undefined, fileSuffix?: string | undefined };
     readonly isVisible: boolean;
+    readonly attchRef: AttachmentRef;
 }
 
 export interface ITabItem {
@@ -122,7 +122,7 @@ export enum planType {
  * Abstract Contract Setting
  */
 export default abstract class AbstractContractSetting<P extends RouteComponentProps, S extends IAbstractContractSettingState> extends AbstractFillableComponent<P, S> {
-
+    private attachRef: React.RefObject<AttachmentRef> = createRef<AttachmentRef>()
     public state: S = {
         contract: {},
         url: { link: "", fileSuffix: "" },
@@ -133,6 +133,10 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         super.componentDidMount();
         this.getRegionInfo({});
 
+    }
+
+    protected getAttchsRef(): AttachmentRef | null {
+        return this.attachRef?.current
     }
     /**
      * @override
@@ -867,213 +871,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         }, {
             title: '附件',
             render: (): React.ReactNode => {
-                return (
-                    <>
-                        <Row className={styles.attachHeader}>
-                            <Col span={1}></Col>
-                            <Col span={6}>附件名称</Col>
-                            <Col span={2}>文件大小</Col>
-                            <Col span={4}>上传时间</Col>
-                            <Col span={4}>上传人员</Col>
-                            <Col span={4}>备注</Col>
-                            <Col span={3}>操作</Col>
-                        </Row>
-                        <Form.List name="attachInfoDtos">
-                            {
-                                (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
-                                    return (
-                                        <>
-                                            <Space size="small" className={styles.attachBtn}>
-                                                <Upload
-                                                    maxCount={10}
-                                                    accept=".doc,.docx,.pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg,.txt,.xls,.xlsx"
-                                                    action={() => {
-                                                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                                                        return baseUrl + '/sinzetech-resource/oss/put-file'
-                                                    }}
-                                                    headers={
-                                                        {
-                                                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                                                            'Tenant-Id': AuthUtil.getTenantId(),
-                                                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                                                        }
-                                                    }
-                                                    beforeUpload={
-                                                        (file) => {
-                                                            const isLt10M = file.size / 1024 / 1024 > 10;
-                                                            return new Promise((resolve, reject) => {
-                                                                if (this.state.contract.attachInfoDtos && this.state.contract.attachInfoDtos.length == 10) {
-                                                                    message.error('文件最多上传10个！')
-                                                                    reject()
-                                                                } else {
-                                                                    resolve()
-                                                                }
-                                                                if (isLt10M) {
-                                                                    message.error('上传文件不能大于10M')
-                                                                    reject()
-                                                                } else {
-                                                                    resolve()
-                                                                }
-                                                            })
-                                                        }
-                                                    }
-                                                    onChange={(info) => {
-                                                        if (info.file.status === 'done') {
-                                                            let index: number = 1;
-                                                            if (this.state.contract.attachInfoDtos) {
-                                                                index = this.state.contract.attachInfoDtos.length + 1;
-                                                            } else {
-                                                                index = 1;
-                                                            }
-                                                            const contract: IContractInfo = this.state.contract;
-                                                            let attachInfoDtos: IAttachDTO[] = contract.attachInfoDtos;
-                                                            const dataInfo = info.file.response.data
-                                                            const fileInfo = dataInfo.name.split(".")
-                                                            const attachInfoItem = {
-                                                                id: "",
-                                                                name: dataInfo.originalName.split(".")[0],
-                                                                description: "",
-                                                                filePath: dataInfo.name,
-                                                                fileSize: dataInfo.size,
-                                                                fileSuffix: fileInfo[fileInfo.length - 1],
-                                                                userName: dataInfo.userName,
-                                                                fileUploadTime: dataInfo.fileUploadTime,
-                                                                link: dataInfo.link
-                                                            };
-                                                            operation.add(attachInfoItem);
-                                                            if (attachInfoDtos) {
-                                                                attachInfoDtos.push(attachInfoItem);
-                                                            } else {
-                                                                attachInfoDtos = [attachInfoItem];
-                                                            }
-                                                            this.setState({
-                                                                contract: {
-                                                                    ...(contract || {}),
-                                                                    attachInfoDtos: attachInfoDtos
-                                                                }
-                                                            })
-                                                        } else if (info.file.status === 'error') {
-                                                            console.log(info.file, info.fileList);
-                                                        }
-                                                    }} showUploadList={false}>
-                                                    <Button type="primary">添加附件</Button>
-                                                </Upload>
-                                                {/* <Button type="primary" onClick={async () => {
-                                                    let attachInfoDtos: any[] = this.getForm()?.getFieldValue("attachInfoDtos");
-                                                    let checked: number[] = this.state.checkList || [];
-                                                    let batchId: any[] = [];
-                                                    checked.map((item: any) => {
-                                                        batchId.push(attachInfoDtos[item].id);
-                                                        contract.attachInfoDtos.splice(item, 1);
-                                                    })
-                                                    if (batchId[0]) {
-                                                        const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${batchId.join(',')}`)
-                                                        if (resData) {
-                                                            operation.remove(checked)
-                                                        }
-                                                    } else {
-                                                        operation.remove(checked)
-                                                    }
-                                                    this.setState({
-                                                        contract: {
-                                                            ...contract,
-                                                            attachInfoDtos: contract.attachInfoDtos
-                                                        },
-                                                        checkList: []
-                                                    })
-                                                }}>删除</Button> */}
-                                            </Space>
-                                            {
-                                                fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
-                                                    <Row key={`${field.name}_${index}`} className={styles.FormItem}>
-                                                        <Col span={1}>
-                                                            <Checkbox checked={this.state.checkList && this.state?.checkList.includes(index)} value={index} onChange={this.checkChange}></Checkbox>
-                                                        </Col>
-                                                        <Col span={6}>
-                                                            <Form.Item {...field} name={[field.name, 'name']} fieldKey={[field.fieldKey, 'name']}>
-                                                                <Input disabled className={styles.Input} />
-                                                            </Form.Item>
-                                                        </Col>
-                                                        <Col span={2}>
-                                                            <Form.Item {...field} name={[field.name, 'fileSize']} fieldKey={[field.fieldKey, 'fileSize']}>
-                                                                <Input disabled className={styles.Input} />
-                                                            </Form.Item>
-                                                        </Col>
-                                                        <Col span={4}>
-                                                            <Form.Item {...field} name={[field.name, 'fileUploadTime']} fieldKey={[field.fieldKey, 'fileUploadTime']}>
-                                                                <Input disabled className={styles.Input} />
-                                                            </Form.Item>
-                                                        </Col>
-                                                        <Col span={4}>
-                                                            <Form.Item {...field} name={[field.name, 'userName']} fieldKey={[field.fieldKey, 'userName']}>
-                                                                <Input disabled className={styles.Input} />
-                                                            </Form.Item>
-                                                        </Col>
-                                                        <Col span={4}>
-                                                            <Form.Item {...field} name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
-                                                                <Input.TextArea rows={1} maxLength={300} />
-                                                            </Form.Item>
-                                                        </Col>
-                                                        <Col span={3}>
-                                                            <Space direction="horizontal" size="small">
-                                                                <Button type="link" onClick={async () => {
-                                                                    let attachInfoDtos: any = this.state.contract?.attachInfoDtos[index];
-                                                                    const suffix: string = attachInfoDtos.fileSuffix
-                                                                    if (['jpg', 'jpeg', 'png'].includes(suffix)) {
-                                                                        this.setState({
-                                                                            isVisible: true,
-                                                                            url: {
-                                                                                link: attachInfoDtos.id ? attachInfoDtos.filePath : attachInfoDtos.link,
-                                                                                fileSuffix: attachInfoDtos
-                                                                            }
-                                                                        })
-                                                                    } else if (suffix === 'pdf') {
-                                                                        window.open(attachInfoDtos.id ? attachInfoDtos.filePath : attachInfoDtos.link)
-                                                                    } else {
-                                                                        message.info('仅图片、pdf支持预览')
-                                                                    }
-
-                                                                }}>预览</Button>
-                                                                <Button type="link" onClick={
-                                                                    () => {
-                                                                        const attachInfoDtos: any = this.state.contract?.attachInfoDtos[index]
-                                                                        downLoadFile(attachInfoDtos.link || attachInfoDtos.filePath)
-                                                                    }
-                                                                }>下载</Button>
-                                                                <ConfirmableButton confirmTitle="要删除该附件吗？"
-                                                                    type="link" placement="topRight"
-                                                                    onConfirm={async () => {
-                                                                        let attachInfoDtos = this.getForm()?.getFieldValue("attachInfoDtos");
-                                                                        if (attachInfoDtos[index].id) {
-                                                                            const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${attachInfoDtos[index].id}`)
-                                                                            if (resData) {
-                                                                                operation.remove(index);
-                                                                            }
-                                                                        } else {
-                                                                            operation.remove(index);
-                                                                        }
-                                                                        contract.attachInfoDtos.splice(index, 1);
-                                                                        this.setState({
-                                                                            contract: {
-                                                                                ...contract,
-                                                                                attachInfoDtos: contract.attachInfoDtos
-                                                                            }
-                                                                        })
-                                                                    }}>
-                                                                    <DeleteOutlined />
-                                                                </ConfirmableButton>
-                                                            </Space>
-                                                        </Col>
-                                                    </Row>
-                                                ))
-                                            }
-                                        </>
-                                    );
-                                }
-                            }
-                        </Form.List>
-                    </>
-                )
+                return (<Attachment ref={ this.attachRef } title={false} edit dataSource={this.state.contract.attachInfoDtos} />)
             }
         }];
     }
