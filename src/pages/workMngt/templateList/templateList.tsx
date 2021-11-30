@@ -1,10 +1,11 @@
 import React, { useState, } from "react"
 import { Input, DatePicker, Select, } from 'antd'
 import { Page } from '../../common'
-import { useHistory } from "react-router-dom"
+import { useHistory, useLocation } from "react-router-dom"
 export default function TemplateList() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({})
+    const location = useLocation<{ state: {} }>();
     const columns: any[] = [
         {
             title: '序号',
@@ -111,6 +112,7 @@ export default function TemplateList() {
                 columns={columns}
                 exportPath={`/tower-science/loftingTemplate`}
                 onFilterSubmit={onFilterSubmit}
+                requestData={{ status: location.state }}
                 searchFormItems={[
                     {
                         name: 'drawType',
