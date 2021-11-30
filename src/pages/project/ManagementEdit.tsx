@@ -1,16 +1,13 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { Button, Form, message, Spin, Upload } from "antd"
-import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable } from '../common'
-import ManagementDetailTabsTitle from "./ManagementDetailTabsTitle"
-import { baseInfoData, enclosure, cargoVOListColumns } from './managementDetailData.json'
+import { Button, Form, message, Spin } from "antd"
+import { DetailContent, BaseInfo, EditTable, DetailTitle, Attachment, AttachmentRef } from '../common'
+import { baseInfoData, cargoVOListColumns } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
-import AuthUtil from "../../utils/AuthUtil"
-import { downLoadFile } from "../../utils"
 export default function BaseInfoEdit(): JSX.Element {
   const history = useHistory()
-  const [attachVosData, setAttachVosData] = useState<any[]>([])
+  const attachRef = useRef<AttachmentRef>()
   const [address, setAddress] = useState<string>("")
   const [baseInfoForm] = Form.useForm()
   const [cargoVOListForm] = Form.useForm()
@@ -42,7 +39,7 @@ export default function BaseInfoEdit(): JSX.Element {
       const result = await run({
         ...baseInfoData,
         id: data?.id,
-        attachInfoDtos: attachVosData,
+        fileIds: attachRef.current?.getDataSource().map(item => item.id),
         cargoDTOList: cargoVOListData.submit,
         projectLeaderId: projectLeaderType ? (data as any).projectLeaderId : baseInfoData.projectLeader?.records[0].id,
         projectLeader: baseInfoData.projectLeader?.value || baseInfoData.projectLeader,
@@ -58,37 +55,10 @@ export default function BaseInfoEdit(): JSX.Element {
     }
   }
 
-  const uploadChange = (event: any) => {
-    if (event.file.status === "done") {
-      if (event.file.response.code === 200) {
-        const dataInfo = event.file.response.data
-        
-        const fileInfo = dataInfo.name.split(".")
-        setAttachVosData([...attachVosData, {
-          id: "",
-          uid: attachVosData.length,
-          link: dataInfo.link,
-          name: dataInfo.originalName.split(".")[0],
-          description: "",
-          filePath: dataInfo.name,
-          fileSize: dataInfo.size,
-          fileSuffix: fileInfo[fileInfo.length - 1],
-          userName: dataInfo.userName,
-          fileUploadTime: dataInfo.fileUploadTime
-        }])
-      }
-    }
-  }
-
-  const deleteAttachData = (id: number) => {
-    setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-  }
-
   const handleBaseInfoChange = async (fields: any) => {
     if (fields.address) {
       const formData = await baseInfoForm.getFieldsValue()
       setAddress(fields.address)
-      console.log(formData.projectLeader)
       data && (data.projectLeaderId = formData.projectLeader?.id)
       baseInfoForm.setFieldsValue({
         ...formData,
@@ -112,7 +82,7 @@ export default function BaseInfoEdit(): JSX.Element {
     ]}>
       <Spin spinning={loading}>
         <DetailTitle title="基本信息" />
-        <BaseInfo 
+        <BaseInfo
           onChange={handleBaseInfoChange}
           form={baseInfoForm}
           columns={
@@ -122,26 +92,7 @@ export default function BaseInfoEdit(): JSX.Element {
           } dataSource={data || {}} edit />
         <DetailTitle title="物资清单" />
         <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
-        <DetailTitle title="附件信息" operation={[<Upload
-          key="sub"
-          name="file"
-          multiple={true}
-          action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-          headers={{
-            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-            'Tenant-Id': AuthUtil.getTenantId(),
-            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-          }}
-          showUploadList={false}
-          onChange={uploadChange}
-        ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
-        <CommonTable columns={[{
-          title: "操作", dataIndex: "opration",
-          render: (_: any, record: any) => (<>
-            <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-            <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
-          </>)
-        }, ...enclosure]} dataSource={attachVosData} />
+        <Attachment edit ref={attachRef} />
       </Spin>
     </DetailContent>
   </>

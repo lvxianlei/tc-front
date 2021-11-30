@@ -88,8 +88,5 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
             <DetailTitle title="操作信息" />
             <CommonTable columns={tableColumns} dataSource={detailData.businessRecordVos} pagination={false} />
         </DetailContent>
-        <Modal visible={pictureVisible} onCancel={() => setPictureVisible(false)} footer={false}>
-            <Image src={pictureUrl} preview={false} />
-        </Modal>
     </>
 }
