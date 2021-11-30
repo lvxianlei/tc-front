@@ -343,12 +343,14 @@
                         "label": "放样任务",
                         "icon": "technology",
                         "path": "/setOutTask",
-                        "authority": "loft_task",
+                        // "authority": "loft_task",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "放样任务",
                                 "path": "/setOutTask",
-                                "authority": "loft_task_list"
+                                // "authority": "loft_task_list"
+                                "authority": "approvalm"
                             }
                         ]
                     },
