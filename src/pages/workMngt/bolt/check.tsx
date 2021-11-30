@@ -75,6 +75,7 @@ export default function BoltCheck(): React.ReactNode {
         await RequestUtil.put('/tower-science/boltRecord/completeCheck', {
             productCategoryId: params.id,
         })
+        history.go(-1)
     }
     return (
         <div>
