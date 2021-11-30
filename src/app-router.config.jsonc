@@ -1780,10 +1780,31 @@
       "authority": "basic_settings_vehicle_management"
     },
     // 通用
+    { // 选择应用
+      "name": "选择应用",
+      "path": "/chooseApply",
+      "module": "./pages/chooseApply/ChooseApply",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 首页-个人中心
       "name": "个人中心",
       "path": "/homePage/personalCenter",
       "module": "./pages/homePage/personalCenter/PersonalCenter",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
+    { // 首页-我的公告/我的消息
+      "name": "我的公告",
+      "path": "/homePage/noticeAndMessage",
+      "module": "./pages/homePage/noticeAndMessage/NoticeAndMessage",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
+    { // 首页-我的公告/我的消息-详情
+      "name": "详情",
+      "path": "/homePage/noticeAndMessage/detail",
+      "module": "./pages/homePage/noticeAndMessage/NoticeAndMessage",
       "exact": true,
       "authority": "home_page_person_center"
     },
@@ -1927,7 +1948,14 @@
       "exact": true,
       "authority": "basic_data_database_management"
     },
-    { // 系统日志
+    { // 系统日志-操作日志
+      "name": "操作日志",
+      "path": "/systemLog/operationLog",
+      "module": "./pages/system-log/OperationLog",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 系统日志-登录日志
       "name": "登录日志",
       "path": "/systemLog/login",
       "module": "./pages/system-log/Login",
