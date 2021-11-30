@@ -40,8 +40,8 @@
         
          if (value.endPayApplyTime) {
              const formatDate = value.endPayApplyTime.map((item: any) => item.format("YYYY-MM-DD"))
-             value.endPayApplyTime = formatDate[0]
-             value.startPayApplyTime = formatDate[1]
+             value.endPayApplyTime = `${formatDate[1]} 23:59:59`
+             value.startPayApplyTime = `${formatDate[0]} 00:00:00`
          }
          return value
      }
@@ -112,7 +112,7 @@
                      },
                      {
                          name: 'endPayApplyTime',
-                         label: '请款日期：',
+                         label: '付款日期：',
                          children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: "200px" }} />
                      }
                  ]}
