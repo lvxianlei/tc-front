@@ -22,7 +22,7 @@
         },
         {
             "title": "请款部门",
-            "dataIndex": "payerDepName"
+            "dataIndex": "payerDeptName"
         },
         {
             "title": "费用类型",
@@ -82,7 +82,7 @@
         },
         {
             "title": "请款部门",
-            "dataIndex": "payerDepName"
+            "dataIndex": "payerDeptName"
         },
         {
             "title": "开户银行",
@@ -172,6 +172,7 @@
             "title": "付款日期",
             "dataIndex": "payTime",
             "type": "date",
+            "format": "YYYY-MM-DD",
             "width": 200,
             "rules": [
                 {

@@ -464,9 +464,13 @@ interface IAppointed {
     readonly sectionNum?: number;
     readonly name?: string;
     readonly materialLeaderDepartment?: string | any;
+    readonly materialLeaderDepartmentName?: string | any;
     readonly materialLeader?: string;
+    readonly materialLeaderName?: string;
     readonly materialCheckLeaderDepartment?: string | any;
+    readonly materialCheckLeaderDepartmentName?: string | any;
     readonly materialCheckLeader?: string;
+    readonly materialCheckLeaderName?: string;
     readonly plannedDeliveryTime?: string;
 }
 
@@ -500,7 +504,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     }
 
     private async modalShow(): Promise<void> {
-        const data = await RequestUtil.get<IAppointed>(this.props.type==='message'?`/tower-science/drawProductSegment/detail/${ this.props.id }`:`/tower-science/productSegment/detail?productCategoryId=${ this.props.id }`)
+        const data = await RequestUtil.get<IAppointed>(this.props.type==='message'?`/tower-science/drawProductSegment/detail/${ this.props.id }`:`/tower-science/drawProductSegment/detail/${ this.props.id }`)
         const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
             return {
@@ -649,10 +653,10 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     { this.props.detailData?.name || '' }
                                 </Descriptions.Item>
                                 <Descriptions.Item label="提料人">
-                                    { this.props.detailData?.materialLeaderDepartment || '' } - {  this.props.detailData?.materialLeader || '' }
+                                    { this.props.detailData?.materialLeaderDepartmentName || '' } - {  this.props.detailData?.materialLeaderName || '' }
                                 </Descriptions.Item>
                                 <Descriptions.Item label="校核人">
-                                    { this.props.detailData?.materialCheckLeaderDepartment || '' } - {  this.props.detailData?.materialCheckLeader || '' }
+                                    { this.props.detailData?.materialCheckLeaderDepartmentName || '' } - {  this.props.detailData?.materialCheckLeaderName || '' }
                                 </Descriptions.Item>
                                 <Descriptions.Item label="交付时间">
                                     { this.props.detailData?.plannedDeliveryTime || '' }

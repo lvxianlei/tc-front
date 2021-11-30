@@ -303,7 +303,7 @@
             },
             {
                 "title": "标准",
-                "dataIndex": "standardName",
+                "dataIndex": "standard",
                 "search": true
             },
             {

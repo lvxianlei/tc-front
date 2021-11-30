@@ -59,9 +59,17 @@ export default function PickTowerDetail(): React.ReactNode {
                     title="确认保存数据?"
                     onConfirm={ async () => {
                         if(form.getFieldsValue(true).data&&form.getFieldsValue(true).data.length>0){
-                            const value = await RequestUtil.post(`/tower-science/drawProductStructure/check/cover`,form.getFieldsValue(true).data)
+                            let values = form.getFieldsValue(true).data;
+                            values = values.map((res: any) => {
+                                return {
+                                    ...res,
+                                    segmentGroupId: tableDataSource[0].segmentGroupId,
+                                    productCategory: tableDataSource[0].productCategory
+                                }
+                            })
+                            const value = await RequestUtil.post(`/tower-science/drawProductStructure/check/cover`, values)
                             if(value){
-                                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,form.getFieldsValue(true).data).then(()=>{
+                                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`, values).then(()=>{
                                     message.success('保存成功！')
                                 }).then(()=>{
                                     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
@@ -132,9 +140,13 @@ export default function PickTowerDetail(): React.ReactNode {
                     <Form form={form} style={{width:'60%'}}>
                     <Table
                         columns={[
-                           
-                            { title: '段号', dataIndex: 'segmentName', key: 'segmentName', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-                                <Form.Item>
+                            { title: '段组号', dataIndex: 'segmentGroupName', key: 'segmentGroupName', render:(_: any, record: Record<string, any>, index: number): React.ReactNode =>(
+                                <Form.Item name={['data',index, "segmentGroupName"]} initialValue={ _ }>
+                                    <Input disabled/>
+                                </Form.Item>
+                            )},
+                            { title: '段号', dataIndex: 'segmentName', key: 'segmentName', render:(_: any, _b: any, index: number): React.ReactNode =>(
+                                <Form.Item name={['data',index, "segmentName"]}>
                                     <Input size="small"/>
                                 </Form.Item>
                             )},

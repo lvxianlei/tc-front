@@ -80,38 +80,17 @@ export default function PickList(): React.ReactNode {
             title: '塔型提料状态',
             width: 100,
             dataIndex: 'status',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: null,
-                        label: "-"
-                    },
-                    {
-                        value: -1,
-                        label: "-"
-                    },
-                    {
-                      value: 1,
-                      label: "待指派"
-                    },
-                    {
-                      value: 2,
-                      label: "提料中"
-                    },
-                    {
-                      value: 3,
-                      label: "配段中"
-                    },
-                    {
-                      value: 4,
-                      label: "已完成"
-                    },
-                    // {
-                    //   value: 5,
-                    //   label: "已提交"
-                    // },
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '待指派';
+                    case 2:
+                        return '提料中';
+                    case 3:
+                        return '配段中';
+                    case 4:
+                        return '已完成';
+                }
             }
         },
         {

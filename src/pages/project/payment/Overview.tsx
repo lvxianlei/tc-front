@@ -1,21 +1,11 @@
-/*
- * @Descripttion: 
- * @version: 
- * @Author: wangxindong
- * @email: wxd93917787@163.com
- * @Date: 2021-11-12 13:56:51
- * @LastEditors: wangxindong
- * @LastEditTime: 2021-11-18 10:59:10
- */
 import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
 import { PaymentList, paymentdetail } from "./PaymentData.json"
-import { enclosure, auditIdRecord } from "../approval-mngt/approvalHeadData.json"
+import { auditIdRecord } from "../../approval-mngt/approvalHeadData.json"
 import useRequest from '@ahooksjs/use-request'
-import RequestUtil from '../../utils/RequestUtil'
-import { downLoadFile } from "../../utils"
+import RequestUtil from '../../../utils/RequestUtil'
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()

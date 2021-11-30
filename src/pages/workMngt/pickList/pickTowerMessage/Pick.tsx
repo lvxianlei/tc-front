@@ -135,7 +135,7 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             editable: true,
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "length"]} initialValue={ _===-1?0:_}>
+                <Form.Item name={['data',index, "length"]} initialValue={ _ }>
                     <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
@@ -291,7 +291,6 @@ export default function Lofting(): React.ReactNode {
     })
     const [ tableColumns, setColumns ] = useState(columnsSetting);
     const onFilterSubmit = (value: any) => {
-        console.log(value)
         setFilterValue(value)
         // return value
         setRefresh(!refresh);
@@ -351,7 +350,7 @@ export default function Lofting(): React.ReactNode {
                         <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                             <Popconfirm
                                 title="确认删除?"
-                                onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure`,{ids: record.id}).then(()=>{
+                                onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ record.id }`).then(()=>{
                                     message.success('删除成功！');
                                     setRefresh(!refresh);
                                 })}
@@ -407,9 +406,7 @@ export default function Lofting(): React.ReactNode {
                                         message.success('导入成功！');
                                         setRefresh(!refresh);
                                     }
-                                    
                                 }
-                                
                             } }
                         >
                             <Button type="primary" ghost>导入</Button>
@@ -422,7 +419,7 @@ export default function Lofting(): React.ReactNode {
                         <Popconfirm
                             title="确认完成提料?"
                             onConfirm={ async () => {
-                                await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting?productSegmentId=${params.productSegmentId}`).then(()=>{
+                                await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting?segmentGroupId=${params.productSegmentId}`).then(()=>{
                                     message.success('提料成功！')
                                 }).then(()=>{
                                     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)
@@ -469,7 +466,7 @@ export default function Lofting(): React.ReactNode {
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
                         <Popconfirm
                             title="确认删除?"
-                            onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure`,{ids: selectedKeys}).then(()=>{
+                            onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ selectedKeys.join(',') }`).then(()=>{
                                 message.success('删除成功！');
                                 setRefresh(!refresh);
                             })}
@@ -567,7 +564,7 @@ export default function Lofting(): React.ReactNode {
                         </Form.Item>
                     ) },
                     { title: '长度（mm）', dataIndex: 'length', key: 'length',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "length"]} initialValue={ record.length }>
+                        <Form.Item name={['dataV',index, "length"]}>
                             <InputNumber size="small" min={0}/>
                         </Form.Item>
                     ) },

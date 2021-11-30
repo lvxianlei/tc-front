@@ -154,36 +154,40 @@ export default function CollectionInfomation(): React.ReactNode {
                                 {approvalStatus.map((item: any, index: number) => <Radio.Button value={item.value} key={`${index}_${item.value}`}>{item.label}</Radio.Button>)}
                             </Radio.Group>
                         </div>
-                        <div style={{marginLeft: '20px'}}>
-                            <Button type="primary" style={{marginRight: 20}} onClick={() => setVisible(true)}>新增</Button>
-                            <Upload 
-                                accept=".xls,.xlsx"
-                                action={ () => {
-                                    const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                                    return baseUrl+'/tower-finance/backMoney/importBackMoney'
-                                } } 
-                                headers={
-                                    {
-                                        'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                                        'Tenant-Id': AuthUtil.getTenantId(),
-                                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                                    }
-                                }
-                                showUploadList={ false }
-                                onChange={ (info) => {
-                                    if(info.file.response && !info.file.response?.success) {
-                                        message.warning(info.file.response?.msg)
-                                    }else if(info.file.response && info.file.response?.success){
-                                        message.success('导入成功！');
-                                        setRefresh(!refresh);
-                                    }
-                                    
-                                } }
-                            >
-                                <Button type="primary" ghost>导入</Button>
-                            </Upload>
-                            <Button type="link" onClick={() => downloadTemplate('/tower-finance/backMoney/exportBackMoney', '回款信息管理导入模板') }>下载导入模板</Button>
-                        </div>
+                        {
+                           confirmStatus === 1 && (
+                                <div style={{marginLeft: '20px'}}>
+                                    <Button type="primary" style={{marginRight: 20}} onClick={() => setVisible(true)}>新增</Button>
+                                    <Upload 
+                                        accept=".xls,.xlsx"
+                                        action={ () => {
+                                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                                            return baseUrl+'/tower-finance/backMoney/importBackMoney'
+                                        } } 
+                                        headers={
+                                            {
+                                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                                'Tenant-Id': AuthUtil.getTenantId(),
+                                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                                            }
+                                        }
+                                        showUploadList={ false }
+                                        onChange={ (info) => {
+                                            if(info.file.response && !info.file.response?.success) {
+                                                message.warning(info.file.response?.msg)
+                                            }else if(info.file.response && info.file.response?.success){
+                                                message.success('导入成功！');
+                                                setRefresh(!refresh);
+                                            }
+                                            
+                                        } }
+                                    >
+                                        <Button type="primary" ghost>导入</Button>
+                                    </Upload>
+                                    <Button type="link" onClick={() => downloadTemplate('/tower-finance/backMoney/exportBackMoney', '回款信息管理导入模板') }>下载导入模板</Button>
+                                </div>
+                           ) 
+                        }
                     </div>
                 }
                 onFilterSubmit={onFilterSubmit}

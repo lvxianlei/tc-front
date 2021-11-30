@@ -79,7 +79,7 @@ class ExportList extends Component<Props, State>  {
         let paramsArray: any = [];
         //拼接参数
         Object.keys(object).forEach(key => paramsArray.push(key + '=' + object[key]))
-        return fetch(`${this.props.url}?${paramsArray.join('&')}`, {
+        return fetch(`${ process.env.REQUEST_API_PATH_PREFIX }${this.props.url}?${paramsArray.join('&')}`, {
             mode: 'cors',
             method: 'GET',
             headers: {
