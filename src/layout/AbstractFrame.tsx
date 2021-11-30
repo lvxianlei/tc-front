@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Layout } from 'antd';
+import { Button, Col, Layout, Popconfirm, Row } from 'antd';
 import { SiderTheme } from 'antd/lib/layout/Sider';
 import React from 'react';
 
@@ -10,6 +10,9 @@ import ApplicationContext from '../configuration/ApplicationContext';
 import EventBus from '../utils/EventBus';
 import styles from './AbstractFrame.module.less';
 import layoutStyles from './Layout.module.less';
+import { UserOutlined, BellOutlined } from '@ant-design/icons';
+import AuthUtil from '../utils/AuthUtil';
+import { Link } from 'react-router-dom';
 
 
 export interface IAbstractFrameProps { }
@@ -95,6 +98,14 @@ export default abstract class AbstractFrame<
     protected getMenuTheme(): SiderTheme {
         return ApplicationContext.get().layout?.navigationPanel?.props?.theme || 'light';
     }
+    
+    protected logOut(): void {
+        AuthUtil.removeTenantId();
+        AuthUtil.removeSinzetechAuth();
+        AuthUtil.removeRealName();
+        AuthUtil.removeUserId();
+        window.location.pathname = '/login';
+    };
 
     /**
      * @description Renders abstract frame
@@ -103,6 +114,29 @@ export default abstract class AbstractFrame<
     public render(): React.ReactNode {
         return (
             <Layout className={layoutStyles.height100}>
+                <div style={{ position: 'absolute', width: '200px', height:'64px' }} className={ layoutStyles.bk }/>
+                <div className={layoutStyles.logout}>
+                    <Row>
+                        <Col>
+                            <Link to={`/approvalm/management`} className={ layoutStyles.btn }>我的审批</Link>
+                        </Col>
+                        <Col><BellOutlined className={ layoutStyles.icon }/></Col>
+                        <Col>
+                            <UserOutlined className={ layoutStyles.icon }/>
+                            <Link to={`/homePage/personalCenter`} className={ layoutStyles.btn }>{ AuthUtil.getRealName() }</Link>
+                        </Col>
+                        <Col>
+                            <Popconfirm
+                                title="确认退出登录?"
+                                onConfirm={ this.logOut }
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button type="link" className={ layoutStyles.btn }>退出</Button>
+                            </Popconfirm>
+                        </Col>
+                    </Row>
+                </div>
                 <Layout.Header className={styles.header}>
                     <Layout>
                         <Layout.Sider className={styles.logo} theme={this.getMenuTheme()} collapsedWidth={48} width={this.getMenuContainerWidth()}>
