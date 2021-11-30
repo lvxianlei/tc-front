@@ -14,6 +14,8 @@ import ConfirmableButton from '../../../components/ConfirmableButton';
 import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IUser } from './IUser';
+import AssociatedEmployees from './AssociatedEmployees';
+import ResetPassword from './ResetPassword';
 
 interface IUserMngtProps { }
 interface IUserRouteProps extends RouteComponentProps<IUserMngtProps>, WithTranslation { }
@@ -264,6 +266,8 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
                     <Space direction="horizontal" size="middle">
                         {/* <Link to={ `/sys/users/detail/${ (item as IUser).id }` }>查看</Link> */}
                         <Link to={`/sys/users/setting/${(item as IUser).id}`}>编辑</Link>
+                        <AssociatedEmployees item={item as IUser} hanleCallBack={this.fetchUsers} />
+                        <ResetPassword item={item as IUser} hanleCallBack={this.fetchUsers} />
                         <ConfirmableButton confirmTitle="确定要删除该角色吗？" type="link" onConfirm={this.onDelete([item as IUser])}>删除</ConfirmableButton>
                     </Space>
                 );

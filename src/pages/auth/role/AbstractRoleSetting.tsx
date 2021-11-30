@@ -184,30 +184,35 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
                 rules: [{
                     required: true
                 }]
-            }, {
-                label: '角色编码',
-                name: 'code',
-                initialValue: this.state.roleDetail?.code,
-                children: <Input placeholder="请输入角色编码"/>,
-                rules: [{
-                    required: true
-                }]
-            }, {
-                label: '上级角色',
-                name: 'parentId',
-                initialValue: this.state.roleDetail?.parentId,
-                children: <TreeSelect placeholder="请选择上级角色" className={ layoutStyles.width100 }
-                    treeData={ this.wrapRole2DataNode( this.state.roles ) } showSearch={ true }/>
-            }, {
-                label: '角色排序',
-                name: 'sort',
-                initialValue: this.state.roleDetail?.sort,
-                children: <InputNumber placeholder="请输入角色排序" className={ layoutStyles.width100 }/>,
-                rules: [{
-                    required: true
-                }]
-            }]
-        }, {
+            }, 
+            // {
+            //     label: '角色编码',
+            //     name: 'code',
+            //     initialValue: this.state.roleDetail?.code,
+            //     children: <Input placeholder="请输入角色编码"/>,
+            //     rules: [{
+            //         required: true
+            //     }]
+            // },
+            // {
+            //     label: '上级角色',
+            //     name: 'parentId',
+            //     initialValue: this.state.roleDetail?.parentId,
+            //     children: <TreeSelect placeholder="请选择上级角色" className={ layoutStyles.width100 }
+            //         treeData={ this.wrapRole2DataNode( this.state.roles ) } showSearch={ true }/>
+            // },
+            // {
+            //     label: '角色排序',
+            //     name: 'sort',
+            //     initialValue: this.state.roleDetail?.sort,
+            //     children: <InputNumber placeholder="请输入角色排序" className={ layoutStyles.width100 }/>,
+            //     rules: [{
+            //         required: true
+            //     }]
+            // }
+        ]
+        }, 
+        {
             title: '权限设置',
             itemProps: [{
                 children: (
