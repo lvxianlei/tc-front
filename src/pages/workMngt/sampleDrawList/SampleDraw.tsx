@@ -152,6 +152,9 @@ export default function SampleDraw(): React.ReactNode {
                 extraOperation={
                     <Space>
                     {/* <Button type="primary">导出</Button> */}
+                    <Button type="primary" onClick={()=>{
+                        downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {} , true)
+                    }}>导出</Button>
                     {params.status==='2'?<Upload
                         accept=".zip,.rar,.7z"
                         multiple={true}
