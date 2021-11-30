@@ -209,12 +209,6 @@ export default function ScheduleView(): React.ReactNode {
             dataIndex: 'smallSampleLeaderName'
         },
         {
-            key: 'smallSampleDeliverTime',
-            title: '小样图计划交付时间',
-            width: 200,
-            dataIndex: 'smallSampleDeliverTime'
-        },
-        {
             key: 'boltLeaderName',
             title: '螺栓清单负责人',
             width: 100,
