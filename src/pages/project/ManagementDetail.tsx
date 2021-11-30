@@ -73,7 +73,7 @@ export default function ManagementDetail(): React.ReactNode {
         }
     }), { manual: true })
 
-    const { loading: deleteLoading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/productGroup/${id}`)
             resole(result)
@@ -124,11 +124,9 @@ export default function ManagementDetail(): React.ReactNode {
             content: "确定删除此数据吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    const result = await deleteRun(id)
-                    if (result) {
-                        resove("")
-                        history.go(0)
-                    }
+                    await deleteRun(id)
+                    resove("")
+                    history.go(0)
                 } catch (error) {
                     reject(error)
                 }
@@ -142,11 +140,9 @@ export default function ManagementDetail(): React.ReactNode {
             content: "确定删除此数据吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    const result = await deleteNoticeRun(id)
-                    if (result) {
-                        resove("")
-                        history.go(0)
-                    }
+                    await deleteNoticeRun(id)
+                    resove("")
+                    history.go(0)
                 } catch (error) {
                     reject(error)
                 }
