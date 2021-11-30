@@ -4,6 +4,7 @@
  */
 import React, { useState, useRef } from 'react';
 import { Button, Input, DatePicker, Radio, Select, message, Modal } from 'antd';
+import moment from 'moment';
 import useRequest from '@ahooksjs/use-request'
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
@@ -29,6 +30,7 @@ export default function ApplicationColunm(): React.ReactNode {
     const [visibleRecovery, setVisibleRecovery] = useState<boolean>(false);
     const [ visibleSee, setVisibleSee ] = useState<boolean>(false);
     const [id, setId] = useState<string>();
+    const [requiredReturnTime, setRequiredReturnTime] = useState<string>("");
     const addRef = useRef<EditRefProps>();
     const addRecoveryRef = useRef<EditRefProps>()
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -128,6 +130,16 @@ export default function ApplicationColunm(): React.ReactNode {
                                 )
                             })
                         }
+                        if (item.dataIndex === 'requiredReturnTime') {
+                            return ({
+                                title: item.title,
+                                dataIndex: item.dataIndex,
+                                width: 50,
+                                render: (_: any, record: any): React.ReactNode => (
+                                    <span style={{color: (acceptStatus === 2 && moment(record.requiredReturnTime).diff(moment(new Date()), 'days') > 0) ? 'red' : ''}}>{record.requiredReturnTime ? record.requiredReturnTime : ''}</span>
+                                )
+                            })
+                        }
                         return item;
                     }),
                     {
@@ -146,6 +158,7 @@ export default function ApplicationColunm(): React.ReactNode {
                                     {acceptStatus === 2 && <Button type="link" onClick={() => {
                                         setVisibleRecovery(true);
                                         setId(record.id);
+                                        setRequiredReturnTime(record.requiredReturnTime)
                                     }}>回收保函</Button>}
                                     {acceptStatus === 1 && <Button type="link" onClick={()=>{window.open(record.filePath)}}>生成文件</Button>}
                                 </>
@@ -230,7 +243,7 @@ export default function ApplicationColunm(): React.ReactNode {
                     </Button>
                   ]}
             >
-                <RecoveryGuaranteeLayer ref={addRecoveryRef} id={id} />
+                <RecoveryGuaranteeLayer ref={addRecoveryRef} id={id} requiredReturnTime={requiredReturnTime} />
             </Modal>
             {/* 查看保函申请 */}
             <SeeGuarantee
