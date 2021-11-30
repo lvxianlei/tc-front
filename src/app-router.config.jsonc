@@ -1996,6 +1996,69 @@
       "module": "./pages/employeeRelation/recruit/RecruitList",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工档案
+      "name": "员工档案",
+      "path": "/employeeRelation/archives",
+      "module": "./pages/employeeRelation/archives/ArchivesList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-劳动合同
+      "name": "劳动合同",
+      "path": "/employeeRelation/labour",
+      "module": "./pages/employeeRelation/labour/LabourList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-转正考核
+      "name": "转正考核",
+      "path": "/employeeRelation/full",
+      "module": "./pages/employeeRelation/full/FullList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工调动
+      "name": "员工调动",
+      "path": "/employeeRelation/transfer",
+      "module": "./pages/employeeRelation/transfer/TransferList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工离职
+      "name": "员工离职",
+      "path": "/employeeRelation/quit",
+      "module": "./pages/employeeRelation/quit/QuitList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-办理离职
+      "name": "办理离职",
+      "path": "/employeeRelation/quitProcedures",
+      "module": "./pages/employeeRelation/quitProcedures/QuitProceduresList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工复职
+      "name": "员工复职",
+      "path": "/employeeRelation/reinstate",
+      "module": "./pages/employeeRelation/reinstate/ReinstateList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-保险方案
+      "name": "保险方案",
+      "path": "/socialSecurity/plan",
+      "module": "./pages/socialSecurity/plan/PlanList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案
+      "name": "员工保险档案",
+      "path": "/socialSecurity/archives",
+      "module": "./pages/socialSecurity/archives/ArchivesList",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
