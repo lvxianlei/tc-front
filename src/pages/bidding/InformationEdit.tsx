@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Spin, Form, message, Upload, Modal, Select, Input } from 'antd'
-import { EditTable, DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common'
+import { Button, Spin, Form, message, Modal } from 'antd'
+import { EditTable, DetailTitle, BaseInfo, DetailContent, Attachment, AttachmentRef } from '../common'
 import { PopTable } from "../common/FormItemType"
 import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
-import AuthUtil from "../../utils/AuthUtil"
-import { downLoadFile } from "../../utils"
-import { Console } from "console";
 const columns = [
     { title: '分标编号', dataIndex: 'partBidNumber', "type": "text", "maxLength": 50 },
     { title: '货物类别', dataIndex: 'goodsType', "type": "text", "maxLength": 50 },
@@ -22,7 +19,7 @@ const columns = [
         "type": "text",
         "maxLength": 50
     },
-    
+
     {
         "title": "工程电压等级",
         "dataIndex": "projectVoltageLevel"
@@ -40,14 +37,15 @@ const columns = [
 export default function InfomationNew(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ id: string }>()
-    const [attachVosData, setAttachVosData] = useState<any[]>([])
+    // const [attachVosData, setAttachVosData] = useState<any[]>([])
+    const attachRef = useRef<AttachmentRef>()
     const [binddingStatus, setBinddingStatus] = useState<number>(0)
     const [visible, setVisible] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [baseInfoForm] = Form.useForm()
     const [bidForm] = Form.useForm()
     const [form] = Form.useForm()
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
             data.bidPackageInfoVOS.map((item: any) => {
@@ -55,15 +53,13 @@ export default function InfomationNew(): JSX.Element {
             });
             bidForm.setFieldsValue({ submit: data.bidPackageInfoVOS })
             setBinddingStatus(data.biddingStatus)
-            setAttachVosData(data.attachVos)
-
             resole(data)
         } catch (error) {
             reject(error)
         }
     }))
 
-    const { loading: saveStatus, data: saveResult, run } = useRequest((postData: {}) => new Promise(async (resove, reject) => {
+    const { loading: saveStatus, run } = useRequest((postData: {}) => new Promise(async (resove, reject) => {
         try {
             const data: any = await RequestUtil.put(`/tower-market/bidInfo`, postData)
             resove(data)
@@ -88,7 +84,7 @@ export default function InfomationNew(): JSX.Element {
             ...detailData,
             ...baseInfoResult,
             bidPackageInfoDTOList: bidPackageInfoDTOList.submit,
-            attachInfoDtos: attachVosData
+            fileIds: attachRef.current?.getDataSource().map(item => item.id)
         }
         delete postData.bidPackageInfoVOS
         delete postData.attachVos
@@ -104,29 +100,6 @@ export default function InfomationNew(): JSX.Element {
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
-
-    const uploadChange = (event: any) => {
-        if (event.file.status === "done") {
-            if (event.file.response.code === 200) {
-                const dataInfo = event.file.response.data
-                const fileInfo = dataInfo.name.split(".")
-                setAttachVosData([...attachVosData, {
-                    id: "",
-                    uid: attachVosData.length,
-                    name: dataInfo.originalName.split(".")[0],
-                    description: "",
-                    filePath: dataInfo.name,
-                    link: dataInfo.link,
-                    fileSize: dataInfo.size,
-                    fileSuffix: fileInfo[fileInfo.length - 1],
-                    userName: dataInfo.userName,
-                    fileUploadTime: dataInfo.fileUploadTime
-                }])
-            }
-        }
-    }
-
-    const deleteAttachData = (id: number) => setAttachVosData(attachVosData.filter((item: any) => (item.id || item.uid) !== id))
 
     const handleBaseInfoChange = (changeFiled: any) => {
         setIsEdit(true)
@@ -191,7 +164,6 @@ export default function InfomationNew(): JSX.Element {
         setIsEdit(true)
     }
     const handleBindChange = (fields: any, allFields: any) => {
-        setIsEdit(true)
         if (fields.submit.length - 1 >= 0) {
             const result = allFields.submit[fields.submit.length - 1];
             const flag = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]")
@@ -259,34 +231,6 @@ export default function InfomationNew(): JSX.Element {
         <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={filterBaseInfoData(baseInfoData)} dataSource={detailData} edit />
         <DetailTitle title="物资清单" />
         <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
-        <DetailTitle title="附件" operation={[<Upload
-            key="sub"
-            name="file"
-            accept=".doc,.docx,.pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg,.txt,.xls,.xlsx"
-            multiple={true}
-            action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-            headers={{
-                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                'Tenant-Id': AuthUtil.getTenantId(),
-                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-            }}
-            showUploadList={false}
-            onChange={uploadChange}
-        ><Button key="su" type="primary" ghost>上传附件</Button></Upload>]} />
-        <CommonTable columns={[{
-            title: "操作", dataIndex: "opration",
-            render: (_: any, record: any) => (<>
-                <Button type="link" onClick={() => deleteAttachData(record.id || record.uid)}>删除</Button>
-                <Button
-                    type="link"
-                    onClick={() => downLoadFile(record.id ? record.filePath : record.link)}
-                >下载</Button>
-            </>)
-        },
-        { title: '文件名', dataIndex: 'name' },
-        { title: '大小', dataIndex: 'fileSize' },
-        { title: '上传人', dataIndex: 'userName' },
-        { title: '上传时间', dataIndex: 'fileUploadTime' }
-        ]} dataSource={attachVosData} />
+        <Attachment title="附件" ref={attachRef} dataSource={data?.attachVos} edit />
     </DetailContent>
 }

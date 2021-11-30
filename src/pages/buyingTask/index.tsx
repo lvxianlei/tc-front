@@ -44,28 +44,20 @@ export default function RawMaterial() {
     const handleCancel3 = () => {
         setIsModalVisible3(false);
     };
-    //点击生成10条数据
-    const aa = async () => {
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/initData/materialPurchaseTask`)
-        console.log(result);
-    }
     const detail = async (purchaseId: any) => {
         setIsModalVisible(true);
         setId(purchaseId);
         setInquiryId(purchaseId);
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchaseTask/${purchaseId}`)
-        console.log(result);
         setObj(result);
     }
     const receive = async (purchaseId: number) => {
         const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/taskReceive/${purchaseId}`, {}, { "Content-Type": "application/json" })
-        console.log(result);
         setIsModalVisible(false);
         history.go(0);
     }
     const submit = async (rejectionDescription: string, id: number) => {
         const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/taskRejection`, { rejectionDescription, id }, { "Content-Type": "application/json" })
-        console.log(result);
         message.success("拒绝成功！");
         setIsModalVisible3(false)
     }
@@ -107,7 +99,7 @@ export default function RawMaterial() {
     const buttons2: {} | null | undefined = [
         <div>
             <Button onClick={() => setIsModalVisible2(false)}>关闭</Button>
-            {/* 调接口 */}<Button >提交/完成</Button>
+            <Button >提交/完成</Button>
         </div>
     ]
     const buttons3: {} | null | undefined = [
