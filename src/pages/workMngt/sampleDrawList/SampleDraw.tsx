@@ -90,7 +90,7 @@ export default function SampleDraw(): React.ReactNode {
                             setRefresh(!refresh)
                         })}
                     >
-                        <Button type="link">
+                        <Button type="link" disabled={!record.smallSample}>
                             删除
                         </Button>
                     </Popconfirm>:null}
