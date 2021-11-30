@@ -104,9 +104,24 @@ export default function Edit() {
             <CommonTable haveIndex columns={editInvoicingHead.map((item: any) => {
                 switch (item.dataIndex) {
                     case "ticketNumber":
-                        return ({ ...item, width: 150, render: (value: string, _: any, index) => <Input value={value} onChange={(event) => handleEditTableChange("ticketNumber", event?.target.value, index)} style={{ width: "100%" }} /> })
+                        return ({
+                            ...item, width: 150, render: (value: string, _: any, index) => <Input
+                                value={value}
+                                maxLength={12}
+                                onChange={(event) => handleEditTableChange("ticketNumber", event?.target.value, index)}
+                                style={{ width: "100%" }} />
+                        })
                     case "taxRate":
-                        return ({ ...item, render: (value: number, _: any, index) => <InputNumber value={value} step={1} min={0} max={100} onChange={(value: number) => handleEditTableChange("taxRate", value, index)} /> })
+                        return ({
+                            ...item, render: (value: number, _: any, index) => <InputNumber
+                                value={value}
+                                step={1}
+                                min={0}
+                                max={100}
+                                formatter={(value: any) => parseFloat(value).toFixed(2)}
+                                onChange={(value: number) => handleEditTableChange("taxRate", value, index)}
+                            />
+                        })
                     default:
                         return item
                 }
