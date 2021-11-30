@@ -1989,6 +1989,13 @@
       "module": "./pages/invoicing/Edit",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 人资-员工关系-招聘入职
+      "name": "招聘入职",
+      "path": "/employeeRelation/recruit",
+      "module": "./pages/employeeRelation/recruit/RecruitList",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
