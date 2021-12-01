@@ -155,6 +155,7 @@ export default function ConfirmList(): React.ReactNode {
             path="/tower-science/drawProductDetail"
             columns={columns}
             filterValue={filterValue}
+            exportPath="/tower-science/drawProductDetail"
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             requestData={{ status: location.state }}

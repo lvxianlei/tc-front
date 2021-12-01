@@ -70,10 +70,10 @@ const towerColumns=[
         }
     },
     {
-        key: 'basicHight',
+        key: 'basicHeight',
         title: '呼高（m）',
         width: 100,
-        dataIndex: 'basicHight'
+        dataIndex: 'basicHeight'
     },
     {
         key: 'otherWeight',

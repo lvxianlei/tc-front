@@ -218,7 +218,7 @@ export default function PlanTrack(): React.ReactNode {
         columns={columnsSetting}
         filterValue={filterValue}
         onFilterSubmit={onFilterSubmit}
-        exportPath="/tower-science/loftingTask/planTrackExport"
+        exportPath="/tower-science/loftingTask/planTrack"
         searchFormItems={[
             {
                 name: 'priority',

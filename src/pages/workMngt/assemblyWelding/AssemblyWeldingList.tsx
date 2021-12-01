@@ -134,11 +134,11 @@ export default function AssemblyWeldingList(): React.ReactNode {
     const userId = AuthUtil.getUserId();
     return <Page
         path="/tower-science/welding"
+        exportPath={`/tower-science/welding`}
         columns={ columns }
         headTabs={ [] }
         refresh={ refresh }
         requestData={ { status: location.state } }
-        // extraOperation={ <Button type="primary" ghost>导出</Button> }
         searchFormItems={ [
             {
                 name: 'updateTime',

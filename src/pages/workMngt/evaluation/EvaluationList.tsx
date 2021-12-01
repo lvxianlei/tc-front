@@ -125,7 +125,7 @@ export default function EvaluationList(): React.ReactNode {
         path="/tower-science/assessTask/assessList"
         columns={ columns }
         headTabs={ [] }
-        exportPath={`/tower-science/assessTask/exportAssessInfo`}
+        exportPath={`/tower-science/assessTask/assessList`}
         refresh={ refresh }
         requestData={ { status: location.state } }
         searchFormItems={ [
