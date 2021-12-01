@@ -13,11 +13,15 @@ import layoutStyles from './Layout.module.less';
 import { UserOutlined, BellOutlined } from '@ant-design/icons';
 import AuthUtil from '../utils/AuthUtil';
 import { Link } from 'react-router-dom';
+import NoticeModal from '../pages/common/NoticeModal';
+import { IAnnouncement } from '../pages/announcement/AnnouncementMngt';
+import RequestUtil from '../utils/RequestUtil';
 
 
 export interface IAbstractFrameProps { }
 export interface IAbstractFrameState {
     readonly collapsed: boolean;
+    readonly detailData: IAnnouncement[]
 }
 
 export default abstract class AbstractFrame<
@@ -66,9 +70,13 @@ export default abstract class AbstractFrame<
      */
     abstract renderFooterPanel(): React.ReactNode;
 
-    public componentDidMount(): void {
+    public async componentDidMount(): Promise<void> {
         super.componentDidMount && super.componentDidMount();
         EventBus.addListener('menu/collapsed', this.onCollapsed, this);
+        const data: IAnnouncement[] = await RequestUtil.get(`/tower-system/notice/staff/notice`);
+        this.setState({
+            detailData: data
+        })
     }
 
     public componentWillUnmount() {
@@ -120,10 +128,11 @@ export default abstract class AbstractFrame<
                         <Col>
                             <Link to={`/approvalm/management`} className={ layoutStyles.btn }>我的审批</Link>
                         </Col>
-                        <Col><BellOutlined className={ layoutStyles.icon }/></Col>
                         <Col>
-                            <UserOutlined className={ layoutStyles.icon }/>
-                            <Link to={`/homePage/personalCenter`} className={ layoutStyles.btn }>{ AuthUtil.getRealName() }</Link>
+                            <Link to={`/homePage/notice`} className={ layoutStyles.btn }><BellOutlined className={ layoutStyles.icon }/></Link>
+                        </Col>
+                        <Col>
+                            <Link to={`/homePage/personalCenter`} className={ layoutStyles.btn }><UserOutlined className={ layoutStyles.icon }/>{ AuthUtil.getRealName() }</Link>
                         </Col>
                         <Col>
                             <Popconfirm
@@ -137,6 +146,9 @@ export default abstract class AbstractFrame<
                         </Col>
                     </Row>
                 </div>
+                { this.state.detailData && this.state.detailData.map((res: IAnnouncement, index: number) => {
+                    return <NoticeModal detailData={ res } key={ index }/>
+                }) }
                 <Layout.Header className={styles.header}>
                     <Layout>
                         <Layout.Sider className={styles.logo} theme={this.getMenuTheme()} collapsedWidth={48} width={this.getMenuContainerWidth()}>
@@ -181,6 +193,7 @@ export default abstract class AbstractFrame<
                     </Layout>
                 </Layout>
                 */}
+               
             </Layout>
         );
     }
