@@ -113,7 +113,7 @@ export default function ConfirmDetail(): React.ReactNode {
           const data:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
           number = dataA+dataB+dataC+dataD+data;
         }
-        formRef.setFieldsValue({
+        dataIndex!=="basicHeight" && formRef.setFieldsValue({
             totalWeight:number + value
         })
       }} min={0} precision={2}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
