@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react"
-import { Button, Upload, Form, message, Spin } from 'antd'
+import React, { useEffect, useRef } from "react"
+import { Button, Form, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, EditTable, formatData } from '../../common'
+import { DetailContent, DetailTitle, BaseInfo, EditTable, formatData, Attachment, AttachmentRef } from '../../common'
 import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
-import { enclosure } from '../../project/managementDetailData.json'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import AuthUtil from "../../../utils/AuthUtil"
-import { downLoadFile } from "../../../utils"
 import ApplicationContext from "../../../configuration/ApplicationContext"
 export default function Edit() {
     const params = useParams<{ id: string }>()
     const history = useHistory()
-    const [attachVosData, setAttachVosData] = useState<any[]>([])
+    const attchRef = useRef<AttachmentRef>()
     const [baseInfo] = Form.useForm()
     const [invoicForm] = Form.useForm()
     const [billingForm] = Form.useForm()
@@ -25,7 +22,6 @@ export default function Edit() {
             baseInfo.setFieldsValue({ ...formatData(baseInfoHead, result) })
             invoicForm.setFieldsValue({ ...result.invoicingInfoVo })
             billingForm.setFieldsValue({ submit: result.invoicingDetailVos.map((item: any) => formatData(billingHead, item)) })
-            setAttachVosData(result.attachInfoVos)
             resole(result)
         } catch (error) {
             reject(error)
@@ -71,27 +67,6 @@ export default function Edit() {
         })
     }, [params.id === 'new'])
 
-    const uploadChange = (event: any) => {
-        if (event.file.status === "done") {
-            if (event.file.response.code === 200) {
-                const dataInfo = event.file.response.data
-                const fileInfo = dataInfo.name.split(".")
-                setAttachVosData([...attachVosData, {
-                    id: "",
-                    uid: attachVosData.length,
-                    link: dataInfo.link,
-                    name: dataInfo.originalName.split(".")[0],
-                    description: "",
-                    filePath: dataInfo.name,
-                    fileSize: dataInfo.size,
-                    fileSuffix: fileInfo[fileInfo.length - 1],
-                    userName: dataInfo.userName,
-                    fileUploadTime: dataInfo.fileUploadTime
-                }])
-            }
-        }
-    }
-
     const generateInitValues = (columns: any[]) => {
         const values: any = {}
         columns.forEach((columnItem: any) => {
@@ -104,21 +79,16 @@ export default function Edit() {
         return values
     }
 
-    const deleteAttachData = (id: number) => {
-        setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-    }
-
     const handleSave = async () => {
         try {
             const baseInfoData = await baseInfo.validateFields()
             const invoicData = await invoicForm.validateFields()
             const billingData = await billingForm.validateFields()
-            console.log(baseInfoData)
             const saveData = {
                 ...baseInfoData,
                 contractCode: baseInfoData.contractCode || data?.contractCode,
                 invoicingDetailDtos: billingData.submit,
-                attachInfoDtos: attachVosData,
+                fileIds: attchRef.current?.getDataSource().map(item => item.id),
                 invoicingInfoDto: { ...invoicData, id: data?.invoicingInfoVo.id || "", invoicingId: data?.invoicingInfoVo.invoicingId || "" }
             }
             const result = params.id === "new" ? await createRun(saveData) : await saveRun({ ...saveData, id: data?.id })
@@ -223,30 +193,9 @@ export default function Edit() {
 
             <DetailTitle title="发票信息" />
             <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={data?.invoicingInfoVo || {}} edit />
-            <DetailTitle title="开票明细" operation={[]} />
-
+            <DetailTitle title="开票明细" />
             <EditTable onChange={handleEditTableChange} form={billingForm} columns={billingHead} dataSource={data?.invoicingDetailDtos || []} />
-
-            <DetailTitle title="附件" operation={[<Upload
-                key="sub"
-                name="file"
-                multiple={true}
-                action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                headers={{
-                    'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                    'Tenant-Id': AuthUtil.getTenantId(),
-                    'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                }}
-                showUploadList={false}
-                onChange={uploadChange}
-            ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
-            <CommonTable columns={[{
-                title: "操作", dataIndex: "opration",
-                render: (_: any, record: any) => (<>
-                    <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-                    <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
-                </>)
-            }, ...enclosure]} dataSource={attachVosData} />
+            <Attachment title="附件" ref={attchRef} edit dataSource={data?.attachInfoVos} />
         </Spin>
     </DetailContent>
 }

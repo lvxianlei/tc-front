@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
-import { useHistory, useParams, Link, Prompt } from 'react-router-dom'
+import { useHistory, useParams, Link } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle, Attachment } from '../common'
 import CostDetail from './Cost'
 import PayInfo from './payInfo'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
     baseInfoData, productGroupColumns, bidDocColumns, paths,
-    frameAgreementColumns, enclosure, cargoVOListColumns, materialListColumns, taskNotice,
+    frameAgreementColumns, cargoVOListColumns, materialListColumns, taskNotice,
     bidInfoColumns, productAssist
 } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -15,7 +15,6 @@ import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
 import ApplicationContext from "../../configuration/ApplicationContext"
-import { downLoadFile } from "../../utils"
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
 const productAssistStatistics = [
     {
@@ -37,7 +36,6 @@ export default function ManagementDetail(): React.ReactNode {
     const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
     const bidType = dictionaryOptions["124"]
     const frangmentBidType = dictionaryOptions["122"]
-    const typeNameEnum = dictionaryOptions["121"].map((item: any) => ({ value: item.id, label: item.name }))
     const [productGroupFlag, setProductGroupFlag] = useState<"productAssistDetailVos" | "productAssistStatisticsVos">("productAssistDetailVos")
     const [productGroupData, setProductGroupData] = useState<{ productAssistDetailVos: any[], productAssistStatisticsVos: any[] }>({
         productAssistDetailVos: [],
@@ -75,7 +73,7 @@ export default function ManagementDetail(): React.ReactNode {
         }
     }), { manual: true })
 
-    const { loading: deleteLoading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/productGroup/${id}`)
             resole(result)
@@ -126,11 +124,9 @@ export default function ManagementDetail(): React.ReactNode {
             content: "确定删除此数据吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    const result = await deleteRun(id)
-                    if (result) {
-                        resove("")
-                        history.go(0)
-                    }
+                    await deleteRun(id)
+                    resove("")
+                    history.go(0)
                 } catch (error) {
                     reject(error)
                 }
@@ -144,11 +140,9 @@ export default function ManagementDetail(): React.ReactNode {
             content: "确定删除此数据吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    const result = await deleteNoticeRun(id)
-                    if (result) {
-                        resove("")
-                        history.go(0)
-                    }
+                    await deleteNoticeRun(id)
+                    resove("")
+                    history.go(0)
                 } catch (error) {
                     reject(error)
                 }
@@ -307,17 +301,15 @@ export default function ManagementDetail(): React.ReactNode {
                 { title: "创建时间", dataIndex: 'createTime', type: "date" }
             ]} dataSource={data || {}} />
         </DetailContent>,
-        tab_contract: <DetailContent>
-            <div style={{ marginLeft: "20px" }}>
-                <Tabs defaultActiveKey="合同" >
-                    <Tabs.TabPane tab="合同" key="合同">
-                        <ManagementContract />
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="订单" key="订单">
-                        <ManagementOrder />
-                    </Tabs.TabPane>
-                </Tabs>
-            </div></DetailContent>,
+        tab_contract: <>
+            <Tabs defaultActiveKey="合同" >
+                <Tabs.TabPane tab="合同" key="合同">
+                    <ManagementContract />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="订单" key="订单">
+                    <ManagementOrder />
+                </Tabs.TabPane>
+            </Tabs></>,
         tab_productGroup: <DetailContent title={[
             <Button key="new" type="primary" onClick={() => history.push(`/project/management/new/productGroup/${params.id}`)}>新增</Button>
         ]}>
@@ -330,15 +322,12 @@ export default function ManagementDetail(): React.ReactNode {
                         ellipsis: false,
                         width: 250,
                         render: (_: any, record: any) => <>
-                            <Button type="link" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
-                            <Button type="link" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
-                            <Button type="link" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
-                            {`${record.status}` === "0" && <Button type="link" onClick={() => deleteProductGroupItem(record.id)} >删除</Button>}
+                            <Button type="link" size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
+                            <Button type="link" size="small" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
+                            <Button type="link" size="small" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
+                            <Button type="link" size="small" disabled={`${record.status}` !== "0"} onClick={() => deleteProductGroupItem(record.id)} >删除</Button>
                         </>
                     }]}
-                // onRow={(record: any) => ({
-                //     onClick: () => handleProductGroupClick(record.id)
-                // })}
                 dataSource={data?.records}
             />
             <Row><Radio.Group

@@ -39,6 +39,8 @@ export default forwardRef(function ({
 
     const modalCancel = (): void => {
         setVisible(false);
+        setList([]);
+        form.resetFields();
     }
 
     const modalShow = (): void => {
@@ -63,6 +65,8 @@ export default forwardRef(function ({
         RequestUtil.post(path, [...value]).then(res => {
             setVisible(false);
             updateList();
+            setList([]);
+            form.resetFields();
         })
     }
 

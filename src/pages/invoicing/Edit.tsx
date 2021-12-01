@@ -1,7 +1,7 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { Button, Form, message, Spin, Input, InputNumber } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, formatData, Attachment } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, formatData, Attachment, AttachmentRef } from '../common'
 import { invoicingInfoHead, editInvoicingHead } from "./InvoicingData.json"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -10,6 +10,7 @@ export default function Edit() {
     const params = useParams<{ invoicingId: string }>()
     const history = useHistory()
     const [invoicingDetailVos, setInvoicingDetailVos] = useState<any[]>([])
+    const attachRef = useRef<AttachmentRef>()
     const [baseInfo] = Form.useForm()
     const productType: any = (ApplicationContext.get().dictionaryOption as any)["101"]
     const saleTypeEnum: any = (ApplicationContext.get().dictionaryOption as any)["123"].map((item: any) => ({ value: item.code, label: item.name }))
@@ -38,6 +39,7 @@ export default function Edit() {
             await saveRun({
                 id: params.invoicingId,
                 invoicingDetailFillDtos: invoicingDetailVos,
+                fileIds: attachRef.current?.getDataSource().map(item => item.id),
                 saveType
             })
             message.success(`${saveType === 1 ? "保存" : "保存并提交"}成功...`)
@@ -102,14 +104,29 @@ export default function Edit() {
             <CommonTable haveIndex columns={editInvoicingHead.map((item: any) => {
                 switch (item.dataIndex) {
                     case "ticketNumber":
-                        return ({ ...item, width: 150, render: (value: string, _: any, index) => <Input value={value} onChange={(event) => handleEditTableChange("ticketNumber", event?.target.value, index)} style={{ width: "100%" }} /> })
+                        return ({
+                            ...item, width: 150, render: (value: string, _: any, index) => <Input
+                                value={value}
+                                maxLength={12}
+                                onChange={(event) => handleEditTableChange("ticketNumber", event?.target.value, index)}
+                                style={{ width: "100%" }} />
+                        })
                     case "taxRate":
-                        return ({ ...item, render: (value: number, _: any, index) => <InputNumber value={value} step={1} min={0} max={100} onChange={(value: number) => handleEditTableChange("taxRate", value, index)} /> })
+                        return ({
+                            ...item, render: (value: number, _: any, index) => <InputNumber
+                                value={value}
+                                step={1}
+                                min={0}
+                                max={100}
+                                formatter={(value: any) => parseFloat(value).toFixed(2)}
+                                onChange={(value: number) => handleEditTableChange("taxRate", value, index)}
+                            />
+                        })
                     default:
                         return item
                 }
             })} dataSource={invoicingDetailVos} />
-            <Attachment edit dataSource={data?.attachInfoVos} />
+            <Attachment edit dataSource={data?.attachInfoVos} ref={attachRef} />
         </Spin>
     </DetailContent>
 }

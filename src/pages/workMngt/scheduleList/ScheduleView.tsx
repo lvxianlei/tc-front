@@ -15,37 +15,25 @@ import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '操作部门', dataIndex: 'ptcreateDeName', key: 'createDeptName', },
+    { title: '操作部门', dataIndex: 'createDeptName', key: 'createDeptName', },
     { title: '操作人', dataIndex: 'createUserName', key: 'createUserName' },
     { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
     { title: '任务状态', dataIndex: 'currentStatus', key: 'currentStatus', render: (value: number, record: object): React.ReactNode => {
         const renderEnum: any = [
             {
-                value: 0,
-                label: "已拒绝"
-            },
-            {
                 value: 1,
-                label: "待确认"
+                label: "指派"
             },
             {
                 value: 2,
-                label: "待指派"
+                label: "编辑"
             },
             {
-                value: 3,
-                label: "待完成"
+                value: null,
+                label: "-"
             },
-            {
-                value: 4,
-                label: "已完成"
-            },
-            {
-                value: 5,
-                label: "已提交"
-            }
         ]
-             return <>{value!==-1?renderEnum.find((item: any) => item.value === value).label:''}</>
+             return <>{value!==-1&&value?renderEnum.find((item: any) => item.value === value).label:''}</>
     }},
     { title: '备注', dataIndex: 'description', key: 'description' }
 ]
@@ -207,12 +195,6 @@ export default function ScheduleView(): React.ReactNode {
             title: '小样图负责人',
             width: 100,
             dataIndex: 'smallSampleLeaderName'
-        },
-        {
-            key: 'smallSampleDeliverTime',
-            title: '小样图计划交付时间',
-            width: 200,
-            dataIndex: 'smallSampleDeliverTime'
         },
         {
             key: 'boltLeaderName',
@@ -799,7 +781,7 @@ export default function ScheduleView(): React.ReactNode {
                 </Form>
                 {edit&&<>
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={scheduleData?.statusRecordList} pagination={ false } />
+                <CommonTable columns={tableColumns} dataSource={scheduleData?.assignLogList} pagination={ false } />
                 </>}
             </Modal>
             <Page

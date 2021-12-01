@@ -79,19 +79,15 @@ export default function SalesPlanEdit() {
                 saleOrderNumber: baseInfoData.saleOrderNumber.value || baseInfoData.saleOrderNumber
             }
             if (type === "save") {
-                const result = await run(submitData)
-                if (result) {
-                    message.success("保存成功...")
-                    history.goBack()
-                }
+                await run(submitData)
+                message.success("保存成功...")
+                history.goBack()
                 return
             }
             if (type === "saveAndApprove") {
-                const result = await saveAndApproveRun(submitData)
-                if (result) {
-                    message.success("保存并提交审核成功...")
-                    history.goBack()
-                }
+                await saveAndApproveRun(submitData)
+                message.success("保存并提交审核成功...")
+                history.goBack()
                 return
             }
         } catch (error) {
