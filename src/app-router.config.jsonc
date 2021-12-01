@@ -2027,7 +2027,7 @@
     { // 人资-员工关系-员工档案
       "name": "员工档案",
       "path": "/employeeRelation/archives",
-      "module": "./pages/employeeRelation/archives/ArchivesList",
+      "module": "./pages/employeeRelation/archives/index",
       "exact": true,
       "authority": "approvalm"
     },
@@ -2083,7 +2083,7 @@
     { // 人资-员工关系-员工调动
       "name": "员工调动",
       "path": "/employeeRelation/transfer",
-      "module": "./pages/employeeRelation/transfer/TransferList",
+      "module": "./pages/employeeRelation/transfer/index",
       "exact": true,
       "authority": "approvalm"
     },
@@ -2139,14 +2139,14 @@
     { // 人资-社保福利-保险方案
       "name": "保险方案",
       "path": "/socialSecurity/plan",
-      "module": "./pages/socialSecurity/plan/PlanList",
+      "module": "./pages/socialSecurity/plan/index",
       "exact": true,
       "authority": "approvalm"
     },
     { // 人资-社保福利-员工保险档案
       "name": "员工保险档案",
       "path": "/socialSecurity/archives",
-      "module": "./pages/socialSecurity/archives/ArchivesList",
+      "module": "./pages/socialSecurity/archives/index",
       "exact": true,
       "authority": "approvalm"
     }
