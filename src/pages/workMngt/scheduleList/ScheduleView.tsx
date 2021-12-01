@@ -787,7 +787,7 @@ export default function ScheduleView(): React.ReactNode {
             <Page
                 path={ `/tower-science/productCategory/taskPage` }
                 columns={ columns }
-                exportPath={`/tower-science/productCategory`}
+                exportPath={`/tower-science/productCategory/taskPage`}
                 extraOperation={
                     <Space>
                         {/* <Button type="primary">导出</Button> */}

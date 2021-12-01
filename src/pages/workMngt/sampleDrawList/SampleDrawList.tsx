@@ -179,7 +179,7 @@ export default function SampleDrawList(): React.ReactNode {
             filterValue={filterValue}
             refresh={refresh}
             requestData={ { smallSampleStatus: location.state } }
-            exportPath="/tower-science/smallSample/exportSmallSampleTask"
+            exportPath="/tower-science/smallSample"
             // extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {
