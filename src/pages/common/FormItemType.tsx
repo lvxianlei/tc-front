@@ -199,17 +199,9 @@ interface SelfSelectProps {
     data: SelectData
 }
 const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
-    return <Select {...props} disabled={data.disabled} style={{ width: "100%", minWidth: 100 }}>
+    return <Select {...props} disabled={data.disabled} style={{ width: "100%", minWidth: 100 }} mode={data.mode} maxTagCount={data.maxTagCount}>
         {data.enum?.map((item: SelectOption, index: number) => (<Select.Option key={`select_option_${index}_${item.value}`} value={item.value} >{item.label}</Select.Option>))}
     </Select>
-}
-
-const limitDecimalsF = (value: string, decimal: number): any => {
-    value.replace(/[^\d.]/g, "");
-    if (value.includes(".") && decimal) {
-        const result = Number(value).toFixed(decimal)
-        return result;
-    }
 }
 
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }) => {

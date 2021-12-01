@@ -53,12 +53,12 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
             if (type === "save") {
                 await saveRun({
                     inquirerDescription: inquirerDescription,
-                    inquirerAttachList: attchRef.current?.getDataSource().map(item => item.id)
+                    fileIds: attchRef.current?.getDataSource().map(item => item.id)
                 })
             } else {
                 await saveAndSubmitRun({
                     inquirerDescription: inquirerDescription,
-                    inquirerAttachList: attchRef.current?.getDataSource().map(item => item.id)
+                    fileIds: attchRef.current?.getDataSource().map(item => item.id)
                 })
             }
             resolve(true)

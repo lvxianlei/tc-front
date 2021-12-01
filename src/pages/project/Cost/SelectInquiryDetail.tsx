@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Modal, Spin, Button, Radio, Row } from "antd"
 import { DetailTitle, CommonTable, BaseInfo, Attachment } from "../../common"
-import { enclosure } from "../managementDetailData.json"
 import {
     supplyBaseInfo,
     supplyAskInfo,
@@ -13,7 +12,6 @@ import {
     workmanshipReverd,
     materialPriceHead
 } from "./costData.json"
-import { downLoadFile } from "../../../utils"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import SelectInquiryEdit from "./SelectInquiryEdit"

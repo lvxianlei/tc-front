@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { Spin } from 'antd'
 import { DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
 import { ApplicationOverview, operationInfo } from "../financialData.json"
