@@ -98,12 +98,12 @@ export default function ProcessCardList(): React.ReactNode {
     return <>
         <Page
             path={ `/tower-science/productSegment/sampleList` }
+            exportPath={`/tower-science/productSegment/sampleList`}
             columns={ columns }
             headTabs={ [] }
             refresh={ refresh }
             requestData={{ productCategoryId: params.id }}
             extraOperation={ <Space direction="horizontal" size="small">
-                <Button type="primary" ghost>导出</Button>
                 { location.state.status === 1 || location.state.status === 2 ? <UploadModal id={ params.id } path="/tower-science/productSegment/segmentDrawUpload" updateList={ () => setRefresh(!refresh) }/> : null }
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </Space> }

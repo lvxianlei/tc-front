@@ -183,7 +183,7 @@ export default function PackingList(): React.ReactNode {
             current={detailData?.current || 1}
             size={detailData?.size || 10}
             total={detailData?.total || 0}
-            url={``}
+            url={`/tower-science/packageStructure/list`}
             serchObj={{}}
             closeExportList={() => setIsExport(false)}
         /> : null}

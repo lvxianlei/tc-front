@@ -212,11 +212,11 @@ export default function SetOutTaskTower(): React.ReactNode {
     return <Page
         path="/tower-science/productCategory/list"
         requestData={{ loftingTaskId: params.id  }}
+        exportPath={`/tower-science/productCategory/list`}
         columns={ columns }
         headTabs={ [] }
         extraOperation={ 
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                {/* <Button type="primary">导出</Button> */}
                 <Button type="ghost" onClick={() => history.goBack()}>返回上一级</Button>
             </Space> 
         }

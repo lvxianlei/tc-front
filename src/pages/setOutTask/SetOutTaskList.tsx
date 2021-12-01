@@ -144,7 +144,7 @@ export default function SetOutTaskList(): React.ReactNode {
         columns={ columns }
         headTabs={ [] }
         requestData={ { status: location.state } }
-        exportPath={`/tower-science/loftingTask/exportLoftingTask`}
+        exportPath={`/tower-science/loftingTask/taskPage`}
         refresh={ refresh }
         searchFormItems={ [
             {

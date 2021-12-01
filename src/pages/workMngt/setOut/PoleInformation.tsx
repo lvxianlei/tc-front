@@ -151,12 +151,12 @@ export default function PoleInformation(): React.ReactNode {
     
     return <Page
         path="/tower-science/product/lofting"
+        exportPath={`/tower-science/product/lofting`}
         columns={ columns }
         headTabs={ [] }
         requestData={{ productCategoryId: params.id }}
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
-            <Button type="primary" ghost>导出</Button>
             <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
         </Space>}
         searchFormItems={ [
