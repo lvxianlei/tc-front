@@ -367,7 +367,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
         columns={columnsSetting}
         onFilterSubmit={onFilterSubmit}
         filterValue={filterValue}
-        exportPath="/tower-science/loftingTask/planLoftingExport"
+        exportPath="/tower-science/loftingTask/planLofting"
         searchFormItems={[
             {
                 name: 'priority',
