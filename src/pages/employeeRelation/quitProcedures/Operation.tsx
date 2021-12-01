@@ -14,7 +14,7 @@ export default function Operation(): React.ReactNode {
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-science/drawTask/getList?drawTaskId=${params.id}`)
+        // const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
