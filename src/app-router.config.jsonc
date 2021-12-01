@@ -118,7 +118,7 @@
     { // 角色管理
       "name": "角色管理",
       "path": "/auth/roles",
-      "module": "./pages/auth/role/RoleMngt",
+      "module": "./pages/auth/role/RoleMngtList",
       "exact": true,
       "authority": "auth_section_role"
     },

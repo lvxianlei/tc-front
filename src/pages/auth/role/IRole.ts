@@ -38,3 +38,11 @@ export interface IAuthority {
     readonly updateUser: number;
     readonly children: IAuthority[];
 }
+
+// 编辑返回的接口
+export interface EditResult {
+    readonly id: number;
+    readonly name: string;
+    readonly functionIdList?: [];
+    readonly [x: string]: any
+}
