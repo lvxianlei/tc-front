@@ -297,7 +297,7 @@ const loftingToCheckVO = [ //放样校核员
 	}
 ]
 
-const MaterialToCheckVO = [ //提料校核员
+const materialToCheckVO = [ //提料校核员
 	{
 		title: '提料任务',
 		child: [
@@ -537,8 +537,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 				: null
 			}
 			{
-				detailData.MaterialToCheckVO ? MaterialToCheckVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.MaterialToCheckVO)}</>
+				detailData.materialToCheckVO ? materialToCheckVO.map((res: IList, ind: number) => {
+					return <>{getChildContent(res, ind, detailData.materialToCheckVO)}</>
 				})
 				: null
 			}
