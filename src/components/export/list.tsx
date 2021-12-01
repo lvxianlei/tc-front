@@ -35,7 +35,11 @@ class ExportList extends Component<Props, State>  {
         exportType: 1,
     }
     UNSAFE_componentWillMount() {
-        let initColumnsKey = this.props.columnsKey().map((item) => {
+        let columnsKey = this.props.columnsKey()
+        if(columnsKey[0].title === '序号') {
+            columnsKey.splice(0, 1)
+        }
+        let initColumnsKey = columnsKey.map((item) => {
             return {
                 label: item.title,
                 value: item.dataIndex,
