@@ -150,7 +150,7 @@ export default function Edit(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-            <Attachment dataSource={[]} edit/>
+            <Attachment dataSource={detailData?.fileVos} edit/>
             {
                 params.status !== 'edit' && <>
                     <DetailTitle title="劳动合同记录" />

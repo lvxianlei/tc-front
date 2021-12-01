@@ -2024,6 +2024,27 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 人资-员工关系-招聘入职-查看
+      "name": "查看",
+      "path": "/employeeRelation/recruit/view/:id",
+      "module": "./pages/employeeRelation/recruit/View",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-招聘入职-新增
+      "name": "新增",
+      "path": "/employeeRelation/recruit/new",
+      "module": "./pages/employeeRelation/recruit/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-招聘入职-编辑
+      "name": "编辑",
+      "path": "/employeeRelation/recruit/edit/:id/:status",
+      "module": "./pages/employeeRelation/recruit/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 人资-员工关系-员工档案
       "name": "员工档案",
       "path": "/employeeRelation/archives",
