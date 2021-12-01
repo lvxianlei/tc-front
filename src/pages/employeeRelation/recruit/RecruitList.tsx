@@ -20,118 +20,130 @@ export default function RecruitList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'productCategoryName',
+            key: 'applicantName',
             title: '应聘人姓名',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'applicantName'
         },
         {
-            key: 'productCategoryName',
+            key: 'gender',
             title: '性别',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'gender'
         },
         {
-            key: 'productCategoryName',
+            key: 'national',
             title: '民族',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'national'
         },
         {
-            key: 'productCategoryName',
+            key: 'companyName',
             title: '入职公司',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'companyName'
         },
         {
-            key: 'productCategoryName',
+            key: 'departmentName',
             title: '入职部门/班组',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'departmentName'
         },
         {
-            key: 'productCategoryName',
+            key: 'postName',
             title: '入职岗位',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'postName'
         },
         {
-            key: 'productCategoryName',
+            key: 'postType',
             title: '员工分组',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'postType'
         },
         {
-            key: 'productCategoryName',
+            key: 'nativePlace',
             title: '籍贯',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'nativePlace'
         },
         {
-            key: 'productCategoryName',
+            key: 'age',
             title: '年龄',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'age'
         },
         {
-            key: 'productCategoryName',
+            key: 'idNumber',
             title: '身份证号',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'idNumber'
         },
         {
-            key: 'name',
+            key: 'education',
             title: '学历',
             width: 100,
-            dataIndex: 'name'
+            dataIndex: 'education'
         },
         {
-            key: 'pattern',
+            key: 'graduateSchool',
             title: '毕业院校',
             width: 100,
-            dataIndex: 'pattern'
+            dataIndex: 'graduateSchool'
         },
         {
-            key: 'name',
+            key: 'professional',
             title: '专业',
             width: 100,
-            dataIndex: 'name'
+            dataIndex: 'professional'
         },
         {
-            key: 'pattern',
+            key: 'phoneNumber',
             title: '联系电话',
             width: 100,
-            dataIndex: 'pattern',
+            dataIndex: 'phoneNumber',
         },
         {
-            key: 'plannedDeliveryTime',
+            key: 'workTime',
             title: '预计到岗时间',
             width: 100,
-            dataIndex: 'plannedDeliveryTime'
+            dataIndex: 'workTime'
         },
         {
-            key: 'materialLeaderName',
+            key: 'bankCardNumber',
             title: '银行卡号',
             width: 150,
-            dataIndex: 'materialLeaderName'
+            dataIndex: 'bankCardNumber'
         },
         {
-            key: 'materialCheckLeaderName',
+            key: 'bankName',
             title: '开户行',
             width: 100,
-            dataIndex: 'materialCheckLeaderName'
+            dataIndex: 'bankName'
+        },
+        {
+            key: 'probationPeriod',
+            title: '试用期',
+            width: 100,
+            dataIndex: 'probationPeriod',
         },
         {
             key: 'status',
-            title: '试用期',
-            width: 100,
-            dataIndex: 'status',
-        },
-        {
-            key: 'updateStatusTime',
             title: '审批状态',
             width: 200,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'status',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '待提交';
+                    case 2:
+                        return '审批中';
+                    case 3:
+                        return '审批通过';
+                    case 4:
+                        return '审批不通过';
+                }
+            } 
         },
         {
             key: 'operation',
@@ -145,8 +157,8 @@ export default function RecruitList(): React.ReactNode {
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>编辑</Button>
                     <Popconfirm
                         title="确认入职后，员工将信息将更新到员工档案中？"
-                        onConfirm={ ()=>{RequestUtil.delete(`/tower-science/drawProductSegment/${record.id}`).then(()=>{
-                            message.success('删除成功！')
+                        onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employee/information/confirm`,{employeeId: record.id}).then(()=>{
+                            message.success('入职成功！')
                         }).then(()=>{
                             setRefresh(!refresh)
                         }) }}
@@ -157,7 +169,7 @@ export default function RecruitList(): React.ReactNode {
                     </Popconfirm>
                     <Popconfirm
                         title="确认删除？"
-                        onConfirm={ ()=>{RequestUtil.delete(`/tower-science/drawProductSegment/${record.id}`).then(()=>{
+                        onConfirm={ ()=>{RequestUtil.delete(`/tower-hr/employee/information`,{employeeId: record.id}).then(()=>{
                             message.success('删除成功！')
                         }).then(()=>{
                             setRefresh(!refresh)
@@ -180,18 +192,17 @@ export default function RecruitList(): React.ReactNode {
     }
     return (
             <Page
-                path={`/tower-science/drawProductSegment`}
+                path={`/tower-hr/employee/information`}
                 columns={columns}
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
-                requestData={{ productCategory: params.id }}
                 extraOperation={
                     <Button type="primary" onClick={()=>history.push('/workMngt/pickList')} ghost>新增入职</Button>
                 }
                 searchFormItems={[
                     {
-                        name: 'fuzzyMsg',
+                        name: 'keyword',
                         label: '模糊查询项',
                         children: <Input placeholder="请输入应聘者姓名/联系电话/身份证号进行查询" maxLength={200} />
                     },

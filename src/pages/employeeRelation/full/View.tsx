@@ -20,7 +20,7 @@ export default function View(): React.ReactNode {
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-science/drawTask/getList?drawTaskId=${params.id}`)
+        // const data: any = await RequestUtil.get(`/tower-hr/positive/check/detail?positiveId=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -37,7 +37,7 @@ export default function View(): React.ReactNode {
             <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
             <DetailTitle title="转正管理"/>
             <BaseInfo columns={fullInfoData} dataSource={detailData || {}} col={2}/>
-            <Attachment dataSource={detailData?.fileVOList}/>
+            <Attachment dataSource={detailData?.fileVos}/>
             <DetailTitle title="审批记录" />
             <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
             </DetailContent>

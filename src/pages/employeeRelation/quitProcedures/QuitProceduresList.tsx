@@ -20,76 +20,96 @@ export default function QuitProceduresList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'productCategoryName',
+            key: 'employeeName',
             title: '员工姓名',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'employeeName'
         },
         {
-            key: 'productCategoryName',
+            key: 'transactProcedure',
             title: '是否办理离职手续',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'transactProcedure'
         },
         {
-            key: 'productCategoryName',
+            key: 'removeContract',
             title: '是否领取解除劳动合同书',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'removeContract'
         },
         {
-            key: 'productCategoryName',
+            key: 'transactDate',
             title: '办理日期',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'transactDate'
         },
         {
-            key: 'productCategoryName',
+            key: 'companyName',
             title: '公司',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'companyName'
         },
         {
-            key: 'productCategoryName',
+            key: 'departmentName',
             title: '部门/班组',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'departmentName'
         },
         {
-            key: 'productCategoryName',
+            key: 'postName',
             title: '岗位',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'postName'
         },
         {
-            key: 'productCategoryName',
+            key: 'employeeType',
             title: '员工类型',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'employeeType',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '正式员工';
+                    case 2:
+                        return '临时工';
+                }
+            } 
         },
         {
-            key: 'productCategoryName',
+            key: 'inductionDate',
             title: '入职时间',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'inductionDate'
         },
         {
-            key: 'productCategoryName',
+            key: 'departureType',
             title: '离职类型',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'departureType',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '主动离职';
+                    case 2:
+                        return '辞退';
+                    case 3:
+                        return '退休';
+                    case 4:
+                        return '死亡';
+                }
+            } 
         },
         {
-            key: 'productCategoryName',
+            key: 'departureDate',
             title: '离职时间',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'departureDate'
         },
         {
-            key: 'name',
+            key: 'departureReason',
             title: '离职原因',
             width: 100,
-            dataIndex: 'name'
+            dataIndex: 'departureReason'
         },
         {
             key: 'operation',
@@ -108,8 +128,8 @@ export default function QuitProceduresList(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0]+ ' 00:00:00';
-            value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
+            value.departureDateStart = formatDate[0]+ ' 00:00:00';
+            value.departureDateEnd = formatDate[1]+ ' 23:59:59';
             delete value.statusUpdateTime
         }
         setFilterValue(value)
@@ -120,19 +140,19 @@ export default function QuitProceduresList(): React.ReactNode {
     }
     return (
             <Page
-                path={`/tower-science/drawProductSegment`}
+                path={`/tower-hr/employeeDeparture/handlePage`}
                 columns={columns}
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 searchFormItems={[
                     {
-                        name: 'fuzzyMsg',
+                        name: 'employeeName',
                         label: '模糊查询项',
                         children: <Input placeholder="请输入员工姓名进行查询" maxLength={200} />
                     },
                     {
-                        name: 'fuzzyMsg',
+                        name: 'isTransactProcedure',
                         label: '是否办理离职手续',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>

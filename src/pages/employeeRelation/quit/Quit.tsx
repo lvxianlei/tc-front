@@ -13,7 +13,7 @@ export default function Sure(): React.ReactNode {
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = params.id !== '0' && await RequestUtil.get(`/tower-science/drawTask/getList?drawTaskId=${params.id}`)
+        // const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -29,6 +29,7 @@ export default function Sure(): React.ReactNode {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
                             value.inquiryQuotationAttachInfoDtos= attachRef.current?.getDataSource()
+                            RequestUtil.post(`/tower-hr/employeeDeparture/save`,value)
                         })
                         
                     }}>保存</Button>
@@ -43,7 +44,7 @@ export default function Sure(): React.ReactNode {
                         <Form.Item label='员工姓名' rules={[{
                             required:true, 
                             message:'请选择员工姓名'
-                        }]} initialValue={1}>
+                        }]} initialValue={1} name='employeeName'>
                             <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
                                 console.log(e)
                                 // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
@@ -52,31 +53,31 @@ export default function Sure(): React.ReactNode {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='公司'>
+                        <Form.Item label='公司' name='companyName'>
                             <Input/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label='部门/班组'>
+                        <Form.Item label='部门/班组' name='departmentName'>
                             <Input/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='岗位'>
+                        <Form.Item label='岗位' name='postName'>
                             <Input/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label='入职日期'>
+                        <Form.Item label='入职日期' name='inductionDate'>
                             <Input/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='员工性质'>
+                        <Form.Item label='员工性质' name='employeeType'>
                             <Input/>
                         </Form.Item>
                     </Col>
@@ -86,7 +87,7 @@ export default function Sure(): React.ReactNode {
                         <Form.Item label='离职日期' rules={[{
                             required:true, 
                             message:'请选择离职日期'
-                        }]}>
+                        }]} name='departureDate'>
                             <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
                                 console.log(e)
                                 // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
@@ -98,7 +99,7 @@ export default function Sure(): React.ReactNode {
                         <Form.Item label='离职类型' rules={[{
                             required:true, 
                             message:'请选择离职类型'
-                        }]}>
+                        }]} name='departureType'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
                                 <Select.Option value={0} key="0">主动离职</Select.Option>
                                 <Select.Option value={1} key="1">辞退</Select.Option>
@@ -113,14 +114,14 @@ export default function Sure(): React.ReactNode {
                         <Form.Item label='离职原因' rules={[{
                             required:true, 
                             message:'请填写离职原因'
-                        }]}>
+                        }]} name='departureReason'>
                             <Input.TextArea maxLength={200} showCount/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={24}>
-                        <Form.Item label='备注' >
+                        <Form.Item label='备注' name='remark'>
                             <Input.TextArea maxLength={400} showCount/>
                         </Form.Item>
                     </Col>

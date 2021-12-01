@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Button, Spin, Space, Form, Select, DatePicker, Row, Col} from 'antd';
+import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, message} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -29,7 +29,10 @@ export default function Operation(): React.ReactNode {
                     <Button key="primary" onClick={() => {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
-                            value.inquiryQuotationAttachInfoDtos= attachRef.current?.getDataSource()
+                            value.attachInfoDtos= attachRef.current?.getDataSource();
+                            RequestUtil.post(`/tower-hr/employeeDeparture/handleSubmit`, value).then(()=>{
+                                message.success('保存成功')
+                            })
                         })
                         
                     }}>保存</Button>
@@ -46,7 +49,7 @@ export default function Operation(): React.ReactNode {
                         <Form.Item label='是否办理离职手续' rules={[{
                             required:true, 
                             message:'请选择是否办理离职手续'
-                        }]} initialValue={1}>
+                        }]} initialValue={1} name='isTransactProcedure'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
                                 <Select.Option value={0} key="0">是</Select.Option>
                                 <Select.Option value={1} key="1">否</Select.Option>
@@ -54,7 +57,7 @@ export default function Operation(): React.ReactNode {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='是否领取解除劳动合同书' initialValue={1}>
+                        <Form.Item label='是否领取解除劳动合同书' initialValue={1} name='isRemoveContract'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
                                 <Select.Option value={0} key="0">是</Select.Option>
                                 <Select.Option value={1} key="1">否</Select.Option>
@@ -67,7 +70,7 @@ export default function Operation(): React.ReactNode {
                         <Form.Item label='办理日期' rules={[{
                             required:true, 
                             message:'请选择办理日期'
-                        }]}>
+                        }]} name='transactDate'>
                             <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}/>
                         </Form.Item>
                     </Col>

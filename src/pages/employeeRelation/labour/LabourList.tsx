@@ -20,76 +20,92 @@ export default function LabourList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'productCategoryName',
+            key: 'contractNumber',
             title: '合同号',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'contractNumber'
         },
         {
-            key: 'productCategoryName',
+            key: 'employeeName',
             title: '员工姓名',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'employeeName'
         },
         {
-            key: 'productCategoryName',
+            key: 'employeeStatus',
             title: '在职状态',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'employeeStatus',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '在职';
+                    case 2:
+                        return '离职';
+                }
+            } 
         },
         {
-            key: 'productCategoryName',
+            key: 'idNumber',
             title: '身份证号',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'idNumber'
         },
         {
-            key: 'productCategoryName',
+            key: 'companyName',
             title: '公司',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'companyName'
         },
         {
-            key: 'productCategoryName',
+            key: 'departmentName',
             title: '部门',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'departmentName'
         },
         {
-            key: 'productCategoryName',
+            key: 'postName',
             title: '岗位',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'postName'
         },
         {
-            key: 'productCategoryName',
+            key: 'signedCompany',
             title: '合同签署公司',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'signedCompany'
         },
         {
-            key: 'productCategoryName',
+            key: 'contractType',
             title: '合同类型',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'contractType'
         },
         {
-            key: 'productCategoryName',
+            key: 'contractStartDate',
             title: '合同开始日期',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'contractStartDate'
         },
         {
-            key: 'productCategoryName',
+            key: 'contractEndDate',
             title: '合同截止日期',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'contractEndDate'
         },
         {
-            key: 'name',
+            key: 'contractStatus',
             title: '合同状态',
             width: 100,
-            dataIndex: 'name'
+            dataIndex: 'contractStatus',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 0:
+                        return '有效';
+                    case 1:
+                        return '无效';
+                }
+            } 
         },
         {
             key: 'operation',
@@ -99,10 +115,10 @@ export default function LabourList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>编辑</Button>
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>变更</Button>
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>续签</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/view/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/edit`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>编辑</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/change`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>变更</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/renewal`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>续签</Button>
                 </Space>
             )
         }
@@ -116,19 +132,19 @@ export default function LabourList(): React.ReactNode {
     }
     return (
             <Page
-                path={`/tower-science/drawProductSegment`}
+                path={`/tower-hr/labor/contract`}
                 columns={columns}
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 searchFormItems={[
                     {
-                        name: 'fuzzyMsg',
+                        name: 'keyword',
                         label: '模糊查询项',
                         children: <Input placeholder="请输入合同号/员工姓名/身份证号进行查询" maxLength={200} />
                     },
                     {
-                        name: 'fuzzyMsg',
+                        name: 'contractType',
                         label: '合同类型',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>
@@ -140,7 +156,7 @@ export default function LabourList(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'fuzzyMsg',
+                        name: 'status',
                         label: '合同状态',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>

@@ -20,58 +20,70 @@ export default function FullList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'name',
+            key: 'employeeName',
             title: '员工姓名',
             width: 100,
-            dataIndex: 'name'
+            dataIndex: 'employeeName'
         },
         {
-            key: 'pattern',
+            key: 'postName',
             title: '岗位',
             width: 100,
-            dataIndex: 'pattern'
+            dataIndex: 'postName'
         },
         {
-            key: 'name',
+            key: 'inductionDate',
             title: '入职时间',
             width: 100,
-            dataIndex: 'name'
+            dataIndex: 'inductionDate'
         },
         {
-            key: 'pattern',
+            key: 'probationPeriod',
             title: '试用期',
             width: 100,
-            dataIndex: 'pattern',
+            dataIndex: 'probationPeriod',
         },
         {
-            key: 'plannedDeliveryTime',
+            key: 'positiveDate',
             title: '转正日期',
             width: 100,
-            dataIndex: 'plannedDeliveryTime'
+            dataIndex: 'positiveDate'
         },
         {
-            key: 'materialLeaderName',
+            key: 'checkResult',
             title: '考核结果',
             width: 150,
-            dataIndex: 'materialLeaderName'
+            dataIndex: 'checkResult'
         },
         {
-            key: 'materialCheckLeaderName',
+            key: 'positiveComments',
             title: '转正评语',
             width: 100,
-            dataIndex: 'materialCheckLeaderName'
+            dataIndex: 'positiveComments'
+        },
+        {
+            key: 'positiveStatus',
+            title: '转正状态',
+            width: 100,
+            dataIndex: 'positiveStatus',
         },
         {
             key: 'status',
-            title: '转正状态',
-            width: 100,
-            dataIndex: 'status',
-        },
-        {
-            key: 'updateStatusTime',
             title: '审批状态',
             width: 200,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'status',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '待提交';
+                    case 2:
+                        return '审批中';
+                    case 3:
+                        return '审批通过';
+                    case 4:
+                        return '审批不通过';
+                }
+            } 
         },
         {
             key: 'operation',
@@ -96,19 +108,19 @@ export default function FullList(): React.ReactNode {
     }
     return (
             <Page
-                path={`/tower-science/drawProductSegment`}
+                path={`/tower-hr/positive/check`}
                 columns={columns}
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 searchFormItems={[
                     {
-                        name: 'fuzzyMsg',
+                        name: 'employeeName',
                         label: '模糊查询项',
                         children: <Input placeholder="请输入员工名称进行查询" maxLength={200} />
                     },
                     {
-                        name: 'fuzzyMsg',
+                        name: 'checkResult',
                         label: '考核结果',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>
@@ -118,7 +130,7 @@ export default function FullList(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'fuzzyMsg',
+                        name: 'positiveStatus',
                         label: '转正状态',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>

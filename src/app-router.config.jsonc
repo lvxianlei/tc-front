@@ -2011,6 +2011,27 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 人资-员工关系-劳动合同-查看
+      "name": "查看",
+      "path": "/employeeRelation/labour/view/:id",
+      "module": "./pages/employeeRelation/labour/View",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-劳动合同-查看-合同详情
+      "name": "合同详情",
+      "path": "/employeeRelation/labour/view/:id/:contractId",
+      "module": "./pages/employeeRelation/labour/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-劳动合同-调整
+      "name": "调整",
+      "path": "/employeeRelation/labour/edit/:id/:status",
+      "module": "./pages/employeeRelation/labour/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 人资-员工关系-转正考核
       "name": "转正考核",
       "path": "/employeeRelation/full",
@@ -2019,14 +2040,14 @@
       "authority": "approvalm"
     },
     { // 人资-员工关系-转正考核-查看
-      "name": "转正考核",
+      "name": "查看",
       "path": "/employeeRelation/full/view/:id",
       "module": "./pages/employeeRelation/full/View",
       "exact": true,
       "authority": "approvalm"
     },
     { // 人资-员工关系-转正考核-转正
-      "name": "转正考核",
+      "name": "转正",
       "path": "/employeeRelation/full/sure/:id",
       "module": "./pages/employeeRelation/full/Sure",
       "exact": true,
