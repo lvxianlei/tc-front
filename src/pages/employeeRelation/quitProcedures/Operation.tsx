@@ -29,7 +29,7 @@ export default function Operation(): React.ReactNode {
                     <Button key="primary" onClick={() => {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
-                            value.attachInfoDtos= attachRef.current?.getDataSource();
+                            value.fileVos= attachRef.current?.getDataSource();
                             RequestUtil.post(`/tower-hr/employeeDeparture/handleSubmit`, value).then(()=>{
                                 message.success('保存成功')
                             })
@@ -76,7 +76,7 @@ export default function Operation(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-            <Attachment dataSource={detailData?.fileVOList} edit/>
+            <Attachment dataSource={detailData?.fileVos} edit/>
             </DetailContent>
         </Spin>
     </>

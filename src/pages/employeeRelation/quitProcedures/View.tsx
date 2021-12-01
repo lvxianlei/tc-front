@@ -25,7 +25,7 @@ export default function View(): React.ReactNode {
             <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
             <DetailTitle title="办理离职信息"/>
             <BaseInfo columns={quitInfoData} dataSource={detailData || {}} col={2}/>
-            <Attachment dataSource={detailData?.fileVOList}/>
+            <Attachment dataSource={detailData?.fileVos}/>
             </DetailContent>
         </Spin>
     </>
