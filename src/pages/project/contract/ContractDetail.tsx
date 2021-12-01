@@ -4,12 +4,12 @@ import { withRouter } from "react-router"
 import { ITabItem } from "../../../components/ITabableComponent"
 import { ContractDetail } from "../../prom/contract/ContractDetail"
 import ManagementContractSummary from "./ContractSummary"
-import ManagementContractAttachment from "./ContractAttachment"
 import ManagementContractRefundRecord from "./ContractRefundRecord"
 import { Button, Popconfirm } from "antd"
 import RequestUtil from "../../../utils/RequestUtil"
 import { IResponseData } from "../../common/Page"
 import { Link } from "react-router-dom"
+import { Attachment } from "../../common"
 
 /**
  * 项目管理-合同详情
@@ -30,9 +30,7 @@ class ManagementContractDetail extends ContractDetail {
       }),
       Object.assign({}, tabs[1], {
         content: (
-          <ManagementContractAttachment
-            attachVos={this.state.detail.attachVos}
-          />
+          <Attachment title={false} dataSource={this.state.detail.attachVos as any} />
         ),
       }),
       Object.assign({}, tabs[2], {

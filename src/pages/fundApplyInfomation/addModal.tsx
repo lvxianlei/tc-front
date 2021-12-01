@@ -52,6 +52,25 @@ export default function AddModal(props: AddModalProps): JSX.Element {
         setLoading(false)
         props.onCancel && props.onCancel();
     }
+    const processingNumber = (arg: any, num: number) => {
+      arg = arg.replace(/[^\d.]/g, ""); // 清除"数字"和"."以外的字符
+      arg = arg.replace(/^\./g, ""); // 验证第一个字符是数字而不是
+      arg = arg.replace(/\.{2,}/g, "."); // 只保留第一个. 清除多余的
+      arg = arg.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+      arg = num === 2 ?
+        arg.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
+        : arg.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3');
+      return arg
+  }
+
+  const handleBaseInfoChange = (fields: any) => {
+      if (fields.payMoney) {
+        const payMoney = processingNumber(addFund.getFieldValue("payMoney") + "", 2);
+        addFund.setFieldsValue({
+          payMoney
+        })
+      }
+    }
     return (
         <Modal
           title={'付款'}
@@ -75,6 +94,7 @@ export default function AddModal(props: AddModalProps): JSX.Element {
                 col={ 2 }
                 edit
                 columns={ addColums}
+                onChange={handleBaseInfoChange}
             />
              <Attachment title="附件" maxCount={10} ref={attchsRef} edit dataSource={attachVosData || [] } />
         </Modal>

@@ -651,15 +651,15 @@
                         ]
                     },
                     {
-                        "label": "首页",
+                        "label": "选择应用",
                         "icon": "technology",
-                        "path": "/homePage",
-                        "authority": "home_page",
+                        "path": "/chooseApply",
+                        "authority": "approvalm",
                         "items": [
                             {
-                                "label": "个人中心",
-                                "path": "/homePage/personalCenter",
-                                "authority": "home_page_person_center"
+                                "label": "选择应用",
+                                "path": "/chooseApply",
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -736,6 +736,11 @@
                         "path": "/systemLog",
                         "authority": "system_log",
                         "items": [
+                            {
+                                "label": "操作日志",
+                                "path": "/systemLog/operationLog",
+                                "authority": "approvalm"
+                            },
                             {
                                 "label": "登录日志",
                                 "path": "/systemLog/login",

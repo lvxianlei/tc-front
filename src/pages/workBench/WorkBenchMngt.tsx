@@ -333,7 +333,7 @@ const MaterialToCheckVO = [ //提料校核员
 	}
 ]
 
-const materialToCheckVO = [ //提料/配段负责人
+const materialToBeMatchVO = [ //提料/配段负责人
 	{
 		title: '提料任务',
 		child: [
@@ -483,7 +483,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 				res?.child && res?.child.map((item: IList, index: number) => {
 					const dataIndex: string | undefined = item.dataIndex;
 					return <div className={res.col !== 2 ? styles.content : styles.content2} key={ind + '_' + index}>
-						<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: item.state || item.type }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
+						<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: item.state || { type: item.type} }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
 						<p className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</p>
 						{/* <div className={styles.draw}><Line keyIndex={dataIndex + '_' + index} valueList={[Math.ceil(Math.random() * 80), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 150), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 90), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)]} /></div> */}
 					</div>
@@ -543,8 +543,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 				: null
 			}
 			{
-				detailData.materialToCheckVO ? materialToCheckVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.materialToCheckVO)}</>
+				detailData.materialToBeMatchVO ? materialToBeMatchVO.map((res: IList, ind: number) => {
+					return <>{getChildContent(res, ind, detailData.materialToBeMatchVO)}</>
 				})
 				: null
 			}

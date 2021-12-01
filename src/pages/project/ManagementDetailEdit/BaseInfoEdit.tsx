@@ -1,14 +1,12 @@
 import React, { useState, useRef } from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Form, message, Spin, Upload } from "antd"
-import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable, Attachment, AttachmentRef } from '../../common'
+import { Button, Form, message, Spin } from "antd"
+import { DetailContent, BaseInfo, EditTable, DetailTitle, Attachment, AttachmentRef } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { baseInfoData, enclosure, cargoVOListColumns } from '../managementDetailData.json'
+import { baseInfoData, cargoVOListColumns } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
-import AuthUtil from "../../../utils/AuthUtil"
-import { downLoadFile } from "../../../utils"
 
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
@@ -55,8 +53,7 @@ export default function BaseInfoEdit(): JSX.Element {
             const result = await run({
                 ...baseInfoData,
                 id: data?.id,
-                // attachInfoDtos: attachVosData,
-                attachInfoDtos: attchsRef.current?.getDataSource(),
+                fileIds: attchsRef.current?.getDataSource().map(item => item.id),
                 cargoDTOList: cargoVOListData.submit,
                 projectLeaderId: projectLeaderType ? (data as any).projectLeaderId : baseInfoData.projectLeader?.records[0].id,
                 projectLeader: baseInfoData.projectLeader?.value || baseInfoData.projectLeader,

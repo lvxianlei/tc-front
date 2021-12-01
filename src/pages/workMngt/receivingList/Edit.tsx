@@ -153,6 +153,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [visible, setVisible] = useState<boolean>(false)
     const [cargoData, setCargoData] = useState<any[]>([])
     const [contractId, setContractId] = useState<string>("")
+    const [columns, setColumns] = useState<object[]>(BasicInformation.map(item => {
+        if (["contractNumber", "supplierName"].includes(item.dataIndex)) {
+            return ({ ...item, disabled: type === "edit" })
+        }
+        return item
+    }))
     const [form] = Form.useForm()
 
     const handleModalOk = () => {
@@ -234,6 +240,15 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
         if (fields.supplierName) {
             const supplierData = fields.supplierName.records[0]
+            setColumns(columns.map((item: any) => {
+                if (item.dataIndex === "contractNumber") {
+                    return ({
+                        ...item,
+                        path:`${item.path}&supplierId=${fields.supplierName.id}`
+                    })
+                }
+                return item
+            }))
             form.setFieldsValue({
                 contactsUser: supplierData.contactMan,
                 contactsPhone: supplierData.contactManTel
@@ -243,7 +258,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     return <Spin spinning={loading}>
         <Modal
-            // destroyOnClose
             width={1011}
             visible={visible}
             title="选择货物明细"
@@ -255,12 +269,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             <ChooseModal id={contractId} ref={modalRef} initChooseList={cargoData} />
         </Modal>
         <DetailTitle title="收货单基础信息" />
-        <BaseInfo form={form} onChange={handleBaseInfoChange} columns={BasicInformation.map((item: any) => {
-            if (["contractNumber", "supplierName"].includes(item.dataIndex)) {
-                return ({ ...item, disabled: type === "edit" })
-            }
-            return item
-        })} dataSource={{}} edit />
+        <BaseInfo form={form} onChange={handleBaseInfoChange} columns={columns} dataSource={{}} edit />
         <DetailTitle title="货物明细" operation={[<Button
             type="primary" key="choose" ghost
             onClick={() => {

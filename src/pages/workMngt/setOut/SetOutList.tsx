@@ -52,10 +52,10 @@ export default function SetOutList(): React.ReactNode {
             width: 200,
         },
         {
-            key: 'pattern',
+            key: 'patternName',
             title: '模式',
             width: 200,
-            dataIndex: 'pattern'
+            dataIndex: 'patternName'
         },
         {
             key: 'loftingLeaderName',
@@ -68,8 +68,8 @@ export default function SetOutList(): React.ReactNode {
             title: '塔型放样状态',
             width: 200,
             dataIndex: 'status',
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
+            render: (status: number): React.ReactNode => {
+                switch (status) {
                     case 1:
                         return '待指派';
                     case 2:
@@ -146,7 +146,7 @@ export default function SetOutList(): React.ReactNode {
             {
                 name: 'pattern',
                 label: '模式',
-                children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                children: <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
                     { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={ index } value={ id }>
                             { name }

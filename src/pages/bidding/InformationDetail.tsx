@@ -60,7 +60,7 @@ export default function InformationDetail(): React.ReactNode {
         }
     }), { manual: true })
 
-    const { loading: bidResStatus, data: bidResResult, run } = useRequest((postData: {}) => new Promise(async (resole, reject) => {
+    const { loading: bidResStatus, run } = useRequest((postData: {}) => new Promise(async (resole, reject) => {
         try {
             const data: any = await RequestUtil.post(`/tower-market/bidInfo/bidResponse`, { id: params.id, ...postData })
             form.setFieldsValue({ biddingStatus: 1 })
@@ -109,7 +109,11 @@ export default function InformationDetail(): React.ReactNode {
         })
     }
     return <>
-        <Modal zIndex={15} visible={visible} title="是否应标" okText="确定" onOk={handleModalOk} onCancel={handleModalCancel} >
+        <Modal zIndex={15} visible={visible}
+            title="是否应标" okText="确定"
+            onOk={handleModalOk}
+            confirmLoading={bidResStatus}
+            onCancel={handleModalCancel} >
             <Form form={form} onValuesChange={handleChange}>
                 <Form.Item name="biddingStatus" label="是否应标" rules={[{
                     required: true,

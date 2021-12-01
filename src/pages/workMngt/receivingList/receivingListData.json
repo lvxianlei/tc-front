@@ -142,7 +142,7 @@
             "title": "合同编号",
             "dataIndex": "contractNumber",
             "type": "popTable",
-            "path": "/tower-supply/materialContract",
+            "path": "/tower-supply/materialContract?contractStatus=1",
             "width": 1011,
             "value": "contractNumber",
             "dependencies": true,
