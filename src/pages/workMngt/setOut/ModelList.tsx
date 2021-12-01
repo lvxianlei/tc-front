@@ -121,7 +121,9 @@ export default function ModelList(): React.ReactNode {
         } }>
             <Row>
                 <Col span={ 4 }>段名</Col>
-                <Col span={ 20 }><Input defaultValue={ segmentName }/></Col>
+                <Col span={ 20 }><Input defaultValue={ segmentName } onChange={ (e) => {
+                    setSegmentName(e.target.value)
+                } }/></Col>
             </Row>
         </Modal>
     </>

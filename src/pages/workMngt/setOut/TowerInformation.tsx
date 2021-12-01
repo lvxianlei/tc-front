@@ -182,8 +182,7 @@ export default function TowerInformation(): React.ReactNode {
                         : null
                     }
                     {
-                        record.status === 3 ? 
-                        <Button type="link" disabled>明细</Button> : <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>明细</Link>
+                        record.status === 3 ? <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>明细</Link> : <Button type="link" disabled>明细</Button>
                     }
                     {
                         record.status === 1 ? 
@@ -258,9 +257,9 @@ export default function TowerInformation(): React.ReactNode {
             columns={ columns }
             headTabs={ [] }
             refresh={ refresh }
+            exportPath={`/tower-science/productSegment`}
             requestData={{ productCategoryId: params.id }}
             extraOperation={ <Space direction="horizontal" size="small">
-                <Button type="primary" ghost>导出</Button>
                 <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/modalList`, state: { status: location.state.status } }}><Button type="primary" ghost>模型</Button></Link>
                 <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/processCardList`, state: { status: location.state.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                 <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram`, state: { status: location.state.status } }}><Button type="primary" ghost>NC程序</Button></Link>
