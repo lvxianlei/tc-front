@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
@@ -7,6 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Invoicing() {
     const history = useHistory()
+    const [filterValue, setFilterValue] = useState({});
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
@@ -22,6 +23,7 @@ export default function Invoicing() {
             value.startLaunchTime = formatDate[0]
             value.endLaunchTime = formatDate[1]
         }
+        setFilterValue(value)
         return value
     }
 
@@ -43,6 +45,7 @@ export default function Invoicing() {
 
     return <Page
         path="/tower-market/invoicing"
+        filterValue={filterValue}
         columns={[
             ...invoicingListHead,
             {
