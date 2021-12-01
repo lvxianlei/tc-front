@@ -103,7 +103,9 @@ export default function AssessmentTaskList(): React.ReactNode {
                             <Assign id={record.id} updataList={() => { setRefresh(!refresh); }} />
                             : <Button type="link" disabled>指派</Button>
                     }
-                    <AssessmentInformation id={record.id} />
+                    {
+                        record.status === 4 || record.status === 5 ? <AssessmentInformation id={record.id} /> : <Button type="link" disabled>评估信息</Button>
+                    }
                     <Popconfirm
                         title="确认提交?"
                         onConfirm={() => {
