@@ -127,9 +127,9 @@ export default function DrawTowerMngt(): React.ReactNode {
 
     return <Page
         path="/tower-science/productCategory/draw/page"
+        exportPath={`/tower-science/productCategory/draw/page`}
         columns={ columns }
         headTabs={ [] }
-        // extraOperation={ <Button type="primary" ghost>导出</Button> }
         refresh={ refresh }
         searchFormItems={ [
             {
