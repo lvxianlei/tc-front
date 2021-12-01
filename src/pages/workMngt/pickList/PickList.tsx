@@ -180,6 +180,7 @@ export default function PickList(): React.ReactNode {
                 columns={columns}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
+                exportPath="/tower-science/materialTask"
                 // extraOperation={<Button type="primary">导出</Button>}
                 requestData={ { status: location.state } }
                 searchFormItems={[
