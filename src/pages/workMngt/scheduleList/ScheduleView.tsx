@@ -18,7 +18,7 @@ const tableColumns = [
     { title: '操作部门', dataIndex: 'createDeptName', key: 'createDeptName', },
     { title: '操作人', dataIndex: 'createUserName', key: 'createUserName' },
     { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
-    { title: '任务状态', dataIndex: 'currentStatus', key: 'currentStatus', render: (value: number, record: object): React.ReactNode => {
+    { title: '操作', dataIndex: 'status', key: 'status', render: (value: number, record: object): React.ReactNode => {
         const renderEnum: any = [
             {
                 value: 1,
