@@ -4,13 +4,10 @@
  * @description 公告通知弹窗
 */
 import React from 'react';
-import { Button, Space, Modal, Tree, Table, Col, Row, Descriptions } from 'antd';
+import { Button, Modal, Descriptions } from 'antd';
 import RequestUtil from '../../utils/RequestUtil';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { IDept } from '../dept/dept/DepartmentMngt';
-import { DataNode } from 'antd/lib/tree';
-import { RowSelectionType } from 'antd/lib/table/interface';
 import { IAnnouncement } from '../announcement/AnnouncementMngt';
 import styles from './NoticeModal.module.less';
 import { Attachment } from '.';
@@ -23,7 +20,6 @@ export interface INoticeModalRouteProps extends RouteComponentProps<NoticeModalP
 }
 
 export interface NoticeModalState {
-    // readonly detailData?: IAnnouncement[];
     readonly visible?: boolean;
 }
 
@@ -33,23 +29,6 @@ class NoticeModal extends React.Component<INoticeModalRouteProps, NoticeModalSta
         visible: true
     }
 
-    async componentDidMount() {
-        // const data: IAnnouncement[] = await RequestUtil.get(`/tower-system/notice/staff/notice`);
-        // this.setState({
-        //     detailData: data
-        // })
-    }
-
-    protected wrapRole2DataNode(roles: (any & DataNode)[] = []): DataNode[] {
-        roles && roles.forEach((role: any & DataNode): void => {
-            role.title = role.name;
-            role.key = role.id;
-            if (role.children && role.children.length > 0) {
-                this.wrapRole2DataNode(role.children);
-            }
-        });
-        return roles;
-    }
 
      /**
      * @description Renders AbstractDetailComponent
@@ -74,8 +53,10 @@ class NoticeModal extends React.Component<INoticeModalRouteProps, NoticeModalSta
                 <Descriptions.Item label="附件">
                     <Attachment title="" dataSource={ this.props.detailData?.attachVos }/>
                     <Button type="primary" className={ styles.btn } onClick={() => {
-                        this.setState({
-                            visible: false
+                        RequestUtil.post(`/tower-system/notice/staff/read`, { id: this.props.detailData?.id }).then(res => {
+                            this.setState({
+                                visible: false
+                            })
                         })
                     }}>关闭</Button>
                 </Descriptions.Item>
