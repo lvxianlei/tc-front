@@ -79,8 +79,8 @@ export default function PickTowerDetail(): React.ReactNode {
                     current={tablePagination.current}
                     size={tablePagination.pageSize}
                     total={tablePagination.total}
-                    url={'/tower-science/assessTask'}
-                    serchObj={{}}
+                    url={'/tower-science/drawProductStructure/check'}
+                    serchObj={{segmentGroupId:params.productSegmentId}}
                     closeExportList={() => { setIsExportStoreList(false) }}
                 />:null}
                 <Table 

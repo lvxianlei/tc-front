@@ -292,6 +292,7 @@ export default function PickTower(): React.ReactNode {
                 filterValue={ filterValue }
                 refresh={ refresh }
                 requestData={{ productCategoryId: params.id }}
+                exportPath="/tower-science/product/material"
                 extraOperation={
                     <Space>
                     {/* <Button type="primary">导出</Button> */}
