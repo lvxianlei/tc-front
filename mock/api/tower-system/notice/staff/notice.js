@@ -2,26 +2,6 @@ const Mock = require('mockjs');
 
 const Random = Mock.Random;
 
-const records = [];
-for (let i = 1; i < 4; ++i) {
-    records.push({
-        "id": Random.increment(),
-        "content": Random.cword(3,10),
-        "title": Random.cword(3,10),
-        "attachVos":[
-            {
-                "description":"ullamco tempor eu dolore ea",
-                "filePath":"eu ad ipsum",
-                "fileSize":96027788.06026006,
-                "fileSuffix":"do adipisicing qui cillum ullamco",
-                "fileUploadTime":"1999-06-24T16:38:51.861Z",
-                "id":59964705,
-                "name":"amet tempor in exercitation ut",
-                "userName":"amet"
-            }
-        ]
-    });
-}
 
 module.exports = {
     msg: "",
@@ -73,5 +53,5 @@ module.exports = {
                     "userName":"ut aute de"
                 }
             ]
-        }].concat(records)
+        }]
 }
