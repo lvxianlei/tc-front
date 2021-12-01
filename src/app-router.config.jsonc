@@ -2016,6 +2016,174 @@
       "module": "./pages/invoicing/Edit",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 人资-员工关系-招聘入职
+      "name": "招聘入职",
+      "path": "/employeeRelation/recruit",
+      "module": "./pages/employeeRelation/recruit/RecruitList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-招聘入职-查看
+      "name": "查看",
+      "path": "/employeeRelation/recruit/view/:id",
+      "module": "./pages/employeeRelation/recruit/View",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-招聘入职-新增
+      "name": "新增",
+      "path": "/employeeRelation/recruit/new",
+      "module": "./pages/employeeRelation/recruit/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-招聘入职-编辑
+      "name": "编辑",
+      "path": "/employeeRelation/recruit/edit/:id/:status",
+      "module": "./pages/employeeRelation/recruit/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工档案
+      "name": "员工档案",
+      "path": "/employeeRelation/archives",
+      "module": "./pages/employeeRelation/archives/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-劳动合同
+      "name": "劳动合同",
+      "path": "/employeeRelation/labour",
+      "module": "./pages/employeeRelation/labour/LabourList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-劳动合同-查看
+      "name": "查看",
+      "path": "/employeeRelation/labour/view/:id",
+      "module": "./pages/employeeRelation/labour/View",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-劳动合同-查看-合同详情
+      "name": "合同详情",
+      "path": "/employeeRelation/labour/view/:id/:contractId",
+      "module": "./pages/employeeRelation/labour/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-劳动合同-调整
+      "name": "调整",
+      "path": "/employeeRelation/labour/edit/:id/:status",
+      "module": "./pages/employeeRelation/labour/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-转正考核
+      "name": "转正考核",
+      "path": "/employeeRelation/full",
+      "module": "./pages/employeeRelation/full/FullList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-转正考核-查看
+      "name": "查看",
+      "path": "/employeeRelation/full/view/:id",
+      "module": "./pages/employeeRelation/full/View",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-转正考核-转正
+      "name": "转正",
+      "path": "/employeeRelation/full/sure/:id",
+      "module": "./pages/employeeRelation/full/Sure",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工调动
+      "name": "员工调动",
+      "path": "/employeeRelation/transfer",
+      "module": "./pages/employeeRelation/transfer/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工调动
+      "name": "查看员工调动",
+      "path": "/employeeRelation/transfer/detail/:transferId",
+      "module": "./pages/employeeRelation/transfer/Overview",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工调动
+      "name": "编辑员工调动",
+      "path": "/employeeRelation/transfer/edit/:transferId",
+      "module": "./pages/employeeRelation/transfer/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工离职
+      "name": "员工离职",
+      "path": "/employeeRelation/quit",
+      "module": "./pages/employeeRelation/quit/QuitList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工离职-新增/编辑
+      "name": "员工离职",
+      "path": "/employeeRelation/quit/:id",
+      "module": "./pages/employeeRelation/quit/Quit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工离职-查看
+      "name": "查看",
+      "path": "/employeeRelation/quit/view/:id",
+      "module": "./pages/employeeRelation/quit/View",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-办理离职
+      "name": "办理离职",
+      "path": "/employeeRelation/quitProcedures",
+      "module": "./pages/employeeRelation/quitProcedures/QuitProceduresList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-办理离职-办理离职
+      "name": "办理离职",
+      "path": "/employeeRelation/quitProcedures/operation/:id",
+      "module": "./pages/employeeRelation/quitProcedures/Operation",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-办理离职-查看
+      "name": "查看",
+      "path": "/employeeRelation/quitProcedures/view/:id",
+      "module": "./pages/employeeRelation/quitProcedures/View",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工复职
+      "name": "员工复职",
+      "path": "/employeeRelation/reinstate",
+      "module": "./pages/employeeRelation/reinstate/ReinstateList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-保险方案
+      "name": "保险方案",
+      "path": "/socialSecurity/plan",
+      "module": "./pages/socialSecurity/plan/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案
+      "name": "员工保险档案",
+      "path": "/socialSecurity/archives",
+      "module": "./pages/socialSecurity/archives/index",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }

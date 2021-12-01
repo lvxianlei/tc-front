@@ -791,6 +791,72 @@
                                 "authority": "guarantee_application_management_list"
                             }
                         ]
+                    },
+                    {
+                        "label": "员工关系",
+                        "icon": "customer",
+                        "path": "/employeeRelation",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "招聘入职",
+                                "path": "/employeeRelation/recruit",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "员工档案",
+                                "path": "/employeeRelation/archives",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "劳动合同",
+                                "path": "/employeeRelation/labour",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "转正考核",
+                                "path": "/employeeRelation/full",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "员工调动",
+                                "path": "/employeeRelation/transfer",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "员工离职",
+                                "path": "/employeeRelation/quit",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "办理离职",
+                                "path": "/employeeRelation/quitProcedures",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "员工复职",
+                                "path": "/employeeRelation/reinstate",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "社保福利",
+                        "icon": "customer",
+                        "path": "/socialSecurity",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "保险方案",
+                                "path": "/socialSecurity/plan",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "员工保险档案",
+                                "path": "/socialSecurity/archives",
+                                "authority": "approvalm"
+                            }
+                        ]
                     }
                 ]
             }

@@ -1,0 +1,44 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "contractNumber",
+            "title": "劳务合同号"
+        },
+        {
+            "dataIndex": "employeeName",
+            "title": "姓名"
+        },
+        {
+            "dataIndex": "companyName",
+            "title": "公司"
+        },
+        {
+            "dataIndex": "departmentName",
+            "title": "部门/班组"
+        },
+        {
+            "dataIndex": "postName",
+            "title": "岗位"
+        },
+        {
+            "dataIndex": "signedCompany",
+            "title": "合同签署公司"
+        },
+        {
+            "dataIndex": "contractStartDate",
+            "title": "合同开始日期"
+        },
+        {
+            "dataIndex": "contractEndDate",
+            "title": "合同截止日期"
+        },
+        {
+            "dataIndex": "contractType",
+            "title": "合同类型"
+        },
+        {
+            "dataIndex": "remark",
+            "title": "备注"
+        }
+    ]
+}
