@@ -33,15 +33,15 @@ export default function TransferList(): React.ReactNode {
                     "dataIndex": "operation",
                     render: (_: undefined, record: any): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Button type="primary" size="small"><Link to={""}>查看</Link></Button>
-                            <Button type="primary" size="small"><Link to={""}>编辑</Link></Button>
+                            <Button type="primary" size="small"><Link to={`/employeeRelation/transfer/detail/${record.id}`}>查看</Link></Button>
+                            <Button type="primary" size="small"><Link to={`/employeeRelation/transfer/edit/${record.id}`}>编辑</Link></Button>
                         </Space>
                     )
                 }]}
             onFilterSubmit={onFilterSubmit}
             requestData={{ productCategory: params.id }}
             extraOperation={
-                <Button type="primary" onClick={() => history.push('')} ghost>新增员工调动</Button>
+                <Button type="primary" onClick={() => history.push('')} ghost><Link to={`/employeeRelation/transfer/edit/new`}>新增员工调动</Link></Button>
             }
             searchFormItems={[
                 {

@@ -2108,6 +2108,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 人资-员工关系-员工调动
+      "name": "查看员工调动",
+      "path": "/employeeRelation/transfer/detail/:transferId",
+      "module": "./pages/employeeRelation/transfer/Overview",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工调动
+      "name": "编辑员工调动",
+      "path": "/employeeRelation/transfer/edit/:transferId",
+      "module": "./pages/employeeRelation/transfer/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 人资-员工关系-员工离职
       "name": "员工离职",
       "path": "/employeeRelation/quit",
