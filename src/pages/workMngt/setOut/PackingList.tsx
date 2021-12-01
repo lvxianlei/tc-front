@@ -184,7 +184,7 @@ export default function PackingList(): React.ReactNode {
             size={detailData?.size || 10}
             total={detailData?.total || 0}
             url={`/tower-science/packageStructure/list`}
-            serchObj={{}}
+            serchObj={{ productId: params.productId  }}
             closeExportList={() => setIsExport(false)}
         /> : null}
     </>
