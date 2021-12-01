@@ -57,12 +57,13 @@ export interface ISaleOrder {
     readonly orderProductVos: IProductVo[];
     readonly productChangeRecordVos?: IProductVo[];
     readonly contractInfoVo?: IContractInfoDto;
+    readonly saleType?: number;
 }
 
 export interface ManagementSaleOrder extends ISaleOrder {
     orderWeight?: number;
     orderProjectName?: string;
-    saleType?: string;
+    saleType?: number;
     salesman?: string;
     productType?: string;
     voltageGrade?: string;
@@ -325,7 +326,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             label: "采购订单号",
                             name: "purchaseOrderNumber",
                             initialValue: saleOrder?.purchaseOrderNumber,
-                            children: <Input maxLength={50} disabled={true}/>,
+                            children: <Input maxLength={50} disabled={true} />,
                         },
                         {
                             label: "关联合同",
@@ -526,31 +527,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 },
                             ],
                             children: (
-                                // <Select
-                                //     showSearch
-                                //     onSearch={this.addNewOption}
-
-                                //     getPopupContainer={(triggerNode) => triggerNode.parentNode}
-                                // >
-                                //     {this.state.newOption ? (
-                                //         <Select.Option
-                                //             key={this.state.newOption.value}
-                                //             value={this.state.newOption.label}
-                                //         >
-                                //             {this.state.newOption.value}
-                                //         </Select.Option>
-                                //     ) : (
-                                //         ""
-                                //     )}
-                                //     {taxRateOptions &&
-                                //         taxRateOptions.map(({ id, name }, index) => {
-                                //             return (
-                                //                 <Select.Option key={index} value={name}>
-                                //                     {name}
-                                //                 </Select.Option>
-                                //             );
-                                //         })}
-                                // </Select>
                                 <InputNumber
                                     min={0}
                                     step="0.01"
@@ -596,7 +572,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                         {
                             label: "销售类型",
                             name: "saleType",
-                            initialValue: saleOrder?.saleType,
+                            initialValue: [-1, "-1"].includes(saleOrder?.saleType as any) ? undefined : saleOrder?.saleType,
                             children: (
                                 <Select disabled={true}
                                     getPopupContainer={(triggerNode) => triggerNode.parentNode}
