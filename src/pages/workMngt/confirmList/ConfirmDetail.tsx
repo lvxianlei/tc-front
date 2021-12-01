@@ -844,7 +844,7 @@ export default function ConfirmDetail(): React.ReactNode {
                       )
                   }
                 ]} dataSource={attachInfo}  pagination={ false }/> */}
-                <Attachment dataSource={attachInfo} edit title="附件信息" ref={attchsRef}/>
+                <Attachment dataSource={attachInfo} edit={params.status==='3'?true:false} title="附件信息" ref={attchsRef}/>
             </DetailContent>
             <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
                 <Image src={pictureUrl} preview={false}/>
