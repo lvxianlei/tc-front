@@ -494,7 +494,11 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                                     "required": true,
                                     "message": "请输入段号"
                                 }]} initialValue={ this.state.baseData?.segmentName }>
-                                    <Select placeholder="请选择" style={{width:'100%'}}>
+                                    <Select placeholder="请选择" style={{width:'100%'}}  onChange={ () => {
+                                        this.setState({
+                                            weldingDetailedStructureList: []
+                                        })
+                                    } } >
                                         { this.props.segmentNameList.map((item: any) => {
                                             return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
                                         }) }

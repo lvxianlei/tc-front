@@ -75,14 +75,6 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
         ]
 
         const data = [{
-            name: '提料塔型构件明细汇总.xls',
-            use: '提料塔型构件明细汇总',
-            path: '/tower-science/productCategory/material/productCategoryStructure/download/excel?productCategoryId='
-        }, {
-            name: '提料杆塔构件明细汇总.xls',
-            use: '提料杆塔构件明细汇总',
-            path: '/tower-science/productCategory/material/productStructure/download/excel?productCategoryId='
-        }, {
             name: '放样塔型构件明细汇总.xls',
             use: '放样塔型构件明细汇总',
             path: '/tower-science/productStructure/productCategory/exportByProductCategoryId?productCategoryId='

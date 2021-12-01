@@ -35,7 +35,7 @@ export default function TowerDetail(): React.ReactNode {
         singleWeight:''
     });
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/productSegment/reuse/productCategory?productCategoryId=${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/productCategory/getLoftingDetail?productCategoryId=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;

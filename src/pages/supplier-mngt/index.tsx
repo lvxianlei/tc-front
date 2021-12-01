@@ -70,6 +70,10 @@ export default function SupplierMngt(): React.ReactNode {
             width={1011}
             title="详情"
             visible={overviewVisible}
+            footer={[<Button type="primary" key="ok" onClick={() => {
+                setDetailId("")
+                setOverviewVisible(false)
+            }}>确定</Button>]}
             onCancel={() => {
                 setDetailId("")
                 setOverviewVisible(false)

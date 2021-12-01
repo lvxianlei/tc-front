@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Modal, Spin, Radio } from "antd"
-import { CommonTable, BaseInfo, DetailContent, DetailTitle } from "../common"
+import { CommonTable, BaseInfo, DetailContent, DetailTitle, Attachment } from "../common"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import {
@@ -57,7 +57,7 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
             </Radio.Group>
             {radioValue === "base" && <BaseInfo columns={drawingCofirm} dataSource={(data as any) || {}} />}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records} />}
-            {radioValue === "attachVos" && <CommonTable columns={enclosure} dataSource={data?.attachInfo} />}
+            {radioValue === "attachVos" && <Attachment title={false} dataSource={data?.fileSources} />}
         </DetailContent>,
         "招标评审申请": <DetailContent>
             <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)}>
@@ -67,7 +67,7 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
             </Radio.Group>
             {radioValue === "base" && <BaseInfo columns={baseInfo} dataSource={(data?.biddingEvaluation) || {}} />}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records || []} />}
-            {radioValue === "attachVos" && <CommonTable columns={enclosure} dataSource={data?.attachInfo} />}
+            {radioValue === "attachVos" && <Attachment title={false} dataSource={data?.attachVos} />}
         </DetailContent>,
         "出厂价申请": <DetailContent>
             <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)}>

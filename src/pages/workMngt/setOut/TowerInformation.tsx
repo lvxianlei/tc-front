@@ -182,7 +182,7 @@ export default function TowerInformation(): React.ReactNode {
                         : null
                     }
                     {
-                        record.status === 1 ? 
+                        record.status === 3 ? 
                         <Button type="link" disabled>明细</Button> : <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>明细</Link>
                     }
                     {

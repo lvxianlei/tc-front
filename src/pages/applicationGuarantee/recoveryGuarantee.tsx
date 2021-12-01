@@ -3,6 +3,7 @@
  */
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Form, Spin } from 'antd';
+import moment from 'moment';
 import { BaseInfo } from '../common';
 import { recoveryGuarantee } from './applicationColunm.json';
 import useRequest from '@ahooksjs/use-request'
@@ -10,8 +11,9 @@ import RequestUtil from '../../utils/RequestUtil';
 interface EditProps {
   id?: string
   ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
+  requiredReturnTime?: string
 }
-export default forwardRef(function RecoveryGuaranteeLayer({id}: EditProps, ref) {
+export default forwardRef(function RecoveryGuaranteeLayer({id, requiredReturnTime}: EditProps, ref) {
   const [addCollectionForm] = Form.useForm();
   const [column, setColumn] = useState(recoveryGuarantee);
   const handleBaseInfoChange = (fields: any) => {
@@ -74,7 +76,7 @@ export default forwardRef(function RecoveryGuaranteeLayer({id}: EditProps, ref) 
     <Spin spinning={loading}>
       <BaseInfo
         form={addCollectionForm}
-        dataSource={{content: 1}}
+        dataSource={{requiredReturnTime: requiredReturnTime ? moment(requiredReturnTime).format("YYYY-MM-DD") : ''}}
         col={ 2 }
         edit
         columns={ column}

@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Modal, message, Row, Col, Input } from 'antd';
+import { Space, Button, Modal, message, Row, Col, Input, Popconfirm } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -51,10 +51,10 @@ export default function ProcessCardList(): React.ReactNode {
             width: 200,
         },
         {
-            key: 'createUser',
+            key: 'createUserName',
             title: '上传人',
             width: 200,
-            dataIndex: 'createUser'
+            dataIndex: 'createUserName'
         },
         {
             key: 'operation',
@@ -73,6 +73,19 @@ export default function ProcessCardList(): React.ReactNode {
                         setSegmentName(record.segmentName);
                         setSegmentId(record.id)
                     } }>编辑</Button> : null }
+                    { location.state.status === 1 || location.state.status === 2 ? <Popconfirm
+                        title="确认删除?"
+                        onConfirm={ () => { 
+                            RequestUtil.delete(`/tower-science/productSegment/segmentDrawDelete?segmentRecordId=${ record.id }`).then(res => {
+                                message.success('删除成功');
+                                setRefresh(!refresh);
+                            })   
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="link">删除</Button>
+                    </Popconfirm> : null }
                 </Space>
             )
         }

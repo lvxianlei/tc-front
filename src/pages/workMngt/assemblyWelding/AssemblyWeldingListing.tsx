@@ -216,7 +216,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                                 message.warning(info.file.response?.msg)
                             }
                             if(info.file.response && info.file.response?.success){
-                                if(Object.keys(info.file.response?.data).length > 0){
+                                if(info.file.response?.dataSource){
                                     setUrl(info.file.response?.data);
                                     setUrlVisible(true);
                                 }else{

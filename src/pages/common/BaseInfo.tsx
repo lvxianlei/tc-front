@@ -58,7 +58,6 @@ export function formatData(columns: any[], dataSource: any): object {
             }
             formatedData[dataSourceKey] = types[dataItem.type || "string"]
         }
-
     })
     return formatedData
 }
