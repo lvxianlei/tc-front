@@ -54,20 +54,24 @@ export default forwardRef(function ({
     }
 
     const save = () => {
-        let value = form.getFieldsValue(true).data;
-        value = value.map((res: IFile) => {
-            return {
-                fileVo: res,
-                productCategoryId: id,
-                segmentName: res.segmentName
-            }
-        })
-        RequestUtil.post(path, [...value]).then(res => {
-            setVisible(false);
-            updateList();
-            setList([]);
-            form.resetFields();
-        })
+        if(form) {
+            form.validateFields().then(res => {
+                let value = form.getFieldsValue(true).data;
+                value = value.map((res: IFile) => {
+                    return {
+                        fileVo: res,
+                        productCategoryId: id,
+                        segmentName: res.segmentName
+                    }
+                })
+                RequestUtil.post(path, [...value]).then(res => {
+                    setVisible(false);
+                    updateList();
+                    setList([]);
+                    form.resetFields();
+                })
+            })
+        }
     }
 
     return <>

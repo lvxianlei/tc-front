@@ -5,6 +5,7 @@ import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import moment from 'moment'
+import { stringify } from 'query-string';
 export type FormItemTypesType = "text" | "number" | "select" | "date" | "textarea" | "popForm" | undefined
 
 interface SelectOption {
@@ -82,7 +83,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                     delete params[columnItem?.dataIndex]
                 }
             })
-            const paramsOptions = Object.keys(params).map((item: string) => `${item}=${params[item] || ""}`).join("&")
+            const paramsOptions = stringify(params)
             const path = data.path.includes("?") ? `${data.path}&${paramsOptions || ''}` : `${data.path}?${paramsOptions || ''}`
             resolve(await RequestUtil.get<{ data: any }>(path))
         } catch (error) {
@@ -199,22 +200,14 @@ interface SelfSelectProps {
     data: SelectData
 }
 const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
-    return <Select {...props} disabled={data.disabled} style={{ width: "100%", minWidth: 100 }}>
+    return <Select {...props} disabled={data.disabled} style={{ width: "100%", minWidth: 100 }} mode={data.mode} maxTagCount={data.maxTagCount}>
         {data.enum?.map((item: SelectOption, index: number) => (<Select.Option key={`select_option_${index}_${item.value}`} value={item.value} >{item.label}</Select.Option>))}
     </Select>
 }
 
-const limitDecimalsF = (value: string, decimal: number): any => {
-    value.replace(/[^\d.]/g, "");
-    if (value.includes(".") && decimal) {
-        const result = Number(value).toFixed(decimal)
-        return result;
-    }
-}
-
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }) => {
     const ItemTypes = {
-        string: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
+        string: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
         text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
         number: <InputNumber
             {...props}

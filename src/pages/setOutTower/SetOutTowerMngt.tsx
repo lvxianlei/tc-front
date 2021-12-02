@@ -194,6 +194,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
             columns={columns}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
+            exportPath="/tower-science/productCategory/lofting/page"
             // extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {

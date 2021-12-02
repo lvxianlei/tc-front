@@ -40,6 +40,7 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
             saleOrder: {
                 ...saleOrder,
                 price: saleOrder.price === -1 ? undefined : saleOrder.price,
+                saleType: [-1, "-1"].includes(saleOrder.saleType as any) ? undefined : saleOrder.saleType,
                 orderProductDtos: saleOrder.orderProductDtos,
                 contractInfoDto: saleOrder.contractInfoVo
             },
@@ -53,7 +54,7 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
             orderQuantity: saleOrder.orderQuantity,
             chargeType: saleOrder.contractInfoVo?.chargeType,
             contractId: saleOrder.contractInfoVo?.contractId,
-            currencyType: saleOrder.contractInfoVo?.currencyType,
+            currencyType: [-1, "-1"].includes(saleOrder.contractInfoVo?.currencyType as any) ? undefined : saleOrder.contractInfoVo?.currencyType,
             customerCompany: saleOrder.contractInfoVo?.customerCompany,
             deliveryTime: saleOrder.contractInfoVo?.deliveryTime,
             internalNumber: saleOrder.contractInfoVo?.internalNumber,
@@ -80,7 +81,7 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
             creditInsurance: saleOrder.creditInsurance === -1 ? '-' : saleOrder.creditInsurance,
             commissionCharge: saleOrder.commissionCharge === -1 ? '-' : saleOrder.commissionCharge,
             description: saleOrder.description,
-            saleType: saleOrder.saleType,
+            saleType: [-1, "-1"].includes(saleOrder.saleType as any) ? undefined : saleOrder.saleType,
             salesman: saleOrder.salesman,
             contractNumber: saleOrder.contractInfoVo?.contractNumber,
 

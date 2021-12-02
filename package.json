@@ -21,6 +21,7 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/react-virtualized": "^9.21.13",
     "antd": "4.15.4",
+    "babel-loader": "8.1.0",
     "camelcase-keys": "^6.2.2",
     "crypto-js": "^4.0.0",
     "dayjs": "^1.10.4",
@@ -28,6 +29,8 @@
     "echarts": "^5.2.1",
     "eventemitter3": "^4.0.7",
     "express": "^4.17.1",
+    "happypack": "^5.0.1",
+    "hard-source-webpack-plugin": "^0.13.1",
     "i18next": "^20.2.2",
     "i18next-http-backend": "^1.2.2",
     "js-cookie": "^2.2.1",
@@ -46,6 +49,7 @@
     "react-virtualized": "^9.22.3",
     "typescript": "^4.2.4",
     "web-vitals": "^1.1.1",
+    "webpackbar": "^5.0.2",
     "xlsx": "^0.17.1"
   },
   "scripts": {

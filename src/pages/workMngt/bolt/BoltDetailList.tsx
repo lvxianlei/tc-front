@@ -173,7 +173,7 @@ export default function BoltCheck(): React.ReactNode {
                 path={`/tower-science/boltRecord/basicHeight/${params.id}`}
                 columns={columns}
                 refresh={refresh}
-                exportPath={`/tower-science/boltRecord/exportBoltList/${params.id}`}
+                exportPath={`/tower-science/boltRecord/basicHeight/${params.id}`}
                 extraOperation={
                     <div>
                         <Button

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message } from 'antd'
+import { Space, Button, Input, DatePicker, Select, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import ConfirmableButton from '../../components/ConfirmableButton'
 import { Page } from '../common'
@@ -55,7 +55,7 @@ export default function Management(): React.ReactNode {
             title: '项目名称',
             dataIndex: 'projectName',
             isResizable: true,
-            width:120,
+            width: 120,
             render: (_a: any, _b: any) => <Link to={`/project/management/detail/base/${_b.id}`}>{_b.projectName}</Link>
         },
         {

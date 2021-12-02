@@ -58,40 +58,46 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '任务状态',
             width: 100,
-            dataIndex: 'status',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 0,
-                        label: "已拒绝"
-                    },
-                    {
-                        value: 1,
-                        label: "待确认"
-                    },
-                    {
-                        value: 2,
-                        label: "待指派"
-                    },
-                    {
-                        value: 3,
-                        label: "待完成"
-                    },
-                    {
-                        value: 4,
-                        label: "已完成"
-                    },
-                    {
-                        value: 5,
-                        label: "已提交"
-                    }
-                  ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'statusName'
         },
+        // {
+        //     key: 'status',
+        //     title: '任务状态',
+        //     width: 100,
+        //     dataIndex: 'status',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 0,
+        //                 label: "已拒绝"
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "待确认"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "待指派"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "待完成"
+        //             },
+        //             {
+        //                 value: 4,
+        //                 label: "已完成"
+        //             },
+        //             {
+        //                 value: 5,
+        //                 label: "已提交"
+        //             }
+        //           ]
+        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'updateStatusTime',
             title: '最新状态变更时间',
@@ -237,6 +243,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             path="/tower-science/drawTask"
             columns={columns}
             refresh={ refresh }
+            exportPath="/tower-science/drawTask"
             // extraOperation={<Button type="primary">导出</Button>}
             filterValue={ filterValue }
             onFilterSubmit={onFilterSubmit}

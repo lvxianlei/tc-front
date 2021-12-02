@@ -45,32 +45,38 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'productCategoryName'
         },
         {
-            key: 'priority',
+            key: 'priorityName',
             title: '优先级',
             width: 100,
-            dataIndex: 'priority',
-            render: (value: any, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 0,
-                        label: "紧急"
-                    },
-                    {
-                        value: 1,
-                        label: "高"
-                    },
-                    {
-                        value: 2,
-                        label: "中"
-                    },
-                    {
-                        value: 3,
-                        label: "低"
-                    },
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'priorityName'
         },
+        // {
+        //     key: 'priority',
+        //     title: '优先级',
+        //     width: 100,
+        //     dataIndex: 'priority',
+        //     render: (value: any, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 0,
+        //                 label: "紧急"
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "高"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "中"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "低"
+        //             },
+        //         ]
+        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'num',
             title: '基数',
@@ -84,44 +90,50 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'totalWeight'
         },
         {
-            key: 'materialStatus',
+            key: 'materialStatusName',
             title: '塔型提料状态',
-            width: 100,
-            dataIndex: 'materialStatus',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: null,
-                        label: "-"
-                    },
-                    {
-                        value: -1,
-                        label: "-"
-                    },
-                    {
-                        value: 1,
-                        label: "待指派"
-                    },
-                    {
-                        value: 2,
-                        label: "提料中"
-                    },
-                    {
-                        value: 3,
-                        label: "配段中"
-                    },
-                    {
-                        value: 4,
-                        label: "已完成"
-                    },
-                    {
-                        value: 5,
-                        label: "已提交"
-                    },
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            width: 200,
+            dataIndex: 'materialStatusName'
         },
+        // {
+        //     key: 'materialStatus',
+        //     title: '塔型提料状态',
+        //     width: 100,
+        //     dataIndex: 'materialStatus',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: null,
+        //                 label: "-"
+        //             },
+        //             {
+        //                 value: -1,
+        //                 label: "-"
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "待指派"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "提料中"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "配段中"
+        //             },
+        //             {
+        //                 value: 4,
+        //                 label: "已完成"
+        //             },
+        //             {
+        //                 value: 5,
+        //                 label: "已提交"
+        //             },
+        //         ]
+        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'materialDeliverTime',
             title: '提料计划交付时间',
@@ -135,48 +147,54 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'materialDeliverRealTime'
         },
         {
-            key: 'loftingStatus',
+            key: 'loftingStatusName',
             title: '塔型放样状态',
-            width: 100,
-            dataIndex: 'loftingStatus',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: null,
-                        label: "-"
-                    },
-                    {
-                        value: -1,
-                        label: "-"
-                    },
-                    {
-                        value: 1,
-                        label: "待指派"
-                    },
-                    {
-                        value: 2,
-                        label: "放样中"
-                    },
-                    {
-                        value: 3,
-                        label: "组焊中"
-                    },
-                    {
-                        value: 4,
-                        label: "配段中"
-                    },
-                    {
-                        value: 5,
-                        label: "已完成"
-                    },
-                    {
-                        value: 6,
-                        label: "已提交"
-                    },
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            width: 200,
+            dataIndex: 'loftingStatusName'
         },
+        // {
+        //     key: 'loftingStatus',
+        //     title: '塔型放样状态',
+        //     width: 100,
+        //     dataIndex: 'loftingStatus',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: null,
+        //                 label: "-"
+        //             },
+        //             {
+        //                 value: -1,
+        //                 label: "-"
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "待指派"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "放样中"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "组焊中"
+        //             },
+        //             {
+        //                 value: 4,
+        //                 label: "配段中"
+        //             },
+        //             {
+        //                 value: 5,
+        //                 label: "已完成"
+        //             },
+        //             {
+        //                 value: 6,
+        //                 label: "已提交"
+        //             },
+        //         ]
+        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'loftingDeliverTime',
             title: '放样计划交付时间',
@@ -218,7 +236,7 @@ export default function PlanTrack(): React.ReactNode {
         columns={columnsSetting}
         filterValue={filterValue}
         onFilterSubmit={onFilterSubmit}
-        exportPath="/tower-science/loftingTask/planTrackExport"
+        exportPath="/tower-science/loftingTask/planTrack"
         searchFormItems={[
             {
                 name: 'priority',

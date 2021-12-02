@@ -54,40 +54,46 @@ export default function ConfirmList(): React.ReactNode {
             dataIndex: 'confirmName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '状态',
-            width: 100,
-            dataIndex: 'status',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 0,
-                        label: "已拒绝"
-                    },
-                    {
-                        value: 1,
-                        label: "待确认"
-                    },
-                    {
-                        value: 2,
-                        label: "待指派"
-                    },
-                    {
-                        value: 3,
-                        label: "待完成"
-                    },
-                    {
-                        value: 4,
-                        label: "已完成"
-                    },
-                    {
-                        value: 5,
-                        label: "已提交"
-                    }
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            width: 200,
+            dataIndex: 'statusName'
         },
+        // {
+        //     key: 'status',
+        //     title: '状态',
+        //     width: 100,
+        //     dataIndex: 'status',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 0,
+        //                 label: "已拒绝"
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "待确认"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "待指派"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "待完成"
+        //             },
+        //             {
+        //                 value: 4,
+        //                 label: "已完成"
+        //             },
+        //             {
+        //                 value: 5,
+        //                 label: "已提交"
+        //             }
+        //         ]
+        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'updateStatusTime',
             title: '状态时间',
@@ -155,6 +161,7 @@ export default function ConfirmList(): React.ReactNode {
             path="/tower-science/drawProductDetail"
             columns={columns}
             filterValue={filterValue}
+            exportPath="/tower-science/drawProductDetail"
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             requestData={{ status: location.state }}
