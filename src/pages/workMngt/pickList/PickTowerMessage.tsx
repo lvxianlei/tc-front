@@ -103,32 +103,38 @@ export default function PickTowerMessage(): React.ReactNode {
             dataIndex: 'materialCheckLeaderName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '提料状态',
-            width: 100,
-            dataIndex: 'status',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 1,
-                        label: "提料中"
-                    },
-                    {
-                        value: 2,
-                        label: "校核中"
-                    },
-                    {
-                        value: 3,
-                        label: "已完成"
-                    },
-                    // {
-                    //     value: 4,
-                    //     label: "已提交"
-                    // }
-                ]
-                     return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            width: 200,
+            dataIndex: 'statusName'
         },
+        // {
+        //     key: 'status',
+        //     title: '提料状态',
+        //     width: 100,
+        //     dataIndex: 'status',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 1,
+        //                 label: "提料中"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "校核中"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "已完成"
+        //             },
+        //             // {
+        //             //     value: 4,
+        //             //     label: "已提交"
+        //             // }
+        //         ]
+        //              return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'updateStatusTime',
             title: '最新状态变更时间',
@@ -293,6 +299,7 @@ export default function PickTowerMessage(): React.ReactNode {
                 onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 requestData={{ productCategory: params.id }}
+                exportPath="/tower-science/drawProductSegment"
                 extraOperation={
                     <Space>
                     {/* <Button type="primary" ghost>导出</Button> */}

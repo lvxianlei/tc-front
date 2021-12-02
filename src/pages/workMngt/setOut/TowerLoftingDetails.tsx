@@ -220,12 +220,12 @@ export default function TowerLoftingDetails(): React.ReactNode {
     
     return <Page
         path="/tower-science/productStructure/list"
+        exportPath={`/tower-science/productStructure/list`}
         columns={ columns }
         headTabs={ [] }
         requestData={ { productSegmentGroupId: params.productSegmentId } }
         extraOperation={ 
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                {/* <Button type="primary">导出</Button> */}
                 <Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>
             </Space> 
         }

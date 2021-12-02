@@ -56,7 +56,7 @@ export default function PickTowerDetail(): React.ReactNode {
                     current={0}
                     size={0}
                     total={0}
-                    url={'/tower-science/assessTask'}
+                    url={`/tower-science/drawProductStructure/material/${params.productId}`}
                     serchObj={{}}
                     closeExportList={() => { setIsExportStoreList(false) }}
                 />:null}

@@ -76,39 +76,13 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
         ["selectA", "selectB", "selectC"].includes(props.type) && getAskProduct()
     }, [props.type, props.count])
 
-    // const uploadChange = (event: any) => {
-    //     if (event.file.status === "done") {
-    //         if (event.file.response.code === 200) {
-    //             const dataInfo = event.file.response.data
-    //             const fileInfo = dataInfo.name.split(".")
-    //             setAttachInfo([...attachInfo, {
-    //                 id: "",
-    //                 uid: attachInfo.length,
-    //                 link: dataInfo.link,
-    //                 name: dataInfo.originalName,
-    //                 description: "",
-    //                 filePath: dataInfo.name,
-    //                 fileSize: dataInfo.size,
-    //                 fileSuffix: fileInfo[fileInfo.length - 1],
-    //                 userName: dataInfo.userName,
-    //                 fileUploadTime: dataInfo.fileUploadTime
-    //             }])
-    //         }
-    //     }
-    // }
-
-    // const deleteAttachData = (id: number) => {
-    //     setAttachInfo(attachInfo.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-    // }
-
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             const baseInfo = await baseForm.validateFields()
             const saveAskData = await askForm.validateFields()
             const saveResult = await run({
                 ...baseInfo,
-                // attachInfoDTOS: attachInfo,
-                attachInfoDTOS: attchsRef.current?.getDataSource(),
+                fileIds: attchsRef.current?.getDataSource().map(item => item.id),
                 startAskLogisticsDTOS: props.type === "selectB" ? askData?.map((item: any, index: number) => ({
                     ...item,
                     ...saveAskData.submit[index]

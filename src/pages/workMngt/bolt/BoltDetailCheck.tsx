@@ -84,6 +84,7 @@ export default function BoltCheck(): React.ReactNode {
         <div>
             <Page
                 path={`/tower-science/boltRecord/checkList`}
+                exportPath={`/tower-science/boltRecord/checkList`}
                 requestData={{ productCategoryId: params.boltId, basicHeightId: params.id }}
                 columns={columns}
                 refresh={refresh}

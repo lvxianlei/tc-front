@@ -1,7 +1,9 @@
 import React, { useState, } from "react"
-import { Input, DatePicker, Select, } from 'antd'
+import { Input, DatePicker, Select, Form, } from 'antd'
 import { Page } from '../../common'
 import { useHistory, useLocation } from "react-router-dom"
+import useRequest from "@ahooksjs/use-request"
+import RequestUtil from "../../../utils/RequestUtil"
 export default function TemplateList() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({})
@@ -23,7 +25,7 @@ export default function TemplateList() {
         },
         {
             title: '上传图纸类型',
-            dataIndex: 'uploadDrawType',
+            dataIndex: 'uploadDrawTypeName',
             align: 'center',
             render: (text: any) => {
                 switch (text) {
@@ -61,7 +63,7 @@ export default function TemplateList() {
         },
         {
             title: '上传状态',
-            dataIndex: 'uploadStatus',
+            dataIndex: 'uploadStatusName',
             align: 'center',
             render: (text: any) => {
                 switch (text) {
@@ -104,6 +106,13 @@ export default function TemplateList() {
         setFilterValue({ ...filterValue, ...value })
         return value
     }
+
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const checkUser: any = data || [];
+    
     return (
         <>
             <Page
@@ -140,6 +149,18 @@ export default function TemplateList() {
                                 <Select.Option value="2">已上传</Select.Option>
                             </Select>
                         )
+                    },
+                    {
+                        name: 'drawLeader',
+                        label: '图纸负责人',
+                        children: <Form.Item name="status" initialValue={""}>
+                            <Select placeholder="请选择" style={{ width: "150px" }}>
+                                <Select.Option value="" key="6">全部</Select.Option>
+                                { checkUser && checkUser.map((item: any) => {
+                                    return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                }) }
+                            </Select>
+                        </Form.Item>
                     },
                     {
                         name: 'fuzzyMsg',

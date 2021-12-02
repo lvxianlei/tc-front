@@ -18,7 +18,7 @@ const tableColumns = [
     { title: '操作部门', dataIndex: 'createDeptName', key: 'createDeptName', },
     { title: '操作人', dataIndex: 'createUserName', key: 'createUserName' },
     { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
-    { title: '任务状态', dataIndex: 'currentStatus', key: 'currentStatus', render: (value: number, record: object): React.ReactNode => {
+    { title: '操作', dataIndex: 'status', key: 'status', render: (value: number, record: object): React.ReactNode => {
         const renderEnum: any = [
             {
                 value: 1,
@@ -140,32 +140,38 @@ export default function ScheduleView(): React.ReactNode {
             // }
         },
         {
-            key: 'priority',
+            key: 'priorityName',
             title: '优先级',
             width: 100,
-            dataIndex: 'priority',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                  {
-                    value: 0,
-                    label: "紧急"
-                  },
-                  {
-                    value: 1,
-                    label: "高"
-                  },
-                  {
-                    value: 2,
-                    label: "中"
-                  },
-                  {
-                    value: 3,
-                    label: "低"
-                  },
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'priorityName',
         },
+        // {
+        //     key: 'priority',
+        //     title: '优先级',
+        //     width: 100,
+        //     dataIndex: 'priority',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //           {
+        //             value: 0,
+        //             label: "紧急"
+        //           },
+        //           {
+        //             value: 1,
+        //             label: "高"
+        //           },
+        //           {
+        //             value: 2,
+        //             label: "中"
+        //           },
+        //           {
+        //             value: 3,
+        //             label: "低"
+        //           },
+        //         ]
+        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'materialLeaderName',
             title: '提料负责人',
@@ -787,7 +793,7 @@ export default function ScheduleView(): React.ReactNode {
             <Page
                 path={ `/tower-science/productCategory/taskPage` }
                 columns={ columns }
-                exportPath={`/tower-science/productCategory`}
+                exportPath={`/tower-science/productCategory/taskPage`}
                 extraOperation={
                     <Space>
                         {/* <Button type="primary">导出</Button> */}

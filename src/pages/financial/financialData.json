@@ -119,6 +119,7 @@
             "title": "开票单位 ",
             "dataIndex": "invoiceUnit",
             "type": "string",
+            "maxLength": 50,
             "rules": [
                 {
                     "required": true,
@@ -129,6 +130,7 @@
         {
             "title": "发票号",
             "dataIndex": "invoiceNumber",
+            "maxLength": 20,
             "rules": [
                 {
                     "required": true,

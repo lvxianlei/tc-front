@@ -6,6 +6,7 @@ import { Page } from '../../common'
 
 export default function TransferList(): React.ReactNode {
     const history = useHistory();
+    const [filterValue, setFilterValue] = useState<object>({})
     const params = useParams<{ id: string, status: string, materialLeader: string }>();
     const onFilterSubmit = (value: any) => {
         if (value.transferDateStart) {
@@ -13,6 +14,7 @@ export default function TransferList(): React.ReactNode {
             value.transferDateStart = formatDate[0] + ' 00:00:00';
             value.transferDateEnd = formatDate[1] + ' 23:59:59';
         }
+        setFilterValue(value)
         return value
     }
     return (
@@ -39,9 +41,10 @@ export default function TransferList(): React.ReactNode {
                     )
                 }]}
             onFilterSubmit={onFilterSubmit}
+            filterValue={filterValue}
             requestData={{ productCategory: params.id }}
             extraOperation={
-                <Button type="primary" onClick={() => history.push('')} ghost><Link to={`/employeeRelation/transfer/edit/new`}>新增员工调动</Link></Button>
+                <Button type="primary" ghost><Link to={`/employeeRelation/transfer/new`}>新增员工调动</Link></Button>
             }
             searchFormItems={[
                 {
