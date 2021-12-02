@@ -12,6 +12,8 @@ import styles from './SetOut.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import Deliverables from './Deliverables';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
 export default function SetOutList(): React.ReactNode {
     const columns = [
         {
@@ -102,6 +104,11 @@ export default function SetOutList(): React.ReactNode {
 
     const [refresh, setRefresh] = useState(false);
     const location = useLocation<{ state: number }>();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const checkUser: any = data || [];
     return <Page
         path="/tower-science/loftingList/loftingPage"
         exportPath={`/tower-science/loftingList/loftingPage`}
@@ -137,6 +144,15 @@ export default function SetOutList(): React.ReactNode {
                         return <Select.Option key={ index } value={ id }>
                             { name }
                         </Select.Option>
+                    }) }
+                </Select>
+            },
+            {
+                name: 'loftingLeader',
+                label: '放样负责人',
+                children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                    { checkUser && checkUser.map((item: any) => {
+                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                     }) }
                 </Select>
             },

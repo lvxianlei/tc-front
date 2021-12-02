@@ -2,6 +2,8 @@ import React, { useState, } from "react"
 import { Input, DatePicker, Select, } from 'antd'
 import { Page } from '../../common'
 import { useHistory, useLocation } from "react-router-dom"
+import useRequest from "@ahooksjs/use-request"
+import RequestUtil from "../../../utils/RequestUtil"
 export default function TemplateList() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({})
@@ -104,6 +106,13 @@ export default function TemplateList() {
         setFilterValue({ ...filterValue, ...value })
         return value
     }
+
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const checkUser: any = data || [];
+    
     return (
         <>
             <Page
@@ -140,6 +149,15 @@ export default function TemplateList() {
                                 <Select.Option value="2">已上传</Select.Option>
                             </Select>
                         )
+                    },
+                    {
+                        name: 'drawLeader',
+                        label: '图纸负责人',
+                        children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                            { checkUser && checkUser.map((item: any) => {
+                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                            }) }
+                        </Select>
                     },
                     {
                         name: 'fuzzyMsg',

@@ -11,6 +11,8 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import AuthUtil from '../../../utils/AuthUtil';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
 
 export default function AssemblyWeldingList(): React.ReactNode {
     const columns = [
@@ -101,6 +103,12 @@ export default function AssemblyWeldingList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState(false);
     const location = useLocation<{ state: {} }>();
     const userId = AuthUtil.getUserId();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const checkUser: any = data || [];
+    
     return <Page
         path="/tower-science/welding"
         exportPath={`/tower-science/welding`}
@@ -125,6 +133,15 @@ export default function AssemblyWeldingList(): React.ReactNode {
                         <Select.Option value={4} key="4">已完成</Select.Option>
                     </Select>
                 </Form.Item>
+            },
+            {
+                name: 'weldingLeader',
+                label: '组焊负责人',
+                children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                    { checkUser && checkUser.map((item: any) => {
+                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                    }) }
+                </Select>
             },
             {
                 name: 'plannedTime',
