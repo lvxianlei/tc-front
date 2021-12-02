@@ -75,23 +75,29 @@ export default function PickList(): React.ReactNode {
             width: 100,
             dataIndex: 'materialLeaderName'
         },
+        // {
+        //     key: 'status',
+        //     title: '塔型提料状态',
+        //     width: 100,
+        //     dataIndex: 'status',
+        //     render: (status: number): React.ReactNode => {
+        //         switch (status) {
+        //             case 1:
+        //                 return '待指派';
+        //             case 2:
+        //                 return '提料中';
+        //             case 3:
+        //                 return '配段中';
+        //             case 4:
+        //                 return '已完成';
+        //         }
+        //     }
+        // },
         {
-            key: 'status',
+            key: 'statusName',
             title: '塔型提料状态',
-            width: 100,
-            dataIndex: 'status',
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 1:
-                        return '待指派';
-                    case 2:
-                        return '提料中';
-                    case 3:
-                        return '配段中';
-                    case 4:
-                        return '已完成';
-                }
-            }
+            width: 150,
+            dataIndex: 'statusName'
         },
         {
             key: 'updateStatusTime',
