@@ -1,7 +1,4 @@
-/***
- * 保函申请
- * 2021/11/22
- */
+
  import React, { useState, useRef } from 'react';
  import { Button, Input, DatePicker, Radio, Select, message, Modal, Tabs, Popconfirm } from 'antd';
  import moment from 'moment';
