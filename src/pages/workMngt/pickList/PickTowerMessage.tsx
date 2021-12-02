@@ -152,7 +152,7 @@ export default function PickTowerMessage(): React.ReactNode {
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>提料</Button>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
-                    <TowerPickAssign type={ record.status < 3 ? 'message' : "detail" } title="指派信息" detailData={ record } id={ record.id } update={ onRefresh } />
+                    <TowerPickAssign type={ record.status < 2 ? 'message' : "detail" } title="指派信息" detailData={ record } id={ record.id } update={ onRefresh } />
                     <Button onClick={()=>{
                         RequestUtil.delete(`/tower-science/drawProductSegment/${record.id}`).then(()=>{
                             message.success('删除成功！')

@@ -10,7 +10,7 @@ import RequestUtil from '../../utils/RequestUtil';
 export default function SetOutTaskList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ filterValue, setFilterValue ] = useState({});
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ state?: number }>();
     
     const columns = [
         {
@@ -127,7 +127,7 @@ export default function SetOutTaskList(): React.ReactNode {
         path="/tower-science/loftingTask/taskPage"
         columns={ columns }
         headTabs={ [] }
-        requestData={ { status: location.state } }
+        requestData={ { status: location.state?.state } }
         exportPath={`/tower-science/loftingTask/taskPage`}
         refresh={ refresh }
         searchFormItems={ [
@@ -139,7 +139,7 @@ export default function SetOutTaskList(): React.ReactNode {
             {
                 name: 'status',
                 label: '任务状态',
-                children: <Form.Item name="status" initialValue={ location.state }>
+                children: <Form.Item name="status" initialValue={ location.state?.state }>
                     <Select style={{ width: '120px' }} placeholder="请选择">
                         <Select.Option value={ "" } key="6">全部</Select.Option>
                         <Select.Option value={ 0 } key="0">已拒绝</Select.Option>
