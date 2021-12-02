@@ -5,6 +5,7 @@ import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import moment from 'moment'
+import { stringify } from 'query-string';
 export type FormItemTypesType = "text" | "number" | "select" | "date" | "textarea" | "popForm" | undefined
 
 interface SelectOption {
@@ -82,9 +83,9 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                     delete params[columnItem?.dataIndex]
                 }
             })
-            const paramsOptions = Object.keys(params).map((item: string) => `${item}=${params[item] || ""}`).join("&")
+            const paramsOptions = stringify(params)
             const path = data.path.includes("?") ? `${data.path}&${paramsOptions || ''}` : `${data.path}?${paramsOptions || ''}`
-            resolve(await RequestUtil.get<{ data: any }>(path))
+            resolve(await RequestUtil.get<{ data: any }>(JSON.stringify(path)))
         } catch (error) {
             reject(error)
         }
@@ -206,7 +207,7 @@ const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
 
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }) => {
     const ItemTypes = {
-        string: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
+        string: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
         text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
         number: <InputNumber
             {...props}

@@ -97,7 +97,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                     <DetailTitle title="产品类型信息" />
                     <CommonTable columns={logisticProductType.map((item: any) => item.dataIndex === "productType" ? ({
                         ...item,
-                        render: (_a: any, record: any) => `${record.voltage}${record.productName}`
+                        render: (_a: any, record: any) => `${record.voltage}kv${record.productName}`
                     }) : item)} dataSource={data?.askLogisticsVOS || []} />
                     <Attachment title="咨询附件" dataSource={data?.replyAttachVos || []} />
                 </>}
