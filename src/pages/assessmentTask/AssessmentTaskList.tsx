@@ -15,7 +15,7 @@ import useRequest from '@ahooksjs/use-request';
 export default function AssessmentTaskList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ state?: number }>();
 
     const columns = [
         {
@@ -152,7 +152,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                 columns={columns}
                 headTabs={[]}
                 exportPath={`/tower-science/assessTask`}
-                requestData={{ status: location.state }}
+                requestData={{ status: location.state?.state }}
                 refresh={refresh}
                 searchFormItems={[
                     {
@@ -163,7 +163,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                     {
                         name: 'status',
                         label: '任务状态',
-                        children: <Form.Item name="status" initialValue={location.state}>
+                        children: <Form.Item name="status" initialValue={location.state?.state}>
                             <Select placeholder="请选择" style={{ width: "150px" }}>
                                 <Select.Option value="" key="6">全部</Select.Option>
                                 <Select.Option value={0} key="0">已拒绝</Select.Option>

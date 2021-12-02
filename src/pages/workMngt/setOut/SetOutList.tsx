@@ -103,7 +103,7 @@ export default function SetOutList(): React.ReactNode {
     ]
 
     const [refresh, setRefresh] = useState(false);
-    const location = useLocation<{ state: number }>();
+    const location = useLocation<{ state?: number, userId?: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
         resole(data?.records);
@@ -114,7 +114,7 @@ export default function SetOutList(): React.ReactNode {
         exportPath={`/tower-science/loftingList/loftingPage`}
         columns={columns}
         headTabs={[]}
-        requestData={{ status: location.state }}
+        requestData={{ status: location.state?.state, loftingLeader: location.state?.userId }}
         refresh={refresh}
         searchFormItems={[
             {
@@ -125,7 +125,7 @@ export default function SetOutList(): React.ReactNode {
             {
                 name: 'status',
                 label: '塔型状态',
-                children: <Form.Item name="status" initialValue={location.state}>
+                children: <Form.Item name="status" initialValue={ location.state?.state }>
                     <Select style={{ width: '120px' }} placeholder="请选择">
                         <Select.Option value="" key="6">全部</Select.Option>
                         <Select.Option value={1} key="1">待指派</Select.Option>
@@ -150,7 +150,7 @@ export default function SetOutList(): React.ReactNode {
             {
                 name: 'loftingLeader',
                 label: '放样负责人',
-                children: <Form.Item name="status" initialValue={""}>
+                children: <Form.Item name="loftingLeader" initialValue={ location.state?.userId || "" }>
                     <Select placeholder="请选择" style={{ width: "150px" }}>
                         <Select.Option value="" key="6">全部</Select.Option>
                         { checkUser && checkUser.map((item: any) => {

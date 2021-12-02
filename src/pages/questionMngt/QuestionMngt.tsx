@@ -7,7 +7,7 @@ import RequestUtil from '../../utils/RequestUtil';
 
 export default function QuestionMngt(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: number, type?: string }>();
+    const location = useLocation<{ state?: number, type?: string, userId?: string }>();
     const history = useHistory();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
@@ -158,7 +158,7 @@ export default function QuestionMngt(): React.ReactNode {
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
-            requestData={ { status: location.state, type: location.state?.type } }
+            requestData={ { status: location.state?.state, type: location.state?.type, recipient: location.state?.userId } }
             searchFormItems={[
                 {
                     name: 'updateTime',
@@ -181,7 +181,7 @@ export default function QuestionMngt(): React.ReactNode {
                 {
                     name: 'type',
                     label: '问题单类型',
-                    children:  <Form.Item name="status" initialValue={ location.state.type }>
+                    children:  <Form.Item name="status" initialValue={ location.state?.type || '' }>
                         <Select style={{width:'100px'}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={'WTD-TL'} key={'WTD-TL'}>提料</Select.Option>
@@ -195,7 +195,7 @@ export default function QuestionMngt(): React.ReactNode {
                 {
                     name: 'recipient',
                     label: '接收人',
-                    children:  <Form.Item name="materialLeader" initialValue={ '' }>
+                    children:  <Form.Item name="materialLeader" initialValue={ location.state?.userId || '' }>
                             <Select style={{width:'100px'}}>
                                 <Select.Option key={''} value={''}>全部</Select.Option>
                                 {user && user.map((item: any) => {

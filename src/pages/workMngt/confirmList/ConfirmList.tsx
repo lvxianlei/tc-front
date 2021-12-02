@@ -14,7 +14,7 @@ export default function ConfirmList(): React.ReactNode {
     const [confirmLeader, setConfirmLeader] = useState<any | undefined>([]);
     const [department, setDepartment] = useState<any | undefined>([]);
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: number }>();
+    const location = useLocation<{ state?: number }>();
     const history = useHistory();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
@@ -164,12 +164,12 @@ export default function ConfirmList(): React.ReactNode {
             exportPath="/tower-science/drawProductDetail"
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
-            requestData={{ status: location.state }}
+            requestData={{ status: location.state?.state }}
             searchFormItems={[
                 {
                     name: 'status',
                     label: '任务状态',
-                    children: <Form.Item name="status" initialValue={location.state}>
+                    children: <Form.Item name="status" initialValue={location.state?.state}>
                         <Select style={{ width: "100px" }}>
                             {/* <Select.Option value={1} key={1}>待确认</Select.Option>
                             <Select.Option value={2} key={2}>待指派</Select.Option> */}
