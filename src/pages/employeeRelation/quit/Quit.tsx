@@ -1,17 +1,19 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
+import WorkshopUserSelectionComponent, { IUser } from '../WorkshopUserModal';
 
 
 export default function Quit(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>();
     const [form] = Form.useForm();
-    const attachRef = useRef<AttachmentRef>()
+    const attachRef = useRef<AttachmentRef>();
+    const [ selectedRows, setSelectedRows ] = useState<IUser[] | any>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         // const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
         resole(data)
@@ -45,11 +47,17 @@ export default function Quit(): React.ReactNode {
                             required:true, 
                             message:'请选择员工姓名'
                         }]} initialValue={1} name='employeeName'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
-                                console.log(e)
-                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
-                                // form.setFieldsValue()
-                            }}/>
+                            <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                                    setSelectedRows(selectedRows);
+                                    form.setFieldsValue({
+                                        employeeName: selectedRows[0].employeeName,
+                                        companyName: selectedRows[0].companyName,
+                                        departmentName: selectedRows[0].departmentName,
+                                        postName: selectedRows[0].postName,
+                                        inductionDate: selectedRows[0].inductionDate,
+                                        employeeType: selectedRows[0].employeeType,
+                                    });
+                            } } buttonType="link" buttonTitle="+选择员工" /> } disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
