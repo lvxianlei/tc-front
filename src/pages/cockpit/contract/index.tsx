@@ -1,22 +1,16 @@
 //合同看板
 import React from 'react'
 import { Button, Select, DatePicker, Input } from 'antd'
-import { Link, useHistory, } from 'react-router-dom'
+import { Link,  } from 'react-router-dom'
 import { Page } from '../../common'
 import { contract } from "./contract.json"
 
 export default function ViewContract(): React.ReactNode {
-    const history = useHistory()
     const onFilterSubmit = (value: any) => {
-        if (value.startBidBuyEndTime) {
-            const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBidBuyEndTime = formatDate[0]
-            value.endBidBuyEndTime = formatDate[1]
-        }
-        if (value.startBiddingEndTime) {
-            const formatDate = value.startBiddingEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBiddingEndTime = formatDate[0]
-            value.endBiddingEndTime = formatDate[1]
+        if (value.signStartTime) {
+            const formatDate = value.signStartTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.signStartTime = formatDate[0]
+            value.signEndTime = formatDate[1]
         }
         return value
     }
@@ -47,9 +41,9 @@ export default function ViewContract(): React.ReactNode {
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
-                name: 'updateTime',
+                name: 'signStartTime',
                 label: '最新状态变更时间',
-                children: <DatePicker />
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             },
             {
                 name: 'contractStatus',
@@ -63,7 +57,7 @@ export default function ViewContract(): React.ReactNode {
             {
                 name: 'fuzzyQuery',
                 label: '查询',
-                children: <Input style={{ width: "113px" }} placeholder="供应商/合同编号" />
+                children: <Input style={{ width: "120px" }} placeholder="供应商/合同编号" />
             }
         ]}
     />)

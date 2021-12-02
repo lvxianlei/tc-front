@@ -94,6 +94,7 @@ export default function PickCheckList(): React.ReactNode {
                 onFilterSubmit={onFilterSubmit}
                 refresh={refresh}
                 filterValue={ filterValue }
+                exportPath="/tower-science/drawProductStructure/check"
                 extraOperation={
                     <Space>
                         {/* <Button type='primary' ghost>导出</Button> */}

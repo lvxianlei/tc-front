@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Modal, Spin, Button, Radio, Row } from "antd"
 import { DetailTitle, CommonTable, BaseInfo, Attachment } from "../../common"
-import { enclosure } from "../managementDetailData.json"
 import {
     supplyBaseInfo,
     supplyAskInfo,
@@ -13,7 +12,6 @@ import {
     workmanshipReverd,
     materialPriceHead
 } from "./costData.json"
-import { downLoadFile } from "../../../utils"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import SelectInquiryEdit from "./SelectInquiryEdit"
@@ -99,7 +97,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                     <DetailTitle title="产品类型信息" />
                     <CommonTable columns={logisticProductType.map((item: any) => item.dataIndex === "productType" ? ({
                         ...item,
-                        render: (_a: any, record: any) => `${record.voltage}${record.productName}`
+                        render: (_a: any, record: any) => `${record.voltage}kv${record.productName}`
                     }) : item)} dataSource={data?.askLogisticsVOS || []} />
                     <Attachment title="咨询附件" dataSource={data?.replyAttachVos || []} />
                 </>}

@@ -237,6 +237,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             path="/tower-science/drawTask"
             columns={columns}
             refresh={ refresh }
+            exportPath="/tower-science/drawTask"
             // extraOperation={<Button type="primary">导出</Button>}
             filterValue={ filterValue }
             onFilterSubmit={onFilterSubmit}

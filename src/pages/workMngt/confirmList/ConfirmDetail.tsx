@@ -113,7 +113,7 @@ export default function ConfirmDetail(): React.ReactNode {
           const data:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
           number = dataA+dataB+dataC+dataD+data;
         }
-        formRef.setFieldsValue({
+        dataIndex!=="basicHeight" && formRef.setFieldsValue({
             totalWeight:number + value
         })
       }} min={0} precision={2}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
@@ -177,9 +177,12 @@ export default function ConfirmDetail(): React.ReactNode {
       setEditingKey(record.key);
     };
     const onDelete = (key: React.Key)=>{
-      const newData = [...tableDataSource];
+      const newData:any = [...tableDataSource];
       const index = newData.findIndex((item:any) => key === item.key);
-      if (index > -1) {
+      if (index > -1 && newData[index].id) {
+        RequestUtil.delete(`/tower-science/drawProductDetail`,{id: newData[index].id})
+        newData.splice(index, 1);
+      }else{
         newData.splice(index, 1);
       }
       setTableDataSource(newData);
@@ -541,7 +544,14 @@ export default function ConfirmDetail(): React.ReactNode {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         resole(data);
-        setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index }}));
+        setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index,
+          legConfigurationA:item.legConfigurationA? item.legConfigurationA: 0,
+          legConfigurationB:item.legConfigurationB? item.legConfigurationB: 0,
+          legConfigurationC:item.legConfigurationC? item.legConfigurationC: 0,
+          legConfigurationD:item.legConfigurationD? item.legConfigurationD: 0,
+          otherWeight:item.otherWeight? item.otherWeight: 0,
+          totalWeight: item.totalWeight? item.totalWeight: 0,
+        }}));
         setAttachInfo([...data.fileVOList]);
         setDescription(data?.description);
         let totalNumber = '0';
@@ -752,7 +762,14 @@ export default function ConfirmDetail(): React.ReactNode {
                                       } else {
                                           message.success('导入成功！');
                                           const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
-                                          setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index }}));
+                                          setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index,
+                                            legConfigurationA:item.legConfigurationA? item.legConfigurationA: 0,
+                                            legConfigurationB:item.legConfigurationB? item.legConfigurationB: 0,
+                                            legConfigurationC:item.legConfigurationC? item.legConfigurationC: 0,
+                                            legConfigurationD:item.legConfigurationD? item.legConfigurationD: 0,
+                                            otherWeight:item.otherWeight? item.otherWeight: 0,
+                                            totalWeight: item.totalWeight? item.totalWeight: 0,
+                                          }}));
                                           setAttachInfo([...data.fileVOList]);
                                           setDescription(data?.description);
                                           let totalNumber = '0';
@@ -844,7 +861,7 @@ export default function ConfirmDetail(): React.ReactNode {
                       )
                   }
                 ]} dataSource={attachInfo}  pagination={ false }/> */}
-                <Attachment dataSource={attachInfo} edit title="附件信息" ref={attchsRef}/>
+                <Attachment dataSource={attachInfo} edit={params.status==='3'?true:false} title="附件信息" ref={attchsRef}/>
             </DetailContent>
             <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
                 <Image src={pictureUrl} preview={false}/>

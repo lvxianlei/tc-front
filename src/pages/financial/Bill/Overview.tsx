@@ -1,6 +1,5 @@
 import React from "react"
 import { Spin } from 'antd'
-import { useHistory } from 'react-router-dom'
 import { DetailTitle, BaseInfo, Attachment } from '../../common'
 import { billinformation } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
@@ -10,7 +9,6 @@ interface OverviewProps {
     id: string
 }
 export default function Overview({ id }: OverviewProps) {
-    const history = useHistory()
     const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1210"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name

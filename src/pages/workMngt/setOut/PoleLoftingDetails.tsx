@@ -219,11 +219,11 @@ export default function PoleLoftingDetails(): React.ReactNode {
     
     return <Page
         path="/tower-science/productStructure/listByProduct"
+        exportPath={`/tower-science/productStructure/listByProduct`}
         columns={ columns }
         requestData={{ productId: params.productId }}
         headTabs={ [] }
         extraOperation={ <Space direction="horizontal" size="small">
-            {/* <Button type="primary" ghost>导出</Button> */}
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space>}
         tableProps={{

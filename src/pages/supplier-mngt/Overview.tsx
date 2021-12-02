@@ -11,6 +11,7 @@ interface OverviewProps {
 export default function Overview({ id }: OverviewProps) {
     const supplierTypeEnum = (ApplicationContext.get().dictionaryOption as any)["144"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const qualityAssuranceEnum = (ApplicationContext.get().dictionaryOption as any)["145"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const supplyProductsEnum = (ApplicationContext.get().dictionaryOption as any)["148"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const { loading, data } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/${id}`)
@@ -22,21 +23,27 @@ export default function Overview({ id }: OverviewProps) {
     return <Spin spinning={loading}>
         <DetailTitle title="供应商基础信息" />
         <BaseInfo columns={editColums.map((item: any) => {
-            if (item.dataIndex === "supplierType") {
-                return ({
-                    ...item,
-                    type: "select",
-                    enum: supplierTypeEnum
-                })
+            switch (item.dataIndex) {
+                case "supplierType":
+                    return ({
+                        ...item,
+                        type: "select",
+                        enum: supplierTypeEnum
+                    })
+                case "supplyProducts":
+                    return ({
+                        ...item,
+                        dataIndex: "supplyProductsName"
+                    })
+                case "qualityAssurance":
+                    return ({
+                        ...item,
+                        type: "select",
+                        enum: qualityAssuranceEnum
+                    })
+                default:
+                    return item
             }
-            if (item.dataIndex === "qualityAssurance") {
-                return ({
-                    ...item,
-                    type: "select",
-                    enum: qualityAssuranceEnum
-                })
-            }
-            return item
         })} dataSource={data || {}} />
         <DetailTitle title="供应商账户信息" />
         <BaseInfo columns={supplierFormHead} dataSource={data || {}} />

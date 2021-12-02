@@ -340,6 +340,7 @@ export default function Lofting(): React.ReactNode {
         
             <Page
                 path="/tower-science/drawProductStructure"
+                exportPath="/tower-science/drawProductStructure"
                 columns={ [...tableColumns,{
                     key: 'operation',
                     title: '操作',

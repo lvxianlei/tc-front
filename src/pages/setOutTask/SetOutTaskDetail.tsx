@@ -114,10 +114,11 @@ export default function SetOutTaskDetail(): React.ReactNode {
             onOk={ () => {
                 if(rejectReason) {
                     if(/^[^(\s)]*$/.test(rejectReason)) {
-                        RequestUtil.post(`/tower-science/loftingTask/refuse`, { id: params.id, description: rejectReason });
-                        setVisible(false); 
-                        history.goBack();
-                        setRejectReason("");
+                        RequestUtil.post(`/tower-science/loftingTask/refuse`, { id: params.id, description: rejectReason }).then(res => {
+                            setVisible(false); 
+                            history.goBack();
+                            setRejectReason("");
+                        });
                     } else {
                         message.warning('禁止输入空格');
                     }

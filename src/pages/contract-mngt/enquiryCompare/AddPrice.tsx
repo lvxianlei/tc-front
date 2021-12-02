@@ -60,7 +60,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
                     return item
                 }),
                 comparisonPriceId: params.id,
-                inquiryQuotationAttachInfoDtos: attachRef.current?.getDataSource()
+                fileIds: attachRef.current?.getDataSource().map(item => item.id)
             })
             resove(true)
         } catch (error) {

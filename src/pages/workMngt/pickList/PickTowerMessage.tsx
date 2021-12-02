@@ -293,6 +293,7 @@ export default function PickTowerMessage(): React.ReactNode {
                 onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 requestData={{ productCategory: params.id }}
+                exportPath="/tower-science/drawProductSegment"
                 extraOperation={
                     <Space>
                     {/* <Button type="primary" ghost>导出</Button> */}

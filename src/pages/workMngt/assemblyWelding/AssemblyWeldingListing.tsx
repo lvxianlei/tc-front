@@ -15,7 +15,6 @@ import styles from './AssemblyWelding.module.less';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import AssemblyWeldingNew, { IBaseData } from './AssemblyWeldingNew';
 import AuthUtil from '../../../utils/AuthUtil';
-import ExportList from '../../../components/export/list';
 
 interface IResponseData {
     readonly id: number;
@@ -162,8 +161,6 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const [ url, setUrl ] = useState<string>('');
     const [ urlVisible, setUrlVisible ] = useState<boolean>(false);
     const location = useLocation<{ status: number }>();
-    const match = useRouteMatch();
-    const [ isExport, setIsExport ] = useState(false);
     const [ segmentNameList, setSegmentNameList ] = useState<ISegmentNameList[]>([]);
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
@@ -186,7 +183,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
             <DetailContent>
                 <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
                 { location.state.status === 2 ? <>
-                    <Button type="primary" onClick={ () => setIsExport(true) } ghost>导出</Button>
+                    <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/downloadSummary', '组焊清单') } ghost>导出</Button>
                     <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '组焊模板') } ghost>模板下载</Button>
                     <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
                         history.goBack();
@@ -263,22 +260,6 @@ export default function AssemblyWeldingListing(): React.ReactNode {
             okText='下载'
         >
             当前存在错误数据，请重新下载上传！
-        </Modal>  
-        {isExport ? <ExportList
-            history={history}
-            location={location}
-            match={match}
-            columnsKey={() => {
-                let keys = [...towerColumns]
-                keys.pop()
-                return keys
-            }}
-            current={detailData?.current || 1}
-            size={detailData?.size || 10}
-            total={detailData?.total || 0}
-            url={``}
-            serchObj={{}}
-            closeExportList={() => setIsExport(false)}
-        /> : null}
+        </Modal> 
     </>
 }

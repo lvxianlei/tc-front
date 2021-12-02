@@ -82,7 +82,7 @@ export default function SampleDrawList(): React.ReactNode {
                     onChange: SelectChange
                 }
             }}
-            exportPath={`/tower-science/productSegment/exportSample/${params.id}`}
+            exportPath={`/tower-science/productSegment/sampleList`}
             extraOperation={
                 <Space>
                 {/* <Button type="primary">导出</Button> */}

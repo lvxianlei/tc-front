@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
-import { Button, Row, Modal, Spin, Form, InputNumber, message, Input } from "antd"
+import { Button, Row, Modal, Spin, Form, InputNumber, message } from "antd"
 import { BaseInfo, DetailTitle, Attachment, CommonTable, PopTableContent, IntgSelect } from "../common"
 import { contractBaseInfo, material, comparison, addMaterial } from "./contract.json"
 import ApplicationContext from "../../configuration/ApplicationContext"
@@ -88,7 +88,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const comparisonPrice = await comparisonForm.validateFields()
             await saveRun({
                 ...baseInfo,
-                materialContractAttachInfoDtos: attchsRef.current.getDataSource(),
+                fileIds: attchsRef.current.getDataSource().map(item => item.id),
                 operatorDeptId: baseInfo.operator?.first,
                 operatorId: baseInfo.operator?.second,
                 supplierId: baseInfo.supplier.id,
