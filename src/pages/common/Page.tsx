@@ -159,6 +159,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                     url={this.props.exportPath}
                     serchObj={{
                         ...this.props.filterValue,
+                        ...this.props.requestData
                     }}
                     closeExportList={() => {
                         this.setState({
