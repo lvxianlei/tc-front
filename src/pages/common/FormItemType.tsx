@@ -85,7 +85,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             })
             const paramsOptions = stringify(params)
             const path = data.path.includes("?") ? `${data.path}&${paramsOptions || ''}` : `${data.path}?${paramsOptions || ''}`
-            resolve(await RequestUtil.get<{ data: any }>(JSON.stringify(path)))
+            resolve(await RequestUtil.get<{ data: any }>(path))
         } catch (error) {
             reject(error)
         }
