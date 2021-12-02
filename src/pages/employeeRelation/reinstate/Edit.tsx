@@ -5,14 +5,17 @@ import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, Attachme
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
-import WorkshopUserSelectionComponent, { IUser } from '../WorkshopUserModal';
+import EmployeeUserSelectionComponent, { IUser } from '../EmployeeUserModal';
+import EmployeeDeptSelectionComponent, { IDept } from '../EmployeeDeptModal';
+import AuthUtil from '../../../utils/AuthUtil';
 
 export default function RecruitEdit(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, status: string }>();
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>();
-    const [ selectedRows, setSelectedRows ] = useState<IUser[] | any>({});
+    const [ selectedUserRows, setSelectedUserRows ] = useState<IUser[] | any>({});
+    const [ selectedDeptRows, setSelectedDeptRows ] = useState<IDept[] | any>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         // const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeReinstatement/detail?id=${params.id}`)
         resole(data)
@@ -51,8 +54,8 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择员工姓名'
                         }]} name='employeeName'>
-                            <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
-                                    setSelectedRows(selectedRows);
+                            <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                                    setSelectedUserRows(selectedRows);
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
                                         inductionDate: selectedRows[0].inductionDate,
@@ -125,8 +128,17 @@ export default function RecruitEdit(): React.ReactNode {
                         <Form.Item label='复职后部门/班组' rules={[{
                             required:true, 
                             message:'请选择复职后部门/班组'
-                        }]} name='departmentName'>
-                            <Input/>
+                        }]} name='newDepartmentName'>
+                            <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
+                                    setSelectedDeptRows(selectedRows);
+                                    form.setFieldsValue({
+                                        employeeName: selectedRows[0].employeeName,
+                                        newDepartmentName: selectedRows[0].parentName+'/'+selectedRows[0].name,
+                                        departmentId: selectedRows[0].parentId,
+                                        teamId: selectedRows[0].id,
+                                        companyName: AuthUtil.getTenantName(),
+                                    });
+                            } } buttonType="link" buttonTitle="+选择部门" /> } disabled/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -165,6 +177,18 @@ export default function RecruitEdit(): React.ReactNode {
                     <Col span={12}>
                         <Form.Item label='备注' name='remark'>
                             <Input.TextArea maxLength={400} showCount/>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Form.Item label='' name='departmentId'>
+                            <Input  type="hidden"/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='' name='teamId'>
+                            <Input  type="hidden"/>
                         </Form.Item>
                     </Col>
                 </Row>

@@ -13,10 +13,10 @@ import { DataType, IAbstractSelectableModalProps, IAbstractSelectableModalState,
 import AbstractFilteredSelecableModal from '../../components/AbstractFilteredSelecableModal';
 import RequestUtil from '../../utils/RequestUtil';
 
-export interface IWorkshopUserSelectionComponentState extends IAbstractSelectableModalState {
+export interface IEmployeeUserSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: IUser[];
 }
-export interface IWorkshopUserSelectionComponentProps extends IAbstractSelectableModalProps {
+export interface IEmployeeUserSelectionComponentProps extends IAbstractSelectableModalProps {
     readonly saleOrderId?: string | number;
     readonly buttonType?: ButtonType;
     readonly buttonTitle?: string;
@@ -59,14 +59,14 @@ export interface IUser {
 /**
  * Workshop User Selection Component
  */
-export default class WorkshopUserSelectionComponent extends AbstractFilteredSelecableModal<IWorkshopUserSelectionComponentProps, IWorkshopUserSelectionComponentState> {
+export default class EmployeeUserSelectionComponent extends AbstractFilteredSelecableModal<IEmployeeUserSelectionComponentProps, IEmployeeUserSelectionComponentState> {
 
     /**
      * @override
      * @description Gets state
      * @returns state 
      */
-    protected getState(): IWorkshopUserSelectionComponentState {
+    protected getState(): IEmployeeUserSelectionComponentState {
         return {
             ...super.getState(),
             tablePagination: {

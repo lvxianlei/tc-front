@@ -75,7 +75,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
     private async onSubmit(values: Record<string, any>) {
         AuthUtil.setTenantId(this.state.tenant.tenantId, { expires: 7 })
         //values.password = MD5(values.password).toString()
-        const { access_token, refresh_token, user_id, tenant_id, ...result } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
+        const { access_token, refresh_token, user_id, tenant_id, tenant_name, ...result } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
             ...values,
             tenantId: this.state.tenant.tenantId
         }, {
@@ -90,6 +90,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
         } else {
             AuthUtil.setSinzetechAuth(access_token, refresh_token)
             AuthUtil.setUserId(user_id)
+            AuthUtil.setTenantName(tenant_name)
             // 暂时有问题，先去掉
             // let gotoPath: string = decodeURIComponent(new URLSearchParams(this.props.location.search).get('goto') || '')
             // const index: number = gotoPath.lastIndexOf("=")

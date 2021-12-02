@@ -5,7 +5,7 @@ import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, Attachme
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
-import WorkshopUserSelectionComponent, { IUser } from '../WorkshopUserModal';
+import EmployeeUserSelectionComponent, { IUser } from '../EmployeeUserModal';
 
 
 export default function Quit(): React.ReactNode {
@@ -47,15 +47,20 @@ export default function Quit(): React.ReactNode {
                             required:true, 
                             message:'请选择员工姓名'
                         }]} initialValue={1} name='employeeName'>
-                            <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                            <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
                                         companyName: selectedRows[0].companyName,
+                                        departmentId: selectedRows[0].departmentId,
+                                        teamId: selectedRows[0].teamId,
                                         departmentName: selectedRows[0].departmentName,
+                                        teamName: selectedRows[0].teamName,
+                                        newDepartmentName: selectedRows[0].departmentName+'/'+selectedRows[0].teamName,
                                         postName: selectedRows[0].postName,
                                         inductionDate: selectedRows[0].inductionDate,
                                         employeeType: selectedRows[0].employeeType,
+                                        employeeId: selectedRows[0].employeeId,
                                     });
                             } } buttonType="link" buttonTitle="+选择员工" /> } disabled/>
                         </Form.Item>
@@ -68,7 +73,7 @@ export default function Quit(): React.ReactNode {
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label='部门/班组' name='departmentName'>
+                        <Form.Item label='部门/班组' name='newDepartmentName'>
                             <Input/>
                         </Form.Item>
                     </Col>
@@ -138,6 +143,9 @@ export default function Quit(): React.ReactNode {
                         </Form.Item>
                     </Col>
                 </Row>
+                <Form.Item label='' name='employeeId'>
+                    <Input type='hidden'/>
+                </Form.Item>
             </Form>
             </DetailContent>
         </Spin>

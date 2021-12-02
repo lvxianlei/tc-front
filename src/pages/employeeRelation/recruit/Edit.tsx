@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
@@ -7,13 +7,16 @@ import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 import { RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
+import AuthUtil from '../../../utils/AuthUtil';
+import EmployeeDeptSelectionComponent, { IDept } from '../EmployeeDeptModal';
 
 
 export default function RecruitEdit(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, status: string }>();
     const [form] = Form.useForm();
-    const attachRef = useRef<AttachmentRef>()
+    const attachRef = useRef<AttachmentRef>();
+    const [ selectedDeptRows, setSelectedDeptRows ] = useState<IDept[] | any>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.id && await RequestUtil.get(`/tower-hr/labor/contract/detail`,{contractId: params.id})
         resole(data)
@@ -141,11 +144,20 @@ export default function RecruitEdit(): React.ReactNode {
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label='入职部门/班组' name='departmentName' rules={[{
+                        <Form.Item label='入职部门/班组' rules={[{
                             required:true, 
                             message:'请选择入职部门/班组'
-                        }]}>
-                            <Input/>
+                        }]} name='newDepartmentName'>
+                            <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
+                                    setSelectedDeptRows(selectedRows);
+                                    form.setFieldsValue({
+                                        employeeName: selectedRows[0].employeeName,
+                                        newDepartmentName: selectedRows[0].parentName+'/'+selectedRows[0].name,
+                                        departmentId: selectedRows[0].parentId,
+                                        teamId: selectedRows[0].id,
+                                        companyName: AuthUtil.getTenantName(),
+                                    });
+                            } } buttonType="link" buttonTitle="+选择部门" /> } disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -311,6 +323,18 @@ export default function RecruitEdit(): React.ReactNode {
                     <Col span={24}>
                         <Form.Item label='备注' name='remark'>
                             <Input.TextArea maxLength={400} showCount/>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Form.Item label='' name='departmentId'>
+                            <Input  type="hidden"/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='' name='teamId'>
+                            <Input  type="hidden"/>
                         </Form.Item>
                     </Col>
                 </Row>
