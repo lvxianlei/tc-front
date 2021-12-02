@@ -142,9 +142,9 @@ export default function RoleMngtList(): React.ReactNode {
                 }}
                 extraOperation={
                     <Space direction="horizontal" size="small">
-                        <Button type="primary" style={{marginRight: 10}}>导入</Button>
+                        {/* <Button type="primary" style={{marginRight: 10}}>导入</Button>
                         <Button style={{marginRight: 10}}>下载导入模板</Button>
-                        <Button style={{marginRight: 10}}>导出</Button>
+                        <Button style={{marginRight: 10}}>导出</Button> */}
                         <Button type="primary" style={{marginRight: 10}} onClick={() => {
                             setVisible(true);
                             setId("");
