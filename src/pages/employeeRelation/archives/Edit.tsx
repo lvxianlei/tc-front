@@ -2,7 +2,7 @@ import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
-import { setting, insurance, business } from "./archives.json"
+import { base } from "./archives.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Edit() {
@@ -15,7 +15,7 @@ export default function Edit() {
         } catch (error) {
             reject(error)
         }
-    }), { manual: params.type === "new" })
+    }))
 
     const { loading: saveLoading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -35,12 +35,8 @@ export default function Edit() {
         <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
     ]}>
         <Spin spinning={loading}>
-            <DetailTitle title="员工保险档案" />
-            <BaseInfo columns={setting} dataSource={data || {}} edit />
-            <DetailTitle title="社保公积金" />
-            <BaseInfo columns={insurance} dataSource={[]} edit />
-            <DetailTitle title="商业保险方案" />
-            <CommonTable columns={business} dataSource={[]} />
+            <DetailTitle title="基本信息" />
+            <BaseInfo columns={base} dataSource={data || {}} edit />
         </Spin>
     </DetailContent>
 }

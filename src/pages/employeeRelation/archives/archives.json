@@ -1,0 +1,143 @@
+{
+    "archives": [
+        {
+            "title": "在职状态",
+            "width": 100,
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "在职"
+                },
+                {
+                    "value": 2,
+                    "label": "离职"
+                }
+            ]
+        },
+        {
+            "title": "员工姓名",
+            "width": 100,
+            "dataIndex": "employeeName"
+        },
+        {
+            "title": "性别",
+            "width": 100,
+            "dataIndex": "gender"
+        },
+        {
+            "title": "民族",
+            "width": 100,
+            "dataIndex": "national"
+        },
+        {
+            "title": "公司",
+            "width": 100,
+            "dataIndex": "companyName"
+        },
+        {
+            "title": "部门/班组",
+            "width": 100,
+            "dataIndex": "departmentName"
+        },
+        {
+            "title": "岗位",
+            "width": 100,
+            "dataIndex": "postName"
+        },
+        {
+            "title": "员工分组",
+            "width": 100,
+            "dataIndex": "postType"
+        },
+        {
+            "title": "籍贯",
+            "width": 100,
+            "dataIndex": "nativePlace"
+        },
+        {
+            "title": "出生日期--",
+            "width": 100,
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "title": "年龄",
+            "width": 100,
+            "dataIndex": "age"
+        },
+        {
+            "title": "身份证号",
+            "width": 100,
+            "dataIndex": "idNumber"
+        },
+        {
+            "title": "学历",
+            "width": 100,
+            "dataIndex": "education"
+        },
+        {
+            "title": "联系电话",
+            "width": 100,
+            "dataIndex": "phoneNumber"
+        },
+        {
+            "title": "入职时间",
+            "width": 100,
+            "dataIndex": "inductionDate"
+        },
+        {
+            "title": "员工性质",
+            "width": 100,
+            "dataIndex": "employeeNature"
+        },
+        {
+            "title": "转正日期",
+            "width": 100,
+            "dataIndex": "positiveDate"
+        },
+        {
+            "title": "工龄",
+            "width": 100,
+            "dataIndex": "workYear"
+        },
+        {
+            "title": "银行卡号",
+            "width": 150,
+            "dataIndex": "bankCardNumber"
+        },
+        {
+            "title": "开户行",
+            "width": 100,
+            "dataIndex": "bankName"
+        },
+        {
+            "title": "紧急联系人",
+            "width": 100,
+            "dataIndex": "emergencyContact"
+        },
+        {
+            "title": "紧急联系电话",
+            "width": 200,
+            "dataIndex": "emergencyContactPhone"
+        }
+    ],
+    "base":[
+        {
+            "title": "员工姓名",
+            "width": 100,
+            "dataIndex": "employeeName"
+        },
+        {
+            "title": "性别",
+            "width": 100,
+            "dataIndex": "gender"
+        },
+        {
+            "title": "民族",
+            "width": 100,
+            "dataIndex": "national"
+        }
+    ],
+    "":[]
+}

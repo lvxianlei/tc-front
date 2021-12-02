@@ -10,16 +10,16 @@ export default function Edit() {
     const params = useParams<{ transferId: string, type: "new" | "edit" }>()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/employeeTransfer/detail/${params.transferId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insurancePlan/detail?id=${params.transferId}`)
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: params.type === "new" })
 
-    const { loading: saveLoading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading: saveLoading } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-hr/employeeTransfer/save`)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-hr/insurancePlan/${params.type === "new" ? "add" : "edit"}`, data)
             resole(result)
         } catch (error) {
             reject(error)

@@ -2052,6 +2052,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 人资-员工关系-员工档案-查看
+      "name": "详情",
+      "path": "/employeeRelation/archives/detail/:archiveId",
+      "module": "./pages/employeeRelation/archives/Overview",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工档案-编辑
+      "name": "员工档案编辑",
+      "path": "/employeeRelation/archives/edit/:archiveId",
+      "module": "./pages/employeeRelation/archives/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 人资-员工关系-劳动合同
       "name": "劳动合同",
       "path": "/employeeRelation/labour",
