@@ -1,27 +1,45 @@
-import React from "react"
+import React, { useRef } from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment, AttachmentRef } from '../../common'
+import { setting } from "./transfer.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Edit() {
     const history = useHistory()
-    const params = useParams<{ invoicingId: string }>()
+    const attachRef = useRef<AttachmentRef>()
+    const params = useParams<{ transferId: string, type: "new" | "edit" }>()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/invoicing/getInvoicingInfo/${params.invoicingId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/employeeTransfer/detail/${params.transferId}`)
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }))
-    return <DetailContent operation={[<Button key="cancel" onClick={() => history.go(-1)}>返回</Button>]}>
+    }), { manual: params.type === "new" })
+
+    const { loading: saveLoading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-hr/employeeTransfer/save`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const handleSave = (type: "save" | "saveAndSubmit") => {
+
+    }
+
+    return <DetailContent operation={[
+        <Button key="save" onClick={() => handleSave("save")} type="primary" style={{ marginRight: 16 }}>保存</Button>,
+        <Button key="saveAndSubmit" onClick={() => handleSave("saveAndSubmit")} type="primary" style={{ marginRight: 16 }} >保存并提交</Button>,
+        <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
+    ]}>
         <Spin spinning={loading}>
             <DetailTitle title="员工调动管理" />
-            <BaseInfo columns={[]} dataSource={data || {}} />
-            <Attachment dataSource={data?.attachInfoVos} />
-            <DetailTitle title="审批记录" />
-            <CommonTable columns={[]} dataSource={[]} />
+            <BaseInfo columns={setting} dataSource={data || {}} edit />
+            <Attachment dataSource={data?.fileVos} edit ref={attachRef} />
         </Spin>
     </DetailContent>
 }
