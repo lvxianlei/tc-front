@@ -124,32 +124,38 @@ export default function PickTower(): React.ReactNode {
             dataIndex: 'materialUserName'
         },
         {
-            key: 'materialStatus',
+            key: 'materialStatusName',
             title: '杆塔配段状态',
             width: 100,
-            dataIndex: 'materialStatus',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 1,
-                        label: "待开始"
-                      },
-                    {
-                        value: 2,
-                        label: "配段中"
-                    },
-                    {
-                        value: 3,
-                        label: "已完成"
-                    },
-                    // {
-                    //     value: 4,
-                    //     label: "已提交"
-                    // }
-                ]
-                return <>{value&&value!==-1?renderEnum.find((item: any) => item.value === value).label:null}</>
-            }
+            dataIndex: 'materialStatusName'
         },
+        // {
+        //     key: 'materialStatus',
+        //     title: '杆塔配段状态',
+        //     width: 100,
+        //     dataIndex: 'materialStatus',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 1,
+        //                 label: "待开始"
+        //               },
+        //             {
+        //                 value: 2,
+        //                 label: "配段中"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "已完成"
+        //             },
+        //             // {
+        //             //     value: 4,
+        //             //     label: "已提交"
+        //             // }
+        //         ]
+        //         return <>{value&&value!==-1?renderEnum.find((item: any) => item.value === value).label:null}</>
+        //     }
+        // },
         {
             key: 'materialUpdateStatusTime',
             title: '最新状态变更时间',

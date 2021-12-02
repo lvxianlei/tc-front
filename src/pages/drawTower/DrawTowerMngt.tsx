@@ -31,20 +31,10 @@ export default function DrawTowerMngt(): React.ReactNode {
             width: 120
         },
         {
-            key: 'pattern',
+            key: 'patternName',
             title: '类型',
             width: 200,
-            dataIndex: 'pattern',
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 1:
-                        return '新放';
-                    case 2:
-                        return '重新出卡';
-                    case 3:
-                        return '套用';
-                }
-            }
+            dataIndex: 'patternName'
         },
         {
             key: 'taskCode',

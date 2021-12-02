@@ -27,26 +27,10 @@ export default function SetOutTaskList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '任务状态',
-            dataIndex: 'status',
-            width: 120,
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 0:
-                        return '已拒绝';
-                    case 1:
-                        return '待确认';
-                    case 2:
-                        return '待指派';
-                    case 3:
-                        return '待完成';
-                    case 4:
-                        return '已完成';
-                    case 5:
-                        return '已提交';
-                }
-            }
+            dataIndex: 'statusName',
+            width: 120
         },
         {
             key: 'updateStatusTime',
@@ -55,21 +39,21 @@ export default function SetOutTaskList(): React.ReactNode {
             dataIndex: 'updateStatusTime'
         },
         {
-            key: 'productCategory',
+            key: 'productCategoryProportion',
             title: '塔型完成进度',
             width: 150,
-            dataIndex: 'productCategory',
+            dataIndex: 'productCategoryProportion',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Link to={ `/setOutTask/setOutTaskTower/${ record.id }` }>{ record.productCategoryEndNum + '/' + record.productCategoryNum }</Link>
+                <Link to={ `/setOutTask/setOutTaskTower/${ record.id }` }>{ _ }</Link>
             )
         },
         {
-            key: 'product',
+            key: 'productProportion',
             title: '杆塔完成进度',
-            dataIndex: 'product',
+            dataIndex: 'productProportion',
             width: 200,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Link to={ `/setOutTask/setOutTaskPole/${ record.id }` }>{ record.productEndNum + '/' + record.productNum }</Link>
+                <Link to={ `/setOutTask/setOutTaskPole/${ record.id }` }>{ _ }</Link>
             )
         },
         {

@@ -3,11 +3,18 @@ import { Space, Input, DatePicker,  Button, Select, Form } from 'antd'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../utils/RequestUtil';
 
 export default function QuestionMngt(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state: number, type?: string }>();
     const history = useHistory();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const user:any = data||[];
     const columns = [
         {
             key: 'index',
@@ -23,32 +30,38 @@ export default function QuestionMngt(): React.ReactNode {
             dataIndex: 'issueNumber'
         },
         {
-            key: 'status',
-            title: '问题单状态',
+            key: 'statusName',
+            title: '问题单编号',
             width: 100,
-            dataIndex: 'status',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 0,
-                        label: "已拒绝"
-                    },
-                    {
-                        value: 1,
-                        label: "待修改"
-                    },
-                    {
-                        value: 2,
-                        label: "已修改"
-                    },
-                    {
-                        value: 3,
-                        label: "已删除"
-                    },
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'statusName'
         },
+        // {
+        //     key: 'status',
+        //     title: '问题单状态',
+        //     width: 100,
+        //     dataIndex: 'status',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 0,
+        //                 label: "已拒绝"
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "待修改"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "已修改"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "已删除"
+        //             },
+        //         ]
+        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'productCategoryName',
             title: '塔型',
@@ -62,36 +75,42 @@ export default function QuestionMngt(): React.ReactNode {
             dataIndex: 'updateTime'
         },
         {
-            key: 'type',
+            key: 'typeName',
             title: '问题单类型',
             width: 200,
-            dataIndex: 'type',
-            render: (value: string, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 'WTD-TL',
-                        label: "提料"
-                    },
-                    {
-                        value: 'WTD-FY',
-                        label: "放样"
-                    },
-                    {
-                        value: 'WTD-LS',
-                        label: "螺栓"
-                    },
-                    {
-                        value: 'WTD-ZH',
-                        label: "组焊"
-                    },
-                    {
-                        value: 'WTD-YT',
-                        label: "小样图"
-                    },
-                  ]
-                return <>{value&&(renderEnum.find((item: any) => item.value === value).label)}</>
-            }
+            dataIndex: 'typeName'
         },
+        // {
+        //     key: 'type',
+        //     title: '问题单类型',
+        //     width: 200,
+        //     dataIndex: 'type',
+        //     render: (value: string, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 'WTD-TL',
+        //                 label: "提料"
+        //             },
+        //             {
+        //                 value: 'WTD-FY',
+        //                 label: "放样"
+        //             },
+        //             {
+        //                 value: 'WTD-LS',
+        //                 label: "螺栓"
+        //             },
+        //             {
+        //                 value: 'WTD-ZH',
+        //                 label: "组焊"
+        //             },
+        //             {
+        //                 value: 'WTD-YT',
+        //                 label: "小样图"
+        //             },
+        //           ]
+        //         return <>{value&&(renderEnum.find((item: any) => item.value === value).label)}</>
+        //     }
+        // },
         {
             key: 'recipientName',
             title: '接收人',
@@ -171,6 +190,18 @@ export default function QuestionMngt(): React.ReactNode {
                                     <Select.Option value={'WTD-ZH'} key={'WTD-ZH'}>组焊</Select.Option>
                                     <Select.Option value={'WTD-YT'} key={'WTD-YT'}>小样图</Select.Option>
                                 </Select>
+                },
+                {
+                    name: 'recipient',
+                    label: '接收人',
+                    children:  <Form.Item name="materialLeader" initialValue={ '' }>
+                            <Select style={{width:'100px'}}>
+                                <Select.Option key={''} value={''}>全部</Select.Option>
+                                {user && user.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                })}
+                            </Select>
+                    </Form.Item>
                 },
                 {
                     name: 'fuzzyMsg',

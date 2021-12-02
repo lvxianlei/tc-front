@@ -6,12 +6,18 @@ import { Page } from '../../common';
 import { Popconfirm } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import useRequest from '@ahooksjs/use-request';
 
 export default function SampleDrawList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state: {} }>();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const user:any = data||[];
     const columns = [
         {
             key: 'index',
@@ -27,32 +33,38 @@ export default function SampleDrawList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'priority',
+            key: 'priorityName',
             title: '优先级',
             width: 100,
-            dataIndex: 'priority',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 0,
-                        label: "紧急"
-                    },
-                    {
-                        value: 1,
-                        label: "高"
-                    },
-                    {
-                        value: 2,
-                        label: "中"
-                    },
-                    {
-                        value: 3,
-                        label: "低"
-                    },
-                ]
-                return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'priorityName'
         },
+        // {
+        //     key: 'priority',
+        //     title: '优先级',
+        //     width: 100,
+        //     dataIndex: 'priority',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 0,
+        //                 label: "紧急"
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "高"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "中"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "低"
+        //             },
+        //         ]
+        //         return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'externalTaskNum',
             title: '任务单编号',
@@ -89,33 +101,39 @@ export default function SampleDrawList(): React.ReactNode {
             width: 100,
             dataIndex: 'smallSampleLeaderName'
         },
-        {
-            key: 'smallSampleStatus',
+        { 
+            key: 'smallSampleStatusName',
             title: '小样图状态',
             width: 100,
-            dataIndex: 'smallSampleStatus',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: -1,
-                        label: ""
-                    },
-                    {
-                        value: 1,
-                        label: "待开始"
-                    },
-                    {
-                        value: 2,
-                        label: "进行中"
-                    },
-                    {
-                        value: 3,
-                        label: "已完成"
-                    },
-                ]
-                return <>{value && renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'smallSampleStatusName'
         },
+        // {
+        //     key: 'smallSampleStatus',
+        //     title: '小样图状态',
+        //     width: 100,
+        //     dataIndex: 'smallSampleStatus',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: -1,
+        //                 label: ""
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "待开始"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "进行中"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "已完成"
+        //             },
+        //         ]
+        //         return <>{value && renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'smallSampleUpdateStatusTime',
             title: '最新状态变更时间',
@@ -215,6 +233,18 @@ export default function SampleDrawList(): React.ReactNode {
                                     <Select.Option value={2} key={2}>中</Select.Option>
                                     <Select.Option value={3} key={3}>低</Select.Option>
                                 </Select>
+                },
+                {
+                    name: 'smallSampleLeader',
+                    label:'小样图负责人',
+                    children:   <Form.Item name="materialLeader" initialValue={ '' }>
+                                <Select style={{width:'100px'}}>
+                                    <Select.Option key={''} value={''}>全部</Select.Option>
+                                    {user && user.map((item: any) => {
+                                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                    })}
+                                </Select>
+                                </Form.Item>
                 },
                 {
                     name: 'fuzzyMsg',

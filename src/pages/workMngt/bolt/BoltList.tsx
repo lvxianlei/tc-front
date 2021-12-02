@@ -11,6 +11,8 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './BoltList.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import AuthUtil from '../../../utils/AuthUtil';
+import RequestUtil from '../../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
 
 enum PriorityType {
     EMERGENCY = 0,
@@ -35,22 +37,10 @@ export default function BoltList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'priority',
+            key: 'priorityName',
             title: '优先级',
             width: 150,
-            dataIndex: 'priority',
-            render: (priority: number): React.ReactNode => {
-                switch (priority) {
-                    case PriorityType.EMERGENCY:
-                        return '紧急';
-                    case PriorityType.HIGH:
-                        return '高';
-                    case PriorityType.LOW:
-                        return '低';
-                    case PriorityType.MIDDLE:
-                        return '中';
-                }
-            }
+            dataIndex: 'priorityName',
         },
         {
             key: 'externalTaskNum',
@@ -98,19 +88,7 @@ export default function BoltList(): React.ReactNode {
             key: 'boltStatus',
             title: '螺栓清单状态',
             width: 200,
-            dataIndex: 'boltStatus',
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 1:
-                        return '待开始';
-                    case 2:
-                        return '进行中';
-                    case 3:
-                        return '校核中';
-                    case 4:
-                        return '已完成';
-                }
-            }
+            dataIndex: 'boltStatusName',
         },
         {
             key: 'boltUpdateStatusTime',
@@ -139,6 +117,12 @@ export default function BoltList(): React.ReactNode {
 
     const location = useLocation<{ state: {} }>();
     const userId = AuthUtil.getUserId();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const checkUser: any = data || [];
+
     return <Page
         path="/tower-science/boltRecord"
         columns={columns}
@@ -161,6 +145,18 @@ export default function BoltList(): React.ReactNode {
                         <Select.Option value="2" key="2">进行中</Select.Option>
                         <Select.Option value="3" key="3">校核中</Select.Option>
                         <Select.Option value="4" key="4">已完成</Select.Option>
+                    </Select>
+                </Form.Item>
+            },
+            {
+                name: 'boltLeader',
+                label: '螺栓负责人',
+                children: <Form.Item name="status" initialValue={""}>
+                    <Select placeholder="请选择" style={{ width: "150px" }}>
+                        <Select.Option value="" key="6">全部</Select.Option>
+                        { checkUser && checkUser.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        }) }
                     </Select>
                 </Form.Item>
             },
