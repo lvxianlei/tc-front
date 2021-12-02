@@ -27,26 +27,10 @@ export default function SetOutTaskList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '任务状态',
-            dataIndex: 'status',
-            width: 120,
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 0:
-                        return '已拒绝';
-                    case 1:
-                        return '待确认';
-                    case 2:
-                        return '待指派';
-                    case 3:
-                        return '待完成';
-                    case 4:
-                        return '已完成';
-                    case 5:
-                        return '已提交';
-                }
-            }
+            dataIndex: 'statusName',
+            width: 120
         },
         {
             key: 'updateStatusTime',

@@ -48,18 +48,10 @@ export default function EvaluationList(): React.ReactNode {
             dataIndex: 'assessUserName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '状态',
-            dataIndex: 'status',
-            width: 200,
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 3:
-                        return '待完成';
-                    case 4:
-                        return '已完成';
-                }
-            }
+            dataIndex: 'statusName',
+            width: 200
         },
         {
             key: 'updateStatusTime',

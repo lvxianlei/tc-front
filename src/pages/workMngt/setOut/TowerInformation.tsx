@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form, TreeSelect, Modal, Table } from 'antd';
-import { CommonTable, Page } from '../../common';
+import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
@@ -89,22 +89,10 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'productCategoryName'
         },
         {
-            key: 'priority',
+            key: 'priorityName',
             title: '优先级',
-            dataIndex: 'priority',
-            width: 120,
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
-                    case 0:
-                        return '紧急';
-                    case 1:
-                        return '高';
-                    case 2:
-                        return '中';
-                    case 3:
-                        return '低';
-                }
-            }
+            dataIndex: 'priorityName',
+            width: 120
         },
         {
             key: 'name',
@@ -138,20 +126,10 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'checkUserName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '放样状态',
             width: 200,
-            dataIndex: 'status',
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
-                    case 1:
-                        return '放样中';
-                    case 2:
-                        return '校核中';
-                    case 3:
-                        return '已完成';
-                }
-            }
+            dataIndex: 'statusName'
         },
         {
             key: 'updateStatusTime',
