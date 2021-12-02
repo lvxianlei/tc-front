@@ -51,25 +51,9 @@ const tableColumns = [
         dataIndex: 'createTime'
     },
     {
-        key: 'currentStatus',
+        key: 'currentStatusName',
         title: '任务状态',
-        dataIndex: 'currentStatus',
-        render: (currentStatus: number): React.ReactNode => {
-            switch (currentStatus) {
-                case 1:
-                    return '待指派';
-                case 2:
-                    return '放样中';
-                case 3:
-                    return '组焊中';
-                case 4:
-                    return '配段中';
-                case 5:
-                    return '已完成';
-                case 6:
-                    return '已提交';
-            }
-        }
+        dataIndex: 'currentStatusName'
     },
     {
         key: 'description',

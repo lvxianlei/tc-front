@@ -12,13 +12,6 @@ import styles from './AssemblyWelding.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import AuthUtil from '../../../utils/AuthUtil';
 
-enum PriorityType {
-    EMERGENCY = '0',   
-    HIGH = '1',              
-    MIDDLE ='2',         
-    LOW = '3',                       
-}
-
 export default function AssemblyWeldingList(): React.ReactNode {
     const columns = [
         {
@@ -35,22 +28,10 @@ export default function AssemblyWeldingList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'priority',
+            key: 'priorityName',
             title: '优先级',
             width: 150,
-            dataIndex: 'priority',
-            render: (priority: string): React.ReactNode => {
-                switch (priority) {
-                    case PriorityType.EMERGENCY:
-                        return '紧急';
-                    case PriorityType.HIGH:
-                        return '高';
-                    case PriorityType.LOW:
-                        return '低';
-                    case PriorityType.MIDDLE:
-                        return '中';
-                }
-            }         
+            dataIndex: 'priorityName'       
         },
         {
             key: 'taskNumber',
@@ -89,22 +70,10 @@ export default function AssemblyWeldingList(): React.ReactNode {
             dataIndex: 'weldingLeaderName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '组焊清单状态',
             width: 200,
-            dataIndex: 'status',
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 0:
-                        return '已拒绝';
-                    case 1:
-                        return '待开始';
-                    case 2:
-                        return '组焊中';
-                    case 3:
-                        return '已完成';
-                }
-            }    
+            dataIndex: 'statusName'
         },
         {
             key: 'updateStatusTime',

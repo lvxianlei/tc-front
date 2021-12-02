@@ -35,7 +35,7 @@ export default function BoltList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'priority',
+            key: 'priorityName',
             title: '优先级',
             width: 150,
             dataIndex: 'priorityName',

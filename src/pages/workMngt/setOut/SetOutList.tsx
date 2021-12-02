@@ -64,24 +64,10 @@ export default function SetOutList(): React.ReactNode {
             dataIndex: 'loftingLeaderName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '塔型放样状态',
             width: 200,
-            dataIndex: 'status',
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 1:
-                        return '待指派';
-                    case 2:
-                        return '放样中';
-                    case 3:
-                        return '组焊中';
-                    case 4:
-                        return '配段中';
-                    case 5:
-                        return '已完成';
-                }
-            }
+            dataIndex: 'statusName'
         },
         {
             key: 'updateStatusTime',
