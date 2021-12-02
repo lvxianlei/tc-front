@@ -3,11 +3,18 @@ import { Space, Input, DatePicker,  Button, Select, Form } from 'antd'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../utils/RequestUtil';
 
 export default function QuestionMngt(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state: number, type?: string }>();
     const history = useHistory();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const user:any = data||[];
     const columns = [
         {
             key: 'index',
@@ -183,6 +190,18 @@ export default function QuestionMngt(): React.ReactNode {
                                     <Select.Option value={'WTD-ZH'} key={'WTD-ZH'}>组焊</Select.Option>
                                     <Select.Option value={'WTD-YT'} key={'WTD-YT'}>小样图</Select.Option>
                                 </Select>
+                },
+                {
+                    name: 'recipient',
+                    label: '接收人',
+                    children:  <Form.Item name="materialLeader" initialValue={ '' }>
+                            <Select style={{width:'100px'}}>
+                                <Select.Option key={''} value={''}>全部</Select.Option>
+                                {user && user.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                })}
+                            </Select>
+                    </Form.Item>
                 },
                 {
                     name: 'fuzzyMsg',
