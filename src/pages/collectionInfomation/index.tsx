@@ -209,6 +209,7 @@ export default function CollectionInfomation(): React.ReactNode {
                 title={'新增回款信息'}
                 visible={visible}
                 width={1000}
+                maskClosable={false}
                 onCancel={() => {
                     addRef.current?.resetFields();
                     setVisible(false);

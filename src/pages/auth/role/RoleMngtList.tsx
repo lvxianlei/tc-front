@@ -102,6 +102,7 @@
                 title={`${id ? '修改': '新增'}角色权限`}
                 visible={visible}
                 width={1000}
+                maskClosable={false}
                 onCancel={() => {
                     setVisible(false)
                     addRef.current?.resetFields();

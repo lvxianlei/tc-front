@@ -204,6 +204,7 @@ export default function ApplicationColunm(): React.ReactNode {
                 title={'填写保函信息'}
                 visible={visible}
                 width={1000}
+                maskClosable={false}
                 onCancel={() => {
                     addRef.current?.resetFields();
                     setVisible(false);
@@ -226,6 +227,7 @@ export default function ApplicationColunm(): React.ReactNode {
             <Modal
                 title={'回收保函'}
                 visible={visibleRecovery}
+                maskClosable={false}
                 width={1000}
                 onCancel={() => {
                     setVisibleRecovery(false)

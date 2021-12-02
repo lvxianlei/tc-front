@@ -178,6 +178,7 @@ export default function RoleMngtList(): React.ReactNode {
             title={`${id ? '修改': '新增'}用户`}
             visible={visible}
             width={1000}
+            maskClosable={false}
             onCancel={() => {
                 setVisible(false)
                 addRef.current?.resetFields();
