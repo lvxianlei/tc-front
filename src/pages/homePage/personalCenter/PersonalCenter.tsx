@@ -23,10 +23,6 @@ const workColums = [
         "title": "姓名："
     },
     {
-        "dataIndex": "phone",
-        "title": "手机号："
-    },
-    {
         "dataIndex": "number",
         "title": "工号："
     },
@@ -70,7 +66,7 @@ export default function PersonalCenter(): React.ReactNode {
     return <>
         <DetailContent>
             <DetailTitle title="账户信息" />
-            <Descriptions title="" bordered size="small" colon={ false } column={ 3 }>
+            <Descriptions title="" bordered size="small" colon={ false } column={ 2 }>
                 <Descriptions.Item label="账号：">
                     { detailData.userAccount }
                 </Descriptions.Item>
@@ -78,22 +74,17 @@ export default function PersonalCenter(): React.ReactNode {
                     ******
                     <Button type="link" onClick={ () => setVisible(true) }>修改密码</Button>
                 </Descriptions.Item>
-                <Descriptions.Item label="手机号：">
-                    { detailData.phone }
-                </Descriptions.Item>
-                <Descriptions.Item label="备注：">
-                    { detailData.description }
-                </Descriptions.Item>
             </Descriptions>
             <DetailTitle title="工作信息" />
             <BaseInfo columns={workColums} dataSource={detailData} col={2} />
         </DetailContent>
-        <Modal visible={ visible } title="修改密码" onCancel={ () => setVisible(false) } onOk={ () => {
+        <Modal visible={ visible } title="修改密码" onCancel={ () => { setVisible(false); form.resetFields(); }} onOk={ () => {
             if(form) {
                 form.validateFields().then(res => {
                     const value = form.getFieldsValue(true);
                     RequestUtil.put(`/sinzetech-user/user/updatePassword`, { ...value }).then(res => {
                         setVisible(false);
+                        form.resetFields();
                         history.go(0);
                     })
                 })
@@ -103,7 +94,7 @@ export default function PersonalCenter(): React.ReactNode {
                <Form.Item label="旧密码" name="oldPassword" rules={[{
                     required: true,
                     message: '请输入旧密码'
-                }]} initialValue={ detailData }>
+                }]}>
                     <Input maxLength={ 50 }/>
                </Form.Item>
                <Form.Item label="新密码" name="password" rules={[{
@@ -119,7 +110,7 @@ export default function PersonalCenter(): React.ReactNode {
                             return Promise.reject('请输入新密码')
                         }
                     }
-                }]} initialValue={ detailData }>
+                }]}>
                     <Input maxLength={ 50 }/>
                </Form.Item>
                <Form.Item label="重复密码" name="confirmPassword" rules={[{
@@ -135,7 +126,7 @@ export default function PersonalCenter(): React.ReactNode {
                             return Promise.reject('请再次输入登录密码')
                         }
                     }
-                }]} initialValue={ detailData }>
+                }]}>
                     <Input maxLength={ 50 }/>
                </Form.Item>
             </Form>
