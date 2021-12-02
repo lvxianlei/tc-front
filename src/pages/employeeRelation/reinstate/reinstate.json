@@ -1,0 +1,52 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "employeeName",
+            "title": "员工名称"
+        },
+        {
+            "dataIndex": "inductionDate",
+            "title": "入职时间"
+        },
+        {
+            "dataIndex": "departureDate",
+            "title": "离职日期"
+        },
+        {
+            "dataIndex": "departureType",
+            "title": "离职类型"
+        },
+        {
+            "dataIndex": "departureReason",
+            "title": "离职原因"
+        },
+        {
+            "dataIndex": "reinstatementDate",
+            "title": "复职日期"
+        },
+        {
+            "dataIndex": "reinstatementNature",
+            "title": "复职性质"
+        },
+        {
+            "dataIndex": "departmentName",
+            "title": "复职后部门/班组"
+        },
+        {
+            "dataIndex": "companyName",
+            "title": "复职后公司"
+        },
+        {
+            "dataIndex": "postName",
+            "title": "复职后岗位"
+        },
+        {
+            "dataIndex": "probationPeriod",
+            "title": "试用期"
+        },
+        {
+            "dataIndex": "remark",
+            "title": "备注"
+        }
+    ]
+}

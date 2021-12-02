@@ -7,7 +7,7 @@ import { baseInfoData } from './labour.json';
 import RequestUtil from '../../../utils/RequestUtil';
 
 
-export default function Detail(): React.ReactNode {
+export default function LabourDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, contractId: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {

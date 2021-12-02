@@ -8,7 +8,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 
 
-export default function Operation(): React.ReactNode {
+export default function QuitProceduresOperation(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>();
     const [form] = Form.useForm();
