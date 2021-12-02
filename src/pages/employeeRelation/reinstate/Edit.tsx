@@ -7,13 +7,13 @@ import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 
 
-export default function Recruit(): React.ReactNode {
+export default function RecruitEdit(): React.ReactNode {
     const history = useHistory()
-    const params = useParams<{ id: string }>();
+    const params = useParams<{ id: string, status: string }>();
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
+        // const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeReinstatement/detail?id=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -28,12 +28,17 @@ export default function Recruit(): React.ReactNode {
                     <Button key="primary" onClick={() => {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
-                            value.inquiryQuotationAttachInfoDtos= attachRef.current?.getDataSource()
-                            RequestUtil.post(`/tower-hr/employeeDeparture/save`,value)
+                            RequestUtil.post(`/tower-hr/employeeReinstatement/save`,value)
                         })
                         
                     }}>保存</Button>
-                    <Button key="primary" onClick={() => history.goBack()}>保存并提交审批</Button>
+                    {!params.status && <Button key="primary" onClick={() =>{
+                        form.validateFields().then(res=>{
+                            const value= form.getFieldsValue(true);
+                            RequestUtil.post(`/tower-hr/employeeReinstatement/submit`,value)
+                        })
+                        
+                    }}>保存并提交审批</Button>}
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
             ]}>
@@ -106,8 +111,7 @@ export default function Recruit(): React.ReactNode {
                                 <Select.Option value={3} key="3">三次复职</Select.Option>
                                 <Select.Option value={4} key="4">四次复职</Select.Option>
                                 <Select.Option value={5} key="5">五次复职</Select.Option>
-                                <Select.Option value={6} key="6">六次复职</Select.Option>
-                                <Select.Option value={7} key="7">六次及以上</Select.Option>
+                                <Select.Option value={6} key="6">六次及以上</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
