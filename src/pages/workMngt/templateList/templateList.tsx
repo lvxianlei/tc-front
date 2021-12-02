@@ -23,7 +23,7 @@ export default function TemplateList() {
         },
         {
             title: '上传图纸类型',
-            dataIndex: 'uploadDrawType',
+            dataIndex: 'uploadDrawTypeName',
             align: 'center',
             render: (text: any) => {
                 switch (text) {
@@ -61,7 +61,7 @@ export default function TemplateList() {
         },
         {
             title: '上传状态',
-            dataIndex: 'uploadStatus',
+            dataIndex: 'uploadStatusName',
             align: 'center',
             render: (text: any) => {
                 switch (text) {

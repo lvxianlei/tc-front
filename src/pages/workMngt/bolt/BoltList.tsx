@@ -38,19 +38,7 @@ export default function BoltList(): React.ReactNode {
             key: 'priority',
             title: '优先级',
             width: 150,
-            dataIndex: 'priority',
-            render: (priority: number): React.ReactNode => {
-                switch (priority) {
-                    case PriorityType.EMERGENCY:
-                        return '紧急';
-                    case PriorityType.HIGH:
-                        return '高';
-                    case PriorityType.LOW:
-                        return '低';
-                    case PriorityType.MIDDLE:
-                        return '中';
-                }
-            }
+            dataIndex: 'priorityName',
         },
         {
             key: 'externalTaskNum',
@@ -95,22 +83,22 @@ export default function BoltList(): React.ReactNode {
             dataIndex: 'boltLeaderName'
         },
         {
+            key: 'boltLeaderName',
+            title: '螺栓负责人',
+            width: 200,
+            dataIndex: 'boltLeaderName'
+        },
+        {
+            key: 'boltLeaderName',
+            title: '螺栓负责人',
+            width: 200,
+            dataIndex: 'boltLeaderName'
+        },
+        {
             key: 'boltStatus',
             title: '螺栓清单状态',
             width: 200,
-            dataIndex: 'boltStatus',
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 1:
-                        return '待开始';
-                    case 2:
-                        return '进行中';
-                    case 3:
-                        return '校核中';
-                    case 4:
-                        return '已完成';
-                }
-            }
+            dataIndex: 'boltStatusName',
         },
         {
             key: 'boltUpdateStatusTime',
