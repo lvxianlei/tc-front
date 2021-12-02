@@ -55,7 +55,6 @@ export default function ConfirmDetail(): React.ReactNode {
     const [formRef] = Form.useForm();
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
-    const [isExport, setIsExportStoreList] = useState(false)
 
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record: Item) => record.key === editingKey;
@@ -711,25 +710,7 @@ export default function ConfirmDetail(): React.ReactNode {
             </>]}>
                 <div style={{display:'flex',justifyContent:'space-between'}}>
                     <Space>
-                    <Button type='primary' onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
-                    {isExport?<ExportList
-                        history={history}
-                        location={location}
-                        match={match}
-                        columnsKey={() => {
-                            let keys = [...mergedColumns]
-                            keys.pop()
-                            return keys
-                        }}
-                        current={0}
-                        size={0}
-                        total={0}
-                        url={'/tower-science/drawProductDetail/export'}
-                        serchObj={{
-                          drawTaskId: params.id
-                        }}
-                        closeExportList={() => { setIsExportStoreList(false) }}
-                    />:null}
+                      <Button type='primary' onClick={()=>{downloadTemplate(`/tower-science/drawProductDetail/export?drawTaskId=${params.id}`, '杆塔信息')}}>导出</Button>
                         <Button type="primary" onClick={ () => downloadTemplate('/tower-science/drawProductDetail/importTemplate', '确认明细模板') } ghost>模板下载</Button>
                         <span>总基数：{tableDataSource.length}基</span>
                         <span>总重量：{weight}kg</span>
