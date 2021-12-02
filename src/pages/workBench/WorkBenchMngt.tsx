@@ -39,7 +39,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 					title: '待完成',
 					dataIndex: 'assessToBeComplete',
 					path: '/workMngt/evaluationList',
-					state: 3
+					state: 3,
+					userId: userId
 				}
 			]
 		}
