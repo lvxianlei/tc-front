@@ -2185,9 +2185,44 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 人资-社保福利-保险方案-查看
+      "name": "保险方案",
+      "path": "/socialSecurity/plan/detail/:planId",
+      "module": "./pages/socialSecurity/plan/Overview",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-保险方案-新增
+      "name": "编辑保险方案",
+      "path": "/socialSecurity/plan/:type",
+      "module": "./pages/socialSecurity/plan/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-保险方案-编辑
+      "name": "编辑保险方案",
+      "path": "/socialSecurity/plan/:type/:planId",
+      "module": "./pages/socialSecurity/plan/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 人资-社保福利-员工保险档案
       "name": "员工保险档案",
       "path": "/socialSecurity/archives",
+      "module": "./pages/socialSecurity/archives/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案-查看
+      "name": "查看员工保险档案",
+      "path": "/socialSecurity/archives/detail/:archiveId",
+      "module": "./pages/socialSecurity/archives/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案-编辑
+      "name": "编辑员工保险档案",
+      "path": "/socialSecurity/archives/edit/:archiveId",
       "module": "./pages/socialSecurity/archives/index",
       "exact": true,
       "authority": "approvalm"
