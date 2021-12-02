@@ -27,32 +27,38 @@ export default function SampleDrawList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'priority',
+            key: 'priorityName',
             title: '优先级',
             width: 100,
-            dataIndex: 'priority',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 0,
-                        label: "紧急"
-                    },
-                    {
-                        value: 1,
-                        label: "高"
-                    },
-                    {
-                        value: 2,
-                        label: "中"
-                    },
-                    {
-                        value: 3,
-                        label: "低"
-                    },
-                ]
-                return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'priorityName'
         },
+        // {
+        //     key: 'priority',
+        //     title: '优先级',
+        //     width: 100,
+        //     dataIndex: 'priority',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 0,
+        //                 label: "紧急"
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "高"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "中"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "低"
+        //             },
+        //         ]
+        //         return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'externalTaskNum',
             title: '任务单编号',
@@ -89,33 +95,39 @@ export default function SampleDrawList(): React.ReactNode {
             width: 100,
             dataIndex: 'smallSampleLeaderName'
         },
-        {
-            key: 'smallSampleStatus',
+        { 
+            key: 'smallSampleStatusName',
             title: '小样图状态',
             width: 100,
-            dataIndex: 'smallSampleStatus',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: -1,
-                        label: ""
-                    },
-                    {
-                        value: 1,
-                        label: "待开始"
-                    },
-                    {
-                        value: 2,
-                        label: "进行中"
-                    },
-                    {
-                        value: 3,
-                        label: "已完成"
-                    },
-                ]
-                return <>{value && renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'smallSampleStatusName'
         },
+        // {
+        //     key: 'smallSampleStatus',
+        //     title: '小样图状态',
+        //     width: 100,
+        //     dataIndex: 'smallSampleStatus',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: -1,
+        //                 label: ""
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "待开始"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "进行中"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "已完成"
+        //             },
+        //         ]
+        //         return <>{value && renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'smallSampleUpdateStatusTime',
             title: '最新状态变更时间',
