@@ -78,7 +78,11 @@ export default function Sure(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='员工性质' name='employeeType'>
-                            <Input/>
+                            <Select placeholder="请选择" style={{ width: '100%' }} >
+                                <Select.Option value={1} key="1">正式员工</Select.Option>
+                                <Select.Option value={2} key="2">超龄员工</Select.Option>
+                                <Select.Option value={3} key="3">实习员工</Select.Option>
+                            </Select>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -101,10 +105,10 @@ export default function Sure(): React.ReactNode {
                             message:'请选择离职类型'
                         }]} name='departureType'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={0} key="0">主动离职</Select.Option>
-                                <Select.Option value={1} key="1">辞退</Select.Option>
-                                <Select.Option value={2} key="2">退休</Select.Option>
-                                <Select.Option value={3} key="3">死亡</Select.Option>
+                                <Select.Option value={1} key="1">主动离职</Select.Option>
+                                <Select.Option value={2} key="2">辞退</Select.Option>
+                                <Select.Option value={3} key="3">退休</Select.Option>
+                                <Select.Option value={4} key="4">死亡</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
