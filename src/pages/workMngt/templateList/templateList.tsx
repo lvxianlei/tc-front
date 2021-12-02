@@ -27,14 +27,6 @@ export default function TemplateList() {
             title: '上传图纸类型',
             dataIndex: 'uploadDrawTypeName',
             align: 'center',
-            render: (text: any) => {
-                switch (text) {
-                    case 1:
-                        return '组装图纸'
-                    case 2:
-                        return '发货图纸'
-                }
-            }
         },
         {
             title: '内部合同编号',
@@ -65,14 +57,6 @@ export default function TemplateList() {
             title: '上传状态',
             dataIndex: 'uploadStatusName',
             align: 'center',
-            render: (text: any) => {
-                switch (text) {
-                    case 1:
-                        return '待上传'
-                    case 2:
-                        return '已上传'
-                }
-            }
         },
         {
             title: '最新状态变更时间',
