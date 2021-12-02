@@ -2192,6 +2192,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 人资-员工关系-员工复职-查看
+      "name": "查看",
+      "path": "/employeeRelation/reinstate/View/:id",
+      "module": "./pages/employeeRelation/reinstate/View",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工复职-新增/编辑
+      "name": "调整",
+      "path": "/employeeRelation/reinstate/Edit/:id/:status",
+      "module": "./pages/employeeRelation/reinstate/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 人资-社保福利-保险方案
       "name": "保险方案",
       "path": "/socialSecurity/plan",
