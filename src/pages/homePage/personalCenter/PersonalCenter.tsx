@@ -12,12 +12,14 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 
 interface IPersonal {
-
+    readonly userAccount?: string;
+    readonly phone?: string;
+    readonly description?: string;
 }
 
 const workColums = [
     {
-        "dataIndex": "staffName",
+        "dataIndex": "name",
         "title": "姓名："
     },
     {
@@ -41,11 +43,11 @@ const workColums = [
         "title": "职位："
     },
     {
-        "dataIndex": "stationName",
+        "dataIndex": "email",
         "title": "邮箱："
     },
     {
-        "dataIndex": "stationName",
+        "dataIndex": "description",
         "title": "备注："
     }
 ]
@@ -55,7 +57,7 @@ export default function PersonalCenter(): React.ReactNode {
     const [ form ] = Form.useForm();
     const history = useHistory();
     const { loading, data } = useRequest<IPersonal>(() => new Promise(async (resole, reject) => {
-        const data: IPersonal = await RequestUtil.get<IPersonal>(``)
+        const data: IPersonal = await RequestUtil.get<IPersonal>(`/tower-system/personalCenter`)
         resole(data)
     }), {})
     const detailData: IPersonal = data || {};
@@ -70,17 +72,17 @@ export default function PersonalCenter(): React.ReactNode {
             <DetailTitle title="账户信息" />
             <Descriptions title="" bordered size="small" colon={ false } column={ 3 }>
                 <Descriptions.Item label="账号：">
-                    { detailData }
+                    { detailData.userAccount }
                 </Descriptions.Item>
                 <Descriptions.Item label="密码：">
-                    { detailData }
+                    ******
                     <Button type="link" onClick={ () => setVisible(true) }>修改密码</Button>
                 </Descriptions.Item>
                 <Descriptions.Item label="手机号：">
-                    { detailData }
+                    { detailData.phone }
                 </Descriptions.Item>
                 <Descriptions.Item label="备注：">
-                    { detailData }
+                    { detailData.description }
                 </Descriptions.Item>
             </Descriptions>
             <DetailTitle title="工作信息" />
@@ -90,7 +92,7 @@ export default function PersonalCenter(): React.ReactNode {
             if(form) {
                 form.validateFields().then(res => {
                     const value = form.getFieldsValue(true);
-                    RequestUtil.post(``, { ...value }).then(res => {
+                    RequestUtil.put(`/sinzetech-user/user/updatePassword`, { ...value }).then(res => {
                         setVisible(false);
                         history.go(0);
                     })
