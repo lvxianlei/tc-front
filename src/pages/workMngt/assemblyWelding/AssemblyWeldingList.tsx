@@ -103,6 +103,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState(false);
     const location = useLocation<{ state: {} }>();
     const userId = AuthUtil.getUserId();
+    const [ filterValue, setFilterValue ] = useState<Record<string, any>>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
         resole(data?.records);
@@ -116,6 +117,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
         headTabs={ [] }
         refresh={ refresh }
         requestData={ { status: location.state } }
+        filterValue={filterValue}
         searchFormItems={ [
             {
                 name: 'updateTime',
@@ -130,7 +132,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                         <Select.Option value="" key="6">全部</Select.Option>
                         <Select.Option value={1} key="1">待开始</Select.Option>
                         <Select.Option value={2} key="2">组焊中</Select.Option>
-                        <Select.Option value={4} key="4">已完成</Select.Option>
+                        <Select.Option value={3} key="3">已完成</Select.Option>
                     </Select>
                 </Form.Item>
             },
@@ -179,6 +181,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';;
                 values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';;
             }
+            setFilterValue(values);
             return values;
         } }
     />
