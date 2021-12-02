@@ -150,11 +150,14 @@ export default function SetOutList(): React.ReactNode {
             {
                 name: 'loftingLeader',
                 label: '放样负责人',
-                children: <Select placeholder="请选择" style={{ width: "150px" }}>
-                    { checkUser && checkUser.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                    }) }
-                </Select>
+                children: <Form.Item name="status" initialValue={""}>
+                    <Select placeholder="请选择" style={{ width: "150px" }}>
+                        <Select.Option value="" key="6">全部</Select.Option>
+                        { checkUser && checkUser.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        }) }
+                    </Select>
+                </Form.Item>
             },
             {
                 name: 'fuzzyMsg',
