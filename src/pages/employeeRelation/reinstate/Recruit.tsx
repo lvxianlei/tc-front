@@ -7,7 +7,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 
 
-export default function Quit(): React.ReactNode {
+export default function Recruit(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>();
     const [form] = Form.useForm();
@@ -37,7 +37,7 @@ export default function Quit(): React.ReactNode {
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
             ]}>
-            <DetailTitle title="员工离职管理"/>
+            <DetailTitle title="员工复职信息"/>
             <Form form={ form } { ...formItemLayout }>
                 <Row>
                     <Col span={12}>
@@ -53,57 +53,19 @@ export default function Quit(): React.ReactNode {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='公司' name='companyName'>
-                            <Input/>
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={12}>
-                        <Form.Item label='部门/班组' name='departmentName'>
-                            <Input/>
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item label='岗位' name='postName'>
-                            <Input/>
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={12}>
                         <Form.Item label='入职日期' name='inductionDate'>
                             <Input/>
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
-                        <Form.Item label='员工性质' name='employeeType'>
-                            <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={1} key="1">正式员工</Select.Option>
-                                <Select.Option value={2} key="2">超龄员工</Select.Option>
-                                <Select.Option value={3} key="3">实习员工</Select.Option>
-                            </Select>
-                        </Form.Item>
-                    </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label='离职日期' rules={[{
-                            required:true, 
-                            message:'请选择离职日期'
-                        }]} name='departureDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
-                                console.log(e)
-                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
-                                // form.setFieldsValue()
-                            }}/>
+                        <Form.Item label='离职日期' name='departureDate'>
+                            <Input/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='离职类型' rules={[{
-                            required:true, 
-                            message:'请选择离职类型'
-                        }]} name='departureType'>
+                        <Form.Item label='离职类型' name='departureType'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
                                 <Select.Option value={1} key="1">主动离职</Select.Option>
                                 <Select.Option value={2} key="2">辞退</Select.Option>
@@ -114,17 +76,83 @@ export default function Quit(): React.ReactNode {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={24}>
-                        <Form.Item label='离职原因' rules={[{
+                    <Col span={12}>
+                        <Form.Item label='离职原因' name='departureReason'>
+                            <Input.TextArea maxLength={400} showCount/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='复职日期' rules={[{
                             required:true, 
-                            message:'请填写离职原因'
-                        }]} name='departureReason'>
-                            <Input.TextArea maxLength={200} showCount/>
+                            message:'请选择复职日期'
+                        }]} name='reinstatementDate'>
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
+                                console.log(e)
+                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
+                                // form.setFieldsValue()
+                            }}/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={24}>
+                    <Col span={12}>
+                        <Form.Item label='复职性质' rules={[{
+                            required:true, 
+                            message:'请选择复职性质'
+                        }]} name='reinstatementNature'>
+                            <Select placeholder="请选择" style={{ width: '100%' }} >
+                                <Select.Option value={1} key="1">一次复职</Select.Option>
+                                <Select.Option value={2} key="2">二次复职</Select.Option>
+                                <Select.Option value={3} key="3">三次复职</Select.Option>
+                                <Select.Option value={4} key="4">四次复职</Select.Option>
+                                <Select.Option value={5} key="5">五次复职</Select.Option>
+                                <Select.Option value={6} key="6">六次复职</Select.Option>
+                                <Select.Option value={7} key="7">六次及以上</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='复职后部门/班组' rules={[{
+                            required:true, 
+                            message:'请选择复职后部门/班组'
+                        }]} name='departmentName'>
+                            <Input/>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Form.Item label='复职后公司' name='companyName'>
+                            <Input/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='复职后岗位'rules={[{
+                            required:true, 
+                            message:'请选择复职后岗位'
+                        }]} name='postName'>
+                            <Input/>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Form.Item label='试用期'rules={[{
+                            required:true, 
+                            message:'请选择试用期'
+                        }]} name='probationPeriod'>
+                            <Select placeholder="请选择" style={{ width: '100%' }} >
+                                <Select.Option value={1} key="1">无试用期</Select.Option>
+                                <Select.Option value={2} key="2">一个月</Select.Option>
+                                <Select.Option value={3} key="3">二个月</Select.Option>
+                                <Select.Option value={4} key="4">三个月</Select.Option>
+                                <Select.Option value={5} key="5">四个月</Select.Option>
+                                <Select.Option value={6} key="6">五个月</Select.Option>
+                                <Select.Option value={7} key="7">六个月</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
                         <Form.Item label='备注' name='remark'>
                             <Input.TextArea maxLength={400} showCount/>
                         </Form.Item>

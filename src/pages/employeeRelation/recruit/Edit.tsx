@@ -9,7 +9,7 @@ import { RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
 
 
-export default function Edit(): React.ReactNode {
+export default function RecruitEdit(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, status: string }>();
     const [form] = Form.useForm();
