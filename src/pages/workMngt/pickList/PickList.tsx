@@ -5,6 +5,8 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import { CommonTable, Page } from '../../common';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
 
 export default function PickList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
@@ -13,6 +15,11 @@ export default function PickList(): React.ReactNode {
     const [taskId,setTaskId] = useState('');
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state: {} }>();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const user:any = data||[];
     const columns = [
         {
             key: 'index',
@@ -209,11 +216,18 @@ export default function PickList(): React.ReactNode {
                             </Select>
                         </Form.Item>
                     },
-                    // {
-                    //     name: 'planTime',
-                    //     label:'计划交付时间',
-                    //     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                    // },
+                    {
+                        name: 'materialLeader',
+                        label: '提料负责人',
+                        children: <Form.Item name="materialLeader" initialValue={ '' }>
+                            <Select style={{width:'100px'}}>
+                                <Select.Option key={''} value={''}>全部</Select.Option>
+                                {user && user.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+                    },
                     {
                         name: 'pattern',
                         label: '模式',
