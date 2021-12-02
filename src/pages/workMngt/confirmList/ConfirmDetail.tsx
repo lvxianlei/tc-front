@@ -180,7 +180,7 @@ export default function ConfirmDetail(): React.ReactNode {
       const newData:any = [...tableDataSource];
       const index = newData.findIndex((item:any) => key === item.key);
       if (index > -1 && newData[index].id) {
-        RequestUtil.delete(`/tower-science/drawProductDetail`,{id: newData[index].id})
+        RequestUtil.delete(`/tower-science/drawProductDetail?id=${newData[index].id}`)
         newData.splice(index, 1);
       }else{
         newData.splice(index, 1);
