@@ -55,7 +55,6 @@ export default function ConfirmDetail(): React.ReactNode {
     const [formRef] = Form.useForm();
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
-    const [isExport, setIsExportStoreList] = useState(false)
 
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record: Item) => record.key === editingKey;
@@ -113,7 +112,7 @@ export default function ConfirmDetail(): React.ReactNode {
           const data:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
           number = dataA+dataB+dataC+dataD+data;
         }
-        formRef.setFieldsValue({
+        dataIndex!=="basicHeight" && formRef.setFieldsValue({
             totalWeight:number + value
         })
       }} min={0} precision={2}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
@@ -177,9 +176,12 @@ export default function ConfirmDetail(): React.ReactNode {
       setEditingKey(record.key);
     };
     const onDelete = (key: React.Key)=>{
-      const newData = [...tableDataSource];
+      const newData:any = [...tableDataSource];
       const index = newData.findIndex((item:any) => key === item.key);
-      if (index > -1) {
+      if (index > -1 && newData[index].id) {
+        RequestUtil.delete(`/tower-science/drawProductDetail?id=${newData[index].id}`)
+        newData.splice(index, 1);
+      }else{
         newData.splice(index, 1);
       }
       setTableDataSource(newData);
@@ -541,7 +543,14 @@ export default function ConfirmDetail(): React.ReactNode {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         resole(data);
-        setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index }}));
+        setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index,
+          legConfigurationA:item.legConfigurationA? item.legConfigurationA: 0,
+          legConfigurationB:item.legConfigurationB? item.legConfigurationB: 0,
+          legConfigurationC:item.legConfigurationC? item.legConfigurationC: 0,
+          legConfigurationD:item.legConfigurationD? item.legConfigurationD: 0,
+          otherWeight:item.otherWeight? item.otherWeight: 0,
+          totalWeight: item.totalWeight? item.totalWeight: 0,
+        }}));
         setAttachInfo([...data.fileVOList]);
         setDescription(data?.description);
         let totalNumber = '0';
@@ -701,25 +710,7 @@ export default function ConfirmDetail(): React.ReactNode {
             </>]}>
                 <div style={{display:'flex',justifyContent:'space-between'}}>
                     <Space>
-                    <Button type='primary' onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
-                    {isExport?<ExportList
-                        history={history}
-                        location={location}
-                        match={match}
-                        columnsKey={() => {
-                            let keys = [...mergedColumns]
-                            keys.pop()
-                            return keys
-                        }}
-                        current={0}
-                        size={0}
-                        total={0}
-                        url={'/tower-science/drawProductDetail/export'}
-                        serchObj={{
-                          drawTaskId: params.id
-                        }}
-                        closeExportList={() => { setIsExportStoreList(false) }}
-                    />:null}
+                      <Button type='primary' onClick={()=>{downloadTemplate(`/tower-science/drawProductDetail/export?drawTaskId=${params.id}`, '杆塔信息')}}>导出</Button>
                         <Button type="primary" onClick={ () => downloadTemplate('/tower-science/drawProductDetail/importTemplate', '确认明细模板') } ghost>模板下载</Button>
                         <span>总基数：{tableDataSource.length}基</span>
                         <span>总重量：{weight}kg</span>
@@ -752,7 +743,14 @@ export default function ConfirmDetail(): React.ReactNode {
                                       } else {
                                           message.success('导入成功！');
                                           const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
-                                          setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index }}));
+                                          setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index,
+                                            legConfigurationA:item.legConfigurationA? item.legConfigurationA: 0,
+                                            legConfigurationB:item.legConfigurationB? item.legConfigurationB: 0,
+                                            legConfigurationC:item.legConfigurationC? item.legConfigurationC: 0,
+                                            legConfigurationD:item.legConfigurationD? item.legConfigurationD: 0,
+                                            otherWeight:item.otherWeight? item.otherWeight: 0,
+                                            totalWeight: item.totalWeight? item.totalWeight: 0,
+                                          }}));
                                           setAttachInfo([...data.fileVOList]);
                                           setDescription(data?.description);
                                           let totalNumber = '0';
@@ -844,7 +842,7 @@ export default function ConfirmDetail(): React.ReactNode {
                       )
                   }
                 ]} dataSource={attachInfo}  pagination={ false }/> */}
-                <Attachment dataSource={attachInfo} edit title="附件信息" ref={attchsRef}/>
+                <Attachment dataSource={attachInfo} edit={params.status==='3'?true:false} title="附件信息" ref={attchsRef}/>
             </DetailContent>
             <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
                 <Image src={pictureUrl} preview={false}/>

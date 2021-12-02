@@ -474,6 +474,7 @@ export default function Lofting(): React.ReactNode {
         <Form form={ form } className={ styles.descripForm }>  
             <Page
                 path="/tower-science/productStructure/list"
+                exportPath={`/tower-science/productStructure/list`}
                 columns={ tableColumns }
                 headTabs={ [] }
                 refresh={ refresh }
@@ -486,7 +487,6 @@ export default function Lofting(): React.ReactNode {
                 }}
                 requestData={{ productSegmentGroupId: params.productSegmentId, ...filterValue }}
                 extraOperation={ <Space direction="horizontal" size="small">
-                    <Button type="primary" ghost>导出</Button>
                     <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板') } ghost>模板下载</Button>
                     <Popconfirm
                         title="确认完成放样?"

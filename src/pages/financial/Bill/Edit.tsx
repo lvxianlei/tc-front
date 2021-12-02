@@ -53,7 +53,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     receiptId: item.receiptId,
                     receiptNumber: item.receiptNumber,
                 })),
-                invoiceAttachInfoDtos: attchsRef.current?.getDataSource()
+                fileIds: attchsRef.current?.getDataSource().map(item => item.id)
             })
             resolve(true)
         } catch (error) {
@@ -64,7 +64,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         baseForm.resetFields()
         attchsRef.current.resetFields()
     }
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit,resetFields])
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
     return <Spin spinning={loading}>
         <DetailTitle title="票据信息" />
         <BaseInfo form={baseForm} columns={bilinformation.map((item: any) => {

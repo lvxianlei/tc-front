@@ -1,0 +1,143 @@
+{
+    "transferList": [
+        {
+            "title": "员工姓名",
+            "width": 100,
+            "dataIndex": "employeeName"
+        },
+        {
+            "title": "原公司",
+            "width": 100,
+            "dataIndex": "oldCompanyName"
+        },
+        {
+            "title": "原部门/班组",
+            "width": 100,
+            "dataIndex": "oldDepartmentName"
+        },
+        {
+            "title": "原岗位",
+            "width": 100,
+            "dataIndex": "oldPostName"
+        },
+        {
+            "title": "调入公司",
+            "width": 100,
+            "dataIndex": "newCompanyName"
+        },
+        {
+            "title": "调入部门/班组",
+            "width": 100,
+            "dataIndex": "newDepartmentName"
+        },
+        {
+            "title": "现岗位",
+            "width": 100,
+            "dataIndex": "newPostName"
+        },
+        {
+            "title": "调动日期",
+            "width": 100,
+            "type": "date",
+            "dataIndex": "transferDate"
+        },
+        {
+            "title": "调派类型",
+            "width": 100,
+            "dataIndex": "transferType"
+        },
+        {
+            "title": "审批状态",
+            "width": 100,
+            "dataIndex": "statusName",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待提交",
+                    "value": 1
+                },
+                {
+                    "label": "审批中",
+                    "value": 2
+                },
+                {
+                    "label": "审批通过",
+                    "value": 3
+                },
+                {
+                    "label": "审批不通过",
+                    "value": 4
+                }
+            ]
+        }
+    ],
+    "setting": [
+        {
+            "title": "员工姓名",
+            "dataIndex": "employeeName"
+        },
+        {
+            "title": "原公司",
+            "dataIndex": "oldCompanyName",
+            "disabled": true
+        },
+        {
+            "title": "原部门/班组",
+            "dataIndex": "oldDepartmentName",
+            "disabled": true
+        },
+        {
+            "title": "原岗位",
+            "dataIndex": "oldPostName",
+            "disabled": true
+        },
+        {
+            "title": "调入部门/班组",
+            "dataIndex": "newDepartmentName"
+        },
+        {
+            "title": "调入公司",
+            "dataIndex": "newCompanyName",
+            "disabled": true
+        },
+        {
+            "title": "现岗位",
+            "dataIndex": "newPostName"
+        },
+        {
+            "title": "调派类型",
+            "dataIndex": "transferType"
+        },
+        {
+            "title": "调动日期",
+            "type": "date",
+            "dataIndex": "transferDate",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "statusName",
+            "type": "textArea"
+        }
+    ],
+    "auditRecords": [
+        {
+            "title": "审批人",
+            "dataIndex": "oldPostName",
+            "disabled": true
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": "newDepartmentName"
+        },
+        {
+            "title": "审批结果",
+            "dataIndex": "newCompanyName",
+            "disabled": true
+        },
+        {
+            "title": "审批意见",
+            "dataIndex": "newPostName"
+        }
+    ]
+}

@@ -38,25 +38,31 @@ const columns = [
         width: 200,
         dataIndex: 'loftingDeliverTime'
     },
+    // {
+    //     key: 'loftingStatus',
+    //     title: '杆塔放样状态',
+    //     width: 200,
+    //     dataIndex: 'loftingStatus',
+    //     render: (status: number): React.ReactNode => {
+    //         switch (status) {
+    //             case 1:
+    //                 return '配段中';
+    //             case 2:
+    //                 return '出单中';
+    //             case 3:
+    //                 return '已完成';
+    //             case 4:
+    //                 return '已提交';
+    //             default:
+    //                 return '-';
+    //         }
+    //     }
+    // },
     {
-        key: 'loftingStatus',
+        key: 'loftingStatusName',
         title: '杆塔放样状态',
         width: 200,
-        dataIndex: 'loftingStatus',
-        render: (status: number): React.ReactNode => {
-            switch (status) {
-                case 1:
-                    return '配段中';
-                case 2:
-                    return '出单中';
-                case 3:
-                    return '已完成';
-                case 4:
-                    return '已提交';
-                default:
-                    return '-';
-            }
-        }
+        dataIndex: 'loftingStatusName'
     },
     {
         key: 'materialLeaderName',
@@ -70,27 +76,33 @@ const columns = [
         width: 200,
         dataIndex: 'materialDeliverTime'
     },
+    // {
+    //     key: 'materialStatus',
+    //     title: '杆塔提料状态',
+    //     width: 200,
+    //     dataIndex: 'materialStatus',
+    //     render: (status: number): React.ReactNode => {
+    //         switch (status) {
+    //             case 0:
+    //                 return '已拒绝';
+    //             case 1:
+    //                 return '待开始';
+    //             case 2:
+    //                 return '提料中';
+    //             case 3:
+    //                 return '已完成';
+    //             case 4:
+    //                 return '已提交';
+    //             default:
+    //                 return '-';
+    //         }
+    //     }
+    // }
     {
-        key: 'materialStatus',
+        key: 'materialStatusName',
         title: '杆塔提料状态',
         width: 200,
-        dataIndex: 'materialStatus',
-        render: (status: number): React.ReactNode => {
-            switch (status) {
-                case 0:
-                    return '已拒绝';
-                case 1:
-                    return '待开始';
-                case 2:
-                    return '提料中';
-                case 3:
-                    return '已完成';
-                case 4:
-                    return '已提交';
-                default:
-                    return '-';
-            }
-        }
+        dataIndex: 'materialStatusName'
     }
 ]
 
@@ -102,9 +114,9 @@ export default function SetOutTaskPole(): React.ReactNode {
         requestData={{ loftingTaskId: params.id  }}
         columns={ columns }
         headTabs={ [] }
+        exportPath={`/tower-science/product/page`}
         extraOperation={ 
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                {/* <Button type="primary">导出</Button> */}
                 <Button type="ghost" onClick={() => history.goBack()}>返回上一级</Button>
             </Space> 
         }

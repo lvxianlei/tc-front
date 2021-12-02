@@ -14,7 +14,7 @@ export default function ConfirmList(): React.ReactNode {
     const [confirmLeader, setConfirmLeader] = useState<any | undefined>([]);
     const [department, setDepartment] = useState<any | undefined>([]);
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: number }>();
+    const location = useLocation<{ state?: number }>();
     const history = useHistory();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
@@ -54,40 +54,46 @@ export default function ConfirmList(): React.ReactNode {
             dataIndex: 'confirmName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '状态',
-            width: 100,
-            dataIndex: 'status',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 0,
-                        label: "已拒绝"
-                    },
-                    {
-                        value: 1,
-                        label: "待确认"
-                    },
-                    {
-                        value: 2,
-                        label: "待指派"
-                    },
-                    {
-                        value: 3,
-                        label: "待完成"
-                    },
-                    {
-                        value: 4,
-                        label: "已完成"
-                    },
-                    {
-                        value: 5,
-                        label: "已提交"
-                    }
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            width: 200,
+            dataIndex: 'statusName'
         },
+        // {
+        //     key: 'status',
+        //     title: '状态',
+        //     width: 100,
+        //     dataIndex: 'status',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 0,
+        //                 label: "已拒绝"
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "待确认"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "待指派"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "待完成"
+        //             },
+        //             {
+        //                 value: 4,
+        //                 label: "已完成"
+        //             },
+        //             {
+        //                 value: 5,
+        //                 label: "已提交"
+        //             }
+        //         ]
+        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'updateStatusTime',
             title: '状态时间',
@@ -155,14 +161,15 @@ export default function ConfirmList(): React.ReactNode {
             path="/tower-science/drawProductDetail"
             columns={columns}
             filterValue={filterValue}
+            exportPath="/tower-science/drawProductDetail"
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
-            requestData={{ status: location.state }}
+            requestData={{ status: location.state?.state }}
             searchFormItems={[
                 {
                     name: 'status',
                     label: '任务状态',
-                    children: <Form.Item name="status" initialValue={location.state}>
+                    children: <Form.Item name="status" initialValue={location.state?.state}>
                         <Select style={{ width: "100px" }}>
                             {/* <Select.Option value={1} key={1}>待确认</Select.Option>
                             <Select.Option value={2} key={2}>待指派</Select.Option> */}

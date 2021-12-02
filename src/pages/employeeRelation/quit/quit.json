@@ -1,0 +1,51 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "employeeName",
+            "title": "员工名称"
+        },
+        {
+            "dataIndex": "companyName",
+            "title": "公司"
+        },
+        {
+            "dataIndex": "departmentName",
+            "title": "部门"
+        },
+        {
+            "dataIndex": "postName",
+            "title": "岗位"
+        },
+        {
+            "dataIndex": "departmentName",
+            "title": "班组"
+        },
+        {
+            "dataIndex": "inductionDate",
+            "title": "入职日期"
+        },
+        {
+            "dataIndex": "employeeType",
+            "title": "员工性质"
+        }
+        ,
+        {
+            "dataIndex": "departureDate",
+            "title": "离职日期"
+        }
+        ,
+        {
+            "dataIndex": "departureType",
+            "title": "离职类型"
+        }
+        ,
+        {
+            "dataIndex": "departureReason",
+            "title": "离职原因"
+        },
+        {
+            "dataIndex": "remark",
+            "title": "备注"
+        }
+    ]
+}

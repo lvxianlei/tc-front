@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form, TreeSelect, Modal, Table } from 'antd';
-import { CommonTable, Page } from '../../common';
+import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
@@ -89,22 +89,10 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'productCategoryName'
         },
         {
-            key: 'priority',
+            key: 'priorityName',
             title: '优先级',
-            dataIndex: 'priority',
-            width: 120,
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
-                    case 0:
-                        return '紧急';
-                    case 1:
-                        return '高';
-                    case 2:
-                        return '中';
-                    case 3:
-                        return '低';
-                }
-            }
+            dataIndex: 'priorityName',
+            width: 120
         },
         {
             key: 'name',
@@ -138,20 +126,20 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'checkUserName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '放样状态',
             width: 200,
-            dataIndex: 'status',
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
-                    case 1:
-                        return '放样中';
-                    case 2:
-                        return '校核中';
-                    case 3:
-                        return '已完成';
-                }
-            }
+            dataIndex: 'statusName',
+            // render: (pattern: number): React.ReactNode => {
+            //     switch (pattern) {
+            //         case 1:
+            //             return '放样中';
+            //         case 2:
+            //             return '校核中';
+            //         case 3:
+            //             return '已完成';
+            //     }
+            // }
         },
         {
             key: 'updateStatusTime',
@@ -182,8 +170,7 @@ export default function TowerInformation(): React.ReactNode {
                         : null
                     }
                     {
-                        record.status === 3 ? 
-                        <Button type="link" disabled>明细</Button> : <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>明细</Link>
+                        record.status === 3 ? <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>明细</Link> : <Button type="link" disabled>明细</Button>
                     }
                     {
                         record.status === 1 ? 
@@ -258,9 +245,9 @@ export default function TowerInformation(): React.ReactNode {
             columns={ columns }
             headTabs={ [] }
             refresh={ refresh }
+            exportPath={`/tower-science/productSegment`}
             requestData={{ productCategoryId: params.id }}
             extraOperation={ <Space direction="horizontal" size="small">
-                <Button type="primary" ghost>导出</Button>
                 <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/modalList`, state: { status: location.state.status } }}><Button type="primary" ghost>模型</Button></Link>
                 <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/processCardList`, state: { status: location.state.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                 <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram`, state: { status: location.state.status } }}><Button type="primary" ghost>NC程序</Button></Link>

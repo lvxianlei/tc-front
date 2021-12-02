@@ -52,22 +52,10 @@ export default function PoleInformation(): React.ReactNode {
             dataIndex: 'loftingUserName',
         },
         {
-            key: 'loftingStatus',
+            key: 'loftingStatusName',
             title: '杆塔放样状态',
-            dataIndex: 'loftingStatus',
-            width: 200,
-            render: (loftingStatus: number): React.ReactNode => {
-                switch (loftingStatus) {
-                    case 1:
-                        return '待开始';
-                    case 2:
-                        return '待配段';
-                    case 3:
-                        return '待出单';
-                    case 4:
-                        return '已完成';
-                }
-            }
+            dataIndex: 'loftingStatusName',
+            width: 200
         },
         {
             key: 'loftingDeliverTime',
@@ -151,12 +139,12 @@ export default function PoleInformation(): React.ReactNode {
     
     return <Page
         path="/tower-science/product/lofting"
+        exportPath={`/tower-science/product/lofting`}
         columns={ columns }
         headTabs={ [] }
         requestData={{ productCategoryId: params.id }}
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
-            <Button type="primary" ghost>导出</Button>
             <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
         </Space>}
         searchFormItems={ [

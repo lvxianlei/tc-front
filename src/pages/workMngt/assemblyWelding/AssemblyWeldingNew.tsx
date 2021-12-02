@@ -519,8 +519,11 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                                 <Form.Item name="componentId" label="组件号" rules={[{
                                     "required": true,
                                     "message": "请输入组件号"
+                                }, {
+                                    pattern: /^[0-9a-zA-Z]*$/,
+                                    message: '仅可输入数字/字母',
                                 }]} initialValue={ this.state.baseData?.componentId }>
-                                    <Input placeholder="请输入" />
+                                    <Input placeholder="请输入" maxLength={ 10 }/>
                                 </Form.Item>
                             </Col>
                             <Col span={ 12 } offset={ 2 }>

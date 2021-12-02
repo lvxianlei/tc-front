@@ -19,7 +19,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     const [drawTaskId, setDrawTaskId] = useState<string>('');
     const [form] = Form.useForm();
     const history = useHistory();
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ state?: {} }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         setDepartment(departmentData);
@@ -58,40 +58,46 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '任务状态',
             width: 100,
-            dataIndex: 'status',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 0,
-                        label: "已拒绝"
-                    },
-                    {
-                        value: 1,
-                        label: "待确认"
-                    },
-                    {
-                        value: 2,
-                        label: "待指派"
-                    },
-                    {
-                        value: 3,
-                        label: "待完成"
-                    },
-                    {
-                        value: 4,
-                        label: "已完成"
-                    },
-                    {
-                        value: 5,
-                        label: "已提交"
-                    }
-                  ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'statusName'
         },
+        // {
+        //     key: 'status',
+        //     title: '任务状态',
+        //     width: 100,
+        //     dataIndex: 'status',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 0,
+        //                 label: "已拒绝"
+        //             },
+        //             {
+        //                 value: 1,
+        //                 label: "待确认"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "待指派"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "待完成"
+        //             },
+        //             {
+        //                 value: 4,
+        //                 label: "已完成"
+        //             },
+        //             {
+        //                 value: 5,
+        //                 label: "已提交"
+        //             }
+        //           ]
+        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'updateStatusTime',
             title: '最新状态变更时间',
@@ -237,10 +243,11 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             path="/tower-science/drawTask"
             columns={columns}
             refresh={ refresh }
+            exportPath="/tower-science/drawTask"
             // extraOperation={<Button type="primary">导出</Button>}
             filterValue={ filterValue }
             onFilterSubmit={onFilterSubmit}
-            requestData={ { status: location.state } }
+            requestData={ { status: location.state?.state } }
             searchFormItems={[
                 {
                     name: 'statusUpdateTime',
@@ -250,7 +257,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 {
                     name: 'status',
                     label: '任务状态',
-                    children: <Form.Item name="status" initialValue={ location.state }>
+                    children: <Form.Item name="status" initialValue={ location.state?.state }>
                         <Select style={{width:"100px"}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待确认</Select.Option>

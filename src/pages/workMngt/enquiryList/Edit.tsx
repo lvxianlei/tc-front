@@ -53,12 +53,12 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
             if (type === "save") {
                 await saveRun({
                     inquirerDescription: inquirerDescription,
-                    inquirerAttachList: attchRef.current?.getDataSource()
+                    fileIds: attchRef.current?.getDataSource().map(item => item.id)
                 })
             } else {
                 await saveAndSubmitRun({
                     inquirerDescription: inquirerDescription,
-                    inquirerAttachList: attchRef.current?.getDataSource()
+                    fileIds: attchRef.current?.getDataSource().map(item => item.id)
                 })
             }
             resolve(true)
@@ -85,6 +85,5 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
             disabled={data?.inquiryStatus !== 4}
             onChange={(event: any) => setInquirerDescription(event.target.value)} />
         <Attachment title="上传附件" dataSource={data?.inquirerAttachList || []} edit={data?.inquiryStatus === 4} ref={attchRef} />
-
     </Spin>
 })

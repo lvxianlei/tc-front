@@ -44,29 +44,35 @@ const columns = [
         width: 200,
         dataIndex: 'loftingDeliverTime'
     },
+    // {
+    //     key: 'loftingStatus',
+    //     title: '塔型放样状态',
+    //     width: 200,
+    //     dataIndex: 'loftingStatus',
+    //     render: (status: number): React.ReactNode => {
+    //         switch (status) {
+    //             case 1:
+    //                 return '待指派';
+    //             case 2:
+    //                 return '放样中';
+    //             case 3:
+    //                 return '组焊中';
+    //             case 4:
+    //                 return '配段中';
+    //             case 5:
+    //                 return '已完成';
+    //             case 6:
+    //                 return '已提交';
+    //             default:
+    //                 return '-';
+    //         }
+    //     }
+    // },
     {
-        key: 'loftingStatus',
+        key: 'loftingStatusName',
         title: '塔型放样状态',
         width: 200,
-        dataIndex: 'loftingStatus',
-        render: (status: number): React.ReactNode => {
-            switch (status) {
-                case 1:
-                    return '待指派';
-                case 2:
-                    return '放样中';
-                case 3:
-                    return '组焊中';
-                case 4:
-                    return '配段中';
-                case 5:
-                    return '已完成';
-                case 6:
-                    return '已提交';
-                default:
-                    return '-';
-            }
-        }
+        dataIndex: 'loftingStatusName'
     },
     {
         key: 'materialLeaderName',
@@ -80,27 +86,33 @@ const columns = [
         width: 200,
         dataIndex: 'materialDeliverTime'
     },
+    // {
+    //     key: 'materialStatus',
+    //     title: '塔型提料状态',
+    //     width: 200,
+    //     dataIndex: 'materialStatus',
+    //     render: (status: number): React.ReactNode => {
+    //         switch (status) {
+    //             case 1:
+    //                 return '待指派';
+    //             case 2:
+    //                 return '提料中';
+    //             case 3:
+    //                 return '配段中';
+    //             case 4:
+    //                 return '已完成';
+    //             case 5:
+    //                 return '已提交';
+    //             default:
+    //                 return '-';
+    //         }
+    //     }
+    // },
     {
-        key: 'materialStatus',
+        key: 'materialStatusName',
         title: '塔型提料状态',
         width: 200,
-        dataIndex: 'materialStatus',
-        render: (status: number): React.ReactNode => {
-            switch (status) {
-                case 1:
-                    return '待指派';
-                case 2:
-                    return '提料中';
-                case 3:
-                    return '配段中';
-                case 4:
-                    return '已完成';
-                case 5:
-                    return '已提交';
-                default:
-                    return '-';
-            }
-        }
+        dataIndex: 'materialStatusName'
     },
     {
         key: 'boltLeaderName',
@@ -114,27 +126,33 @@ const columns = [
         width: 200,
         dataIndex: 'boltDeliverTime'
     },
+    // {
+    //     key: 'boltStatus',
+    //     title: '螺栓清单状态',
+    //     width: 200,
+    //     dataIndex: 'boltStatus',
+    //     render: (status: number): React.ReactNode => {
+    //         switch (status) {
+    //             case 1:
+    //                 return '待开始';
+    //             case 2:
+    //                 return '进行中';
+    //             case 3:
+    //                 return '校核中';
+    //             case 4:
+    //                 return '已完成';
+    //             case 5:
+    //                 return '已提交';
+    //             default:
+    //                 return '-';
+    //         }
+    //     }
+    // },
     {
-        key: 'boltStatus',
+        key: 'boltStatusName',
         title: '螺栓清单状态',
         width: 200,
-        dataIndex: 'boltStatus',
-        render: (status: number): React.ReactNode => {
-            switch (status) {
-                case 1:
-                    return '待开始';
-                case 2:
-                    return '进行中';
-                case 3:
-                    return '校核中';
-                case 4:
-                    return '已完成';
-                case 5:
-                    return '已提交';
-                default:
-                    return '-';
-            }
-        }
+        dataIndex: 'boltStatusName'
     },
     {
         key: 'smallSampleLeaderName',
@@ -148,27 +166,33 @@ const columns = [
         width: 200,
         dataIndex: 'smallSampleDeliverTime'
     },
+    // {
+    //     key: 'smallSampleStatus',
+    //     title: '小样图清单状态',
+    //     width: 200,
+    //     dataIndex: 'smallSampleStatus',
+    //     render: (status: number): React.ReactNode => {
+    //         switch (status) {
+    //             case 1:
+    //                 return '待开始';
+    //             case 2:
+    //                 return '进行中';
+    //             case 3:
+    //                 return '校核中';
+    //             case 4:
+    //                 return '已完成';
+    //             case 5:
+    //                 return '已提交';
+    //             default:
+    //                 return '-';
+    //         }
+    //     }
+    // },
     {
-        key: 'smallSampleStatus',
+        key: 'smallSampleStatusName',
         title: '小样图清单状态',
         width: 200,
-        dataIndex: 'smallSampleStatus',
-        render: (status: number): React.ReactNode => {
-            switch (status) {
-                case 1:
-                    return '待开始';
-                case 2:
-                    return '进行中';
-                case 3:
-                    return '校核中';
-                case 4:
-                    return '已完成';
-                case 5:
-                    return '已提交';
-                default:
-                    return '-';
-            }
-        }
+        dataIndex: 'smallSampleStatusName'
     },
     {
         key: 'weldingLeaderName',
@@ -182,27 +206,33 @@ const columns = [
         width: 200,
         dataIndex: 'weldingDeliverTime'
     },
+    // {
+    //     key: 'weldingStatus',
+    //     title: '组焊清单状态',
+    //     width: 200,
+    //     dataIndex: 'weldingStatus',
+    //     render: (status: number): React.ReactNode => {
+    //         switch (status) {
+    //             case 1:
+    //                 return '待开始';
+    //             case 2:
+    //                 return '进行中';
+    //             case 3:
+    //                 return '校核中';
+    //             case 4:
+    //                 return '已完成';
+    //             case 5:
+    //                 return '已提交';
+    //             default:
+    //                 return '-';
+    //         }
+    //     }
+    // }
     {
-        key: 'weldingStatus',
+        key: 'weldingStatusName',
         title: '组焊清单状态',
         width: 200,
-        dataIndex: 'weldingStatus',
-        render: (status: number): React.ReactNode => {
-            switch (status) {
-                case 1:
-                    return '待开始';
-                case 2:
-                    return '进行中';
-                case 3:
-                    return '校核中';
-                case 4:
-                    return '已完成';
-                case 5:
-                    return '已提交';
-                default:
-                    return '-';
-            }
-        }
+        dataIndex: 'weldingStatusName'
     }
 ]
 
@@ -212,11 +242,11 @@ export default function SetOutTaskTower(): React.ReactNode {
     return <Page
         path="/tower-science/productCategory/list"
         requestData={{ loftingTaskId: params.id  }}
+        exportPath={`/tower-science/productCategory/list`}
         columns={ columns }
         headTabs={ [] }
         extraOperation={ 
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                {/* <Button type="primary">导出</Button> */}
                 <Button type="ghost" onClick={() => history.goBack()}>返回上一级</Button>
             </Space> 
         }

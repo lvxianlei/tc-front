@@ -67,7 +67,7 @@ export default function TemplateDetail() {
                         >查看</span>
                         <Popconfirm
                             placement="bottomRight"
-                            title={text}
+                            title='确认删除？'
                             onConfirm={() => {
                                 deleteItem(item.id)
                             }}
@@ -124,7 +124,7 @@ export default function TemplateDetail() {
     const deleteItem = async (templateRecordId: string) => {
         await RequestUtil.delete(`/tower-science/loftingTemplate/delete?templateRecordId=${templateRecordId}`)
         message.success('操作成功')
-        setRefresh(!refresh)
+        history.go(0)
     }
     return (
         <>

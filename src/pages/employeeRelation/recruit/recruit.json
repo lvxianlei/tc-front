@@ -1,0 +1,80 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "applicantName",
+            "title": "应聘人姓名"
+        },
+        {
+            "dataIndex": "gender",
+            "title": "性别"
+        },
+        {
+            "dataIndex": "national",
+            "title": "民族"
+        },
+        {
+            "dataIndex": "departmentName",
+            "title": "入职部门/班组"
+        },
+        {
+            "dataIndex": "companyName",
+            "title": "入职公司"
+        },
+        {
+            "dataIndex": "postName",
+            "title": "入职岗位"
+        },
+        {
+            "dataIndex": "nativePlace",
+            "title": "籍贯"
+        },
+        {
+            "dataIndex": "idNumber",
+            "title": "身份证号"
+        },
+        {
+            "dataIndex": "postType",
+            "title": "员工分组"
+        },
+        {
+            "dataIndex": "age",
+            "title": "年龄"
+        },
+        {
+            "dataIndex": "phoneNumber",
+            "title": "联系电话"
+        },
+        {
+            "dataIndex": "workTime",
+            "title": "预计到岗时间"
+        },
+        {
+            "dataIndex": "education",
+            "title": "学历"
+        },
+        {
+            "dataIndex": "graduateSchool",
+            "title": "毕业院校"
+        },
+        {
+            "dataIndex": "professional",
+            "title": "专业"
+        },
+        {
+            "dataIndex": "probationPeriod",
+            "title": "试用期"
+        },
+        {
+            "dataIndex": "bankCardNumber",
+            "title": "银行卡号"
+        },
+        {
+            "dataIndex": "bankName",
+            "title": "开户行"
+        },
+        {
+            "dataIndex": "remark",
+            "title": "备注"
+        }
+    ]
+}

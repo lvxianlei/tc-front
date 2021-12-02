@@ -46,7 +46,7 @@ interface IAppointed {
     readonly loftingUserName?: string;
     readonly checkUserDepartmentName?: string;
     readonly checkUserName?: string;
-    readonly plannedDeliveryTime?: string;
+    readonly plannedDeliveryTime?: string | moment.Moment;
     readonly patternName?: string;
 }
 
@@ -86,9 +86,15 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             visible: true,
             appointed: data
         })
-        this.props.detailData?.loftingUserDepartment && this.onDepartmentChange(this.props.detailData?.loftingUserDepartment || '', '放样');
-        this.props.detailData?.checkUserDepartment && this.onDepartmentChange(this.props.detailData?.checkUserDepartment || '', '校对');
-        this.getForm()?.setFieldsValue({ ...data });
+        let detailData = this.props.detailData;
+        detailData = {
+            ...detailData,
+            plannedDeliveryTime: moment(detailData?.plannedDeliveryTime)
+        }
+        detailData?.loftingUserDepartment && this.onDepartmentChange(detailData?.loftingUserDepartment || '', '放样');
+        detailData?.checkUserDepartment && this.onDepartmentChange(detailData?.checkUserDepartment || '', '校对');
+        console.log(detailData)
+        this.getForm()?.setFieldsValue({ ...detailData, ...data });
     }
     
     /**

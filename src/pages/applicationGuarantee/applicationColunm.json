@@ -108,7 +108,7 @@
             ]
         },
         {
-            "dataIndex": "description",
+            "dataIndex": "guaranteeDescription",
             "title": "保函信息备注",
             "placeholder": "请输入保函信息备注",
             "type": "textarea"
@@ -188,7 +188,7 @@
             "placeholder": "请输入原因"
         },
         {
-            "dataIndex": "description",
+            "dataIndex": "recoveryDescription",
             "title": "备注",
             "placeholder": "请输入备注",
             "type": "textarea"
@@ -245,7 +245,12 @@
         },
         {
             "dataIndex": "applicantStatus",
-            "title": "办理状态"
+            "title": "办理状态",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "是" },
+                { "value": 0, "label": "否" }
+            ]
         },
         {
             "dataIndex": "description",
