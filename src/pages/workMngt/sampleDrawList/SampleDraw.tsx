@@ -86,7 +86,9 @@ export default function SampleDraw(): React.ReactNode {
                         cancelText="取消"
                         onConfirm={async () =>  await RequestUtil.delete(`/tower-science/smallSample/sampleDelete/${record.id}`).then(()=>{
                             message.success('删除成功！');
-                        }).then(()=>{
+                        }).then(async ()=>{
+                            const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
+                            setHeaderName(data);
                             setRefresh(!refresh)
                         })}
                     >
