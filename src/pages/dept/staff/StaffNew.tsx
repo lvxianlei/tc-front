@@ -101,12 +101,12 @@ export default function StaffNew(): React.ReactNode {
         },
         {
             key: 'autoAccount',
-            title: '自动生成账号',
+            title: '是否自动生成账号',
             dataIndex: 'autoAccount',
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "autoAccount"] } key={ index } initialValue={ _ }>
-                    <Checkbox key={ record.id } checked={ _ === 2 } disabled={ location.state.type === 'edit' && oldDataList[index].autoAccount === 2 } onChange={ (e) => {
+                    <Checkbox key={ record.id } checked={ _ === 1 } disabled={ location.state.type === 'edit' && oldDataList[index].autoAccount === 1 } onChange={ (e) => {
                         let data = form.getFieldsValue(true).list;
                         data = data.map((item: IStaff, ind: number) => {
                             return {
@@ -117,11 +117,22 @@ export default function StaffNew(): React.ReactNode {
                         data[index] = {
                             ...data[index],
                             id: dataList[index].id,
-                            autoAccount: e.target.checked ? 2 : 1
+                            autoAccount: e.target.checked ? 1 : 2
                         }
                         setDataList([...data]);
                         form.setFieldsValue({ list: [...data] })
                     } }></Checkbox>
+                </Form.Item>
+            )  
+        },
+        {
+            key: 'account',
+            title: '关联已有账号',
+            dataIndex: 'account',
+            width: 150,
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={ ["list", index, "account"] } key={ index } initialValue={ _ }>
+                    { form.getFieldsValue(true)?.list[index].autoAccount === 1 ? <Input maxLength={ 20 } disabled/> : <Input maxLength={ 20 }/>}
                 </Form.Item>
             )  
         },
@@ -248,7 +259,8 @@ export default function StaffNew(): React.ReactNode {
     const addRow = () => {
         const dataListValues = form.getFieldsValue(true).list || [];
         const newRow = {
-            autoAccount: 2,
+            autoAccount: 1,
+            account: '',
             category: undefined,
             dept: undefined,
             description: '',
@@ -332,7 +344,14 @@ export default function StaffNew(): React.ReactNode {
 
     return ( <DetailContent operation={ [
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                <Button type="primary" onClick={ save }>保存</Button>
+                <Popconfirm
+                    title="员工关联用户账号后，将不可解绑，是否确认继续操作？?"
+                    onConfirm={ save }
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Button type="primary">保存</Button>
+                </Popconfirm>
                 <Button type="ghost" onClick={() => history.goBack()}>取消</Button>
             </Space>
         ] }>

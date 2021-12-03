@@ -49,6 +49,7 @@ interface IAppointed {
     readonly materialCheckLeader?: string;
     readonly materialCheckLeaderName?: string;
     readonly plannedDeliveryTime?: string;
+    readonly patternName?: string;
 }
 
 class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerPickAssignState> {
@@ -96,7 +97,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             pattern: renderEnum
         })
         
-        this.getForm()?.setFieldsValue({ ...data, plannedDeliveryTime: this.props.type==='message'?moment(data.plannedDeliveryTime):''});
+        this.getForm()?.setFieldsValue({ ...data});
         if(this.props.type==='message'&& data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
             this.onDepartmentChange(data.materialCheckLeaderDepartment, "校核人");
             this.onDepartmentChange(data.materialLeaderDepartment,"提料人");
@@ -223,7 +224,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式">
-                                {this.props.type==='message'|| this.props.type==='detail'?this.state.appointed?.pattern: this.state.pattern&&this.state.pattern.length>0&&this.state.appointed?.pattern&&this.state.pattern.find((item: any) => item.value === this.state.appointed?.pattern).label }
+                                { this.state.appointed?.patternName }
                             </Descriptions.Item>
                             { this.props.type === 'detail' ?
                                 <><Descriptions.Item label="段信息">
@@ -300,7 +301,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     rules={[{
                                         required: true,
                                         message: '请选择交付时间'
-                                    }]}>
+                                    }]} initialValue={ moment(this.props.detailData?.plannedDeliveryTime) }>
                                     <DatePicker />
                                 </Form.Item>
                             </Descriptions.Item></>

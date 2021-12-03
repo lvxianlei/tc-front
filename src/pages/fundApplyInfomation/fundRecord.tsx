@@ -40,8 +40,8 @@
         
          if (value.endPayApplyTime) {
              const formatDate = value.endPayApplyTime.map((item: any) => item.format("YYYY-MM-DD"))
-             value.endPayApplyTime = `${formatDate[1]} 23:59:59`
-             value.startPayApplyTime = `${formatDate[0]} 00:00:00`
+             value.endPayTime = `${formatDate[1]} 23:59:59`
+             value.startPayTime = `${formatDate[0]} 00:00:00`
          }
          return value
      }

@@ -40,13 +40,13 @@
             const baseData = await addCollectionForm.validateFields();
             console.log(baseData, 'baseData');
             console.log(attachVosData, "附件");
-            const file = [];
+            const fileIds = [];
             if (attachVosData.length > 0) {
                 for (let i = 0; i < attachVosData.length; i += 1) {
-                    file.push(attachVosData[i].filePath);
+                    fileIds.push(attachVosData[i].id);
                 }
             }
-            await run({path: "/tower-finance/guarantee", data: {...baseData, file, id}})
+            await run({path: "/tower-finance/guarantee", data: {...baseData, fileIds, id}})
             resolve(true)
         } catch (error) {
             reject(false)

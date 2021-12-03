@@ -1793,17 +1793,17 @@
       "exact": true,
       "authority": "home_page_person_center"
     },
-    { // 首页-我的公告/我的消息
+    { // 首页-我的公告
       "name": "我的公告",
-      "path": "/homePage/noticeAndMessage",
-      "module": "./pages/homePage/noticeAndMessage/NoticeAndMessage",
+      "path": "/homePage/notice",
+      "module": "./pages/homePage/notice/Notice",
       "exact": true,
       "authority": "home_page_person_center"
     },
-    { // 首页-我的公告/我的消息-详情
+    { // 首页-我的公告-详情
       "name": "详情",
-      "path": "/homePage/noticeAndMessage/detail",
-      "module": "./pages/homePage/noticeAndMessage/NoticeAndMessage",
+      "path": "/homePage/notice/detail/:id",
+      "module": "./pages/homePage/notice/NoticeDetail",
       "exact": true,
       "authority": "home_page_person_center"
     },

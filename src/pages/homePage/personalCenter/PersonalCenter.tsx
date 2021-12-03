@@ -12,17 +12,15 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 
 interface IPersonal {
-
+    readonly userAccount?: string;
+    readonly phone?: string;
+    readonly description?: string;
 }
 
 const workColums = [
     {
-        "dataIndex": "staffName",
+        "dataIndex": "name",
         "title": "姓名："
-    },
-    {
-        "dataIndex": "phone",
-        "title": "手机号："
     },
     {
         "dataIndex": "number",
@@ -41,11 +39,11 @@ const workColums = [
         "title": "职位："
     },
     {
-        "dataIndex": "stationName",
+        "dataIndex": "email",
         "title": "邮箱："
     },
     {
-        "dataIndex": "stationName",
+        "dataIndex": "description",
         "title": "备注："
     }
 ]
@@ -55,7 +53,7 @@ export default function PersonalCenter(): React.ReactNode {
     const [ form ] = Form.useForm();
     const history = useHistory();
     const { loading, data } = useRequest<IPersonal>(() => new Promise(async (resole, reject) => {
-        const data: IPersonal = await RequestUtil.get<IPersonal>(``)
+        const data: IPersonal = await RequestUtil.get<IPersonal>(`/tower-system/personalCenter`)
         resole(data)
     }), {})
     const detailData: IPersonal = data || {};
@@ -68,30 +66,25 @@ export default function PersonalCenter(): React.ReactNode {
     return <>
         <DetailContent>
             <DetailTitle title="账户信息" />
-            <Descriptions title="" bordered size="small" colon={ false } column={ 3 }>
+            <Descriptions title="" bordered size="small" colon={ false } column={ 2 }>
                 <Descriptions.Item label="账号：">
-                    { detailData }
+                    { detailData.userAccount }
                 </Descriptions.Item>
                 <Descriptions.Item label="密码：">
-                    { detailData }
+                    ******
                     <Button type="link" onClick={ () => setVisible(true) }>修改密码</Button>
-                </Descriptions.Item>
-                <Descriptions.Item label="手机号：">
-                    { detailData }
-                </Descriptions.Item>
-                <Descriptions.Item label="备注：">
-                    { detailData }
                 </Descriptions.Item>
             </Descriptions>
             <DetailTitle title="工作信息" />
             <BaseInfo columns={workColums} dataSource={detailData} col={2} />
         </DetailContent>
-        <Modal visible={ visible } title="修改密码" onCancel={ () => setVisible(false) } onOk={ () => {
+        <Modal visible={ visible } title="修改密码" onCancel={ () => { setVisible(false); form.resetFields(); }} onOk={ () => {
             if(form) {
                 form.validateFields().then(res => {
                     const value = form.getFieldsValue(true);
-                    RequestUtil.post(``, { ...value }).then(res => {
+                    RequestUtil.put(`/sinzetech-user/user/updatePassword`, { ...value }).then(res => {
                         setVisible(false);
+                        form.resetFields();
                         history.go(0);
                     })
                 })
@@ -101,7 +94,7 @@ export default function PersonalCenter(): React.ReactNode {
                <Form.Item label="旧密码" name="oldPassword" rules={[{
                     required: true,
                     message: '请输入旧密码'
-                }]} initialValue={ detailData }>
+                }]}>
                     <Input maxLength={ 50 }/>
                </Form.Item>
                <Form.Item label="新密码" name="password" rules={[{
@@ -117,7 +110,7 @@ export default function PersonalCenter(): React.ReactNode {
                             return Promise.reject('请输入新密码')
                         }
                     }
-                }]} initialValue={ detailData }>
+                }]}>
                     <Input maxLength={ 50 }/>
                </Form.Item>
                <Form.Item label="重复密码" name="confirmPassword" rules={[{
@@ -133,7 +126,7 @@ export default function PersonalCenter(): React.ReactNode {
                             return Promise.reject('请再次输入登录密码')
                         }
                     }
-                }]} initialValue={ detailData }>
+                }]}>
                     <Input maxLength={ 50 }/>
                </Form.Item>
             </Form>
