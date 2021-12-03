@@ -46,7 +46,6 @@ export default function ArchivesList(): React.ReactNode {
             searchFormItems={[
                 {
                     name: 'insurancePlanName',
-                    label: '模糊查询项',
                     children: <Input placeholder="请输入方案名称" maxLength={200} />
                 }
             ]}

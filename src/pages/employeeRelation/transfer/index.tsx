@@ -19,8 +19,8 @@ export default function TransferList(): React.ReactNode {
     return (
         <Page
             path={
-                // `/tower-hr/employeeTransfer`
-                `/tower-finance/invoicing`
+                `/tower-hr/employeeTransfer`
+                // `/tower-finance/invoicing`
             }
             columns={[
                 {

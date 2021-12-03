@@ -205,7 +205,7 @@ const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
     </Select>
 }
 
-const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }) => {
+const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ...props }) => {
     const ItemTypes = {
         string: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
         text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
@@ -216,7 +216,6 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }
             min={data?.min || 0}
             step={data?.step || 1}
             style={{ width: "100%", height: "100%", ...props.style }}
-        // formatter={value => limitDecimalsF(value, data.decimal)}
         />,
         select: <SelfSelect {...props} data={data as SelectData} />,
         date: <DatePicker
@@ -228,7 +227,7 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }
         popForm: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
         popTable: <PopTable {...props} data={data as PopTableData} />
     }
-    return <>{ItemTypes[type]}</>
+    return <>{render ? render(data) : ItemTypes[type]}</>
 }
 
 export default FormItemType

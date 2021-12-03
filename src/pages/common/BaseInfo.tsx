@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Descriptions, Form, FormInstance, Row, Col } from "antd"
 import { FormItemType } from '../common'
 import { FormItemTypesType } from "./FormItemType"
@@ -70,6 +70,11 @@ const popTableTransform = (value: any) => {
 }
 
 export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { } }: BaseInfoProps): JSX.Element {
+
+    useEffect(() => {
+        form && form.setFieldsValue(formatData(columns, dataSource))
+    }, [JSON.stringify(dataSource)])
+
     if (edit) {
         return <Form
             onValuesChange={(changedFields, allFields) => onChange(changedFields, allFields, dataSource)}
@@ -94,7 +99,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                                     return item
                                 }) : (item.rules || [])}
                             >
-                                {item.render ? item.render(item) : <FormItemType type={item.type} data={item} placeholder={item.placeholder || ""} />}
+                                <FormItemType type={item.type} data={item} placeholder={item.placeholder || ""} render={item.render} />
                             </Form.Item>
                         </div>
                     </Col>
