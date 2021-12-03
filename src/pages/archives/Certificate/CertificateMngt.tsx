@@ -255,6 +255,7 @@ export default function CertificateMngt(): React.ReactNode {
             path="/tower-system/certificateRecord"
             columns={ columns }
             headTabs={ [] }
+            exportPath={`/tower-system/certificateRecord`}
             extraOperation={ <Space direction="horizontal" size="small">
                  {/* <Upload 
                     action={ () => {
