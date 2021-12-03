@@ -1,9 +1,8 @@
 /***
  * 保函申请
- * 2021/11/22
  */
 import React, { useState, useRef } from 'react';
-import { Button, Input, DatePicker, Radio, Select, message, Modal } from 'antd';
+import { Button, Input, DatePicker, Radio, message, Modal } from 'antd';
 import moment from 'moment';
 import useRequest from '@ahooksjs/use-request'
 import { useHistory } from 'react-router-dom';
@@ -16,11 +15,7 @@ import FillGuaranteeInformation from './fillGuaranteeInformation';
 import RecoveryGuaranteeLayer from './recoveryGuarantee';
 // 引入查看保函申请
 import SeeGuarantee from './seeGuarantee';
-interface EditRefProps {
-    id?: string
-    onSubmit: () => void
-    resetFields: () => void
-}
+import { EditRefProps } from './application';
 
 export default function ApplicationColunm(): React.ReactNode {
     const history = useHistory();

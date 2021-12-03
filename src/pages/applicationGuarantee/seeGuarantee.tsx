@@ -2,10 +2,9 @@
  * 查看保函申请
  */
 import React, { useState, useRef } from 'react';
-import { Modal, Form, Button, ModalFuncProps } from 'antd';
+import { Modal, Form, Button } from 'antd';
 import { BaseInfo, DetailTitle, CommonTable, Attachment, AttachmentRef } from '../common';
-import { downLoadFile } from "../../utils"
-import { seeBaseForm, guaranteeForm, recoveryForm, seeEnclosure, seeApprovalRecord } from './applicationColunm.json';
+import { seeBaseForm, guaranteeForm, recoveryForm, seeApprovalRecord } from './applicationColunm.json';
 interface UserData {
     guaranteeInitVO?: object // 基本信息
     guaranteeVO?: object // 保函信息
@@ -22,13 +21,7 @@ interface OverViewProps {
 }
 export default function SeeGuarantee(props: OverViewProps): JSX.Element {
     const [addCollectionForm] = Form.useForm(); 
-    const [attachVosData, setAttachVosData] = useState<any[]>([])
     const fillGuarantee = useRef<AttachmentRef>();
-
-    const deleteAttachData = (id: number) => {
-        setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-    }
-
     return (
         <Modal
             title={'保函申请'}

@@ -37,7 +37,6 @@ export default forwardRef(function RecoveryGuaranteeLayer({id, requiredReturnTim
         ]
       }
       result.splice(index + 1, 0, v);
-      console.log(result, 'result')
     } else {
       result = column;
       addCollectionForm.setFieldsValue({
