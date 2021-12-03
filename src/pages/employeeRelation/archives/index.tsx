@@ -16,10 +16,12 @@ export default function ArchivesList(): React.ReactNode {
         setFilterValue(value)
         return value
     }
-
     return (
         <Page
-            path={`/tower-hr/employee/archives`}
+            path={
+                // `/tower-hr/employee/archives`
+                `/tower-finance/invoicing`
+            }
             columns={[
                 {
                     title: '序号',

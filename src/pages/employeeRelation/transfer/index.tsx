@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, Button, Select, DatePicker } from 'antd'
+import { Input, Button, Select, DatePicker } from 'antd'
 import { transferList } from "./transfer.json"
 import { Link, useParams } from 'react-router-dom'
 import { Page } from '../../common'
@@ -18,7 +18,10 @@ export default function TransferList(): React.ReactNode {
     }
     return (
         <Page
-            path={`/tower-hr/employeeTransfer`}
+            path={
+                // `/tower-hr/employeeTransfer`
+                `/tower-finance/invoicing`
+            }
             columns={[
                 {
                     "title": "序号",
@@ -33,10 +36,10 @@ export default function TransferList(): React.ReactNode {
                     "width": 230,
                     "dataIndex": "operation",
                     render: (_: undefined, record: any): React.ReactNode => (
-                        <Space direction="horizontal" size="small">
-                            <Button type="primary" size="small"><Link to={`/employeeRelation/transfer/detail/${record.id}`}>查看</Link></Button>
-                            <Button type="primary" size="small"><Link to={`/employeeRelation/transfer/edit/${record.id}`}>编辑</Link></Button>
-                        </Space>
+                        <>
+                            <Button type="link" size="small"><Link to={`/employeeRelation/transfer/detail/${record.id}`}>查看</Link></Button>
+                            <Button type="link" size="small"><Link to={`/employeeRelation/transfer/edit/${record.id}`}>编辑</Link></Button>
+                        </>
                     )
                 }]}
             onFilterSubmit={onFilterSubmit}

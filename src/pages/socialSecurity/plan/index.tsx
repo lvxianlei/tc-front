@@ -11,7 +11,10 @@ export default function ArchivesList(): React.ReactNode {
     }
     return (
         <Page
-            path={`/tower-hr/insurancePlan`}
+            path={
+                // `/tower-hr/insurancePlan`
+                `/tower-finance/invoicing`
+            }
             columns={[
                 {
                     title: '序号',

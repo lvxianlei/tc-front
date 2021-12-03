@@ -8,7 +8,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 export default function Edit() {
     const history = useHistory()
     const attachRef = useRef<AttachmentRef>()
-    const params = useParams<{ transferId: string, type: "new" | "edit" }>()
+    const params = useParams<{ transferId: string }>()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/employeeTransfer/detail/${params.transferId}`)
@@ -16,7 +16,7 @@ export default function Edit() {
         } catch (error) {
             reject(error)
         }
-    }), { manual: params.type === "new" })
+    }), { manual: !params.transferId })
 
     const { loading: saveLoading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {

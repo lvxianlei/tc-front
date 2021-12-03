@@ -117,7 +117,7 @@
         {
             "title": "备注",
             "dataIndex": "statusName",
-            "type": "textArea"
+            "type": "textarea"
         }
     ],
     "auditRecords": [
