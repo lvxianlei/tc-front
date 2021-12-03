@@ -157,7 +157,7 @@ export default function RecruitList(): React.ReactNode {
                     <Button onClick={()=>{history.push(`/employeeRelation/recruit/edit/${record.id}/${record.status}`)}} type='link' disabled={record.status!==2}>编辑</Button>
                     <Popconfirm
                         title="确认入职后，员工将信息将更新到员工档案中？"
-                        onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employee/information/confirm`,{employeeId: record.id}).then(()=>{
+                        onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employee/information/confirm`,{archivesId: record.id}).then(()=>{
                             message.success('入职成功！')
                         }).then(()=>{
                             setRefresh(!refresh)
@@ -170,7 +170,7 @@ export default function RecruitList(): React.ReactNode {
                     </Popconfirm>
                     <Popconfirm
                         title="确认删除？"
-                        onConfirm={ ()=>{RequestUtil.delete(`/tower-hr/employee/information`,{employeeId: record.id}).then(()=>{
+                        onConfirm={ ()=>{RequestUtil.delete(`/tower-hr/employee/information`,{archivesId: record.id}).then(()=>{
                             message.success('删除成功！')
                         }).then(()=>{
                             setRefresh(!refresh)
