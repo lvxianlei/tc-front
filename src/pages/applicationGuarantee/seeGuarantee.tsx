@@ -56,10 +56,10 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                                             ...item,
                                             type: "select",
                                             enum: [
-                                                { value: 1, label: "履约保函" },
-                                                { value: 2, label: "投标保函" },
-                                                { value: 3, label: "质保金保函" },
-                                                { value: 4, label: "预付款保函" }
+                                                { value: '1', label: "履约保函" },
+                                                { value: '2', label: "投标保函" },
+                                                { value: '3', label: "质保金保函" },
+                                                { value: '4', label: "预付款保函" }
                                             ]
                                         })
                                     }
