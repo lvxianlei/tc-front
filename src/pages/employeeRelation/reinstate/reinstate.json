@@ -14,7 +14,14 @@
         },
         {
             "dataIndex": "departureType",
-            "title": "离职类型"
+            "title": "离职类型",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "主动离职" },
+                { "value": 2, "label": "辞退" },
+                { "value": 3, "label": "退休" },
+                { "value": 4, "label": "死亡" }
+            ]
         },
         {
             "dataIndex": "departureReason",
@@ -26,7 +33,16 @@
         },
         {
             "dataIndex": "reinstatementNature",
-            "title": "复职性质"
+            "title": "复职性质",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "一次复职" },
+                { "value": 2, "label": "二次复职" },
+                { "value": 3, "label": "三次复职" },
+                { "value": 4, "label": "四次复职" },
+                { "value": 5, "label": "五次复职" },
+                { "value": 6, "label": "六次及以上" }
+            ]
         },
         {
             "dataIndex": "departmentName",
@@ -42,7 +58,17 @@
         },
         {
             "dataIndex": "probationPeriod",
-            "title": "试用期"
+            "title": "试用期",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "无试用期" },
+                { "value": 2, "label": "一个月" },
+                { "value": 3, "label": "二个月" },
+                { "value": 4, "label": "三个月" },
+                { "value": 5, "label": "四个月" },
+                { "value": 6, "label": "五个月" },
+                { "value": 7, "label": "六个月" }
+            ]
         },
         {
             "dataIndex": "remark",

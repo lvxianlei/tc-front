@@ -89,7 +89,7 @@ export default function BoltCheck(): React.ReactNode {
                         >编辑</span>
                         <Popconfirm
                             placement="bottomRight"
-                            title={text}
+                            title='确认删除?'
                             onConfirm={() => {
                                 deleteItem(item.id)
                             }}

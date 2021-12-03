@@ -1,110 +1,78 @@
-import React, { useState } from 'react'
-import { Select, Form } from 'antd'
-import { useLocation } from 'react-router-dom'
+import React from 'react'
 import { Page } from '../common';
 
 export default function Login(): React.ReactNode {
-    const [refresh, setRefresh] = useState<boolean>(false);
-    const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: {} }>();
 
     const columns = [
         {
-            key: 'index',
+            key: 'loginTime',
             title: '登录时间',
-            dataIndex: 'index',
+            dataIndex: 'loginTime',
             width: 100
         },
         {
-            key: 'taskNum',
+            key: 'userName',
             title: '登录人员',
             width: 100,
-            dataIndex: 'taskNum'
+            dataIndex: 'userName'
         },
         {
-            key: 'status',
+            key: 'terminalType',
             title: '终端类型',
             width: 100,
-            dataIndex: 'status',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 1,
-                        label: "WEB端"
-                    },
-                    {
-                        value: 2,
-                        label: "移动端"
-                    }
-                  ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'terminalType',
+            render: (terminalType: number): React.ReactNode => {
+                switch (terminalType) {
+                    case 1:
+                        return 'web';
+                    case 2:
+                        return '移动端';
+                    default:
+                        return '其他';
+                }
+            }  
         },
         {
-            key: 'updateStatusTime',
+            key: 'terminalVersion',
             title: '浏览器/终端版本',
             width: 200,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'terminalVersion'
         },
         {
-            key: 'confirmName',
+            key: 'operatingSystem',
             title: '操作系统',
             width: 200,
-            dataIndex: 'confirmName'
+            dataIndex: 'operatingSystem'
         },
         {
-            key: 'contractName',
+            key: 'deviceName',
             title: '设备名称',
             width: 100,
-            dataIndex: 'contractName'
+            dataIndex: 'deviceName'
         },
         {
-            key: 'aeName',
+            key: 'mac',
             title: 'MAC地址',
             width: 100,
-            dataIndex: 'aeName'
+            dataIndex: 'mac'
         },
         {
-            key: 'aeName',
+            key: 'ip',
             title: '登录IP',
             width: 100,
-            dataIndex: 'aeName'
+            dataIndex: 'ip'
         },
         {
-            key: 'aeName',
+            key: 'address',
             title: '地址',
             width: 200,
-            dataIndex: 'aeName'
+            dataIndex: 'address'
         }
     ]
-
-    const onFilterSubmit = (value: any) => {
-        setFilterValue(value)
-        return value
-    }
     
-    return <>
-       
-        <Page
-            path="/tower-science/drawTask"
-            columns={columns}
-            refresh={ refresh }
-            // extraOperation={<Button type="primary">导出</Button>}
-            filterValue={ filterValue }
-            onFilterSubmit={onFilterSubmit}
-            searchFormItems={[
-                {
-                    name: 'status',
-                    label: '',
-                    children: <Form.Item name="status" initialValue={ location.state }>
-                        <Select style={{width:"100px"}}>
-                            <Select.Option value={''} key ={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>WEB端</Select.Option>
-                            <Select.Option value={2} key={2}>移动端</Select.Option>
-                        </Select>
-                    </Form.Item>
-                }
-            ]}
+    return <Page
+            path="/sinzetech-log/login"
+            columns={ columns }
+            searchFormItems={[]}
         />
-    </>
 }

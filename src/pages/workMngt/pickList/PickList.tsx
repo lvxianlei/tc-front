@@ -14,7 +14,7 @@ export default function PickList(): React.ReactNode {
     const history = useHistory();
     const [taskId,setTaskId] = useState('');
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ state?: number, userId?: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
         resole(data?.records);
@@ -195,7 +195,7 @@ export default function PickList(): React.ReactNode {
                 onFilterSubmit={onFilterSubmit}
                 exportPath="/tower-science/materialTask"
                 // extraOperation={<Button type="primary">导出</Button>}
-                requestData={ { status: location.state } }
+                requestData={ { status: location.state?.state, materialLeader: location.state?.userId } }
                 searchFormItems={[
                     {
                         name: 'statusUpdateTime',
@@ -205,7 +205,7 @@ export default function PickList(): React.ReactNode {
                     {
                         name: 'status',
                         label: '塔型状态',
-                        children: <Form.Item name="status" initialValue={ location.state }>
+                        children: <Form.Item name="status" initialValue={ location.state?.state }>
                             <Select style={{width:'100px'}}>
                                 <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>待指派</Select.Option>
@@ -219,7 +219,7 @@ export default function PickList(): React.ReactNode {
                     {
                         name: 'materialLeader',
                         label: '提料负责人',
-                        children: <Form.Item name="materialLeader" initialValue={ '' }>
+                        children: <Form.Item name="materialLeader" initialValue={ location.state?.userId || '' }>
                             <Select style={{width:'100px'}}>
                                 <Select.Option key={''} value={''}>全部</Select.Option>
                                 {user && user.map((item: any) => {

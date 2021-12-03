@@ -129,7 +129,17 @@ export default function TowerInformation(): React.ReactNode {
             key: 'statusName',
             title: '放样状态',
             width: 200,
-            dataIndex: 'statusName'
+            dataIndex: 'statusName',
+            // render: (pattern: number): React.ReactNode => {
+            //     switch (pattern) {
+            //         case 1:
+            //             return '放样中';
+            //         case 2:
+            //             return '校核中';
+            //         case 3:
+            //             return '已完成';
+            //     }
+            // }
         },
         {
             key: 'updateStatusTime',

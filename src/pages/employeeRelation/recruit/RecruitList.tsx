@@ -47,7 +47,10 @@ export default function RecruitList(): React.ReactNode {
             key: 'departmentName',
             title: '入职部门/班组',
             width: 100,
-            dataIndex: 'departmentName'
+            dataIndex: 'departmentName',
+            render:(_:any,record:any)=>{
+                return <span>{ record.departmentName + '/' + record.teamName }</span>
+            }
         },
         {
             key: 'postName',
@@ -56,10 +59,10 @@ export default function RecruitList(): React.ReactNode {
             dataIndex: 'postName'
         },
         {
-            key: 'postType',
+            key: 'postTypeName',
             title: '员工分组',
             width: 100,
-            dataIndex: 'postType'
+            dataIndex: 'postTypeName'
         },
         {
             key: 'nativePlace',
@@ -83,7 +86,29 @@ export default function RecruitList(): React.ReactNode {
             key: 'education',
             title: '学历',
             width: 100,
-            dataIndex: 'education'
+            dataIndex: 'education',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '博士';
+                    case 2:
+                        return '硕士';
+                    case 3:
+                        return '本科';
+                    case 4:
+                        return '大专';
+                    case 5:
+                        return '高中';
+                    case 6:
+                        return '中专';
+                    case 7:
+                        return '中学';
+                    case 8:
+                        return '小学';
+                    case 9:
+                        return '其他';
+                }
+            } 
         },
         {
             key: 'graduateSchool',
@@ -117,7 +142,7 @@ export default function RecruitList(): React.ReactNode {
         },
         {
             key: 'bankName',
-            title: '开户行',
+            title: '开户银行',
             width: 100,
             dataIndex: 'bankName'
         },
@@ -126,6 +151,24 @@ export default function RecruitList(): React.ReactNode {
             title: '试用期',
             width: 100,
             dataIndex: 'probationPeriod',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '无试用期';
+                    case 2:
+                        return '一个月';
+                    case 3:
+                        return '二个月';
+                    case 4:
+                        return '三个月';
+                    case 5:
+                        return '四个月';
+                    case 6:
+                        return '五个月';
+                    case 7:
+                        return '六个月';
+                }
+            } 
         },
         {
             key: 'status',
@@ -157,7 +200,7 @@ export default function RecruitList(): React.ReactNode {
                     <Button onClick={()=>{history.push(`/employeeRelation/recruit/edit/${record.id}/${record.status}`)}} type='link' disabled={record.status!==2}>编辑</Button>
                     <Popconfirm
                         title="确认入职后，员工将信息将更新到员工档案中？"
-                        onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employee/information/confirm`,{employeeId: record.id}).then(()=>{
+                        onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employee/information/confirm`,{archivesId: record.id}).then(()=>{
                             message.success('入职成功！')
                         }).then(()=>{
                             setRefresh(!refresh)
@@ -170,7 +213,7 @@ export default function RecruitList(): React.ReactNode {
                     </Popconfirm>
                     <Popconfirm
                         title="确认删除？"
-                        onConfirm={ ()=>{RequestUtil.delete(`/tower-hr/employee/information`,{employeeId: record.id}).then(()=>{
+                        onConfirm={ ()=>{RequestUtil.delete(`/tower-hr/employee/information?archivesId=${record.id}`).then(()=>{
                             message.success('删除成功！')
                         }).then(()=>{
                             setRefresh(!refresh)

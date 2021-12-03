@@ -9,6 +9,7 @@ import { RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
 import AuthUtil from '../../../utils/AuthUtil';
 import EmployeeDeptSelectionComponent, { IDept } from '../EmployeeDeptModal';
+import { employeeTypeOptions } from '../../../configuration/DictionaryOptions';
 
 
 export default function RecruitEdit(): React.ReactNode {
@@ -16,9 +17,16 @@ export default function RecruitEdit(): React.ReactNode {
     const params = useParams<{ id: string, status: string }>();
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>();
+    const [post, setPost] = useState([]);
+    const [bank, setBank] = useState([]);
     const [ selectedDeptRows, setSelectedDeptRows ] = useState<IDept[] | any>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = params.id && await RequestUtil.get(`/tower-hr/labor/contract/detail`,{contractId: params.id})
+        const data: any = params.id && await RequestUtil.get(`/tower-hr/labor/contract/detail`,{archivesId: params.id})
+        const post: any = await RequestUtil.get(`/tower-system/station?size=1000`);
+        setPost(post?.records)
+        const bank: any = await RequestUtil.get(`/tower-supply/supplier?size=1000`)
+        setBank(bank?.records)
+        form.setFieldsValue(params.id?data:{})
         resole(data)
     }), {})
     const detailData: any = data;
@@ -73,10 +81,11 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.fileDTOS= attachRef.current?.getDataSource();
                             value.id = params.id;
+                            value.submitType = 'save';
                             RequestUtil.post(`/tower-hr/labor/contract`, value).then(()=>{
                                 message.success('保存成功！')
                             }).then(()=>{
-                                history.goBack()
+                                history.push('/employeeRelation/recruit')
                             })
                         })
                         
@@ -86,15 +95,16 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.fileDTOS= attachRef.current?.getDataSource();
                             value.id = params.id;
+                            value.submitType = 'submit';
                             RequestUtil.post(`/tower-hr/labor/contract`, value).then(()=>{
-                                message.success('保存成功！')
+                                message.success('提交成功！')
                             }).then(()=>{
-                                history.goBack()
+                                history.push('/employeeRelation/recruit')
                             })
                         })
                         
                     }}>保存并提交审批</Button>}
-                    <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+                    <Button key="goback" onClick={() => history.push('/employeeRelation/recruit')}>返回</Button>
                 </Space>
             ]}>
             <DetailTitle title="员工入职信息"/>
@@ -118,8 +128,8 @@ export default function RecruitEdit(): React.ReactNode {
                             message:'请选择性别'
                         }]}>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={0} key="0">男</Select.Option>
-                                <Select.Option value={1} key="1">女</Select.Option>
+                                <Select.Option value={'男'} key="0">男</Select.Option>
+                                <Select.Option value={'女'} key="1">女</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -138,7 +148,7 @@ export default function RecruitEdit(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='入职公司' name='companyName'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -165,9 +175,10 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择入职岗位'
                         }]} name='postId'>
-                            <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={0} key="0">主任</Select.Option>
-                                <Select.Option value={1} key="1">人资专员</Select.Option>
+                            <Select style={{width:'100%'}}>
+                                {post && post.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.stationName}</Select.Option>
+                                })}
                             </Select>
                         </Form.Item>
                     </Col>
@@ -199,7 +210,18 @@ export default function RecruitEdit(): React.ReactNode {
                                }
                            }
                         }]} name='idNumber'>
-                            <Input/>
+                            <Input onChange={(e:any)=>{
+                                let myDate = new Date();
+                                let month = myDate.getMonth() + 1;
+                                let day = myDate.getDate();
+                                let age = e.target.value.substring(6, 10) && myDate.getFullYear() - e.target.value.substring(6, 10) - 1;
+                                if (e.target.value.substring(12, 14)&& (e.target.value.substring(10, 12) < month || e.target.value.substring(10, 12) == month && e.target.value.substring(12, 14) <= day)) {
+                                    age++;
+                                }
+                                form.setFieldsValue({
+                                    age: age
+                                })
+                            }}/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -209,12 +231,16 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择员工分组'
                         }]} name='postType'>
-                            <Input/>
+                            <Select style={{width:'100%'}} mode="multiple">
+                                {employeeTypeOptions && employeeTypeOptions.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                })}
+                            </Select>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item label='年龄' name='age'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -256,15 +282,15 @@ export default function RecruitEdit(): React.ReactNode {
                             message:'请选择学历'
                         }]} name='education'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={0} key="0">博士</Select.Option>
-                                <Select.Option value={1} key="1">硕士</Select.Option>
-                                <Select.Option value={2} key="2">本科</Select.Option>
-                                <Select.Option value={3} key="3">大专</Select.Option>
-                                <Select.Option value={4} key="4">高中</Select.Option>
-                                <Select.Option value={5} key="5">中专</Select.Option>
-                                <Select.Option value={6} key="6">中学</Select.Option>
-                                <Select.Option value={7} key="7">小学</Select.Option>
-                                <Select.Option value={8} key="8">其他</Select.Option>
+                                <Select.Option value={1} key="1">博士</Select.Option>
+                                <Select.Option value={2} key="2">硕士</Select.Option>
+                                <Select.Option value={3} key="3">本科</Select.Option>
+                                <Select.Option value={4} key="4">大专</Select.Option>
+                                <Select.Option value={5} key="5">高中</Select.Option>
+                                <Select.Option value={6} key="6">中专</Select.Option>
+                                <Select.Option value={7} key="7">中学</Select.Option>
+                                <Select.Option value={8} key="8">小学</Select.Option>
+                                <Select.Option value={9} key="9">其他</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -286,13 +312,13 @@ export default function RecruitEdit(): React.ReactNode {
                             message:'请选择试用期'
                         }]} name='probationPeriod'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={0} key="0">无试用期</Select.Option>
-                                <Select.Option value={1} key="1">1个月</Select.Option>
-                                <Select.Option value={2} key="2">2个月</Select.Option>
-                                <Select.Option value={3} key="3">3个月</Select.Option>
-                                <Select.Option value={4} key="4">4个月</Select.Option>
-                                <Select.Option value={5} key="5">5个月</Select.Option>
-                                <Select.Option value={6} key="6">6个月</Select.Option>
+                                <Select.Option value={1} key="1">无试用期</Select.Option>
+                                <Select.Option value={2} key="2">1个月</Select.Option>
+                                <Select.Option value={3} key="3">2个月</Select.Option>
+                                <Select.Option value={4} key="4">3个月</Select.Option>
+                                <Select.Option value={5} key="5">4个月</Select.Option>
+                                <Select.Option value={6} key="6">5个月</Select.Option>
+                                <Select.Option value={7} key="7">6个月</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -314,7 +340,11 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择开户行'
                         }]} name='bankName'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
+                           <Select style={{width:'100%'}}>
+                                {bank && bank.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.bankDeposit}</Select.Option>
+                                })}
+                            </Select>
                         </Form.Item>
                     </Col>
                 </Row>

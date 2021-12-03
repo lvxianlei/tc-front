@@ -14,13 +14,6 @@ import AuthUtil from '../../../utils/AuthUtil';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 
-enum PriorityType {
-    EMERGENCY = 0,
-    HIGH = 1,
-    MIDDLE = 2,
-    LOW = 3,
-}
-
 export default function BoltList(): React.ReactNode {
     const columns = [
         {
@@ -115,7 +108,7 @@ export default function BoltList(): React.ReactNode {
         }
     ]
 
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ state?: number, userId?: string }>();
     const userId = AuthUtil.getUserId();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
@@ -128,7 +121,7 @@ export default function BoltList(): React.ReactNode {
         columns={columns}
         headTabs={[]}
         exportPath={`/tower-science/boltRecord`}
-        requestData={{ boltStatus: location.state }}
+        requestData={{ boltStatus: location.state?.state, boltLeader: location.state?.userId }}
         searchFormItems={[
             {
                 name: 'updateTime',
@@ -138,7 +131,7 @@ export default function BoltList(): React.ReactNode {
             {
                 name: 'boltStatus',
                 label: '螺栓清单状态',
-                children: <Form.Item name="boltStatus" initialValue={location.state}>
+                children: <Form.Item name="boltStatus" initialValue={location.state?.state}>
                     <Select style={{ width: '120px' }} placeholder="请选择">
                         <Select.Option value="" key="6">全部</Select.Option>
                         <Select.Option value="1" key="1">待开始</Select.Option>
@@ -151,7 +144,7 @@ export default function BoltList(): React.ReactNode {
             {
                 name: 'boltLeader',
                 label: '螺栓负责人',
-                children: <Form.Item name="status" initialValue={""}>
+                children: <Form.Item name="boltLeader" initialValue={location.state?.userId || ""}>
                     <Select placeholder="请选择" style={{ width: "150px" }}>
                         <Select.Option value="" key="6">全部</Select.Option>
                         { checkUser && checkUser.map((item: any) => {

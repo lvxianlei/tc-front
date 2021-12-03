@@ -34,7 +34,7 @@
         },
         {
             "title": "收款银行",
-            "dataIndex": "payBank"
+            "dataIndex": "returnBank"
         },
         {
             "title": "确认方",
@@ -147,10 +147,16 @@
             "disabled": true
         },
         {
-            "dataIndex": "payBank",
+            "dataIndex": "returnBank",
             "title": "收款银行",
             "maxLength": 100,
-            "placeholder": "请输入收款银行"
+            "placeholder": "请输入收款银行",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入收款银行"
+                }
+            ]
         },
         {
             "dataIndex": "confirmer",
@@ -217,7 +223,7 @@
         },
         {
             "title": "收款银行",
-            "dataIndex": "payBank"
+            "dataIndex": "returnBank"
         },
         {
             "title": "确认方",

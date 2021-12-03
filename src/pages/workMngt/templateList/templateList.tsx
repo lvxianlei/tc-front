@@ -7,7 +7,7 @@ import RequestUtil from "../../../utils/RequestUtil"
 export default function TemplateList() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({})
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ state?: number, userId?: string }>();
     const columns: any[] = [
         {
             title: '序号',
@@ -27,14 +27,6 @@ export default function TemplateList() {
             title: '上传图纸类型',
             dataIndex: 'uploadDrawTypeName',
             align: 'center',
-            render: (text: any) => {
-                switch (text) {
-                    case 1:
-                        return '组装图纸'
-                    case 2:
-                        return '发货图纸'
-                }
-            }
         },
         {
             title: '内部合同编号',
@@ -65,14 +57,6 @@ export default function TemplateList() {
             title: '上传状态',
             dataIndex: 'uploadStatusName',
             align: 'center',
-            render: (text: any) => {
-                switch (text) {
-                    case 1:
-                        return '待上传'
-                    case 2:
-                        return '已上传'
-                }
-            }
         },
         {
             title: '最新状态变更时间',
@@ -121,7 +105,7 @@ export default function TemplateList() {
                 columns={columns}
                 exportPath={`/tower-science/loftingTemplate`}
                 onFilterSubmit={onFilterSubmit}
-                requestData={{ status: location.state }}
+                requestData={{ status: location.state?.state, drawLeader: location.state?.userId }}
                 searchFormItems={[
                     {
                         name: 'drawType',
@@ -142,18 +126,19 @@ export default function TemplateList() {
                     {
                         name: 'status',
                         label: '上传状态',
-                        children: (
-                            <Select style={{ width: 200 }} placeholder="请选择">
-                                <Select.Option value="">全部</Select.Option>
-                                <Select.Option value="1">待上传</Select.Option>
-                                <Select.Option value="2">已上传</Select.Option>
-                            </Select>
+                        children: (<Form.Item name="status" initialValue={location.state?.state || ""}>
+                                <Select style={{ width: 200 }} placeholder="请选择">
+                                    <Select.Option value="">全部</Select.Option>
+                                    <Select.Option value="1">待上传</Select.Option>
+                                    <Select.Option value="2">已上传</Select.Option>
+                                </Select>
+                            </Form.Item>
                         )
                     },
                     {
                         name: 'drawLeader',
                         label: '图纸负责人',
-                        children: <Form.Item name="status" initialValue={""}>
+                        children: <Form.Item name="drawLeader" initialValue={location.state?.userId || ""}>
                             <Select placeholder="请选择" style={{ width: "150px" }}>
                                 <Select.Option value="" key="6">全部</Select.Option>
                                 { checkUser && checkUser.map((item: any) => {

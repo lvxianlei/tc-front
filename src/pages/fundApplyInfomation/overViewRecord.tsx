@@ -19,7 +19,7 @@ export default forwardRef(function OverView(props: ViewModalProps,ref): JSX.Elem
         const detail: any = await RequestUtil.get(`/tower-finance/payApply/payment/${props.payApplyId}`);
         detail.payType = (payTypeOptions as Array<any>)?.find((item:any)=>item.id == detail.payType)['name']
         setBaseInfo(detail);
-        setInfoVOList(detail.attachInfoVOList);
+        setInfoVOList(detail.attachInfoVos);
     };
     // 取消
     const handleCancle = () => {
