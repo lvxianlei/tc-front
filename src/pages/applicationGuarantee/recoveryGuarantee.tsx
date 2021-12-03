@@ -8,11 +8,7 @@ import { BaseInfo } from '../common';
 import { recoveryGuarantee } from './applicationColunm.json';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil';
-interface EditProps {
-  id?: string
-  ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
-  requiredReturnTime?: string
-}
+import { EditProps } from './application';
 export default forwardRef(function RecoveryGuaranteeLayer({id, requiredReturnTime}: EditProps, ref) {
   const [addCollectionForm] = Form.useForm();
   const [column, setColumn] = useState(recoveryGuarantee);

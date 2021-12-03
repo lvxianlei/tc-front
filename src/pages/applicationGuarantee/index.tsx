@@ -108,23 +108,6 @@ export default function ApplicationColunm(): React.ReactNode {
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...collectionListHead.map((item: any) => {
-                        if (item.dataIndex === 'guaranteeType') {
-                            return ({
-                                title: item.title,
-                                dataIndex: item.dataIndex,
-                                width: 50,
-                                render: (_: any, record: any): React.ReactNode => (
-                                    <span>{
-                                        record.guaranteeType === '1' ? 
-                                            '履约保函' :
-                                        record.guaranteeType === '2' ?
-                                            '投标保函' :
-                                        record.guaranteeType === '3' ?
-                                            '质保金保函' : '预付款保函'
-                                    }</span>
-                                )
-                            })
-                        }
                         if (item.dataIndex === 'requiredReturnTime') {
                             return ({
                                 title: item.title,
