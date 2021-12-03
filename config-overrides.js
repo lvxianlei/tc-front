@@ -32,7 +32,7 @@ const WebpackBar = require("webpackbar");
 
 module.exports = {
   webpack: override(
-    function(config) {
+    function (config) {
       const scopePluginIndex = config.resolve.plugins.findIndex(
         ({ constructor }) =>
           constructor && constructor.name === "ModuleScopePlugin"
@@ -155,16 +155,16 @@ module.exports = {
     ),
     process.env.REACT_APP_ENV === "development"
       ? addWebpackPlugin(
-          new MockWebpackPlugin({
-            // mock config
-            config: mockConfig,
-            // mock server port, avoid collision with application port
-            port: 3001
-          })
-        )
+        new MockWebpackPlugin({
+          // mock config
+          config: mockConfig,
+          // mock server port, avoid collision with application port
+          port: 3001
+        })
+      )
       : undefined
   ),
-  devServer: overrideDevServer(function(config) {
+  devServer: overrideDevServer(function (config) {
     const proxy = {
       "/yapi": {
         target: "http://yapi.saikul.com/mock/652/",

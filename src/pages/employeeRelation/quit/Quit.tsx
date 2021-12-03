@@ -1,17 +1,19 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
+import EmployeeUserSelectionComponent, { IUser } from '../EmployeeUserModal';
 
 
-export default function Sure(): React.ReactNode {
+export default function Quit(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>();
     const [form] = Form.useForm();
-    const attachRef = useRef<AttachmentRef>()
+    const attachRef = useRef<AttachmentRef>();
+    const [ selectedRows, setSelectedRows ] = useState<IUser[] | any>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         // const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
         resole(data)
@@ -45,11 +47,22 @@ export default function Sure(): React.ReactNode {
                             required:true, 
                             message:'请选择员工姓名'
                         }]} initialValue={1} name='employeeName'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
-                                console.log(e)
-                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
-                                // form.setFieldsValue()
-                            }}/>
+                            <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                                    setSelectedRows(selectedRows);
+                                    form.setFieldsValue({
+                                        employeeName: selectedRows[0].employeeName,
+                                        companyName: selectedRows[0].companyName,
+                                        departmentId: selectedRows[0].departmentId,
+                                        teamId: selectedRows[0].teamId,
+                                        departmentName: selectedRows[0].departmentName,
+                                        teamName: selectedRows[0].teamName,
+                                        newDepartmentName: selectedRows[0].departmentName+'/'+selectedRows[0].teamName,
+                                        postName: selectedRows[0].postName,
+                                        inductionDate: selectedRows[0].inductionDate,
+                                        employeeType: selectedRows[0].employeeType,
+                                        employeeId: selectedRows[0].employeeId,
+                                    });
+                            } } buttonType="link" buttonTitle="+选择员工" /> } disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -60,7 +73,7 @@ export default function Sure(): React.ReactNode {
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label='部门/班组' name='departmentName'>
+                        <Form.Item label='部门/班组' name='newDepartmentName'>
                             <Input/>
                         </Form.Item>
                     </Col>
@@ -78,7 +91,11 @@ export default function Sure(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='员工性质' name='employeeType'>
-                            <Input/>
+                            <Select placeholder="请选择" style={{ width: '100%' }} >
+                                <Select.Option value={1} key="1">正式员工</Select.Option>
+                                <Select.Option value={2} key="2">超龄员工</Select.Option>
+                                <Select.Option value={3} key="3">实习员工</Select.Option>
+                            </Select>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -101,10 +118,10 @@ export default function Sure(): React.ReactNode {
                             message:'请选择离职类型'
                         }]} name='departureType'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={0} key="0">主动离职</Select.Option>
-                                <Select.Option value={1} key="1">辞退</Select.Option>
-                                <Select.Option value={2} key="2">退休</Select.Option>
-                                <Select.Option value={3} key="3">死亡</Select.Option>
+                                <Select.Option value={1} key="1">主动离职</Select.Option>
+                                <Select.Option value={2} key="2">辞退</Select.Option>
+                                <Select.Option value={3} key="3">退休</Select.Option>
+                                <Select.Option value={4} key="4">死亡</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -126,6 +143,9 @@ export default function Sure(): React.ReactNode {
                         </Form.Item>
                     </Col>
                 </Row>
+                <Form.Item label='' name='employeeId'>
+                    <Input type='hidden'/>
+                </Form.Item>
             </Form>
             </DetailContent>
         </Spin>

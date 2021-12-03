@@ -78,12 +78,12 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         this.setState({ loading: true })
         try {
             const sourceDataKey: string[] = this.props.sourceKey?.split(".") || []
-            let resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
-                ...this.props.requestData,
-                ...filterValues,
+            const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
                 current: pagination.current || this.state.tablePagination?.current,
                 size: pagination.pageSize || this.state.tablePagination?.pageSize,
-                type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
+                type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey,
+                ...this.props.requestData,
+                ...filterValues,
             })
             let result = this.props.sourceKey ? this.getHierarchy(resData) : resData;
             this.setState({
@@ -171,7 +171,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                     url={this.props.exportPath}
                     serchObj={{
                         ...this.props.filterValue,
-                        ...JSON.parse(JSON.stringify(this.props?.requestData))
+                        ...JSON.parse(JSON.stringify(this.props?.requestData || {}))
                     }}
                     closeExportList={() => {
                         this.setState({

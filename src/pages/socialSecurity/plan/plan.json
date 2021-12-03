@@ -1,0 +1,130 @@
+{
+    "plan": [
+        {
+            "title": "方案名称",
+            "width": 100,
+            "dataIndex": "insurancePlanName"
+        },
+        {
+            "title": "缴纳地区",
+            "width": 100,
+            "dataIndex": "insuredLand"
+        },
+        {
+            "title": "缴纳公司",
+            "width": 100,
+            "dataIndex": "companyName"
+        },
+        {
+            "title": "人数",
+            "width": 100,
+            "dataIndex": "personNum"
+        },
+        {
+            "title": "状态",
+            "width": 100,
+            "dataIndex": "statusName"
+        }
+    ],
+    "setting": [
+        {
+            "title": "方案名称",
+            "width": 100,
+            "dataIndex": "insurancePlanName"
+        },
+        {
+            "title": "缴纳地区",
+            "width": 100,
+            "dataIndex": "insuredLand"
+        },
+        {
+            "title": "缴纳公司",
+            "width": 100,
+            "dataIndex": "companyName"
+        },
+        {
+            "title": "人数",
+            "width": 100,
+            "dataIndex": "personNum"
+        },
+        {
+            "title": "状态",
+            "width": 100,
+            "dataIndex": "statusName"
+        }
+    ],
+    "insurance": [
+        {
+            "title": "险种名称",
+            "width": 100,
+            "dataIndex": "insuranceName"
+        },
+        {
+            "title": "生效月",
+            "width": 100,
+            "dataIndex": "effectiveMonth"
+        },
+        {
+            "title": "失效月",
+            "width": 100,
+            "dataIndex": "expirationMonth"
+        },
+        {
+            "title": "缴纳对象",
+            "width": 100,
+            "dataIndex": "personNum"
+        },
+        {
+            "title": "基数上限",
+            "width": 100,
+            "dataIndex": "statusName"
+        },
+        {
+            "title": "基数下限",
+            "width": 100,
+            "dataIndex": "statusName"
+        },
+        {
+            "title": "缴纳比例",
+            "width": 100,
+            "dataIndex": "statusName"
+        },
+        {
+            "title": "固定费用",
+            "width": 100,
+            "dataIndex": "fixedCost"
+        }
+    ],
+    "business": [
+        {
+            "title": "商业保险名称",
+            "width": 100,
+            "dataIndex": "commercialInsuranceName"
+        },
+        {
+            "title": "保险类型",
+            "width": 100,
+            "dataIndex": "commercialInsuranceType"
+        },
+        {
+            "title": "保险公司",
+            "width": 100,
+            "dataIndex": "commercialInsuranceCompany"
+        },
+        {
+            "title": "保险金额",
+            "width": 100,
+            "dataIndex": "insuranceAmount"
+        },
+        {
+            "title": "保险合同号",
+            "width": 100,
+            "dataIndex": "insuranceContract"
+        },
+        {
+            "title": "备注",
+            "width": 100,
+            "dataIndex": "description"
+        }
+    ]
+}

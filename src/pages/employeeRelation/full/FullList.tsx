@@ -42,6 +42,24 @@ export default function FullList(): React.ReactNode {
             title: '试用期',
             width: 100,
             dataIndex: 'probationPeriod',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '无试用期';
+                    case 2:
+                        return '一个月';
+                    case 3:
+                        return '二个月';
+                    case 4:
+                        return '三个月';
+                    case 5:
+                        return '四个月';
+                    case 6:
+                        return '五个月';
+                    case 7:
+                        return '六个月';
+                }
+            } 
         },
         {
             key: 'positiveDate',
@@ -53,7 +71,17 @@ export default function FullList(): React.ReactNode {
             key: 'checkResult',
             title: '考核结果',
             width: 150,
-            dataIndex: 'checkResult'
+            dataIndex: 'checkResult',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 0:
+                        return '提前转正';
+                    case 1:
+                        return '正常转正';
+                    case 2:
+                        return '延期转正';
+                }
+            } 
         },
         {
             key: 'positiveComments',
@@ -66,6 +94,14 @@ export default function FullList(): React.ReactNode {
             title: '转正状态',
             width: 100,
             dataIndex: 'positiveStatus',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 0:
+                        return '待转正';
+                    case 1:
+                        return '已转正';
+                }
+            } 
         },
         {
             key: 'status',

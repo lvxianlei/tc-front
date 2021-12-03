@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { Space, Input, Button, Select, DatePicker } from 'antd'
 import { transferList } from "./transfer.json"
-import { Link, useHistory, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 
 export default function TransferList(): React.ReactNode {
-    const history = useHistory();
     const [filterValue, setFilterValue] = useState<object>({})
     const params = useParams<{ id: string, status: string, materialLeader: string }>();
     const onFilterSubmit = (value: any) => {

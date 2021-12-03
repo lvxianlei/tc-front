@@ -163,6 +163,9 @@ export default function PickTowerMessage(): React.ReactNode {
                     <Button onClick={async ()=>{
                         const data = await RequestUtil.get(`/tower-science/drawProductSegment/pattern/${record.id}`)
                         setDetail(data);
+                        form.setFieldsValue({
+                            detailData: data
+                        })
                         if(record.status == 2){
                             setEdit(true);
                         }else{
@@ -251,7 +254,9 @@ export default function PickTowerMessage(): React.ReactNode {
             console.log(error)
         }
     }
-    const handleModalCancel = () => {setVisible(false);;setDetail([]);form.resetFields()};
+    const handleModalCancel = () => {setVisible(false);;setDetail([]);form.setFieldsValue({
+        detailData:{}
+    })};
     return (
         <>
          <Modal title='段模式'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
