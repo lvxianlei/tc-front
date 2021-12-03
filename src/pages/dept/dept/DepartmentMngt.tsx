@@ -120,6 +120,9 @@ export default function DepartmentMngt(): React.ReactNode {
             headTabs={ [] }
             refresh={ refresh }
             searchFormItems={ [] }
+            tableProps={{
+                pagination: false
+            }}
         />
         <Modal visible={ companyVisible }  title={ companyTip === "新增" ? "新增子公司" : "编辑子公司" } onCancel={ () => { setDeptVisible(false); companyForm.resetFields(); companyForm.setFieldsValue({name: ''}) } } onOk={ () => {
             if(companyForm) {
