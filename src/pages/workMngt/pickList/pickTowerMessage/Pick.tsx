@@ -509,26 +509,30 @@ export default function Lofting(): React.ReactNode {
     <Modal title='添加' visible={addVisible} onCancel={()=>{
         setAddVisible(false);
         setTableDataSource([]);
+        form.setFieldsValue({ dataV: [] })
     }} width={1200} onOk={
         ()=>{
-            const values = form.getFieldsValue(true).dataV.map((item:any)=>{
-                return {
-                    ...item,
-                    productCategory: params.id,
-                    segmentGroupId: params.productSegmentId
-                }
+            form.validateFields().then(()=>{
+                const values = form.getFieldsValue(true).dataV.map((item:any)=>{
+                    return {
+                        ...item,
+                        productCategory: params.id,
+                        segmentGroupId: params.productSegmentId
+                    }
+                })
+                RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [ ...values ]).then(res => {
+                    setAddVisible(false);
+                    setTableDataSource([]);
+                    form.setFieldsValue({ dataV: [] })
+                    message.success('添加成功！')
+                    setRefresh(!refresh);    
+                });
             })
-            RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [ ...values ]).then(res => {
-                setAddVisible(false);
-                setTableDataSource([]);
-                message.success('添加成功！')
-                setRefresh(!refresh);    
-            });
         }
     }>
         <Form form={form}>
             <Button onClick={()=>{
-                tableDataSource.push([{length:0}])
+                tableDataSource.push([])
                 setTableDataSource([...tableDataSource])
                 console.log(tableDataSource)
             }} type='primary' ghost>添加一行</Button>
@@ -536,7 +540,7 @@ export default function Lofting(): React.ReactNode {
                 columns={[
                     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
                     { title: '段号', dataIndex: 'segmentId', key: 'segmentId', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-                        <Form.Item name={['dataV',index, "segmentId"]} initialValue={ _a }>
+                        <Form.Item name={['dataV',index, "segmentId"]} initialValue={ _a } rules={[{required:true, message:'请选择段号'}]}>
                             <Select>
                                 { paragraphList.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
@@ -545,48 +549,68 @@ export default function Lofting(): React.ReactNode {
                         </Form.Item>
                     )},
                     { title: '构件编号', dataIndex: 'code', key: 'code',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "code"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "code"]} initialValue={ _ } rules={[{required:true, message:'请填写构件编号'}]}>
                             <Input size="small"/>
                         </Form.Item>
                     ) },
                     { title: '材料名称', dataIndex: 'materialName', key: 'materialName',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "materialName"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "materialName"]} initialValue={ _ } rules={[{required:true, message:'请输入材料名称'}]}>
                             <Input size="small" />
                         </Form.Item>
                     ) },
                     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "structureTexture"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "structureTexture"]} initialValue={ _ } rules={[{required:true, message:'请输入材质'}]}>
                             <Input size="small" />
                         </Form.Item>
                     ) },
                     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "structureSpec"]} initialValue={ _ }>
+                        <Form.Item name={['dataV',index, "structureSpec"]} initialValue={ _ } rules={[{required:true, message:'请输入规格'}]}>
                             <Input size="small" />
                         </Form.Item>
                     ) },
                     { title: '长度（mm）', dataIndex: 'length', key: 'length',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "length"]}>
-                            <InputNumber size="small" min={0}/>
+                        <Form.Item name={['dataV',index, "length"]} rules={[{required:true, message:'请输入长度'}]}>
+                            <InputNumber size="small" min={1} precision={0} max={999999}/>
                         </Form.Item>
                     ) },
                     { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "basicsPartNum"]} initialValue={ _ }>
-                            <Input size="small"/>
+                        <Form.Item name={['dataV',index, "basicsPartNum"]} initialValue={ _ } rules={[{required:true, message:'请输入单段件数'}]}>
+                            <InputNumber size="small" min={1} precision={0} max={99} onChange={(e:any)=>{
+                                const data = form.getFieldsValue(true).dataV;
+                                if (data[index].basicsWeight) {
+                                    data[index] = {
+                                        ...data[index],
+                                        totalWeight:  e* data[index].basicsWeight
+                                    }
+                                    form?.setFieldsValue({ dataV: data })
+                                    setTableDataSource(data)
+                                }
+                            }}/>
                         </Form.Item>
                     ) },
                     { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "basicsWeight"]} initialValue={ _ }>
-                            <Input size="small" />
+                        <Form.Item name={['dataV',index, "basicsWeight"]} initialValue={ _ } rules={[{required:true, message:'请输入单件重量'}]}>
+                            <InputNumber size="small" precision={2} max={9999.99} onChange={(e:any)=>{
+                                const data = form.getFieldsValue(true).dataV;
+                                if (data[index].basicsPartNum) {
+                                    data[index] = {
+                                        ...data[index],
+                                        totalWeight: e* data[index].basicsPartNum
+                                    }
+                                    form?.setFieldsValue({ dataV: data })
+                                    setTableDataSource(data)
+                                }
+                            }}/>
                         </Form.Item>
                     ) },
                     { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "totalWeight"]} initialValue={ _ }>
-                            <Input size="small" />
+                        <Form.Item name={['dataV',index, "totalWeight"]}>
+                            <InputNumber size="small" precision={2} max={9999.99} disabled/>
                         </Form.Item>
                     ) },
                     { title: '备注', dataIndex: 'description', key: 'description',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name={['dataV',index, "description"]} initialValue={ _ }>
-                            <TextArea showCount rows={1} />
+                            <TextArea showCount rows={1} maxLength={50}/>
                         </Form.Item>
                     ) },
                     { title: '操作', key:'operation', render:(_a: any, _b: any, index: number): React.ReactNode =>(
