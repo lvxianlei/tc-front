@@ -210,6 +210,7 @@ export default function DataMngt(): React.ReactNode {
             path="/tower-system/dataRecord"
             columns={ columns }
             headTabs={ [] }
+            exportPath={`/tower-system/dataRecord`}
             extraOperation={ <Space direction="horizontal" size="small">
                  {/* <Upload 
                     action={ () => {
