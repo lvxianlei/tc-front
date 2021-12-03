@@ -224,7 +224,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式">
-                                { this.state.appointed?.patternName }
+                                { this.props.type === 'detail'||this.props.type === 'message'? this.state.appointed?.patternName: this.state.appointed?.pattern }
                             </Descriptions.Item>
                             { this.props.type === 'detail' ?
                                 <><Descriptions.Item label="段信息">
@@ -301,7 +301,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     rules={[{
                                         required: true,
                                         message: '请选择交付时间'
-                                    }]} initialValue={ moment(this.props.detailData?.plannedDeliveryTime) }>
+                                    }]} initialValue={ this.props.detailData?.plannedDeliveryTime?moment(this.props.detailData?.plannedDeliveryTime):'' }>
                                     <DatePicker />
                                 </Form.Item>
                             </Descriptions.Item></>
