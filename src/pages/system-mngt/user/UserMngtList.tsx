@@ -110,9 +110,7 @@ export default function RoleMngtList(): React.ReactNode {
                                 <Popconfirm
                                     title="您确定重置密码吗?"
                                     onConfirm={() => {
-                                        RequestUtil.delete(`/sinzetech-system/role?ids=${record.id}`).then(res => {
-                                            
-                                        });
+                                        handleResetPassWord([record as IUser])
                                     }}
                                     okText="确认"
                                     cancelText="取消"
