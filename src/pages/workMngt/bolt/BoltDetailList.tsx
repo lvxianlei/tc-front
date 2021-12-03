@@ -141,7 +141,7 @@ export default function BoltCheck(): React.ReactNode {
      * @param heightId 
      */
     const deleteItem = async (heightId: string) => {
-        await RequestUtil.delete(`/tower-science/boltRecord/deleteHeight/${heightId}`)
+        await RequestUtil.delete(`/tower-science/boltRecord/deleteHeight?heightId=${heightId}&productCategoryId=${params.id}`)
         message.success('操作成功')
         setRefresh(!refresh)
     }

@@ -21,7 +21,7 @@ export default function ConfirmList(): React.ReactNode {
         // const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         const data: any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
         // setDepartment(departmentData);
-        resole(dataTool)
+        resole(data)
     }), {})
     const confirmLeader: any = data?.records || [];
     const columns = [
