@@ -11,7 +11,7 @@ export default function RecruitView(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-hr/labor/contract/detail`,{contractId: params.id})
+        const data: any = await RequestUtil.get(`/tower-hr/employee/information/detail`,{archivesId: params.id})
         resole(data)
     }), {})
     const detailData: any = data;

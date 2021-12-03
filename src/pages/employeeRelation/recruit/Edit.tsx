@@ -10,6 +10,7 @@ import { StoreValue } from 'antd/lib/form/interface';
 import AuthUtil from '../../../utils/AuthUtil';
 import EmployeeDeptSelectionComponent, { IDept } from '../EmployeeDeptModal';
 import { employeeTypeOptions } from '../../../configuration/DictionaryOptions';
+import moment from 'moment';
 
 
 export default function RecruitEdit(): React.ReactNode {
@@ -21,12 +22,12 @@ export default function RecruitEdit(): React.ReactNode {
     const [bank, setBank] = useState([]);
     const [ selectedDeptRows, setSelectedDeptRows ] = useState<IDept[] | any>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = params.id && await RequestUtil.get(`/tower-hr/labor/contract/detail`,{archivesId: params.id})
+        const data: any = params.id && await RequestUtil.get(`/tower-hr/employee/information/detail`,{archivesId: params.id})
         const post: any = await RequestUtil.get(`/tower-system/station?size=1000`);
         setPost(post?.records)
         const bank: any = await RequestUtil.get(`/tower-supply/supplier?size=1000`)
         setBank(bank?.records)
-        form.setFieldsValue(params.id?data:{})
+        form.setFieldsValue(params.id?{...data,workTime: data?.workTime?moment(data?.workTime):''}:{})
         resole(data)
     }), {})
     const detailData: any = data;
@@ -76,7 +77,7 @@ export default function RecruitEdit(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button key="primary" onClick={() => {
+                    <Button type="primary" onClick={() => {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
                             value.fileDTOS= attachRef.current?.getDataSource();
@@ -90,7 +91,7 @@ export default function RecruitEdit(): React.ReactNode {
                         })
                         
                     }}>保存</Button>
-                    {params.status!=='3' && <Button key="primary" onClick={() => {
+                    {params.status!=='3' && <Button type="primary" onClick={() => {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
                             value.fileDTOS= attachRef.current?.getDataSource();
@@ -227,7 +228,7 @@ export default function RecruitEdit(): React.ReactNode {
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label='员工分组' rules={[{
+                        {/* <Form.Item label='员工分组' rules={[{
                             required:true, 
                             message:'请选择员工分组'
                         }]} name='postType'>
@@ -236,7 +237,7 @@ export default function RecruitEdit(): React.ReactNode {
                                     return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                                 })}
                             </Select>
-                        </Form.Item>
+                        </Form.Item> */}
                     </Col>
                     <Col span={12}>
                         <Form.Item label='年龄' name='age'>
@@ -336,9 +337,9 @@ export default function RecruitEdit(): React.ReactNode {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='开户行' rules={[{
+                        <Form.Item label='开户银行' rules={[{
                             required:true, 
-                            message:'请选择开户行'
+                            message:'请选择开户银行'
                         }]} name='bankName'>
                            <Select style={{width:'100%'}}>
                                 {bank && bank.map((item: any) => {
