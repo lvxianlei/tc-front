@@ -103,7 +103,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 				}, {
 					title: '待指派',
 					dataIndex: 'assessToBeAssigned',
-					path: '/workMngt/scheduleList',
+					path: '/assessmentTask',
 					state: 2
 				}, {
 					title: '待提交',
@@ -123,7 +123,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 				}, {
 					title: '待指派',
 					dataIndex: 'confirmToBeAssigned',
-					path: '/workMngt/scheduleList',
+					path: '/confirmTask/ConfirmTaskMngt',
 					state: 2
 				}, {
 					title: '待提交',
