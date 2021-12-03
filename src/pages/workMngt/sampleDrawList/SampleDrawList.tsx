@@ -237,7 +237,7 @@ export default function SampleDrawList(): React.ReactNode {
                 {
                     name: 'smallSampleLeader',
                     label:'小样图负责人',
-                    children:   <Form.Item name="materialLeader" initialValue={ location.state?.userId || '' }>
+                    children:   <Form.Item name="smallSampleLeader" initialValue={ location.state?.userId || '' }>
                                 <Select style={{width:'100px'}}>
                                     <Select.Option key={''} value={''}>全部</Select.Option>
                                     {user && user.map((item: any) => {
