@@ -107,7 +107,7 @@
             "dataIndex": "bankCardNumber"
         },
         {
-            "title": "开户行",
+            "title": "开户银行",
             "width": 100,
             "dataIndex": "bankName"
         },
@@ -125,142 +125,183 @@
     "baseInfo": [
         {
             "title": "员工姓名",
-            "width": 100,
             "dataIndex": "employeeName"
         },
         {
             "title": "性别",
-            "width": 100,
             "dataIndex": "gender"
         },
         {
             "title": "出生日期",
-            "width": 100,
             "dataIndex": "birthday"
         },
         {
             "title": "民族",
-            "width": 100,
             "dataIndex": "national"
         },
         {
             "title": "婚姻状况",
-            "width": 100,
             "dataIndex": "maritalStatus"
         },
         {
             "title": "年龄",
-            "width": 100,
             "dataIndex": "age"
         },
         {
             "title": "籍贯",
-            "width": 100,
             "dataIndex": "nativePlace"
         },
         {
             "title": "政治面貌",
-            "width": 100,
             "dataIndex": "politicsStatus"
         },
         {
             "title": "党组织关系所在支部",
-            "width": 100,
             "dataIndex": "organizationRelationship"
         },
         {
             "title": "学历",
-            "width": 100,
             "dataIndex": "education"
         },
         {
-            "title": "毕业院校--",
-            "width": 100,
-            "dataIndex": "national"
+            "title": "毕业院校",
+            "dataIndex": "graduateSchool"
         },
         {
-            "title": "专业--",
-            "width": 100,
-            "dataIndex": "national"
+            "title": "专业",
+            "dataIndex": "professional"
         },
         {
             "title": "毕业日期",
-            "width": 100,
             "dataIndex": "graduationDate"
         },
         {
             "title": "身份证号",
-            "width": 100,
             "dataIndex": "idNumber"
         },
         {
             "title": "身份证有效期",
-            "width": 100,
             "dataIndex": "cardValidityDate"
         },
         {
             "title": "户口类别",
-            "width": 100,
             "dataIndex": "accountType"
         },
         {
             "title": "联系电话",
-            "width": 100,
             "dataIndex": "phoneNumber"
         },
         {
             "title": "紧急联系人",
-            "width": 100,
             "dataIndex": "emergencyContact"
         },
         {
             "title": "紧急联系电话",
-            "width": 100,
             "dataIndex": "emergencyContactPhone"
         },
         {
             "title": "户口所在地",
-            "width": 100,
             "dataIndex": "accountLocation"
         },
         {
             "title": "现住址",
-            "width": 100,
             "dataIndex": "currentAddress"
         },
         {
             "title": "银行卡号",
-            "width": 100,
             "dataIndex": "bankCardNumber"
         },
         {
-            "title": "开户行",
-            "width": 100,
+            "title": "开户银行",
             "dataIndex": "bankName"
         },
         {
             "title": "是否残疾",
-            "width": 100,
             "dataIndex": "isDisability"
         },
         {
             "title": "残疾等级",
-            "width": 100,
             "dataIndex": "disabilityLevel"
         },
         {
             "title": "残疾类别",
-            "width": 100,
             "dataIndex": "disabilityCategory"
         },
         {
             "title": "残疾证号",
-            "width": 100,
             "dataIndex": "disabilityNumber"
         }
     ],
     "companyInfo": [
-        {}
+        {
+            "title": "公司",
+            "dataIndex": "companyName"
+        },
+        {
+            "title": "部门/班组",
+            "dataIndex": "workOrganization"
+        },
+        {
+            "title": "岗位",
+            "dataIndex": "postName"
+        },
+        {
+            "title": "员工分组",
+            "dataIndex": "postType"
+        },
+        {
+            "title": "员工性质",
+            "dataIndex": "employeeNature"
+        },
+        {
+            "title": "入职日期",
+            "dataIndex": "inductionDate"
+        },
+        {
+            "title": "转正日期",
+            "dataIndex": "positiveDate"
+        },
+        {
+            "title": "在职状态",
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "在职"
+                },
+                {
+                    "value": 2,
+                    "label": "离职"
+                }
+            ]
+        },
+        {
+            "title": "离职日期",
+            "dataIndex": "departureDate"
+        },
+        {
+            "title": "工龄",
+            "dataIndex": "workYear"
+        }
+    ],
+    "other": [
+        {
+            "title": "身高（cm）",
+            "dataIndex": "height"
+        },
+        {
+            "title": "体重（kg）",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "鞋码（号）",
+            "dataIndex": "shoeSize"
+        },
+        {
+            "title": "工装码",
+            "dataIndex": "frockSize"
+        }
     ],
     "workExperience": [
         {

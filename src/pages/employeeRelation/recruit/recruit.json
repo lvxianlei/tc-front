@@ -33,7 +33,7 @@
             "title": "身份证号"
         },
         {
-            "dataIndex": "postType",
+            "dataIndex": "postTypeName",
             "title": "员工分组"
         },
         {

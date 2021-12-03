@@ -74,7 +74,52 @@
     "setting": [
         {
             "title": "员工姓名",
-            "dataIndex": "employeeName"
+            "dataIndex": "employeeName",
+            "type": "popTable",
+            "path": "/tower-hr/employee/archives",
+            "width": 1011,
+            "value": "",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "员工姓名",
+                    "width": 100,
+                    "dataIndex": "employeeName",
+                    "search": true
+                },
+                {
+                    "title": "性别",
+                    "width": 100,
+                    "dataIndex": "gender"
+                },
+                {
+                    "title": "民族",
+                    "width": 100,
+                    "dataIndex": "national"
+                },
+                {
+                    "title": "公司",
+                    "width": 100,
+                    "dataIndex": "companyName"
+                },
+                {
+                    "title": "部门/班组",
+                    "width": 100,
+                    "dataIndex": "departmentName"
+                },
+                {
+                    "title": "岗位",
+                    "width": 100,
+                    "dataIndex": "postName"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择员工姓名..."
+                }
+            ]
         },
         {
             "title": "原公司",
@@ -93,7 +138,33 @@
         },
         {
             "title": "调入部门/班组",
-            "dataIndex": "newDepartmentName"
+            "dataIndex": "newDepartmentName",
+            "type": "popTable",
+            "path": "/tower-system/department",
+            "width": 1011,
+            "value": "",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "部门名称",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "类型",
+                    "dataIndex": "classification"
+                },
+                {
+                    "title": "简介",
+                    "dataIndex": "description"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择调入部门/班组..."
+                }
+            ]
         },
         {
             "title": "调入公司",
@@ -102,22 +173,40 @@
         },
         {
             "title": "现岗位",
-            "dataIndex": "newPostName"
+            "dataIndex": "newPostName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择现岗位..."
+                }
+            ]
         },
         {
             "title": "调派类型",
-            "dataIndex": "transferType"
+            "dataIndex": "transferType",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择调派类型..."
+                }
+            ]
         },
         {
             "title": "调动日期",
             "type": "date",
             "dataIndex": "transferDate",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择调动日期..."
+                }
+            ]
         },
         {
             "title": "备注",
             "dataIndex": "statusName",
-            "type": "textArea"
+            "type": "textarea"
         }
     ],
     "auditRecords": [
