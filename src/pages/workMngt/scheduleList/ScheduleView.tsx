@@ -140,32 +140,38 @@ export default function ScheduleView(): React.ReactNode {
             // }
         },
         {
-            key: 'priority',
+            key: 'priorityName',
             title: '优先级',
             width: 100,
-            dataIndex: 'priority',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                  {
-                    value: 0,
-                    label: "紧急"
-                  },
-                  {
-                    value: 1,
-                    label: "高"
-                  },
-                  {
-                    value: 2,
-                    label: "中"
-                  },
-                  {
-                    value: 3,
-                    label: "低"
-                  },
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'priorityName',
         },
+        // {
+        //     key: 'priority',
+        //     title: '优先级',
+        //     width: 100,
+        //     dataIndex: 'priority',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //           {
+        //             value: 0,
+        //             label: "紧急"
+        //           },
+        //           {
+        //             value: 1,
+        //             label: "高"
+        //           },
+        //           {
+        //             value: 2,
+        //             label: "中"
+        //           },
+        //           {
+        //             value: 3,
+        //             label: "低"
+        //           },
+        //         ]
+        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'materialLeaderName',
             title: '提料负责人',

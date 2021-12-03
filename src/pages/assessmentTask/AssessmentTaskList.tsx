@@ -15,7 +15,7 @@ import useRequest from '@ahooksjs/use-request';
 export default function AssessmentTaskList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ state?: number, userId?: string }>();
 
     const columns = [
         {
@@ -32,26 +32,10 @@ export default function AssessmentTaskList(): React.ReactNode {
             dataIndex: 'taskCode'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '任务状态',
-            dataIndex: 'status',
-            width: 120,
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 0:
-                        return '已拒绝';
-                    case 1:
-                        return '待确认';
-                    case 2:
-                        return '待指派';
-                    case 3:
-                        return '待完成';
-                    case 4:
-                        return '已完成';
-                    case 5:
-                        return '已提交';
-                }
-            }
+            dataIndex: 'statusName',
+            width: 120
         },
         {
             key: 'updateStatusTime',
@@ -124,13 +108,16 @@ export default function AssessmentTaskList(): React.ReactNode {
         }
     ]
 
-    const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+    // const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
+        // const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
         resole(data);
     }), {})
-    const departmentData: any = data || [];
+    const startRelease: any = data?.records || [];
+    // const departmentData: any = data || [];
 
-    const [startRelease, setStartRelease] = useState([]);
+    // const [startRelease, setStartRelease] = useState([]);
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
@@ -157,7 +144,7 @@ export default function AssessmentTaskList(): React.ReactNode {
         const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         switch (title) {
             case "startReleaseDepartment":
-                return setStartRelease(userData.records);
+                // return setStartRelease(userData.records);
         };
     }
 
@@ -168,7 +155,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                 columns={columns}
                 headTabs={[]}
                 exportPath={`/tower-science/assessTask`}
-                requestData={{ status: location.state }}
+                requestData={{ status: location.state?.state, assessUser: location.state?.userId }}
                 refresh={refresh}
                 searchFormItems={[
                     {
@@ -179,7 +166,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                     {
                         name: 'status',
                         label: '任务状态',
-                        children: <Form.Item name="status" initialValue={location.state}>
+                        children: <Form.Item name="status" initialValue={location.state?.state}>
                             <Select placeholder="请选择" style={{ width: "150px" }}>
                                 <Select.Option value="" key="6">全部</Select.Option>
                                 <Select.Option value={0} key="0">已拒绝</Select.Option>
@@ -192,18 +179,19 @@ export default function AssessmentTaskList(): React.ReactNode {
                         </Form.Item>
                     },
                     {
-                        name: 'startReleaseDate',
+                        // name: 'startReleaseDate',
+                        name: 'assessUser',
                         label: '评估人',
                         children: <Row>
-                            <Col>
+                            {/* <Col>
                                 <Form.Item name="assessUserDept">
                                     <TreeSelect placeholder="请选择" onChange={(value: any) => { onDepartmentChange(value, 'startReleaseDepartment') }} style={{ width: "150px" }}>
                                         {renderTreeNodes(wrapRole2DataNode(departmentData))}
                                     </TreeSelect>
                                 </Form.Item>
-                            </Col>
+                            </Col> */}
                             <Col>
-                                <Form.Item name="assessUser">
+                                <Form.Item name="assessUser" initialValue={ location.state.userId || '' }>
                                     <Select placeholder="请选择" style={{ width: "150px" }}>
                                         {startRelease && startRelease.map((item: any) => {
                                             return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>

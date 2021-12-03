@@ -9,7 +9,6 @@ import { TablePaginationConfig, TableColumnType, TableProps, FormItemProps, Spac
 import { RouteComponentProps, withRouter } from 'react-router'
 import { WithTranslation, withTranslation } from 'react-i18next'
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent'
-import { generateRender } from "./CommonTable"
 import { ITabItem } from '../../components/ITabableComponent'
 import RequestUtil from '../../utils/RequestUtil'
 import { IClient } from '../IClient'
@@ -160,6 +159,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                     url={this.props.exportPath}
                     serchObj={{
                         ...this.props.filterValue,
+                        ...JSON.parse(JSON.stringify(this.props?.requestData))
                     }}
                     closeExportList={() => {
                         this.setState({

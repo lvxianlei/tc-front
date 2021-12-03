@@ -103,32 +103,38 @@ export default function PickTowerMessage(): React.ReactNode {
             dataIndex: 'materialCheckLeaderName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '提料状态',
-            width: 100,
-            dataIndex: 'status',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                    {
-                        value: 1,
-                        label: "提料中"
-                    },
-                    {
-                        value: 2,
-                        label: "校核中"
-                    },
-                    {
-                        value: 3,
-                        label: "已完成"
-                    },
-                    // {
-                    //     value: 4,
-                    //     label: "已提交"
-                    // }
-                ]
-                     return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            width: 200,
+            dataIndex: 'statusName'
         },
+        // {
+        //     key: 'status',
+        //     title: '提料状态',
+        //     width: 100,
+        //     dataIndex: 'status',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //             {
+        //                 value: 1,
+        //                 label: "提料中"
+        //             },
+        //             {
+        //                 value: 2,
+        //                 label: "校核中"
+        //             },
+        //             {
+        //                 value: 3,
+        //                 label: "已完成"
+        //             },
+        //             // {
+        //             //     value: 4,
+        //             //     label: "已提交"
+        //             // }
+        //         ]
+        //              return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
+        //     }
+        // },
         {
             key: 'updateStatusTime',
             title: '最新状态变更时间',
@@ -146,7 +152,7 @@ export default function PickTowerMessage(): React.ReactNode {
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>提料</Button>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
-                    <TowerPickAssign type={ record.status < 3 ? 'message' : "detail" } title="指派信息" detailData={ record } id={ record.id } update={ onRefresh } />
+                    <TowerPickAssign type={ record.status < 2 ? 'message' : "detail" } title="指派信息" detailData={ record } id={ record.id } update={ onRefresh } />
                     <Button onClick={()=>{
                         RequestUtil.delete(`/tower-science/drawProductSegment/${record.id}`).then(()=>{
                             message.success('删除成功！')

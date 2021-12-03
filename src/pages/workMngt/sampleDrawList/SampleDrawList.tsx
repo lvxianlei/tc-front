@@ -6,12 +6,18 @@ import { Page } from '../../common';
 import { Popconfirm } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import useRequest from '@ahooksjs/use-request';
 
 export default function SampleDrawList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ state?: number, userId?: string }>();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const user:any = data||[];
     const columns = [
         {
             key: 'index',
@@ -190,7 +196,7 @@ export default function SampleDrawList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={ { smallSampleStatus: location.state } }
+            requestData={ { smallSampleStatus: location.state?.state, smallSampleLeader: location.state?.userId } }
             exportPath="/tower-science/smallSample"
             // extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
@@ -202,7 +208,7 @@ export default function SampleDrawList(): React.ReactNode {
                 {
                     name: 'smallSampleStatus',
                     label:'小样图状态',
-                    children:  <Form.Item name="smallSampleStatus" initialValue={ location.state }>
+                    children:  <Form.Item name="smallSampleStatus" initialValue={ location.state?.state }>
                         <Select style={{width:"100px"}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待开始</Select.Option>
@@ -227,6 +233,18 @@ export default function SampleDrawList(): React.ReactNode {
                                     <Select.Option value={2} key={2}>中</Select.Option>
                                     <Select.Option value={3} key={3}>低</Select.Option>
                                 </Select>
+                },
+                {
+                    name: 'smallSampleLeader',
+                    label:'小样图负责人',
+                    children:   <Form.Item name="materialLeader" initialValue={ location.state?.userId || '' }>
+                                <Select style={{width:'100px'}}>
+                                    <Select.Option key={''} value={''}>全部</Select.Option>
+                                    {user && user.map((item: any) => {
+                                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                    })}
+                                </Select>
+                                </Form.Item>
                 },
                 {
                     name: 'fuzzyMsg',

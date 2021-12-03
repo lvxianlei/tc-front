@@ -11,13 +11,8 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import AuthUtil from '../../../utils/AuthUtil';
-
-enum PriorityType {
-    EMERGENCY = '0',   
-    HIGH = '1',              
-    MIDDLE ='2',         
-    LOW = '3',                       
-}
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
 
 export default function AssemblyWeldingList(): React.ReactNode {
     const columns = [
@@ -35,22 +30,10 @@ export default function AssemblyWeldingList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'priority',
+            key: 'priorityName',
             title: '优先级',
             width: 150,
-            dataIndex: 'priority',
-            render: (priority: string): React.ReactNode => {
-                switch (priority) {
-                    case PriorityType.EMERGENCY:
-                        return '紧急';
-                    case PriorityType.HIGH:
-                        return '高';
-                    case PriorityType.LOW:
-                        return '低';
-                    case PriorityType.MIDDLE:
-                        return '中';
-                }
-            }         
+            dataIndex: 'priorityName'       
         },
         {
             key: 'taskNumber',
@@ -89,22 +72,10 @@ export default function AssemblyWeldingList(): React.ReactNode {
             dataIndex: 'weldingLeaderName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '组焊清单状态',
             width: 200,
-            dataIndex: 'status',
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 0:
-                        return '已拒绝';
-                    case 1:
-                        return '待开始';
-                    case 2:
-                        return '组焊中';
-                    case 3:
-                        return '已完成';
-                }
-            }    
+            dataIndex: 'statusName'
         },
         {
             key: 'updateStatusTime',
@@ -130,15 +101,23 @@ export default function AssemblyWeldingList(): React.ReactNode {
     ]
 
     const [ refresh, setRefresh ] = useState(false);
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ state?: number, userId?: string }>();
     const userId = AuthUtil.getUserId();
+    const [ filterValue, setFilterValue ] = useState<Record<string, any>>();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const checkUser: any = data || [];
+
     return <Page
         path="/tower-science/welding"
         exportPath={`/tower-science/welding`}
         columns={ columns }
         headTabs={ [] }
         refresh={ refresh }
-        requestData={ { status: location.state } }
+        requestData={ { status: location.state?.state, weldingLeader: location.state?.userId } }
+        filterValue={filterValue}
         searchFormItems={ [
             {
                 name: 'updateTime',
@@ -148,12 +127,24 @@ export default function AssemblyWeldingList(): React.ReactNode {
             {
                 name: 'status',
                 label: '组焊清单状态',
-                children: <Form.Item name="status" initialValue={ location.state }>
+                children: <Form.Item name="status" initialValue={ location.state?.state }>
                     <Select style={{ width: '120px' }} placeholder="请选择">
                         <Select.Option value="" key="6">全部</Select.Option>
                         <Select.Option value={1} key="1">待开始</Select.Option>
                         <Select.Option value={2} key="2">组焊中</Select.Option>
-                        <Select.Option value={4} key="4">已完成</Select.Option>
+                        <Select.Option value={3} key="3">已完成</Select.Option>
+                    </Select>
+                </Form.Item>
+            },
+            {
+                name: 'weldingLeader',
+                label: '组焊负责人',
+                children: <Form.Item name="weldingLeader" initialValue={location.state?.userId || ""}>
+                    <Select placeholder="请选择" style={{ width: "150px" }}>  
+                        <Select.Option value="" key="6">全部</Select.Option>
+                        { checkUser && checkUser.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        }) }
                     </Select>
                 </Form.Item>
             },
@@ -190,6 +181,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';;
                 values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';;
             }
+            setFilterValue(values);
             return values;
         } }
     />

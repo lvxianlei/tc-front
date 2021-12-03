@@ -12,6 +12,8 @@ import styles from './SetOut.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import Deliverables from './Deliverables';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
 export default function SetOutList(): React.ReactNode {
     const columns = [
         {
@@ -64,24 +66,10 @@ export default function SetOutList(): React.ReactNode {
             dataIndex: 'loftingLeaderName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '塔型放样状态',
             width: 200,
-            dataIndex: 'status',
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 1:
-                        return '待指派';
-                    case 2:
-                        return '放样中';
-                    case 3:
-                        return '组焊中';
-                    case 4:
-                        return '配段中';
-                    case 5:
-                        return '已完成';
-                }
-            }
+            dataIndex: 'statusName'
         },
         {
             key: 'updateStatusTime',
@@ -115,13 +103,18 @@ export default function SetOutList(): React.ReactNode {
     ]
 
     const [refresh, setRefresh] = useState(false);
-    const location = useLocation<{ state: number }>();
+    const location = useLocation<{ state?: number, userId?: string }>();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        resole(data?.records);
+    }), {})
+    const checkUser: any = data || [];
     return <Page
         path="/tower-science/loftingList/loftingPage"
         exportPath={`/tower-science/loftingList/loftingPage`}
         columns={columns}
         headTabs={[]}
-        requestData={{ status: location.state }}
+        requestData={{ status: location.state?.state, loftingLeader: location.state?.userId }}
         refresh={refresh}
         searchFormItems={[
             {
@@ -132,7 +125,7 @@ export default function SetOutList(): React.ReactNode {
             {
                 name: 'status',
                 label: '塔型状态',
-                children: <Form.Item name="status" initialValue={location.state}>
+                children: <Form.Item name="status" initialValue={ location.state?.state }>
                     <Select style={{ width: '120px' }} placeholder="请选择">
                         <Select.Option value="" key="6">全部</Select.Option>
                         <Select.Option value={1} key="1">待指派</Select.Option>
@@ -153,6 +146,18 @@ export default function SetOutList(): React.ReactNode {
                         </Select.Option>
                     }) }
                 </Select>
+            },
+            {
+                name: 'loftingLeader',
+                label: '放样负责人',
+                children: <Form.Item name="loftingLeader" initialValue={ location.state?.userId || "" }>
+                    <Select placeholder="请选择" style={{ width: "150px" }}>
+                        <Select.Option value="" key="6">全部</Select.Option>
+                        { checkUser && checkUser.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        }) }
+                    </Select>
+                </Form.Item>
             },
             {
                 name: 'fuzzyMsg',

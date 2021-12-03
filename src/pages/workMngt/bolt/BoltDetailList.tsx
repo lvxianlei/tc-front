@@ -7,7 +7,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { Page } from '../../common';
 
 export default function BoltCheck(): React.ReactNode {
-    const params = useParams<{ id: string, status: string,boltLeader:string }>();
+    const params = useParams<{ id: string, status: string, boltLeader: string }>();
     const history = useHistory()
     const columns: any[] = [
         {
@@ -21,16 +21,7 @@ export default function BoltCheck(): React.ReactNode {
         {
             title: '塔位号',
             width: 150,
-            dataIndex: 'gantahao',
-            render: (text: any, item: { productNumVOList: { id: string, productNumber: string }[] }): React.ReactNode => {
-                return (
-                    <span>
-                        {
-                            item.productNumVOList?.map((item: any) => `${item.productNumber}，`)
-                        }
-                    </span>
-                )
-            }
+            dataIndex: 'productNames',
         },
         {
             title: '呼高m',
@@ -62,7 +53,7 @@ export default function BoltCheck(): React.ReactNode {
                     <div className='operation'>
                         <Popconfirm
                             placement="bottomRight"
-                            title={text}
+                            title='确认删除?'
                             onConfirm={() => {
                                 deleteItem(item.id)
                             }}
@@ -84,6 +75,7 @@ export default function BoltCheck(): React.ReactNode {
                                 setVisible(true)
                                 let idList: string[] = item.productNumVOList.map((item: { id: string }) => item.id)
                                 setproductIdList(idList)
+                                getBoltlist(item.id)
                             }}
                         >编辑</span>
                         <span
@@ -154,14 +146,16 @@ export default function BoltCheck(): React.ReactNode {
         setRefresh(!refresh)
     }
     // 获取塔位号
-    const getBoltlist = async () => {
+    const getBoltlist = async (heightId?: string) => {
         let ary = await RequestUtil.get('/tower-science/product/listByBolt', {
-            productCategoryId: params.id
+            productCategoryId: params.id,
+            heightId,
         })
         setTowerTagList(ary)
     }
     // 弹框取消
     const onCancel = () => {
+        setId(null)
         setVisible(false)
         setproductIdList([])
         setdescription('')
@@ -199,7 +193,7 @@ export default function BoltCheck(): React.ReactNode {
             <Modal
                 visible={visible}
                 width={1000}
-                title="添加"
+                title={id ? "编辑" : "添加"}
                 onCancel={() => { onCancel(); }}
                 onOk={() => onSubmit()}
                 okText="确定"
@@ -216,9 +210,13 @@ export default function BoltCheck(): React.ReactNode {
                                 placeholder='请输入'
                                 className='input'
                                 value={basicHeight}
-                                maxLength={20}
+                                maxLength={3}
                                 onChange={(ev) => {
-                                    setbasicHeight(ev.target.value.replace(/\D/g, ''))
+                                    let height = ev.target.value.replace(/\D/g, '')
+                                    if (Number(height) === 0) {
+                                        height = ''
+                                    }
+                                    setbasicHeight(height)
                                 }}
                             />
                         </Col>
@@ -253,7 +251,7 @@ export default function BoltCheck(): React.ReactNode {
                             md={24}
                             className='search_item'
                         >
-                            <span className='tip'>说明*：</span>
+                            <span className='tip'>说明：</span>
                             <TextArea
                                 className="input"
                                 placeholder="请输入"

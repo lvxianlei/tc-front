@@ -2116,8 +2116,15 @@
       "authority": "approvalm"
     },
     { // 人资-员工关系-员工调动
+      "name": "新增员工调动",
+      "path": "/employeeRelation/transfer/:type",
+      "module": "./pages/employeeRelation/transfer/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工调动
       "name": "编辑员工调动",
-      "path": "/employeeRelation/transfer/edit/:transferId",
+      "path": "/employeeRelation/transfer/:type/:transferId",
       "module": "./pages/employeeRelation/transfer/Edit",
       "exact": true,
       "authority": "approvalm"

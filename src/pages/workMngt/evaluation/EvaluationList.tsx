@@ -13,7 +13,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function EvaluationList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState(false);
-    const location = useLocation<{ state: number }>();
+    const location = useLocation<{ state?: number }>();
 
     const columns = [
         {
@@ -48,18 +48,10 @@ export default function EvaluationList(): React.ReactNode {
             dataIndex: 'assessUserName'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '状态',
-            dataIndex: 'status',
-            width: 200,
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 3:
-                        return '待完成';
-                    case 4:
-                        return '已完成';
-                }
-            }
+            dataIndex: 'statusName',
+            width: 200
         },
         {
             key: 'updateStatusTime',
@@ -127,12 +119,12 @@ export default function EvaluationList(): React.ReactNode {
         headTabs={ [] }
         exportPath={`/tower-science/assessTask/assessList`}
         refresh={ refresh }
-        requestData={ { status: location.state } }
+        requestData={ { status: location.state?.state } }
         searchFormItems={ [
             {
                 name: 'status',
                 label: '任务状态',
-                children: <Form.Item name="status" initialValue={ location.state }>
+                children: <Form.Item name="status" initialValue={ location.state?.state }>
                     <Select style={{ width: '120px' }} placeholder="请选择">
                         <Select.Option value="" key="2">全部</Select.Option>
                         <Select.Option value={ 3 } key="3">待完成</Select.Option>
