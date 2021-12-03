@@ -80,17 +80,19 @@ export default function DepartmentMngt(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Button type="link" onClick={ () => { setDeptTip('新增');setDeptVisible(true); setDeptDeatil({ parentName: record.parentName, parentId: record.parentId }) } }>添加子部门</Button>
-                    <Button type="link" onClick={ () => { setCompanyTip('新增'); setCompanyVisible(true); setDeptDeatil({ parentId: record.parentId }) }}>添加子公司</Button>
+                    <Button type="link" onClick={ () => { setDeptTip('新增');setDeptVisible(true); setDeptDeatil({ parentName: record.name, parentId: record.id }) } } disabled={ record.type === 2 }>添加子部门</Button>
+                    <Button type="link" onClick={ () => { setCompanyTip('新增'); setCompanyVisible(true); setDeptDeatil({ parentId: record.id }) }} disabled={ record.parentId !== '0' }>添加子公司</Button>
                     <Button type="link" disabled={ record.parentId === '0' } onClick={ async () => {
                         const data: IDeptDetail = await RequestUtil.get<IDeptDetail>(`/tower-system/department/${ record.id }`);
                         setDeptDeatil(data);
                         if(record.type === 2) {
                             setCompanyTip('编辑'); 
-                            setCompanyVisible(true)
+                            setCompanyVisible(true);
+                            form.setFieldsValue({ ...data });
                         } else {
                             setDeptTip('编辑');
                             setDeptVisible(true);
+                            companyForm.setFieldsValue({ ...data });
                         }
                     } }>编辑</Button>
                     <Popconfirm
@@ -123,7 +125,7 @@ export default function DepartmentMngt(): React.ReactNode {
             if(companyForm) {
                 companyForm.validateFields().then(res => {
                     let values = companyForm.getFieldsValue(true);
-                    if(deptTip === '新增') {
+                    if(companyTip === '新增') {
                         RequestUtil.post('/tower-system/department', { ...values, type: 2, parentId: deptDeatil?.parentId }).then(res => {
                             setCompanyVisible(false);
                             companyForm.resetFields(); 
