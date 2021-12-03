@@ -31,9 +31,9 @@ export default function AddModal(props: AddModalProps): JSX.Element {
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } });
     // 提交
     const handleSure = async () => {
-        setLoading(true);
-        const postData = await addFund.validateFields();
+      const postData = await addFund.validateFields();
       try{
+        setLoading(true);
         const result: { [key: string]: any } = await RequestUtil.post('/tower-finance/payApply', {
             ...postData,
             payApplyId:props.payApplyId || 0,
@@ -41,6 +41,8 @@ export default function AddModal(props: AddModalProps): JSX.Element {
         });
         setLoading(false);
         addFund.resetFields();
+        setAttachVosData([]);
+        attchsRef.current.resetFields();
         props.onOk && props.onOk()
       }catch{
         setLoading(false)
@@ -49,7 +51,9 @@ export default function AddModal(props: AddModalProps): JSX.Element {
     // 取消
     const handleCancle = () => {
         addFund.resetFields();
-        setLoading(false)
+        setLoading(false);
+        setAttachVosData([]);
+        attchsRef.current.resetFields();
         props.onCancel && props.onCancel();
     }
     const processingNumber = (arg: any, num: number) => {
