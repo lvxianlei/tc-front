@@ -251,7 +251,7 @@ export default function PickTowerMessage(): React.ReactNode {
             console.log(error)
         }
     }
-    const handleModalCancel = () => {setVisible(false);form.resetFields();setDetail([])};
+    const handleModalCancel = () => {setVisible(false);;setDetail([]);form.resetFields()};
     return (
         <>
          <Modal title='段模式'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
@@ -264,8 +264,8 @@ export default function PickTowerMessage(): React.ReactNode {
                                     <>
                                         <Col span={ 1}></Col>
                                         <Col span={ 11 }>
-                                        <Form.Item name={[ field.name , 'segmentName']} label='段名'>
-                                            <span>{detail&&detail[field.name].segmentName}</span>
+                                        <Form.Item name={[ field.name , 'segmentName']} label='段名' initialValue={[ field.name , 'segmentName']}>
+                                            <Input disabled/>
                                         </Form.Item>
                                         </Col>
                                         <Col span={1}></Col>
