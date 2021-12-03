@@ -65,11 +65,11 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         try {
             const sourceDataKey: string[] = this.props.sourceKey?.split(".") || []
             const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
-                ...this.props.requestData,
-                ...filterValues,
                 current: pagination.current || this.state.tablePagination?.current,
                 size: pagination.pageSize || this.state.tablePagination?.pageSize,
-                type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
+                type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey,
+                ...this.props.requestData,
+                ...filterValues,
             })
             // //添加底部计算行
             // if (this.props.isSunmryLine) {
