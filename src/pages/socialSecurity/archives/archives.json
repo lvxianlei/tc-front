@@ -1,0 +1,155 @@
+{
+    "archives": [
+        {
+            "title": "姓名",
+            "width": 100,
+            "dataIndex": "employeeName"
+        },
+        {
+            "title": "公司",
+            "width": 100,
+            "dataIndex": "companyName"
+        },
+        {
+            "title": "部门/班组",
+            "width": 100,
+            "dataIndex": "teamName"
+        },
+        {
+            "title": "身份证号",
+            "width": 100,
+            "dataIndex": "idNumber"
+        },
+        {
+            "title": "方案",
+            "width": 100,
+            "dataIndex": "insurancePlanName"
+        },
+        {
+            "title": "社保开始月",
+            "width": 100,
+            "dataIndex": "ssStartMonth"
+        },
+        {
+            "title": "社保结束月",
+            "width": 100,
+            "dataIndex": "ssEndMonth"
+        },
+        {
+            "title": "社保申报基数",
+            "width": 100,
+            "dataIndex": "ssDeclarationBase"
+        },
+        {
+            "title": "公积金开始月",
+            "width": 100,
+            "dataIndex": "pfaStartMonth"
+        },
+        {
+            "title": "公积金结束月",
+            "width": 100,
+            "dataIndex": "pfaEndMonth"
+        },
+        {
+            "title": "公积金申报基数",
+            "width": 100,
+            "dataIndex": "pfaDeclarationBase"
+        }
+    ],
+    "setting": [
+        {
+            "title": "姓名",
+            "width": 100,
+            "dataIndex": "employeeName"
+        },
+        {
+            "title": "公司",
+            "width": 100,
+            "dataIndex": "companyName"
+        },
+        {
+            "title": "部门/班组",
+            "width": 100,
+            "dataIndex": "teamName"
+        },
+        {
+            "title": "身份证号",
+            "width": 100,
+            "dataIndex": "idNumber"
+        },
+        {
+            "title": "入职日期",
+            "width": 100,
+            "dataIndex": "inductionDate"
+        }
+    ],
+    "insurance": [
+        {
+            "title": "方案名称",
+            "dataIndex": "insurancePlanName"
+        },
+        {
+            "title": "缴纳公司",
+            "dataIndex": "paymentCompany"
+        },
+        {
+            "title": "社保账号",
+            "dataIndex": "socialSecurityNumber"
+        },
+        {
+            "title": "社保开始缴纳月",
+            "dataIndex": "ssStartMonth"
+        },
+        {
+            "title": "社保最后缴纳月",
+            "dataIndex": "ssEndMonth"
+        },
+        {
+            "title": "社保申报基数",
+            "dataIndex": "ssDeclarationBase"
+        },
+        {
+            "title": "公积金账号",
+            "dataIndex": "providentFundAccount"
+        },
+        {
+            "title": "公积金开始缴纳月",
+            "dataIndex": "pfaStartMonth"
+        },
+        {
+            "title": "公积金最后缴纳月",
+            "dataIndex": "pfaEndMonth"
+        },
+        {
+            "title": "公积金申报基数",
+            "dataIndex": "pfaDeclarationBase"
+        }
+    ],
+    "business": [
+        {
+            "title": "商业保险名称",
+            "width": 100,
+            "dataIndex": "insuranceArchivesName"
+        },
+        {
+            "title": "商业保险账号",
+            "width": 100,
+            "dataIndex": "commercialInsuranceNumber"
+        },
+        {
+            "title": "开始缴纳月",
+            "width": 100,
+            "dataIndex": "startMonth"
+        },
+        {
+            "title": "结束缴纳月",
+            "width": 100,
+            "dataIndex": "endMonth"
+        },
+        {
+            "title": "保费金额",
+            "width": 100,
+            "dataIndex": "insuranceAmount"
+        }
+    ]
+}

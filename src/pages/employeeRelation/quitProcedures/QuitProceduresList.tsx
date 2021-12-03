@@ -71,7 +71,9 @@ export default function QuitProceduresList(): React.ReactNode {
                     case 1:
                         return '正式员工';
                     case 2:
-                        return '临时工';
+                        return '超龄员工';
+                    case 3:
+                        return '实习员工';
                 }
             } 
         },

@@ -12,6 +12,7 @@ const TENANT_ID_KEY: string = 'SINZETECH_TENANT_ID'
 const TOKEN_KEY: string = 'SINZETECH_TOKEN'
 const REFRENSH_TOKEN: string = 'SINZETECH_REFRENSH_TOKEN'
 const USER_ID: string = 'USER_ID'
+const TENANT_NAME: string = 'SINZETECH_TENANT_NAME'
 const REAL_NAME: string = 'REAL_NAME';
 export default abstract class AuthUtil {
 
@@ -58,6 +59,26 @@ export default abstract class AuthUtil {
 
     /**
      * @static
+     * @description Sets tenant name
+     * @param tenantName
+     * @param [options] 
+     */
+    public static setTenantName(tenantName: string, options?: CookieAttributes): void {
+        Cookies.set(TENANT_NAME, tenantName, options)
+    }
+    /**
+     * @static
+     * @description Gets tenant name
+     * @returns tenant name 
+     */
+    public static getTenantName(): string {
+        return Cookies.get(TENANT_NAME) || ''
+    }
+    
+    /**
+     * @static
+     * @description Gets sinzetech auth
+     * @returns sinzetech auth 
      * @description Remove tenant id
      * @param tenantId 
      * @param [options] 

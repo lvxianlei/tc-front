@@ -8,7 +8,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 
 
-export default function View(): React.ReactNode {
+export default function QuitProceduresView(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {

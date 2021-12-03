@@ -153,31 +153,33 @@ export default function RecruitList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/recruit/view/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/recruit/edit/${record.id}/${record.status}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>编辑</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/recruit/view/${record.id}`)}} type='link'>查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/recruit/edit/${record.id}/${record.status}`)}} type='link' disabled={record.status!==2}>编辑</Button>
                     <Popconfirm
                         title="确认入职后，员工将信息将更新到员工档案中？"
-                        onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employee/information/confirm`,{employeeId: record.id}).then(()=>{
+                        onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employee/information/confirm`,{archivesId: record.id}).then(()=>{
                             message.success('入职成功！')
                         }).then(()=>{
                             setRefresh(!refresh)
                         }) }}
                         okText="确认"
                         cancelText="取消"
+                        disabled={record.status!==3}
                     >
-                        <Button type="link" >确认入职</Button> 
+                        <Button type="link" disabled={record.status!==3}>确认入职</Button> 
                     </Popconfirm>
                     <Popconfirm
                         title="确认删除？"
-                        onConfirm={ ()=>{RequestUtil.delete(`/tower-hr/employee/information`,{employeeId: record.id}).then(()=>{
+                        onConfirm={ ()=>{RequestUtil.delete(`/tower-hr/employee/information`,{archivesId: record.id}).then(()=>{
                             message.success('删除成功！')
                         }).then(()=>{
                             setRefresh(!refresh)
                         }) }}
                         okText="确认"
                         cancelText="取消"
+                        disabled={record.status!==1}
                     >
-                        <Button type="link" >删除</Button> 
+                        <Button type="link"  disabled={record.status!==1}>删除</Button> 
                     </Popconfirm>
                 </Space>
             )

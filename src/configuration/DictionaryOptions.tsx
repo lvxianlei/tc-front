@@ -24,7 +24,8 @@ export enum DictionaryEnums {
     PAY_TYPE = 1211,
     DEPT_TYPE = 1214,
     DATA_TYPE = 1215,
-    CERTIFICATE_TYPE = 1216
+    CERTIFICATE_TYPE = 1216,
+    EMPLOYEE_TYPE = 149
 }
 
 let productType: IDict[] | undefined = [];
@@ -47,6 +48,7 @@ let dataType: IDict[] | undefined = [];
 let patternType: IDict[] | undefined = [];
 let costType: IDict[] | undefined = [];
 let payType: IDict[] | undefined = [];
+let employeeType: IDict[] | undefined = [];
 
 let certificateType: IDict[] | undefined = [];
 if (dictionary) {
@@ -71,6 +73,7 @@ if (dictionary) {
     costType = dictionary[DictionaryEnums.CONST_TYPE];
     payType = dictionary[DictionaryEnums.PAY_TYPE];
     certificateType = dictionary[DictionaryEnums.CERTIFICATE_TYPE];
+    employeeType = dictionary[DictionaryEnums.EMPLOYEE_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -94,3 +97,4 @@ export const patternTypeOptions = patternType; //模式
 export const costTypeOptions = costType; //费用类型
 export const payTypeOptions = payType; //费用类型
 export const certificateTypeOptions = certificateType; //证件类型
+export const employeeTypeOptions = employeeType; //证件类型
