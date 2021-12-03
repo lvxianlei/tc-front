@@ -2131,14 +2131,14 @@
     },
     { // 人资-员工关系-员工调动
       "name": "新增员工调动",
-      "path": "/employeeRelation/transfer/:type",
+      "path": "/employeeRelation/transfer/new",
       "module": "./pages/employeeRelation/transfer/Edit",
       "exact": true,
       "authority": "approvalm"
     },
     { // 人资-员工关系-员工调动
       "name": "编辑员工调动",
-      "path": "/employeeRelation/transfer/:type/:transferId",
+      "path": "/employeeRelation/transfer/edit/:transferId",
       "module": "./pages/employeeRelation/transfer/Edit",
       "exact": true,
       "authority": "approvalm"
@@ -2221,15 +2221,15 @@
       "authority": "approvalm"
     },
     { // 人资-社保福利-保险方案-新增
-      "name": "编辑保险方案",
-      "path": "/socialSecurity/plan/:type",
+      "name": "新增保险方案",
+      "path": "/socialSecurity/plan/new",
       "module": "./pages/socialSecurity/plan/Edit",
       "exact": true,
       "authority": "approvalm"
     },
     { // 人资-社保福利-保险方案-编辑
       "name": "编辑保险方案",
-      "path": "/socialSecurity/plan/:type/:planId",
+      "path": "/socialSecurity/plan/edit/:planId",
       "module": "./pages/socialSecurity/plan/Edit",
       "exact": true,
       "authority": "approvalm"
@@ -2244,14 +2244,14 @@
     { // 人资-社保福利-员工保险档案-查看
       "name": "查看员工保险档案",
       "path": "/socialSecurity/archives/detail/:archiveId",
-      "module": "./pages/socialSecurity/archives/index",
+      "module": "./pages/socialSecurity/archives/Overview",
       "exact": true,
       "authority": "approvalm"
     },
     { // 人资-社保福利-员工保险档案-编辑
       "name": "编辑员工保险档案",
       "path": "/socialSecurity/archives/edit/:archiveId",
-      "module": "./pages/socialSecurity/archives/index",
+      "module": "./pages/socialSecurity/archives/Edit",
       "exact": true,
       "authority": "approvalm"
     }

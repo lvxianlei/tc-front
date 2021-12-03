@@ -11,7 +11,10 @@ export default function ArchivesList(): React.ReactNode {
     }
     return (
         <Page
-            path={`/tower-hr/insurancePlan`}
+            path={
+                // `/tower-hr/insurancePlan`
+                `/tower-finance/invoicing`
+            }
             columns={[
                 {
                     title: '序号',
@@ -43,7 +46,6 @@ export default function ArchivesList(): React.ReactNode {
             searchFormItems={[
                 {
                     name: 'insurancePlanName',
-                    label: '模糊查询项',
                     children: <Input placeholder="请输入方案名称" maxLength={200} />
                 }
             ]}

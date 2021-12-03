@@ -7,19 +7,19 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Edit() {
     const history = useHistory()
-    const params = useParams<{ transferId: string, type: "new" | "edit" }>()
+    const params = useParams<{ planId: string }>()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insurancePlan/detail?id=${params.transferId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insurancePlan/detail?id=${params.planId}`)
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: params.type === "new" })
+    }), { manual: !params.planId })
 
     const { loading: saveLoading } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-hr/insurancePlan/${params.type === "new" ? "add" : "edit"}`, data)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-hr/insurancePlan/${params.planId ? "add" : "edit"}`, data)
             resole(result)
         } catch (error) {
             reject(error)

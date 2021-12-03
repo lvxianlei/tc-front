@@ -7,10 +7,10 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Overview() {
     const history = useHistory()
-    const params = useParams<{ invoicingId: string }>()
+    const params = useParams<{ planId: string }>()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insurancePlan/detail?id=${params.invoicingId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insurancePlan/detail?id=${params.planId}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -19,7 +19,7 @@ export default function Overview() {
     return <DetailContent operation={[<Button key="cancel" onClick={() => history.go(-1)}>返回</Button>]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={setting} dataSource={data || {}} edit />
+            <BaseInfo columns={setting} dataSource={data || {}} />
             <DetailTitle title="社保公积金" />
             <CommonTable columns={insurance} dataSource={[]} />
             <DetailTitle title="商业保险" />
