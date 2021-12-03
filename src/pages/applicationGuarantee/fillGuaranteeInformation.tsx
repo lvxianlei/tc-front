@@ -2,18 +2,13 @@
  * 填写保函信息
  */
  import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react';
- import { Modal, Form, Upload, Button, Spin } from 'antd';
- import { BaseInfo, DetailTitle, CommonTable, Attachment, AttachmentRef } from '../common';
- import AuthUtil from "../../utils/AuthUtil"
- import { downLoadFile } from "../../utils"
+ import { Form, Spin } from 'antd';
+ import { BaseInfo,  Attachment, AttachmentRef } from '../common';
  import useRequest from '@ahooksjs/use-request'
  import RequestUtil from '../../utils/RequestUtil';
- import { baseColums, enclosure } from './applicationColunm.json';
+ import { baseColums } from './applicationColunm.json';
  import { FileProps } from '../common/Attachment';
- interface EditProps {
-    id?: string
-    ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
-}
+ import { EditProps } from './application';
  
  export default forwardRef(function FillGuaranteeInformation({id}: EditProps, ref) {
     const [addCollectionForm] = Form.useForm();

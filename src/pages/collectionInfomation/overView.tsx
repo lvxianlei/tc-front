@@ -5,18 +5,7 @@ import React from 'react';
 import { Modal, Form, Button } from 'antd';
 import { BaseInfo } from '../common';
 import { overViewColunms } from './collectionColumn.json';
-
-interface TitleType {
-    title: string
-    dataIndex: string
-}
-interface OverViewProps {
-    title: TitleType[]
-    visible?: boolean
-    userData?: object | undefined
-    onCancel: () => void
-}
-
+import { OverViewProps } from './collection';
 export default function OverView(props: OverViewProps): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     // 取消
