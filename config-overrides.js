@@ -28,7 +28,7 @@ const envConfig = Dotenv.config({
 // const os = require("os");
 // const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 const WebpackBar = require("webpackbar");
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+// const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 module.exports = {
   webpack: override(
@@ -126,7 +126,7 @@ module.exports = {
       })
     ),
     addWebpackPlugin(new WebpackBar()),
-    addWebpackPlugin(new HardSourceWebpackPlugin()),
+    // addWebpackPlugin(new HardSourceWebpackPlugin()),
     addWebpackPlugin(new AntdDayjsWebpackPlugin()),
     addWebpackPlugin(
       new DefinePlugin({
