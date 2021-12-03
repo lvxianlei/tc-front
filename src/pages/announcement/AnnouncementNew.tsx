@@ -9,7 +9,6 @@ import { IAnnouncement } from './AnnouncementMngt';
 import { downLoadFile } from '../../utils';
 import SelectUserTransfer from './SelectUserTransfer';
 import { IStaff } from '../dept/staff/StaffMngt';
-import { FileProps } from '../common/Attachment';
 
 export default function AnnouncementNew(): React.ReactNode {
     const [form] = Form.useForm();
@@ -111,7 +110,7 @@ export default function AnnouncementNew(): React.ReactNode {
                     }} />} disabled />
                 </Form.Item>
             </Form>
-            <Attachment ref={attachRef} edit />
+            <Attachment ref={attachRef} dataSource={ detailData.attachInfoVos } edit/>
         </DetailContent>
     </>
 }
