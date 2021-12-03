@@ -90,6 +90,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
         } else {
             AuthUtil.setSinzetechAuth(access_token, refresh_token)
             AuthUtil.setUserId(user_id)
+            AuthUtil.setRealName(result.real_name)
             // 暂时有问题，先去掉
             // let gotoPath: string = decodeURIComponent(new URLSearchParams(this.props.location.search).get('goto') || '')
             // const index: number = gotoPath.lastIndexOf("=")
