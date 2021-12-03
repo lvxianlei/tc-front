@@ -1,88 +1,43 @@
-import React, { useState } from 'react'
-import { Select, Form } from 'antd'
-import { useLocation } from 'react-router-dom'
+import React from 'react'
 import { Page } from '../common';
 
 export default function OperationLog(): React.ReactNode {
-    const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: {} }>();
-
     const columns = [
         {
-            key: 'index',
-            title: '操作时间',
-            dataIndex: 'index',
+            key: 'optName',
+            title: '操作名称',
+            dataIndex: 'optName',
             width: 100
         },
         {
-            key: 'taskNum',
-            title: '操作用户',
-            width: 100,
-            dataIndex: 'taskNum'
+            key: 'description',
+            title: '操作描述',
+            width: 300,
+            dataIndex: 'description'
         },
         {
-            key: 'status',
-            title: '模块',
+            key: 'deptName',
+            title: '操作人部门',
             width: 100,
-            dataIndex: 'status'
+            dataIndex: 'deptName'
         },
         {
-            key: 'updateStatusTime',
-            title: '功能',
+            key: 'optUserName',
+            title: '操作人',
             width: 200,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'optUserName'
         },
         {
-            key: 'confirmName',
-            title: '变更数据',
+            key: 'optTime',
+            title: '操作时间',
             width: 200,
-            dataIndex: 'confirmName'
-        },
-        {
-            key: 'contractName',
-            title: '操作IP',
-            width: 100,
-            dataIndex: 'contractName'
-        },
-        {
-            key: 'aeName',
-            title: '操作终端',
-            width: 100,
-            dataIndex: 'aeName'
-        },
-        {
-            key: 'aeName',
-            title: '备注',
-            width: 200,
-            dataIndex: 'aeName'
+            dataIndex: 'optTime'
         }
     ]
-
-    const onFilterSubmit = (value: any) => {
-        setFilterValue(value)
-        return value
-    }
     
-    return <>
-       
-        <Page
-            path="/tower-science/drawTask"
+    return <Page
+            path="/tower-system/log"
             columns={ columns }
-            filterValue={ filterValue }
-            onFilterSubmit={onFilterSubmit}
-            searchFormItems={[
-                {
-                    name: 'status',
-                    label: '',
-                    children: <Form.Item name="status" initialValue={ location.state }>
-                        <Select style={{width:"100px"}}>
-                            <Select.Option value={''} key ={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>营销中心</Select.Option>
-                            <Select.Option value={2} key={2}>应用中心</Select.Option>
-                        </Select>
-                    </Form.Item>
-                }
-            ]}
+            searchFormItems={[]}
         />
-    </>
 }
