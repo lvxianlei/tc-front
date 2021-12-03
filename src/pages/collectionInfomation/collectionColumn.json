@@ -150,7 +150,13 @@
             "dataIndex": "payBank",
             "title": "收款银行",
             "maxLength": 100,
-            "placeholder": "请输入收款银行"
+            "placeholder": "请输入收款银行",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入收款银行"
+                }
+            ]
         },
         {
             "dataIndex": "confirmer",
