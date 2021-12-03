@@ -282,15 +282,15 @@ export default function RecruitEdit(): React.ReactNode {
                             message:'请选择学历'
                         }]} name='education'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={0} key="0">博士</Select.Option>
-                                <Select.Option value={1} key="1">硕士</Select.Option>
-                                <Select.Option value={2} key="2">本科</Select.Option>
-                                <Select.Option value={3} key="3">大专</Select.Option>
-                                <Select.Option value={4} key="4">高中</Select.Option>
-                                <Select.Option value={5} key="5">中专</Select.Option>
-                                <Select.Option value={6} key="6">中学</Select.Option>
-                                <Select.Option value={7} key="7">小学</Select.Option>
-                                <Select.Option value={8} key="8">其他</Select.Option>
+                                <Select.Option value={1} key="1">博士</Select.Option>
+                                <Select.Option value={2} key="2">硕士</Select.Option>
+                                <Select.Option value={3} key="3">本科</Select.Option>
+                                <Select.Option value={4} key="4">大专</Select.Option>
+                                <Select.Option value={5} key="5">高中</Select.Option>
+                                <Select.Option value={6} key="6">中专</Select.Option>
+                                <Select.Option value={7} key="7">中学</Select.Option>
+                                <Select.Option value={8} key="8">小学</Select.Option>
+                                <Select.Option value={9} key="9">其他</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -312,13 +312,13 @@ export default function RecruitEdit(): React.ReactNode {
                             message:'请选择试用期'
                         }]} name='probationPeriod'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={0} key="0">无试用期</Select.Option>
-                                <Select.Option value={1} key="1">1个月</Select.Option>
-                                <Select.Option value={2} key="2">2个月</Select.Option>
-                                <Select.Option value={3} key="3">3个月</Select.Option>
-                                <Select.Option value={4} key="4">4个月</Select.Option>
-                                <Select.Option value={5} key="5">5个月</Select.Option>
-                                <Select.Option value={6} key="6">6个月</Select.Option>
+                                <Select.Option value={1} key="1">无试用期</Select.Option>
+                                <Select.Option value={2} key="2">1个月</Select.Option>
+                                <Select.Option value={3} key="3">2个月</Select.Option>
+                                <Select.Option value={4} key="4">3个月</Select.Option>
+                                <Select.Option value={5} key="5">4个月</Select.Option>
+                                <Select.Option value={6} key="6">5个月</Select.Option>
+                                <Select.Option value={7} key="7">6个月</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
