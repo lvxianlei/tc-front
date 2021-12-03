@@ -67,31 +67,31 @@ export default function Quit(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='公司' name='companyName'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <Form.Item label='部门/班组' name='newDepartmentName'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item label='岗位' name='postName'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <Form.Item label='入职日期' name='inductionDate'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item label='员工性质' name='employeeType'>
-                            <Select placeholder="请选择" style={{ width: '100%' }} >
+                            <Select placeholder="请选择" style={{ width: '100%' }} disabled>
                                 <Select.Option value={1} key="1">正式员工</Select.Option>
                                 <Select.Option value={2} key="2">超龄员工</Select.Option>
                                 <Select.Option value={3} key="3">实习员工</Select.Option>
@@ -131,14 +131,14 @@ export default function Quit(): React.ReactNode {
                         <Form.Item label='离职原因' rules={[{
                             required:true, 
                             message:'请填写离职原因'
-                        }]} name='departureReason'>
+                        }]} name='departureReason' labelCol= {{span:3}} wrapperCol={{ span: 20 }}>
                             <Input.TextArea maxLength={200} showCount/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={24}>
-                        <Form.Item label='备注' name='remark'>
+                        <Form.Item label='备注' name='remark' labelCol= {{span:3}} wrapperCol={{ span: 20 }}>
                             <Input.TextArea maxLength={400} showCount/>
                         </Form.Item>
                     </Col>
