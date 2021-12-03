@@ -224,7 +224,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式">
-                                { this.props.type === 'detail'||this.props.type === 'message'? this.state.appointed?.patternName: this.state.appointed?.pattern }
+                                { this.props.type === 'detail'||this.props.type === 'message'? this.state.appointed?.pattern: this.state.appointed?.patternName }
                             </Descriptions.Item>
                             { this.props.type === 'detail' ?
                                 <><Descriptions.Item label="段信息">
