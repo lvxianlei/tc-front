@@ -120,11 +120,11 @@ export default function ApplicationColunm(): React.ReactNode {
                                 width: 50,
                                 render: (_: any, record: any): React.ReactNode => (
                                     <span>{
-                                        record.guaranteeType === 1 ? 
+                                        record.guaranteeType === '1' ? 
                                             '履约保函' :
-                                        record.guaranteeType === 2 ?
+                                        record.guaranteeType === '2' ?
                                             '投标保函' :
-                                        record.guaranteeType === 3 ?
+                                        record.guaranteeType === '3' ?
                                             '质保金保函' : '预付款保函'
                                     }</span>
                                 )

@@ -68,33 +68,6 @@
             viewRef.current?.getDetail()
         }) 
     }
-    //表格增加底部计算
-    const addList = (data:any)=> {
-        //如果没有数据
-        if(!data.payApplyListVOIPage.records.length){
-            return;
-        }
-        const records = data.payApplyListVOIPage.records;
-        let sumMoney=0,
-                money=0,
-                payMoney=0;
-        records.forEach((item:any) => {
-            sumMoney= (sumMoney*100+Number(item.sumMoney)*100)/100;
-            money= (money*100+Number(item.money)*100)/100;
-            payMoney= (payMoney*100+Number(item.payMoney)*100)/100;
-        });
-        let list:{[t:string]:any} ={}
-        fundListColumns.forEach((item:any)=>{
-            list[item.dataIndex]=""
-        });
-        list.id=1000;
-        list.payApplyNumber = "合计";
-        list.Sunmry=true;
-        list.sumMoney=sumMoney;
-        list.money=money;
-        list.payMoney=payMoney;
-        records.push(list)
-    }
      return (
          <>
              <Page
@@ -148,15 +121,14 @@
                      </Radio.Group>
                      { payStatus == 1 ? 
                                  <span style={{marginLeft:"20px"}}>
-                                     请款金额总计：{data ? data.totalSumMoney : null}元   
-                                     已付金额合计：{data ?data.totalMoney : null}元    
-                                     应付款余额合计：{data ?data.totalPayMoney : null}元
+                                     请款金额总计：{data ? data.totalSumMoney : 0}元   
+                                     已付金额合计：{data ?data.totalMoney : 0}元    
+                                     应付款余额合计：{data ?data.totalPayMoney : 0}元
                                  </span>
                                  :
-                                 <span style={{marginLeft:"20px"}}>请款金额总计：{data ?data.totalSumMoney : null}元</span>
+                                 <span style={{marginLeft:"20px"}}>请款金额总计：{data ?data.totalSumMoney : 0}元</span>
                              }
                  </>}
-                  isSunmryLine={addList}
                  columns={[
                      ...fundListColumns.map((item: any) => {
                          if (item.dataIndex === 'payStatus') {
@@ -193,8 +165,51 @@
                                 return <Button type="link"onClick={() => { viewShow(record) }}>详情</Button>
                             }
                          }
-                     }]}
-                     
+                 }]}
+                 tableProps={{
+                    summary: (pageData: any) => {
+                        const number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+                        let subMomeny = 0, // 已付金额
+                          sumMoney = 0, // 请款金额
+                          payMoney = 0; // 应付金额
+                        if (pageData && pageData.length > 0) {
+                            for (let i = 0; i <= pageData.length; i += 1) {
+                                if (pageData[i] && pageData[i].payMoney) {
+                                    subMomeny += pageData[i].money * 1;
+                                    sumMoney += pageData[i].sumMoney * 1;
+                                    payMoney += pageData[i].payMoney * 1;
+                                }
+                            }
+                        }
+                        return (
+                            <>
+                              {
+                                pageData && pageData.length > 0 ? (
+                                    <Table.Summary.Row>
+                                        {
+                                            number.map((item: any, index: number) => {
+                                                if (index === 0) {
+                                                return <Table.Summary.Cell index={1}>合计：</Table.Summary.Cell>
+                                                } else
+                                                if (index === 8) {
+                                                return <Table.Summary.Cell index={1}>{sumMoney}</Table.Summary.Cell>
+                                                } else
+                                                if (index === 9) {
+                                                    return <Table.Summary.Cell index={1}>{subMomeny}</Table.Summary.Cell>
+                                                } else
+                                                if (index === 10) {
+                                                    return <Table.Summary.Cell index={1}>{payMoney}</Table.Summary.Cell>
+                                                } else
+                                                return <Table.Summary.Cell index={2}></Table.Summary.Cell>
+                                            })
+                                        }
+                                    </Table.Summary.Row>
+                                  ) : null
+                              }
+                            </>
+                          );
+                    }
+                }}
              />
              {/* 新增 */}
              <AddModal

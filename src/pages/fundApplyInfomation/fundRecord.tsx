@@ -3,7 +3,7 @@
  * 2021/11/22
  */
  import React, { useState,useRef } from 'react';
- import { Button, Input, DatePicker,Select ,Form,TreeSelect,Table} from 'antd'
+ import { Button, Input, DatePicker,Select ,Form,TreeSelect,Table, Typography} from 'antd'
  import { Page } from '../common'
  import { fundRecordColumns } from "./fundRecord.json"
  import { payTypeOptions } from '../../configuration/DictionaryOptions';
@@ -11,6 +11,8 @@
  import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
  import useRequest from '@ahooksjs/use-request';
  import RequestUtil from '../../utils/RequestUtil'
+
+ const { Text } = Typography;
  interface ViewRefProps {
     getDetail: () => void
 }
@@ -121,38 +123,73 @@
                     金额合计：{data ? Number(data.totalSumMoney).toFixed(2) : null}元
                 </>}
                 isSunmryLine={addList}
-                 columns={[
-                     ...fundRecordColumns.map((item: any) => {
-                        if (item.dataIndex === 'payType') {
-                            return ({
-                                title: item.title,
-                                dataIndex: 'payType',
-                                width: 50,
-                                render: (_: any, record: any):
-                                React.ReactNode => (
-                                    <span>{
-                                           !record.Sunmry ?
-                                                (payTypeOptions as Array<any>)?.find((item:any)=>item.id == record.payType)['name'] :""
-                                        }
-                                    </span>
-                                )
-                            })
+                columns={[
+                    ...fundRecordColumns.map((item: any) => {
+                    if (item.dataIndex === 'payType') {
+                        return ({
+                            title: item.title,
+                            dataIndex: 'payType',
+                            width: 50,
+                            render: (_: any, record: any):
+                            React.ReactNode => (
+                                <span>{
+                                        !record.Sunmry ?
+                                            (payTypeOptions as Array<any>)?.find((item:any)=>item.id == record.payType)['name'] :""
+                                    }
+                                </span>
+                            )
+                        })
+                    }
+                    return item;
+                }),
+                    {
+                        title: "操作",
+                        dataIndex: "opration",
+                        fixed: "right",
+                        width: 100,
+                        render: (_: any, record: any) => {
+                        if(!record.Sunmry){
+                            return <Button type="link" 
+                            onClick={() => {viewShow(record)}}>详情</Button>
                         }
-                        return item;
-                    }),
-                     {
-                         title: "操作",
-                         dataIndex: "opration",
-                         fixed: "right",
-                         width: 100,
-                         render: (_: any, record: any) => {
-                            if(!record.Sunmry){
-                                return <Button type="link" 
-                                onClick={() => {viewShow(record)}}>详情</Button>
+                        }
+                }]}
+                tableProps={{
+                    summary: (pageData: any) => {
+                        const number = [1,2,3,4,5,6,7,8,9,10];
+                        let momeny = 0;
+                        if (pageData && pageData.length > 0) {
+                            for (let i = 0; i <= pageData.length; i += 1) {
+                                if (pageData[i] && pageData[i].payMoney) {
+                                    momeny += pageData[i].payMoney * 1;
+                                }
+                                
                             }
-                         }
-                     }]}
-             />
+                        }
+                        return (
+                            <>
+                              {
+                                (pageData && pageData.length > 0) ? (
+                                    <Table.Summary.Row>
+                                        {
+                                            number.map((item: any, index: number) => {
+                                                if (index === 0) {
+                                                return <Table.Summary.Cell index={1}>合计：</Table.Summary.Cell>
+                                                } else
+                                                if (index === 8) {
+                                                return  <Table.Summary.Cell index={1}>{momeny}</Table.Summary.Cell>
+                                                } else
+                                                return <Table.Summary.Cell index={2}></Table.Summary.Cell>
+                                            })
+                                        }
+                                    </Table.Summary.Row>
+                                ) : null
+                              }
+                            </>
+                          );
+                    }
+                }}
+            />
              {/* 查看 */}
              <OverViewRecord
                 payApplyId={payApplyId}
