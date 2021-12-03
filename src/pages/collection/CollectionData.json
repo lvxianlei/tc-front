@@ -41,7 +41,7 @@
         },
         {
             "title": "外币金额",
-            "dataIndex": "currency"
+            "dataIndex": "abroadMoney"
         },
         {
             "title": "来款银行",
@@ -262,6 +262,7 @@
         {
             "title": "备注",
             "dataIndex": "remark",
+            "disabled": true,
             "type": "textarea"
         }
     ],

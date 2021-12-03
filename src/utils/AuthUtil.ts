@@ -12,6 +12,8 @@ const TENANT_ID_KEY: string = 'SINZETECH_TENANT_ID'
 const TOKEN_KEY: string = 'SINZETECH_TOKEN'
 const REFRENSH_TOKEN: string = 'SINZETECH_REFRENSH_TOKEN'
 const USER_ID: string = 'USER_ID'
+const TENANT_NAME: string = 'SINZETECH_TENANT_NAME'
+const REAL_NAME: string = 'REAL_NAME';
 export default abstract class AuthUtil {
 
     static timeLength = 50 * 60 * 1000
@@ -57,11 +59,32 @@ export default abstract class AuthUtil {
 
     /**
      * @static
+     * @description Sets tenant name
+     * @param tenantName
+     * @param [options] 
+     */
+    public static setTenantName(tenantName: string, options?: CookieAttributes): void {
+        Cookies.set(TENANT_NAME, tenantName, options)
+    }
+    /**
+     * @static
+     * @description Gets tenant name
+     * @returns tenant name 
+     */
+    public static getTenantName(): string {
+        return Cookies.get(TENANT_NAME) || ''
+    }
+    
+    /**
+     * @static
      * @description Gets sinzetech auth
      * @returns sinzetech auth 
+     * @description Remove tenant id
+     * @param tenantId 
+     * @param [options] 
      */
-    public static getSinzetechAuth(): string {
-        return sessionStorage.getItem(TOKEN_KEY) || ''
+    public static removeTenantId(): void {
+        Cookies.remove(TENANT_ID_KEY);
     }
 
     /**
@@ -69,14 +92,8 @@ export default abstract class AuthUtil {
      * @description Gets sinzetech auth
      * @returns sinzetech auth 
      */
-    public static getRefreshToken(): string {
-        return sessionStorage.getItem(REFRENSH_TOKEN) || ''
-    }
-    public static setUserId(userId: string): void {
-        sessionStorage.setItem(USER_ID, userId)
-    }
-    public static getUserId(): any {
-        return sessionStorage.getItem(USER_ID)||'';
+    public static getSinzetechAuth(): string {
+        return sessionStorage.getItem(TOKEN_KEY) || ''
     }
 
     /**
@@ -92,6 +109,66 @@ export default abstract class AuthUtil {
         this.timer = setTimeout(() => {
             this.refrenshToken(this.getRefreshToken())
         }, this.timeLength)
+    }
+
+    /**
+     * @static
+     * @description Remove sinzetech auth
+     * @param token 
+     * @param [options] 
+     */
+    public static removeSinzetechAuth(): void {
+        Cookies.remove(TOKEN_KEY);
+    }
+
+    /**
+     * @static
+     * @description Gets sinzetech auth
+     * @returns sinzetech auth 
+     */
+     public static getRealName(): string {
+        return Cookies.get(REAL_NAME) || '';
+    }
+
+    /**
+     * @static
+     * @description Sets sinzetech auth
+     * @param token 
+     * @param [options] 
+     */
+    public static setRealName(token: string, options?: CookieAttributes): void {
+        Cookies.set(REAL_NAME, token, options);
+    }
+
+    /**
+     * @static
+     * @description Remove sinzetech auth
+     * @param token 
+     * @param [options] 
+     */
+    public static removeRealName(): void {
+        Cookies.remove(REAL_NAME);
+    }
+   
+    public static setUserId(userId: string): void {
+        sessionStorage.setItem(USER_ID, userId)
+    }
+
+    public static getUserId(): any {
+        return sessionStorage.getItem(USER_ID)||'';
+    } 
+
+    public static removeUserId(): void {
+        sessionStorage.removeItem(USER_ID);
+    } 
+    
+    /**
+     * @static
+     * @description Gets sinzetech auth
+     * @returns sinzetech auth 
+     */
+     public static getRefreshToken(): string {
+        return sessionStorage.getItem(REFRENSH_TOKEN) || ''
     }
 
     /**

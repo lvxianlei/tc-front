@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, Button, Popconfirm, message } from 'antd'
+import { Space, Input, Button, Popconfirm, message, Select, DatePicker } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
@@ -20,76 +20,137 @@ export default function ReinstateList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'productCategoryName',
+            key: 'employeeName',
             title: '姓名',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'employeeName'
         },
         {
-            key: 'productCategoryName',
+            key: 'inductionDate',
             title: '入职日期',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'inductionDate'
         },
         {
-            key: 'productCategoryName',
+            key: 'departureDate',
             title: '离职日期',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'departureDate'
         },
         {
-            key: 'productCategoryName',
+            key: 'departureType',
             title: '离职类型',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'departureType',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '主动离职';
+                    case 2:
+                        return '辞退';
+                    case 3:
+                        return '退休';
+                    case 4:
+                        return '死亡';
+                }
+            } 
         },
         {
-            key: 'productCategoryName',
+            key: 'departureReason',
             title: '离职原因',
-            width: 100,
-            dataIndex: 'productCategoryName'
+            width: 200,
+            dataIndex: 'departureReason',
         },
         {
-            key: 'productCategoryName',
+            key: 'reinstatementDate',
             title: '复职日期',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'reinstatementDate'
         },
         {
-            key: 'productCategoryName',
+            key: 'companyName',
             title: '复职公司',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'companyName'
         },
         {
             key: 'productCategoryName',
             title: '复职部门/班组',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'productCategoryName',
+            render:(_:any,record:any)=>{
+                return <span>{record.departmentName+"/"+record.teamName}</span>
+            }
         },
         {
-            key: 'productCategoryName',
+            key: 'postName',
             title: '复职岗位',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'postName'
         },
         {
-            key: 'productCategoryName',
+            key: 'reinstatementNature',
             title: '复职性质',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'reinstatementNature',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '一次复职';
+                    case 2:
+                        return '二次复职';
+                    case 3:
+                        return '三次复职';
+                    case 4:
+                        return '四次复职';
+                    case 5:
+                        return '五次复职';
+                    case 6:
+                        return '六次及以上';
+                }
+            } 
         },
         {
-            key: 'name',
+            key: 'probationPeriod',
             title: '试用期',
             width: 100,
-            dataIndex: 'name'
+            dataIndex: 'probationPeriod',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '无试用期';
+                    case 2:
+                        return '一个月';
+                    case 3:
+                        return '二个月';
+                    case 4:
+                        return '三个月';
+                    case 5:
+                        return '四个月';
+                    case 6:
+                        return '五个月';
+                    case 7:
+                        return '六个月';
+                }
+            } 
         },
         {
-            key: 'pattern',
+            key: 'status',
             title: '审批状态',
             width: 100,
-            dataIndex: 'pattern'
+            dataIndex: 'status',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '待提交';
+                    case 2:
+                        return '审批中';
+                    case 3:
+                        return '审批通过';
+                    case 4:
+                        return '审批不通过';
+                }
+            } 
         },
         {
             key: 'operation',
@@ -99,9 +160,21 @@ export default function ReinstateList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>编辑</Button>
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>确认复职</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/reinstate/View/${record.id}`)}} type='link' >查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/reinstate/Edit/${record.id}/${record.status}`)}} type='link' disabled={record.status===2}>编辑</Button>
+                    <Popconfirm
+                        title="确认复职后，员工将信息将更新到员工档案中？"
+                        onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employeeReinstatement/confirm`,{employeeId: record.id}).then(()=>{
+                            message.success('复职成功！')
+                        }).then(()=>{
+                            setRefresh(!refresh)
+                        }) }}
+                        okText="确认"
+                        cancelText="取消"
+                        disabled={record.status!==3}
+                    >
+                        <Button type="link"  disabled={record.status!==3}>确认复职</Button> 
+                    </Popconfirm>
                     <Popconfirm
                         title="确认删除？"
                         onConfirm={ ()=>{RequestUtil.delete(`/tower-science/drawProductSegment/${record.id}`).then(()=>{
@@ -111,14 +184,21 @@ export default function ReinstateList(): React.ReactNode {
                         }) }}
                         okText="确认"
                         cancelText="取消"
+                        disabled={record.status!==1}
                     >
-                        <Button type="link" >删除</Button> 
+                        <Button type="link" disabled={record.status!==1}>删除</Button> 
                     </Popconfirm>
                 </Space>
             )
         }
     ];
     const onFilterSubmit = (value: any) => {
+        if (value.statusUpdateTime) {
+            const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.departureDateStart = formatDate[0]+ ' 00:00:00';
+            value.departureDateEnd = formatDate[1]+ ' 23:59:59';
+            delete value.statusUpdateTime
+        }
         setFilterValue(value)
         return value
     }
@@ -127,20 +207,37 @@ export default function ReinstateList(): React.ReactNode {
     }
     return (
             <Page
-                path={`/tower-science/drawProductSegment`}
+                path={`/tower-hr/employeeReinstatement`}
                 columns={columns}
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 requestData={{ productCategory: params.id }}
                 extraOperation={
-                    <Button type="primary" onClick={()=>history.push('/workMngt/pickList')} ghost>新增入职</Button>
+                    <Button type="primary" onClick={()=>history.push('/employeeRelation/reinstate/Edit/0/0')} ghost>新增员工复职</Button>
                 }
                 searchFormItems={[
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入应聘者姓名/联系电话/身份证号进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入员工姓名/电话/身份证号进行查询" maxLength={200} />
+                    },
+                    {
+                        name: 'departureType',
+                        label: '离职类型',
+                        children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                                <Select.Option value={1} key="1">一次复职</Select.Option>
+                                <Select.Option value={2} key="2">二次复职</Select.Option>
+                                <Select.Option value={3} key="3">三次复职</Select.Option>
+                                <Select.Option value={4} key="4">四次复职</Select.Option>
+                                <Select.Option value={5} key="5">五次复职</Select.Option>
+                                <Select.Option value={6} key="6">六次及以上</Select.Option>
+                        </Select>
+                    },
+                    {
+                        name: 'statusUpdateTime',
+                        label: '调动日期',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                 ]}
             />

@@ -7,7 +7,7 @@ import { baseInfoData } from './recruit.json';
 import RequestUtil from '../../../utils/RequestUtil';
 
 
-export default function View(): React.ReactNode {
+export default function RecruitView(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {

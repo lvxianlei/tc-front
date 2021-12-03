@@ -255,7 +255,35 @@ export default function CertificateMngt(): React.ReactNode {
             path="/tower-system/certificateRecord"
             columns={ columns }
             headTabs={ [] }
+            exportPath={`/tower-system/certificateRecord`}
             extraOperation={ <Space direction="horizontal" size="small">
+                 {/* <Upload 
+                    action={ () => {
+                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                        return baseUrl+''
+                    } } 
+                    headers={
+                        {
+                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }
+                    }
+                    showUploadList={ false }
+                    onChange={ (info) => {
+                        if(info.file.response && !info.file.response?.success) {
+                            message.warning(info.file.response?.msg)
+                        }
+                        if(info.file.response && info.file.response?.success){
+                            message.success('导入成功！');
+                            setRefresh(!refresh);
+                        } 
+                    } }
+                >
+                    <Button type="primary">导入</Button>
+                </Upload>
+                <Button type="primary" onClick={ () => downloadTemplate('', '证件管理导入模板') } ghost>下载导入模板</Button>
+                <Button type="primary" ghost>导出</Button> */}
                 <Link to={{pathname: `/archivesMngt/certificateMngt/certificateNew`, state:{ type: 'new' } }}><Button type="primary" ghost>录入</Button></Link>
                 { selectedRows.length > 0 && selectedRows.map(items => items.certificateStatus).indexOf(1) === -1 && selectedRows.map(items => items.certificateStatus).indexOf(2) === -1 && selectedRows.map(items => items.certificateStatus).indexOf(3) === -1 ? <Link to={{pathname: `/archivesMngt/certificateMngt/certificateSetting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button>}
                 <Button type="primary" onClick={ batchDel } ghost>删除</Button>

@@ -34,7 +34,7 @@ export interface IResponseData {
     readonly current: number;
     readonly size: number;
     readonly total: number;
-    readonly records: IClient[]
+    readonly records: IClient[];
 }
 
 interface PageState extends IAbstractMngtComponentState {
@@ -60,32 +60,44 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
             isExport: false
         };
     }
+
+    /**
+     * 根据传递的sourceKey对数据结构进行处理
+     * @param resData 
+     * @returns 
+     */
+    public getHierarchy = (resData: IResponseData) => {
+        const dataKey:string[] = this.props.sourceKey?.split(".").filter((item: any) => item !== this.props.sourceKey?.split(".")[this.props.sourceKey?.split(".").length - 1]) || [];
+        const result =  this.props.sourceKey ? dataKey.reduce((acc: any, key: any) => {
+            return acc && key in acc ? acc[key] : null;},
+        (resData as any)) : resData.records || resData;
+        return result;
+    }
+
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         this.setState({ loading: true })
         try {
             const sourceDataKey: string[] = this.props.sourceKey?.split(".") || []
             const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
-                ...this.props.requestData,
-                ...filterValues,
                 current: pagination.current || this.state.tablePagination?.current,
                 size: pagination.pageSize || this.state.tablePagination?.pageSize,
-                type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
+                type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey,
+                ...this.props.requestData,
+                ...filterValues,
             })
-            // //添加底部计算行
-            // if (this.props.isSunmryLine) {
-            //     this.props.isSunmryLine(resData)
-            // }
+            let result = this.props.sourceKey ? this.getHierarchy(resData) : resData;
             this.setState({
                 ...filterValues,
                 resData,
                 tableDataSource: this.props.sourceKey ? sourceDataKey.reduce((acc, key) => {
                     return acc && key in acc ? acc[key] : null;
-                }, (resData as any)) : resData.records || resData,
+                },
+                (resData as any)) : resData.records || resData,
                 tablePagination: {
                     ...this.state.tablePagination,
-                    current: resData.current,
-                    pageSize: resData.size,
-                    total: resData.total
+                    current: this.props.sourceKey ? result.current : resData.current,
+                    pageSize: this.props.sourceKey ? result.size : resData.size,
+                    total: this.props.sourceKey ? result.total : resData.total
                 },
                 loading: false
             });
@@ -159,7 +171,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                     url={this.props.exportPath}
                     serchObj={{
                         ...this.props.filterValue,
-                        ...JSON.parse(JSON.stringify(this.props?.requestData))
+                        ...JSON.parse(JSON.stringify(this.props?.requestData || {}))
                     }}
                     closeExportList={() => {
                         this.setState({

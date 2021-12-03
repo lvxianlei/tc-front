@@ -16,6 +16,7 @@ interface UserData {
 interface OverViewProps {
     visible?: boolean
     userData?: UserData | undefined
+    acceptStatus?: number
     onCancel: () => void
     onOk: () => void
 }
@@ -56,10 +57,10 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                                             ...item,
                                             type: "select",
                                             enum: [
-                                                { value: 1, label: "履约保函" },
-                                                { value: 2, label: "投标保函" },
-                                                { value: 3, label: "质保金保函" },
-                                                { value: 4, label: "预付款保函" }
+                                                { value: '1', label: "履约保函" },
+                                                { value: '2', label: "投标保函" },
+                                                { value: '3', label: "质保金保函" },
+                                                { value: '4', label: "预付款保函" }
                                             ]
                                         })
                                     }
@@ -71,7 +72,7 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                 )
             }
             {
-                props?.userData?.guaranteeVO && (
+                (props.acceptStatus === 3 || props.acceptStatus === 2) && props?.userData?.guaranteeVO && (
                     <>
                         <DetailTitle title="保函信息" />
                         <BaseInfo
@@ -83,7 +84,7 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                     </>
                 )
             }
-            {props?.userData?.guaranteeRecoveryVO && (
+            {props.acceptStatus === 3 && props?.userData?.guaranteeRecoveryVO && (
                 <>
                     <DetailTitle title="保函回收信息" />
                     <BaseInfo
@@ -106,7 +107,7 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                 </>
             )}
             {
-                props?.userData?.attachInfoVOList && (
+                (props.acceptStatus === 3 || props.acceptStatus === 2) && props?.userData?.attachInfoVOList && (
                     <>
                         <Attachment
                             dataSource={ props?.userData?.attachInfoVOList || [] }

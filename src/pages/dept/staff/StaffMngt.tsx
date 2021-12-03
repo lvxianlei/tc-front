@@ -145,6 +145,7 @@ export default function StaffMngt(): React.ReactNode {
             path="/tower-system/employee"
             columns={ columns }
             headTabs={ [] }
+            exportPath={`/tower-system/employee`}
             extraOperation={ <Space direction="horizontal" size="small">
                 {/* <Upload 
                     action={ () => {
@@ -171,8 +172,7 @@ export default function StaffMngt(): React.ReactNode {
                 >
                     <Button type="primary">导入</Button>
                 </Upload>
-                <Button type="primary" onClick={ () => downloadTemplate('', '员工管理导入模板') } ghost>下载导入模板</Button>
-                <Button type="primary" ghost>导出</Button> */}
+                <Button type="primary" onClick={ () => downloadTemplate('', '员工管理导入模板') } ghost>下载导入模板</Button> */}
                 <Link to={{pathname: `/dept/staffMngt/new`, state:{ type: 'new' } }}><Button type="primary" ghost>新增</Button></Link>
                 { selectedRows.length > 0 ? <Link to={{pathname: `/dept/staffMngt/setting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button> }
                 <Popconfirm

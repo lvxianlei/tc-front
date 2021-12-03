@@ -53,7 +53,9 @@ export default function QuitList(): React.ReactNode {
                     case 1:
                         return '正式员工';
                     case 2:
-                        return '临时工';
+                        return '超龄员工';
+                    case 3:
+                        return '实习员工';
                 }
             } 
         },
@@ -160,10 +162,10 @@ export default function QuitList(): React.ReactNode {
                         label: '离职类型',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>
-                            <Select.Option value={0} key="0">主动离职</Select.Option>
-                            <Select.Option value={1} key="1">辞退</Select.Option>
-                            <Select.Option value={2} key="2">退休</Select.Option>
-                            <Select.Option value={3} key="3">死亡</Select.Option>
+                            <Select.Option value={1} key="1">主动离职</Select.Option>
+                            <Select.Option value={2} key="2">辞退</Select.Option>
+                            <Select.Option value={3} key="3">退休</Select.Option>
+                            <Select.Option value={4} key="4">死亡</Select.Option>
                         </Select>
                     },
                     {

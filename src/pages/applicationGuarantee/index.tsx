@@ -120,11 +120,11 @@ export default function ApplicationColunm(): React.ReactNode {
                                 width: 50,
                                 render: (_: any, record: any): React.ReactNode => (
                                     <span>{
-                                        record.guaranteeType === 1 ? 
+                                        record.guaranteeType === '1' ? 
                                             '履约保函' :
-                                        record.guaranteeType === 2 ?
+                                        record.guaranteeType === '2' ?
                                             '投标保函' :
-                                        record.guaranteeType === 3 ?
+                                        record.guaranteeType === '3' ?
                                             '质保金保函' : '预付款保函'
                                     }</span>
                                 )
@@ -136,7 +136,7 @@ export default function ApplicationColunm(): React.ReactNode {
                                 dataIndex: item.dataIndex,
                                 width: 50,
                                 render: (_: any, record: any): React.ReactNode => (
-                                    <span style={{color: (acceptStatus === 2 && moment(record.requiredReturnTime).diff(moment(new Date()), 'days') > 0) ? 'red' : ''}}>{record.requiredReturnTime ? record.requiredReturnTime : ''}</span>
+                                    <span style={{color: (acceptStatus === 2 && moment(record.requiredReturnTime).diff(moment(moment(new Date()).format("YYYY-MM-DD")), 'days') < 0) ? 'red' : ''}}>{record.requiredReturnTime ? record.requiredReturnTime : ''}</span>
                                 )
                             })
                         }
@@ -251,6 +251,7 @@ export default function ApplicationColunm(): React.ReactNode {
             <SeeGuarantee
                 visible={visibleSee}
                 userData={userData}
+                acceptStatus={acceptStatus}
                 onCancel={() => setVisibleSee(false)}
                 onOk={() => setVisibleSee(false)}
             />

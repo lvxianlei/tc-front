@@ -131,20 +131,20 @@ export default function BoltList(): React.ReactNode {
             {
                 name: 'boltStatus',
                 label: '螺栓清单状态',
-                children: <Form.Item name="boltStatus" initialValue={location.state?.state}>
+                children: <Form.Item name="boltStatus" initialValue={location.state?.state || ''}>
                     <Select style={{ width: '120px' }} placeholder="请选择">
                         <Select.Option value="" key="6">全部</Select.Option>
-                        <Select.Option value="1" key="1">待开始</Select.Option>
-                        <Select.Option value="2" key="2">进行中</Select.Option>
-                        <Select.Option value="3" key="3">校核中</Select.Option>
-                        <Select.Option value="4" key="4">已完成</Select.Option>
+                        <Select.Option value={1} key="1">待开始</Select.Option>
+                        <Select.Option value={2} key="2">进行中</Select.Option>
+                        <Select.Option value={3} key="3">校核中</Select.Option>
+                        <Select.Option value={4} key="4">已完成</Select.Option>
                     </Select>
                 </Form.Item>
             },
             {
                 name: 'boltLeader',
                 label: '螺栓负责人',
-                children: <Form.Item name="boltLeader" initialValue={location.state?.userId || ""}>
+                children: <Form.Item name="boltLeader" initialValue={location.state?.userId || ''}>
                     <Select placeholder="请选择" style={{ width: "150px" }}>
                         <Select.Option value="" key="6">全部</Select.Option>
                         { checkUser && checkUser.map((item: any) => {
