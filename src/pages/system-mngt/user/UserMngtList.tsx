@@ -33,7 +33,7 @@ export default function RoleMngtList(): React.ReactNode {
             render: (_: undefined, item: object): React.ReactNode => {
                 return (
                     <Checkbox
-                        checked={(item as IUser).status ? true : false}
+                        checked={(item as IUser).status === 1 ? true : false}
                         onChange={() => onChangeStatus([item as IUser])}
                     />
                 )
@@ -46,7 +46,7 @@ export default function RoleMngtList(): React.ReactNode {
     }
 
     const onChangeStatus = async(items: IUser[]) => {
-        const resData: IResponseData = await RequestUtil.put<IResponseData>(`/sinzetech-user/user/status?status=${items.map<number>((item: IUser): number => item?.status ? 0 : 1)[0]}&userIds=${items.map<number>((item: IUser): number => item?.id as number)}`);
+        const resData: IResponseData = await RequestUtil.put<IResponseData>(`/sinzetech-user/user/status?status=${items.map<number>((item: IUser): number => item?.status === 1 ? 0 : 1)[0]}&userIds=${items.map<number>((item: IUser): number => item?.id as number)}`);
         setRefresh(!refresh);
     }
 
