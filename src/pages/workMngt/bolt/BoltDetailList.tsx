@@ -21,16 +21,7 @@ export default function BoltCheck(): React.ReactNode {
         {
             title: '塔位号',
             width: 150,
-            dataIndex: 'gantahao',
-            render: (text: any, item: { productNumVOList: { id: string, productNumber: string }[] }): React.ReactNode => {
-                return (
-                    <span>
-                        {
-                            item.productNumVOList?.map((item: any) => `${item.productNumber}，`)
-                        }
-                    </span>
-                )
-            }
+            dataIndex: 'productNames',
         },
         {
             title: '呼高m',
