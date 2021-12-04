@@ -122,7 +122,8 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
         let resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-hr/employee/archives`, {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize || this.state.tablePagination?.pageSize
+            size: pagination.pageSize || this.state.tablePagination?.pageSize,
+            stationStatus: 1
         });
         const selectKeys: [] = this.props.selectKey;
         let newData: IUser[] = resData.records;
