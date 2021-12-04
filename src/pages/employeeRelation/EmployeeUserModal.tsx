@@ -190,6 +190,9 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             title: '部门/班组',
             width: '5%',
             dataIndex: 'departmentName', 
+            render:(_:any,record:any)=>{
+                return record.departmentName+'/'+record.teamName
+            }
         }, {
             key: 'postName',
             title: '岗位',
@@ -200,14 +203,6 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             title: '员工分组',
             width: '5%',
             dataIndex: 'postTypeName',
-            // render: (stationStatus: number): React.ReactNode => {
-            //     switch (stationStatus) {
-            //         case 0:
-            //             return '不在职';
-            //         case 1:
-            //             return '在职';
-            //     }
-            // } 
         }, {
             key: 'nativePlace',
             title: '籍贯',

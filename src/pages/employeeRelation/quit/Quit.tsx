@@ -36,7 +36,7 @@ export default function Quit(): React.ReactNode {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
                             value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
-                            value.id = params.id;
+                            value.id = params.id!=='0'?params.id:undefined;
                             value.submitType='save';
                             RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
                                 message.success('保存成功！')
@@ -48,7 +48,7 @@ export default function Quit(): React.ReactNode {
                     <Button type="primary" onClick={() => {
                         const value= form.getFieldsValue(true);
                         value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
-                        value.id = params.id;
+                        value.id = params.id!=='0'?params.id:undefined;
                         value.submitType='submit';
                         RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
                             message.success('提交成功！')
