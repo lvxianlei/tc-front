@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react'
-import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input} from 'antd';
+import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 import EmployeeUserSelectionComponent, { IUser } from '../EmployeeUserModal';
+import moment from 'moment';
 
 
 export default function Quit(): React.ReactNode {
@@ -15,7 +16,8 @@ export default function Quit(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>();
     const [ selectedRows, setSelectedRows ] = useState<IUser[] | any>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
+        const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
+        form.setFieldsValue(params.id?{...data,departureDate: data?.departureDate?moment(data?.departureDate):''}:{})
         resole(data)
     }), {})
     const detailData: any = data;
@@ -27,16 +29,31 @@ export default function Quit(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button key="primary" onClick={() => {
+                    <Button type="primary" onClick={() => {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
-                            value.inquiryQuotationAttachInfoDtos= attachRef.current?.getDataSource()
-                            RequestUtil.post(`/tower-hr/employeeDeparture/save`,value)
+                            value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
+                            value.id = params.id;
+                            value.submitType='save';
+                            RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
+                                message.success('保存成功！')
+                                history.push(`/employeeRelation/quit`)
+                            })
                         })
                         
                     }}>保存</Button>
-                    <Button key="primary" onClick={() => history.goBack()}>保存并提交审批</Button>
-                    <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+                    <Button type="primary" onClick={() => {
+                        const value= form.getFieldsValue(true);
+                        value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
+                        value.id = params.id;
+                        value.submitType='submit';
+                        RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
+                            message.success('提交成功！')
+                            history.push(`/employeeRelation/quit`)
+                        })
+                        history.push(`/employeeRelation/quit`)
+                    }}>保存并提交审批</Button>
+                    <Button key="goback" onClick={() => history.push(`/employeeRelation/quit`)}>返回</Button>
                 </Space>
             ]}>
             <DetailTitle title="员工离职管理"/>
@@ -50,7 +67,7 @@ export default function Quit(): React.ReactNode {
                             <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
                                     form.setFieldsValue({
-                                        employeeName: selectedRows[0].employeeName,
+                                        employeeName: selectedRows[0].employeeName||'1',
                                         companyName: selectedRows[0].companyName,
                                         departmentId: selectedRows[0].departmentId,
                                         teamId: selectedRows[0].teamId,
