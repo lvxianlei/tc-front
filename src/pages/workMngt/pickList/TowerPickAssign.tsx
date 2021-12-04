@@ -48,7 +48,7 @@ interface IAppointed {
     readonly materialCheckLeaderDepartmentName?: string | any;
     readonly materialCheckLeader?: string;
     readonly materialCheckLeaderName?: string;
-    readonly plannedDeliveryTime?: string;
+    readonly plannedDeliveryTime?: string | moment.Moment;
     readonly patternName?: string;
 }
 
@@ -96,8 +96,12 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             appointed: data,
             pattern: renderEnum
         })
-        
-        this.getForm()?.setFieldsValue({ ...data});
+        let detailData = this.props.detailData;
+        detailData = {
+            ...detailData,
+            plannedDeliveryTime: moment(detailData?.plannedDeliveryTime)
+        }
+        this.getForm()?.setFieldsValue({ ...detailData, ...data});
         if(this.props.type==='message'&& data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
             this.onDepartmentChange(data.materialCheckLeaderDepartment, "校核人");
             this.onDepartmentChange(data.materialLeaderDepartment,"提料人");
