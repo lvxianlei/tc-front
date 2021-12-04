@@ -19,7 +19,7 @@ export default function RecruitEdit(): React.ReactNode {
     const [ selectedDeptRows, setSelectedDeptRows ] = useState<IDept[] | any>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeReinstatement/detail?id=${params.id}`)
-        form.setFieldsValue(params.id?{
+        form.setFieldsValue(params.id!=='0'?{
             ...data,
             newDepartmentName: data?.departmentName+'/'+data?.teamName,
             // inductionDate: data?.inductionDate?moment(data?.inductionDate):'',
