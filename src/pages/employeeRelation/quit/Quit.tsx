@@ -54,7 +54,6 @@ export default function Quit(): React.ReactNode {
                             message.success('提交成功！')
                             history.push(`/employeeRelation/quit`)
                         })
-                        history.push(`/employeeRelation/quit`)
                     }}>保存并提交审批</Button>
                     <Button key="goback" onClick={() => history.push(`/employeeRelation/quit`)}>返回</Button>
                 </Space>
