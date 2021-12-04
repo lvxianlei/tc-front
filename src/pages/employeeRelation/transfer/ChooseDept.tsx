@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Input, InputNumber, Select, DatePicker, Modal, Form, Row, Col, Button } from 'antd'
-import CommonTable from "./CommonTable"
+import { Input, DatePicker, Modal, Form, Row, Col, Button } from 'antd'
+import { CommonTable, FormItemType } from "../../common"
 import { PlusOutlined } from "@ant-design/icons"
-import RequestUtil from '../../utils/RequestUtil'
+import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import moment from 'moment'
 import { stringify } from 'query-string';
 export type FormItemTypesType = "text" | "number" | "select" | "date" | "textarea" | "popForm" | undefined
 
@@ -38,13 +37,6 @@ export interface PopTableData {
     [key: string]: any
 }
 
-interface FormItemTypes {
-    type?: FormItemTypesType
-    readonly?: boolean
-    data: SelectData | InputData | PopTableData
-    [key: string]: any
-}
-
 interface PopTableProps {
     data: PopTableData
     [key: string]: any
@@ -59,17 +51,12 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
     const initValue = value?.records?.map((item: any) => item.id)
     const [select, setSelect] = useState<any[]>(initValue)
     const [columns, setColumns] = useState<any[]>(data.columns)
-    const [pagenation, setPagenation] = useState<PagenationProps>({
-        current: 1,
-        pageSize: 10
-    })
+    
     const [form] = Form.useForm()
     const searchs = data.columns.filter((item: any) => item.search)
     const { loading, data: popTableData, run } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         try {
             const params = await form.getFieldsValue()
-            params.current = pagenation.current
-            params.pageSize = pagenation.pageSize
             Object.keys(params).forEach((item: any) => {
                 const columnItem = searchs.find((sItem: any) => sItem.dataIndex === item)
                 if (columnItem?.type === "date" && params[item]) {
@@ -89,7 +76,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [pagenation.current] })
+    }), { refreshDeps: [] })
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
         onChange && onChange(selectRows)
@@ -100,11 +87,10 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         setColumns(data.columns)
     }, [JSON.stringify(data.columns)])
 
-    const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
+    
 
     return <>
         {searchs.length > 0 && <Form form={form} onFinish={async () => {
-            setPagenation({ ...pagenation, current: 1, pageSize: 10 })
             await run()
         }}>
             <Row gutter={[8, 8]}>
@@ -135,17 +121,11 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             size="small"
             loading={loading}
             dataSource={popTableData?.records || popTableData || []}
-            pagination={{
-                size: "small",
-                pageSize: pagenation.pageSize,
-                onChange: paginationChange,
-                current: pagenation.current,
-                total: popTableData?.total
-            }} />
+            pagination={false} />
     </>
 }
 
-export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
+const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [visible, setVisible] = useState<boolean>(false)
     const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: [] })
     const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: [] })
@@ -196,38 +176,5 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
             addonAfter={<PlusOutlined onClick={() => !data.disabled && setVisible(true)} />} />
     </>
 }
-interface SelfSelectProps {
-    data: SelectData
-}
-const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
-    return <Select {...props} disabled={data.disabled} style={{ width: "100%", minWidth: 100 }} mode={data.mode} maxTagCount={data.maxTagCount}>
-        {data.enum?.map((item: SelectOption, index: number) => (<Select.Option key={`select_option_${index}_${item.value}`} value={item.value} >{item.label}</Select.Option>))}
-    </Select>
-}
 
-const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ...props }) => {
-    const ItemTypes = {
-        string: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
-        text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
-        number: <InputNumber
-            {...props}
-            disabled={data.disabled}
-            max={data?.max || 999999999999}
-            min={data?.min || 0}
-            step={data?.step || 1}
-            style={{ width: "100%", height: "100%", ...props.style }}
-        />,
-        select: <SelfSelect {...props} data={data as SelectData} />,
-        date: <DatePicker
-            {...data.picker ? { ...props, picker: data.picker } : { ...props }}
-            onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}
-            value={props.value ? moment(props.value) : null}
-            format={data.format || "YYYY-MM-DD HH:mm:ss"} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
-        textarea: <Input.TextArea {...props} disabled={data.disabled} rows={data.rows || 2} maxLength={400} showCount style={{ width: "100%", height: "100%", ...props.style }} />,
-        popForm: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
-        popTable: <PopTable {...props} data={data as PopTableData} />
-    }
-    return <>{render ? render(data, props) : ItemTypes[type]}</>
-}
-
-export default FormItemType
+export default PopTable

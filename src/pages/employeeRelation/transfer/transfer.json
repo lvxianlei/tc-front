@@ -44,7 +44,30 @@
         {
             "title": "调派类型",
             "width": 100,
-            "dataIndex": "transferType"
+            "dataIndex": "transferType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "晋升",
+                    "value": 1
+                },
+                {
+                    "label": "调动",
+                    "value": 2
+                },
+                {
+                    "label": "借调",
+                    "value": 3
+                },
+                {
+                    "label": "外派",
+                    "value": 4
+                },
+                {
+                    "label": "工商调动",
+                    "value": 5
+                }
+            ]
         },
         {
             "title": "审批状态",
@@ -184,6 +207,29 @@
         {
             "title": "调派类型",
             "dataIndex": "transferType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "晋升",
+                    "value": 1
+                },
+                {
+                    "label": "调动",
+                    "value": 2
+                },
+                {
+                    "label": "借调",
+                    "value": 3
+                },
+                {
+                    "label": "外派",
+                    "value": 4
+                },
+                {
+                    "label": "工商调动",
+                    "value": 5
+                }
+            ],
             "rules": [
                 {
                     "required": true,

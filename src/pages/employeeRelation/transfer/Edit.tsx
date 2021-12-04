@@ -1,7 +1,8 @@
 import React, { useRef } from "react"
-import { Button, Spin } from 'antd'
+import { Button, Spin, Input, Form } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment, AttachmentRef } from '../../common'
+import { DetailContent, DetailTitle, BaseInfo, Attachment, AttachmentRef } from '../../common'
+import ChooseDept from "./ChooseDept"
 import { setting } from "./transfer.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -9,6 +10,7 @@ export default function Edit() {
     const history = useHistory()
     const attachRef = useRef<AttachmentRef>()
     const params = useParams<{ transferId: string }>()
+    const [form] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/employeeTransfer/detail/${params.transferId}`)
@@ -27,8 +29,13 @@ export default function Edit() {
         }
     }), { manual: true })
 
-    const handleSave = (type: "save" | "saveAndSubmit") => {
-
+    const handleSave = async (type: "save" | "saveAndSubmit") => {
+        try {
+            const postData = await form.validateFields()
+            console.log(postData)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return <DetailContent operation={[
@@ -38,7 +45,18 @@ export default function Edit() {
     ]}>
         <Spin spinning={loading}>
             <DetailTitle title="员工调动管理" />
-            <BaseInfo columns={setting} dataSource={data || {}} edit />
+            <BaseInfo
+                form={form}
+                columns={setting.map(item => {
+                    if (item.dataIndex === "newDepartmentName") {
+                        return ({
+                            ...item,
+                            render: (columnItem: any, props: any) => <ChooseDept data={columnItem} {...props} />
+                        })
+                    }
+                    return item
+                })}
+                dataSource={data || {}} edit />
             <Attachment dataSource={data?.fileVos} edit ref={attachRef} />
         </Spin>
     </DetailContent>
