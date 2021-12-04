@@ -345,7 +345,7 @@ export default function RecruitEdit(): React.ReactNode {
                         <Form.Item label='开户银行' rules={[{
                             required:true, 
                             message:'请选择开户银行'
-                        }]} name='bankName'>
+                        }]} name='bankNameId'>
                            <Select style={{width:'100%'}}>
                                 {bankTypeOptions && bankTypeOptions.map((item: any) => {
                                     return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>

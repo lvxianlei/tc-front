@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import moment from 'moment';
 
 export default function RecruitList(): React.ReactNode {
     const history = useHistory();
@@ -132,7 +133,10 @@ export default function RecruitList(): React.ReactNode {
             key: 'workTime',
             title: '预计到岗时间',
             width: 100,
-            dataIndex: 'workTime'
+            dataIndex: 'workTime',
+            render:(workTime:string)=>{
+                return workTime?moment(workTime).format('YYYY-MM-DD'):''
+            }
         },
         {
             key: 'bankCardNumber',

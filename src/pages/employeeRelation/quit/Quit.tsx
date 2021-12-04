@@ -15,7 +15,10 @@ export default function Quit(): React.ReactNode {
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>();
     const [ selectedRows, setSelectedRows ] = useState<IUser[] | any>({});
+    const [ post, setPost ] = useState([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const post: any = await RequestUtil.get(`/tower-system/station?size=1000`);
+        setPost(post?.records)
         const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
         form.setFieldsValue(params.id?{...data,departureDate: data?.departureDate?moment(data?.departureDate):''}:{})
         resole(data)
@@ -75,7 +78,7 @@ export default function Quit(): React.ReactNode {
                                         teamName: selectedRows[0].teamName,
                                         newDepartmentName: selectedRows[0].departmentName+'/'+selectedRows[0].teamName,
                                         postName: selectedRows[0].postName,
-                                        inductionDate: selectedRows[0].inductionDate,
+                                        inductionDate: moment(selectedRows[0].inductionDate).format('YYYY-MM-DD'),
                                         employeeType: selectedRows[0].employeeType,
                                         employeeId: selectedRows[0].employeeId,
                                     });
@@ -96,7 +99,11 @@ export default function Quit(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='岗位' name='postName'>
-                            <Input disabled/>
+                            <Select style={{width:'100%'}} disabled>
+                                {post && post.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.stationName}</Select.Option>
+                                })}
+                            </Select>
                         </Form.Item>
                     </Col>
                 </Row>
