@@ -168,7 +168,7 @@ export default function PickTowerMessage(): React.ReactNode {
                         })
                         if(record.status > 1){
                             setEdit(true);
-                        }else{setEdit
+                        }else{
                             setEdit(false);
                         }
                         setVisible(true);
