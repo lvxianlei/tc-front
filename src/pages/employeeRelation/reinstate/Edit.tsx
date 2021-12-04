@@ -51,7 +51,7 @@ export default function RecruitEdit(): React.ReactNode {
                         })
                         
                     }}>保存</Button>
-                    {!params.status && <Button type="primary" onClick={() =>{
+                    {params.status!=='3' && <Button type="primary" onClick={() =>{
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
                             value.id = params.id!=='0'?params.id:undefined;
