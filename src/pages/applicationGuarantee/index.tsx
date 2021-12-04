@@ -138,7 +138,7 @@ export default function ApplicationColunm(): React.ReactNode {
                                         setId(record.id);
                                         setRequiredReturnTime(record.requiredReturnTime)
                                     }}>回收保函</Button>}
-                                    {acceptStatus === 1 && <Button type="link" onClick={()=>{window.open(record.filePath)}}>生成文件</Button>}
+                                    {/* {acceptStatus === 1 && <Button type="link" onClick={()=>{window.open(record.filePath)}}>生成文件</Button>} */}
                                 </>
                             )
                         }

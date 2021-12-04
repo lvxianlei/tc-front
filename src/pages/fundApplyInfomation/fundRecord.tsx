@@ -11,6 +11,7 @@
  import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
  import useRequest from '@ahooksjs/use-request';
  import RequestUtil from '../../utils/RequestUtil'
+import OtherDetail from '../questionMngt/OtherDetail';
 
  const { Text } = Typography;
  interface ViewRefProps {
@@ -132,9 +133,10 @@
                             width: 50,
                             render: (_: any, record: any):
                             React.ReactNode => (
-                                <span>{
-                                        !record.Sunmry ?
-                                            (payTypeOptions as Array<any>)?.find((item:any)=>item.id == record.payType)['name'] :""
+                                <span>
+                                    { (payTypeOptions as Array<any>)?.find((item: any) => item.id === record.payType) ?
+                                        (payTypeOptions as Array<any>)?.find((item: any) => item.id === record.payType)["name"]
+                                        : ""    
                                     }
                                 </span>
                             )
