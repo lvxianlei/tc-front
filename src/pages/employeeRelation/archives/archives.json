@@ -49,7 +49,7 @@
         {
             "title": "员工分组",
             "width": 100,
-            "dataIndex": "postType"
+            "dataIndex": "postTypeName"
         },
         {
             "title": "籍贯",
@@ -89,7 +89,26 @@
         {
             "title": "员工性质",
             "width": 100,
-            "dataIndex": "employeeNature"
+            "dataIndex": "employeeNature",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "正式员工",
+                    "value": 1
+                },
+                {
+                    "label": "短期派遣员工",
+                    "value": 2
+                },
+                {
+                    "label": "超龄员工",
+                    "value": 3
+                },
+                {
+                    "label": "实习员工",
+                    "value": 4
+                }
+            ]
         },
         {
             "title": "转正日期",
@@ -251,7 +270,26 @@
         },
         {
             "title": "员工性质",
-            "dataIndex": "employeeNature"
+            "dataIndex": "employeeNature",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "正式员工",
+                    "value": 1
+                },
+                {
+                    "label": "短期派遣员工",
+                    "value": 2
+                },
+                {
+                    "label": "超龄员工",
+                    "value": 3
+                },
+                {
+                    "label": "实习员工",
+                    "value": 4
+                }
+            ]
         },
         {
             "title": "入职日期",

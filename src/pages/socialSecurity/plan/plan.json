@@ -30,7 +30,13 @@
         {
             "title": "方案名称",
             "width": 100,
-            "dataIndex": "insurancePlanName"
+            "dataIndex": "insurancePlanName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入方案名称..."
+                }
+            ]
         },
         {
             "title": "缴纳地区",

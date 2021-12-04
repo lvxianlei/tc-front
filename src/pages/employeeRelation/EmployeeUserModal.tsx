@@ -272,8 +272,10 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
                     case 1:
                         return '正式员工';
                     case 2:
-                        return '超龄员工';
+                        return '短期派遣员工';
                     case 3:
+                        return '超龄员工';
+                    case 4:
                         return '实习员工';
                 }
             } 

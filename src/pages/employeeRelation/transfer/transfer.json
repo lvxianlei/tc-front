@@ -101,7 +101,7 @@
             "type": "popTable",
             "path": "/tower-hr/employee/archives",
             "width": 1011,
-            "value": "",
+            "value": "employeeName",
             "dependencies": true,
             "readOnly": true,
             "columns": [
@@ -117,11 +117,6 @@
                     "dataIndex": "gender"
                 },
                 {
-                    "title": "民族",
-                    "width": 100,
-                    "dataIndex": "national"
-                },
-                {
                     "title": "公司",
                     "width": 100,
                     "dataIndex": "companyName"
@@ -135,6 +130,11 @@
                     "title": "岗位",
                     "width": 100,
                     "dataIndex": "postName"
+                },
+                {
+                    "title": "身份证号",
+                    "width": 100,
+                    "dataIndex": "idNumber"
                 }
             ],
             "rules": [
@@ -165,7 +165,7 @@
             "type": "popTable",
             "path": "/tower-system/department",
             "width": 1011,
-            "value": "",
+            "value": "name",
             "dependencies": true,
             "readOnly": true,
             "columns": [
@@ -197,6 +197,7 @@
         {
             "title": "现岗位",
             "dataIndex": "newPostName",
+            "type": "select",
             "rules": [
                 {
                     "required": true,
