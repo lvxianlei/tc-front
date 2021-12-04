@@ -154,7 +154,7 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择复职后部门/班组'
                         }]} name='newDepartmentName'>
-                            <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
+                            <Input maxLength={ 50 }  addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
                                     setSelectedDeptRows(selectedRows);
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
