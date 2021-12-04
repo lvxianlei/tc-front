@@ -314,7 +314,7 @@ export default function Lofting(): React.ReactNode {
             <Form.Item label='材质' name='structureTexture'>
                 <Input/>
             </Form.Item>
-            <Form.Item label='段号' name='partName'>
+            <Form.Item label='段号' name='segmentName'>
                 <Input/>
             </Form.Item>
             <Form.Item>
