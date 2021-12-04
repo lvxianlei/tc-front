@@ -166,9 +166,9 @@ export default function PickTowerMessage(): React.ReactNode {
                         form.setFieldsValue({
                             detailData: data
                         })
-                        if(record.status == 2){
+                        if(record.status > 1){
                             setEdit(true);
-                        }else{
+                        }else{setEdit
                             setEdit(false);
                         }
                         setVisible(true);
