@@ -145,7 +145,7 @@ export default function StaffNew(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "roleIdList"] } key={ index } initialValue={ _ }>
                     <TreeSelect showSearch={true} placeholder="请选择所属角色" multiple={true}
-                    className={layoutStyles.width100} treeData={wrapRole2DataNode(roleList)} />
+                    className={layoutStyles.width100} treeData={wrapRole1DataNode(roleList)} />
                 </Form.Item>
             )  
         },
@@ -245,6 +245,16 @@ export default function StaffNew(): React.ReactNode {
             )
         }
     ]
+
+    const wrapRole1DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles && roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {

@@ -402,7 +402,7 @@ export default function PackingListNew(): React.ReactNode {
             <CommonTable columns={ packingColumns } pagination={ false } dataSource={ packagingData } />
         </DetailContent>
         <Modal visible={ visible } title="创建包" onCancel={ () => setVisible(false) } onOk={ () => {
-            if(balesCode) {
+            if(balesCode&&/^[^\s]*$/.test(balesCode)&&/^[0-9a-zA-Z-]*$/.test(balesCode)) {
                 const value = {
                     balesCode: balesCode,
                     id: params.packId,
@@ -424,7 +424,7 @@ export default function PackingListNew(): React.ReactNode {
             <Row>
                 <Col span={ 4 }>捆号</Col>   
                 <Col span={ 19 } offset={ 1 }>
-                    <Input placeholder="请输入捆号" defaultValue={ detailData?.balesCode } onChange={ (e) => balesCodeChange(e) } /> 
+                    <Input placeholder="请输入捆号" defaultValue={ detailData?.balesCode } onChange={ (e) => balesCodeChange(e) } maxLength={10}/> 
                 </Col>  
             </Row>  
         </Modal>
