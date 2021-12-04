@@ -149,7 +149,7 @@ export default function BoltCheck(): React.ReactNode {
     const getDataSource = async (basicHeightId?: string) => {
         const data: [] = await RequestUtil.get(`/tower-science/boltRecord/checkList`, {
             basicHeightId: basicHeightId,
-            productCategoryId: params.boltId
+            productCategoryId: params.id
         })
         setDataSource(data);
     }
@@ -176,6 +176,6 @@ export default function BoltCheck(): React.ReactNode {
             </Space>
             <CommonTable columns={columnsSetting} dataSource={dataSource} pagination={false} />
         </DetailContent>
-        <BoltQuestionnaireModal title={title} visible={visible} modalCancel={() => { setVisible(false); getDataSource(params.id) }} record={record} update={() => getDataSource(params.id)} productCategory={params.boltId} />
+        <BoltQuestionnaireModal title={title} visible={visible} modalCancel={() => setVisible(false)} record={record} update={() => getDataSource(params.boltId)} productCategory={params.boltId} />
     </>
 }
