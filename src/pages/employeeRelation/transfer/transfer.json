@@ -72,7 +72,7 @@
         {
             "title": "审批状态",
             "width": 100,
-            "dataIndex": "statusName",
+            "dataIndex": "status",
             "type": "select",
             "enum": [
                 {
