@@ -22,7 +22,9 @@
         },
         {
             "dataIndex": "inductionDate",
-            "title": "入职日期"
+            "title": "入职日期",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "dataIndex": "employeeType",
@@ -37,7 +39,9 @@
         ,
         {
             "dataIndex": "departureDate",
-            "title": "离职日期"
+            "title": "离职日期",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         }
         ,
         {

@@ -83,10 +83,10 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.fileDTOS= attachRef.current?.getDataSource();
                             value.id = params.id;
-                            value.workTime = moment(value.workTime).format('YYYY-MM-DD');
+                            value.workTime = moment(value.workTime).format('YYYY-MM-DD HH:mm:ss');
                             value.postType = value.postType.length>0&&value.postType.join(',')
                             value.submitType = 'save';
-                            RequestUtil.post(`/tower-hr/labor/contract`, value).then(()=>{
+                            RequestUtil.post(`/tower-hr/employee/information`, value).then(()=>{
                                 message.success('保存成功！')
                             }).then(()=>{
                                 history.push('/employeeRelation/recruit')
@@ -99,10 +99,10 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.fileDTOS= attachRef.current?.getDataSource();
                             value.id = params.id;
-                            value.workTime = moment(value.workTime).format('YYYY-MM-DD');
+                            value.workTime = moment(value.workTime).format('YYYY-MM-DD HH:mm:ss');
                             value.postType = value.postType.join(',')
                             value.submitType = 'submit';
-                            RequestUtil.post(`/tower-hr/labor/contract`, value).then(()=>{
+                            RequestUtil.post(`/tower-hr/employee/information`, value).then(()=>{
                                 message.success('提交成功！')
                             }).then(()=>{
                                 history.push('/employeeRelation/recruit')

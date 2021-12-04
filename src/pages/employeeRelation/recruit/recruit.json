@@ -46,11 +46,25 @@
         },
         {
             "dataIndex": "workTime",
-            "title": "预计到岗时间"
+            "title": "预计到岗时间",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "dataIndex": "education",
-            "title": "学历"
+            "title": "学历",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "博士" },
+                { "value": 2, "label": "硕士" },
+                { "value": 3, "label": "本科" },
+                { "value": 4, "label": "大专" },
+                { "value": 5, "label": "高中" },
+                { "value": 6, "label": "中专" },
+                { "value": 7, "label": "中学" },
+                { "value": 8, "label": "小学" },
+                { "value": 9, "label": "其他" }
+            ]
         },
         {
             "dataIndex": "graduateSchool",
@@ -65,13 +79,13 @@
             "title": "试用期",
             "type": "select",
             "enum": [
-                { "value": 0, "label": "无试用期" },
-                { "value": 1, "label": "一个月" },
-                { "value": 2, "label": "二个月" },
-                { "value": 3, "label": "三个月" },
-                { "value": 4, "label": "四个月" },
-                { "value": 5, "label": "五个月" },
-                { "value": 6, "label": "六个月" }
+                { "value": 1, "label": "无试用期" },
+                { "value": 2, "label": "一个月" },
+                { "value": 3, "label": "二个月" },
+                { "value": 4, "label": "三个月" },
+                { "value": 5, "label": "四个月" },
+                { "value": 6, "label": "五个月" },
+                { "value": 7, "label": "六个月" }
             ]
         },
         {

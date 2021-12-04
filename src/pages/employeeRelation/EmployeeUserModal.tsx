@@ -12,6 +12,7 @@ import { RowSelectionType } from 'antd/lib/table/interface';
 import { DataType, IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../components/AbstractSelectableModal';
 import AbstractFilteredSelecableModal from '../../components/AbstractFilteredSelecableModal';
 import RequestUtil from '../../utils/RequestUtil';
+import moment from 'moment';
 
 export interface IEmployeeUserSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: IUser[];
@@ -216,7 +217,10 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             key: 'birthday',
             title: '出生日期',
             width: '5%',
-            dataIndex: 'birthday'
+            dataIndex: 'birthday',
+            render:(birthday:string)=>{
+                return moment(birthday).format('YYYY-MM-DD')
+            }
         }, {
             key: 'age',
             title: '年龄',
@@ -261,7 +265,10 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             key: 'inductionDate',
             title: '入职时间',
             width: '5%',
-            dataIndex: 'inductionDate'
+            dataIndex: 'inductionDate',
+            render:(birthday:string)=>{
+                return moment(birthday).format('YYYY-MM-DD')
+            }
         }, {
             key: 'employeeNature',
             title: '员工性质',
@@ -281,7 +288,10 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             key: 'positiveDate',
             title: '转正日期',
             width: '5%',
-            dataIndex: 'positiveDate'
+            dataIndex: 'positiveDate',
+            render:(birthday:string)=>{
+                return moment(birthday).format('YYYY-MM-DD')
+            }
         }, {
             key: 'workYear',
             title: '工龄',

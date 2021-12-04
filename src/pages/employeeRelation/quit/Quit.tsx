@@ -33,6 +33,8 @@ export default function Quit(): React.ReactNode {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
                             value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
+                            value.id = params.id;
+                            value.submitType='save';
                             RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
                                 message.success('保存成功！')
                                 history.push(`/employeeRelation/quit`)
@@ -43,8 +45,10 @@ export default function Quit(): React.ReactNode {
                     <Button type="primary" onClick={() => {
                         const value= form.getFieldsValue(true);
                         value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
+                        value.id = params.id;
+                        value.submitType='submit';
                         RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
-                            message.success('保存成功！')
+                            message.success('提交成功！')
                             history.push(`/employeeRelation/quit`)
                         })
                         history.push(`/employeeRelation/quit`)
@@ -63,7 +67,7 @@ export default function Quit(): React.ReactNode {
                             <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
                                     form.setFieldsValue({
-                                        employeeName: selectedRows[0].employeeName,
+                                        employeeName: selectedRows[0].employeeName||'1',
                                         companyName: selectedRows[0].companyName,
                                         departmentId: selectedRows[0].departmentId,
                                         teamId: selectedRows[0].teamId,
