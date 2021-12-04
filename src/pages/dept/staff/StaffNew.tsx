@@ -101,12 +101,12 @@ export default function StaffNew(): React.ReactNode {
         },
         {
             key: 'autoAccount',
-            title: '是否自动生成账号',
+            title: '是否关联账号',
             dataIndex: 'autoAccount',
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "autoAccount"] } key={ index } initialValue={ _ }>
-                    <Checkbox key={ record.id } checked={ _ === 1 } disabled={ location.state.type === 'edit' && oldDataList[index].autoAccount === 1 } onChange={ (e) => {
+                    <Checkbox key={ record.id } checked={ _ === 2 } disabled={ location.state.type === 'edit' && oldDataList[index].autoAccount === 2 } onChange={ (e) => {
                         let data = form.getFieldsValue(true).list;
                         data = data.map((item: IStaff, ind: number) => {
                             return {
@@ -117,7 +117,7 @@ export default function StaffNew(): React.ReactNode {
                         data[index] = {
                             ...data[index],
                             id: dataList[index].id,
-                            autoAccount: e.target.checked ? 1 : 2
+                            autoAccount: e.target.checked ? 2 : 1
                         }
                         setDataList([...data]);
                         form.setFieldsValue({ list: [...data] })
@@ -259,7 +259,7 @@ export default function StaffNew(): React.ReactNode {
     const addRow = () => {
         const dataListValues = form.getFieldsValue(true).list || [];
         const newRow = {
-            autoAccount: 1,
+            autoAccount: 2,
             account: '',
             category: undefined,
             dept: undefined,

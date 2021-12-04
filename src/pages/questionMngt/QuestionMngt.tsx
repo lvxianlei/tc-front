@@ -7,7 +7,7 @@ import RequestUtil from '../../utils/RequestUtil';
 
 export default function QuestionMngt(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state?: number, type?: string, userId?: string }>();
+    const location = useLocation<{ state?: number, type?: string, userId?: string, createUserId?: string }>();
     const history = useHistory();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
@@ -111,7 +111,7 @@ export default function QuestionMngt(): React.ReactNode {
         //     }
         // },
         {
-            key: 'recipientName',
+            key: 'createUserNameName',
             title: '接收人',
             width: 100,
             dataIndex: 'recipientName'
@@ -158,7 +158,7 @@ export default function QuestionMngt(): React.ReactNode {
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
-            requestData={ { status: location.state?.state, type: location.state?.type, recipient: location.state?.userId } }
+            requestData={ { status: location.state?.state, type: location.state?.type, recipient: location.state?.userId, createUser: location.state?.createUserId } }
             searchFormItems={[
                 {
                     name: 'updateTime',
@@ -195,7 +195,19 @@ export default function QuestionMngt(): React.ReactNode {
                 {
                     name: 'recipient',
                     label: '接收人',
-                    children:  <Form.Item name="materialLeader" initialValue={ location.state?.userId || '' }>
+                    children:  <Form.Item name="recipient" initialValue={ location.state?.userId || '' }>
+                            <Select style={{width:'100px'}}>
+                                <Select.Option key={''} value={''}>全部</Select.Option>
+                                {user && user.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                })}
+                            </Select>
+                    </Form.Item>
+                },
+                {
+                    name: 'createUser',
+                    label: '创建人',
+                    children:  <Form.Item name="createUser" initialValue={ location.state?.createUserId || '' }>
                             <Select style={{width:'100px'}}>
                                 <Select.Option key={''} value={''}>全部</Select.Option>
                                 {user && user.map((item: any) => {

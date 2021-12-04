@@ -143,7 +143,7 @@ export default function ScheduleList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             requestData={{
-                status: location.state.state
+                status: location.state?.state
             }}
             searchFormItems={[
                 {
@@ -154,7 +154,7 @@ export default function ScheduleList(): React.ReactNode {
                 {
                     name: 'status',
                     label:'任务状态',
-                    children: <Form.Item name="status" initialValue={ location.state?.state }>
+                    children: <Form.Item name="status" initialValue={ location.state?.state || '' }>
                         <Select style={{width:"100px"}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             {/* <Select.Option value={0} key={0}>已拒绝</Select.Option>

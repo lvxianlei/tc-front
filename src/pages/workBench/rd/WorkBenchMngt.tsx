@@ -26,6 +26,7 @@ interface IList {
 	readonly state?: number;
 	readonly type?: string;
 	readonly userId?: string;
+	readonly createUserId?: string;
 }
 
 export default function WorkBenchMngt(): React.ReactNode {
@@ -180,7 +181,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'boltProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-LS',
-					userId: userId
+					createUserId: userId
 				},
 				{
 					title: '待修改',
@@ -194,7 +195,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'segmentProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-FY',
-					userId: userId
+					createUserId: userId
 				}
 			]
 		},
@@ -219,6 +220,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '图纸',
+			col: 2,
 			child: [
 				{
 					title: '待上传',
@@ -241,7 +243,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					title: '待出单',
 					dataIndex: 'productToBeSubmittedLofting',
 					path: '/workMngt/setOutList',
-					state: 3
+					state: 4
 				}, {
 					title: '待配段',
 					dataIndex: 'productToBeSubmittedWelding',
@@ -251,13 +253,13 @@ export default function WorkBenchMngt(): React.ReactNode {
 					title: '待校核',
 					dataIndex: 'segmentProductToBeCheck',
 					path: '/workMngt/setOutList',
-					state: 1,
+					state: 2,
 					userId: userId
 				}, {
 					title: '待放样',
 					dataIndex: 'segmentProductToBeLofting',
 					path: '/workMngt/setOutList',
-					state: 1,
+					state: 2,
 					userId: userId
 				}
 			]
@@ -291,13 +293,14 @@ export default function WorkBenchMngt(): React.ReactNode {
 	const loftingToCheckVO = [ //放样校核员
 		{
 			title: '问题单',
+			col: 2,
 			child: [
 				{
 					title: '放样任务',
 					dataIndex: 'segmentProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-FY',
-					userId: userId
+					createUserId: userId
 				}
 			]
 		}, {
@@ -331,8 +334,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					title: '待校核',
 					dataIndex: 'segmentMaterialToBeCheck',
 					path: '/workMngt/pickList',
-					state: 2,
-					userId: userId
+					state: 2
 				}
 			]
 		},
@@ -344,7 +346,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'materialProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-TL',
-					userId: userId
+					createUserId: userId
 				}, 
 				{
 					title: '待修改',
@@ -395,11 +397,12 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'materialProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-TL',
-					userId: userId
+					createUserId: userId
 				}, {
 					title: '待修改',
 					dataIndex: 'materialProblemPending',
 					path: '/question/questionMngt',
+					type: 'WTD-TL',
 					state: 1,
 					userId: userId
 				}
@@ -444,17 +447,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'boltProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-LS',
-					userId: userId
+					createUserId: userId
 				}, {
 					title: '待修改',
 					dataIndex: 'boltProblemPending',
 					path: '/question/questionMngt',
+					type: 'WTD-LS',
 					state: 1,
 					userId: userId
 				}
 			]
 		}, {
 			title: '螺栓工作',
+			col: 2,
 			child: [
 				{
 					title: '待校核',
