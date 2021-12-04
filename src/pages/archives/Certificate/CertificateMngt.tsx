@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Input, Select, Button, Popconfirm, Form, message, TreeSelect, Modal, DatePicker } from 'antd';
+import { Space, Input, Select, Button, Popconfirm, Form, message, TreeSelect, Modal, DatePicker, Upload } from 'antd';
 import { Link } from 'react-router-dom';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -9,6 +9,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import useRequest from '@ahooksjs/use-request';
 import { IDatabaseTree } from '../../basicData/database/DatabaseMngt';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import AuthUtil from '../../../utils/AuthUtil';
 
 export interface ICertificate {
     readonly id?: string;
@@ -257,10 +258,10 @@ export default function CertificateMngt(): React.ReactNode {
             headTabs={ [] }
             exportPath={`/tower-system/certificateRecord`}
             extraOperation={ <Space direction="horizontal" size="small">
-                 {/* <Upload 
+                 <Upload 
                     action={ () => {
                         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                        return baseUrl+''
+                        return baseUrl+'/tower-system/certificateRecord/import'
                     } } 
                     headers={
                         {
@@ -282,8 +283,7 @@ export default function CertificateMngt(): React.ReactNode {
                 >
                     <Button type="primary">导入</Button>
                 </Upload>
-                <Button type="primary" onClick={ () => downloadTemplate('', '证件管理导入模板') } ghost>下载导入模板</Button>
-                <Button type="primary" ghost>导出</Button> */}
+                {/* <Button type="primary" onClick={ () => downloadTemplate('', '证件管理导入模板') } ghost>下载导入模板</Button> */}
                 <Link to={{pathname: `/archivesMngt/certificateMngt/certificateNew`, state:{ type: 'new' } }}><Button type="primary" ghost>录入</Button></Link>
                 { selectedRows.length > 0 && selectedRows.map(items => items.certificateStatus).indexOf(1) === -1 && selectedRows.map(items => items.certificateStatus).indexOf(2) === -1 && selectedRows.map(items => items.certificateStatus).indexOf(3) === -1 ? <Link to={{pathname: `/archivesMngt/certificateMngt/certificateSetting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button>}
                 <Button type="primary" onClick={ batchDel } ghost>删除</Button>
