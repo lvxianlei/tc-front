@@ -97,11 +97,14 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             pattern: renderEnum
         })
         let detailData = this.props.detailData;
-        detailData = {
-            ...detailData,
-            plannedDeliveryTime: moment(detailData?.plannedDeliveryTime)
+        if(this.props.type === 'message'||this.props.type === 'detail'){
+            detailData = {
+                ...detailData,
+                plannedDeliveryTime: moment(detailData?.plannedDeliveryTime)
+            }
         }
-        this.getForm()?.setFieldsValue({ ...detailData, ...data});
+       
+        this.getForm()?.setFieldsValue({  ...data, ...detailData});
         if(this.props.type==='message'&& data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
             this.onDepartmentChange(data.materialCheckLeaderDepartment, "校核人");
             this.onDepartmentChange(data.materialLeaderDepartment,"提料人");
@@ -305,7 +308,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     rules={[{
                                         required: true,
                                         message: '请选择交付时间'
-                                    }]} initialValue={ this.props.detailData?.plannedDeliveryTime?moment(this.props.detailData?.plannedDeliveryTime):'' }>
+                                    }]}>
                                     <DatePicker />
                                 </Form.Item>
                             </Descriptions.Item></>
