@@ -22,7 +22,26 @@
         },
         {
             "dataIndex": "employeeType",
-            "title": "员工性质"
+            "title": "员工性质",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "正式员工",
+                    "value": 1
+                },
+                {
+                    "label": "短期派遣员工",
+                    "value": 2
+                },
+                {
+                    "label": "超龄员工",
+                    "value": 3
+                },
+                {
+                    "label": "实习员工",
+                    "value": 4
+                }
+            ]
         }
         ,
         {

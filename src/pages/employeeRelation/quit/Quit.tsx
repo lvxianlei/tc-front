@@ -15,7 +15,10 @@ export default function Quit(): React.ReactNode {
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>();
     const [ selectedRows, setSelectedRows ] = useState<IUser[] | any>({});
+    const [ post, setPost ] = useState([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const post: any = await RequestUtil.get(`/tower-system/station?size=1000`);
+        setPost(post?.records)
         const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
         form.setFieldsValue(params.id?{...data,departureDate: data?.departureDate?moment(data?.departureDate):''}:{})
         resole(data)
@@ -33,7 +36,7 @@ export default function Quit(): React.ReactNode {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
                             value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
-                            value.id = params.id;
+                            value.id = params.id!=='0'?params.id:undefined;
                             value.submitType='save';
                             RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
                                 message.success('保存成功！')
@@ -45,13 +48,12 @@ export default function Quit(): React.ReactNode {
                     <Button type="primary" onClick={() => {
                         const value= form.getFieldsValue(true);
                         value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
-                        value.id = params.id;
+                        value.id = params.id!=='0'?params.id:undefined;
                         value.submitType='submit';
                         RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
                             message.success('提交成功！')
                             history.push(`/employeeRelation/quit`)
                         })
-                        history.push(`/employeeRelation/quit`)
                     }}>保存并提交审批</Button>
                     <Button key="goback" onClick={() => history.push(`/employeeRelation/quit`)}>返回</Button>
                 </Space>
@@ -75,7 +77,7 @@ export default function Quit(): React.ReactNode {
                                         teamName: selectedRows[0].teamName,
                                         newDepartmentName: selectedRows[0].departmentName+'/'+selectedRows[0].teamName,
                                         postName: selectedRows[0].postName,
-                                        inductionDate: selectedRows[0].inductionDate,
+                                        inductionDate: moment(selectedRows[0].inductionDate).format('YYYY-MM-DD'),
                                         employeeType: selectedRows[0].employeeType,
                                         employeeId: selectedRows[0].employeeId,
                                     });
@@ -96,7 +98,11 @@ export default function Quit(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='岗位' name='postName'>
-                            <Input disabled/>
+                            <Select style={{width:'100%'}} disabled>
+                                {post && post.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.stationName}</Select.Option>
+                                })}
+                            </Select>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -110,8 +116,9 @@ export default function Quit(): React.ReactNode {
                         <Form.Item label='员工性质' name='employeeType'>
                             <Select placeholder="请选择" style={{ width: '100%' }} disabled>
                                 <Select.Option value={1} key="1">正式员工</Select.Option>
-                                <Select.Option value={2} key="2">超龄员工</Select.Option>
-                                <Select.Option value={3} key="3">实习员工</Select.Option>
+                                <Select.Option value={2} key="2">短期派遣员工</Select.Option>
+                                <Select.Option value={3} key="3">超龄员工</Select.Option>
+                                <Select.Option value={4} key="4">实习员工</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>

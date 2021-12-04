@@ -122,7 +122,8 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
         let resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-hr/employee/archives`, {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize || this.state.tablePagination?.pageSize
+            size: pagination.pageSize || this.state.tablePagination?.pageSize,
+            stationStatus: 1
         });
         const selectKeys: [] = this.props.selectKey;
         let newData: IUser[] = resData.records;
@@ -190,6 +191,9 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             title: '部门/班组',
             width: '5%',
             dataIndex: 'departmentName', 
+            render:(_:any,record:any)=>{
+                return record.departmentName+'/'+record.teamName
+            }
         }, {
             key: 'postName',
             title: '岗位',
@@ -200,14 +204,6 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             title: '员工分组',
             width: '5%',
             dataIndex: 'postTypeName',
-            // render: (stationStatus: number): React.ReactNode => {
-            //     switch (stationStatus) {
-            //         case 0:
-            //             return '不在职';
-            //         case 1:
-            //             return '在职';
-            //     }
-            // } 
         }, {
             key: 'nativePlace',
             title: '籍贯',

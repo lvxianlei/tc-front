@@ -32,8 +32,9 @@
             "type": "select",
             "enum": [
                 { "value": 1, "label": "正式员工" },
-                { "value": 2, "label": "超龄员工" },
-                { "value": 3, "label": "实习员工" }
+                { "value": 2, "label": "短期派遣员工" },
+                { "value": 3, "label": "超龄员工" },
+                { "value": 4, "label": "实习员工" }
             ]
         }
         ,
