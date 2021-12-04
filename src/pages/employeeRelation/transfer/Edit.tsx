@@ -21,8 +21,19 @@ export default function Edit() {
     }))
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/employeeTransfer/detail/${params.transferId}`)
-            resole(result)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/employeeTransfer/detail?id=${params.transferId}`)
+            resole({
+                ...result,
+                employeeName: { id: result?.employeeId, value: result?.employeeName },
+                newDepartmentName: {
+                    id: result?.newTeamId,
+                    value: result?.newTeamName,
+                    records: [{
+                        id: result?.newTeamId,
+                        parentId: result?.newDepartmentId
+                    }]
+                }
+            })
         } catch (error) {
             reject(error)
         }
@@ -30,7 +41,7 @@ export default function Edit() {
 
     const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-hr/employeeTransfer/save`, data)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-hr/employeeTransfer/save`, params.transferId ? ({ ...data, id: params.transferId }) : data)
             resole(result)
         } catch (error) {
             reject(error)
