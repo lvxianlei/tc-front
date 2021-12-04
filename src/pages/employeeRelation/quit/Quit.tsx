@@ -117,8 +117,9 @@ export default function Quit(): React.ReactNode {
                         <Form.Item label='员工性质' name='employeeType'>
                             <Select placeholder="请选择" style={{ width: '100%' }} disabled>
                                 <Select.Option value={1} key="1">正式员工</Select.Option>
-                                <Select.Option value={2} key="2">超龄员工</Select.Option>
-                                <Select.Option value={3} key="3">实习员工</Select.Option>
+                                <Select.Option value={2} key="2">短期派遣员工</Select.Option>
+                                <Select.Option value={3} key="3">超龄员工</Select.Option>
+                                <Select.Option value={4} key="4">实习员工</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
