@@ -191,7 +191,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                                 </Form.Item>
                             </Col> */}
                             <Col>
-                                <Form.Item name="assessUser" initialValue={ location.state.userId || '' }>
+                                <Form.Item name="assessUser" initialValue={ location.state?.userId || '' }>
                                     <Select placeholder="请选择" style={{ width: "150px" }}>
                                         {startRelease && startRelease.map((item: any) => {
                                             return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
