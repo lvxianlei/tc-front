@@ -35,7 +35,10 @@ export default function QuitList(): React.ReactNode {
             key: 'departmentName',
             title: '部门/班组',
             width: 100,
-            dataIndex: 'departmentName'
+            dataIndex: 'departmentName',
+            render:(_:any,record:any)=>{
+                return <span>{ record.departmentName + '/' + record.teamName }</span>
+            }
         },
         {
             key: 'postName',
@@ -121,8 +124,8 @@ export default function QuitList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/quit/view/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/quit/${record.id}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>编辑</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quit/view/${record.id}`)}} type='link'>查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quit/${record.id}`)}} type='link' disabled={record.status===2}>编辑</Button>
                 </Space>
             )
         }
