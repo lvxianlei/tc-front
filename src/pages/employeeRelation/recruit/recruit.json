@@ -1,7 +1,7 @@
 {
     "baseInfoData": [
         {
-            "dataIndex": "applicantName",
+            "dataIndex": "employeeName",
             "title": "应聘人姓名"
         },
         {

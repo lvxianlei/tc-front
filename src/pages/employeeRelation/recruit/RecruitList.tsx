@@ -20,10 +20,10 @@ export default function RecruitList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'applicantName',
+            key: 'employeeName',
             title: '应聘人姓名',
             width: 100,
-            dataIndex: 'applicantName'
+            dataIndex: 'employeeName'
         },
         {
             key: 'gender',
