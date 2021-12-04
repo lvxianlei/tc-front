@@ -100,7 +100,7 @@ export default function BoltCheck(): React.ReactNode {
         if (tip !== 'normal') {
             const data: IRecord = await RequestUtil.get<{}>(`/tower-science/boltRecord/issueDetail`, { keyId: record.id, problemField: col.dataIndex });
             if (tip === 'red') {
-                setRecord({ dataSource: [record], problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
+                setRecord({ dataSource: [{ ...record, type: record.typeName}], problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
                 setTitle('查看问题单');
             } else {
                 setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
