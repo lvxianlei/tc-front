@@ -132,7 +132,7 @@ export default function StaffNew(): React.ReactNode {
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "account"] } key={ index } initialValue={ _ }>
-                    { form.getFieldsValue(true)?.list[index].autoAccount === 2 ? <Input maxLength={ 20 } disabled/> : <Input maxLength={ 20 }/>}
+                    { form.getFieldsValue(true)?.list[index].autoAccount === 2 ? <Input maxLength={ 20 } disabled/> : <Input maxLength={ 20 } disabled={ location.state.type === 'edit' && oldDataList[index].autoAccount === 1 }/>}
                 </Form.Item>
             )  
         },
