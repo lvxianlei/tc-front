@@ -5,13 +5,14 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Popconfirm, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions, Modal } from 'antd';
+import { Space, Button, Popconfirm, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions, Modal, Select } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styles from './SetOut.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import { IMaterialTree } from '../../system-mngt/material/IMaterial';
 
 export interface IBundle {
     readonly id?: string;
@@ -54,6 +55,8 @@ export default function PackingListNew(): React.ReactNode {
     const location = useLocation<{productCategoryName: string, productNumber: string}>();
     const [ balesCode, setBalesCode ] = useState<string>();
     const [ visible, setVisible ] = useState<boolean>(false);
+    const [ userList, setUserList ] = useState([]);
+    const [ materialList, setMaterialList ] = useState<IMaterialTree[]>([]);
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if(!location.state) {
@@ -66,9 +69,17 @@ export default function PackingListNew(): React.ReactNode {
         }
         const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId })
         setStayDistrict(list);
+        const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
+            productSegmentGroupId: params.productId
+        });
+        setUserList(data);
+        const resData: IMaterialTree[] = await RequestUtil.get<IMaterialTree[]>('/tower-system/materialCategory/tree');
+        setMaterialList(resData);
     });
 
-    const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}));
+    const { loading, data } = useRequest<IPackingList>(() => {
+        getTableDataSource({});
+    });
 
     const detailData: IPackingList = data || {};
 
@@ -361,27 +372,35 @@ export default function PackingListNew(): React.ReactNode {
                 <Row>
                     <Col span={ 3 }>
                         <Form.Item name="materialSpec" label="材料名称" className={ styles.rightPadding5 }>
-                           <Input placeholder="请输入"/>
+                           <Select placeholder="请选择" style={{width:'120px'}}>
+                                { materialList && materialList.map((item: any) => {
+                                    return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
+                                }) }
+                            </Select>
                         </Form.Item>
                     </Col>
                     <Col offset={ 1 } span={ 4 }>
                         <Form.Item name="segmentName" label="段名">
-                           <Input placeholder="请选择" />
+                           <Select placeholder="请选择" style={{width:'120px'}}>
+                                { userList && userList.map((item: any) => {
+                                    return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
+                                }) }
+                            </Select>
                         </Form.Item>
                     </Col>
                     <Col offset={ 1 } span={ 3 }>
                         <Form.Item name="minLength" label="长度范围" className={ styles.rightPadding5 }>
-                           <Input type="number" placeholder="请输入" />
+                           <Input type="number" min={0} placeholder="请输入" />
                         </Form.Item>
                     </Col>
                     <Col span={ 2 }>
                         <Form.Item name="maxLength">
-                           <Input type="number" placeholder="请输入" />
+                           <Input type="number" min={0} placeholder="请输入" />
                         </Form.Item>
                     </Col>
                     <Col offset={ 1 } span={ 4 }>
-                        <Form.Item name="segmentName" label="查询">
-                           <Input placeholder="请输入" />
+                        <Form.Item name="code" label="查询">
+                           <Input placeholder="请输入" maxLength={50}/>
                         </Form.Item>
                     </Col>
                     <Col  offset={ 1 } span={ 3 }>
