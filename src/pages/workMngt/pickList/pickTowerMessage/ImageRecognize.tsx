@@ -114,6 +114,7 @@ export default function PickTowerDetail(): React.ReactNode {
                                     myBase64: file?.target?.result, // 把 本地图片的base64编码传给后台，调接口，生成图片的url
                                 };
                                 setUrlBase(params.myBase64);
+                                setCropData('');
                             }
                             return new Promise((resolve, reject) => {
                                 resolve()
@@ -122,7 +123,7 @@ export default function PickTowerDetail(): React.ReactNode {
                     }
                     onChange={ (info)=>{
                         if (info.file.status === 'done') {
-                            setUrl(info.file.response.data.link);
+                            setUrl(info.file.response.data.link)
                         } else if (info.file.status === 'error') {
                             console.log(info.file, info.fileList);
                         }
