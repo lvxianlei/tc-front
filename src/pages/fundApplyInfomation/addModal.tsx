@@ -104,7 +104,7 @@ export default function AddModal(props: AddModalProps): JSX.Element {
                 columns={ addColums}
                 onChange={handleBaseInfoChange}
             />
-             <Attachment title="附件" maxCount={10} ref={attchsRef} edit dataSource={attachVosData || [] } />
+             <Attachment title="付款凭证" maxCount={10} ref={attchsRef} edit dataSource={attachVosData || [] } />
         </Modal>
     )
 }

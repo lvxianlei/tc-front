@@ -45,7 +45,7 @@ export default forwardRef(function OverView(props: ViewModalProps,ref): JSX.Elem
                     ...fundRecordColumns
                 ]}
             />
-            <Attachment title="附件" dataSource={attachInfoVOList || [] } />
+            <Attachment title="付款凭证" dataSource={attachInfoVOList || [] } />
         </Modal>
     )
 }
