@@ -61,7 +61,16 @@ export default function PackingListNew(): React.ReactNode {
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if(!location.state) {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${ params.packId }`);
-            setPackagingData(data?.packageRecordVOList || []);
+            const newData = packagingData.filter((item: IBundle) => {
+                data?.packageRecordVOList?.every((items: IBundle) => { 
+                    if(items.id !== item.structureId) {
+                        return items
+                    } else {
+                        return {}
+                    }
+                })
+            })
+            setPackagingData(newData || []);
             setBalesCode(data?.balesCode || '');
             resole(data);
         } else {
@@ -77,9 +86,7 @@ export default function PackingListNew(): React.ReactNode {
         setMaterialList(resData);
     });
 
-    const { loading, data } = useRequest<IPackingList>(() => {
-        getTableDataSource({});
-    });
+    const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}), {})
 
     const detailData: IPackingList = data || {};
 
