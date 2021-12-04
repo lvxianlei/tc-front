@@ -77,7 +77,7 @@ export default function PoleInformation(): React.ReactNode {
                         }</>
                         : null
                     }
-                    { location.state.status === 4 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/poleLoftingDetails/${ record.id }` }>杆塔放样明细</Link> : <Button type="link" disabled>杆塔放样明细</Button>}
+                    { record.loftingStatus === 4 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/poleLoftingDetails/${ record.id }` }>杆塔放样明细</Link> : <Button type="link" disabled>杆塔放样明细</Button>}
                     {   userId === record.loftingUser ?
                         <>{  
                             record.loftingStatus === 3 && location.state.status === 4 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }` }>包装清单</Link> : <Button type="link" disabled>包装清单</Button> 
