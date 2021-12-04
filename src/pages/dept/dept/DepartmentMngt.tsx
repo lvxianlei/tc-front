@@ -88,11 +88,11 @@ export default function DepartmentMngt(): React.ReactNode {
                         if(record.type === 2) {
                             setCompanyTip('编辑'); 
                             setCompanyVisible(true);
-                            form.setFieldsValue({ ...data });
+                            companyForm.setFieldsValue({ ...data });
                         } else {
                             setDeptTip('编辑');
                             setDeptVisible(true);
-                            companyForm.setFieldsValue({ ...data });
+                            form.setFieldsValue({ ...data });
                         }
                     } }>编辑</Button>
                     <Popconfirm
