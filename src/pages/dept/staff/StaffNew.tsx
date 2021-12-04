@@ -106,7 +106,7 @@ export default function StaffNew(): React.ReactNode {
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "autoAccount"] } key={ index } initialValue={ _ }>
-                    <Checkbox key={ record.id } checked={ _ === 2 } disabled={ location.state.type === 'edit' && oldDataList[index].autoAccount === 2 } onChange={ (e) => {
+                    <Checkbox key={ record.id } checked={ _ === 1 } disabled={ location.state.type === 'edit' && oldDataList[index].autoAccount === 1 } onChange={ (e) => {
                         let data = form.getFieldsValue(true).list;
                         data = data.map((item: IStaff, ind: number) => {
                             return {
@@ -117,7 +117,7 @@ export default function StaffNew(): React.ReactNode {
                         data[index] = {
                             ...data[index],
                             id: dataList[index].id,
-                            autoAccount: e.target.checked ? 2 : 1
+                            autoAccount: e.target.checked ? 1 : 2
                         }
                         setDataList([...data]);
                         form.setFieldsValue({ list: [...data] })
@@ -132,7 +132,7 @@ export default function StaffNew(): React.ReactNode {
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "account"] } key={ index } initialValue={ _ }>
-                    { form.getFieldsValue(true)?.list[index].autoAccount === 1 ? <Input maxLength={ 20 } disabled/> : <Input maxLength={ 20 }/>}
+                    { form.getFieldsValue(true)?.list[index].autoAccount === 2 ? <Input maxLength={ 20 } disabled/> : <Input maxLength={ 20 }/>}
                 </Form.Item>
             )  
         },
@@ -259,7 +259,7 @@ export default function StaffNew(): React.ReactNode {
     const addRow = () => {
         const dataListValues = form.getFieldsValue(true).list || [];
         const newRow = {
-            autoAccount: 2,
+            autoAccount: 1,
             account: '',
             category: undefined,
             dept: undefined,
