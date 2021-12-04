@@ -22,6 +22,7 @@ import { IJobs } from '../jobs/JobsMngt';
 import { checkcustomerPhone } from './RulesUtils';
 import { RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
+import { TreeNode } from 'antd/lib/tree-select';
 
 interface IResponseData {
     readonly records?: IJobs[];
@@ -248,6 +249,8 @@ export default function StaffNew(): React.ReactNode {
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
             role.value = role.id;
+            role.title = role.name;
+            role.type === 2 || role.parentId === '0' ? role.disabled = true : role.disabled = false;
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
@@ -314,7 +317,7 @@ export default function StaffNew(): React.ReactNode {
     }
 
     const { loading } = useRequest(() => new Promise(async (resole, reject) => {
-        const deptData: IMetaDept[] = await RequestUtil.get(`/tower-system/department/tree`);
+        const deptData: IMetaDept[] = await RequestUtil.get(`/tower-system/department`);
         setDepartData(deptData);
         const roles: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-system/role/tree');
         setRoleList(roles);
