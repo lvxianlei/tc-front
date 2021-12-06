@@ -45,6 +45,8 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.id = params.id!=='0'?params.id:undefined;
                             value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
+                            value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
+                            value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             value.submitType = 'save';
                             RequestUtil.post(`/tower-hr/employeeReinstatement/save`,value).then(()=>{
                                 message.success('保存成功！')
@@ -59,6 +61,8 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.id = params.id!=='0'?params.id:undefined;
                             value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
+                            value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
+                            value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             value.submitType = 'submit';
                             RequestUtil.post(`/tower-hr/employeeReinstatement/save`,value).then(()=>{
                                 message.success('提交成功！')
@@ -94,14 +98,14 @@ export default function RecruitEdit(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='入职日期' name='inductionDate'>
-                            <Input disabled/>
+                            <DatePicker disabled format='YYYY-MM-DD' style={{width:'100%'}}/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <Form.Item label='离职日期' name='departureDate'>
-                            <Input disabled/>
+                            <DatePicker disabled format='YYYY-MM-DD' style={{width:'100%'}}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>

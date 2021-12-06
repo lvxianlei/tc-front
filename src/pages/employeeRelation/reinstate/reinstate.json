@@ -51,7 +51,7 @@
             ]
         },
         {
-            "dataIndex": "departmentName",
+            "dataIndex": "newDepartmentName",
             "title": "复职后部门/班组"
         },
         {
