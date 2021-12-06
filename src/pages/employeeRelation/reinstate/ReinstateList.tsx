@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import moment from 'moment';
 
 export default function ReinstateList(): React.ReactNode {
     const history = useHistory();
@@ -29,13 +30,19 @@ export default function ReinstateList(): React.ReactNode {
             key: 'inductionDate',
             title: '入职日期',
             width: 100,
-            dataIndex: 'inductionDate'
+            dataIndex: 'inductionDate',
+            render:(inductionDate:string)=>{
+                return inductionDate?moment(inductionDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'departureDate',
             title: '离职日期',
             width: 100,
-            dataIndex: 'departureDate'
+            dataIndex: 'departureDate',
+            render:(departureDate:string)=>{
+                return departureDate?moment(departureDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'departureType',
@@ -65,7 +72,10 @@ export default function ReinstateList(): React.ReactNode {
             key: 'reinstatementDate',
             title: '复职日期',
             width: 100,
-            dataIndex: 'reinstatementDate'
+            dataIndex: 'reinstatementDate',
+            render:(reinstatementDate:string)=>{
+                return reinstatementDate?moment(reinstatementDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'companyName',
@@ -79,7 +89,7 @@ export default function ReinstateList(): React.ReactNode {
             width: 100,
             dataIndex: 'productCategoryName',
             render:(_:any,record:any)=>{
-                return <span>{record.departmentName+"/"+record.teamName}</span>
+                return <span>{ record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-' }</span>
             }
         },
         {
@@ -164,7 +174,7 @@ export default function ReinstateList(): React.ReactNode {
                     <Button onClick={()=>{history.push(`/employeeRelation/reinstate/Edit/${record.id}/${record.status}`)}} type='link' disabled={record.status===2}>编辑</Button>
                     <Popconfirm
                         title="确认复职后，员工将信息将更新到员工档案中？"
-                        onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employeeReinstatement/confirm`,{employeeId: record.id}).then(()=>{
+                        onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employeeReinstatement/confirm`,{id: record.id}).then(()=>{
                             message.success('复职成功！')
                         }).then(()=>{
                             setRefresh(!refresh)
@@ -177,7 +187,7 @@ export default function ReinstateList(): React.ReactNode {
                     </Popconfirm>
                     <Popconfirm
                         title="确认删除？"
-                        onConfirm={ ()=>{RequestUtil.delete(`/tower-science/drawProductSegment/${record.id}`).then(()=>{
+                        onConfirm={ ()=>{RequestUtil.delete(`/tower-hr/employeeReinstatement?id=${record.id}`).then(()=>{
                             message.success('删除成功！')
                         }).then(()=>{
                             setRefresh(!refresh)
@@ -195,8 +205,8 @@ export default function ReinstateList(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.departureDateStart = formatDate[0]+ ' 00:00:00';
-            value.departureDateEnd = formatDate[1]+ ' 23:59:59';
+            value.reinstatementDateStart = formatDate[0]+ ' 00:00:00';
+            value.reinstatementDateEnd = formatDate[1]+ ' 23:59:59';
             delete value.statusUpdateTime
         }
         setFilterValue(value)
@@ -223,7 +233,7 @@ export default function ReinstateList(): React.ReactNode {
                         children: <Input placeholder="请输入员工姓名/电话/身份证号进行查询" maxLength={200} />
                     },
                     {
-                        name: 'departureType',
+                        name: 'reinstatementNature',
                         label: '离职类型',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                                 <Select.Option value={1} key="1">一次复职</Select.Option>
@@ -236,7 +246,7 @@ export default function ReinstateList(): React.ReactNode {
                     },
                     {
                         name: 'statusUpdateTime',
-                        label: '调动日期',
+                        label: '复职日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                 ]}

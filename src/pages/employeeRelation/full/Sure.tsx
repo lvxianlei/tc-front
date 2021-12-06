@@ -68,11 +68,11 @@ export default function Sure(): React.ReactNode {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={12}>
+                    <Col span={24}>
                         <Form.Item label='转正评语' rules={[{
                             required:true, 
                             message:'请填写转正评语'
-                        }]}>
+                        }]} labelCol= {{span:3}} wrapperCol={{ span: 20 }}>
                             <Input.TextArea maxLength={400} showCount/>
                         </Form.Item>
                     </Col>
