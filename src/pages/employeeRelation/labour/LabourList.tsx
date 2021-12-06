@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import moment from 'moment';
 
 export default function LabourList(): React.ReactNode {
     const history = useHistory();
@@ -85,13 +86,19 @@ export default function LabourList(): React.ReactNode {
             key: 'contractStartDate',
             title: '合同开始日期',
             width: 100,
-            dataIndex: 'contractStartDate'
+            dataIndex: 'contractStartDate',
+            render:(contractStartDate: string)=>{
+                return contractStartDate?moment(contractStartDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'contractEndDate',
             title: '合同截止日期',
             width: 100,
-            dataIndex: 'contractEndDate'
+            dataIndex: 'contractEndDate',
+            render:(contractEndDate: string)=>{
+                return contractEndDate?moment(contractEndDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'contractStatus',

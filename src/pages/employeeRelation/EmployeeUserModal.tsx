@@ -12,6 +12,7 @@ import { RowSelectionType } from 'antd/lib/table/interface';
 import { DataType, IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../components/AbstractSelectableModal';
 import AbstractFilteredSelecableModal from '../../components/AbstractFilteredSelecableModal';
 import RequestUtil from '../../utils/RequestUtil';
+import moment from 'moment';
 
 export interface IEmployeeUserSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: IUser[];
@@ -21,6 +22,7 @@ export interface IEmployeeUserSelectionComponentProps extends IAbstractSelectabl
     readonly buttonType?: ButtonType;
     readonly buttonTitle?: string;
     readonly rowSelectionType?: RowSelectionType | undefined;
+    readonly type?: number
 }
 
 export interface IResponseDataMore extends IResponseData {
@@ -121,7 +123,8 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
         let resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-hr/employee/archives`, {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize || this.state.tablePagination?.pageSize
+            size: pagination.pageSize || this.state.tablePagination?.pageSize,
+            stationStatus: this.props.type || 1
         });
         const selectKeys: [] = this.props.selectKey;
         let newData: IUser[] = resData.records;
@@ -189,6 +192,9 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             title: '部门/班组',
             width: '5%',
             dataIndex: 'departmentName', 
+            render:(_:any,record:any)=>{
+                return record.departmentName+'/'+record.teamName
+            }
         }, {
             key: 'postName',
             title: '岗位',
@@ -199,14 +205,6 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             title: '员工分组',
             width: '5%',
             dataIndex: 'postTypeName',
-            // render: (stationStatus: number): React.ReactNode => {
-            //     switch (stationStatus) {
-            //         case 0:
-            //             return '不在职';
-            //         case 1:
-            //             return '在职';
-            //     }
-            // } 
         }, {
             key: 'nativePlace',
             title: '籍贯',
@@ -216,7 +214,10 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             key: 'birthday',
             title: '出生日期',
             width: '5%',
-            dataIndex: 'birthday'
+            dataIndex: 'birthday',
+            render:(birthday:string)=>{
+                return moment(birthday).format('YYYY-MM-DD')
+            }
         }, {
             key: 'age',
             title: '年龄',
@@ -261,7 +262,10 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             key: 'inductionDate',
             title: '入职时间',
             width: '5%',
-            dataIndex: 'inductionDate'
+            dataIndex: 'inductionDate',
+            render:(birthday:string)=>{
+                return moment(birthday).format('YYYY-MM-DD')
+            }
         }, {
             key: 'employeeNature',
             title: '员工性质',
@@ -272,8 +276,10 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
                     case 1:
                         return '正式员工';
                     case 2:
-                        return '超龄员工';
+                        return '短期派遣员工';
                     case 3:
+                        return '超龄员工';
+                    case 4:
                         return '实习员工';
                 }
             } 
@@ -281,7 +287,10 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             key: 'positiveDate',
             title: '转正日期',
             width: '5%',
-            dataIndex: 'positiveDate'
+            dataIndex: 'positiveDate',
+            render:(birthday:string)=>{
+                return moment(birthday).format('YYYY-MM-DD')
+            }
         }, {
             key: 'workYear',
             title: '工龄',

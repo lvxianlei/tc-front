@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import moment from 'moment';
 
 export default function RecruitList(): React.ReactNode {
     const history = useHistory();
@@ -20,10 +21,10 @@ export default function RecruitList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'applicantName',
+            key: 'employeeName',
             title: '应聘人姓名',
             width: 100,
-            dataIndex: 'applicantName'
+            dataIndex: 'employeeName'
         },
         {
             key: 'gender',
@@ -49,7 +50,7 @@ export default function RecruitList(): React.ReactNode {
             width: 100,
             dataIndex: 'departmentName',
             render:(_:any,record:any)=>{
-                return <span>{ record.departmentName + '/' + record.teamName }</span>
+                return <span>{ record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-' }</span>
             }
         },
         {
@@ -132,7 +133,10 @@ export default function RecruitList(): React.ReactNode {
             key: 'workTime',
             title: '预计到岗时间',
             width: 100,
-            dataIndex: 'workTime'
+            dataIndex: 'workTime',
+            render:(workTime:string)=>{
+                return workTime?moment(workTime).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'bankCardNumber',
