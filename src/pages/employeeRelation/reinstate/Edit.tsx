@@ -25,8 +25,8 @@ export default function RecruitEdit(): React.ReactNode {
         form.setFieldsValue(params.id!=='0'?{
             ...data,
             newDepartmentName: data?.departmentName+'/'+data?.teamName,
-            // inductionDate: data?.inductionDate?moment(data?.inductionDate):'',
-            // departureDate: data?.departureDate?moment(data?.departureDate):'',
+            inductionDate: data?.inductionDate?moment(data?.inductionDate):'',
+            departureDate: data?.departureDate?moment(data?.departureDate):'',
             reinstatementDate: data?.reinstatementDate?moment(data?.reinstatementDate):'',
         }:{})
         resole(data)
@@ -49,7 +49,7 @@ export default function RecruitEdit(): React.ReactNode {
                             RequestUtil.post(`/tower-hr/employeeReinstatement/save`,value).then(()=>{
                                 message.success('保存成功！')
                             }).then(()=>{
-                                history.push('/employeeRelation/recruit')
+                                history.push('/employeeRelation/reinstate')
                             })
                         })
                         
@@ -60,10 +60,10 @@ export default function RecruitEdit(): React.ReactNode {
                             value.id = params.id!=='0'?params.id:undefined;
                             value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
                             value.submitType = 'submit';
-                            RequestUtil.post(`/tower-hr/employeeReinstatement/submit`,value).then(()=>{
+                            RequestUtil.post(`/tower-hr/employeeReinstatement/save`,value).then(()=>{
                                 message.success('提交成功！')
                             }).then(()=>{
-                                history.push('/employeeRelation/recruit')
+                                history.push('/employeeRelation/reinstate')
                             })
                         })
                         
@@ -83,7 +83,7 @@ export default function RecruitEdit(): React.ReactNode {
                                     setSelectedUserRows(selectedRows);
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
-                                        employeeId: selectedRows[0].employeeId,
+                                        employeeId: selectedRows[0].id,
                                         inductionDate: selectedRows[0].inductionDate,
                                         departureDate: selectedRows[0].departureDate,
                                         departureType: selectedRows[0].departureType,
@@ -161,7 +161,6 @@ export default function RecruitEdit(): React.ReactNode {
                             <Input maxLength={ 50 }  addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
                                     setSelectedDeptRows(selectedRows);
                                     form.setFieldsValue({
-                                        employeeName: selectedRows[0].employeeName,
                                         newDepartmentName: selectedRows[0].parentName+'/'+selectedRows[0].name,
                                         departmentId: selectedRows[0].parentId,
                                         teamId: selectedRows[0].id,
@@ -182,7 +181,7 @@ export default function RecruitEdit(): React.ReactNode {
                         <Form.Item label='复职后岗位'rules={[{
                             required:true, 
                             message:'请选择复职后岗位'
-                        }]} name='postName'>
+                        }]} name='postId'>
                             <Select style={{width:'100%'}}>
                                 {post && post.map((item: any) => {
                                     return <Select.Option key={item.id} value={item.id}>{item.stationName}</Select.Option>

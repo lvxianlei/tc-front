@@ -80,7 +80,7 @@ export default function Quit(): React.ReactNode {
                                         departmentName: selectedRows[0].departmentName,
                                         teamName: selectedRows[0].teamName,
                                         newDepartmentName: selectedRows[0].departmentName+'/'+selectedRows[0].teamName,
-                                        postName: selectedRows[0].postName,
+                                        postId: selectedRows[0].postId,
                                         inductionDate: moment(selectedRows[0].inductionDate).format('YYYY-MM-DD'),
                                         employeeType: selectedRows[0].employeeType,
                                         employeeId: selectedRows[0].id,
@@ -101,7 +101,7 @@ export default function Quit(): React.ReactNode {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='岗位' name='postName'>
+                        <Form.Item label='岗位' name='postId'>
                             <Select style={{width:'100%'}} disabled>
                                 {post && post.map((item: any) => {
                                     return <Select.Option key={item.id} value={item.id}>{item.stationName}</Select.Option>
