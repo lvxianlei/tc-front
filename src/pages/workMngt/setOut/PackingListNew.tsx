@@ -61,25 +61,17 @@ export default function PackingListNew(): React.ReactNode {
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if(!location.state) {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${ params.packId }`);
-            const newData = packagingData.filter((item: IBundle) => {
-                data?.packageRecordVOList?.every((items: IBundle) => { 
-                    if(items.id !== item.structureId) {
-                        return items
-                    } else {
-                        return {}
-                    }
-                })
-            })
-            setPackagingData(newData || []);
+            setPackagingData(data?.packageRecordVOList || []);
             setBalesCode(data?.balesCode || '');
             resole(data);
         } else {
             resole({ productCategoryName: location.state.productCategoryName, productNumber:location.state.productNumber });
         }
-        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId })
-        setStayDistrict(list);
+        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId });
+        const newData = list.filter((item: IBundle) => !packagingData.some((ele: IBundle) => ele.id !== item.id))
+        setStayDistrict(newData);
         const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
-            productSegmentGroupId: params.productId
+            productSegmentGroupId: params.packId
         });
         setUserList(data);
         const resData: IMaterialTree[] = await RequestUtil.get<IMaterialTree[]>('/tower-system/materialCategory/tree');
