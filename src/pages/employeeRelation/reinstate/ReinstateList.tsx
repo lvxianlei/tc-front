@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import moment from 'moment';
 
 export default function ReinstateList(): React.ReactNode {
     const history = useHistory();
@@ -29,13 +30,19 @@ export default function ReinstateList(): React.ReactNode {
             key: 'inductionDate',
             title: '入职日期',
             width: 100,
-            dataIndex: 'inductionDate'
+            dataIndex: 'inductionDate',
+            render:(inductionDate:string)=>{
+                return inductionDate?moment(inductionDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'departureDate',
             title: '离职日期',
             width: 100,
-            dataIndex: 'departureDate'
+            dataIndex: 'departureDate',
+            render:(departureDate:string)=>{
+                return departureDate?moment(departureDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'departureType',
@@ -65,7 +72,10 @@ export default function ReinstateList(): React.ReactNode {
             key: 'reinstatementDate',
             title: '复职日期',
             width: 100,
-            dataIndex: 'reinstatementDate'
+            dataIndex: 'reinstatementDate',
+            render:(reinstatementDate:string)=>{
+                return reinstatementDate?moment(reinstatementDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'companyName',
@@ -79,7 +89,7 @@ export default function ReinstateList(): React.ReactNode {
             width: 100,
             dataIndex: 'productCategoryName',
             render:(_:any,record:any)=>{
-                return <span>{record.departmentName+"/"+record.teamName}</span>
+                return <span>{ record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-' }</span>
             }
         },
         {

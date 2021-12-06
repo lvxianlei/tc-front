@@ -9,7 +9,7 @@
             "title": "公司"
         },
         {
-            "dataIndex": "departmentName",
+            "dataIndex": "newDepartmentName",
             "title": "部门/班组"
         },
         {
@@ -21,7 +21,7 @@
             "title": "入职日期"
         },
         {
-            "dataIndex": "employeeType",
+            "dataIndex": "employeeNature",
             "title": "员工性质",
             "type": "select",
             "enum": [

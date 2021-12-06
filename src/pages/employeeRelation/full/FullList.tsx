@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import moment from 'moment';
 
 export default function FullList(): React.ReactNode {
     const history = useHistory();
@@ -35,7 +36,10 @@ export default function FullList(): React.ReactNode {
             key: 'inductionDate',
             title: '入职时间',
             width: 100,
-            dataIndex: 'inductionDate'
+            dataIndex: 'inductionDate',
+            render:(inductionDate: string)=>{
+                return inductionDate?moment(inductionDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'probationPeriod',
@@ -65,7 +69,10 @@ export default function FullList(): React.ReactNode {
             key: 'positiveDate',
             title: '转正日期',
             width: 100,
-            dataIndex: 'positiveDate'
+            dataIndex: 'positiveDate',
+            render:(positiveDate: string)=>{
+                return positiveDate?moment(positiveDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'checkResult',

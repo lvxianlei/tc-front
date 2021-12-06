@@ -6,6 +6,7 @@ import useRequest from '@ahooksjs/use-request';
 import { baseInfoData, quitInfoData } from './quit.json';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
+import moment from 'moment';
 
 
 export default function QuitProceduresOperation(): React.ReactNode {
@@ -14,7 +15,8 @@ export default function QuitProceduresOperation(): React.ReactNode {
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
+        data.newDepartmentName = data.departmentName+'/'+data.teamName
         resole(data)
     }), {})
     const detailData: any = data;
@@ -26,17 +28,24 @@ export default function QuitProceduresOperation(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button key="primary" onClick={() => {
+                    <Button type="primary" onClick={() => {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
+                            value.transactDate= moment(value.transactDate).format('YYYY-MM-DD');
+                            value.employeeId = detailData.employeeId;
+                            value.id = params.id;
+                            value.handleType='save';
+                            value.isProcessingCompleted = false;
                             value.fileVos= attachRef.current?.getDataSource();
-                            RequestUtil.post(`/tower-hr/employeeDeparture/handleSubmit`, value).then(()=>{
+                            value.isRemoveContract =  value.isRemoveContract === 1?true:false;
+                            value.isTransactProcedure =  value.isRemoveContract === 1?true:false;
+                            RequestUtil.post(`/tower-hr/employeeDeparture/handleSave`, value).then(()=>{
                                 message.success('保存成功')
                             })
                         })
                         
                     }}>保存</Button>
-                    <Button key="primary" onClick={() => history.goBack()}>保存并办理完成</Button>
+                    <Button type="primary" onClick={() => history.goBack()}>保存并办理完成</Button>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
             ]}>

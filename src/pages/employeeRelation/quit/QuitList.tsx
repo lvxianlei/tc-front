@@ -38,7 +38,7 @@ export default function QuitList(): React.ReactNode {
             width: 100,
             dataIndex: 'departmentName',
             render:(_:any,record:any)=>{
-                return <span>{ record.departmentName + '/' + record.teamName }</span>
+                return <span>{ record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-' }</span>
             }
         },
         {
@@ -70,8 +70,8 @@ export default function QuitList(): React.ReactNode {
             title: '入职时间',
             width: 100,
             dataIndex: 'inductionDate',
-            render:(departureDate: string)=>{
-                return moment(departureDate).format('YYYY-MM-DD')
+            render:(inductionDate: string)=>{
+                return inductionDate?moment(inductionDate).format('YYYY-MM-DD'):'-'
             }
         },
         {
@@ -98,7 +98,7 @@ export default function QuitList(): React.ReactNode {
             width: 100,
             dataIndex: 'departureDate',
             render:(departureDate: string)=>{
-                return moment(departureDate).format('YYYY-MM-DD')
+                return departureDate?moment(departureDate).format('YYYY-MM-DD'):'-'
             }
         },
         {
