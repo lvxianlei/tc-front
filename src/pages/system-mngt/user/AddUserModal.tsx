@@ -29,7 +29,8 @@
              const result:IUser = await RequestUtil.get(`/sinzetech-user/user/${id}`);
              addCollectionForm.setFieldsValue({
                 account: result && result.account,
-                roleIds: result && result.roleIds?.split(",")
+                roleIds: result && result.roleIds?.split(","),
+                departmentId: result && result.departmentId
              })
          } catch (error) {
              reject(error)
@@ -45,6 +46,16 @@
              reject(error)
          }
      }), {})
+
+     // 获取部门
+     const { run: getDepartment, data: department = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-user/department/tree');
+            resole(result);
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
  
  
      // 新增保存
@@ -90,16 +101,29 @@
                      >
                          <Input placeholder="请输入账号" />
                      </Form.Item>
+
                      <Form.Item
                          label="角色"
                          name="roleIds"
                          rules={[{ required: true, message: '请选择角色!' }]}
                      >
                         <TreeSelect
-                        showSearch={true}
-                        placeholder="请选择角色"
-                        multiple={true}
-                        treeData={authority as (IRole & DataNode)[]}
+                            showSearch={true}
+                            placeholder="请选择角色"
+                            multiple={true}
+                            treeData={authority as (IRole & DataNode)[]}
+                        />
+                     </Form.Item>
+
+                     <Form.Item
+                         label="所属部门"
+                         name="departmentId"
+                         rules={[{ required: true, message: '请选择所属部门!' }]}
+                     >
+                        <TreeSelect
+                            showSearch={true}
+                            placeholder="请选择所属部门"
+                            treeData={department as (IRole & DataNode)[]}
                         />
                      </Form.Item>
                  </Form>
