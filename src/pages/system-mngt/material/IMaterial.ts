@@ -37,6 +37,7 @@ export interface IMaterialType {
     readonly ruleFront?: string;
     readonly unit?: string;
     readonly firstCode?: string;
+    readonly sonName?: string;
 }
 
 

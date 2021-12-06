@@ -2,7 +2,8 @@
  * @author lxy
  * @copyright © 2021  All rights reserved
  */
-import { Button, Form, FormItemProps, Input, Modal, Space, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
+import { Button, Form, FormItemProps, Input, InputNumber, Modal, Space, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
+import { valueType } from 'antd/lib/statistic/utils';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -52,6 +53,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
 
     //modal-show
     public showModal(record: Record<string, any>, type: number): void {
+        console.log(record)
         this.setState({
             visible: true,
             defaultData: record,
@@ -100,16 +102,24 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
         // })
         // selectedValue.id && type === 2 ? await RequestUtil.put('/tower-system/materialCategory', dataSource) : await RequestUtil.post('/tower-system/materialCategory', dataSource);
         // this.fetchMaterialType();
-        console.log(values)
-        if(this.state.type === 0) {
-            RequestUtil.post('/tower-system/materialCategory', values).then(res => {
+        if(this.state.type === 0 || this.state.type === 2) {
+            RequestUtil.post('/tower-system/materialCategory', {
+                ...values,
+                code: this.state.type === 0 ? values.code : this.state.defaultData.firstCode + values.code,
+                parentId: this.state.type === 0 ? '' : this.state.defaultData.parentId
+            }).then(res => {
                 this.setState({
                     visible: false
                 })
                 this.fetchMaterialType();
             })
-        } else if(this.state.type === 1) {
-            RequestUtil.put('/tower-system/materialCategory', { ...this.state.defaultData, ...values }).then(res => {
+        } else if (this.state.type === 1 || this.state.type === 3) {
+            console.log(this.state.defaultData)
+            RequestUtil.put('/tower-system/materialCategory', { 
+                ...this.state.defaultData, 
+                ...values,
+                code: this.state.type === 1 ? values.code : this.state.defaultData.firstCode + values.code
+            }).then(res => {
                 this.setState({
                     visible: false
                 })
@@ -158,10 +168,10 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
             align: "center",
             render: (_: undefined, record: IMaterialType): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    { record.level === 1 ? <Button type="link" onClick={() => this.showModal({ firstCode: record.code }, 2)}>
+                    { record.level === 1 ? <Button type="link" onClick={() => this.showModal({ firstCode: record.code, parentId: record.id }, 2)}>
                         添加二级类目
                     </Button> : null}
-                    <Button type="link" onClick={() => this.showModal(record, record.level === 1 ? 1 : 2)}>
+                    <Button type="link" onClick={() => this.showModal({ ...record, firstCode: record.code?.substring(0,2), code: record.code?.substring(2, 4) }, record.level === 1 ? 1 : 3)}>
                         编辑
                     </Button>
                     <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => { this.handleDelete(record) }} >
@@ -199,14 +209,20 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
         });
         resData = resData.map((item: IMaterialType) => {
-            if(item.level === 2) {
+            if(item.children && item.children?.length > 0) {
                 return {
                     ...item,
-                    sonName: item.name,
-                    name: ''
+                    children: item?.children?.map((items: IMaterialType) => {
+                        return {
+                            ...items,
+                            sonName: items.name,
+                            name: '',
+                            children: undefined
+                        }
+                    })
                 }
             } else {
-                return item
+                return { ...item, children: undefined}
             }
         })
         this.setState({
@@ -344,12 +360,21 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                                 message: '请输入原材料编号！'
                             },
                             {
-                                pattern: /^[^(\s)|(\u4e00-\u9fa5)]*$/,
-                                message: '禁止输入中文或空格',
+                                pattern: /^[^\s]*$/,
+                                message: '禁止输入空格',
+                            }, 
+                            {
+                                pattern: /^[0-9]*$/,
+                                message: '仅可输入数字',
                             }]}
-                            initialValue={defaultData.code}
+                            initialValue={defaultData?.code}
                         >
-                            { this.state.type === 2 || this.state.type === 3 ?<Input placeholder="请输入"  addonBefore={defaultData.firstCode} style={{ width: "100%" }} maxLength={20} /> : <Input placeholder="请输入" style={{ width: "100%" }} maxLength={20} />}
+                            { this.state.type === 2 || this.state.type === 3 ?<Input 
+                                min={0}
+                                maxLength={2}
+                                addonBefore={ defaultData.firstCode }
+                                style={{ width: "100%" }}
+                                />  : <Input maxLength={2} min={0} placeholder="请输入" style={{ width: "100%" }} />}
                         </Form.Item>
                         <Form.Item
                             name="name"
@@ -362,7 +387,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                                 pattern: /^[^\s]*$/,
                                 message: '禁止输入空格',
                             }]}
-                            initialValue={defaultData.name}
+                            initialValue={ this.state.type === 2 || this.state.type === 3 ? defaultData?.sonName : defaultData.name }
                         >
                             <Input placeholder="请输入名称" maxLength={20} />
                         </Form.Item>
@@ -370,14 +395,14 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                             <><Form.Item
                                 name="ruleFront"
                                 label="规格前置符"
-                                initialValue={defaultData.ruleFront}
+                                initialValue={defaultData?.ruleFront}
                             >
                                 <Input placeholder="请输入规格前置符" maxLength={20} />
                             </Form.Item>
                             <Form.Item
                                 name="unit"
                                 label="单位"
-                                initialValue={defaultData.unit}
+                                initialValue={defaultData?.unit}
                             >
                                 <Input placeholder="请输入单位称" maxLength={20} />
                             </Form.Item></>
