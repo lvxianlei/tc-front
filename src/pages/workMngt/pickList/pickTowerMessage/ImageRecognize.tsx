@@ -239,13 +239,27 @@ export default function PickTowerDetail(): React.ReactNode {
                 </div>
             </DetailContent>
             <Modal visible={visible} title='' onCancel={()=>{setVisible(false)}} okText='是' cancelText='否' footer={<Space><Button onClick={async ()=>{
-                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=1`,form.getFieldsValue(true).data).then(()=>{
+                let values = form.getFieldsValue(true).data;
+                values = values.map((res: any) => {
+                    return {
+                        ...res,
+                        segmentGroupId: params.productSegmentId
+                    }
+                })
+                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=1`,values).then(()=>{
                     message.success('保存成功！')
                 }).then(()=>{
                     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
                 })
             }}>是</Button><Button onClick={async ()=>{
-                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,form.getFieldsValue(true).data).then(()=>{
+                let values = form.getFieldsValue(true).data;
+                values = values.map((res: any) => {
+                    return {
+                        ...res,
+                        segmentGroupId: params.productSegmentId
+                    }
+                })
+                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,values).then(()=>{
                     message.success('保存成功！')
                 }).then(()=>{
                     setVisible(false);
