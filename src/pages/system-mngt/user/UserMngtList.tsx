@@ -28,6 +28,10 @@ export default function RoleMngtList(): React.ReactNode {
             dataIndex: "userRoleNames"
         },
         {
+            title: "用户姓名",
+            dataIndex: "name"
+        },
+        {
             title: "所属部门",
             dataIndex: "departmentName"
         },
