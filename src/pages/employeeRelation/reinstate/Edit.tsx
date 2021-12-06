@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message} from 'antd';
+import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message, InputNumber} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -17,13 +17,16 @@ export default function RecruitEdit(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>();
     const [ selectedUserRows, setSelectedUserRows ] = useState<IUser[] | any>({});
     const [ selectedDeptRows, setSelectedDeptRows ] = useState<IDept[] | any>({});
+    const [post, setPost] = useState([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeReinstatement/detail?id=${params.id}`)
+        const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeReinstatement/detail?id=${params.id}`);
+        const post: any = await RequestUtil.get(`/tower-system/station?size=1000`);
+        setPost(post?.records)
         form.setFieldsValue(params.id!=='0'?{
             ...data,
             newDepartmentName: data?.departmentName+'/'+data?.teamName,
-            // inductionDate: data?.inductionDate?moment(data?.inductionDate):'',
-            // departureDate: data?.departureDate?moment(data?.departureDate):'',
+            inductionDate: data?.inductionDate?moment(data?.inductionDate):'',
+            departureDate: data?.departureDate?moment(data?.departureDate):'',
             reinstatementDate: data?.reinstatementDate?moment(data?.reinstatementDate):'',
         }:{})
         resole(data)
@@ -42,11 +45,13 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.id = params.id!=='0'?params.id:undefined;
                             value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
+                            value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
+                            value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             value.submitType = 'save';
                             RequestUtil.post(`/tower-hr/employeeReinstatement/save`,value).then(()=>{
                                 message.success('保存成功！')
                             }).then(()=>{
-                                history.push('/employeeRelation/recruit')
+                                history.push('/employeeRelation/reinstate')
                             })
                         })
                         
@@ -56,11 +61,13 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.id = params.id!=='0'?params.id:undefined;
                             value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
+                            value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
+                            value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             value.submitType = 'submit';
-                            RequestUtil.post(`/tower-hr/employeeReinstatement/submit`,value).then(()=>{
+                            RequestUtil.post(`/tower-hr/employeeReinstatement/save`,value).then(()=>{
                                 message.success('提交成功！')
                             }).then(()=>{
-                                history.push('/employeeRelation/recruit')
+                                history.push('/employeeRelation/reinstate')
                             })
                         })
                         
@@ -80,24 +87,25 @@ export default function RecruitEdit(): React.ReactNode {
                                     setSelectedUserRows(selectedRows);
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
+                                        employeeId: selectedRows[0].id,
                                         inductionDate: selectedRows[0].inductionDate,
                                         departureDate: selectedRows[0].departureDate,
                                         departureType: selectedRows[0].departureType,
                                         departureReason: selectedRows[0].departureReason,
                                     });
-                            } } buttonType="link" buttonTitle="+选择员工" /> } disabled/>
+                            } } buttonType="link" buttonTitle="+选择员工" type={2} /> } disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item label='入职日期' name='inductionDate'>
-                            <Input disabled/>
+                            <DatePicker disabled format='YYYY-MM-DD' style={{width:'100%'}}/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <Form.Item label='离职日期' name='departureDate'>
-                            <Input disabled/>
+                            <DatePicker disabled format='YYYY-MM-DD' style={{width:'100%'}}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -157,7 +165,6 @@ export default function RecruitEdit(): React.ReactNode {
                             <Input maxLength={ 50 }  addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
                                     setSelectedDeptRows(selectedRows);
                                     form.setFieldsValue({
-                                        employeeName: selectedRows[0].employeeName,
                                         newDepartmentName: selectedRows[0].parentName+'/'+selectedRows[0].name,
                                         departmentId: selectedRows[0].parentId,
                                         teamId: selectedRows[0].id,
@@ -178,8 +185,12 @@ export default function RecruitEdit(): React.ReactNode {
                         <Form.Item label='复职后岗位'rules={[{
                             required:true, 
                             message:'请选择复职后岗位'
-                        }]} name='postName'>
-                            <Input/>
+                        }]} name='postId'>
+                            <Select style={{width:'100%'}}>
+                                {post && post.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.stationName}</Select.Option>
+                                })}
+                            </Select>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -207,13 +218,18 @@ export default function RecruitEdit(): React.ReactNode {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={12}>
+                    <Col span={4}>
                         <Form.Item label='' name='departmentId'>
                             <Input  type="hidden"/>
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={4}>
                         <Form.Item label='' name='teamId'>
+                            <Input  type="hidden"/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                        <Form.Item label='' name='employeeId'>
                             <Input  type="hidden"/>
                         </Form.Item>
                     </Col>

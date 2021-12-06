@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Input, TreeSelect } from 'antd';
+import { Input, TreeSelect, Checkbox } from 'antd';
 import { FormInstance } from 'rc-field-form/es/interface';
 import { RuleObject, StoreValue } from 'rc-field-form/lib/interface';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
@@ -182,4 +182,59 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
             }]
         }]];
     }
+
+    handleClick = (e: any) => {
+        console.log(e, '------------')
+        this.getForm()?.setFieldsValue({
+            roleIds11: e.target.checked
+        })
+        console.log(this.getForm()?.getFieldsValue(true))
+    }
+
+
+    // 新增新
+    // public getFormItemGroups(): IFormItemGroup[][] {
+    //     return [[{
+    //         title: '用户信息',
+    //         itemCol: {
+    //             span: 12
+    //         },
+    //         itemProps: [{
+    //             label: '账号',
+    //             name: 'account',
+    //             initialValue: this.state.user?.account,
+    //             children: <Input placeholder="请输入账号" />,
+    //             rules: [{
+    //                 required: true,
+    //                 message: '请输入账号!'
+    //             }]
+    //         }, {
+    //             label: '角色',
+    //             name: 'roleIds',
+    //             initialValue: this.state.user?.roleIds?.split(','),
+    //             children: <TreeSelect showSearch={true} placeholder="请选择角色" multiple={true}
+    //                 className={layoutStyles.width100} treeData={this.wrapRole2DataNode(this.state.roles)} />,
+    //             rules: [{
+    //                 required: true,
+    //                 message: '请输入角色!'
+    //             }]
+    //         }, {
+    //             label: '启用账号',
+    //             name: 'roleIds11',
+    //             // initialValue: this.state.user?.roleIds?.split(','),
+    //             children: <Checkbox onChange={(e: any) => this.handleClick(e)}/>,
+    //             // rules: [
+    //             //     {
+    //             //       validator: (_, value) =>
+    //             //         value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
+    //             //     }
+    //             // ]
+    //         },{
+    //             label: '备注',
+    //             name: 'phone',
+    //             initialValue: this.state.user?.phone,
+    //             children: <Input placeholder="请输入手机号码" />
+    //         }]
+    //     }]];
+    // }
 }

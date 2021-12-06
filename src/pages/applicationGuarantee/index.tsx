@@ -1,9 +1,8 @@
 /***
  * 保函申请
- * 2021/11/22
  */
 import React, { useState, useRef } from 'react';
-import { Button, Input, DatePicker, Radio, Select, message, Modal } from 'antd';
+import { Button, Input, DatePicker, Radio, message, Modal } from 'antd';
 import moment from 'moment';
 import useRequest from '@ahooksjs/use-request'
 import { useHistory } from 'react-router-dom';
@@ -16,11 +15,7 @@ import FillGuaranteeInformation from './fillGuaranteeInformation';
 import RecoveryGuaranteeLayer from './recoveryGuarantee';
 // 引入查看保函申请
 import SeeGuarantee from './seeGuarantee';
-interface EditRefProps {
-    id?: string
-    onSubmit: () => void
-    resetFields: () => void
-}
+import { EditRefProps } from './application';
 
 export default function ApplicationColunm(): React.ReactNode {
     const history = useHistory();
@@ -113,23 +108,6 @@ export default function ApplicationColunm(): React.ReactNode {
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...collectionListHead.map((item: any) => {
-                        if (item.dataIndex === 'guaranteeType') {
-                            return ({
-                                title: item.title,
-                                dataIndex: item.dataIndex,
-                                width: 50,
-                                render: (_: any, record: any): React.ReactNode => (
-                                    <span>{
-                                        record.guaranteeType === 1 ? 
-                                            '履约保函' :
-                                        record.guaranteeType === 2 ?
-                                            '投标保函' :
-                                        record.guaranteeType === 3 ?
-                                            '质保金保函' : '预付款保函'
-                                    }</span>
-                                )
-                            })
-                        }
                         if (item.dataIndex === 'requiredReturnTime') {
                             return ({
                                 title: item.title,
@@ -160,7 +138,7 @@ export default function ApplicationColunm(): React.ReactNode {
                                         setId(record.id);
                                         setRequiredReturnTime(record.requiredReturnTime)
                                     }}>回收保函</Button>}
-                                    {acceptStatus === 1 && <Button type="link" onClick={()=>{window.open(record.filePath)}}>生成文件</Button>}
+                                    {/* {acceptStatus === 1 && <Button type="link" onClick={()=>{window.open(record.filePath)}}>生成文件</Button>} */}
                                 </>
                             )
                         }
@@ -204,6 +182,7 @@ export default function ApplicationColunm(): React.ReactNode {
                 title={'填写保函信息'}
                 visible={visible}
                 width={1000}
+                maskClosable={false}
                 onCancel={() => {
                     addRef.current?.resetFields();
                     setVisible(false);
@@ -226,6 +205,7 @@ export default function ApplicationColunm(): React.ReactNode {
             <Modal
                 title={'回收保函'}
                 visible={visibleRecovery}
+                maskClosable={false}
                 width={1000}
                 onCancel={() => {
                     setVisibleRecovery(false)

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message} from 'antd';
+import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message, InputNumber} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -11,7 +11,6 @@ import AuthUtil from '../../../utils/AuthUtil';
 import EmployeeDeptSelectionComponent, { IDept } from '../EmployeeDeptModal';
 import { bankTypeOptions, employeeTypeOptions } from '../../../configuration/DictionaryOptions';
 import moment from 'moment';
-
 
 export default function RecruitEdit(): React.ReactNode {
     const history = useHistory()
@@ -168,7 +167,6 @@ export default function RecruitEdit(): React.ReactNode {
                             <Input maxLength={ 50 }  addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
                                     setSelectedDeptRows(selectedRows);
                                     form.setFieldsValue({
-                                        employeeName: selectedRows[0].employeeName,
                                         newDepartmentName: selectedRows[0].parentName+'/'+selectedRows[0].name,
                                         departmentId: selectedRows[0].parentId,
                                         teamId: selectedRows[0].id,

@@ -3,7 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import { DeleteOutlined } from '@ant-design/icons';
-import { FormItemProps, Input, Space, TableColumnType, TablePaginationConfig, TableProps,Button } from 'antd';
+import { FormItemProps, Input, Space, TableColumnType, TablePaginationConfig, TableProps,Button, Checkbox, Popconfirm, message } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -238,6 +238,25 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
         );
     }
 
+    // 启用
+    protected async onChangeStatus(items: IUser[]) {
+        const resData: IResponseData = await RequestUtil.put<IResponseData>(`/sinzetech-user/user/status?status=${items.map<number>((item: IUser): number => item?.status ? 0 : 1)[0]}&userIds=${items.map<number>((item: IUser): number => item?.id as number)}`);
+        this.fetchUsers({
+            name: this.state.name,
+            account: this.state.account
+        });
+    }
+
+    // 重置密码
+    protected async handleResetPassWord(items: IUser[]) {
+        const resData: IResponseData = await RequestUtil.put<IResponseData>('/sinzetech-user/user/resetPassword?userIds='+ items.map<number>((item: IUser): number => item?.id as number));
+        message.success("重置密码成功！")
+        this.fetchUsers({
+            name: this.state.name,
+            account: this.state.account
+        });
+    }
+
     /**
      * @implements
      * @description Gets table columns
@@ -257,13 +276,33 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
         }, {
             title: '所属机构',
             dataIndex: 'departmentName'
-        }, {
+        },
+        {
+            title: '启用',
+            render: (_: undefined, item: object): React.ReactNode => {
+                return (
+                    <Checkbox
+                        checked={(item as IUser).status ? true : false}
+                        onChange={() => this.onChangeStatus([item as IUser])}
+                    />
+                )
+            }
+        },
+        {
             title: '操作',
             render: (_: undefined, item: object): React.ReactNode => {
                 return (
                     <Space direction="horizontal" size="middle">
                         {/* <Link to={ `/sys/users/detail/${ (item as IUser).id }` }>查看</Link> */}
                         <Link to={`/sys/users/setting/${(item as IUser).id}`}>编辑</Link>
+                        <Popconfirm
+                            title="确定要重置密码吗？"
+                            onConfirm={() => this.handleResetPassWord([item as IUser])}
+                            okText="确定"
+                            cancelText="取消"
+                        >
+                            <Button type="link">重置密码</Button>
+                        </Popconfirm>
                         <ConfirmableButton confirmTitle="确定要删除该角色吗？" type="link" onConfirm={this.onDelete([item as IUser])}>删除</ConfirmableButton>
                     </Space>
                 );

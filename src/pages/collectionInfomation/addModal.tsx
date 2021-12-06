@@ -8,9 +8,7 @@ import { baseColums } from './collectionColumn.json';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil';
 import ApplicationContext from "../../configuration/ApplicationContext"
-interface EditProps {
-    ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
-}
+import { EditProps } from './collection';
 
 export default forwardRef(function AddModal({}: EditProps, ref) {
     const [ addCollectionForm ] = Form.useForm();

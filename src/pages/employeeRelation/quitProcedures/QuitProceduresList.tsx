@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import moment from 'moment';
 
 export default function QuitProceduresList(): React.ReactNode {
     const history = useHistory();
@@ -26,22 +27,31 @@ export default function QuitProceduresList(): React.ReactNode {
             dataIndex: 'employeeName'
         },
         {
-            key: 'transactProcedure',
+            key: 'isTransactProcedure',
             title: '是否办理离职手续',
             width: 100,
-            dataIndex: 'transactProcedure'
+            dataIndex: 'isTransactProcedure',
+            render:(isTransactProcedure:boolean)=>{
+                return isTransactProcedure?'是':'否'
+            }
         },
         {
-            key: 'removeContract',
+            key: 'isRemoveContract',
             title: '是否领取解除劳动合同书',
             width: 100,
-            dataIndex: 'removeContract'
+            dataIndex: 'isRemoveContract',
+            render:(isRemoveContract:boolean)=>{
+                return isRemoveContract?'是':'否'
+            }
         },
         {
             key: 'transactDate',
             title: '办理日期',
             width: 100,
-            dataIndex: 'transactDate'
+            dataIndex: 'transactDate',
+            render:(transactDate: string)=>{
+                return transactDate?moment(transactDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'companyName',
@@ -53,7 +63,10 @@ export default function QuitProceduresList(): React.ReactNode {
             key: 'departmentName',
             title: '部门/班组',
             width: 100,
-            dataIndex: 'departmentName'
+            dataIndex: 'departmentName',
+            render:(_:any,record:any)=>{
+                return <span>{ record.departmentName + '/' + record.teamName }</span>
+            }
         },
         {
             key: 'postName',
@@ -62,10 +75,10 @@ export default function QuitProceduresList(): React.ReactNode {
             dataIndex: 'postName'
         },
         {
-            key: 'employeeType',
+            key: 'employeeNature',
             title: '员工类型',
             width: 100,
-            dataIndex: 'employeeType',
+            dataIndex: 'employeeNature',
             render: (status: number): React.ReactNode => {
                 switch (status) {
                     case 1:
@@ -81,7 +94,10 @@ export default function QuitProceduresList(): React.ReactNode {
             key: 'inductionDate',
             title: '入职时间',
             width: 100,
-            dataIndex: 'inductionDate'
+            dataIndex: 'inductionDate',
+            render:(inductionDate: string)=>{
+                return inductionDate?moment(inductionDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'departureType',
@@ -105,7 +121,10 @@ export default function QuitProceduresList(): React.ReactNode {
             key: 'departureDate',
             title: '离职时间',
             width: 100,
-            dataIndex: 'departureDate'
+            dataIndex: 'departureDate',
+            render:(departureDate: string)=>{
+                return departureDate?moment(departureDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'departureReason',
@@ -121,8 +140,8 @@ export default function QuitProceduresList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/view/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/operation/${record.id}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>办理离职</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/view/${record.id}`)}} type='link'>查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/operation/${record.id}`)}} type='link' disabled={record.isProcessingCompleted}>办理离职</Button>
                 </Space>
             )
         }
@@ -158,8 +177,8 @@ export default function QuitProceduresList(): React.ReactNode {
                         label: '是否办理离职手续',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>
-                            <Select.Option value={0} key="0">是</Select.Option>
-                            <Select.Option value={1} key="1">否</Select.Option>
+                            <Select.Option value={'true'} key="0">是</Select.Option>
+                            <Select.Option value={'false'} key="1">否</Select.Option>
                         </Select>
                     },
                     {

@@ -48,14 +48,14 @@ export default function BoltList(): React.ReactNode {
         },
         {
             key: 'typeName',
-            title: '类型',
+            title: '螺栓类型',
             width: 150,
             dataIndex: 'typeName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "type"]} initialValue={record.type} rules={[{
                     required: true,
-                    message: '请选择类型'
+                    message: '请选择螺栓类型'
                 }]}>
                     <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
                         {boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
@@ -78,7 +78,7 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请输入名称'
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} />
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={10} />
                 </Form.Item>
             )
         },
@@ -108,7 +108,7 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请输入规格'
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} />
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={20}/>
                 </Form.Item>
             )
         },
@@ -120,7 +120,7 @@ export default function BoltList(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "unbuckleLength"]} initialValue={_}>
-                    <Input size="small" onChange={() => rowChange(index)} />
+                    <Input type="number" size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -135,7 +135,7 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请输入名称'
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} />
+                    <Input type="number" size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -150,7 +150,7 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请输入合计'
                 }]}>
-                    <Input size="small" onChange={(e) => {
+                    <Input type="number" size="small" onChange={(e) => {
                         rowChange(index);
                         const data = form.getFieldsValue(true).data;
                         if (data[index].singleWeight) {
@@ -175,7 +175,7 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请输入单重'
                 }]}>
-                    <Input size="small" onChange={(e) => {
+                    <Input type="number" size="small" onChange={(e) => {
                         rowChange(index);
                         const data = form.getFieldsValue(true).data;
                         if (data[index].total) {
@@ -201,6 +201,18 @@ export default function BoltList(): React.ReactNode {
                     message: '请输入合计重'
                 }]}>
                     <Input size="small" onChange={() => rowChange(index)} disabled />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'description',
+            title: '备注',
+            width: 120,
+            dataIndex: 'description',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "description"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)}/>
                 </Form.Item>
             )
         },
@@ -236,7 +248,7 @@ export default function BoltList(): React.ReactNode {
                             okText="确认"
                             cancelText="取消"
                         >
-                            <Button type="link"  hidden={params.status === '2' && params.boltLeader === userId ? false : true}>删除</Button>
+                            <Button type="link" hidden={params.status === '2' && params.boltLeader === userId ? false : true}>删除</Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -278,7 +290,7 @@ export default function BoltList(): React.ReactNode {
                 <Button type="primary" onClick={() => downloadTemplate('/tower-science/boltRecord/exportTemplate', '螺栓导入模板')} ghost>模板下载</Button>
             </Space>
             <Space direction="horizontal" size="small" className={`${styles.topbtn} ${styles.btnRight}`}>
-                <Button type="primary"  hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost onClick={() => {
+                <Button type="primary" hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost onClick={() => {
                     if (editorLock === '编辑') {
                         setColumns(columns);
                         setEditorLock('锁定');
@@ -291,30 +303,34 @@ export default function BoltList(): React.ReactNode {
                         form.setFieldsValue({ data: [...newData] })
                     } else {
                         const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-                        let values = form.getFieldsValue(true).data;
-                        if (values) {
-                            let changeValues = values.filter((item: any, index: number) => {
-                                return newRowChangeList.indexOf(index) !== -1;
-                            })
-                            changeValues = changeValues.map((res: []) => {
-                                return {
-                                    ...res,
-                                    basicHeightId: params.id,
-                                    productCategoryId: params.boltId,
+                        if(form) {
+                            form.validateFields().then(res => {
+                                let values = form.getFieldsValue(true).data;
+                                if (values) {
+                                    let changeValues = values.filter((item: any, index: number) => {
+                                        return newRowChangeList.indexOf(index) !== -1;
+                                    })
+                                    changeValues = changeValues.map((res: []) => {
+                                        return {
+                                            ...res,
+                                            basicHeightId: params.id,
+                                            productCategoryId: params.boltId,
+                                        }
+                                    })
+                                    RequestUtil.put(`/tower-science/boltRecord`, [...changeValues]).then(res => {
+                                        setColumns(columnsSetting);
+                                        setEditorLock('编辑');
+                                        setRowChangeList([]);
+                                        form.resetFields();
+                                        getDataSource();
+                                    });
+                                } else {
+                                    setColumns(columnsSetting);
+                                    setEditorLock('编辑');
+                                    form.resetFields();
+                                    getDataSource();
                                 }
                             })
-                            RequestUtil.put(`/tower-science/boltRecord`, [...changeValues]).then(res => {
-                                setColumns(columnsSetting);
-                                setEditorLock('编辑');
-                                setRowChangeList([]);
-                                form.resetFields();
-                                getDataSource();
-                            });
-                        } else {
-                            setColumns(columnsSetting);
-                            setEditorLock('编辑');
-                            form.resetFields();
-                            getDataSource();
                         }
                     }
                 }}>{editorLock}</Button>
@@ -347,9 +363,9 @@ export default function BoltList(): React.ReactNode {
                         }
                     }}
                 >
-                    <Button type="primary"  hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost>导入</Button>
+                    <Button type="primary" hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost>导入</Button>
                 </Upload>
-                {editorLock === '锁定' ? <Button type="primary"  hidden={params.status === '2' && params.boltLeader === userId ? false : true} disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => getDataSource()} />}
+                {params.status === '2' && params.boltLeader === userId ? editorLock === '锁定' ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => { getDataSource() }} /> : null}
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </Space>
             <Form form={form}>

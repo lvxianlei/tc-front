@@ -51,7 +51,7 @@ export default function NoticeDetail(): React.ReactNode {
         ]}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseColums} dataSource={detailData} col={2} />
-            <Attachment dataSource={ detailData.attachVos }/>
+            <Attachment dataSource={ detailData.attachInfoVos }/>
         </DetailContent>
     </>
 }

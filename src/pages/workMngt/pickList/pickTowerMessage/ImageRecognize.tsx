@@ -114,6 +114,7 @@ export default function PickTowerDetail(): React.ReactNode {
                                     myBase64: file?.target?.result, // 把 本地图片的base64编码传给后台，调接口，生成图片的url
                                 };
                                 setUrlBase(params.myBase64);
+                                setCropData('');
                             }
                             return new Promise((resolve, reject) => {
                                 resolve()
@@ -122,7 +123,7 @@ export default function PickTowerDetail(): React.ReactNode {
                     }
                     onChange={ (info)=>{
                         if (info.file.status === 'done') {
-                            setUrl(info.file.response.data.link);
+                            setUrl(info.file.response.data.link)
                         } else if (info.file.status === 'error') {
                             console.log(info.file, info.fileList);
                         }
@@ -238,13 +239,27 @@ export default function PickTowerDetail(): React.ReactNode {
                 </div>
             </DetailContent>
             <Modal visible={visible} title='' onCancel={()=>{setVisible(false)}} okText='是' cancelText='否' footer={<Space><Button onClick={async ()=>{
-                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=1`,form.getFieldsValue(true).data).then(()=>{
+                let values = form.getFieldsValue(true).data;
+                values = values.map((res: any) => {
+                    return {
+                        ...res,
+                        segmentGroupId: params.productSegmentId
+                    }
+                })
+                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=1`,values).then(()=>{
                     message.success('保存成功！')
                 }).then(()=>{
                     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
                 })
             }}>是</Button><Button onClick={async ()=>{
-                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,form.getFieldsValue(true).data).then(()=>{
+                let values = form.getFieldsValue(true).data;
+                values = values.map((res: any) => {
+                    return {
+                        ...res,
+                        segmentGroupId: params.productSegmentId
+                    }
+                })
+                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,values).then(()=>{
                     message.success('保存成功！')
                 }).then(()=>{
                     setVisible(false);

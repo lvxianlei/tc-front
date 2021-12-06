@@ -13,10 +13,7 @@ import AuthUtil from '../../utils/AuthUtil';
 import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 import AddModal from './addModal'; // 新增
 import OverView from './overView'; // 查看
-interface EditRefProps {
-    onSubmit: () => void
-    resetFields: () => void
-}
+import { EditRefProps } from './collection';
 
 export default function CollectionInfomation(): React.ReactNode {
     const history = useHistory()
@@ -101,14 +98,6 @@ export default function CollectionInfomation(): React.ReactNode {
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...collectionListHead.map((item: any) => {
-                        if (item.dataIndex === 'confirmStatus') {
-                            return ({
-                                title: item.title,
-                                dataIndex: item.dataIndex,
-                                width: 50,
-                                render: (_: any, record: any): React.ReactNode => (<span>{record.confirmStatus === 1 ? '待确认' : '已确认'}</span>)
-                            })
-                        }
                         if (item.dataIndex === "payMoney") {
                             return ({
                                 title: item.title,
@@ -209,6 +198,7 @@ export default function CollectionInfomation(): React.ReactNode {
                 title={'新增回款信息'}
                 visible={visible}
                 width={1000}
+                maskClosable={false}
                 onCancel={() => {
                     addRef.current?.resetFields();
                     setVisible(false);

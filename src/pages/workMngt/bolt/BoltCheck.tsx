@@ -100,7 +100,7 @@ export default function BoltCheck(): React.ReactNode {
         if (tip !== 'normal') {
             const data: IRecord = await RequestUtil.get<{}>(`/tower-science/boltRecord/issueDetail`, { keyId: record.id, problemField: col.dataIndex });
             if (tip === 'red') {
-                setRecord({ dataSource: [record], problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
+                setRecord({ dataSource: [{ ...record, type: record.typeName}], problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
                 setTitle('查看问题单');
             } else {
                 setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
@@ -154,12 +154,9 @@ export default function BoltCheck(): React.ReactNode {
         setDataSource(data);
     }
 
-    const { loading, data } = useRequest<ITab[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<ITab[]>(`/tower-science/boltRecord/basicHeight/${params.boltId}`);
-        if (data[0]) {
-            getDataSource(data[0].id);
-        }
-        resole(data)
+    const { loading } = useRequest(() => new Promise(async (resole, reject) => {
+        getDataSource(params.id)
+        resole(true)
     }), {})
 
     if (loading) {
@@ -176,6 +173,6 @@ export default function BoltCheck(): React.ReactNode {
             </Space>
             <CommonTable columns={columnsSetting} dataSource={dataSource} pagination={false} />
         </DetailContent>
-        <BoltQuestionnaireModal title={title} visible={visible} modalCancel={() => { setVisible(false); getDataSource(params.id) }} record={record} update={() => getDataSource(params.id)} productCategory={params.boltId} />
+        <BoltQuestionnaireModal title={title} visible={visible} modalCancel={() => setVisible(false)} record={record} update={() => getDataSource(params.boltId)} productCategory={params.boltId} />
     </>
 }

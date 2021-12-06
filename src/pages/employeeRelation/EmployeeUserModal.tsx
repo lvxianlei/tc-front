@@ -22,6 +22,7 @@ export interface IEmployeeUserSelectionComponentProps extends IAbstractSelectabl
     readonly buttonType?: ButtonType;
     readonly buttonTitle?: string;
     readonly rowSelectionType?: RowSelectionType | undefined;
+    readonly type?: number
 }
 
 export interface IResponseDataMore extends IResponseData {
@@ -123,7 +124,7 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
-            stationStatus: 1
+            stationStatus: this.props.type || 1
         });
         const selectKeys: [] = this.props.selectKey;
         let newData: IUser[] = resData.records;

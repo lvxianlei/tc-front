@@ -111,7 +111,8 @@
         },
         {
             "title": "应付款余额",
-            "dataIndex": "payMoney"
+            "dataIndex": "payMoney",
+            "type": "number"
         },
         {
             "title": "付款状态",

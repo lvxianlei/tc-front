@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router'
-import styles from '../WorkBench.module.less'
+import styles from '../rd/WorkBench.module.less'
 import RequestUtil from '../../../utils/RequestUtil'
 import { DetailTitle } from '../../common'
 import { swWork } from "./sw.json"

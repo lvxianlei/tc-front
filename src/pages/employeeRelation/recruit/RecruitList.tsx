@@ -50,7 +50,7 @@ export default function RecruitList(): React.ReactNode {
             width: 100,
             dataIndex: 'departmentName',
             render:(_:any,record:any)=>{
-                return <span>{ record.departmentName + '/' + record.teamName }</span>
+                return <span>{ record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-' }</span>
             }
         },
         {
@@ -135,7 +135,7 @@ export default function RecruitList(): React.ReactNode {
             width: 100,
             dataIndex: 'workTime',
             render:(workTime:string)=>{
-                return workTime?moment(workTime).format('YYYY-MM-DD'):''
+                return workTime?moment(workTime).format('YYYY-MM-DD'):'-'
             }
         },
         {

@@ -15,6 +15,7 @@ export interface IAnnouncement {
     readonly updateTime?: string;
     readonly userNames?: string;
     readonly attachInfoDtos?: FileProps[];
+    readonly attachInfoVos?: FileProps[];
     readonly attachVos?: FileProps[];
     readonly staffList?: string[];
 }

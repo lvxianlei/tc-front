@@ -13,7 +13,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function EvaluationList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState(false);
-    const location = useLocation<{ state?: number }>();
+    const location = useLocation<{ state?: number, userId?: string }>();
 
     const columns = [
         {
@@ -76,12 +76,15 @@ export default function EvaluationList(): React.ReactNode {
         }
     ]
 
-    const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+    // const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
+        // const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
         resole(data);
     }), {})
-    const departmentData: any = data || [];
-    const [ programLeader,setProgramLeader ] = useState([]);
+    // const departmentData: any = data || [];
+    const programLeader: any = data?.records || [];
+    // const [ programLeader,setProgramLeader ] = useState([]);
     const [ filterValue, setFilterValue ] = useState({});
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
@@ -105,13 +108,13 @@ export default function EvaluationList(): React.ReactNode {
         return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
     });
 
-    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
-        switch (title) {
-            case "programLeader":
-                return setProgramLeader(userData.records);
-        };
-    }
+    // const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
+    //     const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
+    //     switch (title) {
+    //         case "programLeader":
+    //             return setProgramLeader(userData.records);
+    //     };
+    // }
     
     return <Page
         path="/tower-science/assessTask/assessList"
@@ -119,7 +122,7 @@ export default function EvaluationList(): React.ReactNode {
         headTabs={ [] }
         exportPath={`/tower-science/assessTask/assessList`}
         refresh={ refresh }
-        requestData={ { status: location.state?.state } }
+        requestData={ { status: location.state?.state, assessUser: location.state?.userId } }
         searchFormItems={ [
             {
                 name: 'status',
@@ -138,18 +141,19 @@ export default function EvaluationList(): React.ReactNode {
                 children: <DatePicker.RangePicker />
             },
             {
-                name: 'assess',
+                // name: 'assess',
+                name: 'assessUser',
                 label: '评估人',
                 children: <Row>
-                    <Col>
+                    {/* <Col>
                         <Form.Item name="assessUserDept">
                             <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'programLeader') } } style={{ width: "150px" }}>
                                 { renderTreeNodes(wrapRole2DataNode(departmentData)) }
                             </TreeSelect>
                         </Form.Item>
-                    </Col>
+                    </Col> */}
                     <Col>
-                        <Form.Item name="assessUser">
+                        <Form.Item name="assessUser" initialValue={ location.state?.userId || '' }>
                             <Select placeholder="请选择" style={{ width: "150px" }}>
                                 { programLeader && programLeader.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
