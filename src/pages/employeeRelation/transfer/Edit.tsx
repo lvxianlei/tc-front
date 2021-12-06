@@ -96,7 +96,7 @@ export default function Edit() {
                             render: (columnItem: any, props: any) => <ChooseDept data={columnItem} {...props} />
                         })
                     }
-                    if (item.dataIndex === "newPostName") {
+                    if (item.dataIndex === "newPostId") {
                         return ({
                             ...item,
                             enum: stationEnum
