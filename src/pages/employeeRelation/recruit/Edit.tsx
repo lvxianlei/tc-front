@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message} from 'antd';
+import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message, InputNumber} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -246,7 +246,8 @@ export default function RecruitEdit(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='年龄' name='age'>
-                            <Input disabled/>
+                            {/* <Input disabled/> */}
+                            <InputNumber formatter={(value:any)=>`$ ${value}`}/>
                         </Form.Item>
                     </Col>
                 </Row>
