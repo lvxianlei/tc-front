@@ -141,7 +141,7 @@ export default function QuitProceduresList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/view/${record.id}`)}} type='link'>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/operation/${record.id}`)}} type='link' >办理离职</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/operation/${record.id}`)}} type='link' disabled={record.isProcessingCompleted}>办理离职</Button>
                 </Space>
             )
         }
@@ -177,8 +177,8 @@ export default function QuitProceduresList(): React.ReactNode {
                         label: '是否办理离职手续',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>
-                            <Select.Option value={0} key="0">是</Select.Option>
-                            <Select.Option value={1} key="1">否</Select.Option>
+                            <Select.Option value={'true'} key="0">是</Select.Option>
+                            <Select.Option value={'false'} key="1">否</Select.Option>
                         </Select>
                     },
                     {

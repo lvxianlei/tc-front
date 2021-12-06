@@ -17,6 +17,12 @@ export default function QuitProceduresOperation(): React.ReactNode {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
         data.newDepartmentName = data.departmentName+'/'+data.teamName
+        form.setFieldsValue({
+            ...data,
+            transactDate: data?.transactDate?moment(data?.transactDate):'',
+            isTransactProcedure: data.isTransactProcedure?0:1,
+            isRemoveContract: data.isRemoveContract?0:1,
+        })
         resole(data)
     }), {})
     const detailData: any = data;
@@ -37,15 +43,32 @@ export default function QuitProceduresOperation(): React.ReactNode {
                             value.handleType='save';
                             value.isProcessingCompleted = false;
                             value.fileVos= attachRef.current?.getDataSource();
-                            value.isRemoveContract =  value.isRemoveContract === 1?true:false;
-                            value.isTransactProcedure =  value.isRemoveContract === 1?true:false;
+                            value.isRemoveContract =  value.isRemoveContract === 1?false:true;
+                            value.isTransactProcedure =  value.isTransactProcedure === 1?false:true;
                             RequestUtil.post(`/tower-hr/employeeDeparture/handleSave`, value).then(()=>{
                                 message.success('保存成功')
+                                history.push(`/employeeRelation/quitProcedures`)
                             })
                         })
                         
                     }}>保存</Button>
-                    <Button type="primary" onClick={() => history.goBack()}>保存并办理完成</Button>
+                    <Button type="primary" onClick={() => {
+                        form.validateFields().then(res=>{
+                            const value= form.getFieldsValue(true);
+                            value.transactDate= moment(value.transactDate).format('YYYY-MM-DD');
+                            value.employeeId = detailData.employeeId;
+                            value.id = params.id;
+                            value.handleType='submit';
+                            value.isProcessingCompleted = true;
+                            value.fileVos= attachRef.current?.getDataSource();
+                            value.isRemoveContract =  value.isRemoveContract === 1?false:true;
+                            value.isTransactProcedure =  value.isTransactProcedure === 1?false:true;
+                            RequestUtil.post(`/tower-hr/employeeDeparture/handleSave`, value).then(()=>{
+                                message.success('办理完成！')
+                                history.push(`/employeeRelation/quitProcedures`)
+                            })
+                        })
+                    }}>保存并办理完成</Button>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
             ]}>
@@ -58,7 +81,7 @@ export default function QuitProceduresOperation(): React.ReactNode {
                         <Form.Item label='是否办理离职手续' rules={[{
                             required:true, 
                             message:'请选择是否办理离职手续'
-                        }]} initialValue={1} name='isTransactProcedure'>
+                        }]}  name='isTransactProcedure'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
                                 <Select.Option value={0} key="0">是</Select.Option>
                                 <Select.Option value={1} key="1">否</Select.Option>
@@ -66,7 +89,7 @@ export default function QuitProceduresOperation(): React.ReactNode {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='是否领取解除劳动合同书' initialValue={1} name='isRemoveContract'>
+                        <Form.Item label='是否领取解除劳动合同书'  name='isRemoveContract'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
                                 <Select.Option value={0} key="0">是</Select.Option>
                                 <Select.Option value={1} key="1">否</Select.Option>
