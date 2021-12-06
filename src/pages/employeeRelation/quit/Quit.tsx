@@ -20,7 +20,11 @@ export default function Quit(): React.ReactNode {
         const post: any = await RequestUtil.get(`/tower-system/station?size=1000`);
         setPost(post?.records)
         const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
-        form.setFieldsValue(params.id!=='0'?{...data,departureDate: data?.departureDate?moment(data?.departureDate):''}:{})
+        form.setFieldsValue(params.id!=='0'?{
+            ...data,
+            departureDate: data?.departureDate?moment(data?.departureDate):'',
+            newDepartmentName: data.departmentName+'/'+data.teamName,
+        }:{})
         resole(data)
     }), {})
     const detailData: any = data;
@@ -113,7 +117,7 @@ export default function Quit(): React.ReactNode {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='员工性质' name='employeeType'>
+                        <Form.Item label='员工性质' name='employeeNature'>
                             <Select placeholder="请选择" style={{ width: '100%' }} disabled>
                                 <Select.Option value={1} key="1">正式员工</Select.Option>
                                 <Select.Option value={2} key="2">短期派遣员工</Select.Option>

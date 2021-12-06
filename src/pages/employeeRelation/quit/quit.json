@@ -9,16 +9,12 @@
             "title": "公司"
         },
         {
-            "dataIndex": "departmentName",
-            "title": "部门"
-        },
-        {
             "dataIndex": "postName",
             "title": "岗位"
         },
         {
-            "dataIndex": "departmentName",
-            "title": "班组"
+            "dataIndex": "newDepartmentName",
+            "title": "部门/班组"
         },
         {
             "dataIndex": "inductionDate",
@@ -27,7 +23,7 @@
             "format": "YYYY-MM-DD"
         },
         {
-            "dataIndex": "employeeType",
+            "dataIndex": "employeeNature",
             "title": "员工性质",
             "type": "select",
             "enum": [
