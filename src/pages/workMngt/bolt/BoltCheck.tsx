@@ -149,17 +149,14 @@ export default function BoltCheck(): React.ReactNode {
     const getDataSource = async (basicHeightId?: string) => {
         const data: [] = await RequestUtil.get(`/tower-science/boltRecord/checkList`, {
             basicHeightId: basicHeightId,
-            productCategoryId: params.id
+            productCategoryId: params.boltId
         })
         setDataSource(data);
     }
 
-    const { loading, data } = useRequest<ITab[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<ITab[]>(`/tower-science/boltRecord/basicHeight/${params.boltId}`);
-        if (data[0]) {
-            getDataSource(data[0].id);
-        }
-        resole(data)
+    const { loading } = useRequest(() => new Promise(async (resole, reject) => {
+        getDataSource(params.id)
+        resole(true)
     }), {})
 
     if (loading) {
