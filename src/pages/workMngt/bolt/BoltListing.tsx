@@ -205,6 +205,18 @@ export default function BoltList(): React.ReactNode {
             )
         },
         {
+            key: 'description',
+            title: '备注',
+            width: 120,
+            dataIndex: 'description',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "description"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)}/>
+                </Form.Item>
+            )
+        },
+        {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',

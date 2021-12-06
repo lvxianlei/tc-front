@@ -86,15 +86,16 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             visible: true,
             appointed: data
         })
-        let detailData = this.props.detailData;
-        detailData = {
-            ...detailData,
-            plannedDeliveryTime: moment(detailData?.plannedDeliveryTime)
+        if(this.props.type === 'edit') {
+            let detailData = this.props.detailData;
+            detailData = {
+                ...detailData,
+                plannedDeliveryTime: detailData?.plannedDeliveryTime ? moment(detailData?.plannedDeliveryTime) : ''
+            }
+            detailData?.loftingUserDepartment && this.onDepartmentChange(detailData?.loftingUserDepartment || '', '放样');
+            detailData?.checkUserDepartment && this.onDepartmentChange(detailData?.checkUserDepartment || '', '校对');
+            this.getForm()?.setFieldsValue({ ...detailData, ...data });
         }
-        detailData?.loftingUserDepartment && this.onDepartmentChange(detailData?.loftingUserDepartment || '', '放样');
-        detailData?.checkUserDepartment && this.onDepartmentChange(detailData?.checkUserDepartment || '', '校对');
-        console.log(detailData)
-        this.getForm()?.setFieldsValue({ ...detailData, ...data });
     }
     
     /**
@@ -233,8 +234,8 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                         pattern: /^[^\s]*$/,
                                         message: '禁止输入空格',
                                     }, {
-                                        pattern: /^[0-9a-zA-Z-]*$/,
-                                        message: '仅可输入数字/字母/-',
+                                        pattern: /^[0-9a-zA-Z-,]*$/,
+                                        message: '仅可输入数字/字母/-/,',
                                     }]}>
                                     <Input placeholder="请输入（1-3，5，ac，w）"/>
                                 </Form.Item>
@@ -284,7 +285,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="交付时间">
-                                <Form.Item name="plannedDeliveryTime" initialValue={ moment(this.props.detailData?.plannedDeliveryTime) }
+                                <Form.Item name="plannedDeliveryTime"
                                     rules={[{
                                         required: true,
                                         message: '请选择交付时间'

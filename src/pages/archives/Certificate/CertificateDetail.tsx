@@ -121,7 +121,7 @@ export default function CertificateDetail(): React.ReactNode {
     const time =  new Date(data?.endDate && data?.endDate.toString().replace("-","/") || '');
     const detailData: ICertificate = {
         ...data,
-        effective: now < time ? '失效' : '有效'
+        effective: now > time ? '失效' : '有效'
     };
     if (loading) {
         return <Spin spinning={loading}>

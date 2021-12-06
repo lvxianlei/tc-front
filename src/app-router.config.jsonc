@@ -1316,7 +1316,7 @@
       // "authority": "rd_bolt_management"
       "authority": "approvalm"
     },
-    { // 工作管理-螺栓列表-螺栓清单
+    { // 工作管理-螺栓列表-螺栓明细
       "name": "螺栓明细",
       "path": "/workMngt/boltList/boltListing/:boltId/:id/:boltLeader/:status",
       "module": "./pages/workMngt/bolt/BoltListing",
@@ -1332,7 +1332,7 @@
       // "authority": "rd_bolt_management"
       "authority": "approvalm"
     },
-    { // 工作管理-螺栓列表-校核-螺栓清单
+    { // 工作管理-螺栓列表-校核-螺栓明细
       "name": "螺栓明细",
       "path": "/workMngt/boltList/boltCheck/:boltId/:id",
       "module": "./pages/workMngt/bolt/BoltCheck",

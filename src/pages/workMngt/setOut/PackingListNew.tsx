@@ -61,27 +61,17 @@ export default function PackingListNew(): React.ReactNode {
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if(!location.state) {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${ params.packId }`);
-            const newData = packagingData.filter((item: IBundle) => {
-                data?.packageRecordVOList?.every((items: IBundle) => { 
-                    if(items.id !== item.structureId) {
-                        return items
-                    } else {
-                        return {}
-                    }
-                })
-            })
-            setPackagingData(newData || []);
+            setPackagingData(data?.packageRecordVOList || []);
             setBalesCode(data?.balesCode || '');
             resole(data);
         } else {
             resole({ productCategoryName: location.state.productCategoryName, productNumber:location.state.productNumber });
         }
-        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId })
-        setStayDistrict(list);
-        const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
-            productSegmentGroupId: params.productId
-        });
-        setUserList(data);
+        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId });
+        const newData = list.filter((item: IBundle) => !packagingData.some((ele: IBundle) => ele.id !== item.id))
+        setStayDistrict(newData);
+        const data: any = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
+        setUserList(data?.loftingProductSegmentList);
         const resData: IMaterialTree[] = await RequestUtil.get<IMaterialTree[]>('/tower-system/materialCategory/tree');
         setMaterialList(resData);
     });
@@ -379,18 +369,14 @@ export default function PackingListNew(): React.ReactNode {
                 <Row>
                     <Col span={ 3 }>
                         <Form.Item name="materialSpec" label="材料名称" className={ styles.rightPadding5 }>
-                           <Select placeholder="请选择" style={{width:'120px'}}>
-                                { materialList && materialList.map((item: any) => {
-                                    return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
-                                }) }
-                            </Select>
+                            <Input placeholder="请输入" maxLength={20}/>
                         </Form.Item>
                     </Col>
                     <Col offset={ 1 } span={ 4 }>
-                        <Form.Item name="segmentName" label="段名">
+                        <Form.Item name="segmentId" label="段名">
                            <Select placeholder="请选择" style={{width:'120px'}}>
                                 { userList && userList.map((item: any) => {
-                                    return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
+                                    return <Select.Option key={ item.id } value={ item.segmentId }>{ item.segmentName }</Select.Option>
                                 }) }
                             </Select>
                         </Form.Item>
