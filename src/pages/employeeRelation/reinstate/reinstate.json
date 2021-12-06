@@ -6,11 +6,15 @@
         },
         {
             "dataIndex": "inductionDate",
-            "title": "入职时间"
+            "title": "入职时间",
+            "type":"date",
+            "format":"YYYY-MM-DD"
         },
         {
             "dataIndex": "departureDate",
-            "title": "离职日期"
+            "title": "离职日期",
+            "type":"date",
+            "format":"YYYY-MM-DD"
         },
         {
             "dataIndex": "departureType",
@@ -29,7 +33,9 @@
         },
         {
             "dataIndex": "reinstatementDate",
-            "title": "复职日期"
+            "title": "复职日期",
+            "type":"date",
+            "format":"YYYY-MM-DD"
         },
         {
             "dataIndex": "reinstatementNature",
@@ -45,7 +51,7 @@
             ]
         },
         {
-            "dataIndex": "departmentName",
+            "dataIndex": "newDepartmentName",
             "title": "复职后部门/班组"
         },
         {

@@ -73,7 +73,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
 
     useEffect(() => {
         form && form.setFieldsValue(formatData(columns, dataSource))
-    }, [JSON.stringify(dataSource)])
+    }, [JSON.stringify(dataSource), JSON.stringify(columns), form, dataSource, columns])
 
     if (edit) {
         return <Form

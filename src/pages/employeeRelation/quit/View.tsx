@@ -17,7 +17,8 @@ export default function View(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
+        data.newDepartmentName = data.departmentName+'/'+data.teamName
         resole(data)
     }), {})
     const detailData: any = data;

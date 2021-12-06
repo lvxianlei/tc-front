@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import moment from 'moment';
 
 export default function QuitList(): React.ReactNode {
     const history = useHistory();
@@ -35,7 +36,10 @@ export default function QuitList(): React.ReactNode {
             key: 'departmentName',
             title: '部门/班组',
             width: 100,
-            dataIndex: 'departmentName'
+            dataIndex: 'departmentName',
+            render:(_:any,record:any)=>{
+                return <span>{ record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-' }</span>
+            }
         },
         {
             key: 'postName',
@@ -44,17 +48,19 @@ export default function QuitList(): React.ReactNode {
             dataIndex: 'postName'
         },
         {
-            key: 'employeeType',
-            title: '员工类型',
+            key: 'employeeNature',
+            title: '员工性质',
             width: 100,
-            dataIndex: 'employeeType',
+            dataIndex: 'employeeNature',
             render: (status: number): React.ReactNode => {
                 switch (status) {
                     case 1:
                         return '正式员工';
                     case 2:
-                        return '超龄员工';
+                        return '短期派遣员工';
                     case 3:
+                        return '超龄员工';
+                    case 4:
                         return '实习员工';
                 }
             } 
@@ -63,7 +69,10 @@ export default function QuitList(): React.ReactNode {
             key: 'inductionDate',
             title: '入职时间',
             width: 100,
-            dataIndex: 'inductionDate'
+            dataIndex: 'inductionDate',
+            render:(inductionDate: string)=>{
+                return inductionDate?moment(inductionDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'departureType',
@@ -87,7 +96,10 @@ export default function QuitList(): React.ReactNode {
             key: 'departureDate',
             title: '离职时间',
             width: 100,
-            dataIndex: 'departureDate'
+            dataIndex: 'departureDate',
+            render:(departureDate: string)=>{
+                return departureDate?moment(departureDate).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'departureReason',
@@ -121,8 +133,8 @@ export default function QuitList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/quit/view/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/quit/${record.id}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>编辑</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quit/view/${record.id}`)}} type='link'>查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quit/${record.id}`)}} type='link' disabled={record.status===2}>编辑</Button>
                 </Space>
             )
         }
@@ -170,7 +182,7 @@ export default function QuitList(): React.ReactNode {
                     },
                     {
                         name: 'statusUpdateTime',
-                        label: '调动日期',
+                        label: '离职日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                 ]}
