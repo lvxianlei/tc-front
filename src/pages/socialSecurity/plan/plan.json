@@ -29,7 +29,6 @@
     "setting": [
         {
             "title": "方案名称",
-            "width": 100,
             "dataIndex": "insurancePlanName",
             "rules": [
                 {
@@ -39,61 +38,88 @@
             ]
         },
         {
-            "title": "缴纳地区",
-            "width": 100,
+            "title": "缴纳公司",
+            "dataIndex": "companyId",
+            "type": "select"
+        },
+        {
+            "title": "投保地",
             "dataIndex": "insuredLand"
         },
         {
-            "title": "缴纳公司",
-            "width": 100,
-            "dataIndex": "companyName"
-        },
-        {
-            "title": "人数",
-            "width": 100,
-            "dataIndex": "personNum"
-        },
-        {
-            "title": "状态",
-            "width": 100,
-            "dataIndex": "statusName"
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "insurance": [
         {
             "title": "险种名称",
+            "dataIndex": "insuranceType",
             "width": 100,
-            "dataIndex": "insuranceName"
+            "type": "select",
+            "enum": [
+                {
+                    "label": "养老保险",
+                    "value": 1
+                },
+                {
+                    "label": "医疗保险",
+                    "value": 2
+                },
+                {
+                    "label": "工伤保险",
+                    "value": 3
+                },
+                {
+                    "label": "生育保险",
+                    "value": 4
+                },
+                {
+                    "label": "失业保险",
+                    "value": 5
+                },
+                {
+                    "label": "公积金",
+                    "value": 6
+                }
+            ]
         },
         {
-            "title": "生效月",
+            "title": "生效月~失效月",
             "width": 100,
             "dataIndex": "effectiveMonth"
         },
         {
-            "title": "失效月",
-            "width": 100,
-            "dataIndex": "expirationMonth"
-        },
-        {
             "title": "缴纳对象",
             "width": 100,
-            "dataIndex": "personNum"
+            "dataIndex": "paymentType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "公司",
+                    "value": 1
+                },
+                {
+                    "label": "个人",
+                    "value": 2
+                }
+            ]
         },
         {
             "title": "基数上限",
             "width": 100,
-            "dataIndex": "statusName"
+            "dataIndex": "cardinalityUpperLimit"
         },
         {
             "title": "基数下限",
             "width": 100,
-            "dataIndex": "statusName"
+            "dataIndex": "cardinalityLowerBound"
         },
         {
             "title": "缴纳比例",
             "width": 100,
-            "dataIndex": "statusName"
+            "dataIndex": "paymentProportion"
         },
         {
             "title": "固定费用",
@@ -101,35 +127,157 @@
             "dataIndex": "fixedCost"
         }
     ],
+    "insuranceData": [
+        {
+            "insuranceType": 1,
+            "effectiveMonth": "1111111",
+            "expirationMonth": "1111111111",
+            "paymentType": 1,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        },
+        {
+            "insuranceType": 1,
+            "effectiveMonth": "",
+            "expirationMonth": "",
+            "paymentType": 2,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        },
+        {
+            "insuranceType": 2,
+            "effectiveMonth": "",
+            "expirationMonth": "",
+            "paymentType": 1,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        },
+        {
+            "insuranceType": 2,
+            "effectiveMonth": "",
+            "expirationMonth": "",
+            "paymentType": 2,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        },
+        {
+            "insuranceType": 3,
+            "effectiveMonth": "",
+            "expirationMonth": "",
+            "paymentType": 1,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        },
+        {
+            "insuranceType": 3,
+            "effectiveMonth": "",
+            "expirationMonth": "",
+            "paymentType": 2,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        },
+        {
+            "insuranceType": 4,
+            "effectiveMonth": "",
+            "expirationMonth": "",
+            "paymentType": 1,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        },
+        {
+            "insuranceType": 4,
+            "effectiveMonth": "",
+            "expirationMonth": "",
+            "paymentType": 2,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        },
+        {
+            "insuranceType": 5,
+            "effectiveMonth": "",
+            "expirationMonth": "",
+            "paymentType": 1,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        },
+        {
+            "insuranceType": 5,
+            "effectiveMonth": "",
+            "expirationMonth": "",
+            "paymentType": 2,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        },
+        {
+            "insuranceType": 6,
+            "effectiveMonth": "",
+            "expirationMonth": "",
+            "paymentType": 1,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        },
+        {
+            "insuranceType": 6,
+            "effectiveMonth": "",
+            "expirationMonth": "",
+            "paymentType": 2,
+            "cardinalityUpperLimit": "",
+            "cardinalityLowerBound": "",
+            "paymentProportion": "",
+            "fixedCost": ""
+        }
+    ],
     "business": [
         {
             "title": "商业保险名称",
-            "width": 100,
+            "width": 50,
             "dataIndex": "commercialInsuranceName"
         },
         {
             "title": "保险类型",
-            "width": 100,
+            "width": 50,
             "dataIndex": "commercialInsuranceType"
         },
         {
             "title": "保险公司",
-            "width": 100,
+            "width": 50,
             "dataIndex": "commercialInsuranceCompany"
         },
         {
             "title": "保险金额",
-            "width": 100,
+            "width": 50,
             "dataIndex": "insuranceAmount"
         },
         {
             "title": "保险合同号",
-            "width": 100,
+            "width": 50,
             "dataIndex": "insuranceContract"
         },
         {
             "title": "备注",
-            "width": 100,
+            "width": 200,
             "dataIndex": "description"
         }
     ]
