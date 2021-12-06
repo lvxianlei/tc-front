@@ -369,11 +369,7 @@ export default function PackingListNew(): React.ReactNode {
                 <Row>
                     <Col span={ 3 }>
                         <Form.Item name="materialSpec" label="材料名称" className={ styles.rightPadding5 }>
-                           <Select placeholder="请选择" style={{width:'120px'}}>
-                                { materialList && materialList.map((item: any) => {
-                                    return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
-                                }) }
-                            </Select>
+                            <Input placeholder="请输入" maxLength={20}/>
                         </Form.Item>
                     </Col>
                     <Col offset={ 1 } span={ 4 }>
