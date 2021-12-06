@@ -1,0 +1,108 @@
+{
+    "applicationdetails": [
+        {
+            "title": "塔型",
+            "dataIndex": "purchasePlanCode",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "杆塔数",
+            "dataIndex": "purchaseType",
+            "type": "select",
+            "width": 100
+        },
+        {
+            "title": "原材料任务编号",
+            "dataIndex": "productCategoryNum",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "圆钢总重（吨）",
+            "dataIndex": "productNum",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "角钢总重（吨）",
+            "dataIndex": "roundSteelTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "钢板总重（吨）",
+            "dataIndex": "angleSteelTotal",
+            "width": 100,
+            "type": "number"
+        }
+    ],
+    "ingredientsColumn": [
+        {
+            "title": "材质",
+            "dataIndex": "purchasePlanCode",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "purchaseType",
+            "type": "select",
+            "width": 100
+        },
+        {
+            "title": "规格",
+            "dataIndex": "productCategoryNum",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "配料品名",
+            "dataIndex": "productNum",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "搭配长度",
+            "dataIndex": "roundSteelTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "搭配数量",
+            "dataIndex": "angleSteelTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "angleSteelTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "angleSteelTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "生产未领料（支）",
+            "dataIndex": "angleSteelTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "仓库库存（支）",
+            "dataIndex": "angleSteelTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "在途库存（支）",
+            "dataIndex": "angleSteelTotal",
+            "width": 100,
+            "type": "number"
+        }
+    ]
+}

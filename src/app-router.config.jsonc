@@ -223,7 +223,7 @@
     { // 用户管理
       "name": "用户管理",
       "path": "/sys/users",
-      "module": "./pages/system-mngt/user/UserMngtList",
+      "module": "./pages/system-mngt/user/UserMngt",
       "exact": true,
       "authority": "users"
     },

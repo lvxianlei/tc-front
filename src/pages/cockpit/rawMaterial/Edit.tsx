@@ -110,10 +110,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     }
 
     const onSubmit = async () => new Promise(async (resove, reject) => {
-        if (!popContent.id) {
-            message.warning("请先选择原材料...")
-            return
-        }
+        // if (!popContent.id) {
+        //     message.warning("请先选择原材料...")
+        //     return
+        // }
         const materialData = await materialForm.validateFields()
         const priceInfoData = await priceInfoForm.validateFields()
         try {
@@ -132,25 +132,26 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     useImperativeHandle(ref, () => ({ onSubmit, loading: saveLoading }), [onSubmit, saveLoading])
 
-    const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+    // 选择原材料名称后的回调处理
+    const handleChangeName = (fields: { [key: string]: any}) => {
         console.log(fields, 'fields')
     }
 
     return <Spin spinning={loading}>
-        <Modal width={1011} title="选择" destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
+        {/* <Modal width={1011} title="选择" destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={materialList as any} onChange={handleChange} />
         </Modal>
         <DetailTitle title="原材料信息" operation={[
             <Button disabled={type === "edit"} type="primary" ghost key="choose" onClick={() => setVisible(true)}>选择</Button>
-        ]} />
-        <BaseInfo form={materialForm} onChange={performanceBondChange} col={2} columns={[
+        ]} /> */}
+        <BaseInfo form={materialForm} col={2} columns={[
             ...materialInfo.map((item: any) => {
                 if(item.dataIndex === "materialName") {
                     return (
                         {
                             ...item,
                             render() {
-                                return <PopTable data={item} />
+                                return <PopTable data={item} onChange={handleChangeName} />
                             }
                         }
                     )

@@ -1,0 +1,92 @@
+{
+    "baseInfo": [
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "收货单号"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "供应商"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "供应商"
+        },
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "合同编号"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "纸质单号"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "联系人"
+        },
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "联系电话"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "约定到货时间"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "数量合计"
+        },
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "原材料价税合计（元）"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "车辆牌照"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "重量（kg）合计"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "备注"
+        }
+    ],
+    "freightInfo": [
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "运输承担"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "运输公司"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "合同单价（元/吨）"
+        },
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "运费价税合计（元）"
+        }
+    ],
+    "handlingChargesInfo": [
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "卸车承担"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "装卸公司"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "合同单价（元/吨）"
+        },
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "装卸费价税合计（元）"
+        }
+    ]
+}

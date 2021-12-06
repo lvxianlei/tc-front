@@ -6,6 +6,16 @@
             "type": "string"
         },
         {
+            "title": "纸质单号",
+            "dataIndex": "receiveNumber",
+            "type": "string"
+        },
+        {
+            "title": "车牌号",
+            "dataIndex": "receiveNumber",
+            "type": "string"
+        },
+        {
             "title": "收货单状态",
             "dataIndex": "receiveStatus",
             "type": "select",
@@ -56,17 +66,22 @@
             "type": "string"
         },
         {
-            "title": "材料名称",
-            "dataIndex": "productName",
-            "type": "string"
-        },
-        {
             "title": "重量（吨）合计",
             "dataIndex": "weight",
             "type": "string"
         },
         {
-            "title": "价税合计（元）",
+            "title": "原材料价税合计（元）",
+            "dataIndex": "price",
+            "type": "string"
+        },
+        {
+            "title": "运费价税合计（元）",
+            "dataIndex": "price",
+            "type": "string"
+        },
+        {
+            "title": "装卸费价税合计（元）",
             "dataIndex": "price",
             "type": "string"
         },

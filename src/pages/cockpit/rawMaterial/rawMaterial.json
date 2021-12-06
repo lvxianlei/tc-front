@@ -69,7 +69,11 @@
             "dataIndex": "materialName"
         },
         {
-            "title": "原材料规格",
+            "title": "材质",
+            "dataIndex": "materialSpec"
+        },
+        {
+            "title": "规格",
             "dataIndex": "materialSpec"
         },
         {
@@ -169,6 +173,11 @@
             "readOnly": true,
             "columns": [
                 {
+                    "title": "编号",
+                    "dataIndex": "materialCode",
+                    "search": true
+                },
+                {
                     "title": "类别",
                     "dataIndex": "bigCategoryName",
                     "type": "select",
@@ -181,36 +190,21 @@
                     "search": true
                 },
                 {
-                    "title": "编号",
-                    "dataIndex": "materialCode",
-                    "search": true
-                },
-                {
                     "title": "品名",
                     "dataIndex": "materialName",
                     "search": true
-                },
-                {
-                    "title": "快捷码",
-                    "dataIndex": "shortcutCode"
-                },
-                {
-                    "title": "标准",
-                    "dataIndex": "standardName"
-                },
-                {
-                    "title": "材料",
-                    "dataIndex": "rowMaterial"
-                },
-                {
-                    "title": "材质",
-                    "dataIndex": "structureTexture"
                 },
                 {
                     "title": "规格",
                     "dataIndex": "structureSpec",
                     "type": "select",
                     "search": true
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择原材料名称..."
                 }
             ]
         },

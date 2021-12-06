@@ -110,22 +110,25 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             <Row gutter={[8, 8]}>
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
                     <div style={{display: "flex", flexWrap: "nowrap"}}>
-                        <Form.Item name="note" label="Note" rules={[{ required: true }]}>
-                            <Select style={{ width: 120 }}>
+                        <Form.Item name="note" label="类别" rules={[{ required: true }]}>
+                            <Select style={{ width: 120 }} placeholder="请选择类别">
                                 <Select.Option value="jack">Jack</Select.Option>
                                 <Select.Option value="lucy">Lucy</Select.Option>
                                 <Select.Option value="Yiminghe">yiminghe</Select.Option>
                             </Select>
                         </Form.Item>
-                        <Form.Item name="note1" label="Note" rules={[{ required: true }]}>
-                            <Select style={{ width: 120 }}>
+                        <Form.Item name="note1" label="类型" rules={[{ required: true }]}>
+                            <Select style={{ width: 120 }} placeholder="请选择类型">
                                 <Select.Option value="jack">Jack</Select.Option>
                                 <Select.Option value="lucy">Lucy</Select.Option>
                                 <Select.Option value="Yiminghe">yiminghe</Select.Option>
                             </Select>
                         </Form.Item>
-                        <Form.Item name="note2" label="Note" rules={[{ required: true }]}>
-                            <Input />
+                        <Form.Item name="note2" label="规格" rules={[{ required: true }]}>
+                            <Input placeholder="请输入规格" />
+                        </Form.Item>
+                        <Form.Item name="note2" label="查询" rules={[{ required: true }]}>
+                            <Input placeholder="请输入编号/品名" />
                         </Form.Item>
                     </div>
                 </Col>

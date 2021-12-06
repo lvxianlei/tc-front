@@ -122,6 +122,10 @@
             "dataIndex": "materialName"
         },
         {
+            "title": "材质",
+            "dataIndex": "materialSpec"
+        },
+        {
             "title": "规格",
             "dataIndex": "materialSpec"
         },
