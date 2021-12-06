@@ -106,7 +106,7 @@ export default function ModelList(): React.ReactNode {
             searchFormItems={ [] }
         />
         <Modal visible={ visible } title="编辑" onCancel={ () => setVisible(false) } onOk={ () => {
-            if(segmentName) {
+            if(segmentName && /^[^\s]*$/.test(segmentName) && /^[0-9a-zA-Z-,]*$/.test(segmentName)) {
                 RequestUtil.put(`/tower-science/productSegment/segmentModelUpdate`, {
                     id: segmentId,
                     productCategoryId: params.id,
@@ -116,7 +116,7 @@ export default function ModelList(): React.ReactNode {
                     setRefresh(!refresh);
                 });
             } else {
-                message.warning('请输入段信息')
+                message.warning('请输入段信息，仅可输入数字/字母/-/,')
             }
         } }>
             <Row>

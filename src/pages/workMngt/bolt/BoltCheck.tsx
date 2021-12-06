@@ -173,6 +173,6 @@ export default function BoltCheck(): React.ReactNode {
             </Space>
             <CommonTable columns={columnsSetting} dataSource={dataSource} pagination={false} />
         </DetailContent>
-        <BoltQuestionnaireModal title={title} visible={visible} modalCancel={() => setVisible(false)} record={record} update={() => getDataSource(params.boltId)} productCategory={params.boltId} />
+        <BoltQuestionnaireModal title={title} visible={visible} modalCancel={() => setVisible(false)} record={record} update={() => getDataSource(params.id)} productCategory={params.boltId} />
     </>
 }
