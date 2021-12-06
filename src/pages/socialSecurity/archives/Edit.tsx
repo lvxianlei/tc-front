@@ -15,7 +15,7 @@ export default function Edit() {
         } catch (error) {
             reject(error)
         }
-    }), { manual: params.type === "new" })
+    }))
 
     const { loading: saveLoading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {

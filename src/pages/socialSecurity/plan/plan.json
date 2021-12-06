@@ -23,7 +23,18 @@
         {
             "title": "状态",
             "width": 100,
-            "dataIndex": "statusName"
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "启用",
+                    "value": 1
+                },
+                {
+                    "label": "禁用",
+                    "value": 2
+                }
+            ]
         }
     ],
     "setting": [
@@ -40,11 +51,22 @@
         {
             "title": "缴纳公司",
             "dataIndex": "companyId",
-            "type": "select"
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择缴纳公司..."
+                }
+            ]
         },
         {
             "title": "投保地",
-            "dataIndex": "insuredLand"
+            "dataIndex": "insuredLand",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入投保地..."
+                }
+            ]
         },
         {
             "title": "备注",

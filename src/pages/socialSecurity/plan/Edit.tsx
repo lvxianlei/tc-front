@@ -1,10 +1,11 @@
 import React, { useState } from "react"
-import { Button, Spin, Form, DatePicker, InputNumber, Row, TreeSelect, Input, Select } from 'antd'
+import { Button, Spin, Form, DatePicker, InputNumber, Row, TreeSelect, Input, Select, Switch, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
 import { setting, insurance, business, insuranceData } from "./plan.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import moment from "moment"
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ planId: string }>()
@@ -12,7 +13,7 @@ export default function Edit() {
     const [insuranceForm] = Form.useForm()
     const [businessForm] = Form.useForm()
     const [businessData, setBusinessData] = useState<any[]>([])
-
+    const [isSocialSecurity, setIsSocialSecurity] = useState<boolean>(false)
     const { loading: companyLoading, data: companyEnum } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/department/company`)
@@ -27,15 +28,35 @@ export default function Edit() {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insurancePlan/detail?id=${params.planId}`)
+            const insuranceFormData: any = {}
+            const businessFormData: any = {}
+            setIsSocialSecurity(result.isSocialSecurity)
+            result.socialSecurityList.forEach((item: any, index: number) => {
+                insuranceFormData[index] = ({
+                    ...item,
+                    effectiveMonth: [
+                        moment(item.effectiveMonth, "YYYY-MM-DD"),
+                        moment(item.expirationMonth, "YYYY-MM-DD")
+                    ]
+                })
+            })
+            result.businessList.forEach((item: any, index: number) => {
+                businessFormData[index] = item
+            })
+            insuranceForm.setFieldsValue(insuranceFormData)
+            businessForm.setFieldsValue(businessFormData)
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: !params.planId })
 
-    const { loading: saveLoading } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-hr/insurancePlan/${params.planId ? "add" : "edit"}`, data)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-hr/insurancePlan/${params.planId ? "edit" : "add"}`, params.planId ? {
+                ...data,
+                id: params.planId
+            } : data)
             resole(result)
         } catch (error) {
             reject(error)
@@ -43,11 +64,31 @@ export default function Edit() {
     }), { manual: true })
 
     const handleSave = async () => {
-        const baseData = await baseForm.validateFields()
-        const insuranceData = await insuranceForm.validateFields()
-        const businessData = await businessForm.validateFields()
-        const postInsuranceData = Object.keys(insuranceData).map((item: any) => insuranceData[item])
-
+        try {
+            const baseData = await baseForm.validateFields()
+            const insuranceData = await insuranceForm.validateFields()
+            const businessData = await businessForm.validateFields()
+            const postInsuranceData = Object.keys(insuranceData).map((item: any, index: number) => {
+                const rowSpanData = index % 2 === 1 ? insuranceData[item - 1] : insuranceData[item]
+                const formatDate = rowSpanData.effectiveMonth.map((item: any) => item.format("YYYY-MM-DD"))
+                return ({
+                    ...insuranceData[item],
+                    effectiveMonth: formatDate?.[0] + " 00:00:00",
+                    expirationMonth: formatDate?.[1] + " 23:59:59",
+                })
+            })
+            const postBusinessData = Object.keys(businessData).map((item: any) => businessData[item])
+            await saveRun({
+                ...baseData,
+                isSocialSecurity,
+                businessList: postBusinessData,
+                socialSecurityList: postInsuranceData
+            })
+            message.success("保存成功...")
+            history.go(-1)
+        } catch (error) {
+            console.log(error)
+        }
     }
     const handleAdd = () => {
         setBusinessData([
@@ -68,23 +109,31 @@ export default function Edit() {
                 if (item.dataIndex === "companyId") {
                     return ({
                         ...item,
-                        render: () => <TreeSelect treeData={companyEnum} />
+                        render: (data: any, props: any) => <TreeSelect treeData={companyEnum} data={data} {...props} />
                     })
                 }
                 return item
             })} dataSource={data || {}} edit />
             <DetailTitle title="社保公积金" />
+            <Row style={{ padding: "8px 16px" }}>
+                <span style={{ fontSize: 14 }}>是否启用：</span><Switch checked={isSocialSecurity} onChange={(checked: boolean) => setIsSocialSecurity(checked)} />
+            </Row>
             <Form form={insuranceForm}>
                 <CommonTable
                     rowKey={(_: any, index: number) => index}
                     pagination={false}
                     columns={insurance.map((item: any) => {
-                        if (["insuranceType", "effectiveMonth", "expirationMonth"].includes(item.dataIndex)) {
+                        if (["insuranceType", "effectiveMonth"].includes(item.dataIndex)) {
                             return ({
                                 ...item,
-                                render: (value: string | number, row: any, index: number) => {
+                                render: (value: any, row: any, index: number) => {
                                     const obj: { children: any, props: { rowSpan: number, style: any } } = {
-                                        children: <Form.Item name={[index, item.dataIndex]}><DatePicker.RangePicker format="YYYY-MM-DD" /></Form.Item>,
+                                        children: <Form.Item rules={[
+                                            {
+                                                "required": true,
+                                                "message": "请选择生效/失效日期..."
+                                            }
+                                        ]} name={[index, item.dataIndex]}><DatePicker.RangePicker value={value} format="YYYY-MM-DD" /></Form.Item>,
                                         props: {
                                             rowSpan: 0,
                                             style: {}
@@ -105,29 +154,50 @@ export default function Edit() {
                             case "cardinalityUpperLimit":
                                 return ({
                                     ...item,
-                                    render: (value: string, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <InputNumber style={{ width: "100%" }} precision={2} />
+                                    render: (value: string, record: any, index: number) => <Form.Item
+                                        rules={[
+                                            {
+                                                "required": true,
+                                                "message": "请输入基数上限..."
+                                            }
+                                        ]}
+                                        name={[index, item.dataIndex]}>
+                                        <InputNumber value={value} style={{ width: "100%" }} precision={2} />
                                     </Form.Item>
                                 })
                             case "cardinalityLowerBound":
                                 return ({
                                     ...item,
-                                    render: (value: string, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <InputNumber style={{ width: "100%" }} precision={2} />
+                                    render: (value: string, record: any, index: number) => <Form.Item
+                                        rules={[
+                                            {
+                                                "required": true,
+                                                "message": "请输入基数下限..."
+                                            }
+                                        ]}
+                                        name={[index, item.dataIndex]}>
+                                        <InputNumber value={value} style={{ width: "100%" }} precision={2} />
                                     </Form.Item>
                                 })
                             case "fixedCost":
                                 return ({
                                     ...item,
                                     render: (value: string, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <InputNumber style={{ width: "100%" }} precision={2} />
+                                        <InputNumber value={value} style={{ width: "100%" }} precision={2} />
                                     </Form.Item>
                                 })
                             case "paymentProportion":
                                 return ({
                                     ...item,
-                                    render: (value: string, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <InputNumber style={{ width: "100%" }} precision={2} />
+                                    render: (value: string, record: any, index: number) => <Form.Item
+                                        rules={[
+                                            {
+                                                "required": true,
+                                                "message": "请输入缴纳比例..."
+                                            }
+                                        ]}
+                                        name={[index, item.dataIndex]}>
+                                        <InputNumber value={value} style={{ width: "100%" }} precision={2} />
                                     </Form.Item>
                                 })
                             default:
@@ -160,7 +230,7 @@ export default function Edit() {
                                 return ({
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <InputNumber style={{ width: "100%" }} value={value}/>
+                                        <InputNumber style={{ width: "100%" }} value={value} />
                                     </Form.Item>
                                 })
                             case "commercialInsuranceType":
