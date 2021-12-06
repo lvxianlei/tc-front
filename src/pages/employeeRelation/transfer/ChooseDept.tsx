@@ -157,7 +157,6 @@ const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
 
     const formatValue = () => {
         let initValue = typeof props.value === "string" ? props.value : value?.value
-        console.log(value,"--------")
         return initValue
     }
 

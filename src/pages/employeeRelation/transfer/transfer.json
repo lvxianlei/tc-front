@@ -196,7 +196,7 @@
         },
         {
             "title": "现岗位",
-            "dataIndex": "newPostName",
+            "dataIndex": "newPostId",
             "type": "select",
             "rules": [
                 {
