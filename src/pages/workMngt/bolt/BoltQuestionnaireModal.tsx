@@ -264,7 +264,7 @@ class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRout
                             initialValue={ record.newValue }>
                             { record.problemFieldName === '类型' ? <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
                                 { boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
-                                    return <Select.Option key={index} value={id}>
+                                    return <Select.Option key={index} value={name}>
                                         {name}
                                     </Select.Option>
                                 }) }
