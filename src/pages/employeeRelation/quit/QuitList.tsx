@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import moment from 'moment';
 
 export default function QuitList(): React.ReactNode {
     const history = useHistory();
@@ -48,7 +49,7 @@ export default function QuitList(): React.ReactNode {
         },
         {
             key: 'employeeType',
-            title: '员工类型',
+            title: '员工性质',
             width: 100,
             dataIndex: 'employeeType',
             render: (status: number): React.ReactNode => {
@@ -66,7 +67,10 @@ export default function QuitList(): React.ReactNode {
             key: 'inductionDate',
             title: '入职时间',
             width: 100,
-            dataIndex: 'inductionDate'
+            dataIndex: 'inductionDate',
+            render:(departureDate: string)=>{
+                return moment(departureDate).format('YYYY-MM-DD')
+            }
         },
         {
             key: 'departureType',
@@ -90,7 +94,10 @@ export default function QuitList(): React.ReactNode {
             key: 'departureDate',
             title: '离职时间',
             width: 100,
-            dataIndex: 'departureDate'
+            dataIndex: 'departureDate',
+            render:(departureDate: string)=>{
+                return moment(departureDate).format('YYYY-MM-DD')
+            }
         },
         {
             key: 'departureReason',

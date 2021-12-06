@@ -79,9 +79,9 @@ export default function Quit(): React.ReactNode {
                                         postName: selectedRows[0].postName,
                                         inductionDate: moment(selectedRows[0].inductionDate).format('YYYY-MM-DD'),
                                         employeeType: selectedRows[0].employeeType,
-                                        employeeId: selectedRows[0].employeeId,
+                                        employeeId: selectedRows[0].id,
                                     });
-                            } } buttonType="link" buttonTitle="+选择员工" /> } disabled/>
+                            } } buttonType="link" buttonTitle="+选择员工" type={1}/> } disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>

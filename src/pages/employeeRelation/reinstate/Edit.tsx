@@ -17,8 +17,11 @@ export default function RecruitEdit(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>();
     const [ selectedUserRows, setSelectedUserRows ] = useState<IUser[] | any>({});
     const [ selectedDeptRows, setSelectedDeptRows ] = useState<IDept[] | any>({});
+    const [post, setPost] = useState([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeReinstatement/detail?id=${params.id}`)
+        const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeReinstatement/detail?id=${params.id}`);
+        const post: any = await RequestUtil.get(`/tower-system/station?size=1000`);
+        setPost(post?.records)
         form.setFieldsValue(params.id!=='0'?{
             ...data,
             newDepartmentName: data?.departmentName+'/'+data?.teamName,
@@ -85,7 +88,7 @@ export default function RecruitEdit(): React.ReactNode {
                                         departureType: selectedRows[0].departureType,
                                         departureReason: selectedRows[0].departureReason,
                                     });
-                            } } buttonType="link" buttonTitle="+选择员工" /> } disabled/>
+                            } } buttonType="link" buttonTitle="+选择员工" type={2} /> } disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -179,7 +182,11 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择复职后岗位'
                         }]} name='postName'>
-                            <Input/>
+                            <Select style={{width:'100%'}}>
+                                {post && post.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.stationName}</Select.Option>
+                                })}
+                            </Select>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
