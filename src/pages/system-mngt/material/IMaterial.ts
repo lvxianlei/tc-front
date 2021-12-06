@@ -29,11 +29,14 @@
 export interface IMaterialType {
     name?: string;
     code?: string;
-    level?: string;
+    level?: number;
     parentId?: string;
     id?: string;
     readonly treeName?: string;
     readonly children?: IMaterialType[]
+    readonly ruleFront?: string;
+    readonly unit?: string;
+    readonly firstCode?: string;
 }
 
 
