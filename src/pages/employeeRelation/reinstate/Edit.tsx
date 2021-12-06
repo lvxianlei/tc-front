@@ -83,6 +83,7 @@ export default function RecruitEdit(): React.ReactNode {
                                     setSelectedUserRows(selectedRows);
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
+                                        employeeId: selectedRows[0].employeeId,
                                         inductionDate: selectedRows[0].inductionDate,
                                         departureDate: selectedRows[0].departureDate,
                                         departureType: selectedRows[0].departureType,
@@ -214,13 +215,18 @@ export default function RecruitEdit(): React.ReactNode {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={12}>
+                    <Col span={4}>
                         <Form.Item label='' name='departmentId'>
                             <Input  type="hidden"/>
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={4}>
                         <Form.Item label='' name='teamId'>
+                            <Input  type="hidden"/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                        <Form.Item label='' name='employeeId'>
                             <Input  type="hidden"/>
                         </Form.Item>
                     </Col>
