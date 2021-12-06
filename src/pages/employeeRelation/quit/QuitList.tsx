@@ -48,17 +48,19 @@ export default function QuitList(): React.ReactNode {
             dataIndex: 'postName'
         },
         {
-            key: 'employeeType',
+            key: 'employeeNature',
             title: '员工性质',
             width: 100,
-            dataIndex: 'employeeType',
+            dataIndex: 'employeeNature',
             render: (status: number): React.ReactNode => {
                 switch (status) {
                     case 1:
                         return '正式员工';
                     case 2:
-                        return '超龄员工';
+                        return '短期派遣员工';
                     case 3:
+                        return '超龄员工';
+                    case 4:
                         return '实习员工';
                 }
             } 
@@ -180,7 +182,7 @@ export default function QuitList(): React.ReactNode {
                     },
                     {
                         name: 'statusUpdateTime',
-                        label: '调动日期',
+                        label: '离职日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                 ]}
