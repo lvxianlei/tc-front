@@ -5,7 +5,7 @@
 */
 
 import React, { useRef, useState } from 'react';
-import { Space, Input, DatePicker, Button, Popconfirm, message, Spin } from 'antd';
+import { Space, Input, DatePicker, Button, Popconfirm, message, Spin, Select } from 'antd';
 import { Attachment, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
@@ -78,18 +78,21 @@ export default function NCProgram(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string }>();
     const [ refresh, setRefresh ] = useState(false);
-    const [ data, setData ] = useState<IData>();
+    const [ detailData, setDetailData ] = useState<IData>();
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const location = useLocation<{ status: number }>();
 
     const getData = async () => {
         const data = await RequestUtil.get<IData>(`/tower-science/productNc/count?productCategoryId=${ params.id }`);
-        setData(data)
+        setDetailData(data)
     }
-    const { loading }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
+    const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
         getData();
-        resole(true);
+        const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/reuse/productCategory?productCategoryId=${params.id}`);
+        resole(data);
     }), {})
+
+    const userList: any = data || [];
 
     if (loading) {
         return <Spin spinning={loading}>
@@ -105,7 +108,7 @@ export default function NCProgram(): React.ReactNode {
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
             <Button type="primary" ghost onClick={ () => downloadTemplate(`/tower-science/productNc/downloadSummary?productCategoryId=${ params.id }`, "NC文件汇总" , {}, true ) }>下载</Button>
-            <p>NC程序数 { data?.ncCount || 0 }/{ data?.structureCount || 0 }</p>
+            <p>NC程序数 { detailData?.ncCount || 0 }/{ detailData?.structureCount || 0 }</p>
             { location.state.status === 1 || location.state.status === 2 ? <Attachment ref={ attachRef } isTable={ false } dataSource={[]} onDoneChange={ (dataInfo: FileProps[]) => {
                 RequestUtil.post(`/tower-science/productNc/importProductNc`, {
                     fileVOList: [...dataInfo],
@@ -127,9 +130,13 @@ export default function NCProgram(): React.ReactNode {
                 children: <DatePicker.RangePicker />
             },
             {
-                name: 'partName',
+                name: 'segmentId',
                 label: '段名',
-                children: <Input maxLength={ 50 } />
+                children: <Select placeholder="请选择" style={{width:'120px'}}>
+                    { userList && userList.map((item: any) => {
+                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                    }) }
+                </Select>
             },
             {
                 name: 'fuzzyMsg',

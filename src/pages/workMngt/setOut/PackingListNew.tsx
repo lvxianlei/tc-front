@@ -70,8 +70,8 @@ export default function PackingListNew(): React.ReactNode {
         const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId });
         const newData = list.filter((item: IBundle) => !packagingData.some((ele: IBundle) => ele.id !== item.id))
         setStayDistrict(newData);
-        const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
-        setUserList(data);
+        const data: any = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
+        setUserList(data?.loftingProductSegmentList);
         const resData: IMaterialTree[] = await RequestUtil.get<IMaterialTree[]>('/tower-system/materialCategory/tree');
         setMaterialList(resData);
     });
@@ -377,7 +377,7 @@ export default function PackingListNew(): React.ReactNode {
                         </Form.Item>
                     </Col>
                     <Col offset={ 1 } span={ 4 }>
-                        <Form.Item name="segmentName" label="段名">
+                        <Form.Item name="segmentId" label="段名">
                            <Select placeholder="请选择" style={{width:'120px'}}>
                                 { userList && userList.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.segmentId }>{ item.segmentName }</Select.Option>
