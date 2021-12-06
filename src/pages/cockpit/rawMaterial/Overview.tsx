@@ -8,6 +8,15 @@ import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import ApplicationContext from "../../../configuration/ApplicationContext"
 
+/***
+ * 拿掉
+ *  {
+        "title": "原材料规格",
+        "dataIndex": "materialSpec"
+    },
+    新增 材质/规格（需后台提供字段名称）
+ */
+
 export default function Overview(): React.ReactNode {
     const history = useHistory()
     const [editId, setEditId] = useState<string>("")

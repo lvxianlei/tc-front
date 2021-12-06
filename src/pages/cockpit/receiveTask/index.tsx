@@ -6,6 +6,26 @@ import { Page } from '../../common'
 import { receiveColumns } from "./receiveTask.json"
 import PrepareOverview from "../../financial/Prepare/Overview"
 import BillOverview from "../../financial/Bill/Overview"
+
+/**
+ * 拿掉
+ *  {
+        "title": "供应商",
+        "dataIndex": "supplierName"
+    },
+    {
+        "title": "运费(元)",
+        "dataIndex": "freight",
+        "type": "number"
+    },
+    {
+        "title": "货款运费合计(元)",
+        "dataIndex": "price",
+        "type": "number"
+    },
+    新增 企业类型以及企业名称 （需跟后台确认字段）
+    查询条件：企业类型下拉框数据需后台提供
+ */
 export default function ViewReceivingNote(): React.ReactNode {
     const history = useHistory()
     const [prepareVisible, setPrepareVisible] = useState<boolean>(false)
@@ -93,7 +113,17 @@ export default function ViewReceivingNote(): React.ReactNode {
                 },
                 {
                     name: 'invoiceStatus',
-                    label: '状态',
+                    label: '付款状态',
+                    children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
+                        <Select.Option value={1}>待收票</Select.Option>
+                        <Select.Option value={2}>已收票</Select.Option>
+                        <Select.Option value={3}>待付款</Select.Option>
+                        <Select.Option value={4}>已付款</Select.Option>
+                    </Select>
+                },
+                {
+                    name: 'invoiceStatus',
+                    label: '企业类型',
                     children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
                         <Select.Option value={1}>待收票</Select.Option>
                         <Select.Option value={2}>已收票</Select.Option>

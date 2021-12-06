@@ -1,7 +1,11 @@
 {
     "receiveColumns": [
         {
-            "title": "供应商",
+            "title": "企业类型",
+            "dataIndex": "supplierName"
+        },
+        {
+            "title": "企业名称",
             "dataIndex": "supplierName"
         },
         {
@@ -19,16 +23,6 @@
         },
         {
             "title": "价税合计(元)",
-            "dataIndex": "price",
-            "type": "number"
-        },
-        {
-            "title": "运费(元)",
-            "dataIndex": "freight",
-            "type": "number"
-        },
-        {
-            "title": "货款运费合计(元)",
             "dataIndex": "price",
             "type": "number"
         },

@@ -1,9 +1,10 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react"
-import { Spin, Button, Modal, Form, message } from "antd"
+import { Spin, Button, Modal, Form, message, Input } from "antd"
 import { materialInfo, priceInfo } from "./rawMaterial.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { BaseInfo, DetailTitle, PopTableContent } from "../../common"
+import { PopTable } from './LayerModal';
 interface EditProps {
     id: string
     type: "new" | "edit"
@@ -131,6 +132,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     useImperativeHandle(ref, () => ({ onSubmit, loading: saveLoading }), [onSubmit, saveLoading])
 
+    const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+        console.log(fields, 'fields')
+    }
+
     return <Spin spinning={loading}>
         <Modal width={1011} title="选择" destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={materialList as any} onChange={handleChange} />
@@ -138,12 +143,26 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         <DetailTitle title="原材料信息" operation={[
             <Button disabled={type === "edit"} type="primary" ghost key="choose" onClick={() => setVisible(true)}>选择</Button>
         ]} />
-        <BaseInfo form={materialForm} col={3} columns={materialInfo} dataSource={data || {}} edit />
+        <BaseInfo form={materialForm} onChange={performanceBondChange} col={2} columns={[
+            ...materialInfo.map((item: any) => {
+                if(item.dataIndex === "materialName") {
+                    return (
+                        {
+                            ...item,
+                            render() {
+                                return <PopTable data={item} />
+                            }
+                        }
+                    )
+                }
+                return item;
+            })
+        ]} dataSource={data || {}} edit />
         <DetailTitle title="价格信息" />
         <BaseInfo form={priceInfoForm} col={3} columns={priceInfo.map((item: any) => {
             if (item.dataIndex === "priceSource") {
                 return ({ ...item, type: "select", enum: priceSourceEnum })
-            }
+            }   
             return item
         })} dataSource={data || {}} edit />
     </Spin>
