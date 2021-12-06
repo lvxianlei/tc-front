@@ -12,7 +12,6 @@ import EmployeeDeptSelectionComponent, { IDept } from '../EmployeeDeptModal';
 import { bankTypeOptions, employeeTypeOptions } from '../../../configuration/DictionaryOptions';
 import moment from 'moment';
 
-
 export default function RecruitEdit(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, status: string }>();
@@ -246,8 +245,7 @@ export default function RecruitEdit(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='年龄' name='age'>
-                            {/* <Input disabled/> */}
-                            <InputNumber formatter={(value:any)=>`$ ${value}`}/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                 </Row>
