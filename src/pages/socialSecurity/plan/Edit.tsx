@@ -31,6 +31,7 @@ export default function Edit() {
             const insuranceFormData: any = {}
             const businessFormData: any = {}
             setIsSocialSecurity(result.isSocialSecurity)
+            setBusinessData(result.businessList)
             result.socialSecurityList.forEach((item: any, index: number) => {
                 insuranceFormData[index] = ({
                     ...item,
@@ -255,8 +256,7 @@ export default function Edit() {
                                     </Form.Item>
                                 })
                         }
-                    })
-                    ]}
+                    })]}
                     dataSource={businessData} />
             </Form>
         </Spin>
