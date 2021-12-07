@@ -11,7 +11,8 @@ export default function LabourDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, contractId: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-hr/labor/contract/detail`,{contractId: params.contractId})
+        const data: any = await RequestUtil.get(`/tower-hr/labor/contract/detail`,{contractId: params.contractId})
+        data.newDepartmentName = data.departmentName+'/'+data.teamName
         resole(data)
     }), {})
     const detailData: any = data;
