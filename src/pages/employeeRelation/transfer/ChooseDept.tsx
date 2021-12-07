@@ -87,6 +87,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         setColumns(data.columns)
     }, [JSON.stringify(data.columns)])
 
+    
+
     return <>
         {searchs.length > 0 && <Form form={form} onFinish={async () => {
             await run()
@@ -157,7 +159,6 @@ const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
 
     const formatValue = () => {
         let initValue = typeof props.value === "string" ? props.value : value?.value
-        console.log(value,"--------")
         return initValue
     }
 

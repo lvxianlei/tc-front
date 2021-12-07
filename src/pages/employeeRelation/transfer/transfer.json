@@ -196,7 +196,7 @@
         },
         {
             "title": "现岗位",
-            "dataIndex": "newPostName",
+            "dataIndex": "newPostId",
             "type": "select",
             "rules": [
                 {
@@ -252,7 +252,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "statusName",
+            "dataIndex": "remark",
             "type": "textarea"
         }
     ],
