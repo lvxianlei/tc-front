@@ -76,8 +76,8 @@
             "title": "是否办理离职手续",
             "type": "select",
             "enum": [
-                { "value": true, "label": "是" },
-                { "value": false, "label": "否" }
+                { "value": 0, "label": "是" },
+                { "value": 1, "label": "否" }
             ]
         },
         {
@@ -85,8 +85,8 @@
             "title": "是否领取解除劳动合同书",
             "type": "select",
             "enum": [
-                { "value": true, "label": "是" },
-                { "value": false, "label": "否" }
+                { "value": 0, "label": "是" },
+                { "value": 1, "label": "否" }
             ]
         },
         {
