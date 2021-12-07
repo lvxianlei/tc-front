@@ -99,7 +99,7 @@ export default function Edit(): React.ReactNode {
                             if(moment(value.contractEndDate)<moment(value.contractStartDate)){
                                 message.error('合同截止日期不可小于开始日期！')
                             }else{
-                                value.fileId= attachRef.current?.getDataSource().map((item:any)=>{
+                                value.fileIds= attachRef.current?.getDataSource().map((item:any)=>{
                                     return item.id
                                 });
                                 value.contractEndDate= moment(value.contractEndDate).format('YYYY-MM-DD HH:mm:ss');

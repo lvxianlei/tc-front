@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input} from 'antd';
+import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -17,6 +17,10 @@ export default function Sure(): React.ReactNode {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/positive/check/detail?positiveId=${params.id}`);
         data.newDepartmentName = data.departmentName+'/'+data.teamName;
+        form.setFieldsValue({
+            ...data,
+            positiveDate: data.positiveDate?moment(data.positiveDate):''
+        })
         resole(data)
     }), {})
     const detailData: any = data;
@@ -28,14 +32,47 @@ export default function Sure(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button key="primary" onClick={() => {
+                    <Button type="primary" onClick={() => {
                         form.validateFields().then(res=>{
+                           
                             const value= form.getFieldsValue(true);
-                            value.inquiryQuotationAttachInfoDtos= attachRef.current?.getDataSource()
+                            value.fileIds= attachRef.current?.getDataSource().map((item:any)=>{
+                                return item.id
+                            });
+                            value.positiveDate= moment(value.positiveDate).format('YYYY-MM-DD HH:mm:ss');
+                            value.submitType='save';
+                            value.checkResult = value.checkResult===1?'提前转正':value.checkResult===2?'正常转正':'延期转正'
+                            value.id = params.id;
+                            value.employeeId = detailData.employeeId;
+                            RequestUtil.post(`/tower-hr/positive/check`, value).then(()=>{
+                                message.success('保存成功！')
+                            }).then(()=>{
+                                history.goBack()
+                            })
+                            
                         })
                         
                     }}>保存</Button>
-                    <Button key="primary" onClick={() => history.goBack()}>保存并提交审批</Button>
+                    <Button type="primary" onClick={() => {
+                        form.validateFields().then(res=>{
+                           
+                            const value= form.getFieldsValue(true);
+                            value.fileIds= attachRef.current?.getDataSource().map((item:any)=>{
+                                return item.id
+                            });
+                            value.positiveDate= moment(value.positiveDate).format('YYYY-MM-DD HH:mm:ss');
+                            value.submitType='submit';
+                            value.id = params.id;
+                            value.checkResult = value.checkResult===1?'提前转正':value.checkResult===2?'正常转正':'延期转正'
+                            value.employeeId = detailData.employeeId;
+                            RequestUtil.post(`/tower-hr/positive/check`, value).then(()=>{
+                                message.success('提交成功！')
+                            }).then(()=>{
+                                history.goBack()
+                            })
+                            
+                        })
+                    }}>保存并提交审批</Button>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
             ]}>
@@ -51,7 +88,26 @@ export default function Sure(): React.ReactNode {
                         }]} name="positiveDate">
                             <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} 
                                 onChange={(e)=>{
-                                    moment(e).subtract(2, 'months').format('YYYY-MM-DD')
+                                    const date = moment(detailData.inductionDate).add(detailData.probationPeriod-1, 'months').format('YYYY-MM-DD')
+                                    console.log(date)
+                                    const newDate = e?.format('YYYY-MM-DD')
+                                    var formatDate1 = new Date(date)
+                                    var formatDate2 = new Date(`${newDate}`)
+                                    if(formatDate1.getTime() > formatDate2.getTime()){
+                                        form.setFieldsValue({
+                                            checkResult: 1
+                                        })
+                                    }
+                                    if(formatDate1.getTime() === formatDate2.getTime()){
+                                        form.setFieldsValue({
+                                            checkResult: 2
+                                        })
+                                    }
+                                    if(formatDate1.getTime() < formatDate2.getTime()){
+                                        form.setFieldsValue({
+                                            checkResult: 3
+                                        })
+                                    }
                                 }}
                             />
                         </Form.Item>
