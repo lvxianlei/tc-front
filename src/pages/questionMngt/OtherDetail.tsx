@@ -102,7 +102,7 @@ const boltColumns = [
 
 export default function OtherDetail(): React.ReactNode {
     const history = useHistory();
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ recipient:'', createUser:''}>();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const params = useParams<{ id: string, type: string, status: string }>()
@@ -160,7 +160,7 @@ export default function OtherDetail(): React.ReactNode {
                     </Form.Item>
                 </Form>
             </Modal>
-            <DetailContent operation={params.status==='1'&&AuthUtil.getUserId()===location.state?[
+            <DetailContent operation={params.status==='1'&&AuthUtil.getUserId()===location.state.recipient?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
                         message.success('修改成功！')
@@ -174,6 +174,9 @@ export default function OtherDetail(): React.ReactNode {
                 // <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => {
                 //     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}`)
                 // }}>跳转页面</Button>,
+                
+                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+            ]:params.status==='1'&&AuthUtil.getUserId()===location.state.createUser?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.delete(`/tower-science/issue?id=${params.id}`).then(()=>{
                         message.success('删除成功！')
