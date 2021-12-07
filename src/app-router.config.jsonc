@@ -307,21 +307,21 @@
     { // 原材料管理
       "name": "原材料管理",
       "path": "/sys/material",
-      "module": "./pages/system-mngt/material/MaterialMngt",
+      "module": "./pages/system-mngt/materialMngt/MaterialMngt",
       "exact": true,
       "authority": "material_management"
     },
     { // 新增原材料
       "name": "新增原材料",
       "path": "/sys/material/new",
-      "module": "./pages/system-mngt/material/MaterialNew",
+      "module": "./pages/system-mngt/materialMngt/MaterialNew",
       "exact": true,
       "authority": "material_management"
     },
     { // 编辑原材料
       "name": "编辑原材料",
       "path": "/sys/material/view/:id",
-      "module": "./pages/system-mngt/material/MaterialView",
+      "module": "./pages/system-mngt/materialMngt/MaterialView",
       "exact": true,
       "authority": "material_management"
     },

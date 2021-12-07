@@ -2,8 +2,7 @@
  * @author lxy
  * @copyright © 2021  All rights reserved
  */
-import { Button, Form, FormItemProps, Input, InputNumber, Modal, Space, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
-import { valueType } from 'antd/lib/statistic/utils';
+import { Button, Form, FormItemProps, Input, Modal, Space, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -53,7 +52,6 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
 
     //modal-show
     public showModal(record: Record<string, any>, type: number): void {
-        console.log(record)
         this.setState({
             visible: true,
             defaultData: record,
@@ -114,7 +112,6 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                 this.fetchMaterialType();
             })
         } else if (this.state.type === 1 || this.state.type === 3) {
-            console.log(this.state.defaultData)
             RequestUtil.put('/tower-system/materialCategory', { 
                 ...this.state.defaultData, 
                 ...values,
@@ -126,8 +123,6 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                 this.fetchMaterialType();
             })
         }
-
-
     }
 
     public getTableColumns(item: ITabItem): TableColumnType<object>[] {
@@ -317,8 +312,6 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
             name: this.state.name
         }, pagination);
     }
-
-
 
     /**
      * @implements
