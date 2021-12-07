@@ -52,7 +52,7 @@ export default function View(): React.ReactNode {
             <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
             <Attachment dataSource={detailData?.fileVos}/>
             <DetailTitle title="劳动合同记录" />
-            <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
+            <CommonTable columns={tableColumns} dataSource={detailData?.laborContractVOS} pagination={ false } />
             </DetailContent>
         </Spin>
     </>

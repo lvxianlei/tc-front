@@ -42,7 +42,9 @@ export default function QuitProceduresOperation(): React.ReactNode {
                             value.id = params.id;
                             value.handleType='save';
                             value.isProcessingCompleted = false;
-                            value.fileVos= attachRef.current?.getDataSource();
+                            value.fileId= attachRef.current?.getDataSource().map((item:any)=>{
+                                return item.id
+                            });
                             value.isRemoveContract =  value.isRemoveContract === 1?false:true;
                             value.isTransactProcedure =  value.isTransactProcedure === 1?false:true;
                             RequestUtil.post(`/tower-hr/employeeDeparture/handleSave`, value).then(()=>{
@@ -108,7 +110,7 @@ export default function QuitProceduresOperation(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-            <Attachment dataSource={detailData?.fileVos} edit/>
+            <Attachment dataSource={detailData?.fileVos} edit ref={attachRef}/>
             </DetailContent>
         </Spin>
     </>
