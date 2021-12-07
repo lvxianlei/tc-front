@@ -476,20 +476,17 @@ export default function WorkBenchMngt(): React.ReactNode {
 					title: '待放样',
 					dataIndex: 'segmentProductToBeLofting',
 					path: '/workMngt/setOutList',
-					state: 2,
-					userId: userId
+					state: 2
 				}, {
 					title: '待配段',
 					dataIndex: 'rodProductToBeMatch',
 					path: '/workMngt/setOutList',
-					state: 4,
-					userId: userId
+					state: 4
 				}, {
 					title: '待出单',
 					dataIndex: 'rodProductToBeIssue',
 					path: '/workMngt/setOutList',
-					state: 4,
-					userId: userId
+					state: 4
 				}
 			]
 		}, {
