@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react"
-import { Button, Spin, Tabs } from 'antd'
+import { Button, Form, Spin, Tabs } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment, AttachmentRef } from '../../common'
-import { baseInfo, workExperience, family, relatives } from "./archives.json"
+import { baseInfo, companyInfo, other, workExperience, family, relatives } from "./archives.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 type TabTypes = "baseInfo" | "family" | "employee" | "work"
@@ -22,6 +22,9 @@ export default function Edit() {
     const history = useHistory()
     const params = useParams<{ archiveId: string, type: "new" | "edit" }>()
     const attchRef = useRef<AttachmentRef>()
+    const [baseForm] = Form.useForm()
+    const [companyForm] = Form.useForm()
+    const [otherForm] = Form.useForm()
     const [currentType, setCurrentType] = useState<TabTypes>("baseInfo")
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -33,17 +36,27 @@ export default function Edit() {
         }
     }), { refreshDeps: [currentType] })
 
-    const { loading: saveLoading } = useRequest<{ [key: string]: any }>((type: TabTypes, data: any) => new Promise(async (resole, reject) => {
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((type: TabTypes, data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(saveUrlObj[type], data)
+            const result: { [key: string]: any } = await RequestUtil.post(saveUrlObj[type], { ...data, id: params.archiveId })
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
 
-    const handleSave = (type: TabTypes) => {
-
+    const handleSave = async (type: TabTypes) => {
+        try {
+            const postData = await baseForm.validateFields()
+            await saveRun(type, {
+                ...postData,
+                birthday: postData.birthday + " 00:00:00",
+                graduationDate: postData.graduationDate + " 00:00:00",
+                cardValidityDate: postData.cardValidityDate + " 00:00:00",
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return <Tabs type="card" activeKey={currentType} onChange={(tabKey: string) => setCurrentType(tabKey as TabTypes)}>
@@ -54,7 +67,11 @@ export default function Edit() {
             ]}>
                 <Spin spinning={loading}>
                     <DetailTitle title="基本信息" />
-                    <BaseInfo columns={baseInfo} dataSource={data || {}} edit />
+                    <BaseInfo form={baseForm} columns={baseInfo} dataSource={data || {}} edit />
+                    <DetailTitle title="公司信息" />
+                    <BaseInfo form={companyForm} columns={companyInfo} dataSource={data || {}} edit />
+                    <DetailTitle title="其他信息" />
+                    <BaseInfo form={otherForm} columns={other} dataSource={data || {}} edit />
                     <Attachment ref={attchRef} edit />
                 </Spin>
             </DetailContent>
