@@ -426,11 +426,12 @@
         },
         {
             "title": "开户银行",
-            "dataIndex": "bankName",
+            "dataIndex": "bankNameId",
+            "type": "select",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入开户银行..."
+                    "message": "请选择开户银行..."
                 }
             ]
         },
@@ -441,11 +442,11 @@
             "enum": [
                 {
                     "label": "是",
-                    "value": 1
+                    "value": true
                 },
                 {
                     "label": "否",
-                    "value": 2
+                    "value": false
                 }
             ],
             "rules": [
@@ -553,15 +554,18 @@
     "companyInfo": [
         {
             "title": "公司",
-            "dataIndex": "companyName"
+            "dataIndex": "companyName",
+            "disabled": true
         },
         {
             "title": "部门/班组",
-            "dataIndex": "workOrganization"
+            "dataIndex": "workOrganization",
+            "disabled": true
         },
         {
             "title": "岗位",
-            "dataIndex": "postName"
+            "dataIndex": "postName",
+            "disabled": true
         },
         {
             "title": "员工分组",
@@ -592,11 +596,13 @@
         },
         {
             "title": "入职日期",
-            "dataIndex": "inductionDate"
+            "dataIndex": "inductionDate",
+            "disabled": true
         },
         {
             "title": "转正日期",
-            "dataIndex": "positiveDate"
+            "dataIndex": "positiveDate",
+            "disabled": true
         },
         {
             "title": "在职状态",
@@ -611,29 +617,35 @@
                     "value": 2,
                     "label": "离职"
                 }
-            ]
+            ],
+            "disabled": true
         },
         {
             "title": "离职日期",
-            "dataIndex": "departureDate"
+            "dataIndex": "departureDate",
+            "disabled": true
         },
         {
             "title": "工龄",
-            "dataIndex": "workYear"
+            "dataIndex": "workYear",
+            "disabled": true
         }
     ],
     "other": [
         {
             "title": "身高（cm）",
-            "dataIndex": "height"
+            "dataIndex": "height",
+            "type": "number"
         },
         {
             "title": "体重（kg）",
-            "dataIndex": "weight"
+            "dataIndex": "weight",
+            "type": "number"
         },
         {
             "title": "鞋码（号）",
-            "dataIndex": "shoeSize"
+            "dataIndex": "shoeSize",
+            "type": "number"
         },
         {
             "title": "工装码",
@@ -643,18 +655,38 @@
     "workExperience": [
         {
             "title": "工作时间",
-            "width": 100,
-            "dataIndex": "workDate"
+            "span": 4,
+            "dataIndex": "workDate",
+            "type": "rangePicker",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择工作时间..."
+                }
+            ]
         },
         {
             "title": "工作单位",
             "width": 100,
-            "dataIndex": "workOrganization"
+            "dataIndex": "workOrganization",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入工作单位..."
+                }
+            ]
         },
         {
             "title": "离职原因",
             "width": 100,
-            "dataIndex": "departureReason"
+            "dataIndex": "departureReason",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入离职原因..."
+                }
+            ]
         },
         {
             "title": "职务",
@@ -664,29 +696,55 @@
         {
             "title": "备注",
             "width": 100,
-            "dataIndex": "remark"
+            "dataIndex": "remark",
+            "type": "textarea",
+            "rows": 1
         }
     ],
     "family": [
         {
             "title": "姓名",
             "width": 100,
-            "dataIndex": "name"
+            "dataIndex": "name",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入姓名..."
+                }
+            ]
         },
         {
             "title": "与本人关系",
             "width": 100,
-            "dataIndex": "relation"
+            "dataIndex": "relation",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入与本人关系..."
+                }
+            ]
         },
         {
             "title": "工作单位",
             "width": 100,
-            "dataIndex": "workOrganization"
+            "dataIndex": "workOrganization",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入工作单位..."
+                }
+            ]
         },
         {
             "title": "联系电话",
             "width": 100,
-            "dataIndex": "phoneNumber"
+            "dataIndex": "phoneNumber",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入联系电话..."
+                }
+            ]
         },
         {
             "title": "备注",
