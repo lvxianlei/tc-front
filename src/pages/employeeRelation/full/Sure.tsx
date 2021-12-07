@@ -46,12 +46,8 @@ export default function Sure(): React.ReactNode {
                         <Form.Item label='转正日期' rules={[{
                             required:true, 
                             message:'请选择转正日期'
-                        }]} initialValue={1}>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
-                                console.log(e)
-                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
-                                // form.setFieldsValue()
-                            }}/>
+                        }]} >
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -60,9 +56,9 @@ export default function Sure(): React.ReactNode {
                             message:'请选择考核结果'
                         }]}>
                             <Select placeholder="请选择" style={{ width: '100%' }} disabled>
-                                <Select.Option value={0} key="0">提前转正</Select.Option>
-                                <Select.Option value={1} key="1">正常转正</Select.Option>
-                                <Select.Option value={2} key="2">延期转正</Select.Option>
+                                <Select.Option value={1} key="1">提前转正</Select.Option>
+                                <Select.Option value={2} key="2">正常转正</Select.Option>
+                                <Select.Option value={3} key="3">延期转正</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
