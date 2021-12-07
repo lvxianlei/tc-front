@@ -377,7 +377,7 @@ export default function StaffNew(): React.ReactNode {
         ] }>
             <DetailTitle title="员工信息" operation={[location.state.type === 'new' ? <Button type="primary" onClick={ addRow }>添加行</Button> : <></>]}/>
             <Form form={ form }>
-                <Table rowKey="id" scroll={{ x: 1200 }} dataSource={[...dataList]} pagination={false} columns={location.state.type === 'edit' ? tableColumns.splice(0, 10) : tableColumns} className={styles.addModal}/>
+                <Table rowKey="id" scroll={{ x: 1200 }} dataSource={[...dataList]} pagination={false} columns={location.state.type === 'edit' ? tableColumns.splice(0, 11) : tableColumns} className={styles.addModal}/>
             </Form>
         </DetailContent>
     )
