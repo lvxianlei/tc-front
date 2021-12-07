@@ -8,6 +8,9 @@ import '../../StockPublicStyle.less';
 import './detail.less';
 
 const { RangePicker } = DatePicker;
+/**
+ * 新增(批号、质保书号、轧制批号)
+ */
 export default function RawMaterialStock(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const history = useHistory(),
@@ -87,7 +90,23 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '炉批号',
             dataIndex: 'furnaceBatch',
             width: 120,
-        }, {
+        },
+        {
+            title: '批号',
+            dataIndex: 'standard',
+            width: 100,
+        },
+        {
+            title: '质保书号',
+            dataIndex: 'standard',
+            width: 100,
+        },
+        {
+            title: '轧制批号',
+            dataIndex: 'standard',
+            width: 100,
+        },
+        {
             title: '内部合同号',
             dataIndex: 'contractNumber',
             width: 120,
@@ -339,7 +358,8 @@ export default function RawMaterialStock(): React.ReactNode {
             render: (text: any, item: any, index: any) => {
                 return <span>{index + 1}</span>
             }
-        }, {
+        },
+        {
             title: '物料编码',
             dataIndex: 'standard',
             width: 100,
@@ -659,6 +679,60 @@ export default function RawMaterialStock(): React.ReactNode {
                                     )
                                 })
                             }
+                        </Select>
+                    </div>
+                </div>
+                <div className="search_item">
+                    <span className="tip">材质：</span>
+                    <div className='selectOrInput'>
+                        <Select
+                            className="select"
+                            style={{ width: "100px" }}
+                            value={status ? status : ''}
+                            onChange={(val) => { setStatus(val) }}
+                        >
+                            <Select.Option
+                                value=""
+                            >
+                                全部
+                            </Select.Option>
+                            <Select.Option
+                                value="0"
+                            >
+                                待完成
+                            </Select.Option>
+                            <Select.Option
+                                value="2"
+                            >
+                                已完成
+                            </Select.Option>
+                        </Select>
+                    </div>
+                </div>
+                <div className="search_item">
+                    <span className="tip">标准：</span>
+                    <div className='selectOrInput'>
+                        <Select
+                            className="select"
+                            style={{ width: "100px" }}
+                            value={status ? status : ''}
+                            onChange={(val) => { setStatus(val) }}
+                        >
+                            <Select.Option
+                                value=""
+                            >
+                                全部
+                            </Select.Option>
+                            <Select.Option
+                                value="0"
+                            >
+                                待完成
+                            </Select.Option>
+                            <Select.Option
+                                value="2"
+                            >
+                                已完成
+                            </Select.Option>
                         </Select>
                     </div>
                 </div>

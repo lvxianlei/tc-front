@@ -1,20 +1,24 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
-import { Button, Form, message, Spin, Modal, InputNumber, Row, Col } from 'antd'
+import { Button, Form, message, Spin, Modal, InputNumber, Row, Col, Input, Select } from 'antd'
 import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
-import { BasicInformation, editCargoDetails, SelectedArea, Selected } from "./receivingListData.json"
+import { BasicInformation, editCargoDetails, SelectedArea, Selected, freightInfo, handlingChargesInfo } from "./receivingListData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 interface ChooseModalProps {
     id: string,
     initChooseList: any[]
 }
+/**
+ * 纸质单号，原材料税款合计，车辆牌照
+ */
 const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const [chooseList, setChooseList] = useState<any[]>(initChooseList)
     const [selectList, setSelectList] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
     const [currentId, setCurrentId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"select" | "remove">("select")
-    const [form] = Form.useForm()
+    const [form] = Form.useForm();
+    const [serarchForm] = Form.useForm();
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -126,7 +130,62 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
                     setVisible(true)
                 }}>移除</a>
             }]} dataSource={chooseList} />
-        <DetailTitle title="待选区" />
+        {/* <DetailTitle title="待选区" /> */}
+        <div>
+            <p style={{paddingLeft: "14px", boxSizing: "border-box", fontSize: "16px"}}>待选区</p>
+            <Form form={serarchForm} style={{paddingLeft: "14px"}}>
+                <Row>
+                    <Col span={4}>
+                        <Form.Item
+                            name="num1"
+                            label="标准">
+                                <Select style={{ width: 120 }} placeholder="请选择">
+                                    <Select.Option value="jack">Jack</Select.Option>
+                                    <Select.Option value="lucy">Lucy</Select.Option>
+                                    <Select.Option value="Yiminghe">yiminghe</Select.Option>
+                                </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                        <Form.Item
+                            name="num2"
+                            label="材质">
+                                <Select style={{ width: 120 }} placeholder="请选择">
+                                    <Select.Option value="jack">Jack</Select.Option>
+                                    <Select.Option value="lucy">Lucy</Select.Option>
+                                    <Select.Option value="Yiminghe">yiminghe</Select.Option>
+                                </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                        <Form.Item
+                            name="num3"
+                            label="长度">
+                                <InputNumber min={1} step={1} />&nbsp;
+                        </Form.Item>
+                    </Col>
+                    <Col span={3}>
+                        <Form.Item
+                            name="num4">
+                                <InputNumber min={1} step={1} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={3}>
+                        <Form.Item
+                            name="num5"
+                            label="规格">
+                                <Input placeholder="请输入规格" />
+                        </Form.Item>
+                    </Col>&nbsp;&nbsp;
+                    <Col span={4}>
+                        <Form.Item>
+                            <Button type="primary">搜索</Button>&nbsp;&nbsp;
+                            <Button>重置</Button>
+                        </Form.Item>
+                    </Col>
+                </Row>
+            </Form>
+        </div>
         <CommonTable columns={[
             ...Selected,
             {
@@ -270,6 +329,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         </Modal>
         <DetailTitle title="收货单基础信息" />
         <BaseInfo form={form} onChange={handleBaseInfoChange} columns={columns} dataSource={{}} edit />
+        <DetailTitle title="运费信息" />
+        <BaseInfo form={form} columns={freightInfo} dataSource={{}} />
+        <DetailTitle title="装卸费信息" />
+        <BaseInfo form={form} columns={handlingChargesInfo} dataSource={{}} />
         <DetailTitle title="货物明细" operation={[<Button
             type="primary" key="choose" ghost
             onClick={() => {

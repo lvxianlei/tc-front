@@ -4,7 +4,7 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Form, Button } from 'antd';
 import { BaseInfo, DetailTitle, CommonTable, Attachment, AttachmentRef } from '../../common';
-import { baseInfo } from './Detail.json';
+import { baseInfo, freightInfo, handlingChargesInfo, goodsDetail } from './Detail.json';
 interface OverViewProps {
     visible?: boolean
     acceptStatus?: number
@@ -19,7 +19,7 @@ export default function Detail(props: OverViewProps): JSX.Element {
             visible={props.visible}
             onCancel={props?.onCancel}
             maskClosable={false}
-            width={1100}
+            width={1300}
             footer={[
             <Button key="back" onClick={props?.onCancel}>
                 关闭
@@ -30,8 +30,22 @@ export default function Detail(props: OverViewProps): JSX.Element {
             <BaseInfo
                 form={addCollectionForm}
                 dataSource={{}}
-                col={ 2 }
+                col={ 4 }
                 columns={[...baseInfo]}
+            />
+            <DetailTitle title="运费信息" />
+            <BaseInfo
+                form={addCollectionForm}
+                dataSource={{}}
+                col={ 4 }
+                columns={[...freightInfo]}
+            />
+            <DetailTitle title="装卸费信息" />
+            <BaseInfo
+                form={addCollectionForm}
+                dataSource={{}}
+                col={ 4 }
+                columns={[...handlingChargesInfo]}
             />
             <DetailTitle title="审批记录" />
             <CommonTable columns={[
@@ -42,7 +56,7 @@ export default function Detail(props: OverViewProps): JSX.Element {
                     width: 50,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
-                ...baseInfo
+                ...goodsDetail
             ]} dataSource={[]} />
         </Modal>
     )

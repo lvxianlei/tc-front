@@ -88,5 +88,43 @@
             "dataIndex": "requiredReturnTime",
             "title": "装卸费价税合计（元）"
         }
+    ],
+    "goodsDetail": [
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "品名"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "标准"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "材质"
+        },
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "规格"
+        },
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "长度（mm）"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "数量"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "合同单价（元/吨）"
+        },
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "价税合计（元）"
+        },
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "重量（kg）"
+        }
     ]
 }

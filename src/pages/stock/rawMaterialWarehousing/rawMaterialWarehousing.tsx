@@ -1,11 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Space, Button, Input, DatePicker, Select, Table } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import { Space, Button, Input, DatePicker, Select, Table, Modal, message } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface'
 import RequestUtil from '../../../utils/RequestUtil';
+// 引入新增纸质单号
+import PaperOrderModal from './PaperOrderModal';
 import '../StockPublicStyle.less';
 
 const { RangePicker } = DatePicker;
+interface EditRefProps {
+    id?: string
+    onSubmit: () => void
+    resetFields: () => void
+}
+/**
+ * 列表新增 纸质单号以及车牌号 （需后台提供字段名称）
+ * 
+ */
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory(),
         [current, setCurrent] = useState(1),
@@ -16,13 +27,15 @@ export default function RawMaterialStock(): React.ReactNode {
         [dateValue, setDateValue] = useState<any>([]),//时间
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
         [keyword, setKeyword] = useState<any>('');//关键字搜索
+    const [ visible, setVisible ] = useState<boolean>(false);
+    const [id, setId] = useState<string>();
+    const addRef = useRef<EditRefProps>();
     const columns = [
         {
             title: '序号',
             dataIndex: 'key',
             width: 50,
             render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
                 return <span>{index + 1}</span>
             }
         },
@@ -30,7 +43,18 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '收货单号',
             dataIndex: 'receiveNumber',
             width: 120,
-        }, {
+        }, 
+        {
+            title: '纸质单号',
+            dataIndex: 'receiveNumber',
+            width: 120,
+        }, 
+        {
+            title: '车牌号',
+            dataIndex: 'receiveNumber',
+            width: 120,
+        }, 
+        {
             title: '状态',
             dataIndex: 'receivingBatch',
             width: 120,
@@ -40,7 +64,7 @@ export default function RawMaterialStock(): React.ReactNode {
         }, {
             title: '最新状态变更时间',
             dataIndex: 'updateTime',
-            width: 120,
+            width: 200,
         }, {
             title: '供应商',
             dataIndex: 'supplierName',
@@ -56,7 +80,7 @@ export default function RawMaterialStock(): React.ReactNode {
         }, {
             title: '合同编号',
             dataIndex: 'contractNumber',
-            width: 120,
+            width: 180,
         }, {
             title: '约定到货时间',
             dataIndex: 'receiveTime',
@@ -76,11 +100,15 @@ export default function RawMaterialStock(): React.ReactNode {
         }, {
             title: '操作',
             dataIndex: 'key',
-            width: 40,
+            width: 160,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={`/stock/rawMaterialWarehousing/detail/${record.id}`}>详情</Link>
+                    <Button type="link" onClick={() => {
+                        setVisible(true);
+                        setId(record.id);
+                    }}>纸质单号</Button>
                 </Space>
             )
         }
@@ -111,7 +139,21 @@ export default function RawMaterialStock(): React.ReactNode {
     useEffect(() => {
         loadData()
     }, [current, pageSize, status, dateString])
+    
+    // 新增回调
+    const handleOk = () => new Promise(async (resove, reject) => {
+        try {
+            await addRef.current?.onSubmit()
+            message.success("完善纸质单号成功...")
+            setVisible(false)
+            history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
     return (
+        <>
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
                 <div className="search_item">
@@ -223,5 +265,29 @@ export default function RawMaterialStock(): React.ReactNode {
                 />
             </div>
         </div>
+        <Modal
+            title={'输入'}
+            visible={visible}
+            width={500}
+            maskClosable={false}
+            onCancel={() => {
+                addRef.current?.resetFields();
+                setVisible(false);
+            }}
+            footer={[
+                <Button key="submit" type="primary" onClick={() => handleOk()}>
+                提交
+                </Button>,
+                <Button key="back" onClick={() => {
+                    addRef.current?.resetFields();
+                    setVisible(false);
+                }}>
+                取消
+                </Button>
+            ]}
+        >
+            <PaperOrderModal ref={addRef} id={id} />
+        </Modal>
+        </>
     )
 }

@@ -4,6 +4,7 @@ import { materialInfo, priceInfo } from "./rawMaterial.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { BaseInfo, DetailTitle, PopTableContent } from "../../common"
+import ApplicationContext from "../../../configuration/ApplicationContext"
 import { PopTable } from './LayerModal';
 interface EditProps {
     id: string
@@ -65,7 +66,17 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [visible, setVisible] = useState<boolean>(false)
     const [popContent, setPopContent] = useState<{ id: string, records: any }>({ id: "", records: {} })
     const [materialForm] = Form.useForm()
-    const [priceInfoForm] = Form.useForm()
+    const [priceInfoForm] = Form.useForm();
+    // 原材料标准
+    const materialStandardName = (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+    // 原材料材质
+    const materialCategoryName = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
     const { data: priceSourceEnum } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/list`)
@@ -135,7 +146,22 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     // 选择原材料名称后的回调处理
     const handleChangeName = (fields: { [key: string]: any}) => {
         console.log(fields, 'fields')
+        materialForm.setFieldsValue({
+            purchasePlanCode: fields.records[0].materialName, // 原材料名称
+            materialSpec: fields.records[0].structureSpec, // 原材料规格
+            materialCategoryName: fields.records[0].materialCategoryName, // 原材料类型
+        })
     }
+    const handleTest =  async (fields: any) => {
+        console.log(fields, 'fields')
+        if (fields.materialName) {
+            materialForm.setFieldsValue({
+                purchasePlanCode: fields.records[0].materialName, // 原材料名称
+                materialSpec: fields.records[0].structureSpec, // 原材料规格
+                materialCategoryName: fields.records[0].materialCategoryName, // 原材料类型
+            })
+        }
+      }
 
     return <Spin spinning={loading}>
         {/* <Modal width={1011} title="选择" destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
@@ -144,7 +170,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         <DetailTitle title="原材料信息" operation={[
             <Button disabled={type === "edit"} type="primary" ghost key="choose" onClick={() => setVisible(true)}>选择</Button>
         ]} /> */}
-        <BaseInfo form={materialForm} col={2} columns={[
+        <BaseInfo form={materialForm} onChange={handleTest} col={2} columns={[
             ...materialInfo.map((item: any) => {
                 if(item.dataIndex === "materialName") {
                     return (
@@ -153,6 +179,22 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                             render() {
                                 return <PopTable data={item} onChange={handleChangeName} />
                             }
+                        }
+                    )
+                }
+                if (item.dataIndex === "materialStandardName") {
+                    return (
+                        {
+                            ...item,
+                            enum: materialStandardName
+                        }
+                    )
+                }
+                if (item.dataIndex === "materialCategoryName11") {
+                    return (
+                        {
+                            ...item,
+                            enum: materialCategoryName
                         }
                     )
                 }

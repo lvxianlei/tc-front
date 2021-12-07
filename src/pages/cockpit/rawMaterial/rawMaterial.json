@@ -231,7 +231,7 @@
         },
         {
             "title": "原材料材质",
-            "dataIndex": "materialCategoryName",
+            "dataIndex": "materialCategoryName11",
             "type": "select",
             "rules": [
                 {

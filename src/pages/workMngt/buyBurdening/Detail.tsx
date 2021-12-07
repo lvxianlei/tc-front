@@ -6,6 +6,7 @@ import { Page } from '../../common'
 import Batcher from "./Batcher"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import IngredientsModal from './IngredientsModal';
 export default function EnquiryList(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, status: string }>()
@@ -91,9 +92,9 @@ export default function EnquiryList(): React.ReactNode {
     })
 
     return <>
-        <Modal title="配料" width={1011} visible={visible} okText="保存并提交" onOk={handleModalOk} onCancel={() => setVisible(false)}>
+        {/* <Modal title="配料" width={1011} visible={visible} okText="保存并提交" onOk={handleModalOk} onCancel={() => setVisible(false)}>
             <Batcher id={params.id} ref={ref} />
-        </Modal>
+        </Modal> */}
         <Page
             path="/tower-supply/purchaseTaskTower/component"
             columns={ComponentDetails.map((item: any) => {
@@ -118,6 +119,12 @@ export default function EnquiryList(): React.ReactNode {
                     children: <Input placeholder="件号/材质/规格" maxLength={200} />
                 }
             ]}
+        />
+        {/* 新增配料 */}
+        <IngredientsModal
+            visible={visible}
+            onOk={handleModalOk}
+            onCancel={() => setVisible(false)}
         />
     </>
 }
