@@ -4,6 +4,8 @@
  * More info please see {@link http://47.111.254.114:3001/project/41/interface/api/6860}
  */
 
+import { StringMap } from "i18next";
+
  export interface IMaterial {
     readonly weightAlgorithm?: string;
     readonly clientId?: string;
@@ -23,6 +25,7 @@
     readonly description?: string;
     readonly unit?: string;
     readonly material?: string;
+    readonly materialType?: string;
 }
 
 

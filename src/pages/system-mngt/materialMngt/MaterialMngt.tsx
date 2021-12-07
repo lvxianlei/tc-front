@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Select, Button, Form } from 'antd';
+import { Space, Input, Select, Button, Form, Modal, Spin, Row, Col, InputNumber, Popconfirm, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 // import styles from './MaterialMngt.module.less';
@@ -13,7 +13,8 @@ import { Link, useHistory } from 'react-router-dom';
 import AuthUtil from '../../../utils/AuthUtil';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import { IMaterialType } from '../material/IMaterial';
+import { IMaterial, IMaterialType } from '../material/IMaterial';
+import { RuleObject } from 'rc-field-form/lib/interface';
 
 export default function MaterialMngt(): React.ReactNode {
     const columns = [
@@ -58,13 +59,26 @@ export default function MaterialMngt(): React.ReactNode {
             key: 'proportion',
             title: '比重',
             width: 200,
-            dataIndex: 'proportion'
+            dataIndex: 'proportion',
+            render: (text: number, record: any, index: any) => {
+                return text == -1 ? <span>-</span> : <span>{ text }</span>
+            }
         },
         {
             key: 'weightAlgorithm',
             title: '算法',
             width: 200,
-            dataIndex: 'weightAlgorithm'
+            dataIndex: 'weightAlgorithm',
+            render: (status: string): React.ReactNode => {
+                switch (status) {
+                    case '0':
+                        return '比重*体积（钢板类）';
+                    case '1':
+                        return '比重*长度（角板类）';
+                    default:
+                        return '-'
+                }
+            }  
         },
         {
             key: 'description',
@@ -80,19 +94,81 @@ export default function MaterialMngt(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    {
-                        record.boltLeader === userId ? <Link to={`/workMngt/boltList/boltListing/${record.id}/${record.boltLeader}/${record.boltStatus}`}>螺栓清单</Link> : <Button type="link" disabled>螺栓清单</Button>
-                    }
-                    {
-                        record.boltStatus === 3 && record.loftingLeader === userId ? <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link> : <Button type="link" disabled>校核</Button>
-                    }
+                    <Button type="link" onClick={ async () => {
+                        const data = await RequestUtil.get<IMaterial[]>(`/tower-system/material/detail/${ record.id }`);
+                        setVisible(true);
+                        const list = materialType.filter((res: IMaterialType) => res.id === data[0].materialType);
+                        setMaterialList(list[0]?.children);
+                        setDetailData(data[0]);
+                        form.setFieldsValue({ ...data[0] });
+                        setTitle('编辑');
+                    } }>编辑</Button>
+                    <Popconfirm title="要删除该数据吗？" placement="topRight" onConfirm={() => {
+                        RequestUtil.delete(`/tower-system/material?id=${record.id}`).then(res => {
+                            setRefresh(!refresh);
+                            message.success('删除成功');
+                        })
+                    }}>
+                        <Button type="link">删除</Button>
+                    </Popconfirm>
+
                 </Space>
             )
         }
     ]
 
-    const userId = AuthUtil.getUserId();
+    const close = () => {
+        setVisible(false);
+        setMaterialList([]);
+        setDetailData({});
+        form.resetFields();
+    }
+
+    const save = () => {
+        if(form) {
+            form.validateFields().then(res => {
+                const values = form.getFieldsValue(true);
+                if(title === '新增') {
+                    RequestUtil.post('/tower-system/material', [values]).then(res => {
+                        close();
+                        setRefresh(!refresh);
+                        message.success('保存成功');
+                    })
+                } else {
+                    RequestUtil.put('/tower-system/material', [{
+                        ...values,
+                        id: detailData.id
+                    }]).then(res => {
+                        close();
+                        setRefresh(!refresh);
+                        message.success('保存成功');
+                    })
+                }
+            })
+        }
+    }
+
+    /**
+     * @description 验证编号是否重复
+     */
+    const checkBatchSn = (value: string): Promise<void | any> => {
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const resData = await RequestUtil.get('/tower-system/material/checkMaterialCode', {
+                materialCode: value,
+                id: detailData.id,
+            });
+            resolve(resData)
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
+
     const [ materialList, setMaterialList ] = useState([]);
+    const [ visible, setVisible ] = useState(false);
+    const [ title, setTitle ] = useState('新增');
+    const [ detailData, setDetailData ] = useState<IMaterial>({});
+    const [ refresh, setRefresh ] = useState<boolean>(false);
+    const [ form ] = Form.useForm();
     const history = useHistory();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: IMaterialType[] = await RequestUtil.get<IMaterialType[]>(`/tower-system/materialCategory`);
@@ -100,59 +176,150 @@ export default function MaterialMngt(): React.ReactNode {
     }), {})
     const materialType: any = data || [];
 
-    return <Page
-        path="/tower-system/material"
-        columns={columns}
-        headTabs={[]}
-        exportPath={`/tower-system/material`}
-        extraOperation={<Space direction="horizontal" size="small">
-            <Button type="primary" ghost>模板下载</Button>
-            <Button type="primary" ghost>导入</Button>
-            <Button type="primary" ghost>新增</Button>
-            <Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>
-        </Space>}
-        searchFormItems={[
-            {
-                name: 'materialType',
-                label: '类别',
-                children: <Form.Item name="materialType" initialValue="">
-                    <Select placeholder="请选择" style={{ width: "150px" }} onChange={ (e) => {
-                        const list = materialType.filter((res: IMaterialType) => res.id === e);
-                        console.log(list)
-                        setMaterialList(list[0].children);
-                    } }>
-                        <Select.Option value="" key="6">全部</Select.Option>
-                        { materialType && materialType.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                        }) }
-                    </Select>
-                </Form.Item>
-            },
-            {
-                name: 'materialCategory',
-                label: '类型',
-                children: <Form.Item name="materialCategory" initialValue="">
-                    <Select placeholder="请选择" style={{ width: "150px" }}>
-                        <Select.Option value="" key="6">全部</Select.Option>
-                        { materialList && materialList.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                        }) }
-                    </Select>
-                </Form.Item>
-            },
-            {
-                name: 'fuzzyMsg',
-                label: '查询',
-                children: <Input placeholder="品名/规格" />
-            }
-        ]}
-        onFilterSubmit={(values: Record<string, any>) => {
-            if (values.updateTime) {
-                const formatDate = values.updateTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-                values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-            }
-            return values;
-        }}
-    />
+    return <Spin spinning={loading}>
+        <Page
+            path="/tower-system/material"
+            columns={columns}
+            headTabs={[]}
+            refresh={refresh}
+            exportPath={`/tower-system/material`}
+            extraOperation={<Space direction="horizontal" size="small">
+                <Button type="primary" ghost>模板下载</Button>
+                <Button type="primary" ghost>导入</Button>
+                <Button type="primary" onClick={() => { setVisible(true); setTitle('新增'); }} ghost>新增</Button>
+                <Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>
+            </Space>}
+            searchFormItems={[
+                {
+                    name: 'materialType',
+                    label: '类别',
+                    children: <Form.Item name="materialType" initialValue="">
+                        <Select placeholder="请选择" style={{ width: "150px" }} onChange={ (e) => {
+                            const list = materialType.filter((res: IMaterialType) => res.id === e);
+                            setMaterialList(list[0].children);
+                        } }>
+                            <Select.Option value="" key="6">全部</Select.Option>
+                            { materialType && materialType.map((item: any) => {
+                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                            }) }
+                        </Select>
+                    </Form.Item>
+                },
+                {
+                    name: 'materialCategory',
+                    label: '类型',
+                    children: <Form.Item name="materialCategory" initialValue="">
+                        <Select placeholder="请选择" style={{ width: "150px" }}>
+                            <Select.Option value="" key="6">全部</Select.Option>
+                            { materialList && materialList.map((item: any) => {
+                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                            }) }
+                        </Select>
+                    </Form.Item>
+                },
+                {
+                    name: 'fuzzyQuery',
+                    label: '查询',
+                    children: <Input placeholder="品名/规格" />
+                }
+            ]}
+            onFilterSubmit={(values: Record<string, any>) => {
+                return values;
+            }}
+        />
+        <Modal title={ title } visible={ visible } width="40%" okText="保存" onCancel={ close } onOk={ save }>
+            <Form form={ form } labelCol={{ span: 6 }}>
+                <Row>
+                    <Col span={ 11 } offset={ 1 }><Form.Item label="类别" name="materialType" rules={[{
+                        required: true,
+                        message: '请选择类别'
+                    }]}>
+                        <Select placeholder="请选择" style={{ width: "100%" }} onChange={ (e) => {
+                            const list = materialType.filter((res: IMaterialType) => res.id === e);
+                            setMaterialList(list[0].children);
+                        } }>
+                            { materialType && materialType.map((item: any) => {
+                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                            }) }
+                        </Select>
+                    </Form.Item></Col>
+                    <Col span={ 11 } offset={ 1 }><Form.Item label="类型" name="materialCategory" rules={[{
+                        required: true,
+                        message: '请选择类型'
+                    }]}>
+                        <Select placeholder="请选择" style={{ width: "100%" }}>
+                            { materialList && materialList.map((item: any) => {
+                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                            }) }
+                        </Select>
+                    </Form.Item></Col>
+                </Row>
+                <Row>
+                    <Col span={ 11 } offset={ 1 }><Form.Item label="品名" name="materialName" rules={[{
+                        required: true,
+                        message: '请输入品名'
+                    }, {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }]}>
+                        <Input maxLength={ 20 }/>
+                    </Form.Item></Col>
+                    <Col span={ 11 } offset={ 1 }><Form.Item label="编号" name="materialCode" rules={[{
+                        required: true,
+                        message: '请输入编号'
+                    }, {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }, {
+                        pattern: /^[0-9]*$/,
+                        message: '仅可输入非负数',
+                    }, {
+                        validator: (rule: RuleObject, value: string, callback: (error?: string) => void) => {
+                            checkBatchSn(value).then(res => {
+                                if (res) {
+                                    callback()
+                                } else {
+                                    callback('物料编号重复');
+                                }
+                            })
+                        }
+                    }]}>
+                        <Input maxLength={ 20 }/>
+                    </Form.Item></Col>
+                </Row>
+                <Row>
+                    <Col span={ 11 } offset={ 1 }><Form.Item label="规格" name="structureSpec" rules={[{
+                        required: true,
+                        message: '请输入编号'
+                    }, {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }, {
+                        pattern: /^[^\u4e00-\u9fa5]*$/,
+                        message: '仅可输入数字/字母/特殊字符',
+                    }]}>
+                        <Input maxLength={ 20 }/>
+                    </Form.Item></Col>
+                    <Col span={ 11 } offset={ 1 }><Form.Item label="比重" name="proportion">
+                        <InputNumber min={ 0 } step="0.0001" precision={ 4 } max={ 99.9999 } style={{ width: '100%' }}/>
+                    </Form.Item></Col>
+                </Row>
+                <Row>
+                    <Col span={ 11 } offset={ 1 }><Form.Item label="比重算法" name="weightAlgorithm">
+                        <Select style={{ width: '100%' }}>
+                            <Select.Option value={ 0 } id='0'>
+                                比重*体积（钢板类）
+                            </Select.Option>
+                            <Select.Option value={ 1 } id='1' >
+                                比重*长度（角板类）
+                            </Select.Option>
+                        </Select>
+                    </Form.Item></Col>
+                    <Col span={ 11 } offset={ 1 }><Form.Item label="备注" name="description">
+                        <Input.TextArea maxLength={ 300 }/>
+                    </Form.Item></Col>
+                </Row>
+            </Form>
+        </Modal>
+    </Spin>
 }
