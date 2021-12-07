@@ -709,8 +709,15 @@
     },
     { //供应商管理
       "name": "供应商管理",
-      "path": "/supplier-mngt/index",
-      "module": "./pages/supplier-mngt/index",
+      "path": "/cooperative/supplier-mngt/index",
+      "module": "./pages/cooperative/supplier-mngt/index",
+      "exact": true,
+      "authority": "supplier_mngt_list"
+    },
+    { //装卸公司管理
+      "name": "装卸公司管理",
+      "path": "/cooperative/stevedoring-company-mngt/stevedoringCompany",
+      "module": "./pages/cooperative/stevedoring-company-mngt/StevedoringCompanyMngt",
       "exact": true,
       "authority": "supplier_mngt_list"
     },

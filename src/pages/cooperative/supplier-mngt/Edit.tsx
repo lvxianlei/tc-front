@@ -1,10 +1,10 @@
 import React, { forwardRef, useImperativeHandle } from "react"
 import { Spin, Form } from "antd"
-import { DetailTitle, BaseInfo, CommonTable } from "../common"
+import { DetailTitle, BaseInfo, CommonTable } from "../../common"
 import { editColums, oprationInfo, supplierFormHead } from "./supplier.json"
-import RequestUtil from '../../utils/RequestUtil'
+import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import ApplicationContext from "../../configuration/ApplicationContext"
+import ApplicationContext from "../../../configuration/ApplicationContext"
 interface EditProps {
     id: string
     type: "new" | "edit"

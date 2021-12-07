@@ -2,12 +2,12 @@
 import React, { Key, useRef, useState } from 'react'
 import { Input, Select, Button, Modal, message } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../common'
+import { Page } from '../../common'
 import { supplierMngt } from "./supplier.json"
-import ApplicationContext from "../../configuration/ApplicationContext"
+import ApplicationContext from "../../../configuration/ApplicationContext"
 import Edit from "./Edit"
 import Overview from "./Overview"
-import RequestUtil from '../../utils/RequestUtil'
+import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 export default function SupplierMngt(): React.ReactNode {
     const history = useHistory()
