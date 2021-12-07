@@ -87,6 +87,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         setColumns(data.columns)
     }, [JSON.stringify(data.columns)])
 
+    
+
     return <>
         {searchs.length > 0 && <Form form={form} onFinish={async () => {
             await run()

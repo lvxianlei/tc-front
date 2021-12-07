@@ -11,14 +11,30 @@ export default function View(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-hr/labor/contract/detail`,{contractId: params.id})
+        const data: any = await RequestUtil.get(`/tower-hr/labor/contract/detail`,{contractId: params.id})
+        data.newDepartmentName = data.departmentName+'/'+data.teamName
         resole(data)
     }), {})
     const detailData: any = data;
     const tableColumns = [
         { title: '合同编号', dataIndex: 'contractNumber', key: 'contractNumber' },
         { title: '合同公司', dataIndex: 'signedCompany', key: 'signedCompany' },
-        { title: '合同类型', dataIndex: 'contractType', key: 'contractType' },
+        { title: '合同类型', dataIndex: 'contractType', key: 'contractType', 
+            render: (contractType: number): React.ReactNode => {
+                switch (contractType) {
+                    case 0:
+                        return '固定期限劳动合同';
+                    case 1:
+                        return '无固定期限劳动合同';
+                    case 2:
+                        return '超龄返聘合同';
+                    case 3:
+                        return '实习合同';
+                    case 4:
+                        return '其他合同';
+                }
+            } 
+        },
         { title: '合同开始时间', dataIndex: 'contractStartDate', key: 'contractStartDate' },
         { title: '合同结束时间', dataIndex: 'contractEndDate', key: 'contractEndDate'},
         { title: '操作', dataIndex: 'operation', key: 'operation',render: (_: any, record: any, index: number): React.ReactNode => (

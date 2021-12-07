@@ -59,7 +59,9 @@
         {
             "title": "出生日期",
             "width": 100,
-            "dataIndex": "birthday"
+            "dataIndex": "birthday",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "年龄",
@@ -84,7 +86,9 @@
         {
             "title": "入职时间",
             "width": 100,
-            "dataIndex": "inductionDate"
+            "dataIndex": "inductionDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "员工性质",
@@ -113,7 +117,9 @@
         {
             "title": "转正日期",
             "width": 100,
-            "dataIndex": "positiveDate"
+            "dataIndex": "positiveDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "工龄",
@@ -144,35 +150,121 @@
     "baseInfo": [
         {
             "title": "员工姓名",
-            "dataIndex": "employeeName"
+            "dataIndex": "employeeName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入员工姓名..."
+                }
+            ]
         },
         {
             "title": "性别",
-            "dataIndex": "gender"
+            "dataIndex": "gender",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "男",
+                    "value": "男"
+                },
+                {
+                    "label": "女",
+                    "value": "女"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择性别..."
+                }
+            ]
         },
         {
             "title": "出生日期",
-            "dataIndex": "birthday"
+            "dataIndex": "birthday",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "民族",
-            "dataIndex": "national"
+            "dataIndex": "national",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入民族..."
+                }
+            ]
         },
         {
             "title": "婚姻状况",
-            "dataIndex": "maritalStatus"
+            "dataIndex": "maritalStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "已婚",
+                    "value": 1
+                },
+                {
+                    "label": "未婚",
+                    "value": 2
+                },
+                {
+                    "label": "离婚",
+                    "value": 3
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择婚姻状况..."
+                }
+            ]
         },
         {
             "title": "年龄",
-            "dataIndex": "age"
+            "dataIndex": "age",
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入年龄..."
+                }
+            ]
         },
         {
             "title": "籍贯",
-            "dataIndex": "nativePlace"
+            "dataIndex": "nativePlace",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入籍贯..."
+                }
+            ]
         },
         {
             "title": "政治面貌",
-            "dataIndex": "politicsStatus"
+            "dataIndex": "politicsStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "团员",
+                    "value": 1
+                },
+                {
+                    "label": "党员",
+                    "value": 2
+                },
+                {
+                    "label": "群众",
+                    "value": 3
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择政治面貌..."
+                }
+            ]
         },
         {
             "title": "党组织关系所在支部",
@@ -180,7 +272,52 @@
         },
         {
             "title": "学历",
-            "dataIndex": "education"
+            "dataIndex": "education",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "博士",
+                    "value": 1
+                },
+                {
+                    "label": "硕士",
+                    "value": 2
+                },
+                {
+                    "label": "本科",
+                    "value": 3
+                },
+                {
+                    "label": "大专",
+                    "value": 4
+                },
+                {
+                    "label": "高中",
+                    "value": 5
+                },
+                {
+                    "label": "中专",
+                    "value": 6
+                },
+                {
+                    "label": "中学",
+                    "value": 7
+                },
+                {
+                    "label": "小学",
+                    "value": 8
+                },
+                {
+                    "label": "其他",
+                    "value": 9
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择学历..."
+                }
+            ]
         },
         {
             "title": "毕业院校",
@@ -192,19 +329,46 @@
         },
         {
             "title": "毕业日期",
-            "dataIndex": "graduationDate"
+            "dataIndex": "graduationDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "身份证号",
-            "dataIndex": "idNumber"
+            "dataIndex": "idNumber",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入身份证号..."
+                }
+            ]
         },
         {
             "title": "身份证有效期",
-            "dataIndex": "cardValidityDate"
+            "dataIndex": "cardValidityDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "户口类别",
-            "dataIndex": "accountType"
+            "dataIndex": "accountType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "农业",
+                    "value": 1
+                },
+                {
+                    "label": "城镇",
+                    "value": 2
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择户口类别..."
+                }
+            ]
         },
         {
             "title": "联系电话",
@@ -212,39 +376,174 @@
         },
         {
             "title": "紧急联系人",
-            "dataIndex": "emergencyContact"
+            "dataIndex": "emergencyContact",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入紧急联系人..."
+                }
+            ]
         },
         {
             "title": "紧急联系电话",
-            "dataIndex": "emergencyContactPhone"
+            "dataIndex": "emergencyContactPhone",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入紧急联系电话..."
+                }
+            ]
         },
         {
             "title": "户口所在地",
-            "dataIndex": "accountLocation"
+            "dataIndex": "accountLocation",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入户口所在地..."
+                }
+            ]
         },
         {
             "title": "现住址",
-            "dataIndex": "currentAddress"
+            "dataIndex": "currentAddress",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入现住址..."
+                }
+            ]
         },
         {
             "title": "银行卡号",
-            "dataIndex": "bankCardNumber"
+            "dataIndex": "bankCardNumber",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入银行卡号..."
+                }
+            ]
         },
         {
             "title": "开户银行",
-            "dataIndex": "bankName"
+            "dataIndex": "bankName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入开户银行..."
+                }
+            ]
         },
         {
             "title": "是否残疾",
-            "dataIndex": "isDisability"
+            "dataIndex": "isDisability",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "是",
+                    "value": 1
+                },
+                {
+                    "label": "否",
+                    "value": 2
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择是否残疾..."
+                }
+            ]
         },
         {
             "title": "残疾等级",
-            "dataIndex": "disabilityLevel"
+            "dataIndex": "disabilityLevel",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "一级",
+                    "value": 1
+                },
+                {
+                    "label": "二级",
+                    "value": 2
+                },
+                {
+                    "label": "三级",
+                    "value": 3
+                },
+                {
+                    "label": "四级",
+                    "value": 4
+                },
+                {
+                    "label": "五级",
+                    "value": 5
+                },
+                {
+                    "label": "六级",
+                    "value": 6
+                },
+                {
+                    "label": "七级",
+                    "value": 7
+                },
+                {
+                    "label": "八级",
+                    "value": 8
+                },
+                {
+                    "label": "九级",
+                    "value": 9
+                },
+                {
+                    "label": "十级",
+                    "value": 10
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择残疾等级..."
+                }
+            ]
         },
         {
             "title": "残疾类别",
-            "dataIndex": "disabilityCategory"
+            "dataIndex": "disabilityCategory",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "视力残疾",
+                    "value": 1
+                },
+                {
+                    "label": "听力残疾",
+                    "value": 2
+                },
+                {
+                    "label": "言语残疾",
+                    "value": 3
+                },
+                {
+                    "label": "智力残疾",
+                    "value": 4
+                },
+                {
+                    "label": "肢体残疾",
+                    "value": 5
+                },
+                {
+                    "label": "肢体残疾",
+                    "value": 6
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择残疾类别..."
+                }
+            ]
         },
         {
             "title": "残疾证号",
