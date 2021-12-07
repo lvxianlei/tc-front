@@ -252,7 +252,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "statusName",
+            "dataIndex": "remark",
             "type": "textarea"
         }
     ],

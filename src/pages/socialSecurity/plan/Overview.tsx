@@ -5,6 +5,7 @@ import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
 import { setting, insurance, business } from "./plan.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import moment from "moment"
 export default function Overview() {
     const history = useHistory()
     const params = useParams<{ planId: string }>()
@@ -21,9 +22,17 @@ export default function Overview() {
             <DetailTitle title="基本信息" />
             <BaseInfo columns={setting} dataSource={data || {}} />
             <DetailTitle title="社保公积金" />
-            <CommonTable columns={insurance} dataSource={[]} />
+            <CommonTable columns={insurance.map((item: any) => {
+                if (item.dataIndex === "effectiveMonth") {
+                    return ({
+                        ...item,
+                        render: (value: any, records: any) => <>{`${moment(value).format("YYYY-MM-DD")}~${moment(records.expirationMonth).format("YYYY-MM-DD")}`}</>
+                    })
+                }
+                return item
+            })} dataSource={data?.socialSecurityList || []} />
             <DetailTitle title="商业保险" />
-            <CommonTable columns={business} dataSource={[]} />
+            <CommonTable columns={business} dataSource={data?.businessList || []} />
         </Spin>
     </DetailContent>
 }

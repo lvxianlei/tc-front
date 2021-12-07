@@ -59,38 +59,45 @@
     "setting": [
         {
             "title": "姓名",
-            "width": 100,
-            "dataIndex": "employeeName"
+            "dataIndex": "employeeName",
+            "disabled": true
         },
         {
             "title": "公司",
-            "width": 100,
-            "dataIndex": "companyName"
+            "dataIndex": "companyName",
+            "disabled": true
         },
         {
             "title": "部门/班组",
-            "width": 100,
-            "dataIndex": "teamName"
+            "dataIndex": "teamName",
+            "disabled": true
         },
         {
             "title": "身份证号",
-            "width": 100,
-            "dataIndex": "idNumber"
+            "dataIndex": "idNumber",
+            "disabled": true
         },
         {
             "title": "入职日期",
-            "width": 100,
-            "dataIndex": "inductionDate"
+            "dataIndex": "inductionDate",
+            "disabled": true
         }
     ],
     "insurance": [
         {
             "title": "方案名称",
-            "dataIndex": "insurancePlanName"
+            "dataIndex": "insurancePlanName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择方案名称..."
+                }
+            ]
         },
         {
             "title": "缴纳公司",
-            "dataIndex": "paymentCompany"
+            "dataIndex": "paymentCompany",
+            "disabled": true
         },
         {
             "title": "社保账号",
@@ -98,15 +105,32 @@
         },
         {
             "title": "社保开始缴纳月",
-            "dataIndex": "ssStartMonth"
+            "dataIndex": "ssStartMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择社保开始缴纳月..."
+                }
+            ]
         },
         {
             "title": "社保最后缴纳月",
-            "dataIndex": "ssEndMonth"
+            "dataIndex": "ssEndMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "社保申报基数",
-            "dataIndex": "ssDeclarationBase"
+            "dataIndex": "ssDeclarationBase",
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入社保申报基数..."
+                }
+            ]
         },
         {
             "title": "公积金账号",
@@ -114,15 +138,32 @@
         },
         {
             "title": "公积金开始缴纳月",
-            "dataIndex": "pfaStartMonth"
+            "dataIndex": "pfaStartMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择公积金开始缴纳月..."
+                }
+            ]
         },
         {
             "title": "公积金最后缴纳月",
-            "dataIndex": "pfaEndMonth"
+            "dataIndex": "pfaEndMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "公积金申报基数",
-            "dataIndex": "pfaDeclarationBase"
+            "dataIndex": "pfaDeclarationBase",
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入公积金申报基数..."
+                }
+            ]
         }
     ],
     "business": [

@@ -60,9 +60,12 @@ export default function LabourList(): React.ReactNode {
         },
         {
             key: 'departmentName',
-            title: '部门',
+            title: '部门/班组',
             width: 100,
-            dataIndex: 'departmentName'
+            dataIndex: 'departmentName',
+            render:(_:any,record:any)=>{
+                return record.departmentName+'/'+record.teamName
+            }
         },
         {
             key: 'postName',
@@ -80,7 +83,21 @@ export default function LabourList(): React.ReactNode {
             key: 'contractType',
             title: '合同类型',
             width: 100,
-            dataIndex: 'contractType'
+            dataIndex: 'contractType',
+            render: (contractType: number): React.ReactNode => {
+                switch (contractType) {
+                    case 0:
+                        return '固定期限劳动合同';
+                    case 1:
+                        return '无固定期限劳动合同';
+                    case 2:
+                        return '超龄返聘合同';
+                    case 3:
+                        return '实习合同';
+                    case 4:
+                        return '其他合同';
+                }
+            } 
         },
         {
             key: 'contractStartDate',
@@ -122,10 +139,10 @@ export default function LabourList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/view/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/edit`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>编辑</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/change`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>变更</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/renewal`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>续签</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/view/${record.id}`)}} type='link' >查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/edit`)}} type='link' >编辑</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/change`)}} type='link' >变更</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/renewal`)}} type='link' >续签</Button>
                 </Space>
             )
         }
