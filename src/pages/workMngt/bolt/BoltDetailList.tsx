@@ -55,7 +55,7 @@ export default function BoltCheck(): React.ReactNode {
                             placement="bottomRight"
                             title='确认删除?'
                             onConfirm={() => {
-                                deleteItem(item.id)
+                                deleteItem(item.id, item.productNumVOList)
                             }}
                             okText="是"
                             cancelText="否"
@@ -140,8 +140,12 @@ export default function BoltCheck(): React.ReactNode {
      * 删除
      * @param heightId 
      */
-    const deleteItem = async (heightId: string) => {
-        await RequestUtil.delete(`/tower-science/boltRecord/deleteHeight/${heightId}`)
+    const deleteItem = async (heightId: string, record: Record<string, any>) => {
+        await RequestUtil.delete(`/tower-science/boltRecord/deleteHeight`, {
+            productNumVOList: record,
+            id: heightId,
+            productCategoryId: params.id,
+        })
         message.success('操作成功')
         setRefresh(!refresh)
     }

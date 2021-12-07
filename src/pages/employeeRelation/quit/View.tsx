@@ -8,16 +8,17 @@ import RequestUtil from '../../../utils/RequestUtil';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '审批人', dataIndex: 'ptcreateDeName', key: 'createDeptName', },
-    { title: '审批时间', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '审批结果', dataIndex: 'createTime', key: 'createTime' },
-    { title: '审批意见', dataIndex: 'currentStatus', key: 'currentStatus'}
+    { title: '审批人', dataIndex: 'approverName', key: 'approverName', },
+    { title: '审批时间', dataIndex: 'approveDate', key: 'approveDate' },
+    { title: '审批结果', dataIndex: 'approveResult', key: 'approveResult' },
+    { title: '审批意见', dataIndex: 'approveOpinion', key: 'approveOpinion'}
 ]
 export default function View(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
+        data.newDepartmentName = data.departmentName+'/'+data.teamName
         resole(data)
     }), {})
     const detailData: any = data;
@@ -29,7 +30,7 @@ export default function View(): React.ReactNode {
             <DetailTitle title="员工离职管理"/>
             <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
             <DetailTitle title="审批记录" />
-            <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
+            <CommonTable columns={tableColumns} dataSource={detailData?.approveLog} pagination={ false } />
             </DetailContent>
         </Spin>
     </>

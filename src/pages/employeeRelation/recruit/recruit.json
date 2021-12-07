@@ -13,7 +13,7 @@
             "title": "民族"
         },
         {
-            "dataIndex": "departmentName",
+            "dataIndex": "newDepartmentName",
             "title": "入职部门/班组"
         },
         {

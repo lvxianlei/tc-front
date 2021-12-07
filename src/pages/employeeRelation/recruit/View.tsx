@@ -12,15 +12,16 @@ export default function RecruitView(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/employee/information/detail`,{archivesId: params.id})
+        data.newDepartmentName = data.departmentName+'/'+data.teamName
         resole(data)
     }), {})
     const detailData: any = data;
     const tableColumns = [
         { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-        { title: '审批人', dataIndex: 'signedCompany', key: 'signedCompany' },
-        { title: '审批时间', dataIndex: 'contractType', key: 'contractType' },
-        { title: '审批结果', dataIndex: 'contractStartDate', key: 'contractStartDate' },
-        { title: '审批意见', dataIndex: 'contractEndDate', key: 'contractEndDate'}
+        { title: '审批人', dataIndex: 'approverName', key: 'approverName' },
+        { title: '审批时间', dataIndex: 'approveDate', key: 'approveDate' },
+        { title: '审批结果', dataIndex: 'approveResult', key: 'approveResult' },
+        { title: '审批意见', dataIndex: 'approveOpinion', key: 'approveOpinion'}
     ]
     return <>
         <Spin spinning={loading}>
@@ -30,7 +31,7 @@ export default function RecruitView(): React.ReactNode {
             <DetailTitle title="员工入职管理"/>
             <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
             <DetailTitle title="审批记录" />
-            <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
+            <CommonTable columns={tableColumns} dataSource={detailData?.approveLog} pagination={ false } />
             </DetailContent>
         </Spin>
     </>

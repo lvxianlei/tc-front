@@ -3,7 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  * More info please see {@link http://47.111.254.114:3001/project/83/interface/api/4079}
  */
-
+import { FileProps } from '../../common/Attachment';
 export interface IUser {
     readonly account?: string;
     readonly clientId?: string;
@@ -28,4 +28,33 @@ export interface IUser {
     readonly userId?: number;
     readonly userRoleList?: number[];
     readonly userRoleNames?: string;
+}
+
+export interface EditRefProps {
+    id?: string
+    onSubmit: () => void
+    resetFields: () => void
+}
+export interface IResponseData {
+    readonly current: number;
+    readonly size: number;
+    readonly total: number;
+    readonly records: IUser[]
+}
+
+export interface IAnnouncement {
+    readonly id?: string;
+    readonly title?: string;
+    readonly content?: string;
+    readonly state?: number;
+    readonly updateTime?: string;
+    readonly userNames?: string;
+    readonly attachInfoDtos?: FileProps[];
+    readonly attachVos?: FileProps[];
+    readonly staffList?: string[];
+}
+
+export interface EditProps {
+    id?: string
+    ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
 }

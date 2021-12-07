@@ -13,10 +13,7 @@ export default function PlanList(): React.ReactNode {
 
     return (
         <Page
-            path={
-                // `/tower-hr/insuranceArchives`
-                `/tower-finance/invoicing`
-            }
+            path={`/tower-hr/insuranceArchives`}
             columns={[
                 {
                     key: 'index',

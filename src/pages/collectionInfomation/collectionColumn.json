@@ -42,7 +42,12 @@
         },
         {
             "title": "确认状态",
-            "dataIndex": "confirmStatus"
+            "dataIndex": "confirmStatus",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "待确认" },
+                { "value": 2, "label": "已确认" }
+            ]
         },
         {
             "title": "备注",

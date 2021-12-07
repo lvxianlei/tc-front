@@ -23,6 +23,10 @@ const workColums = [
         "title": "姓名："
     },
     {
+        "dataIndex": "phone",
+        "title": "手机号："
+    },
+    {
         "dataIndex": "number",
         "title": "工号："
     },

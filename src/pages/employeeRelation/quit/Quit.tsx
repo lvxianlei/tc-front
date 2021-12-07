@@ -20,7 +20,11 @@ export default function Quit(): React.ReactNode {
         const post: any = await RequestUtil.get(`/tower-system/station?size=1000`);
         setPost(post?.records)
         const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
-        form.setFieldsValue(params.id?{...data,departureDate: data?.departureDate?moment(data?.departureDate):''}:{})
+        form.setFieldsValue(params.id!=='0'?{
+            ...data,
+            departureDate: data?.departureDate?moment(data?.departureDate):'',
+            newDepartmentName: data.departmentName+'/'+data.teamName,
+        }:{})
         resole(data)
     }), {})
     const detailData: any = data;
@@ -76,12 +80,12 @@ export default function Quit(): React.ReactNode {
                                         departmentName: selectedRows[0].departmentName,
                                         teamName: selectedRows[0].teamName,
                                         newDepartmentName: selectedRows[0].departmentName+'/'+selectedRows[0].teamName,
-                                        postName: selectedRows[0].postName,
+                                        postId: selectedRows[0].postId,
                                         inductionDate: moment(selectedRows[0].inductionDate).format('YYYY-MM-DD'),
                                         employeeType: selectedRows[0].employeeType,
-                                        employeeId: selectedRows[0].employeeId,
+                                        employeeId: selectedRows[0].id,
                                     });
-                            } } buttonType="link" buttonTitle="+选择员工" /> } disabled/>
+                            } } buttonType="link" buttonTitle="+选择员工" type={1}/> } disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -97,7 +101,7 @@ export default function Quit(): React.ReactNode {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='岗位' name='postName'>
+                        <Form.Item label='岗位' name='postId'>
                             <Select style={{width:'100%'}} disabled>
                                 {post && post.map((item: any) => {
                                     return <Select.Option key={item.id} value={item.id}>{item.stationName}</Select.Option>
@@ -113,7 +117,7 @@ export default function Quit(): React.ReactNode {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='员工性质' name='employeeType'>
+                        <Form.Item label='员工性质' name='employeeNature'>
                             <Select placeholder="请选择" style={{ width: '100%' }} disabled>
                                 <Select.Option value={1} key="1">正式员工</Select.Option>
                                 <Select.Option value={2} key="2">短期派遣员工</Select.Option>

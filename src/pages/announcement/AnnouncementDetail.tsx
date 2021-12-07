@@ -84,7 +84,7 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
         ]}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseColums} dataSource={detailData} col={2} />
-            <Attachment dataSource={ detailData.attachVos }/>
+            <Attachment dataSource={ detailData.attachInfoVos }/>
             <DetailTitle title="操作信息" />
             <CommonTable columns={tableColumns} dataSource={detailData.businessRecordVos} pagination={false} />
         </DetailContent>
