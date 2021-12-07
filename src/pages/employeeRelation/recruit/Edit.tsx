@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message} from 'antd';
+import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message, InputNumber} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -9,9 +9,8 @@ import { RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
 import AuthUtil from '../../../utils/AuthUtil';
 import EmployeeDeptSelectionComponent, { IDept } from '../EmployeeDeptModal';
-import { employeeTypeOptions } from '../../../configuration/DictionaryOptions';
+import { bankTypeOptions, employeeTypeOptions } from '../../../configuration/DictionaryOptions';
 import moment from 'moment';
-
 
 export default function RecruitEdit(): React.ReactNode {
     const history = useHistory()
@@ -19,15 +18,17 @@ export default function RecruitEdit(): React.ReactNode {
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>();
     const [post, setPost] = useState([]);
-    const [bank, setBank] = useState([]);
     const [ selectedDeptRows, setSelectedDeptRows ] = useState<IDept[] | any>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.id && await RequestUtil.get(`/tower-hr/employee/information/detail`,{archivesId: params.id})
         const post: any = await RequestUtil.get(`/tower-system/station?size=1000`);
         setPost(post?.records)
-        const bank: any = await RequestUtil.get(`/tower-supply/supplier?size=1000`)
-        setBank(bank?.records)
-        form.setFieldsValue(params.id?{...data,workTime: data?.workTime?moment(data?.workTime):''}:{})
+        form.setFieldsValue(params.id?{
+            ...data,
+            newDepartmentName: data?.departmentName+'/'+data?.teamName,
+            workTime: data?.workTime?moment(data?.workTime):'',
+            postType: data?.postType?data?.postType.split(','):[]
+        }:{})
         resole(data)
     }), {})
     const detailData: any = data;
@@ -82,8 +83,10 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.fileDTOS= attachRef.current?.getDataSource();
                             value.id = params.id;
+                            value.workTime = moment(value.workTime).format('YYYY-MM-DD HH:mm:ss');
+                            value.postType = value.postType.length>0&&value.postType.join(',')
                             value.submitType = 'save';
-                            RequestUtil.post(`/tower-hr/labor/contract`, value).then(()=>{
+                            RequestUtil.post(`/tower-hr/employee/information`, value).then(()=>{
                                 message.success('保存成功！')
                             }).then(()=>{
                                 history.push('/employeeRelation/recruit')
@@ -96,8 +99,10 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.fileDTOS= attachRef.current?.getDataSource();
                             value.id = params.id;
+                            value.workTime = moment(value.workTime).format('YYYY-MM-DD HH:mm:ss');
+                            value.postType = value.postType.join(',')
                             value.submitType = 'submit';
-                            RequestUtil.post(`/tower-hr/labor/contract`, value).then(()=>{
+                            RequestUtil.post(`/tower-hr/employee/information`, value).then(()=>{
                                 message.success('提交成功！')
                             }).then(()=>{
                                 history.push('/employeeRelation/recruit')
@@ -112,7 +117,7 @@ export default function RecruitEdit(): React.ReactNode {
             <Form form={ form } { ...formItemLayout }>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label='应聘人姓名' name='applicantName' rules={[{
+                        <Form.Item label='应聘人姓名' name='employeeName' rules={[{
                             required:true, 
                             message:'请填写应聘人姓名',
                             
@@ -159,10 +164,9 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择入职部门/班组'
                         }]} name='newDepartmentName'>
-                            <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
+                            <Input maxLength={ 50 }  addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
                                     setSelectedDeptRows(selectedRows);
                                     form.setFieldsValue({
-                                        employeeName: selectedRows[0].employeeName,
                                         newDepartmentName: selectedRows[0].parentName+'/'+selectedRows[0].name,
                                         departmentId: selectedRows[0].parentId,
                                         teamId: selectedRows[0].id,
@@ -228,7 +232,7 @@ export default function RecruitEdit(): React.ReactNode {
                 </Row>
                 <Row>
                     <Col span={12}>
-                        {/* <Form.Item label='员工分组' rules={[{
+                        <Form.Item label='员工分组' rules={[{
                             required:true, 
                             message:'请选择员工分组'
                         }]} name='postType'>
@@ -237,7 +241,7 @@ export default function RecruitEdit(): React.ReactNode {
                                     return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                                 })}
                             </Select>
-                        </Form.Item> */}
+                        </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item label='年龄' name='age'>
@@ -340,10 +344,10 @@ export default function RecruitEdit(): React.ReactNode {
                         <Form.Item label='开户银行' rules={[{
                             required:true, 
                             message:'请选择开户银行'
-                        }]} name='bankName'>
+                        }]} name='bankNameId'>
                            <Select style={{width:'100%'}}>
-                                {bank && bank.map((item: any) => {
-                                    return <Select.Option key={item.id} value={item.id}>{item.bankDeposit}</Select.Option>
+                                {bankTypeOptions && bankTypeOptions.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                                 })}
                             </Select>
                         </Form.Item>
@@ -352,7 +356,7 @@ export default function RecruitEdit(): React.ReactNode {
 
                 <Row>
                     <Col span={24}>
-                        <Form.Item label='备注' name='remark'>
+                        <Form.Item label='备注' name='remark' labelCol= {{span:3}} wrapperCol={{ span: 20 }}>
                             <Input.TextArea maxLength={400} showCount/>
                         </Form.Item>
                     </Col>

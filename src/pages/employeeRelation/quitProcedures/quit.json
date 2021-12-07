@@ -9,7 +9,7 @@
             "title": "公司"
         },
         {
-            "dataIndex": "departmentName",
+            "dataIndex": "newDepartmentName",
             "title": "部门/班组"
         },
         {
@@ -21,8 +21,27 @@
             "title": "入职日期"
         },
         {
-            "dataIndex": "employeeType",
-            "title": "员工性质"
+            "dataIndex": "employeeNature",
+            "title": "员工性质",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "正式员工",
+                    "value": 1
+                },
+                {
+                    "label": "短期派遣员工",
+                    "value": 2
+                },
+                {
+                    "label": "超龄员工",
+                    "value": 3
+                },
+                {
+                    "label": "实习员工",
+                    "value": 4
+                }
+            ]
         }
         ,
         {
@@ -54,11 +73,21 @@
     "quitInfoData":[
         {
             "dataIndex": "isTransactProcedure",
-            "title": "是否办理离职手续"
+            "title": "是否办理离职手续",
+            "type": "select",
+            "enum": [
+                { "value": true, "label": "是" },
+                { "value": false, "label": "否" }
+            ]
         },
         {
             "dataIndex": "isRemoveContract",
-            "title": "是否领取解除劳动合同书"
+            "title": "是否领取解除劳动合同书",
+            "type": "select",
+            "enum": [
+                { "value": true, "label": "是" },
+                { "value": false, "label": "否" }
+            ]
         },
         {
             "dataIndex": "transactDate",

@@ -11,11 +11,12 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './BoltList.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
-import { ColumnType } from 'antd/lib/table';
+import Table, { ColumnType } from 'antd/lib/table';
 import BoltNewModal from './BoltNewModal';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import AuthUtil from '../../../utils/AuthUtil';
 import { boltTypeOptions } from '../../../configuration/DictionaryOptions';
+import AbstractMngtComponentStyles from '../../../components/AbstractMngtComponent.module.less';
 
 interface IData {
     readonly unbuckleLength?: number
@@ -369,7 +370,7 @@ export default function BoltList(): React.ReactNode {
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </Space>
             <Form form={form}>
-                <CommonTable columns={tableColumns} dataSource={dataSource} pagination={false} />
+                <Table columns={tableColumns} dataSource={dataSource} pagination={false} onRow={ () => ({ className: AbstractMngtComponentStyles.tableRow })}/>
             </Form>
         </DetailContent>
         <Modal

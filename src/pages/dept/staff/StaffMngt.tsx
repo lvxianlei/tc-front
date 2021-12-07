@@ -96,6 +96,12 @@ export default function StaffMngt(): React.ReactNode {
             dataIndex: 'roleName'
         },
         {
+            key: 'description',
+            title: '备注',
+            width: 200,
+            dataIndex: 'description'
+        },
+        {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',

@@ -59,11 +59,11 @@ export default function TransferList(): React.ReactNode {
                     label: '调派类型',
                     children: <Select placeholder="请选择" style={{ width: "150px" }}>
                         <Select.Option value={''} key="">全部</Select.Option>
-                        <Select.Option value={0} key="0">晋升</Select.Option>
-                        <Select.Option value={1} key="1">调动</Select.Option>
-                        <Select.Option value={2} key="2">借调</Select.Option>
-                        <Select.Option value={3} key="3">外派</Select.Option>
-                        <Select.Option value={4} key="4">工商调动</Select.Option>
+                        <Select.Option value={1} key="1">晋升</Select.Option>
+                        <Select.Option value={2} key="2">调动</Select.Option>
+                        <Select.Option value={3} key="3">借调</Select.Option>
+                        <Select.Option value={4} key="4">外派</Select.Option>
+                        <Select.Option value={5} key="5">工商调动</Select.Option>
                     </Select>
                 },
                 {

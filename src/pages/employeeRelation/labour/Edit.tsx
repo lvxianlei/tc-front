@@ -144,7 +144,7 @@ export default function Edit(): React.ReactNode {
                 <Row>
                     
                     <Col span={24}>
-                        <Form.Item label='备注' name='remark'>
+                        <Form.Item label='备注' name='remark' labelCol= {{span:3}} wrapperCol={{ span: 20 }}>
                             <Input.TextArea maxLength={400} showCount/>
                         </Form.Item>
                     </Col>
