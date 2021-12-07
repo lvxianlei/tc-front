@@ -69,11 +69,11 @@ export default function Quit(): React.ReactNode {
                         <Form.Item label='员工姓名' rules={[{
                             required:true, 
                             message:'请选择员工姓名'
-                        }]} initialValue={1} name='employeeName'>
+                        }]}  name='employeeName'>
                             <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
                                     form.setFieldsValue({
-                                        employeeName: selectedRows[0].employeeName||'1',
+                                        employeeName: selectedRows[0].employeeName,
                                         companyName: selectedRows[0].companyName,
                                         departmentId: selectedRows[0].departmentId,
                                         teamId: selectedRows[0].teamId,
@@ -82,7 +82,7 @@ export default function Quit(): React.ReactNode {
                                         newDepartmentName: selectedRows[0].departmentName+'/'+selectedRows[0].teamName,
                                         postId: selectedRows[0].postId,
                                         inductionDate: moment(selectedRows[0].inductionDate).format('YYYY-MM-DD'),
-                                        employeeType: selectedRows[0].employeeType,
+                                        employeeNature: selectedRows[0].employeeNature,
                                         employeeId: selectedRows[0].id,
                                     });
                             } } buttonType="link" buttonTitle="+选择员工" type={1}/> } disabled/>

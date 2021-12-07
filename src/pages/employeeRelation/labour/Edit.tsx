@@ -1,19 +1,30 @@
-import React, { useRef } from 'react'
-import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message} from 'antd';
+import React, { useRef, useState } from 'react'
+import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message, TreeSelect} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
-
+import moment from 'moment';
+import { TreeNode } from 'antd/lib/tree-select';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
 export default function Edit(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, status: string }>();
     const [form] = Form.useForm();
+    const [company, setCompany] = useState([]);
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/labor/contract/detail`,{contractId: params.id})
+        const result:any = await RequestUtil.get(`/tower-system/department/company`)
+        form.setFieldsValue({
+            ...data,
+            contractEndDate: data.contractEndDate?moment(data.contractEndDate):'',
+            contractStartDate: data.contractStartDate?moment(data.contractStartDate):'',
+            newDepartmentName: data.departmentName+'/'+data.teamName
+        })
+        setCompany(result)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -21,15 +32,58 @@ export default function Edit(): React.ReactNode {
         labelCol: { span: 6 },
         wrapperCol: { span: 16 }
     };
+    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles && roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.title = role.name;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
+
+    const renderTreeNodes = (data:any) => data.map((item:any) => {
+        if (item.children && item.children.length > 0) {
+            item.disabled = true;
+            return (<TreeNode key={ item.id } title={ item.name } value={ item.id }>
+                { renderTreeNodes(item.children) }
+            </TreeNode>);
+        }
+        return <TreeNode { ...item } key={ item.id } title={ item.name } value={ item.id } />;
+    });
     const tableColumns = [
         { title: '合同编号', dataIndex: 'contractNumber', key: 'contractNumber' },
         { title: '合同公司', dataIndex: 'signedCompany', key: 'signedCompany' },
-        { title: '合同类型', dataIndex: 'contractType', key: 'contractType' },
-        { title: '合同开始时间', dataIndex: 'contractStartDate', key: 'contractStartDate' },
-        { title: '合同结束时间', dataIndex: 'contractEndDate', key: 'contractEndDate'},
+        { title: '合同类型', dataIndex: 'contractType', key: 'contractType', 
+            render: (contractType: number): React.ReactNode => {
+                switch (contractType) {
+                    case 1:
+                        return '固定期限劳动合同';
+                    case 2:
+                        return '无固定期限劳动合同';
+                    case 3:
+                        return '超龄返聘合同';
+                    case 4:
+                        return '实习合同';
+                    case 5:
+                        return '其他合同';
+                }
+            } 
+        },
+        { title: '合同开始时间', dataIndex: 'contractStartDate', key: 'contractStartDate',
+            render:(contractStartDate: string)=>{
+                return contractStartDate?moment(contractStartDate).format('YYYY-MM-DD'):'-'
+            } 
+        },
+        { title: '合同结束时间', dataIndex: 'contractEndDate', key: 'contractEndDate',
+            render:(contractEndDate: string)=>{
+                return contractEndDate?moment(contractEndDate).format('YYYY-MM-DD'):'-'
+            }
+        },
         { title: '操作', dataIndex: 'operation', key: 'operation',render: (_: any, record: any, index: number): React.ReactNode => (
             <Button type='link' onClick={()=>{
-                history.push(`/employeeRelation/labour/view/${params.id}/${record.id}`)
+                history.push(`/employeeRelation/labour/edit/${params.id}/${params.status}/${record.id}`)
             }}>详情</Button>) 
         }
     ]
@@ -37,16 +91,28 @@ export default function Edit(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button key="primary" onClick={() => {
+                    <Button type="primary" onClick={() => {
+                        console.log(attachRef.current?.getDataSource())
                         form.validateFields().then(res=>{
+                           
                             const value= form.getFieldsValue(true);
-                            value.fileDTOS= attachRef.current?.getDataSource();
-                            value.id = params.id;
-                            RequestUtil.post(`/tower-hr/labor/contract`, value).then(()=>{
-                                message.success('保存成功！')
-                            }).then(()=>{
-                                history.goBack()
-                            })
+                            if(moment(value.contractEndDate)<moment(value.contractStartDate)){
+                                message.error('合同截止日期不可小于开始日期！')
+                            }else{
+                                value.fileId= attachRef.current?.getDataSource().map((item:any)=>{
+                                    return item.id
+                                });
+                                value.contractEndDate= moment(value.contractEndDate).format('YYYY-MM-DD HH:mm:ss');
+                                value.contractStartDate= moment(value.contractStartDate).format('YYYY-MM-DD HH:mm:ss');
+                                value.submitType='save';
+                                value.id = params.id;
+                                RequestUtil.post(`/tower-hr/labor/contract`, value).then(()=>{
+                                    message.success('保存成功！')
+                                }).then(()=>{
+                                    history.goBack()
+                                })
+                            }
+                            
                         })
                         
                     }}>保存</Button>
@@ -63,36 +129,61 @@ export default function Edit(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='姓名' name='employeeName'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <Form.Item label='公司' name='companyName'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='部门/班组' name='departmentName'>
-                            <Input/>
+                        <Form.Item label='部门/班组' name='newDepartmentName'>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <Form.Item label='岗位' name='postName'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
+                    <Col span={12} >
+                        <Form.Item label='身份证号' name='idNumber'>
+                            <Input disabled/>
+                        </Form.Item>
+                    </Col>
+                    
+                </Row>
+                <Row>
                     <Col span={12}>
                         <Form.Item label='合同签署公司' rules={[{
                             required:true, 
                             message:'请填写合同签署公司'
                         }]} name='signedCompany'>
-                            <Input/>
+                            <TreeSelect placeholder="请选择" style={{ width: "100%" }}>
+                                { renderTreeNodes(wrapRole2DataNode(company)) }
+                            </TreeSelect>
                         </Form.Item>
                     </Col>
+                    <Col span={12}>
+                        <Form.Item label='合同类型' rules={[{
+                            required:true, 
+                            message:'请选择合同类型'
+                        }]} name='contractType'>
+                            <Select placeholder="请选择" style={{ width: '100%' }} >
+                                <Select.Option value={1} key="1">固定期限劳动合同</Select.Option>
+                                <Select.Option value={2} key="2">无固定期限劳动合同</Select.Option>
+                                <Select.Option value={3} key="3">超龄返聘合同</Select.Option>
+                                <Select.Option value={4} key="4">实习合同</Select.Option>
+                                <Select.Option value={5} key="5">其他合同</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    
                 </Row>
                 <Row>
                     <Col span={12}>
@@ -100,11 +191,7 @@ export default function Edit(): React.ReactNode {
                             required:true, 
                             message:'请选择合同开始日期'
                         }]} name='contractStartDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
-                                console.log(e)
-                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
-                                // form.setFieldsValue()
-                            }}/>
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -112,34 +199,12 @@ export default function Edit(): React.ReactNode {
                             required:true, 
                             message:'请选择合同截止日期'
                         }]} name='contractEndDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
-                                console.log(e)
-                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
-                                // form.setFieldsValue()
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} disabledDate={(current) =>{
+                                return current && current < form.getFieldsValue().contractStartDate;
                             }}/>
                         </Form.Item>
                     </Col>
-                </Row>
-                <Row>
-                    { params.status === 'edit' && <Col span={12} >
-                        <Form.Item label='身份证号' name='idNumber'>
-                            <Input/>
-                        </Form.Item>
-                    </Col>}
-                    <Col span={12}>
-                        <Form.Item label='合同类型' rules={[{
-                            required:true, 
-                            message:'请选择合同类型'
-                        }]} name='contractType'>
-                            <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={0} key="0">固定期限劳动合同</Select.Option>
-                                <Select.Option value={1} key="1">无固定期限劳动合同</Select.Option>
-                                <Select.Option value={2} key="2">超龄返聘合同</Select.Option>
-                                <Select.Option value={3} key="3">实习合同</Select.Option>
-                                <Select.Option value={4} key="4">其他合同</Select.Option>
-                            </Select>
-                        </Form.Item>
-                    </Col>
+                    
                 </Row>
                 <Row>
                     
@@ -150,11 +215,11 @@ export default function Edit(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-            <Attachment dataSource={detailData?.fileVos} edit/>
+            <Attachment dataSource={detailData?.fileVos} edit ref={attachRef} />
             {
                 params.status !== 'edit' && <>
                     <DetailTitle title="劳动合同记录" />
-                    <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
+                    <CommonTable columns={tableColumns} dataSource={detailData?.laborContractVOS} pagination={ false } />
                 </>
             }
             </DetailContent>

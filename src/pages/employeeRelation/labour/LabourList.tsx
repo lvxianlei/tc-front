@@ -60,9 +60,12 @@ export default function LabourList(): React.ReactNode {
         },
         {
             key: 'departmentName',
-            title: '部门',
+            title: '部门/班组',
             width: 100,
-            dataIndex: 'departmentName'
+            dataIndex: 'departmentName',
+            render:(_:any,record:any)=>{
+                return record.departmentName+'/'+record.teamName
+            }
         },
         {
             key: 'postName',
@@ -80,7 +83,21 @@ export default function LabourList(): React.ReactNode {
             key: 'contractType',
             title: '合同类型',
             width: 100,
-            dataIndex: 'contractType'
+            dataIndex: 'contractType',
+            render: (contractType: number): React.ReactNode => {
+                switch (contractType) {
+                    case 1:
+                        return '固定期限劳动合同';
+                    case 2:
+                        return '无固定期限劳动合同';
+                    case 3:
+                        return '超龄返聘合同';
+                    case 4:
+                        return '实习合同';
+                    case 5:
+                        return '其他合同';
+                }
+            } 
         },
         {
             key: 'contractStartDate',
@@ -101,15 +118,15 @@ export default function LabourList(): React.ReactNode {
             }
         },
         {
-            key: 'contractStatus',
+            key: 'status',
             title: '合同状态',
             width: 100,
-            dataIndex: 'contractStatus',
+            dataIndex: 'status',
             render: (status: number): React.ReactNode => {
                 switch (status) {
-                    case 0:
-                        return '有效';
                     case 1:
+                        return '有效';
+                    case 2:
                         return '无效';
                 }
             } 
@@ -122,10 +139,10 @@ export default function LabourList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/view/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/edit`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>编辑</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/change`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>变更</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/renewal`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>续签</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/view/${record.id}`)}} type='link' >查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/edit`)}} type='link' disabled={record.employeeStatus===2 || record.status}>编辑</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/change`)}} type='link' disabled={record.employeeStatus===2 || record.status===1}>变更</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/renewal`)}} type='link' disabled={record.employeeStatus===2 || record.status=== 2 && record.employeeStatus===1}>续签</Button>
                 </Space>
             )
         }
@@ -155,11 +172,11 @@ export default function LabourList(): React.ReactNode {
                         label: '合同类型',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>
-                            <Select.Option value={0} key="0">固定期限劳动合同</Select.Option>
-                            <Select.Option value={1} key="1">无固定期限劳动合同</Select.Option>
-                            <Select.Option value={2} key="2">超龄返聘合同</Select.Option>
-                            <Select.Option value={3} key="3">实习合同</Select.Option>
-                            <Select.Option value={4} key="4">其他合同</Select.Option>
+                            <Select.Option value={1} key="1">固定期限劳动合同</Select.Option>
+                            <Select.Option value={2} key="2">无固定期限劳动合同</Select.Option>
+                            <Select.Option value={3} key="3">超龄返聘合同</Select.Option>
+                            <Select.Option value={4} key="4">实习合同</Select.Option>
+                            <Select.Option value={5} key="5">其他合同</Select.Option>
                         </Select>
                     },
                     {
@@ -167,8 +184,8 @@ export default function LabourList(): React.ReactNode {
                         label: '合同状态',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>
-                            <Select.Option value={0} key="0">有效</Select.Option>
-                            <Select.Option value={1} key="1">无效</Select.Option>
+                            <Select.Option value={1} key="1">有效</Select.Option>
+                            <Select.Option value={2} key="2">无效</Select.Option>
                         </Select>
                     },
                 ]}

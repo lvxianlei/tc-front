@@ -6,6 +6,7 @@ import useRequest from '@ahooksjs/use-request';
 import { baseInfoData } from './full.json';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
+import moment from 'moment';
 
 
 export default function Sure(): React.ReactNode {
@@ -14,7 +15,8 @@ export default function Sure(): React.ReactNode {
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-hr/positive/check/detail?positiveId=${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-hr/positive/check/detail?positiveId=${params.id}`);
+        data.newDepartmentName = data.departmentName+'/'+data.teamName;
         resole(data)
     }), {})
     const detailData: any = data;
@@ -46,23 +48,23 @@ export default function Sure(): React.ReactNode {
                         <Form.Item label='转正日期' rules={[{
                             required:true, 
                             message:'请选择转正日期'
-                        }]} initialValue={1}>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
-                                console.log(e)
-                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
-                                // form.setFieldsValue()
-                            }}/>
+                        }]} name="positiveDate">
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} 
+                                onChange={(e)=>{
+                                    moment(e).subtract(2, 'months').format('YYYY-MM-DD')
+                                }}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item label='考核结果' rules={[{
                             required:true, 
                             message:'请选择考核结果'
-                        }]}>
+                        }]} name="checkResult">
                             <Select placeholder="请选择" style={{ width: '100%' }} disabled>
-                                <Select.Option value={0} key="0">提前转正</Select.Option>
-                                <Select.Option value={1} key="1">正常转正</Select.Option>
-                                <Select.Option value={2} key="2">延期转正</Select.Option>
+                                <Select.Option value={1} key="1">提前转正</Select.Option>
+                                <Select.Option value={2} key="2">正常转正</Select.Option>
+                                <Select.Option value={3} key="3">延期转正</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -72,13 +74,13 @@ export default function Sure(): React.ReactNode {
                         <Form.Item label='转正评语' rules={[{
                             required:true, 
                             message:'请填写转正评语'
-                        }]} labelCol= {{span:3}} wrapperCol={{ span: 20 }}>
+                        }]} name="positiveComments" labelCol= {{span:3}} wrapperCol={{ span: 20 }}>
                             <Input.TextArea maxLength={400} showCount/>
                         </Form.Item>
                     </Col>
                 </Row>
             </Form>
-            <Attachment dataSource={detailData?.fileVOList} edit/>
+            <Attachment dataSource={detailData?.fileVOList} edit ref={attachRef} />
             </DetailContent>
         </Spin>
     </>

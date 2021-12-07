@@ -30,7 +30,8 @@
              addCollectionForm.setFieldsValue({
                 account: result && result.account,
                 roleIds: result && result.roleIds?.split(","),
-                departmentId: result && result.departmentId
+                departmentId: result && result.departmentId,
+                name: result && result.name
              })
          } catch (error) {
              reject(error)
@@ -94,6 +95,15 @@
                      autoComplete="off"
                      form={addCollectionForm}
                  >
+
+                    <Form.Item
+                         label="用户姓名"
+                         name="name"
+                         rules={[{ required: true, message: '请输入用户姓名' }]}
+                     >
+                         <Input placeholder="请输入用户姓名" />
+                     </Form.Item>
+
                      <Form.Item
                          label="账号"
                          name="account"
