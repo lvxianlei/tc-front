@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Space, Input, Select, Button, Popconfirm, Form, message } from 'antd';
+import { Space, Input, Select, Button, Popconfirm, Form, message, Modal, Descriptions } from 'antd';
 import { Link } from 'react-router-dom';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
 import { FileProps } from '../../common/Attachment';
-
+import styles from './StevedoringCompanyMngt.module.less'
+ 
 export interface IStevedoringCompanyMngt {
     readonly id?: string;
     readonly title?: string;
@@ -22,6 +23,9 @@ export interface IStevedoringCompanyMngt {
 export default function StevedoringCompanyMngt(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ filterValue, setFilterValue ] = useState({});
+    const [ title, setTitle ] = useState('创建');
+    const [ visible, setVisible ] = useState(false);
+    const [ form ] = Form.useForm();
 
     const columns = [
         {
@@ -95,23 +99,76 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
         }
     ]
 
-    return <Page
-        path="/tower-supply/stevedoreCompany"
-        columns={ columns }
-        headTabs={ [] }
-        extraOperation={ <Button type="primary" ghost>创建</Button> }
-        refresh={ refresh }
-        searchFormItems={ [
-            {
-                name: 'fuzzyQuery',
-                label: '查询',
-                children: <Input maxLength={50} placeholder="编号/名称/联系人/联系电话"/>
-            }
-        ] }
-        filterValue={ filterValue }
-        onFilterSubmit = { (values: Record<string, any>) => {
-            setFilterValue(values);
-            return values;
-        } }
-    />
+    const close = () => {
+        setVisible(false);
+    }
+
+    const save = () => {
+
+    }
+
+    return <>
+        <Page
+            path="/tower-supply/stevedoreCompany"
+            columns={ columns }
+            headTabs={ [] }
+            extraOperation={ <Button type="primary" onClick={ () => { setVisible(true); setTitle('新增'); } } ghost>创建</Button> }
+            refresh={ refresh }
+            searchFormItems={ [
+                {
+                    name: 'fuzzyQuery',
+                    label: '查询',
+                    children: <Input maxLength={50} placeholder="编号/名称/联系人/联系电话"/>
+                }
+            ] }
+            filterValue={ filterValue }
+            onFilterSubmit = { (values: Record<string, any>) => {
+                setFilterValue(values);
+                return values;
+            } }
+        />
+        <Modal title={ title } visible={ visible } width="50%" okText="保存" onCancel={ close } onOk={ save }>
+            <Form form={ form }>
+                <Descriptions title="基础信息" bordered size="small" colon={ false } column={ 2 } className={ styles.description }>
+                    <Descriptions.Item label="装卸公司编号">
+                        <Form.Item name="stevedoreCompanyNumber">
+                            <Input placeholder="自动生成" bordered={false} disabled/>
+                        </Form.Item>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="装卸公司名称">
+                        <Form.Item name="stevedoreCompanyName">
+                            <Input placeholder="请输入" bordered={false}/>
+                        </Form.Item>
+                    </Descriptions.Item>
+                    <Descriptions.Item label={<span>联系人<span style={{ color: 'red' }}>*</span></span>}>
+                        <Form.Item name="stevedoreCompanyNumber">
+                            <Input placeholder="请输入" bordered={false}/>
+                        </Form.Item>
+                    </Descriptions.Item>
+                    <Descriptions.Item label={<span>联系电话<span style={{ color: 'red' }}>*</span></span>}>
+                        <Form.Item name="stevedoreCompanyName">
+                            <Input placeholder="请输入" bordered={false}/>
+                        </Form.Item>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="备注">
+                        <Form.Item name="stevedoreCompanyNumber">
+                            <Input placeholder="请输入" bordered={false}/>
+                        </Form.Item>
+                    </Descriptions.Item>
+                </Descriptions>
+                <Descriptions title="账户信息" bordered size="small" colon={ false } column={ 2 } className={ styles.description }>
+                    <Descriptions.Item label={<span>开户银行<span style={{ color: 'red' }}>*</span></span>}>
+                        <Form.Item name="stevedoreCompanyNumber">
+                            <Input placeholder="请输入" bordered={false}/>
+                        </Form.Item>
+                    </Descriptions.Item>
+                    <Descriptions.Item label={<span>银行账号 <span style={{ color: 'red' }}>*</span></span>}>
+                        <Form.Item name="stevedoreCompanyName">
+                            <Input placeholder="请输入" maxLength={50} bordered={false}/>
+                        </Form.Item>
+                    </Descriptions.Item>
+                </Descriptions>
+            </Form>
+        </Modal>
+    </>
 }
