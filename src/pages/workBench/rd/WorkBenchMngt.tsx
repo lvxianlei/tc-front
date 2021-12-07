@@ -213,9 +213,9 @@ export default function WorkBenchMngt(): React.ReactNode {
 					title: '待校核',
 					dataIndex: 'boltToBeMade',
 					path: '/workMngt/boltList',
-					state: 3,
-					userId: userId
+					state: 3
 				}
+				
 			]
 		},
 		{
