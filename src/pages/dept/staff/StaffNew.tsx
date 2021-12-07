@@ -68,7 +68,14 @@ export default function StaffNew(): React.ReactNode {
                         if(value) {
                             checkcustomerPhone(value).then(res => {
                                 if (res) {
-                                    callback()
+                                    const values: IStaff[] = JSON.parse(JSON.stringify(form.getFieldsValue(true).list));
+                                    values.splice(index, 1);
+                                    var same = values.some((item: IStaff) => item.phone === value);
+                                    if(same) {
+                                        callback('手机号重复')
+                                    } else { 
+                                        callback()
+                                    }
                                 } else {
                                     callback('手机号格式有误')
                                 }
