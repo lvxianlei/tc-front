@@ -86,7 +86,7 @@ export default function PersonalCenter(): React.ReactNode {
             if(form) {
                 form.validateFields().then(res => {
                     const value = form.getFieldsValue(true);
-                    RequestUtil.put(`/sinzetech-user/user/updatePassword`, { ...value }).then(res => {
+                    RequestUtil.put(`/sinzetech-user/user/updatePassword?oldPassword=${ value.oldPassword }&password=${ value.password }`).then(res => {
                         setVisible(false);
                         form.resetFields();
                         history.go(0);
