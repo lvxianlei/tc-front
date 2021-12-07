@@ -160,10 +160,10 @@ export default forwardRef(function ({
 
     const handlePreview = useCallback((record: FileProps) => {
         if (["png", "jpeg", "jpg", "gif"].includes(record?.fileSuffix || "")) {
-            setPicUrl(record.filePath)
+            setPicUrl(record.downloadUrl)
             setVisible(true)
         } else if (["pdf"].includes(record?.fileSuffix || "")) {
-            window.open(record.filePath)
+            window.open(record.downloadUrl)
         } else {
             message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf预览...")
         }
