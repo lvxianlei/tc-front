@@ -805,6 +805,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 配置管理-其他参数配置
+      "name": "其他参数配置",
+      "path": "/stock/otherParameters",
+      "module": "./pages/stock/otherParameters/OtherParameters",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 确认任务
       "name": "确认任务",
       "path": "/confirmTask/ConfirmTaskMngt",
