@@ -20,8 +20,8 @@ export default function View(): React.ReactNode {
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-hr/positive/check/detail?positiveId=${params.id}`)
-        // data.newDepartmentName = data.departmentName+ '/' + data.teamName
+        const data: any = await RequestUtil.get(`/tower-hr/positive/check/detail?positiveId=${params.id}`)
+        data.newDepartmentName = data.departmentName+ '/' + data.teamName
         resole(data)
     }), {})
     const detailData: any = data;
