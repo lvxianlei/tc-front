@@ -87,6 +87,23 @@
         {
             "title": "方案名称",
             "dataIndex": "insurancePlanName",
+            "type": "popTable",
+            "path": "/tower-hr/insurancePlan",
+            "width": 1011,
+            "value": "insurancePlanName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "方案名称",
+                    "dataIndex": "insurancePlanName",
+                    "search": true
+                },
+                {
+                    "title": "缴纳地区",
+                    "dataIndex": "insuredLand"
+                }
+            ],
             "rules": [
                 {
                     "required": true,
@@ -104,9 +121,9 @@
             "dataIndex": "socialSecurityNumber"
         },
         {
-            "title": "社保开始缴纳月",
+            "title": "社保缴纳起止月",
             "dataIndex": "ssStartMonth",
-            "type": "date",
+            "type": "rangePicker",
             "format": "YYYY-MM-DD",
             "rules": [
                 {
@@ -114,12 +131,6 @@
                     "message": "请选择社保开始缴纳月..."
                 }
             ]
-        },
-        {
-            "title": "社保最后缴纳月",
-            "dataIndex": "ssEndMonth",
-            "type": "date",
-            "format": "YYYY-MM-DD"
         },
         {
             "title": "社保申报基数",
@@ -137,9 +148,9 @@
             "dataIndex": "providentFundAccount"
         },
         {
-            "title": "公积金开始缴纳月",
+            "title": "公积金缴纳起止月",
             "dataIndex": "pfaStartMonth",
-            "type": "date",
+            "type": "rangePicker",
             "format": "YYYY-MM-DD",
             "rules": [
                 {
@@ -147,12 +158,6 @@
                     "message": "请选择公积金开始缴纳月..."
                 }
             ]
-        },
-        {
-            "title": "公积金最后缴纳月",
-            "dataIndex": "pfaEndMonth",
-            "type": "date",
-            "format": "YYYY-MM-DD"
         },
         {
             "title": "公积金申报基数",
@@ -178,14 +183,9 @@
             "dataIndex": "commercialInsuranceNumber"
         },
         {
-            "title": "开始缴纳月",
+            "title": "开始缴纳月-结束缴纳月",
             "width": 100,
             "dataIndex": "startMonth"
-        },
-        {
-            "title": "结束缴纳月",
-            "width": 100,
-            "dataIndex": "endMonth"
         },
         {
             "title": "保费金额",

@@ -79,16 +79,16 @@ export default function FullList(): React.ReactNode {
             title: '考核结果',
             width: 150,
             dataIndex: 'checkResult',
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 1:
-                        return '提前转正';
-                    case 2:
-                        return '正常转正';
-                    case 3:
-                        return '延期转正';
-                }
-            } 
+            // render: (status: number): React.ReactNode => {
+            //     switch (status) {
+            //         case 1:
+            //             return '提前转正';
+            //         case 2:
+            //             return '正常转正';
+            //         case 3:
+            //             return '延期转正';
+            //     }
+            // } 
         },
         {
             key: 'positiveComments',

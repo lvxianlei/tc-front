@@ -42,7 +42,7 @@ export default function QuitProceduresOperation(): React.ReactNode {
                             value.id = params.id;
                             value.handleType='save';
                             value.isProcessingCompleted = false;
-                            value.fileId= attachRef.current?.getDataSource().map((item:any)=>{
+                            value.fileIds= attachRef.current?.getDataSource().map((item:any)=>{
                                 return item.id
                             });
                             value.isRemoveContract =  value.isRemoveContract === 1?false:true;
