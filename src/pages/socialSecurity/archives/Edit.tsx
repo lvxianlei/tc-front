@@ -1,5 +1,5 @@
-import React from "react"
-import { Button, Spin, Form } from 'antd'
+import React, { useState } from "react"
+import { Button, Spin, Form, Input, InputNumber, Select } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
 import { setting, insurance, business } from "./archives.json"
@@ -10,15 +10,25 @@ export default function Edit() {
     const params = useParams<{ archiveId: string, type: "new" | "edit" }>()
     const [baseForm] = Form.useForm()
     const [insuranceForm] = Form.useForm()
+    const [businessForm] = Form.useForm()
+    const [businessData, setBusinessData] = useState<any[]>([])
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insuranceArchives/detail?id=${params.archiveId}`)
-            baseForm.setFieldsValue(result)
             resole(result)
         } catch (error) {
             reject(error)
         }
     }))
+    const { loading: businessLoding, run: getBusinessRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insurancePlan/detail?id=${id}`)
+            setBusinessData(result?.businessList)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
@@ -35,7 +45,11 @@ export default function Edit() {
             const postInsuranceData = await insuranceForm.validateFields()
             await saveRun({
                 ...postBaseInfoData,
-                ...postInsuranceData
+                ...postInsuranceData,
+                ssStartMonth: postInsuranceData.ssStartMonth + " 00:00:00",
+                ssEndMonth: postInsuranceData.ssEndMonth + " 23:59:59",
+                pfaStartMonth: postInsuranceData.pfaStartMonth + " 00:00:00",
+                pfaEndMonth: postInsuranceData.pfaEndMonth + " 23:59:59"
             })
         } catch (error) {
             console.log(error)
@@ -44,8 +58,12 @@ export default function Edit() {
 
     const handleInsuranceChange = (fields: any) => {
         if (fields.insurancePlanName) {
-            console.log(fields.insurancePlanName)
             insuranceForm.setFieldsValue({ paymentCompany: fields.insurancePlanName.records[0].companyName })
+            getBusinessRun(fields.insurancePlanName.id)
+        }
+        if (fields.ssEndMonth) {
+            // moment(fields.ssEndMonth).
+            console.log(fields.ssEndMonth)
         }
     }
 
@@ -59,7 +77,51 @@ export default function Edit() {
             <DetailTitle title="社保公积金" />
             <BaseInfo form={insuranceForm} onChange={handleInsuranceChange} columns={insurance} dataSource={data || {}} edit />
             <DetailTitle title="商业保险方案" />
-            <CommonTable columns={business} dataSource={[]} />
+            <Form form={businessForm}>
+                <CommonTable
+                    rowKey="id"
+                    loading={businessLoding}
+                    columns={business.map((item: any) => {
+                        switch (item.dataIndex) {
+                            case "description":
+                                return ({
+                                    ...item,
+                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                        <Input.TextArea autoSize={{ maxRows: 1 }} value={value} />
+                                    </Form.Item>
+                                })
+                            case "insuranceAmount":
+                                return ({
+                                    ...item,
+                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                        <InputNumber style={{ width: "100%" }} value={value} />
+                                    </Form.Item>
+                                })
+                            case "commercialInsuranceType":
+                                return ({
+                                    ...item,
+                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                        <Select style={{ width: "100%" }}>
+                                            <Select.Option value={1}>补充医疗保险</Select.Option>
+                                            <Select.Option value={2}>雇主责任险</Select.Option>
+                                            <Select.Option value={3}>意外伤害险</Select.Option>
+                                            <Select.Option value={4}>团体责任险</Select.Option>
+                                            <Select.Option value={5}>重大疾病险</Select.Option>
+                                            <Select.Option value={6}>其他</Select.Option>
+                                        </Select>
+                                    </Form.Item>
+                                })
+                            default:
+                                return ({
+                                    ...item,
+                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                        <Input />
+                                    </Form.Item>
+                                })
+                        }
+                    })}
+                    dataSource={businessData} />
+            </Form>
         </Spin>
     </DetailContent>
 }

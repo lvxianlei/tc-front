@@ -217,6 +217,7 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
             disabled={data.disabled}
             max={data?.max || 999999999999}
             min={data?.min || 0}
+            precision={data?.precision}
             step={data?.step || 1}
             style={{ width: "100%", height: "100%", ...props.style }}
         />,
