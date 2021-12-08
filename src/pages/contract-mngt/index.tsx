@@ -1,14 +1,13 @@
 // 合同管理-原材料合同管理
 import React, { useState, useRef } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { DatePicker, Select, Input, Button, Modal, message } from 'antd'
-import { Page } from "../common"
+import { DatePicker, Select, Input, Button, Modal, message, Form } from 'antd'
+import { IntgSelect, Page } from "../common"
 import Edit from "./Edit"
 import Overview from "./Overview"
 import { contract } from "./contract.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import ApplicationContext from "../../configuration/ApplicationContext"
 import { deliverywayOptions, materialStandardOptions, transportationTypeOptions } from '../../configuration/DictionaryOptions'
 export default function ContractMngt(): JSX.Element {
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
@@ -60,6 +59,9 @@ export default function ContractMngt(): JSX.Element {
             const formatDate = value.signStartTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.signStartTime = formatDate[0] + " 00:00:00"
             value.signEndTime = formatDate[1] + " 23:59:59"
+        }
+        if(value.operatorId) {
+            value.operatorId = value.operatorId?.second
         }
         return value
     }
@@ -160,6 +162,11 @@ export default function ContractMngt(): JSX.Element {
                             <Select.Option value="1">执行中</Select.Option>
                             <Select.Option value="2">已完成</Select.Option>
                         </Select>
+                    },
+                    {
+                        name: 'operatorId',
+                        label: '经办人',
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'fuzzyQuery',
