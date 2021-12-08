@@ -84,6 +84,19 @@ export default function RoleMngtList(): React.ReactNode {
         setRefresh(!refresh);
     }
 
+    // 检查用户是否关联员工
+    const checkAccount = async(account: string, id: string) => {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/employee/checkAccount?account=${account}`);
+        hanleDeteUser(id);
+    }
+
+    // 删除用户
+    const hanleDeteUser = async(id: string) => {
+        const resData: IResponseData = await RequestUtil.delete(`/sinzetech-user/user?ids=${id}`);
+        message.success("删除用户成功！")
+        setRefresh(!refresh);
+    }
+
     // 新增回调
     const handleOkuseState = () => new Promise(async (resove, reject) => {
         try {
@@ -126,9 +139,7 @@ export default function RoleMngtList(): React.ReactNode {
                                 <Popconfirm
                                     title="您确定删除该用户吗?"
                                     onConfirm={() => {
-                                        RequestUtil.delete(`/sinzetech-user/user?ids=${record.id}`).then(res => {
-                                            setRefresh(!refresh);
-                                        });
+                                        checkAccount(record.account, record.id)
                                     }}
                                     okText="确认"
                                     cancelText="取消"
