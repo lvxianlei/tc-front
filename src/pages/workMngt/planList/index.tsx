@@ -17,6 +17,7 @@ export default function Invoicing() {
     const addRef = useRef<EditRefProps>();
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({})
+    const [ id, setId ] = useState<string>();
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan/${id}`)
@@ -89,6 +90,7 @@ export default function Invoicing() {
                                 <Link to={`/workMngt/planList/purchaseList/${record.id}`}><Button type="link">采购清单</Button></Link>
                                 <Button type="link" disabled={record.purchasePlanStatus === 3} onClick={() => handleDelete(record.id)}>取消计划</Button>
                                 <Button type="link"  onClick={() => {
+                                    setId(record.id);
                                     setVisible(true);
                                 }}>编辑计划</Button>
                             </>
@@ -136,6 +138,7 @@ export default function Invoicing() {
                 visible={visible}
                 width={1000}
                 maskClosable={false}
+                destroyOnClose={true}
                 onCancel={() => {
                     addRef.current?.resetFields();
                     setVisible(false);
@@ -152,7 +155,7 @@ export default function Invoicing() {
                     </Button>
                   ]}
             >
-                <EditPurchasePlan ref={addRef} id={""} />
+                <EditPurchasePlan ref={addRef} id={id} />
             </Modal>
         </>
     )

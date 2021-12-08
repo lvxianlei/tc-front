@@ -2,37 +2,37 @@
     "applicationdetails": [
         {
             "title": "塔型",
-            "dataIndex": "purchasePlanCode",
+            "dataIndex": "productCategoryName",
             "width": 100,
             "type": "string"
         },
         {
             "title": "杆塔数",
-            "dataIndex": "purchaseType",
+            "dataIndex": "productNum",
             "type": "select",
             "width": 100
         },
         {
             "title": "原材料任务编号",
-            "dataIndex": "productCategoryNum",
+            "dataIndex": "purchasePlanNumber",
             "width": 100,
             "type": "string"
         },
         {
             "title": "圆钢总重（吨）",
-            "dataIndex": "productNum",
+            "dataIndex": "roundSteelTotal",
             "width": 100,
             "type": "string"
         },
         {
             "title": "角钢总重（吨）",
-            "dataIndex": "roundSteelTotal",
+            "dataIndex": "angleSteelTotal",
             "width": 100,
             "type": "number"
         },
         {
             "title": "钢板总重（吨）",
-            "dataIndex": "angleSteelTotal",
+            "dataIndex": "steelPlateTotal",
             "width": 100,
             "type": "number"
         }
@@ -40,67 +40,67 @@
     "ingredientsColumn": [
         {
             "title": "材质",
-            "dataIndex": "purchasePlanCode",
+            "dataIndex": "materialTexture",
             "width": 100,
             "type": "string"
         },
         {
             "title": "标准",
-            "dataIndex": "purchaseType",
+            "dataIndex": "standard",
             "type": "select",
             "width": 100
         },
         {
             "title": "规格",
-            "dataIndex": "productCategoryNum",
+            "dataIndex": "structureSpec",
             "width": 100,
             "type": "string"
         },
         {
             "title": "配料品名",
-            "dataIndex": "productNum",
+            "dataIndex": "materialName",
             "width": 100,
             "type": "string"
         },
         {
             "title": "搭配长度",
-            "dataIndex": "roundSteelTotal",
+            "dataIndex": "length",
             "width": 100,
             "type": "number"
         },
         {
             "title": "搭配数量",
-            "dataIndex": "angleSteelTotal",
+            "dataIndex": "num",
             "width": 100,
             "type": "number"
         },
         {
             "title": "重量（吨）",
-            "dataIndex": "angleSteelTotal",
+            "dataIndex": "weight",
             "width": 100,
             "type": "number"
         },
         {
             "title": "备注",
-            "dataIndex": "angleSteelTotal",
+            "dataIndex": "remarks",
             "width": 100,
             "type": "number"
         },
         {
             "title": "生产未领料（支）",
-            "dataIndex": "angleSteelTotal",
+            "dataIndex": "uncollectedMaterial",
             "width": 100,
             "type": "number"
         },
         {
             "title": "仓库库存（支）",
-            "dataIndex": "angleSteelTotal",
+            "dataIndex": "warehouseStock",
             "width": 100,
             "type": "number"
         },
         {
             "title": "在途库存（支）",
-            "dataIndex": "angleSteelTotal",
+            "dataIndex": "transitStock",
             "width": 100,
             "type": "number"
         }

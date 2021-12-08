@@ -4,6 +4,7 @@ import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
 import { BasicInformation, editCargoDetails, SelectedArea, Selected, freightInfo, handlingChargesInfo } from "./receivingListData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
+import ApplicationContext from "../../../configuration/ApplicationContext"
 interface ChooseModalProps {
     id: string,
     initChooseList: any[]
@@ -19,6 +20,18 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
     const [oprationType, setOprationType] = useState<"select" | "remove">("select")
     const [form] = Form.useForm();
     const [serarchForm] = Form.useForm();
+
+    // 标准
+    const standardEnum = (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+
+    // 材质 
+    const materialEnum = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -140,9 +153,11 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
                             name="num1"
                             label="标准">
                                 <Select style={{ width: 120 }} placeholder="请选择">
-                                    <Select.Option value="jack">Jack</Select.Option>
-                                    <Select.Option value="lucy">Lucy</Select.Option>
-                                    <Select.Option value="Yiminghe">yiminghe</Select.Option>
+                                    {
+                                        standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
+                                            return <Select.Option value={item.id} key={index}>{item.label}</Select.Option>
+                                        })
+                                    }
                                 </Select>
                         </Form.Item>
                     </Col>
@@ -151,9 +166,11 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
                             name="num2"
                             label="材质">
                                 <Select style={{ width: 120 }} placeholder="请选择">
-                                    <Select.Option value="jack">Jack</Select.Option>
-                                    <Select.Option value="lucy">Lucy</Select.Option>
-                                    <Select.Option value="Yiminghe">yiminghe</Select.Option>
+                                    {
+                                        materialEnum && materialEnum.length > 0 && materialEnum.map((item: any, index: number) => {
+                                            return <Select.Option value={item.id} key={index}>{item.label}</Select.Option>
+                                        })
+                                    }
                                 </Select>
                         </Form.Item>
                     </Col>

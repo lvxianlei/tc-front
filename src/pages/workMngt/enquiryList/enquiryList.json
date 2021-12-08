@@ -3,7 +3,7 @@
         {
             "title": "工程报价任务编号",
             "width": 100,
-            "dataIndex": "inquiryNumber"
+            "dataIndex": "sysInquiryNumber"
         },
         {
             "title": "项目名称",
