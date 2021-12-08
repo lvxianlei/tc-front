@@ -19,10 +19,19 @@ export default function Overview() {
     return <DetailContent operation={[<Button key="cancel" onClick={() => history.go(-1)}>返回</Button>]}>
         <Spin spinning={loading}>
             <DetailTitle title="员工调动管理" />
-            <BaseInfo columns={setting} dataSource={data || {}} />
+            <BaseInfo columns={setting.map(item => {
+                if (item.dataIndex === "newPostId") {
+                    return ({
+                        ...item,
+                        type: "string",
+                        dataIndex: "newPostName"
+                    })
+                }
+                return item
+            })} dataSource={data || {}} />
             <Attachment dataSource={data?.fileVos} />
             <DetailTitle title="审批记录" />
-            <CommonTable columns={auditRecords} dataSource={[]} />
+            <CommonTable columns={auditRecords} dataSource={data?.approveLog} />
         </Spin>
     </DetailContent>
 }
