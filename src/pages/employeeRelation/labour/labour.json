@@ -13,7 +13,7 @@
             "title": "公司"
         },
         {
-            "dataIndex": "departmentName",
+            "dataIndex": "newDepartmentName",
             "title": "部门/班组"
         },
         {
@@ -26,24 +26,26 @@
         },
         {
             "dataIndex": "contractStartDate",
-            "title": "合同开始日期"
+            "title": "合同开始日期",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "dataIndex": "contractEndDate",
-            "title": "合同截止日期"
+            "title": "合同截止日期",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "dataIndex": "contractType",
             "title": "合同类型",
             "type": "select",
             "enum": [
-                { "value": 0, "label": "无试用期" },
-                { "value": 1, "label": "一个月" },
-                { "value": 2, "label": "二个月" },
-                { "value": 3, "label": "三个月" },
-                { "value": 4, "label": "四个月" },
-                { "value": 5, "label": "五个月" },
-                { "value": 6, "label": "六个月" }
+                { "value": 0, "label": "固定期限劳动合同" },
+                { "value": 1, "label": "无固定期限劳动合同" },
+                { "value": 2, "label": "超龄返聘合同" },
+                { "value": 3, "label": "实习合同" },
+                { "value": 4, "label": "其他合同" }
             ]
         },
         {

@@ -8,25 +8,26 @@ export enum DictionaryEnums {
     VOLTAGE_GRADE = 102,
     UNIT = 103,
     MATERIAL_STANDARD = 104,
+    BOLT_TYPE = 105,
+    PATTERN = 106,
     CURRENCY_TYPE = 111,
     TAX_RATE = 112,
     REFUND_MODE = 113,
+    CONST_TYPE = 115,
+    BANK_TYPE = 116,
     CLIENT_TYPE = 121,
     WIN_BID_TYPE = 122,
     SALE_TYPE = 123,
-    BOLT_TYPE = 105,
     WAREHOUSE_TYPE = 127,
+    DELIVERY_WAY = 128,
+    TRANSPORTATION_TYPE = 129,
     CAR_TYPE = 146,
-    STANDARD = 104,
-    STAFF_TYPE = 1213,
-    PATTERN = 106,
-    CONST_TYPE = 115,
+    EMPLOYEE_TYPE = 149,
     PAY_TYPE = 1211,
+    STAFF_TYPE = 1213,
     DEPT_TYPE = 1214,
     DATA_TYPE = 1215,
     CERTIFICATE_TYPE = 1216,
-    EMPLOYEE_TYPE = 149,
-    BANK_TYPE = 116
 }
 
 let productType: IDict[] | undefined = [];
@@ -42,7 +43,6 @@ let saleType: IDict[] | undefined = [];
 let boltType: IDict[] | undefined = [];
 let warehouseType: IDict[] | undefined = [];
 let carType: IDict[] | undefined = [];
-let standard: IDict[] | undefined = [];
 let staffType: IDict[] | undefined = [];
 let deptType: IDict[] | undefined = [];
 let dataType: IDict[] | undefined = [];
@@ -51,8 +51,10 @@ let costType: IDict[] | undefined = [];
 let payType: IDict[] | undefined = [];
 let employeeType: IDict[] | undefined = [];
 let bankType: IDict[] | undefined = [];
-
+let deliveryway: IDict[] | undefined = [];
+let transportationType: IDict[] | undefined = [];
 let certificateType: IDict[] | undefined = [];
+
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
     voltageGrade = dictionary[DictionaryEnums.VOLTAGE_GRADE];
@@ -67,7 +69,6 @@ if (dictionary) {
     boltType = dictionary[DictionaryEnums.BOLT_TYPE];
     warehouseType = dictionary[DictionaryEnums.WAREHOUSE_TYPE];
     carType = dictionary[DictionaryEnums.CAR_TYPE];
-    standard = dictionary[DictionaryEnums.STANDARD];
     staffType = dictionary[DictionaryEnums.STAFF_TYPE];
     deptType = dictionary[DictionaryEnums.DEPT_TYPE];
     dataType = dictionary[DictionaryEnums.DATA_TYPE];
@@ -77,6 +78,8 @@ if (dictionary) {
     certificateType = dictionary[DictionaryEnums.CERTIFICATE_TYPE];
     employeeType = dictionary[DictionaryEnums.EMPLOYEE_TYPE];
     bankType = dictionary[DictionaryEnums.BANK_TYPE];
+    deliveryway = dictionary[DictionaryEnums.DELIVERY_WAY];
+    transportationType = dictionary[DictionaryEnums.TRANSPORTATION_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -92,7 +95,6 @@ export const saleTypeOptions = saleType; //销售类型
 export const boltTypeOptions = boltType; //螺栓类型
 export const warehouseOptions = warehouseType; //仓库类型
 export const carOptions = carType; //车辆类型
-export const standardOptions = standard; //材料标准
 export const staffTypeOptions = staffType; //员工类型
 export const deptTypeOptions = deptType; //部门类型
 export const dataTypeOptions = dataType; //资料类型
@@ -102,3 +104,5 @@ export const payTypeOptions = payType; //费用类型
 export const certificateTypeOptions = certificateType; //证件类型
 export const employeeTypeOptions = employeeType; //员工分组
 export const bankTypeOptions = bankType; //开户银行
+export const deliverywayOptions = deliveryway; //交货方式
+export const transportationTypeOptions = transportationType; //运输方式

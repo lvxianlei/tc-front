@@ -7,10 +7,10 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Overview() {
     const history = useHistory()
-    const params = useParams<{ invoicingId: string }>()
+    const params = useParams<{ archiveId: string }>()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/invoicing/getInvoicingInfo/${params.invoicingId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insuranceArchives/detail?id=${params.archiveId}`)
             resole(result)
         } catch (error) {
             reject(error)

@@ -302,7 +302,7 @@ export default function PickTower(): React.ReactNode {
                 extraOperation={
                     <Space>
                     {/* <Button type="primary">导出</Button> */}
-                    <Popconfirm
+                    {/* <Popconfirm
                         title="确认提交?"
                         onConfirm={ async ()=>{
                             await RequestUtil.post(`/tower-science/product/material/submit?productCategoryId=${params.id}`).then(()=>{
@@ -315,7 +315,7 @@ export default function PickTower(): React.ReactNode {
                         cancelText="取消"
                     >   
                         <Button type="primary" >提交</Button>
-                    </Popconfirm>
+                    </Popconfirm> */}
                     <Button type="primary" onClick={()=>history.push('/workMngt/pickList')}>返回上一级</Button>
                     </Space>
                 }

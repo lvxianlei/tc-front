@@ -15,6 +15,7 @@ interface IPersonal {
     readonly userAccount?: string;
     readonly phone?: string;
     readonly description?: string;
+    readonly number?: string;
 }
 
 const workColums = [
@@ -79,14 +80,14 @@ export default function PersonalCenter(): React.ReactNode {
                     <Button type="link" onClick={ () => setVisible(true) }>修改密码</Button>
                 </Descriptions.Item>
             </Descriptions>
-            <DetailTitle title="工作信息" />
-            <BaseInfo columns={workColums} dataSource={detailData} col={2} />
+            {  detailData.number ? <><DetailTitle title="工作信息" />
+            <BaseInfo columns={workColums} dataSource={detailData} col={2} /></> : null}
         </DetailContent>
         <Modal visible={ visible } title="修改密码" onCancel={ () => { setVisible(false); form.resetFields(); }} onOk={ () => {
             if(form) {
                 form.validateFields().then(res => {
                     const value = form.getFieldsValue(true);
-                    RequestUtil.put(`/sinzetech-user/user/updatePassword`, { ...value }).then(res => {
+                    RequestUtil.put(`/sinzetech-user/user/updatePassword?oldPassword=${ value.oldPassword }&password=${ value.password }`).then(res => {
                         setVisible(false);
                         form.resetFields();
                         history.go(0);

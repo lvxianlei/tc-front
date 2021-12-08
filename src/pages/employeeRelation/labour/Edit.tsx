@@ -5,6 +5,7 @@ import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, Attachme
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
+import moment from 'moment';
 
 
 export default function Edit(): React.ReactNode {
@@ -14,6 +15,10 @@ export default function Edit(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/labor/contract/detail`,{contractId: params.id})
+        form.setFieldsValue({
+            ...data,
+            newDepartmentName: data.departmentName+'/'+data.teamName
+        })
         resole(data)
     }), {})
     const detailData: any = data;
@@ -24,7 +29,22 @@ export default function Edit(): React.ReactNode {
     const tableColumns = [
         { title: '合同编号', dataIndex: 'contractNumber', key: 'contractNumber' },
         { title: '合同公司', dataIndex: 'signedCompany', key: 'signedCompany' },
-        { title: '合同类型', dataIndex: 'contractType', key: 'contractType' },
+        { title: '合同类型', dataIndex: 'contractType', key: 'contractType', 
+            render: (contractType: number): React.ReactNode => {
+                switch (contractType) {
+                    case 0:
+                        return '固定期限劳动合同';
+                    case 1:
+                        return '无固定期限劳动合同';
+                    case 2:
+                        return '超龄返聘合同';
+                    case 3:
+                        return '实习合同';
+                    case 4:
+                        return '其他合同';
+                }
+            } 
+        },
         { title: '合同开始时间', dataIndex: 'contractStartDate', key: 'contractStartDate' },
         { title: '合同结束时间', dataIndex: 'contractEndDate', key: 'contractEndDate'},
         { title: '操作', dataIndex: 'operation', key: 'operation',render: (_: any, record: any, index: number): React.ReactNode => (
@@ -63,26 +83,26 @@ export default function Edit(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='姓名' name='employeeName'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <Form.Item label='公司' name='companyName'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label='部门/班组' name='departmentName'>
-                            <Input/>
+                        <Form.Item label='部门/班组' name='newDepartmentName'>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <Form.Item label='岗位' name='postName'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -116,14 +136,17 @@ export default function Edit(): React.ReactNode {
                                 console.log(e)
                                 // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
                                 // form.setFieldsValue()
-                            }}/>
+                            }} disabledDate={(current) =>{
+                                // Can not select days before today and today
+                                return current && current > form.getFieldsValue().contractStartDate;
+                              }}/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     { params.status === 'edit' && <Col span={12} >
                         <Form.Item label='身份证号' name='idNumber'>
-                            <Input/>
+                            <Input disabled/>
                         </Form.Item>
                     </Col>}
                     <Col span={12}>
@@ -154,7 +177,7 @@ export default function Edit(): React.ReactNode {
             {
                 params.status !== 'edit' && <>
                     <DetailTitle title="劳动合同记录" />
-                    <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
+                    <CommonTable columns={tableColumns} dataSource={detailData?.laborContractVOS} pagination={ false } />
                 </>
             }
             </DetailContent>

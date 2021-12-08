@@ -12,7 +12,7 @@ import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGr
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 import { IMaterial, IMaterialTree } from './IMaterial';
-import { unitOptions, standardOptions } from '../../../configuration/DictionaryOptions';
+import { unitOptions, materialStandardOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 
 export interface IAbstractMaterialSettingState extends IAbstractFillableComponentState {
@@ -276,7 +276,7 @@ export default abstract class AbstractMaterialSetting<P extends RouteComponentPr
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'standard']}>
                     <Select style={{ width: '100%' }} value={text}>
-                        {standardOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
+                        {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                     </Select>
                 </Form.Item>
             )

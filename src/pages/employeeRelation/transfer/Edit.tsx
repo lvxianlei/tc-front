@@ -1,5 +1,5 @@
 import React, { useRef } from "react"
-import { Button, Spin, Input, Form, message } from 'antd'
+import { Button, Spin, Form, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, Attachment, AttachmentRef } from '../../common'
 import ChooseDept from "./ChooseDept"
@@ -84,8 +84,8 @@ export default function Edit() {
         <Button key="submit" loading={saveLoading} onClick={() => handleSave("submit")} type="primary" style={{ marginRight: 16 }} >保存并提交</Button>,
         <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
     ]}>
+        <DetailTitle title="员工调动管理" />
         <Spin spinning={loading || stationLoading}>
-            <DetailTitle title="员工调动管理" />
             <BaseInfo
                 form={form}
                 onChange={handleChange}
