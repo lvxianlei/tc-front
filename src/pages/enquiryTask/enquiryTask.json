@@ -56,7 +56,7 @@
             "dataIndex": "biddingEndTime"
         },
         {
-            "title": "工程报价人",
+            "title": "工程报价员",
             "dataIndex": "inquirer"
         }
     ],
@@ -123,7 +123,7 @@
         },
         {
             "title": "材质",
-            "dataIndex": "materialSpec"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",

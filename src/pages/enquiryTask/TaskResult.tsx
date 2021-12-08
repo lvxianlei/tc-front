@@ -8,14 +8,6 @@ import { downLoadFile } from "../../utils"
 interface OverviewProps {
     id: string
 }
-/**
- * 添加 （需后台提供字段）
- * 
-    {
-        "title": "材质",
-        "dataIndex": "materialSpec"
-    },
- */
 export default function ({ id }: OverviewProps) {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
