@@ -56,7 +56,6 @@ export default function PackingListNew(): React.ReactNode {
     const [ balesCode, setBalesCode ] = useState<string>();
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ userList, setUserList ] = useState([]);
-    const [ materialList, setMaterialList ] = useState<IMaterialTree[]>([]);
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if(!location.state) {
@@ -72,8 +71,6 @@ export default function PackingListNew(): React.ReactNode {
         setStayDistrict(newData);
         const data: any = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
         setUserList(data?.loftingProductSegmentList);
-        const resData: IMaterialTree[] = await RequestUtil.get<IMaterialTree[]>('/tower-system/materialCategory/tree');
-        setMaterialList(resData);
     });
 
     const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}), {})
