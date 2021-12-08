@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react"
-import { Button, DatePicker, Form, Input, Row, Select, Spin, Tabs } from 'antd'
+import { Button, Form, message, Spin, Tabs } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, EditTable, Attachment, AttachmentRef } from '../../common'
+import { DetailContent, DetailTitle, BaseInfo, EditTable, Attachment, AttachmentRef } from '../../common'
 import { baseInfo, companyInfo, other, workExperience, family, relatives } from "./archives.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -30,7 +30,6 @@ export default function Edit() {
     const [familyForm] = Form.useForm()
     const [employeeForm] = Form.useForm()
     const [currentType, setCurrentType] = useState<TabTypes>("baseInfo")
-    const [workData, setWorkData] = useState<any[]>([])
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`${tabPaths[currentType]}?employeeId=${params.archiveId}`)
@@ -67,12 +66,13 @@ export default function Edit() {
                             graduationDate: postBaseData.graduationDate + " 00:00:00",
                             cardValidityDate: postBaseData.cardValidityDate + " 00:00:00",
                         })
+                        message.success("保存成功...")
+                        history.go(-1)
                     }
                     break
                 case "work":
                     {
                         const postData = await workForm.validateFields()
-                        console.log(postData?.submit)
                         await saveRun("work", postData?.submit.map((item: any) => {
                             const postItem: any = { ...item }
                             delete postItem.id
@@ -83,25 +83,45 @@ export default function Edit() {
                             delete postItem.workDate
                             return postItem
                         }))
+                        message.success("保存成功...")
+                        history.go(-1)
                     }
                     break
                 case "family":
                     {
                         const postData = await familyForm.validateFields()
-                        await saveRun("work", postData?.submit.map((item: any) => {
+                        await saveRun("family", postData?.submit.map((item: any) => {
                             const postItem: any = { ...item }
                             delete postItem.id
                             delete postItem.uid
                             postItem.startWorkDate = postItem.workDate[0] ? postItem.workDate[0] + " 00:00:00" : ""
                             postItem.endWorkDate = postItem.workDate[1] ? postItem.workDate[1] + " 00:00:00" : ""
+                            postItem.employeeId = params.archiveId
+                            delete postItem.workDate
                             return postItem
                         }))
+                        message.success("保存成功...")
+                        history.go(-1)
+                    }
+                    break
+                case "employee":
+                    {
+                        const postData = await familyForm.validateFields()
+                        await saveRun("employee", postData?.submit.map((item: any) => {
+                            const postItem: any = { ...item }
+                            delete postItem.id
+                            delete postItem.uid
+                            postItem.startWorkDate = postItem.workDate[0] ? postItem.workDate[0] + " 00:00:00" : ""
+                            postItem.endWorkDate = postItem.workDate[1] ? postItem.workDate[1] + " 00:00:00" : ""
+                            postItem.employeeId = params.archiveId
+                            delete postItem.workDate
+                            return postItem
+                        }))
+                        message.success("保存成功...")
+                        history.go(-1)
                     }
                     break
                 default:
-                    {
-
-                    }
                     break
             }
 
