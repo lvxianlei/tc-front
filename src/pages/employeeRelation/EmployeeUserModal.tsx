@@ -216,7 +216,7 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             width: '5%',
             dataIndex: 'birthday',
             render:(birthday:string)=>{
-                return moment(birthday).format('YYYY-MM-DD')
+                return birthday?moment(birthday).format('YYYY-MM-DD'):'-'
             }
         }, {
             key: 'age',
@@ -263,8 +263,8 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             title: '入职时间',
             width: '5%',
             dataIndex: 'inductionDate',
-            render:(birthday:string)=>{
-                return moment(birthday).format('YYYY-MM-DD')
+            render:(inductionDate:string)=>{
+                return inductionDate?moment(inductionDate).format('YYYY-MM-DD'):'-'
             }
         }, {
             key: 'employeeNature',
@@ -288,8 +288,8 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             title: '转正日期',
             width: '5%',
             dataIndex: 'positiveDate',
-            render:(birthday:string)=>{
-                return moment(birthday).format('YYYY-MM-DD')
+            render:(positiveDate:string)=>{
+                return positiveDate?moment(positiveDate).format('YYYY-MM-DD'):'-'
             }
         }, {
             key: 'workYear',
