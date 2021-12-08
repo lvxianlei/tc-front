@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Spin, Form, Input, InputNumber, Select } from 'antd'
+import { Button, Spin, Form, Input, InputNumber, Select, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
 import { setting, insurance, business } from "./archives.json"
@@ -54,14 +54,21 @@ export default function Edit() {
         try {
             const postBaseInfoData = await baseForm.validateFields()
             const postInsuranceData = await insuranceForm.validateFields()
+            const postBusiness = await businessForm.validateFields()
+            const businessList = Object.keys(postBusiness).map(item => postBusiness[item])
             await saveRun({
                 ...postBaseInfoData,
                 ...postInsuranceData,
+                insurancePlanId: postInsuranceData.insurancePlanName.id,
+                insurancePlanName: postInsuranceData.insurancePlanName.value,
                 ssStartMonth: postInsuranceData.ssStartMonth + " 00:00:00",
                 ssEndMonth: postInsuranceData.ssEndMonth + " 23:59:59",
                 pfaStartMonth: postInsuranceData.pfaStartMonth + " 00:00:00",
-                pfaEndMonth: postInsuranceData.pfaEndMonth + " 23:59:59"
+                pfaEndMonth: postInsuranceData.pfaEndMonth + " 23:59:59",
+                businesss: businessList
             })
+            message.success("保存成功...")
+            history.go(-1)
         } catch (error) {
             console.log(error)
         }
