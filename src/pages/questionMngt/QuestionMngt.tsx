@@ -111,7 +111,7 @@ export default function QuestionMngt(): React.ReactNode {
         //     }
         // },
         {
-            key: 'createUserNameName',
+            key: 'recipientName',
             title: '接收人',
             width: 100,
             dataIndex: 'recipientName'
@@ -130,7 +130,7 @@ export default function QuestionMngt(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={()=>history.push({pathname:`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`,state: record.recipient})}>查看详情</Button>
+                    <Button type='link' onClick={()=>history.push({pathname:`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`,state: {recipient:record.recipient,createUser: record.createUser}})}>查看详情</Button>
                     {/* {
                         record.type==='WTD-TL'||record.type==='WTD-FY'||record.type==='WTD-LS'? <Button type='link' onClick={()=>history.push({pathname:`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`,state: record.recipient})}>查看详情</Button>:
                         record.type==='WTD-ZH'? <Button  type='link' onClick={()=>history.push({pathname:`/question/questionMngt/assemblyWeldDetail/${record.id}/${record.status}`,state: record.recipient})}>查看详情</Button>:

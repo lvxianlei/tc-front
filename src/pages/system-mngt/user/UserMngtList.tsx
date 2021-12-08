@@ -173,10 +173,6 @@ export default function RoleMngtList(): React.ReactNode {
                     {
                         name: 'account',
                         children: <Input placeholder="请输入账号" style={{ width: 300 }} />
-                    },
-                    {
-                        name: 'name',
-                        children: <Input placeholder="请输入姓名" style={{ width: 300 }} />
                     }
                 ]}
         />
@@ -185,6 +181,7 @@ export default function RoleMngtList(): React.ReactNode {
             visible={visible}
             width={1000}
             maskClosable={false}
+            destroyOnClose={true}
             onCancel={() => {
                 setVisible(false)
                 addRef.current?.resetFields();

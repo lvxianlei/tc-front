@@ -241,7 +241,8 @@ export default function DataMngt(): React.ReactNode {
                 {/* <Button type="primary" onClick={ () => downloadTemplate('', '资料管理导入模板') } ghost>下载导入模板</Button> */}
                 <Link to={{pathname: `/archivesMngt/dataMngt/dataNew`, state:{ type: 'new' } }}><Button type="primary" ghost>录入</Button></Link>
                 { selectedRows.length > 0 && selectedRows.map(items => items.dataStatus).indexOf(1) === -1 && selectedRows.map(items => items.dataStatus).indexOf(2) === -1 && selectedRows.map(items => items.dataStatus).indexOf(3) === -1 ? <Link to={{pathname: `/archivesMngt/dataMngt/datasetting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button>}
-                <Button type="primary" onClick={ batchDel } ghost>删除</Button>
+                { selectedRows.length > 0 && selectedRows.map(items => items.dataStatus).indexOf(1) === -1 && selectedRows.map(items => items.dataStatus).indexOf(2) === -1 && selectedRows.map(items => items.dataStatus).indexOf(3) === -1 ? <Button type="primary" onClick={ batchDel } ghost>删除</Button> : <Button type="primary" disabled ghost>删除</Button>}
+                
             </Space> }
             refresh={ refresh }
             tableProps={{
