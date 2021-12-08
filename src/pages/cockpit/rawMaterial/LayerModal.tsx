@@ -59,12 +59,22 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
     const initValue = value?.records?.map((item: any) => item.id)
     const [select, setSelect] = useState<any[]>(initValue)
     const [columns, setColumns] = useState<any[]>(data.columns)
+    const [ type, setType ] = useState<any[]>([]); // 类型
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,
         pageSize: 10
     })
     const [form] = Form.useForm()
     const searchs = data.columns.filter((item: any) => item.search)
+    // 获取类型/类别
+    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: [] = await RequestUtil.get(`/tower-system/materialCategory/tree`);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), {  })
     const { loading, data: popTableData, run } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         try {
             const params = await form.getFieldsValue()
@@ -110,24 +120,34 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             <Row gutter={[8, 8]}>
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
                     <div style={{display: "flex", flexWrap: "nowrap"}}>
-                        <Form.Item name="note" label="类别" rules={[{ required: true }]}>
-                            <Select style={{ width: 120 }} placeholder="请选择类别">
-                                <Select.Option value="jack">Jack</Select.Option>
-                                <Select.Option value="lucy">Lucy</Select.Option>
-                                <Select.Option value="Yiminghe">yiminghe</Select.Option>
+                        <Form.Item name="materialType" label="类别">
+                            <Select style={{ width: 120 }} placeholder="请选择类别" onChange={(val) => {
+                                const result = userData?.filter((item: any) => item.id === val)[0].children || [];
+                                setType(result);
+                                form.setFieldsValue({
+                                    note1: undefined
+                                })
+                            }}>
+                                {
+                                    userData && userData.length > 0 && userData.map((item: any, index: number) => {
+                                        return <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
+                                    })
+                                }
                             </Select>
                         </Form.Item>
-                        <Form.Item name="note1" label="类型" rules={[{ required: true }]}>
+                        <Form.Item name="materialCategory" label="类型">
                             <Select style={{ width: 120 }} placeholder="请选择类型">
-                                <Select.Option value="jack">Jack</Select.Option>
-                                <Select.Option value="lucy">Lucy</Select.Option>
-                                <Select.Option value="Yiminghe">yiminghe</Select.Option>
+                                {
+                                    type && type.length > 0 && type.map((item: any, index: number) => {
+                                        return <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
+                                    })
+                                }
                             </Select>
                         </Form.Item>
-                        <Form.Item name="note2" label="规格" rules={[{ required: true }]}>
+                        <Form.Item name="structureSpec" label="规格">
                             <Input placeholder="请输入规格" />
                         </Form.Item>
-                        <Form.Item name="note2" label="查询" rules={[{ required: true }]}>
+                        <Form.Item name="fuzzyQuery" label="查询">
                             <Input placeholder="请输入编号/品名" />
                         </Form.Item>
                     </div>

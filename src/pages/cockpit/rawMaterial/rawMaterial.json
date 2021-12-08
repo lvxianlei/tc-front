@@ -70,7 +70,7 @@
         },
         {
             "title": "材质",
-            "dataIndex": "materialSpec"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",
@@ -168,7 +168,7 @@
             "type": "popTable",
             "path": "/tower-system/material",
             "width": 1011,
-            "value": "purchasePlanCode",
+            "value": "materialName",
             "dependencies": true,
             "readOnly": true,
             "columns": [
@@ -179,7 +179,7 @@
                 },
                 {
                     "title": "类别",
-                    "dataIndex": "bigCategoryName",
+                    "dataIndex": "materialTypeName",
                     "type": "select",
                     "search": true
                 },
@@ -215,7 +215,7 @@
         },
         {
             "title": "原材料标准",
-            "dataIndex": "materialStandardName",
+            "dataIndex": "materialStandard",
             "type": "select",
             "rules": [
                 {
@@ -231,7 +231,7 @@
         },
         {
             "title": "原材料材质",
-            "dataIndex": "materialCategoryName11",
+            "dataIndex": "structureTextureId",
             "type": "select",
             "rules": [
                 {
