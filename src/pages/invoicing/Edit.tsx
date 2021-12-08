@@ -107,6 +107,7 @@ export default function Edit() {
                         return ({
                             ...item,
                             width: 150,
+                            title: `* ${item.title}`,
                             render: (value: string, _: any, index) => <Input
                                 value={value}
                                 maxLength={12}
@@ -116,6 +117,7 @@ export default function Edit() {
                     case "taxRate":
                         return ({
                             ...item,
+                            title: `* ${item.title}`,
                             render: (value: number, _: any, index) => <InputNumber
                                 value={([-1, "-1"].includes(value) || !value) ? 0 : value}
                                 step={1}

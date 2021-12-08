@@ -1,7 +1,7 @@
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { Table, Checkbox, Space, Tabs, Button, Modal, Form, Input, TabsProps } from 'antd';
+import { Table, Checkbox, Space, Tabs, Button, Modal, Form, Input, TabsProps, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import AbstractTabableComponent from '../../components/AbstractTabableComponent';
 import { ITabItem } from '../../components/ITabableComponent';
@@ -292,7 +292,11 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
         this.setState({
             visible: false,
         })
-        selectedValue.id?await RequestUtil.put('/tower-system/dictionary', dataSource):await RequestUtil.post('/tower-system/dictionary', dataSource);
+        selectedValue.id?await RequestUtil.put('/tower-system/dictionary', dataSource).then(()=>{
+            message.warn('刷新或退出重新登录，即可生效！')
+        }):await RequestUtil.post('/tower-system/dictionary', dataSource).then(()=>{
+            message.warn('刷新或退出重新登录，即可生效！')
+        });
         this.updateTab(this.state.selectedTab)
     }
 
