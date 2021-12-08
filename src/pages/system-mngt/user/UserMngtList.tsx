@@ -63,24 +63,42 @@ export default function RoleMngtList(): React.ReactNode {
         setSelectedRows(selectedRows)
     }
 
-    // 批量删除
+    // 批量检查是否关联员工
     const batchDel = () => {
         if(selectedRows.length > 0) {
-            RequestUtil.delete(`/sinzetech-user/user?ids=${ selectedRows.map<string>((item: IAnnouncement): string => item?.id || '').join(',') }`).then(res => {
-                message.success('批量删除成功');
-                setSelectedKeys([]);
-                setSelectedRows([]);
-                setRefresh(!refresh);
-            });   
+            checkAccount(selectedRows.map<string>((item: IAnnouncement): string => item?.account || '').join(','), "", true)
         } else {
             message.warning('请先选择需要删除的数据');
         }
     }
 
+    // 批量删除
+    const batchAllDel = () => {
+        RequestUtil.delete(`/sinzetech-user/user?ids=${ selectedRows.map<string>((item: IAnnouncement): string => item?.id || '').join(',') }`).then(res => {
+            message.success('批量删除成功');
+            setSelectedKeys([]);
+            setSelectedRows([]);
+            setRefresh(!refresh);
+        });  
+    }
     // 重置密码
     const handleResetPassWord = async(items: IUser[]) => {
         const resData: IResponseData = await RequestUtil.put<IResponseData>('/sinzetech-user/user/resetPassword?userIds='+ items.map<number>((item: IUser): number => item?.id as number));
         message.success("重置密码成功！")
+        setRefresh(!refresh);
+    }
+
+    // 检查用户是否关联员工
+    const checkAccount = async(account: string, id: string, flag: boolean) => {
+        // flag true为批量删除 false 单个删除
+        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/employee/checkAccount?accounts=${account}`);
+        flag ? batchAllDel() : hanleDeteUser(id);
+    }
+
+    // 删除用户
+    const hanleDeteUser = async(id: string) => {
+        const resData: IResponseData = await RequestUtil.delete(`/sinzetech-user/user?ids=${id}`);
+        message.success("删除用户成功！")
         setRefresh(!refresh);
     }
 
@@ -126,9 +144,7 @@ export default function RoleMngtList(): React.ReactNode {
                                 <Popconfirm
                                     title="您确定删除该用户吗?"
                                     onConfirm={() => {
-                                        RequestUtil.delete(`/sinzetech-user/user?ids=${record.id}`).then(res => {
-                                            setRefresh(!refresh);
-                                        });
+                                        checkAccount(record.account, record.id, false)
                                     }}
                                     okText="确认"
                                     cancelText="取消"

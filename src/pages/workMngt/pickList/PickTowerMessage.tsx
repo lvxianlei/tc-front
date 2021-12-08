@@ -276,7 +276,7 @@ export default function PickTowerMessage(): React.ReactNode {
                                         <Col span={1}></Col>
                                         <Col span={ 11 }>
                                         <Form.Item  name={[ field.name , 'pattern']} label='模式' initialValue={[ field.name , 'pattern']}>
-                                            <Select style={{ width: '150px' }}>
+                                            <Select style={{ width: '150px' }} disabled={edit}>
                                                 { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
                                                     return <Select.Option key={ index } value={ id  }>
                                                         { name }
