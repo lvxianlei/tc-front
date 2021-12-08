@@ -23,7 +23,7 @@
             "type": "number"
         },
         {
-            "title": "开票合计重量(元/吨)",
+            "title": "开票合计重量(吨)",
             "dataIndex": "ticketWeight",
             "type": "number"
         },
@@ -48,7 +48,7 @@
             "type": "string"
         },
         {
-            "title": "申请日期",
+            "title": "申请时间",
             "dataIndex": "createTime",
             "type": "date",
             "format": "YYYY-MM-DD"

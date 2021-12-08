@@ -611,7 +611,7 @@
             "dataIndex": "company"
         },
         {
-            "title": "重量(吨)",
+            "title": "数量",
             "dataIndex": "weight",
             "type": "number",
             "rules": [
