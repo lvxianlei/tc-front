@@ -2,6 +2,10 @@
     "enquiryTaskList": [
         {
             "title": "工程报价任务编号",
+            "dataIndex": "sysInquiryNumber"
+        },
+        {
+            "title": "编号",
             "dataIndex": "inquiryNumber"
         },
         {
