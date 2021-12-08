@@ -180,6 +180,10 @@
             ]
         },
         {
+            "title": "照片",
+            "dataIndex": "photo"
+        },
+        {
             "title": "出生日期",
             "dataIndex": "birthday",
             "type": "date",
@@ -665,6 +669,56 @@
                     "message": "请选择工作时间..."
                 }
             ]
+        },
+        {
+            "title": "工作单位",
+            "width": 100,
+            "dataIndex": "workOrganization",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入工作单位..."
+                }
+            ]
+        },
+        {
+            "title": "离职原因",
+            "width": 100,
+            "dataIndex": "departureReason",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入离职原因..."
+                }
+            ]
+        },
+        {
+            "title": "职务",
+            "width": 100,
+            "dataIndex": "position"
+        },
+        {
+            "title": "备注",
+            "width": 100,
+            "dataIndex": "remark",
+            "type": "textarea",
+            "rows": 1
+        }
+    ],
+    "overviewWorkExperience": [
+        {
+            "title": "工作开始时间",
+            "dataIndex": "startWorkDate",
+            "width": 100,
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "工作结束时间",
+            "dataIndex": "endWorkDate",
+            "width": 100,
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "工作单位",

@@ -106,7 +106,7 @@ export default function Edit() {
                     break
                 case "employee":
                     {
-                        const postData = await familyForm.validateFields()
+                        const postData = await employeeForm.validateFields()
                         await saveRun("employee", postData?.submit.map((item: any) => {
                             const postItem: any = { ...item }
                             delete postItem.id
