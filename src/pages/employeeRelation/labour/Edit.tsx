@@ -105,6 +105,7 @@ export default function Edit(): React.ReactNode {
                                 value.contractEndDate= moment(value.contractEndDate).format('YYYY-MM-DD HH:mm:ss');
                                 value.contractStartDate= moment(value.contractStartDate).format('YYYY-MM-DD HH:mm:ss');
                                 value.submitType='save';
+                                value.employeeId = detailData.employeeId;
                                 value.id = params.status !== 'edit'?undefined:params.id;
                                 value.type = params.status === 'change'?1:params.status === 'renewal'?2:undefined
                                 RequestUtil.post(`/tower-hr/labor/contract`, value).then(()=>{
