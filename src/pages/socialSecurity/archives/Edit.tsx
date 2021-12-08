@@ -20,17 +20,26 @@ export default function Edit() {
         }
     }))
 
-    const { loading: saveLoading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-hr/insuranceArchives/save`)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-hr/insuranceArchives/save`, { ...data, id: params.archiveId })
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
 
-    const handleSave = () => {
-
+    const handleSave = async () => {
+        try {
+            const postBaseInfoData = await baseForm.validateFields()
+            const postInsuranceData = await insuranceForm.validateFields()
+            await saveRun({
+                ...postBaseInfoData,
+                ...postInsuranceData
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleInsuranceChange = (fields: any) => {

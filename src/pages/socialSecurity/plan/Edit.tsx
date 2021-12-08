@@ -67,13 +67,15 @@ export default function Edit() {
     const handleSave = async () => {
         try {
             const baseData = await baseForm.validateFields()
-            const insuranceData = await insuranceForm.validateFields()
+            const insuranceFormData = await insuranceForm.validateFields()
             const businessData = await businessForm.validateFields()
-            const postInsuranceData = Object.keys(insuranceData).map((item: any, index: number) => {
-                const rowSpanData = index % 2 === 1 ? insuranceData[item - 1] : insuranceData[item]
+            const postInsuranceData = Object.keys(insuranceFormData).map((item: any, index: number) => {
+                const rowSpanData = index % 2 === 1 ? insuranceFormData[item - 1] : insuranceFormData[item]
                 const formatDate = rowSpanData.effectiveMonth.map((item: any) => item.format("YYYY-MM-DD"))
                 return ({
-                    ...insuranceData[item],
+                    ...insuranceFormData[item],
+                    insuranceType: insuranceData[index].insuranceType,
+                    paymentType: insuranceData[index].paymentType,
                     effectiveMonth: formatDate?.[0] + " 00:00:00",
                     expirationMonth: formatDate?.[1] + " 23:59:59",
                 })
@@ -96,6 +98,7 @@ export default function Edit() {
             ...businessData,
             { id: Math.random() + new Date().getDate() }
         ])
+        console.log(businessForm.getFieldsValue())
     }
     const handleDelete = (id: string) => {
         setBusinessData(businessData.filter(item => item.id !== id))

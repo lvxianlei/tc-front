@@ -121,14 +121,26 @@
             "dataIndex": "socialSecurityNumber"
         },
         {
-            "title": "社保缴纳起止月",
+            "title": "社保开始缴纳月",
             "dataIndex": "ssStartMonth",
-            "type": "rangePicker",
+            "type": "date",
             "format": "YYYY-MM-DD",
             "rules": [
                 {
                     "required": true,
                     "message": "请选择社保开始缴纳月..."
+                }
+            ]
+        },
+        {
+            "title": "社保结束缴纳月",
+            "dataIndex": "ssEndMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择社保结束缴纳月..."
                 }
             ]
         },
@@ -148,14 +160,26 @@
             "dataIndex": "providentFundAccount"
         },
         {
-            "title": "公积金缴纳起止月",
+            "title": "公积金开始缴纳月",
             "dataIndex": "pfaStartMonth",
-            "type": "rangePicker",
+            "type": "date",
             "format": "YYYY-MM-DD",
             "rules": [
                 {
                     "required": true,
                     "message": "请选择公积金开始缴纳月..."
+                }
+            ]
+        },
+        {
+            "title": "公积金结束缴纳月",
+            "dataIndex": "pfaEndMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择公积金结束缴纳月..."
                 }
             ]
         },
@@ -183,9 +207,14 @@
             "dataIndex": "commercialInsuranceNumber"
         },
         {
-            "title": "开始缴纳月-结束缴纳月",
+            "title": "开始缴纳月",
             "width": 100,
             "dataIndex": "startMonth"
+        },
+        {
+            "title": "结束缴纳月",
+            "width": 100,
+            "dataIndex": "endMonth"
         },
         {
             "title": "结束缴纳月",
