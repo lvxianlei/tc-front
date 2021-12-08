@@ -1,10 +1,11 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
 import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber } from "antd"
-import { BaseInfo, CommonTable, DetailTitle, PopTableContent, IntgSelect } from "../../common"
+import { BaseInfo, CommonTable, DetailTitle, IntgSelect } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
+import { PopTableContent } from "./compareModal"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { materialStandardOptions } from "../../../configuration/DictionaryOptions"
 interface EditProps {
     id: string
     type: "new" | "edit"
@@ -69,7 +70,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
 })
 
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
-    const materialStandardEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: {
+    const materialStandardEnum = materialStandardOptions?.map((item: {
         id: string,
         name: string
     }) => ({
@@ -81,7 +82,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [chooseVisible, setChooseVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
-    const [form] = Form.useForm()
+    const [form] = Form.useForm();
+    const [ purchasePlanId, setPurchasePlanId ] = useState('');
     const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${id}`)
@@ -95,7 +97,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const postData = type === "new" ? data : ({ ...data, id })
+            const postData = type === "new" ? { ...data, purchasePlanId: purchasePlanId} : ({ ...data, id, purchasePlanId: purchasePlanId })
             const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/comparisonPrice`, postData)
             resole(result)
         } catch (error) {
@@ -153,7 +155,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
 
     const handleChoosePlanOk = () => {
-        const chooseData = choosePlanRef.current?.selectRows
+        const chooseData = choosePlanRef.current?.selectRows;
+        setPurchasePlanId(chooseData[0].id);
         setMaterialList(chooseData[0]?.materials.map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",

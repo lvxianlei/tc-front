@@ -134,19 +134,19 @@ export default function ContractMngt() {
                             <Link to={`/contract-mngt/enquiryCompare/enquiry/${records.id}`}>询价信息</Link>
                             <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => {
                                 setDetailId(records.id)
+                                setCancelVisible(true)
+                            }}>取消</Button>
+                            <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => handleDelete(records.id)}>删除</Button>
+                            <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => {
+                                setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => {
-                                setDetailId(records.id)
-                                setCancelVisible(true)
-                            }}>取消</Button>
                             <Button type="link" onClick={() => {
                                 // setDetailId(records.id)
                                 // setOprationVisible(true)
                                 message.warning("功能加急开发中...")
                             }}>操作信息</Button>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => handleDelete(records.id)}>删除</Button>
                         </>
                     }
                 ]}
