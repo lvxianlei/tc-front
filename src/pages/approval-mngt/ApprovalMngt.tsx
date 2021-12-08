@@ -29,6 +29,7 @@ export default function Information(): React.ReactNode {
     const history = useHistory()
     const attachRef = useRef<AttachmentRef>()
     const [visible, setVisible] = useState(false)
+    const [filterValue, setFilterValue] = useState({})
     const [performanceBondVisible, setPerformanceBondVisible] = useState<boolean>(false)
     const [drawHVisible, setDrawHVisible] = useState<boolean>(false)
     const [drawingCofirmVisible, setDrawingCofirmVisible] = useState<boolean>(false)
@@ -284,6 +285,7 @@ export default function Information(): React.ReactNode {
             value.endMarketAuditTime = formatDate[1]
             delete value.marketAuditTime
         }
+        setFilterValue(value)
         return value
     }
 
@@ -440,6 +442,7 @@ export default function Information(): React.ReactNode {
                         </Space>
                     )
                 }]}
+            filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             extraOperation={<Button type="primary" onClick={handleNewAudit}>新增审批</Button>}
             searchFormItems={[

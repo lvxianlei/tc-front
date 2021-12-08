@@ -8,8 +8,8 @@ export default function Invoicing() {
     const onFilterSubmit = (value: any) => {
         if (value.startLaunchTime) {
             const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+            value.startLaunchTime = formatDate[0] + " 00:00:00"
+            value.endLaunchTime = formatDate[1] + " 23:59:59"
         }
         return value
     }
