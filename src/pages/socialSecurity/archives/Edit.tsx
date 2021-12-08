@@ -15,7 +15,13 @@ export default function Edit() {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insuranceArchives/detail?id=${params.archiveId}`)
-            resole(result)
+            resole({
+                ...result,
+                insurancePlanName: {
+                    id: result?.insurancePlanId,
+                    value: result?.insurancePlanName
+                }
+            })
         } catch (error) {
             reject(error)
         }
@@ -23,7 +29,12 @@ export default function Edit() {
     const { loading: businessLoding, run: getBusinessRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insurancePlan/detail?id=${id}`)
+            const businessData: any = {}
+            result.businessList.forEach((item: any, index: number) => {
+                businessData[index] = item
+            })
             setBusinessData(result?.businessList)
+            businessForm.setFieldsValue(businessData)
             resole(result)
         } catch (error) {
             reject(error)
@@ -101,7 +112,7 @@ export default function Edit() {
                                 return ({
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <Select style={{ width: "100%" }}>
+                                        <Select style={{ width: "100%" }} value={value}>
                                             <Select.Option value={1}>补充医疗保险</Select.Option>
                                             <Select.Option value={2}>雇主责任险</Select.Option>
                                             <Select.Option value={3}>意外伤害险</Select.Option>
@@ -115,7 +126,7 @@ export default function Edit() {
                                 return ({
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <Input />
+                                        <Input value={value} />
                                     </Form.Item>
                                 })
                         }

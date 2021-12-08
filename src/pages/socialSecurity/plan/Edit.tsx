@@ -94,14 +94,21 @@ export default function Edit() {
         }
     }
     const handleAdd = () => {
-        setBusinessData([
-            ...businessData,
-            { id: Math.random() + new Date().getDate() }
-        ])
-        console.log(businessForm.getFieldsValue())
+        const businessFormData = businessForm.getFieldsValue()
+        setBusinessData([...businessData, { id: `${Math.random() + new Date().getDate()}` }])
+        businessForm.resetFields()
+        businessForm.setFieldsValue({ ...businessFormData, [businessData.length + 1]: {} })
     }
     const handleDelete = (id: string) => {
-        setBusinessData(businessData.filter(item => item.id !== id))
+        const businessFormData = businessForm.getFieldsValue()
+        setBusinessData(businessData.filter((item: any, index: number) => {
+            (item.id === id) && delete businessFormData[index]
+            return item.id !== id
+        }))
+        Object.keys(businessFormData).forEach((item: string, index: number) => {
+            businessFormData[index] = businessFormData[item]
+        })
+        businessForm.setFieldsValue(businessFormData)
     }
     return <DetailContent operation={[
         <Button key="save" loading={saveLoading} onClick={handleSave} type="primary" style={{ marginRight: 16 }}>保存</Button>,
@@ -241,7 +248,7 @@ export default function Edit() {
                                 return ({
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <Select style={{ width: "100%" }}>
+                                        <Select style={{ width: "100%" }} value={value}>
                                             <Select.Option value={1}>补充医疗保险</Select.Option>
                                             <Select.Option value={2}>雇主责任险</Select.Option>
                                             <Select.Option value={3}>意外伤害险</Select.Option>
@@ -255,7 +262,7 @@ export default function Edit() {
                                 return ({
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <Input />
+                                        <Input value={value} />
                                     </Form.Item>
                                 })
                         }
