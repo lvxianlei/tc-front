@@ -5,7 +5,7 @@ import { DetailContent, DetailTitle, BaseInfo, EditTable, Attachment, Attachment
 import { baseInfo, companyInfo, other, workExperience, family, relatives } from "./archives.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { bankTypeOptions } from "../../../configuration/DictionaryOptions"
+import { bankTypeOptions, employeeTypeOptions } from "../../../configuration/DictionaryOptions"
 type TabTypes = "baseInfo" | "family" | "employee" | "work"
 const tabPaths: { [key in TabTypes]: string } = {
     baseInfo: "/tower-hr/employee/archives/detail",
@@ -33,8 +33,10 @@ export default function Edit() {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`${tabPaths[currentType]}?employeeId=${params.archiveId}`)
-
-            resole(result)
+            resole(currentType === "baseInfo" ? {
+                ...result,
+                postType: result?.postType.split(",")
+            } : result)
         } catch (error) {
             reject(error)
         }
@@ -94,8 +96,6 @@ export default function Edit() {
                             const postItem: any = { ...item }
                             delete postItem.id
                             delete postItem.uid
-                            postItem.startWorkDate = postItem.workDate[0] ? postItem.workDate[0] + " 00:00:00" : ""
-                            postItem.endWorkDate = postItem.workDate[1] ? postItem.workDate[1] + " 00:00:00" : ""
                             postItem.employeeId = params.archiveId
                             delete postItem.workDate
                             return postItem
@@ -111,8 +111,6 @@ export default function Edit() {
                             const postItem: any = { ...item }
                             delete postItem.id
                             delete postItem.uid
-                            postItem.startWorkDate = postItem.workDate[0] ? postItem.workDate[0] + " 00:00:00" : ""
-                            postItem.endWorkDate = postItem.workDate[1] ? postItem.workDate[1] + " 00:00:00" : ""
                             postItem.employeeId = params.archiveId
                             delete postItem.workDate
                             return postItem
@@ -129,7 +127,7 @@ export default function Edit() {
             console.log(error)
         }
     }
-    console.log(data)
+
     return <Tabs type="card" activeKey={currentType} onChange={(tabKey: string) => setCurrentType(tabKey as TabTypes)}>
         <Tabs.TabPane tab="基本信息" key="baseInfo">
             <DetailContent operation={[
@@ -150,7 +148,20 @@ export default function Edit() {
                         return item
                     })} dataSource={data || {}} edit />
                     <DetailTitle title="公司信息" />
-                    <BaseInfo form={companyForm} columns={companyInfo} dataSource={data || {}} edit />
+                    <BaseInfo form={companyForm} columns={companyInfo.map((item: any) => {
+                        if (item.dataIndex === "postType") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                mode: "multiple",
+                                enum: employeeTypeOptions?.map(item => ({
+                                    label: item.name,
+                                    value: item.id
+                                }))
+                            })
+                        }
+                        return item
+                    })} dataSource={data || {}} edit />
                     <DetailTitle title="其他信息" />
                     <BaseInfo form={otherForm} columns={other} dataSource={data || {}} edit />
                     <Attachment ref={attchRef} edit />
