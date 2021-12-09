@@ -21,6 +21,9 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
     const [form] = Form.useForm();
     const [serarchForm] = Form.useForm();
 
+    // 定义承接待选区的所有数据
+    const [waitingArea, setWaitingArea] = useState<any[]>([])
+
     // 标准
     const standardEnum = (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
         value: item.id,
@@ -41,6 +44,11 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
                 num: item.surplusNum,
                 materialContractDetailId: item.id
             })).filter((item: any) => item.num))
+            setWaitingArea(result?.materialContractDetailVos.map((item: any) => ({
+                ...item,
+                num: item.surplusNum,
+                materialContractDetailId: item.id
+            })).filter((item: any) => item.num))
             resole(result)
         } catch (error) {
             reject(error)
@@ -53,6 +61,7 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
         setCurrentId("")
         setChooseList([])
         setSelectList([])
+        setWaitingArea([])
     }
 
     const handleRemove = async (materialContractDetailId: string) => {
@@ -63,8 +72,10 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
             setChooseList(chooseList.filter((item: any) => item.materialContractDetailId !== materialContractDetailId))
             if (currentSelectData) {
                 setSelectList(selectList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+                setWaitingArea(waitingArea.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
                 setSelectList([...selectList, { ...currentData, num: formData.num }])
+                setWaitingArea([...waitingArea, { ...currentData, num: formData.num }])
             }
         } else if ((currentData.num - formData.num) < 0) {
             message.error("移除数量不能大于已选数量...")
@@ -73,8 +84,10 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
             setChooseList(chooseList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: item.num - formData.num }) : item))
             if (currentSelectData) {
                 setSelectList(selectList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+                setWaitingArea(waitingArea.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
                 setSelectList([...selectList, { ...currentData, num: formData.num }])
+                setWaitingArea([...waitingArea, { ...currentData, num: formData.num }])
             }
         }
         setVisible(false)
@@ -87,6 +100,7 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
         const currentChooseData = chooseList.find((item: any) => item.materialContractDetailId === materialContractDetailId)
         if ((currentData.num - formData.num) === 0) {
             setSelectList(selectList.filter((item: any) => item.materialContractDetailId !== materialContractDetailId))
+            setWaitingArea(waitingArea.filter((item: any) => item.materialContractDetailId !== materialContractDetailId))
             if (currentChooseData) {
                 setChooseList(chooseList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
@@ -97,6 +111,7 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
             return
         } else {
             setSelectList(selectList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
+            setWaitingArea(waitingArea.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
             if (currentChooseData) {
                 setChooseList(chooseList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
@@ -109,6 +124,89 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
 
     const handleModalOk = () => oprationType === "select" ? handleSelect(currentId) : handleRemove(currentId)
     useImperativeHandle(ref, () => ({ dataSource: chooseList, resetFields }), [ref, JSON.stringify(chooseList), resetFields])
+
+    // 模糊搜索
+    const handleSearch = () => {
+        let result = [];
+        // 标准存在
+        if (serarchForm.getFieldValue("materialStandardName")) {
+            result = waitingArea.filter((item: any) => item.materialStandardName === serarchForm.getFieldValue("materialStandardName"));
+        }
+        // 材质存在
+        if (serarchForm.getFieldValue("materialTexture")) {
+            if (result.length > 0) {
+                result = result.filter((item: any) => item.materialTexture === serarchForm.getFieldValue("materialTexture"));
+            } else {
+                result = waitingArea.filter((item: any) => item.materialTexture === serarchForm.getFieldValue("materialTexture"));
+            }
+        }
+        // 规格
+        if (serarchForm.getFieldValue("spec")) {
+            let v = []
+            if (result.length > 0) {
+                for (let i = 0; i < result.length; i += 1) {
+                    if (result[i].spec.indexOf(serarchForm.getFieldValue("spec")) !== -1) {
+                        v.push(result[i]);
+                    }
+                }
+            } else {
+                for (let i = 0; i < waitingArea.length; i += 1) {
+                    if (waitingArea[i].spec.indexOf(serarchForm.getFieldValue("spec")) !== -1) {
+                        v.push(waitingArea[i]);
+                    }
+                }
+            }
+            result = v;
+        }
+        // 长度
+        if (serarchForm.getFieldValue("length1") && serarchForm.getFieldValue("length2")) {
+            if (serarchForm.getFieldValue("length1") > serarchForm.getFieldValue("length2")) {
+                // 前者比后者大
+                let v = [];
+                if (result.length > 0) {
+                    for (let i = 0; i < result.length; i += 1) {
+                        if (result[i].length >= serarchForm.getFieldValue("length2") && result[i].length <= serarchForm.getFieldValue("length1")) {
+                            v.push(result[i]);
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < waitingArea.length; i += 1) {
+                        if (waitingArea[i].length >= serarchForm.getFieldValue("length2") && waitingArea[i].length <= serarchForm.getFieldValue("length1")) {
+                            v.push(waitingArea[i]);
+                        }
+                    }
+                }
+                result = v;
+            } else {
+                // 后者比前者大
+                let v = [];
+                if (result.length > 0) {
+                    for (let i = 0; i < result.length; i += 1) {
+                        if (result[i].length <= serarchForm.getFieldValue("length2") && result[i].length >= serarchForm.getFieldValue("length1")) {
+                            v.push(result[i]);
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < waitingArea.length; i += 1) {
+                        if (waitingArea[i].length <= serarchForm.getFieldValue("length2") && waitingArea[i].length >= serarchForm.getFieldValue("length1")) {
+                            v.push(waitingArea[i]);
+                        }
+                    }
+                }
+                result = v;
+            }
+        }
+        if (serarchForm.getFieldValue("materialStandardName")
+            || serarchForm.getFieldValue("num2")
+            || serarchForm.getFieldValue("spec")
+            || serarchForm.getFieldValue("length1")
+            || serarchForm.getFieldValue("length2")
+        ) {
+            setSelectList(result);
+        } else {
+            setSelectList(waitingArea);
+        }
+    }
     return <Spin spinning={loading}>
         <Modal title="选定数量"
             visible={visible}
@@ -150,12 +248,12 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
                 <Row>
                     <Col span={4}>
                         <Form.Item
-                            name="num1"
+                            name="materialStandardName"
                             label="标准">
                                 <Select style={{ width: 120 }} placeholder="请选择">
                                     {
                                         standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
-                                            return <Select.Option value={item.id} key={index}>{item.label}</Select.Option>
+                                            return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
                                         })
                                     }
                                 </Select>
@@ -163,12 +261,12 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
                     </Col>
                     <Col span={4}>
                         <Form.Item
-                            name="num2"
+                            name="materialTexture"
                             label="材质">
                                 <Select style={{ width: 120 }} placeholder="请选择">
                                     {
                                         materialEnum && materialEnum.length > 0 && materialEnum.map((item: any, index: number) => {
-                                            return <Select.Option value={item.id} key={index}>{item.label}</Select.Option>
+                                            return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
                                         })
                                     }
                                 </Select>
@@ -176,28 +274,31 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
                     </Col>
                     <Col span={4}>
                         <Form.Item
-                            name="num3"
+                            name="length1"
                             label="长度">
-                                <InputNumber min={1} step={1} />&nbsp;
+                               <InputNumber min={1} step={1} />
                         </Form.Item>
                     </Col>
                     <Col span={3}>
                         <Form.Item
-                            name="num4">
+                            name="length2">
                                 <InputNumber min={1} step={1} />
                         </Form.Item>
                     </Col>
                     <Col span={3}>
                         <Form.Item
-                            name="num5"
+                            name="spec"
                             label="规格">
                                 <Input placeholder="请输入规格" />
                         </Form.Item>
                     </Col>&nbsp;&nbsp;
+                    
                     <Col span={4}>
                         <Form.Item>
-                            <Button type="primary">搜索</Button>&nbsp;&nbsp;
-                            <Button>重置</Button>
+                            <Button type="primary" onClick={handleSearch}>搜索</Button>&nbsp;&nbsp;
+                            <Button onClick={() => {
+                                serarchForm.resetFields();
+                            }}>重置</Button>
                         </Form.Item>
                     </Col>
                 </Row>
