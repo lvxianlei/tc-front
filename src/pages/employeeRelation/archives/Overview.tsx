@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Spin, Tabs } from 'antd'
+import { Button, Modal, Spin, Tabs, Image } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
 import { baseInfo, overviewWorkExperience, family, companyInfo, other, relatives } from "./archives.json"
@@ -31,7 +31,17 @@ export default function Overview() {
             ]}>
                 <Spin spinning={loading}>
                     <DetailTitle title="基本信息" />
-                    <BaseInfo columns={baseInfo} dataSource={data || {}} />
+                    <BaseInfo columns={baseInfo.map((item: any) => {
+                        if (item.dataIndex === "image") {
+                            return ({
+                                ...item,
+                                render: (dataSource: any) => {
+                                    return <Image width={48} src={dataSource.image} alt="" />
+                                }
+                            })
+                        }
+                        return item
+                    })} dataSource={data || {}} />
                     <DetailTitle title="公司信息" />
                     <BaseInfo columns={companyInfo.map((item: any) => {
                         if (item.dataIndex === "postType") {
