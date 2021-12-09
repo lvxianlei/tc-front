@@ -2,17 +2,17 @@ import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
 import { Button, Row, Modal, Spin, Form, InputNumber, message } from "antd"
 import { BaseInfo, DetailTitle, Attachment, CommonTable, PopTableContent, IntgSelect } from "../common"
 import { contractBaseInfo, material, comparison, addMaterial } from "./contract.json"
-import ApplicationContext from "../../configuration/ApplicationContext"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
+import { deliverywayOptions, materialStandardOptions, transportationTypeOptions } from "../../configuration/DictionaryOptions"
 interface EditProps {
     id: string
     type: "new" | "edit"
 }
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
-    const materialStandardEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const deliveryMethodEnum = (ApplicationContext.get().dictionaryOption as any)["128"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const transportMethodEnum = (ApplicationContext.get().dictionaryOption as any)["129"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const transportMethodEnum = transportationTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const [visible, setVisible] = useState<boolean>(false)
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [materialList, setMaterialList] = useState<any[]>([])

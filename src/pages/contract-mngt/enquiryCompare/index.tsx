@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react'
 import { useHistory, Link } from "react-router-dom"
 import { IntgSelect, Page } from "../../common"
-import { Select, Input, Button, Modal, DatePicker, message, Form } from 'antd'
+import { Select, Input, Button, Modal, DatePicker, message, Form, Space } from 'antd'
 import { comparison } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -130,7 +130,7 @@ export default function ContractMngt() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        render: (_: any, records: any) => <>
+                        render: (_: any, records: any) => <Space direction="horizontal" size="small">
                             <Link to={`/contract-mngt/enquiryCompare/enquiry/${records.id}`}>询价信息</Link>
                             <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => {
                                 setDetailId(records.id)
@@ -147,7 +147,7 @@ export default function ContractMngt() {
                                 // setOprationVisible(true)
                                 message.warning("功能加急开发中...")
                             }}>操作信息</Button>
-                        </>
+                        </Space>
                     }
                 ]}
                 extraOperation={<>

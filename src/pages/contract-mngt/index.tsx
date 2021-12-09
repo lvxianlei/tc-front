@@ -1,7 +1,7 @@
 // 合同管理-原材料合同管理
 import React, { useState, useRef } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { DatePicker, Select, Input, Button, Modal, message, Form } from 'antd'
+import { DatePicker, Select, Input, Button, Modal, message, Form, Space } from 'antd'
 import { IntgSelect, Page } from "../common"
 import Edit from "./Edit"
 import Overview from "./Overview"
@@ -123,7 +123,7 @@ export default function ContractMngt(): JSX.Element {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        render: (_: any, records: any) => <>
+                        render: (_: any, records: any) => <Space direction="horizontal" size="small">
                             <Button type="link" disabled={records.isReceiptRef === 1}
                                 onClick={() => {
                                     setOprationType("edit")
@@ -136,7 +136,7 @@ export default function ContractMngt(): JSX.Element {
                             }}>详情</Button>
                             <Button type="link" disabled={records.isReceiptRef === 1}
                                 onClick={() => handleDelete(records.id)}>删除</Button>
-                        </>
+                        </Space>
                     }
                 ]}
                 extraOperation={<>

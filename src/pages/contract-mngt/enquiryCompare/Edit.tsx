@@ -188,6 +188,20 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         }))
     }
 
+    const lengthChange = (value: number, id: string) => {
+        const list = materialList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    weight: item.weightAlgorithm === '0' ? (item.proportion * item.thickness * item.width * value).toFixed(3) : item.weightAlgorithm === '1' ? (item.proportion * value).toFixed(3) : null,
+                    totalWeight: (parseFloat(item.weight || "0.00") * item.num).toFixed(3)
+                })
+            }
+            return item
+        })
+        setMaterialList(list);
+    }
+
     return <Spin spinning={loading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
             onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
@@ -235,6 +249,15 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                 min={0}
                                 value={value === -1 ? 0 : value}
                                 onChange={(value: number) => handleInputChange(value, records.id)} />
+                        })
+                    }
+                    if (item.dataIndex === "length") {
+                        return ({
+                            ...item,
+                            render: (value: number, records: any) => records.source === 1 ? value : <InputNumber
+                                min={0}
+                                value={value === -1 ? 0 : value}
+                                onChange={(value: number) => lengthChange(value, records.id)} />
                         })
                     }
                     return item
