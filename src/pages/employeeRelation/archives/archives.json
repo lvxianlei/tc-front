@@ -183,7 +183,8 @@
             "title": "出生日期",
             "dataIndex": "birthday",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD",
+            "disabled": true
         },
         {
             "title": "照片",
@@ -228,12 +229,7 @@
             "title": "年龄",
             "dataIndex": "age",
             "type": "number",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入年龄..."
-                }
-            ]
+            "disabled": true
         },
         {
             "title": "籍贯",

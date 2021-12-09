@@ -20,6 +20,23 @@ const saveUrlObj: { [key in TabTypes]: string } = {
     employee: "/tower-hr/employee/archives/relatives",
     work: "/tower-hr/employee/archives/work/experience"
 }
+const verifyIdNumber = (idcode: string) => {
+    const weight_factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
+    const check_code = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2']
+    const code = idcode + ""
+    const last = idcode[17]
+    const seventeen = code.substring(0, 17)
+    const arr = seventeen.split("")
+    let num = 0
+    arr.forEach((item: string, index: number) => {
+        num = num + Number(arr[index]) * weight_factor[index]
+    })
+    const resisue = num % 11
+    const last_no = check_code[resisue]
+    const idcard_patter = /^[1-9][0-9]{5}([1][9][0-9]{2}|[2][0][0|1][0-9])([0][1-9]|[1][0|1|2])([0][1-9]|[1|2][0-9]|[3][0|1])[0-9]{3}([0-9]|[X])$/
+    const format = idcard_patter.test(idcode)
+    return last === last_no && format ? true : false
+}
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ archiveId: string, type: "new" | "edit" }>()
@@ -151,6 +168,17 @@ export default function Edit() {
                                 render: () => {
                                     return <Photo id={params.archiveId} url={data?.image} />
                                 }
+                            })
+                        }
+                        if (item.dataIndex === "idNumber") {
+                            return ({
+                                ...item,
+                                rules: [
+                                    ...item.rules,
+                                    // {
+                                    //     validateTrigger:""
+                                    // }
+                                ]
                             })
                         }
                         return item
