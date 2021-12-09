@@ -170,12 +170,12 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
         return [{
             key: 'employeeName',
             title: '员工姓名',
-            width: '5%',
+            width: '18%',
             dataIndex: 'employeeName',
         }, {
             key: 'gender',
             title: '性别',
-            width: '5%',
+            width: '18%',
             dataIndex: 'gender'
         }, 
         // {
@@ -187,12 +187,12 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
         {
             key: 'companyName',
             title: '公司',
-            width: '5%',
+            width: '18%',
             dataIndex: 'companyName'
         }, {
             key: 'departmentName',
             title: '部门/班组',
-            width: '5%',
+            width: '18%',
             dataIndex: 'departmentName', 
             render:(_:any,record:any)=>{
                 return record.departmentName+'/'+record.teamName
@@ -200,7 +200,7 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
         }, {
             key: 'postName',
             title: '岗位',
-            width: '5%',
+            width: '18%',
             dataIndex: 'postName'
         }, 
         // {
@@ -230,7 +230,7 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
         {
             key: 'idNumber',
             title: '身份证号',
-            width: '5%',
+            width: '18%',
             dataIndex: 'idNumber'
         }, 
         // {
