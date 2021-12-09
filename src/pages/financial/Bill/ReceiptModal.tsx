@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Select, Modal, Form, Row, Col, Button } from 'antd'
+import { Input, Select, Modal, Form, Row, Col, Button, DatePicker } from 'antd'
 import { CommonTable } from "../../common"
 import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../../utils/RequestUtil'
@@ -55,6 +55,10 @@ interface PagenationProps {
     pageSize: number
 }
 
+interface IResponse {
+    readonly records: [];
+}
+
 export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
     const initValue = value?.records?.map((item: any) => item.id)
     const [select, setSelect] = useState<any[]>(initValue)
@@ -64,9 +68,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         pageSize: 10
     })
     const [form] = Form.useForm()
-    const searchs = data.columns.filter((item: any) => item.search);
-    const [ materialType, setMaterialType ] = useState<IMaterialType[]>([]);
     const [ materialList, setMaterialList ] = useState<IMaterialType[]>([]);
+    const searchs = data.columns.filter((item: any) => item.search);
     const { loading, data: popTableData, run } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         try {
             const params = await form.getFieldsValue()
@@ -87,8 +90,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             })
             const paramsOptions = stringify(params)
             const path = data.path.includes("?") ? `${data.path}&${paramsOptions || ''}` : `${data.path}?${paramsOptions || ''}`
-            const materialTypeList: IMaterialType[] = await RequestUtil.get<IMaterialType[]>(`/tower-system/materialCategory`);
-            setMaterialType(materialTypeList);
+            const list: IResponse = await RequestUtil.get<IResponse>(`/tower-system/material?size=100`);
+            setMaterialList(list?.records)
             resolve(await RequestUtil.get<{ data: any }>(path))
         } catch (error) {
             reject(error)
@@ -113,20 +116,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         }}>
             <Row gutter={[8, 8]}>
                 <Col>
-                    <Form.Item name="materialType" label="类别" initialValue="">
-                        <Select placeholder="请选择" style={{ width: "150px" }} onChange={ (e) => {
-                            const list = materialType.filter((res: IMaterialType) => res.id === e);
-                            setMaterialList(list[0].children || []);
-                        } }>
-                            <Select.Option value="" key="6">全部</Select.Option>
-                            { materialType && materialType.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                            }) }
-                        </Select>
-                    </Form.Item>
-                </Col>
-                <Col>
-                    <Form.Item name="materialCategory" label="类型" initialValue="">
+                    <Form.Item name="materialType" label="材料名称" initialValue="">
                         <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value="" key="6">全部</Select.Option>
                             { materialList && materialList.map((item: any) => {
@@ -136,8 +126,13 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                     </Form.Item>
                 </Col>
                 <Col>
+                    <Form.Item name="completeTime" label="月份选择" initialValue="">
+                        <DatePicker.RangePicker picker="month" />
+                    </Form.Item>
+                </Col>
+                <Col>
                     <Form.Item name="fuzzyQuery" label="查询" initialValue="">
-                        <Input placeholder="品名/规格" />
+                        <Input placeholder="合同编号/收货单号/联系人" />
                     </Form.Item>
                 </Col>
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>

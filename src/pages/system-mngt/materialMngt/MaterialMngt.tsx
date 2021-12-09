@@ -180,10 +180,10 @@ export default function MaterialMngt(): React.ReactNode {
             columns={columns}
             headTabs={[]}
             refresh={refresh}
-            exportPath={`/tower-system/material`}
+            // exportPath={`/tower-system/material`}
             extraOperation={<Space direction="horizontal" size="small">
-                <Button type="primary" ghost>模板下载</Button>
-                <Button type="primary" ghost>导入</Button>
+                {/* <Button type="primary" ghost>模板下载</Button>
+                <Button type="primary" ghost>导入</Button> */}
                 <Button type="primary" onClick={() => { setVisible(true); setTitle('新增'); }} ghost>新增</Button>
                 <Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>
             </Space>}

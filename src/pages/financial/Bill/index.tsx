@@ -143,17 +143,17 @@ export default function Invoice() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
+                            <Button type="link" disabled={![1].includes(record.invoiceStatus)} onClick={() => {
+                                setType("edit")
+                                setDetailedId(record.id)
+                                setVisible(true)
+                            }}>编辑</Button>
                             <Button
                                 type="link"
                                 onClick={() => {
                                     setDetailVisible(true)
                                     setDetailedId(record.id)
                                 }}>详情</Button>
-                            <Button type="link" disabled={![1].includes(record.invoiceStatus)} onClick={() => {
-                                setType("edit")
-                                setDetailedId(record.id)
-                                setVisible(true)
-                            }}>编辑</Button>
                             <Button type="link" disabled={![1].includes(record.invoiceStatus)} onClick={() => handleCancel(record.id)}>作废</Button>
                             <Button type="link" disabled={record.invoiceStatus !== 1} onClick={() => handleDelete(record.id)}>删除</Button>
                         </>
@@ -193,9 +193,19 @@ export default function Invoice() {
                     </Select>
                 },
                 {
+                    name: 'businessType',
+                    label: '企业类型',
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
+                        <Select.Option value="1">供应商</Select.Option>
+                        <Select.Option value="2">运输公司</Select.Option>
+                        <Select.Option value="3">装卸公司</Select.Option>
+                    </Select>
+                },
+                {
                     name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input placeholder="票据编号/请款编号/发票号/供应商" style={{ width: 230 }} />
+                    children: <Input placeholder="票据编号/请款编号/发票号" style={{ width: 230 }} />
                 }
             ]}
         />

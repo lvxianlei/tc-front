@@ -2,7 +2,7 @@ import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
 import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber } from "antd"
 import { BaseInfo, CommonTable, DetailTitle, IntgSelect } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
-import { PopTableContent } from "./compareModal"
+import { PopTableContent } from "./CompareModal"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { materialStandardOptions } from "../../../configuration/DictionaryOptions"
