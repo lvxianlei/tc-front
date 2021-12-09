@@ -1,20 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, } from 'react'
-import { Button, DatePicker, Form, Input, message, Modal, Select, } from 'antd';
+import { Button, DatePicker, Input, message, Modal, Select, } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import * as echarts from 'echarts';
 import './prodUnit.less';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 const ProdUnitAdd = (props: any) => {
     let [prodLinkList, setProdLinkList] = useState<any[]>([])
     let [itemInfo, setItemInfo] = useState<any>({})
     let [times, setTimes] = useState<string[]>(['', ''])
     useEffect(() => {
+        times[0] = dayjs().format('YYYY-MM-DD')
+        times[1] = dayjs().add(7, 'day').format('YYYY-MM-DD')
+        setTimes(times)
         getProdLinkList()
         if (props.id) {
             getDetail()
-            initCharts([],[])
+            initCharts([], [])
         }
     }, [])
     /**
@@ -37,6 +41,7 @@ const ProdUnitAdd = (props: any) => {
         const data: any = await RequestUtil.get('/tower-aps/productionLink', {
             current: 1,
             size: 1000,
+            unitId: props.id,
         })
         setProdLinkList(data.records)
     }
@@ -90,7 +95,7 @@ const ProdUnitAdd = (props: any) => {
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [130, 320, 60, 10]
+                    data: []
                 },
                 {
                     name: '已反馈',
@@ -99,7 +104,7 @@ const ProdUnitAdd = (props: any) => {
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [120, 132, 101, 10]
+                    data: []
                 },
                 {
                     name: '待确认',
@@ -108,7 +113,7 @@ const ProdUnitAdd = (props: any) => {
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [130, 320, 60, 10]
+                    data: []
                 },
                 {
                     name: '已锁定',
@@ -117,12 +122,13 @@ const ProdUnitAdd = (props: any) => {
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [120, 132, 101, 10]
+                    data: []
                 },
             ];
             (data.loadList || []).forEach((item: { productivityList: { forEach: (arg0: (e: any, i: string) => void) => void; }; }, index: any) => {
-                item.productivityList.forEach((e: any, i: string) => {
-                    datas[i].data.push(e.productivity)
+                item.productivityList.forEach((e: any, i: any) => {
+                    datas[i].name = e.statusName
+                    datas[i].data.push(e.productivity || 0)
                 });
             });
             initCharts(dates, datas)
@@ -135,12 +141,18 @@ const ProdUnitAdd = (props: any) => {
         const myChart = echarts.init((document as HTMLElement | any).getElementById('chartsBox'));
         // 绘制图表
         myChart.setOption({
-            // color: '#FF8C00',
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
                     type: 'shadow'
                 }
+            },
+            legend: {},
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
             },
             xAxis: [
                 {
@@ -153,13 +165,7 @@ const ProdUnitAdd = (props: any) => {
                     type: 'value'
                 }
             ],
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            series: datas,
+            series:datas,
         });
     }
     return (
@@ -196,7 +202,7 @@ const ProdUnitAdd = (props: any) => {
                         <span className='tip' style={{ width: 110, }}>产力值*：</span>
                         <Input
                             className='input'
-                            maxLength={100}
+                            maxLength={12}
                             value={itemInfo['productivity']}
                             onChange={(ev) => {
                                 changeItemInfo(ev.target.value.replace(/[^0-9]/ig, ""), 'productivity')
@@ -222,6 +228,7 @@ const ProdUnitAdd = (props: any) => {
                                         <Select.Option
                                             key={index}
                                             value={item.id}
+                                            disabled={item.isUse}
                                         >{item.name}</Select.Option>
                                     )
                                 })
