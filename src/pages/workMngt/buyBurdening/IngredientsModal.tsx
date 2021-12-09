@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Row, Col, Table, Form, Select, InputNumber } from 'antd';
+import useRequest from '@ahooksjs/use-request'
+import RequestUtil from '../../../utils/RequestUtil';
 import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
 import { BatchingScheme, alternative, ConstructionClassification, ConstructionClassificationDetail } from './IngredientsModal.json';
 interface DataType {
@@ -15,6 +17,21 @@ export default function IngredientsModal(props: any) {
     const handleOkuseState = () => {
 
     }
+
+    // 获取构建分类
+    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/purchaseTaskTower/component/material/${id}`)
+            console.log(result, "构建分类")
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    useEffect(() => {
+        getUser(props.id);
+    }, [props.id && props.visible])
 
     const rowSelection = {
         onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
@@ -66,41 +83,41 @@ export default function IngredientsModal(props: any) {
                    <DetailTitle title="配料策略" />
                    {/* 配料策略 */}
                    <Form form={serarchForm} style={{paddingLeft: "14px", display: "flex", flexWrap: "nowrap"}}>
-                                <Form.Item
-                                    name="num1"
-                                    label="开数">
-                                        <Select style={{ width: 120 }} placeholder="请选择">
-                                            <Select.Option value="jack">Jack</Select.Option>
-                                            <Select.Option value="lucy">Lucy</Select.Option>
-                                            <Select.Option value="Yiminghe">yiminghe</Select.Option>
-                                        </Select>
-                                </Form.Item>&nbsp;
-                                <Form.Item
-                                    name="num3"
-                                    label="米数">
-                                        <InputNumber
-                                            min="0"
-                                            step="0.01"
-                                            precision={2}
-                                        />&nbsp;
-                                </Form.Item>
-                                <Form.Item
-                                    name="num4">
-                                        <InputNumber
-                                            min="0"
-                                            step="0.01"
-                                            precision={2}
-                                        />
-                                </Form.Item>&nbsp;
-                                <Form.Item
-                                    name="num5"
-                                    label="利用率">
-                                        <InputNumber
-                                            min="0"
-                                            step="0.01"
-                                            precision={2}
-                                        />
-                                </Form.Item>
+                        <Form.Item
+                            name="num1"
+                            label="开数">
+                                <Select style={{ width: 120 }} placeholder="请选择">
+                                    <Select.Option value="jack">Jack</Select.Option>
+                                    <Select.Option value="lucy">Lucy</Select.Option>
+                                    <Select.Option value="Yiminghe">yiminghe</Select.Option>
+                                </Select>
+                        </Form.Item>&nbsp;
+                        <Form.Item
+                            name="num3"
+                            label="米数">
+                                <InputNumber
+                                    min="0"
+                                    step="0.01"
+                                    precision={2}
+                                />&nbsp;
+                        </Form.Item>
+                        <Form.Item
+                            name="num4">
+                                <InputNumber
+                                    min="0"
+                                    step="0.01"
+                                    precision={2}
+                                />
+                        </Form.Item>&nbsp;
+                        <Form.Item
+                            name="num5"
+                            label="利用率">
+                                <InputNumber
+                                    min="0"
+                                    step="0.01"
+                                    precision={2}
+                                />
+                        </Form.Item>
                     </Form>
                    <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
                       <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类</span>
