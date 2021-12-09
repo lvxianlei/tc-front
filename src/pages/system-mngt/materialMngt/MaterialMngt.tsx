@@ -317,10 +317,10 @@ export default function MaterialMngt(): React.ReactNode {
                 <Row>
                     <Col span={ 11 } offset={ 1 }><Form.Item label="比重算法" name="weightAlgorithm">
                         <Select style={{ width: '100%' }}>
-                            <Select.Option value={ 0 } id='0'>
+                            <Select.Option value='0' id='0'>
                                 比重*体积（钢板类）
                             </Select.Option>
-                            <Select.Option value={ 1 } id='1' >
+                            <Select.Option value='1' id='1' >
                                 比重*长度（角板类）
                             </Select.Option>
                         </Select>
