@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Spin, Form, Input, InputNumber, Select } from 'antd'
+import { Button, Spin, Form, Input, InputNumber, Select, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
 import { setting, insurance, business } from "./archives.json"
@@ -15,6 +15,10 @@ export default function Edit() {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insuranceArchives/detail?id=${params.archiveId}`)
+            const businessFormData: any = {}
+            result?.businesss.forEach((item: any, index: number) => businessFormData[index] = item)
+            setBusinessData(result?.businesss)
+            businessForm.setFieldsValue(businessFormData)
             resole({
                 ...result,
                 insurancePlanName: {
@@ -54,14 +58,21 @@ export default function Edit() {
         try {
             const postBaseInfoData = await baseForm.validateFields()
             const postInsuranceData = await insuranceForm.validateFields()
+            const postBusiness = await businessForm.validateFields()
+            const businessList = Object.keys(postBusiness).map(item => postBusiness[item])
             await saveRun({
                 ...postBaseInfoData,
                 ...postInsuranceData,
+                insurancePlanId: postInsuranceData.insurancePlanName.id,
+                insurancePlanName: postInsuranceData.insurancePlanName.value,
                 ssStartMonth: postInsuranceData.ssStartMonth + " 00:00:00",
                 ssEndMonth: postInsuranceData.ssEndMonth + " 23:59:59",
                 pfaStartMonth: postInsuranceData.pfaStartMonth + " 00:00:00",
-                pfaEndMonth: postInsuranceData.pfaEndMonth + " 23:59:59"
+                pfaEndMonth: postInsuranceData.pfaEndMonth + " 23:59:59",
+                businesss: businessList
             })
+            message.success("保存成功...")
+            history.go(-1)
         } catch (error) {
             console.log(error)
         }
@@ -77,7 +88,7 @@ export default function Edit() {
             console.log(fields.ssEndMonth)
         }
     }
-
+    console.log(businessData)
     return <DetailContent operation={[
         <Button key="save" loading={saveLoading} onClick={handleSave} type="primary" style={{ marginRight: 16 }}>保存</Button>,
         <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
