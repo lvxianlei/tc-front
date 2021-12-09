@@ -1,129 +1,125 @@
 {
     "baseInfo": [
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "receiveNumber",
             "title": "收货单号"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "supplierName",
             "title": "供应商"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
-            "title": "供应商"
-        },
-        {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "contractNumber",
             "title": "合同编号"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "paperNumber",
             "title": "纸质单号"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "contactsUser",
             "title": "联系人"
         },
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "contactsPhone",
             "title": "联系电话"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "receiveTime",
             "title": "约定到货时间"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "quantity",
             "title": "数量合计"
         },
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "price",
             "title": "原材料价税合计（元）"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "carNumber",
             "title": "车辆牌照"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "weight",
             "title": "重量（kg）合计"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "remark",
             "title": "备注"
         }
     ],
     "freightInfo": [
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "transportBear",
             "title": "运输承担"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "transportCompany",
             "title": "运输公司"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "transportTaxPrice",
             "title": "合同单价（元/吨）"
         },
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "transportPriceCount",
             "title": "运费价税合计（元）"
         }
     ],
     "handlingChargesInfo": [
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "unloadBear",
             "title": "卸车承担"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "unloadCompany",
             "title": "装卸公司"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "unloadTaxPrice",
             "title": "合同单价（元/吨）"
         },
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "unloadPriceCount",
             "title": "装卸费价税合计（元）"
         }
     ],
     "goodsDetail": [
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "materialName",
             "title": "品名"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "materialStandard",
             "title": "标准"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "materialTexture",
             "title": "材质"
         },
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "spec",
             "title": "规格"
         },
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "length",
             "title": "长度（mm）"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "quantity",
             "title": "数量"
         },
         {
-            "dataIndex": "guaranteeReturnTime",
+            "dataIndex": "contractUnitPrice",
             "title": "合同单价（元/吨）"
         },
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "price",
             "title": "价税合计（元）"
         },
         {
-            "dataIndex": "requiredReturnTime",
+            "dataIndex": "weight",
             "title": "重量（kg）"
         }
     ]

@@ -325,6 +325,18 @@ interface ModalRef {
     dataSource: any[]
     resetFields: () => void
 }
+interface Freight {
+    transportBear: string
+    transportCompany: string
+    transportTaxPrice: string
+    transportPriceCount: string
+}
+interface HandLing {
+    unloadBear: string
+    unloadCompany: string
+    unloadTaxPrice: string
+    unloadPriceCount: string
+}
 export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Element {
     const modalRef = useRef<ModalRef>({ dataSource: [], resetFields: () => { } })
     const [visible, setVisible] = useState<boolean>(false)
@@ -337,6 +349,21 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         return item
     }))
     const [form] = Form.useForm()
+
+    // 运费信息
+    const [freightInformation, setFreightInformation] = useState<Freight>({
+        transportBear: "",
+        transportCompany: "",
+        transportTaxPrice: "0",
+        transportPriceCount: "0"
+    });
+    // 装卸费信息
+    const [handlingCharges, setHandlingCharges] = useState<HandLing>({
+        unloadBear: "",
+        unloadCompany: "",
+        unloadTaxPrice: "0",
+        unloadPriceCount: "0"
+    });
 
     const handleModalOk = () => {
         let num: string = "0.00"
@@ -358,7 +385,36 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         })
         setCargoData(dataSource)
         form.setFieldsValue({ num: parseFloat(num), weight })
-        setVisible(false)
+        setVisible(false);
+        console.log(dataSource, 'dataSource')
+        // 选择完货物明细，
+        let transportPriceCount = "0",
+                unloadPriceCount = "0",
+                weightAll = 0,
+                priceAll = 0;
+        if (dataSource.length > 0) {
+            for (let i = 0; i < dataSource.length; i += 1) {
+                weightAll = weightAll += (((dataSource[i].weight) * 1 <= 0 ? 0 : dataSource[i].weight) * 1);
+                priceAll = dataSource[i].price * 1 + priceAll;
+            }
+            // 运费价税合计 = 总重量 * 单价
+            transportPriceCount = weightAll * ((freightInformation as any).transportTaxPrice * 1) + "";
+            // 装卸费合计 = 总重量 * 单价
+            unloadPriceCount = (weightAll * ((handlingCharges as any).unloadTaxPrice * 1) ) + "";
+        }
+        const v = {
+            ...freightInformation,
+            transportPriceCount, // 运费价税合计（元）
+        }
+        // 设置装卸费信息
+        const handing = {
+            ...handlingCharges,
+            unloadPriceCount
+        }
+        console.log(columns, "columns", )
+        setFreightInformation(Object.assign({}, v))
+        setHandlingCharges(Object.assign({}, handing))
+        form.setFieldsValue({ price: priceAll })
     }
 
     const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -392,6 +448,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const baseFormData = await form.validateFields()
             await saveRun({
                 ...baseFormData,
+                ...freightInformation,
+                ...handlingCharges,
                 supplierId: baseFormData.supplierName.id,
                 supplierName: baseFormData.supplierName.value,
                 contractId: baseFormData.contractNumber.id,
@@ -412,8 +470,38 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, cargoData, onSubmit, resetFields])
 
     const handleBaseInfoChange = (fields: any) => {
+        console.log(fields, "带回来的数据")
         if (fields.contractNumber) {
-            setContractId(fields.contractNumber.id)
+            setContractId(fields.contractNumber.id);
+
+            // 设置运费信息以及装卸费信息
+            let transportPriceCount = "0",
+                unloadPriceCount = "0",
+                weightAll = 0;
+            if (cargoData.length > 0) {
+                for (let i = 0; i < cargoData.length; i += 1) {
+                    weightAll = weightAll += (((cargoData[i].weight) * 1 <= 0 ? 0 : cargoData[i].weight) * 1);
+                }
+                // 运费价税合计 = 总重量 * 单价
+                transportPriceCount = weightAll * (fields.contractNumber.records[0].transportTaxPrice ? fields.contractNumber.records[0].transportTaxPrice : "0") + "";
+                // 装卸费合计 = 总重量 * 单价
+                unloadPriceCount = (weightAll * (fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0")) + "";
+            }
+            const v = {
+                transportBear:  fields.contractNumber.records[0].transportBear === 1 ? "需方" : '我方', // 运输承担
+                transportCompany: fields.contractNumber.records[0].transportCompany ? fields.contractNumber.records[0].transportCompany : "", // 运输公司
+                transportTaxPrice: fields.contractNumber.records[0].transportTaxPrice ? fields.contractNumber.records[0].transportTaxPrice : "0", // 合同单价
+                transportPriceCount, // 运费价税合计（元）
+            }
+            // 设置装卸费信息
+            const handing = {
+                unloadBear: fields.contractNumber.records[0].unloadBear === 1 ? "需方" : '我方',
+                unloadCompany: fields.contractNumber.records[0].unloadCompany ? fields.contractNumber.records[0].unloadCompany : "",
+                unloadTaxPrice: fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0",
+                unloadPriceCount
+            }
+            setFreightInformation(Object.assign({}, v))
+            setHandlingCharges(Object.assign({}, handing))
         }
         if (fields.supplierName) {
             const supplierData = fields.supplierName.records[0]
@@ -448,9 +536,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         <DetailTitle title="收货单基础信息" />
         <BaseInfo form={form} onChange={handleBaseInfoChange} columns={columns} dataSource={{}} edit />
         <DetailTitle title="运费信息" />
-        <BaseInfo form={form} columns={freightInfo} dataSource={{}} />
+        <BaseInfo form={form} columns={freightInfo} dataSource={(freightInformation as any)} />
         <DetailTitle title="装卸费信息" />
-        <BaseInfo form={form} columns={handlingChargesInfo} dataSource={{}} />
+        <BaseInfo form={form} columns={handlingChargesInfo} dataSource={(handlingCharges as any)} />
         <DetailTitle title="货物明细" operation={[<Button
             type="primary" key="choose" ghost
             onClick={() => {

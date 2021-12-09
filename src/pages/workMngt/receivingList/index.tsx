@@ -87,6 +87,7 @@ export default function Invoicing() {
         {/* 详情 */}
         <Detail
             visible={visibleSee}
+            id={detailId}
             onCancel={() => setVisibleSee(false)}
             onOk={() => setVisibleSee(false)}
         />
@@ -117,6 +118,7 @@ export default function Invoicing() {
                             }}>编辑</Button>
                         <Button type="link" onClick={() => {
                             setVisibleSee(true);
+                            setDetailId(record.id);
                         }}>详情</Button>
                         <Button type="link" disabled={record.lists && record.lists.length !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
