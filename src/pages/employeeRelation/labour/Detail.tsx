@@ -23,7 +23,7 @@ export default function LabourDetail(): React.ReactNode {
             ]}>
             <DetailTitle title="员工劳务合同"/>
             <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
-            <Attachment dataSource={detailData.fileVos}/>
+            <Attachment dataSource={detailData?.fileVos}/>
             </DetailContent>
         </Spin>
     </>

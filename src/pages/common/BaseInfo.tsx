@@ -87,7 +87,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             <Row>
                 {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={item.type === "textarea" ? 24 : (24 / col)}>
                     <Col span={24} >
-                        <div style={{ height: 56, marginBottom: item.type === "textarea" ? 20 : 0 }}>
+                        <div style={{ minHeight: 56, marginBottom: item.type === "textarea" ? 20 : 0 }}>
                             <Form.Item
                                 className="baseInfoForm"
                                 name={item.dataIndex}

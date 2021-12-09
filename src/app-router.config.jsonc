@@ -2108,6 +2108,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 人资-员工关系-劳动合同-调整-合同详情
+      "name": "合同详情",
+      "path": "/employeeRelation/labour/edit/:id/:status/:contractId",
+      "module": "./pages/employeeRelation/labour/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 人资-员工关系-转正考核
       "name": "转正考核",
       "path": "/employeeRelation/full",

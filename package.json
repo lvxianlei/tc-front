@@ -21,6 +21,7 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/react-virtualized": "^9.21.13",
     "antd": "4.15.4",
+    "antd-img-crop": "^3.16.0",
     "babel-loader": "8.1.0",
     "camelcase-keys": "^6.2.2",
     "crypto-js": "^4.0.0",

@@ -23,13 +23,13 @@
             "title": "试用期",
             "type": "select",
             "enum": [
-                { "value": 0, "label": "无试用期" },
-                { "value": 1, "label": "一个月" },
-                { "value": 2, "label": "二个月" },
-                { "value": 3, "label": "三个月" },
-                { "value": 4, "label": "四个月" },
-                { "value": 5, "label": "五个月" },
-                { "value": 6, "label": "六个月" }
+                { "value": 1, "label": "无试用期" },
+                { "value": 2, "label": "一个月" },
+                { "value": 3, "label": "二个月" },
+                { "value": 4, "label": "三个月" },
+                { "value": 5, "label": "四个月" },
+                { "value": 6, "label": "五个月" },
+                { "value": 7, "label": "六个月" }
             ]
         }
     ],
@@ -42,13 +42,7 @@
         },
         {
             "dataIndex": "checkResult",
-            "title": "考核结果",
-            "type": "select",
-            "enum": [
-                { "value": 0, "label": "提前转正" },
-                { "value": 1, "label": "正常转正" },
-                { "value": 2, "label": "延期转正" }
-            ]
+            "title": "考核结果"
         },
         {
             "dataIndex": "positiveComments",
