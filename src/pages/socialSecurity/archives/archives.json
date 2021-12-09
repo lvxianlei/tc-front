@@ -144,13 +144,7 @@
             "title": "社保结束缴纳月",
             "dataIndex": "ssEndMonth",
             "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择社保结束缴纳月..."
-                }
-            ]
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "社保申报基数",
@@ -184,13 +178,7 @@
             "title": "公积金结束缴纳月",
             "dataIndex": "pfaEndMonth",
             "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择公积金结束缴纳月..."
-                }
-            ]
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "公积金申报基数",
