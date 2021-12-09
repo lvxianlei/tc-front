@@ -81,7 +81,7 @@
                 towerIds: deleIds.map<string>((item: any): string => item || '').join(',')
             }
             await run({path: "/tower-supply/materialPurchasePlan/purchasePlanInfo/save", data: v})
-            // resolve(true)
+            resolve(true)
         } catch (error) {
             reject(false)
         }

@@ -8,40 +8,6 @@ import RequestUtil from '../../../utils/RequestUtil'
 import Edit from "./Edit"
 import Detail from './Detail';
 
-/**
- * 拿掉：
-    {
-        "title": "材料名称",
-        "dataIndex": "productName",
-        "type": "string"
-    },
- * 新增
- *  {
-        "title": "纸质单号",
-        "dataIndex": "receiveNumber",
-        "type": "string"
-    },
-    {
-        "title": "车牌号",
-        "dataIndex": "receiveNumber",
-        "type": "string"
-    },
-    {
-        "title": "原材料价税合计（元）",
-        "dataIndex": "price",
-        "type": "string"
-    },
-    {
-        "title": "运费价税合计（元）",
-        "dataIndex": "price",
-        "type": "string"
-    },
-    {
-        "title": "装卸费价税合计（元）",
-        "dataIndex": "price",
-        "type": "string"
-    },
- */
 export default function Invoicing() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
