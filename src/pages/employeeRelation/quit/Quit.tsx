@@ -133,11 +133,11 @@ export default function Quit(): React.ReactNode {
                             required:true, 
                             message:'请选择离职日期'
                         }]} name='departureDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
-                                console.log(e)
-                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
-                                // form.setFieldsValue()
-                            }}/>
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
+                                // disabledDate={(current)=>{
+                                //     return current< form.getFieldsValue(true).inductionDate
+                                // }}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
