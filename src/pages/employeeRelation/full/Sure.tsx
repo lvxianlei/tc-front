@@ -137,7 +137,7 @@ export default function Sure(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-            <Attachment dataSource={detailData?.fileVOList} edit ref={attachRef} />
+            <Attachment dataSource={detailData?.fileVos} edit ref={attachRef} />
             </DetailContent>
         </Spin>
     </>
