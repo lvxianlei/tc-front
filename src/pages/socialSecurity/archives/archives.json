@@ -258,6 +258,8 @@
             "title": "开始缴纳月",
             "width": 100,
             "dataIndex": "startMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "rules": [
                 {
                     "required": true,
@@ -268,7 +270,9 @@
         {
             "title": "结束缴纳月",
             "width": 100,
-            "dataIndex": "endMonth"
+            "dataIndex": "endMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "保险金额",

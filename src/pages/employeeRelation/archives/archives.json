@@ -124,7 +124,8 @@
         {
             "title": "工龄",
             "width": 100,
-            "dataIndex": "workYear"
+            "dataIndex": "workYear",
+            "type": "number"
         },
         {
             "title": "银行卡号",
@@ -640,6 +641,7 @@
         {
             "title": "工龄",
             "dataIndex": "workYear",
+            "type": "number",
             "disabled": true
         }
     ],

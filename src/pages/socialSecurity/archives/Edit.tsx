@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Button, Spin, Form, Input, InputNumber, Select, message, DatePicker } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, FormItemType } from '../../common'
 import { setting, insurance, business } from "./archives.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -180,12 +180,13 @@ export default function Edit() {
                                 return ({
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
-                                        {({ ...props }: any) => <DatePicker
+                                        {/* <DatePicker
                                             style={{ width: "100%" }}
                                             value={value ? moment(value) : null}
                                             format="YYYY-MM-DD"
-                                            onChange={(value) => props.onChange(value?.format("YYYY-MM-DD"))}
-                                        />}
+                                            onChange={(value) => value?.format("YYYY-MM-DD")}
+                                        /> */}
+                                        <FormItemType data={item} type="date" />
                                     </Form.Item>
                                 })
                             case "endMonth":
@@ -205,12 +206,13 @@ export default function Edit() {
                                             }
                                         })
                                     }]} name={[index, item.dataIndex]}>
-                                        {({ ...props }: any) => <DatePicker
+                                        {/* <DatePicker
                                             style={{ width: "100%" }}
                                             value={value ? moment(value) : null}
                                             format="YYYY-MM-DD"
-                                            onChange={(value) => props.onChange(value?.format("YYYY-MM-DD"))}
-                                        />}
+                                            onChange={(value) => value?.format("YYYY-MM-DD")}
+                                        /> */}
+                                        <FormItemType data={item} type="date" />
                                     </Form.Item>
                                 })
                             default:
