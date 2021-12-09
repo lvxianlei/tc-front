@@ -37,9 +37,9 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
             }
             return item
         })} dataSource={data || {}} />
-        <Attachment title="回执单" dataSource={data?.applyPaymentAttachInfoVos || []} />
         <DetailTitle title="审批信息" />
         <CommonTable columns={operationInfo} dataSource={[]} />
+        <Attachment title="回执单" dataSource={data?.applyPaymentAttachInfoVos || []} />
         <DetailTitle title="操作信息" />
         <CommonTable columns={operationInfo} dataSource={[]} />
     </Spin>

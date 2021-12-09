@@ -243,20 +243,20 @@ export default function ApplyPayment() {
                             <Button type="link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
                             <Button type="link" disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
-                            <Button
+                            {/* <Button
                                 type="link"
                                 disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleSuccess(record.id)}
-                            >通过</Button>
+                            >通过</Button> */}
                             <Button type="link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
-                            <Button
+                            {/* <Button
                                 type="link"
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setSuccessVisible(true)
                                 }}
                                 disabled={(record.pleasePayStatus === 3 && record.applyStatus === 4) ? true : false}
-                            >完成</Button>
+                            >完成</Button> */}
                         </>
                     }
                 }]}

@@ -481,7 +481,7 @@
         },
         {
             "title": "请款机构",
-            "dataIndex": "pleasePayOrganization",
+            "dataIndex": "pleasePayOrganizationName",
             "type": "string"
         },
         {
@@ -497,42 +497,32 @@
     ],
     "ApplicationList": [
         {
-            "title": "所属供应商",
-            "dataIndex": "supplierName",
-            "type": "popTable",
-            "path": "/tower-supply/supplier",
-            "width": 1011,
-            "value": "supplierName",
-            "dependencies": true,
-            "readOnly": true,
-            "columns": [
+            "title": "请款类别",
+            "dataIndex": "pleasePayType",
+            "type": "select"
+        },
+        {
+            "title": "企业类型",
+            "dataIndex": "businessType",
+            "type": "select",
+            "enum": [
                 {
-                    "title": "供应商编号",
-                    "dataIndex": "supplierCode"
+                    "label": "供应商",
+                    "value": 1
                 },
                 {
-                    "title": "供应商名称",
-                    "dataIndex": "supplierName"
+                    "label": "装卸公司",
+                    "value": 2
                 },
                 {
-                    "title": "联系人",
-                    "dataIndex": "contactMan"
-                },
-                {
-                    "title": "联系电话",
-                    "dataIndex": "contactManTel"
-                },
-                {
-                    "title": "供货产品",
-                    "dataIndex": "supplyProductsName"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择供应商..."
+                    "label": "运输公司",
+                    "value": 3
                 }
             ]
+        },
+        {
+            "title": "所属企业",
+            "dataIndex": "businessId"
         },
         {
             "title": "关联票据",
@@ -580,24 +570,13 @@
             ]
         },
         {
-            "title": "请款金额",
-            "dataIndex": "pleasePayAmount",
-            "type": "number",
-            "disabled": true
-        },
-        {
-            "title": "关联收货单",
-            "dataIndex": "receiptNumbers",
-            "disabled": true
-        },
-        {
             "title": "开户银行",
             "dataIndex": "openBank",
             "disabled": true
         },
         {
-            "title": "银行账号",
-            "dataIndex": "openBankNumber",
+            "title": "关联收货单",
+            "dataIndex": "receiptNumbers",
             "disabled": true
         },
         {
@@ -620,44 +599,50 @@
             ]
         },
         {
-            "title": "请款类别",
-            "dataIndex": "pleasePayType",
-            "type": "select"
+            "title": "银行账号",
+            "dataIndex": "openBankNumber",
+            "disabled": true
         },
         {
             "title": "请款机构",
             "dataIndex": "pleasePayOrganization",
             "type": "select"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "pleasePayAmount",
+            "type": "number",
+            "disabled": true
         }
     ],
     "ApplicationOverview": [
         {
-            "title": "所属供应商",
-            "dataIndex": "supplierName"
+            "title": "请款类别",
+            "dataIndex": "pleasePayType",
+            "type": "select"
+        },
+        {
+            "title": "企业类型",
+            "dataIndex": "businessType",
+            "type": "select"
+        },
+        {
+            "title": "所属企业",
+            "dataIndex": "businessName",
+            "type": "string"
         },
         {
             "title": "关联票据",
             "dataIndex": "billNumbers"
         },
         {
-            "title": "请款金额",
-            "dataIndex": "pleasePayAmount",
-            "type": "number",
-            "disabled": true
-        },
-        {
-            "title": "关联收货单",
-            "dataIndex": "receiptNumbers",
-            "disabled": true
-        },
-        {
             "title": "开户银行",
             "dataIndex": "openBank",
             "disabled": true
         },
         {
-            "title": "银行账号",
-            "dataIndex": "openBankNumber",
+            "title": "关联收货单",
+            "dataIndex": "receiptNumbers",
             "disabled": true
         },
         {
@@ -680,14 +665,20 @@
             ]
         },
         {
-            "title": "请款类别",
-            "dataIndex": "pleasePayType",
-            "type": "select"
-        },
-        {
             "title": "请款机构",
             "dataIndex": "pleasePayOrganization",
             "type": "select"
+        },
+        {
+            "title": "银行账号",
+            "dataIndex": "openBankNumber",
+            "disabled": true
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "pleasePayAmount",
+            "type": "number",
+            "disabled": true
         }
     ],
     "ApplicationDetail": [
