@@ -124,7 +124,7 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
-            stationStatus: this.props.type || 1
+            employeeStatus: this.props.type || 1
         });
         const selectKeys: [] = this.props.selectKey;
         let newData: IUser[] = resData.records;
