@@ -13,10 +13,7 @@ interface EditRefProps {
     onSubmit: () => void
     resetFields: () => void
 }
-/**
- * 列表新增 纸质单号以及车牌号 （需后台提供字段名称）
- * 
- */
+
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory(),
         [current, setCurrent] = useState(1),
@@ -46,12 +43,12 @@ export default function RawMaterialStock(): React.ReactNode {
         }, 
         {
             title: '纸质单号',
-            dataIndex: 'receiveNumber',
+            dataIndex: 'paperNumber',
             width: 120,
         }, 
         {
             title: '车牌号',
-            dataIndex: 'receiveNumber',
+            dataIndex: 'carNumber',
             width: 120,
         }, 
         {

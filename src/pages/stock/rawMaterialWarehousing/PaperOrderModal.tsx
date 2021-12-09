@@ -15,13 +15,12 @@
  
  export default forwardRef(function PaperOrderModal({id}: EditProps, ref) {
     const [addCollectionForm] = Form.useForm();
-    const fillGuarantee = useRef<AttachmentRef>();
 
     // 表单
     const colunm = [
         {
             title: "纸质单号",
-            dataIndex: "tt",
+            dataIndex: "paperNumber",
             type: "text",
             rules: [{
                 required: true,
@@ -46,7 +45,7 @@
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await addCollectionForm.validateFields();
-            // await run({path: "/tower-finance/guarantee", data: {...baseData, fileIds, id}})
+            await run({path: "/tower-storage/receiveStock/updatePaperNumber", data: { ...baseData, id}})
             resolve(true)
         } catch (error) {
             reject(false)
