@@ -212,6 +212,11 @@
             "dataIndex": "commercialInsuranceName"
         },
         {
+            "title": "商业保险账号",
+            "width": 50,
+            "dataIndex": "commercialInsuranceNumber"
+        },
+        {
             "title": "保险类型",
             "width": 50,
             "dataIndex": "commercialInsuranceType",
@@ -252,16 +257,6 @@
             "title": "保险金额",
             "width": 50,
             "dataIndex": "insuranceAmount"
-        },
-        {
-            "title": "保险合同号",
-            "width": 50,
-            "dataIndex": "insuranceContract"
-        },
-        {
-            "title": "备注",
-            "width": 200,
-            "dataIndex": "description"
         }
     ]
 }

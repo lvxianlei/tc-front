@@ -15,6 +15,10 @@ export default function Edit() {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-hr/insuranceArchives/detail?id=${params.archiveId}`)
+            const businessFormData: any = {}
+            result?.businesss.forEach((item: any, index: number) => businessFormData[index] = item)
+            setBusinessData(result?.businesss)
+            businessForm.setFieldsValue(businessFormData)
             resole({
                 ...result,
                 insurancePlanName: {
@@ -84,7 +88,7 @@ export default function Edit() {
             console.log(fields.ssEndMonth)
         }
     }
-
+    console.log(businessData)
     return <DetailContent operation={[
         <Button key="save" loading={saveLoading} onClick={handleSave} type="primary" style={{ marginRight: 16 }}>保存</Button>,
         <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
