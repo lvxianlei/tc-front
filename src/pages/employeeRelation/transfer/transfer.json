@@ -259,21 +259,21 @@
     "auditRecords": [
         {
             "title": "审批人",
-            "dataIndex": "oldPostName",
+            "dataIndex": "approverName",
             "disabled": true
         },
         {
             "title": "审批时间",
-            "dataIndex": "newDepartmentName"
+            "dataIndex": "approveDate"
         },
         {
             "title": "审批结果",
-            "dataIndex": "newCompanyName",
+            "dataIndex": "approveResult",
             "disabled": true
         },
         {
             "title": "审批意见",
-            "dataIndex": "newPostName"
+            "dataIndex": "approveOpinion"
         }
     ]
 }

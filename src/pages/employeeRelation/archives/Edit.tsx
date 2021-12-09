@@ -1,10 +1,12 @@
 import React, { useRef, useState } from "react"
-import { Button, Form, Spin, Tabs } from 'antd'
+import { Button, Form, message, Spin, Tabs } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment, AttachmentRef } from '../../common'
+import { DetailContent, DetailTitle, BaseInfo, EditTable, Attachment, AttachmentRef } from '../../common'
 import { baseInfo, companyInfo, other, workExperience, family, relatives } from "./archives.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { bankTypeOptions, employeeTypeOptions } from "../../../configuration/DictionaryOptions"
+import Photo from "./Photo"
 type TabTypes = "baseInfo" | "family" | "employee" | "work"
 const tabPaths: { [key in TabTypes]: string } = {
     baseInfo: "/tower-hr/employee/archives/detail",
@@ -13,7 +15,7 @@ const tabPaths: { [key in TabTypes]: string } = {
     work: "/tower-hr/employee/archives/work/experience"
 }
 const saveUrlObj: { [key in TabTypes]: string } = {
-    baseInfo: "/tower-hr/insuranceArchives/save",
+    baseInfo: "/tower-hr/employee/archives",
     family: "/tower-hr/employee/archives/family",
     employee: "/tower-hr/employee/archives/relatives",
     work: "/tower-hr/employee/archives/work/experience"
@@ -25,12 +27,17 @@ export default function Edit() {
     const [baseForm] = Form.useForm()
     const [companyForm] = Form.useForm()
     const [otherForm] = Form.useForm()
+    const [workForm] = Form.useForm()
+    const [familyForm] = Form.useForm()
+    const [employeeForm] = Form.useForm()
     const [currentType, setCurrentType] = useState<TabTypes>("baseInfo")
-
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`${tabPaths[currentType]}?employeeId=${params.archiveId}`)
-            resole(result)
+            resole(currentType === "baseInfo" ? {
+                ...result,
+                postType: result?.postType.split(",")
+            } : result)
         } catch (error) {
             reject(error)
         }
@@ -38,7 +45,7 @@ export default function Edit() {
 
     const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((type: TabTypes, data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(saveUrlObj[type], { ...data, id: params.archiveId })
+            const result: { [key: string]: any } = await RequestUtil.post(saveUrlObj[type], data)
             resole(result)
         } catch (error) {
             reject(error)
@@ -47,13 +54,75 @@ export default function Edit() {
 
     const handleSave = async (type: TabTypes) => {
         try {
-            const postData = await baseForm.validateFields()
-            await saveRun(type, {
-                ...postData,
-                birthday: postData.birthday + " 00:00:00",
-                graduationDate: postData.graduationDate + " 00:00:00",
-                cardValidityDate: postData.cardValidityDate + " 00:00:00",
-            })
+            switch (type) {
+                case "baseInfo":
+                    {
+                        const postBaseData = await baseForm.validateFields()
+                        const postCompanyData = await companyForm.validateFields()
+                        const postOtherData = await otherForm.validateFields()
+                        await saveRun(type, {
+                            ...postBaseData,
+                            ...postCompanyData,
+                            ...postOtherData,
+                            id: params.archiveId,
+                            birthday: postBaseData.birthday + " 00:00:00",
+                            graduationDate: postBaseData.graduationDate + " 00:00:00",
+                            cardValidityDate: postBaseData.cardValidityDate + " 00:00:00",
+                        })
+                        message.success("保存成功...")
+                        history.go(-1)
+                    }
+                    break
+                case "work":
+                    {
+                        const postData = await workForm.validateFields()
+                        await saveRun("work", postData?.submit.map((item: any) => {
+                            const postItem: any = { ...item }
+                            delete postItem.id
+                            delete postItem.uid
+                            postItem.startWorkDate = postItem.workDate[0] ? postItem.workDate[0] + " 00:00:00" : ""
+                            postItem.endWorkDate = postItem.workDate[1] ? postItem.workDate[1] + " 00:00:00" : ""
+                            postItem.employeeId = params.archiveId
+                            delete postItem.workDate
+                            return postItem
+                        }))
+                        message.success("保存成功...")
+                        history.go(-1)
+                    }
+                    break
+                case "family":
+                    {
+                        const postData = await familyForm.validateFields()
+                        await saveRun("family", postData?.submit.map((item: any) => {
+                            const postItem: any = { ...item }
+                            delete postItem.id
+                            delete postItem.uid
+                            postItem.employeeId = params.archiveId
+                            delete postItem.workDate
+                            return postItem
+                        }))
+                        message.success("保存成功...")
+                        history.go(-1)
+                    }
+                    break
+                case "employee":
+                    {
+                        const postData = await employeeForm.validateFields()
+                        await saveRun("employee", postData?.submit.map((item: any) => {
+                            const postItem: any = { ...item }
+                            delete postItem.id
+                            delete postItem.uid
+                            postItem.employeeId = params.archiveId
+                            delete postItem.workDate
+                            return postItem
+                        }))
+                        message.success("保存成功...")
+                        history.go(-1)
+                    }
+                    break
+                default:
+                    break
+            }
         } catch (error) {
             console.log(error)
         }
@@ -67,9 +136,40 @@ export default function Edit() {
             ]}>
                 <Spin spinning={loading}>
                     <DetailTitle title="基本信息" />
-                    <BaseInfo form={baseForm} columns={baseInfo} dataSource={data || {}} edit />
+                    <BaseInfo form={baseForm} columns={baseInfo.map((item: any) => {
+                        if (item.dataIndex === "bankNameId") {
+                            return ({
+                                ...item, enum: bankTypeOptions?.map(item => ({
+                                    label: item.name,
+                                    value: item.id
+                                }))
+                            })
+                        }
+                        if (item.dataIndex === "photo") {
+                            return ({
+                                ...item,
+                                render: () => {
+                                    return <Photo id={params.archiveId} url={data?.image} />
+                                }
+                            })
+                        }
+                        return item
+                    })} dataSource={data || {}} edit />
                     <DetailTitle title="公司信息" />
-                    <BaseInfo form={companyForm} columns={companyInfo} dataSource={data || {}} edit />
+                    <BaseInfo form={companyForm} columns={companyInfo.map((item: any) => {
+                        if (item.dataIndex === "postType") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                mode: "multiple",
+                                enum: employeeTypeOptions?.map(item => ({
+                                    label: item.name,
+                                    value: item.id
+                                }))
+                            })
+                        }
+                        return item
+                    })} dataSource={data || {}} edit />
                     <DetailTitle title="其他信息" />
                     <BaseInfo form={otherForm} columns={other} dataSource={data || {}} edit />
                     <Attachment ref={attchRef} edit />
@@ -83,7 +183,15 @@ export default function Edit() {
             ]}>
                 <Spin spinning={loading}>
                     <DetailTitle title="工作经历" />
-                    <CommonTable columns={workExperience} dataSource={[]} />
+                    <EditTable
+                        haveIndex={false}
+                        form={workForm}
+                        newButtonTitle="新增"
+                        columns={workExperience}
+                        dataSource={data instanceof Array ? data.map((item: any) => ({
+                            ...item,
+                            workDate: [item.startWorkDate, item.endWorkDate]
+                        })) : []} />
                 </Spin>
             </DetailContent>
         </Tabs.TabPane>
@@ -94,7 +202,7 @@ export default function Edit() {
             ]}>
                 <Spin spinning={loading}>
                     <DetailTitle title="家庭情况" />
-                    <CommonTable columns={family} dataSource={[]} />
+                    <EditTable form={familyForm} newButtonTitle="新增" columns={family} dataSource={(data as any[]) || []} />
                 </Spin>
             </DetailContent>
         </Tabs.TabPane>
@@ -105,7 +213,7 @@ export default function Edit() {
             ]}>
                 <Spin spinning={loading}>
                     <DetailTitle title="公司亲属" />
-                    <CommonTable columns={relatives} dataSource={[]} />
+                    <EditTable form={employeeForm} newButtonTitle="新增" columns={relatives} dataSource={(data as any[]) || []} />
                 </Spin>
             </DetailContent>
         </Tabs.TabPane>

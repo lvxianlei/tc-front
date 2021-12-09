@@ -4,9 +4,9 @@ import CommonTable from "./CommonTable"
 import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import { stringify } from 'query-string';
-export type FormItemTypesType = "text" | "number" | "select" | "date" | "textarea" | "popForm" | undefined
+export type FormItemTypesType = "text" | "number" | "select" | "date" | "textarea" | "popForm" | "rangePicker" | undefined
 
 interface SelectOption {
     value: string | number
@@ -206,6 +206,9 @@ const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
 }
 
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ...props }) => {
+    const formatRangePickerValue: any = (value: any) => {
+        return (props.value && props.value instanceof Array && props.value.length === 2) ? props.value.map((valueItem: any) => moment(valueItem, data.format || "YYYY-MM-DD")) : [undefined, undefined]
+    }
     const ItemTypes = {
         string: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
         text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
@@ -214,6 +217,7 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
             disabled={data.disabled}
             max={data?.max || 999999999999}
             min={data?.min || 0}
+            precision={data?.precision}
             step={data?.step || 1}
             style={{ width: "100%", height: "100%", ...props.style }}
         />,
@@ -223,6 +227,12 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
             onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}
             value={props.value ? moment(props.value) : null}
             format={data.format || "YYYY-MM-DD HH:mm:ss"} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
+        rangePicker: <DatePicker.RangePicker format={data.format || "YYYY-MM-DD"}
+            {...data.picker ? { ...props, picker: data.picker } : { ...props }}
+            onChange={(value) => props.onChange(value?.map((valueItem: any) => valueItem.format(data.format || "YYYY-MM-DD")))}
+            value={formatRangePickerValue(props.value)}
+            disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }}
+        />,
         textarea: <Input.TextArea {...props} disabled={data.disabled} rows={data.rows || 2} maxLength={400} showCount style={{ width: "100%", height: "100%", ...props.style }} />,
         popForm: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
         popTable: <PopTable {...props} data={data as PopTableData} />
