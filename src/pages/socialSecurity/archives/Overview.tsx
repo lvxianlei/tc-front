@@ -23,7 +23,7 @@ export default function Overview() {
             <DetailTitle title="社保公积金" />
             <BaseInfo columns={insurance} dataSource={data || {}} />
             <DetailTitle title="商业保险方案" />
-            <CommonTable columns={business} dataSource={[]} />
+            <CommonTable columns={business} dataSource={data?.businesss || []} />
         </Spin>
     </DetailContent>
 }

@@ -40,6 +40,9 @@ export default function Overview() {
                                 }
                             })
                         }
+                        if (item.dataIndex === "bankNameId") {
+                            return ({ ...item, type: "string", dataIndex: "bankName" })
+                        }
                         return item
                     })} dataSource={data || {}} />
                     <DetailTitle title="公司信息" />
@@ -53,7 +56,7 @@ export default function Overview() {
                     })} dataSource={data || {}} />
                     <DetailTitle title="其他信息" />
                     <BaseInfo columns={other} dataSource={data || {}} />
-                    <Attachment />
+                    <Attachment dataSource={data?.fileVos} />
                 </Spin>
             </DetailContent>
         </Tabs.TabPane>
