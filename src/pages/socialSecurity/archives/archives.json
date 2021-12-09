@@ -196,17 +196,18 @@
     "business": [
         {
             "title": "商业保险名称",
-            "width": 50,
-            "dataIndex": "commercialInsuranceName"
-        },
-        {
-            "title": "商业保险账号",
-            "width": 50,
-            "dataIndex": "commercialInsuranceNumber"
+            "width": 100,
+            "dataIndex": "commercialInsuranceName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入商业保险名称..."
+                }
+            ]
         },
         {
             "title": "保险类型",
-            "width": 50,
+            "width": 100,
             "dataIndex": "commercialInsuranceType",
             "type": "select",
             "enum": [
@@ -234,17 +235,51 @@
                     "label": "其他",
                     "value": 6
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择保险类型..."
+                }
             ]
         },
         {
-            "title": "保险公司",
-            "width": 50,
-            "dataIndex": "commercialInsuranceCompany"
+            "title": "商业保险账号",
+            "width": 100,
+            "dataIndex": "commercialInsuranceNumber",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入商业保险账号..."
+                }
+            ]
+        },
+        {
+            "title": "开始缴纳月",
+            "width": 100,
+            "dataIndex": "startMonth",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入开始缴纳月..."
+                }
+            ]
+        },
+        {
+            "title": "结束缴纳月",
+            "width": 100,
+            "dataIndex": "endMonth"
         },
         {
             "title": "保险金额",
-            "width": 50,
-            "dataIndex": "insuranceAmount"
+            "width": 100,
+            "dataIndex": "insuranceAmount",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保险金额..."
+                }
+            ]
         }
     ]
 }

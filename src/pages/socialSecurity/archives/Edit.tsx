@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Spin, Form, Input, InputNumber, Select, message } from 'antd'
+import { Button, Spin, Form, Input, InputNumber, Select, message, DatePicker } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
 import { setting, insurance, business } from "./archives.json"
@@ -61,7 +61,11 @@ export default function Edit() {
             const postBaseInfoData = await baseForm.validateFields()
             const postInsuranceData = await insuranceForm.validateFields()
             const postBusiness = await businessForm.validateFields()
-            const businessList = Object.keys(postBusiness).map(item => postBusiness[item])
+            const businessList = Object.keys(postBusiness).map(item => ({
+                ...postBusiness[item],
+                startMonth: postBusiness[item].startMonth + " 00:00:00",
+                endMonth: postBusiness[item].endMonth && (postBusiness[item].endMonth + " 23:59:59")
+            }))
             await saveRun({
                 ...postBaseInfoData,
                 ...postInsuranceData,
@@ -85,14 +89,6 @@ export default function Edit() {
             insuranceForm.setFieldsValue({ paymentCompany: fields.insurancePlanName.records[0].companyName })
             getBusinessRun(fields.insurancePlanName.id)
         }
-        // if (fields.ssEndMonth && allFields.ssStartMonth) {
-        //     // moment()
-        //     // moment(fields.ssEndMonth).
-        //     console.log(fields.ssEndMonth)
-        //     if (moment(fields.ssEndMonth).isBefore(moment(allFields.ssStartMonth))) {
-        //         message
-        //     }
-        // }
     }
 
     return <DetailContent operation={[
@@ -113,7 +109,25 @@ export default function Edit() {
                                     const allFields = insuranceForm.getFieldsValue()
                                     if (value && allFields.ssStartMonth) {
                                         if (moment(value).isBefore(moment(allFields.ssStartMonth))) {
-                                            reject('公积金结束缴纳月必须在公积金开始缴纳月之前...')
+                                            reject('社保结束缴纳月必须在社保开始缴纳月之后...')
+                                        } else {
+                                            resove(value)
+                                        }
+                                    } else {
+                                        resove(value)
+                                    }
+                                })
+                            }]
+                        })
+                    case "pfaEndMonth":
+                        return ({
+                            ...item,
+                            rules: [{
+                                validator: (rule: RuleObject, value: string) => new Promise((resove, reject) => {
+                                    const allFields = insuranceForm.getFieldsValue()
+                                    if (value && allFields.ssStartMonth) {
+                                        if (moment(value).isBefore(moment(allFields.pfaStartMonth))) {
+                                            reject('公积金结束缴纳月必须在公积金开始缴纳月之后...')
                                         } else {
                                             resove(value)
                                         }
@@ -137,22 +151,22 @@ export default function Edit() {
                             case "description":
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                    render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
                                         <Input.TextArea autoSize={{ maxRows: 1 }} value={value} />
                                     </Form.Item>
                                 })
                             case "insuranceAmount":
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <InputNumber style={{ width: "100%" }} value={value} />
+                                    render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
+                                        <InputNumber value={value} />
                                     </Form.Item>
                                 })
                             case "commercialInsuranceType":
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <Select style={{ width: "100%" }} value={value}>
+                                    render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
+                                        <Select value={value}>
                                             <Select.Option value={1}>补充医疗保险</Select.Option>
                                             <Select.Option value={2}>雇主责任险</Select.Option>
                                             <Select.Option value={3}>意外伤害险</Select.Option>
@@ -162,10 +176,47 @@ export default function Edit() {
                                         </Select>
                                     </Form.Item>
                                 })
+                            case "startMonth":
+                                return ({
+                                    ...item,
+                                    render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
+                                        {({ ...props }: any) => <DatePicker
+                                            style={{ width: "100%" }}
+                                            value={value ? moment(value) : null}
+                                            format="YYYY-MM-DD"
+                                            onChange={(value) => props.onChange(value?.format("YYYY-MM-DD"))}
+                                        />}
+                                    </Form.Item>
+                                })
+                            case "endMonth":
+                                return ({
+                                    ...item,
+                                    render: (value: any, record: any, index: number) => <Form.Item rules={[{
+                                        validator: (rule: RuleObject, value: string) => new Promise((resove, reject) => {
+                                            const allFields = businessForm.getFieldsValue()[index]
+                                            if (value && allFields.startMonth) {
+                                                if (moment(value).isBefore(moment(allFields.startMonth))) {
+                                                    reject('结束缴纳月必须在开始缴纳月之后...')
+                                                } else {
+                                                    resove(value)
+                                                }
+                                            } else {
+                                                resove(value)
+                                            }
+                                        })
+                                    }]} name={[index, item.dataIndex]}>
+                                        {({ ...props }: any) => <DatePicker
+                                            style={{ width: "100%" }}
+                                            value={value ? moment(value) : null}
+                                            format="YYYY-MM-DD"
+                                            onChange={(value) => props.onChange(value?.format("YYYY-MM-DD"))}
+                                        />}
+                                    </Form.Item>
+                                })
                             default:
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                    render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
                                         <Input value={value} />
                                     </Form.Item>
                                 })

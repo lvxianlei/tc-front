@@ -618,7 +618,7 @@
         },
         {
             "title": "在职状态",
-            "dataIndex": "status",
+            "dataIndex": "employeeStatus",
             "type": "select",
             "enum": [
                 {
