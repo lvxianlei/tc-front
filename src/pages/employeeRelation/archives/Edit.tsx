@@ -6,6 +6,7 @@ import { baseInfo, companyInfo, other, workExperience, family, relatives } from 
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { bankTypeOptions, employeeTypeOptions } from "../../../configuration/DictionaryOptions"
+import Photo from "./Photo"
 type TabTypes = "baseInfo" | "family" | "employee" | "work"
 const tabPaths: { [key in TabTypes]: string } = {
     baseInfo: "/tower-hr/employee/archives/detail",
@@ -122,7 +123,6 @@ export default function Edit() {
                 default:
                     break
             }
-
         } catch (error) {
             console.log(error)
         }
@@ -143,6 +143,14 @@ export default function Edit() {
                                     label: item.name,
                                     value: item.id
                                 }))
+                            })
+                        }
+                        if (item.dataIndex === "photo") {
+                            return ({
+                                ...item,
+                                render: () => {
+                                    return <Photo id={params.archiveId} url={data?.image} />
+                                }
                             })
                         }
                         return item

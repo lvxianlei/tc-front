@@ -180,14 +180,14 @@
             ]
         },
         {
-            "title": "照片",
-            "dataIndex": "photo"
-        },
-        {
             "title": "出生日期",
             "dataIndex": "birthday",
             "type": "date",
             "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "照片",
+            "dataIndex": "photo"
         },
         {
             "title": "民族",
