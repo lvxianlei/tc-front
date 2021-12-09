@@ -1,8 +1,8 @@
 import React from "react"
-import { Button, message, Spin } from 'antd'
+import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../common'
-import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
+import { baseInfoHead, invoiceHead, billingHeader } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ApplicationContext from "../../configuration/ApplicationContext"
@@ -46,7 +46,7 @@ export default function Overview() {
             <BaseInfo columns={invoiceHead} dataSource={data?.invoicingInfoVo || []} />
 
             <DetailTitle title="开票明细" />
-            <CommonTable columns={billingHead} dataSource={data?.invoicingDetailVos || []} />
+            <CommonTable columns={billingHeader} dataSource={data?.invoicingDetailVos || []} />
             <Attachment dataSource={data?.attachInfoVos} />
         </Spin>
     </DetailContent>

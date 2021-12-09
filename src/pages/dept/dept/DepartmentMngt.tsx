@@ -58,7 +58,10 @@ export default function DepartmentMngt(): React.ReactNode {
             key: 'name',
             title: '机构名称',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'name',
+            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                record.type === 2 && record.parentId !== 0 ? <span>{ _ }（子公司）</span> : <span>{ _ }</span>
+            )
         },
         {
             key: 'classification',

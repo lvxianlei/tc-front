@@ -103,6 +103,7 @@
                 visible={visible}
                 width={1000}
                 maskClosable={false}
+                destroyOnClose={true}
                 onCancel={() => {
                     setVisible(false)
                     addRef.current?.resetFields();
