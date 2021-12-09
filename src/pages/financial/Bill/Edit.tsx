@@ -94,7 +94,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 }
             })
         } else {
-            result = await RequestUtil.get(``);
+            result = await RequestUtil.get(`/tower-logistic/carrier?size=100`);
+            list = result?.records?.map((item: { companyName: string }) => {
+                return{
+                    ...item,
+                    name: item.companyName
+                }
+            })
         }
         
         setCompanyList(list || []);
