@@ -31,6 +31,7 @@ export default function Edit() {
             const insuranceFormData: any = {}
             const businessFormData: any = {}
             setIsSocialSecurity(result.isSocialSecurity)
+            setBusinessData(result.businessList)
             result.socialSecurityList.forEach((item: any, index: number) => {
                 insuranceFormData[index] = ({
                     ...item,
@@ -66,13 +67,15 @@ export default function Edit() {
     const handleSave = async () => {
         try {
             const baseData = await baseForm.validateFields()
-            const insuranceData = await insuranceForm.validateFields()
+            const insuranceFormData = await insuranceForm.validateFields()
             const businessData = await businessForm.validateFields()
-            const postInsuranceData = Object.keys(insuranceData).map((item: any, index: number) => {
-                const rowSpanData = index % 2 === 1 ? insuranceData[item - 1] : insuranceData[item]
+            const postInsuranceData = Object.keys(insuranceFormData).map((item: any, index: number) => {
+                const rowSpanData = index % 2 === 1 ? insuranceFormData[item - 1] : insuranceFormData[item]
                 const formatDate = rowSpanData.effectiveMonth.map((item: any) => item.format("YYYY-MM-DD"))
                 return ({
-                    ...insuranceData[item],
+                    ...insuranceFormData[item],
+                    insuranceType: insuranceData[index].insuranceType,
+                    paymentType: insuranceData[index].paymentType,
                     effectiveMonth: formatDate?.[0] + " 00:00:00",
                     expirationMonth: formatDate?.[1] + " 23:59:59",
                 })
@@ -91,13 +94,21 @@ export default function Edit() {
         }
     }
     const handleAdd = () => {
-        setBusinessData([
-            ...businessData,
-            { id: Math.random() + new Date().getDate() }
-        ])
+        const businessFormData = businessForm.getFieldsValue()
+        setBusinessData([...businessData, { id: `${Math.random() + new Date().getDate()}` }])
+        businessForm.resetFields()
+        businessForm.setFieldsValue({ ...businessFormData, [businessData.length + 1]: {} })
     }
     const handleDelete = (id: string) => {
-        setBusinessData(businessData.filter(item => item.id !== id))
+        const businessFormData = businessForm.getFieldsValue()
+        setBusinessData(businessData.filter((item: any, index: number) => {
+            (item.id === id) && delete businessFormData[index]
+            return item.id !== id
+        }))
+        Object.keys(businessFormData).forEach((item: string, index: number) => {
+            businessFormData[index] = businessFormData[item]
+        })
+        businessForm.setFieldsValue(businessFormData)
     }
     return <DetailContent operation={[
         <Button key="save" loading={saveLoading} onClick={handleSave} type="primary" style={{ marginRight: 16 }}>保存</Button>,
@@ -237,7 +248,7 @@ export default function Edit() {
                                 return ({
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <Select style={{ width: "100%" }}>
+                                        <Select style={{ width: "100%" }} value={value}>
                                             <Select.Option value={1}>补充医疗保险</Select.Option>
                                             <Select.Option value={2}>雇主责任险</Select.Option>
                                             <Select.Option value={3}>意外伤害险</Select.Option>
@@ -251,12 +262,11 @@ export default function Edit() {
                                 return ({
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <Input />
+                                        <Input value={value} />
                                     </Form.Item>
                                 })
                         }
-                    })
-                    ]}
+                    })]}
                     dataSource={businessData} />
             </Form>
         </Spin>

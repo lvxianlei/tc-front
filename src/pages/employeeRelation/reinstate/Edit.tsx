@@ -88,8 +88,8 @@ export default function RecruitEdit(): React.ReactNode {
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
                                         employeeId: selectedRows[0].id,
-                                        inductionDate: selectedRows[0].inductionDate,
-                                        departureDate: selectedRows[0].departureDate,
+                                        inductionDate: selectedRows[0].inductionDate?moment(selectedRows[0].inductionDate):'',
+                                        departureDate: selectedRows[0].departureDate?moment(selectedRows[0].departureDate):'',
                                         departureType: selectedRows[0].departureType,
                                         departureReason: selectedRows[0].departureReason,
                                     });
@@ -132,11 +132,7 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择复职日期'
                         }]} name='reinstatementDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
-                                console.log(e)
-                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
-                                // form.setFieldsValue()
-                            }}/>
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>

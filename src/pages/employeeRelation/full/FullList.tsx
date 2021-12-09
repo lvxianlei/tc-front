@@ -79,16 +79,16 @@ export default function FullList(): React.ReactNode {
             title: '考核结果',
             width: 150,
             dataIndex: 'checkResult',
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 0:
-                        return '提前转正';
-                    case 1:
-                        return '正常转正';
-                    case 2:
-                        return '延期转正';
-                }
-            } 
+            // render: (status: number): React.ReactNode => {
+            //     switch (status) {
+            //         case 1:
+            //             return '提前转正';
+            //         case 2:
+            //             return '正常转正';
+            //         case 3:
+            //             return '延期转正';
+            //     }
+            // } 
         },
         {
             key: 'positiveComments',
@@ -103,9 +103,9 @@ export default function FullList(): React.ReactNode {
             dataIndex: 'positiveStatus',
             render: (status: number): React.ReactNode => {
                 switch (status) {
-                    case 0:
-                        return '待转正';
                     case 1:
+                        return '待转正';
+                    case 2:
                         return '已转正';
                 }
             } 
@@ -136,8 +136,8 @@ export default function FullList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/full/view/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/full/sure/${record.id}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>转正</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/full/view/${record.id}`)}} type='link' >查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/full/sure/${record.id}`)}} type='link' disabled={record.status===2||record.positiveStatus===2}>转正</Button>
                 </Space>
             )
         }
@@ -167,9 +167,9 @@ export default function FullList(): React.ReactNode {
                         label: '考核结果',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>
-                            <Select.Option value={0} key="0">提前转正</Select.Option>
-                            <Select.Option value={1} key="1">正常转正</Select.Option>
-                            <Select.Option value={2} key="2">延期转正</Select.Option>
+                            <Select.Option value={1} key="1">提前转正</Select.Option>
+                            <Select.Option value={2} key="2">正常转正</Select.Option>
+                            <Select.Option value={3} key="3">延期转正</Select.Option>
                         </Select>
                     },
                     {
@@ -177,8 +177,8 @@ export default function FullList(): React.ReactNode {
                         label: '转正状态',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>
-                            <Select.Option value={0} key="0">待转正</Select.Option>
-                            <Select.Option value={1} key="1">已转正</Select.Option>
+                            <Select.Option value={1} key="1">待转正</Select.Option>
+                            <Select.Option value={2} key="2">已转正</Select.Option>
                         </Select>
                     },
                 ]}
