@@ -238,15 +238,6 @@ export default function CertificateMngt(): React.ReactNode {
         return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
     });
 
-    const renderTreeNodes2 = (data:any) => data.map((item:any) => {
-        if (item.children && item.children.length > 0) {
-            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } className={ styles.node } >
-                { renderTreeNodes(item.children) }
-            </TreeNode>);
-        }
-        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
-    });
-
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [ selectedRows, setSelectedRows ] = useState<ICertificate[]>([]);
     const [ visible, setVisible ] = useState<boolean>(false);
@@ -309,9 +300,7 @@ export default function CertificateMngt(): React.ReactNode {
                     name: 'dataPlaceId',
                     label: '资料库',
                     children: <Form.Item name="dataPlaceId">
-                        <TreeSelect placeholder="请选择" style={{ width: "150px" }}>
-                            { renderTreeNodes2(wrapRole2DataNode(databaseData)) }
-                        </TreeSelect>
+                        <TreeSelect placeholder="请选择" style={{ width: "150px" }} treeData={wrapRole2DataNode(databaseData)}/>
                     </Form.Item>
                 },
                 {
