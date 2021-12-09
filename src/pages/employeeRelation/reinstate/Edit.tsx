@@ -132,7 +132,11 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择复职日期'
                         }]} name='reinstatementDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}/>
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
+                                disabledDate={(current)=>{
+                                    return current && current< form.getFieldsValue().departureDate
+                                }}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>

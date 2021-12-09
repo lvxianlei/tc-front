@@ -101,7 +101,7 @@ export default function BoltList(): React.ReactNode {
                         record.boltLeader === userId ? <Link to={`/workMngt/boltList/boltListing/${record.id}/${record.boltLeader}/${record.boltStatus}`}>螺栓清单</Link> : <Button type="link" disabled>螺栓清单</Button>
                     }
                     {
-                        record.boltStatus === 3 && record.loftingLeader === userId ? <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link> : <Button type="link" disabled>校核</Button>
+                        record.boltStatus === 3 && record.weldingLeader === userId ? <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link> : <Button type="link" disabled>校核</Button>
                     }
                 </Space>
             )

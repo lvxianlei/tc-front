@@ -19,6 +19,7 @@ export default function Sure(): React.ReactNode {
         data.newDepartmentName = data.departmentName+'/'+data.teamName;
         form.setFieldsValue({
             ...data,
+            checkResult: 2,
             positiveDate: data.positiveDate?moment(data.positiveDate):''
         })
         resole(data)

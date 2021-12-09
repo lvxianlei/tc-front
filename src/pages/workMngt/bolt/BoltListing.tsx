@@ -58,7 +58,7 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请选择螺栓类型'
                 }]}>
-                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    <Select onChange={() => rowChange(index)} getPopupContainer={triggerNode => triggerNode.parentNode}>
                         {boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}

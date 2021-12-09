@@ -52,6 +52,7 @@ export interface IAnnouncement {
     readonly attachInfoDtos?: FileProps[];
     readonly attachVos?: FileProps[];
     readonly staffList?: string[];
+    readonly account?: string;
 }
 
 export interface EditProps {

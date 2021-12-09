@@ -105,7 +105,10 @@ export default function Edit() {
                 switch (item.dataIndex) {
                     case "ticketNumber":
                         return ({
-                            ...item, width: 150, render: (value: string, _: any, index) => <Input
+                            ...item,
+                            width: 150,
+                            title: `* ${item.title}`,
+                            render: (value: string, _: any, index) => <Input
                                 value={value}
                                 maxLength={12}
                                 onChange={(event) => handleEditTableChange("ticketNumber", event?.target.value, index)}
@@ -113,8 +116,10 @@ export default function Edit() {
                         })
                     case "taxRate":
                         return ({
-                            ...item, render: (value: number, _: any, index) => <InputNumber
-                                value={value}
+                            ...item,
+                            title: `* ${item.title}`,
+                            render: (value: number, _: any, index) => <InputNumber
+                                value={([-1, "-1"].includes(value) || !value) ? 0 : value}
                                 step={1}
                                 min={0}
                                 max={100}

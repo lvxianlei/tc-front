@@ -67,7 +67,6 @@ const setOutColumns = [
     { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
     { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
     { title: '单件孔数', dataIndex: 'holesNum', key: 'holesNum' },
-    { title: 'NC程序名称', dataIndex: 'ncName', key: 'ncName' },
     { title: '备注', dataIndex: 'description', key: 'description' },
     { title: '电焊', dataIndex: 'electricWelding', key: 'electricWelding' },
     { title: '火曲', dataIndex: 'bend', key: 'bend' },
