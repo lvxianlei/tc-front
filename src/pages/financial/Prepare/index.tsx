@@ -8,7 +8,7 @@ import AttachFile from "./AttachFile"
 import { ApplicationForPayment } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { payTypeOptions, pleasePayTypeOptions } from "../../../configuration/DictionaryOptions"
 
 interface EditRefProps {
     onSubmit: (type?: "saveAndApply" | "save") => void
@@ -17,11 +17,11 @@ interface EditRefProps {
 
 export default function ApplyPayment() {
     const history = useHistory()
-    const pleasePayTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1212"].map((item: { id: string, name: string }) => ({
+    const pleasePayTypeEnum = pleasePayTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
-    const paymentMethodEnum = (ApplicationContext.get().dictionaryOption as any)["1211"].map((item: { id: string, name: string }) => ({
+    const paymentMethodEnum = payTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -303,7 +303,17 @@ export default function ApplyPayment() {
                     label: '请款类别',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>
-                        {pleasePayTypeEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
+                        {pleasePayTypeEnum?.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
+                    </Select>
+                },
+                {
+                    name: 'businessType',
+                    label: '企业类型',
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
+                        <Select.Option value="1">供应商</Select.Option>
+                        <Select.Option value="2">装卸公司</Select.Option>
+                        <Select.Option value="3">运输公司</Select.Option>
                     </Select>
                 },
                 {

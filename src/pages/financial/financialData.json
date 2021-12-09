@@ -43,11 +43,11 @@
                     "value": 1
                 },
                 {
-                    "label": "运输公司",
+                    "label": "装卸公司",
                     "value": 2
                 },
                 {
-                    "label": "装卸公司",
+                    "label": "运输公司",
                     "value": 3
                 }
             ]
@@ -323,11 +323,11 @@
                     "value": 1
                 },
                 {
-                    "label": "运输公司",
+                    "label": "装卸公司",
                     "value": 2
                 },
                 {
-                    "label": "装卸公司",
+                    "label": "运输公司",
                     "value": 3
                 }
             ]
@@ -403,6 +403,10 @@
             "type": "number"
         },
         {
+            "title": "已付款金额",
+            "dataIndex": "paidAmount"
+        },
+        {
             "title": "请款状态",
             "dataIndex": "pleasePayStatus",
             "type": "select",
@@ -453,8 +457,27 @@
             "dataIndex": "updateTime"
         },
         {
-            "title": "所属供应商",
-            "dataIndex": "supplierName"
+            "title": "企业类型",
+            "dataIndex": "businessType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "供应商",
+                    "value": 1
+                },
+                {
+                    "label": "装卸公司",
+                    "value": 2
+                },
+                {
+                    "label": "运输公司",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "企业名称",
+            "dataIndex": "businessName"
         },
         {
             "title": "请款机构",

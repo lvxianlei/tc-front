@@ -121,8 +121,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     return <Form.Item name="businessType">
                         <Select onChange={ (e: number) => businessTypeChange(e) }>
                             <Select.Option value={1} key="1">供应商</Select.Option>
-                            <Select.Option value={2} key="2">运输公司</Select.Option>
-                            <Select.Option value={3} key="3">装卸公司</Select.Option>
+                            <Select.Option value={2} key="2">装卸公司</Select.Option>
+                            <Select.Option value={3} key="3">运输公司</Select.Option>
                         </Select>
                     </Form.Item>
                 } })
