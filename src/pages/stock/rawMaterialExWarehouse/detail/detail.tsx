@@ -4,6 +4,7 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../../utils/RequestUtil';
 import AuthUtil from '../../../../utils/AuthUtil';
+import ApplicationContext from "../../../../configuration/ApplicationContext"
 import '../../StockPublicStyle.less';
 import './detail.less';
 
@@ -20,6 +21,8 @@ export default function RawMaterialStock(): React.ReactNode {
         [status, setStatus] = useState(''),//状态
         [dateValue, setDateValue] = useState<any>([]),//时间
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
+        [materialTexture, setMaterialTexture] = useState<any>([]), // 材质
+        [standard, setStandard] = useState<any>([]), // 标准
         [keyword, setKeyword] = useState<any>('');//关键字搜索
     const [departmentId, setDepartmentId] = useState('');//部门
     const [outStockStaffId, setPersonnelId] = useState('');//人员
@@ -39,6 +42,17 @@ export default function RawMaterialStock(): React.ReactNode {
     const [tempApplyData, setTempApplyData] = useState<number | string>('');//出库-弹框-缺料申请需要的列表数据
     const [departmentList, setDepartmentList] = useState<any[]>([]);//部门数据
     const [userList, setuserList] = useState<any[]>([]);//申请人数据数据
+    // 标准
+    const standardEnum = (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+
+    // 材质 
+    const materialEnum = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
     const columns = [
         {
             title: '序号',
@@ -93,17 +107,17 @@ export default function RawMaterialStock(): React.ReactNode {
         },
         {
             title: '批号',
-            dataIndex: 'standard',
+            dataIndex: 'batchNumber',
             width: 100,
         },
         {
             title: '质保书号',
-            dataIndex: 'standard',
+            dataIndex: 'warrantyNumber',
             width: 100,
         },
         {
             title: '轧制批号',
-            dataIndex: 'standard',
+            dataIndex: 'rollingNumber',
             width: 100,
         },
         {
@@ -429,6 +443,8 @@ export default function RawMaterialStock(): React.ReactNode {
             outStockStaffId,
             selectName: keyword,
             status: status,
+            materialTexture, // 材质
+            standard, // 标准
             updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
             updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
         })
@@ -689,23 +705,14 @@ export default function RawMaterialStock(): React.ReactNode {
                             className="select"
                             style={{ width: "100px" }}
                             value={status ? status : ''}
-                            onChange={(val) => { setStatus(val) }}
+                            onChange={(val) => { setMaterialTexture(val) }}
+                            placeholder="请选择材质"
                         >
-                            <Select.Option
-                                value=""
-                            >
-                                全部
-                            </Select.Option>
-                            <Select.Option
-                                value="0"
-                            >
-                                待完成
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                已完成
-                            </Select.Option>
+                            {
+                                materialEnum && materialEnum.length > 0 && materialEnum.map((item: any, index: number) => {
+                                    return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
+                                })
+                            }
                         </Select>
                     </div>
                 </div>
@@ -716,23 +723,14 @@ export default function RawMaterialStock(): React.ReactNode {
                             className="select"
                             style={{ width: "100px" }}
                             value={status ? status : ''}
-                            onChange={(val) => { setStatus(val) }}
+                            onChange={(val) => { setStandard(val) }}
+                            placeholder="请选择标准"
                         >
-                            <Select.Option
-                                value=""
-                            >
-                                全部
-                            </Select.Option>
-                            <Select.Option
-                                value="0"
-                            >
-                                待完成
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                已完成
-                            </Select.Option>
+                            {
+                                standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
+                                    return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
+                                })
+                            }
                         </Select>
                     </div>
                 </div>
@@ -741,7 +739,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     <div className='selectOrInput'>
                         <Input
                             style={{ width: "200px" }}
-                            placeholder="品名/炉批号/内部合同号/杆塔号"
+                            placeholder="品名/炉批号/内部合同号/杆塔号/批号、质保书号、轧制批号"
                             value={keyword}
                             allowClear
                             onChange={(e) => {
