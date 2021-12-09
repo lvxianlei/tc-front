@@ -97,8 +97,13 @@ export default function MaterialMngt(): React.ReactNode {
                         setVisible(true);
                         const list = materialType.filter((res: IMaterialType) => res.id === data[0].materialType);
                         setMaterialList(list[0]?.children);
-                        setDetailData(data[0]);
-                        form.setFieldsValue({ ...data[0] });
+                        let newData = {
+                            ...data[0],
+                            materialType: data[0].materialType + ',' + data[0].materialTypeName,
+                            materialCategory: data[0].materialCategory + ',' + data[0].materialCategoryName,
+                        }
+                        setDetailData(newData);
+                        form.setFieldsValue({ ...newData });
                         setTitle('编辑');
                     } }>编辑</Button>
                     <Popconfirm title="要删除该数据吗？" placement="topRight" onConfirm={() => {
@@ -125,7 +130,14 @@ export default function MaterialMngt(): React.ReactNode {
     const save = () => {
         if(form) {
             form.validateFields().then(res => {
-                const values = form.getFieldsValue(true);
+                let values = form.getFieldsValue(true);
+                values = {
+                    ...values,
+                    materialType: values.materialType.split(',')[0],
+                    materialTypeName: values.materialType.split(',')[1],
+                    materialCategory: values.materialCategory.split(',')[0],
+                    materialCategoryName: values.materialCategory.split(',')[1]
+                }
                 if(title === '新增') {
                     RequestUtil.post('/tower-system/material', [values]).then(res => {
                         close();
@@ -232,12 +244,12 @@ export default function MaterialMngt(): React.ReactNode {
                         required: true,
                         message: '请选择类别'
                     }]}>
-                        <Select placeholder="请选择" style={{ width: "100%" }} onChange={ (e) => {
-                            const list = materialType.filter((res: IMaterialType) => res.id === e);
+                        <Select placeholder="请选择" style={{ width: "100%" }} onChange={ (e: string) => {
+                            const list = materialType.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
                             setMaterialList(list[0].children);
                         } }>
                             { materialType && materialType.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                return <Select.Option key={ item.id } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
                             }) }
                         </Select>
                     </Form.Item></Col>
@@ -247,7 +259,7 @@ export default function MaterialMngt(): React.ReactNode {
                     }]}>
                         <Select placeholder="请选择" style={{ width: "100%" }}>
                             { materialList && materialList.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                return <Select.Option key={ item.id } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
                             }) }
                         </Select>
                     </Form.Item></Col>

@@ -20,12 +20,14 @@ import { StringMap } from "i18next";
     readonly materialTexture?: string;
     readonly materialCode?: string;
     readonly materialCategory?: string;
+    readonly materialCategoryName?: string;
     readonly roleIds?: string;
     readonly field_3?: number;
     readonly description?: string;
     readonly unit?: string;
     readonly material?: string;
     readonly materialType?: string;
+    readonly materialTypeName?: string;
 }
 
 
