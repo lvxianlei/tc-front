@@ -107,7 +107,7 @@ export default function Edit(): React.ReactNode {
                                 value.submitType='save';
                                 value.employeeId = detailData.employeeId;
                                 value.id = params.status !== 'edit'?undefined:params.id;
-                                value.type = params.status === 'change'?1:params.status === 'renewal'?2:undefined
+                                value.type = params.status === 'change'?1:params.status === 'renewal'?2:3
                                 RequestUtil.post(`/tower-hr/labor/contract`, value).then(()=>{
                                     message.success('保存成功！')
                                 }).then(()=>{
