@@ -2,11 +2,17 @@
     "receiveColumns": [
         {
             "title": "企业类型",
-            "dataIndex": "supplierName"
+            "dataIndex": "companyType",
+            "type": "select",
+            "enum": [
+                { "value": "1", "label": "供应商" },
+                { "value": "2", "label": "运输" },
+                { "value": "3", "label": "装卸" }
+            ]
         },
         {
             "title": "企业名称",
-            "dataIndex": "supplierName"
+            "dataIndex": "companyName"
         },
         {
             "title": "收货单编号",

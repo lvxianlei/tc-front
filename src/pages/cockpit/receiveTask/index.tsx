@@ -125,16 +125,15 @@ export default function ViewReceivingNote(): React.ReactNode {
                     name: 'invoiceStatus',
                     label: '企业类型',
                     children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
-                        <Select.Option value={1}>待收票</Select.Option>
-                        <Select.Option value={2}>已收票</Select.Option>
-                        <Select.Option value={3}>待付款</Select.Option>
-                        <Select.Option value={4}>已付款</Select.Option>
+                        <Select.Option value={1}>供应商</Select.Option>
+                        <Select.Option value={2}>运输</Select.Option>
+                        <Select.Option value={3}>装卸</Select.Option>
                     </Select>
                 },
                 {
                     name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input style={{ width: 280 }} placeholder="供应商/收货单编号/关联申请编号/关联票据编号" />
+                    children: <Input style={{ width: 350 }} placeholder="供应商/收货单编号/关联申请编号/关联票据编号/企业名称" />
                 }
             ]}
         />
