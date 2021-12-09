@@ -66,7 +66,7 @@ export default class EmployeeDeptSelectionComponent extends AbstractFilteredSele
                 type: this.props.rowSelectionType || 'radio',
                 selectedRowKeys: this.state.selectedRowKeys,
                 getCheckboxProps: (record: any) => ({
-                    disabled: record.parentId === "0", // Column configuration not to be checked
+                    disabled: record.parentId === "0"|| record.type === 2, // Column configuration not to be checked
                 }),
                 onChange: this.onSelectChange
             }
