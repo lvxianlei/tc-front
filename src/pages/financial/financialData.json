@@ -787,6 +787,18 @@
         {
             "title": "操作时间",
             "dataIndex": "optTime"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "optName"
+        },
+        {
+            "title": "付款日",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
         }
     ],
     "EditList": [
@@ -845,6 +857,54 @@
         {
             "title": "操作时间",
             "dataIndex": "optTime"
+        }
+    ],
+    "approvalInfo": [
+        {
+            "title": "操作部门",
+            "dataIndex": "department"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "operator"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "operatorTime"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "approveStatus"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "paymentInfo": [
+        {
+            "title": "操作部门",
+            "dataIndex": "department"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "operator"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "operatorTime"
+        },
+        {
+            "title": "付款日期",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "付款金额",
+            "dataIndex": "payMoney"
         }
     ]
 }
