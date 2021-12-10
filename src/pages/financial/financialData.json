@@ -895,10 +895,6 @@
             "dataIndex": "operatorTime"
         },
         {
-            "title": "付款日期",
-            "dataIndex": "payTime"
-        },
-        {
             "title": "付款方式",
             "dataIndex": "payType"
         },
