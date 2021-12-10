@@ -7,14 +7,14 @@ import Overview from "./Overview"
 import { baseinfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { invoiceTypeOptions } from "../../../configuration/DictionaryOptions"
 interface EditRefProps {
     onSubmit: () => void
     resetFields: () => void
 }
 export default function Invoice() {
     const history = useHistory()
-    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1210"].map((item: { id: string, name: string }) => ({
+    const invoiceTypeEnum = invoiceTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -189,7 +189,7 @@ export default function Invoice() {
                     label: '发票类型',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>
-                        {invoiceTypeEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
+                        {invoiceTypeEnum?.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {

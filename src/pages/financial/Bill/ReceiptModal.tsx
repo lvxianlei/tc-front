@@ -126,8 +126,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                     </Form.Item>
                 </Col>
                 <Col>
-                    <Form.Item name="completeTime" label="月份选择" initialValue="">
-                        <DatePicker.RangePicker picker="month" />
+                    <Form.Item name="receiveTime" label="月份选择" initialValue="">
+                        <DatePicker.RangePicker />
                     </Form.Item>
                 </Col>
                 <Col>
