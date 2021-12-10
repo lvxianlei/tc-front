@@ -224,7 +224,7 @@ export default function ReinstateList(): React.ReactNode {
                 filterValue={ filterValue }
                 requestData={{ productCategory: params.id }}
                 extraOperation={
-                    <Button type="primary" onClick={()=>history.push('/employeeRelation/reinstate/Edit/0/0')} ghost>新增员工复职</Button>
+                    <Button type="primary" onClick={()=>history.push('/employeeRelation/reinstate/Edit/0/add')} ghost>新增员工复职</Button>
                 }
                 searchFormItems={[
                     {
