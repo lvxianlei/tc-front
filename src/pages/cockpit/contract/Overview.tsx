@@ -22,7 +22,6 @@ export default function Particulars(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const onFilterSubmit = (value: any) => {
-        console.log(value, '查询的值')
         return value
     }
 
@@ -32,11 +31,11 @@ export default function Particulars(): React.ReactNode {
         sourceKey={"receiveStockDetailPage.records"}
         extraOperation={(data) => 
             <>
-                <span style={{marginLeft:"20px"}}>
-                    已收货：重量(支)合计：0  
-                    价税合计(元)合计：0元    
-                    未收货：重量(支)合计：0元
-                    价税合计(元)合计：51425.00
+                <span style={{marginLeft:"20px", fontSize: 16, color: "#FF8C00", fontWeight: "bold"}}>
+                    已收货：重量(支)合计：{data?.receiveWeight || 0}&nbsp;
+                    价税合计(元)合计：{data?.receivePrice || 0}&nbsp;
+                    未收货：重量(支)合计：{data?.waitWeight || 0}&nbsp;
+                    价税合计(元)合计：{data?.waitPrice || 0}
                 </span>
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>

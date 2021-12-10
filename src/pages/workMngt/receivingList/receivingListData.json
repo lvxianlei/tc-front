@@ -93,17 +93,6 @@
     ],
     "BasicInformation": [
         {
-            "title": "收货单号",
-            "dataIndex": "receiveNumber",
-            "type": "string",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入收货单号..."
-                }
-            ]
-        },
-        {
             "title": "供应商",
             "dataIndex": "supplierName",
             "type": "popTable",
@@ -572,7 +561,7 @@
         },
         {
             "title": "装卸费价税合计（元）",
-            "dataIndex": "unloadPriceCount;",
+            "dataIndex": "unloadPriceCount",
             "type": "number"
         }
     ]

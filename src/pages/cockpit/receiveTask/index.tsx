@@ -66,7 +66,7 @@ export default function ViewReceivingNote(): React.ReactNode {
             <BillOverview id={detailId} />
         </Modal>
         <Page
-            path="/tower-storage/receiveStock/list"
+            path="/tower-storage/receiveStockBoard"
             columns={[
                 {
                     key: 'index',
@@ -114,7 +114,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                 {
                     name: 'invoiceStatus',
                     label: '付款状态',
-                    children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
+                    children: <Select style={{ width: "150px" }} placeholder="请选择付款状态">
                         <Select.Option value={1}>待收票</Select.Option>
                         <Select.Option value={2}>已收票</Select.Option>
                         <Select.Option value={3}>待付款</Select.Option>
@@ -122,9 +122,9 @@ export default function ViewReceivingNote(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'invoiceStatus',
+                    name: 'companyType',
                     label: '企业类型',
-                    children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
+                    children: <Select style={{ width: "150px" }} placeholder="请选择企业类型">
                         <Select.Option value={1}>供应商</Select.Option>
                         <Select.Option value={2}>运输</Select.Option>
                         <Select.Option value={3}>装卸</Select.Option>

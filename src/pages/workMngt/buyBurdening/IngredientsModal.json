@@ -206,49 +206,43 @@
     "ConstructionClassification": [
         {
             "title": "材质",
-            "dataIndex": "purchaseNumber",
+            "dataIndex": "structureTexture",
             "width": 200,
             "type": "string"
         },
         {
             "title": "规格",
-            "dataIndex": "productNum",
+            "dataIndex": "structureSpec",
             "width": 100,
             "type": "number"
         },
         {
             "title": "未配",
-            "dataIndex": "batcher",
+            "dataIndex": "notConfigured",
             "width": 100,
             "type": "string"
         },
         {
             "title": "全部",
-            "dataIndex": "batcheTaskStatus"
+            "dataIndex": "totalNum"
         }
     ],
     "ConstructionClassificationDetail": [
         {
-            "title": "件号",
-            "dataIndex": "purchaseNumber",
-            "width": 200,
-            "type": "string"
-        },
-        {
             "title": "长度（mm）",
-            "dataIndex": "productNum",
+            "dataIndex": "length",
             "width": 100,
             "type": "number"
         },
         {
             "title": "未配",
-            "dataIndex": "batcher",
+            "dataIndex": "notConfigured",
             "width": 100,
             "type": "string"
         },
         {
             "title": "全部",
-            "dataIndex": "batcheTaskStatus"
+            "dataIndex": "num"
         }
     ]
 }

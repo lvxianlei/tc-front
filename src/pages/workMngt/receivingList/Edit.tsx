@@ -402,18 +402,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             // 装卸费合计 = 总重量 * 单价
             unloadPriceCount = (weightAll * ((handlingCharges as any).unloadTaxPrice * 1) ) + "";
         }
-        const v = {
+        setFreightInformation({
             ...freightInformation,
             transportPriceCount, // 运费价税合计（元）
-        }
-        // 设置装卸费信息
-        const handing = {
+        })
+        setHandlingCharges({
             ...handlingCharges,
             unloadPriceCount
-        }
-        console.log(columns, "columns", )
-        setFreightInformation(Object.assign({}, v))
-        setHandlingCharges(Object.assign({}, handing))
+        })
         form.setFieldsValue({ price: priceAll })
     }
 
@@ -427,6 +423,19 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             })
             setContractId(result?.contractId)
             setCargoData(result?.lists || [])
+            // 编辑回显
+            setFreightInformation({
+                transportBear:  result?.transportBear === 1 ? "需方" : '我方', // 运输承担
+                transportCompany: result?.transportCompany, // 运输公司
+                transportTaxPrice: result?.transportTaxPrice, // 合同单价
+                transportPriceCount: result?.transportPriceCount, // 运费价税合计（元）
+            })
+            setHandlingCharges({
+                unloadBear: result?.unloadBear === 1 ? "需方" : '我方',
+                unloadCompany: result?.unloadCompany,
+                unloadTaxPrice: result?.unloadTaxPrice,
+                unloadPriceCount: result?.unloadPriceCount
+            })
             resole(result)
         } catch (error) {
             reject(error)
@@ -450,6 +459,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 ...baseFormData,
                 ...freightInformation,
                 ...handlingCharges,
+                transportBear: freightInformation?.transportBear === "需方" ? 2 : 1,
+                unloadBear: handlingCharges.unloadBear === "需方" ? 2 : 1,
                 supplierId: baseFormData.supplierName.id,
                 supplierName: baseFormData.supplierName.value,
                 contractId: baseFormData.contractNumber.id,
@@ -487,21 +498,18 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 // 装卸费合计 = 总重量 * 单价
                 unloadPriceCount = (weightAll * (fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0")) + "";
             }
-            const v = {
+            setFreightInformation({
                 transportBear:  fields.contractNumber.records[0].transportBear === 1 ? "需方" : '我方', // 运输承担
                 transportCompany: fields.contractNumber.records[0].transportCompany ? fields.contractNumber.records[0].transportCompany : "", // 运输公司
                 transportTaxPrice: fields.contractNumber.records[0].transportTaxPrice ? fields.contractNumber.records[0].transportTaxPrice : "0", // 合同单价
                 transportPriceCount, // 运费价税合计（元）
-            }
-            // 设置装卸费信息
-            const handing = {
+            })
+            setHandlingCharges({
                 unloadBear: fields.contractNumber.records[0].unloadBear === 1 ? "需方" : '我方',
                 unloadCompany: fields.contractNumber.records[0].unloadCompany ? fields.contractNumber.records[0].unloadCompany : "",
                 unloadTaxPrice: fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0",
                 unloadPriceCount
-            }
-            setFreightInformation(Object.assign({}, v))
-            setHandlingCharges(Object.assign({}, handing))
+            })
         }
         if (fields.supplierName) {
             const supplierData = fields.supplierName.records[0]

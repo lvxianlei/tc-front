@@ -9,20 +9,44 @@ interface DataType {
     name: string;
     age: number;
     address: string;
+    structureSpec: string;
+    structureTexture: string
 }
 export default function IngredientsModal(props: any) {
     const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>('radio');
+    // 构建分类选择的集合
+    const [ selectSort, setSelectSort ] = useState<any>([]);
+    // 构建分类明细选择的集合
+    const [ selectedRowKeysCheck, setSelectedRowKeysCheck ] = useState<any>([]);
     const [ serarchForm ] = Form.useForm();
       
     const handleOkuseState = () => {
-
+        console.log(selectedRowKeysCheck, "selectedRowKeysCheck")
     }
 
     // 获取构建分类
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseTaskTower/component/material/${id}`)
-            console.log(result, "构建分类")
+            result?.materialList.map((element: any, index: number) => {
+                element["key"] = `${element.structureTexture}_${index}`
+            });
+            resole(result);
+            if (result?.materialList.length > 0) {
+                // 默认选中第一条
+                setSelectSort([result?.materialList[0].key])
+                // 获取构建分类明细
+                getSortDetail(props.id, result?.materialList[0]?.structureSpec, result?.materialList[0]?.structureTexture);
+            }
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    // 获取构建分类明细
+    const { run: getSortDetail, data: sortDetailList } = useRequest<{ [key: string]: any }>((purchaseTowerId: string, spec: string, texture: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseTaskTower/component/${purchaseTowerId}/${spec}/${texture}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -34,22 +58,19 @@ export default function IngredientsModal(props: any) {
     }, [props.id && props.visible])
 
     const rowSelection = {
+        selectedRowKeys: selectSort,
         onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: (record: DataType) => ({
-            disabled: record.name === 'Disabled User', // Column configuration not to be checked
-            name: record.name,
-        }),
+            // 构建分类改变了，获取构建分类明细
+            getSortDetail(props.id, selectedRows[0]?.structureSpec, selectedRows[0]?.structureTexture);
+            setSelectSort(selectedRowKeys);
+        }
     };
     const rowSelectionCheck = {
-        onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+        selectedRowKeys: selectedRowKeysCheck,
+        onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: (record: DataType) => ({
-            disabled: record.name === 'Disabled User', // Column configuration not to be checked
-            name: record.name,
-        }),
+            setSelectedRowKeysCheck(selectedRowKeys)
+        }
     };
     return (
         <Modal
@@ -61,13 +82,13 @@ export default function IngredientsModal(props: any) {
                 props.onCancel();
             }}
             footer={[
-                <Button key="submit" type="primary">
+                <Button type="primary">
                     手动配料
                 </Button>,
                 <Button key="submit" type="primary">
                     保存
                 </Button>,
-                <Button key="submit" type="primary" onClick={() => handleOkuseState()}>
+                <Button type="primary" onClick={() => handleOkuseState()}>
                     保存并提交
                 </Button>,
                 <Button key="back" onClick={() => {
@@ -121,7 +142,7 @@ export default function IngredientsModal(props: any) {
                     </Form>
                    <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
                       <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类</span>
-                      <span style={{color: "#FF8C00"}}>未分配/全部：300/800</span>
+                      <span style={{color: "#FF8C00"}}>未分配/全部：{(userData as any) && (userData as any).notConfigured}/{(userData as any) && (userData as any).totalNum}</span>
                    </div>
                    <Table
                         size="small"
@@ -130,12 +151,12 @@ export default function IngredientsModal(props: any) {
                         ...rowSelection,
                         }}
                         columns={ConstructionClassification}
-                        dataSource={[]}
+                        dataSource={(userData as any) && (userData as any).materialList ? (userData as any).materialList : []}
                         pagination={false}
                      />
                      <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
                       <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类明细</span>
-                      <span style={{color: "#FF8C00"}}>已配：30 全部： 100</span>
+                      <span style={{color: "#FF8C00"}}>{(sortDetailList as any) && (sortDetailList as any).completionProgres} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum}</span>
                    </div>
                    <Table
                         size="small"
@@ -143,8 +164,17 @@ export default function IngredientsModal(props: any) {
                         type: "checkbox",
                         ...rowSelectionCheck,
                         }}
-                        columns={ConstructionClassificationDetail}
-                        dataSource={[]}
+                        columns={[
+                            {
+                                key: 'index',
+                                title: '件号',
+                                dataIndex: 'index',
+                                width: 50,
+                                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                            },
+                            ...ConstructionClassificationDetail
+                        ]}
+                        dataSource={(sortDetailList as any) && (sortDetailList as any).componentList ? (sortDetailList as any).componentList : []}
                         pagination={false}
                      />
                 </Col>

@@ -52,7 +52,12 @@
     "freightInfo": [
         {
             "dataIndex": "transportBear",
-            "title": "运输承担"
+            "title": "运输承担",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "供方" },
+                { "value": 2, "label": "需方" }
+            ]
         },
         {
             "dataIndex": "transportCompany",
@@ -70,7 +75,12 @@
     "handlingChargesInfo": [
         {
             "dataIndex": "unloadBear",
-            "title": "卸车承担"
+            "title": "卸车承担",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "供方" },
+                { "value": 2, "label": "需方" }
+            ]
         },
         {
             "dataIndex": "unloadCompany",

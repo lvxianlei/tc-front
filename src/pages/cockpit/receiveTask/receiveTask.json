@@ -5,9 +5,9 @@
             "dataIndex": "companyType",
             "type": "select",
             "enum": [
-                { "value": "1", "label": "供应商" },
-                { "value": "2", "label": "运输" },
-                { "value": "3", "label": "装卸" }
+                { "value": 1, "label": "供应商" },
+                { "value": 2, "label": "运输" },
+                { "value": 3, "label": "装卸" }
             ]
         },
         {
