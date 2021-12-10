@@ -195,7 +195,7 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             width: '18%',
             dataIndex: 'departmentName', 
             render:(_:any,record:any)=>{
-                return record.departmentName+'/'+record.teamName
+                return record.departmentId!=='0'?record.departmentName+'/'+record.teamName:record.teamName
             }
         }, {
             key: 'postName',

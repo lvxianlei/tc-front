@@ -22,7 +22,7 @@ export default function Edit(): React.ReactNode {
             ...data,
             contractEndDate: data.contractEndDate?moment(data.contractEndDate):'',
             contractStartDate: data.contractStartDate?moment(data.contractStartDate):'',
-            newDepartmentName: data.departmentName+'/'+data.teamName
+            newDepartmentName: data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         })
         setCompany(result)
         resole(data)

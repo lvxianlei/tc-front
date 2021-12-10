@@ -89,7 +89,7 @@ export default function ReinstateList(): React.ReactNode {
             width: 100,
             dataIndex: 'productCategoryName',
             render:(_:any,record:any)=>{
-                return <span>{ record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-' }</span>
+                return <span>{ record.departmentId!=='0'?record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-': record.teamName}</span>
             }
         },
         {
@@ -224,7 +224,7 @@ export default function ReinstateList(): React.ReactNode {
                 filterValue={ filterValue }
                 requestData={{ productCategory: params.id }}
                 extraOperation={
-                    <Button type="primary" onClick={()=>history.push('/employeeRelation/reinstate/Edit/0/add')} ghost>新增员工复职</Button>
+                    <Button type="primary" onClick={()=>history.push('/employeeRelation/reinstate/add')} ghost>新增员工复职</Button>
                 }
                 searchFormItems={[
                     {
