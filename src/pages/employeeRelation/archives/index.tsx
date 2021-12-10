@@ -39,7 +39,7 @@ export default function ArchivesList(): React.ReactNode {
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>
                             <Button type="link" size="small"><Link to={`/employeeRelation/archives/detail/${record.id}`}>查看</Link></Button>
-                            <Button type="link" size="small"><Link to={`/employeeRelation/archives/edit/${record.id}`}>编辑</Link></Button>
+                            <Button disabled={record?.employeeStatus === 2} type="link" size="small"><Link to={`/employeeRelation/archives/edit/${record.id}`}>编辑</Link></Button>
                         </>
                     )
                 }

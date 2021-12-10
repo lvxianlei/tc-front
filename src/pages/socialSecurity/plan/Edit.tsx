@@ -17,8 +17,12 @@ export default function Edit() {
     const { loading: companyLoading, data: companyEnum } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/department/company`)
+            console.log(result.map((item: any) => {
+                const children = item.children?.map((item: any) => ({ title: item.name, value: item.id })) || []
+                return ({ title: item.name, value: item.id, children })
+            }))
             resole(result.map((item: any) => {
-                const children = item.children.map((item: any) => ({ title: item.name, value: item.id }))
+                const children = item.children?.map((item: any) => ({ title: item.name, value: item.id })) || []
                 return ({ title: item.name, value: item.id, children })
             }))
         } catch (error) {

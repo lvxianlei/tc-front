@@ -661,11 +661,15 @@
         {
             "title": "入职日期",
             "dataIndex": "inductionDate",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "disabled": true
         },
         {
             "title": "转正日期",
             "dataIndex": "positiveDate",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "disabled": true
         },
         {
