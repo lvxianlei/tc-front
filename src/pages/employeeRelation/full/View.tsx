@@ -39,8 +39,8 @@ export default function View(): React.ReactNode {
             <DetailTitle title="转正管理"/>
             <BaseInfo columns={fullInfoData} dataSource={detailData || {}} col={2}/>
             <Attachment dataSource={detailData?.fileVos}/>
-            <DetailTitle title="审批记录" />
-            <CommonTable columns={tableColumns} dataSource={detailData?.approveLog} pagination={ false } />
+            {detailData?.approveLog.length>0&&<DetailTitle title="审批记录" />}
+            {detailData?.approveLog.length>0&&<CommonTable columns={tableColumns} dataSource={detailData?.approveLog} pagination={ false } />}
             </DetailContent>
         </Spin>
     </>

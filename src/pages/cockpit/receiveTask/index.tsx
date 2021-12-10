@@ -6,6 +6,26 @@ import { Page } from '../../common'
 import { receiveColumns } from "./receiveTask.json"
 import PrepareOverview from "../../financial/Prepare/Overview"
 import BillOverview from "../../financial/Bill/Overview"
+
+/**
+ * 拿掉
+ *  {
+        "title": "供应商",
+        "dataIndex": "supplierName"
+    },
+    {
+        "title": "运费(元)",
+        "dataIndex": "freight",
+        "type": "number"
+    },
+    {
+        "title": "货款运费合计(元)",
+        "dataIndex": "price",
+        "type": "number"
+    },
+    新增 企业类型以及企业名称 （需跟后台确认字段）
+    查询条件：企业类型下拉框数据需后台提供
+ */
 export default function ViewReceivingNote(): React.ReactNode {
     const history = useHistory()
     const [prepareVisible, setPrepareVisible] = useState<boolean>(false)
@@ -46,7 +66,7 @@ export default function ViewReceivingNote(): React.ReactNode {
             <BillOverview id={detailId} />
         </Modal>
         <Page
-            path="/tower-storage/receiveStock/list"
+            path="/tower-storage/receiveStockBoard"
             columns={[
                 {
                     key: 'index',
@@ -93,8 +113,8 @@ export default function ViewReceivingNote(): React.ReactNode {
                 },
                 {
                     name: 'invoiceStatus',
-                    label: '状态',
-                    children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
+                    label: '付款状态',
+                    children: <Select style={{ width: "150px" }} placeholder="请选择付款状态">
                         <Select.Option value={1}>待收票</Select.Option>
                         <Select.Option value={2}>已收票</Select.Option>
                         <Select.Option value={3}>待付款</Select.Option>
@@ -102,9 +122,18 @@ export default function ViewReceivingNote(): React.ReactNode {
                     </Select>
                 },
                 {
+                    name: 'companyType',
+                    label: '企业类型',
+                    children: <Select style={{ width: "150px" }} placeholder="请选择企业类型">
+                        <Select.Option value={1}>供应商</Select.Option>
+                        <Select.Option value={2}>运输</Select.Option>
+                        <Select.Option value={3}>装卸</Select.Option>
+                    </Select>
+                },
+                {
                     name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input style={{ width: 280 }} placeholder="供应商/收货单编号/关联申请编号/关联票据编号" />
+                    children: <Input style={{ width: 350 }} placeholder="供应商/收货单编号/关联申请编号/关联票据编号/企业名称" />
                 }
             ]}
         />

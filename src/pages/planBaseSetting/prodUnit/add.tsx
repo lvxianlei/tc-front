@@ -10,11 +10,22 @@ import dayjs from 'dayjs';
 const ProdUnitAdd = (props: any) => {
     let [prodLinkList, setProdLinkList] = useState<any[]>([])
     let [itemInfo, setItemInfo] = useState<any>({})
-    let [times, setTimes] = useState<string[]>(['', ''])
+    // let [times, setTimes] = useState<string[]>(['', ''])
+    const [value, setValue] = useState<any>();
+    const [dates, setDates] = useState<any>([]);
+    const disabledDate = (current: any) => {
+      if (!dates || dates.length === 0) {
+        return false;
+      }
+      const tooLate = dates[0] && current.diff(dates[0], 'days') > 7;
+      const tooEarly = dates[1] && dates[1].diff(current, 'days') > 7;
+      return tooEarly || tooLate;
+    };
     useEffect(() => {
-        times[0] = dayjs().format('YYYY-MM-DD')
-        times[1] = dayjs().add(7, 'day').format('YYYY-MM-DD')
-        setTimes(times)
+        // times[0] = dayjs().format('YYYY-MM-DD')
+        // times[1] = dayjs().add(7, 'day').format('YYYY-MM-DD')
+        // setTimes(times)
+        setValue([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(7, 'day').format('YYYY-MM-DD'))])
         getProdLinkList()
         if (props.id) {
             getDetail()
@@ -74,14 +85,20 @@ const ProdUnitAdd = (props: any) => {
      * @description
      */
     const seeLoad = async () => {
-        if (!times[0]) {
+        // if (!times[0]) {
+        //     message.error('请选择时间范围')
+        //     return
+        // }
+        if (!value) {
             message.error('请选择时间范围')
             return
         }
         let data: any = await RequestUtil.get('/tower-aps/productionUnit/load', {
             id: props.id,
-            startTime: times[0] ? `${times[0]} 00:00:00` : null,
-            endTime: times[1] ? `${times[1]} 23:59:59` : null,
+            startTime: value[0].format('YYYY-MM-DD') + ' 00:00:00',
+            endTime: value[1].format('YYYY-MM-DD') + ' 23:59:59'
+            // startTime: times[0] ? `${times[0]} 00:00:00` : null,
+            // endTime: times[1] ? `${times[1]} 23:59:59` : null,
         })
         if (data) {
             let dates = (data.loadList || []).map((item: { dayTime: string }) => {
@@ -125,11 +142,20 @@ const ProdUnitAdd = (props: any) => {
                     data: []
                 },
             ];
-            (data.loadList || []).forEach((item: { productivityList: { forEach: (arg0: (e: any, i: string) => void) => void; }; }, index: any) => {
-                item.productivityList.forEach((e: any, i: any) => {
-                    datas[i].name = e.statusName
-                    datas[i].data.push(e.productivity || 0)
-                });
+            // (data.loadList || []).forEach((item: { productivityList: { forEach: (arg0: (e: any, i: string) => void) => void; }; }, index: any) => {
+            //     item.productivityList.forEach((e: any, i: any) => {
+            //         datas[i].name = e.statusName
+            //         datas[i].data.push(e.productivity || 0)
+            //     });
+            // });
+            (data.loadList || []).forEach((item: { productivityList:  any }, index: any) => {
+                datas.map((res: any, i: number) => {
+                    if(item?.productivityList?.length > 0 && res.name === item.productivityList[i].statusName ){
+                        res.data.push(item.productivityList[i].productivity || 0)
+                    }  else  {
+                        res.data.push(0)
+                    } 
+                })
             });
             initCharts(dates, datas)
         }
@@ -243,9 +269,17 @@ const ProdUnitAdd = (props: any) => {
                         }}
                     >查看负荷</Button>
                     <DatePicker.RangePicker
-                        value={times[0] ? [moment(times[0]), moment(times[1])] : null}
-                        onChange={(value, valueString) => {
-                            setTimes(valueString)
+                        disabledDate={disabledDate}
+                        onCalendarChange={(val: any) => setDates(val)}
+                        value={value}
+                        onChange={(value) => {
+                            setValue(value)
+                        }}
+                        onOpenChange={(open: boolean) => {
+                            if (open) {
+                                setDates([]);
+                                setValue([])
+                            }
                         }}
                     />
                 </div>

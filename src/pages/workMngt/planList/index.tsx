@@ -1,13 +1,23 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { baseInfoList } from "./planListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+// 引入编辑采购计划
+import EditPurchasePlan from './EditPurchasePlan';
+interface EditRefProps {
+    id?: string
+    onSubmit: () => void
+    resetFields: () => void
+}
 export default function Invoicing() {
+    const [ visible, setVisible ] = useState<boolean>(false);
+    const addRef = useRef<EditRefProps>();
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({})
+    const [ id, setId ] = useState<string>();
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan/${id}`)
@@ -44,64 +54,109 @@ export default function Invoicing() {
         })
     }
 
-    return <Page
-        path="/tower-supply/materialPurchasePlan"
-        columns={[
-            {
-                title: "序号",
-                dataIndex: "index",
-                width: 40,
-                render: (_: any, _a: any, index: number) => <>{index + 1}</>
-            },
-            ...baseInfoList,
-            {
-                title: "操作",
-                dataIndex: "opration",
-                fixed: "right",
-                width: 100,
-                render: (_: any, record: any) => {
-                    return <>
-                        <Link to={`/workMngt/planList/relationTower/${record.id}`}>关联塔型</Link>
-                        <Link to={`/workMngt/planList/purchaseList/${record.id}`}><Button type="link">采购清单</Button></Link>
-                        <Button type="link" disabled={record.purchasePlanStatus === 3} onClick={() => handleDelete(record.id)}>取消计划</Button>
-                    </>
-                }
-            }]}
-        extraOperation={<>
-            <Button type="primary" ghost>导出</Button>
-            <Button type="primary" ghost onClick={() => message.warning("预留按钮,暂无功能...")}>创建采购计划</Button>
-        </>}
-        onFilterSubmit={onFilterSubmit}
-        filterValue={filterValue}
-        searchFormItems={[
-            {
-                name: 'startStatusUpdateTime',
-                label: '最新状态变更时间',
-                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-            },
-            {
-                name: 'planStatus',
-                label: '计划状态',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">待完成</Select.Option>、
-                    <Select.Option value="2">已完成</Select.Option>
-                    <Select.Option value="3">已取消</Select.Option>
-                </Select>
-            },
-            {
-                name: 'purchaseType',
-                label: '采购类型',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">外部</Select.Option>
-                    <Select.Option value="2">内部</Select.Option>
-                    <Select.Option value="3">缺料</Select.Option>
-                </Select>
-            },
-            {
-                name: 'purchasePlanCode',
-                label: '采购计划编号',
-                children: <Input />
-            }
-        ]}
-    />
+    // 编辑采购计划回调
+    const handleOk = () => new Promise(async (resove, reject) => {
+        try {
+            await addRef.current?.onSubmit()
+            message.success("编辑回调计划成功...")
+            setVisible(false)
+            history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    return(
+        <>
+            <Page
+                path="/tower-supply/materialPurchasePlan"
+                columns={[
+                    {
+                        title: "序号",
+                        dataIndex: "index",
+                        width: 40,
+                        render: (_: any, _a: any, index: number) => <>{index + 1}</>
+                    },
+                    ...baseInfoList,
+                    {
+                        title: "操作",
+                        dataIndex: "opration",
+                        fixed: "right",
+                        width: 100,
+                        render: (_: any, record: any) => {
+                            return <>
+                                <Link to={`/workMngt/planList/relationTower/${record.id}`}>关联塔型</Link>
+                                <Link to={`/workMngt/planList/purchaseList/${record.id}`}><Button type="link">采购清单</Button></Link>
+                                <Button type="link" disabled={record.purchasePlanStatus === 3} onClick={() => handleDelete(record.id)}>取消计划</Button>
+                                <Button type="link"  onClick={() => {
+                                    setId(record.id);
+                                    setVisible(true);
+                                }}>编辑计划</Button>
+                            </>
+                        }
+                    }]}
+                extraOperation={<>
+                    <Button type="primary" ghost>导出</Button>
+                    <Button type="primary" ghost onClick={() => message.warning("预留按钮,暂无功能...")}>创建采购计划</Button>
+                </>}
+                onFilterSubmit={onFilterSubmit}
+                filterValue={filterValue}
+                searchFormItems={[
+                    {
+                        name: 'startStatusUpdateTime',
+                        label: '最新状态变更时间',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    },
+                    {
+                        name: 'planStatus',
+                        label: '计划状态',
+                        children: <Select style={{ width: 200 }}>
+                            <Select.Option value="1">待完成</Select.Option>、
+                            <Select.Option value="2">已完成</Select.Option>
+                            <Select.Option value="3">已取消</Select.Option>
+                        </Select>
+                    },
+                    {
+                        name: 'purchaseType',
+                        label: '采购类型',
+                        children: <Select style={{ width: 200 }}>
+                            <Select.Option value="1">外部</Select.Option>
+                            <Select.Option value="2">内部</Select.Option>
+                            <Select.Option value="3">缺料</Select.Option>
+                        </Select>
+                    },
+                    {
+                        name: 'purchasePlanCode',
+                        label: '采购计划编号',
+                        children: <Input />
+                    }
+                ]}
+            />
+            <Modal
+                title={'编辑采购计划'}
+                visible={visible}
+                width={1000}
+                maskClosable={false}
+                destroyOnClose={true}
+                onCancel={() => {
+                    addRef.current?.resetFields();
+                    setVisible(false);
+                }}
+                  footer={[
+                    <Button key="back" onClick={() => {
+                        addRef.current?.resetFields();
+                        setVisible(false);
+                    }}>
+                      关闭
+                    </Button>,
+                    <Button key="submit" type="primary" onClick={() => handleOk()}>
+                      保存并提交
+                    </Button>
+                  ]}
+            >
+                <EditPurchasePlan ref={addRef} id={id} />
+            </Modal>
+        </>
+    )
 }

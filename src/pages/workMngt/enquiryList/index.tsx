@@ -117,7 +117,7 @@ export default function EnquiryList(): React.ReactNode {
                 },
                 {
                     name: 'inquirerId',
-                    label: '询价人',
+                    label: '工程报价员',
                     children: <IntgSelect width={200} />
                 }
             ]}

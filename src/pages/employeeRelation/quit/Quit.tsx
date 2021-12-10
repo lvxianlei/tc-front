@@ -73,6 +73,7 @@ export default function Quit(): React.ReactNode {
                         }]}  name='employeeName'>
                             <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
+                                    form.resetFields();
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
                                         companyName: selectedRows[0].companyName,

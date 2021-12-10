@@ -29,8 +29,8 @@ export default function View(): React.ReactNode {
             ]}>
             <DetailTitle title="员工复职信息"/>
             <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
-            <DetailTitle title="审批记录" />
-            <CommonTable columns={tableColumns} dataSource={detailData?.approveLog} pagination={ false } />
+            {detailData?.approveLog.length>0&&<DetailTitle title="审批记录" />}
+            {detailData?.approveLog.length>0&&<CommonTable columns={tableColumns} dataSource={detailData?.approveLog} pagination={ false } />}
             </DetailContent>
         </Spin>
     </>

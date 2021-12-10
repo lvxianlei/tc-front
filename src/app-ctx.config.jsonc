@@ -224,13 +224,13 @@
                         ]
                     },
                     {
-                        "label": "询价任务",
+                        "label": "工程报价任务",
                         "icon": "technology",
                         "path": "/enquiryTask",
                         "authority": "enquiryTask",
                         "items": [
                             {
-                                "label": "询价任务",
+                                "label": "工程报价任务",
                                 "path": "/enquiryTask/index",
                                 "authority": "enquiryTask_list"
                             }
@@ -414,7 +414,7 @@
                                 "authority": "work_management_assembly_welding_list"
                             },
                             {
-                                "label": "询价列表",
+                                "label": "工程报价列表",
                                 "path": "/workMngt/enquiry",
                                 "authority": "work_management_inquiry_list"
                             },
