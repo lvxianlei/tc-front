@@ -10,7 +10,7 @@ interface OverviewProps {
 }
 export default function Overview({ id }: OverviewProps): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false);
-    const [picUrl, setPicUrl] = useState<string>();
+    const [attach, setAttach] = useState([]);
 
     const pleasePayTypeEnum = pleasePayTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
@@ -31,7 +31,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
 
     const handleCancel = () => {
         setVisible(false);
-        setPicUrl('');
+        setAttach([]);
     }
 
     return <>
@@ -57,20 +57,19 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
                     dataIndex: "index", 
                     width: 50, 
                     render: (_: any, record: Record<string, any>, index: number) => (<>{
-                        record.attachInfoVos ? 
+                        record.attachInfoVos && record.attachInfoVos.length > 0 ? 
                         <Button type="link" onClick={ () => {
                             setVisible(true);
-                            setPicUrl(record.attachInfoVos[0].downloadUrl);
+                            setAttach(record.attachInfoVos);
                         } }>回执单</Button>
                         : <Button type="link" disabled>回执单</Button>
                     }</>)
                 }]} dataSource={data?.applyPaymentRecordVos || []} />
-            {/* <Attachment title="回执单" dataSource={data?.applyPaymentAttachInfoVos || []} /> */}
             <DetailTitle title="操作信息" />
             <CommonTable columns={operationInfo} dataSource={ data?.operationRecordInfoVos || []} />
         </Spin>
         <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
-            <Image src={picUrl} preview={false} />
+            <Attachment title="回执单" dataSource={attach || []} />
         </Modal>
     </>
 }
