@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Row, Col, Table, Form, Select, InputNumber } from 'antd';
+import { Modal, Button, Row, Col, Table, Form, Select, InputNumber, message } from 'antd';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil';
 import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
@@ -18,11 +18,36 @@ export default function IngredientsModal(props: any) {
     const [ selectSort, setSelectSort ] = useState<any>([]);
     // 构建分类明细选择的集合
     const [ selectedRowKeysCheck, setSelectedRowKeysCheck ] = useState<any>([]);
+    // 构建分类数据
+    const [constructionClassification, setConstructionClassification] = useState<any[]>([]);
+    // 构建分类明细数据
+    const [constructionClassificationDetail, setConstructionClassificationDetail] = useState<any[]>([]);
+    // 开数
+    const [policyDetailed, setPolicyDetailed] = useState([]);
+    // 米数
+    const [batchingLength, setBatchingLength] = useState([]);
+    // 利用率
+    const [utilizationRate, setUtilizationRate] = useState([]);
     const [ serarchForm ] = Form.useForm();
       
-    const handleOkuseState = () => {
+    const handleOkuseState = async() => {
         console.log(selectedRowKeysCheck, "selectedRowKeysCheck")
+        const serarchData = await serarchForm.validateFields();
+        console.log(serarchData, "serarchData")
     }
+
+    // 获取配料策略
+    const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/angleConfigStrategy/getIngredientsConfigList`);
+            setPolicyDetailed(result.openNumber.policyDetailed);
+            setBatchingLength(result.batchingLength.policyDetailed);
+            setUtilizationRate(result.utilizationRate.policyDetailed);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     // 获取构建分类
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -31,6 +56,7 @@ export default function IngredientsModal(props: any) {
             result?.materialList.map((element: any, index: number) => {
                 element["key"] = `${element.structureTexture}_${index}`
             });
+            setConstructionClassification(result?.materialList || []);
             resole(result);
             if (result?.materialList.length > 0) {
                 // 默认选中第一条
@@ -47,7 +73,11 @@ export default function IngredientsModal(props: any) {
     const { run: getSortDetail, data: sortDetailList } = useRequest<{ [key: string]: any }>((purchaseTowerId: string, spec: string, texture: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseTaskTower/component/${purchaseTowerId}/${spec}/${texture}`)
+            result?.componentList.map((element: any, index: number) => {
+                element["key"] = `${element.id}`
+            });
             resole(result)
+            setConstructionClassificationDetail(result?.componentList || []);
         } catch (error) {
             reject(error)
         }
@@ -55,6 +85,7 @@ export default function IngredientsModal(props: any) {
 
     useEffect(() => {
         getUser(props.id);
+        getBatchingStrategy();
     }, [props.id && props.visible])
 
     const rowSelection = {
@@ -82,11 +113,13 @@ export default function IngredientsModal(props: any) {
                 props.onCancel();
             }}
             footer={[
-                <Button type="primary">
-                    手动配料
+                <Button type="primary" onClick={() => {
+                    message.warning("该功能暂未开发！")
+                }}>
+                    自动配料
                 </Button>,
                 <Button key="submit" type="primary">
-                    保存
+                    手动配料
                 </Button>,
                 <Button type="primary" onClick={() => handleOkuseState()}>
                     保存并提交
@@ -106,38 +139,45 @@ export default function IngredientsModal(props: any) {
                    <Form form={serarchForm} style={{paddingLeft: "14px", display: "flex", flexWrap: "nowrap"}}>
                         <Form.Item
                             name="num1"
-                            label="开数">
+                            label="开数"
+                            initialValue={policyDetailed && policyDetailed[0]}
+                        >
                                 <Select style={{ width: 120 }} placeholder="请选择">
-                                    <Select.Option value="jack">Jack</Select.Option>
-                                    <Select.Option value="lucy">Lucy</Select.Option>
-                                    <Select.Option value="Yiminghe">yiminghe</Select.Option>
+                                    {policyDetailed && policyDetailed.map((item: any, index: number) => {
+                                        return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                    })}
                                 </Select>
                         </Form.Item>&nbsp;
                         <Form.Item
                             name="num3"
-                            label="米数">
-                                <InputNumber
-                                    min="0"
-                                    step="0.01"
-                                    precision={2}
-                                />&nbsp;
+                            initialValue={batchingLength && batchingLength[0]}
+                            label="米数"
+                        >
+                                <Select style={{ width: 80 }} placeholder="请选择">
+                                    {batchingLength && batchingLength.map((item: any, index: number) => {
+                                        return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                    })}
+                                </Select>
                         </Form.Item>
                         <Form.Item
+                            initialValue={batchingLength && batchingLength[batchingLength.length - 1]}
                             name="num4">
-                                <InputNumber
-                                    min="0"
-                                    step="0.01"
-                                    precision={2}
-                                />
+                                <Select style={{ width: 80 }} placeholder="请选择">
+                                    {batchingLength && batchingLength.map((item: any, index: number) => {
+                                        return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                    })}
+                                </Select>
                         </Form.Item>&nbsp;
                         <Form.Item
                             name="num5"
-                            label="利用率">
-                                <InputNumber
-                                    min="0"
-                                    step="0.01"
-                                    precision={2}
-                                />
+                            initialValue={utilizationRate && utilizationRate[0]}
+                            label="利用率"
+                        >
+                                <Select style={{ width: 80 }} placeholder="请选择">
+                                    {utilizationRate && utilizationRate.map((item: any, index: number) => {
+                                        return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                    })}
+                                </Select>
                         </Form.Item>
                     </Form>
                    <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
@@ -151,7 +191,7 @@ export default function IngredientsModal(props: any) {
                         ...rowSelection,
                         }}
                         columns={ConstructionClassification}
-                        dataSource={(userData as any) && (userData as any).materialList ? (userData as any).materialList : []}
+                        dataSource={constructionClassification}
                         pagination={false}
                      />
                      <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
@@ -174,7 +214,7 @@ export default function IngredientsModal(props: any) {
                             },
                             ...ConstructionClassificationDetail
                         ]}
-                        dataSource={(sortDetailList as any) && (sortDetailList as any).componentList ? (sortDetailList as any).componentList : []}
+                        dataSource={constructionClassificationDetail}
                         pagination={false}
                      />
                 </Col>
