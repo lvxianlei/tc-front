@@ -76,7 +76,46 @@
         {
             "title": "学历",
             "width": 100,
-            "dataIndex": "education"
+            "dataIndex": "education",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "博士",
+                    "value": 1
+                },
+                {
+                    "label": "硕士",
+                    "value": 2
+                },
+                {
+                    "label": "本科",
+                    "value": 3
+                },
+                {
+                    "label": "大专",
+                    "value": 4
+                },
+                {
+                    "label": "高中",
+                    "value": 5
+                },
+                {
+                    "label": "中专",
+                    "value": 6
+                },
+                {
+                    "label": "中学",
+                    "value": 7
+                },
+                {
+                    "label": "小学",
+                    "value": 8
+                },
+                {
+                    "label": "其他",
+                    "value": 9
+                }
+            ]
         },
         {
             "title": "联系电话",
@@ -383,7 +422,13 @@
         },
         {
             "title": "联系电话",
-            "dataIndex": "phoneNumber"
+            "dataIndex": "phoneNumber",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入联系电话..."
+                }
+            ]
         },
         {
             "title": "紧急联系人",
@@ -604,6 +649,12 @@
                 {
                     "label": "实习员工",
                     "value": 4
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择员工性质..."
                 }
             ]
         },
