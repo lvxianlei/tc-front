@@ -177,13 +177,6 @@ export default function WorkBenchMngt(): React.ReactNode {
 			title: '问题单',
 			child: [
 				{
-					title: '螺栓',
-					dataIndex: 'boltProblemEstablish',
-					path: '/question/questionMngt',
-					type: 'WTD-LS',
-					createUserId: userId
-				},
-				{
 					title: '待修改',
 					dataIndex: 'segmentAndBoltProblemPending',
 					path: '/question/questionMngt',
@@ -191,10 +184,9 @@ export default function WorkBenchMngt(): React.ReactNode {
 					userId: userId
 				},
 				{
-					title: '放样任务',
-					dataIndex: 'segmentProblemEstablish',
+					title: '我创建的',
+					dataIndex: 'segmentAndBoltProblemEstablish',
 					path: '/question/questionMngt',
-					type: 'WTD-FY',
 					createUserId: userId
 				}
 			]
