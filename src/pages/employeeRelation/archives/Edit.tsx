@@ -2,11 +2,13 @@ import React, { useRef, useState } from "react"
 import { Button, Form, message, Spin, Tabs } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, EditTable, Attachment, AttachmentRef } from '../../common'
-import { baseInfo, companyInfo, other, workExperience, family, relatives } from "./archives.json"
+import { baseInfo, companyInfo, other, workExperience, family, relatives, disabilityCols } from "./archives.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { bankTypeOptions, employeeTypeOptions } from "../../../configuration/DictionaryOptions"
 import Photo from "./Photo"
+import { RuleObject } from "antd/es/form"
+import { fromIdNumberGetBirthday } from "../../../utils"
 type TabTypes = "baseInfo" | "family" | "employee" | "work"
 const tabPaths: { [key in TabTypes]: string } = {
     baseInfo: "/tower-hr/employee/archives/detail",
@@ -48,12 +50,13 @@ export default function Edit() {
     const [familyForm] = Form.useForm()
     const [employeeForm] = Form.useForm()
     const [currentType, setCurrentType] = useState<TabTypes>("baseInfo")
+    const [baseInfoColumns, setBaseInfoColumns] = useState<Object[]>(baseInfo)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`${tabPaths[currentType]}?employeeId=${params.archiveId}`)
             resole(currentType === "baseInfo" ? {
                 ...result,
-                postType: result?.postType.split(",")
+                postType: result?.postType?.split(",")
             } : result)
         } catch (error) {
             reject(error)
@@ -82,9 +85,11 @@ export default function Edit() {
                             ...postCompanyData,
                             ...postOtherData,
                             id: params.archiveId,
-                            birthday: postBaseData.birthday + " 00:00:00",
-                            graduationDate: postBaseData.graduationDate + " 00:00:00",
-                            cardValidityDate: postBaseData.cardValidityDate + " 00:00:00",
+                            fileIds: attchRef.current?.getDataSource().map(item => item.id),
+                            postType: postCompanyData.postType.join(","),
+                            birthday: postBaseData.birthday && (postBaseData.birthday + " 00:00:00"),
+                            graduationDate: postBaseData.graduationDate && (postBaseData.graduationDate + " 00:00:00"),
+                            cardValidityDate: postBaseData.cardValidityDate && (postBaseData.cardValidityDate + " 00:00:00"),
                         })
                         message.success("保存成功...")
                         history.go(-1)
@@ -145,6 +150,22 @@ export default function Edit() {
         }
     }
 
+    const handleBaseFormChange = (fields: any) => {
+        if (fields.idNumber && verifyIdNumber(fields.idNumber)) {
+            const { birthday, age }: { birthday: string, age: number } = fromIdNumberGetBirthday(fields.idNumber)
+            baseForm.setFieldsValue({
+                birthday,
+                age,
+            })
+        }
+        if (fields.isDisability === true) {
+            setBaseInfoColumns([...baseInfo, ...disabilityCols])
+        }
+        if (fields.isDisability === false) {
+            setBaseInfoColumns(baseInfo)
+        }
+    }
+
     return <Tabs type="card" activeKey={currentType} onChange={(tabKey: string) => setCurrentType(tabKey as TabTypes)}>
         <Tabs.TabPane tab="基本信息" key="baseInfo">
             <DetailContent operation={[
@@ -153,7 +174,7 @@ export default function Edit() {
             ]}>
                 <Spin spinning={loading}>
                     <DetailTitle title="基本信息" />
-                    <BaseInfo form={baseForm} columns={baseInfo.map((item: any) => {
+                    <BaseInfo form={baseForm} onChange={handleBaseFormChange} columns={baseInfoColumns.map((item: any) => {
                         if (item.dataIndex === "bankNameId") {
                             return ({
                                 ...item, enum: bankTypeOptions?.map(item => ({
@@ -162,7 +183,15 @@ export default function Edit() {
                                 }))
                             })
                         }
-                        if (item.dataIndex === "photo") {
+                        if (item.dataIndex === "emergencyContactPhone") {
+                            return ({
+                                ...item, rules: [...item.rules, {
+                                    pattern: /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+                                    message: "紧急联系电话不合法"
+                                }]
+                            })
+                        }
+                        if (item.dataIndex === "image") {
                             return ({
                                 ...item,
                                 render: () => {
@@ -174,10 +203,20 @@ export default function Edit() {
                             return ({
                                 ...item,
                                 rules: [
-                                    ...item.rules,
-                                    // {
-                                    //     validateTrigger:""
-                                    // }
+                                    {
+                                        required: true,
+                                        validator: (rule: RuleObject, value: string) => new Promise((resove, reject) => {
+                                            if (value && value !== '') {
+                                                if (!verifyIdNumber(value)) {
+                                                    reject('请核对身份证号信息...')
+                                                } else {
+                                                    resove(value)
+                                                }
+                                            } else {
+                                                reject('请输入身份证号...')
+                                            }
+                                        })
+                                    }
                                 ]
                             })
                         }
@@ -200,7 +239,7 @@ export default function Edit() {
                     })} dataSource={data || {}} edit />
                     <DetailTitle title="其他信息" />
                     <BaseInfo form={otherForm} columns={other} dataSource={data || {}} edit />
-                    <Attachment ref={attchRef} edit />
+                    <Attachment ref={attchRef} edit dataSource={data?.fileVos} />
                 </Spin>
             </DetailContent>
         </Tabs.TabPane>

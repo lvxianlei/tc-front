@@ -30,7 +30,7 @@ interface BaseInfoProps {
 function formatDataType(dataItem: any, dataSource: any): string {
     const value = dataSource[dataItem.dataIndex]
     const types: any = {
-        number: (value && value !== -1) ? value : "-",
+        number: (value && value !== -1) ? value : 0,
         select: ((value || value === 0) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
         string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
@@ -73,7 +73,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
 
     useEffect(() => {
         form && form.setFieldsValue(formatData(columns, dataSource))
-    }, [JSON.stringify(dataSource), JSON.stringify(columns), form, dataSource, columns])
+    }, [JSON.stringify(dataSource), form])
 
     if (edit) {
         return <Form
@@ -92,6 +92,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                                 className="baseInfoForm"
                                 name={item.dataIndex}
                                 label={item.title}
+                                validateTrigger={item.validateTrigger}
                                 rules={item.type === "popTable" && item.rules ? item.rules.map((item: any) => {
                                     if (item.required) {
                                         return ({ ...item, transform: popTableTransform })
@@ -108,13 +109,14 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             </Row>
         </Form>
     }
-
     return <Descriptions bordered column={col} size="small" >
         {columns.map((item: any, index: number) => <Descriptions.Item
             contentStyle={{ ...item.contentStyle, width: `${100 / (col * 2)}%` }}
             labelStyle={{ ...item.labelStyle, width: `${100 / (col * 4)}%` }}
             span={item.type === "textarea" ? col : 1}
             key={`desc_${index}`}
-            label={item.title}>{formatDataType(item, dataSource)}</Descriptions.Item>)}
+            label={item.title}>{item.render ?
+                item.render(dataSource) : formatDataType(item, dataSource)}
+        </Descriptions.Item>)}
     </Descriptions>
 }

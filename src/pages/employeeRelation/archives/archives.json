@@ -3,7 +3,7 @@
         {
             "title": "在职状态",
             "width": 100,
-            "dataIndex": "status",
+            "dataIndex": "employeeStatus",
             "type": "select",
             "enum": [
                 {
@@ -124,7 +124,8 @@
         {
             "title": "工龄",
             "width": 100,
-            "dataIndex": "workYear"
+            "dataIndex": "workYear",
+            "type": "number"
         },
         {
             "title": "银行卡号",
@@ -144,7 +145,13 @@
         {
             "title": "紧急联系电话",
             "width": 200,
-            "dataIndex": "emergencyContactPhone"
+            "dataIndex": "emergencyContactPhone",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入紧急联系电话..."
+                }
+            ]
         }
     ],
     "baseInfo": [
@@ -188,7 +195,7 @@
         },
         {
             "title": "照片",
-            "dataIndex": "photo"
+            "dataIndex": "image"
         },
         {
             "title": "民族",
@@ -336,6 +343,10 @@
         {
             "title": "身份证号",
             "dataIndex": "idNumber",
+            "validateTrigger": [
+                "onChange",
+                "onBlur"
+            ],
             "rules": [
                 {
                     "required": true,
@@ -455,7 +466,9 @@
                     "message": "请选择是否残疾..."
                 }
             ]
-        },
+        }
+    ],
+    "disabilityCols": [
         {
             "title": "残疾等级",
             "dataIndex": "disabilityLevel",
@@ -606,7 +619,7 @@
         },
         {
             "title": "在职状态",
-            "dataIndex": "status",
+            "dataIndex": "employeeStatus",
             "type": "select",
             "enum": [
                 {
@@ -628,6 +641,7 @@
         {
             "title": "工龄",
             "dataIndex": "workYear",
+            "type": "number",
             "disabled": true
         }
     ],

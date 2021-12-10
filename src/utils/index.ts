@@ -1,4 +1,4 @@
-
+import moment from "moment"
 export function downLoadFile(path: string, fileName?: string | undefined) {
     const a = document.createElement("a");
     a.setAttribute("href", path);
@@ -36,4 +36,29 @@ export function currency(value: string | number = 0, currency = "¥", decimals =
     const _float = decimals ? stringified.slice(-1 - decimals) : ''
     var sign = value < 0 ? '-' : ''
     return sign + currency + head + _int.slice(i).replace(digitsRE, '$1,') + _float
+}
+/**
+ * 从身份证号获取出生日期、年龄
+ * @param idNumber 
+ */
+export function fromIdNumberGetBirthday(idNumber: string): { birthday: string, age: number } {
+    //15位身份证号-s
+    const sReg = /(?<=\d{6})(\d{2})(\d{2})(\d{2})(?=\d{3})/
+    //18位身份证号-l
+    const lReg = /(?<=\d{6})(\d{4})(\d{2})(\d{2})(?=\d{3})/
+    const returnData: { birthday: string, age: number } = {
+        birthday: "",
+        age: 0
+    }
+    if (idNumber.length === 15) {
+        const regMatchData: string[] | null = idNumber.match(sReg)
+        returnData.birthday = moment(regMatchData?.[0] || "").format("YYYY-MM-DD")
+        returnData.age = moment().diff(moment(regMatchData?.[0] || ""), 'years')
+    }
+    if (idNumber.length === 18) {
+        const regMatchData = idNumber.match(lReg)
+        returnData.birthday = moment(regMatchData?.[0] || "").format("YYYY-MM-DD")
+        returnData.age = moment().diff(moment(regMatchData?.[0] || ""), 'years')
+    }
+    return returnData
 }

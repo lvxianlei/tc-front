@@ -19,6 +19,7 @@ export default function Sure(): React.ReactNode {
         data.newDepartmentName = data.departmentName+'/'+data.teamName;
         form.setFieldsValue({
             ...data,
+            checkResult: 2,
             positiveDate: data.positiveDate?moment(data.positiveDate):''
         })
         resole(data)
@@ -88,7 +89,7 @@ export default function Sure(): React.ReactNode {
                         }]} name="positiveDate">
                             <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} 
                                 onChange={(e)=>{
-                                    const date = moment(detailData.inductionDate).add(detailData.probationPeriod-1, 'months').format('YYYY-MM-DD')
+                                    const date = moment(detailData.inductionDate).add(detailData.probationPeriod, 'months').format('YYYY-MM-DD')
                                     console.log(date)
                                     const newDate = e?.format('YYYY-MM-DD')
                                     var formatDate1 = new Date(date)
@@ -136,7 +137,7 @@ export default function Sure(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-            <Attachment dataSource={detailData?.fileVOList} edit ref={attachRef} />
+            <Attachment dataSource={detailData?.fileVos} edit ref={attachRef} />
             </DetailContent>
         </Spin>
     </>

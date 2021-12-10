@@ -132,7 +132,11 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择复职日期'
                         }]} name='reinstatementDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}/>
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
+                                disabledDate={(current)=>{
+                                    return current && current< form.getFieldsValue().departureDate
+                                }}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -195,13 +199,13 @@ export default function RecruitEdit(): React.ReactNode {
                             message:'请选择试用期'
                         }]} name='probationPeriod'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={1} key="1">无试用期</Select.Option>
-                                <Select.Option value={2} key="2">一个月</Select.Option>
-                                <Select.Option value={3} key="3">二个月</Select.Option>
-                                <Select.Option value={4} key="4">三个月</Select.Option>
-                                <Select.Option value={5} key="5">四个月</Select.Option>
-                                <Select.Option value={6} key="6">五个月</Select.Option>
-                                <Select.Option value={7} key="7">六个月</Select.Option>
+                                <Select.Option value={0} key="0">无试用期</Select.Option>
+                                <Select.Option value={1} key="1">一个月</Select.Option>
+                                <Select.Option value={2} key="2">二个月</Select.Option>
+                                <Select.Option value={3} key="3">三个月</Select.Option>
+                                <Select.Option value={4} key="4">四个月</Select.Option>
+                                <Select.Option value={5} key="5">五个月</Select.Option>
+                                <Select.Option value={6} key="6">六个月</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>

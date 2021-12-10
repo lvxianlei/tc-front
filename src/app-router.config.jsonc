@@ -2275,6 +2275,20 @@
       "module": "./pages/socialSecurity/archives/Edit",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案-编辑
+      "name": "生产环节管理",
+      "path": "/planBaseSetting/prodLink",
+      "module": "./pages/planBaseSetting/prodLink/prodLink",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案-编辑
+      "name": "生产单元管理",
+      "path": "/planBaseSetting/prodUnit",
+      "module": "./pages/planBaseSetting/prodUnit/prodUnit",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
