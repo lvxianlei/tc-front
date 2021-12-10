@@ -85,6 +85,7 @@ export default function RecruitEdit(): React.ReactNode {
                         }]} name='employeeName'>
                             <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedUserRows(selectedRows);
+                                    form.resetFields();
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
                                         employeeId: selectedRows[0].id,
@@ -164,7 +165,9 @@ export default function RecruitEdit(): React.ReactNode {
                         }]} name='newDepartmentName'>
                             <Input maxLength={ 50 }  addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
                                     setSelectedDeptRows(selectedRows);
+                                    const value = form.getFieldsValue(true);
                                     form.setFieldsValue({
+                                        ...value,
                                         newDepartmentName: selectedRows[0].parentName+'/'+selectedRows[0].name,
                                         departmentId: selectedRows[0].parentId,
                                         teamId: selectedRows[0].id,
