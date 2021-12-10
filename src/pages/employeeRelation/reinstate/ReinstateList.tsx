@@ -89,7 +89,7 @@ export default function ReinstateList(): React.ReactNode {
             width: 100,
             dataIndex: 'productCategoryName',
             render:(_:any,record:any)=>{
-                return <span>{ record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-' }</span>
+                return <span>{ record.departmentId!=='0'?record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-': record.teamName}</span>
             }
         },
         {

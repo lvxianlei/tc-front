@@ -64,7 +64,7 @@ export default function LabourList(): React.ReactNode {
             width: 100,
             dataIndex: 'departmentName',
             render:(_:any,record:any)=>{
-                return record.departmentName+'/'+record.teamName
+                return record.departmentId!=='0'?record.departmentName+'/'+record.teamName:record.teamName
             }
         },
         {
