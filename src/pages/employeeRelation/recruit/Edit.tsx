@@ -166,8 +166,10 @@ export default function RecruitEdit(): React.ReactNode {
                         }]} name='newDepartmentName'>
                             <Input maxLength={ 50 }  addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
                                     setSelectedDeptRows(selectedRows);
+                                    const value = form.getFieldsValue(true);
                                     form.setFieldsValue({
-                                        newDepartmentName: selectedRows[0].parentName+'/'+selectedRows[0].name,
+                                        ...value,
+                                        newDepartmentName: selectedRows[0].parentId==='0'?selectedRows[0].name:selectedRows[0].parentName+'/'+selectedRows[0].name,
                                         departmentId: selectedRows[0].parentId,
                                         teamId: selectedRows[0].id,
                                         companyName: AuthUtil.getTenantName(),
@@ -317,13 +319,13 @@ export default function RecruitEdit(): React.ReactNode {
                             message:'请选择试用期'
                         }]} name='probationPeriod'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={1} key="1">无试用期</Select.Option>
-                                <Select.Option value={2} key="2">1个月</Select.Option>
-                                <Select.Option value={3} key="3">2个月</Select.Option>
-                                <Select.Option value={4} key="4">3个月</Select.Option>
-                                <Select.Option value={5} key="5">4个月</Select.Option>
-                                <Select.Option value={6} key="6">5个月</Select.Option>
-                                <Select.Option value={7} key="7">6个月</Select.Option>
+                                <Select.Option value={0} key="0">无试用期</Select.Option>
+                                <Select.Option value={1} key="1">1个月</Select.Option>
+                                <Select.Option value={2} key="2">2个月</Select.Option>
+                                <Select.Option value={3} key="3">3个月</Select.Option>
+                                <Select.Option value={4} key="4">4个月</Select.Option>
+                                <Select.Option value={5} key="5">5个月</Select.Option>
+                                <Select.Option value={6} key="6">6个月</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>

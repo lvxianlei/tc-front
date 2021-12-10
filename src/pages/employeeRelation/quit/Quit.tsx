@@ -22,6 +22,7 @@ export default function Quit(): React.ReactNode {
         const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
         form.setFieldsValue(params.id!=='0'?{
             ...data,
+            inductionDate: data?.departureDate?moment(data?.inductionDate):'',
             departureDate: data?.departureDate?moment(data?.departureDate):'',
             newDepartmentName: data.departmentName+'/'+data.teamName,
         }:{})
@@ -72,6 +73,7 @@ export default function Quit(): React.ReactNode {
                         }]}  name='employeeName'>
                             <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
+                                    form.resetFields();
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
                                         companyName: selectedRows[0].companyName,
@@ -81,7 +83,7 @@ export default function Quit(): React.ReactNode {
                                         teamName: selectedRows[0].teamName,
                                         newDepartmentName: selectedRows[0].departmentName+'/'+selectedRows[0].teamName,
                                         postId: selectedRows[0].postId,
-                                        inductionDate: moment(selectedRows[0].inductionDate).format('YYYY-MM-DD'),
+                                        inductionDate: selectedRows[0].inductionDate?moment(selectedRows[0].inductionDate):'',
                                         employeeNature: selectedRows[0].employeeNature,
                                         employeeId: selectedRows[0].id,
                                     });
@@ -113,7 +115,7 @@ export default function Quit(): React.ReactNode {
                 <Row>
                     <Col span={12}>
                         <Form.Item label='入职日期' name='inductionDate'>
-                            <Input disabled/>
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -133,11 +135,11 @@ export default function Quit(): React.ReactNode {
                             required:true, 
                             message:'请选择离职日期'
                         }]} name='departureDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
-                                console.log(e)
-                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
-                                // form.setFieldsValue()
-                            }}/>
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
+                                disabledDate={(current)=>{
+                                    return current && current< form.getFieldsValue().inductionDate
+                                }}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>

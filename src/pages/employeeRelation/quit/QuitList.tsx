@@ -134,7 +134,7 @@ export default function QuitList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button onClick={()=>{history.push(`/employeeRelation/quit/view/${record.id}`)}} type='link'>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/quit/${record.id}`)}} type='link' disabled={record.status===2}>编辑</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quit/${record.id}`)}} type='link' disabled={record.status===2||record.status===3}>编辑</Button>
                 </Space>
             )
         }

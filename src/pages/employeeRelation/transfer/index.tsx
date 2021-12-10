@@ -18,10 +18,7 @@ export default function TransferList(): React.ReactNode {
     }
     return (
         <Page
-            path={
-                `/tower-hr/employeeTransfer`
-                // `/tower-finance/invoicing`
-            }
+            path={`/tower-hr/employeeTransfer`}
             columns={[
                 {
                     "title": "序号",
@@ -38,7 +35,7 @@ export default function TransferList(): React.ReactNode {
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>
                             <Button type="link" size="small"><Link to={`/employeeRelation/transfer/detail/${record.id}`}>查看</Link></Button>
-                            <Button type="link" size="small"><Link to={`/employeeRelation/transfer/edit/${record.id}`}>编辑</Link></Button>
+                            <Button disabled={[2, 3].includes(record.status)} type="link" size="small"><Link to={`/employeeRelation/transfer/edit/${record.id}`}>编辑</Link></Button>
                         </>
                     )
                 }]}
