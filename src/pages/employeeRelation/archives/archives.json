@@ -124,7 +124,8 @@
         {
             "title": "工龄",
             "width": 100,
-            "dataIndex": "workYear"
+            "dataIndex": "workYear",
+            "type": "number"
         },
         {
             "title": "银行卡号",
@@ -618,7 +619,7 @@
         },
         {
             "title": "在职状态",
-            "dataIndex": "status",
+            "dataIndex": "employeeStatus",
             "type": "select",
             "enum": [
                 {
@@ -640,6 +641,7 @@
         {
             "title": "工龄",
             "dataIndex": "workYear",
+            "type": "number",
             "disabled": true
         }
     ],

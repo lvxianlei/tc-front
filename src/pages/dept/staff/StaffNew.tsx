@@ -91,14 +91,14 @@ export default function StaffNew(): React.ReactNode {
             key: 'dept',
             title: <span><span style={{ color: 'red' }}>*</span>部门</span>,
             dataIndex: 'dept',
-            width: 200,
+            width: 400,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "dept"] } key={ index } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请选择部门" }]}>
                     <TreeSelect
                         style={{ width: '100%' }}
-                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                        dropdownClassName={styles.deptSelect}
                         treeData={wrapRole2DataNode(departData)}
                         placeholder="请选择"
                     />

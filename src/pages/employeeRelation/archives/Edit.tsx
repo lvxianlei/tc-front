@@ -85,6 +85,7 @@ export default function Edit() {
                             ...postCompanyData,
                             ...postOtherData,
                             id: params.archiveId,
+                            fileIds: attchRef.current?.getDataSource().map(item => item.id),
                             postType: postCompanyData.postType.join(","),
                             birthday: postBaseData.birthday && (postBaseData.birthday + " 00:00:00"),
                             graduationDate: postBaseData.graduationDate && (postBaseData.graduationDate + " 00:00:00"),
@@ -204,17 +205,17 @@ export default function Edit() {
                                 rules: [
                                     {
                                         required: true,
-                                        validator: (rule: RuleObject, value: string, callback: (error?: string) => void) => {
+                                        validator: (rule: RuleObject, value: string) => new Promise((resove, reject) => {
                                             if (value && value !== '') {
                                                 if (!verifyIdNumber(value)) {
-                                                    callback('请核对身份证号信息...')
+                                                    reject('请核对身份证号信息...')
                                                 } else {
-                                                    callback()
+                                                    resove(value)
                                                 }
                                             } else {
-                                                callback('请输入身份证号')
+                                                reject('请输入身份证号...')
                                             }
-                                        }
+                                        })
                                     }
                                 ]
                             })
@@ -238,7 +239,7 @@ export default function Edit() {
                     })} dataSource={data || {}} edit />
                     <DetailTitle title="其他信息" />
                     <BaseInfo form={otherForm} columns={other} dataSource={data || {}} edit />
-                    <Attachment ref={attchRef} edit />
+                    <Attachment ref={attchRef} edit dataSource={data?.fileVos} />
                 </Spin>
             </DetailContent>
         </Tabs.TabPane>
