@@ -21,7 +21,7 @@ export default function IngredientsModal(props: any) {
     // 获取构建分类
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/purchaseTaskTower/component/material/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseTaskTower/component/material/${id}`)
             console.log(result, "构建分类")
             resole(result)
         } catch (error) {

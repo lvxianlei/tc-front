@@ -2,97 +2,23 @@
     "baseInfo": [
         {
             "title": "品名",
-            "dataIndex": "purchaseNumber"
+            "dataIndex": "materialName"
         },
         {
             "title": "材质",
-            "dataIndex": "internalNumber"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",
-            "dataIndex": "productCategoryNum"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "原材料长度",
-            "dataIndex": "productNum"
+            "dataIndex": "length"
         },
         {
             "title": "汇总数量",
-            "dataIndex": "batcher"
-        }
-    ],
-    "SeeList": [
-        {
-            "title": "材质",
-            "dataIndex": "productCategoryName"
-        },
-        {
-            "title": "规格",
-            "dataIndex": "productNum"
-        },
-        {
-            "title": "原材料长度（mm）",
-            "dataIndex": "totalWeight"
-        },
-        {
-            "title": "零件1",
-            "dataIndex": "batcher"
-        },
-        {
-            "title": "长度（mm）",
-            "dataIndex": "batcheTaskStatus"
-        },
-        {
-            "title": "数量",
-            "dataIndex": "batcheStatusUpdateTime"
-        },
-        {
-            "title": "零件2",
-            "dataIndex": "batcher"
-        },
-        {
-            "title": "长度（mm）",
-            "dataIndex": "batcheTaskStatus"
-        },
-        {
-            "title": "数量",
-            "dataIndex": "batcheStatusUpdateTime"
-        },
-        {
-            "title": "零件3",
-            "dataIndex": "batcher"
-        },
-        {
-            "title": "长度（mm）",
-            "dataIndex": "batcheTaskStatus"
-        },
-        {
-            "title": "数量",
-            "dataIndex": "batcheStatusUpdateTime"
-        },
-        {
-            "title": "零件4",
-            "dataIndex": "batcher"
-        },
-        {
-            "title": "长度（mm）",
-            "dataIndex": "batcheTaskStatus"
-        },
-        {
-            "title": "数量",
-            "dataIndex": "batcheStatusUpdateTime"
-        },
-        {
-            "title": "余料长度",
-            "dataIndex": "batcher"
-        },
-        {
-            "title": "利用率",
-            "dataIndex": "batcheTaskStatus"
-        },
-        {
-            "title": "代用",
-            "dataIndex": "batcheStatusUpdateTime"
+            "dataIndex": "collocationNum"
         }
     ]
 }
