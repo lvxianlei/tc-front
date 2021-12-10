@@ -74,10 +74,10 @@ export default function LabourList(): React.ReactNode {
             dataIndex: 'postName'
         },
         {
-            key: 'signedCompany',
+            key: 'signedCompanyName',
             title: '合同签署公司',
             width: 100,
-            dataIndex: 'signedCompany'
+            dataIndex: 'signedCompanyName'
         },
         {
             key: 'contractType',
