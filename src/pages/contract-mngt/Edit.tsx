@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
-import { Button, Row, Modal, Spin, Form, InputNumber, message } from "antd"
+import { Button, Row, Modal, Spin, Form, InputNumber, message, Select } from "antd"
 import { BaseInfo, DetailTitle, Attachment, CommonTable, PopTableContent, IntgSelect } from "../common"
-import { contractBaseInfo, material, comparison, addMaterial } from "./contract.json"
+import { contractBaseInfo, material, comparison, addMaterial, freight, stevedoring } from "./contract.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import { deliverywayOptions, materialStandardOptions, transportationTypeOptions } from "../../configuration/DictionaryOptions"
@@ -19,6 +19,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [supplierId, setSupplierId] = useState<string>("")
     const [baseForm] = Form.useForm()
     const [comparisonForm] = Form.useForm()
+    const [freightForm] = Form.useForm()
+    const [stevedoringForm] = Form.useForm()
     const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({ getDataSource: () => [], resetFields: () => { } })
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
@@ -38,6 +40,36 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             reject(error)
         }
     }), { manual: type === "new", refreshDeps: [id] })
+
+    const { data: stevedoreCompanyList } = useRequest<any>(() => new Promise(async (resove, reject) => {
+        try {
+            const data: any = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
+            const list = data?.records?.map((item: { stevedoreCompanyName: string }) => {
+                return{
+                    ...item,
+                    name: item.stevedoreCompanyName
+                }
+            })
+            resove(list)
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
+    const { data: companyList } = useRequest<any>(() => new Promise(async (resove, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-logistic/carrier?size=100`);
+            const list = result?.records?.map((item: { companyName: string }) => {
+                return{
+                    ...item,
+                    name: item.companyName
+                }
+            })
+            resove(list)
+        } catch (error) {
+            reject(error)
+        }
+    }))
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
@@ -86,7 +118,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         try {
             const baseInfo = await baseForm.validateFields()
             const comparisonPrice = await comparisonForm.validateFields()
-            await saveRun({
+            const values = {
                 ...baseInfo,
                 fileIds: attchsRef.current.getDataSource().map(item => item.id),
                 operatorDeptId: baseInfo.operator?.first,
@@ -95,7 +127,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 supplierName: baseInfo.supplier.value,
                 purchasePlanId: baseInfo.purchasePlan?.id || data?.purchasePlanId,
                 purchasePlanNumber: baseInfo.purchasePlan.value || data?.purchasePlanNumber,
-                comparisonPriceId: comparisonPrice.comparisonPrice.id,
+                comparisonPriceId: baseInfo.comparisonPrice.comparisonPrice.id,
                 comparisonPriceNumber: comparisonPrice.comparisonPrice.value,
                 materialContractDetailDtos: materialList.map((item: any) => {
                     delete item.id
@@ -107,7 +139,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         totalAmount: item.totalAmount
                     })
                 })
-            })
+            }
+            console.log(values)
+            // await saveRun(values)
             resove(true)
         } catch (error) {
             reject(false)
@@ -186,7 +220,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setMaterialList(newData)
     }
     return <Spin spinning={loading}>
-        <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible} onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
+        <Modal width={addMaterial.width || 750} title={`选择${addMaterial.title}`} destroyOnClose visible={visible} onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={addMaterial as any} onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
                 ...item,
                 materialTexture: item.structureTexture,
@@ -201,7 +235,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         <DetailTitle title="合同基本信息" />
         <BaseInfo
             form={baseForm}
-            col={3}
+            col={2}
             onChange={handleBaseInfoChange}
             columns={contractBaseInfo.map((item: any) => {
                 switch (item.dataIndex) {
@@ -216,19 +250,43 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                             ...item,
                             render: () => <IntgSelect />
                         })
+                    case "comparisonPriceNumber":
+                        return ({ ...item, path: `${item.path}?supplierId=${supplierId}&comparisonStatus=2` })
                     default:
                         return item
                 }
             })}
             dataSource={{}} edit />
-        <DetailTitle title="询比价信息" />
-        <BaseInfo form={comparisonForm} col={1} onChange={handleComparisonPriceChange} columns={comparison.map((item: any) => {
-            if (item.dataIndex === "comparisonPrice") {
-                return ({ ...item, path: `${item.path}?supplierId=${supplierId}&comparisonStatus=2` })
+        <DetailTitle title="运费信息" />
+        <BaseInfo form={freightForm} col={4} columns={freight.map((item: any) => {
+            if (item.dataIndex === "transportCompanyId") {
+                return ({ ...item, render: (data: any, props: any) => {
+                    return <Form.Item name="transportCompanyId">
+                        <Select>
+                            { stevedoreCompanyList && stevedoreCompanyList.map((item: any) => {
+                                return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
+                            }) }
+                        </Select>
+                    </Form.Item>
+                } })
             }
             return item
         })} dataSource={{}} edit />
-        <Attachment dataSource={data?.materialContractAttachInfoVos || []} edit ref={attchsRef} />
+        <DetailTitle title="装卸费信息" />
+        <BaseInfo form={stevedoringForm} col={4} columns={stevedoring.map((item: any) => {
+            if (item.dataIndex === "unloadCompanyId") {
+                return ({ ...item, render: (data: any, props: any) => {
+                    return <Form.Item name="unloadCompanyId">
+                        <Select>
+                            { companyList && companyList.map((item: any) => {
+                                return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
+                            }) }
+                        </Select>
+                    </Form.Item>
+                } })
+            }
+            return item
+        })} dataSource={{}} edit />
         <DetailTitle
             title="原材料信息"
             operation={[<Button
@@ -265,5 +323,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             rowKey={(_: any, records: any) => records.materialName}
             pagination={false}
             dataSource={materialList} />
+        <Attachment dataSource={data?.materialContractAttachInfoVos || []} edit ref={attchsRef} />
     </Spin>
 })

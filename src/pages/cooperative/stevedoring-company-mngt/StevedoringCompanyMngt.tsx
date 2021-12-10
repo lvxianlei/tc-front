@@ -75,16 +75,16 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
             dataIndex: 'openBankName'
         },
         {
-            key: 'description',
+            key: 'openBank',
             title: '银行账号',
             width: 200,
-            dataIndex: 'description'
+            dataIndex: 'openBank'
         },
         {
-            key: 'updateTime',
+            key: 'description',
             title: '备注',
             width: 200,
-            dataIndex: 'updateTime'
+            dataIndex: 'description'
         },
         {
             key: 'operation',
@@ -102,7 +102,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => { 
-                            RequestUtil.delete(``).then(res => {
+                            RequestUtil.delete(`/tower-supply/stevedoreCompany/${ record.id }`).then(res => {
                                 message.success('删除成功');
                                 setRefresh(!refresh);
                             }) 
@@ -110,7 +110,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="primary" ghost>删除</Button>
+                        <Button type="link">删除</Button>
                     </Popconfirm>
                 </Space>
             )
