@@ -85,6 +85,8 @@ export default function Edit() {
                             ...postCompanyData,
                             ...postOtherData,
                             id: params.archiveId,
+                            inductionDate: postCompanyData.inductionDate && (postCompanyData.inductionDate + " 00:00:00"),
+                            positiveDate: postCompanyData.positiveDate && (postCompanyData.positiveDate + " 00:00:00"),
                             fileIds: attchRef.current?.getDataSource().map(item => item.id),
                             postType: postCompanyData.postType.join(","),
                             birthday: postBaseData.birthday && (postBaseData.birthday + " 00:00:00"),
