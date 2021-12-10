@@ -24,7 +24,7 @@ export default function Quit(): React.ReactNode {
             ...data,
             inductionDate: data?.departureDate?moment(data?.inductionDate):'',
             departureDate: data?.departureDate?moment(data?.departureDate):'',
-            newDepartmentName: data.departmentName+'/'+data.teamName,
+            newDepartmentName: data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName,
         }:{})
         resole(data)
     }), {})
@@ -81,7 +81,7 @@ export default function Quit(): React.ReactNode {
                                         teamId: selectedRows[0].teamId,
                                         departmentName: selectedRows[0].departmentName,
                                         teamName: selectedRows[0].teamName,
-                                        newDepartmentName: selectedRows[0].departmentName+'/'+selectedRows[0].teamName,
+                                        newDepartmentName: selectedRows[0].Id!=='0'?selectedRows[0].departmentName+'/'+selectedRows[0].teamName:selectedRows[0].teamName,
                                         postId: selectedRows[0].postId,
                                         inductionDate: selectedRows[0].inductionDate?moment(selectedRows[0].inductionDate):'',
                                         employeeNature: selectedRows[0].employeeNature,

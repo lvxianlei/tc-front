@@ -25,7 +25,7 @@ export default function RecruitEdit(): React.ReactNode {
         setPost(post?.records)
         form.setFieldsValue(params.id?{
             ...data,
-            newDepartmentName: data?.departmentName+'/'+data?.teamName,
+            newDepartmentName: data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName,
             workTime: data?.workTime?moment(data?.workTime):'',
             postType: data?.postType?data?.postType.split(','):[]
         }:{})
