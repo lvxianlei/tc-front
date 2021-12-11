@@ -691,6 +691,8 @@
         {
             "title": "离职日期",
             "dataIndex": "departureDate",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "disabled": true
         },
         {
