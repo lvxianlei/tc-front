@@ -83,8 +83,13 @@ export default function Edit() {
             })
         }
         if (changeFields.newDepartmentName) {
+            console.log()
             form.setFieldsValue({
-                newCompanyName: AuthUtil.getTenantName()
+                newCompanyName: AuthUtil.getTenantName(),
+                newDepartmentName: {
+                    ...changeFields.newDepartmentName,
+                    value: `${changeFields.newDepartmentName.records[0].parentName}/${changeFields.newDepartmentName.value}`
+                }
             })
         }
     }
@@ -102,7 +107,11 @@ export default function Edit() {
                     if (item.dataIndex === "newDepartmentName") {
                         return ({
                             ...item,
-                            render: (columnItem: any, props: any) => <ChooseDept data={columnItem} {...props} />
+                            render: (columnItem: any, props: any) => <ChooseDept
+                                data={columnItem}
+                                {...props}
+                                disabled={data?.status === 4}
+                            />
                         })
                     }
                     if (item.dataIndex === "newPostId") {
