@@ -19,9 +19,15 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         value: item.id,
         label: item.name
     }))
-    const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
-    const [baseForm] = Form.useForm();
     const [ companyList, setCompanyList ] = useState([]);
+    const [bilinformationCoumns, setBilinformation] = useState<any[]>(bilinformation.map((item: any) => {
+        if (item.dataIndex === "invoiceType") {
+            return ({ ...item, type: "select", enum: invoiceTypeEnum })
+        }
+        return item
+    }))
+    const attchsRef = useRef<AttachmentRef>()
+    const [baseForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/invoice/${id}`)
@@ -71,7 +77,17 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     })
     const resetFields = () => {
         baseForm.resetFields()
-        attchsRef.current.resetFields()
+        attchsRef.current?.resetFields()
+    }
+    const handleBaseInfoChange = (fields: any) => {
+        if (fields.supplierName) {
+            setBilinformation(bilinformationCoumns.map((item: any) => {
+                if (item.dataIndex === "receiptVos") {
+                    return ({ ...item, path: `${item.path}?supplierId=${fields.supplierName.id}` })
+                }
+                return item
+            }))
+        }
     }
 
     const businessTypeChange = async (e: number) => {

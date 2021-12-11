@@ -389,7 +389,7 @@ class ManagementContractSetting extends ContractSetting {
                     this.getForm()?.getFieldValue("countryCode") === 1 ||
                     contract?.countryCode === 1
                   }
-                  onChange={() => this.regionChange()}
+                  onChange={this.regionChange}
                 >
                   {this.state.regionInfoData?.map((opt: any) => {
                     return (

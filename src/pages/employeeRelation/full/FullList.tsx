@@ -11,7 +11,9 @@ export default function FullList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const params = useParams<{ id: string, status: string, materialLeader: string }>();
-    const [filterValue, setFilterValue] = useState({});
+    const [filterValue, setFilterValue] = useState({
+        positiveStatus: 1
+    });
     const columns = [
         {
             key: 'index',
@@ -175,7 +177,7 @@ export default function FullList(): React.ReactNode {
                     {
                         name: 'positiveStatus',
                         label: '转正状态',
-                        children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                        children: <Select placeholder="请选择" style={{ width: "150px" }} defaultValue={1}>
                             <Select.Option value={''} key="">全部</Select.Option>
                             <Select.Option value={1} key="1">待转正</Select.Option>
                             <Select.Option value={2} key="2">已转正</Select.Option>

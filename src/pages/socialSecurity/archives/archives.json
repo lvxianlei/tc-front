@@ -96,7 +96,7 @@
             "title": "方案名称",
             "dataIndex": "insurancePlanName",
             "type": "popTable",
-            "path": "/tower-hr/insurancePlan",
+            "path": "/tower-hr/insurancePlan?status=1",
             "width": 1011,
             "value": "insurancePlanName",
             "dependencies": true,
@@ -195,7 +195,7 @@
     ],
     "business": [
         {
-            "title": "商业保险名称",
+            "title": "*商业保险名称",
             "width": 100,
             "dataIndex": "commercialInsuranceName",
             "rules": [
@@ -206,7 +206,7 @@
             ]
         },
         {
-            "title": "保险类型",
+            "title": "*保险类型",
             "width": 100,
             "dataIndex": "commercialInsuranceType",
             "type": "select",
@@ -244,7 +244,7 @@
             ]
         },
         {
-            "title": "商业保险账号",
+            "title": "*商业保险账号",
             "width": 100,
             "dataIndex": "commercialInsuranceNumber",
             "rules": [
@@ -255,7 +255,7 @@
             ]
         },
         {
-            "title": "开始缴纳月",
+            "title": "*开始缴纳月",
             "width": 100,
             "dataIndex": "startMonth",
             "type": "date",
@@ -275,7 +275,7 @@
             "format": "YYYY-MM-DD"
         },
         {
-            "title": "保险金额",
+            "title": "*保险金额",
             "width": 100,
             "dataIndex": "insuranceAmount",
             "rules": [

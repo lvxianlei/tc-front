@@ -2173,7 +2173,7 @@
     },
     { // 人资-员工关系-员工离职-新增/编辑
       "name": "员工离职",
-      "path": "/employeeRelation/quit/:id",
+      "path": "/employeeRelation/quit/edit/:id",
       "module": "./pages/employeeRelation/quit/Quit",
       "exact": true,
       "authority": "approvalm"
@@ -2220,9 +2220,16 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { // 人资-员工关系-员工复职-新增/编辑
+    { // 人资-员工关系-员工复职-编辑
       "name": "调整",
       "path": "/employeeRelation/reinstate/Edit/:id/:status",
+      "module": "./pages/employeeRelation/reinstate/Edit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-员工关系-员工复职-新增
+      "name": "新增",
+      "path": "/employeeRelation/reinstate/add",
       "module": "./pages/employeeRelation/reinstate/Edit",
       "exact": true,
       "authority": "approvalm"
