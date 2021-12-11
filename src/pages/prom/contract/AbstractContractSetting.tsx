@@ -432,8 +432,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         })
     }
     public regionChange(value: string) {
-        console.log(value, "region")
-        this.setState({ region: "" })
+        this.setState({ region: value })
     }
     /**
      * @implements
