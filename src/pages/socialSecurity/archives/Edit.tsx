@@ -163,29 +163,13 @@ export default function Edit() {
                                     </Form.Item>
                                 })
                             case "commercialInsuranceType":
-                                return ({
-                                    ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
-                                        <Select value={value}>
-                                            <Select.Option value={1}>补充医疗保险</Select.Option>
-                                            <Select.Option value={2}>雇主责任险</Select.Option>
-                                            <Select.Option value={3}>意外伤害险</Select.Option>
-                                            <Select.Option value={4}>团体责任险</Select.Option>
-                                            <Select.Option value={5}>重大疾病险</Select.Option>
-                                            <Select.Option value={6}>其他</Select.Option>
-                                        </Select>
-                                    </Form.Item>
-                                })
+                                return item
+                            case "commercialInsuranceName":
+                                return item
                             case "startMonth":
                                 return ({
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
-                                        {/* <DatePicker
-                                            style={{ width: "100%" }}
-                                            value={value ? moment(value) : null}
-                                            format="YYYY-MM-DD"
-                                            onChange={(value) => value?.format("YYYY-MM-DD")}
-                                        /> */}
                                         <FormItemType data={item} type="date" />
                                     </Form.Item>
                                 })
@@ -206,12 +190,6 @@ export default function Edit() {
                                             }
                                         })
                                     }]} name={[index, item.dataIndex]}>
-                                        {/* <DatePicker
-                                            style={{ width: "100%" }}
-                                            value={value ? moment(value) : null}
-                                            format="YYYY-MM-DD"
-                                            onChange={(value) => value?.format("YYYY-MM-DD")}
-                                        /> */}
                                         <FormItemType data={item} type="date" />
                                     </Form.Item>
                                 })
