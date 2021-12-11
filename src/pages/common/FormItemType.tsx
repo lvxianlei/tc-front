@@ -4,9 +4,9 @@ import CommonTable from "./CommonTable"
 import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import { stringify } from 'query-string';
-export type FormItemTypesType = "text" | "number" | "select" | "date" | "textarea" | "popForm" | undefined
+export type FormItemTypesType = "text" | "number" | "select" | "date" | "textarea" | "popForm" | "rangePicker" | undefined
 
 interface SelectOption {
     value: string | number
@@ -31,7 +31,7 @@ export interface PopTableData {
     title: string
     path: string
     columns: { title: string, dataIndex: string, type?: string }[]
-    search?: boolean
+    search?: { title: string, dataIndex: string, type?: string }[]
     dependencies?: boolean
     selectType?: "checkbox" | "radio"
     value?: string
@@ -64,7 +64,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         pageSize: 10
     })
     const [form] = Form.useForm()
-    const searchs = data.columns.filter((item: any) => item.search)
+    const searchs = data.search || data.columns.filter((item: any) => item.search)
     const { loading, data: popTableData, run } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         try {
             const params = await form.getFieldsValue()
@@ -103,12 +103,12 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
     return <>
-        {searchs.length > 0 && <Form form={form} onFinish={async () => {
+        {(searchs.length > 0 || data.search) && <Form form={form} onFinish={async () => {
             setPagenation({ ...pagenation, current: 1, pageSize: 10 })
             await run()
         }}>
             <Row gutter={[8, 8]}>
-                {searchs.map((fItem: any) => <Col style={{ height: 32 }} span={(searchs.length + 1) / 24} key={fItem.dataIndex}><Form.Item
+                {searchs.length > 0 && searchs.map((fItem: any) => <Col style={{ height: 32 }} span={(searchs.length + 1) / 24} key={fItem.dataIndex}><Form.Item
                     name={fItem.dataIndex}
                     label={fItem.title}
                     style={{ height: 32, fontSize: 12 }}
@@ -200,31 +200,88 @@ interface SelfSelectProps {
     data: SelectData
 }
 const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
-    return <Select {...props} disabled={data.disabled} style={{ width: "100%", minWidth: 100 }} mode={data.mode} maxTagCount={data.maxTagCount}>
+    const componentProps: any = {}
+    Object.keys(data).forEach((item: any) => {
+        if (!["title", "dataIndex", "width", "type", "enum", "dependencies", "value", "path", "search", "columns"].includes(item)) {
+            componentProps[item] = data[item]
+        }
+    })
+    return <Select
+        {...props}
+        disabled={data.disabled}
+        style={{ width: "100%", minWidth: 100 }}
+        {...componentProps}
+    >
         {data.enum?.map((item: SelectOption, index: number) => (<Select.Option key={`select_option_${index}_${item.value}`} value={item.value} >{item.label}</Select.Option>))}
     </Select>
 }
 
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ...props }) => {
+    const formatRangePickerValue: any = (value: any) => {
+        return (props.value && props.value instanceof Array && props.value.length === 2) ? props.value.map((valueItem: any) => moment(valueItem, data.format || "YYYY-MM-DD")) : [undefined, undefined]
+    }
+    const componentProps: any = {}
+    Object.keys(data).forEach((item: any) => {
+        if (!["title", "dataIndex", "width", "type", "enum", "dependencies", "value", "path", "search", "columns"].includes(item)) {
+            componentProps[item] = data[item]
+        }
+    })
     const ItemTypes = {
-        string: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
-        text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
+        string: <Input
+            {...props}
+            disabled={data.disabled}
+            style={{ width: data.width || "100%", height: "100%", ...props.style }}
+            maxLength={data.maxLength}
+            {...componentProps}
+        />,
+        text: <Input {...props}
+            disabled={data.disabled}
+            style={{ width: data.width || "100%", height: "100%", ...props.style }}
+            maxLength={data.maxLength}
+            {...componentProps}
+        />,
         number: <InputNumber
             {...props}
             disabled={data.disabled}
             max={data?.max || 999999999999}
             min={data?.min || 0}
+            precision={data?.precision}
             step={data?.step || 1}
-            style={{ width: "100%", height: "100%", ...props.style }}
+            style={{ width: data.width || "100%", height: "100%", ...props.style }}
+            {...componentProps}
         />,
         select: <SelfSelect {...props} data={data as SelectData} />,
         date: <DatePicker
             {...data.picker ? { ...props, picker: data.picker } : { ...props }}
             onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}
             value={props.value ? moment(props.value) : null}
-            format={data.format || "YYYY-MM-DD HH:mm:ss"} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
-        textarea: <Input.TextArea {...props} disabled={data.disabled} rows={data.rows || 2} maxLength={400} showCount style={{ width: "100%", height: "100%", ...props.style }} />,
-        popForm: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
+            format={data.format || "YYYY-MM-DD HH:mm:ss"}
+            disabled={data.disabled}
+            style={{ width: data.width || "100%", height: "100%", ...props.style }}
+            {...componentProps}
+        />,
+        rangePicker: <DatePicker.RangePicker format={data.format || "YYYY-MM-DD"}
+            {...data.picker ? { ...props, picker: data.picker } : { ...props }}
+            onChange={(value) => props.onChange(value?.map((valueItem: any) => valueItem.format(data.format || "YYYY-MM-DD")))}
+            value={formatRangePickerValue(props.value)}
+            disabled={data.disabled}
+            style={{ width: data.width || "100%", height: "100%", ...props.style }}
+            {...componentProps}
+        />,
+        textarea: <Input.TextArea
+            {...props} disabled={data.disabled}
+            rows={data.rows || 2}
+            maxLength={400}
+            showCount
+            style={{ width: data.width || "100%", height: "100%", ...props.style }}
+            {...componentProps}
+        />,
+        popForm: <Input
+            {...props}
+            disabled={data.disabled}
+            style={{ width: data.width || "100%", height: "100%", ...props.style }}
+            {...componentProps}
+        />,
         popTable: <PopTable {...props} data={data as PopTableData} />
     }
     return <>{render ? render(data, props) : ItemTypes[type]}</>

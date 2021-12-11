@@ -300,9 +300,7 @@ export default function CertificateMngt(): React.ReactNode {
                     name: 'dataPlaceId',
                     label: '资料库',
                     children: <Form.Item name="dataPlaceId">
-                        <TreeSelect placeholder="请选择" style={{ width: "150px" }}>
-                            { renderTreeNodes(wrapRole2DataNode(databaseData)) }
-                        </TreeSelect>
+                        <TreeSelect placeholder="请选择" style={{ width: "150px" }} treeData={wrapRole2DataNode(databaseData)}/>
                     </Form.Item>
                 },
                 {

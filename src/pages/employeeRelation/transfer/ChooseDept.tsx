@@ -51,7 +51,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
     const initValue = value?.records?.map((item: any) => item.id)
     const [select, setSelect] = useState<any[]>(initValue)
     const [columns, setColumns] = useState<any[]>(data.columns)
-    
+
     const [form] = Form.useForm()
     const searchs = data.columns.filter((item: any) => item.search)
     const { loading, data: popTableData, run } = useRequest<any>(() => new Promise(async (resolve, reject) => {
@@ -87,7 +87,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         setColumns(data.columns)
     }, [JSON.stringify(data.columns)])
 
-    
+
 
     return <>
         {searchs.length > 0 && <Form form={form} onFinish={async () => {
@@ -116,6 +116,9 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
                 onChange: onSelectChange,
+                getCheckboxProps: (record: any) => ({
+                    disabled: (record.type === 2) || (record.parentId === "0")
+                })
             }}
             rowKey={(record: any) => record.id}
             size="small"

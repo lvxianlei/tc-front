@@ -124,7 +124,7 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
-            stationStatus: this.props.type || 1
+            employeeStatus: this.props.type || 1
         });
         const selectKeys: [] = this.props.selectKey;
         let newData: IUser[] = resData.records;
@@ -170,153 +170,159 @@ export default class EmployeeUserSelectionComponent extends AbstractFilteredSele
         return [{
             key: 'employeeName',
             title: '员工姓名',
-            width: '5%',
+            width: '18%',
             dataIndex: 'employeeName',
         }, {
             key: 'gender',
             title: '性别',
-            width: '5%',
+            width: '18%',
             dataIndex: 'gender'
-        }, {
-            key: 'national',
-            title: '民族',
-            width: '5%',
-            dataIndex: 'national'
-        }, {
+        }, 
+        // {
+        //     key: 'national',
+        //     title: '民族',
+        //     width: '5%',
+        //     dataIndex: 'national'
+        // }, 
+        {
             key: 'companyName',
             title: '公司',
-            width: '5%',
+            width: '18%',
             dataIndex: 'companyName'
         }, {
             key: 'departmentName',
             title: '部门/班组',
-            width: '5%',
+            width: '18%',
             dataIndex: 'departmentName', 
             render:(_:any,record:any)=>{
-                return record.departmentName+'/'+record.teamName
+                return record.departmentId!=='0'?record.departmentName+'/'+record.teamName:record.teamName
             }
         }, {
             key: 'postName',
             title: '岗位',
-            width: '5%',
+            width: '18%',
             dataIndex: 'postName'
-        }, {
-            key: 'postTypeName',
-            title: '员工分组',
-            width: '5%',
-            dataIndex: 'postTypeName',
-        }, {
-            key: 'nativePlace',
-            title: '籍贯',
-            width: '5%',
-            dataIndex: 'nativePlace'
-        }, {
-            key: 'birthday',
-            title: '出生日期',
-            width: '5%',
-            dataIndex: 'birthday',
-            render:(birthday:string)=>{
-                return moment(birthday).format('YYYY-MM-DD')
-            }
-        }, {
-            key: 'age',
-            title: '年龄',
-            width: '5%',
-            dataIndex: 'age'
-        }, {
+        }, 
+        // {
+        //     key: 'postTypeName',
+        //     title: '员工分组',
+        //     width: '5%',
+        //     dataIndex: 'postTypeName',
+        // }, {
+        //     key: 'nativePlace',
+        //     title: '籍贯',
+        //     width: '5%',
+        //     dataIndex: 'nativePlace'
+        // }, {
+        //     key: 'birthday',
+        //     title: '出生日期',
+        //     width: '5%',
+        //     dataIndex: 'birthday',
+        //     render:(birthday:string)=>{
+        //         return birthday?moment(birthday).format('YYYY-MM-DD'):'-'
+        //     }
+        // }, {
+        //     key: 'age',
+        //     title: '年龄',
+        //     width: '5%',
+        //     dataIndex: 'age'
+        // }, 
+        {
             key: 'idNumber',
             title: '身份证号',
-            width: '5%',
+            width: '18%',
             dataIndex: 'idNumber'
-        }, {
-            key: 'education',
-            title: '学历',
-            width: '5%',
-            dataIndex: 'education',
-            render: (stationStatus: number): React.ReactNode => {
-                switch (stationStatus) {
-                    case 1:
-                        return '博士';
-                    case 2:
-                        return '本科';
-                    case 3:
-                        return '大专';
-                    case 4:
-                        return '高中';
-                    case 5:
-                        return '中专';
-                    case 6:
-                        return '中学';
-                    case 7:
-                        return '小学';
-                    case 8:
-                        return '其他';
-                }
-            } 
-        }, {
-            key: 'phoneNumber',
-            title: '联系电话',
-            width: '5%',
-            dataIndex: 'phoneNumber'
-        }, {
-            key: 'inductionDate',
-            title: '入职时间',
-            width: '5%',
-            dataIndex: 'inductionDate',
-            render:(birthday:string)=>{
-                return moment(birthday).format('YYYY-MM-DD')
-            }
-        }, {
-            key: 'employeeNature',
-            title: '员工性质',
-            width: '5%',
-            dataIndex: 'employeeNature',
-            render: (stationStatus: number): React.ReactNode => {
-                switch (stationStatus) {
-                    case 1:
-                        return '正式员工';
-                    case 2:
-                        return '短期派遣员工';
-                    case 3:
-                        return '超龄员工';
-                    case 4:
-                        return '实习员工';
-                }
-            } 
-        }, {
-            key: 'positiveDate',
-            title: '转正日期',
-            width: '5%',
-            dataIndex: 'positiveDate',
-            render:(birthday:string)=>{
-                return moment(birthday).format('YYYY-MM-DD')
-            }
-        }, {
-            key: 'workYear',
-            title: '工龄',
-            width: '5%',
-            dataIndex: 'workYear'
-        }, {
-            key: 'bankCardNumber',
-            title: '银行卡号',
-            width: '5%',
-            dataIndex: 'bankCardNumber'
-        }, {
-            key: 'bankName',
-            title: '开户行',
-            width: '5%',
-            dataIndex: 'bankName'
-        }, {
-            key: 'emergencyContact',
-            title: '紧急联系人',
-            width: '5%',
-            dataIndex: 'emergencyContact'
-        }, {
-            key: 'emergencyContactPhone',
-            title: '紧急联系电话',
-            width: '5%',
-            dataIndex: 'emergencyContactPhone'
-        }];
+        }, 
+        // {
+        //     key: 'education',
+        //     title: '学历',
+        //     width: '5%',
+        //     dataIndex: 'education',
+        //     render: (stationStatus: number): React.ReactNode => {
+        //         switch (stationStatus) {
+        //             case 1:
+        //                 return '博士';
+        //             case 2:
+        //                 return '本科';
+        //             case 3:
+        //                 return '大专';
+        //             case 4:
+        //                 return '高中';
+        //             case 5:
+        //                 return '中专';
+        //             case 6:
+        //                 return '中学';
+        //             case 7:
+        //                 return '小学';
+        //             case 8:
+        //                 return '其他';
+        //         }
+        //     } 
+        // }, {
+        //     key: 'phoneNumber',
+        //     title: '联系电话',
+        //     width: '5%',
+        //     dataIndex: 'phoneNumber'
+        // }, {
+        //     key: 'inductionDate',
+        //     title: '入职时间',
+        //     width: '5%',
+        //     dataIndex: 'inductionDate',
+        //     render:(inductionDate:string)=>{
+        //         return inductionDate?moment(inductionDate).format('YYYY-MM-DD'):'-'
+        //     }
+        // }, {
+        //     key: 'employeeNature',
+        //     title: '员工性质',
+        //     width: '5%',
+        //     dataIndex: 'employeeNature',
+        //     render: (stationStatus: number): React.ReactNode => {
+        //         switch (stationStatus) {
+        //             case 1:
+        //                 return '正式员工';
+        //             case 2:
+        //                 return '短期派遣员工';
+        //             case 3:
+        //                 return '超龄员工';
+        //             case 4:
+        //                 return '实习员工';
+        //         }
+        //     } 
+        // }, {
+        //     key: 'positiveDate',
+        //     title: '转正日期',
+        //     width: '5%',
+        //     dataIndex: 'positiveDate',
+        //     render:(positiveDate:string)=>{
+        //         return positiveDate?moment(positiveDate).format('YYYY-MM-DD'):'-'
+        //     }
+        // }, {
+        //     key: 'workYear',
+        //     title: '工龄',
+        //     width: '5%',
+        //     dataIndex: 'workYear'
+        // }, {
+        //     key: 'bankCardNumber',
+        //     title: '银行卡号',
+        //     width: '5%',
+        //     dataIndex: 'bankCardNumber'
+        // }, {
+        //     key: 'bankName',
+        //     title: '开户行',
+        //     width: '5%',
+        //     dataIndex: 'bankName'
+        // }, {
+        //     key: 'emergencyContact',
+        //     title: '紧急联系人',
+        //     width: '5%',
+        //     dataIndex: 'emergencyContact'
+        // }, {
+        //     key: 'emergencyContactPhone',
+        //     title: '紧急联系电话',
+        //     width: '5%',
+        //     dataIndex: 'emergencyContactPhone'
+        // }
+    ];
     }
 
     //row-key

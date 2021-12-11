@@ -42,13 +42,7 @@
         },
         {
             "dataIndex": "checkResult",
-            "title": "考核结果",
-            "type": "select",
-            "enum": [
-                { "value": 0, "label": "提前转正" },
-                { "value": 1, "label": "正常转正" },
-                { "value": 2, "label": "延期转正" }
-            ]
+            "title": "考核结果"
         },
         {
             "dataIndex": "positiveComments",

@@ -38,8 +38,9 @@
         {
             "title": "调动日期",
             "width": 100,
+            "dataIndex": "transferDate",
             "type": "date",
-            "dataIndex": "transferDate"
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "调派类型",
@@ -64,7 +65,7 @@
                     "value": 4
                 },
                 {
-                    "label": "工商调动",
+                    "label": "工伤调动",
                     "value": 5
                 }
             ]
@@ -99,17 +100,26 @@
             "title": "员工姓名",
             "dataIndex": "employeeName",
             "type": "popTable",
-            "path": "/tower-hr/employee/archives",
+            "path": "/tower-hr/employee/archives?employeeStatus=1",
             "width": 1011,
             "value": "employeeName",
             "dependencies": true,
             "readOnly": true,
+            "disabled": false,
+            "search": [
+                {
+                    "title": "",
+                    "width": 200,
+                    "dataIndex": "keyword",
+                    "type": "string",
+                    "placeholder": "员工姓名/电话/身份证号"
+                }
+            ],
             "columns": [
                 {
                     "title": "员工姓名",
                     "width": 100,
-                    "dataIndex": "employeeName",
-                    "search": true
+                    "dataIndex": "employeeName"
                 },
                 {
                     "title": "性别",
@@ -227,7 +237,7 @@
                     "value": 4
                 },
                 {
-                    "label": "工商调动",
+                    "label": "工伤调动",
                     "value": 5
                 }
             ],
@@ -259,21 +269,21 @@
     "auditRecords": [
         {
             "title": "审批人",
-            "dataIndex": "oldPostName",
+            "dataIndex": "approverName",
             "disabled": true
         },
         {
             "title": "审批时间",
-            "dataIndex": "newDepartmentName"
+            "dataIndex": "approveDate"
         },
         {
             "title": "审批结果",
-            "dataIndex": "newCompanyName",
+            "dataIndex": "approveResult",
             "disabled": true
         },
         {
             "title": "审批意见",
-            "dataIndex": "newPostName"
+            "dataIndex": "approveOpinion"
         }
     ]
 }

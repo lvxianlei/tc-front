@@ -6,6 +6,7 @@ import ChooseDept from "./ChooseDept"
 import { setting } from "./transfer.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import AuthUtil from "../../../utils/AuthUtil"
 export default function Edit() {
     const history = useHistory()
     const attachRef = useRef<AttachmentRef>()
@@ -53,12 +54,15 @@ export default function Edit() {
             const baseData = await form.validateFields()
             const postData = {
                 ...baseData,
+                oldDepartmentId: baseData.employeeName.records?.[0]?.departmentId || data?.oldDepartmentId,
+                oldPostId: baseData.employeeName.records?.[0]?.postId || data?.oldPostId,
+                oldTeamId: baseData.employeeName.records?.[0]?.teamId || data?.oldTeamId,
                 transferDate: baseData.transferDate + " 00:00:00",
                 employeeName: baseData.employeeName.value,
                 employeeId: baseData.employeeName.id,
-                newTeamId: baseData.newDepartmentName.records[0].id,
-                newDepartmentId: baseData.newDepartmentName.records[0].parentId,
-                fileDTOS: attachRef.current?.getDataSource(),
+                newTeamId: baseData.newDepartmentName.records[0].id || data?.newTeamId,
+                newDepartmentId: baseData.newDepartmentName.records[0].parentId || data?.newDepartmentId,
+                fileIds: attachRef.current?.getDataSource().map(item => item.id),
                 submitType
             }
             delete postData.newDepartmentName
@@ -78,6 +82,16 @@ export default function Edit() {
                 oldPostName: changeRecords.postName
             })
         }
+        if (changeFields.newDepartmentName) {
+            console.log()
+            form.setFieldsValue({
+                newCompanyName: AuthUtil.getTenantName(),
+                newDepartmentName: {
+                    ...changeFields.newDepartmentName,
+                    value: `${changeFields.newDepartmentName.records[0].parentName}/${changeFields.newDepartmentName.value}`
+                }
+            })
+        }
     }
     return <DetailContent operation={[
         <Button key="save" loading={saveLoading} onClick={() => handleSave("save")} type="primary" style={{ marginRight: 16 }}>保存</Button>,
@@ -93,7 +107,11 @@ export default function Edit() {
                     if (item.dataIndex === "newDepartmentName") {
                         return ({
                             ...item,
-                            render: (columnItem: any, props: any) => <ChooseDept data={columnItem} {...props} />
+                            render: (columnItem: any, props: any) => <ChooseDept
+                                data={columnItem}
+                                {...props}
+                                disabled={data?.status === 4}
+                            />
                         })
                     }
                     if (item.dataIndex === "newPostId") {

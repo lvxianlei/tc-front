@@ -50,7 +50,7 @@ export default function RecruitList(): React.ReactNode {
             width: 100,
             dataIndex: 'departmentName',
             render:(_:any,record:any)=>{
-                return <span>{ record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-' }</span>
+                return <span>{ record.departmentId!=='0'?record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-':record.teamName }</span>
             }
         },
         {
@@ -157,19 +157,19 @@ export default function RecruitList(): React.ReactNode {
             dataIndex: 'probationPeriod',
             render: (status: number): React.ReactNode => {
                 switch (status) {
-                    case 1:
+                    case 0:
                         return '无试用期';
-                    case 2:
+                    case 1:
                         return '一个月';
-                    case 3:
+                    case 2:
                         return '二个月';
-                    case 4:
+                    case 3:
                         return '三个月';
-                    case 5:
+                    case 4:
                         return '四个月';
-                    case 6:
+                    case 5:
                         return '五个月';
-                    case 7:
+                    case 6:
                         return '六个月';
                 }
             } 

@@ -12,7 +12,7 @@ export default function View(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/labor/contract/detail`,{contractId: params.id})
-        data.newDepartmentName = data.departmentName+'/'+data.teamName
+        data.newDepartmentName = data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         resole(data)
     }), {})
     const detailData: any = data;
@@ -52,7 +52,7 @@ export default function View(): React.ReactNode {
             <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
             <Attachment dataSource={detailData?.fileVos}/>
             <DetailTitle title="劳动合同记录" />
-            <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
+            <CommonTable columns={tableColumns} dataSource={detailData?.laborContractVOS} pagination={ false } />
             </DetailContent>
         </Spin>
     </>

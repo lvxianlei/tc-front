@@ -28,12 +28,16 @@
         {
             "title": "社保开始月",
             "width": 100,
-            "dataIndex": "ssStartMonth"
+            "dataIndex": "ssStartMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "社保结束月",
             "width": 100,
-            "dataIndex": "ssEndMonth"
+            "dataIndex": "ssEndMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "社保申报基数",
@@ -43,12 +47,16 @@
         {
             "title": "公积金开始月",
             "width": 100,
-            "dataIndex": "pfaStartMonth"
+            "dataIndex": "pfaStartMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "公积金结束月",
             "width": 100,
-            "dataIndex": "pfaEndMonth"
+            "dataIndex": "pfaEndMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "公积金申报基数",
@@ -87,6 +95,23 @@
         {
             "title": "方案名称",
             "dataIndex": "insurancePlanName",
+            "type": "popTable",
+            "path": "/tower-hr/insurancePlan?status=1",
+            "width": 1011,
+            "value": "insurancePlanName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "方案名称",
+                    "dataIndex": "insurancePlanName",
+                    "search": true
+                },
+                {
+                    "title": "缴纳地区",
+                    "dataIndex": "insuredLand"
+                }
+            ],
             "rules": [
                 {
                     "required": true,
@@ -116,7 +141,7 @@
             ]
         },
         {
-            "title": "社保最后缴纳月",
+            "title": "社保结束缴纳月",
             "dataIndex": "ssEndMonth",
             "type": "date",
             "format": "YYYY-MM-DD"
@@ -125,6 +150,7 @@
             "title": "社保申报基数",
             "dataIndex": "ssDeclarationBase",
             "type": "number",
+            "precision": 2,
             "rules": [
                 {
                     "required": true,
@@ -149,7 +175,7 @@
             ]
         },
         {
-            "title": "公积金最后缴纳月",
+            "title": "公积金结束缴纳月",
             "dataIndex": "pfaEndMonth",
             "type": "date",
             "format": "YYYY-MM-DD"
@@ -158,6 +184,7 @@
             "title": "公积金申报基数",
             "dataIndex": "pfaDeclarationBase",
             "type": "number",
+            "precision": 2,
             "rules": [
                 {
                     "required": true,
@@ -168,29 +195,95 @@
     ],
     "business": [
         {
-            "title": "商业保险名称",
+            "title": "*商业保险名称",
             "width": 100,
-            "dataIndex": "insuranceArchivesName"
+            "dataIndex": "commercialInsuranceName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入商业保险名称..."
+                }
+            ]
         },
         {
-            "title": "商业保险账号",
+            "title": "*保险类型",
             "width": 100,
-            "dataIndex": "commercialInsuranceNumber"
+            "dataIndex": "commercialInsuranceType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "补充医疗保险",
+                    "value": 1
+                },
+                {
+                    "label": "雇主责任险",
+                    "value": 2
+                },
+                {
+                    "label": "意外伤害险",
+                    "value": 3
+                },
+                {
+                    "label": "团体责任险",
+                    "value": 4
+                },
+                {
+                    "label": "重大疾病险",
+                    "value": 5
+                },
+                {
+                    "label": "其他",
+                    "value": 6
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择保险类型..."
+                }
+            ]
         },
         {
-            "title": "开始缴纳月",
+            "title": "*商业保险账号",
             "width": 100,
-            "dataIndex": "startMonth"
+            "dataIndex": "commercialInsuranceNumber",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入商业保险账号..."
+                }
+            ]
+        },
+        {
+            "title": "*开始缴纳月",
+            "width": 100,
+            "dataIndex": "startMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入开始缴纳月..."
+                }
+            ]
         },
         {
             "title": "结束缴纳月",
             "width": 100,
-            "dataIndex": "endMonth"
+            "dataIndex": "endMonth",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
-            "title": "保费金额",
+            "title": "*保险金额",
             "width": 100,
-            "dataIndex": "insuranceAmount"
+            "dataIndex": "insuranceAmount",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保险金额..."
+                }
+            ]
         }
     ]
 }

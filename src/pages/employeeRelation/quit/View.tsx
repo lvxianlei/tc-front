@@ -18,7 +18,7 @@ export default function View(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
-        data.newDepartmentName = data.departmentName+'/'+data.teamName
+        data.newDepartmentName = data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         resole(data)
     }), {})
     const detailData: any = data;
@@ -29,8 +29,8 @@ export default function View(): React.ReactNode {
             ]}>
             <DetailTitle title="员工离职管理"/>
             <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
-            <DetailTitle title="审批记录" />
-            <CommonTable columns={tableColumns} dataSource={detailData?.approveLog} pagination={ false } />
+            {detailData?.approveLog.length>0&&<DetailTitle title="审批记录" />}
+            {detailData?.approveLog.length>0&&<CommonTable columns={tableColumns} dataSource={detailData?.approveLog} pagination={ false } />}
             </DetailContent>
         </Spin>
     </>

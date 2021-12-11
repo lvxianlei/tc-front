@@ -19,6 +19,7 @@ import { ProjectContractInfo } from "../../prom/contract/AbstractContractSetting
 class ManagementContractNew extends ContractNew {
   public getFormItemGroups(): IFormItemGroup[][] {
     const contract = this.state.contract as ProjectContractInfo | undefined;
+    console.log(this.state)
     return [
       [
         {
@@ -391,7 +392,7 @@ class ManagementContractNew extends ContractNew {
                     this.getForm()?.getFieldValue("countryCode") === 1 ||
                     contract?.countryCode === 1
                   }
-                  onChange={() => this.regionChange()}
+                  onChange={this.regionChange.bind(this)}
                 >
                   {this.state.regionInfoData?.map((opt: any) => {
                     return (

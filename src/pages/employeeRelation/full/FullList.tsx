@@ -11,7 +11,9 @@ export default function FullList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const params = useParams<{ id: string, status: string, materialLeader: string }>();
-    const [filterValue, setFilterValue] = useState({});
+    const [filterValue, setFilterValue] = useState({
+        positiveStatus: 1
+    });
     const columns = [
         {
             key: 'index',
@@ -48,19 +50,19 @@ export default function FullList(): React.ReactNode {
             dataIndex: 'probationPeriod',
             render: (status: number): React.ReactNode => {
                 switch (status) {
-                    case 1:
+                    case 0:
                         return '无试用期';
-                    case 2:
+                    case 1:
                         return '一个月';
-                    case 3:
+                    case 2:
                         return '二个月';
-                    case 4:
+                    case 3:
                         return '三个月';
-                    case 5:
+                    case 4:
                         return '四个月';
-                    case 6:
+                    case 5:
                         return '五个月';
-                    case 7:
+                    case 6:
                         return '六个月';
                 }
             } 
@@ -79,16 +81,16 @@ export default function FullList(): React.ReactNode {
             title: '考核结果',
             width: 150,
             dataIndex: 'checkResult',
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 0:
-                        return '提前转正';
-                    case 1:
-                        return '正常转正';
-                    case 2:
-                        return '延期转正';
-                }
-            } 
+            // render: (status: number): React.ReactNode => {
+            //     switch (status) {
+            //         case 1:
+            //             return '提前转正';
+            //         case 2:
+            //             return '正常转正';
+            //         case 3:
+            //             return '延期转正';
+            //     }
+            // } 
         },
         {
             key: 'positiveComments',
@@ -103,9 +105,9 @@ export default function FullList(): React.ReactNode {
             dataIndex: 'positiveStatus',
             render: (status: number): React.ReactNode => {
                 switch (status) {
-                    case 0:
-                        return '待转正';
                     case 1:
+                        return '待转正';
+                    case 2:
                         return '已转正';
                 }
             } 
@@ -136,8 +138,8 @@ export default function FullList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/full/view/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/full/sure/${record.id}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>转正</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/full/view/${record.id}`)}} type='link' >查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/full/sure/${record.id}`)}} type='link' disabled={record.status===2||record.positiveStatus===2}>转正</Button>
                 </Space>
             )
         }
@@ -167,18 +169,18 @@ export default function FullList(): React.ReactNode {
                         label: '考核结果',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>
-                            <Select.Option value={0} key="0">提前转正</Select.Option>
-                            <Select.Option value={1} key="1">正常转正</Select.Option>
-                            <Select.Option value={2} key="2">延期转正</Select.Option>
+                            <Select.Option value={1} key="1">提前转正</Select.Option>
+                            <Select.Option value={2} key="2">正常转正</Select.Option>
+                            <Select.Option value={3} key="3">延期转正</Select.Option>
                         </Select>
                     },
                     {
                         name: 'positiveStatus',
                         label: '转正状态',
-                        children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                        children: <Select placeholder="请选择" style={{ width: "150px" }} defaultValue={1}>
                             <Select.Option value={''} key="">全部</Select.Option>
-                            <Select.Option value={0} key="0">待转正</Select.Option>
-                            <Select.Option value={1} key="1">已转正</Select.Option>
+                            <Select.Option value={1} key="1">待转正</Select.Option>
+                            <Select.Option value={2} key="2">已转正</Select.Option>
                         </Select>
                     },
                 ]}

@@ -89,7 +89,7 @@ export default function ReinstateList(): React.ReactNode {
             width: 100,
             dataIndex: 'productCategoryName',
             render:(_:any,record:any)=>{
-                return <span>{ record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-' }</span>
+                return <span>{ record.departmentId!=='0'?record.departmentName&&record.teamName?record.departmentName + '/' + record.teamName:'-': record.teamName}</span>
             }
         },
         {
@@ -127,19 +127,19 @@ export default function ReinstateList(): React.ReactNode {
             dataIndex: 'probationPeriod',
             render: (status: number): React.ReactNode => {
                 switch (status) {
-                    case 1:
+                    case 0:
                         return '无试用期';
-                    case 2:
+                    case 1:
                         return '一个月';
-                    case 3:
+                    case 2:
                         return '二个月';
-                    case 4:
+                    case 3:
                         return '三个月';
-                    case 5:
+                    case 4:
                         return '四个月';
-                    case 6:
+                    case 5:
                         return '五个月';
-                    case 7:
+                    case 6:
                         return '六个月';
                 }
             } 
@@ -171,10 +171,10 @@ export default function ReinstateList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button onClick={()=>{history.push(`/employeeRelation/reinstate/View/${record.id}`)}} type='link' >查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/reinstate/Edit/${record.id}/${record.status}`)}} type='link' disabled={record.status===2}>编辑</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/reinstate/Edit/${record.id}/${record.status}`)}} type='link' disabled={record.status===2||record.status===3}>编辑</Button>
                     <Popconfirm
                         title="确认复职后，员工将信息将更新到员工档案中？"
-                        onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employeeReinstatement/confirm`,{id: record.id}).then(()=>{
+                        onConfirm={ ()=>{RequestUtil.post(`/tower-hr/employeeReinstatement/confirm`,{id: record.id}).then(()=>{
                             message.success('复职成功！')
                         }).then(()=>{
                             setRefresh(!refresh)
@@ -224,7 +224,7 @@ export default function ReinstateList(): React.ReactNode {
                 filterValue={ filterValue }
                 requestData={{ productCategory: params.id }}
                 extraOperation={
-                    <Button type="primary" onClick={()=>history.push('/employeeRelation/reinstate/Edit/0/0')} ghost>新增员工复职</Button>
+                    <Button type="primary" onClick={()=>history.push('/employeeRelation/reinstate/add')} ghost>新增员工复职</Button>
                 }
                 searchFormItems={[
                     {

@@ -16,7 +16,7 @@ export default function QuitProceduresOperation(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
-        data.newDepartmentName = data.departmentName+'/'+data.teamName
+        data.newDepartmentName = data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         form.setFieldsValue({
             ...data,
             transactDate: data?.transactDate?moment(data?.transactDate):'',
@@ -42,7 +42,9 @@ export default function QuitProceduresOperation(): React.ReactNode {
                             value.id = params.id;
                             value.handleType='save';
                             value.isProcessingCompleted = false;
-                            value.fileVos= attachRef.current?.getDataSource();
+                            value.fileIds= attachRef.current?.getDataSource().map((item:any)=>{
+                                return item.id
+                            });
                             value.isRemoveContract =  value.isRemoveContract === 1?false:true;
                             value.isTransactProcedure =  value.isTransactProcedure === 1?false:true;
                             RequestUtil.post(`/tower-hr/employeeDeparture/handleSave`, value).then(()=>{
@@ -108,7 +110,7 @@ export default function QuitProceduresOperation(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-            <Attachment dataSource={detailData?.fileVos} edit/>
+            <Attachment dataSource={detailData?.fileVos} edit ref={attachRef}/>
             </DetailContent>
         </Spin>
     </>

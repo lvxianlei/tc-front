@@ -13,7 +13,9 @@ export default function QuitProceduresView(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
-        data.newDepartmentName = data.departmentName+'/'+data.teamName
+        data.isRemoveContract = data.isRemoveContract?0:1;
+        data.isTransactProcedure = data.isTransactProcedure?0:1
+        data.newDepartmentName = data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         resole(data)
     }), {})
     const detailData: any = data;

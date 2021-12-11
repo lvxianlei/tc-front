@@ -33,6 +33,7 @@ export interface IAbstractContractSettingState extends IAbstractFillableComponen
     readonly checkList?: number[];
     readonly tableDataSource: [];
     readonly regionInfoData: [] | IRegion[];
+    readonly region: string;
     readonly childData: [] | undefined;
     readonly col: [];
     readonly url: { link?: string | undefined, fileSuffix?: string | undefined };
@@ -126,13 +127,13 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public state: S = {
         contract: {},
         url: { link: "", fileSuffix: "" },
-        isVisible: false
+        isVisible: false,
+        region: ""
     } as S;
 
     public async componentDidMount() {
         super.componentDidMount();
         this.getRegionInfo({});
-
     }
 
     protected getAttchsRef(): AttachmentRef | null {
@@ -430,9 +431,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             contractPrice: parseFloat((contractAmount / contractTotalWeight).toFixed(2))
         })
     }
-    public regionChange() {
-        // console.log(111,this.getForm())
-        // this.forceUpdate();
+    public regionChange(value: string) {
+        console.log(value, "region")
+        this.setState({ region: "" })
     }
     /**
      * @implements
@@ -871,7 +872,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         }, {
             title: '附件',
             render: (): React.ReactNode => {
-                return (<Attachment ref={ this.attachRef } title={false} edit dataSource={this.state.contract.attachInfoDtos} />)
+                return (<Attachment ref={this.attachRef} title={false} edit dataSource={this.state.contract.attachInfoDtos} />)
             }
         }];
     }

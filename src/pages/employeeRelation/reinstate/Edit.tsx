@@ -4,7 +4,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import TextArea from 'antd/lib/input/TextArea';
 import EmployeeUserSelectionComponent, { IUser } from '../EmployeeUserModal';
 import EmployeeDeptSelectionComponent, { IDept } from '../EmployeeDeptModal';
 import AuthUtil from '../../../utils/AuthUtil';
@@ -19,10 +18,10 @@ export default function RecruitEdit(): React.ReactNode {
     const [ selectedDeptRows, setSelectedDeptRows ] = useState<IDept[] | any>({});
     const [post, setPost] = useState([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeReinstatement/detail?id=${params.id}`);
+        const data: any = params.id&&params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeReinstatement/detail?id=${params.id}`);
         const post: any = await RequestUtil.get(`/tower-system/station?size=1000`);
         setPost(post?.records)
-        form.setFieldsValue(params.id!=='0'?{
+        form.setFieldsValue( params.id&&params.id!=='0'?{
             ...data,
             newDepartmentName: data?.departmentName+'/'+data?.teamName,
             inductionDate: data?.inductionDate?moment(data?.inductionDate):'',
@@ -43,7 +42,7 @@ export default function RecruitEdit(): React.ReactNode {
                     <Button type="primary" onClick={() => {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
-                            value.id = params.id!=='0'?params.id:undefined;
+                            value.id =  params.id&&params.id!=='0'?params.id:undefined;
                             value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
                             value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
@@ -59,7 +58,7 @@ export default function RecruitEdit(): React.ReactNode {
                     {params.status!=='3' && <Button type="primary" onClick={() =>{
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
-                            value.id = params.id!=='0'?params.id:undefined;
+                            value.id =  params.id&&params.id!=='0'?params.id:undefined;
                             value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
                             value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
@@ -85,11 +84,12 @@ export default function RecruitEdit(): React.ReactNode {
                         }]} name='employeeName'>
                             <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedUserRows(selectedRows);
+                                    form.resetFields();
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
                                         employeeId: selectedRows[0].id,
-                                        inductionDate: selectedRows[0].inductionDate,
-                                        departureDate: selectedRows[0].departureDate,
+                                        inductionDate: selectedRows[0].inductionDate?moment(selectedRows[0].inductionDate):'',
+                                        departureDate: selectedRows[0].departureDate?moment(selectedRows[0].departureDate):'',
                                         departureType: selectedRows[0].departureType,
                                         departureReason: selectedRows[0].departureReason,
                                     });
@@ -132,11 +132,11 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择复职日期'
                         }]} name='reinstatementDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} onChange={e=>{
-                                console.log(e)
-                                // let newTime =new Date(new Date(e).setHours(new Date(e).getMonth() + weldingCompletionTime));
-                                // form.setFieldsValue()
-                            }}/>
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
+                                disabledDate={(current)=>{
+                                    return current && current< form.getFieldsValue().departureDate
+                                }}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -164,8 +164,10 @@ export default function RecruitEdit(): React.ReactNode {
                         }]} name='newDepartmentName'>
                             <Input maxLength={ 50 }  addonAfter={ <EmployeeDeptSelectionComponent onSelect={ (selectedRows: IDept[] | any) => {
                                     setSelectedDeptRows(selectedRows);
+                                    const value = form.getFieldsValue(true);
                                     form.setFieldsValue({
-                                        newDepartmentName: selectedRows[0].parentName+'/'+selectedRows[0].name,
+                                        ...value,
+                                        newDepartmentName: selectedRows[0].parentId!=='0'?selectedRows[0].parentName+'/'+selectedRows[0].name:selectedRows[0].name,
                                         departmentId: selectedRows[0].parentId,
                                         teamId: selectedRows[0].id,
                                         companyName: AuthUtil.getTenantName(),
@@ -199,13 +201,13 @@ export default function RecruitEdit(): React.ReactNode {
                             message:'请选择试用期'
                         }]} name='probationPeriod'>
                             <Select placeholder="请选择" style={{ width: '100%' }} >
-                                <Select.Option value={1} key="1">无试用期</Select.Option>
-                                <Select.Option value={2} key="2">一个月</Select.Option>
-                                <Select.Option value={3} key="3">二个月</Select.Option>
-                                <Select.Option value={4} key="4">三个月</Select.Option>
-                                <Select.Option value={5} key="5">四个月</Select.Option>
-                                <Select.Option value={6} key="6">五个月</Select.Option>
-                                <Select.Option value={7} key="7">六个月</Select.Option>
+                                <Select.Option value={0} key="0">无试用期</Select.Option>
+                                <Select.Option value={1} key="1">一个月</Select.Option>
+                                <Select.Option value={2} key="2">二个月</Select.Option>
+                                <Select.Option value={3} key="3">三个月</Select.Option>
+                                <Select.Option value={4} key="4">四个月</Select.Option>
+                                <Select.Option value={5} key="5">五个月</Select.Option>
+                                <Select.Option value={6} key="6">六个月</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
