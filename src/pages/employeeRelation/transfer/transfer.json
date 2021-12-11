@@ -99,7 +99,7 @@
             "title": "员工姓名",
             "dataIndex": "employeeName",
             "type": "popTable",
-            "path": "/tower-hr/employee/archives",
+            "path": "/tower-hr/employee/archives?employeeStatus=1",
             "width": 1011,
             "value": "employeeName",
             "dependencies": true,
