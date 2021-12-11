@@ -51,10 +51,10 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
             dataIndex: 'stevedoreCompanyName'
         },
         {
-            key: 'content',
+            key: 'createTime',
             title: '添加时间',
             width: 150,
-            dataIndex: 'content'
+            dataIndex: 'createTime'
         },
         {
             key: 'contactMan',
@@ -159,7 +159,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
             openBank: data.openBank + ',' + data.openBankName
         }
         setDetail(data);
-        setVisible(false);
+        setVisible(true);
         form.setFieldsValue({...data});
     }
 
