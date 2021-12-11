@@ -106,6 +106,14 @@ export default function CollectionInfomation(): React.ReactNode {
                                 render: (_: any, record: any): React.ReactNode => (<span>{record.payMoney ? changeTwoDecimal_f(record.payMoney) : ''}</span>)
                             })
                         }
+                        if (item.dataIndex === "abroadMoney") {
+                            return ({
+                                title: item.title,
+                                dataIndex: item.dataIndex,
+                                width: 50,
+                                render: (_: any, record: any): React.ReactNode => (<span>{record.abroadMoney ? changeTwoDecimal_f(record.abroadMoney) : ''}</span>)
+                            })
+                        }
                         return item;
                     }),
                     {
