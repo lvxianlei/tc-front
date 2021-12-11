@@ -1,21 +1,27 @@
-import React, { useImperativeHandle, forwardRef, useRef } from "react"
+import React, { useImperativeHandle, forwardRef, useRef, useState } from "react"
 import { Spin, Form } from 'antd'
 import { DetailTitle, BaseInfo, Attachment, AttachmentRef } from '../../common'
 import { bilinformation } from "../financialData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { invoiceTypeOptions } from "../../../configuration/DictionaryOptions"
 interface EditProps {
     type: "new" | "edit",
     id: string
 }
 
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
-    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1210"].map((item: { id: string, name: string }) => ({
+    const invoiceTypeEnum = invoiceTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
-    const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
+    const [bilinformationCoumns, setBilinformation] = useState<any[]>(bilinformation.map((item: any) => {
+        if (item.dataIndex === "invoiceType") {
+            return ({ ...item, type: "select", enum: invoiceTypeEnum })
+        }
+        return item
+    }))
+    const attchsRef = useRef<AttachmentRef>()
     const [baseForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -62,17 +68,22 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     })
     const resetFields = () => {
         baseForm.resetFields()
-        attchsRef.current.resetFields()
+        attchsRef.current?.resetFields()
+    }
+    const handleBaseInfoChange = (fields: any) => {
+        if (fields.supplierName) {
+            setBilinformation(bilinformationCoumns.map((item: any) => {
+                if (item.dataIndex === "receiptVos") {
+                    return ({ ...item, path: `${item.path}?supplierId=${fields.supplierName.id}` })
+                }
+                return item
+            }))
+        }
     }
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
     return <Spin spinning={loading}>
         <DetailTitle title="票据信息" />
-        <BaseInfo form={baseForm} columns={bilinformation.map((item: any) => {
-            if (item.dataIndex === "invoiceType") {
-                return ({ ...item, type: "select", enum: invoiceTypeEnum })
-            }
-            return item
-        })} col={3} dataSource={{}} edit />
+        <BaseInfo form={baseForm} onChange={handleBaseInfoChange} columns={bilinformationCoumns} col={3} dataSource={{}} edit />
         <Attachment ref={attchsRef} edit />
     </Spin>
 })
