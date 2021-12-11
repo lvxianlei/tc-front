@@ -21,6 +21,7 @@ export enum DictionaryEnums {
     WAREHOUSE_TYPE = 127,
     DELIVERY_WAY = 128,
     TRANSPORTATION_TYPE = 129,
+    MATERIAL_TEXTURE = 139,
     CAR_TYPE = 146,
     EMPLOYEE_TYPE = 149,
     INVOICE_TYPE = 1210,
@@ -58,6 +59,7 @@ let transportationType: IDict[] | undefined = [];
 let certificateType: IDict[] | undefined = [];
 let invoiceType: IDict[] | undefined = [];
 let pleasePayType: IDict[] | undefined = [];
+let materialTexture: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -86,6 +88,7 @@ if (dictionary) {
     transportationType = dictionary[DictionaryEnums.TRANSPORTATION_TYPE];
     invoiceType = dictionary[DictionaryEnums.INVOICE_TYPE];
     pleasePayType = dictionary[DictionaryEnums.PLEASE_PAY_TYPE];
+    materialTexture = dictionary[DictionaryEnums.MATERIAL_TEXTURE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -114,3 +117,4 @@ export const deliverywayOptions = deliveryway; //交货方式
 export const transportationTypeOptions = transportationType; //运输方式
 export const invoiceTypeOptions = invoiceType; //发票类型
 export const pleasePayTypeOptions = pleasePayType; //请款类别
+export const materialTextureOptions = materialTexture; //材质
