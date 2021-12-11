@@ -8,7 +8,7 @@ import { withRouter } from "react-router-dom";
 import ClientSelectionComponent from "../../../components/ClientSelectionModal";
 import {
   winBidTypeOptions,
-  saleTypeOptions,
+  saleTypeOptions
 } from "../../../configuration/DictionaryOptions";
 import { IFormItemGroup } from "../../entrust/EntrustDetail";
 import { ContractSetting } from "../../prom/contract/ContractSetting";
@@ -189,18 +189,16 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <>
-                  <Input
-                    value={contract?.customerInfoDto?.customerCompany}
-                    suffix={
-                      <ClientSelectionComponent
-                        onSelect={this.onCustomerCompanySelect}
-                        selectKey={[contract?.customerInfoDto?.customerId]}
-                        id="1"
-                      />
-                    }
-                  />
-                </>
+                <Input
+                  value={contract?.customerInfoDto?.customerCompany}
+                  suffix={
+                    <ClientSelectionComponent
+                      onSelect={this.onCustomerCompanySelect}
+                      selectKey={[contract?.customerInfoDto?.customerId]}
+                      id="1"
+                    />
+                  }
+                />
               ),
             },
             {
@@ -236,36 +234,32 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <>
-                  <Input
-                    value={contract?.signCustomerName}
-                    suffix={
-                      <ClientSelectionComponent
-                        onSelect={this.onCustomerNameSelect}
-                        selectKey={[contract?.signCustomerId]}
-                        id="2"
-                      />
-                    }
-                  />
-                </>
+                <Input
+                  value={contract?.signCustomerName}
+                  suffix={
+                    <ClientSelectionComponent
+                      onSelect={this.onCustomerNameSelect}
+                      selectKey={[contract?.signCustomerId]}
+                      id="2"
+                    />
+                  }
+                />
               ),
             },
             {
               label: "付款方式",
-              name: "customerPhone",
-              initialValue: contract?.customerInfoVo?.customerPhone,
+              name: "payType",
+              initialValue: contract?.customerInfoVo?.payType,
               children: (
-                <>
-                  <Select
-                    value={contract?.customerInfoVo?.customerPhone}
-                  >
-                    <Select.Option value="1">转账</Select.Option>
-                    <Select.Option value="2">现金</Select.Option>
-                    <Select.Option value="3">支票</Select.Option>
-                    <Select.Option value="4">电汇</Select.Option>
-                    <Select.Option value="5">承兑</Select.Option>
-                  </Select>
-                </>
+                <Select
+                  value={contract?.customerInfoVo?.payType}
+                >
+                  <Select.Option value="1">转账</Select.Option>
+                  <Select.Option value="2">现金</Select.Option>
+                  <Select.Option value="3">支票</Select.Option>
+                  <Select.Option value="4">电汇</Select.Option>
+                  <Select.Option value="5">承兑</Select.Option>
+                </Select>
               ),
             },
             {
@@ -279,24 +273,23 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <>
-                  <Input
-                    value={contract?.payCompanyName}
-                    suffix={
-                      <ClientSelectionComponent
-                        onSelect={this.onPayCompanyNameSelect}
-                        selectKey={[contract?.signCustomerId]}
-                      />
-                    }
-                  />
-                </>
+                <Input
+                  value={contract?.payCompanyName}
+                  suffix={
+                    <ClientSelectionComponent
+                      onSelect={this.onPayCompanyNameSelect}
+                      selectKey={[contract?.payCompanyId]}
+                      id="3"
+                    />
+                  }
+                />
               ),
             },
             {
               label: "合同签订日期",
               name: "signContractTime",
               initialValue: contract?.signContractTime
-                ? moment(contract?.signContractTime||"")
+                ? moment(contract?.signContractTime || "")
                 : "",
               rules: [
                 {
@@ -305,7 +298,7 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <FormItemType data={{dataIndex:"signContractTime"}} type="date" />
+                <FormItemType data={{ dataIndex: "signContractTime" }} type="date" />
                 // <DatePicker
                 //   format="YYYY-MM-DD"
                 //   onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}
@@ -338,7 +331,7 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <FormItemType data={{dataIndex:"deliveryTime"}} type="date" />
+                <FormItemType data={{ dataIndex: "deliveryTime" }} type="date" />
                 // <DatePicker
                 //   format="YYYY-MM-DD"
                 //   className={layoutStyles.width100}
@@ -410,9 +403,9 @@ class ManagementContractSetting extends ContractSetting {
             },
             {
               label: "国家",
-              name: "regionOther",
-              initialValue: contract?.regionOther,
-              children: (<Input value={contract?.regionOther} />),
+              name: "country",
+              initialValue: contract?.country,
+              children: (<Input value={contract?.country} />),
             },
             {
               label: "销售业务员",
@@ -437,7 +430,7 @@ class ManagementContractSetting extends ContractSetting {
               name: "takeOverTime",
               initialValue: contract?.takeOverTime,
               children: (
-                <FormItemType data={{dataIndex:"takeOverTime"}} type="date" />
+                <FormItemType data={{ dataIndex: "takeOverTime" }} type="date" />
                 // <DatePicker
                 //   format="YYYY-MM-DD"
                 //   className={layoutStyles.width100}
@@ -691,20 +684,18 @@ class ManagementContractSetting extends ContractSetting {
             },
             {
               label: "付款方式",
-              name: "customerPhone",
-              initialValue: contract?.customerInfoVo?.customerPhone,
+              name: "payType",
+              initialValue: contract?.customerInfoVo?.payType,
               children: (
-                <>
-                  <Select
-                    value={contract?.customerInfoVo?.customerPhone}
-                  >
-                    <Select.Option value="1">转账</Select.Option>
-                    <Select.Option value="2">现金</Select.Option>
-                    <Select.Option value="3">支票</Select.Option>
-                    <Select.Option value="4">电汇</Select.Option>
-                    <Select.Option value="5">承兑</Select.Option>
-                  </Select>
-                </>
+                <Select
+                  value={contract?.customerInfoVo?.payType}
+                >
+                  <Select.Option value="1">转账</Select.Option>
+                  <Select.Option value="2">现金</Select.Option>
+                  <Select.Option value="3">支票</Select.Option>
+                  <Select.Option value="4">电汇</Select.Option>
+                  <Select.Option value="5">承兑</Select.Option>
+                </Select>
               ),
             },
             {
@@ -718,17 +709,16 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <>
-                  <Input
-                    value={contract?.payCompanyName}
-                    suffix={
-                      <ClientSelectionComponent
-                        onSelect={this.onPayCompanyNameSelect}
-                        selectKey={[contract?.signCustomerId]}
-                      />
-                    }
-                  />
-                </>
+                <Input
+                  value={contract?.payCompanyName}
+                  suffix={
+                    <ClientSelectionComponent
+                      onSelect={this.onPayCompanyNameSelect}
+                      selectKey={[contract?.payCompanyId]}
+                      id="3"
+                    />
+                  }
+                />
               ),
             },
             {
@@ -744,7 +734,7 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <FormItemType data={{dataIndex:"signContractTime"}} type="date" />
+                <FormItemType data={{ dataIndex: "signContractTime" }} type="date" />
               ),
             },
             {
@@ -772,7 +762,7 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <FormItemType data={{dataIndex:"deliveryTime"}} type="date" />
+                <FormItemType data={{ dataIndex: "deliveryTime" }} type="date" />
               ),
             },
             {
@@ -861,7 +851,7 @@ class ManagementContractSetting extends ContractSetting {
               name: "takeOverTime",
               initialValue: contract?.takeOverTime,
               children: (
-                <FormItemType data={{dataIndex:"takeOverTime"}} type="date" />
+                <FormItemType data={{ dataIndex: "takeOverTime" }} type="date" />
               ),
             },
             {

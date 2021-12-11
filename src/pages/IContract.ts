@@ -40,4 +40,5 @@ export interface IContract {
     readonly isRelateOrder?: number;
     readonly payCompanyName?: string;
     readonly purchaseOrderNumber?: string;
+    readonly takeOverTime?: string;
 }
