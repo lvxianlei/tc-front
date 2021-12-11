@@ -2159,7 +2159,7 @@
     },
     { // 人资-员工关系-员工离职-新增/编辑
       "name": "员工离职",
-      "path": "/employeeRelation/quit/:id",
+      "path": "/employeeRelation/quit/edit/:id",
       "module": "./pages/employeeRelation/quit/Quit",
       "exact": true,
       "authority": "approvalm"
