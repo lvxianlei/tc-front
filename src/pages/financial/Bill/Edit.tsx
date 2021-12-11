@@ -20,41 +20,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         label: item.name
     }))
     const [ companyList, setCompanyList ] = useState([]);
-    const [bilinformationCoumns, setBilinformation] = useState<any[]>(bilinformation.map((item: any) => {
-        if (item.dataIndex === "invoiceType") {
-            return ({ ...item, type: "select", enum: invoiceTypeEnum })
-        }
-        if(item.dataIndex === 'receiptVos') {
-            return ({ ...item, render: (data: any, props: any) => {
-                return <PopTable data={data} {
-                    ...props
-                }/>
-            } })
-        }
-        if(item.dataIndex === 'businessType') {
-            return ({ ...item, render: (data: any, props: any) => {
-                return <Form.Item name="businessType">
-                    <Select onChange={ (e: number) => businessTypeChange(e) }>
-                        <Select.Option value={1} key="1">供应商</Select.Option>
-                        <Select.Option value={2} key="2">装卸公司</Select.Option>
-                        <Select.Option value={3} key="3">运输公司</Select.Option>
-                    </Select>
-                </Form.Item>
-            } })
-        }
-        if(item.dataIndex === 'businessId') {
-            return ({ ...item, render: (data: any, props: any) => {
-                return <Form.Item name="businessId">
-                    <Select>
-                        { companyList && companyList.map((item: any) => {
-                            return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
-                        }) }
-                    </Select>
-                </Form.Item>
-            } })
-        }
-        return item
-    }))
     const attchsRef = useRef<AttachmentRef>()
     const [baseForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -108,16 +73,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         baseForm.resetFields()
         attchsRef.current?.resetFields()
     }
-    const handleBaseInfoChange = (fields: any) => {
-        if (fields.supplierName) {
-            setBilinformation(bilinformationCoumns.map((item: any) => {
-                if (item.dataIndex === "receiptVos") {
-                    return ({ ...item, path: `${item.path}?supplierId=${fields.supplierName.id}` })
-                }
-                return item
-            }))
-        }
-    }
 
     const businessTypeChange = async (e: number) => {
         let result: IResponse = {};
@@ -147,13 +102,47 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 }
             })
         }
-        
+        console.log(list)
         setCompanyList(list || []);
     }
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
     return <Spin spinning={loading}>
         <DetailTitle title="票据信息" />
-        <BaseInfo form={baseForm} onChange={handleBaseInfoChange} columns={bilinformationCoumns} col={3} dataSource={{}} edit />
+        <BaseInfo form={baseForm} columns={bilinformation.map((item: any) => {
+            if (item.dataIndex === "invoiceType") {
+                return ({ ...item, type: "select", enum: invoiceTypeEnum })
+            }
+            if(item.dataIndex === 'receiptVos') {
+                return ({ ...item, render: (data: any, props: any) => {
+                    return <PopTable data={data} {
+                        ...props
+                    }/>
+                } })
+            }
+            if(item.dataIndex === 'businessType') {
+                return ({ ...item, render: (data: any, props: any) => {
+                    return <Form.Item name="businessType">
+                        <Select onChange={ (e: number) => businessTypeChange(e) }>
+                            <Select.Option value={1} key="1">供应商</Select.Option>
+                            <Select.Option value={2} key="2">装卸公司</Select.Option>
+                            <Select.Option value={3} key="3">运输公司</Select.Option>
+                        </Select>
+                    </Form.Item>
+                } })
+            }
+            if(item.dataIndex === 'businessId') {
+                return ({ ...item, render: (data: any, props: any) => {
+                    return <Form.Item name="businessId">
+                        <Select>
+                            { companyList && companyList.map((item: any) => {
+                                return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
+                            }) }
+                        </Select>
+                    </Form.Item>
+                } })
+            }
+            return item
+        })} col={2} dataSource={{}} edit />
         <Attachment ref={attchsRef} edit />
     </Spin>
 })
