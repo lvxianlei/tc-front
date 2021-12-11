@@ -96,7 +96,7 @@
             "title": "方案名称",
             "dataIndex": "insurancePlanName",
             "type": "popTable",
-            "path": "/tower-hr/insurancePlan",
+            "path": "/tower-hr/insurancePlan?status=1",
             "width": 1011,
             "value": "insurancePlanName",
             "dependencies": true,
