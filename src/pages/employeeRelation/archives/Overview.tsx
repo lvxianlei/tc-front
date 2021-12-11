@@ -52,6 +52,12 @@ export default function Overview() {
                                 ...item, dataIndex: "postTypeName"
                             })
                         }
+                        if (item.dataIndex === "departmentName") {
+                            return ({
+                                ...item,
+                                render: (data: any) => <>{data?.departmentName}{data?.departmentName ? "/" : "-"}{data?.teamName}</>
+                            })
+                        }
                         return item
                     })} dataSource={data || {}} />
                     <DetailTitle title="其他信息" />

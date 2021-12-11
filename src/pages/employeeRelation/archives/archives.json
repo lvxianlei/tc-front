@@ -617,7 +617,7 @@
         },
         {
             "title": "部门/班组",
-            "dataIndex": "workOrganization",
+            "dataIndex": "departmentName",
             "disabled": true
         },
         {
