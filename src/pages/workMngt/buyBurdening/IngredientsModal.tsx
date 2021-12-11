@@ -34,6 +34,14 @@ export default function IngredientsModal(props: any) {
         console.log(selectedRowKeysCheck, "selectedRowKeysCheck")
         const serarchData = await serarchForm.validateFields();
         console.log(serarchData, "serarchData")
+        if (serarchData.num1 * 1 !== selectedRowKeysCheck.length) {
+            message.error("勾选的分类明细跟开数不符！");
+            return false;
+        }
+        if (serarchData.num3 > serarchData.num4) {
+            message.error("请选择合适的米数范围！");
+            return false;
+        }
     }
 
     // 获取配料策略
@@ -94,6 +102,7 @@ export default function IngredientsModal(props: any) {
             // 构建分类改变了，获取构建分类明细
             getSortDetail(props.id, selectedRows[0]?.structureSpec, selectedRows[0]?.structureTexture);
             setSelectSort(selectedRowKeys);
+            setSelectedRowKeysCheck([])
         }
     };
     const rowSelectionCheck = {
