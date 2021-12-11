@@ -68,6 +68,21 @@
             viewRef.current?.getDetail()
         }) 
     }
+    const changeTwoDecimal_f = (x: string) => {  
+    　　var f_x = parseFloat(x);  
+    　　if (isNaN(f_x)) return 0; 
+    　　var f_x = Math.round(100 * Number(x))/100;  
+    　　var s_x = f_x.toString();  
+    　　var pos_decimal = s_x.indexOf('.');  
+    　　if (pos_decimal < 0)  {  
+    　　　　pos_decimal = s_x.length;  
+    　　    s_x += '.';  
+    　　}  
+    　　while (s_x.length <= pos_decimal + 2) {  
+    　　　　s_x += '0';  
+    　　}  
+    　　return s_x;  
+    }
      return (
          <>
              <Page
@@ -121,12 +136,12 @@
                      </Radio.Group>
                      { payStatus == 1 ? 
                                  <span style={{marginLeft:"20px"}}>
-                                     请款金额总计：{data ? data.totalSumMoney : 0}元   
-                                     已付金额合计：{data ?data.totalMoney : 0}元    
-                                     应付款余额合计：{data ?data.totalPayMoney : 0}元
+                                     请款金额总计：{data ? changeTwoDecimal_f(data.totalSumMoney) : 0.00}元   
+                                     已付金额合计：{data ?changeTwoDecimal_f(data.totalMoney) : 0.00}元    
+                                     应付款余额合计：{data ?changeTwoDecimal_f(data.totalPayMoney) : 0.00}元
                                  </span>
                                  :
-                                 <span style={{marginLeft:"20px"}}>请款金额总计：{data ?data.totalSumMoney : 0}元</span>
+                                 <span style={{marginLeft:"20px"}}>请款金额总计：{data ?changeTwoDecimal_f(data.totalSumMoney) : 0.00}元</span>
                              }
                  </>}
                  columns={[
@@ -142,6 +157,30 @@
                                  )
                              })
                          }
+                         if (item.dataIndex === "sumMoney") {
+                            return ({
+                                title: item.title,
+                                dataIndex: item.dataIndex,
+                                width: 50,
+                                render: (_: any, record: any): React.ReactNode => (<span>{record.sumMoney ? changeTwoDecimal_f(record.sumMoney) : ''}</span>)
+                            })
+                        }
+                        if (item.dataIndex === "money") {
+                            return ({
+                                title: item.title,
+                                dataIndex: item.dataIndex,
+                                width: 50,
+                                render: (_: any, record: any): React.ReactNode => (<span>{record.money ? changeTwoDecimal_f(record.money) : ''}</span>)
+                            })
+                        }
+                        if (item.dataIndex === "payMoney") {
+                            return ({
+                                title: item.title,
+                                dataIndex: item.dataIndex,
+                                width: 50,
+                                render: (_: any, record: any): React.ReactNode => (<span>{record.payMoney ? changeTwoDecimal_f(record.payMoney) : ''}</span>)
+                            })
+                        }
                          return item;
                      }),
                      {
@@ -192,13 +231,13 @@
                                                 return <Table.Summary.Cell index={1}>合计：</Table.Summary.Cell>
                                                 } else
                                                 if (index === 8) {
-                                                return <Table.Summary.Cell index={1}>{sumMoney}</Table.Summary.Cell>
+                                                return <Table.Summary.Cell index={1}>{changeTwoDecimal_f(sumMoney + "")}</Table.Summary.Cell>
                                                 } else
                                                 if (index === 9) {
-                                                    return <Table.Summary.Cell index={1}>{subMomeny}</Table.Summary.Cell>
+                                                    return <Table.Summary.Cell index={1}>{changeTwoDecimal_f(subMomeny + "")}</Table.Summary.Cell>
                                                 } else
                                                 if (index === 10) {
-                                                    return <Table.Summary.Cell index={1}>{payMoney}</Table.Summary.Cell>
+                                                    return <Table.Summary.Cell index={1}>{changeTwoDecimal_f(payMoney + "")}</Table.Summary.Cell>
                                                 } else
                                                 return <Table.Summary.Cell index={2}></Table.Summary.Cell>
                                             })
