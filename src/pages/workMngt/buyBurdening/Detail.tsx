@@ -124,7 +124,10 @@ export default function EnquiryList(): React.ReactNode {
         <IngredientsModal
             id={params.id}
             visible={visible}
-            onOk={handleModalOk}
+            onOk={() => {
+                history.go(0);
+                setVisible(false)
+            }}
             onCancel={() => setVisible(false)}
         />
     </>

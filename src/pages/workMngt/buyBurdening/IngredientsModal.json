@@ -2,205 +2,172 @@
     "BatchingScheme": [
         {
             "title": "材质",
-            "dataIndex": "purchaseNumber",
-            "width": 200,
+            "dataIndex": "structureTexture",
+            "width": 120,
             "type": "string"
         },
         {
             "title": "规格",
-            "dataIndex": "internalNumber",
-            "width": 150,
+            "dataIndex": "structureSpec",
+            "width": 100,
             "type": "string"
         },
         {
             "title": "原材料长度（mm）",
-            "dataIndex": "productCategoryNum",
+            "dataIndex": "length",
             "width": 100,
             "type": "number"
         },
         {
             "title": "零件1",
-            "dataIndex": "productNum",
+            "dataIndex": "component1",
             "width": 100,
             "type": "number"
         },
         {
             "title": "长度（mm）",
-            "dataIndex": "batcher",
+            "dataIndex": "len1",
             "width": 100,
             "type": "string"
         },
         {
             "title": "数量",
-            "dataIndex": "batcheTaskStatus"
+            "dataIndex": "num1"
         },
         {
             "title": "零件2",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "component2"
         },
         {
             "title": "长度（mm）",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "len2"
         },
         {
             "title": "数量",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "num2"
         },
         {
             "title": "零件3",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "component3"
         },
         {
             "title": "长度（mm）",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "len3"
         },
         {
             "title": "数量",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "num3"
         },
         {
             "title": "零件4",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "component4"
         },
         {
             "title": "长度（mm）",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "len4"
         },
         {
             "title": "数量",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "num4"
         },
         {
             "title": "耗损",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "lossLength"
         },
         {
             "title": "余料长度",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "plannedSurplusLength"
         },
         {
             "title": "利用率",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "utilizationRate"
         }
     ],
     "alternative": [
         {
             "title": "原材料长度（mm）",
-            "dataIndex": "purchaseNumber",
-            "width": 200,
+            "dataIndex": "length",
+            "width": 160,
             "type": "string"
         },
         {
             "title": "零件1",
-            "dataIndex": "productNum",
+            "dataIndex": "component1",
             "width": 100,
             "type": "number"
         },
         {
             "title": "长度（mm）",
-            "dataIndex": "batcher",
-            "width": 100,
+            "dataIndex": "len1",
+            "width": 130,
             "type": "string"
         },
         {
             "title": "数量",
-            "dataIndex": "batcheTaskStatus"
+            "width": 120,
+            "dataIndex": "num1"
         },
         {
             "title": "零件2",
-            "dataIndex": "batcheStatusUpdateTime",
+            "width": 160,
+            "dataIndex": "component2",
             "type": "date",
             "format": "YYYY-MM-DD HH:mm"
         },
         {
             "title": "长度（mm）",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "width": 160,
+            "dataIndex": "len2"
         },
         {
             "title": "数量",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "width": 160,
+            "dataIndex": "num2"
         },
         {
             "title": "零件3",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "width": 160,
+            "dataIndex": "component3"
         },
         {
             "title": "长度（mm）",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "width": 160,
+            "dataIndex": "len3"
         },
         {
             "title": "数量",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "width": 160,
+            "dataIndex": "num3"
         },
         {
             "title": "零件4",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "width": 160,
+            "dataIndex": "component4"
         },
         {
             "title": "长度（mm）",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "width": 160,
+            "dataIndex": "len4"
         },
         {
             "title": "数量",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "width": 160,
+            "dataIndex": "num4"
         },
         {
             "title": "耗损",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "width": 160,
+            "dataIndex": "lossLength"
         },
         {
             "title": "余料长度",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "width": 160,
+            "dataIndex": "plannedSurplusLength"
         },
         {
             "title": "利用率",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "width": 160,
+            "dataIndex": "utilizationRate"
         }
     ],
     "ConstructionClassification": [
@@ -228,6 +195,10 @@
         }
     ],
     "ConstructionClassificationDetail": [
+        {
+            "title": "件号",
+            "dataIndex": "code"
+        },
         {
             "title": "长度（mm）",
             "dataIndex": "length",
