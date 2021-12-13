@@ -44,7 +44,7 @@ export default function RecruitEdit(): React.ReactNode {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
                             value.id =  params.id&&params.id!=='0'?params.id:undefined;
-                            value.reinstatementDate = value.reinstatementDate?moment(value.reinstatementDate):undefined;
+                            value.reinstatementDate = value.reinstatementDate?value.reinstatementDate:undefined;
                             // value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             // value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             value.submitType = 'save';
@@ -60,7 +60,7 @@ export default function RecruitEdit(): React.ReactNode {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
                             value.id =  params.id&&params.id!=='0'?params.id:undefined;
-                            value.reinstatementDate = value.reinstatementDate?moment(value.reinstatementDate):undefined;
+                            value.reinstatementDate = value.reinstatementDate?value.reinstatementDate:undefined;
                             // value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             // value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             value.submitType = 'submit';
@@ -135,14 +135,16 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择复职日期'
                         }]} name='reinstatementDate'>
-                            {/* <FormItemType data={{disabledDate:(current:any)=>{
+                            <FormItemType data={{
+                                disabledDate:(current:any)=>{
                                     return current && current< form.getFieldsValue().departureDate
-                                }}} type="date"/> */}
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
+                                },
+                                format:"YYYY-MM-DD"}} type="date" />
+                            {/* <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
                                 disabledDate={(current)=>{
                                     return current && current< form.getFieldsValue().departureDate
                                 }}
-                            />
+                            /> */}
                         </Form.Item>
                     </Col>
                     <Col span={12}>
