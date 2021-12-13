@@ -878,12 +878,7 @@
                                 "label": "生产单元管理",
                                 "path": "/planBaseSetting/prodUnit",
                                 "authority": "approvalm"
-                            },
-                            {
-                                "label": "计划排产",
-                                "path": "/planProd/planMgmt",
-                                "authority": "planned_production_scheduling_list"
-                            }
+                            } 
                         ]
                     }
                 ]

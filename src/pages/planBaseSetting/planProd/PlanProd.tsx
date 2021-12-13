@@ -37,18 +37,28 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         gantt.clearAll();
         gantt.config.column_width = 20;
         gantt.config.columns = [
-          {label:'计划号', name: "planNumber", tree: true, resize: true },
+          {label:'计划号', name: "planNumber", tree: true, resize: true , width:200, template: function (task:any) {
+            if(!task.parent){
+              // href='/planProd/planMgmt/detail/${task.id}/${task.planId}'
+              return (
+                `
+                <span style="color:#FF8C00" title="客户：${task.customerCompany}&#10;线路：${task.lineName}" >${task.planNumber}</span>
+                `
+              )
+            }
+              
+          }},
           {label:'塔型',name: "name", align: "center", resize: true, width: 100},
           {label:'基数',name: "productNum", align: "center"},
           {label:'重量',name: "weight", align: "center"},
           {label:'交货日期',name: "deliveryTime", align: "center"},
-          {label:'计划状态',name: "planStatus", align: "center", template: function (task:any) {
-            switch(task.planStatus){
-              case 1: return '待排产'
-              case 2: return '排产中'
-              case 3: return '已排产'
-            }
-          }},
+          // {label:'计划状态',name: "planStatus", align: "center", template: function (task:any) {
+          //   switch(task.planStatus){
+          //     case 1: return '待排产'
+          //     case 2: return '排产中'
+          //     case 3: return '已排产'
+          //   }
+          // }},
           {label:'操作',name: "buttons",width: 150, align: "center", template: function (task:any) {
             if(task.parent){
               // href='/planProd/planMgmt/detail/${task.id}/${task.planId}'
@@ -151,8 +161,8 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
     onFilterSubmit = async (value: any) => {
       if (value.time) {
           const formatDate = value.time.map((item: any) => item.format("YYYY-MM-DD"))
-          value.reinstatementDateStart = formatDate[0]+ ' 00:00:00';
-          value.reinstatementDateEnd = formatDate[1]+ ' 23:59:59';
+          value.startTime = formatDate[0]+ ' 00:00:00';
+          value.endTime = formatDate[1]+ ' 23:59:59';
           delete value.time
       }
       const tree: any = await RequestUtil.get<any>('/tower-aps/productionPlan/thread',value);
@@ -187,14 +197,14 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
           <Form.Item label='生产计划号/塔型' name='fuzzyMsg'>
               <Input/>
           </Form.Item>
-          <Form.Item label='计划状态' name='planStatus'>
+          {/* <Form.Item label='计划状态' name='planStatus'>
               <Select placeholder="请选择" style={{ width: "150px" }}>
                   <Select.Option value={''} key="">全部</Select.Option>
                   <Select.Option value={1} key="1">待排产</Select.Option>
                   <Select.Option value={2} key="2">排产中</Select.Option>
                   <Select.Option value={3} key="3">已排产</Select.Option>
               </Select>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label='交货时间' name='time'>
               <DatePicker.RangePicker format="YYYY-MM-DD" />
           </Form.Item>

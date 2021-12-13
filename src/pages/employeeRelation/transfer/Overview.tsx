@@ -30,8 +30,10 @@ export default function Overview() {
                 return item
             })} dataSource={data || {}} />
             <Attachment dataSource={data?.fileVos} />
-            <DetailTitle title="审批记录" />
-            <CommonTable columns={auditRecords} dataSource={data?.approveLog} />
+            {data?.status !== 1 && <>
+                <DetailTitle title="审批记录" />
+                <CommonTable columns={auditRecords} dataSource={data?.approveLog} />
+            </>}
         </Spin>
     </DetailContent>
 }

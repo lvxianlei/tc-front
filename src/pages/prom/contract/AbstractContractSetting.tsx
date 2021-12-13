@@ -213,14 +213,13 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     }
 
     public onPayCompanyNameSelect = (selectedRows: DataType[]): void => {
-        console.log(selectedRows)
         const contract: IContractInfo | undefined = this.state.contract;
         if (selectedRows && selectedRows.length > 0) {
             this.setState(({
                 contract: {
                     ...(contract || {}),
                     payCompanyName: selectedRows[0].name,
-                    payCompanyId: selectedRows[0].id?.toString
+                    payCompanyId: selectedRows[0].id?.toString()
                 }
             }) as any)
             this.getForm()?.setFieldsValue({ payCompanyName: selectedRows[0].name });
