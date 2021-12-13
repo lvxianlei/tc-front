@@ -11,10 +11,6 @@ declare module "*.jsonc" {
 }
 
 
-declare module "*.esm.min.js" {
-    const classes: { [key: string]: string };
-    export default classes;
-}
 declare module "@loadable/component" {
     type LoadableOptions = {
         fallback: React.ReactNode
