@@ -42,7 +42,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             // comparisonForm.setFieldsValue({
             //     comparisonPrice: { id: result.comparisonPriceId, value: result.comparisonPriceNumber }
             // })
-            setMaterialList(result?.materialContractDetailVos || [])
+            setMaterialList(result?.materialContractDetailVos.map((res: any) => {
+                const id = res.materialTextureId;
+                const name = res.materialTexture;
+                return {
+                    ...res,
+                    materialTexture: id,
+                    materialTextureId: name,
+                }}) || [])
             resove(result)
         } catch (error) {
             reject(error)
@@ -149,6 +156,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     unloadCompany: stevedoringInfo.unloadCompanyId.split(',')[1],
                 },
                 materialContractDetailDtos: materialList.map((item: any) => {
+                    const id = item.materialTextureId;
+                    const name = item.materialTexture;
                     delete item.id
                     return ({
                         ...item,
@@ -156,15 +165,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         price: item.price,
                         taxTotalAmount: item.taxTotalAmount,
                         totalAmount: item.totalAmount,
-                        materialTexture: item.source === 1 ? item.materialTextureId : item.materialTexture,
-                        materialTextureId: item.source === 1 ? '' :item.materialTextureId,
+                        materialTexture: item.source === 1 ? id : item.materialTexture,
+                        materialTextureId: item.source === 1 ? name : item.materialTextureId,
                     })
                 })
             }
             await saveRun(values)
             resove(true)
         } catch (error) {
-            console.log(error)
             reject(false)
         }
     })
@@ -200,6 +208,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 const num = parseFloat(item.num || "1")
                 const taxPrice = parseFloat(item.taxOffer || "1.00")
                 const price = parseFloat(item.offer || "1.00")
+                const id = item.materialTextureId;
+                const name = item.materialTexture;
                 return ({
                     ...item,
                     source: 1,
@@ -207,6 +217,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     taxPrice,
                     price,
                     width: formatSpec(item.structureSpec).width,
+                    materialTexture: id,
+                    materialTextureId: name,
                     // length: formatSpec(item.structureSpec).length,
                     weight: item.weight || "1.00",
                     taxTotalAmount: (num * taxPrice).toFixed(2),
@@ -380,7 +392,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 key="add"
                 onClick={async () => {
                     const baseInfo = await baseForm.validateFields(['comparisonPriceNumber']);
-                    if (!baseInfo.comparisonPriceNumber.records[0].id) {
+                    if (baseInfo?.comparisonPriceNumber?.records && !baseInfo?.comparisonPriceNumber?.records[0]?.id) {
                         message.warning("请先选择询比价信息...")
                     } else {
                         setVisible(true)
@@ -405,7 +417,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "materialStandard") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <Select style={{ width: '150px' }} value={ materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' +  materialList[key]?.materialStandardName } onChange={(e: string) => {
+                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select style={{ width: '150px' }} value={ materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' +  materialList[key]?.materialStandardName } onChange={(e: string) => {
                                 const newData = materialList.map((item: any, index: number) => {
                                     if(index === key) {
                                         return {
