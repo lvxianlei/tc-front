@@ -151,8 +151,8 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
     onFilterSubmit = async (value: any) => {
       if (value.time) {
           const formatDate = value.time.map((item: any) => item.format("YYYY-MM-DD"))
-          value.reinstatementDateStart = formatDate[0]+ ' 00:00:00';
-          value.reinstatementDateEnd = formatDate[1]+ ' 23:59:59';
+          value.startTime = formatDate[0]+ ' 00:00:00';
+          value.endTime = formatDate[1]+ ' 23:59:59';
           delete value.time
       }
       const tree: any = await RequestUtil.get<any>('/tower-aps/productionPlan/thread',value);

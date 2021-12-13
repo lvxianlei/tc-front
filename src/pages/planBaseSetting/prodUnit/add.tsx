@@ -96,7 +96,7 @@ const ProdUnitAdd = (props: any) => {
         let data: any = await RequestUtil.get('/tower-aps/productionUnit/load', {
             id: props.id,
             startTime: value[0].format('YYYY-MM-DD'),
-            endTime: value[1].format('YYYY-MM-DD') 
+            endTime: value[1].format('YYYY-MM-DD'),
             // startTime: times[0] ? `${times[0]} 00:00:00` : null,
             // endTime: times[1] ? `${times[1]} 23:59:59` : null,
         })

@@ -3,7 +3,6 @@ import { Space, Input, DatePicker, Select, Button, Form, TablePaginationConfig, 
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import GantChart from '../../../components/GantChart';
 import { useForm } from 'antd/lib/form/Form';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -61,13 +60,6 @@ export default function ProcessingTaskList(): React.ReactNode {
     </Card>
     <Card>
         <Button type='primary' onClick={()=>{history.push(`/packagingWorkshop/processingTask/dispatch/new`)}}>派工</Button>
-        <GantChart value={[{
-            id:'1',deptProcessesName:'流水线', name:'设备A',startTime:new Date().getTime(), endTime:new Date('2021-11-20 14:53:22').getTime(),number:1,towerType:'塔型1',status:1
-        },{
-            id:'2',deptProcessesName:'流水线', name:'设备B',startTime:new Date('2021-11-20 15:40:22').getTime(), endTime:new Date('2021-11-20 20:10:00').getTime(),number:2,towerType:'塔型2',status:2
-        },{
-            id:'3',deptProcessesName:'不是流水线', name:'设备C',startTime:new Date('2021-11-21 2:40:22').getTime(), endTime:new Date('2021-11-21 6:10:00').getTime(),number:3,towerType:'塔型3',status:3
-        }]} type='package'  url='/packagingWorkshop/processingTask/detail'/>
     </Card>
     </>
 }

@@ -82,7 +82,7 @@ export default function RecruitEdit(): React.ReactNode {
                         <Form.Item label='员工姓名' rules={[{
                             required:true, 
                             message:'请选择员工姓名'
-                        }]} name='employeeName' initialValue={1}>
+                        }]} name='employeeName'>
                             <Input maxLength={ 50 } value={ detailData?.employeeName||'' } addonAfter={ <EmployeeUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedUserRows(selectedRows);
                                     form.resetFields();
