@@ -465,6 +465,8 @@
       "exact": true,
       "authority": "project"
     },
+    // 图纸确认信息
+ 
     { // 合同详情
       "name": "合同详情",
       "path": "/project/contract/detail/:projectId/:id",

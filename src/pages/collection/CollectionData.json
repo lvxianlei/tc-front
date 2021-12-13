@@ -44,20 +44,12 @@
             "dataIndex": "abroadMoney"
         },
         {
-            "title": "来款银行",
-            "dataIndex": "payBank"
-        },
-        {
             "title": "付款方式",
             "dataIndex": "payType"
         },
         {
             "title": "收款银行",
             "dataIndex": "returnBank"
-        },
-        {
-            "title": "收款银行账号",
-            "dataIndex": "returnBankNumber"
         },
         {
             "title": "确认人",

@@ -1361,9 +1361,21 @@
             "dataIndex": "productHeight"
         },
         {
-            "title": "杆塔重量（kg）",
-            "dataIndex": "productWeight"
+            "title": " 单重（kg）",
+            "dataIndex": "wight"
+
         },
+        {
+            "title": " 其他单重（kg）",
+            "dataIndex": "otherWeight"
+
+        },
+        {
+            "title": " 总重（kg）",
+            "dataIndex": "totalWeight"
+
+        },
+    
         {
             "title": "备注",
             "dataIndex": "description"

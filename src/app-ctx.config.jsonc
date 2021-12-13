@@ -138,6 +138,11 @@
                                 "label": "回款确认",
                                 "path": "/project/collection",
                                 "authority": "project_collection_confirmation"
+                            },
+                            {
+                                "label": "图纸确认任务",
+                                "path": "/project/drawing",
+                                "authority": "project_drawing_confirmation"
                             }
                         ]
                     },
