@@ -204,7 +204,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         };
         gantt.init("ganttDetail");
         gantt.i18n.setLocale("cn");
-        const tasksNew = tree.planUnitLinkVOList.length>0 ? tree.planUnitLinkVOList.map((item:any)=>{
+        const tasksNew = tree.planUnitLinkVOList&&tree.planUnitLinkVOList.length>0 ? tree.planUnitLinkVOList.map((item:any)=>{
           return {
             ...item,
             open:true,
