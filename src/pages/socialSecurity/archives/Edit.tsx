@@ -61,7 +61,8 @@ export default function Edit() {
             const postBaseInfoData = await baseForm.validateFields()
             const postInsuranceData = await insuranceForm.validateFields()
             const postBusiness = await businessForm.validateFields()
-            const businessList = Object.keys(postBusiness).map(item => ({
+            const businessList = Object.keys(postBusiness).map((item: any) => ({
+                ...businessData[item],
                 ...postBusiness[item],
                 startMonth: postBusiness[item].startMonth + " 00:00:00",
                 endMonth: postBusiness[item].endMonth && (postBusiness[item].endMonth + " 23:59:59")
