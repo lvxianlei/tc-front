@@ -88,12 +88,12 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         };
         gantt.init("planProd");
         gantt.i18n.setLocale("cn");
-        const value = tree.reduce((res:any, item:any) => {
+        const value = tree.length>0 && tree.reduce((res:any, item:any) => {
           const parent = {...item};
           delete parent.planProductCategoryVOList;
-          return res.concat(item.planProductCategoryVOList.map((child:any) => ({...child,parent: parent.id})))
+          return res.concat(item.planProductCategoryVOList.length>0&&item.planProductCategoryVOList.map((child:any) => ({...child,parent: parent.id})))
         }, []);
-        const tasksNew = tree.concat(value).map((item:any)=>{
+        const tasksNew = tree.length>0 &&tree.concat(value).map((item:any)=>{
           return {
             ...item,
             open:true,
@@ -104,19 +104,8 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
             end_date: item.endTime?new Date(item.endTime): new Date()
           }
         })
-        // const tasks={
-        //   data:[
-        //       {id:1, planNumber:"1", deliveryTime:"2021-12-01", productNum:11,  open:true, tower:'1', start_date:new Date("2021-12-10"), duration: 6, progress:1},
-        //       {id:2, planNumber:"2", deliveryTime:"2021-12-02", productNum:11,  open:true, tower:'2', start_date:new Date("2021-12-02"), duration: 5, progress:0.7},
-        //       {id:3, planNumber:"3", deliveryTime:"2021-12-03", productNum:11,  open:true, tower:'3', start_date:new Date("2021-12-03"), duration: 4},
-        //       {id:4, planNumber:"4", deliveryTime:"2021-12-04", productNum:11,  open:true, tower:'4', start_date:new Date("2021-12-04"), duration: 3},
-        //       {id:5, planNumber:"5", deliveryTime:"2021-12-05", productNum:11,  open:true, tower:'5', start_date:new Date("2021-12-05"), duration: 2}, 
-        //       {id:6, planNumber:"6", deliveryTime:"2021-12-06", productNum:11,  open:true, tower:'6', start_date:new Date("2021-12-06"), duration: 1}, 
-        //       {id:6, planNumber:undefined, deliveryTime:"2021-12-07", productNum:12,  open:true, tower:'塔型7', start_date:new Date("2021-12-06"), duration: 1,parent:1}
-        //   ]
-        // };
         const tasks = {
-          data: tasksNew
+          data: tasksNew.length>0?tasksNew:[]
         }
         tasksNew&&gantt.parse(tasks);
         gantt.parse(tasks);
