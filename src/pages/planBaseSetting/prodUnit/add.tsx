@@ -69,17 +69,22 @@ const ProdUnitAdd = (props: any) => {
      * @description 弹窗提交
      */
     const submit = async () => {
-        itemInfo['productionLinkDTOList'] = itemInfo['productionLinkDTOList'].map((item: string) => {
-            return {
-                productionLinkId: item,
-                productionUnitId: props.id
-            }
-        })
-        await RequestUtil.post('/tower-aps/productionUnit', {
-            ...itemInfo,
-        })
-        message.success('操作成功')
-        props.cancelModal(true)
+        if(itemInfo.productivity&&itemInfo.name&&itemInfo['productionLinkDTOList']&&itemInfo['productionLinkDTOList'].length>0){
+            itemInfo['productionLinkDTOList'] = itemInfo['productionLinkDTOList'].map((item: string) => {
+                return {
+                    productionLinkId: item,
+                    productionUnitId: props.id
+                }
+            })
+            await RequestUtil.post('/tower-aps/productionUnit', {
+                ...itemInfo,
+            })
+            message.success('操作成功')
+            props.cancelModal(true)
+        }else{
+            message.error('必填项未填写，不可提交！')
+        }
+        
     }
     /**
      * @description
@@ -231,7 +236,7 @@ const ProdUnitAdd = (props: any) => {
                             maxLength={12}
                             value={itemInfo['productivity']}
                             onChange={(ev) => {
-                                changeItemInfo(ev.target.value.replace(/[^0-9]/ig, ""), 'productivity')
+                                changeItemInfo(ev.target.value.replace(/[^1-9]/ig, ""), 'productivity')
                                 console.log(itemInfo)
                             }}
                             placeholder='请输入'
@@ -245,6 +250,7 @@ const ProdUnitAdd = (props: any) => {
                             value={itemInfo['productionLinkDTOList'] || []}
                             mode='multiple'
                             maxTagCount={10}
+                            searchValue=''
                             onChange={(value) => {
                                 changeItemInfo(value, 'productionLinkDTOList')
                             }}
