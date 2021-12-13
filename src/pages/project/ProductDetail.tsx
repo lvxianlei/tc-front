@@ -33,7 +33,6 @@ export default function ProductGroupEdit() {
                 title: "操作",
                 dataIndex: "opration",
                 render: (_: null, records: any) => <>
-                 
                     <Button type="link" size="small" onClick = {deleteThisRecode} >删除</Button>
                 </>
             }, ...productAssist]} dataSource={select} />
