@@ -213,7 +213,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     }
 
     public onPayCompanyNameSelect = (selectedRows: DataType[]): void => {
-        console.log(selectedRows)
         const contract: IContractInfo | undefined = this.state.contract;
         if (selectedRows && selectedRows.length > 0) {
             this.setState(({
