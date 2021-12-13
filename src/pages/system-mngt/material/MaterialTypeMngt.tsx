@@ -365,7 +365,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                             { this.state.type === 2 || this.state.type === 3 ?<Input 
                                 min={0}
                                 maxLength={2}
-                                addonBefore={ defaultData.firstCode }
+                                addonBefore={ defaultData?.firstCode }
                                 style={{ width: "100%" }}
                                 />  : <Input maxLength={2} min={0} placeholder="请输入" style={{ width: "100%" }} />}
                         </Form.Item>
@@ -380,7 +380,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                                 pattern: /^[^\s]*$/,
                                 message: '禁止输入空格',
                             }]}
-                            initialValue={ this.state.type === 2 || this.state.type === 3 ? defaultData?.sonName : defaultData.name }
+                            initialValue={ this.state.type === 2 || this.state.type === 3 ? defaultData?.sonName : defaultData?.name }
                         >
                             <Input placeholder="请输入名称" maxLength={20} />
                         </Form.Item>

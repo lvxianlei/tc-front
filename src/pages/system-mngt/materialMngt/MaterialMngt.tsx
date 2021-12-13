@@ -206,7 +206,7 @@ export default function MaterialMngt(): React.ReactNode {
                     children: <Form.Item name="materialType" initialValue="">
                         <Select placeholder="请选择" style={{ width: "150px" }} onChange={ (e) => {
                             const list = materialType.filter((res: IMaterialType) => res.id === e);
-                            setMaterialList(list[0].children);
+                            setMaterialList(list[0]?.children);
                         } }>
                             <Select.Option value="" key="6">全部</Select.Option>
                             { materialType && materialType.map((item: any) => {

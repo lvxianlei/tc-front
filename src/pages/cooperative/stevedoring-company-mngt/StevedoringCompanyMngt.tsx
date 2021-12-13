@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Space, Input, Select, Button, Popconfirm, Form, message, Modal, Descriptions } from 'antd';
-import { Link } from 'react-router-dom';
 import { CommonTable, DetailTitle, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';

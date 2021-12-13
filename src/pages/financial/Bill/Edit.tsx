@@ -143,6 +143,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             }
             return item
         })} col={2} dataSource={{}} edit />
-        <Attachment ref={attchsRef} edit />
+        <Attachment ref={attchsRef} dataSource={baseForm.getFieldsValue(true)?.invoiceAttachInfoVos} edit />
     </Spin>
 })
