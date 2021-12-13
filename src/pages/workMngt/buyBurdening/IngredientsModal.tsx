@@ -250,8 +250,8 @@ export default function IngredientsModal(props: any) {
         setConstructionClassificationDetail(detail.slice(0));
         // 配料方案添加数据
         setSchemeData([
-            ...schemeData,
-            record
+            record,
+            ...schemeData
         ]);
         // 清空备料方案
         setPreparation([]);
