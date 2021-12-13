@@ -195,7 +195,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
                   <Select.Option value={3} key="3">已排产</Select.Option>
               </Select>
           </Form.Item>
-          <Form.Item label='排产时间' name='time'>
+          <Form.Item label='交货时间' name='time'>
               <DatePicker.RangePicker format="YYYY-MM-DD" />
           </Form.Item>
           <Form.Item>
