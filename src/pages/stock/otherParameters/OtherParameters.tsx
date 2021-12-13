@@ -71,7 +71,7 @@ export default function SetOutTaskList(): React.ReactNode {
         if(form) {
             form.validateFields().then(res => {
                 const values = form.getFieldsValue(true);
-                RequestUtil.post('/tower-supply/materialRate', {
+                RequestUtil.put('/tower-supply/materialRate', {
                     ...detailData,
                     ...values
                 }).then(res => {
