@@ -2,12 +2,12 @@ import React from 'react';
 import { gantt } from 'dhtmlx-gantt';
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
 import { Button, DatePicker, Form, Input, message, Popconfirm, Space } from 'antd';
-import RequestUtil from '../../utils/RequestUtil';
-import { DetailContent } from '../common';
+import RequestUtil from '../../../utils/RequestUtil';
+import { DetailContent } from '../../common';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import moment from 'moment';
-import DataSource from '../cockpit/rawMaterial/DataSource';
+import DataSource from '../../cockpit/rawMaterial/DataSource';
 export interface IRouteProps extends RouteComponentProps<any>, WithTranslation {}
 export interface WithSectionModalProps {
   planId: any;
