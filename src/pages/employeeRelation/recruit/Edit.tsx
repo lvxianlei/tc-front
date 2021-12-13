@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message, InputNumber} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
+import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef, FormItemType } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
@@ -83,7 +83,8 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.fileDTOS= attachRef.current?.getDataSource();
                             value.id = params.id;
-                            value.workTime = moment(value.workTime).format('YYYY-MM-DD HH:mm:ss');
+                            // value.workTime = moment(value.workTime).format('YYYY-MM-DD HH:mm:ss');
+                            value.workTime = value.workTime?value.workTime:undefined
                             value.postType = value.postType.length>0&&value.postType.join(',')
                             value.submitType = 'save';
                             RequestUtil.post(`/tower-hr/employee/information`, value).then(()=>{
@@ -99,7 +100,8 @@ export default function RecruitEdit(): React.ReactNode {
                             const value= form.getFieldsValue(true);
                             value.fileDTOS= attachRef.current?.getDataSource();
                             value.id = params.id;
-                            value.workTime = moment(value.workTime).format('YYYY-MM-DD HH:mm:ss');
+                            value.workTime = value.workTime?value.workTime:undefined
+                            // value.workTime = moment(value.workTime).format('YYYY-MM-DD HH:mm:ss');
                             value.postType = value.postType.join(',')
                             value.submitType = 'submit';
                             RequestUtil.post(`/tower-hr/employee/information`, value).then(()=>{
@@ -278,7 +280,8 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择预计到岗时间'
                         }]} name='workTime'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
+                            {/* <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} /> */}
+                            <FormItemType data={{format:"YYYY-MM-DD"}} type="date" />
                         </Form.Item>
                     </Col>
                 </Row>
