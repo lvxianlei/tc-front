@@ -1,7 +1,7 @@
 import React from 'react';
 import { gantt } from 'dhtmlx-gantt';
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
-import { Button, DatePicker, Form, Input, message, Popconfirm, Space } from 'antd';
+import { Button, DatePicker, Form, Input, message, Popconfirm, Select, Space } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import { DetailContent } from '../../common';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -101,8 +101,8 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         
         gantt.config.column_width = 20;
         gantt.config.columns = [
-          {label:'生产环节', name: "linkName", tree: true, resize: true, width:150 },
-          {label:'生产单元',name: "unitName", align: "center", resize: true},
+          {label:'生产环节', name: "linkName", tree: true, resize: true, width:100 },
+          {label:'生产单元',name: "unitName", align: "center", resize: true, width:100 },
           {label:'开始时间',name: "startTime", align: "center", width:100 , template: function (task:any) {
             return (
               `
@@ -117,7 +117,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
               `
             );
           }},
-          {label:'状态',name: "status", align: "center", template: function (task:any) {
+          {label:'状态',name: "status", align: "center", width:70 , template: function (task:any) {
             switch(task.status){
               case 1:
                 return '待排产'
@@ -131,7 +131,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
                 return '已排产'
             }
           }},
-          {label:'操作',name: "buttons",width: 200, align: "left", template: function (task:any) {
+          {label:'操作',name: "buttons",width: 150, align: "left", template: function (task:any) {
             if(task.status===2||task.status===3||task.status===5){
               if(task.status===2){
                 return (
@@ -183,8 +183,8 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           css: "gantt_container",
           cols: [
            {
-             
-             min_width: 200,
+             width: 620,
+             min_width: 100,
          
              // adding horizontal scrollbar to the grid via the scrollX attribute
              rows:[
@@ -245,7 +245,36 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           return e
         },'');
     }
-
+    onFilterSubmit = async (value: any) => {
+      if (value.time) {
+          const formatDate = value.time.map((item: any) => item.format("YYYY-MM-DD"))
+          value.startTime = formatDate[0]+ ' 00:00:00';
+          value.endTime = formatDate[1]+ ' 23:59:59';
+          delete value.time
+      }
+      const tree = await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks/${this.props.match.params.id}`);
+      const tasksNew = tree.planUnitLinkVOList&&tree.planUnitLinkVOList.length>0 ? tree.planUnitLinkVOList.map((item:any)=>{
+        return {
+          ...item,
+          open:true,
+          start_date: item.startTime?new Date(item.startTime+' 00:00:00'): new Date(),
+          name: item.name?item.name:item.productCategoryNum,
+          deliveryTime: item.deliveryTime?moment(item.deliveryTime).format('YYYY-MM-DD'):undefined,
+          planNumber:item.planNumber?item.planNumber:undefined,
+          end_date: item.endTime?new Date(item.endTime+' 23:59:59'): new Date()
+        }
+      }):[];
+      this.setState({
+        value:tree
+      })
+      const tasks={
+        data:tasksNew
+      };
+      this.setState({
+        dataSource: tasks
+      })
+      gantt.parse(tasks);
+    }
 
     
     render() {
@@ -255,6 +284,27 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
                 <Button key="goback" onClick={()=>{this.props.history.push(`/planProd/planMgmt`)}}>返回</Button>
             </Space>
         ]}>
+          <Form layout="inline" style={{margin:'20px'}} onFinish={this.onFilterSubmit}>
+              <Form.Item label='状态' name='status'>
+                  <Select placeholder="请选择" style={{ width: "150px" }}>
+                      <Select.Option value={''} key="">全部</Select.Option>
+                      <Select.Option value={1} key="1">待排产</Select.Option>
+                      <Select.Option value={2} key="2">已锁定</Select.Option>
+                      <Select.Option value={3} key="3">待确认</Select.Option>
+                      <Select.Option value={4} key="4">已反馈</Select.Option>
+                      <Select.Option value={5} key="5">已排产</Select.Option>
+                  </Select>
+              </Form.Item>
+              <Form.Item label='时间范围' name='time'>
+                  <DatePicker.RangePicker format="YYYY-MM-DD" />
+              </Form.Item>
+              <Form.Item>
+                  <Button type="primary" htmlType="submit">查询</Button>
+              </Form.Item>
+              <Form.Item>
+                  <Button htmlType="reset">重置</Button>
+              </Form.Item>
+            </Form>
             <Button type='primary' onClick={()=>{this.props.history.push(`${this.props.history?.location?.pathname}/add`)}} style={{margin:'10px'}}> 新增</Button>
             <div>
               <Space>
