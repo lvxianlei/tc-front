@@ -220,7 +220,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 contract: {
                     ...(contract || {}),
                     payCompanyName: selectedRows[0].name,
-                    payCompanyId: selectedRows[0].id?.toString
+                    payCompanyId: selectedRows[0].id?.toString()
                 }
             }) as any)
             this.getForm()?.setFieldsValue({ payCompanyName: selectedRows[0].name });
