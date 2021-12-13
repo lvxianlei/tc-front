@@ -52,6 +52,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         }
       } 
       this.onLock = this.onLock.bind(this);
+      this.onConfirm = this.onConfirm.bind(this);
     }
 
     onLock=async (id:any)=>{
