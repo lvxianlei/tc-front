@@ -216,7 +216,7 @@ export default function IngredientsModal(props: any) {
             setSelectedRowKeysCheck([])
         },
         getCheckboxProps: (record: any) => ({
-            disabled: record.notConfigured === 0, // Column configuration not to be checked
+            disabled: record.notConfigured <= 0, // Column configuration not to be checked
             name: record.name,
         }),
     };
@@ -226,7 +226,7 @@ export default function IngredientsModal(props: any) {
             setSelectedRowKeysCheck(selectedRowKeys)
         },
         getCheckboxProps: (record: any) => ({
-            disabled: record.notConfigured === 0, // Column configuration not to be checked
+            disabled: record.notConfigured <= 0, // Column configuration not to be checked
             name: record.name,
         }),
     };
