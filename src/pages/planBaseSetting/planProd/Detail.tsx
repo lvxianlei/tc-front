@@ -208,11 +208,11 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           return {
             ...item,
             open:true,
-            start_date: item.startTime?new Date(item.startTime): new Date(),
+            start_date: item.startTime?new Date(item.startTime+' 00:00:00'): new Date(),
             name: item.name?item.name:item.productCategoryNum,
             deliveryTime: item.deliveryTime?moment(item.deliveryTime).format('YYYY-MM-DD'):undefined,
             planNumber:item.planNumber?item.planNumber:undefined,
-            end_date: item.endTime?new Date(item.endTime): new Date()
+            end_date: item.endTime?new Date(item.endTime+' 23:59:59'): new Date()
           }
         }):[];
         this.setState({

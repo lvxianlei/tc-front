@@ -54,7 +54,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
               // href='/planProd/planMgmt/detail/${task.id}/${task.planId}'
               return (
                 `
-                <a style="color:#FF8C00" id="planEdit">查看</a>
+                <a style="color:#FF8C00" id="planEdit" href='/planProd/planMgmt/detail/${task.id}/${task.planId}'>查看</a>
                 `
               );
             }else{
@@ -134,9 +134,9 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
           console.log('id')
         },'');
         gantt.attachEvent("onTaskClick", async (id:any, e:any) => {
-          if(e.target.id === 'planEdit'){
-            this.onDetail(id)
-          }
+          // if(e.target.id === 'planEdit'){
+          //   this.onDetail(id)
+          // }
           return e
         },'');
 
@@ -165,11 +165,11 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         return {
           ...item,
           open:true,
-          start_date: item.startTime?new Date(item.startTime): new Date(),
+          start_date: item.startTime?new Date(item.startTime+' 00:00:00'): new Date(),
           name: item.name?item.name:item.productCategoryNum,
           deliveryTime: item.deliveryTime?moment(item.deliveryTime).format('YYYY-MM-DD'):undefined,
           planNumber:item.planNumber?item.planNumber:undefined,
-          end_date: item.endTime?new Date(item.endTime): new Date()
+          end_date: item.endTime?new Date(item.endTime+' 23:59:59'): new Date()
         }
       })
       const tasks = {
