@@ -5,7 +5,7 @@ import { editColums, oprationInfo, supplierFormHead } from "./supplier.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import ApplicationContext from "../../../configuration/ApplicationContext"
-import { bankTypeOptions } from "../../../configuration/DictionaryOptions"
+import { bankTypeOptions, qualityAssuranceOptions, supplierTypeOptions, supplyProductsOptions } from "../../../configuration/DictionaryOptions"
 interface EditProps {
     id: string
     type: "new" | "edit"
@@ -13,9 +13,9 @@ interface EditProps {
 export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Element {
     const [baseInfo] = Form.useForm()
     const [supplierForm] = Form.useForm()
-    const supplierTypeEnum = (ApplicationContext.get().dictionaryOption as any)["144"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const qualityAssuranceEnum = (ApplicationContext.get().dictionaryOption as any)["145"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const supplyProductsEnum = (ApplicationContext.get().dictionaryOption as any)["148"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const supplierTypeEnum = supplierTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const supplyProductsEnum = supplyProductsOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const { loading } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/${id}`)
