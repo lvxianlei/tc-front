@@ -25,15 +25,15 @@ export default function SetOutTaskList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'reteName',
+            key: 'rateName',
             title: '名称',
             width: 150,
-            dataIndex: 'reteName'
+            dataIndex: 'rateName'
         },
         {
-            key: 'retaParam',
+            key: 'rateParam',
             title: '参数',
-            dataIndex: 'retaParam',
+            dataIndex: 'rateParam',
             width: 120
         },
         {
@@ -98,7 +98,7 @@ export default function SetOutTaskList(): React.ReactNode {
         />
         <Modal visible={ visible } title="编辑" onCancel={ close } onOk={ save }>
             <Form form={ form }>
-                <Form.Item label="税率参数" name="retaParam" rules={[{
+                <Form.Item label="税率参数" name="rateParam" rules={[{
                         required: true,
                         message: '请输入税率参数'
                     }]}>
