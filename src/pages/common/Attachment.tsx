@@ -89,7 +89,7 @@ export default forwardRef(function ({
     const [uploadOSSUrlInfo, setUploadOSSUrlInfo] = useState<URLProps>({
         pushUrl: "http://www."
     })
-    const [uploadOSSUrlList, setUploadOSSUrlList] = useState<any>()
+    const [uploadOSSUrlList, setUploadOSSUrlList] = useState<any>([])
     const [picUrl, setPicUrl] = useState<string>()
     const { run: saveFile } = useRequest<URLProps>((data: any) => new Promise(async (resole, reject) => {
         try {
@@ -101,6 +101,8 @@ export default forwardRef(function ({
     }), { manual: true })
 
     useEffect(() => setAttachs(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || []), [JSON.stringify(dataSource)])
+
+    useEffect(() => setUploadOSSUrlList([...uploadOSSUrlList]), [JSON.stringify(uploadOSSUrlList)])
 
     const deleteAttachData = useCallback((uid: string) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== uid : item.id !== uid)), [setAttachs, attchs])
 
@@ -117,7 +119,8 @@ export default forwardRef(function ({
             })
             setUploadOSSUrlInfo(result)
             if(multiple) {
-                setUploadOSSUrlList(result)
+                uploadOSSUrlList.push(result)
+                setUploadOSSUrlList([...uploadOSSUrlList])
             }
             resove(true)
         } catch (error) {
@@ -144,15 +147,18 @@ export default forwardRef(function ({
                     return item
                 }))
                 if(multiple) {
-                    onDoneChange([{
-                        id: uploadOSSUrlList?.id || "",
-                        uid: event.file.uid,
-                        filePath: uploadOSSUrlList?.downloadUrl || "",
-                        originalName: uploadOSSUrlList?.originalName || "",
-                        fileSuffix: uploadOSSUrlList?.fileSuffix || "",
-                        fileSize: uploadOSSUrlList?.fileSize || "",
-                        downloadUrl: uploadOSSUrlList?.downloadUrl || ""
-                    }])
+                    const list = uploadOSSUrlList.map((res: any) => {
+                        return {
+                                id: res?.id || "",
+                                uid: event.file.uid,
+                                filePath: res?.downloadUrl || "",
+                                originalName: res?.originalName || "",
+                                fileSuffix: res?.fileSuffix || "",
+                                fileSize: res?.fileSize || "",
+                                downloadUrl: res?.downloadUrl || ""
+                            }
+                    })
+                    onDoneChange([...list])
                 } else {
                     onDoneChange([{
                         id: uploadOSSUrlInfo?.id || "",

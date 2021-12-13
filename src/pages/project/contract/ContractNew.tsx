@@ -630,7 +630,7 @@ class ManagementContractNew extends ContractNew {
                       <ClientSelectionComponent
                         onSelect={this.onCustomerCompanySelect}
                         selectKey={[contract?.customerInfoDto?.customerId]}
-                        id="1"
+                        key="1"
                       />
                     }
                   />
@@ -677,7 +677,7 @@ class ManagementContractNew extends ContractNew {
                       <ClientSelectionComponent
                         onSelect={this.onCustomerNameSelect}
                         selectKey={[contract?.signCustomerId]}
-                        id="2"
+                        key="2"
                       />
                     }
                   />
@@ -719,7 +719,8 @@ class ManagementContractNew extends ContractNew {
                     suffix={
                       <ClientSelectionComponent
                         onSelect={this.onPayCompanyNameSelect}
-                        selectKey={[contract?.signCustomerId]}
+                        selectKey={[contract?.payCompanyId]}
+                        key="3"
                       />
                     }
                   />

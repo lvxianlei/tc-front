@@ -1,7 +1,7 @@
 import React from 'react';
 import { gantt } from 'dhtmlx-gantt';
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
-import { Button, DatePicker, Form, Input, Popconfirm } from 'antd';
+import { Button, DatePicker, Form, Input, Popconfirm, Select } from 'antd';
 import { IResponseData } from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -12,10 +12,20 @@ export interface WithSectionModalProps {}
 export interface IWithSectionModalRouteProps extends RouteComponentProps<WithSectionModalProps>, WithTranslation {
     readonly id: number | string;
     readonly updateList: () => void;
+    dataSource: {
+      data:any
+    };
 }
-export interface WithSectionModalState {}
+export interface WithSectionModalState {
+  dataSource?:any
+}
 class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSectionModalState> {
-
+  constructor(props: IWithSectionModalRouteProps) {
+    super(props);
+    this.state={
+      dataSource:[]
+    }
+  }
     componentDidUpdate() {
       gantt.render();
     }
@@ -27,13 +37,31 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         gantt.clearAll();
         gantt.config.column_width = 20;
         gantt.config.columns = [
-          {label:'计划号', name: "planNumber", tree: true, resize: true },
+          {label:'计划号', name: "planNumber", tree: true, resize: true , width:200, template: function (task:any) {
+            if(!task.parent){
+              // href='/planProd/planMgmt/detail/${task.id}/${task.planId}'
+              return (
+                `
+                <span style="color:#FF8C00" title="客户：${task.customerCompany}&#10;线路：${task.lineName}" >${task.planNumber}</span>
+                `
+              )
+            }
+              
+          }},
           {label:'塔型',name: "name", align: "center", resize: true, width: 100},
           {label:'基数',name: "productNum", align: "center"},
           {label:'重量',name: "weight", align: "center"},
           {label:'交货日期',name: "deliveryTime", align: "center"},
+          // {label:'计划状态',name: "planStatus", align: "center", template: function (task:any) {
+          //   switch(task.planStatus){
+          //     case 1: return '待排产'
+          //     case 2: return '排产中'
+          //     case 3: return '已排产'
+          //   }
+          // }},
           {label:'操作',name: "buttons",width: 150, align: "center", template: function (task:any) {
             if(task.parent){
+              // href='/planProd/planMgmt/detail/${task.id}/${task.planId}'
               return (
                 `
                 <a style="color:#FF8C00" id="planEdit" href='/planProd/planMgmt/detail/${task.id}/${task.planId}'>查看</a>
@@ -97,18 +125,21 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
           return {
             ...item,
             open:true,
-            start_date: item.startTime?new Date(item.startTime): new Date(),
+            start_date: item.startTime?new Date(item.startTime+ ' 00:00:00'): new Date(),
             name: item.name?item.name:item.productCategoryNum,
             deliveryTime: item.deliveryTime?moment(item.deliveryTime).format('YYYY-MM-DD'):undefined,
             planNumber:item.planNumber?item.planNumber:undefined,
-            end_date: item.endTime?new Date(item.endTime): new Date()
+            end_date: item.endTime?new Date(item.endTime+ ' 23:59:59'): new Date()
           }
         })
         const tasks = {
           data: tasksNew.length>0?tasksNew:[]
         }
-        tasksNew&&gantt.parse(tasks);
+        this.setState({
+          dataSource: tasks
+        })
         gantt.parse(tasks);
+        gantt.detachAllEvents();
         gantt.attachEvent("onTaskDblClick", function(id:any, e:any) {
           console.log('id')
         },'');
@@ -124,17 +155,37 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
 
 
     onDetail = (task:any) =>{
-      this.props.history.push(`/planProd/planMgmt/detail/${task}`)
+      const value = this.state.dataSource.data.filter((item:any)=>{return item.id === task})
+      this.props.history.push(`/planProd/planMgmt/detail/${task}/${value[0].planId}`)
     }
-    onFilterSubmit = (value: any) => {
+    onFilterSubmit = async (value: any) => {
       if (value.time) {
           const formatDate = value.time.map((item: any) => item.format("YYYY-MM-DD"))
-          value.reinstatementDateStart = formatDate[0]+ ' 00:00:00';
-          value.reinstatementDateEnd = formatDate[1]+ ' 23:59:59';
+          value.startTime = formatDate[0]+ ' 00:00:00';
+          value.endTime = formatDate[1]+ ' 23:59:59';
           delete value.time
       }
-      // setFilterValue(value)
-      return value
+      const tree: any = await RequestUtil.get<any>('/tower-aps/productionPlan/thread',value);
+      const valueN = tree.length>0 && tree.reduce((res:any, item:any) => {
+        const parent = {...item};
+        delete parent.planProductCategoryVOList;
+        return res.concat(item.planProductCategoryVOList.length>0&&item.planProductCategoryVOList.map((child:any) => ({...child,parent: parent.id})))
+      }, []);
+      const tasksNew = tree.length>0 &&tree.concat(valueN).map((item:any)=>{
+        return {
+          ...item,
+          open:true,
+          start_date: item.startTime?new Date(item.startTime+' 00:00:00'): new Date(),
+          name: item.name?item.name:item.productCategoryNum,
+          deliveryTime: item.deliveryTime?moment(item.deliveryTime).format('YYYY-MM-DD'):undefined,
+          planNumber:item.planNumber?item.planNumber:undefined,
+          end_date: item.endTime?new Date(item.endTime+' 23:59:59'): new Date()
+        }
+      })
+      const tasks = {
+        data: tasksNew.length>0?tasksNew:[]
+      }
+      gantt.parse(tasks);
     }
     List = async () =>{
       const value = await RequestUtil.get(`/tower-science/drawProductSegment/getSegmentBySegmentGroupId`);
@@ -143,13 +194,18 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
     render() {
       return (<>
         <Form layout="inline" style={{margin:'20px'}} onFinish={this.onFilterSubmit}>
-          <Form.Item label='生产计划号/塔型' name='materialName'>
+          <Form.Item label='生产计划号/塔型' name='fuzzyMsg'>
               <Input/>
           </Form.Item>
-          <Form.Item label='计划状态' name='structureTexture'>
-              <Input/>
-          </Form.Item>
-          <Form.Item label='排产时间' name='time'>
+          {/* <Form.Item label='计划状态' name='planStatus'>
+              <Select placeholder="请选择" style={{ width: "150px" }}>
+                  <Select.Option value={''} key="">全部</Select.Option>
+                  <Select.Option value={1} key="1">待排产</Select.Option>
+                  <Select.Option value={2} key="2">排产中</Select.Option>
+                  <Select.Option value={3} key="3">已排产</Select.Option>
+              </Select>
+          </Form.Item> */}
+          <Form.Item label='交货时间' name='time'>
               <DatePicker.RangePicker format="YYYY-MM-DD" />
           </Form.Item>
           <Form.Item>

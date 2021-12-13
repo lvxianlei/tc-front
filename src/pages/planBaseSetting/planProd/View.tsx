@@ -77,9 +77,9 @@ export default function RecruitEdit(): React.ReactNode {
             return
         }
         let data: any = await RequestUtil.get('/tower-aps/productionUnit/load', {
-            id: form.getFieldsValue().id,
-            startTime: value[0].format('YYYY-MM-DD') + ' 00:00:00',
-            endTime: value[1].format('YYYY-MM-DD') + ' 23:59:59'
+            id: form.getFieldsValue().unitId,
+            startTime: value[0].format('YYYY-MM-DD'),
+            endTime: value[1].format('YYYY-MM-DD')
             // startTime: times[0] ? `${times[0]} 00:00:00` : null,
             // endTime: times[1] ? `${times[1]} 23:59:59` : null,
         })

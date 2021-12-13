@@ -232,8 +232,8 @@
     "insuranceData": [
         {
             "insuranceType": 1,
-            "effectiveMonth": "1111111",
-            "expirationMonth": "1111111111",
+            "effectiveMonth": "",
+            "expirationMonth": "",
             "paymentType": 1,
             "cardinalityUpperLimit": "",
             "cardinalityLowerBound": "",
