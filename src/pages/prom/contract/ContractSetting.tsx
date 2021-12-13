@@ -32,7 +32,8 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
         super.componentDidMount();
         const contract = await RequestUtil.get<ProjectContractInfo>(`${this.requestPath}/${this.props.match.params.id}`);
         this.setState({
-            contract: contract
+            contract: contract,
+            region: (contract.region as any)
         });
         contract.paymentPlanDtos = contract.paymentPlanVos?.map<IPaymentPlanDto>((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
             return {
@@ -68,14 +69,17 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             signUserName: contract.signUserName,
             deliveryTime: contract.deliveryTime && moment(contract.deliveryTime),
             reviewTime: contract.reviewTime && moment(contract.reviewTime),
+            takeOverTime: contract.takeOverTime && moment(contract.takeOverTime),
             chargeType: contract.chargeType === -1 ? '' : contract.chargeType,
             salesman: contract.salesman,
             region: Array.isArray(contract?.region) ? contract?.region : [contract?.region],
-            countryCode: contract.countryCode,
+            country: contract.country,
             contractAmount: contract.contractAmount,
             currencyType: contract.currencyType,
             description: contract.description,
             planType: contract.planType,
+            payType: contract.payType,
+            takeOverUser: contract.takeOverUser,
             paymentPlanDtos: contract.paymentPlanDtos,
             attachInfoDtos: contract?.attachInfoDtos,
             customerCompany: contract.customerInfoVo?.customerCompany,
@@ -90,29 +94,6 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             isIta: contract?.isIta,
             payCompanyName: contract?.payCompanyName
         });
-        const region: string[] | undefined = this.state.contract.region;
-        let regionInfoData: IRegion[] = this.state.regionInfoData;
-        if (this.state.contract.countryCode === 0) {
-            if (region && region.length > 0) {
-                const index: number = regionInfoData.findIndex((regionInfo: IRegion) => regionInfo.code === region[0]);
-                const resData: IRegion[] = await RequestUtil.get(`/tower-system/region/${region[0]}`);
-                regionInfoData[index] = {
-                    ...regionInfoData[index],
-                    children: resData
-                }
-                // if(region[1]) {
-                //     const childrenIndex: number = regionInfoData[index].children.findIndex((regionInfo: IRegion) => regionInfo.code === region[1]);
-                //     const resChildrenData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[1] }`);
-                //     regionInfoData[index].children[childrenIndex] = {
-                //         ...regionInfoData[index].children[childrenIndex],
-                //         children: resChildrenData
-                //     }
-                // }
-                this.setState({
-                    regionInfoData: regionInfoData
-                })
-            }
-        }
     }
 
     /**

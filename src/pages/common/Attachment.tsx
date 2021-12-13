@@ -89,6 +89,7 @@ export default forwardRef(function ({
     const [uploadOSSUrlInfo, setUploadOSSUrlInfo] = useState<URLProps>({
         pushUrl: "http://www."
     })
+    const [uploadOSSUrlList, setUploadOSSUrlList] = useState<any>()
     const [picUrl, setPicUrl] = useState<string>()
     const { run: saveFile } = useRequest<URLProps>((data: any) => new Promise(async (resole, reject) => {
         try {
@@ -115,6 +116,9 @@ export default forwardRef(function ({
                 fileSize: event.size
             })
             setUploadOSSUrlInfo(result)
+            if(multiple) {
+                setUploadOSSUrlList(result)
+            }
             resove(true)
         } catch (error) {
             reject(false)
@@ -139,15 +143,28 @@ export default forwardRef(function ({
                     }
                     return item
                 }))
-                onDoneChange([{
-                    id: uploadOSSUrlInfo?.id || "",
-                    uid: event.file.uid,
-                    filePath: uploadOSSUrlInfo?.downloadUrl || "",
-                    originalName: uploadOSSUrlInfo?.originalName || "",
-                    fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
-                    fileSize: uploadOSSUrlInfo?.fileSize || "",
-                    downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
-                }])
+                if(multiple) {
+                    onDoneChange([{
+                        id: uploadOSSUrlList?.id || "",
+                        uid: event.file.uid,
+                        filePath: uploadOSSUrlList?.downloadUrl || "",
+                        originalName: uploadOSSUrlList?.originalName || "",
+                        fileSuffix: uploadOSSUrlList?.fileSuffix || "",
+                        fileSize: uploadOSSUrlList?.fileSize || "",
+                        downloadUrl: uploadOSSUrlList?.downloadUrl || ""
+                    }])
+                } else {
+                    onDoneChange([{
+                        id: uploadOSSUrlInfo?.id || "",
+                        uid: event.file.uid,
+                        filePath: uploadOSSUrlInfo?.downloadUrl || "",
+                        originalName: uploadOSSUrlInfo?.originalName || "",
+                        fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
+                        fileSize: uploadOSSUrlInfo?.fileSize || "",
+                        downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
+                    }])
+                }
+                
             }
         }
     }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo])

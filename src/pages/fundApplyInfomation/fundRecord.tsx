@@ -77,6 +77,21 @@ import OtherDetail from '../questionMngt/OtherDetail';
         list.payMoney=payMoney;
         records.push(list)
     }
+    const changeTwoDecimal_f = (x: string) => {  
+    　　var f_x = parseFloat(x);  
+    　　if (isNaN(f_x)) return 0; 
+    　　var f_x = Math.round(100 * Number(x))/100;  
+    　　var s_x = f_x.toString();  
+    　　var pos_decimal = s_x.indexOf('.');  
+    　　if (pos_decimal < 0)  {  
+    　　　　pos_decimal = s_x.length;  
+    　　    s_x += '.';  
+    　　}  
+    　　while (s_x.length <= pos_decimal + 2) {  
+    　　　　s_x += '0';  
+    　　}  
+    　　return s_x;  
+    }
      return (
          <>
              <Page
@@ -121,7 +136,7 @@ import OtherDetail from '../questionMngt/OtherDetail';
                  ]}
                  sourceKey="paymentDetailListVOIPage.records"
                  extraOperation={(data: any) => <>
-                    金额合计：{data ? Number(data.totalSumMoney).toFixed(2) : null}元
+                    金额合计：{data ? changeTwoDecimal_f(data.totalSumMoney) : 0.00}元
                 </>}
                 isSunmryLine={addList}
                 columns={[
@@ -140,6 +155,14 @@ import OtherDetail from '../questionMngt/OtherDetail';
                                     }
                                 </span>
                             )
+                        })
+                    }
+                    if (item.dataIndex === "payMoney") {
+                        return ({
+                            title: item.title,
+                            dataIndex: item.dataIndex,
+                            width: 50,
+                            render: (_: any, record: any): React.ReactNode => (<span>{record.payMoney ? changeTwoDecimal_f(record.payMoney) : ''}</span>)
                         })
                     }
                     return item;

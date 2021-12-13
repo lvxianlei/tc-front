@@ -23,6 +23,7 @@ export enum DictionaryEnums {
     TRANSPORTATION_TYPE = 129,
     CAR_TYPE = 146,
     EMPLOYEE_TYPE = 149,
+    INVOICE_TYPE = 1210,
     PAY_TYPE = 1211,
     STAFF_TYPE = 1213,
     DEPT_TYPE = 1214,
@@ -54,6 +55,7 @@ let bankType: IDict[] | undefined = [];
 let deliveryway: IDict[] | undefined = [];
 let transportationType: IDict[] | undefined = [];
 let certificateType: IDict[] | undefined = [];
+let invoiceType: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -80,6 +82,7 @@ if (dictionary) {
     bankType = dictionary[DictionaryEnums.BANK_TYPE];
     deliveryway = dictionary[DictionaryEnums.DELIVERY_WAY];
     transportationType = dictionary[DictionaryEnums.TRANSPORTATION_TYPE];
+    invoiceType = dictionary[DictionaryEnums.INVOICE_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -106,3 +109,4 @@ export const employeeTypeOptions = employeeType; //员工分组
 export const bankTypeOptions = bankType; //开户银行
 export const deliverywayOptions = deliveryway; //交货方式
 export const transportationTypeOptions = transportationType; //运输方式
+export const invoiceTypeOptions = invoiceType; //发票类型

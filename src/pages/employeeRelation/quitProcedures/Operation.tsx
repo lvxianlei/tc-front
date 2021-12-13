@@ -16,7 +16,7 @@ export default function QuitProceduresOperation(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
-        data.newDepartmentName = data.departmentName+'/'+data.teamName
+        data.newDepartmentName = data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         form.setFieldsValue({
             ...data,
             transactDate: data?.transactDate?moment(data?.transactDate):'',

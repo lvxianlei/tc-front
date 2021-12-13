@@ -353,12 +353,18 @@
     ],
     "business": [
         {
-            "title": "商业保险名称",
+            "title": "*商业保险名称",
             "width": 50,
-            "dataIndex": "commercialInsuranceName"
+            "dataIndex": "commercialInsuranceName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入商业保险名称..."
+                }
+            ]
         },
         {
-            "title": "保险类型",
+            "title": "*保险类型",
             "width": 50,
             "dataIndex": "commercialInsuranceType",
             "type": "select",
@@ -390,19 +396,31 @@
             ]
         },
         {
-            "title": "保险公司",
+            "title": "*保险公司",
             "width": 50,
-            "dataIndex": "commercialInsuranceCompany"
+            "dataIndex": "commercialInsuranceCompany",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保险公司..."
+                }
+            ]
         },
         {
-            "title": "保险金额",
+            "title": "*保险金额",
             "width": 50,
             "dataIndex": "insuranceAmount"
         },
         {
-            "title": "保险合同号",
+            "title": "*保险合同号",
             "width": 50,
-            "dataIndex": "insuranceContract"
+            "dataIndex": "insuranceContract",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保险合同号..."
+                }
+            ]
         },
         {
             "title": "备注",

@@ -18,7 +18,7 @@ export default function Edit() {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/department/company`)
             resole(result.map((item: any) => {
-                const children = item.children.map((item: any) => ({ title: item.name, value: item.id }))
+                const children = item.children?.map((item: any) => ({ title: item.name, value: item.id })) || []
                 return ({ title: item.name, value: item.id, children })
             }))
         } catch (error) {
@@ -233,21 +233,36 @@ export default function Edit() {
                             case "description":
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                    render: (value: any, record: any, index: number) => <Form.Item
+                                        name={[index, item.dataIndex]}>
                                         <Input.TextArea autoSize={{ maxRows: 1 }} value={value} />
                                     </Form.Item>
                                 })
                             case "insuranceAmount":
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                    render: (value: any, record: any, index: number) => <Form.Item
+                                        rules={[
+                                            {
+                                                "required": true,
+                                                "message": "请填写保险金额..."
+                                            }
+                                        ]}
+                                        name={[index, item.dataIndex]}>
                                         <InputNumber style={{ width: "100%" }} value={value} />
                                     </Form.Item>
                                 })
                             case "commercialInsuranceType":
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                    render: (value: any, record: any, index: number) => <Form.Item
+                                        rules={[
+                                            {
+                                                "required": true,
+                                                "message": "请选择保险类型..."
+                                            }
+                                        ]}
+                                        name={[index, item.dataIndex]}>
                                         <Select style={{ width: "100%" }} value={value}>
                                             <Select.Option value={1}>补充医疗保险</Select.Option>
                                             <Select.Option value={2}>雇主责任险</Select.Option>
@@ -261,7 +276,7 @@ export default function Edit() {
                             default:
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                    render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
                                         <Input value={value} />
                                     </Form.Item>
                                 })
