@@ -287,7 +287,7 @@ export default function ManagementDetail(): React.ReactNode {
                     value: fitem.id, label: fitem.name
                 }))
             }) : item)}
-                dataSource={data || {}} />
+                dataSource={{...data, executionWeight: "0.00000000"} || { executionWeight: "0.00000000"}} />
             <DetailTitle title="合同物资清单" />
             <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', width: 50, key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },

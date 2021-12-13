@@ -576,7 +576,7 @@
             "disabled": true
         },
         {
-            "title": "合同总重(吨)",
+            "title": "预估总重(吨)",
             "dataIndex": "contractWeight",
             "type": "number",
             "rules": [
@@ -587,12 +587,12 @@
             ]
         },
         {
-            "title": "合同单价(元/吨)",
+            "title": "预估单价(元/吨)",
             "dataIndex": "contractMoney",
             "type": "number"
         },
         {
-            "title": "合同总价(元)",
+            "title": "预估总价(元)",
             "dataIndex": "contractMoneyCount",
             "type": "number",
             "rules": [
@@ -601,6 +601,10 @@
                     "message": "请输入合同总价..."
                 }
             ]
+        },
+        {
+            "title": "执行重量",
+            "dataIndex": "executionWeight"
         },
         {
             "title": "中标类型",
