@@ -12,13 +12,8 @@
         },
         {
             "title": "项目编码",
-            "dataIndex": "projectNumber",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入项目编码..."
-                }
-            ]
+            "dataIndex": "projectNumber"
+          
         },
         {
             "title": "项目类型",
@@ -40,6 +35,12 @@
                     "message": "请选择项目类型..."
                 }
             ]
+        },
+        {
+            "title": "发布日期",
+            "dataIndex": "releaseDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "标书购买截至日期",
@@ -69,12 +70,46 @@
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入国家..."
+                    "message": "请选择国家..."
                 }
             ]
         },
         {
-            "title": "招标人",
+            "title": "业务经理",
+            "dataIndex": "projectLeader",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择业务经理..."
+                }
+            ],
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
+        },
+        {
+            "title": "招标人/客户",
             "dataIndex": "biddingPerson",
             "type": "popTable",
             "path": "/tower-customer/customer",
@@ -133,48 +168,9 @@
                     "title": "联系电话",
                     "dataIndex": "phone"
                 }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择招标代理机构..."
-                }
             ]
         },
-        {
-            "title": "项目负责人",
-            "dataIndex": "projectLeader",
-            "type": "popTable",
-            "path": "/sinzetech-user/user",
-            "value": "name",
-            "readOnly": true,
-            "dependencies": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择项目负责人..."
-                }
-            ],
-            "columns": [
-                {
-                    "title": "登录账号",
-                    "dataIndex": "account"
-                },
-                {
-                    "title": "用户姓名",
-                    "dataIndex": "name",
-                    "search": true
-                },
-                {
-                    "title": "所属角色",
-                    "dataIndex": "userRoleNames"
-                },
-                {
-                    "title": "所属机构",
-                    "dataIndex": "departmentName"
-                }
-            ]
-        },
+       
         {
             "title": "当前项目阶段",
             "dataIndex": "currentProjectStage",
@@ -200,20 +196,24 @@
                     "value": 4,
                     "label": "项目结束"
                 }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择当前项目阶段..."
-                }
             ]
         },
         {
-            "title": "发布日期",
-            "dataIndex": "releaseDate",
-            "type": "date",
-            "format": "YYYY-MM-DD"
+            "title": "是否签订合同",
+            "dataIndex": "isBid",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "是"
+                },
+                {
+                    "value": 2,
+                    "label": "否"
+                }
+            ]
         },
+    
         {
             "title": "说明",
             "dataIndex": "bidExplain",

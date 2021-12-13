@@ -100,15 +100,7 @@
             "dataIndex": "projectName"
         },
         {
-            "title": "业务经理",
-            "dataIndex": "projectLeader"
-        },
-        {
-            "title": "费用名称",
-            "dataIndex": "costName"
-        },
-        {
-            "title": "付款类型",
+            "title": "请款类型",
             "dataIndex": "payType",
             "type": "select",
             "enum": [
@@ -123,6 +115,40 @@
             ]
         },
         {
+            "title": "业务经理",
+            "dataIndex": "projectLeader"
+        },
+        {
+            "title": "申请人",
+            "dataIndex": "applicantName"
+        },
+        {
+            "title": "申请时间",
+            "dataIndex": "applicantTime"
+        }, 
+        {
+            "title": "总金额",
+            "dataIndex": "money"
+        }, 
+        
+        {
+            "title": "付款方式",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "收款方",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "账号",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "开户行",
+            "dataIndex": "payType"
+        },
+
+        {
             "title": "付款状态",
             "dataIndex": "payStatus",
             "type": "select",
@@ -136,18 +162,6 @@
                     "value": 1
                 }
             ]
-        },
-        {
-            "title": "金额（元）",
-            "dataIndex": "sumMoney"
-        },
-        {
-            "title": "申请时间",
-            "dataIndex": "applicantTime"
-        },
-        {
-            "title": "申请人",
-            "dataIndex": "applicantName"
         },
         {
             "title": "审批状态",
@@ -211,6 +225,22 @@
             "dataIndex": "sumMoney"
         },
         {
+            "title": " 付款方式",
+            "dataIndex": "payType"
+        },
+        {
+            "title": " 收款方",
+            "dataIndex": "payee"
+        },
+        {
+            "title": " 账号",
+            "dataIndex": "accountNumber"
+        },
+        {
+            "title": " 开户行",
+            "dataIndex": "bankName"
+        },
+        {
             "title": " 付款状态",
             "dataIndex": "payStatus"
         },
@@ -244,7 +274,7 @@
     ],
     "paymentdetail": [
         {
-            "title": "费用类型",
+            "title": "票据号",
             "dataIndex": "costType",
             "type": "select",
             "enum": [
@@ -271,32 +301,20 @@
             ]
         },
         {
-            "title": "费用名称",
-            "dataIndex": "costName"
-        },
-        {
-            "title": "支付类型",
-            "dataIndex": "payType"
-        },
-        {
             "title": "金额（元）",
             "dataIndex": "money"
         },
         {
+            "title": "票据单位",
+            "dataIndex": "billUnit"
+        },
+        {
+            "title": "票据类型",
+            "dataIndex": "billType"
+        },
+        {
             "title": "付款时间",
             "dataIndex": "payTime"
-        },
-        {
-            "title": "收款方",
-            "dataIndex": "payee"
-        },
-        {
-            "title": "账号",
-            "dataIndex": "accNum"
-        },
-        {
-            "title": "开户行",
-            "dataIndex": "bankName"
         },
         {
             "title": "备注",

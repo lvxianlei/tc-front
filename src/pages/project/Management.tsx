@@ -64,6 +64,11 @@ export default function Management(): React.ReactNode {
             dataIndex: 'projectNumber'
         },
         {
+            key: 'projectNumber',
+            title: '招标批次列',
+            dataIndex: 'projectNumber'
+        },
+        {
             key: 'projectType',
             title: '项目类型',
             dataIndex: 'projectType',
@@ -158,7 +163,22 @@ export default function Management(): React.ReactNode {
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="项目名称/项目编码/项目负责人" style={{ width: 260 }} />
+                children: <Input placeholder="项目名称/项目编码/项目负责人/批次号/内部合同编号/订单编号/计划号" style={{ width: 260 }} />
+            },
+            {
+                name:'InterContract',
+                label:'内部合同编号',
+                children: <Input placeholder="内部合同编号" style={{ width: 210}} />
+            },
+            {
+                name:'OrderNumber',
+                label:'订单编号',
+                children: <Input placeholder="订单编号" style={{ width: 210 }} />
+            },
+            {
+                name:'PlanNumber',
+                label:'计划号',
+                children: <Input placeholder="计划号" style={{ width: 210 }} />
             },
             {
                 name: 'startBidBuyEndTime',

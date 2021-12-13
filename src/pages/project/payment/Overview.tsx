@@ -23,7 +23,7 @@ export default function Edit() {
         <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
     ]}>
         <Spin spinning={loading}>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="请款单信息" />
             <BaseInfo columns={PaymentList} dataSource={(data as any) || {}} />
             <DetailTitle title={data?.payType === 0 ? "请款明细" : "报销明细"} />
             <CommonTable columns={[
@@ -43,7 +43,7 @@ export default function Edit() {
             ]} dataSource={data?.payInfoVOList || []} />
             <Attachment dataSource={data?.attachVos || []} />
             <DetailTitle title="审批记录" />
-            <CommonTable columns={auditIdRecord} dataSource={data?.payInfoVOList || []} />
+            <CommonTable haveIndex columns={auditIdRecord} dataSource={data?.payInfoVOList || []} />
         </Spin>
     </DetailContent>
 }
