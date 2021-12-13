@@ -244,6 +244,7 @@ const ProdUnitAdd = (props: any) => {
                             placeholder='请选择'
                             value={itemInfo['productionLinkDTOList'] || []}
                             mode='multiple'
+                            maxTagCount={10}
                             onChange={(value) => {
                                 changeItemInfo(value, 'productionLinkDTOList')
                             }}
