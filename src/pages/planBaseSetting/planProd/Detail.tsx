@@ -69,7 +69,10 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         const newValue={
           data: value
         }
-          gantt.parse(newValue)
+        this.setState({
+          dataSource: newValue
+        })
+        gantt.parse(newValue)
       });
     }
     onConfirm =async (id:any)=>{
@@ -86,7 +89,10 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         const newValue={
           data: value
         }
-          gantt.parse(newValue)
+        this.setState({
+          dataSource: newValue
+        })
+        gantt.parse(newValue)
       });
     }
     componentDidUpdate() {
@@ -96,7 +102,9 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
     async componentDidMount() {
         gantt.clearAll();
         let tree: any = {};
-        tree = await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks/${this.props.match.params.id}`);
+        tree = await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks`,{
+          planProductCategoryId:this.props.match.params.id,
+        });
         
         
         gantt.config.column_width = 20;
@@ -252,7 +260,10 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           value.endTime = formatDate[1]+ ' 23:59:59';
           delete value.time
       }
-      const tree = await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks/${this.props.match.params.id}`);
+      const tree = await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks`,{
+        planProductCategoryId:this.props.match.params.id,
+        ...value
+      });
       const tasksNew = tree.planUnitLinkVOList&&tree.planUnitLinkVOList.length>0 ? tree.planUnitLinkVOList.map((item:any)=>{
         return {
           ...item,
@@ -285,7 +296,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
             </Space>
         ]}>
           <Form layout="inline" style={{margin:'20px'}} onFinish={this.onFilterSubmit}>
-              <Form.Item label='状态' name='status'>
+              <Form.Item label='状态' name='planUnitLinkStatus'>
                   <Select placeholder="请选择" style={{ width: "150px" }}>
                       <Select.Option value={''} key="">全部</Select.Option>
                       <Select.Option value={1} key="1">待排产</Select.Option>
