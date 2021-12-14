@@ -64,11 +64,9 @@ export default function ManagementDetail(): React.ReactNode {
         const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`)
         resole(result)
     }), { refreshDeps: [params.tab] })
-    console.log(data, "是这里嘛11111111111")
     const { loading: projectGroupLoading, data: projectGroupData, run: projectGroupRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductAssist?productGroupId=${id}`)
-            console.log(data, "是这里嘛")
             resole(result)
         } catch (error) {
             reject(error)
