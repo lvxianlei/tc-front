@@ -12,14 +12,15 @@ interface TaskAssignRef {
     resetFields: () => void
 }
 export default function RawMaterial() {
+    const history = useHistory();
     const [detailId, setDetailId] = useState<string>("")
+    const [filterValue, setFilterValue] = useState<object>(history.location.state as object)
     const tarkRef = useRef<TaskAssignRef>({ onSubmit: () => { }, resetFields: () => { } })
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible1, setIsModalVisible1] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const [isModalVisible3, setIsModalVisible3] = useState(false);
     const [id, setId] = useState(0);//采购任务id
-    const [inquiryId, setInquiryId] = useState("");
     const [obj, setObj] = useState<any>({});
     const [rejectionDescription, setRejectionDescription] = useState("");
     const { run: generaterRun } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -30,7 +31,6 @@ export default function RawMaterial() {
             reject(false)
         }
     }), { manual: true })
-    const history = useHistory();
 
     const handleCancel = () => {
         setIsModalVisible(false);
@@ -46,8 +46,7 @@ export default function RawMaterial() {
     };
     const detail = async (purchaseId: any) => {
         setIsModalVisible(true);
-        setId(purchaseId);
-        setInquiryId(purchaseId);
+        setId(purchaseId)
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchaseTask/${purchaseId}`)
         setObj(result);
     }
@@ -115,6 +114,7 @@ export default function RawMaterial() {
             value.startStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
+        setFilterValue(value)
         return value
     }
 
@@ -147,6 +147,7 @@ export default function RawMaterial() {
                         </>
                     }
                 ]}
+                filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={<Button type="primary" ghost onClick={async () => {
                     await generaterRun()
