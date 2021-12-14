@@ -168,11 +168,12 @@ export default function RecruitEdit(): React.ReactNode {
                 }
             ],
             yAxis: [
+               
                 {
-                    type: 'value'
+                    type: 'value',
                 }
             ],
-            series:datas,
+            series:datas.length>0?datas:'',
         });
     }
     return <>
