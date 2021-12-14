@@ -24,7 +24,7 @@ export default function RecruitEdit(): React.ReactNode {
         form.setFieldsValue( params.productCategoryId?{
             ...data,
             startTime: data?.startTime?moment(data?.startTime):'',
-            endTime: data?.startTime && data.minCompletionDays?moment(new Date( data?.startTime).setDate(new Date( data?.startTime).getDate()+ data.minCompletionDays)):'',
+            endTime: data?.startTime && data.minCompletionDays?moment(new Date( data?.startTime).setDate(new Date( data?.startTime).getDate()+ data.minCompletionDays-1)):'',
         }:{})
         resole(data)
     }), {})
@@ -32,8 +32,8 @@ export default function RecruitEdit(): React.ReactNode {
         if (!dates || dates.length === 0) {
           return false;
         }
-        const tooLate = dates[0] && current.diff(dates[0], 'days') > 7;
-        const tooEarly = dates[1] && dates[1].diff(current, 'days') > 7;
+        const tooLate = dates[0] && current.diff(dates[0], 'days') > 6;
+        const tooEarly = dates[1] && dates[1].diff(current, 'days') > 6;
         return tooEarly || tooLate;
     };
 
