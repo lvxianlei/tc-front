@@ -200,7 +200,7 @@ const ProdUnitAdd = (props: any) => {
                     type: 'value'
                 }
             ],
-            series:datas,
+            series:datas.length>0?datas:'',
         });
     }
     return (

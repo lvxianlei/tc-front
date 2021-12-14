@@ -34,41 +34,48 @@ export default function QuitProceduresOperation(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button type="primary" onClick={() => {
-                        form.validateFields().then(res=>{
-                            const value= form.getFieldsValue(true);
-                            value.transactDate= moment(value.transactDate).format('YYYY-MM-DD');
-                            value.employeeId = detailData.employeeId;
-                            value.id = params.id;
-                            value.handleType='save';
-                            value.isProcessingCompleted = false;
-                            value.fileIds= attachRef.current?.getDataSource().map((item:any)=>{
+                    <Button type="primary" onClick={async () => {
+                        await form.validateFields();
+                        const value= form.getFieldsValue(true);
+                        const postValue = {
+                            ...value,
+                            id : params.id,
+                            employeeId: detailData.employeeId,
+                            transactDate: value.transactDate?moment(value.transactDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            handleType: 'save',
+                            isProcessingCompleted: false,
+                            fileIds: attachRef.current?.getDataSource().map((item:any)=>{
                                 return item.id
-                            });
-                            value.isRemoveContract =  value.isRemoveContract === 1?false:true;
-                            value.isTransactProcedure =  value.isTransactProcedure === 1?false:true;
-                            RequestUtil.post(`/tower-hr/employeeDeparture/handleSave`, value).then(()=>{
-                                message.success('保存成功')
-                                history.push(`/employeeRelation/quitProcedures`)
-                            })
+                            }),
+                            isRemoveContract: value.isRemoveContract === 1?false:true,
+                            isTransactProcedure: value.isTransactProcedure === 1?false:true
+                        }
+                        RequestUtil.post(`/tower-hr/employeeDeparture/handleSave`,postValue).then(()=>{
+                            message.success('保存成功')
+                            history.push(`/employeeRelation/quitProcedures`)
                         })
                         
                     }}>保存</Button>
-                    <Button type="primary" onClick={() => {
-                        form.validateFields().then(res=>{
-                            const value= form.getFieldsValue(true);
-                            value.transactDate= moment(value.transactDate).format('YYYY-MM-DD');
-                            value.employeeId = detailData.employeeId;
-                            value.id = params.id;
-                            value.handleType='submit';
-                            value.isProcessingCompleted = true;
-                            value.fileVos= attachRef.current?.getDataSource();
-                            value.isRemoveContract =  value.isRemoveContract === 1?false:true;
-                            value.isTransactProcedure =  value.isTransactProcedure === 1?false:true;
-                            RequestUtil.post(`/tower-hr/employeeDeparture/handleSave`, value).then(()=>{
-                                message.success('办理完成！')
-                                history.push(`/employeeRelation/quitProcedures`)
-                            })
+                    <Button type="primary" onClick={async () => {
+                        await form.validateFields();
+                        const value= form.getFieldsValue(true);
+                        const postValue = {
+                            ...value,
+                            id : params.id,
+                            employeeId: detailData.employeeId,
+                            transactDate: value.transactDate?moment(value.transactDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            handleType: 'submit',
+                            isProcessingCompleted: false,
+                            fileIds: attachRef.current?.getDataSource().map((item:any)=>{
+                                return item.id
+                            }),
+                            fileVos: attachRef.current?.getDataSource(),
+                            isRemoveContract: value.isRemoveContract === 1?false:true,
+                            isTransactProcedure: value.isTransactProcedure === 1?false:true
+                        }
+                        RequestUtil.post(`/tower-hr/employeeDeparture/handleSave`, postValue).then(()=>{
+                            message.success('办理完成！')
+                            history.push(`/employeeRelation/quitProcedures`)
                         })
                     }}>保存并办理完成</Button>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
@@ -105,7 +112,7 @@ export default function QuitProceduresOperation(): React.ReactNode {
                             required:true, 
                             message:'请选择办理日期'
                         }]} name='transactDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}/>
+                            <DatePicker  style={{ width: '100%' }}/>
                         </Form.Item>
                     </Col>
                 </Row>
