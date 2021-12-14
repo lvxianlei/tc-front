@@ -74,6 +74,15 @@ export default abstract class AuthUtil {
     public static getTenantName(): string {
         return Cookies.get(TENANT_NAME) || ''
     }
+
+    /**
+     * @static
+     * @description remove tenant name
+     * @returns tenant name 
+     */
+     public static removeTenantName(): void {
+        Cookies.remove(TENANT_NAME)
+    }
     
     /**
      * @static
@@ -118,7 +127,8 @@ export default abstract class AuthUtil {
      * @param [options] 
      */
     public static removeSinzetechAuth(): void {
-        Cookies.remove(TOKEN_KEY);
+        sessionStorage.removeItem(TOKEN_KEY);
+        sessionStorage.removeItem(REFRENSH_TOKEN);
     }
 
     /**

@@ -89,6 +89,7 @@ export default forwardRef(function ({
     const [uploadOSSUrlInfo, setUploadOSSUrlInfo] = useState<URLProps>({
         pushUrl: "http://www."
     })
+    const [uploadOSSUrlList, setUploadOSSUrlList] = useState<any>([])
     const [picUrl, setPicUrl] = useState<string>()
     const { run: saveFile } = useRequest<URLProps>((data: any) => new Promise(async (resole, reject) => {
         try {
@@ -100,6 +101,8 @@ export default forwardRef(function ({
     }), { manual: true })
 
     useEffect(() => setAttachs(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || []), [JSON.stringify(dataSource)])
+
+    useEffect(() => setUploadOSSUrlList([...uploadOSSUrlList]), [JSON.stringify(uploadOSSUrlList)])
 
     const deleteAttachData = useCallback((uid: string) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== uid : item.id !== uid)), [setAttachs, attchs])
 
@@ -115,6 +118,10 @@ export default forwardRef(function ({
                 fileSize: event.size
             })
             setUploadOSSUrlInfo(result)
+            if(multiple) {
+                uploadOSSUrlList.push(result)
+                setUploadOSSUrlList([...uploadOSSUrlList])
+            }
             resove(true)
         } catch (error) {
             reject(false)
@@ -139,15 +146,31 @@ export default forwardRef(function ({
                     }
                     return item
                 }))
-                onDoneChange([{
-                    id: uploadOSSUrlInfo?.id || "",
-                    uid: event.file.uid,
-                    filePath: uploadOSSUrlInfo?.downloadUrl || "",
-                    originalName: uploadOSSUrlInfo?.originalName || "",
-                    fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
-                    fileSize: uploadOSSUrlInfo?.fileSize || "",
-                    downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
-                }])
+                if(multiple) {
+                    const list = uploadOSSUrlList.map((res: any) => {
+                        return {
+                                id: res?.id || "",
+                                uid: event.file.uid,
+                                filePath: res?.downloadUrl || "",
+                                originalName: res?.originalName || "",
+                                fileSuffix: res?.fileSuffix || "",
+                                fileSize: res?.fileSize || "",
+                                downloadUrl: res?.downloadUrl || ""
+                            }
+                    })
+                    onDoneChange([...list])
+                } else {
+                    onDoneChange([{
+                        id: uploadOSSUrlInfo?.id || "",
+                        uid: event.file.uid,
+                        filePath: uploadOSSUrlInfo?.downloadUrl || "",
+                        originalName: uploadOSSUrlInfo?.originalName || "",
+                        fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
+                        fileSize: uploadOSSUrlInfo?.fileSize || "",
+                        downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
+                    }])
+                }
+                
             }
         }
     }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo])

@@ -2,13 +2,14 @@
 import React, { Key, useRef, useState } from 'react'
 import { Input, Select, Button, Modal, message } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../common'
+import { Page } from '../../common'
 import { supplierMngt } from "./supplier.json"
-import ApplicationContext from "../../configuration/ApplicationContext"
+import ApplicationContext from "../../../configuration/ApplicationContext"
 import Edit from "./Edit"
 import Overview from "./Overview"
-import RequestUtil from '../../utils/RequestUtil'
+import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
+import { qualityAssuranceOptions, supplierTypeOptions, supplyProductsOptions } from '../../../configuration/DictionaryOptions'
 export default function SupplierMngt(): React.ReactNode {
     const history = useHistory()
     const [editVisible, setEditVisible] = useState<boolean>(false)
@@ -16,9 +17,9 @@ export default function SupplierMngt(): React.ReactNode {
     const [overviewVisible, setOverviewVisible] = useState<boolean>(false)
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const editRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
-    const supplierTypeEnum = (ApplicationContext.get().dictionaryOption as any)["144"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const qualityAssuranceEnum = (ApplicationContext.get().dictionaryOption as any)["145"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const invoiceTypeEnum2 = (ApplicationContext.get().dictionaryOption as any)["148"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const supplierTypeEnum = supplierTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const invoiceTypeEnum2 = supplyProductsOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/supplier?supplierId=${id}`)
@@ -135,7 +136,7 @@ export default function SupplierMngt(): React.ReactNode {
                     label: '供应商类型',
                     children: <Select style={{ width: "150px" }} defaultValue="请选择">
                         {
-                            supplierTypeEnum.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, index: string | number | undefined) => {
+                            supplierTypeEnum?.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, index: string | number | undefined) => {
                                 return <Select.Option value={item.value} key={index}>{item.label}</Select.Option>
                             })
                         }
@@ -146,7 +147,7 @@ export default function SupplierMngt(): React.ReactNode {
                     label: '供货产品',
                     children: <Select style={{ width: "150px" }} defaultValue="请选择">
                         {
-                            invoiceTypeEnum2.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, index: string | number | undefined) => {
+                            invoiceTypeEnum2?.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, index: string | number | undefined) => {
                                 return <Select.Option value={item.value} key={index}>{item.label}</Select.Option>
                             })
                         }
@@ -157,7 +158,7 @@ export default function SupplierMngt(): React.ReactNode {
                     label: '质量保证体系',
                     children: <Select style={{ width: "150px" }} defaultValue="请选择">
                         {
-                            qualityAssuranceEnum.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, index: string | number | undefined) => {
+                            qualityAssuranceEnum?.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, index: string | number | undefined) => {
                                 return <Select.Option value={item.value} key={index}>{item.label}</Select.Option>
                             })
                         }

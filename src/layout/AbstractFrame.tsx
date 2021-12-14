@@ -112,6 +112,7 @@ export default abstract class AbstractFrame<
         AuthUtil.removeSinzetechAuth();
         AuthUtil.removeRealName();
         AuthUtil.removeUserId();
+        AuthUtil.removeTenantName();
         window.location.pathname = '/login';
     };
 

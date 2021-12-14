@@ -8,6 +8,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
 import ApplicationContext from "../../../configuration/ApplicationContext"
+import { changeTwoDecimal_f } from '../../../utils/KeepDecimals';
 export default function FrameAgreementEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
@@ -62,6 +63,26 @@ export default function FrameAgreementEdit(): JSX.Element {
         }
     }
 
+    // 基本信息修改触发
+    const handleBaseInfoChange = (fields: any) => {
+        // 预估总重存在
+        if (fields.contractWeight) {
+            // 执行重量百分比 = 执行重量 / 预估重量 * 100%   保留两位小数
+            const result = ((baseInfoForm.getFieldValue("implementWeight") * 1 || 0) / fields.contractWeight) * 100;
+            baseInfoForm.setFieldsValue({
+                implementWeightPro: changeTwoDecimal_f(result + "")
+            })
+        }
+        // 预估总价存在
+        if (fields.contractMoneyCount) {
+            // 执行金额百分比 = 执行金额 / 预估总价 * 100%   保留两位小数
+            const result = ((baseInfoForm.getFieldValue("implementMoney") * 1 || 0) / fields.contractMoneyCount) * 100;
+            baseInfoForm.setFieldsValue({
+                implementMoneyPro: changeTwoDecimal_f(result + "")
+            })
+        }
+    }
+
     return <>
         <ManagementDetailTabsTitle />
         <DetailContent operation={[
@@ -76,7 +97,22 @@ export default function FrameAgreementEdit(): JSX.Element {
                         type: "select",
                         enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name }))
                     }) : item)}
-                    dataSource={data || {}} edit />
+                    dataSource={
+                        {   ...data,
+                            implementWeight: data?.implementWeight ? changeTwoDecimal_f(data?.implementWeight) : "0.00000000",
+                            implementMoney: data?.implementMoney ? changeTwoDecimal_f(data?.implementMoney) : "0.00",
+                            implementWeightPro: data?.implementWeightPro ? data?.implementWeightPro : "0.00",
+                            implementMoneyPro: data?.implementMoneyPro ? data?.implementMoneyPro : "0.00",
+                        }
+                        || {
+                                implementWeight: "0.00000000",
+                                implementMoney: "0.00",
+                                implementWeightPro: "0.00",
+                                implementMoneyPro: "0.00"
+                            }
+                    } edit
+                    onChange={handleBaseInfoChange}
+                />
                 <DetailTitle title="合同物资清单" />
                 <EditTable form={cargoDtoForm} columns={materialListColumns} dataSource={data?.contractCargoVos} />
                 <DetailTitle title="系统信息" />

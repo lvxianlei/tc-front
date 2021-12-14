@@ -572,6 +572,10 @@
     ],
     "billingHeader": [
         {
+            "title": "产品名称(票面)",
+            "dataIndex": "productName"
+        },
+        {
             "title": "生产名称(实际)",
             "dataIndex": "devName"
         },

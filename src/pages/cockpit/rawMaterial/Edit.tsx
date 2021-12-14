@@ -1,12 +1,20 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react"
-import { Spin, Button, Modal, Form, message } from "antd"
+import { Spin, Button, Modal, Form, message, Input } from "antd"
 import { materialInfo, priceInfo } from "./rawMaterial.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { BaseInfo, DetailTitle, PopTableContent } from "../../common"
+import ApplicationContext from "../../../configuration/ApplicationContext"
+import { PopTable } from './LayerModal';
+
+interface priceSourceEnumData {
+    label: string
+    value: string
+}
 interface EditProps {
     id: string
-    type: "new" | "edit"
+    type: "new" | "edit",
+    priceSourceEnum: {[key: string]: any} | undefined
 }
 
 const materialList = {
@@ -60,25 +68,36 @@ const materialList = {
     ]
 }
 
-export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Element {
+export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps, ref): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [popContent, setPopContent] = useState<{ id: string, records: any }>({ id: "", records: {} })
     const [materialForm] = Form.useForm()
-    const [priceInfoForm] = Form.useForm()
-    const { data: priceSourceEnum } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/list`)
-            resove(result.map((item: any) => ({ label: item.supplierName, value: item.id })))
-        } catch (error) {
-            reject(error)
-        }
+    const [priceInfoForm] = Form.useForm();
+    // 原材料标准
+    const materialStandard = (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+    // 原材料材质
+    const materialCategoryName = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
     }))
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/${id}`);
+            console.log(result, "dddddd")
+            // 根据价格来源去查询价格来源的id
+            const priceSource = priceSourceEnum && priceSourceEnum?.filter((item: any) => item.label === result.priceSource);
+            console.log(priceSource, priceSourceEnum, result.priceSource)
             materialForm.setFieldsValue(result)
-            priceInfoForm.setFieldsValue(result)
+            priceInfoForm.setFieldsValue(
+                {
+                    ...result,
+                    priceSource: priceSource ? priceSource[0].value : ""
+                }
+            )
             setPopContent({ id: result.id, records: result })
             resove(result)
         } catch (error) {
@@ -100,7 +119,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             materialName: popContent.records.materialName,
             materialSpec: popContent.records.structureSpec,
             materialCategoryName: popContent.records.materialCategoryName,
-            materialStandardName: popContent.records.standardName
+            materialStandard: popContent.records.standardName
         })
         setVisible(false)
     }
@@ -109,19 +128,28 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     }
 
     const onSubmit = async () => new Promise(async (resove, reject) => {
-        if (!popContent.id) {
-            message.warning("请先选择原材料...")
-            return
-        }
         const materialData = await materialForm.validateFields()
         const priceInfoData = await priceInfoForm.validateFields()
+        console.log("priceInfoData", priceInfoData)
+        const materialStandardName = materialStandard.filter((item: any) => item.value === materialData.materialStandard),
+           structureTexture = materialCategoryName.filter((item: any) => item.value === materialData.structureTextureId),
+           priceSource = priceSourceEnum && priceSourceEnum?.filter((item: any) => item.value === priceInfoData.priceSource);
+           console.log(priceSource, "priceSource", priceSourceEnum, 'id', priceInfoData.priceSource)
         try {
             await saveRun({
-                ...materialData,
-                ...priceInfoData,
-                materialId: popContent?.records.id || popContent?.records.materialId,
-                materialCategoryId: popContent?.records.materialCategory || popContent?.records.materialCategoryId,
-                materialStandard: popContent?.records.standard || popContent?.records.materialStandard
+                // id:  popContent?.records.id || popContent?.records.id,
+                materialCategoryId: popContent?.records.materialType || popContent?.records.materialType, // 列表没有
+                materialCategoryName: materialData.materialCategoryName, // 原材料类型名称
+                materialId: popContent?.records.id || popContent?.records.materialId, // 原材料id
+                materialName: materialData.materialName.value, // 原材料名称
+                materialStandard: materialData.materialStandard, // 原材料标准id
+                materialStandardName: materialStandardName ? materialStandardName[0].label : "", // 原材料标准名称
+                price: priceInfoData.price, // 原材料价格
+                priceSource: (priceSource && priceSource.length > 0) ? priceSource[0].label : priceInfoData.priceSource, // 价格来源
+                quotationTime: priceInfoData.quotationTime, // 报价时间
+                materialSpec: materialData.materialSpec, // 原材料规格
+                structureTexture: structureTexture ? structureTexture[0].label : "", // 原材料材质
+                structureTextureId: materialData.structureTextureId, // 原材料材质id
             })
             resove(true)
         } catch (error) {
@@ -131,19 +159,72 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     useImperativeHandle(ref, () => ({ onSubmit, loading: saveLoading }), [onSubmit, saveLoading])
 
+    // 选择原材料名称后的回调处理
+    const handleChangeName = (fields: { [key: string]: any}) => {
+        console.log(fields.materialName, 'fields')
+        if (fields.materialName) {
+            materialForm.setFieldsValue({
+                // purchasePlanCode: fields.records[0].materialName, // 原材料名称
+                materialSpec: fields.materialName.records[0].structureSpec, // 原材料规格
+                materialCategoryName: fields.materialName.records[0].materialCategoryName, // 原材料类型
+            })
+            setPopContent({ id: fields.id, records: fields.materialName.records[0] })
+        }
+    }
+    const handleTest =  async (fields: any) => {
+        console.log(fields, 'fields')
+        if (fields.materialName) {
+            materialForm.setFieldsValue({
+                purchasePlanCode: fields.records[0].materialName, // 原材料名称
+                materialSpec: fields.records[0].structureSpec, // 原材料规格
+                materialCategoryName: fields.records[0].materialCategoryName, // 原材料类型
+            })
+        }
+      }
+
     return <Spin spinning={loading}>
-        <Modal width={1011} title="选择" destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
+        {/* <Modal width={1011} title="选择" destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={materialList as any} onChange={handleChange} />
         </Modal>
         <DetailTitle title="原材料信息" operation={[
             <Button disabled={type === "edit"} type="primary" ghost key="choose" onClick={() => setVisible(true)}>选择</Button>
-        ]} />
-        <BaseInfo form={materialForm} col={3} columns={materialInfo} dataSource={data || {}} edit />
+        ]} /> */}
+        <BaseInfo form={materialForm} onChange={handleChangeName}  col={2} columns={[
+            ...materialInfo.map((item: any) => {
+                if(item.dataIndex === "materialName") {
+                    return (
+                        {
+                            ...item,
+                            render(data: any, props: any) {
+                                return <PopTable data={data} {...props} />
+                            }
+                        }
+                    )
+                }
+                if (item.dataIndex === "materialStandard") {
+                    return (
+                        {
+                            ...item,
+                            enum: materialStandard
+                        }
+                    )
+                }
+                if (item.dataIndex === "structureTextureId") {
+                    return (
+                        {
+                            ...item,
+                            enum: materialCategoryName
+                        }
+                    )
+                }
+                return item;
+            })
+        ]} dataSource={data || {}} edit />
         <DetailTitle title="价格信息" />
         <BaseInfo form={priceInfoForm} col={3} columns={priceInfo.map((item: any) => {
             if (item.dataIndex === "priceSource") {
                 return ({ ...item, type: "select", enum: priceSourceEnum })
-            }
+            }   
             return item
         })} dataSource={data || {}} edit />
     </Spin>

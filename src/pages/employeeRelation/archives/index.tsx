@@ -3,6 +3,7 @@ import { Input, Button, DatePicker, Select } from 'antd'
 import { Link, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import { archives } from "./archives.json"
+import { employeeTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function ArchivesList(): React.ReactNode {
     const params = useParams<{ id: string, status: string, materialLeader: string }>();
     const [filterValue, setFilterValue] = useState({});
@@ -12,6 +13,9 @@ export default function ArchivesList(): React.ReactNode {
             value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
             value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.statusUpdateTime
+        }
+        if (value.postName) {
+            value.postName = value.postName.join(",")
         }
         setFilterValue(value)
         return value
@@ -35,7 +39,7 @@ export default function ArchivesList(): React.ReactNode {
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>
                             <Button type="link" size="small"><Link to={`/employeeRelation/archives/detail/${record.id}`}>查看</Link></Button>
-                            <Button type="link" size="small"><Link to={`/employeeRelation/archives/edit/${record.id}`}>编辑</Link></Button>
+                            <Button disabled={record?.employeeStatus === 2} type="link" size="small"><Link to={`/employeeRelation/archives/edit/${record.id}`}>编辑</Link></Button>
                         </>
                     )
                 }
@@ -45,14 +49,14 @@ export default function ArchivesList(): React.ReactNode {
             requestData={{ productCategory: params.id }}
             searchFormItems={[
                 {
-                    name: 'fuzzyMsg',
+                    name: 'keyword',
                     label: '模糊查询项',
                     children: <Input placeholder="请输入员工姓名/电话/身份证号" maxLength={200} />
                 },
                 {
                     name: 'employeeNature',
                     label: '员工性质',
-                    children: <Select style={{ width: 100 }}>
+                    children: <Select style={{ width: 150 }}>
                         <Select.Option value={1}>正式员工</Select.Option>
                         <Select.Option value={2}>短期派遣员工</Select.Option>
                         <Select.Option value={3}>超龄员工</Select.Option>
@@ -62,7 +66,11 @@ export default function ArchivesList(): React.ReactNode {
                 {
                     name: 'postName',
                     label: '员工分组',
-                    children: <Input placeholder="请输入员工姓名/电话/身份证号进行查询" maxLength={200} />
+                    children: <Select mode="multiple" style={{ width: 200 }} maxTagCount={3}>
+                        {
+                            employeeTypeOptions?.map(item => <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>)
+                        }
+                    </Select>
                 },
                 {
                     name: 'statusUpdateTime',

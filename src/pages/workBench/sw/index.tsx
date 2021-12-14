@@ -7,27 +7,40 @@ import { swWork } from "./sw.json"
 import { CheckCircleOutlined, RightOutlined, SoundOutlined } from '@ant-design/icons'
 import useRequest from '@ahooksjs/use-request'
 import { Spin, Table } from 'antd'
+import Line from '../rd/Line'
+import ApplicationContext from '../../../configuration/ApplicationContext'
+import { Link } from 'react-router-dom'
 export default function SWWorkBench(): React.ReactNode {
+    const authorities = ApplicationContext.get().authorities
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         const data: { [key: string]: any } = await RequestUtil.get(`/tower-supply/workbench/getWorkbenchData`);
         resole(data)
     }))
-    {/* <div className={item.col !== 2 ? styles.content : styles.content2} > */ }
-    // <p ><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
-    {/* <p className={styles.total}>2</p> */ }
-    {/* <div className={styles.draw}><Line keyIndex={dataIndex + '_' + index} valueList={[Math.ceil(Math.random() * 80), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 150), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 90), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)]} /></div> */ }
-    {/* </div> */ }
-    console.log(data)
     return <Spin spinning={loading}>
         <div className={styles.all}>
             <div className={styles.left}>
                 {swWork.map((item: any, ind: number) => <div key={ind} className={item.col !== 2 ? styles.border : styles.border2}>
                     <DetailTitle title={item.title}></DetailTitle>
-                    {item.dataIndex}
-                    <div>{data?.[item.dataIndex].workbenchItemVos.map((workbenchItem: any) => {
-
+                    {item.workbenchItemVos?.filter((itemVos: any) => authorities?.includes(itemVos.authority)).map((workbenchItem: any, index: number) => {
+                        return <div key={index} className={item.col !== 2 ? styles.content : styles.content2}>
+                            <Link to={workbenchItem.path}>
+                                <p><CheckCircleOutlined />{workbenchItem.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
+                                <p className={styles.total}>{data?.[item.dataIndex]?.num || 0}</p>
+                                <div className={styles.draw}>
+                                    <Line keyIndex={`${ind}${index}`}
+                                        valueList={[
+                                            Math.ceil(Math.random() * 80),
+                                            Math.ceil(Math.random() * 100),
+                                            Math.ceil(Math.random() * 150),
+                                            Math.ceil(Math.random() * 100),
+                                            Math.ceil(Math.random() * 90),
+                                            Math.ceil(Math.random() * 100),
+                                            Math.ceil(Math.random() * 100)
+                                        ]} />
+                                </div>
+                            </Link>
+                        </div>
                     })}
-                    </div>
                 </div>)}
             </div>
             <div className={styles.right}>

@@ -61,20 +61,21 @@ export default function Edit() {
             const postBaseInfoData = await baseForm.validateFields()
             const postInsuranceData = await insuranceForm.validateFields()
             const postBusiness = await businessForm.validateFields()
-            const businessList = Object.keys(postBusiness).map(item => ({
+            const businessList = Object.keys(postBusiness).map((item: any) => ({
+                ...businessData[item],
                 ...postBusiness[item],
-                startMonth: postBusiness[item].startMonth + " 00:00:00",
-                endMonth: postBusiness[item].endMonth && (postBusiness[item].endMonth + " 23:59:59")
+                startMonth: (postBusiness[item].startMonth) && (postBusiness[item].startMonth),
+                endMonth: postBusiness[item].endMonth && (postBusiness[item].endMonth)
             }))
             await saveRun({
                 ...postBaseInfoData,
                 ...postInsuranceData,
                 insurancePlanId: postInsuranceData.insurancePlanName.id,
                 insurancePlanName: postInsuranceData.insurancePlanName.value,
-                ssStartMonth: postInsuranceData.ssStartMonth && (postInsuranceData.ssStartMonth + " 00:00:00"),
-                ssEndMonth: postInsuranceData.ssEndMonth && (postInsuranceData.ssEndMonth + " 23:59:59"),
-                pfaStartMonth: postInsuranceData.pfaStartMonth && (postInsuranceData.pfaStartMonth + " 00:00:00"),
-                pfaEndMonth: postInsuranceData.pfaEndMonth && (postInsuranceData.pfaEndMonth + " 23:59:59"),
+                ssStartMonth: postInsuranceData.ssStartMonth && (postInsuranceData.ssStartMonth),
+                ssEndMonth: postInsuranceData.ssEndMonth && (postInsuranceData.ssEndMonth),
+                pfaStartMonth: postInsuranceData.pfaStartMonth && (postInsuranceData.pfaStartMonth),
+                pfaEndMonth: postInsuranceData.pfaEndMonth && (postInsuranceData.pfaEndMonth),
                 businesss: businessList
             })
             message.success("保存成功...")
@@ -99,48 +100,51 @@ export default function Edit() {
             <DetailTitle title="员工保险档案" />
             <BaseInfo columns={setting} form={baseForm} dataSource={data || {}} edit />
             <DetailTitle title="社保公积金" />
-            <BaseInfo form={insuranceForm} onChange={handleInsuranceChange} columns={insurance.map(item => {
-                switch (item.dataIndex) {
-                    case "ssEndMonth":
-                        return ({
-                            ...item,
-                            rules: [{
-                                validator: (rule: RuleObject, value: string) => new Promise((resove, reject) => {
-                                    const allFields = insuranceForm.getFieldsValue()
-                                    if (value && allFields.ssStartMonth) {
-                                        if (moment(value).isBefore(moment(allFields.ssStartMonth))) {
-                                            reject('社保结束缴纳月必须在社保开始缴纳月之后...')
+            <BaseInfo
+                form={insuranceForm}
+                onChange={handleInsuranceChange}
+                columns={insurance.map(item => {
+                    switch (item.dataIndex) {
+                        case "ssEndMonth":
+                            return ({
+                                ...item,
+                                rules: [{
+                                    validator: (rule: RuleObject, value: string) => new Promise((resove, reject) => {
+                                        const allFields = insuranceForm.getFieldsValue()
+                                        if (value && allFields.ssStartMonth) {
+                                            if (moment(value).isBefore(moment(allFields.ssStartMonth))) {
+                                                reject('社保结束缴纳月必须在社保开始缴纳月之后...')
+                                            } else {
+                                                resove(value)
+                                            }
                                         } else {
                                             resove(value)
                                         }
-                                    } else {
-                                        resove(value)
-                                    }
-                                })
-                            }]
-                        })
-                    case "pfaEndMonth":
-                        return ({
-                            ...item,
-                            rules: [{
-                                validator: (rule: RuleObject, value: string) => new Promise((resove, reject) => {
-                                    const allFields = insuranceForm.getFieldsValue()
-                                    if (value && allFields.ssStartMonth) {
-                                        if (moment(value).isBefore(moment(allFields.pfaStartMonth))) {
-                                            reject('公积金结束缴纳月必须在公积金开始缴纳月之后...')
+                                    })
+                                }]
+                            })
+                        case "pfaEndMonth":
+                            return ({
+                                ...item,
+                                rules: [{
+                                    validator: (rule: RuleObject, value: string) => new Promise((resove, reject) => {
+                                        const allFields = insuranceForm.getFieldsValue()
+                                        if (value && allFields.ssStartMonth) {
+                                            if (moment(value).isBefore(moment(allFields.pfaStartMonth))) {
+                                                reject('公积金结束缴纳月必须在公积金开始缴纳月之后...')
+                                            } else {
+                                                resove(value)
+                                            }
                                         } else {
                                             resove(value)
                                         }
-                                    } else {
-                                        resove(value)
-                                    }
-                                })
-                            }]
-                        })
-                    default:
-                        return item
-                }
-            })} dataSource={data || {}} edit />
+                                    })
+                                }]
+                            })
+                        default:
+                            return item
+                    }
+                })} dataSource={data || {}} edit />
             <DetailTitle title="商业保险方案" />
             <Form form={businessForm}>
                 <CommonTable
@@ -159,33 +163,17 @@ export default function Edit() {
                                 return ({
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
-                                        <InputNumber value={value} />
+                                        <InputNumber value={value} precision={2} />
                                     </Form.Item>
                                 })
                             case "commercialInsuranceType":
-                                return ({
-                                    ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
-                                        <Select value={value}>
-                                            <Select.Option value={1}>补充医疗保险</Select.Option>
-                                            <Select.Option value={2}>雇主责任险</Select.Option>
-                                            <Select.Option value={3}>意外伤害险</Select.Option>
-                                            <Select.Option value={4}>团体责任险</Select.Option>
-                                            <Select.Option value={5}>重大疾病险</Select.Option>
-                                            <Select.Option value={6}>其他</Select.Option>
-                                        </Select>
-                                    </Form.Item>
-                                })
+                                return item
+                            case "commercialInsuranceName":
+                                return item
                             case "startMonth":
                                 return ({
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
-                                        {/* <DatePicker
-                                            style={{ width: "100%" }}
-                                            value={value ? moment(value) : null}
-                                            format="YYYY-MM-DD"
-                                            onChange={(value) => value?.format("YYYY-MM-DD")}
-                                        /> */}
                                         <FormItemType data={item} type="date" />
                                     </Form.Item>
                                 })
@@ -206,12 +194,6 @@ export default function Edit() {
                                             }
                                         })
                                     }]} name={[index, item.dataIndex]}>
-                                        {/* <DatePicker
-                                            style={{ width: "100%" }}
-                                            value={value ? moment(value) : null}
-                                            format="YYYY-MM-DD"
-                                            onChange={(value) => value?.format("YYYY-MM-DD")}
-                                        /> */}
                                         <FormItemType data={item} type="date" />
                                     </Form.Item>
                                 })

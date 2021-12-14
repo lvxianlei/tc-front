@@ -160,7 +160,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
                 <div className="search_item">
-                    <span className="tip">申请人：</span>
+                    <span className="tip">出库人：</span>
                     <div className='selectOrInput'>
                         <Select
                             className="select"

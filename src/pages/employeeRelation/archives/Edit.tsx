@@ -53,7 +53,8 @@ export default function Edit() {
     const [baseInfoColumns, setBaseInfoColumns] = useState<Object[]>(baseInfo)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`${tabPaths[currentType]}?employeeId=${params.archiveId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`${tabPaths[currentType]}?employeeId=${params.archiveId}`);
+            (currentType === "baseInfo" && result?.isDisability) && setBaseInfoColumns([...baseInfo, ...disabilityCols])
             resole(currentType === "baseInfo" ? {
                 ...result,
                 postType: result?.postType?.split(",")
@@ -85,6 +86,8 @@ export default function Edit() {
                             ...postCompanyData,
                             ...postOtherData,
                             id: params.archiveId,
+                            inductionDate: postCompanyData.inductionDate && (postCompanyData.inductionDate + " 00:00:00"),
+                            positiveDate: postCompanyData.positiveDate && (postCompanyData.positiveDate + " 00:00:00"),
                             fileIds: attchRef.current?.getDataSource().map(item => item.id),
                             postType: postCompanyData.postType.join(","),
                             birthday: postBaseData.birthday && (postBaseData.birthday + " 00:00:00"),
@@ -92,7 +95,7 @@ export default function Edit() {
                             cardValidityDate: postBaseData.cardValidityDate && (postBaseData.cardValidityDate + " 00:00:00"),
                         })
                         message.success("保存成功...")
-                        history.go(-1)
+                        history.goBack()
                     }
                     break
                 case "work":
@@ -109,7 +112,7 @@ export default function Edit() {
                             return postItem
                         }))
                         message.success("保存成功...")
-                        history.go(-1)
+                        history.goBack()
                     }
                     break
                 case "family":
@@ -124,7 +127,7 @@ export default function Edit() {
                             return postItem
                         }))
                         message.success("保存成功...")
-                        history.go(-1)
+                        history.goBack()
                     }
                     break
                 case "employee":
@@ -139,7 +142,7 @@ export default function Edit() {
                             return postItem
                         }))
                         message.success("保存成功...")
-                        history.go(-1)
+                        history.goBack()
                     }
                     break
                 default:
@@ -183,9 +186,10 @@ export default function Edit() {
                                 }))
                             })
                         }
-                        if (item.dataIndex === "emergencyContactPhone") {
+                        if (["emergencyContactPhone", "phoneNumber"].includes(item.dataIndex)) {
                             return ({
-                                ...item, rules: [...item.rules, {
+                                ...item,
+                                rules: [...item.rules, {
                                     pattern: /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
                                     message: "紧急联系电话不合法"
                                 }]

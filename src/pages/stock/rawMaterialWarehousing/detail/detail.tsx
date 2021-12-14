@@ -35,6 +35,9 @@ export default function RawMaterialStock(): React.ReactNode {
     const [receivePrice, setReceivePrice] = useState('');//展示条 已收货合计价格
     const [waitWeight, setWaitWeight] = useState('');//展示条 待收货：重量
     const [waitPrice, setwaitPrice] = useState('');//展示条 待收货：价格
+    const [batchNumber, setBatchNumber] = useState(""); // 批号
+    const [warrantyNumber, setWarrantyNumber] = useState(""); // 质保书号
+    const [rollingNumber, setRollingNumber] = useState(""); // 轧制批号	
     const columns = [
         {
             title: '序号',
@@ -100,9 +103,25 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         }, {
             title: '炉批号',
-            dataIndex: 'furnaceBatchNo',
+            dataIndex: 'furnaceBatchNumber',
             width: 120,
-        }, {
+        },
+        {
+            title: '批号',
+            dataIndex: 'batchNumber',
+            width: 120,
+        },
+        {
+            title: '质保书号',
+            dataIndex: 'warrantyNumber',
+            width: 120,
+        },
+        {
+            title: '轧制批号',
+            dataIndex: 'rollingNumber',
+            width: 120,
+        },
+        {
             title: '仓库',
             dataIndex: 'warehouse',
             width: 120,
@@ -121,6 +140,11 @@ export default function RawMaterialStock(): React.ReactNode {
         }, {
             title: '备注',
             dataIndex: 'remark',
+            width: 120,
+        },
+        {
+            title: '拒收原因',
+            dataIndex: 'refuseDes',
             width: 120,
         },
         {
@@ -227,14 +251,29 @@ export default function RawMaterialStock(): React.ReactNode {
             message.error('请输入炉批号')
             return
         }
-        const data: any = await RequestUtil.post(`/tower-storage/receiveStock`, {
+        if (!batchNumber) {
+            message.error('请输入批号')
+            return
+        }
+        if (!warrantyNumber) {
+            message.error('请输入质保书号')
+            return
+        }
+        if (!rollingNumber) {
+            message.error('轧制批号')
+            return
+        }
+        const data: any = await RequestUtil.post(`/tower-storage/receiveStock/batchSaveReceiveStock`, [{
             id: ListID,
             furnaceBatchNumber: furnaceBatchNo,
             receiveStatus: 1,
             locatorId: locatorId,
             reservoirId: reservoirId,
-            warehouseId: warehouseId
-        });
+            warehouseId: warehouseId,
+            batchNumber,
+            warrantyNumber,
+            rollingNumber
+        }]);
         if (data) {
             onReceivingCancel()
             loadData()
@@ -419,7 +458,6 @@ export default function RawMaterialStock(): React.ReactNode {
                     rows={4}
                     maxLength={200}
                     onChange={(e) => {
-                        console.log(e.target.value)
                         setRejectionText(e.target.value)
                     }}
                     onPressEnter={() => {
@@ -497,6 +535,32 @@ export default function RawMaterialStock(): React.ReactNode {
                                 </Select>
                             </div>
                         </div>
+                        <div className="item">
+                            <div className='tip'>质保书号<span>*</span></div>
+                            <div className='info'>
+                                <Input
+                                    placeholder='请输入'
+                                    value={warrantyNumber}
+                                    maxLength={30}
+                                    onChange={(e) => {
+                                        setWarrantyNumber(e.target.value.replace(/[\u4E00-\u9FA5]/g, ''))
+                                    }}
+                                ></Input>
+                            </div>
+                        </div>
+                        <div className="item">
+                            <div className='tip'>轧制批号<span>*</span></div>
+                            <div className='info'>
+                                <Input
+                                    placeholder='请输入'
+                                    value={rollingNumber}
+                                    maxLength={30}
+                                    onChange={(e) => {
+                                        setRollingNumber(e.target.value.replace(/[\u4E00-\u9FA5]/g, ''))
+                                    }}
+                                ></Input>
+                            </div>
+                        </div>
                     </div>
                     <div className="part">
                         <div className="item">
@@ -535,6 +599,19 @@ export default function RawMaterialStock(): React.ReactNode {
                                     maxLength={30}
                                     onChange={(e) => {
                                         setFurnaceBatchNo(e.target.value.replace(/[\u4E00-\u9FA5]/g, ''))
+                                    }}
+                                ></Input>
+                            </div>
+                        </div>
+                        <div className="item">
+                            <div className='tip'>批号<span>*</span></div>
+                            <div className='info'>
+                                <Input
+                                    placeholder='请输入'
+                                    value={batchNumber}
+                                    maxLength={30}
+                                    onChange={(e) => {
+                                        setBatchNumber(e.target.value.replace(/[\u4E00-\u9FA5]/g, ''))
                                     }}
                                 ></Input>
                             </div>

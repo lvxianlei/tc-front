@@ -1,8 +1,18 @@
 {
     "receiveColumns": [
         {
-            "title": "供应商",
-            "dataIndex": "supplierName"
+            "title": "企业类型",
+            "dataIndex": "companyType",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "供应商" },
+                { "value": 2, "label": "运输" },
+                { "value": 3, "label": "装卸" }
+            ]
+        },
+        {
+            "title": "企业名称",
+            "dataIndex": "companyName"
         },
         {
             "title": "收货单编号",
@@ -19,16 +29,6 @@
         },
         {
             "title": "价税合计(元)",
-            "dataIndex": "price",
-            "type": "number"
-        },
-        {
-            "title": "运费(元)",
-            "dataIndex": "freight",
-            "type": "number"
-        },
-        {
-            "title": "货款运费合计(元)",
             "dataIndex": "price",
             "type": "number"
         },

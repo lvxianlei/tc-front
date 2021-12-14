@@ -1,0 +1,108 @@
+{
+    "applicationdetails": [
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "杆塔数",
+            "dataIndex": "productNum",
+            "type": "select",
+            "width": 100
+        },
+        {
+            "title": "原材料任务编号",
+            "dataIndex": "purchasePlanNumber",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "圆钢总重（吨）",
+            "dataIndex": "roundSteelTotal",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "角钢总重（吨）",
+            "dataIndex": "angleSteelTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "钢板总重（吨）",
+            "dataIndex": "steelPlateTotal",
+            "width": 100,
+            "type": "number"
+        }
+    ],
+    "ingredientsColumn": [
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard",
+            "type": "select",
+            "width": 100
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "配料品名",
+            "dataIndex": "materialName",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "搭配长度",
+            "dataIndex": "length",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "搭配数量",
+            "dataIndex": "num",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remarks",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "生产未领料（支）",
+            "dataIndex": "uncollectedMaterial",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "仓库库存（支）",
+            "dataIndex": "warehouseStock",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "在途库存（支）",
+            "dataIndex": "transitStock",
+            "width": 100,
+            "type": "number"
+        }
+    ]
+}
