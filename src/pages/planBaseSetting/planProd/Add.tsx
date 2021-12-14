@@ -7,12 +7,13 @@ import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import moment from 'moment';
 import * as echarts from 'echarts';
+import dayjs from 'dayjs';
 
 export default function RecruitEdit(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, productCategoryId: string, planId: string }>();
     const [form] = Form.useForm();
-    const [value, setValue] = useState<any>();
+    const [value, setValue] = useState<any>([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(6, 'day').format('YYYY-MM-DD'))]);
     const [dates, setDates] = useState<any>([]);
     const [ prodLinkList, setProdLinkList] = useState<any[]>([])
     const [ prodUnitList, setProdUnitList] = useState<any[]>([])
@@ -31,8 +32,8 @@ export default function RecruitEdit(): React.ReactNode {
         if (!dates || dates.length === 0) {
           return false;
         }
-        const tooLate = dates[0] && current.diff(dates[0], 'days') > 7;
-        const tooEarly = dates[1] && dates[1].diff(current, 'days') > 7;
+        const tooLate = dates[0] && current.diff(dates[0], 'days') > 6;
+        const tooEarly = dates[1] && dates[1].diff(current, 'days') > 6;
         return tooEarly || tooLate;
     };
     const detailData: any = data;
@@ -69,7 +70,7 @@ export default function RecruitEdit(): React.ReactNode {
         //     message.error('请选择时间范围')
         //     return
         // }
-        if (!value) {
+        if (!value||value.length===0) {
             message.error('请选择时间范围')
             return
         }
@@ -297,11 +298,12 @@ export default function RecruitEdit(): React.ReactNode {
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label="负荷">
+                        <Form.Item label="查看负荷">
                             <DatePicker.RangePicker
                                 disabledDate={disabledDate}
                                 onCalendarChange={(val: any) => setDates(val)}
                                 value={value}
+                                defaultValue={value}
                                 onChange={(value) => {
                                     setValue(value)
                                 }}

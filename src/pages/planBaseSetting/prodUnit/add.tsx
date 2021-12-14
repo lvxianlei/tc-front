@@ -11,14 +11,14 @@ const ProdUnitAdd = (props: any) => {
     let [prodLinkList, setProdLinkList] = useState<any[]>([])
     let [itemInfo, setItemInfo] = useState<any>({})
     // let [times, setTimes] = useState<string[]>(['', ''])
-    const [value, setValue] = useState<any>([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(7, 'day').format('YYYY-MM-DD'))]);
+    const [value, setValue] = useState<any>([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(6, 'day').format('YYYY-MM-DD'))]);
     const [dates, setDates] = useState<any>([]);
     const disabledDate = (current: any) => {
       if (!dates || dates.length === 0) {
         return false;
       }
-      const tooLate = dates[0] && current.diff(dates[0], 'days') > 7;
-      const tooEarly = dates[1] && dates[1].diff(current, 'days') > 7;
+      const tooLate = dates[0] && current.diff(dates[0], 'days') > 6;
+      const tooEarly = dates[1] && dates[1].diff(current, 'days') > 6;
       return tooEarly || tooLate;
     };
     useEffect(() => {
@@ -98,7 +98,7 @@ const ProdUnitAdd = (props: any) => {
         //     message.error('请选择时间范围')
         //     return
         // }
-        if (!value) {
+        if (!value||value.length===0) {
             message.error('请选择时间范围')
             return
         }
@@ -285,6 +285,7 @@ const ProdUnitAdd = (props: any) => {
                         defaultValue={value}
                         value={value}
                         onChange={(value) => {
+                            console.log(value)
                             setValue(value)
                         }}
                         onOpenChange={(open: boolean) => {
