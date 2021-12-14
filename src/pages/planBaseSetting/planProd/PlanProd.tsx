@@ -91,6 +91,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         gantt.config.drag_resize = false;//拖拽工期
         gantt.config.drag_progress = false;//拖拽进度
         gantt.config.drag_links = false;//通过拖拽的方式新增任务依赖的线条
+        gantt.config.drag_move = false;
         gantt.config.layout = {
           css: "gantt_container",
           cols: [
