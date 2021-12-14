@@ -20,7 +20,16 @@ export default function ({ id }: OverviewProps) {
 
     return <Spin spinning={loading}>
         <DetailTitle title="当前价格信息" />
-        <CommonTable columns={CurrentPriceInformation} dataSource={data?.materialDetails || []} />
+        <CommonTable columns={[
+            {
+                key: 'index',
+                title: '序号',
+                dataIndex: 'index',
+                width: 50,
+                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            },
+            ...CurrentPriceInformation
+        ]} dataSource={data?.materialDetails || []} />
         <Row style={{ backgroundColor: "#f1f1f1", minHeight: 40, padding: 10 }}>{data?.inquirerDescription}</Row>
         <DetailTitle title="附件" />
         <Attachment dataSource={data?.inquirerAttachList || []} />

@@ -6,9 +6,12 @@ import { baseInfo } from "./receivingListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import Edit from "./Edit"
+import Detail from './Detail';
+
 export default function Invoicing() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
+    const [ visibleSee, setVisibleSee ] = useState<boolean>(false);
     const [type, setType] = useState<"new" | "edit">("new")
     const [detailId, setDetailId] = useState<string>("")
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
@@ -81,6 +84,13 @@ export default function Invoicing() {
         }}>
             <Edit ref={editRef} id={detailId} type={type} />
         </Modal>
+        {/* 详情 */}
+        <Detail
+            visible={visibleSee}
+            id={detailId}
+            onCancel={() => setVisibleSee(false)}
+            onOk={() => setVisibleSee(false)}
+        />
         <Page
             path="/tower-storage/receiveStock"
             columns={[{
@@ -97,7 +107,7 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Link to={`/workMngt/receiving/detail/${record.id}`}>详情</Link>
+                        <Link to={`/workMngt/receiving/detail/${record.id}`}>明细</Link>
                         <Button
                             type="link"
                             disabled={record.receiveStatus === 1}
@@ -106,7 +116,11 @@ export default function Invoicing() {
                                 setType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                        <Button type="link" disabled={record.lists.length !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
+                        <Button type="link" onClick={() => {
+                            setVisibleSee(true);
+                            setDetailId(record.id);
+                        }}>详情</Button>
+                        <Button type="link" disabled={record.lists && record.lists.length !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
                 }
             }]}

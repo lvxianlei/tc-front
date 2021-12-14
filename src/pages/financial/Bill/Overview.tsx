@@ -1,10 +1,11 @@
 import React from "react"
 import { Spin } from 'antd'
-import { DetailTitle, BaseInfo, Attachment } from '../../common'
+import { DetailTitle, BaseInfo, Attachment, CommonTable } from '../../common'
 import { billinformation } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import ApplicationContext from "../../../configuration/ApplicationContext"
+import { billOperationInfo } from "../financialData.json"
 interface OverviewProps {
     id: string
 }
@@ -29,7 +30,9 @@ export default function Overview({ id }: OverviewProps) {
                 return ({ ...item, type: "select", enum: invoiceTypeEnum })
             }
             return item
-        })} dataSource={data || {}} />
+    })} col={2} dataSource={data || {}} />
         <Attachment dataSource={data?.invoiceAttachInfoVos || []} />
+        <DetailTitle title="操作信息" />
+        <CommonTable columns={billOperationInfo} dataSource={data?.operationRecordInfoVos || []} />
     </Spin>
 }

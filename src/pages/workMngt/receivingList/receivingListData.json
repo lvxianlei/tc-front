@@ -6,6 +6,16 @@
             "type": "string"
         },
         {
+            "title": "纸质单号",
+            "dataIndex": "paperNumber",
+            "type": "string"
+        },
+        {
+            "title": "车牌号",
+            "dataIndex": "carNumber",
+            "type": "string"
+        },
+        {
             "title": "收货单状态",
             "dataIndex": "receiveStatus",
             "type": "select",
@@ -56,18 +66,23 @@
             "type": "string"
         },
         {
-            "title": "材料名称",
-            "dataIndex": "productName",
-            "type": "string"
-        },
-        {
             "title": "重量（吨）合计",
             "dataIndex": "weight",
             "type": "string"
         },
         {
-            "title": "价税合计（元）",
+            "title": "原材料价税合计（元）",
             "dataIndex": "price",
+            "type": "string"
+        },
+        {
+            "title": "运费价税合计（元）",
+            "dataIndex": "transportTaxPrice",
+            "type": "string"
+        },
+        {
+            "title": "装卸费价税合计（元）",
+            "dataIndex": "unloadTaxPrice",
             "type": "string"
         },
         {
@@ -77,17 +92,6 @@
         }
     ],
     "BasicInformation": [
-        {
-            "title": "收货单号",
-            "dataIndex": "receiveNumber",
-            "type": "string",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入收货单号..."
-                }
-            ]
-        },
         {
             "title": "供应商",
             "dataIndex": "supplierName",
@@ -125,18 +129,6 @@
                     "message": "请选择供应商..."
                 }
             ]
-        },
-        {
-            "title": "联系人",
-            "dataIndex": "contactsUser",
-            "type": "string",
-            "disabled": true
-        },
-        {
-            "title": "联系电话",
-            "dataIndex": "contactsPhone",
-            "type": "string",
-            "disabled": true
         },
         {
             "title": "合同编号",
@@ -220,6 +212,29 @@
             ]
         },
         {
+            "title": "纸质单号",
+            "dataIndex": "paperNumber",
+            "type": "string",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入纸质单号"
+                }
+            ]
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "contactsUser",
+            "type": "string",
+            "disabled": true
+        },
+        {
+            "title": "联系电话",
+            "dataIndex": "contactsPhone",
+            "type": "string",
+            "disabled": true
+        },
+        {
             "title": "约定到货时间",
             "dataIndex": "receiveTime",
             "type": "date",
@@ -238,15 +253,26 @@
             "disabled": true
         },
         {
-            "title": "重量（kg）合计",
-            "dataIndex": "weight",
+            "title": "原材料税款合计（元）",
+            "dataIndex": "price",
             "type": "number",
             "disabled": true
         },
         {
-            "title": "价税合计（元）",
-            "dataIndex": "price",
-            "type": "number"
+            "title": "车辆牌照",
+            "dataIndex": "carNumber",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入车辆牌照"
+                }
+            ]
+        },
+        {
+            "title": "重量（kg）合计",
+            "dataIndex": "weight",
+            "type": "number",
+            "disabled": true
         },
         {
             "title": "备注",
@@ -492,6 +518,50 @@
         {
             "title": "价税合计（元）",
             "dataIndex": "price",
+            "type": "number"
+        }
+    ],
+    "freightInfo": [
+        {
+            "title": "运输承担",
+            "dataIndex": "transportBear",
+            "type": "string"
+        },
+        {
+            "title": "运输公司",
+            "dataIndex": "transportCompany",
+            "type": "string"
+        },
+        {
+            "title": "合同单价（元/吨）",
+            "dataIndex": "transportTaxPrice",
+            "type": "string"
+        },
+        {
+            "title": "运费价税合计（元）",
+            "dataIndex": "transportPriceCount",
+            "type": "number"
+        }
+    ],
+    "handlingChargesInfo": [
+        {
+            "title": "卸车承担",
+            "dataIndex": "unloadBear",
+            "type": "string"
+        },
+        {
+            "title": "装卸公司",
+            "dataIndex": "unloadCompany",
+            "type": "string"
+        },
+        {
+            "title": "合同单价（元/吨）",
+            "dataIndex": "unloadTaxPrice",
+            "type": "string"
+        },
+        {
+            "title": "装卸费价税合计（元）",
+            "dataIndex": "unloadPriceCount",
             "type": "number"
         }
     ]

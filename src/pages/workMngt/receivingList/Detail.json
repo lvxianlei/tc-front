@@ -1,0 +1,136 @@
+{
+    "baseInfo": [
+        {
+            "dataIndex": "receiveNumber",
+            "title": "收货单号"
+        },
+        {
+            "dataIndex": "supplierName",
+            "title": "供应商"
+        },
+        {
+            "dataIndex": "contractNumber",
+            "title": "合同编号"
+        },
+        {
+            "dataIndex": "paperNumber",
+            "title": "纸质单号"
+        },
+        {
+            "dataIndex": "contactsUser",
+            "title": "联系人"
+        },
+        {
+            "dataIndex": "contactsPhone",
+            "title": "联系电话"
+        },
+        {
+            "dataIndex": "receiveTime",
+            "title": "约定到货时间"
+        },
+        {
+            "dataIndex": "quantity",
+            "title": "数量合计"
+        },
+        {
+            "dataIndex": "price",
+            "title": "原材料价税合计（元）"
+        },
+        {
+            "dataIndex": "carNumber",
+            "title": "车辆牌照"
+        },
+        {
+            "dataIndex": "weight",
+            "title": "重量（kg）合计"
+        },
+        {
+            "dataIndex": "remark",
+            "title": "备注"
+        }
+    ],
+    "freightInfo": [
+        {
+            "dataIndex": "transportBear",
+            "title": "运输承担",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "供方" },
+                { "value": 2, "label": "需方" }
+            ]
+        },
+        {
+            "dataIndex": "transportCompany",
+            "title": "运输公司"
+        },
+        {
+            "dataIndex": "transportTaxPrice",
+            "title": "合同单价（元/吨）"
+        },
+        {
+            "dataIndex": "transportPriceCount",
+            "title": "运费价税合计（元）"
+        }
+    ],
+    "handlingChargesInfo": [
+        {
+            "dataIndex": "unloadBear",
+            "title": "卸车承担",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "供方" },
+                { "value": 2, "label": "需方" }
+            ]
+        },
+        {
+            "dataIndex": "unloadCompany",
+            "title": "装卸公司"
+        },
+        {
+            "dataIndex": "unloadTaxPrice",
+            "title": "合同单价（元/吨）"
+        },
+        {
+            "dataIndex": "unloadPriceCount",
+            "title": "装卸费价税合计（元）"
+        }
+    ],
+    "goodsDetail": [
+        {
+            "dataIndex": "materialName",
+            "title": "品名"
+        },
+        {
+            "dataIndex": "materialStandard",
+            "title": "标准"
+        },
+        {
+            "dataIndex": "materialTexture",
+            "title": "材质"
+        },
+        {
+            "dataIndex": "spec",
+            "title": "规格"
+        },
+        {
+            "dataIndex": "length",
+            "title": "长度（mm）"
+        },
+        {
+            "dataIndex": "quantity",
+            "title": "数量"
+        },
+        {
+            "dataIndex": "contractUnitPrice",
+            "title": "合同单价（元/吨）"
+        },
+        {
+            "dataIndex": "price",
+            "title": "价税合计（元）"
+        },
+        {
+            "dataIndex": "weight",
+            "title": "重量（kg）"
+        }
+    ]
+}

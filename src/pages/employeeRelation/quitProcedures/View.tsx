@@ -15,7 +15,7 @@ export default function QuitProceduresView(): React.ReactNode {
         const data: any = await RequestUtil.get(`/tower-hr/employeeDeparture/detail?id=${params.id}`)
         data.isRemoveContract = data.isRemoveContract?0:1;
         data.isTransactProcedure = data.isTransactProcedure?0:1
-        data.newDepartmentName = data.departmentName+'/'+data.teamName
+        data.newDepartmentName = data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         resole(data)
     }), {})
     const detailData: any = data;

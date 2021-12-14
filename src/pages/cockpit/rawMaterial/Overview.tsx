@@ -21,6 +21,16 @@ export default function Overview(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         return value
     }
+    const { data: priceSourceEnum } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/list`)
+            resove(result.map((item: any) => ({ label: item.supplierName, value: item.id })));
+
+            
+        } catch (error) {
+            reject(error)
+        }
+    }))
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPrice/${id}`)
@@ -67,7 +77,7 @@ export default function Overview(): React.ReactNode {
                     setEditId("")
                     setVisible(false)
                 }} >
-                <Edit type={oprationType} id={editId} ref={editRef} />
+                <Edit type={oprationType} id={editId} ref={editRef} priceSourceEnum={priceSourceEnum} />
             </Modal>
             <Page
                 path="/tower-supply/materialPrice"

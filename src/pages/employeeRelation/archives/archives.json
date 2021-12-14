@@ -76,7 +76,46 @@
         {
             "title": "学历",
             "width": 100,
-            "dataIndex": "education"
+            "dataIndex": "education",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "博士",
+                    "value": 1
+                },
+                {
+                    "label": "硕士",
+                    "value": 2
+                },
+                {
+                    "label": "本科",
+                    "value": 3
+                },
+                {
+                    "label": "大专",
+                    "value": 4
+                },
+                {
+                    "label": "高中",
+                    "value": 5
+                },
+                {
+                    "label": "中专",
+                    "value": 6
+                },
+                {
+                    "label": "中学",
+                    "value": 7
+                },
+                {
+                    "label": "小学",
+                    "value": 8
+                },
+                {
+                    "label": "其他",
+                    "value": 9
+                }
+            ]
         },
         {
             "title": "联系电话",
@@ -383,7 +422,13 @@
         },
         {
             "title": "联系电话",
-            "dataIndex": "phoneNumber"
+            "dataIndex": "phoneNumber",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入联系电话..."
+                }
+            ]
         },
         {
             "title": "紧急联系人",
@@ -572,7 +617,7 @@
         },
         {
             "title": "部门/班组",
-            "dataIndex": "workOrganization",
+            "dataIndex": "departmentName",
             "disabled": true
         },
         {
@@ -605,16 +650,26 @@
                     "label": "实习员工",
                     "value": 4
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择员工性质..."
+                }
             ]
         },
         {
             "title": "入职日期",
             "dataIndex": "inductionDate",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "disabled": true
         },
         {
             "title": "转正日期",
             "dataIndex": "positiveDate",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "disabled": true
         },
         {
@@ -636,6 +691,8 @@
         {
             "title": "离职日期",
             "dataIndex": "departureDate",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "disabled": true
         },
         {
@@ -668,7 +725,7 @@
     ],
     "workExperience": [
         {
-            "title": "工作时间",
+            "title": "*工作时间",
             "span": 4,
             "dataIndex": "workDate",
             "type": "rangePicker",
@@ -681,7 +738,7 @@
             ]
         },
         {
-            "title": "工作单位",
+            "title": "*工作单位",
             "width": 100,
             "dataIndex": "workOrganization",
             "rules": [
@@ -692,7 +749,7 @@
             ]
         },
         {
-            "title": "离职原因",
+            "title": "*离职原因",
             "width": 100,
             "dataIndex": "departureReason",
             "rules": [
@@ -767,7 +824,7 @@
     ],
     "family": [
         {
-            "title": "姓名",
+            "title": "*姓名",
             "width": 100,
             "dataIndex": "name",
             "rules": [
@@ -778,7 +835,7 @@
             ]
         },
         {
-            "title": "与本人关系",
+            "title": "*与本人关系",
             "width": 100,
             "dataIndex": "relation",
             "rules": [
@@ -789,7 +846,7 @@
             ]
         },
         {
-            "title": "工作单位",
+            "title": "*工作单位",
             "width": 100,
             "dataIndex": "workOrganization",
             "rules": [
@@ -800,7 +857,7 @@
             ]
         },
         {
-            "title": "联系电话",
+            "title": "*联系电话",
             "width": 100,
             "dataIndex": "phoneNumber",
             "rules": [
@@ -818,17 +875,17 @@
     ],
     "relatives": [
         {
-            "title": "亲属姓名",
+            "title": "*亲属姓名",
             "width": 100,
             "dataIndex": "name"
         },
         {
-            "title": "亲属关系",
+            "title": "*亲属关系",
             "width": 100,
             "dataIndex": "relation"
         },
         {
-            "title": "亲属所在部门",
+            "title": "*亲属所在部门",
             "width": 100,
             "dataIndex": "department"
         },

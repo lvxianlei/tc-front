@@ -21,7 +21,7 @@ export default function View(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/positive/check/detail?positiveId=${params.id}`)
-        data.newDepartmentName = data.departmentName+ '/' + data.teamName
+        data.newDepartmentName = data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         resole(data)
     }), {})
     const detailData: any = data;

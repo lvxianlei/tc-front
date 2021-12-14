@@ -20,7 +20,7 @@ interface TaskRef {
 }
 export default function EnquiryTask(): React.ReactNode {
     const history = useHistory()
-    const [filterValue, setFilterValue] = useState({});
+    const [filterValue, setFilterValue] = useState<object>(history.location.state as object);
     const [detailId, setDetailId] = useState<string>("")
     const [currentData, setCurrentData] = useState<any>({})
     const overviewRef = useRef<OverviewRef>({ onReceive: () => { }, onRejection: () => { }, footer: [] })
@@ -57,7 +57,7 @@ export default function EnquiryTask(): React.ReactNode {
             value.deptId = value.inquirerId.first;
             value.inquirerId = value.inquirerId.second;
         }
-        setFilterValue({ ...filterValue, ...value })
+        setFilterValue(value)
         return value
     }
 
@@ -192,7 +192,7 @@ export default function EnquiryTask(): React.ReactNode {
                 },
                 {
                     name: 'inquirerId',
-                    label: '询价人',
+                    label: '工程报价员',
                     children: <IntgSelect width={200} />
                 },
                 {

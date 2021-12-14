@@ -69,7 +69,11 @@
             "dataIndex": "materialName"
         },
         {
-            "title": "原材料规格",
+            "title": "材质",
+            "dataIndex": "structureTexture"
+        },
+        {
+            "title": "规格",
             "dataIndex": "materialSpec"
         },
         {
@@ -161,7 +165,48 @@
         {
             "title": "原材料名称",
             "dataIndex": "materialName",
-            "disabled": true
+            "type": "popTable",
+            "path": "/tower-system/material",
+            "width": 1011,
+            "value": "materialName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "编号",
+                    "dataIndex": "materialCode",
+                    "search": true
+                },
+                {
+                    "title": "类别",
+                    "dataIndex": "materialTypeName",
+                    "type": "select",
+                    "search": true
+                },
+                {
+                    "title": "类型",
+                    "dataIndex": "materialCategoryName",
+                    "type": "select",
+                    "search": true
+                },
+                {
+                    "title": "品名",
+                    "dataIndex": "materialName",
+                    "search": true
+                },
+                {
+                    "title": "规格",
+                    "dataIndex": "structureSpec",
+                    "type": "select",
+                    "search": true
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择原材料名称..."
+                }
+            ]
         },
         {
             "title": "原材料规格",
@@ -169,14 +214,31 @@
             "disabled": true
         },
         {
+            "title": "原材料标准",
+            "dataIndex": "materialStandard",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择原材料标准..."
+                }
+            ]
+        },
+        {
             "title": "原材料类型",
             "dataIndex": "materialCategoryName",
             "disabled": true
         },
         {
-            "title": "原材料标准",
-            "dataIndex": "materialStandardName",
-            "disabled": true
+            "title": "原材料材质",
+            "dataIndex": "structureTextureId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择原材料材质..."
+                }
+            ]
         }
     ],
     "priceInfo": [

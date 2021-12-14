@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message, InputNumber} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
+import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef, FormItemType } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
@@ -25,7 +25,7 @@ export default function RecruitEdit(): React.ReactNode {
         setPost(post?.records)
         form.setFieldsValue(params.id?{
             ...data,
-            newDepartmentName: data?.departmentName+'/'+data?.teamName,
+            newDepartmentName: data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName,
             workTime: data?.workTime?moment(data?.workTime):'',
             postType: data?.postType?data?.postType.split(','):[]
         }:{})
@@ -78,37 +78,40 @@ export default function RecruitEdit(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button type="primary" onClick={() => {
-                        form.validateFields().then(res=>{
-                            const value= form.getFieldsValue(true);
-                            value.fileDTOS= attachRef.current?.getDataSource();
-                            value.id = params.id;
-                            value.workTime = moment(value.workTime).format('YYYY-MM-DD HH:mm:ss');
-                            value.postType = value.postType.length>0&&value.postType.join(',')
-                            value.submitType = 'save';
-                            RequestUtil.post(`/tower-hr/employee/information`, value).then(()=>{
-                                message.success('保存成功！')
-                            }).then(()=>{
-                                history.push('/employeeRelation/recruit')
-                            })
+                    <Button type="primary" onClick={async () => {
+                        await form.validateFields();
+                        const value= form.getFieldsValue(true);
+                        const postValue = {
+                            ...value,
+                            fileDTOS: attachRef.current?.getDataSource(),
+                            id :params.id,
+                            workTime: value.workTime?moment(value.workTime).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            postType: Array.isArray(value.postType)?value.postType.join(','):value.postType,
+                            submitType: 'save',
+                        }
+                        RequestUtil.post(`/tower-hr/employee/information`, postValue).then(()=>{
+                            message.success('保存成功！')
+                        }).then(()=>{
+                            history.push('/employeeRelation/recruit')
                         })
                         
                     }}>保存</Button>
-                    {params.status!=='3' && <Button type="primary" onClick={() => {
-                        form.validateFields().then(res=>{
-                            const value= form.getFieldsValue(true);
-                            value.fileDTOS= attachRef.current?.getDataSource();
-                            value.id = params.id;
-                            value.workTime = moment(value.workTime).format('YYYY-MM-DD HH:mm:ss');
-                            value.postType = value.postType.join(',')
-                            value.submitType = 'submit';
-                            RequestUtil.post(`/tower-hr/employee/information`, value).then(()=>{
-                                message.success('提交成功！')
-                            }).then(()=>{
-                                history.push('/employeeRelation/recruit')
-                            })
+                    {params.status!=='3' && <Button type="primary" onClick={async () => {
+                        await form.validateFields();
+                        const value= form.getFieldsValue(true);
+                        const postValue = {
+                            ...value,
+                            fileDTOS: attachRef.current?.getDataSource(),
+                            id :params.id,
+                            workTime: value.workTime?moment(value.workTime).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            postType: Array.isArray(value.postType)?value.postType.join(','):value.postType,
+                            submitType: 'submit',
+                        }
+                        RequestUtil.post(`/tower-hr/employee/information`, postValue).then(()=>{
+                            message.success('提交成功！')
+                        }).then(()=>{
+                            history.push('/employeeRelation/recruit')
                         })
-                        
                     }}>保存并提交审批</Button>}
                     <Button key="goback" onClick={() => history.push('/employeeRelation/recruit')}>返回</Button>
                 </Space>
@@ -278,7 +281,7 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择预计到岗时间'
                         }]} name='workTime'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
+                            <DatePicker style={{ width: '100%' }} />
                         </Form.Item>
                     </Col>
                 </Row>

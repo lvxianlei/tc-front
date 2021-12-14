@@ -96,7 +96,7 @@
             "title": "方案名称",
             "dataIndex": "insurancePlanName",
             "type": "popTable",
-            "path": "/tower-hr/insurancePlan",
+            "path": "/tower-hr/insurancePlan?status=1",
             "width": 1011,
             "value": "insurancePlanName",
             "dependencies": true,
@@ -132,7 +132,8 @@
             "title": "社保开始缴纳月",
             "dataIndex": "ssStartMonth",
             "type": "date",
-            "format": "YYYY-MM-DD",
+            "format": "YYYY-MM",
+            "picker": "month",
             "rules": [
                 {
                     "required": true,
@@ -144,7 +145,8 @@
             "title": "社保结束缴纳月",
             "dataIndex": "ssEndMonth",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM",
+            "picker": "month"
         },
         {
             "title": "社保申报基数",
@@ -166,7 +168,8 @@
             "title": "公积金开始缴纳月",
             "dataIndex": "pfaStartMonth",
             "type": "date",
-            "format": "YYYY-MM-DD",
+            "format": "YYYY-MM",
+            "picker": "month",
             "rules": [
                 {
                     "required": true,
@@ -178,7 +181,8 @@
             "title": "公积金结束缴纳月",
             "dataIndex": "pfaEndMonth",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "picker": "month",
+            "format": "YYYY-MM"
         },
         {
             "title": "公积金申报基数",
@@ -195,7 +199,7 @@
     ],
     "business": [
         {
-            "title": "商业保险名称",
+            "title": "*商业保险名称",
             "width": 100,
             "dataIndex": "commercialInsuranceName",
             "rules": [
@@ -206,7 +210,7 @@
             ]
         },
         {
-            "title": "保险类型",
+            "title": "*保险类型",
             "width": 100,
             "dataIndex": "commercialInsuranceType",
             "type": "select",
@@ -244,7 +248,7 @@
             ]
         },
         {
-            "title": "商业保险账号",
+            "title": "*商业保险账号",
             "width": 100,
             "dataIndex": "commercialInsuranceNumber",
             "rules": [
@@ -255,11 +259,12 @@
             ]
         },
         {
-            "title": "开始缴纳月",
+            "title": "*开始缴纳月",
             "width": 100,
             "dataIndex": "startMonth",
             "type": "date",
-            "format": "YYYY-MM-DD",
+            "format": "YYYY-MM",
+            "picker": "month",
             "rules": [
                 {
                     "required": true,
@@ -272,10 +277,11 @@
             "width": 100,
             "dataIndex": "endMonth",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "picker": "month",
+            "format": "YYYY-MM"
         },
         {
-            "title": "保险金额",
+            "title": "*保险金额",
             "width": 100,
             "dataIndex": "insuranceAmount",
             "rules": [

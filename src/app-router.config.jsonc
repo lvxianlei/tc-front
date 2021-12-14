@@ -307,21 +307,21 @@
     { // 原材料管理
       "name": "原材料管理",
       "path": "/sys/material",
-      "module": "./pages/system-mngt/material/MaterialMngt",
+      "module": "./pages/system-mngt/materialMngt/MaterialMngt",
       "exact": true,
       "authority": "material_management"
     },
     { // 新增原材料
       "name": "新增原材料",
       "path": "/sys/material/new",
-      "module": "./pages/system-mngt/material/MaterialNew",
+      "module": "./pages/system-mngt/materialMngt/MaterialNew",
       "exact": true,
       "authority": "material_management"
     },
     { // 编辑原材料
       "name": "编辑原材料",
       "path": "/sys/material/view/:id",
-      "module": "./pages/system-mngt/material/MaterialView",
+      "module": "./pages/system-mngt/materialMngt/MaterialView",
       "exact": true,
       "authority": "material_management"
     },
@@ -711,8 +711,15 @@
     },
     { //供应商管理
       "name": "供应商管理",
-      "path": "/supplier-mngt/index",
-      "module": "./pages/supplier-mngt/index",
+      "path": "/cooperative/supplier-mngt/index",
+      "module": "./pages/cooperative/supplier-mngt/index",
+      "exact": true,
+      "authority": "supplier_mngt_list"
+    },
+    { //装卸公司管理
+      "name": "装卸公司管理",
+      "path": "/cooperative/stevedoring-company-mngt/stevedoringCompany",
+      "module": "./pages/cooperative/stevedoring-company-mngt/StevedoringCompanyMngt",
       "exact": true,
       "authority": "supplier_mngt_list"
     },
@@ -804,6 +811,13 @@
       "name": "角钢配料策略",
       "path": "/stock/angleSteel",
       "module": "./pages/stock/angleSteel/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 配置管理-其他参数配置
+      "name": "其他参数配置",
+      "path": "/stock/otherParameters",
+      "module": "./pages/stock/otherParameters/OtherParameters",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1601,7 +1615,42 @@
     { // 计划排产
       "name": "计划排产",
       "path": "/planProd/planMgmt",
-      "module": "./pages/planProd/PlanProd",
+      "module": "./pages/planBaseSetting/planProd/PlanProd",
+      "exact": true,
+      "authority": "planned_production_scheduling_list"
+    },
+    { // 计划排产-子详情
+      "name": "计划详情",
+      "path": "/planProd/planMgmt/detail/:id/:planId",
+      "module": "./pages/planBaseSetting/planProd/Detail",
+      "exact": true,
+      "authority": "planned_production_scheduling_list"
+    },
+    { // 计划排产-环节新增
+      "name": "环节新增",
+      "path": "/planProd/planMgmt/detail/:id/:planId/add",
+      "module": "./pages/planBaseSetting/planProd/Add",
+      "exact": true,
+      "authority": "planned_production_scheduling_list"
+    },
+    { // 计划排产-环节查看
+      "name": "环节查看",
+      "path": "/planProd/planMgmt/detail/:id/:planId/view/:productCategoryId",
+      "module": "./pages/planBaseSetting/planProd/View",
+      "exact": true,
+      "authority": "planned_production_scheduling_list"
+    },
+    { // 计划排产-环节编辑
+      "name": "环节调整",
+      "path": "/planProd/planMgmt/detail/:id/:planId/edit/:productCategoryId",
+      "module": "./pages/planBaseSetting/planProd/Add",
+      "exact": true,
+      "authority": "planned_production_scheduling_list"
+    },
+    { // 计划排产-环节详情
+      "name": "环节详情",
+      "path": "/planProd/planMgmt/edit/:id",
+      "module": "./pages/planBaseSetting/planProd/Edit",
       "exact": true,
       "authority": "planned_production_scheduling_list"
     },
@@ -2161,7 +2210,7 @@
     },
     { // 人资-员工关系-员工离职-新增/编辑
       "name": "员工离职",
-      "path": "/employeeRelation/quit/:id",
+      "path": "/employeeRelation/quit/edit/:id",
       "module": "./pages/employeeRelation/quit/Quit",
       "exact": true,
       "authority": "approvalm"
@@ -2217,7 +2266,7 @@
     },
     { // 人资-员工关系-员工复职-新增
       "name": "新增",
-      "path": "/employeeRelation/reinstate/Edit/:id/add",
+      "path": "/employeeRelation/reinstate/add",
       "module": "./pages/employeeRelation/reinstate/Edit",
       "exact": true,
       "authority": "approvalm"

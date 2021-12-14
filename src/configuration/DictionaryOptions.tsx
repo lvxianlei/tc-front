@@ -21,9 +21,15 @@ export enum DictionaryEnums {
     WAREHOUSE_TYPE = 127,
     DELIVERY_WAY = 128,
     TRANSPORTATION_TYPE = 129,
+    MATERIAL_TEXTURE = 139,
+    SUPPLIER_TYPE = 144,
+    QUALITY_ASSURANCE = 145,
     CAR_TYPE = 146,
+    SUPPLY_PRODUCTS = 146,
     EMPLOYEE_TYPE = 149,
+    INVOICE_TYPE = 1210,
     PAY_TYPE = 1211,
+    PLEASE_PAY_TYPE = 1212,
     STAFF_TYPE = 1213,
     DEPT_TYPE = 1214,
     DATA_TYPE = 1215,
@@ -54,6 +60,12 @@ let bankType: IDict[] | undefined = [];
 let deliveryway: IDict[] | undefined = [];
 let transportationType: IDict[] | undefined = [];
 let certificateType: IDict[] | undefined = [];
+let invoiceType: IDict[] | undefined = [];
+let pleasePayType: IDict[] | undefined = [];
+let materialTexture: IDict[] | undefined = [];
+let supplierType: IDict[] | undefined = [];
+let qualityAssurance: IDict[] | undefined = [];
+let supplyProducts: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -80,6 +92,12 @@ if (dictionary) {
     bankType = dictionary[DictionaryEnums.BANK_TYPE];
     deliveryway = dictionary[DictionaryEnums.DELIVERY_WAY];
     transportationType = dictionary[DictionaryEnums.TRANSPORTATION_TYPE];
+    invoiceType = dictionary[DictionaryEnums.INVOICE_TYPE];
+    pleasePayType = dictionary[DictionaryEnums.PLEASE_PAY_TYPE];
+    materialTexture = dictionary[DictionaryEnums.MATERIAL_TEXTURE];
+    supplierType = dictionary[DictionaryEnums.SUPPLIER_TYPE];
+    qualityAssurance = dictionary[DictionaryEnums.QUALITY_ASSURANCE];
+    supplyProducts = dictionary[DictionaryEnums.SUPPLY_PRODUCTS];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -106,3 +124,9 @@ export const employeeTypeOptions = employeeType; //员工分组
 export const bankTypeOptions = bankType; //开户银行
 export const deliverywayOptions = deliveryway; //交货方式
 export const transportationTypeOptions = transportationType; //运输方式
+export const invoiceTypeOptions = invoiceType; //发票类型
+export const pleasePayTypeOptions = pleasePayType; //请款类别
+export const materialTextureOptions = materialTexture; //材质
+export const supplierTypeOptions = supplierType; //供应商类型
+export const qualityAssuranceOptions = qualityAssurance; //质量保证体系
+export const supplyProductsOptions = supplyProducts; //供应商供货产品

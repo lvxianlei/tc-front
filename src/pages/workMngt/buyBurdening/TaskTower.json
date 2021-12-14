@@ -1,0 +1,24 @@
+{
+    "baseInfo": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "原材料长度",
+            "dataIndex": "length"
+        },
+        {
+            "title": "汇总数量",
+            "dataIndex": "collocationNum"
+        }
+    ]
+}

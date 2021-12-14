@@ -1,42 +1,216 @@
 {
     "swWork": [
         {
-            "title": "差异列表",
-            "dataIndex": "componentDiffWorkBenchVo",
-            "col": 2
-        },
-        {
-            "title": "询价任务",
+            "title": "工程报价任务",
+            "path": "询价任务",
             "dataIndex": "inquiryTaskWorkBenchVo",
-            "col":  1
+            "col": 1,
+            "workbenchItemVos": [
+                {
+                    "title": "待指派",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/enquiryTask/index",
+                        "state": {
+                            "inquiryStatus": 3
+                        }
+                    },
+                    "authority": "workbench_data"
+                },
+                {
+                    "title": "待确认",
+                    "path": {
+                        "pathname": "/enquiryTask/index",
+                        "state": {
+                            "inquiryStatus": 1
+                        }
+                    },
+                    "authority": "workbench_data1"
+                },
+                {
+                    "title": "待提交",
+                    "path": {
+                        "pathname": "/enquiryTask/index",
+                        "state": {
+                            "inquiryStatus": 2
+                        }
+                    },
+                    "authority": "workbench_data2"
+                },
+                {
+                    "title": "待完成",
+                    "path": {
+                        "pathname": "/enquiryTask/index",
+                        "state": {
+                            "inquiryStatus": 4
+                        }
+                    },
+                    "authority": "workbench_data3"
+                }
+            ]
         },
         {
-            "title": "采购任务",
-            "dataIndex": "materialPurchaseTaskWorkBenchVo"
+            "title": "原材料采购任务",
+            "dataIndex": "materialPurchaseTaskWorkBenchVo",
+            "path": "采购任务-原材料",
+            "workbenchItemVos": [
+                {
+                    "title": "待确认",
+                    "path": "/buyingTask/index",
+                    "authority": "workbench_data4"
+                },
+                {
+                    "title": "待提交",
+                    "path": "/buyingTask/index",
+                    "authority": "workbench_data5"
+                },
+                {
+                    "title": "待指派",
+                    "path": "/buyingTask/index",
+                    "authority": "workbench_data6"
+                }
+            ]
         },
         {
-            "title": "缺料申请",
-            "dataIndex": "materialShortageWorkBatchVo"
+            "title": "塔型配料",
+            "dataIndex": "componentDiffWorkBenchVo",
+            "col": 2,
+            "path": "工作管理-采购配料",
+            "workbenchItemVos": [
+                {
+                    "title": "待完成",
+                    "path": "/workMngt/buyBurdening",
+                    "authority": "workbench_data7"
+                }
+            ]
         },
         {
             "title": "生产配料",
-            "dataIndex": "produceIngredientsWorkBatchVo"
+            "col": 2,
+            "dataIndex": "produceIngredientsWorkBatchVo",
+            "path": "工作管理-生产配料",
+            "workbenchItemVos": [
+                {
+                    "title": "待完成",
+                    "path": "/workMngt/production",
+                    "authority": "workbench_data8"
+                }
+            ]
         },
         {
-            "title": "采购配料",
-            "dataIndex": "purchaseIngredientsWorkBenchVo"
+            "title": "塔型采购",
+            "col": 2,
+            "dataIndex": "purchaseTaskTowerWorkBenchVo",
+            "path": "工作管理-采购列表",
+            "workbenchItemVos": [
+                {
+                    "title": "待完成",
+                    "path": "/workMngt/purchaseList",
+                    "authority": "workbench_data9"
+                }
+            ]
         },
         {
             "title": "采购计划",
-            "dataIndex": "purchasePlanWorkBatchVo"
+            "col": 2,
+            "dataIndex": "purchasePlanWorkBatchVo",
+            "path": "工作管理-计划列表",
+            "workbenchItemVos": [
+                {
+                    "title": "待完成",
+                    "path": "/workMngt/planList",
+                    "authority": "workbench_data10"
+                }
+            ]
         },
         {
-            "title": "采购列表",
-            "dataIndex": "purchaseTaskTowerWorkBenchVo"
+            "title": "差异处理",
+            "dataIndex": "materialShortageWorkBatchVo",
+            "col": 2,
+            "path": "工作管理-差异列表",
+            "workbenchItemVos": [
+                {
+                    "title": "待处理",
+                    "path": "/workMngt/differentList",
+                    "authority": "workbench_data11"
+                }
+            ]
         },
         {
-            "title": "收货单",
-            "dataIndex": "receiveStockWorkBatchVo"
+            "title": "缺料处理",
+            "dataIndex": "materialShortageWorkBatchVo",
+            "col": 2,
+            "path": "工作管理-缺料列表",
+            "workbenchItemVos": [
+                {
+                    "title": "待处理",
+                    "path": "/workMngt/shortageList",
+                    "authority": "workbench_data12"
+                }
+            ]
+        },
+        {
+            "title": "原材料入库",
+            "dataIndex": "purchaseIngredientsWorkBenchVo",
+            "col": 3,
+            "path": "暂无",
+            "workbenchItemVos": [
+                {
+                    "title": "待完成",
+                    "path": "",
+                    "authority": "workbench_data13"
+                }
+            ]
+        },
+        {
+            "title": "原材料出库",
+            "dataIndex": "purchaseIngredientsWorkBenchVo",
+            "col": 3,
+            "path": "暂无",
+            "workbenchItemVos": [
+                {
+                    "title": "待完成",
+                    "path": "",
+                    "authority": "workbench_data14"
+                }
+            ]
+        },
+        {
+            "title": "余料出库",
+            "dataIndex": "purchaseIngredientsWorkBenchVo",
+            "col": 3,
+            "path": "暂无",
+            "workbenchItemVos": [
+                {
+                    "title": "待完成",
+                    "path": "",
+                    "authority": "workbench_data15"
+                }
+            ]
+        },
+        {
+            "title": "审批",
+            "dataIndex": "receiveStockWorkBatchVo",
+            "col": 2,
+            "workbenchItemVos": [
+                {
+                    "title": "我发起的",
+                    "path": "",
+                    "authority": "workbench_data16"
+                }
+            ]
+        },
+        {
+            "title": "审批",
+            "dataIndex": "receiveStockWorkBatchVo",
+            "col": 2,
+            "workbenchItemVos": [
+                {
+                    "title": "我接收的",
+                    "path": "",
+                    "authority": "workbench_data17"
+                }
+            ]
         }
     ]
 }

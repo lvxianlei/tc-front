@@ -1,12 +1,12 @@
 {
     "enquiryTaskList": [
         {
-            "title": "询价任务编号",
-            "dataIndex": "inquiryNumber"
+            "title": "工程报价任务编号",
+            "dataIndex": "sysInquiryNumber"
         },
         {
             "title": "编号",
-            "dataIndex": "Num"
+            "dataIndex": "inquiryNumber"
         },
         {
             "title": "任务状态",
@@ -60,7 +60,7 @@
             "dataIndex": "biddingEndTime"
         },
         {
-            "title": "询价人",
+            "title": "工程报价员",
             "dataIndex": "inquirer"
         }
     ],
@@ -124,6 +124,10 @@
         {
             "title": "原材料名称",
             "dataIndex": "materialName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",

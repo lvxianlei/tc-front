@@ -64,7 +64,7 @@ export default function LabourList(): React.ReactNode {
             width: 100,
             dataIndex: 'departmentName',
             render:(_:any,record:any)=>{
-                return record.departmentName+'/'+record.teamName
+                return record.departmentId!=='0'?record.departmentName+'/'+record.teamName:record.teamName
             }
         },
         {
@@ -74,10 +74,10 @@ export default function LabourList(): React.ReactNode {
             dataIndex: 'postName'
         },
         {
-            key: 'signedCompany',
+            key: 'signedCompanyName',
             title: '合同签署公司',
             width: 100,
-            dataIndex: 'signedCompany'
+            dataIndex: 'signedCompanyName'
         },
         {
             key: 'contractType',
@@ -142,7 +142,7 @@ export default function LabourList(): React.ReactNode {
                     <Button onClick={()=>{history.push(`/employeeRelation/labour/view/${record.id}`)}} type='link' >查看</Button>
                     <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/edit`)}} type='link' disabled={record.employeeStatus===2 || record.status}>编辑</Button>
                     <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/change`)}} type='link' disabled={record.employeeStatus===2 || record.status===2 || !record.status}>变更</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/renewal`)}} type='link' disabled={record.employeeStatus===2 || record.status=== 2 && record.employeeStatus===1 ||!record.status}>续签</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/renewal`)}} type='link' disabled={record.employeeStatus===2 || !(record.status=== 2 && record.employeeStatus===1) ||!record.status}>续签</Button>
                 </Space>
             )
         }
