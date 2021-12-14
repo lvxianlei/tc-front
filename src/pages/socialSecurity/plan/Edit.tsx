@@ -36,8 +36,8 @@ export default function Edit() {
                 insuranceFormData[index] = ({
                     ...item,
                     effectiveMonth: [
-                        moment(item.effectiveMonth, "YYYY-MM-DD"),
-                        moment(item.expirationMonth, "YYYY-MM-DD")
+                        moment(item.effectiveMonth, "YYYY-MM"),
+                        moment(item.expirationMonth, "YYYY-MM")
                     ]
                 })
             })
@@ -71,13 +71,13 @@ export default function Edit() {
             const businessData = await businessForm.validateFields()
             const postInsuranceData = Object.keys(insuranceFormData).map((item: any, index: number) => {
                 const rowSpanData = index % 2 === 1 ? insuranceFormData[item - 1] : insuranceFormData[item]
-                const formatDate = rowSpanData.effectiveMonth.map((item: any) => item.format("YYYY-MM-DD"))
+                const formatDate = rowSpanData.effectiveMonth.map((item: any) => item.format("YYYY-MM"))
                 return ({
                     ...insuranceFormData[item],
                     insuranceType: insuranceData[index].insuranceType,
                     paymentType: insuranceData[index].paymentType,
-                    effectiveMonth: formatDate?.[0] + " 00:00:00",
-                    expirationMonth: formatDate?.[1] + " 23:59:59",
+                    effectiveMonth: formatDate?.[0],
+                    expirationMonth: formatDate?.[1],
                 })
             })
             const postBusinessData = Object.keys(businessData).map((item: any) => businessData[item])
@@ -147,7 +147,10 @@ export default function Edit() {
                                                 "required": true,
                                                 "message": "请选择生效/失效日期..."
                                             }
-                                        ]} name={[index, item.dataIndex]}><DatePicker.RangePicker value={value} format="YYYY-MM-DD" /></Form.Item>,
+                                        ]}
+                                            name={[index, item.dataIndex]}>
+                                            <DatePicker.RangePicker value={value} picker="month" format="YYYY-MM" />
+                                        </Form.Item>,
                                         props: {
                                             rowSpan: 0,
                                             style: {}
@@ -253,7 +256,7 @@ export default function Edit() {
                                             }
                                         ]}
                                         name={[index, item.dataIndex]}>
-                                        <InputNumber style={{ width: "100%" }} value={value} />
+                                        <InputNumber style={{ width: "100%" }} value={value} precision={2} />
                                     </Form.Item>
                                 })
                             case "commercialInsuranceType":

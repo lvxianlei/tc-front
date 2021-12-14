@@ -132,7 +132,8 @@
             "title": "社保开始缴纳月",
             "dataIndex": "ssStartMonth",
             "type": "date",
-            "format": "YYYY-MM-DD",
+            "format": "YYYY-MM",
+            "picker": "month",
             "rules": [
                 {
                     "required": true,
@@ -144,7 +145,8 @@
             "title": "社保结束缴纳月",
             "dataIndex": "ssEndMonth",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM",
+            "picker": "month"
         },
         {
             "title": "社保申报基数",
@@ -166,7 +168,8 @@
             "title": "公积金开始缴纳月",
             "dataIndex": "pfaStartMonth",
             "type": "date",
-            "format": "YYYY-MM-DD",
+            "format": "YYYY-MM",
+            "picker": "month",
             "rules": [
                 {
                     "required": true,
@@ -178,7 +181,8 @@
             "title": "公积金结束缴纳月",
             "dataIndex": "pfaEndMonth",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "picker": "month",
+            "format": "YYYY-MM"
         },
         {
             "title": "公积金申报基数",
@@ -259,7 +263,8 @@
             "width": 100,
             "dataIndex": "startMonth",
             "type": "date",
-            "format": "YYYY-MM-DD",
+            "format": "YYYY-MM",
+            "picker": "month",
             "rules": [
                 {
                     "required": true,
@@ -272,7 +277,8 @@
             "width": 100,
             "dataIndex": "endMonth",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "picker": "month",
+            "format": "YYYY-MM"
         },
         {
             "title": "*保险金额",
