@@ -11,7 +11,7 @@ const ProdUnitAdd = (props: any) => {
     let [prodLinkList, setProdLinkList] = useState<any[]>([])
     let [itemInfo, setItemInfo] = useState<any>({})
     // let [times, setTimes] = useState<string[]>(['', ''])
-    const [value, setValue] = useState<any>();
+    const [value, setValue] = useState<any>([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(7, 'day').format('YYYY-MM-DD'))]);
     const [dates, setDates] = useState<any>([]);
     const disabledDate = (current: any) => {
       if (!dates || dates.length === 0) {
@@ -25,11 +25,14 @@ const ProdUnitAdd = (props: any) => {
         // times[0] = dayjs().format('YYYY-MM-DD')
         // times[1] = dayjs().add(7, 'day').format('YYYY-MM-DD')
         // setTimes(times)
-        setValue([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(7, 'day').format('YYYY-MM-DD'))])
+        // setValue([new Date(), new Date(new Date().setDate(new Date().getDate()+7))])
         getProdLinkList()
         if (props.id) {
             getDetail()
             initCharts([], [])
+            if(value){
+                seeLoad();
+            }
         }
     }, [])
     /**
@@ -55,6 +58,7 @@ const ProdUnitAdd = (props: any) => {
             unitId: props.id,
         })
         setProdLinkList(data.records)
+        
     }
     /**
      * 
@@ -278,6 +282,7 @@ const ProdUnitAdd = (props: any) => {
                     <DatePicker.RangePicker
                         disabledDate={disabledDate}
                         onCalendarChange={(val: any) => setDates(val)}
+                        defaultValue={value}
                         value={value}
                         onChange={(value) => {
                             setValue(value)
