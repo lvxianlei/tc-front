@@ -1,9 +1,9 @@
 {
     "baseInfo": [
         {
-            "title": "询价任务编号",
+            "title": "工程报价任务编号",
             "width": 100,
-            "dataIndex": "inquiryNumber"
+            "dataIndex": "sysInquiryNumber"
         },
         {
             "title": "项目名称",
@@ -72,7 +72,7 @@
             "format": "YYYY-MM-DD"
         },
         {
-            "title": "询价人",
+            "title": "工程报价员",
             "width": 50,
             "dataIndex": "inquirer"
         }

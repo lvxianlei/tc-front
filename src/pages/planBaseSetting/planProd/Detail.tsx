@@ -109,8 +109,20 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         
         gantt.config.column_width = 20;
         gantt.config.columns = [
-          {label:'生产环节', name: "linkName", tree: true, resize: true, width:100 },
-          {label:'生产单元',name: "unitName", align: "center", resize: true, width:100 },
+          {label:'生产环节', name: "linkName",  resize: true, width:100 , template: function (task:any) {
+            return (
+              `
+              <span  title="${task.linkName}" >${task.linkName}</span>
+              `
+            );
+          }},
+          {label:'生产单元',name: "unitName", align: "center", resize: true, width:100, template: function (task:any) {
+            return (
+              `
+              <span  title="${task.unitName}" >${task.unitName}</span>
+              `
+            );
+          }},
           {label:'开始时间',name: "startTime", align: "center", width:100 , template: function (task:any) {
             return (
               `
@@ -187,6 +199,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         gantt.config.drag_resize = false;//拖拽工期
         gantt.config.drag_progress = false;//拖拽进度
         gantt.config.drag_links = false;//通过拖拽的方式新增任务依赖的线条
+        gantt.config.drag_move = false;
         gantt.config.layout = {
           css: "gantt_container",
           cols: [
@@ -260,6 +273,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           value.endTime = formatDate[1]+ ' 23:59:59';
           delete value.time
       }
+      gantt.clearAll();
       const tree = await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks`,{
         planProductCategoryId:this.props.match.params.id,
         ...value

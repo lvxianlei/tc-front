@@ -7,19 +7,20 @@ import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import moment from 'moment';
 import * as echarts from 'echarts';
+import dayjs from 'dayjs';
 
 export default function RecruitEdit(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, productCategoryId: string, planId: string }>();
     const [form] = Form.useForm();
-    const [value, setValue] = useState<any>();
+    const [value, setValue] = useState<any>([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(6, 'day').format('YYYY-MM-DD'))]);
     const [dates, setDates] = useState<any>([]);
     const [ prodLinkList, setProdLinkList] = useState<any[]>([])
     const [ prodUnitList, setProdUnitList] = useState<any[]>([])
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
         getProdLinkList();
-        getProdUnitList();
+        // getProdUnitList();
         form.setFieldsValue( params.productCategoryId?{
             ...data,
             startTime: data?.startTime?moment(data?.startTime):'',
@@ -31,8 +32,8 @@ export default function RecruitEdit(): React.ReactNode {
         if (!dates || dates.length === 0) {
           return false;
         }
-        const tooLate = dates[0] && current.diff(dates[0], 'days') > 7;
-        const tooEarly = dates[1] && dates[1].diff(current, 'days') > 7;
+        const tooLate = dates[0] && current.diff(dates[0], 'days') > 6;
+        const tooEarly = dates[1] && dates[1].diff(current, 'days') > 6;
         return tooEarly || tooLate;
     };
     const detailData: any = data;
@@ -53,10 +54,14 @@ export default function RecruitEdit(): React.ReactNode {
     /**
      * @description 获取生产单元
      */
-    const getProdUnitList = async () => {
+    const getProdUnitList = async (id:any) => {
+        form.setFieldsValue({
+            unitId:''
+        })
         const data: any = await RequestUtil.get('/tower-aps/productionUnit', {
             current: 1,
-            size: 1000
+            size: 1000,
+            productionLinkId:id
         })
         setProdUnitList(data.records)
     }
@@ -69,7 +74,7 @@ export default function RecruitEdit(): React.ReactNode {
         //     message.error('请选择时间范围')
         //     return
         // }
-        if (!value) {
+        if (!value||value.length===0) {
             message.error('请选择时间范围')
             return
         }
@@ -167,11 +172,12 @@ export default function RecruitEdit(): React.ReactNode {
                 }
             ],
             yAxis: [
+               
                 {
-                    type: 'value'
+                    type: 'value',
                 }
             ],
-            series:datas,
+            series:datas.length>0?datas:'',
         });
     }
     return <>
@@ -208,6 +214,9 @@ export default function RecruitEdit(): React.ReactNode {
                                 className='input'
                                 placeholder='请选择'
                                 style={{width:'100%'}}
+                                onChange={(value:any)=>{
+                                    getProdUnitList(value)
+                                }}
                             >
                                 {
                                     prodLinkList.map((item: any, index: number) => {
@@ -262,7 +271,7 @@ export default function RecruitEdit(): React.ReactNode {
                                     const value = form.getFieldsValue().startTime
                                     if(value){
                                         const newDate = new Date(value)
-                                        const endTime =  newDate.setDate(newDate.getDate()+e)
+                                        const endTime =  newDate.setDate(newDate.getDate()+e-1)
                                         form.setFieldsValue({
                                             endTime: moment(endTime)
                                         })
@@ -280,9 +289,9 @@ export default function RecruitEdit(): React.ReactNode {
                                 const value = form.getFieldsValue().minCompletionDays||0
                                 const newDate = current?.format('YYYY-MM-DD')
                                 var formatDate2 = new Date(`${newDate}`)
-                                const endTime =  formatDate2.setDate(formatDate2.getDate()+value)
+                                const endTime =  formatDate2.setDate(formatDate2.getDate()+value-1)
                                 form.setFieldsValue({
-                                    endTime: moment(endTime)
+                                    endTime: endTime?moment(endTime):''
                                 })
                             }}/>
                         </Form.Item>
@@ -297,11 +306,12 @@ export default function RecruitEdit(): React.ReactNode {
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label="负荷">
+                        <Form.Item label="查看负荷">
                             <DatePicker.RangePicker
                                 disabledDate={disabledDate}
                                 onCalendarChange={(val: any) => setDates(val)}
                                 value={value}
+                                defaultValue={value}
                                 onChange={(value) => {
                                     setValue(value)
                                 }}

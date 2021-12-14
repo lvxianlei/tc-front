@@ -37,7 +37,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         gantt.clearAll();
         gantt.config.column_width = 20;
         gantt.config.columns = [
-          {label:'计划号', name: "planNumber", tree: true, resize: true , width:200, template: function (task:any) {
+          {label:'计划号', name: "planNumber", tree: true, resize: true , width:170, template: function (task:any) {
             if(!task.parent){
               // href='/planProd/planMgmt/detail/${task.id}/${task.planId}'
               return (
@@ -48,7 +48,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
             }
               
           }},
-          {label:'塔型',name: "name", align: "center", resize: true, width: 100},
+          {label:'塔型',name: "name", align: "center", resize: true, width: 130},
           {label:'基数',name: "productNum", align: "center"},
           {label:'重量',name: "weight", align: "center"},
           {label:'交货日期',name: "deliveryTime", align: "center"},
@@ -64,7 +64,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
               // href='/planProd/planMgmt/detail/${task.id}/${task.planId}'
               return (
                 `
-                <a style="color:#FF8C00" id="planEdit" href='/planProd/planMgmt/detail/${task.id}/${task.planId}'>查看</a>
+                <a style="color:#FF8C00" id="planEdit" href='/planProd/planMgmt/detail/${task.id}/${task.planId}'>详情</a>
                 `
               );
             }else{
@@ -91,6 +91,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         gantt.config.drag_resize = false;//拖拽工期
         gantt.config.drag_progress = false;//拖拽进度
         gantt.config.drag_links = false;//通过拖拽的方式新增任务依赖的线条
+        gantt.config.drag_move = false;
         gantt.config.layout = {
           css: "gantt_container",
           cols: [
@@ -165,6 +166,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
           value.endTime = formatDate[1]+ ' 23:59:59';
           delete value.time
       }
+      gantt.clearAll();
       const tree: any = await RequestUtil.get<any>('/tower-aps/productionPlan/thread',value);
       const valueN = tree.length>0 && tree.reduce((res:any, item:any) => {
         const parent = {...item};

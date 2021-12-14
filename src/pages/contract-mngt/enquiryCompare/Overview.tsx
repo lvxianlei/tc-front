@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { message, Select } from "antd"
+import { Col, message, Row, Select } from "antd"
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Modal, Spin } from "antd"
 import { CommonTable, DetailTitle, DetailContent, Attachment } from "../../common"
@@ -32,6 +32,8 @@ export default function Overview(): JSX.Element {
     const params = useParams<{ id: string }>()
     const [visible, setVisible] = useState<boolean>(false)
     const [attchVisible, setAttchVisible] = useState<boolean>(false)
+    const [supplierVisible, setSupplierVisible] = useState<boolean>(false)
+    const [supplier, setSupplier] = useState('')
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [detailId, setDetailId] = useState<string>("")
     const [materialLists, setMaterialList] = useState<any[]>([])
@@ -131,6 +133,42 @@ export default function Overview(): JSX.Element {
             }}>
             <AttchFiles id={detailId} />
         </Modal>
+        <Modal 
+            destroyOnClose
+            title="中标"
+            visible={supplierVisible}
+            footer={[<Button type="primary" key="confirm" onClick={() => {
+                const list = materialLists.map(res => {
+                    return {
+                        ...res,
+                        winBidSupplierId: supplier
+                    }
+                }) 
+                setSupplierVisible(false)
+                setSupplier("")
+                setMaterialList(list);
+                console.log(list)
+            }}>确定</Button>]}
+            onCancel={() => {
+                setSupplier("")
+                setSupplierVisible(false)
+            }}>
+                <Row>
+                    <Col offset={1} span={5}>中标供应商</Col>
+                    <Col offset={1} span={17}>
+                        <Select
+                            disabled={data?.comparisonStatus !== 1}
+                            onChange={(value: string) => {
+                                setSupplier(value)
+                            }}
+                            style={{ width: '100%' }}>
+                            {data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData.map((item: any) => <Select.Option
+                                value={item.supplierId}
+                                key={item.id}>{item.supplierName}</Select.Option>)}
+                        </Select>
+                    </Col>
+                </Row>
+        </Modal>
         <DetailContent title={[
             <Button type="primary" ghost key="export" style={{ marginRight: 16 }}>导出</Button>,
             <Button
@@ -149,7 +187,15 @@ export default function Overview(): JSX.Element {
                 onClick={() => {
                     setOprationType("new")
                     setVisible(true)
-                }}>添加报价</Button>
+                }}>添加报价</Button>,
+            <Button
+                type="primary"
+                style={{ marginRight: 16 }}
+                ghost 
+                key="select"
+                onClick={() => {
+                    setSupplierVisible(true)
+                }}>批量中标选择</Button>
         ]} operation={[
             <Button type="primary" ghost key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>

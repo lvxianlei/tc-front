@@ -94,12 +94,8 @@
             "dataIndex": "receiveStatusName"
         },
         {
-            "title": "状态时间",
-            "dataIndex": "updateTime"
-        },
-        {
-            "title": "操作人",
-            "dataIndex": "operatorMan"
+            "title": "收货单",
+            "dataIndex": "weight"
         }
     ]
 }

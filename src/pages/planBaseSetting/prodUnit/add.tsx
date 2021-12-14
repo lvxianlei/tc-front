@@ -11,25 +11,28 @@ const ProdUnitAdd = (props: any) => {
     let [prodLinkList, setProdLinkList] = useState<any[]>([])
     let [itemInfo, setItemInfo] = useState<any>({})
     // let [times, setTimes] = useState<string[]>(['', ''])
-    const [value, setValue] = useState<any>();
+    const [value, setValue] = useState<any>([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(6, 'day').format('YYYY-MM-DD'))]);
     const [dates, setDates] = useState<any>([]);
     const disabledDate = (current: any) => {
       if (!dates || dates.length === 0) {
         return false;
       }
-      const tooLate = dates[0] && current.diff(dates[0], 'days') > 7;
-      const tooEarly = dates[1] && dates[1].diff(current, 'days') > 7;
+      const tooLate = dates[0] && current.diff(dates[0], 'days') > 6;
+      const tooEarly = dates[1] && dates[1].diff(current, 'days') > 6;
       return tooEarly || tooLate;
     };
     useEffect(() => {
         // times[0] = dayjs().format('YYYY-MM-DD')
         // times[1] = dayjs().add(7, 'day').format('YYYY-MM-DD')
         // setTimes(times)
-        setValue([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(7, 'day').format('YYYY-MM-DD'))])
+        // setValue([new Date(), new Date(new Date().setDate(new Date().getDate()+7))])
         getProdLinkList()
         if (props.id) {
             getDetail()
             initCharts([], [])
+            if(value){
+                seeLoad();
+            }
         }
     }, [])
     /**
@@ -55,6 +58,7 @@ const ProdUnitAdd = (props: any) => {
             unitId: props.id,
         })
         setProdLinkList(data.records)
+        
     }
     /**
      * 
@@ -69,17 +73,22 @@ const ProdUnitAdd = (props: any) => {
      * @description 弹窗提交
      */
     const submit = async () => {
-        itemInfo['productionLinkDTOList'] = itemInfo['productionLinkDTOList'].map((item: string) => {
-            return {
-                productionLinkId: item,
-                productionUnitId: props.id
-            }
-        })
-        await RequestUtil.post('/tower-aps/productionUnit', {
-            ...itemInfo,
-        })
-        message.success('操作成功')
-        props.cancelModal(true)
+        if(itemInfo.productivity&&itemInfo.name&&itemInfo['productionLinkDTOList']&&itemInfo['productionLinkDTOList'].length>0){
+            itemInfo['productionLinkDTOList'] = itemInfo['productionLinkDTOList'].map((item: string) => {
+                return {
+                    productionLinkId: item,
+                    productionUnitId: props.id
+                }
+            })
+            await RequestUtil.post('/tower-aps/productionUnit', {
+                ...itemInfo,
+            })
+            message.success('操作成功')
+            props.cancelModal(true)
+        }else{
+            message.error('必填项未填写，不可提交！')
+        }
+        
     }
     /**
      * @description
@@ -89,7 +98,7 @@ const ProdUnitAdd = (props: any) => {
         //     message.error('请选择时间范围')
         //     return
         // }
-        if (!value) {
+        if (!value||value.length===0) {
             message.error('请选择时间范围')
             return
         }
@@ -191,7 +200,7 @@ const ProdUnitAdd = (props: any) => {
                     type: 'value'
                 }
             ],
-            series:datas,
+            series:datas.length>0?datas:'',
         });
     }
     return (
@@ -231,7 +240,7 @@ const ProdUnitAdd = (props: any) => {
                             maxLength={12}
                             value={itemInfo['productivity']}
                             onChange={(ev) => {
-                                changeItemInfo(ev.target.value.replace(/[^0-9]/ig, ""), 'productivity')
+                                changeItemInfo(ev.target.value.replace(/[^1-9]/ig, ""), 'productivity')
                                 console.log(itemInfo)
                             }}
                             placeholder='请输入'
@@ -244,6 +253,8 @@ const ProdUnitAdd = (props: any) => {
                             placeholder='请选择'
                             value={itemInfo['productionLinkDTOList'] || []}
                             mode='multiple'
+                            maxTagCount={10}
+                            searchValue=''
                             onChange={(value) => {
                                 changeItemInfo(value, 'productionLinkDTOList')
                             }}
@@ -271,8 +282,10 @@ const ProdUnitAdd = (props: any) => {
                     <DatePicker.RangePicker
                         disabledDate={disabledDate}
                         onCalendarChange={(val: any) => setDates(val)}
+                        defaultValue={value}
                         value={value}
                         onChange={(value) => {
+                            console.log(value)
                             setValue(value)
                         }}
                         onOpenChange={(open: boolean) => {

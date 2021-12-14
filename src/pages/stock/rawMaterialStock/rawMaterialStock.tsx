@@ -52,7 +52,13 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '区位',
             dataIndex: 'reservoirName',
             width: 120,
-        }, {
+        }, 
+        {
+            title: '供应商',
+            dataIndex: 'supplierName',
+            width: 120,
+        },
+        {
             title: '物料编码',
             dataIndex: 'materialCode',
             width: 120,

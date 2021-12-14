@@ -4,10 +4,14 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../../utils/RequestUtil';
 import AuthUtil from '../../../../utils/AuthUtil';
+import ApplicationContext from "../../../../configuration/ApplicationContext"
 import '../../StockPublicStyle.less';
 import './detail.less';
 
 const { RangePicker } = DatePicker;
+/**
+ * 新增(批号、质保书号、轧制批号)
+ */
 export default function RawMaterialStock(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const history = useHistory(),
@@ -17,6 +21,8 @@ export default function RawMaterialStock(): React.ReactNode {
         [status, setStatus] = useState(''),//状态
         [dateValue, setDateValue] = useState<any>([]),//时间
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
+        [materialTexture, setMaterialTexture] = useState<any>([]), // 材质
+        [standard, setStandard] = useState<any>([]), // 标准
         [keyword, setKeyword] = useState<any>('');//关键字搜索
     const [departmentId, setDepartmentId] = useState('');//部门
     const [outStockStaffId, setPersonnelId] = useState('');//人员
@@ -36,6 +42,17 @@ export default function RawMaterialStock(): React.ReactNode {
     const [tempApplyData, setTempApplyData] = useState<number | string>('');//出库-弹框-缺料申请需要的列表数据
     const [departmentList, setDepartmentList] = useState<any[]>([]);//部门数据
     const [userList, setuserList] = useState<any[]>([]);//申请人数据数据
+    // 标准
+    const standardEnum = (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+
+    // 材质 
+    const materialEnum = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
     const columns = [
         {
             title: '序号',
@@ -87,7 +104,23 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '炉批号',
             dataIndex: 'furnaceBatch',
             width: 120,
-        }, {
+        },
+        {
+            title: '批号',
+            dataIndex: 'batchNumber',
+            width: 100,
+        },
+        {
+            title: '质保书号',
+            dataIndex: 'warrantyNumber',
+            width: 100,
+        },
+        {
+            title: '轧制批号',
+            dataIndex: 'rollingNumber',
+            width: 100,
+        },
+        {
             title: '内部合同号',
             dataIndex: 'contractNumber',
             width: 120,
@@ -339,7 +372,8 @@ export default function RawMaterialStock(): React.ReactNode {
             render: (text: any, item: any, index: any) => {
                 return <span>{index + 1}</span>
             }
-        }, {
+        },
+        {
             title: '物料编码',
             dataIndex: 'standard',
             width: 100,
@@ -409,6 +443,8 @@ export default function RawMaterialStock(): React.ReactNode {
             outStockStaffId,
             selectName: keyword,
             status: status,
+            materialTexture, // 材质
+            standard, // 标准
             updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
             updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
         })
@@ -663,11 +699,47 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
                 <div className="search_item">
+                    <span className="tip">材质：</span>
+                    <div className='selectOrInput'>
+                        <Select
+                            className="select"
+                            style={{ width: "100px" }}
+                            value={status ? status : ''}
+                            onChange={(val) => { setMaterialTexture(val) }}
+                            placeholder="请选择材质"
+                        >
+                            {
+                                materialEnum && materialEnum.length > 0 && materialEnum.map((item: any, index: number) => {
+                                    return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
+                                })
+                            }
+                        </Select>
+                    </div>
+                </div>
+                <div className="search_item">
+                    <span className="tip">标准：</span>
+                    <div className='selectOrInput'>
+                        <Select
+                            className="select"
+                            style={{ width: "100px" }}
+                            value={status ? status : ''}
+                            onChange={(val) => { setStandard(val) }}
+                            placeholder="请选择标准"
+                        >
+                            {
+                                standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
+                                    return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
+                                })
+                            }
+                        </Select>
+                    </div>
+                </div>
+                <div className="search_item">
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
                         <Input
                             style={{ width: "200px" }}
-                            placeholder="品名/炉批号/内部合同号/杆塔号"
+                            placeholder="品名/炉批号/内部合同号/杆塔号/批号、质保书号、轧制批号"
                             value={keyword}
                             allowClear
                             onChange={(e) => {
