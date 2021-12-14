@@ -21,6 +21,12 @@ export default function RecruitEdit(): React.ReactNode {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
         getProdLinkList();
         // getProdUnitList();
+        const value: any = params.productCategoryId &&await RequestUtil.get('/tower-aps/productionUnit', {
+            current: 1,
+            size: 1000,
+            productionLinkId:data.unitId
+        })
+        params.productCategoryId && setProdUnitList(value.records)
         form.setFieldsValue( params.productCategoryId?{
             ...data,
             startTime: data?.startTime?moment(data?.startTime):'',
