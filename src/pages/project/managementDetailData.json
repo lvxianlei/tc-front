@@ -604,7 +604,23 @@
         },
         {
             "title": "执行重量",
-            "dataIndex": "executionWeight"
+            "dataIndex": "implementWeight",
+            "disabled": true
+        },
+        {
+            "title": "执行金额",
+            "dataIndex": "implementMoney",
+            "disabled": true
+        },
+        {
+            "title": "执行重量百分比(%)",
+            "dataIndex": "implementWeightPro",
+            "disabled": true
+        },
+        {
+            "title": "执行金额百分比(%)",
+            "dataIndex": "implementMoneyPro",
+            "disabled": true
         },
         {
             "title": "中标类型",
