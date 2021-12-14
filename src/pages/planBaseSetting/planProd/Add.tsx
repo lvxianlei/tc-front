@@ -283,7 +283,7 @@ export default function RecruitEdit(): React.ReactNode {
                                 var formatDate2 = new Date(`${newDate}`)
                                 const endTime =  formatDate2.setDate(formatDate2.getDate()+value)
                                 form.setFieldsValue({
-                                    endTime: moment(endTime)
+                                    endTime: endTime?moment(endTime):''
                                 })
                             }}/>
                         </Form.Item>
