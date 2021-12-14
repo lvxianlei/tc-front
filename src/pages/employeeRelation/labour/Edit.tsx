@@ -54,7 +54,7 @@ export default function Edit(): React.ReactNode {
     });
     const tableColumns = [
         { title: '合同编号', dataIndex: 'contractNumber', key: 'contractNumber' },
-        { title: '合同公司', dataIndex: 'signedCompany', key: 'signedCompany' },
+        { title: '合同公司', dataIndex: 'signedCompanyName', key: 'signedCompanyName' },
         { title: '合同类型', dataIndex: 'contractType', key: 'contractType', 
             render: (contractType: number): React.ReactNode => {
                 switch (contractType) {

@@ -21,7 +21,7 @@
             "title": "岗位"
         },
         {
-            "dataIndex": "signedCompany",
+            "dataIndex": "signedCompanyName",
             "title": "合同签署公司"
         },
         {
@@ -41,11 +41,11 @@
             "title": "合同类型",
             "type": "select",
             "enum": [
-                { "value": 0, "label": "固定期限劳动合同" },
-                { "value": 1, "label": "无固定期限劳动合同" },
-                { "value": 2, "label": "超龄返聘合同" },
-                { "value": 3, "label": "实习合同" },
-                { "value": 4, "label": "其他合同" }
+                { "value": 1, "label": "固定期限劳动合同" },
+                { "value": 2, "label": "无固定期限劳动合同" },
+                { "value": 3, "label": "超龄返聘合同" },
+                { "value": 4, "label": "实习合同" },
+                { "value": 5, "label": "其他合同" }
             ]
         },
         {

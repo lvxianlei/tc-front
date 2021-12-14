@@ -23,15 +23,15 @@ export default function View(): React.ReactNode {
         { title: '合同类型', dataIndex: 'contractType', key: 'contractType', 
             render: (contractType: number): React.ReactNode => {
                 switch (contractType) {
-                    case 0:
-                        return '固定期限劳动合同';
                     case 1:
-                        return '无固定期限劳动合同';
+                        return '固定期限劳动合同';
                     case 2:
-                        return '超龄返聘合同';
+                        return '无固定期限劳动合同';
                     case 3:
-                        return '实习合同';
+                        return '超龄返聘合同';
                     case 4:
+                        return '实习合同';
+                    case 5:
                         return '其他合同';
                 }
             } 
