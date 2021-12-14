@@ -22,7 +22,12 @@ export default function PlanList(): React.ReactNode {
                     width: 50,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
-                ...archives,
+                ...archives.map((item: any) => {
+                    if (item === "teamName") {
+                        return ({ ...item, render: (value: string, records: any) => <>{records?.departmentName}/{value}</> })
+                    }
+                    return item
+                }),
                 {
                     key: 'operation',
                     title: '操作',
