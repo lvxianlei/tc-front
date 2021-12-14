@@ -142,7 +142,7 @@
                             {
                                 "label": "图纸确认任务",
                                 "path": "/project/drawing",
-                                "authority": "project_drawing_confirmation"
+                                "authority": "project_collection_confirmation"
                             }
                         ]
                     },

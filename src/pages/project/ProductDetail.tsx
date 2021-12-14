@@ -19,7 +19,7 @@ export default function ProductGroupEdit() {
         }
     }))
     const deleteThisRecode = ()=>{
-         // 删除
+         // 删除 这里需要添加
     }
     return <DetailContent
         operation={[

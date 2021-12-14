@@ -466,7 +466,30 @@
       "authority": "project"
     },
     // 图纸确认信息
- 
+    {
+      "name": "图纸确认",
+      "path": "/project/drawing",
+      "module": "./pages/project/drawing",
+      "exact": true,
+      "authority": "project"
+    },
+    {
+      // 项目管理-图纸确认任务-新增/编辑
+      "name":"新增图纸确认",
+      "path":"/project/drawing/new",
+      "module":"./pages/project/drawing/Drawingnew",
+      "exact":true,
+      "authority":"project"
+    },
+    {
+      // 项目管理-图纸确认任务-查看详情
+      "name":"图纸详情",
+      "path":"/project/drawing/details",
+      "module":"./pages/project/drawing/DrawingDetails",
+      "exact":true,
+      "authority":"project"
+    },
+
     { // 合同详情
       "name": "合同详情",
       "path": "/project/contract/detail/:projectId/:id",
@@ -531,20 +554,7 @@
       "exact": true,
       "authority": "project_detail"
     },
-    { // 项目管理基础信息编辑
-      "name": "基础信息编辑",
-      "path": "/project/management/edit/base/:id",
-      "module": "./pages/project/ManagementDetailEdit/BaseInfoEdit",
-      "exact": true,
-      "authority": "project_detail"
-    },
-    { // 项目管理成本评估编辑
-      "name": "成本评估编辑",
-      "path": "/project/management/edit/cost/:projectId",
-      "module": "./pages/project/Cost/CostEdit",
-      "exact": true,
-      "authority": "project_detail"
-    },
+      
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
       "path": "/project/management/new/cost/:projectId",

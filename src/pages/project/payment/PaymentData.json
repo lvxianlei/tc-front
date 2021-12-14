@@ -101,18 +101,8 @@
         },
         {
             "title": "请款类型",
-            "dataIndex": "payType",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "请款",
-                    "value": 0
-                },
-                {
-                    "label": "报销",
-                    "value": 1
-                }
-            ]
+            "dataIndex": "costType",
+            "type": "select"
         },
         {
             "title": "业务经理",
@@ -125,29 +115,27 @@
         {
             "title": "申请时间",
             "dataIndex": "applicantTime"
-        }, 
+        },
         {
             "title": "总金额",
-            "dataIndex": "money"
-        }, 
-        
+            "dataIndex": "sumMoney"
+        },
         {
             "title": "付款方式",
             "dataIndex": "payType"
         },
         {
             "title": "收款方",
-            "dataIndex": "payType"
+            "dataIndex": "payee"
         },
         {
             "title": "账号",
-            "dataIndex": "payType"
+            "dataIndex": "accNum"
         },
         {
             "title": "开户行",
-            "dataIndex": "payType"
+            "dataIndex": "bankName"
         },
-
         {
             "title": "付款状态",
             "dataIndex": "payStatus",
@@ -275,50 +263,27 @@
     "paymentdetail": [
         {
             "title": "票据号",
-            "dataIndex": "costType",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "标书费",
-                    "value": 0
-                },
-                {
-                    "label": "投标服务费",
-                    "value": 1
-                },
-                {
-                    "label": "投标保证金",
-                    "value": 2
-                },
-                {
-                    "label": "中标服务费",
-                    "value": 3
-                },
-                {
-                    "label": "杂费",
-                    "value": 4
-                }
-            ]
+            "dataIndex": "billNumber"
         },
         {
             "title": "金额（元）",
-            "dataIndex": "money"
+            "dataIndex": "billMoney"
         },
         {
             "title": "票据单位",
-            "dataIndex": "billUnit"
+            "dataIndex": "billCompany"
         },
         {
             "title": "票据类型",
             "dataIndex": "billType"
         },
         {
-            "title": "付款时间",
-            "dataIndex": "payTime"
+            "title": "票据时间",
+            "dataIndex": "billTime"
         },
         {
             "title": "备注",
-            "dataIndex": "remark"
+            "dataIndex": "description"
         }
     ],
     "reimbursementdta": [

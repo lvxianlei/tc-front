@@ -1366,7 +1366,7 @@
         },
         {
             "title": " 单重（kg）",
-            "dataIndex": "wight"
+            "dataIndex": "singleWight"
 
         },
         {

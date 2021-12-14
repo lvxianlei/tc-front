@@ -64,9 +64,9 @@ export default function Management(): React.ReactNode {
             dataIndex: 'projectNumber'
         },
         {
-            key: 'projectNumber',
+            key: 'bidBatch',
             title: '招标批次列',
-            dataIndex: 'projectNumber'
+            dataIndex: 'bidBatch'
         },
         {
             key: 'projectType',

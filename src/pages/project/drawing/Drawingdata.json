@@ -1,0 +1,52 @@
+{
+
+    "drawingConfiremationitem":[
+        {
+            "title": "图纸/工程名称",
+            "dataIndex": "projectName",
+            "rules": [
+                {
+                    "required": true
+                }
+            ]
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "projectNumber"
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "projectType"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "releaseDate"
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "bidBuyEndTime"
+        },
+        {
+            "title": "业务经理联系电话",
+            "dataIndex": "biddingEndTime"
+        },
+        {
+            "title": "设计院名称",
+            "dataIndex": "address"
+        },
+        {
+            "title": "设计院联系人",
+            "dataIndex": "country"
+        },
+        {
+            "title": "设计院联系电话",
+            "dataIndex": "projectLeader"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "bidExplain",
+            "type": "textarea"
+        }    
+]
+
+}
