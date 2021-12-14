@@ -240,8 +240,7 @@ const ProdUnitAdd = (props: any) => {
                             maxLength={12}
                             value={itemInfo['productivity']}
                             onChange={(ev) => {
-                                changeItemInfo(ev.target.value.replace(/[^1-9]/ig, ""), 'productivity')
-                                console.log(itemInfo)
+                                changeItemInfo(ev.target.value.replace(/[^0-9]/ig, ""), 'productivity')
                             }}
                             placeholder='请输入'
                         />
