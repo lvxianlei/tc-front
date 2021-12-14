@@ -53,7 +53,8 @@ export default function Edit() {
     const [baseInfoColumns, setBaseInfoColumns] = useState<Object[]>(baseInfo)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`${tabPaths[currentType]}?employeeId=${params.archiveId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`${tabPaths[currentType]}?employeeId=${params.archiveId}`);
+            (currentType === "baseInfo" && result?.isDisability) && setBaseInfoColumns([...baseInfo, ...disabilityCols])
             resole(currentType === "baseInfo" ? {
                 ...result,
                 postType: result?.postType?.split(",")
