@@ -60,7 +60,7 @@ export default function Collection() {
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="编号/来款单位名称/来款银行" style={{ width: 300 }} />
+                children: <Input placeholder="编号/来款单位名称" style={{ width: 300 }} />
             },
             {
                 name: 'startRefundTime',
