@@ -24,7 +24,7 @@ export default function RecruitEdit(): React.ReactNode {
         form.setFieldsValue( params.productCategoryId?{
             ...data,
             startTime: data?.startTime?moment(data?.startTime):'',
-            endTime: data?.startTime && data.minCompletionDays?moment(new Date( data?.startTime).setDate(new Date( data?.startTime).getDate()+ data.minCompletionDays)):'',
+            endTime: data?.startTime && data.minCompletionDays?moment(new Date( data?.startTime).setDate(new Date( data?.startTime).getDate()+ data.minCompletionDays-1)):'',
         }:{})
         resole(data)
     }), {})
