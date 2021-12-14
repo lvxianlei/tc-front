@@ -187,7 +187,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         gantt.config.scales = [
           {unit:"day", step:1, date:"%d" },
           {unit:"month", step:1, date:"%F, %Y" },
-          {unit:"year", step:1, date:"%Y" }
+          // {unit:"year", step:1, date:"%Y" }
         ];
 
         gantt.config.row_height = 22;

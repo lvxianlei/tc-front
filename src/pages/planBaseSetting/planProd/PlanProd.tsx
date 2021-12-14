@@ -79,7 +79,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         gantt.config.scales = [
           {unit:"day", step:1, date:"%d" },
           {unit:"month", step:1, date:"%F, %Y" },
-          {unit:"year", step:1, date:"%Y" }
+          // {unit:"year", step:1, date:"%Y" }
         ];
 
         gantt.config.row_height = 22;
