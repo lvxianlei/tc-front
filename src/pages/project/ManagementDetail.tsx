@@ -367,7 +367,12 @@ export default function ManagementDetail(): React.ReactNode {
                     <Radio.Button value="1" >已通过</Radio.Button>
                 </Radio.Group>
             </Row>
-            {salesPlanStatus === "" && <Row><Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>新增</Button></Row>}
+            <div style={{width: "100%", display: "flex", flexWrap: "nowrap", justifyContent: "space-between", marginTop: 10, marginBottom: 10}}>
+                {
+                    salesPlanStatus === "" && <Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>新增</Button>
+                }
+                <Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>导出</Button>
+            </div>
             <CommonTable columns={[...taskNotice, {
                 title: "操作",
                 dataIndex: "opration",

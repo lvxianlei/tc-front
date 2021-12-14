@@ -1216,6 +1216,11 @@
             ]
         },
         {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "maxLength": 20
+        },
+        {
             "title": "内部合同编号",
             "dataIndex": "internalNumber",
             "disabled": true
@@ -1446,8 +1451,16 @@
             "dataIndex": "productHeight"
         },
         {
-            "title": "杆塔重量（kg）",
-            "dataIndex": "productWeight"
+            "title": "单重(kg)",
+            "dataIndex": "singleWeight"
+        },
+        {
+            "title": "其他重量(kg)",
+            "dataIndex": "otherWeight"
+        },
+        {
+            "title": "总重(kg)",
+            "dataIndex": "totalWeight"
         },
         {
             "title": "备注",
