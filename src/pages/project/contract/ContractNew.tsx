@@ -62,13 +62,7 @@ class ManagementContractNew extends ContractNew {
               children: <Input placeholder="内部合同编号自动生成" disabled />,
             },
             {
-              label: "招标批次",
-              name: "internalNumber",
-              initialValue: contract?.internalNumber,
-              children: <Input placeholder="内部合同编号自动生成" disabled />,
-            },
-            {
-              label: "合同名称",
+              label: "合同/工程名称",
               name: "contractName",
               initialValue: contract?.contractName,
               rules: [
@@ -78,315 +72,6 @@ class ManagementContractNew extends ContractNew {
                 },
               ],
               children: <Input maxLength={100} />,
-            },
-           
-            {
-              label: "中标类型",
-              name: "winBidType",
-              initialValue: contract?.winBidType,
-              children: (
-                <Select
-                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
-                >
-                  {winBidTypeOptions &&
-                    winBidTypeOptions.map(({ id, name }, index) => {
-                      return (
-                        <Select.Option key={index} value={id}>
-                          {name}
-                        </Select.Option>
-                      );
-                    })}
-                </Select>
-              ),
-            },
-            {
-              label: "销售类型",
-              name: "saleType",
-              initialValue: contract?.saleType,
-              children: (
-                <Select
-                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
-                >
-                  {saleTypeOptions &&
-                    saleTypeOptions.map(({ id, name }, index) => {
-                      return (
-                        <Select.Option key={index} value={id}>
-                          {name}
-                        </Select.Option>
-                      );
-                    })}
-                </Select>
-              ),
-            },
-
-            {
-              label: "业主单位",
-              name: "customerCompany",
-              initialValue: contract?.customerInfoDto?.customerCompany,
-              rules: [
-                {
-                  required: true,
-                  message: "请选择业主单位",
-                },
-              ],
-              children: (
-                <>
-                  <Input
-                    value={contract?.customerInfoDto?.customerCompany}
-                    suffix={
-                      <ClientSelectionComponent
-                        onSelect={this.onCustomerCompanySelect}
-                        selectKey={[contract?.customerInfoDto?.customerId]}
-                        id="1"
-                      />
-                    }
-                  />
-                </>
-              ),
-            },
-            
-            {
-              label: "合同签订单位",
-              name: "signCustomerName",
-              initialValue: contract?.signCustomerName,
-              rules: [
-                {
-                  required: true,
-                  message: "请选择合同签订单位",
-                },
-              ],
-              children: (
-                <>
-                  <Input
-                    value={contract?.signCustomerName}
-                    suffix={
-                      <ClientSelectionComponent
-                        onSelect={this.onCustomerNameSelect}
-                        selectKey={[contract?.signCustomerId]}
-                        id="2"
-                      />
-                    }
-                  />
-                </>
-              ),
-            },
-
-            {
-              label: "业主联系人",
-              name: "customerLinkman",
-              initialValue: contract?.customerInfoDto?.customerLinkman,
-              children: (
-                <Input
-                  value={contract?.customerInfoDto?.customerLinkman}
-                  maxLength={30}
-                />
-              ),
-            },
-            {
-              label: "业主联系电话",
-              name: "customerPhone",
-              initialValue: contract?.customerInfoDto?.customerPhone,
-              children: (
-                <Input
-                  value={contract?.customerInfoDto?.customerPhone}
-                  maxLength={30}
-                />
-              ),
-            },
-            {
-              label: "合同签订日期",
-              name: "signContractTime",
-              initialValue: contract?.signContractTime
-                ? moment(contract?.signContractTime)
-                : "",
-              rules: [
-                {
-                  required: true,
-                  message: "请选择合同签订日期",
-                },
-              ],
-              children: (
-                <DatePicker
-                  format="YYYY-MM-DD"
-                  className={layoutStyles.width100}
-                />
-              ),
-            },
-            {
-              label: "签订人",
-              name: "signUserName",
-              initialValue: contract?.signUserName,
-              rules: [
-                {
-                  required: true,
-                  message: "请输入签订人",
-                },
-              ],
-              children: <Input maxLength={20} />,
-            },
-            {
-              label: "业务经理",
-              name: "signUserName",
-              initialValue: contract?.signUserName,
-              rules: [
-                {
-                  required: true,
-                  message: "请输入业务经理",
-                },
-              ],
-              children: <Input maxLength={20} />,
-            },
-
-         
-            {
-              label: "付款方式",
-              name: "customerPhone",
-              initialValue: contract?.customerInfoVo?.customerPhone,
-              children: (
-                <>
-                  <Select
-                    value={contract?.customerInfoVo?.customerPhone}
-                  >
-                    <Select.Option value="1">转账</Select.Option>
-                    <Select.Option value="2">现金</Select.Option>
-                    <Select.Option value="3">支票</Select.Option>
-                    <Select.Option value="4">电汇</Select.Option>
-                    <Select.Option value="5">承兑</Select.Option>
-                  </Select>
-                </>
-              ),
-            },
-            {
-              label: "结算单位",
-              name: "payCompanyName",
-              initialValue: contract?.payCompanyName,
-              rules: [
-                {
-                  required: true,
-                  message: "请选择结算单位",
-                },
-              ],
-              children: (
-                <>
-                  <Input
-                    value={contract?.payCompanyName}
-                    suffix={
-                      <ClientSelectionComponent
-                        onSelect={this.onPayCompanyNameSelect}
-                        selectKey={[contract?.signCustomerId]}
-                      />
-                    }
-                  />
-                </>
-              ),
-            },
-         
-   
-            {
-              label: "要求交货日期",
-              name: "deliveryTime",
-              initialValue: contract?.deliveryTime
-                ? moment(contract?.deliveryTime)
-                : "",
-              rules: [
-                {
-                  required: true,
-                  message: "请选择要求交货日期",
-                },
-              ],
-              children: (
-                <DatePicker
-                  format="YYYY-MM-DD"
-                  className={layoutStyles.width100}
-                />
-              ),
-            },
-            {
-              label:'收到合同形式'
-            },
-            {
-              label:'合同份数'
-            },
-            {
-              label:'合同页数'
-            },
-            {
-              label:'合同接管日期'
-            },
-
-            // {
-            //   label: "有无技术协议",
-            //   name: "isIta",
-            //   initialValue: contract?.isIta,
-            //   rules: [
-            //     {
-            //       required: true,
-            //       message: "请选择技术协议",
-            //     },
-            //   ],
-            //   children: (
-            //     <Select
-            //       getPopupContainer={(triggerNode) => triggerNode.parentNode}
-            //     >
-            //       <Select.Option value={0}>无</Select.Option>
-            //       <Select.Option value={1}>原件</Select.Option>
-            //       <Select.Option value={2}>复印件</Select.Option>
-            //     </Select>
-            //   ),
-            // },
-            {
-              label: "所属区域",
-              name: "region",
-              initialValue: contract?.region,
-              rules: [
-                {
-                  required: true,
-                  message: "请选择所属区域",
-                },
-                {
-                  validator: (
-                    rule: RuleObject,
-                    value: StoreValue,
-                    callback: (error?: string) => void
-                  ) => {
-                    if (value.length >= 1) {
-                      callback();
-                    } else {
-                      callback("所属区域需选择到省级");
-                    }
-                  },
-                },
-              ],
-              children: (
-                <Select
-                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
-                  disabled={
-                    this.getForm()?.getFieldValue("countryCode") === 1 ||
-                    contract?.countryCode === 1
-                  }
-                  onChange={this.regionChange.bind(this)}
-                >
-                  {this.state.regionInfoData?.map((opt: any) => {
-                    return (
-                      <Select.Option key={opt.code} value={opt.code}>
-                        {opt.name}
-                      </Select.Option>
-                    );
-                  })}
-                  <Select.Option value="其他-国外">其他-国外</Select.Option>
-                </Select>
-              ),
-            },
-            {
-              label: "国家",
-              name: "regionOther",
-              initialValue: contract?.regionOther,
-              children: (<Input value={contract?.regionOther} />),
-            },
-            {
-              label:'币种',
-              name:'',
-
             },
             {
               label: "合同总重(吨)",
@@ -454,78 +139,318 @@ class ManagementContractNew extends ContractNew {
               ),
             },
             {
-              label:'要求交货日期',
-              name:'--',
-
+              label: "中标类型",
+              name: "winBidType",
+              initialValue: contract?.winBidType,
+              children: (
+                <Select
+                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
+                >
+                  {winBidTypeOptions &&
+                    winBidTypeOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
+                </Select>
+              ),
             },
             {
-              label:'交货方式',
-              name:'--',
+              label: "销售类型",
+              name: "saleType",
+              initialValue: contract?.saleType,
+              children: (
+                <Select
+                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
+                >
+                  {saleTypeOptions &&
+                    saleTypeOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
+                </Select>
+              ),
+            },
 
+            {
+              label: "业主单位",
+              name: "customerCompany",
+              initialValue: contract?.customerInfoDto?.customerCompany,
+              rules: [
+                {
+                  required: true,
+                  message: "请选择业主单位",
+                },
+              ],
+              children: (
+                <>
+                  <Input
+                    value={contract?.customerInfoDto?.customerCompany}
+                    suffix={
+                      <ClientSelectionComponent
+                        onSelect={this.onCustomerCompanySelect}
+                        selectKey={[contract?.customerInfoDto?.customerId]}
+                        id="1"
+                      />
+                    }
+                  />
+                </>
+              ),
             },
             {
-              label:'交货地点',
-              name:'--',
-
+              label: "业主联系人",
+              name: "customerLinkman",
+              initialValue: contract?.customerInfoDto?.customerLinkman,
+              children: (
+                <Input
+                  value={contract?.customerInfoDto?.customerLinkman}
+                  maxLength={30}
+                />
+              ),
             },
             {
-              label:'合同下计划状态',
-              name:'--',
-
+              label: "业主联系电话",
+              name: "customerPhone",
+              initialValue: contract?.customerInfoDto?.customerPhone,
+              children: (
+                <Input
+                  value={contract?.customerInfoDto?.customerPhone}
+                  maxLength={30}
+                />
+              ),
             },
             {
-              label:'合同重量与计划重量差值',
-              name:'--',
-
+              label: "合同签订单位",
+              name: "signCustomerName",
+              initialValue: contract?.signCustomerName,
+              rules: [
+                {
+                  required: true,
+                  message: "请选择合同签订单位",
+                },
+              ],
+              children: (
+                <>
+                  <Input
+                    value={contract?.signCustomerName}
+                    suffix={
+                      <ClientSelectionComponent
+                        onSelect={this.onCustomerNameSelect}
+                        selectKey={[contract?.signCustomerId]}
+                        id="2"
+                      />
+                    }
+                  />
+                </>
+              ),
             },
             {
-              label:'备注',
-              name:'--',
-
+              label: "付款方式",
+              name: "customerPhone",
+              initialValue: contract?.customerInfoVo?.customerPhone,
+              children: (
+                <>
+                  <Select
+                    value={contract?.customerInfoVo?.customerPhone}
+                  >
+                    <Select.Option value="1">转账</Select.Option>
+                    <Select.Option value="2">现金</Select.Option>
+                    <Select.Option value="3">支票</Select.Option>
+                    <Select.Option value="4">电汇</Select.Option>
+                    <Select.Option value="5">承兑</Select.Option>
+                  </Select>
+                </>
+              ),
             },
-
-         
-            // {
-            //   label: "销售业务员",
-            //   name: "salesman",
-            //   rules: [
-            //     {
-            //       required: true,
-            //       message: "请输入销售业务员",
-            //     },
-            //   ],
-            //   initialValue: contract?.salesman,
-            //   children: (<Input value={contract?.salesman} />),
-            // },
-            // {
-            //   label: "合同接管人",
-            //   name: "takeOverUser",
-            //   initialValue: contract?.takeOverUser,
-            //   children: (<Input value={contract?.takeOverUser} />),
-            // },
-            // {
-            //   label: "合同接管日期",
-            //   name: "takeOverTime",
-            //   initialValue: contract?.takeOverTime,
-            //   children: (
-            //     <DatePicker
-            //       format="YYYY-MM-DD"
-            //       className={layoutStyles.width100}
-            //     />
-            //   ),
-            // },
-            // {
-            //   label: "是否收到合同原件",
-            //   name: "isReceivedContract",
-            //   initialValue: contract?.isReceivedContract || 0,
-            //   children: (
-            //     <Select value={contract?.isReceivedContract}
-            //     >
-            //       <Select.Option value={0}>是</Select.Option>
-            //       <Select.Option value={1}>否</Select.Option>
-            //     </Select>
-            //   ),
-            // }
+            {
+              label: "结算单位",
+              name: "payCompanyName",
+              initialValue: contract?.payCompanyName,
+              rules: [
+                {
+                  required: true,
+                  message: "请选择结算单位",
+                },
+              ],
+              children: (
+                <>
+                  <Input
+                    value={contract?.payCompanyName}
+                    suffix={
+                      <ClientSelectionComponent
+                        onSelect={this.onPayCompanyNameSelect}
+                        selectKey={[contract?.signCustomerId]}
+                      />
+                    }
+                  />
+                </>
+              ),
+            },
+            {
+              label: "合同签订日期",
+              name: "signContractTime",
+              initialValue: contract?.signContractTime
+                ? moment(contract?.signContractTime)
+                : "",
+              rules: [
+                {
+                  required: true,
+                  message: "请选择合同签订日期",
+                },
+              ],
+              children: (
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  className={layoutStyles.width100}
+                />
+              ),
+            },
+            {
+              label: "签订人",
+              name: "signUserName",
+              initialValue: contract?.signUserName,
+              rules: [
+                {
+                  required: true,
+                  message: "请输入签订人",
+                },
+              ],
+              children: <Input maxLength={20} />,
+            },
+            {
+              label: "要求交货日期",
+              name: "deliveryTime",
+              initialValue: contract?.deliveryTime
+                ? moment(contract?.deliveryTime)
+                : "",
+              rules: [
+                {
+                  required: true,
+                  message: "请选择要求交货日期",
+                },
+              ],
+              children: (
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  className={layoutStyles.width100}
+                />
+              ),
+            },
+            {
+              label: "有无技术协议",
+              name: "isIta",
+              initialValue: contract?.isIta,
+              rules: [
+                {
+                  required: true,
+                  message: "请选择技术协议",
+                },
+              ],
+              children: (
+                <Select
+                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
+                >
+                  <Select.Option value={0}>无</Select.Option>
+                  <Select.Option value={1}>原件</Select.Option>
+                  <Select.Option value={2}>复印件</Select.Option>
+                </Select>
+              ),
+            },
+            {
+              label: "所属区域",
+              name: "region",
+              initialValue: contract?.region,
+              rules: [
+                {
+                  required: true,
+                  message: "请选择所属区域",
+                },
+                {
+                  validator: (
+                    rule: RuleObject,
+                    value: StoreValue,
+                    callback: (error?: string) => void
+                  ) => {
+                    if (value.length >= 1) {
+                      callback();
+                    } else {
+                      callback("所属区域需选择到省级");
+                    }
+                  },
+                },
+              ],
+              children: (
+                <Select
+                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
+                  disabled={
+                    this.getForm()?.getFieldValue("countryCode") === 1 ||
+                    contract?.countryCode === 1
+                  }
+                  onChange={this.regionChange.bind(this)}
+                >
+                  {this.state.regionInfoData?.map((opt: any) => {
+                    return (
+                      <Select.Option key={opt.code} value={opt.code}>
+                        {opt.name}
+                      </Select.Option>
+                    );
+                  })}
+                  <Select.Option value="其他-国外">其他-国外</Select.Option>
+                </Select>
+              ),
+            },
+            {
+              label: "国家",
+              name: "regionOther",
+              initialValue: contract?.regionOther,
+              children: (<Input value={contract?.regionOther} />),
+            },
+            {
+              label: "销售业务员",
+              name: "salesman",
+              rules: [
+                {
+                  required: true,
+                  message: "请输入销售业务员",
+                },
+              ],
+              initialValue: contract?.salesman,
+              children: (<Input value={contract?.salesman} />),
+            },
+            {
+              label: "合同接管人",
+              name: "takeOverUser",
+              initialValue: contract?.takeOverUser,
+              children: (<Input value={contract?.takeOverUser} />),
+            },
+            {
+              label: "合同接管日期",
+              name: "takeOverTime",
+              initialValue: contract?.takeOverTime,
+              children: (
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  className={layoutStyles.width100}
+                />
+              ),
+            },
+            {
+              label: "是否收到合同原件",
+              name: "isReceivedContract",
+              initialValue: contract?.isReceivedContract || 0,
+              children: (
+                <Select value={contract?.isReceivedContract}
+                >
+                  <Select.Option value={0}>是</Select.Option>
+                  <Select.Option value={1}>否</Select.Option>
+                </Select>
+              ),
+            }
           ],
         },
       ],
