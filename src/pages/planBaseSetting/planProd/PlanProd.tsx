@@ -165,6 +165,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
           value.endTime = formatDate[1]+ ' 23:59:59';
           delete value.time
       }
+      gantt.clearAll();
       const tree: any = await RequestUtil.get<any>('/tower-aps/productionPlan/thread',value);
       const valueN = tree.length>0 && tree.reduce((res:any, item:any) => {
         const parent = {...item};

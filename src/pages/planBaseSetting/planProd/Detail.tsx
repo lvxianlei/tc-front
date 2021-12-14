@@ -260,6 +260,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           value.endTime = formatDate[1]+ ' 23:59:59';
           delete value.time
       }
+      gantt.clearAll();
       const tree = await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks`,{
         planProductCategoryId:this.props.match.params.id,
         ...value
