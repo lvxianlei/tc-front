@@ -19,7 +19,7 @@ export default function Sure(): React.ReactNode {
         data.newDepartmentName = data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         form.setFieldsValue({
             ...data,
-            checkResult: 2,
+            checkResult: data.checkResult === "提前转正"?1: data.checkResult === "延期转正"? 3 :2,
             positiveDate: data.positiveDate?moment(data.positiveDate):''
         })
         resole(data)
