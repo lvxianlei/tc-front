@@ -102,16 +102,19 @@ export default function Edit() {
                 case "work":
                     {
                         const postData = await workForm.validateFields()
-                        await saveRun("work", postData?.submit.map((item: any) => {
-                            const postItem: any = { ...item }
-                            delete postItem.id
-                            delete postItem.uid
-                            postItem.startWorkDate = postItem.workDate[0] ? postItem.workDate[0] + " 00:00:00" : ""
-                            postItem.endWorkDate = postItem.workDate[1] ? postItem.workDate[1] + " 00:00:00" : ""
-                            postItem.employeeId = params.archiveId
-                            delete postItem.workDate
-                            return postItem
-                        }))
+                        await saveRun("work", {
+                            employeeId: params.archiveId,
+                            workExperienceList: postData?.submit.map((item: any) => {
+                                const postItem: any = { ...item }
+                                delete postItem.id
+                                delete postItem.uid
+                                postItem.startWorkDate = postItem.workDate[0] ? postItem.workDate[0] + " 00:00:00" : ""
+                                postItem.endWorkDate = postItem.workDate[1] ? postItem.workDate[1] + " 00:00:00" : ""
+                                postItem.employeeId = params.archiveId
+                                delete postItem.workDate
+                                return postItem
+                            })
+                        })
                         message.success("保存成功...")
                         history.goBack()
                     }
@@ -119,14 +122,17 @@ export default function Edit() {
                 case "family":
                     {
                         const postData = await familyForm.validateFields()
-                        await saveRun("family", postData?.submit.map((item: any) => {
-                            const postItem: any = { ...item }
-                            delete postItem.id
-                            delete postItem.uid
-                            postItem.employeeId = params.archiveId
-                            delete postItem.workDate
-                            return postItem
-                        }))
+                        await saveRun("family", {
+                            employeeId: params.archiveId,
+                            familyList: postData?.submit.map((item: any) => {
+                                const postItem: any = { ...item }
+                                delete postItem.id
+                                delete postItem.uid
+                                postItem.employeeId = params.archiveId
+                                delete postItem.workDate
+                                return postItem
+                            })
+                        })
                         message.success("保存成功...")
                         history.goBack()
                     }
@@ -134,14 +140,17 @@ export default function Edit() {
                 case "employee":
                     {
                         const postData = await employeeForm.validateFields()
-                        await saveRun("employee", postData?.submit.map((item: any) => {
-                            const postItem: any = { ...item }
-                            delete postItem.id
-                            delete postItem.uid
-                            postItem.employeeId = params.archiveId
-                            delete postItem.workDate
-                            return postItem
-                        }))
+                        await saveRun("employee", {
+                            employeeId: params.archiveId,
+                            relativesList: postData?.submit.map((item: any) => {
+                                const postItem: any = { ...item }
+                                delete postItem.id
+                                delete postItem.uid
+                                postItem.employeeId = params.archiveId
+                                delete postItem.workDate
+                                return postItem
+                            })
+                        })
                         message.success("保存成功...")
                         history.goBack()
                     }
