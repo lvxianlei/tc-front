@@ -20,7 +20,7 @@ export default function RecruitEdit(): React.ReactNode {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
         getProdLinkList();
-        getProdUnitList();
+        // getProdUnitList();
         form.setFieldsValue( params.productCategoryId?{
             ...data,
             startTime: data?.startTime?moment(data?.startTime):'',
@@ -54,10 +54,14 @@ export default function RecruitEdit(): React.ReactNode {
     /**
      * @description 获取生产单元
      */
-    const getProdUnitList = async () => {
+    const getProdUnitList = async (id:any) => {
+        form.setFieldsValue({
+            unitId:''
+        })
         const data: any = await RequestUtil.get('/tower-aps/productionUnit', {
             current: 1,
-            size: 1000
+            size: 1000,
+            productionLinkId:id
         })
         setProdUnitList(data.records)
     }
@@ -210,6 +214,9 @@ export default function RecruitEdit(): React.ReactNode {
                                 className='input'
                                 placeholder='请选择'
                                 style={{width:'100%'}}
+                                onChange={(value:any)=>{
+                                    getProdUnitList(value)
+                                }}
                             >
                                 {
                                     prodLinkList.map((item: any, index: number) => {
@@ -264,7 +271,7 @@ export default function RecruitEdit(): React.ReactNode {
                                     const value = form.getFieldsValue().startTime
                                     if(value){
                                         const newDate = new Date(value)
-                                        const endTime =  newDate.setDate(newDate.getDate()+e)
+                                        const endTime =  newDate.setDate(newDate.getDate()+e-1)
                                         form.setFieldsValue({
                                             endTime: moment(endTime)
                                         })
@@ -282,7 +289,7 @@ export default function RecruitEdit(): React.ReactNode {
                                 const value = form.getFieldsValue().minCompletionDays||0
                                 const newDate = current?.format('YYYY-MM-DD')
                                 var formatDate2 = new Date(`${newDate}`)
-                                const endTime =  formatDate2.setDate(formatDate2.getDate()+value)
+                                const endTime =  formatDate2.setDate(formatDate2.getDate()+value-1)
                                 form.setFieldsValue({
                                     endTime: endTime?moment(endTime):''
                                 })
