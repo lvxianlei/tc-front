@@ -79,7 +79,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         gantt.config.scales = [
           {unit:"day", step:1, date:"%d" },
           {unit:"month", step:1, date:"%F, %Y" },
-          {unit:"year", step:1, date:"%Y" }
+          // {unit:"year", step:1, date:"%Y" }
         ];
 
         gantt.config.row_height = 22;
@@ -125,7 +125,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         const tasksNew = tree.length>0 &&tree.concat(value).map((item:any)=>{
           return {
             ...item,
-            open:true,
+            // open:true,
             start_date: item.startTime?new Date(item.startTime+ ' 00:00:00'): new Date(),
             name: item.name?item.name:item.productCategoryNum,
             deliveryTime: item.deliveryTime?moment(item.deliveryTime).format('YYYY-MM-DD'):undefined,
@@ -176,7 +176,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
       const tasksNew = tree.length>0 &&tree.concat(valueN).map((item:any)=>{
         return {
           ...item,
-          open:true,
+          // open:true,
           start_date: item.startTime?new Date(item.startTime+' 00:00:00'): new Date(),
           name: item.name?item.name:item.productCategoryNum,
           deliveryTime: item.deliveryTime?moment(item.deliveryTime).format('YYYY-MM-DD'):undefined,
