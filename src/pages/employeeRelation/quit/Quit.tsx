@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
+import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef, FormItemType } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
@@ -24,7 +24,7 @@ export default function Quit(): React.ReactNode {
             ...data,
             inductionDate: data?.departureDate?moment(data?.inductionDate):'',
             departureDate: data?.departureDate?moment(data?.departureDate):'',
-            newDepartmentName: data.departmentName+'/'+data.teamName,
+            newDepartmentName: data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName,
         }:{})
         resole(data)
     }), {})
@@ -40,7 +40,7 @@ export default function Quit(): React.ReactNode {
                     <Button type="primary" onClick={() => {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
-                            value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
+                            value.departureDate= value.departureDate;
                             value.id = params.id!=='0'?params.id:undefined;
                             value.submitType='save';
                             RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
@@ -52,7 +52,7 @@ export default function Quit(): React.ReactNode {
                     }}>保存</Button>
                     <Button type="primary" onClick={() => {
                         const value= form.getFieldsValue(true);
-                        value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
+                        value.departureDate= value.departureDate;
                         value.id = params.id!=='0'?params.id:undefined;
                         value.submitType='submit';
                         RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
@@ -81,7 +81,7 @@ export default function Quit(): React.ReactNode {
                                         teamId: selectedRows[0].teamId,
                                         departmentName: selectedRows[0].departmentName,
                                         teamName: selectedRows[0].teamName,
-                                        newDepartmentName: selectedRows[0].departmentName+'/'+selectedRows[0].teamName,
+                                        newDepartmentName: selectedRows[0].Id!=='0'?selectedRows[0].departmentName+'/'+selectedRows[0].teamName:selectedRows[0].teamName,
                                         postId: selectedRows[0].postId,
                                         inductionDate: selectedRows[0].inductionDate?moment(selectedRows[0].inductionDate):'',
                                         employeeNature: selectedRows[0].employeeNature,
@@ -115,7 +115,7 @@ export default function Quit(): React.ReactNode {
                 <Row>
                     <Col span={12}>
                         <Form.Item label='入职日期' name='inductionDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} disabled/>
+                            <DatePicker  style={{ width: '100%' }} disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -135,11 +135,11 @@ export default function Quit(): React.ReactNode {
                             required:true, 
                             message:'请选择离职日期'
                         }]} name='departureDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
-                                disabledDate={(current)=>{
+                            <FormItemType data={{
+                                disabledDate:(current:any)=>{
                                     return current && current< form.getFieldsValue().inductionDate
-                                }}
-                            />
+                                },
+                                format:"YYYY-MM-DD"}} type="date" />
                         </Form.Item>
                     </Col>
                     <Col span={12}>

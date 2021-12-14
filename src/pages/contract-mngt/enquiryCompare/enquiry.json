@@ -62,26 +62,21 @@
             "dataIndex": "materialStandardName"
         },
         {
-            "title": "材质",
-            "dataIndex": "materialTexture"
-        },
-        {
             "title": "规格",
             "dataIndex": "spec"
         },
         {
-            "title": "宽度（mm）",
-            "dataIndex": "width",
-            "type": "number"
-        },
-        {
-            "title": "厚度（mm）",
-            "dataIndex": "thickness",
-            "type": "number"
+            "title": "材质",
+            "dataIndex": "materialTexture"
         },
         {
             "title": "长度（mm）",
             "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width",
             "type": "number"
         },
         {
@@ -110,11 +105,11 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standardName"
+            "dataIndex": "materialStandard"
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture"
+            "dataIndex": "materialTextureId"
         },
         {
             "title": "规格",
@@ -292,27 +287,22 @@
         "readOnly": true,
         "columns": [
             {
-                "title": "物料编号",
-                "dataIndex": "materialCode",
+                "title": "编号",
+                "dataIndex": "materialCode"
+            },
+            {
+                "title": "类别",
+                "dataIndex": "materialTypeName",
+                "search": true
+            },
+            {
+                "title": "类型",
+                "dataIndex": "materialCategoryName",
                 "search": true
             },
             {
                 "title": "品名",
-                "dataIndex": "materialName",
-                "search": true
-            },
-            {
-                "title": "标准",
-                "dataIndex": "standard",
-                "search": true
-            },
-            {
-                "title": "材料",
-                "dataIndex": "rowMaterial"
-            },
-            {
-                "title": "材质",
-                "dataIndex": "structureTexture"
+                "dataIndex": "materialName"
             },
             {
                 "title": "规格",

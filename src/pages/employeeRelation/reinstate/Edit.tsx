@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message, InputNumber} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
+import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef, FormItemType } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import EmployeeUserSelectionComponent, { IUser } from '../EmployeeUserModal';
@@ -21,11 +21,12 @@ export default function RecruitEdit(): React.ReactNode {
         const data: any = params.id&&params.id !== '0' && await RequestUtil.get(`/tower-hr/employeeReinstatement/detail?id=${params.id}`);
         const post: any = await RequestUtil.get(`/tower-system/station?size=1000`);
         setPost(post?.records)
+        console.log(1)
         form.setFieldsValue( params.id&&params.id!=='0'?{
             ...data,
             newDepartmentName: data?.departmentName+'/'+data?.teamName,
-            inductionDate: data?.inductionDate?moment(data?.inductionDate):'',
-            departureDate: data?.departureDate?moment(data?.departureDate):'',
+            // inductionDate: data?.inductionDate?moment(data?.inductionDate):'',
+            // departureDate: data?.departureDate?moment(data?.departureDate):'',
             reinstatementDate: data?.reinstatementDate?moment(data?.reinstatementDate):'',
         }:{})
         resole(data)
@@ -43,25 +44,25 @@ export default function RecruitEdit(): React.ReactNode {
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
                             value.id =  params.id&&params.id!=='0'?params.id:undefined;
-                            value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
-                            value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
-                            value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
+                            value.reinstatementDate = value.reinstatementDate?value.reinstatementDate:undefined;
+                            // value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
+                            // value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             value.submitType = 'save';
                             RequestUtil.post(`/tower-hr/employeeReinstatement/save`,value).then(()=>{
                                 message.success('保存成功！')
                             }).then(()=>{
                                 history.push('/employeeRelation/reinstate')
                             })
-                        })
+                    })
                         
                     }}>保存</Button>
                     {params.status!=='3' && <Button type="primary" onClick={() =>{
                         form.validateFields().then(res=>{
                             const value= form.getFieldsValue(true);
                             value.id =  params.id&&params.id!=='0'?params.id:undefined;
-                            value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
-                            value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
-                            value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
+                            value.reinstatementDate = value.reinstatementDate?value.reinstatementDate:undefined;
+                            // value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
+                            // value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
                             value.submitType = 'submit';
                             RequestUtil.post(`/tower-hr/employeeReinstatement/save`,value).then(()=>{
                                 message.success('提交成功！')
@@ -88,8 +89,10 @@ export default function RecruitEdit(): React.ReactNode {
                                     form.setFieldsValue({
                                         employeeName: selectedRows[0].employeeName,
                                         employeeId: selectedRows[0].id,
-                                        inductionDate: selectedRows[0].inductionDate?moment(selectedRows[0].inductionDate):'',
-                                        departureDate: selectedRows[0].departureDate?moment(selectedRows[0].departureDate):'',
+                                        inductionDate: selectedRows[0].inductionDate?moment(selectedRows[0].inductionDate).format("YYYY-MM-DD"):'',
+                                        departureDate: selectedRows[0].departureDate?moment(selectedRows[0].departureDate).format("YYYY-MM-DD"):'',
+                                        // inductionDate: selectedRows[0].inductionDate?moment(selectedRows[0].inductionDate):'',
+                                        // departureDate: selectedRows[0].departureDate?moment(selectedRows[0].departureDate):'',
                                         departureType: selectedRows[0].departureType,
                                         departureReason: selectedRows[0].departureReason,
                                     });
@@ -98,14 +101,14 @@ export default function RecruitEdit(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <Form.Item label='入职日期' name='inductionDate'>
-                            <DatePicker disabled format='YYYY-MM-DD' style={{width:'100%'}}/>
+                            <Input disabled  style={{width:'100%'}}/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <Form.Item label='离职日期' name='departureDate'>
-                            <DatePicker disabled format='YYYY-MM-DD' style={{width:'100%'}}/>
+                            <Input disabled  style={{width:'100%'}}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -132,11 +135,16 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择复职日期'
                         }]} name='reinstatementDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
+                            <FormItemType data={{
+                                disabledDate:(current:any)=>{
+                                    return current && current< form.getFieldsValue().departureDate
+                                },
+                                format:"YYYY-MM-DD"}} type="date" />
+                            {/* <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
                                 disabledDate={(current)=>{
                                     return current && current< form.getFieldsValue().departureDate
                                 }}
-                            />
+                            /> */}
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -167,7 +175,7 @@ export default function RecruitEdit(): React.ReactNode {
                                     const value = form.getFieldsValue(true);
                                     form.setFieldsValue({
                                         ...value,
-                                        newDepartmentName: selectedRows[0].parentName+'/'+selectedRows[0].name,
+                                        newDepartmentName: selectedRows[0].parentId!=='0'?selectedRows[0].parentName+'/'+selectedRows[0].name:selectedRows[0].name,
                                         departmentId: selectedRows[0].parentId,
                                         teamId: selectedRows[0].id,
                                         companyName: AuthUtil.getTenantName(),

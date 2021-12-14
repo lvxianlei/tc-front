@@ -248,11 +248,11 @@ export default function TowerInformation(): React.ReactNode {
             exportPath={`/tower-science/productSegment`}
             requestData={{ productCategoryId: params.id }}
             extraOperation={ <Space direction="horizontal" size="small">
-                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/modalList`, state: { status: location.state.status } }}><Button type="primary" ghost>模型</Button></Link>
-                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/processCardList`, state: { status: location.state.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
-                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram`, state: { status: location.state.status } }}><Button type="primary" ghost>NC程序</Button></Link>
+                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/modalList`, state: { status: location.state?.status } }}><Button type="primary" ghost>模型</Button></Link>
+                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/processCardList`, state: { status: location.state?.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
+                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram`, state: { status: location.state?.status } }}><Button type="primary" ghost>NC程序</Button></Link>
                 {
-                    userId === location.state.loftingLeader ? <>
+                    userId === location.state?.loftingLeader ? <>
                     <Popconfirm
                         title="确认提交?"
                         onConfirm={ () => {
@@ -263,11 +263,11 @@ export default function TowerInformation(): React.ReactNode {
                         } }
                         okText="提交"
                         cancelText="取消"
-                        disabled={ !(location.state.status < 3) }
+                        disabled={ !(location.state?.status < 3) }
                     >
-                        <Button type="primary" disabled={ !(location.state.status < 3) } ghost>提交</Button>
+                        <Button type="primary" disabled={ !(location.state?.status < 3) } ghost>提交</Button>
                     </Popconfirm>
-                    { location.state.status < 3 ? <TowerLoftingAssign title="塔型放样指派" id={ params.id } update={ onRefresh } type="edit" /> : <Button type="primary" disabled ghost>塔型放样指派</Button> }
+                    { location.state?.status < 3 ? <TowerLoftingAssign title="塔型放样指派" id={ params.id } update={ onRefresh } type="edit" /> : <Button type="primary" disabled ghost>塔型放样指派</Button> }
                     </>
                     : null
                 }

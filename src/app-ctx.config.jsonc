@@ -237,14 +237,19 @@
                         ]
                     },
                     {
-                        "label": "供应商管理",
+                        "label": "合作企业管理",
                         "icon": "technology",
-                        "path": "/supplier-mngt",
+                        "path": "/cooperative",
                         "authority": "supplier_mngt",
                         "items": [
                             {
                                 "label": "供应商管理",
-                                "path": "/supplier-mngt/index",
+                                "path": "/cooperative/supplier-mngt/index",
+                                "authority": "supplier_mngt_list"
+                            },
+                            {
+                                "label": "装卸公司管理",
+                                "path": "/cooperative/stevedoring-company-mngt/stevedoringCompany",
                                 "authority": "supplier_mngt_list"
                             }
                         ]
@@ -873,7 +878,7 @@
                                 "label": "生产单元管理",
                                 "path": "/planBaseSetting/prodUnit",
                                 "authority": "approvalm"
-                            }
+                            } 
                         ]
                     }
                 ]

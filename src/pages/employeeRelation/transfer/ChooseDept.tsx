@@ -117,7 +117,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 type: data.selectType || "radio",
                 onChange: onSelectChange,
                 getCheckboxProps: (record: any) => ({
-                    disabled: record.type === 2
+                    disabled: (record.type === 2) || (record.parentId === "0")
                 })
             }}
             rowKey={(record: any) => record.id}

@@ -16,7 +16,7 @@ export default function Sure(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/positive/check/detail?positiveId=${params.id}`);
-        data.newDepartmentName = data.departmentName+'/'+data.teamName;
+        data.newDepartmentName = data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         form.setFieldsValue({
             ...data,
             checkResult: 2,
@@ -87,7 +87,7 @@ export default function Sure(): React.ReactNode {
                             required:true, 
                             message:'请选择转正日期'
                         }]} name="positiveDate">
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} 
+                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}  disabledDate={current=>current< moment(detailData.inductionDate)}
                                 onChange={(e)=>{
                                     const date = moment(detailData.inductionDate).add(detailData.probationPeriod, 'months').format('YYYY-MM-DD')
                                     console.log(date)

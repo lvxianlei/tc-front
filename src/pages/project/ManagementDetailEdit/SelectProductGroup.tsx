@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Modal } from "antd"
 import { CommonTable, DetailTitle } from "../../common"
 import useRequest from '@ahooksjs/use-request'
@@ -6,10 +6,12 @@ import RequestUtil from "../../../utils/RequestUtil"
 import { contract, productAssist } from '../managementDetailData.json'
 export default function SelectProductGroup(props: any): JSX.Element {
     const [select, setSelect] = useState<any[]>([])
-    const [projectSelect, setProjectSelect] = useState<string[]>([])
+    const [projectSelect, setProjectSelect] = useState<string[]>(props.select || [])
     const [projectSelectRows, setProjectSelectRows] = useState<any[]>([])
-
-    const { loading, error, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    useEffect(() => {
+        setProjectSelect(props.select)
+    }, [JSON.stringify(props.select)])
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract?projectId=${props.projectId}`)
             resole(result)
@@ -36,7 +38,7 @@ export default function SelectProductGroup(props: any): JSX.Element {
         setProjectSelect(selectedRowKeys)
         setProjectSelectRows(selectRows)
     }
-
+    console.log(props.select, projectSelect)
     return <Modal title="选择确认明细" width={1011} {...props} destroyOnClose onOk={() => props.onOk && props.onOk(projectSelectRows)} >
         <CommonTable
             loading={loading}

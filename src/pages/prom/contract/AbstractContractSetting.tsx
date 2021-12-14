@@ -33,6 +33,7 @@ export interface IAbstractContractSettingState extends IAbstractFillableComponen
     readonly checkList?: number[];
     readonly tableDataSource: [];
     readonly regionInfoData: [] | IRegion[];
+    readonly region: string;
     readonly childData: [] | undefined;
     readonly col: [];
     readonly url: { link?: string | undefined, fileSuffix?: string | undefined };
@@ -63,9 +64,11 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly ecpContractNumber: string;
     readonly payCompanyName: string;
     readonly payType: number;
+    readonly country: string;
     readonly regionOther: string;
     readonly takeOverUser: string;
     readonly takeOverTime: string;
+    readonly payCompanyId: string;
     readonly isReceivedContract: number;
 }
 
@@ -74,6 +77,7 @@ export interface ICustomerInfoDto {
     readonly customerCompany?: string;
     readonly customerLinkman?: string;
     readonly customerPhone?: string;
+    readonly payType?: number;
 }
 
 export interface IPaymentPlanDto {
@@ -126,13 +130,13 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public state: S = {
         contract: {},
         url: { link: "", fileSuffix: "" },
-        isVisible: false
+        isVisible: false,
+        region: ""
     } as S;
 
     public async componentDidMount() {
         super.componentDidMount();
         this.getRegionInfo({});
-
     }
 
     protected getAttchsRef(): AttachmentRef | null {
@@ -215,7 +219,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 contract: {
                     ...(contract || {}),
                     payCompanyName: selectedRows[0].name,
-                    payCompanyId: selectedRows[0].id
+                    payCompanyId: selectedRows[0].id?.toString()
                 }
             }) as any)
             this.getForm()?.setFieldsValue({ payCompanyName: selectedRows[0].name });
@@ -224,7 +228,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
 
     public onCustomerCompanySelect = (selectedRows: DataType[]): void => {
         const contract: IContractInfo | undefined = this.state.contract;
-        console.log(selectedRows, contract)
         if (selectedRows && selectedRows.length > 0) {
             const select = {
                 customerId: selectedRows[0].id,
@@ -430,9 +433,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             contractPrice: parseFloat((contractAmount / contractTotalWeight).toFixed(2))
         })
     }
-    public regionChange() {
-        // console.log(111,this.getForm())
-        // this.forceUpdate();
+    public regionChange(value: string) {
+        this.setState({ region: value })
     }
     /**
      * @implements
@@ -508,12 +510,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     required: true,
                     message: '请选择业主单位'
                 }],
-                children:
-                    <>
-                        <Input value={contract?.customerInfoDto?.customerCompany} suffix={
-                            <ClientSelectionComponent onSelect={this.onCustomerCompanySelect} selectKey={[contract.customerInfoDto?.customerId]} />
-                        } />
-                    </>
+                children: (<Input value={contract?.customerInfoDto?.customerCompany} suffix={
+                    <ClientSelectionComponent onSelect={this.onCustomerCompanySelect} selectKey={[contract.customerInfoDto?.customerId]} />
+                } />)
             }, {
                 label: '业主联系人',
                 name: 'customerLinkman',
@@ -871,7 +870,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         }, {
             title: '附件',
             render: (): React.ReactNode => {
-                return (<Attachment ref={ this.attachRef } title={false} edit dataSource={this.state.contract.attachInfoDtos} />)
+                return (<Attachment ref={this.attachRef} title={false} edit dataSource={this.state.contract.attachInfoDtos} />)
             }
         }];
     }

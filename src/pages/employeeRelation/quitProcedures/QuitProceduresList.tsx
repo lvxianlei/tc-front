@@ -65,7 +65,7 @@ export default function QuitProceduresList(): React.ReactNode {
             width: 100,
             dataIndex: 'departmentName',
             render:(_:any,record:any)=>{
-                return <span>{ record.departmentName + '/' + record.teamName }</span>
+                return <span>{ record.departmentId!=='0'?record.departmentName + '/' + record.teamName: record.teamName }</span>
             }
         },
         {

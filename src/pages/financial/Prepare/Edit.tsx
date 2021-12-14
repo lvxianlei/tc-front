@@ -1,21 +1,26 @@
-import React, { useImperativeHandle, forwardRef } from "react"
-import { Spin, Form } from 'antd'
+import React, { useImperativeHandle, forwardRef, useState } from "react"
+import { Spin, Form, Select } from 'antd'
 import { DetailContent, BaseInfo, formatData } from '../../common'
 import { ApplicationList } from "../financialData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { invoiceTypeOptions, payTypeOptions, pleasePayTypeOptions } from "../../../configuration/DictionaryOptions"
 interface EditProps {
     type: "new" | "edit",
     ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
     id: string
 }
 
+interface IResponse {
+    readonly records?: [];
+}
+
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const [baseForm] = Form.useForm()
-    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1210"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const pleasePayTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1212"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const paymentMethodEnum = (ApplicationContext.get().dictionaryOption as any)["1211"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const [ companyList, setCompanyList ] = useState([]);
+    const invoiceTypeEnum = invoiceTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const pleasePayTypeEnum = pleasePayTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const paymentMethodEnum = payTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
 
     const { data: deptData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -31,6 +36,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/${id}`)
             baseForm.setFieldsValue(formatData(ApplicationList, {
                 ...result,
+                businessId: result.businessId + ',' + result.businessName,
                 relatednotes: {
                     value: result.applyPaymentInvoiceVos?.map((item: any) => item.billNumber).join(","),
                     records: result.applyPaymentInvoiceVos?.map((item: any) => ({
@@ -66,8 +72,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const baseData = await baseForm.validateFields()
             const postData = type === "new" ? {
                 ...baseData,
-                supplierId: baseData.supplierName?.id || data?.supplierId,
-                supplierName: baseData.supplierName?.value || data?.supplierName,
+                // supplierId: baseData.supplierName?.id || data?.supplierId,
+                // supplierName: baseData.supplierName?.value || data?.supplierName,
+                businessId: baseData.businessId?.split(',')[0],
+                businessName: baseData.businessId?.split(',')[1],
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
                     invoiceId: item.id,
                     billNumber: item.billNumber
@@ -75,8 +83,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             } : {
                 ...baseData,
                 id: data?.id,
-                supplierId: baseData.supplierName?.id || data?.supplierId,
-                supplierName: baseData.supplierName?.value || data?.supplierName,
+                // supplierId: baseData.supplierName?.id || data?.supplierId,
+                // supplierName: baseData.supplierName?.value || data?.supplierName,
+                businessId: baseData.businessId?.split(',')[0],
+                businessName: baseData.businessId?.split(',')[1],
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
                     invoiceId: item.id,
                     billNumber: item.billNumber
@@ -117,6 +127,48 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         }
     }
 
+    const businessTypeChange = async (e: number) => {
+        let result: IResponse = {};
+        let list: any = {};
+        if(e === 1) {
+            result = await RequestUtil.get(`/tower-supply/supplier?size=100`);
+            list = result?.records?.map((item: { supplierName: string, bankDepositName: string }) => {
+                return{
+                    ...item,
+                    name: item.supplierName,
+                    openBank: item.bankDepositName
+                }
+            })
+        } else if(e === 3) {
+            result = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
+            list = result?.records?.map((item: { stevedoreCompanyName: string, openBankName: string }) => {
+                return{
+                    ...item,
+                    name: item.stevedoreCompanyName,
+                    openBank: item.openBankName
+                }
+            })
+        } else {
+            result = await RequestUtil.get(`/tower-logistic/carrier?size=100`);
+            list = result?.records?.map((item: { companyName: string }) => {
+                return{
+                    ...item,
+                    name: item.companyName
+                }
+            })
+        }
+        setCompanyList(list || []);
+    }
+
+    const businessIdChange = (e: string) => {
+        const businessId: string = e.split(',')[0];
+        const item: any = companyList.filter((res: any) => res.id === businessId)[0];
+        baseForm.setFieldsValue({
+            openBank: item.openBank,
+            openBankNumber: item.bankAccount
+        })
+    }
+
     return <DetailContent>
         <Spin spinning={loading}>
             <BaseInfo form={baseForm} onChange={handleBaseInfoChange} columns={ApplicationList.map((item: any) => {
@@ -136,10 +188,30 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         return ({ ...item, type: "select", enum: paymentMethodEnum })
                     case "pleasePayOrganization":
                         return ({ ...item, enum: deptData })
+                    case 'businessType':
+                        return ({ ...item, render: (data: any, props: any) => {
+                            return <Form.Item name="businessType">
+                                <Select onChange={ (e: number) => businessTypeChange(e) }>
+                                    <Select.Option value={1} key="1">供应商</Select.Option>
+                                    <Select.Option value={2} key="2">装卸公司</Select.Option>
+                                    <Select.Option value={3} key="3">运输公司</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        } })
+                    case 'businessId': 
+                        return ({ ...item, render: (data: any, props: any) => {
+                            return <Form.Item name="businessId">
+                                <Select onChange={(e: string) => businessIdChange(e)}>
+                                    { companyList && companyList.map((item: any) => {
+                                        return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
+                                    }) }
+                                </Select>
+                            </Form.Item>
+                        } })
                     default:
                         return item
                 }
-            })} col={3} dataSource={{}} edit />
+            })} col={2} dataSource={{}} edit />
         </Spin>
     </DetailContent>
 })

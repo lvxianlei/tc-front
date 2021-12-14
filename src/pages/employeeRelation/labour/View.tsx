@@ -5,6 +5,7 @@ import { DetailContent, CommonTable, DetailTitle, BaseInfo, Attachment } from '.
 import useRequest from '@ahooksjs/use-request';
 import { baseInfoData } from './labour.json';
 import RequestUtil from '../../../utils/RequestUtil';
+import moment from 'moment';
 
 
 export default function View(): React.ReactNode {
@@ -12,13 +13,13 @@ export default function View(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-hr/labor/contract/detail`,{contractId: params.id})
-        data.newDepartmentName = data.departmentName+'/'+data.teamName
+        data.newDepartmentName = data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         resole(data)
     }), {})
     const detailData: any = data;
     const tableColumns = [
         { title: '合同编号', dataIndex: 'contractNumber', key: 'contractNumber' },
-        { title: '合同公司', dataIndex: 'signedCompany', key: 'signedCompany' },
+        { title: '合同公司', dataIndex: 'signedCompanyName', key: 'signedCompanyName' },
         { title: '合同类型', dataIndex: 'contractType', key: 'contractType', 
             render: (contractType: number): React.ReactNode => {
                 switch (contractType) {
@@ -35,8 +36,14 @@ export default function View(): React.ReactNode {
                 }
             } 
         },
-        { title: '合同开始时间', dataIndex: 'contractStartDate', key: 'contractStartDate' },
-        { title: '合同结束时间', dataIndex: 'contractEndDate', key: 'contractEndDate'},
+        { title: '合同开始时间', dataIndex: 'contractStartDate', key: 'contractStartDate',
+        render:(contractStartDate: string)=>{
+            return contractStartDate?moment(contractStartDate).format('YYYY-MM-DD'):'-'
+        } },
+        { title: '合同结束时间', dataIndex: 'contractEndDate', key: 'contractEndDate',
+        render:(contractEndDate: string)=>{
+            return contractEndDate?moment(contractEndDate).format('YYYY-MM-DD'):'-'
+        }},
         { title: '操作', dataIndex: 'operation', key: 'operation',render: (_: any, record: any, index: number): React.ReactNode => (
             <Button type='link' onClick={()=>{
                 history.push(`/employeeRelation/labour/view/${params.id}/${record.id}`)

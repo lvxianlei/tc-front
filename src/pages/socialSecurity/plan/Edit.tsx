@@ -13,12 +13,12 @@ export default function Edit() {
     const [insuranceForm] = Form.useForm()
     const [businessForm] = Form.useForm()
     const [businessData, setBusinessData] = useState<any[]>([])
-    const [isSocialSecurity, setIsSocialSecurity] = useState<boolean>(false)
+    const [isSocialSecurity, setIsSocialSecurity] = useState<boolean>(true)
     const { loading: companyLoading, data: companyEnum } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/department/company`)
             resole(result.map((item: any) => {
-                const children = item.children.map((item: any) => ({ title: item.name, value: item.id }))
+                const children = item.children?.map((item: any) => ({ title: item.name, value: item.id })) || []
                 return ({ title: item.name, value: item.id, children })
             }))
         } catch (error) {
@@ -67,7 +67,7 @@ export default function Edit() {
     const handleSave = async () => {
         try {
             const baseData = await baseForm.validateFields()
-            const insuranceFormData = await insuranceForm.validateFields()
+            const insuranceFormData = isSocialSecurity ? await insuranceForm.validateFields() : {}
             const businessData = await businessForm.validateFields()
             const postInsuranceData = Object.keys(insuranceFormData).map((item: any, index: number) => {
                 const rowSpanData = index % 2 === 1 ? insuranceFormData[item - 1] : insuranceFormData[item]
@@ -127,13 +127,16 @@ export default function Edit() {
             })} dataSource={data || {}} edit />
             <DetailTitle title="社保公积金" />
             <Row style={{ padding: "8px 16px" }}>
-                <span style={{ fontSize: 14 }}>是否启用：</span><Switch checked={isSocialSecurity} onChange={(checked: boolean) => setIsSocialSecurity(checked)} />
+                <span style={{ fontSize: 14 }}>是否启用：</span><Switch checked={isSocialSecurity} onChange={(checked: boolean) => {
+                    setIsSocialSecurity(checked)
+                    insuranceForm.resetFields()
+                }} />
             </Row>
             <Form form={insuranceForm}>
                 <CommonTable
                     rowKey={(_: any, index: number) => index}
                     pagination={false}
-                    columns={insurance.map((item: any) => {
+                    columns={isSocialSecurity ? insurance.map((item: any) => {
                         if (["insuranceType", "effectiveMonth"].includes(item.dataIndex)) {
                             return ({
                                 ...item,
@@ -214,7 +217,7 @@ export default function Edit() {
                             default:
                                 return item
                         }
-                    })}
+                    }) : insurance}
                     dataSource={insuranceData} />
             </Form>
             <DetailTitle title="商业保险" />
@@ -222,6 +225,7 @@ export default function Edit() {
             <Form form={businessForm}>
                 <CommonTable
                     rowKey="id"
+                    pagination={false}
                     columns={[{
                         title: "操作",
                         dataIndex: "opration",
@@ -233,21 +237,36 @@ export default function Edit() {
                             case "description":
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                    render: (value: any, record: any, index: number) => <Form.Item
+                                        name={[index, item.dataIndex]}>
                                         <Input.TextArea autoSize={{ maxRows: 1 }} value={value} />
                                     </Form.Item>
                                 })
                             case "insuranceAmount":
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                    render: (value: any, record: any, index: number) => <Form.Item
+                                        rules={[
+                                            {
+                                                "required": true,
+                                                "message": "请填写保险金额..."
+                                            }
+                                        ]}
+                                        name={[index, item.dataIndex]}>
                                         <InputNumber style={{ width: "100%" }} value={value} />
                                     </Form.Item>
                                 })
                             case "commercialInsuranceType":
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                    render: (value: any, record: any, index: number) => <Form.Item
+                                        rules={[
+                                            {
+                                                "required": true,
+                                                "message": "请选择保险类型..."
+                                            }
+                                        ]}
+                                        name={[index, item.dataIndex]}>
                                         <Select style={{ width: "100%" }} value={value}>
                                             <Select.Option value={1}>补充医疗保险</Select.Option>
                                             <Select.Option value={2}>雇主责任险</Select.Option>
@@ -261,7 +280,7 @@ export default function Edit() {
                             default:
                                 return ({
                                     ...item,
-                                    render: (value: any, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
+                                    render: (value: any, record: any, index: number) => <Form.Item rules={item.rules} name={[index, item.dataIndex]}>
                                         <Input value={value} />
                                     </Form.Item>
                                 })

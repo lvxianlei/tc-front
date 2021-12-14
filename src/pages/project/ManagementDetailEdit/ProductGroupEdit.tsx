@@ -92,6 +92,7 @@ export default function ProductGroupEdit() {
         <SelectProductGroup
             projectId={match.params.projectId}
             productGroupId={match.params.id}
+            select={select.map(item => item.id)}
             visible={visible}
             onCancel={() => setVisible(false)}
             onOk={handleModalOk} />

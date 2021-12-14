@@ -11,7 +11,9 @@ export default function FullList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const params = useParams<{ id: string, status: string, materialLeader: string }>();
-    const [filterValue, setFilterValue] = useState({});
+    const [filterValue, setFilterValue] = useState({
+        positiveStatus: 1
+    });
     const columns = [
         {
             key: 'index',
@@ -137,7 +139,7 @@ export default function FullList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button onClick={()=>{history.push(`/employeeRelation/full/view/${record.id}`)}} type='link' >查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/full/sure/${record.id}`)}} type='link' disabled={record.status===2||record.positiveStatus===2}>转正</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/full/sure/${record.id}`)}} type='link' disabled={record.status===2||record.status===3||record.positiveStatus===2}>转正</Button>
                 </Space>
             )
         }
@@ -175,7 +177,7 @@ export default function FullList(): React.ReactNode {
                     {
                         name: 'positiveStatus',
                         label: '转正状态',
-                        children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                        children: <Select placeholder="请选择" style={{ width: "150px" }} defaultValue={1}>
                             <Select.Option value={''} key="">全部</Select.Option>
                             <Select.Option value={1} key="1">待转正</Select.Option>
                             <Select.Option value={2} key="2">已转正</Select.Option>

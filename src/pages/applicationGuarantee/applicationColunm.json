@@ -146,6 +146,7 @@
             "title": "要求交回日期",
             "type": "date",
             "format": "YYYY-MM-DD",
+            "disabled": true,
             "placeholder": "请选择要求交回日期",
             "rules": [
                 {
