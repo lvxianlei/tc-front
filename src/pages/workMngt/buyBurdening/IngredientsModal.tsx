@@ -5,6 +5,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
 import { BatchingScheme, alternative, ConstructionClassification, ConstructionClassificationDetail } from './IngredientsModal.json';
 import "./ingredientsModal.less"
+import { dataTool } from 'echarts';
 interface DataType {
     key: React.Key;
     name: string;
@@ -37,6 +38,10 @@ export default function IngredientsModal(props: any) {
     const [constructionClassification, setConstructionClassification] = useState<any[]>([]);
     // 构建分类明细数据
     const [constructionClassificationDetail, setConstructionClassificationDetail] = useState<any[]>([]);
+    // 构建分类未配的数量
+    const [construNumber, setConstruNumber] = useState<number>(0);
+    // 构建分类明细未配的数量
+    const [construNumberDetail, setConstruNumberDetail] = useState<number>(0);
     // 开数
     const [policyDetailed, setPolicyDetailed] = useState([]);
     // 米数
@@ -47,6 +52,7 @@ export default function IngredientsModal(props: any) {
     const [ preparation, setPreparation ] = useState([]);
     // 配料方案
     const [schemeData, setSchemeData] = useState<any>([]);
+    let [count, setCount] = useState<any>(0);
     const [ serarchForm ] = Form.useForm();
       
     const handleOkuseState = async() => {
@@ -90,6 +96,17 @@ export default function IngredientsModal(props: any) {
         }
     }), { manual: true })
 
+    // 相当于编辑获取配料方案
+    const { run: purchaseListRun, data: purchaseList } = useRequest<{ [key: string]: any }>((purchaseTaskTowerId: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/${purchaseTaskTowerId}`);
+            setSchemeData(result.schemeData || []);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     // 获取构建分类
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -98,6 +115,7 @@ export default function IngredientsModal(props: any) {
                 element["key"] = `${element.structureTexture}_${index}`
             });
             setConstructionClassification(result?.materialList || []);
+            setConstruNumber(result.notConfigured || 0);
             resole(result);
             if (result?.materialList.length > 0) {
                 // 默认选中第一条
@@ -117,8 +135,10 @@ export default function IngredientsModal(props: any) {
             result?.componentList.map((element: any, index: number) => {
                 element["key"] = `${element.id}`
             });
-            resole(result)
             setConstructionClassificationDetail(result?.componentList || []);
+            setConstruNumberDetail(result.completionProgres || 0);
+            setCount(count += 1);
+            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -203,8 +223,10 @@ export default function IngredientsModal(props: any) {
     }), { manual: true })
 
     useEffect(() => {
-        getUser(props.id);
-        getBatchingStrategy();
+            getUser(props.id);
+            getBatchingStrategy();
+            // 获取编辑配料方案信息
+            purchaseListRun(props.id);
     }, [props.id && props.visible])
 
     const rowSelection = {
@@ -213,7 +235,7 @@ export default function IngredientsModal(props: any) {
             // 构建分类改变了，获取构建分类明细
             getSortDetail(props.id, selectedRows[0]?.structureSpec, selectedRows[0]?.structureTexture);
             setSelectSort(selectedRowKeys);
-            setSelectedRowKeysCheck([])
+            setSelectedRowKeysCheck([]);
         },
         getCheckboxProps: (record: any) => ({
             disabled: record.notConfigured <= 0, // Column configuration not to be checked
@@ -236,6 +258,8 @@ export default function IngredientsModal(props: any) {
          * 点击选中处理两件事
          *    1、构建分类对应的以及构建分类明细对应的未配数量需要做对应的减少
          *    2、添加数据到配料方案
+         *    3、构建分类未配的对应减少
+         *    4、构建分类明细未配的对应减少
          */
         const nums = (record.num1 || 0) + (record.num2 || 0) + (record.num3 || 0) + (record.num4 || 0);
         // 构建分类
@@ -244,9 +268,37 @@ export default function IngredientsModal(props: any) {
         result[index].notConfigured = result[index].notConfigured - nums;
         setConstructionClassification(result.slice(0));
         // 构建分类明细
-        const detail = constructionClassificationDetail;
-        const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.structureSpec === record.structureSpec && item.structureTexture === record.structureTexture);
-        detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - nums;
+        let detail = constructionClassificationDetail,
+            detailNumber = construNumberDetail;
+        if (record.component1) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component1);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num1;
+                detailNumber = detailNumber + record.num1;
+            }
+        }
+        if (record.component2) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component2);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num2;
+                detailNumber = detailNumber + record.num2;
+            }
+        }
+        if (record.component3) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component3);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num3;
+                detailNumber = detailNumber + record.num3;
+            }
+        }
+        if (record.component4) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component4);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num4;
+                detailNumber = detailNumber + record.num4;
+            }
+            
+        }
         setConstructionClassificationDetail(detail.slice(0));
         // 配料方案添加数据
         setSchemeData([
@@ -255,6 +307,11 @@ export default function IngredientsModal(props: any) {
         ]);
         // 清空备料方案
         setPreparation([]);
+        // 构建分类
+        const numsConstrue = (construNumber - nums <= 0 ? 0 : (construNumber - nums))
+        setConstruNumber(numsConstrue);
+        // 构建分类明细
+        setConstruNumberDetail(detailNumber);
     }
 
     // 移除
@@ -263,6 +320,8 @@ export default function IngredientsModal(props: any) {
          * 点击选中处理两件事
          *    1、构建分类对应的以及构建分类明细对应的未配数量需要做对应的增加
          *    2、配料方案过滤该条数据
+         *    3、构建分类未配的对应增加
+         *    4、构建分类明细未配的对应增加
          */
         const nums = (record.num1 || 0) + (record.num2 || 0) + (record.num3 || 0) + (record.num4 || 0);
         // 构建分类
@@ -271,10 +330,35 @@ export default function IngredientsModal(props: any) {
         result[index].notConfigured = result[index].notConfigured + nums;
         setConstructionClassification(result.slice(0));
         // 构建分类明细
-        const detail = constructionClassificationDetail;
-        const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.structureSpec === record.structureSpec && item.structureTexture === record.structureTexture);
-        if (detainIndex !== -1) {
-            detail[detainIndex].notConfigured = detail[detainIndex].notConfigured + nums;
+        let detail = constructionClassificationDetail,
+           detailNumber = construNumberDetail;
+        if (record.component1) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component1);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured + record.num1;
+                detailNumber = detailNumber - record.num1;
+            }
+        }
+        if (record.component2) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component2);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured + record.num2;
+                detailNumber = detailNumber - record.num2;
+            }
+        }
+        if (record.component3) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component3);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured + record.num3;
+                detailNumber = detailNumber - record.num3;
+            }
+        }
+        if (record.component4) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component4);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured + record.num4;
+                detailNumber = detailNumber - record.num4;
+            }
         }
         setConstructionClassificationDetail(detail.slice(0));
         // 移除配料方案的数据
@@ -282,7 +366,65 @@ export default function IngredientsModal(props: any) {
         const preIndex = schemeData.findIndex((item: any) => item.structureSpec === record.structureSpec && item.structureTexture === record.structureTexture);
         preList.splice(preIndex, 1);
         setSchemeData(preList.slice(0));
+        // 构建分类
+        const numsConstrue = (construNumber + nums <= 0 ? 0 : (construNumber - nums))
+        setConstruNumber(numsConstrue);
+        // 构建分类明细
+        const numsConstrueDetail = detailNumber <= 0 ? 0 : detailNumber;
+        setConstruNumberDetail(numsConstrueDetail);
     }
+
+    const editDetail = (record: any) => {
+        // 构建分类明细
+        let detail = constructionClassificationDetail,
+            detailNumber = construNumberDetail;
+        if (record.component1) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component1);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num1;
+                detailNumber = detailNumber + record.num1;
+            }
+        }
+        if (record.component2) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component2);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num2;
+                detailNumber = detailNumber + record.num2;
+            }
+        }
+        if (record.component3) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component3);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num3;
+                detailNumber = detailNumber + record.num3;
+            }
+        }
+        if (record.component4) {
+            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component4);
+            if (detainIndex !== -1) {
+                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num4;
+                detailNumber = detailNumber + record.num4;
+            }
+        }
+        setConstructionClassificationDetail(detail.slice(0));
+        const numsConstrueDetail = detailNumber <= 0 ? 0 : detailNumber;
+        setConstruNumberDetail(numsConstrueDetail);
+    }
+
+    const getEditDetail = () => {
+        for (let i = 0; i < schemeData.length; i += 1) {
+            const index = constructionClassificationDetail.findIndex((item: any) => item.code === schemeData[i].component1)
+            const index1 = constructionClassificationDetail.findIndex((item: any) => item.code === schemeData[i].component2)
+            const index2 = constructionClassificationDetail.findIndex((item: any) => item.code === schemeData[i].component3)
+            const index3 = constructionClassificationDetail.findIndex((item: any) => item.code === schemeData[i].component4);
+            if (index !== -1 || index1 !== -1 || index2 !== -1 || index3 !== -1) {
+                editDetail(schemeData[i]);
+            }
+        }
+    }
+    useEffect(() => {
+        getEditDetail();
+    }, [count])
     return (
         <Modal
             title={'配料'}
@@ -368,7 +510,7 @@ export default function IngredientsModal(props: any) {
                     </Form>
                    <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
                       <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类</span>
-                      <span style={{color: "#FF8C00"}}>未分配/全部：{(userData as any) && (userData as any).notConfigured}/{(userData as any) && (userData as any).totalNum}</span>
+                      <span style={{color: "#FF8C00"}}>未分配/全部：{construNumber}/{(userData as any) && (userData as any).totalNum}</span>
                    </div>
                    <Table
                         size="small"
@@ -383,7 +525,7 @@ export default function IngredientsModal(props: any) {
                      />
                      <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
                       <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类明细</span>
-                      <span style={{color: "#FF8C00"}}>{(sortDetailList as any) && (sortDetailList as any).completionProgres} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum}</span>
+                      <span style={{color: "#FF8C00"}}>已配： {construNumberDetail} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum}</span>
                    </div>
                    <Table
                         size="small"

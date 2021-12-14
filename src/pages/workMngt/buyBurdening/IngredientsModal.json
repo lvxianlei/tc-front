@@ -32,54 +32,67 @@
         },
         {
             "title": "数量",
+            "width": 100,
             "dataIndex": "num1"
         },
         {
             "title": "零件2",
+            "width": 100,
             "dataIndex": "component2"
         },
         {
             "title": "长度（mm）",
+            "width": 100,
             "dataIndex": "len2"
         },
         {
             "title": "数量",
+            "width": 100,
             "dataIndex": "num2"
         },
         {
             "title": "零件3",
+            "width": 100,
             "dataIndex": "component3"
         },
         {
             "title": "长度（mm）",
+            "width": 100,
             "dataIndex": "len3"
         },
         {
             "title": "数量",
+            "width": 100,
             "dataIndex": "num3"
         },
         {
             "title": "零件4",
+            "width": 100,
             "dataIndex": "component4"
         },
         {
             "title": "长度（mm）",
+            "width": 100,
             "dataIndex": "len4"
         },
         {
             "title": "数量",
+            "width": 100,
             "dataIndex": "num4"
         },
         {
             "title": "耗损",
+            "width": 100,
             "dataIndex": "lossLength"
         },
         {
             "title": "余料长度",
+            "width": 100,
             "dataIndex": "plannedSurplusLength"
         },
         {
             "title": "利用率",
+            "width": 100,
             "dataIndex": "utilizationRate"
         }
     ],
