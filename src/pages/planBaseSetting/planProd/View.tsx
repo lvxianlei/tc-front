@@ -67,7 +67,7 @@ export default function RecruitEdit(): React.ReactNode {
         setProdUnitList(list.records)
         const listValue: any = list.records.length>0?list.records.filter((res: any) => {return res.id === detail.unitId}):[{}]
         setProductivity(listValue[0].productivity?listValue[0].productivity:'')
-        seeLoad(listValue[0].productivity)
+        seeLoad(listValue[0].productivity?listValue[0].productivity:'')
     }
 
     /**
