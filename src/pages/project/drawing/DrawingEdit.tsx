@@ -11,10 +11,8 @@ import {drawingConfiremationitem} from './Drawingdata.json'
 export default function Drawingnew(): JSX.Element {
   const history = useHistory()
   const attachRef = useRef<AttachmentRef>()
-  const [dataSource, setdataSource] = useState<string>("")
   const [baseInfoForm] = Form.useForm()
   const [cargoVOListForm] = Form.useForm()
- 
   const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
     try {
       const addressList: any[] = await RequestUtil.get(`/tower-system/region/00`)
@@ -81,7 +79,7 @@ export default function Drawingnew(): JSX.Element {
           columns={
             drawingConfiremationitem
           } 
-          dataSource={data || {}}  />
+          dataSource={data || {}} edit />
         <Attachment edit ref={attachRef} />
       </Spin>
     </DetailContent>

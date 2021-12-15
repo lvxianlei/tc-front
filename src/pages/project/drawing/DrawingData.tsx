@@ -4,6 +4,8 @@ import { IClient } from '../../IClient'
 import { Link, useHistory } from 'react-router-dom'
 import { Space, Button, Input, DatePicker, Select, message } from 'antd'
 import ConfirmableButton from '../../../components/ConfirmableButton'
+import localeValues from "antd/es/locale/zh_CN"
+
 
  const columns = [
     {
@@ -72,7 +74,6 @@ import ConfirmableButton from '../../../components/ConfirmableButton'
                         const result = await RequestUtil.delete(`/tower-market/projectInfo?id=${(record as IClient).id}`)
                         if (result) {
                             message.success("项目成功删除...")
-                            // history.go(0)
                         }
                     }}>
                     删除

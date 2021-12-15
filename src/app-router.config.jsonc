@@ -489,6 +489,14 @@
       "exact":true,
       "authority":"project"
     },
+    {
+      // 项目管理-图纸编辑
+      "name":"图纸编辑",
+      "path":"/project/drawing/edit",
+      "module":"./pages/project/drawing/DrawingEdit",
+      "exact":true,
+      "authority":"project"
+    },
 
     { // 合同详情
       "name": "合同详情",

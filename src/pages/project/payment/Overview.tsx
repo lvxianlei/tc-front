@@ -6,10 +6,19 @@ import { PaymentList, paymentdetail } from "./PaymentData.json"
 import { auditIdRecord } from "../../approval-mngt/approvalHeadData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { costTypeOptions } from "../../../configuration/DictionaryOptions"
+
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
-
+    const costTypeOption = costTypeOptions?.map((item)=>{
+         return{
+             label:item.name,
+             value:item.id
+         }
+    })
+    console.log(costTypeOption)
+    
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/payApply/${params.id}`)
@@ -24,7 +33,15 @@ export default function Edit() {
     ]}>
         <Spin spinning={loading}>
             <DetailTitle title="请款单信息" />
-            <BaseInfo columns={PaymentList} dataSource={(data as any) || {}} />
+            <BaseInfo columns={PaymentList.map((item: any) => {
+                if (item.dataIndex === "costType") {
+                    return ({
+                        ...item,
+                        enum: costTypeOption
+                    })
+                }
+                return item
+            })} dataSource={(data as any) || {}} />
             <DetailTitle title={data?.payType === 0 ? "请款明细" : "报销明细"} />
             <CommonTable columns={[
                 ...paymentdetail,

@@ -34,6 +34,7 @@ export enum DictionaryEnums {
     DEPT_TYPE = 1214,
     DATA_TYPE = 1215,
     CERTIFICATE_TYPE = 1216,
+    
 }
 
 let productType: IDict[] | undefined = [];

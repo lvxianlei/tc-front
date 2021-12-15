@@ -7,7 +7,8 @@ import { DetailTitle,BaseInfo,CommonTable,Attachment } from '../common';
 import { overViewBaseColunms,overViewBillColunms,overViewApplyColunms,
     payStatuOptions } from './fundListHead.json';
 import useRequest from '@ahooksjs/use-request';
- import RequestUtil from '../../utils/RequestUtil';
+
+import RequestUtil from '../../utils/RequestUtil';
 interface AddModalProps extends ModalFuncProps {
     payApplyId?: string;
     ref?: { getDetail: () => Promise<any> }
@@ -41,7 +42,7 @@ export default forwardRef(function OverView(props: AddModalProps,ref): JSX.Eleme
             width={800}
             footer={[
                 <Button key="back" onClick={props?.onCancel}>
-                取消
+                    取消
                 </Button>
             ]}
         >

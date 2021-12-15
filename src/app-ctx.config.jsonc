@@ -87,19 +87,6 @@
                             }
                         ]
                     },
-                    // {
-                    //     "label": "产品管理",
-                    //     "icon": "product",
-                    //     "path": "/product",
-                    //     "authority": "product_section",
-                    //     "items": [
-                    //         {
-                    //             "label": "塔型管理",
-                    //             "path": "/product/towershape",
-                    //             "authority": "product_towershape"
-                    //         }
-                    //     ]
-                    // },
                     {
                         "label": "招标信息",
                         "icon": "zhaobiao2",
