@@ -27,21 +27,21 @@
     { // 客户管理
       "name": "客户管理", // 显示在面包屑中的名称
       "path": "/client/mngt",
-      "module": "./pages/client-mngt/ClientMngt",
+      "module": "./pages/clientMngt/index",
       "exact": true,
       "authority": "customer_detail"
     },
     { // 新增客户
       "name": "新增客户",
-      "path": "/client/mngt/new",
-      "module": "./pages/client-mngt/ClientNew",
+      "path": "/client/mngt/:type",
+      "module": "./pages/clientMngt/Edit",
       "exact": true,
       "authority": "customer_detail"
     },
     { // 编辑客户
       "name": "编辑客户",
-      "path": "/client/mngt/setting/:id",
-      "module": "./pages/client-mngt/ClientSetting",
+      "path": "/client/mngt/:type/:id",
+      "module": "./pages/clientMngt/Edit",
       "exact": true,
       "authority": "customer_detail"
     },
