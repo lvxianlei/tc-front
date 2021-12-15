@@ -340,7 +340,7 @@ const ProdUnitAdd = (props: any) => {
                     </Row>
                 
                 </Form>
-                <div className='see' hidden={!props.id}>
+                <div  hidden={!props.id}>
                     <Button
                         onClick={() => {
                             seeLoad(itemInfo.productivity)
