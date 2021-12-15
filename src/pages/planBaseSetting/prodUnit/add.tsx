@@ -142,6 +142,12 @@ const ProdUnitAdd = (props: any) => {
                     emphasis: {
                         focus: 'series'
                     },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                            yAxis:max
+                        }]
+                    },
                     data: []
                 },
                 {
@@ -150,6 +156,12 @@ const ProdUnitAdd = (props: any) => {
                     stack: 'stack',
                     emphasis: {
                         focus: 'series'
+                    },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
                     },
                     data: []
                 },
@@ -160,6 +172,12 @@ const ProdUnitAdd = (props: any) => {
                     emphasis: {
                         focus: 'series'
                     },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
+                    },
                     data: []
                 },
                 {
@@ -168,6 +186,12 @@ const ProdUnitAdd = (props: any) => {
                     stack: 'stack',
                     emphasis: {
                         focus: 'series'
+                    },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
                     },
                     data: []
                 },
@@ -183,7 +207,7 @@ const ProdUnitAdd = (props: any) => {
                     if(item?.productivityList?.length > 0 && res.name === item.productivityList[i].statusName ){
                         res.data.push(item.productivityList[i].productivity || 0)
                     }  else  {
-                        res.data.push(0)
+                        res.data.push(undefined)
                     } 
                 })
             });
@@ -219,11 +243,10 @@ const ProdUnitAdd = (props: any) => {
             yAxis: [
                 {
                     type: 'value',
-                    min: 0,
-                    max: max,
                 }
             ],
-            series:datas.length>0?datas:'',
+           
+            series:datas,
         });
     }
     return (

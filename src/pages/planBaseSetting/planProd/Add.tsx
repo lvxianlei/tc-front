@@ -75,7 +75,7 @@ export default function RecruitEdit(): React.ReactNode {
     /**
      * @description
      */
-     const seeLoad = async () => {
+     const seeLoad = async (max:number) => {
         // if (!times[0]) {
         //     message.error('请选择时间范围')
         //     return
@@ -103,6 +103,12 @@ export default function RecruitEdit(): React.ReactNode {
                     emphasis: {
                         focus: 'series'
                     },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
+                    },
                     data: []
                 },
                 {
@@ -111,6 +117,12 @@ export default function RecruitEdit(): React.ReactNode {
                     stack: 'stack',
                     emphasis: {
                         focus: 'series'
+                    },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
                     },
                     data: []
                 },
@@ -121,6 +133,12 @@ export default function RecruitEdit(): React.ReactNode {
                     emphasis: {
                         focus: 'series'
                     },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
+                    },
                     data: []
                 },
                 {
@@ -129,6 +147,12 @@ export default function RecruitEdit(): React.ReactNode {
                     stack: 'stack',
                     emphasis: {
                         focus: 'series'
+                    },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
                     },
                     data: []
                 },
@@ -144,7 +168,7 @@ export default function RecruitEdit(): React.ReactNode {
                     if(item?.productivityList?.length > 0 && res.name === item.productivityList[i].statusName ){
                         res.data.push(item.productivityList[i].productivity || 0)
                     }  else  {
-                        res.data.push(0)
+                        res.data.push(undefined)
                     } 
                 })
             });
@@ -183,7 +207,7 @@ export default function RecruitEdit(): React.ReactNode {
                     type: 'value',
                 }
             ],
-            series:datas.length>0?datas:'',
+            series:datas,
         });
     }
     return <>
@@ -330,7 +354,7 @@ export default function RecruitEdit(): React.ReactNode {
                             />
                             <Button
                                 onClick={() => {
-                                    seeLoad()
+                                    seeLoad(detailData.productivity)
                                 }}
                             >查看负荷</Button>
                         </Form.Item>
