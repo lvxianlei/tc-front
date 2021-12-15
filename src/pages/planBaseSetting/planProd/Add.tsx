@@ -272,7 +272,7 @@ export default function RecruitEdit(): React.ReactNode {
                 <Row>
                     <Col span={12}>
                         <Form.Item label="完成天数" rules={[{required:true,message:'请填写完成天数'}]} name='minCompletionDays'>
-                            <InputNumber maxLength={10} min={0} style={{width:'100%'}} onChange={
+                            <InputNumber maxLength={10} min={1} style={{width:'100%'}} precision={0} onChange={
                                 e=>{
                                     const value = form.getFieldsValue().startTime
                                     if(value){
