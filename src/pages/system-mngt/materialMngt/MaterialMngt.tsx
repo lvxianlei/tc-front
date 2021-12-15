@@ -128,6 +128,7 @@ export default function MaterialMngt(): React.ReactNode {
         setMaterialList([]);
         setDetailData({});
         form.resetFields();
+        setCode('');
     }
 
     const save = () => {
@@ -252,7 +253,7 @@ export default function MaterialMngt(): React.ReactNode {
                         <Select placeholder="请选择" style={{ width: "100%" }} onChange={ (e: string) => {
                             const list = materialType.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
                             setMaterialList(list[0].children);
-                            form.setFieldsValue({ materialCategory: '' })
+                            form.setFieldsValue({ materialCategory: '' });
                             setCode('');
                         } }>
                             { materialType && materialType.map((item: any) => {
