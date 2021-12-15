@@ -8,7 +8,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待指派",
-                    "dataIndex": "",
+                    "dataIndex": "assignedNum",
                     "path": {
                         "pathname": "/enquiryTask/index",
                         "state": {
@@ -19,6 +19,7 @@
                 },
                 {
                     "title": "待确认",
+                    "dataIndex": "confirmedNum",
                     "path": {
                         "pathname": "/enquiryTask/index",
                         "state": {
@@ -29,6 +30,7 @@
                 },
                 {
                     "title": "待提交",
+                    "dataIndex": "boBeSubmitNum",
                     "path": {
                         "pathname": "/enquiryTask/index",
                         "state": {
@@ -39,6 +41,7 @@
                 },
                 {
                     "title": "待完成",
+                    "dataIndex": "toBeCompleteNum",
                     "path": {
                         "pathname": "/enquiryTask/index",
                         "state": {
@@ -56,6 +59,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待确认",
+                    "dataIndex": "confirmedNum",
                     "path": {
                         "pathname": "/buyingTask/index",
                         "state": {
@@ -66,6 +70,7 @@
                 },
                 {
                     "title": "待提交",
+                    "dataIndex": "",
                     "path": {
                         "pathname": "/buyingTask/index",
                         "state": {
@@ -76,6 +81,7 @@
                 },
                 {
                     "title": "待指派",
+                    "dataIndex": "",
                     "path": {
                         "pathname": "/buyingTask/index",
                         "state": {
@@ -94,6 +100,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
+                    "dataIndex": "",
                     "path": {
                         "pathname": "/workMngt/buyBurdening",
                         "state": {
@@ -112,6 +119,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
+                    "dataIndex": "",
                     "path": {
                         "pathname": "/workMngt/production",
                         "state": {
@@ -130,6 +138,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
+                    "dataIndex": "",
                     "path": {
                         "pathname": "/workMngt/purchaseList",
                         "state": {
@@ -148,6 +157,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
+                    "dataIndex": "",
                     "path": {
                         "pathname": "/workMngt/planList",
                         "state": {
@@ -166,6 +176,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待处理",
+                    "dataIndex": "",
                     "path": {
                         "pathname": "/workMngt/differentList",
                         "state": {
@@ -184,6 +195,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待处理",
+                    "dataIndex": "",
                     "path": {
                         "pathname": "/workMngt/shortageList",
                         "state": {
@@ -198,14 +210,15 @@
             "title": "原材料入库",
             "dataIndex": "materialExWarehouseWorkBatchVo",
             "col": 2,
-            "path": "暂无",
+            "path": "库存管理-原材料入库",
             "workbenchItemVos": [
                 {
                     "title": "待完成",
+                    "dataIndex": "",
                     "path": {
-                        "pathname": "/workMngt/shortageList",
+                        "pathname": "/stock/rawMaterialWarehousing",
                         "state": {
-                            "shortageStatus": 1
+                            "receiveStatus": "0"
                         }
                     },
                     "authority": "workbench_data13"
@@ -216,14 +229,15 @@
             "title": "原材料出库",
             "dataIndex": "materialWarehouseWorkBatchVo",
             "col": 2,
-            "path": "暂无",
+            "path": "库存管理-原材料出库",
             "workbenchItemVos": [
                 {
                     "title": "待完成",
+                    "dataIndex": "",
                     "path": {
-                        "pathname": "/workMngt/shortageList",
+                        "pathname": "/stock/rawMaterialExWarehouse",
                         "state": {
-                            "shortageStatus": 1
+                            "status": "0"
                         }
                     },
                     "authority": "workbench_data14"
@@ -231,17 +245,18 @@
             ]
         },
         {
-            "title": "余料出库",
+            "title": "余料入库",
             "dataIndex": "surplusExWarehouseWorkBatchVo",
             "col": 2,
-            "path": "暂无",
+            "path": "库存管理-余料入库",
             "workbenchItemVos": [
                 {
                     "title": "待完成",
+                    "dataIndex": "",
                     "path": {
-                        "pathname": "/workMngt/shortageList",
+                        "pathname": "/stock/surplusMaterialWarehousing",
                         "state": {
-                            "shortageStatus": 1
+                            "receiveStatus": "0"
                         }
                     },
                     "authority": "workbench_data15"
@@ -252,24 +267,26 @@
             "title": "审批",
             "dataIndex": "applyPaymentWorkBatchVo",
             "col": 1,
-            "path": "暂无",
+            "path": "财务管理-请款申请",
             "workbenchItemVos": [
                 {
                     "title": "我发起的",
+                    "dataIndex": "",
                     "path": {
-                        "pathname": "/workMngt/shortageList",
+                        "pathname": "/financial/prepare",
                         "state": {
-                            "shortageStatus": 1
+                            "applyStatus": 1
                         }
                     },
                     "authority": "workbench_data16"
                 },
                 {
                     "title": "我接收的",
+                    "dataIndex": "",
                     "path": {
-                        "pathname": "/workMngt/shortageList",
+                        "pathname": "/financial/prepare",
                         "state": {
-                            "shortageStatus": 1
+                            "applyStatus": 4
                         }
                     },
                     "authority": "workbench_data17"
