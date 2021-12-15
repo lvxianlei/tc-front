@@ -75,7 +75,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
           {label:'交货日期',name: "deliveryTime", align: "center", template: function (task:any) {
             return (
               `
-              <span title="交货日期:${task.deliveryTime}" >${task.deliveryTime}</span>
+              <span title="交货日期:${task.deliveryTime?task.deliveryTime:'-'}" >${task.deliveryTime?task.deliveryTime:'-'}</span>
               `
             )
             
