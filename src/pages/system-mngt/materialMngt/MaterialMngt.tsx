@@ -252,6 +252,8 @@ export default function MaterialMngt(): React.ReactNode {
                         <Select placeholder="请选择" style={{ width: "100%" }} onChange={ (e: string) => {
                             const list = materialType.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
                             setMaterialList(list[0].children);
+                            form.setFieldsValue({ materialCategory: '' })
+                            setCode('');
                         } }>
                             { materialType && materialType.map((item: any) => {
                                 return <Select.Option key={ item.id } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
@@ -264,7 +266,7 @@ export default function MaterialMngt(): React.ReactNode {
                     }]}>
                         <Select placeholder="请选择" style={{ width: "100%" }} onChange={(e: string) => { 
                             const list: any = materialList.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
-                            setCode(list[0].code)
+                            setCode(list[0].code);
                         }}>
                             { materialList && materialList.map((item: any) => {
                                 return <Select.Option key={ item.id } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
@@ -302,7 +304,7 @@ export default function MaterialMngt(): React.ReactNode {
                             })
                         }
                     }]}>
-                        <Input addonBefore={ code } maxLength={ 20 }/>
+                        <Input addonBefore={ code } maxLength={ 3 }/>
                     </Form.Item></Col>
                 </Row>
                 <Row>
