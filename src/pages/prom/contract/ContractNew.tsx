@@ -36,7 +36,10 @@ export class ContractNew extends AbstractContractSetting<IContractNewRouteProps,
             return totalAmount = parseFloat((Number(item.returnedAmount) + Number(totalAmount)).toFixed(2));
         })
         values.signContractTime = values.signContractTime && moment(values.signContractTime).format('YYYY-MM-DD');
-        values.deliveryTime = values.deliveryTime && moment(values.deliveryTime).format('YYYY-MM-DD');
+        /**
+         * 要求交货日期修改为可以输入控制的
+         */
+        // values.deliveryTime = values.deliveryTime && moment(values.deliveryTime).format('YYYY-MM-DD');
         values.reviewTime = values.reviewTime && moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
         values.paymentPlanDtos = values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
             return {

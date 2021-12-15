@@ -10,6 +10,7 @@ import { ITabItem } from '../../../components/ITabableComponent';
 import { saleTypeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IContract } from '../../IContract';
 import RequestUtil from '../../../utils/RequestUtil';
+import { changeTwoDecimal_f } from "../../../utils/KeepDecimals";
 
 const { Option } = Select;
 
@@ -23,6 +24,8 @@ export interface IPromContractState extends IAbstractMngtComponentState {
     readonly signCustomerName?: string;
     readonly winBidType?: string;
     readonly projectId?: string;
+    readonly contractWeightAll?: string;
+    readonly contractAmountAll?: string;
 }
 
 export interface IResponseData {
@@ -31,14 +34,24 @@ export interface IResponseData {
     readonly current: number;
     readonly total: number;
     readonly records: IContract[];
+    readonly contractList?: IResponseList;
+    readonly contractTotalAmount?: string;
+    readonly contractTotalWeight?: string;
 }
 
+interface IResponseList {
+    readonly id: number;
+    readonly size: number;
+    readonly current: number;
+    readonly total: number;
+    readonly records: IContract[];
+}
 /**
  * 销售合同管理
  */
 export class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IPromContractState> {
 
-    requestPath = '/tower-market/contract';
+    requestPath = '/tower-market/contract/getContractPackPage';
 
     /**
      * @override
@@ -48,7 +61,9 @@ export class PromContract extends AbstractMngtComponent<IPromContractWithRoutePr
     protected getState(): IPromContractState {
         return {
             ...super.getState(),
-            tableDataSource: []
+            tableDataSource: [],
+            contractWeightAll: "", // 合同总重量
+            contractAmountAll: "", // 合同总金额
         };
     }
 
@@ -64,9 +79,9 @@ export class PromContract extends AbstractMngtComponent<IPromContractWithRoutePr
             saleType: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey,
             projectId: (this.props.match.params as any).id
         });
-        if (resData?.records?.length === 0 && resData?.current > 1) {
+        if (resData?.contractList?.records?.length === 0 && resData?.contractList?.current > 1) {
             this.fetchTableData({}, {
-                current: resData.current - 1,
+                current: resData.contractList.current - 1,
                 pageSize: 10,
                 total: 0,
                 showSizeChanger: false
@@ -74,13 +89,15 @@ export class PromContract extends AbstractMngtComponent<IPromContractWithRoutePr
         }
         this.setState({
             ...filterValues,
-            tableDataSource: resData.records,
+            tableDataSource: resData?.contractList?.records || [],
+            contractWeightAll: changeTwoDecimal_f(resData.contractTotalWeight + "") || "0.00",
+            contractAmountAll: changeTwoDecimal_f(resData.contractTotalAmount + "") || "0.00",
             tablePagination: {
                 ...this.state.tablePagination,
-                current: resData.current,
-                pageSize: resData.size,
-                total: resData.total
-            }
+                current: resData?.contractList?.current,
+                pageSize: resData?.contractList?.size,
+                total: resData?.contractList?.total
+            },
         });
     }
 
