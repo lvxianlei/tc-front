@@ -182,7 +182,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           }}
         ];
         gantt.templates.task_text = function(start,end,task){
-          return task.linkName?"<b>生产环节:</b> "+task.linkName:"<b>生产环节:</b> "+"-";
+          return task.linkName?`<b title='生产环节:${task.linkName}'>生产环节:</b> `+task.linkName:`<b  title='生产环节:-'>生产环节:</b> `+"-";
         };
         gantt.config.scales = [
           {unit:"day", step:1, date:"%d" },
