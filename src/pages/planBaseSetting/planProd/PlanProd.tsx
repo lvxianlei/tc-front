@@ -74,7 +74,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
           }}
         ];
         gantt.templates.task_text = function(start,end,task){
-          return task.planNumber?"<b>计划号:</b> "+task.planNumber:"<b> 塔型:</b> "+task.name;
+          return task.planNumber?`<b title='计划号:${task.planNumber}'>计划号:</b> `+task.planNumber:`<b title='塔型:${task.name}'> 塔型:</b> `+task.name;
         };
         gantt.config.scales = [
           {unit:"day", step:1, date:"%d" },
