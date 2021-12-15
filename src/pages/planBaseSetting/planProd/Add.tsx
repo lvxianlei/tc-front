@@ -266,7 +266,7 @@ export default function RecruitEdit(): React.ReactNode {
                 <Row>
                     <Col span={12}>
                         <Form.Item label="占用产力" rules={[{required:true,message:'请填写占用产力'}]} name='useProductivity'>
-                            <InputNumber maxLength={12} min={0} style={{width:'100%'}} />
+                            <InputNumber maxLength={12} min={1} style={{width:'100%'}} />
                         </Form.Item>
                     </Col>
                 </Row>
