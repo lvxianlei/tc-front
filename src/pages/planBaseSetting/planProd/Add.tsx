@@ -24,7 +24,7 @@ export default function RecruitEdit(): React.ReactNode {
         const value: any = params.productCategoryId &&await RequestUtil.get('/tower-aps/productionUnit', {
             current: 1,
             size: 1000,
-            productionLinkId:data.unitId
+            productionLinkId:data.linkId
         })
         params.productCategoryId && setProdUnitList(value.records)
         form.setFieldsValue( params.productCategoryId?{
