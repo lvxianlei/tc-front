@@ -135,7 +135,7 @@
     "supplierFormHead": [
         {
             "title": "开户银行",
-            "dataIndex": "bankDepositName",
+            "dataIndex": "bankDepositId",
             "rules": [
                 {
                     "required": true,
