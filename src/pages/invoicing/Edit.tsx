@@ -5,15 +5,15 @@ import { DetailContent, DetailTitle, BaseInfo, CommonTable, formatData, Attachme
 import { invoicingInfoHead, editInvoicingHead } from "./InvoicingData.json"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import ApplicationContext from "../../configuration/ApplicationContext"
+import { productTypeOptions, saleTypeOptions } from "../../configuration/DictionaryOptions"
 export default function Edit() {
     const params = useParams<{ invoicingId: string }>()
     const history = useHistory()
     const [invoicingDetailVos, setInvoicingDetailVos] = useState<any[]>([])
     const attachRef = useRef<AttachmentRef>()
     const [baseInfo] = Form.useForm()
-    const productType: any = (ApplicationContext.get().dictionaryOption as any)["101"]
-    const saleTypeEnum: any = (ApplicationContext.get().dictionaryOption as any)["123"].map((item: any) => ({ value: item.code, label: item.name }))
+    const productType: any = productTypeOptions
+    const saleTypeEnum: any = saleTypeOptions?.map((item: any) => ({ value: item.code, label: item.name }))
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/invoicing/getInvoicingInfo/${params.invoicingId}`)

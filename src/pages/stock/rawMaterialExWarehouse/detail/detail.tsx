@@ -4,9 +4,9 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../../utils/RequestUtil';
 import AuthUtil from '../../../../utils/AuthUtil';
-import ApplicationContext from "../../../../configuration/ApplicationContext"
 import '../../StockPublicStyle.less';
 import './detail.less';
+import { materialStandardTypeOptions, materialTextureOptions } from '../../../../configuration/DictionaryOptions';
 
 const { RangePicker } = DatePicker;
 /**
@@ -43,13 +43,13 @@ export default function RawMaterialStock(): React.ReactNode {
     const [departmentList, setDepartmentList] = useState<any[]>([]);//部门数据
     const [userList, setuserList] = useState<any[]>([]);//申请人数据数据
     // 标准
-    const standardEnum = (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
+    const standardEnum = materialStandardTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
 
     // 材质 
-    const materialEnum = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+    const materialEnum = materialTextureOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))

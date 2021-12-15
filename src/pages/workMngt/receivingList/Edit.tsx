@@ -4,7 +4,7 @@ import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
 import { BasicInformation, editCargoDetails, SelectedArea, Selected, freightInfo, handlingChargesInfo } from "./receivingListData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { materialStandardTypeOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
 interface ChooseModalProps {
     id: string,
     initChooseList: any[]
@@ -25,13 +25,13 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
     const [waitingArea, setWaitingArea] = useState<any[]>([])
 
     // 标准
-    const standardEnum = (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
+    const standardEnum = materialStandardTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
 
     // 材质 
-    const materialEnum = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+    const materialEnum = materialTextureOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))

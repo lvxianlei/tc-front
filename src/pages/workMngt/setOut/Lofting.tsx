@@ -556,7 +556,12 @@ export default function Lofting(): React.ReactNode {
                             }
                         }
                     } }>{ editorLock }</Button>
-                    <Button type="primary" ghost>PDM同步</Button>
+                    <Button type="primary" onClick={() => { 
+                        RequestUtil.post(`/tower-science/productStructure/pdmSynchronous/${ params.productSegmentId }`).then(res => {
+                            message.success('PDM同步成功');
+                            history.go(0);
+                        })
+                     }} ghost>PDM同步</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => { 
@@ -568,7 +573,6 @@ export default function Lofting(): React.ReactNode {
                             } else {
                                 message.warning('请选择要删除的数据')
                             }
-                                
                         }}
                         okText="确认"
                         cancelText="取消"

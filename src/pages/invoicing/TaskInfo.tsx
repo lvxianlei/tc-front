@@ -5,11 +5,11 @@ import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '.
 import { baseInfoHead, invoiceHead, billingHeader } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import ApplicationContext from "../../configuration/ApplicationContext"
+import { productTypeOptions } from "../../configuration/DictionaryOptions"
 export default function Overview() {
     const history = useHistory()
     const params = useParams<{ invoicingId: string }>()
-    const productType: any = (ApplicationContext.get().dictionaryOption as any)["101"]
+    const productType: any = productTypeOptions
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/invoicing/getTaskInfo/${params.invoicingId}`)

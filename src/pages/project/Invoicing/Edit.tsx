@@ -5,7 +5,7 @@ import { DetailContent, DetailTitle, BaseInfo, EditTable, formatData, Attachment
 import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { productTypeOptions, saleTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function Edit() {
     const params = useParams<{ id: string }>()
     const history = useHistory()
@@ -13,8 +13,8 @@ export default function Edit() {
     const [baseInfo] = Form.useForm()
     const [invoicForm] = Form.useForm()
     const [billingForm] = Form.useForm()
-    const productType: any = (ApplicationContext.get().dictionaryOption as any)["101"]
-    const saleTypeEnum: any = (ApplicationContext.get().dictionaryOption as any)["123"].map((item: any) => ({ value: item.code, label: item.name }))
+    const productType: any = productTypeOptions
+    const saleTypeEnum: any = saleTypeOptions?.map((item: any) => ({ value: item.code, label: item.name }))
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -172,7 +172,7 @@ export default function Edit() {
                     if (item.dataIndex === "productTypeId") {
                         return ({
                             ...item,
-                            enum: productType.map((product: any) => ({
+                            enum: productType?.map((product: any) => ({
                                 value: product.id,
                                 label: product.name
                             }))

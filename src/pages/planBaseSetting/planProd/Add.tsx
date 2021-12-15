@@ -17,6 +17,7 @@ export default function RecruitEdit(): React.ReactNode {
     const [dates, setDates] = useState<any>([]);
     const [ prodLinkList, setProdLinkList] = useState<any[]>([])
     const [ prodUnitList, setProdUnitList] = useState<any[]>([])
+    const [productivity, setProductivity] = useState<any>('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
         getProdLinkList();
@@ -24,8 +25,11 @@ export default function RecruitEdit(): React.ReactNode {
         const value: any = params.productCategoryId &&await RequestUtil.get('/tower-aps/productionUnit', {
             current: 1,
             size: 1000,
-            productionLinkId:data.unitId
+            productionLinkId:data.linkId
         })
+        const listValue: any = params.productCategoryId&& value.records.length>0?value.records.filter((res: any) => {return res.id === data.unitId}):[{}]
+        params.productCategoryId && setProductivity(listValue[0].productivity?listValue[0].productivity:'')
+        params.productCategoryId&& seeLoad(listValue[0].productivity, data.unitId)
         params.productCategoryId && setProdUnitList(value.records)
         form.setFieldsValue( params.productCategoryId?{
             ...data,
@@ -75,7 +79,7 @@ export default function RecruitEdit(): React.ReactNode {
     /**
      * @description
      */
-     const seeLoad = async () => {
+     const seeLoad = async (max?:number, id?:any) => {
         // if (!times[0]) {
         //     message.error('请选择时间范围')
         //     return
@@ -85,7 +89,7 @@ export default function RecruitEdit(): React.ReactNode {
             return
         }
         let data: any = await RequestUtil.get('/tower-aps/productionUnit/load', {
-            id: form.getFieldsValue().unitId,
+            id: form.getFieldsValue().unitId?form.getFieldsValue().unitId:id,
             startTime: value[0].format('YYYY-MM-DD'),
             endTime: value[1].format('YYYY-MM-DD') 
             // startTime: times[0] ? `${times[0]} 00:00:00` : null,
@@ -103,6 +107,12 @@ export default function RecruitEdit(): React.ReactNode {
                     emphasis: {
                         focus: 'series'
                     },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
+                    },
                     data: []
                 },
                 {
@@ -111,6 +121,12 @@ export default function RecruitEdit(): React.ReactNode {
                     stack: 'stack',
                     emphasis: {
                         focus: 'series'
+                    },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
                     },
                     data: []
                 },
@@ -121,6 +137,12 @@ export default function RecruitEdit(): React.ReactNode {
                     emphasis: {
                         focus: 'series'
                     },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
+                    },
                     data: []
                 },
                 {
@@ -129,6 +151,12 @@ export default function RecruitEdit(): React.ReactNode {
                     stack: 'stack',
                     emphasis: {
                         focus: 'series'
+                    },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
                     },
                     data: []
                 },
@@ -144,7 +172,7 @@ export default function RecruitEdit(): React.ReactNode {
                     if(item?.productivityList?.length > 0 && res.name === item.productivityList[i].statusName ){
                         res.data.push(item.productivityList[i].productivity || 0)
                     }  else  {
-                        res.data.push(0)
+                        res.data.push(undefined)
                     } 
                 })
             });
@@ -183,29 +211,29 @@ export default function RecruitEdit(): React.ReactNode {
                     type: 'value',
                 }
             ],
-            series:datas.length>0?datas:'',
+            series:datas,
         });
     }
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button type="primary" onClick={() => {
-                        form.validateFields().then(res=>{
+                    <Button type="primary" onClick={async () => {
+                            await form.validateFields();
                             const value= form.getFieldsValue(true);
-                            value.planId = params.planId;
-                            // value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
-                            value.planProductCategoryId = params.id;
-                            value.startTime= value.startTime?moment(value.startTime).format('YYYY-MM-DD'):undefined;
-                            value.endTime= value.endTime?moment(value.endTime).format('YYYY-MM-DD'):undefined;
-                            // value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
-                            // value.submitType = 'save';
-                            RequestUtil.post(`/tower-aps/planUnitLink`,value).then(()=>{
+                            const submitValue={
+                                ...value,
+                                planId:params.planId,
+                                planProductCategoryId:params.id,
+                                startTime: value.startTime?moment(value.startTime).format('YYYY-MM-DD'):undefined,
+                                endTime:value.endTime?moment(value.endTime).format('YYYY-MM-DD'):undefined,
+
+                            }
+                            RequestUtil.post(`/tower-aps/planUnitLink`,submitValue).then(()=>{
                                 message.success('保存成功！')
                             }).then(()=>{
                                 history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
                             })
-                        })
                         
                     }}>保存</Button>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
@@ -253,6 +281,11 @@ export default function RecruitEdit(): React.ReactNode {
                                 className='input'
                                 placeholder='请选择'
                                 style={{width:'100%'}}
+                                onChange={(select:any)=>{
+                                    console.log(select)
+                                    const list: any = prodUnitList.filter((res: any) => {return res.id === select})
+                                    setProductivity(list[0].productivity?list[0].productivity:'')
+                                }}
                             >
                                 {
                                     prodUnitList.map((item: any, index: number) => {
@@ -330,7 +363,7 @@ export default function RecruitEdit(): React.ReactNode {
                             />
                             <Button
                                 onClick={() => {
-                                    seeLoad()
+                                    seeLoad(productivity)
                                 }}
                             >查看负荷</Button>
                         </Form.Item>

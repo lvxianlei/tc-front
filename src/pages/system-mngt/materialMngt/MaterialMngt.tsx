@@ -101,7 +101,10 @@ export default function MaterialMngt(): React.ReactNode {
                             ...data[0],
                             materialType: data[0].materialType + ',' + data[0].materialTypeName,
                             materialCategory: data[0].materialCategory + ',' + data[0].materialCategoryName,
+                            materialCode: data[0].materialCode?.substring(4),
+                            proportion: data[0].proportion == -1 ? undefined : data[0].proportion
                         }
+                        setCode(data[0].materialCode?.substring(0, 4) || '')
                         setDetailData(newData);
                         form.setFieldsValue({ ...newData });
                         setTitle('编辑');
@@ -136,7 +139,8 @@ export default function MaterialMngt(): React.ReactNode {
                     materialType: values.materialType.split(',')[0],
                     materialTypeName: values.materialType.split(',')[1],
                     materialCategory: values.materialCategory.split(',')[0],
-                    materialCategoryName: values.materialCategory.split(',')[1]
+                    materialCategoryName: values.materialCategory.split(',')[1],
+                    materialCode: code + values.materialCode
                 }
                 if(title === '新增') {
                     RequestUtil.post('/tower-system/material', [values]).then(res => {
@@ -180,6 +184,7 @@ export default function MaterialMngt(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ form ] = Form.useForm();
     const history = useHistory();
+    const [ code, setCode ] = useState('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: IMaterialType[] = await RequestUtil.get<IMaterialType[]>(`/tower-system/materialCategory`);
         resole(data);
@@ -247,6 +252,8 @@ export default function MaterialMngt(): React.ReactNode {
                         <Select placeholder="请选择" style={{ width: "100%" }} onChange={ (e: string) => {
                             const list = materialType.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
                             setMaterialList(list[0].children);
+                            form.setFieldsValue({ materialCategory: '' })
+                            setCode('');
                         } }>
                             { materialType && materialType.map((item: any) => {
                                 return <Select.Option key={ item.id } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
@@ -257,7 +264,10 @@ export default function MaterialMngt(): React.ReactNode {
                         required: true,
                         message: '请选择类型'
                     }]}>
-                        <Select placeholder="请选择" style={{ width: "100%" }}>
+                        <Select placeholder="请选择" style={{ width: "100%" }} onChange={(e: string) => { 
+                            const list: any = materialList.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
+                            setCode(list[0].code);
+                        }}>
                             { materialList && materialList.map((item: any) => {
                                 return <Select.Option key={ item.id } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
                             }) }
@@ -294,7 +304,7 @@ export default function MaterialMngt(): React.ReactNode {
                             })
                         }
                     }]}>
-                        <Input maxLength={ 20 }/>
+                        <Input addonBefore={ code } maxLength={ 3 }/>
                     </Form.Item></Col>
                 </Row>
                 <Row>

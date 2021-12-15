@@ -34,7 +34,7 @@
         },
         {
             "title": "开户银行",
-            "dataIndex": "bankDeposit"
+            "dataIndex": "bankDepositName"
         }
     ],
     "editColums": [
@@ -135,7 +135,7 @@
     "supplierFormHead": [
         {
             "title": "开户银行",
-            "dataIndex": "bankDepositName",
+            "dataIndex": "bankDepositId",
             "rules": [
                 {
                     "required": true,
