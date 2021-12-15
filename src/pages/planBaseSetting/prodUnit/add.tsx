@@ -211,13 +211,13 @@ const ProdUnitAdd = (props: any) => {
                     } 
                 })
             });
-            initCharts(dates, datas, max)
+            initCharts(dates, datas)
         }
     }
     /**
      * @description
      */
-    const initCharts = (dates: string[], datas: any[],max:number) => {
+    const initCharts = (dates: string[], datas: any[]) => {
         const myChart = echarts.init((document as HTMLElement | any).getElementById('chartsBox'));
         // 绘制图表
         myChart.setOption({
@@ -249,6 +249,10 @@ const ProdUnitAdd = (props: any) => {
             series:datas,
         });
     }
+    const formItemLayout = {
+        labelCol: { span: 3 },
+        wrapperCol: { span: 20 }
+    };
     return (
         <div className='public_page'>
             <Modal
@@ -318,7 +322,7 @@ const ProdUnitAdd = (props: any) => {
                         </Select>
                     </div>
                 </div> */}
-                <Form form={ form }>
+                <Form form={ form } {...formItemLayout}>
                     <Row>
                         <Col  span={24}>
                             <Form.Item label="生产单元名称" rules={[{required:true,message:'请填写生产单元名称'}]} name='name'>
@@ -361,31 +365,33 @@ const ProdUnitAdd = (props: any) => {
                             </Form.Item>
                         </Col>
                     </Row>
-                
+                    <Row>
+                    <Col span={24}>
+                        <Form.Item label="查看负荷" hidden={!props.id}>
+                            <DatePicker.RangePicker
+                                disabledDate={disabledDate}
+                                onCalendarChange={(val: any) => setDates(val)}
+                                value={value}
+                                defaultValue={value}
+                                onChange={(value) => {
+                                    setValue(value)
+                                }}
+                                onOpenChange={(open: boolean) => {
+                                    if (open) {
+                                        setDates([]);
+                                        setValue([])
+                                    }
+                                }}
+                            />
+                            <Button
+                                onClick={() => {
+                                    seeLoad(itemInfo.productivity)
+                                }}
+                            >查看负荷</Button>
+                        </Form.Item>
+                    </Col>
+                    </Row>
                 </Form>
-                <div  hidden={!props.id}>
-                    <Button
-                        onClick={() => {
-                            seeLoad(itemInfo.productivity)
-                        }}
-                    >查看负荷</Button>
-                    <DatePicker.RangePicker
-                        disabledDate={disabledDate}
-                        onCalendarChange={(val: any) => setDates(val)}
-                        defaultValue={value}
-                        value={value}
-                        onChange={(value) => {
-                            console.log(value)
-                            setValue(value)
-                        }}
-                        onOpenChange={(open: boolean) => {
-                            if (open) {
-                                setDates([]);
-                                setValue([])
-                            }
-                        }}
-                    />
-                </div>
                 <div id='chartsBox' style={{ width: '100%', height: 300 }} hidden={!props.id}></div>
             </Modal>
         </div>

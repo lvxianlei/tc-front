@@ -17,6 +17,7 @@ export default function RecruitEdit(): React.ReactNode {
     const [dates, setDates] = useState<any>([]);
     const [ prodLinkList, setProdLinkList] = useState<any[]>([])
     const [ prodUnitList, setProdUnitList] = useState<any[]>([])
+    const [productivity, setProductivity] = useState<any>('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
         getProdLinkList();
@@ -26,6 +27,9 @@ export default function RecruitEdit(): React.ReactNode {
             size: 1000,
             productionLinkId:data.linkId
         })
+        const listValue: any = params.productCategoryId&& value.records.length>0?value.records.filter((res: any) => {return res.id === data.unitId}):[{}]
+        params.productCategoryId && setProductivity(listValue[0].productivity?listValue[0].productivity:'')
+        params.productCategoryId&& seeLoad(listValue[0].productivity)
         params.productCategoryId && setProdUnitList(value.records)
         form.setFieldsValue( params.productCategoryId?{
             ...data,
@@ -75,7 +79,7 @@ export default function RecruitEdit(): React.ReactNode {
     /**
      * @description
      */
-     const seeLoad = async (max:number) => {
+     const seeLoad = async (max?:number) => {
         // if (!times[0]) {
         //     message.error('请选择时间范围')
         //     return
@@ -277,6 +281,11 @@ export default function RecruitEdit(): React.ReactNode {
                                 className='input'
                                 placeholder='请选择'
                                 style={{width:'100%'}}
+                                onChange={(select:any)=>{
+                                    console.log(select)
+                                    const list: any = prodUnitList.filter((res: any) => {return res.id === select})
+                                    setProductivity(list[0].productivity?list[0].productivity:'')
+                                }}
                             >
                                 {
                                     prodUnitList.map((item: any, index: number) => {
@@ -354,7 +363,7 @@ export default function RecruitEdit(): React.ReactNode {
                             />
                             <Button
                                 onClick={() => {
-                                    seeLoad(detailData.productivity)
+                                    seeLoad(productivity)
                                 }}
                             >查看负荷</Button>
                         </Form.Item>

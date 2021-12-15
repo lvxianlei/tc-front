@@ -7,20 +7,24 @@ import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import moment from 'moment';
 import * as echarts from 'echarts';
+import dayjs from 'dayjs';
 
 export default function RecruitEdit(): React.ReactNode {
     
     const history = useHistory()
     const params = useParams<{ id: string, productCategoryId: string, planId: string }>();
     const [form] = Form.useForm();
-    const [value, setValue] = useState<any>();
+    const [value, setValue] = useState<any>([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(6, 'day').format('YYYY-MM-DD'))]);
     const [dates, setDates] = useState<any>([]);
     const [ prodLinkList, setProdLinkList] = useState<any[]>([])
     const [ prodUnitList, setProdUnitList] = useState<any[]>([])
+    const [ detail, setDetail] = useState<any>({})
+    const [productivity, setProductivity] = useState<any>('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
         getProdLinkList();
         getProdUnitList();
+        setDetail(data)
         form.setFieldsValue( params.productCategoryId?{
             ...data,
             startTime: data?.startTime?moment(data?.startTime):'',
@@ -37,8 +41,7 @@ export default function RecruitEdit(): React.ReactNode {
         return tooEarly || tooLate;
     };
 
-    console.log(history)
-    const detailData: any = data;
+    let detailData: any = data;
     const formItemLayout = {
         labelCol: { span: 6 },
         wrapperCol: { span: 16 }
@@ -57,17 +60,20 @@ export default function RecruitEdit(): React.ReactNode {
      * @description 获取生产单元
      */
     const getProdUnitList = async () => {
-        const data: any = await RequestUtil.get('/tower-aps/productionUnit', {
+        const list: any = await RequestUtil.get('/tower-aps/productionUnit', {
             current: 1,
             size: 1000
         })
-        setProdUnitList(data.records)
+        setProdUnitList(list.records)
+        const listValue: any = list.records.length>0?list.records.filter((res: any) => {return res.id === detail.unitId}):[{}]
+        setProductivity(listValue[0].productivity?listValue[0].productivity:'')
+        seeLoad(listValue[0].productivity)
     }
 
     /**
      * @description
      */
-     const seeLoad = async () => {
+     const seeLoad = async (max: any) => {
         // if (!times[0]) {
         //     message.error('请选择时间范围')
         //     return
@@ -95,6 +101,12 @@ export default function RecruitEdit(): React.ReactNode {
                     emphasis: {
                         focus: 'series'
                     },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
+                    },
                     data: []
                 },
                 {
@@ -103,6 +115,12 @@ export default function RecruitEdit(): React.ReactNode {
                     stack: 'stack',
                     emphasis: {
                         focus: 'series'
+                    },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
                     },
                     data: []
                 },
@@ -113,6 +131,12 @@ export default function RecruitEdit(): React.ReactNode {
                     emphasis: {
                         focus: 'series'
                     },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
+                    },
                     data: []
                 },
                 {
@@ -121,6 +145,12 @@ export default function RecruitEdit(): React.ReactNode {
                     stack: 'stack',
                     emphasis: {
                         focus: 'series'
+                    },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
                     },
                     data: []
                 },
@@ -136,7 +166,7 @@ export default function RecruitEdit(): React.ReactNode {
                     if(item?.productivityList?.length > 0 && res.name === item.productivityList[i].statusName ){
                         res.data.push(item.productivityList[i].productivity || 0)
                     }  else  {
-                        res.data.push(0)
+                        res.data.push(undefined)
                     } 
                 })
             });
@@ -290,6 +320,7 @@ export default function RecruitEdit(): React.ReactNode {
                                 disabledDate={disabledDate}
                                 onCalendarChange={(val: any) => setDates(val)}
                                 value={value}
+                                defaultValue={value}
                                 onChange={(value) => {
                                     setValue(value)
                                 }}
@@ -302,7 +333,7 @@ export default function RecruitEdit(): React.ReactNode {
                             />
                             <Button
                                 onClick={() => {
-                                    seeLoad()
+                                    seeLoad(productivity)
                                 }}
                             >查看负荷</Button>
                         </Form.Item>
