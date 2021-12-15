@@ -48,10 +48,38 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
             }
               
           }},
-          {label:'塔型',name: "name", align: "center", resize: true, width: 130},
-          {label:'基数',name: "productNum", align: "center"},
-          {label:'重量',name: "weight", align: "center"},
-          {label:'交货日期',name: "deliveryTime", align: "center"},
+          {label:'塔型',name: "name", align: "center", resize: true, template: function (task:any) {
+              return (
+                `
+                <span title="塔型：${task.name}" >${task.name}</span>
+                `
+              )
+              
+          }},
+          {label:'基数',name: "productNum", align: "center", template: function (task:any) {
+            return (
+              `
+              <span title="基数：${task.productNum}" >${task.productNum}</span>
+              `
+            )
+            
+        }},
+          {label:'重量',name: "weight", align: "center", template: function (task:any) {
+            return (
+              `
+              <span title="重量：${task.weight}" >${task.weight}</span>
+              `
+            )
+            
+        }},
+          {label:'交货日期',name: "deliveryTime", align: "center", template: function (task:any) {
+            return (
+              `
+              <span title="交货日期:${task.deliveryTime}" >${task.deliveryTime}</span>
+              `
+            )
+            
+        }},
           // {label:'计划状态',name: "planStatus", align: "center", template: function (task:any) {
           //   switch(task.planStatus){
           //     case 1: return '待排产'
