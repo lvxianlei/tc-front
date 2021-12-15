@@ -108,7 +108,8 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                 parentId: this.state.type === 0 ? '' : this.state.defaultData.parentId
             }).then(res => {
                 this.setState({
-                    visible: false
+                    visible: false,
+                    defaultData: {}
                 })
                 this.fetchMaterialType();
             })
@@ -119,7 +120,8 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                 code: this.state.type === 1 ? values.code : this.state.defaultData.firstCode + values.code
             }).then(res => {
                 this.setState({
-                    visible: false
+                    visible: false,
+                    defaultData: {}
                 })
                 this.fetchMaterialType();
             })
@@ -366,7 +368,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                             { this.state.type === 2 || this.state.type === 3 ?<Input 
                                 min={0}
                                 maxLength={2}
-                                addonBefore={ defaultData?.firstCode }
+                                addonBefore={ defaultData.firstCode || 0 }
                                 style={{ width: "100%" }}
                                 />  : <Input maxLength={2} min={0} placeholder="请输入" style={{ width: "100%" }} />}
                         </Form.Item>
