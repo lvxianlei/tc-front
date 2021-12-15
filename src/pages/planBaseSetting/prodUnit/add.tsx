@@ -30,10 +30,8 @@ const ProdUnitAdd = (props: any) => {
         getProdLinkList()
         if (props.id) {
             getDetail()
-            initCharts([], [])
-            if(value){
-                seeLoad();
-            }
+            // initCharts([], [],productivity)
+           
         }
     }, [])
     /**
@@ -47,10 +45,13 @@ const ProdUnitAdd = (props: any) => {
         data['productionLinkDTOList'] = data['productionLinkVOList'].map((item: { productionLinkId: string }) => {
             return item.productionLinkId
         })
-        // setItemInfo(data)
+        setItemInfo(data)
         form.setFieldsValue({
             ...data
         })
+        if(data){
+            seeLoad(data.productivity);
+        }
     }
     /**
      * @description 获取生产环节
@@ -113,7 +114,7 @@ const ProdUnitAdd = (props: any) => {
     /**
      * @description
      */
-    const seeLoad = async () => {
+    const seeLoad = async (max:number) => {
         // if (!times[0]) {
         //     message.error('请选择时间范围')
         //     return
@@ -186,13 +187,13 @@ const ProdUnitAdd = (props: any) => {
                     } 
                 })
             });
-            initCharts(dates, datas)
+            initCharts(dates, datas, max)
         }
     }
     /**
      * @description
      */
-    const initCharts = (dates: string[], datas: any[],) => {
+    const initCharts = (dates: string[], datas: any[],max:number) => {
         const myChart = echarts.init((document as HTMLElement | any).getElementById('chartsBox'));
         // 绘制图表
         myChart.setOption({
@@ -217,7 +218,9 @@ const ProdUnitAdd = (props: any) => {
             ],
             yAxis: [
                 {
-                    type: 'value'
+                    type: 'value',
+                    min: 0,
+                    max: max,
                 }
             ],
             series:datas.length>0?datas:'',
@@ -340,7 +343,7 @@ const ProdUnitAdd = (props: any) => {
                 <div className='see' hidden={!props.id}>
                     <Button
                         onClick={() => {
-                            seeLoad()
+                            seeLoad(itemInfo.productivity)
                         }}
                     >查看负荷</Button>
                     <DatePicker.RangePicker
