@@ -4,13 +4,13 @@ import { Button, Select, DatePicker, Input, Modal } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
 import { materialPrice } from "./rawMaterial.json"
 import { Page } from '../../common'
-import ApplicationContext from '../../../configuration/ApplicationContext'
 import HistoryPrice from './HistoryPrice'
 import DataSource from './DataSource'
+import { materialStandardOptions } from '../../../configuration/DictionaryOptions'
 
 export default function ViewRawMaterial(): React.ReactNode {
     const history = useHistory()
-    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({
+    const invoiceTypeEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -112,7 +112,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                     name: 'materialStandard',
                     label: '原材料标准',
                     children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
-                        {invoiceTypeEnum.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                        {invoiceTypeEnum?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {

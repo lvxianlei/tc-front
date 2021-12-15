@@ -14,7 +14,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
-import ApplicationContext from "../../configuration/ApplicationContext"
+import { bidTypeOptions, winBidTypeOptions } from '../../configuration/DictionaryOptions'
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
 const productAssistStatistics = [
     {
@@ -33,9 +33,8 @@ const productAssistStatistics = [
 export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, tab?: TabTypes }>()
-    const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
-    const bidType = dictionaryOptions["124"]
-    const frangmentBidType = dictionaryOptions["122"]
+    const bidType = bidTypeOptions
+    const frangmentBidType = winBidTypeOptions
     const [productGroupFlag, setProductGroupFlag] = useState<"productAssistDetailVos" | "productAssistStatisticsVos">("productAssistDetailVos")
     const [productGroupData, setProductGroupData] = useState<{ productAssistDetailVos: any[], productAssistStatisticsVos: any[] }>({
         productAssistDetailVos: [],
@@ -197,7 +196,7 @@ export default function ManagementDetail(): React.ReactNode {
             <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
                 ...item,
                 type: "select",
-                enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name }))
+                enum: bidType?.map((bid: any) => ({ value: bid.id, label: bid.name }))
             }) : item)} dataSource={data || {}} col={4} />
             <DetailTitle title="填写记录" />
             <CommonTable columns={[
@@ -283,7 +282,7 @@ export default function ManagementDetail(): React.ReactNode {
             <DetailTitle title="基本信息" />
             <BaseInfo columns={frameAgreementColumns.map((item: any) => item.dataIndex === "bidType" ? ({
                 ...item,
-                enum: frangmentBidType.map((fitem: any) => ({
+                enum: frangmentBidType?.map((fitem: any) => ({
                     value: fitem.id, label: fitem.name
                 }))
             }) : item)}

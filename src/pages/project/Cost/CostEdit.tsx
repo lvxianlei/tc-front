@@ -7,7 +7,7 @@ import type { TabTypes } from "../ManagementDetail"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { voltageGradeOptions } from "../../../configuration/DictionaryOptions"
 
 export type SelectType = "selectA" | "selectB" | "selectC"
 
@@ -154,7 +154,7 @@ const EditableProTableList: React.FC<any> = forwardRef(({ data, deleteProduct },
 })
 
 export default function CostEdit() {
-    const voltageEnum: any = (ApplicationContext.get().dictionaryOption as any)["102"].map((dic: any) => ({ label: dic.name, value: dic.name }))
+    const voltageEnum: any = voltageGradeOptions?.map((dic: any) => ({ label: dic.name, value: dic.name }))
     const history = useHistory()
     const [baseInfo] = Form.useForm()
     const formRef = useRef([])

@@ -5,11 +5,11 @@ import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '.
 import { baseInfoHead, invoiceHead, billingHead, batchHead } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { productTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
-    const productType: any = (ApplicationContext.get().dictionaryOption as any)["101"]
+    const productType: any = productTypeOptions
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
@@ -52,7 +52,7 @@ export default function Edit() {
                 if (item.dataIndex === "productTypeId") {
                     return ({
                         ...item,
-                        enum: productType.map((product: any) => ({
+                        enum: productType?.map((product: any) => ({
                             value: product.id,
                             label: product.name
                         }))
