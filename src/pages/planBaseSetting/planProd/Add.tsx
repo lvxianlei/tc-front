@@ -29,7 +29,7 @@ export default function RecruitEdit(): React.ReactNode {
         })
         const listValue: any = params.productCategoryId&& value.records.length>0?value.records.filter((res: any) => {return res.id === data.unitId}):[{}]
         params.productCategoryId && setProductivity(listValue[0].productivity?listValue[0].productivity:'')
-        params.productCategoryId&& seeLoad(listValue[0].productivity)
+        params.productCategoryId&& seeLoad(listValue[0].productivity, data.unitId)
         params.productCategoryId && setProdUnitList(value.records)
         form.setFieldsValue( params.productCategoryId?{
             ...data,
@@ -79,7 +79,7 @@ export default function RecruitEdit(): React.ReactNode {
     /**
      * @description
      */
-     const seeLoad = async (max?:number) => {
+     const seeLoad = async (max?:number, id?:any) => {
         // if (!times[0]) {
         //     message.error('请选择时间范围')
         //     return
@@ -89,7 +89,7 @@ export default function RecruitEdit(): React.ReactNode {
             return
         }
         let data: any = await RequestUtil.get('/tower-aps/productionUnit/load', {
-            id: form.getFieldsValue().unitId,
+            id: form.getFieldsValue().unitId?form.getFieldsValue().unitId:id,
             startTime: value[0].format('YYYY-MM-DD'),
             endTime: value[1].format('YYYY-MM-DD') 
             // startTime: times[0] ? `${times[0]} 00:00:00` : null,
