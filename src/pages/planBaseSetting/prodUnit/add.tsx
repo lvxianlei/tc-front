@@ -367,7 +367,7 @@ const ProdUnitAdd = (props: any) => {
                     </Row>
                     <Row>
                     <Col span={24}>
-                        <Form.Item label="查看负荷" hidden={!props.id}>
+                        <Form.Item label="时间范围" hidden={!props.id}>
                             <DatePicker.RangePicker
                                 disabledDate={disabledDate}
                                 onCalendarChange={(val: any) => setDates(val)}

@@ -347,7 +347,7 @@ export default function RecruitEdit(): React.ReactNode {
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label="查看负荷">
+                        <Form.Item label="时间范围">
                             <DatePicker.RangePicker
                                 disabledDate={disabledDate}
                                 onCalendarChange={(val: any) => setDates(val)}
