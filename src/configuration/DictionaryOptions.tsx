@@ -34,6 +34,8 @@ export enum DictionaryEnums {
     DEPT_TYPE = 1214,
     DATA_TYPE = 1215,
     CERTIFICATE_TYPE = 1216,
+    CONTRACT_PLAN_STATUS = 1217,
+    CONTRACT_FORM = 1218,
 }
 
 let productType: IDict[] | undefined = [];
@@ -66,6 +68,8 @@ let materialTexture: IDict[] | undefined = [];
 let supplierType: IDict[] | undefined = [];
 let qualityAssurance: IDict[] | undefined = [];
 let supplyProducts: IDict[] | undefined = [];
+let contractPlanStatus: IDict[] | undefined = [];
+let contractForm: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -98,6 +102,8 @@ if (dictionary) {
     supplierType = dictionary[DictionaryEnums.SUPPLIER_TYPE];
     qualityAssurance = dictionary[DictionaryEnums.QUALITY_ASSURANCE];
     supplyProducts = dictionary[DictionaryEnums.SUPPLY_PRODUCTS];
+    contractPlanStatus = dictionary[DictionaryEnums.CONTRACT_PLAN_STATUS];
+    contractForm = dictionary[DictionaryEnums.CONTRACT_FORM];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -130,3 +136,5 @@ export const materialTextureOptions = materialTexture; //材质
 export const supplierTypeOptions = supplierType; //供应商类型
 export const qualityAssuranceOptions = qualityAssurance; //质量保证体系
 export const supplyProductsOptions = supplyProducts; //供应商供货产品
+export const contractPlanStatusOptions = contractPlanStatus; // 合同计划状态
+export const contractFormOptions = contractForm; // 收到合同形式

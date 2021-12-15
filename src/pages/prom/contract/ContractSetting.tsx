@@ -65,11 +65,11 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             winBidType: contract.winBidType === -1 ? '' : contract.winBidType,
             saleType: contract.saleType === -1 ? '' : contract.saleType,
             signCustomerName: contract.signCustomerName,
-            signContractTime: contract.signContractTime && moment(contract.signContractTime),
+            signContractTime: contract.signContractTime && moment(contract.signContractTime).format("YYYY-MM-DD"),
             signUserName: contract.signUserName,
-            deliveryTime: contract.deliveryTime && moment(contract.deliveryTime),
+            deliveryTime: contract.deliveryTime, // 合同的要求交回日期改为input框
             reviewTime: contract.reviewTime && moment(contract.reviewTime),
-            takeOverTime: contract.takeOverTime && moment(contract.takeOverTime),
+            takeOverTime: contract.takeOverTime && moment(contract.takeOverTime).format("YYYY-MM-DD"),
             chargeType: contract.chargeType === -1 ? '' : contract.chargeType,
             salesman: contract.salesman,
             region: Array.isArray(contract?.region) ? contract?.region : [contract?.region],
@@ -92,7 +92,10 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             contractName: contract?.contractName,
             contractPrice: contract?.contractPrice,
             isIta: contract?.isIta,
-            payCompanyName: contract?.payCompanyName
+            payCompanyName: contract?.payCompanyName,
+
+            contractPlanStatus: contract?.contractPlanStatus,
+            receivedContractShape: contract?.receivedContractShape
         });
     }
 
