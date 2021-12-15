@@ -63,6 +63,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
     public closeModal(): void {
         this.setState({
             visible: false,
+            defaultData: {}
         })
     }
 
@@ -166,7 +167,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                     { record.level === 1 ? <Button type="link" onClick={() => this.showModal({ firstCode: record.code, parentId: record.id }, 2)}>
                         添加二级类目
                     </Button> : null}
-                    <Button type="link" onClick={() => this.showModal({ ...record, firstCode: record.code?.substring(0,2), code: record.code?.substring(2, 4) }, record.level === 1 ? 1 : 3)}>
+                    <Button type="link" onClick={() => this.showModal({ ...record, firstCode: record.code?.substring(0,2), code: record.level === 1 ? record.code : record.code?.substring(2, 4) }, record.level === 1 ? 1 : 3)}>
                         编辑
                     </Button>
                     <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => { this.handleDelete(record) }} >
