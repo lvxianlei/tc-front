@@ -102,7 +102,7 @@ export default function EnquiryTask(): React.ReactNode {
     return <>
         <Modal
             width={1011}
-            title="询价任务详情"
+            title="工程报价任务详情"
             visible={overviewVisible}
             footer={[
                 <Button type="primary" key="cancel" onClick={() => {
@@ -123,7 +123,7 @@ export default function EnquiryTask(): React.ReactNode {
         }}>
             <TaskAssign id={detailId} ref={taskRef} />
         </Modal>
-        <Modal title="询价结果" width={1011} visible={taskResultVisible} footer={[<Button type="primary" key="confirm" onClick={() => {
+        <Modal title="工程报价任务结果" width={1011} visible={taskResultVisible} footer={[<Button type="primary" key="confirm" onClick={() => {
             setTaskResultVisible(false)
         }}>确定</Button>]} onCancel={() => setTaskResultVisible(false)}>
             <TaskResult id={detailId} />
@@ -157,7 +157,7 @@ export default function EnquiryTask(): React.ReactNode {
                             <Button type="link" disabled={record.inquiryStatus !== 2} onClick={() => {
                                 setDetailId(record.id)
                                 setTaskResultVisible(true)
-                            }}>询价结果</Button>
+                            }}>工程报价结果</Button>
                             <Button type="link" disabled={record.inquiryStatus !== 2} onClick={() => handleFinishTask(record.id)}>提交任务</Button>
                         </>
                     }
@@ -166,9 +166,9 @@ export default function EnquiryTask(): React.ReactNode {
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={async () => {
                     await generateRun()
-                    await message.success("成功生成询价任务...")
+                    await message.success("成功生成工程报价任务...")
                     history.go(0)
-                }}>临时生成询价任务</Button>
+                }}>临时生成工程报价任务</Button>
             </>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
@@ -198,7 +198,7 @@ export default function EnquiryTask(): React.ReactNode {
                 {
                     name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input placeholder="询价任务编号/项目名称/客户名称/项目负责人" style={{ width: "280px" }} />
+                    children: <Input placeholder="工程报价任务编号/项目名称/客户名称/项目负责人" style={{ width: "280px" }} />
                 },
             ]}
         />
