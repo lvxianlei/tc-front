@@ -45,7 +45,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     })) || []
                 }
             }))
-            businessTypeChange(result.businessType)
+            businessTypeChange(result.businessType);
+            setPleasePayType(result.pleasePayType);
             resole(result)
         } catch (error) {
             reject(error)
@@ -73,8 +74,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const baseData = await baseForm.validateFields()
             const postData = type === "new" ? {
                 ...baseData,
-                // supplierId: baseData.supplierName?.id || data?.supplierId,
-                // supplierName: baseData.supplierName?.value || data?.supplierName,
                 businessId: baseData.businessId?.split(',')[0],
                 businessName: baseData.businessId?.split(',')[1],
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
@@ -84,8 +83,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             } : {
                 ...baseData,
                 id: data?.id,
-                // supplierId: baseData.supplierName?.id || data?.supplierId,
-                // supplierName: baseData.supplierName?.value || data?.supplierName,
                 businessId: baseData.businessId?.split(',')[0],
                 businessName: baseData.businessId?.split(',')[1],
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
