@@ -238,5 +238,27 @@
             "title": "确认方",
             "dataIndex": "confirmer"
         }
+    ],
+    "contractInformation": [
+        {
+            "title": "内部合同编号",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "payTypeName"
+        },
+        {
+            "title": "回款金额",
+            "dataIndex": "payCategoryName"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "payTime"
+        }
     ]
 }

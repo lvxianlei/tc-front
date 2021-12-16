@@ -24,15 +24,11 @@ export default function CollectionInfomation(): React.ReactNode {
     const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
     const addRef = useRef<EditRefProps>()
     const confirmed = [
-        { "title": "内部合同编号", "dataIndex": "internalNumber"},
-        { "title": "合同名称", "dataIndex": "contractName"},
         { "title": "备注", "dataIndex": "description"}
     ],
         confirmedEnd = [
             { "title": "回款类型", "dataIndex": "returnType" },
             { "title": "确认日期", "dataIndex": "confirmTime" },
-            { "title": "内部合同编号", "dataIndex": "internalNumber"},
-            { "title": "合同名称", "dataIndex": "contractName"},
             { "title": "备注", "dataIndex": "description" }
         ]
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -205,7 +201,7 @@ export default function CollectionInfomation(): React.ReactNode {
                         name: 'costType',
                         label: '回款类型',
                         children: (
-                            <Select placeholder="请选择回款类型" style={{ width: "14px" }}>
+                            <Select placeholder="请选择回款类型" style={{ width: "140px" }}>
                                 { collectionTypeeOptions && collectionTypeeOptions.map(({ id, name }, index) => {
                                     return <Select.Option key={index} value={name}>
                                         {name}
