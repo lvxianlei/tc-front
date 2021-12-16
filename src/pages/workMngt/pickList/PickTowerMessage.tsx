@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select, message } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
-import { Link, useHistory, useLocation, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import TowerPickAssign from './TowerPickAssign';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -55,35 +55,6 @@ export default function PickTowerMessage(): React.ReactNode {
             width: 100,
             dataIndex: 'pattern'
         },
-        // {
-        //     key: 'name',
-        //     title: '段名',
-        //     width: 100,
-        //     dataIndex: 'name'
-        // },
-        // {
-        //     key: 'pattern',
-        //     title: '模式',
-        //     width: 100,
-        //     dataIndex: 'pattern',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //           {
-        //             value: 1,
-        //             label: "新放"
-        //           },
-        //           {
-        //             value: 2,
-        //             label: "重新出卡"
-        //           },
-        //           {
-        //             value: 3,
-        //             label: "套用"
-        //           },
-        //         ]
-        //         return <>{value&&value!==-1?renderEnum.find((item: any) => item.value === value).label:null}</>
-        //     }
-        // },
         {
             key: 'plannedDeliveryTime',
             title: '计划交付时间',
@@ -108,33 +79,6 @@ export default function PickTowerMessage(): React.ReactNode {
             width: 200,
             dataIndex: 'statusName'
         },
-        // {
-        //     key: 'status',
-        //     title: '提料状态',
-        //     width: 100,
-        //     dataIndex: 'status',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: 1,
-        //                 label: "提料中"
-        //             },
-        //             {
-        //                 value: 2,
-        //                 label: "校核中"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "已完成"
-        //             },
-        //             // {
-        //             //     value: 4,
-        //             //     label: "已提交"
-        //             // }
-        //         ]
-        //              return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'updateStatusTime',
             title: '最新状态变更时间',

@@ -85,7 +85,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     name: item.supplierName
                 }
             })
-        } else if(e === 3) {
+        } else if(e === 2) {
             result = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
             list = result?.records?.map((item: { stevedoreCompanyName: string }) => {
                 return{

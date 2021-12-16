@@ -6,7 +6,6 @@ import styles from './Pick.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
-// import { Console } from 'node:console';
 import AuthUtil from '../../../../utils/AuthUtil';
 import { downloadTemplate } from '../../setOut/downloadTemplate';
 import { patternTypeOptions } from '../../../../configuration/DictionaryOptions';
@@ -140,31 +139,6 @@ export default function Lofting(): React.ReactNode {
                 </Form.Item>
             ) 
         },
-        // { 
-        //     title: '宽度（mm）', 
-        //     dataIndex: 'width', 
-        //     key: 'width' ,
-        //     width: 120,
-        //     editable: true,
-        //     render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data',index, "width"]} initialValue={ _===-1?0:_}>
-        //             <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
-        //         </Form.Item>
-        //     )
-        // },
-        // { 
-        //     title: '厚度（mm）', 
-        //     dataIndex: 'thickness', 
-        //     key: 'thickness', 
-        //     editable: true,
-        //     width: 120,
-        //     render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data',index, "thickness"]} initialValue={ _===-1?0:_}>
-        //             <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
-        //         </Form.Item>
-        //     ) 
-        // },
-      
         { 
             title: '单件重量（kg）', 
             dataIndex: 'basicsWeight', 
@@ -239,22 +213,6 @@ export default function Lofting(): React.ReactNode {
         if(col.dataIndex === 'operation') {
             return {
                 ...col,
-                // render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                //     <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                //         <Popconfirm
-                //             title="确认删除?"
-                //             onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure/${record.id}`).then(()=>{
-                //                 message.success('删除成功！');
-                //                 setColumns(columnsSetting);
-                //                 setRefresh(!refresh);
-                //             })}
-                //             okText="提交"
-                //             cancelText="取消"
-                //         >
-                //             <Button type="link">删除</Button>
-                //         </Popconfirm>
-                //     </Space>
-                // )
             }
         } else {
             if(['basicsPartNum','length','width','basicsTheoryWeight','basicsWeight','totalWeight'].includes(col.dataIndex as string)){
@@ -366,7 +324,6 @@ export default function Lofting(): React.ReactNode {
                 }] }
                 requestData={{segmentGroupId:params.productSegmentId,...filterValue}}
                 headTabs={ [] }
-                // onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 refresh={ refresh }
                 tableProps={{
@@ -378,7 +335,6 @@ export default function Lofting(): React.ReactNode {
                 }}
                 extraOperation={ 
                     <Space direction="horizontal" size="small">
-                        {/* <Button type="primary" ghost>导出</Button> */}
                         <Button type="primary" ghost onClick={ () => downloadTemplate('/tower-science/drawProductStructure/exportTemplate', '构建明细') }>模板下载</Button>
                         <Button type="primary" ghost  onClick={()=>{ setTipVisible(true) }}>提示说明</Button>
                         <Upload 

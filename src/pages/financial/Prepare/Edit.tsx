@@ -45,6 +45,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     })) || []
                 }
             }))
+            businessTypeChange(result.businessType);
+            setPleasePayType(result.pleasePayType);
             resole(result)
         } catch (error) {
             reject(error)
@@ -72,8 +74,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const baseData = await baseForm.validateFields()
             const postData = type === "new" ? {
                 ...baseData,
-                // supplierId: baseData.supplierName?.id || data?.supplierId,
-                // supplierName: baseData.supplierName?.value || data?.supplierName,
                 businessId: baseData.businessId?.split(',')[0],
                 businessName: baseData.businessId?.split(',')[1],
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
@@ -83,8 +83,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             } : {
                 ...baseData,
                 id: data?.id,
-                // supplierId: baseData.supplierName?.id || data?.supplierId,
-                // supplierName: baseData.supplierName?.value || data?.supplierName,
                 businessId: baseData.businessId?.split(',')[0],
                 businessName: baseData.businessId?.split(',')[1],
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
@@ -139,7 +137,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     openBank: item.bankDepositName
                 }
             })
-        } else if(e === 3) {
+        } else if(e === 2) {
             result = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
             list = result?.records?.map((item: { stevedoreCompanyName: string, openBankName: string }) => {
                 return{
@@ -187,7 +185,14 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                             return <Form.Item name="pleasePayType">
                                 <Select onChange={(e: string) => {
                                     setPleasePayType(e);
-                                    baseForm.setFieldsValue({businessType: e === '1156' ? 1 : e === '1157' ? 2 : e === '1158' ? 3 : ''})
+                                    baseForm.setFieldsValue({businessType: e === '1156' ? 1 : e === '1157' ? 3 : e === '1158' ? 2 : ''})
+                                    if(e === '1156') {
+                                        businessTypeChange(1);
+                                    } else if(e === '1157') {
+                                        businessTypeChange(3)
+                                    } else if(e === '1158') {
+                                        businessTypeChange(2)
+                                    }
                                 }}>
                                     { costTypeOptions && costTypeOptions.map((item: any) => {
                                         return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>

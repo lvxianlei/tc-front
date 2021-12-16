@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Modal, Spin, Image } from 'antd'
+import { Button, Modal, Spin } from 'antd'
 import { DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
 import { ApplicationOverview, operationInfo, approvalInfo, paymentInfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
