@@ -95,7 +95,7 @@
         },
         {
             "title": "收货单",
-            "dataIndex": "weight"
+            "dataIndex": "receiveNumber"
         }
     ]
 }
