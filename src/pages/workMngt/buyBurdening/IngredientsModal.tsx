@@ -159,7 +159,12 @@ export default function IngredientsModal(props: any) {
                 components: detail
             }
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/purchaseBatchingScheme/batcher/scheme`, obj);
-            setPreparation(result.schemeData || []);
+            if (result && result.schemeData && result.schemeData.length > 0) {
+                setPreparation(result.schemeData || []);
+            } else {
+                message.error("没有合适的备选方案！");
+                return false;
+            }
             resole(result)
         } catch (error) {
             reject(error)
