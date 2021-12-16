@@ -139,7 +139,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     openBank: item.bankDepositName
                 }
             })
-        } else if(e === 3) {
+        } else if(e === 2) {
             result = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
             list = result?.records?.map((item: { stevedoreCompanyName: string, openBankName: string }) => {
                 return{
@@ -187,7 +187,14 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                             return <Form.Item name="pleasePayType">
                                 <Select onChange={(e: string) => {
                                     setPleasePayType(e);
-                                    baseForm.setFieldsValue({businessType: e === '1156' ? 1 : e === '1157' ? 2 : e === '1158' ? 3 : ''})
+                                    baseForm.setFieldsValue({businessType: e === '1156' ? 1 : e === '1157' ? 3 : e === '1158' ? 2 : ''})
+                                    if(e === '1156') {
+                                        businessTypeChange(1);
+                                    } else if(e === '1157') {
+                                        businessTypeChange(3)
+                                    } else if(e === '1158') {
+                                        businessTypeChange(2)
+                                    }
                                 }}>
                                     { costTypeOptions && costTypeOptions.map((item: any) => {
                                         return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
