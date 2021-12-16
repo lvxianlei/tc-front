@@ -21,9 +21,7 @@ export default function OverView(props: OverViewProps): JSX.Element {
             maskClosable={false}
             width={800}
             footer={[
-                <Button key="back" onClick={props?.onCancel}>
-                取消
-                </Button>
+                <Button key="back" onClick={props?.onCancel}>关闭</Button>
             ]}
         >
             <DetailTitle title="基本信息" />
@@ -37,7 +35,7 @@ export default function OverView(props: OverViewProps): JSX.Element {
                 ]}
             />
             <DetailTitle title="合同信息" />
-            <CommonTable columns={contractInformation} dataSource={[]} pagination={ false }/>
+            <CommonTable columns={contractInformation} dataSource={props.contractList || []} pagination={ false }/>
         </Modal>
     )
 }

@@ -13,7 +13,7 @@ import AuthUtil from '../../utils/AuthUtil';
 import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 import AddModal from './addModal'; // 新增
 import OverView from './overView'; // 查看
-import { EditRefProps } from './collection';
+import { EditRefProps, Contract } from './collection';
 import { collectionTypeeOptions } from '../../configuration/DictionaryOptions';
 
 export default function CollectionInfomation(): React.ReactNode {
@@ -22,6 +22,7 @@ export default function CollectionInfomation(): React.ReactNode {
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
     const [visible, setVisible] = useState(false);
     const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
+    const [ contractList, setContractList ] = useState<Contract[]>([]);
     const addRef = useRef<EditRefProps>()
     const confirmed = [
         { "title": "备注", "dataIndex": "description"}
@@ -36,6 +37,7 @@ export default function CollectionInfomation(): React.ReactNode {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/backMoney/${id}`)
             resole(result)
             setVisibleOverView(true);
+            setContractList(result.contractList || [])
         } catch (error) {
             reject(error)
         }
@@ -198,7 +200,7 @@ export default function CollectionInfomation(): React.ReactNode {
                         children: <Input placeholder="请输入来款单位进行查询" style={{ width: 300 }} />
                     },
                     {
-                        name: 'costType',
+                        name: 'returnType',
                         label: '回款类型',
                         children: (
                             <Select placeholder="请选择回款类型" style={{ width: "140px" }}>
@@ -246,6 +248,7 @@ export default function CollectionInfomation(): React.ReactNode {
                 title={confirmStatus === 1 ? confirmed : confirmedEnd}
                 visible={visibleOverView}
                 userData={userData}
+                contractList={contractList}
                 onCancel={() => setVisibleOverView(false)}
             />
         </>
