@@ -5,7 +5,6 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
 import { BatchingScheme, alternative, ConstructionClassification, ConstructionClassificationDetail } from './IngredientsModal.json';
 import "./ingredientsModal.less"
-import { dataTool } from 'echarts';
 interface DataType {
     key: React.Key;
     name: string;
@@ -52,8 +51,10 @@ export default function IngredientsModal(props: any) {
     const [ preparation, setPreparation ] = useState([]);
     // 配料方案
     const [schemeData, setSchemeData] = useState<any>([]);
-    let [count, setCount] = useState<any>(0);
+    let [numbers, setNumbers] = useState<any>(0);
     const [ serarchForm ] = Form.useForm();
+
+    let map:Map<string,number> = new Map();
       
     const handleOkuseState = async() => {
         const serarchData = await serarchForm.validateFields();
@@ -137,7 +138,7 @@ export default function IngredientsModal(props: any) {
             });
             setConstructionClassificationDetail(result?.componentList || []);
             setConstruNumberDetail(result.completionProgres || 0);
-            setCount(count += 1);
+            setNumbers(numbers += 1);
             resole(result)
         } catch (error) {
             reject(error)
@@ -254,177 +255,96 @@ export default function IngredientsModal(props: any) {
     };
     // 点击备选方案的选中
     const handleChecked = (record: any) => {
-        /**
-         * 点击选中处理两件事
-         *    1、构建分类对应的以及构建分类明细对应的未配数量需要做对应的减少
-         *    2、添加数据到配料方案
-         *    3、构建分类未配的对应减少
-         *    4、构建分类明细未配的对应减少
-         */
+        setSchemeData([
+            record,
+            ...schemeData
+        ]);
+        setNumbers(numbers += 1);
         const nums = (record.num1 || 0) + (record.num2 || 0) + (record.num3 || 0) + (record.num4 || 0);
         // 构建分类
         const result = constructionClassification;
         const index = constructionClassification.findIndex((item: any) => item.structureSpec === record.structureSpec && item.structureTexture === record.structureTexture);
         result[index].notConfigured = result[index].notConfigured - nums;
         setConstructionClassification(result.slice(0));
-        // 构建分类明细
-        let detail = constructionClassificationDetail,
-            detailNumber = construNumberDetail;
-        if (record.component1) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component1);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num1;
-                detailNumber = detailNumber + record.num1;
-            }
-        }
-        if (record.component2) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component2);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num2;
-                detailNumber = detailNumber + record.num2;
-            }
-        }
-        if (record.component3) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component3);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num3;
-                detailNumber = detailNumber + record.num3;
-            }
-        }
-        if (record.component4) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component4);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num4;
-                detailNumber = detailNumber + record.num4;
-            }
-            
-        }
-        setConstructionClassificationDetail(detail.slice(0));
-        // 配料方案添加数据
-        setSchemeData([
-            record,
-            ...schemeData
-        ]);
-        // 清空备料方案
-        setPreparation([]);
-        // 构建分类
+        // 设置构建分类的数量
         const numsConstrue = (construNumber - nums <= 0 ? 0 : (construNumber - nums))
         setConstruNumber(numsConstrue);
-        // 构建分类明细
-        setConstruNumberDetail(detailNumber);
+        // 清空备选方案
+        setPreparation([]);
     }
 
+    useEffect(() => {
+        map.clear();
+        let numberDetail = 0; // 构建分类明细的数量
+        // 循环配料方案 生成map
+        for (let i = 0; i < schemeData.length; i += 1) {
+            if (schemeData[i].component1) {
+                if (map.has(schemeData[i].component1)) {
+                    const result = map.get(schemeData[i].component1);
+                    map.set(schemeData[i].component1, result + schemeData[i].num1);
+                } else {
+                    map.set(schemeData[i].component1, schemeData[i].num1);
+                }
+            }
+            if (schemeData[i].component2) {
+                if (map.has(schemeData[i].component2)) {
+                    const result = map.get(schemeData[i].component2);
+                    map.set(schemeData[i].component2, result + schemeData[i].num2);
+                } else {
+                    map.set(schemeData[i].component2, schemeData[i].num2);
+                }
+            }
+            if (schemeData[i].component3) {
+                if (map.has(schemeData[i].component3)) {
+                    const result = map.get(schemeData[i].component3);
+                    map.set(schemeData[i].component3, result + schemeData[i].num3);
+                } else {
+                    map.set(schemeData[i].component3, schemeData[i].num3);
+                }
+            }
+            if (schemeData[i].component4) {
+                if (map.has(schemeData[i].component4)) {
+                    const result = map.get(schemeData[i].component4);
+                    map.set(schemeData[i].component4, result + schemeData[i].num4);
+                } else {
+                    map.set(schemeData[i].component4, schemeData[i].num4);
+                }
+            }
+        }
+        // 循环构建分类明细
+        let result:any = constructionClassificationDetail;
+        for (let i = 0; i < result.length; i += 1) {
+            if (map.has(result[i].code)) {
+                // map对应存在，则需要减少
+                let num:number = map.get(result[i]?.code) || 0;
+                result[i].notConfigured = result[i].num - num;
+                numberDetail += num;
+            } else {
+                result[i].notConfigured = result[i].num;
+            }
+        }
+        setConstructionClassificationDetail(result.slice(0));
+        setConstruNumberDetail(numberDetail)
+    }, [numbers])
+
     // 移除
-    const handleDelete = (record: any) => {
-        /**
-         * 点击选中处理两件事
-         *    1、构建分类对应的以及构建分类明细对应的未配数量需要做对应的增加
-         *    2、配料方案过滤该条数据
-         *    3、构建分类未配的对应增加
-         *    4、构建分类明细未配的对应增加
-         */
+    const handleDelete = (record: any, idx: number) => {
         const nums = (record.num1 || 0) + (record.num2 || 0) + (record.num3 || 0) + (record.num4 || 0);
         // 构建分类
         const result = constructionClassification;
         const index = constructionClassification.findIndex((item: any) => item.structureSpec === record.structureSpec && item.structureTexture === record.structureTexture);
         result[index].notConfigured = result[index].notConfigured + nums;
         setConstructionClassification(result.slice(0));
-        // 构建分类明细
-        let detail = constructionClassificationDetail,
-           detailNumber = construNumberDetail;
-        if (record.component1) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component1);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured + record.num1;
-                detailNumber = detailNumber - record.num1;
-            }
-        }
-        if (record.component2) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component2);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured + record.num2;
-                detailNumber = detailNumber - record.num2;
-            }
-        }
-        if (record.component3) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component3);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured + record.num3;
-                detailNumber = detailNumber - record.num3;
-            }
-        }
-        if (record.component4) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component4);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured + record.num4;
-                detailNumber = detailNumber - record.num4;
-            }
-        }
-        setConstructionClassificationDetail(detail.slice(0));
         // 移除配料方案的数据
         const preList = schemeData;
-        const preIndex = schemeData.findIndex((item: any) => item.structureSpec === record.structureSpec && item.structureTexture === record.structureTexture);
-        preList.splice(preIndex, 1);
-        setSchemeData(preList.slice(0));
+        preList.splice(idx, 1);
+        setSchemeData(schemeData.slice(0));
+        setNumbers(numbers += 1);
         // 构建分类
-        const numsConstrue = (construNumber + nums <= 0 ? 0 : (construNumber - nums))
+        const numsConstrue = (construNumber + nums <= 0 ? 0 : (construNumber + nums))
         setConstruNumber(numsConstrue);
-        // 构建分类明细
-        const numsConstrueDetail = detailNumber <= 0 ? 0 : detailNumber;
-        setConstruNumberDetail(numsConstrueDetail);
     }
 
-    const editDetail = (record: any) => {
-        // 构建分类明细
-        let detail = constructionClassificationDetail,
-            detailNumber = construNumberDetail;
-        if (record.component1) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component1);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num1;
-                detailNumber = detailNumber + record.num1;
-            }
-        }
-        if (record.component2) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component2);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num2;
-                detailNumber = detailNumber + record.num2;
-            }
-        }
-        if (record.component3) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component3);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num3;
-                detailNumber = detailNumber + record.num3;
-            }
-        }
-        if (record.component4) {
-            const detainIndex = constructionClassificationDetail.findIndex((item: any) => item.code === record.component4);
-            if (detainIndex !== -1) {
-                detail[detainIndex].notConfigured = detail[detainIndex].notConfigured - record.num4;
-                detailNumber = detailNumber + record.num4;
-            }
-        }
-        setConstructionClassificationDetail(detail.slice(0));
-        const numsConstrueDetail = detailNumber <= 0 ? 0 : detailNumber;
-        setConstruNumberDetail(numsConstrueDetail);
-    }
-
-    const getEditDetail = () => {
-        for (let i = 0; i < schemeData.length; i += 1) {
-            const index = constructionClassificationDetail.findIndex((item: any) => item.code === schemeData[i].component1)
-            const index1 = constructionClassificationDetail.findIndex((item: any) => item.code === schemeData[i].component2)
-            const index2 = constructionClassificationDetail.findIndex((item: any) => item.code === schemeData[i].component3)
-            const index3 = constructionClassificationDetail.findIndex((item: any) => item.code === schemeData[i].component4);
-            if (index !== -1 || index1 !== -1 || index2 !== -1 || index3 !== -1) {
-                editDetail(schemeData[i]);
-            }
-        }
-    }
-    useEffect(() => {
-        getEditDetail();
-    }, [count])
     return (
         <Modal
             title={'配料'}
@@ -549,10 +469,10 @@ export default function IngredientsModal(props: any) {
                                 dataIndex: "opration",
                                 fixed: "right",
                                 width: 100,
-                                render: (_: any, record: any) => {
+                                render: (_: any, record: any, index: number) => {
                                     return (
                                         <>
-                                            <Button type="link" onClick={() => handleDelete(record)}>移除</Button>
+                                            <Button type="link" onClick={() => handleDelete(record, index)}>移除</Button>
                                         </>
                                     )
                                 }

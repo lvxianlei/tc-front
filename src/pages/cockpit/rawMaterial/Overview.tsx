@@ -31,6 +31,15 @@ export default function Overview(): React.ReactNode {
             reject(error)
         }
     }))
+    // 原材料类型
+    const { data: materialCategory } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/materialCategory/category`)
+            resove(result.map((item: any) => ({ label: item.materialCategoryName, value: item.materialCategoryId })));
+        } catch (error) {
+            reject(error)
+        }
+    }))
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPrice/${id}`)
@@ -126,7 +135,7 @@ export default function Overview(): React.ReactNode {
                         name: 'materialCategoryId',
                         label: '原材料类型',
                         children: <Select style={{ width: "150px" }}>
-                            {invoiceTypeEnum?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                            {materialCategory?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     },
                     {
