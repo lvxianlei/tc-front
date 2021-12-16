@@ -75,8 +75,9 @@
             ]
         },
         {
-            "title": "开票时合同状态",
+            "title": "合同下计划状态",
             "dataIndex": "contractType",
+            "disabled": true,
             "type": "select",
             "enum": [
                 {
@@ -289,16 +290,6 @@
             ]
         },
         {
-            "title": "票面单位",
-            "dataIndex": "ticketCompany",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入票面单位..."
-                }
-            ]
-        },
-        {
             "title": "合同/工程名称",
             "dataIndex": "contractName",
             "rules": [
@@ -321,7 +312,9 @@
         },
         {
             "title": "电压等级",
-            "dataIndex": "voltage"
+            "dataIndex": "voltage",
+            "type": "select",
+            "enum": []
         },
         {
             "title": "合同签订日期",
@@ -509,14 +502,22 @@
             ]
         },
         {
-            "title": "理重(吨)",
+            "title": "理重",
             "dataIndex": "reasonWeight",
-            "type": "number"
+            "type": "number",
+            "disabled": true
+        },
+        {
+            "title": "计划重量",
+            "dataIndex": "reasonWeight",
+            "type": "number",
+            "disabled": true
         },
         {
             "title": "过磅重量(吨)",
             "dataIndex": "weigh",
-            "type": "number"
+            "type": "number",
+            "disabled": true
         },
         {
             "title": "业务经理",
@@ -563,16 +564,46 @@
     ],
     "invoiceHead": [
         {
-            "title": "名称",
-            "dataIndex": "name"
+            "title": "票面单位名称",
+            "dataIndex": "name",
+            "type": "popTable",
+            "path": "/tower-customer/customer",
+            "readOnly": false,
+            "value": "name",
+            "width": 1101,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "typeName"
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ]
         },
         {
             "title": "纳税人识别号",
             "dataIndex": "taxCode"
         },
         {
-            "title": "地址、电话",
+            "title": "地址",
             "dataIndex": "address"
+        },
+        {
+            "title": "电话",
+            "dataIndex": "phone",
+            "type": "phone"
         },
         {
             "title": "开户行及账号",
@@ -611,15 +642,10 @@
             "dataIndex": "company"
         },
         {
-            "title": "数量",
+            "title": "重量",
             "dataIndex": "weight",
             "type": "number",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入重量..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "单价(元/吨)",

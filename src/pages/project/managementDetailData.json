@@ -1,4 +1,86 @@
 {
+    "baseList": [
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "isResizable": true,
+            "width": 120
+        },
+        {
+            "title": "项目编码",
+            "dataIndex": "projectNumber"
+        },
+        {
+            "title": "招标批次列",
+            "dataIndex": "bidBatch"
+        },
+        {
+            "title": "项目类型",
+            "dataIndex": "projectType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "公开招标"
+                },
+                {
+                    "value": 1,
+                    "label": "用户工程"
+                }
+            ]
+        },
+        {
+            "title": "标书购买截至日期",
+            "dataIndex": "bidBuyEndTime"
+        },
+        {
+            "title": "投标截至日期",
+            "dataIndex": "biddingEndTime"
+        },
+        {
+            "title": "项目阶段",
+            "dataIndex": "currentProjectStage",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "准备投标"
+                },
+                {
+                    "value": 1,
+                    "label": "投标"
+                },
+                {
+                    "value": 2,
+                    "label": "合同签订"
+                },
+                {
+                    "value": 3,
+                    "label": "合同执行"
+                },
+                {
+                    "value": 4,
+                    "label": "项目结束"
+                }
+            ]
+        },
+        {
+            "title": "项目负责人",
+            "dataIndex": "projectLeader"
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime"
+        },
+        {
+            "title": "发布时间",
+            "dataIndex": "releaseDate"
+        },
+        {
+            "title": "说明",
+            "dataIndex": "bidExplain"
+        }
+    ],
     "baseInfoData": [
         {
             "title": "项目名称",
@@ -13,7 +95,10 @@
         {
             "title": "项目编码",
             "dataIndex": "projectNumber"
-          
+        },
+        {
+            "title": "招标批次",
+            "dataIndex": "bidBatch"
         },
         {
             "title": "项目类型",
@@ -170,7 +255,6 @@
                 }
             ]
         },
-       
         {
             "title": "当前项目阶段",
             "dataIndex": "currentProjectStage",
@@ -200,7 +284,7 @@
         },
         {
             "title": "是否签订合同",
-            "dataIndex": "isBid",
+            "dataIndex": "isContract",
             "type": "select",
             "enum": [
                 {
@@ -208,12 +292,11 @@
                     "label": "是"
                 },
                 {
-                    "value": 2,
+                    "value": 0,
                     "label": "否"
                 }
             ]
         },
-    
         {
             "title": "说明",
             "dataIndex": "bidExplain",
@@ -295,7 +378,7 @@
             "dataIndex": "money",
             "type": "number",
             "required": true,
-            "decimal":"4",
+            "decimal": "4",
             "rules": [
                 {
                     "required": true,
@@ -307,7 +390,7 @@
             "title": "重量（吨）",
             "dataIndex": "weight",
             "type": "number",
-            "decimal":"3",
+            "decimal": "3",
             "required": true,
             "rules": [
                 {
@@ -1353,12 +1436,13 @@
             ]
         },
         {
-            "title": "基数",
-            "dataIndex": "number"
-        },
-        {
             "title": "线路名称",
             "dataIndex": "lineName",
+            "width": 120
+        },
+        {
+            "title": "杆塔号",
+            "dataIndex": "productNumber",
             "width": 120
         },
         {
@@ -1367,9 +1451,8 @@
             "width": 120
         },
         {
-            "title": "杆塔号",
-            "dataIndex": "productNumber",
-            "width": 120
+            "title": "基数",
+            "dataIndex": "number"
         },
         {
             "title": "产品类型",
@@ -1388,19 +1471,15 @@
         {
             "title": " 单重（kg）",
             "dataIndex": "singleWight"
-
         },
         {
             "title": " 其他单重（kg）",
             "dataIndex": "otherWeight"
-
         },
         {
             "title": " 总重（kg）",
             "dataIndex": "totalWeight"
-
         },
-    
         {
             "title": "备注",
             "dataIndex": "description"

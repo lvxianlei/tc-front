@@ -80,11 +80,14 @@
         },
         {
             "title": "电话",
-            "dataIndex": "contactManTel"
+            "dataIndex": "contactManTel",
+            "type": "phone"
         },
         {
             "title": "开户行",
-            "dataIndex": "openBankName"
+            "dataIndex": "openBankId",
+            "type": "select",
+            "enum": []
         },
         {
             "title": "银行账号",

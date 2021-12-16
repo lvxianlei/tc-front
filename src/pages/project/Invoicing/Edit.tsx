@@ -5,22 +5,18 @@ import { DetailContent, DetailTitle, BaseInfo, EditTable, formatData, Attachment
 import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { productTypeOptions, voltageGradeOptions, saleTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function Edit() {
     const params = useParams<{ id: string }>()
     const history = useHistory()
     const attchRef = useRef<AttachmentRef>()
     const [baseInfo] = Form.useForm()
-    const [invoicForm] = Form.useForm()
+    const [invoiceForm] = Form.useForm()
     const [billingForm] = Form.useForm()
-    const productType: any = (ApplicationContext.get().dictionaryOption as any)["101"]
-    const saleTypeEnum: any = (ApplicationContext.get().dictionaryOption as any)["123"].map((item: any) => ({ value: item.code, label: item.name }))
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
-            baseInfo.setFieldsValue({ ...formatData(baseInfoHead, result) })
-            invoicForm.setFieldsValue({ ...result.invoicingInfoVo })
             billingForm.setFieldsValue({ submit: result.invoicingDetailVos.map((item: any) => formatData(billingHead, item)) })
             resole(result)
         } catch (error) {
@@ -56,33 +52,10 @@ export default function Edit() {
         }
     }), { manual: true })
 
-    // 设置默认值
-    useEffect(() => {
-        baseInfo.setFieldsValue({
-            ticketWeight: '0.0000',
-            ticketMoney: '0.00',
-            ticketType: 1,
-            openTicketType: 1,
-            ticketBasis: 1
-        })
-    }, [params.id === 'new'])
-
-    const generateInitValues = (columns: any[]) => {
-        const values: any = {}
-        columns.forEach((columnItem: any) => {
-            if (columnItem.type === "numbe") {
-                values[columnItem.dataIndex] = 0
-            } else if (columnItem.type === "select") {
-                values[columnItem.dataIndex] = null
-            }
-        })
-        return values
-    }
-
     const handleSave = async () => {
         try {
             const baseInfoData = await baseInfo.validateFields()
-            const invoicData = await invoicForm.validateFields()
+            const invoicData = await invoiceForm.validateFields()
             const billingData = await billingForm.validateFields()
             const saveData = {
                 ...baseInfoData,
@@ -155,11 +128,20 @@ export default function Edit() {
         }
     }
 
+    const handleInvoiceChange = (fields: any) => {
+        if (fields.name && (fields.name.value === fields.name.records?.[0].name)) {
+            invoiceForm.setFieldsValue({
+                address: fields.name.records?.[0].address,
+                phone: fields.name.records?.[0].phone
+            })
+        }
+    }
+
     return <DetailContent operation={[
         <Button
             type="primary" key="save"
             style={{ marginRight: 16 }}
-            loading={saveLoading}
+            loading={saveLoading || creteLoading}
             onClick={handleSave}>保存</Button>,
         <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
     ]}>
@@ -169,30 +151,52 @@ export default function Edit() {
                 onChange={handleBaseInfoChange}
                 form={baseInfo}
                 columns={baseInfoHead.map((item: any) => {
-                    if (item.dataIndex === "productTypeId") {
-                        return ({
-                            ...item,
-                            enum: productType.map((product: any) => ({
-                                value: product.id,
-                                label: product.name
-                            }))
-                        })
+                    switch (item.dataIndex) {
+                        case "productTypeId":
+                            return ({
+                                ...item,
+                                enum: productTypeOptions?.map((product: any) => ({
+                                    value: product.id,
+                                    label: product.name
+                                }))
+                            })
+                        case "contractCode":
+                            return ({
+                                ...item,
+                                columns: item.columns.map(((coItem: any) => coItem.dataIndex === "saleType" ? ({
+                                    ...coItem,
+                                    type: "select",
+                                    enum: saleTypeOptions?.map(item => ({
+                                        value: item.id,
+                                        lable: item.name
+                                    }))
+                                }) : coItem))
+                            })
+                        case "voltage":
+                            return ({
+                                ...item,
+                                enum: voltageGradeOptions?.map((product: any) => ({
+                                    value: product.id,
+                                    label: product.name
+                                }))
+                            })
+                        default:
+                            return item
                     }
-                    if (item.dataIndex === "contractCode") {
-                        return ({
-                            ...item, columns: item.columns.map(((coItem: any) => coItem.dataIndex === "saleType" ? ({
-                                ...coItem,
-                                type: "select",
-                                enum: saleTypeEnum
-                            }) : coItem))
-                        })
-                    }
-                    return item
                 })}
-                dataSource={baseInfoHead} edit />
-
+                dataSource={data || {
+                    ticketWeight: '0.0000',
+                    ticketMoney: '0.00',
+                    ticketType: 1,
+                    openTicketType: 1,
+                    ticketBasis: 1
+                }} edit />
             <DetailTitle title="发票信息" />
-            <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={data?.invoicingInfoVo || {}} edit />
+            <BaseInfo
+                form={invoiceForm}
+                columns={invoiceHead}
+                onChange={handleInvoiceChange}
+                dataSource={data?.invoicingInfoVo || {}} edit />
             <DetailTitle title="开票明细" />
             <EditTable onChange={handleEditTableChange} form={billingForm} columns={billingHead} dataSource={data?.invoicingDetailDtos || []} />
             <Attachment title="附件" ref={attchRef} edit dataSource={data?.attachInfoVos} />

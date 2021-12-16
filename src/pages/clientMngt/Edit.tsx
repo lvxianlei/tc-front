@@ -5,7 +5,7 @@ import { BaseInfo, DetailContent, DetailTitle } from "../common"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../utils/RequestUtil"
 import { setting, invoice } from "./clientMegt.json"
-import { clientTypeOptions } from "../../configuration/DictionaryOptions"
+import { clientTypeOptions, bankTypeOptions } from "../../configuration/DictionaryOptions"
 interface EditProps {
     type: "new" | "edit",
     id: string
@@ -36,8 +36,10 @@ export default function Edit(): JSX.Element {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields()
+            const invoiceData = await invoiceForm.validateFields()
             await saveRun({
-                ...baseData
+                ...baseData,
+                ...invoiceData
             })
             message.success("保存成功...")
             history.goBack()
@@ -70,7 +72,18 @@ export default function Edit(): JSX.Element {
                 return item
             })} dataSource={data || {}} edit />
             <DetailTitle title="发票信息" />
-            <BaseInfo form={invoiceForm} columns={invoice} dataSource={data || {}} edit />
+            <BaseInfo form={invoiceForm} columns={invoice.map((item: any) => {
+                if (item.dataIndex === "openBankId") {
+                    return ({
+                        ...item,
+                        enum: bankTypeOptions?.map(item => ({
+                            value: item.id,
+                            label: item.name
+                        }))
+                    })
+                }
+                return item
+            })} dataSource={data || {}} edit />
         </Spin>
     </DetailContent>
 }
