@@ -378,7 +378,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 standard: item.materialStandard,
                 materialStandardName: item.materialStandardName,
                 num: item.num,
-                contractUnitPrice: item.price
+                contractUnitPrice: item.price,
+                quantity: item.quantity ? item.quantity : 0
             }
             delete postData.id
             return postData
@@ -421,8 +422,18 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 supplierName: { id: result.supplierId, value: result.supplierName },
                 contractNumber: { id: result.contractId, value: result.contractNumber }
             })
+            let v = [];
+            if (result.lists) {
+                for (let i = 0; i < result.lists.length; i += 1) {
+                    v.push({
+                        ...result.lists[i],
+                        quantity: result.lists[i].quantity ? result.lists[i].quantity : 0
+                    })
+                }
+            }
+            
             setContractId(result?.contractId)
-            setCargoData(result?.lists || [])
+            setCargoData(v || [])
             // 编辑回显
             setFreightInformation({
                 transportBear:  result?.transportBear === 1 ? "需方" : '供方', // 运输承担
