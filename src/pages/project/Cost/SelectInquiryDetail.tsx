@@ -11,7 +11,7 @@ import {
     workmanshipBaseInfo,
     workmanshipReverd,
     materialPriceHead
-} from "./costData.json"
+} from "./cost.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import SelectInquiryEdit from "./SelectInquiryEdit"

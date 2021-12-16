@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Button, Input, DatePicker, Radio } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
-import { collectionListHead } from "./CollectionData.json"
+import { collectionListHead } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Collection() {

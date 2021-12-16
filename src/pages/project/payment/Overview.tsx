@@ -2,7 +2,7 @@ import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
-import { PaymentList, paymentdetail } from "./PaymentData.json"
+import { paymentList, paymentdetail } from "./payment.json"
 import { auditIdRecord } from "../../approval-mngt/approvalHeadData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -33,7 +33,7 @@ export default function Edit() {
     ]}>
         <Spin spinning={loading}>
             <DetailTitle title="请款单信息" />
-            <BaseInfo columns={PaymentList.map((item: any) => {
+            <BaseInfo columns={paymentList.map((item: any) => {
                 if (item.dataIndex === "costType") {
                     return ({
                         ...item,

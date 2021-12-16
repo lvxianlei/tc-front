@@ -1,5 +1,5 @@
 import React, { useState, useRef, useImperativeHandle, forwardRef } from "react"
-import { Button, Form, message, Spin, Modal, Select, Input } from "antd"
+import { Button, Form, message, Spin, Modal, Select } from "antd"
 import { useHistory, useParams } from "react-router-dom"
 import { BaseInfo, DetailContent, DetailTitle, EditTable } from '../../common'
 import { costBase } from '../managementDetailData.json'

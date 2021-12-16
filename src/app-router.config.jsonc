@@ -412,21 +412,21 @@
     { // 开票申请
       "name": "开票申请",
       "path": "/project/invoicing",
-      "module": "./pages/project/Invoicing/index",
+      "module": "./pages/project/invoicing/index",
       "exact": true,
       "authority": "project_invoicing_requisition"
     },
     { // 开票申请详情
       "name": "开票申请详情",
       "path": "/project/invoicing/detail/:id",
-      "module": "./pages/project/Invoicing/Overview",
+      "module": "./pages/project/invoicing/Overview",
       "exact": true,
       "authority": "project"
     },
     { // 开票申请
       "name": "新增开票申请",
       "path": "/project/invoicing/edit/:id",
-      "module": "./pages/project/Invoicing/Edit",
+      "module": "./pages/project/invoicing/Edit",
       "exact": true,
       "authority": "project"
     },
@@ -541,7 +541,7 @@
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
       "path": "/project/management/new/cost/:projectId",
-      "module": "./pages/project/Cost/CostEdit",
+      "module": "./pages/project/cost/Edit",
       "exact": true,
       "authority": "project_detail"
     },
@@ -555,21 +555,21 @@
     { // 项目管理招标结果编辑
       "name": "招标结果编辑",
       "path": "/project/management/edit/bidResult/:id",
-      "module": "./pages/project/ManagementDetailEdit/BidResultEdit",
+      "module": "./pages/project/Edit/BidResultEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理框架协议编辑
       "name": "框架协议编辑",
       "path": "/project/management/edit/frameAgreement/:id",
-      "module": "./pages/project/ManagementDetailEdit/FrameAgreementEdit",
+      "module": "./pages/project/Edit/FrameAgreementEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 杆塔明细编辑
       "name": "杆塔明细编辑",
       "path": "/project/management/edit/productGroup/:projectId/:id",
-      "module": "./pages/project/ManagementDetailEdit/ProductGroupEdit",
+      "module": "./pages/project/Edit/ProductGroupEdit",
       "exact": true,
       "authority": "project_detail"
     },
@@ -583,21 +583,21 @@
     { // 新增杆塔明细
       "name": "新增杆塔明细",
       "path": "/project/management/new/productGroup/:id",
-      "module": "./pages/project/ManagementDetailEdit/ProductGroupEdit",
+      "module": "./pages/project/Edit/ProductGroupEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 销售计划编辑
       "name": "销售计划编辑",
       "path": "/project/management/edit/salesPlan/:projectId/:id",
-      "module": "./pages/project/ManagementDetailEdit/SalesPlanEdit",
+      "module": "./pages/project/Edit/SalesPlanEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 新增销售计划编辑
       "name": "新增销售计划",
       "path": "/project/management/new/salesPlan/:id",
-      "module": "./pages/project/ManagementDetailEdit/SalesPlanEdit",
+      "module": "./pages/project/Edit/SalesPlanEdit",
       "exact": true,
       "authority": "project_detail"
     },

@@ -1,5 +1,5 @@
 {
-    "PaymentListHead": [
+    "paymentListHead": [
         {
             "title": "付款单号",
             "dataIndex": "payNumber"
@@ -86,7 +86,7 @@
             ]
         }
     ],
-    "PaymentList": [
+    "paymentList": [
         {
             "title": "付款单号",
             "dataIndex": "payNumber"

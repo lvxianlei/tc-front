@@ -2,7 +2,7 @@ import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
-import { promotionalTourism, contractInformationDetail } from "./CollectionData.json"
+import { promotionalTourism, contractInformationDetail } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Overview() {
