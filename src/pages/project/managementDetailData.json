@@ -479,7 +479,31 @@
         },
         {
             "title": "制作人员",
-            "dataIndex": "mackUser"
+            "dataIndex": "mackUser",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
         },
         {
             "title": "接收人",
@@ -491,12 +515,60 @@
             "type": "date"
         },
         {
-            "title": "授权人",
-            "dataIndex": "warrantUser"
+            "title": "授权代表",
+            "dataIndex": "warrantUser",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
         },
         {
             "title": "检查人",
-            "dataIndex": "checkUser"
+            "dataIndex": "checkUser",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
         },
         {
             "title": "开标日期",

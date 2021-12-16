@@ -7,13 +7,11 @@ import { bidDocColumns } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { bidTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
-    // const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
-    // const bidType = dictionaryOptions["124"]
-    const bidType = (ApplicationContext.get().dictionaryOption as any)["124"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }));
+    const bidType = bidTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }));
     const [baseInfoForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -27,7 +25,7 @@ export default function BaseInfoEdit(): JSX.Element {
             reject(error)
         }
     }))
-    const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
+    const { loading: saveStatus, run: saveRun } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/bidDoc`, postData)
             resole(result)
@@ -39,7 +37,7 @@ export default function BaseInfoEdit(): JSX.Element {
     const handleSubmit = async () => {
         try {
             const baseInfoData = await baseInfoForm.validateFields()
-            const result = await run({ ...data, ...baseInfoData, projectId: params.id })
+            const result = await saveRun({ ...data, ...baseInfoData, projectId: params.id })
             if (result) {
                 message.success("保存成功...")
                 history.goBack()
