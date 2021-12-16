@@ -155,7 +155,8 @@
         },
         {
             "title": "业务经理联系电话",
-            "dataIndex": "serviceManagerTel"
+            "dataIndex": "serviceManagerTel",
+            "type": "phone"
         },
         {
             "title": "设计院名称",
@@ -167,7 +168,8 @@
         },
         {
             "title": "设计院联系电话",
-            "dataIndex": "designInstituteUserTel"
+            "dataIndex": "designInstituteUserTel",
+            "type": "phone"
         },
         {
             "title": "备注",

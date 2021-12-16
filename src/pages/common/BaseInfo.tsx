@@ -8,7 +8,7 @@ export interface BaseInfoItemProps {
     name: string
     label: string
     value: string | number | null | undefined
-    type?: 'text' | 'number' | 'date' | 'select'
+    type?: 'text' | 'number' | 'date' | 'select' | 'phone'
 }
 
 export interface BaseInfoColumnsProps {
@@ -34,6 +34,7 @@ function formatDataType(dataItem: any, dataSource: any): string {
         select: ((value || value === 0) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
         string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
+        phone: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         textarea: value || "-",
         popTable: value || "-"
     }
@@ -53,6 +54,7 @@ export function formatData(columns: any[], dataSource: any): object {
                 select: ([-1, "-1"].includes(value)) ? null : value,
                 date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : undefined,
                 string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "",
+                phone: (value && !["-1", -1, "0", 0].includes(value)) ? value : "",
                 textarea: value || "",
                 popTable: value || {
                     value: "",
@@ -71,7 +73,45 @@ const popTableTransform = (value: any) => {
     }
     return value
 }
+const generateRules = (type: string, columnItems: any) => {
+    let rules = columnItems.rules || []
+    if (columnItems.required) {
+        const inputType = ["date", "select"].includes(columnItems.type) ? "选择" : "输入"
+        rules = [
+            {
+                "required": true,
+                "message": `请${inputType}${columnItems.title}...`
+            },
+            ...rules
+        ]
+    }
+    if (type === "popTable") {
+        rules = rules.map((item: any) => {
+            if (item.required) {
+                return ({ ...item, transform: popTableTransform })
+            }
+            return item
+        })
+    }
+    if (type === "phone") {
+        rules = [
+            ...rules,
+            {
+                pattern: /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+                message: `${columnItems.title}不合法...`
+            }]
+    }
+    return rules
+}
 
+const generatePlaceholder = (columnItems: any): string => {
+    let placeholder = columnItems.placeholder || ""
+    if (!columnItems.disabled) {
+        const inputType = ["date", "select"].includes(columnItems.type) ? "选择" : "输入"
+        placeholder = `请${inputType}${columnItems.title}`
+    }
+    return placeholder
+}
 export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { } }: BaseInfoProps): JSX.Element {
 
     useEffect(() => {
@@ -96,14 +136,9 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                                 name={item.dataIndex}
                                 label={item.title}
                                 validateTrigger={item.validateTrigger}
-                                rules={item.type === "popTable" && item.rules ? item.rules.map((item: any) => {
-                                    if (item.required) {
-                                        return ({ ...item, transform: popTableTransform })
-                                    }
-                                    return item
-                                }) : (item.rules || [])}
+                                rules={generateRules(item.type, item)}
                             >
-                                <FormItemType type={item.type} data={item} placeholder={item.placeholder || ""} render={item.render} />
+                                <FormItemType type={item.type} data={item} placeholder={generatePlaceholder(item)} render={item.render} />
                             </Form.Item>
                         </div>
                     </Col>

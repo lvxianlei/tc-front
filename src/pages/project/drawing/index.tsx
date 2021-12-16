@@ -8,7 +8,7 @@ import { drawing } from './drawing.json'
 import Edit from "./Edit"
 import Overview from "./Overview"
 interface EditRefProps {
-    onSubmit: () => void
+    onSubmit: (type: 1 | 2) => void
 }
 export default function Drawing(): React.ReactNode {
     const history = useHistory()
@@ -37,10 +37,10 @@ export default function Drawing(): React.ReactNode {
         return value
     }
 
-    const handleModalOk = () => new Promise(async (resove, reject) => {
+    const handleModalOk = (type: 1 | 2) => new Promise(async (resove, reject) => {
         try {
-            await editRef.current?.onSubmit()
-            message.success(`票据${type === "new" ? "创建" : "编辑"}成功...`)
+            await editRef.current?.onSubmit(type)
+            message.success(`${type === 1 ? "保存" : "保存并提交"}成功...`)
             setVisible(false)
             resove(true)
             history.go(0)
@@ -69,12 +69,10 @@ export default function Drawing(): React.ReactNode {
             visible={visible}
             width={1011}
             title="图纸确认任务"
-            onOk={handleModalOk}
-            onCancel={() => {
-                setType("new")
-                setDetailedId("")
-                setVisible(false)
-            }}>
+            footer={[
+                <Button key="save" type="primary" ghost onClick={() => handleModalOk(1)}>保存</Button>,
+                <Button key="saveAndSubmit" type="primary" ghost onClick={() => handleModalOk(2)}>保存并发起</Button>
+            ]}>
             <Edit type={type} ref={editRef} id={detailedId} />
         </Modal>
         <Modal

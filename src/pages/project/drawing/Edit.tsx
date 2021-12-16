@@ -31,25 +31,30 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
   const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
     try {
-      const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-market/drawingConfirmation`, { ...postData, id: data?.id })
+      const submitData = type === "new" ? postData : { ...postData, id: id }
+      const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-market/drawingConfirmation`, submitData)
       resole(result)
     } catch (error) {
+      console.log(error)
       reject(error)
     }
   }), { manual: true })
 
-  const onSubmit = () => new Promise(async (resolve, reject) => {
+  const onSubmit = (saveType: 1 | 2) => new Promise(async (resolve, reject) => {
     try {
       const baseData = await baseForm.validateFields()
       await saveRun({
         ...baseData,
-        internalNumber: baseData.internalNumber.value,
-        contractId: baseData.internalNumber.id,
-        serviceManager: baseData.serviceManager.id,
-        serviceManagerId: baseData.serviceManager.id,
+        internalNumber: baseData.internalNumber?.value,
+        contractId: baseData.internalNumber?.id,
+        serviceManager: baseData.serviceManager?.id,
+        serviceManagerId: baseData.serviceManager?.id,
+        saveType,
+        fileIds: attchsRef.current?.getDataSource().map(item => item.id)
       })
       resolve(true)
     } catch (error) {
+      console.log(error)
       reject(false)
     }
   })
