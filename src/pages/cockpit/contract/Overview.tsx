@@ -22,6 +22,7 @@ export default function Particulars(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const onFilterSubmit = (value: any) => {
+        value.contractId = params.id
         return value
     }
 
@@ -44,14 +45,13 @@ export default function Particulars(): React.ReactNode {
         filterValue={{ contractId: params.id }}
         searchFormItems={[
             {
-                name: 'state',
+                name: 'receiveStatus',
                 label: '采购状态',
-                children: <Form.Item name="state" initialValue="">
+                children: <Form.Item name="receiveStatus" initialValue="">
                     <Select placeholder="请选择" style={{ width: "150px" }}>
                         <Select.Option value={''} key="3">全部</Select.Option>
-                        <Select.Option value={0} key="0">草稿</Select.Option>
-                        <Select.Option value={1} key="1">已发布</Select.Option>
-                        <Select.Option value={2} key="2">已撤回</Select.Option>
+                        <Select.Option value={0} key="0">待收货</Select.Option>
+                        <Select.Option value={1} key="1">已收货</Select.Option>
                     </Select>
                 </Form.Item>
             },

@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
+import React, { forwardRef, useImperativeHandle, useRef } from "react"
 import { Attachment, AttachmentRef} from '../../common'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'

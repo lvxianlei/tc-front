@@ -53,7 +53,6 @@ export default function ScheduleView(): React.ReactNode {
     const [drawUser, setDrawUser] = useState<any|undefined>([]);
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
     const [materialPartUser, setMaterialPartUser] = useState<any|undefined>([]);
-    // const [materialLeader, setMaterialLeader] = useState<any|undefined>([]);
     const [smallSampleUser, setSmallSampleUser] = useState<any|undefined>([]);
     const params = useParams<{ id: string, status: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -121,23 +120,6 @@ export default function ScheduleView(): React.ReactNode {
             title: '模式',
             width: 100,
             dataIndex: 'patternName',
-            // render: (value: number, record: object): React.ReactNode => {
-            //     const renderEnum: any = [
-            //       {
-            //         value: 1,
-            //         label: "新放"
-            //       },
-            //       {
-            //         value: 2,
-            //         label: "重新出卡"
-            //       },
-            //       {
-            //         value: 3,
-            //         label: "套用"
-            //       },
-            //     ]
-            //     return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            // }
         },
         {
             key: 'priorityName',
@@ -145,33 +127,6 @@ export default function ScheduleView(): React.ReactNode {
             width: 100,
             dataIndex: 'priorityName',
         },
-        // {
-        //     key: 'priority',
-        //     title: '优先级',
-        //     width: 100,
-        //     dataIndex: 'priority',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //           {
-        //             value: 0,
-        //             label: "紧急"
-        //           },
-        //           {
-        //             value: 1,
-        //             label: "高"
-        //           },
-        //           {
-        //             value: 2,
-        //             label: "中"
-        //           },
-        //           {
-        //             value: 3,
-        //             label: "低"
-        //           },
-        //         ]
-        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'materialLeaderName',
             title: '提料负责人',
@@ -441,9 +396,6 @@ export default function ScheduleView(): React.ReactNode {
             case "boltLeaderDepartment":
                 form.setFieldsValue({boltLeader:''});
                 return setBoltUser(userData.records);
-            // case "materialLeaderDepartmentQuery":
-            //     form.setFieldsValue({materialLeader:''});
-            //     return setMaterialLeader(userData.records);
         };
     }
     const formItemLayout = {
@@ -796,7 +748,6 @@ export default function ScheduleView(): React.ReactNode {
                 exportPath={`/tower-science/productCategory/taskPage`}
                 extraOperation={
                     <Space>
-                        {/* <Button type="primary">导出</Button> */}
                         <Button type="primary" onClick={ () => history.goBack() }>返回上一级</Button>
                     </Space>
                 }
@@ -827,24 +778,6 @@ export default function ScheduleView(): React.ReactNode {
                                         <Select.Option value='3' key='3'>低</Select.Option>
                                     </Select>
                     },
-                    // {
-                    //     name: 'materialLeaderDepartment',
-                    //     label: '提料负责人',
-                    //     children:  <TreeSelect style={{width:'200px'}}
-                    //                     onChange={(value:any)=>{onDepartmentChange(value,'materialLeaderDepartmentQuery')}  }
-                    //                 >
-                    //                     {renderTreeNodes(wrapRole2DataNode( department ))}
-                    //                 </TreeSelect>
-                    // },
-                    // {
-                    //     name: 'materialLeader',
-                    //     label:'',
-                    //     children:   <Select style={{width:'100px'}}>
-                    //                     { materialLeader && materialLeader.map((item:any)=>{
-                    //                         return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                    //                     }) }
-                    //                 </Select>
-                    // },
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',

@@ -701,7 +701,7 @@
       "authority": "approvalm"
     },
     { //询价任务
-      "name": "询价任务",
+      "name": "工程报价任务",
       "path": "/enquiryTask/index",
       "module": "./pages/enquiryTask/index",
       "exact": true,
@@ -1395,7 +1395,7 @@
       "authority": "approvalm"
     },
     { // 工作管理-询价列表
-      "name": "询价列表",
+      "name": "工程报价列表",
       "path": "/workMngt/enquiry",
       "module": "./pages/workMngt/enquiryList/index",
       "exact": true,

@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form, Modal, message } from 'antd'
-import { FixedType } from 'rc-table/lib/interface';
-import { Link, useHistory, useParams } from 'react-router-dom'
-import { CommonTable, Page } from '../../../common'
+import { Space, Input, Button, Form, message } from 'antd';
+import { useHistory, useParams } from 'react-router-dom'
+import { Page } from '../../../common'
 import QuestionnaireModal from './QuestionnaireModal';
 import { Popconfirm } from 'antd';
 import RequestUtil from '../../../../utils/RequestUtil';
 import styles from './SetOut.module.less';
 
 export default function PickCheckList(): React.ReactNode {
-    const [form] = Form.useForm();
     const params = useParams<{ productSegmentId: string, id: string, materialLeaderId: string,status: string, materialLeader: string}>();
     const history = useHistory();
     const [ visible, setVisible ] = useState(false);
@@ -27,8 +25,6 @@ export default function PickCheckList(): React.ReactNode {
         { title: '材料名称', dataIndex: 'materialName', key: 'materialName', editable: true },
         { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture', editable: true },
         { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', editable: true },
-        // { title: '宽度（mm）', dataIndex: 'width', key: 'width', editable: true },
-        // { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness', editable: true },
         { title: '长度（mm）', dataIndex: 'length', key: 'length', editable: true },
         { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum', editable: true },
         { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight', editable: false },
@@ -97,7 +93,6 @@ export default function PickCheckList(): React.ReactNode {
                 exportPath="/tower-science/drawProductStructure/check"
                 extraOperation={
                     <Space>
-                        {/* <Button type='primary' ghost>导出</Button> */}
                         <Popconfirm
                             title="确认完成校核?"
                             onConfirm={ async () => {
