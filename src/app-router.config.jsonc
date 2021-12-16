@@ -523,10 +523,18 @@
       "authority": "sale_order"
     },
     {
-      // 项目新建/编辑
+      // 项目新建
       "name": "项目新建",
       "path": "/project/management/new",
-      "module": "./pages/project/ManagementEdit",
+      "module": "./pages/project/Edit/BaseInfoEdit",
+      "exact": true,
+      "authority": "project_edit"
+    },
+    {
+      // 项目编辑
+      "name": "项目新建",
+      "path": "/project/management/edit/base/:id",
+      "module": "./pages/project/Edit/BaseInfoEdit",
       "exact": true,
       "authority": "project_edit"
     },
@@ -548,7 +556,7 @@
     { // 项目管理标书制作编辑
       "name": "标书制作编辑",
       "path": "/project/management/edit/bidDoc/:id",
-      "module": "./pages/project/ManagementDetailEdit/BidDocEdit",
+      "module": "./pages/project/Edit/BidDocEdit",
       "exact": true,
       "authority": "project_detail"
     },

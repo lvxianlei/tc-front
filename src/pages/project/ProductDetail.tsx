@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Form, Spin } from "antd"
+import { Button, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../common"
 import { newProductGroup, productAssist } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -18,8 +18,8 @@ export default function ProductGroupEdit() {
             reject(error)
         }
     }))
-    const deleteThisRecode = ()=>{
-         // 删除 这里需要添加
+    const deleteThisRecode = () => {
+        // 删除 这里需要添加
     }
     return <DetailContent
         operation={[
@@ -27,13 +27,13 @@ export default function ProductGroupEdit() {
         ]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
-            <BaseInfo  columns={newProductGroup} dataSource={data || {}} />
+            <BaseInfo columns={newProductGroup} dataSource={data || {}} />
             <DetailTitle title="明细" />
             <CommonTable columns={[{
                 title: "操作",
                 dataIndex: "opration",
                 render: (_: null, records: any) => <>
-                    <Button type="link" size="small" onClick = {deleteThisRecode} >删除</Button>
+                    <Button type="link" size="small" onClick={deleteThisRecode} >删除</Button>
                 </>
             }, ...productAssist]} dataSource={select} />
         </Spin>
