@@ -74,7 +74,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
     const [materialForm] = Form.useForm()
     const [priceInfoForm] = Form.useForm();
     // 原材料标准
-    const materialStandard = (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
+    const materialStandard = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -195,6 +195,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
                     return (
                         {
                             ...item,
+                            disabled: type !== "new" ? true : false,
                             render(data: any, props: any) {
                                 return <PopTable data={data} {...props} />
                             }
@@ -205,6 +206,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
                     return (
                         {
                             ...item,
+                            disabled: type !== "new" ? true : false,
                             enum: materialStandard
                         }
                     )
@@ -213,6 +215,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
                     return (
                         {
                             ...item,
+                            disabled: type !== "new" ? true : false,
                             enum: materialCategoryName
                         }
                     )
