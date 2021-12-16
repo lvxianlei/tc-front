@@ -106,7 +106,7 @@ export default function EnquiryList(): React.ReactNode {
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" disabled={params.status !== "1"} ghost onClick={handleSuccess}>完成</Button>
-                <Button type="primary" ghost onClick={() => setVisible(true)}>配料</Button>
+                <Button type="primary" disabled={params.status !== "1"} ghost onClick={() => setVisible(true)}>配料</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
                 <Button type="primary" ghost onClick={() => createBatchingScheme()}>临时创建配料方案</Button>
             </>}
