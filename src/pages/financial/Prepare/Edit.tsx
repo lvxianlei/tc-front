@@ -45,6 +45,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     })) || []
                 }
             }))
+            businessTypeChange(result.businessType)
             resole(result)
         } catch (error) {
             reject(error)
