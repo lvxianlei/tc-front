@@ -9,6 +9,10 @@
             "dataIndex": "materialSpec"
         },
         {
+            "title": "材质",
+            "dataIndex": "structureTexture"
+        },
+        {
             "title": "原材料类型",
             "dataIndex": "materialCategoryName"
         },
