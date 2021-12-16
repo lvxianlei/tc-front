@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Button, Spin, Space } from 'antd';
+import { Button, Spin } from 'antd';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
-import { specialInfoData, productInfoData } from './pick.json';
+import { DetailContent, CommonTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import ExportList from '../../../components/export/list';
@@ -15,8 +14,6 @@ const towerColumns = [
     { title: '材料名称', dataIndex: 'materialName', key: 'materialName' },
     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
-    // { title: '宽度（mm）', dataIndex: 'width', key: 'width' },
-    // { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness' },
     { title: '长度（mm）', dataIndex: 'length', key: 'length' },
     { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
     { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight' },
@@ -34,7 +31,6 @@ export default function PickTowerDetail(): React.ReactNode {
     const [isExport, setIsExportStoreList] = useState(false)
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/material/${params.productId}`)
-        // const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/material/productId=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data
