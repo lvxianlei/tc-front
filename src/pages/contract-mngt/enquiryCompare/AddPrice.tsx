@@ -117,7 +117,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
             ]
         }]} dataSource={{}} edit />
         <DetailTitle title="询价原材料" />
-        <CommonTable columns={addPriceHead.map((item: any) => {
+        <CommonTable rowKey={(record: Record<string, any>) => {return record.code + record.length}} columns={addPriceHead.map((item: any) => {
             if (item.dataIndex === "taxOffer") {
                 return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "taxOffer")} /> })
             }

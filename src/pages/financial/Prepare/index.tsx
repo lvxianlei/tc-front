@@ -8,7 +8,7 @@ import AttachFile from "./AttachFile"
 import { ApplicationForPayment } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { payTypeOptions, pleasePayTypeOptions } from "../../../configuration/DictionaryOptions"
+import { costTypeOptions, payTypeOptions } from "../../../configuration/DictionaryOptions"
 
 interface EditRefProps {
     onSubmit: (type?: "saveAndApply" | "save") => void
@@ -17,7 +17,7 @@ interface EditRefProps {
 
 export default function ApplyPayment() {
     const history = useHistory()
-    const pleasePayTypeEnum = pleasePayTypeOptions?.map((item: { id: string, name: string }) => ({
+    const pleasePayTypeEnum = costTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
