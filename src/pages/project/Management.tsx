@@ -116,6 +116,7 @@ export default function Management(): React.ReactNode {
         {
             key: 'operation',
             title: '操作',
+            fixed: "right",
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
@@ -158,7 +159,7 @@ export default function Management(): React.ReactNode {
         path="/tower-market/projectInfo"
         columns={columns}
         filterValue={filterValue}
-        extraOperation={<Link to="/project/management/new"><Button type="primary">新建项目</Button></Link>}
+        extraOperation={<Button type="primary"><Link to="/project/management/edit/base/new">新建项目</Link></Button>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
@@ -166,18 +167,18 @@ export default function Management(): React.ReactNode {
                 children: <Input placeholder="项目名称/项目编码/项目负责人/批次号/内部合同编号/订单编号/计划号" style={{ width: 260 }} />
             },
             {
-                name:'InterContract',
-                label:'内部合同编号',
-                children: <Input placeholder="内部合同编号" style={{ width: 210}} />
+                name: 'InterContract',
+                label: '内部合同编号',
+                children: <Input placeholder="内部合同编号" style={{ width: 210 }} />
             },
             {
-                name:'OrderNumber',
-                label:'订单编号',
+                name: 'OrderNumber',
+                label: '订单编号',
                 children: <Input placeholder="订单编号" style={{ width: 210 }} />
             },
             {
-                name:'PlanNumber',
-                label:'计划号',
+                name: 'PlanNumber',
+                label: '计划号',
                 children: <Input placeholder="计划号" style={{ width: 210 }} />
             },
             {
