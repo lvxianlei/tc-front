@@ -3,7 +3,7 @@
  * 2021/11/22
  */
 import React, { useState, useRef } from 'react';
-import { Button, Input, DatePicker, Radio, message, Modal, Popconfirm, Upload } from 'antd'
+import { Button, Input, DatePicker, Radio, message, Modal, Popconfirm, Upload, Select } from 'antd'
 import useRequest from '@ahooksjs/use-request'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../common'
@@ -14,6 +14,7 @@ import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 import AddModal from './addModal'; // 新增
 import OverView from './overView'; // 查看
 import { EditRefProps } from './collection';
+import { collectionTypeeOptions } from '../../configuration/DictionaryOptions';
 
 export default function CollectionInfomation(): React.ReactNode {
     const history = useHistory()
@@ -22,10 +23,16 @@ export default function CollectionInfomation(): React.ReactNode {
     const [visible, setVisible] = useState(false);
     const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
     const addRef = useRef<EditRefProps>()
-    const confirmed = [{ "title": "备注", "dataIndex": "description"}],
+    const confirmed = [
+        { "title": "内部合同编号", "dataIndex": "internalNumber"},
+        { "title": "合同名称", "dataIndex": "contractName"},
+        { "title": "备注", "dataIndex": "description"}
+    ],
         confirmedEnd = [
             { "title": "回款类型", "dataIndex": "returnType" },
             { "title": "确认日期", "dataIndex": "confirmTime" },
+            { "title": "内部合同编号", "dataIndex": "internalNumber"},
+            { "title": "合同名称", "dataIndex": "contractName"},
             { "title": "备注", "dataIndex": "description" }
         ]
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -193,6 +200,19 @@ export default function CollectionInfomation(): React.ReactNode {
                     {
                         name: 'payCompany',
                         children: <Input placeholder="请输入来款单位进行查询" style={{ width: 300 }} />
+                    },
+                    {
+                        name: 'costType',
+                        label: '回款类型',
+                        children: (
+                            <Select placeholder="请选择回款类型" style={{ width: "14px" }}>
+                                { collectionTypeeOptions && collectionTypeeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={index} value={name}>
+                                        {name}
+                                    </Select.Option>
+                                }) }
+                            </Select>
+                        )
                     },
                     {
                         name: 'startRefundTime',

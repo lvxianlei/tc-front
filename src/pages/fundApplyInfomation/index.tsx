@@ -23,6 +23,7 @@
      const [AddVisible, setAddVisible] = useState(false);
      const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
      const [ payApplyId, setPayApplyId ] = useState<string>("");
+     const [ amountPayable, setAmountPayable ] = useState<string>("0"); // 应付款金额
      const confirmed = [{ "title": "备注", "dataIndex": "description"}];
      const viewRef = useRef<ViewRefProps>();
      //请求部门
@@ -195,7 +196,11 @@
                                         <>
                                         {/* 等于2为已付款 */}
                                         {record.payStatus != 2 ?
-                                            <Button type="link" onClick={() => { setAddVisible(true);setPayApplyId(record.id) } }>新增付款记录</Button>
+                                            <Button type="link" onClick={() => { 
+                                                setAddVisible(true);
+                                                setPayApplyId(record.id);
+                                                setAmountPayable(record.payMoney);
+                                             } }>新增付款记录</Button>
                                         :""}
                                             <Button type="link"  onClick={() => {viewShow(record)}}>详情</Button>
                                         </>
@@ -252,8 +257,9 @@
              />
              {/* 新增 */}
              <AddModal
-                payApplyId={payApplyId}
+                 payApplyId={payApplyId}
                  visible={AddVisible}
+                 amountPayable={amountPayable}
                  onCancel={() => setAddVisible(false)}
                  onOk={handleOk}
              />

@@ -37,6 +37,10 @@
             "dataIndex": "returnBank"
         },
         {
+            "title": "回款类型",
+            "dataIndex": "returnBank"
+        },
+        {
             "title": "确认方",
             "dataIndex": "confirmer"
         },
