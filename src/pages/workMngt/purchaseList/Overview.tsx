@@ -3,13 +3,14 @@ import { Spin } from "antd"
 import { CommonTable } from '../../common'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { baseInfo } from './TaskTower.json';
 interface OverviewProps {
     id: string
 }
 export default function Overview({ id }: OverviewProps): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any[] = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/${id}`)
+            const result: any[] = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/statistics/${id}`);
             resole(result)
         } catch (error) {
             reject(error)
@@ -17,6 +18,6 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
     }), { refreshDeps: [id] })
 
     return <Spin spinning={loading}>
-        <CommonTable haveIndex columns={data?.headerColumnVos || []} dataSource={data?.schemeData || []} />
+        <CommonTable haveIndex columns={baseInfo} dataSource={(data as any) || []} />
     </Spin>
 }

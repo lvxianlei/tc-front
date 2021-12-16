@@ -195,6 +195,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
                     return (
                         {
                             ...item,
+                            disabled: type !== "new" ? true : false,
                             render(data: any, props: any) {
                                 return <PopTable data={data} {...props} />
                             }
@@ -205,6 +206,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
                     return (
                         {
                             ...item,
+                            disabled: type !== "new" ? true : false,
                             enum: materialStandard
                         }
                     )
@@ -213,6 +215,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
                     return (
                         {
                             ...item,
+                            disabled: type !== "new" ? true : false,
                             enum: materialCategoryName
                         }
                     )
