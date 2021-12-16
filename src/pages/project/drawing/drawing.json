@@ -1,0 +1,178 @@
+{
+    "drawing": [
+        {
+            "title": "任务编号",
+            "dataIndex": "taskNumber"
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 120
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName"
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "serviceManager"
+        },
+        {
+            "title": "拒绝原因",
+            "dataIndex": "refuseMsg"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "auditStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "待发起"
+                },
+                {
+                    "value": 1,
+                    "label": "已发起"
+                },
+                {
+                    "value": 2,
+                    "label": "待完成"
+                },
+                {
+                    "value": 3,
+                    "label": "已拒绝"
+                },
+                {
+                    "value": 4,
+                    "label": "已完成"
+                }
+            ]
+        },
+        {
+            "title": "制单人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "制单时间",
+            "dataIndex": "createTime"
+        }
+    ],
+    "setting": [
+        {
+            "title": "图纸/工程名称",
+            "dataIndex": "projectName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入图纸/工程名称..."
+                }
+            ]
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber",
+            "type": "popTable",
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "internalNumber",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同内部编号",
+                    "dataIndex": "internalNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
+                },
+                {
+                    "title": "要求交货日期",
+                    "dataIndex": "deliveryTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
+                }
+            ]
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName",
+            "disabled": true
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany",
+            "disabled": true
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "serviceManager",
+            "type": "popTable",
+            "width": 1011,
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
+        },
+        {
+            "title": "业务经理联系电话",
+            "dataIndex": "serviceManagerTel"
+        },
+        {
+            "title": "设计院名称",
+            "dataIndex": "designInstitute"
+        },
+        {
+            "title": "设计院联系人",
+            "dataIndex": "designInstituteUser"
+        },
+        {
+            "title": "设计院联系电话",
+            "dataIndex": "designInstituteUserTel"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ]
+}

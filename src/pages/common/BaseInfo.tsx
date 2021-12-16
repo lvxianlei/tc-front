@@ -54,7 +54,10 @@ export function formatData(columns: any[], dataSource: any): object {
                 date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : undefined,
                 string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "",
                 textarea: value || "",
-                popTable: value || ""
+                popTable: value || {
+                    value: "",
+                    id: ""
+                }
             }
             formatedData[dataSourceKey] = types[dataItem.type || "string"]
         }

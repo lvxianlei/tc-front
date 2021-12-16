@@ -447,21 +447,21 @@
     { // 回款申请
       "name": "回款申请",
       "path": "/project/collection",
-      "module": "./pages/collection/index",
+      "module": "./pages/project/collection/index",
       "exact": true,
       "authority": "project_collection_confirmation"
     },
     { // 回款申请详情
       "name": "回款确认详情",
       "path": "/project/collection/detail/:id",
-      "module": "./pages/collection/Overview",
+      "module": "./pages/project/collection/Overview",
       "exact": true,
       "authority": "project"
     },
     { // 回款申请详情
       "name": "回款确认",
       "path": "/project/collection/edit/:id",
-      "module": "./pages/collection/Edit",
+      "module": "./pages/project/collection/Edit",
       "exact": true,
       "authority": "project"
     },
@@ -473,31 +473,6 @@
       "exact": true,
       "authority": "project"
     },
-    {
-      // 项目管理-图纸确认任务-新增/编辑
-      "name":"新增图纸确认",
-      "path":"/project/drawing/new",
-      "module":"./pages/project/drawing/Drawingnew",
-      "exact":true,
-      "authority":"project"
-    },
-    {
-      // 项目管理-图纸确认任务-查看详情
-      "name":"图纸详情",
-      "path":"/project/drawing/details",
-      "module":"./pages/project/drawing/DrawingDetails",
-      "exact":true,
-      "authority":"project"
-    },
-    {
-      // 项目管理-图纸编辑
-      "name":"图纸编辑",
-      "path":"/project/drawing/edit",
-      "module":"./pages/project/drawing/DrawingEdit",
-      "exact":true,
-      "authority":"project"
-    },
-
     { // 合同详情
       "name": "合同详情",
       "path": "/project/contract/detail/:projectId/:id",
@@ -2349,6 +2324,34 @@
       "name": "生产单元管理",
       "path": "/planBaseSetting/prodUnit",
       "module": "./pages/planBaseSetting/prodUnit/prodUnit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { //物料平衡-一次套料
+      "name": "一次套料",
+      "path": "/materialBalance/PrimaryNesting",
+      "module": "./pages/materialBalance/PrimaryNesting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案-编辑
+      "name": "库平采购",
+      "path": "/materialBalance/purchase",
+      "module": "./pages/materialBalance/PrimaryNesting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案-编辑
+      "name": "二次套料",
+      "path": "/materialBalance/secondary",
+      "module": "./pages/materialBalance/PrimaryNesting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案-编辑
+      "name": "套料设置",
+      "path": "/materialBalance/Nesting",
+      "module": "./pages/materialBalance/PrimaryNesting",
       "exact": true,
       "authority": "approvalm"
     }

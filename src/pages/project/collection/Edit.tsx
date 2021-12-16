@@ -1,10 +1,10 @@
 import React, { useState } from "react"
 import { Button, Spin, Form, Modal, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData } from '../../common'
 import { promotionalTourism, contractInformation } from "./CollectionData.json"
 import useRequest from '@ahooksjs/use-request'
-import RequestUtil from '../../utils/RequestUtil'
+import RequestUtil from '../../../utils/RequestUtil'
 type ReturnType = 0 | 1 | -1 | "-1" | undefined
 const contract = {
     "title": "相关合同",
