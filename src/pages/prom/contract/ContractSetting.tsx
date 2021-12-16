@@ -95,7 +95,9 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             payCompanyName: contract?.payCompanyName,
 
             contractPlanStatus: contract?.contractPlanStatus,
-            receivedContractShape: contract?.receivedContractShape
+            receivedContractShape: contract?.receivedContractShape,
+            contractFraction: contract?.contractFraction,
+            contractPage: contract?.contractPage,
         });
     }
 
