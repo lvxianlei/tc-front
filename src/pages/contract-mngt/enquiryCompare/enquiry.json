@@ -156,7 +156,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standardName"
+            "dataIndex": "materialStandardName"
         },
         {
             "title": "材质",
