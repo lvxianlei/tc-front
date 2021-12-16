@@ -4,7 +4,7 @@ import { BaseInfo } from '../../common'
 import { angleConfigStrategy } from "./angleSteel.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { materialTextureOptions } from "../../../configuration/DictionaryOptions"
 interface EditProps {
     type: "new" | "edit",
     data?: { [key: string]: any }
@@ -12,7 +12,7 @@ interface EditProps {
 }
 
 export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
-    const materialTextureEnum = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+    const materialTextureEnum = materialTextureOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))

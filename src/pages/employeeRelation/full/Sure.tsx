@@ -19,7 +19,7 @@ export default function Sure(): React.ReactNode {
         data.newDepartmentName = data.departmentId!=='0'?data.departmentName+'/'+data.teamName:data.teamName
         form.setFieldsValue({
             ...data,
-            checkResult: 2,
+            checkResult: data.checkResult === "提前转正"?1: data.checkResult === "延期转正"? 3 :2,
             positiveDate: data.positiveDate?moment(data.positiveDate):''
         })
         resole(data)
@@ -33,45 +33,46 @@ export default function Sure(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button type="primary" onClick={() => {
-                        form.validateFields().then(res=>{
-                           
-                            const value= form.getFieldsValue(true);
-                            value.fileIds= attachRef.current?.getDataSource().map((item:any)=>{
+                    <Button type="primary" onClick={async () => {
+
+                        await form.validateFields();
+                        const value= form.getFieldsValue(true);
+                        const postValue = {
+                            ...value,
+                            id :  params.id,
+                            employeeId :detailData.employeeId,
+                            fileIds: attachRef.current?.getDataSource().map((item:any)=>{
                                 return item.id
-                            });
-                            value.positiveDate= moment(value.positiveDate).format('YYYY-MM-DD HH:mm:ss');
-                            value.submitType='save';
-                            value.checkResult = value.checkResult===1?'提前转正':value.checkResult===2?'正常转正':'延期转正'
-                            value.id = params.id;
-                            value.employeeId = detailData.employeeId;
-                            RequestUtil.post(`/tower-hr/positive/check`, value).then(()=>{
-                                message.success('保存成功！')
-                            }).then(()=>{
-                                history.goBack()
-                            })
-                            
+                            }),
+                            checkResult: value.checkResult===1?'提前转正':value.checkResult===2?'正常转正':'延期转正',
+                            positiveDate: value.positiveDate?moment(value.positiveDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            submitType: 'save',
+                        }
+                        RequestUtil.post(`/tower-hr/positive/check`, postValue).then(()=>{
+                            message.success('保存成功！')
+                        }).then(()=>{
+                            history.goBack()
                         })
                         
                     }}>保存</Button>
-                    <Button type="primary" onClick={() => {
-                        form.validateFields().then(res=>{
-                           
-                            const value= form.getFieldsValue(true);
-                            value.fileIds= attachRef.current?.getDataSource().map((item:any)=>{
+                    <Button type="primary" onClick={async () => {
+                        await form.validateFields();
+                        const value= form.getFieldsValue(true);
+                        const postValue = {
+                            ...value,
+                            id :  params.id,
+                            employeeId :detailData.employeeId,
+                            fileIds: attachRef.current?.getDataSource().map((item:any)=>{
                                 return item.id
-                            });
-                            value.positiveDate= moment(value.positiveDate).format('YYYY-MM-DD HH:mm:ss');
-                            value.submitType='submit';
-                            value.id = params.id;
-                            value.checkResult = value.checkResult===1?'提前转正':value.checkResult===2?'正常转正':'延期转正'
-                            value.employeeId = detailData.employeeId;
-                            RequestUtil.post(`/tower-hr/positive/check`, value).then(()=>{
-                                message.success('提交成功！')
-                            }).then(()=>{
-                                history.goBack()
-                            })
-                            
+                            }),
+                            checkResult: value.checkResult===1?'提前转正':value.checkResult===2?'正常转正':'延期转正',
+                            positiveDate: value.positiveDate?moment(value.positiveDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            submitType: 'submit',
+                        }
+                        RequestUtil.post(`/tower-hr/positive/check`, postValue).then(()=>{
+                            message.success('提交成功！')
+                        }).then(()=>{
+                            history.goBack()
                         })
                     }}>保存并提交审批</Button>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>

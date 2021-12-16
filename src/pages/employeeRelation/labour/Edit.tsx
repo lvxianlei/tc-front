@@ -54,7 +54,7 @@ export default function Edit(): React.ReactNode {
     });
     const tableColumns = [
         { title: '合同编号', dataIndex: 'contractNumber', key: 'contractNumber' },
-        { title: '合同公司', dataIndex: 'signedCompany', key: 'signedCompany' },
+        { title: '合同公司', dataIndex: 'signedCompanyName', key: 'signedCompanyName' },
         { title: '合同类型', dataIndex: 'contractType', key: 'contractType', 
             render: (contractType: number): React.ReactNode => {
                 switch (contractType) {
@@ -91,32 +91,30 @@ export default function Edit(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button type="primary" onClick={() => {
-                        console.log(attachRef.current?.getDataSource())
-                        form.validateFields().then(res=>{
-                           
-                            const value= form.getFieldsValue(true);
-                            if(moment(value.contractEndDate)<moment(value.contractStartDate)){
-                                message.error('合同截止日期不可小于开始日期！')
-                            }else{
-                                value.fileIds= attachRef.current?.getDataSource().map((item:any)=>{
+                    <Button type="primary" onClick={async () => {
+                        await form.validateFields();
+                        const value= form.getFieldsValue(true);
+                        if(moment(value.contractEndDate)<moment(value.contractStartDate)){
+                            message.error('合同截止日期不可小于开始日期！')
+                        }else{
+                            const postValue = {
+                                ...value,
+                                id : params.status !== 'edit'?undefined:params.id,
+                                employeeId :detailData.employeeId,
+                                fileIds: attachRef.current?.getDataSource().map((item:any)=>{
                                     return item.id
-                                });
-                                value.contractEndDate= moment(value.contractEndDate).format('YYYY-MM-DD HH:mm:ss');
-                                value.contractStartDate= moment(value.contractStartDate).format('YYYY-MM-DD HH:mm:ss');
-                                value.submitType='save';
-                                value.employeeId = detailData.employeeId;
-                                value.id = params.status !== 'edit'?undefined:params.id;
-                                value.type = params.status === 'change'?1:params.status === 'renewal'?2:3
-                                RequestUtil.post(`/tower-hr/labor/contract`, value).then(()=>{
-                                    message.success('保存成功！')
-                                }).then(()=>{
-                                    history.goBack()
-                                })
+                                }),
+                                type: params.status === 'change'?1:params.status === 'renewal'?2:3,
+                                contractEndDate: value.contractEndDate?moment(value.contractEndDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                                contractStartDate: value.contractStartDate?moment(value.contractStartDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                                submitType: 'save',
                             }
-                            
-                        })
-                        
+                            RequestUtil.post(`/tower-hr/labor/contract`, postValue).then(()=>{
+                                message.success('保存成功！')
+                            }).then(()=>{
+                                history.goBack()
+                            })
+                        }
                     }}>保存</Button>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>

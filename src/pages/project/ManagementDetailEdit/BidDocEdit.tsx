@@ -7,13 +7,13 @@ import { bidDocColumns } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { bidTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
     // const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
     // const bidType = dictionaryOptions["124"]
-    const bidType = (ApplicationContext.get().dictionaryOption as any)["124"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }));
+    const bidType = bidTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }));
     const [baseInfoForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {

@@ -13,14 +13,19 @@ export enum DictionaryEnums {
     CURRENCY_TYPE = 111,
     TAX_RATE = 112,
     REFUND_MODE = 113,
+    PAY_CATEGORY = 114,
     CONST_TYPE = 115,
     BANK_TYPE = 116,
     CLIENT_TYPE = 121,
     WIN_BID_TYPE = 122,
     SALE_TYPE = 123,
+    BID_TYPE = 124,
+    SOURCE = 125,
     WAREHOUSE_TYPE = 127,
     DELIVERY_WAY = 128,
     TRANSPORTATION_TYPE = 129,
+    PAYMENT_CATEGORY = 136,
+    MATERIAL_STANDARD_TYPE = 138,
     MATERIAL_TEXTURE = 139,
     SUPPLIER_TYPE = 144,
     QUALITY_ASSURANCE = 145,
@@ -66,6 +71,11 @@ let materialTexture: IDict[] | undefined = [];
 let supplierType: IDict[] | undefined = [];
 let qualityAssurance: IDict[] | undefined = [];
 let supplyProducts: IDict[] | undefined = [];
+let paymentCategory: IDict[] | undefined = [];
+let source: IDict[] | undefined = [];
+let materialStandardType: IDict[] | undefined = [];
+let payCategory: IDict[] | undefined = [];
+let bidType: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -98,6 +108,11 @@ if (dictionary) {
     supplierType = dictionary[DictionaryEnums.SUPPLIER_TYPE];
     qualityAssurance = dictionary[DictionaryEnums.QUALITY_ASSURANCE];
     supplyProducts = dictionary[DictionaryEnums.SUPPLY_PRODUCTS];
+    paymentCategory = dictionary[DictionaryEnums.PAYMENT_CATEGORY];
+    source = dictionary[DictionaryEnums.SOURCE];
+    materialStandardType = dictionary[DictionaryEnums.MATERIAL_STANDARD_TYPE];
+    payCategory = dictionary[DictionaryEnums.PAY_CATEGORY];
+    bidType = dictionary[DictionaryEnums.BID_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -130,3 +145,8 @@ export const materialTextureOptions = materialTexture; //材质
 export const supplierTypeOptions = supplierType; //供应商类型
 export const qualityAssuranceOptions = qualityAssurance; //质量保证体系
 export const supplyProductsOptions = supplyProducts; //供应商供货产品
+export const paymentCategoryOptions = paymentCategory; //支付类别
+export const sourceOptions = source; //来源
+export const materialStandardTypeOptions = materialStandardType; //原材料标准类型
+export const payCategoryOptions = payCategory; //来款性质
+export const bidTypeOptions = bidType; //标书类别

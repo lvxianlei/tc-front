@@ -37,28 +37,34 @@ export default function Quit(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button type="primary" onClick={() => {
-                        form.validateFields().then(res=>{
-                            const value= form.getFieldsValue(true);
-                            value.departureDate= value.departureDate;
-                            value.id = params.id!=='0'?params.id:undefined;
-                            value.submitType='save';
-                            RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
-                                message.success('保存成功！')
-                                history.push(`/employeeRelation/quit`)
-                            })
-                        })
-                        
-                    }}>保存</Button>
-                    <Button type="primary" onClick={() => {
+                    <Button type="primary" onClick={async () => {
+                        await form.validateFields();
                         const value= form.getFieldsValue(true);
-                        value.departureDate= value.departureDate;
-                        value.id = params.id!=='0'?params.id:undefined;
-                        value.submitType='submit';
-                        RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
+                        const postValue = {
+                            ...value,
+                            id : params.id&&params.id!=='0'?params.id:undefined,
+                            departureDate: value.departureDate?moment(value.departureDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            submitType: 'save',
+                        }
+                        RequestUtil.post(`/tower-hr/employeeDeparture/save`,postValue).then(()=>{
+                            message.success('保存成功！')
+                            history.push(`/employeeRelation/quit`)
+                        })
+                    }}>保存</Button>
+                    <Button type="primary" onClick={async () => {
+                        await form.validateFields();
+                        const value= form.getFieldsValue(true);
+                        const postValue = {
+                            ...value,
+                            id : params.id&&params.id!=='0'?params.id:undefined,
+                            departureDate: value.departureDate?moment(value.departureDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            submitType: 'submit',
+                        }
+                        RequestUtil.post(`/tower-hr/employeeDeparture/save`,postValue).then(()=>{
                             message.success('提交成功！')
                             history.push(`/employeeRelation/quit`)
                         })
+                        
                     }}>保存并提交审批</Button>
                     <Button key="goback" onClick={() => history.push(`/employeeRelation/quit`)}>返回</Button>
                 </Space>

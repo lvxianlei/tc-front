@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, } from 'react'
-import { Button, DatePicker, Input, message, Modal, Select, } from 'antd';
+import { Button, Col, DatePicker, Form, Input, InputNumber, message, Modal, Row, Select, } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import * as echarts from 'echarts';
 import './prodUnit.less';
@@ -10,26 +10,28 @@ import dayjs from 'dayjs';
 const ProdUnitAdd = (props: any) => {
     let [prodLinkList, setProdLinkList] = useState<any[]>([])
     let [itemInfo, setItemInfo] = useState<any>({})
+    const [form] = Form.useForm();
     // let [times, setTimes] = useState<string[]>(['', ''])
-    const [value, setValue] = useState<any>();
+    const [value, setValue] = useState<any>([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(6, 'day').format('YYYY-MM-DD'))]);
     const [dates, setDates] = useState<any>([]);
     const disabledDate = (current: any) => {
       if (!dates || dates.length === 0) {
         return false;
       }
-      const tooLate = dates[0] && current.diff(dates[0], 'days') > 7;
-      const tooEarly = dates[1] && dates[1].diff(current, 'days') > 7;
+      const tooLate = dates[0] && current.diff(dates[0], 'days') > 6;
+      const tooEarly = dates[1] && dates[1].diff(current, 'days') > 6;
       return tooEarly || tooLate;
     };
     useEffect(() => {
         // times[0] = dayjs().format('YYYY-MM-DD')
         // times[1] = dayjs().add(7, 'day').format('YYYY-MM-DD')
         // setTimes(times)
-        setValue([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(7, 'day').format('YYYY-MM-DD'))])
+        // setValue([new Date(), new Date(new Date().setDate(new Date().getDate()+7))])
         getProdLinkList()
         if (props.id) {
             getDetail()
-            initCharts([], [])
+            // initCharts([], [],productivity)
+           
         }
     }, [])
     /**
@@ -44,6 +46,12 @@ const ProdUnitAdd = (props: any) => {
             return item.productionLinkId
         })
         setItemInfo(data)
+        form.setFieldsValue({
+            ...data
+        })
+        if(data){
+            seeLoad(data.productivity);
+        }
     }
     /**
      * @description 获取生产环节
@@ -55,6 +63,7 @@ const ProdUnitAdd = (props: any) => {
             unitId: props.id,
         })
         setProdLinkList(data.records)
+        
     }
     /**
      * 
@@ -69,32 +78,48 @@ const ProdUnitAdd = (props: any) => {
      * @description 弹窗提交
      */
     const submit = async () => {
-        if(itemInfo.productivity&&itemInfo.name&&itemInfo['productionLinkDTOList']&&itemInfo['productionLinkDTOList'].length>0){
-            itemInfo['productionLinkDTOList'] = itemInfo['productionLinkDTOList'].map((item: string) => {
+        await form.validateFields();
+        const value = form.getFieldsValue(true);
+        const submitValue = {
+            ...value,
+            productionLinkDTOList: value.productionLinkDTOList.map((item: string) => {
                 return {
                     productionLinkId: item,
                     productionUnitId: props.id
                 }
             })
-            await RequestUtil.post('/tower-aps/productionUnit', {
-                ...itemInfo,
-            })
-            message.success('操作成功')
-            props.cancelModal(true)
-        }else{
-            message.error('必填项未填写，不可提交！')
         }
+        await RequestUtil.post('/tower-aps/productionUnit', {
+            ...submitValue,
+        })
+        message.success('操作成功')
+        props.cancelModal(true)
+        // if(itemInfo.productivity&&itemInfo.name&&itemInfo['productionLinkDTOList']&&itemInfo['productionLinkDTOList'].length>0){
+        //     itemInfo['productionLinkDTOList'] = itemInfo['productionLinkDTOList'].map((item: string) => {
+        //         return {
+        //             productionLinkId: item,
+        //             productionUnitId: props.id
+        //         }
+        //     })
+        //     await RequestUtil.post('/tower-aps/productionUnit', {
+        //         ...itemInfo,
+        //     })
+        //     message.success('操作成功')
+        //     props.cancelModal(true)
+        // }else{
+        //     message.error('必填项未填写，不可提交！')
+        // }
         
     }
     /**
      * @description
      */
-    const seeLoad = async () => {
+    const seeLoad = async (max:number) => {
         // if (!times[0]) {
         //     message.error('请选择时间范围')
         //     return
         // }
-        if (!value) {
+        if (!value||value.length===0) {
             message.error('请选择时间范围')
             return
         }
@@ -117,6 +142,12 @@ const ProdUnitAdd = (props: any) => {
                     emphasis: {
                         focus: 'series'
                     },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                            yAxis:max
+                        }]
+                    },
                     data: []
                 },
                 {
@@ -125,6 +156,12 @@ const ProdUnitAdd = (props: any) => {
                     stack: 'stack',
                     emphasis: {
                         focus: 'series'
+                    },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
                     },
                     data: []
                 },
@@ -135,6 +172,12 @@ const ProdUnitAdd = (props: any) => {
                     emphasis: {
                         focus: 'series'
                     },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
+                    },
                     data: []
                 },
                 {
@@ -143,6 +186,12 @@ const ProdUnitAdd = (props: any) => {
                     stack: 'stack',
                     emphasis: {
                         focus: 'series'
+                    },
+                    markLine: {
+                        data: [{
+                            name:'产力值',
+                           yAxis:max
+                        }]
                     },
                     data: []
                 },
@@ -158,7 +207,7 @@ const ProdUnitAdd = (props: any) => {
                     if(item?.productivityList?.length > 0 && res.name === item.productivityList[i].statusName ){
                         res.data.push(item.productivityList[i].productivity || 0)
                     }  else  {
-                        res.data.push(0)
+                        res.data.push(undefined)
                     } 
                 })
             });
@@ -168,7 +217,7 @@ const ProdUnitAdd = (props: any) => {
     /**
      * @description
      */
-    const initCharts = (dates: string[], datas: any[],) => {
+    const initCharts = (dates: string[], datas: any[]) => {
         const myChart = echarts.init((document as HTMLElement | any).getElementById('chartsBox'));
         // 绘制图表
         myChart.setOption({
@@ -193,12 +242,17 @@ const ProdUnitAdd = (props: any) => {
             ],
             yAxis: [
                 {
-                    type: 'value'
+                    type: 'value',
                 }
             ],
+           
             series:datas,
         });
     }
+    const formItemLayout = {
+        labelCol: { span: 3 },
+        wrapperCol: { span: 20 }
+    };
     return (
         <div className='public_page'>
             <Modal
@@ -216,13 +270,13 @@ const ProdUnitAdd = (props: any) => {
                 cancelText='取消'
                 okText='确定'
             >
-                <div>
+                {/* <div>
                     <div className='edit-item'>
                         <span className='tip' style={{ width: 110, }}>生产单元名称*：</span>
                         <Input
                             className='input'
                             maxLength={24}
-                            value={itemInfo['name']}
+                            defaultValue={itemInfo['name']}
                             onChange={(ev) => {
                                 changeItemInfo(ev.target.value.trim(), 'name')
                             }}
@@ -234,10 +288,9 @@ const ProdUnitAdd = (props: any) => {
                         <Input
                             className='input'
                             maxLength={12}
-                            value={itemInfo['productivity']}
+                            defaultValue={itemInfo['productivity']}
                             onChange={(ev) => {
-                                changeItemInfo(ev.target.value.replace(/[^1-9]/ig, ""), 'productivity')
-                                console.log(itemInfo)
+                                // changeItemInfo(ev.target.value.replace(/[^0-9]/ig, ""), 'productivity')
                             }}
                             placeholder='请输入'
                         />
@@ -247,7 +300,7 @@ const ProdUnitAdd = (props: any) => {
                         <Select
                             className='input'
                             placeholder='请选择'
-                            value={itemInfo['productionLinkDTOList'] || []}
+                            defaultValue={itemInfo['productionLinkDTOList'] || []}
                             mode='multiple'
                             maxTagCount={10}
                             searchValue=''
@@ -268,28 +321,77 @@ const ProdUnitAdd = (props: any) => {
                             }
                         </Select>
                     </div>
-                </div>
-                <div className='see' hidden={!props.id}>
-                    <Button
-                        onClick={() => {
-                            seeLoad()
-                        }}
-                    >查看负荷</Button>
-                    <DatePicker.RangePicker
-                        disabledDate={disabledDate}
-                        onCalendarChange={(val: any) => setDates(val)}
-                        value={value}
-                        onChange={(value) => {
-                            setValue(value)
-                        }}
-                        onOpenChange={(open: boolean) => {
-                            if (open) {
-                                setDates([]);
-                                setValue([])
-                            }
-                        }}
-                    />
-                </div>
+                </div> */}
+                <Form form={ form } {...formItemLayout}>
+                    <Row>
+                        <Col  span={24}>
+                            <Form.Item label="生产单元名称" rules={[{required:true,message:'请填写生产单元名称'}]} name='name'>
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col  span={24}>
+                            <Form.Item label="产力值" rules={[{required:true,message:'请填写产力值'}]} name='productivity'>
+                                <InputNumber maxLength={12} min={0} style={{width:'100%'}} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col  span={24}>
+                            <Form.Item label="关联生产环节" rules={[{required:true,message:'请选择关联生产环节'}]} name='productionLinkDTOList'>
+                                <Select
+                                    className='input'
+                                    placeholder='请选择'
+                                    mode='multiple'
+                                    maxTagCount={10}
+                                    searchValue=''
+                                    // onChange={(value) => {
+                                    //     changeItemInfo(value, 'productionLinkDTOList')
+                                    // }}
+                                >
+                                    {
+                                        prodLinkList.map((item: any, index: number) => {
+                                            return (
+                                                <Select.Option
+                                                    key={index}
+                                                    value={item.id}
+                                                    disabled={item.isUse}
+                                                >{item.name}</Select.Option>
+                                            )
+                                        })
+                                    }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                    <Col span={24}>
+                        <Form.Item label="时间范围" hidden={!props.id}>
+                            <DatePicker.RangePicker
+                                disabledDate={disabledDate}
+                                onCalendarChange={(val: any) => setDates(val)}
+                                value={value}
+                                defaultValue={value}
+                                onChange={(value) => {
+                                    setValue(value)
+                                }}
+                                onOpenChange={(open: boolean) => {
+                                    if (open) {
+                                        setDates([]);
+                                        setValue([])
+                                    }
+                                }}
+                            />
+                            <Button
+                                onClick={() => {
+                                    seeLoad(itemInfo.productivity)
+                                }}
+                            >查看负荷</Button>
+                        </Form.Item>
+                    </Col>
+                    </Row>
+                </Form>
                 <div id='chartsBox' style={{ width: '100%', height: 300 }} hidden={!props.id}></div>
             </Modal>
         </div>

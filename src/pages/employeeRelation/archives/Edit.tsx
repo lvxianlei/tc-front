@@ -53,7 +53,8 @@ export default function Edit() {
     const [baseInfoColumns, setBaseInfoColumns] = useState<Object[]>(baseInfo)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`${tabPaths[currentType]}?employeeId=${params.archiveId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`${tabPaths[currentType]}?employeeId=${params.archiveId}`);
+            (currentType === "baseInfo" && result?.isDisability) && setBaseInfoColumns([...baseInfo, ...disabilityCols])
             resole(currentType === "baseInfo" ? {
                 ...result,
                 postType: result?.postType?.split(",")
@@ -85,6 +86,7 @@ export default function Edit() {
                             ...postCompanyData,
                             ...postOtherData,
                             id: params.archiveId,
+                            departureDate: postCompanyData.departureDate && (postCompanyData.departureDate + " 00:00:00"),
                             inductionDate: postCompanyData.inductionDate && (postCompanyData.inductionDate + " 00:00:00"),
                             positiveDate: postCompanyData.positiveDate && (postCompanyData.positiveDate + " 00:00:00"),
                             fileIds: attchRef.current?.getDataSource().map(item => item.id),
@@ -100,16 +102,19 @@ export default function Edit() {
                 case "work":
                     {
                         const postData = await workForm.validateFields()
-                        await saveRun("work", postData?.submit.map((item: any) => {
-                            const postItem: any = { ...item }
-                            delete postItem.id
-                            delete postItem.uid
-                            postItem.startWorkDate = postItem.workDate[0] ? postItem.workDate[0] + " 00:00:00" : ""
-                            postItem.endWorkDate = postItem.workDate[1] ? postItem.workDate[1] + " 00:00:00" : ""
-                            postItem.employeeId = params.archiveId
-                            delete postItem.workDate
-                            return postItem
-                        }))
+                        await saveRun("work", {
+                            employeeId: params.archiveId,
+                            workExperienceList: postData?.submit.map((item: any) => {
+                                const postItem: any = { ...item }
+                                delete postItem.id
+                                delete postItem.uid
+                                postItem.startWorkDate = postItem.workDate[0] ? postItem.workDate[0] + " 00:00:00" : ""
+                                postItem.endWorkDate = postItem.workDate[1] ? postItem.workDate[1] + " 00:00:00" : ""
+                                postItem.employeeId = params.archiveId
+                                delete postItem.workDate
+                                return postItem
+                            })
+                        })
                         message.success("保存成功...")
                         history.goBack()
                     }
@@ -117,14 +122,17 @@ export default function Edit() {
                 case "family":
                     {
                         const postData = await familyForm.validateFields()
-                        await saveRun("family", postData?.submit.map((item: any) => {
-                            const postItem: any = { ...item }
-                            delete postItem.id
-                            delete postItem.uid
-                            postItem.employeeId = params.archiveId
-                            delete postItem.workDate
-                            return postItem
-                        }))
+                        await saveRun("family", {
+                            employeeId: params.archiveId,
+                            familyList: postData?.submit.map((item: any) => {
+                                const postItem: any = { ...item }
+                                delete postItem.id
+                                delete postItem.uid
+                                postItem.employeeId = params.archiveId
+                                delete postItem.workDate
+                                return postItem
+                            })
+                        })
                         message.success("保存成功...")
                         history.goBack()
                     }
@@ -132,14 +140,17 @@ export default function Edit() {
                 case "employee":
                     {
                         const postData = await employeeForm.validateFields()
-                        await saveRun("employee", postData?.submit.map((item: any) => {
-                            const postItem: any = { ...item }
-                            delete postItem.id
-                            delete postItem.uid
-                            postItem.employeeId = params.archiveId
-                            delete postItem.workDate
-                            return postItem
-                        }))
+                        await saveRun("employee", {
+                            employeeId: params.archiveId,
+                            relativesList: postData?.submit.map((item: any) => {
+                                const postItem: any = { ...item }
+                                delete postItem.id
+                                delete postItem.uid
+                                postItem.employeeId = params.archiveId
+                                delete postItem.workDate
+                                return postItem
+                            })
+                        })
                         message.success("保存成功...")
                         history.goBack()
                     }
@@ -190,7 +201,7 @@ export default function Edit() {
                                 ...item,
                                 rules: [...item.rules, {
                                     pattern: /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
-                                    message: "紧急联系电话不合法"
+                                    message: "紧急联系电话不合法..."
                                 }]
                             })
                         }

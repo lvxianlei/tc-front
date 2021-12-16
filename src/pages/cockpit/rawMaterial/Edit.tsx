@@ -4,8 +4,8 @@ import { materialInfo, priceInfo } from "./rawMaterial.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { BaseInfo, DetailTitle, PopTableContent } from "../../common"
-import ApplicationContext from "../../../configuration/ApplicationContext"
 import { PopTable } from './LayerModal';
+import { materialStandardTypeOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
 
 interface priceSourceEnumData {
     label: string
@@ -74,12 +74,12 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
     const [materialForm] = Form.useForm()
     const [priceInfoForm] = Form.useForm();
     // 原材料标准
-    const materialStandard = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({
+    const materialStandard = materialStandardTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
     // 原材料材质
-    const materialCategoryName = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+    const materialCategoryName = materialTextureOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -131,8 +131,8 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
         const materialData = await materialForm.validateFields()
         const priceInfoData = await priceInfoForm.validateFields()
         console.log("priceInfoData", priceInfoData)
-        const materialStandardName = materialStandard.filter((item: any) => item.value === materialData.materialStandard),
-           structureTexture = materialCategoryName.filter((item: any) => item.value === materialData.structureTextureId),
+        const materialStandardName = materialStandard?.filter((item: any) => item.value === materialData.materialStandard),
+           structureTexture = materialCategoryName?.filter((item: any) => item.value === materialData.structureTextureId),
            priceSource = priceSourceEnum && priceSourceEnum?.filter((item: any) => item.value === priceInfoData.priceSource);
            console.log(priceSource, "priceSource", priceSourceEnum, 'id', priceInfoData.priceSource)
         try {

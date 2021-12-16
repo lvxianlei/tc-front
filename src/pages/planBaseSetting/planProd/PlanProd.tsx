@@ -37,7 +37,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         gantt.clearAll();
         gantt.config.column_width = 20;
         gantt.config.columns = [
-          {label:'计划号', name: "planNumber", tree: true, resize: true , width:200, template: function (task:any) {
+          {label:'计划号', name: "planNumber", align: "center", tree: true, resize: true , width:170, template: function (task:any) {
             if(!task.parent){
               // href='/planProd/planMgmt/detail/${task.id}/${task.planId}'
               return (
@@ -48,10 +48,38 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
             }
               
           }},
-          {label:'塔型',name: "name", align: "center", resize: true, width: 100},
-          {label:'基数',name: "productNum", align: "center"},
-          {label:'重量',name: "weight", align: "center"},
-          {label:'交货日期',name: "deliveryTime", align: "center"},
+          {label:'塔型',name: "name", align: "center", resize: true, template: function (task:any) {
+              return (
+                `
+                <span title="塔型：${task.name}" >${task.name}</span>
+                `
+              )
+              
+          }},
+          {label:'基数',name: "productNum", align: "center", template: function (task:any) {
+            return (
+              `
+              <span title="基数：${task.productNum}" >${task.productNum}</span>
+              `
+            )
+            
+        }},
+          {label:'重量',name: "weight", align: "center", template: function (task:any) {
+            return (
+              `
+              <span title="重量：${task.weight}" >${task.weight}</span>
+              `
+            )
+            
+        }},
+          {label:'交货日期',name: "deliveryTime", align: "center", template: function (task:any) {
+            return (
+              `
+              <span title="交货日期:${task.deliveryTime?task.deliveryTime:'-'}" >${task.deliveryTime?task.deliveryTime:'-'}</span>
+              `
+            )
+            
+        }},
           // {label:'计划状态',name: "planStatus", align: "center", template: function (task:any) {
           //   switch(task.planStatus){
           //     case 1: return '待排产'
@@ -64,7 +92,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
               // href='/planProd/planMgmt/detail/${task.id}/${task.planId}'
               return (
                 `
-                <a style="color:#FF8C00" id="planEdit" href='/planProd/planMgmt/detail/${task.id}/${task.planId}'>查看</a>
+                <a style="color:#FF8C00" id="planEdit" href='/planProd/planMgmt/detail/${task.id}/${task.planId}'>详情</a>
                 `
               );
             }else{
@@ -74,12 +102,12 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
           }}
         ];
         gantt.templates.task_text = function(start,end,task){
-          return task.planNumber?"<b>计划号:</b> "+task.planNumber:"<b> 塔型:</b> "+task.name;
+          return task.planNumber?`<b title='计划号:${task.planNumber}'>计划号:</b> `+task.planNumber:`<b title='塔型:${task.name}'> 塔型:</b> `+task.name;
         };
         gantt.config.scales = [
           {unit:"day", step:1, date:"%d" },
           {unit:"month", step:1, date:"%F, %Y" },
-          {unit:"year", step:1, date:"%Y" }
+          // {unit:"year", step:1, date:"%Y" }
         ];
 
         gantt.config.row_height = 22;
@@ -91,6 +119,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         gantt.config.drag_resize = false;//拖拽工期
         gantt.config.drag_progress = false;//拖拽进度
         gantt.config.drag_links = false;//通过拖拽的方式新增任务依赖的线条
+        gantt.config.drag_move = false;
         gantt.config.layout = {
           css: "gantt_container",
           cols: [
@@ -124,7 +153,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         const tasksNew = tree.length>0 &&tree.concat(value).map((item:any)=>{
           return {
             ...item,
-            open:true,
+            // open:true,
             start_date: item.startTime?new Date(item.startTime+ ' 00:00:00'): new Date(),
             name: item.name?item.name:item.productCategoryNum,
             deliveryTime: item.deliveryTime?moment(item.deliveryTime).format('YYYY-MM-DD'):undefined,
@@ -165,6 +194,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
           value.endTime = formatDate[1]+ ' 23:59:59';
           delete value.time
       }
+      gantt.clearAll();
       const tree: any = await RequestUtil.get<any>('/tower-aps/productionPlan/thread',value);
       const valueN = tree.length>0 && tree.reduce((res:any, item:any) => {
         const parent = {...item};
@@ -174,7 +204,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
       const tasksNew = tree.length>0 &&tree.concat(valueN).map((item:any)=>{
         return {
           ...item,
-          open:true,
+          // open:true,
           start_date: item.startTime?new Date(item.startTime+' 00:00:00'): new Date(),
           name: item.name?item.name:item.productCategoryNum,
           deliveryTime: item.deliveryTime?moment(item.deliveryTime).format('YYYY-MM-DD'):undefined,
