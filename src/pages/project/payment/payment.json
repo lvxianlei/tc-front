@@ -17,21 +17,6 @@
             "dataIndex": "projectLeader"
         },
         {
-            "title": "付款类型",
-            "dataIndex": "payType",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "请款",
-                    "value": 0
-                },
-                {
-                    "label": "报销",
-                    "value": 1
-                }
-            ]
-        },
-        {
             "title": "付款状态",
             "dataIndex": "payStatus",
             "type": "select",
@@ -102,7 +87,29 @@
         {
             "title": "请款类型",
             "dataIndex": "costType",
-            "type": "select"
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1151,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1152,
+                    "label": "中标服务费"
+                },
+                {
+                    "value": 1153,
+                    "label": "标书费"
+                },
+                {
+                    "value": 1154,
+                    "label": "杂费"
+                },
+                {
+                    "value": 1155,
+                    "label": "投标服务费"
+                }
+            ]
         },
         {
             "title": "业务经理",
@@ -278,7 +285,7 @@
             "dataIndex": "billType"
         },
         {
-            "title": "票据时间",
+            "title": "票据日期",
             "dataIndex": "billTime"
         },
         {

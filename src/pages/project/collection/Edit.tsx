@@ -5,7 +5,7 @@ import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, forma
 import { promotionalTourism, contractInformation } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-type ReturnType = 0 | 1 | -1 | "-1" | undefined
+type ReturnType = 1171 | 1172 | -1 | "-1" | undefined
 const contract = {
     "title": "相关合同",
     "dataIndex": "contractId",
@@ -81,13 +81,13 @@ export default function Edit() {
     const handleSubmit = async () => {
         const baseInfo = await baseForm.validateFields()
         const confirmBackMoneyInfoDTOList = await contractInfosForm.validateFields()
-        if (returnType === 1 && confirmBackMoneyInfoDTOList?.submit?.length <= 0) {
+        if (returnType === 1172 && confirmBackMoneyInfoDTOList?.submit?.length <= 0) {
             message.warning("回款类型为合同应收款时，必须选择合同和回款计划")
             return
         } else {
             const result = await saveRun({
                 ...baseInfo,
-                payNum: returnType === 0 ? baseInfo.payNum?.records?.[0].payNumber || data?.payNum || "" : "",
+                payNum: returnType === 1171 ? baseInfo.payNum?.records?.[0].payNumber || data?.payNum || "" : "",
                 confirmBackMoneyInfoDTOList: confirmBackMoneyInfoDTOList?.submit?.map((item: any) => ({
                     ...item,
                     contractId: item.id,
@@ -140,11 +140,11 @@ export default function Edit() {
             <BaseInfo
                 onChange={handleBaseInfoChange}
                 form={baseForm}
-                columns={promotionalTourism.filter((item: any) => returnType === 0 ? true : item.dataIndex !== "payNum")}
+                columns={promotionalTourism.filter((item: any) => returnType === 1171 ? true : item.dataIndex !== "payNum")}
                 dataSource={data || {}}
                 edit
             />
-            {returnType === 1 && <>
+            {returnType === 1172 && <>
                 <DetailTitle title="合同信息" operation={[<Button key="choose" type="primary" ghost onClick={() => setVisible(true)}>选择合同</Button>]} />
                 <EditTable
                     form={contractInfosForm}

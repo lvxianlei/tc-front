@@ -117,7 +117,7 @@
                                 "authority": "project_invoicing_requisition"
                             },
                             {
-                                "label": "付款申请",
+                                "label": "请款申请",
                                 "path": "/project/payment",
                                 "authority": "project_payment_application"
                             },
