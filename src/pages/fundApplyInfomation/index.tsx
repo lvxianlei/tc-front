@@ -28,17 +28,22 @@
      const viewRef = useRef<ViewRefProps>();
      //请求部门
      useRequest(() => new Promise(async (resole, reject) => {
-         const deptData: SelectDataNode[] = await RequestUtil.get(`/tower-system/department/tree`);
+         const deptData: SelectDataNode[] = await RequestUtil.get(`/tower-system/department`);
          setDepartData(deptData);
      }), {})
      const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
          roles && roles.forEach((role: any & SelectDataNode): void => {
-             role.value = role.id;
-             role.isLeaf = false;
-             if (role.children && role.children.length > 0) {
-                 wrapRole2DataNode(role.children);
-             }
+            if (role.type === 2) {
+                role.disabled = true;
+            }
+            role.value = role.id;
+            role.title = role.name;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
          });
+         console.log(roles, "eoless")
          return roles;
      }
      // 查询按钮
@@ -48,6 +53,7 @@
              value.endPayApplyTime = `${formatDate[1]} 23:59:59`
              value.startPayApplyTime = `${formatDate[0]} 00:00:00`
          }
+         console.log(departData, "departData")
          value.payStatus=payStatus;
          return value
      }
