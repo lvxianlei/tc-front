@@ -102,7 +102,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 }
             })
         }
-        console.log(list)
         setCompanyList(list || []);
     }
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
@@ -122,7 +121,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             if(item.dataIndex === 'businessType') {
                 return ({ ...item, render: (data: any, props: any) => {
                     return <Form.Item name="businessType">
-                        <Select onChange={ (e: number) => businessTypeChange(e) }>
+                        <Select onChange={ (e: number) => { businessTypeChange(e); baseForm.setFieldsValue({ businessId: '' }); } }>
                             <Select.Option value={1} key="1">供应商</Select.Option>
                             <Select.Option value={2} key="2">装卸公司</Select.Option>
                             <Select.Option value={3} key="3">运输公司</Select.Option>

@@ -363,7 +363,8 @@
         {
             "title": "开票日",
             "dataIndex": "collectInvoiceDate",
-            "type": "string"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         }
     ],
     "billOperationInfo": [
@@ -553,7 +554,8 @@
                 {
                     "title": "开票日",
                     "dataIndex": "collectInvoiceDate",
-                    "type": "string"
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
                 },
                 {
                     "title": "发票类型",
