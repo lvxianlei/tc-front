@@ -1,0 +1,97 @@
+{
+    "clientMegt": [
+        {
+            "title": "客户名称",
+            "dataIndex": "name"
+        },
+        {
+            "title": "客户类型",
+            "dataIndex": "typeName"
+        },
+        {
+            "title": "重要联系人",
+            "dataIndex": "linkman"
+        },
+        {
+            "title": "手机号码",
+            "dataIndex": "phone"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        }
+    ],
+    "setting": [
+        {
+            "title": "客户名称",
+            "dataIndex": "name",
+            "required": true
+        },
+        {
+            "title": "客户类型",
+            "dataIndex": "type",
+            "type": "select",
+            "enum": [],
+            "required": true
+        },
+        {
+            "title": "首要联系人",
+            "dataIndex": "linkman",
+            "required": true
+        },
+        {
+            "title": "联系人职位",
+            "dataIndex": "position"
+        },
+        {
+            "title": "联系电话",
+            "dataIndex": "phone",
+            "type": "phone",
+            "required": true
+        },
+        {
+            "title": "联系地址",
+            "dataIndex": "address"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "invoice": [
+        {
+            "title": "票面单位",
+            "dataIndex": "invoiceUnit"
+        },
+        {
+            "title": "纳税人识别号",
+            "dataIndex": "taxpayerNumber"
+        },
+        {
+            "title": "地址",
+            "dataIndex": "positionAddress"
+        },
+        {
+            "title": "电话",
+            "dataIndex": "contactManTel",
+            "type": "phone"
+        },
+        {
+            "title": "开户行",
+            "dataIndex": "openBankId",
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "银行账号",
+            "dataIndex": "bankAccount"
+        }
+    ]
+}

@@ -144,9 +144,29 @@ class ManagementContractSummary extends ContractSummary {
             value: baseInfo?.takeOverTime
           },
           {
-            label: "是否收到合同原件",
-            value: baseInfo?.isReceivedContract
-          }]
+            label: "收到合同形式",
+            value: baseInfo?.receivedContractShapeName
+          }],
+        [
+          {
+            label: "合同份数",
+            value: baseInfo?.contractFraction || 0,
+          },
+          {
+            label: "合同页数",
+            value: baseInfo?.contractPage || 0,
+          },
+        ],
+        [
+          {
+            label: "合同计划状态",
+            value: baseInfo?.contractPlanStatusName,
+          },
+          {
+            label: "合同重量与计划重量差值",
+            value: baseInfo?.contractWeightDiff
+          }
+        ]
       ],
     };
   }
