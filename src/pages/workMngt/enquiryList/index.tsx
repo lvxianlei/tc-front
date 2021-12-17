@@ -41,7 +41,7 @@ export default function EnquiryList(): React.ReactNode {
     return <>
         <Modal
             destroyOnClose
-            title="询价信息"
+            title="工程报价信息"
             width={1011}
             visible={visible}
             footer={[
@@ -86,7 +86,7 @@ export default function EnquiryList(): React.ReactNode {
                             setDetailId(records.id)
                             setInquiryStatus(records.inquiryStatus)
                             setVisible(true)
-                        }}>询价信息</Button>
+                        }}>工程报价信息</Button>
                 }]}
             extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}

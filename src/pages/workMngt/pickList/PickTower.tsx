@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select, message, InputNumber, TreeSelect } from 'antd'
+import { Space, DatePicker, Button, Form, Modal, Row, Col, Select, message, InputNumber, TreeSelect } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
-import { Link, useHistory, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
@@ -129,33 +129,6 @@ export default function PickTower(): React.ReactNode {
             width: 100,
             dataIndex: 'materialStatusName'
         },
-        // {
-        //     key: 'materialStatus',
-        //     title: '杆塔配段状态',
-        //     width: 100,
-        //     dataIndex: 'materialStatus',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: 1,
-        //                 label: "待开始"
-        //               },
-        //             {
-        //                 value: 2,
-        //                 label: "配段中"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "已完成"
-        //             },
-        //             // {
-        //             //     value: 4,
-        //             //     label: "已提交"
-        //             // }
-        //         ]
-        //         return <>{value&&value!==-1?renderEnum.find((item: any) => item.value === value).label:null}</>
-        //     }
-        // },
         {
             key: 'materialUpdateStatusTime',
             title: '最新状态变更时间',
@@ -176,7 +149,6 @@ export default function PickTower(): React.ReactNode {
                             const detailData: IMaterialDetail[]|undefined = data&&data.materialDrawProductSegmentList&&data.materialDrawProductSegmentList.map((item:IMaterialDetail)=>{
                                 return {
                                     ...item,
-                                    // value:item.count===-1?0:item.count,
                                 }
                             })
                             setProductId(record.id);
@@ -301,22 +273,7 @@ export default function PickTower(): React.ReactNode {
                 exportPath="/tower-science/product/material"
                 extraOperation={
                     <Space>
-                    {/* <Button type="primary">导出</Button> */}
-                    {/* <Popconfirm
-                        title="确认提交?"
-                        onConfirm={ async ()=>{
-                            await RequestUtil.post(`/tower-science/product/material/submit?productCategoryId=${params.id}`).then(()=>{
-                                message.success('提交成功！')
-                            }).then(()=>{
-                                history.push('/workMngt/pickList')
-                            })
-                        } }
-                        okText="确认"
-                        cancelText="取消"
-                    >   
-                        <Button type="primary" >提交</Button>
-                    </Popconfirm> */}
-                    <Button type="primary" onClick={()=>history.push('/workMngt/pickList')}>返回上一级</Button>
+                        <Button type="primary" onClick={()=>history.push('/workMngt/pickList')}>返回上一级</Button>
                     </Space>
                 }
                 searchFormItems={[
@@ -333,7 +290,6 @@ export default function PickTower(): React.ReactNode {
                             <Select.Option value={1} key={1}>待开始</Select.Option>
                             <Select.Option value={2} key={2}>配段中</Select.Option>
                             <Select.Option value={3} key={3}>已完成</Select.Option>
-                            {/* <Select.Option value={4} key={4}>已提交</Select.Option> */}
                         </Select>
                     },
                     {

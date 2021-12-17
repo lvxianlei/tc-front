@@ -8,7 +8,7 @@ import AttachFile from "./AttachFile"
 import { ApplicationForPayment } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { payTypeOptions, pleasePayTypeOptions } from "../../../configuration/DictionaryOptions"
+import { costTypeOptions, payTypeOptions } from "../../../configuration/DictionaryOptions"
 
 interface EditRefProps {
     onSubmit: (type?: "saveAndApply" | "save") => void
@@ -17,7 +17,7 @@ interface EditRefProps {
 
 export default function ApplyPayment() {
     const history = useHistory()
-    const pleasePayTypeEnum = pleasePayTypeOptions?.map((item: { id: string, name: string }) => ({
+    const pleasePayTypeEnum = costTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -32,7 +32,7 @@ export default function ApplyPayment() {
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [successVisible, setSuccessVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
-    const [filterValue, setFilterValue] = useState<any>({})
+    const [filterValue, setFilterValue] = useState<object>(history.location.state as object)
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/applyPayment?id=${id}`)
@@ -75,7 +75,7 @@ export default function ApplyPayment() {
             value.updateStartTime = formatDate[0] + " 00:00:00"
             value.updateEndTime = formatDate[1] + " 23:59:59"
         }
-        setFilterValue({ ...filterValue, ...value })
+        setFilterValue(value)
         return value
     }
     const handleModalOk = (type?: "saveAndApply" | "save") => new Promise(async (resove, reject) => {

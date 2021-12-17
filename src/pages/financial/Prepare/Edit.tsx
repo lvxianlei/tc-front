@@ -4,7 +4,7 @@ import { DetailContent, BaseInfo, formatData } from '../../common'
 import { ApplicationList } from "../financialData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { invoiceTypeOptions, payTypeOptions, pleasePayTypeOptions } from "../../../configuration/DictionaryOptions"
+import { costTypeOptions, invoiceTypeOptions, payTypeOptions } from "../../../configuration/DictionaryOptions"
 interface EditProps {
     type: "new" | "edit",
     ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
@@ -18,8 +18,8 @@ interface IResponse {
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const [baseForm] = Form.useForm()
     const [ companyList, setCompanyList ] = useState([]);
+    const [ pleasePayType, setPleasePayType ] = useState('');
     const invoiceTypeEnum = invoiceTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const pleasePayTypeEnum = pleasePayTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const paymentMethodEnum = payTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
 
     const { data: deptData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -45,6 +45,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     })) || []
                 }
             }))
+            businessTypeChange(result.businessType);
+            setPleasePayType(result.pleasePayType);
             resole(result)
         } catch (error) {
             reject(error)
@@ -72,8 +74,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const baseData = await baseForm.validateFields()
             const postData = type === "new" ? {
                 ...baseData,
-                // supplierId: baseData.supplierName?.id || data?.supplierId,
-                // supplierName: baseData.supplierName?.value || data?.supplierName,
                 businessId: baseData.businessId?.split(',')[0],
                 businessName: baseData.businessId?.split(',')[1],
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
@@ -83,8 +83,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             } : {
                 ...baseData,
                 id: data?.id,
-                // supplierId: baseData.supplierName?.id || data?.supplierId,
-                // supplierName: baseData.supplierName?.value || data?.supplierName,
                 businessId: baseData.businessId?.split(',')[0],
                 businessName: baseData.businessId?.split(',')[1],
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
@@ -139,7 +137,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     openBank: item.bankDepositName
                 }
             })
-        } else if(e === 3) {
+        } else if(e === 2) {
             result = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
             list = result?.records?.map((item: { stevedoreCompanyName: string, openBankName: string }) => {
                 return{
@@ -183,7 +181,25 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                             }) : item)
                         })
                     case "pleasePayType":
-                        return ({ ...item, enum: pleasePayTypeEnum })
+                        return ({ ...item, render: (data: any, props: any) => {
+                            return <Form.Item name="pleasePayType">
+                                <Select onChange={(e: string) => {
+                                    setPleasePayType(e);
+                                    baseForm.setFieldsValue({businessType: e === '1156' ? 1 : e === '1157' ? 3 : e === '1158' ? 2 : ''})
+                                    if(e === '1156') {
+                                        businessTypeChange(1);
+                                    } else if(e === '1157') {
+                                        businessTypeChange(3)
+                                    } else if(e === '1158') {
+                                        businessTypeChange(2)
+                                    }
+                                }}>
+                                    { costTypeOptions && costTypeOptions.map((item: any) => {
+                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                    }) }
+                                </Select>
+                            </Form.Item>
+                        } })
                     case "paymentMethod":
                         return ({ ...item, type: "select", enum: paymentMethodEnum })
                     case "pleasePayOrganization":
@@ -191,7 +207,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     case 'businessType':
                         return ({ ...item, render: (data: any, props: any) => {
                             return <Form.Item name="businessType">
-                                <Select onChange={ (e: number) => businessTypeChange(e) }>
+                                <Select disabled={ pleasePayType === '1156' || pleasePayType === '1157' || pleasePayType === '1158' } onChange={ (e: number) => businessTypeChange(e) }>
                                     <Select.Option value={1} key="1">供应商</Select.Option>
                                     <Select.Option value={2} key="2">装卸公司</Select.Option>
                                     <Select.Option value={3} key="3">运输公司</Select.Option>

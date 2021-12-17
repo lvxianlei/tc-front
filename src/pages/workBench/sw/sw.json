@@ -3,12 +3,12 @@
         {
             "title": "工程报价任务",
             "path": "询价任务",
-            "dataIndex": "inquiryTaskWorkBenchVo",
+            "dataIndex": "inquiryTaskWorkBenchVO",
             "col": 1,
             "workbenchItemVos": [
                 {
                     "title": "待指派",
-                    "dataIndex": "",
+                    "dataIndex": "assignedNum",
                     "path": {
                         "pathname": "/enquiryTask/index",
                         "state": {
@@ -19,6 +19,7 @@
                 },
                 {
                     "title": "待确认",
+                    "dataIndex": "confirmedNum",
                     "path": {
                         "pathname": "/enquiryTask/index",
                         "state": {
@@ -29,6 +30,7 @@
                 },
                 {
                     "title": "待提交",
+                    "dataIndex": "boBeSubmitNum",
                     "path": {
                         "pathname": "/enquiryTask/index",
                         "state": {
@@ -39,6 +41,7 @@
                 },
                 {
                     "title": "待完成",
+                    "dataIndex": "toBeCompleteNum",
                     "path": {
                         "pathname": "/enquiryTask/index",
                         "state": {
@@ -56,30 +59,54 @@
             "workbenchItemVos": [
                 {
                     "title": "待确认",
-                    "path": "/buyingTask/index",
+                    "dataIndex": "confirmedNum",
+                    "path": {
+                        "pathname": "/buyingTask/index",
+                        "state": {
+                            "taskStatus": 1
+                        }
+                    },
                     "authority": "workbench_data4"
                 },
                 {
                     "title": "待提交",
-                    "path": "/buyingTask/index",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/buyingTask/index",
+                        "state": {
+                            "taskStatus": 2
+                        }
+                    },
                     "authority": "workbench_data5"
                 },
                 {
                     "title": "待指派",
-                    "path": "/buyingTask/index",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/buyingTask/index",
+                        "state": {
+                            "taskStatus": 3
+                        }
+                    },
                     "authority": "workbench_data6"
                 }
             ]
         },
         {
             "title": "塔型配料",
-            "dataIndex": "componentDiffWorkBenchVo",
+            "dataIndex": "purchaseIngredientsWorkBenchVo",
             "col": 2,
             "path": "工作管理-采购配料",
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "path": "/workMngt/buyBurdening",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/workMngt/buyBurdening",
+                        "state": {
+                            "batcheTaskStatus": 1
+                        }
+                    },
                     "authority": "workbench_data7"
                 }
             ]
@@ -92,7 +119,13 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "path": "/workMngt/production",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/workMngt/production",
+                        "state": {
+                            "loftingState": 1
+                        }
+                    },
                     "authority": "workbench_data8"
                 }
             ]
@@ -105,7 +138,13 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "path": "/workMngt/purchaseList",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/workMngt/purchaseList",
+                        "state": {
+                            "purchaseTaskStatus": 1
+                        }
+                    },
                     "authority": "workbench_data9"
                 }
             ]
@@ -118,20 +157,32 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "path": "/workMngt/planList",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/workMngt/planList",
+                        "state": {
+                            "planStatus": 1
+                        }
+                    },
                     "authority": "workbench_data10"
                 }
             ]
         },
         {
             "title": "差异处理",
-            "dataIndex": "materialShortageWorkBatchVo",
+            "dataIndex": "componentDiffWorkBenchVo",
             "col": 2,
             "path": "工作管理-差异列表",
             "workbenchItemVos": [
                 {
                     "title": "待处理",
-                    "path": "/workMngt/differentList",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/workMngt/differentList",
+                        "state": {
+                            "diffStatus": 1
+                        }
+                    },
                     "authority": "workbench_data11"
                 }
             ]
@@ -144,70 +195,100 @@
             "workbenchItemVos": [
                 {
                     "title": "待处理",
-                    "path": "/workMngt/shortageList",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/workMngt/shortageList",
+                        "state": {
+                            "shortageStatus": 1
+                        }
+                    },
                     "authority": "workbench_data12"
                 }
             ]
         },
         {
             "title": "原材料入库",
-            "dataIndex": "purchaseIngredientsWorkBenchVo",
-            "col": 3,
-            "path": "暂无",
+            "dataIndex": "materialExWarehouseWorkBatchVo",
+            "col": 2,
+            "path": "库存管理-原材料入库",
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "path": "",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/stock/rawMaterialWarehousing",
+                        "state": {
+                            "receiveStatus": "0"
+                        }
+                    },
                     "authority": "workbench_data13"
                 }
             ]
         },
         {
             "title": "原材料出库",
-            "dataIndex": "purchaseIngredientsWorkBenchVo",
-            "col": 3,
-            "path": "暂无",
+            "dataIndex": "materialWarehouseWorkBatchVo",
+            "col": 2,
+            "path": "库存管理-原材料出库",
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "path": "",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/stock/rawMaterialExWarehouse",
+                        "state": {
+                            "status": "0"
+                        }
+                    },
                     "authority": "workbench_data14"
                 }
             ]
         },
         {
-            "title": "余料出库",
-            "dataIndex": "purchaseIngredientsWorkBenchVo",
-            "col": 3,
-            "path": "暂无",
+            "title": "余料入库",
+            "dataIndex": "surplusExWarehouseWorkBatchVo",
+            "col": 2,
+            "path": "库存管理-余料入库",
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "path": "",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/stock/surplusMaterialWarehousing",
+                        "state": {
+                            "receiveStatus": "0"
+                        }
+                    },
                     "authority": "workbench_data15"
                 }
             ]
         },
         {
             "title": "审批",
-            "dataIndex": "receiveStockWorkBatchVo",
-            "col": 2,
+            "dataIndex": "applyPaymentWorkBatchVo",
+            "col": 1,
+            "path": "财务管理-请款申请",
             "workbenchItemVos": [
                 {
                     "title": "我发起的",
-                    "path": "",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/financial/prepare",
+                        "state": {
+                            "applyStatus": 1
+                        }
+                    },
                     "authority": "workbench_data16"
-                }
-            ]
-        },
-        {
-            "title": "审批",
-            "dataIndex": "receiveStockWorkBatchVo",
-            "col": 2,
-            "workbenchItemVos": [
+                },
                 {
                     "title": "我接收的",
-                    "path": "",
+                    "dataIndex": "",
+                    "path": {
+                        "pathname": "/financial/prepare",
+                        "state": {
+                            "applyStatus": 4
+                        }
+                    },
                     "authority": "workbench_data17"
                 }
             ]

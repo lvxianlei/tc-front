@@ -4,12 +4,12 @@ import { DetailTitle, BaseInfo, Attachment, CommonTable } from '../../common'
 import { billinformation, billOperationInfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { invoiceTypeOptions } from "../../../configuration/DictionaryOptions"
 interface OverviewProps {
     id: string
 }
 export default function Overview({ id }: OverviewProps) {
-    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1210"].map((item: { id: string, name: string }) => ({
+    const invoiceTypeEnum = invoiceTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))

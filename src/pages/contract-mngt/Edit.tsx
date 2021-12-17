@@ -227,28 +227,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             }))
         }
     }
-    // const handleComparisonPriceChange = async (fields: any) => {
-    //     if (fields.comparisonPrice) {
-    //         const meterialList: any[] = await getComparisonPrice(fields.comparisonPrice.id)
-    //         setMaterialList(meterialList.map((item: any) => {
-    //             const num = parseFloat(item.num || "1")
-    //             const taxPrice = parseFloat(item.taxOffer || "1.00")
-    //             const price = parseFloat(item.offer || "1.00")
-    //             return ({
-    //                 ...item,
-    //                 source: 1,
-    //                 num,
-    //                 taxPrice,
-    //                 price,
-    //                 width: formatSpec(item.structureSpec).width,
-    //                 // length: formatSpec(item.structureSpec).length,
-    //                 weight: item.weight || "1.00",
-    //                 taxTotalAmount: (num * taxPrice).toFixed(2),
-    //                 totalAmount: (num * price).toFixed(2)
-    //             })
-    //         }))
-    //     }
-    // }
 
     const handleNumChange = (value: number, materialCode: string, dataIndex: string) => {
         const newData = materialList.map((item: any) => {
@@ -286,18 +264,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
     
     return <Spin spinning={loading}>
-        {/* <Modal width={addMaterial.width || 750} title={`选择${addMaterial.title}`} destroyOnClose visible={visible} onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
-            <PopTableContent data={addMaterial as any} onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
-                ...item,
-                materialTexture: item.structureTexture,
-                spec: item.structureSpec,
-                source: 2,
-                taxPrice: item.taxPrice || 1.00,
-                price: item.price || 1.00,
-                taxTotalAmount: item.taxTotalAmount || 1.00,
-                totalAmount: item.totalAmount || 1.00
-            })))} />
-        </Modal> */}
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
             onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={{
@@ -360,7 +326,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({ ...item, render: (data: any, props: any) => {
                     return <Form.Item name="transportCompanyId">
                         <Select>
-                            { stevedoreCompanyList && stevedoreCompanyList.map((item: any) => {
+                            { companyList && companyList.map((item: any) => {
                                 return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
                             }) }
                         </Select>
@@ -375,7 +341,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({ ...item, render: (data: any, props: any) => {
                     return <Form.Item name="unloadCompanyId">
                         <Select>
-                            { companyList && companyList.map((item: any) => {
+                            { stevedoreCompanyList && stevedoreCompanyList.map((item: any) => {
                                 return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
                             }) }
                         </Select>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page } from '../common'
-import ApplicationContext from "../../configuration/ApplicationContext"
+import { sourceOptions } from '../../configuration/DictionaryOptions'
 const biddingStatusEnum = [
     {
         value: 0,
@@ -114,7 +114,7 @@ const columns = [
 ]
 export default function Information(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({})
-    const dictionaryOptions: any = (ApplicationContext.get().dictionaryOption as any)["125"]
+    const dictionaryOptions: any = sourceOptions
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
             const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -177,7 +177,7 @@ export default function Information(): React.ReactNode {
                 name: 'source',
                 label: '来源',
                 children: <Select mode="multiple" style={{ minWidth: 100 }}>
-                    {dictionaryOptions.map((item: any, index: number) => <Select.Option key={index} value={item.name}>{item.name}</Select.Option>)}
+                    {dictionaryOptions?.map((item: any, index: number) => <Select.Option key={index} value={item.name}>{item.name}</Select.Option>)}
                 </Select>
             }
         ]}

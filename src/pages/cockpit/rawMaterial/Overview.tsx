@@ -6,7 +6,7 @@ import { Page } from '../../common'
 import Edit from "./Edit"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { materialStandardOptions } from '../../../configuration/DictionaryOptions'
 
 export default function Overview(): React.ReactNode {
     const history = useHistory()
@@ -14,7 +14,7 @@ export default function Overview(): React.ReactNode {
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [visible, setVisible] = useState<boolean>(false)
     const editRef = useRef<{ onSubmit: () => void, loading: boolean }>({ onSubmit: () => { }, loading: false })
-    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({
+    const invoiceTypeEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -27,6 +27,15 @@ export default function Overview(): React.ReactNode {
             resove(result.map((item: any) => ({ label: item.supplierName, value: item.id })));
 
             
+        } catch (error) {
+            reject(error)
+        }
+    }))
+    // 原材料类型
+    const { data: materialCategory } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/materialCategory/category`)
+            resove(result.map((item: any) => ({ label: item.materialCategoryName, value: item.materialCategoryId })));
         } catch (error) {
             reject(error)
         }
@@ -126,7 +135,7 @@ export default function Overview(): React.ReactNode {
                         name: 'materialCategoryId',
                         label: '原材料类型',
                         children: <Select style={{ width: "150px" }}>
-                            {invoiceTypeEnum.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                            {materialCategory?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     },
                     {
@@ -134,7 +143,7 @@ export default function Overview(): React.ReactNode {
                         label: '原材料标准',
                         children: <Select style={{ width: "150px" }}>
                             <Select.Option value="">全部</Select.Option>
-                            {invoiceTypeEnum.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                            {invoiceTypeEnum?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     },
                     {

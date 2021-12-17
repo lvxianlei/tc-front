@@ -36,7 +36,7 @@ export default function Overview() {
                         ...item,
                         render: (value: any, records: any, index: number) => {
                             const obj: { children: any, props: { rowSpan: number, style: any } } = {
-                                children: <>{`${moment(value).format("YYYY-MM-DD")}`}</>,
+                                children: <>{`${moment(value).format("YYYY-MM")}`}</>,
                                 props: {
                                     rowSpan: 0,
                                     style: {}

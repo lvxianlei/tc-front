@@ -1,10 +1,10 @@
 import React, { useState } from "react"
-import { Button, Modal, Spin, Image } from 'antd'
+import { Button, Modal, Spin } from 'antd'
 import { DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
 import { ApplicationOverview, operationInfo, approvalInfo, paymentInfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { payTypeOptions, pleasePayTypeOptions } from "../../../configuration/DictionaryOptions"
+import { costTypeOptions, payTypeOptions } from "../../../configuration/DictionaryOptions"
 interface OverviewProps {
     id: string
 }
@@ -12,7 +12,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false);
     const [attach, setAttach] = useState([]);
 
-    const pleasePayTypeEnum = pleasePayTypeOptions?.map((item: { id: string, name: string }) => ({
+    const pleasePayTypeEnum = costTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))

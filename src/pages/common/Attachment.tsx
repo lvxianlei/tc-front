@@ -4,7 +4,6 @@ import { DetailTitle } from "../common"
 import RequestUtil from "../../utils/RequestUtil"
 import useRequest from '@ahooksjs/use-request'
 import { downLoadFile } from "../../utils"
-import styles from "./CommonTable.module.less"
 export interface FileProps {
     id?: string,
     uid?: number | string,
@@ -108,6 +107,10 @@ export default forwardRef(function ({
 
     const handleBeforeUpload = useCallback((event: File): Promise<boolean> => new Promise(async (resove, reject) => {
         try {
+            if (attchs.length === maxCount) {
+                message.warn(`最多可上传${maxCount}个文件...`)
+                return
+            }
             setAttachs([...attchs, {
                 uid: (event as any).uid,
                 originalName: event.name || "",
@@ -118,7 +121,7 @@ export default forwardRef(function ({
                 fileSize: event.size
             })
             setUploadOSSUrlInfo(result)
-            if(multiple) {
+            if (multiple) {
                 uploadOSSUrlList.push(result)
                 setUploadOSSUrlList([...uploadOSSUrlList])
             }
@@ -146,17 +149,17 @@ export default forwardRef(function ({
                     }
                     return item
                 }))
-                if(multiple) {
+                if (multiple) {
                     const list = uploadOSSUrlList.map((res: any) => {
                         return {
-                                id: res?.id || "",
-                                uid: event.file.uid,
-                                filePath: res?.downloadUrl || "",
-                                originalName: res?.originalName || "",
-                                fileSuffix: res?.fileSuffix || "",
-                                fileSize: res?.fileSize || "",
-                                downloadUrl: res?.downloadUrl || ""
-                            }
+                            id: res?.id || "",
+                            uid: event.file.uid,
+                            filePath: res?.downloadUrl || "",
+                            originalName: res?.originalName || "",
+                            fileSuffix: res?.fileSuffix || "",
+                            fileSize: res?.fileSize || "",
+                            downloadUrl: res?.downloadUrl || ""
+                        }
                     })
                     onDoneChange([...list])
                 } else {
@@ -170,7 +173,7 @@ export default forwardRef(function ({
                         downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
                     }])
                 }
-                
+
             }
         }
     }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo])

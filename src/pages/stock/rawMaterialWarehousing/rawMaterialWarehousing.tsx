@@ -15,16 +15,16 @@ interface EditRefProps {
 }
 
 export default function RawMaterialStock(): React.ReactNode {
-    const history = useHistory(),
-        [current, setCurrent] = useState(1),
+    const history = useHistory()
+    const [current, setCurrent] = useState(1),
         [total, setTotal] = useState(0),
         [pageSize, setPageSize] = useState<number>(10),
-        [status, setStatus] = useState(''),//状态
+        [status, setStatus] = useState(`${(history.location.state as any)?.receiveStatus || ""}`),//状态
         [Listdata, setListdata] = useState<any>([]),//数据
         [dateValue, setDateValue] = useState<any>([]),//时间
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
         [keyword, setKeyword] = useState<any>('');//关键字搜索
-    const [ visible, setVisible ] = useState<boolean>(false);
+    const [visible, setVisible] = useState<boolean>(false);
     const [id, setId] = useState<string>();
     const addRef = useRef<EditRefProps>();
     const columns = [
@@ -40,17 +40,17 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '收货单号',
             dataIndex: 'receiveNumber',
             width: 120,
-        }, 
+        },
         {
             title: '纸质单号',
             dataIndex: 'paperNumber',
             width: 120,
-        }, 
+        },
         {
             title: '车牌号',
             dataIndex: 'carNumber',
             width: 120,
-        }, 
+        },
         {
             title: '状态',
             dataIndex: 'receivingBatch',
@@ -136,7 +136,7 @@ export default function RawMaterialStock(): React.ReactNode {
     useEffect(() => {
         loadData()
     }, [current, pageSize, status, dateString])
-    
+
     // 新增回调
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
@@ -151,140 +151,140 @@ export default function RawMaterialStock(): React.ReactNode {
     })
     return (
         <>
-        <div id="RawMaterialStock">
-            <div className="Search_public_Stock">
-                <div className="search_item">
-                    <span className="tip">最新状态变更时间：</span>
-                    <div className='selectOrInput'>
-                        <RangePicker
-                            value={dateValue}
-                            onChange={(date, dateString) => {
-                                console.log(date, dateString)
-                                setDateValue(date)
-                                setDateString(dateString)
-                            }}
-                        ></RangePicker>
+            <div id="RawMaterialStock">
+                <div className="Search_public_Stock">
+                    <div className="search_item">
+                        <span className="tip">最新状态变更时间：</span>
+                        <div className='selectOrInput'>
+                            <RangePicker
+                                value={dateValue}
+                                onChange={(date, dateString) => {
+                                    console.log(date, dateString)
+                                    setDateValue(date)
+                                    setDateString(dateString)
+                                }}
+                            ></RangePicker>
+                        </div>
                     </div>
-                </div>
-                <div className="search_item">
-                    <span className="tip">状态： </span>
-                    <div className='selectOrInput'>
-                        <Select
-                            className="select"
-                            style={{ width: "100px" }}
-                            value={status ? status : ''}
-                            onChange={(val) => { setStatus(val) }}
-                        >
-                            <Select.Option
-                                value=""
+                    <div className="search_item">
+                        <span className="tip">状态： </span>
+                        <div className='selectOrInput'>
+                            <Select
+                                className="select"
+                                style={{ width: "100px" }}
+                                value={status ? status : ''}
+                                onChange={(val) => { setStatus(val) }}
                             >
-                                全部
-                            </Select.Option>
-                            <Select.Option
-                                value="0"
+                                <Select.Option
+                                    value=""
+                                >
+                                    全部
+                                </Select.Option>
+                                <Select.Option
+                                    value="0"
+                                >
+                                    待完成
+                                </Select.Option>
+                                <Select.Option
+                                    value="1"
+                                >
+                                    已完成
+                                </Select.Option>
+                            </Select>
+                        </div>
+                    </div>
+                    <div className="search_item">
+                        <span className="tip">关键字：</span>
+                        <div className='selectOrInput'>
+                            <Input
+                                placeholder="收货单号/供应商/合同编号/联系人/联系电话"
+                                value={keyword}
+                                style={{ width: 260 }}
+                                onChange={(e) => {
+                                    setKeyword(e.target.value)
+                                }}
+                                onPressEnter={() => {
+                                    loadData()
+                                }}
                             >
-                                待完成
-                            </Select.Option>
-                            <Select.Option
-                                value="1"
-                            >
-                                已完成
-                            </Select.Option>
-                        </Select>
+                            </Input>
+                        </div>
+                    </div>
+                    <div className="search_item">
+                        <div className='search_Reset'>
+                            <Button
+                                className="btn"
+                                type="primary"
+                                onClick={() => { loadData() }}
+                            >查询</Button>
+                            <Button
+                                className="btn"
+                                type="primary"
+                                ghost
+                                onClick={reset}
+                            >重置</Button>
+                        </div>
                     </div>
                 </div>
-                <div className="search_item">
-                    <span className="tip">关键字：</span>
-                    <div className='selectOrInput'>
-                        <Input
-                            placeholder="收货单号/供应商/合同编号/联系人/联系电话"
-                            value={keyword}
-                            style={{ width: 260 }}
-                            onChange={(e) => {
-                                setKeyword(e.target.value)
-                            }}
-                            onPressEnter={() => {
-                                loadData()
-                            }}
-                        >
-                        </Input>
-                    </div>
+                <div className="func_public_Stock">
+                    <Button
+                        type="primary"
+                    >导出</Button>
                 </div>
-                <div className="search_item">
-                    <div className='search_Reset'>
-                        <Button
-                            className="btn"
-                            type="primary"
-                            onClick={() => { loadData() }}
-                        >查询</Button>
-                        <Button
-                            className="btn"
-                            type="primary"
-                            ghost
-                            onClick={reset}
-                        >重置</Button>
-                    </div>
-                </div>
-            </div>
-            <div className="func_public_Stock">
-                <Button
-                    type="primary"
-                >导出</Button>
-            </div>
-            <div className="page_public_Stock">
-                <Table
-                    columns={columns}
-                    dataSource={Listdata}
-                    size='small'
-                    rowClassName={(item, index) => {
-                        return index % 2 ? 'aaa' : ''
-                    }}
-                    scroll={
-                        {
-                            y: 400
+                <div className="page_public_Stock">
+                    <Table
+                        columns={columns}
+                        dataSource={Listdata}
+                        size='small'
+                        rowClassName={(item, index) => {
+                            return index % 2 ? 'aaa' : ''
+                        }}
+                        scroll={
+                            {
+                                y: 400
+                            }
                         }
-                    }
-                    pagination={{
-                        size: 'small',
-                        defaultPageSize: 5,
-                        showQuickJumper: true,
-                        current: current,
-                        total: total,
-                        pageSize: pageSize,
-                        pageSizeOptions: ['10', '20', '50', '100'],
-                        showSizeChanger: true,
-                        onChange: (page, pageSize) => {
-                            console.log(page, pageSize)
-                            setCurrent(page);
-                            setPageSize(Number(pageSize));
-                        }
-                    }}
-                />
+                        pagination={{
+                            size: 'small',
+                            defaultPageSize: 5,
+                            showQuickJumper: true,
+                            current: current,
+                            total: total,
+                            pageSize: pageSize,
+                            pageSizeOptions: ['10', '20', '50', '100'],
+                            showSizeChanger: true,
+                            onChange: (page, pageSize) => {
+                                console.log(page, pageSize)
+                                setCurrent(page);
+                                setPageSize(Number(pageSize));
+                            }
+                        }}
+                    />
+                </div>
             </div>
-        </div>
-        <Modal
-            title={'输入'}
-            visible={visible}
-            width={500}
-            maskClosable={false}
-            onCancel={() => {
-                addRef.current?.resetFields();
-                setVisible(false);
-            }}
-            footer={[
-                <Button key="submit" type="primary" onClick={() => handleOk()}>
-                提交
-                </Button>,
-                <Button key="back" onClick={() => {
+            <Modal
+                title={'输入'}
+                visible={visible}
+                width={500}
+                maskClosable={false}
+                onCancel={() => {
                     addRef.current?.resetFields();
                     setVisible(false);
-                }}>
-                取消
-                </Button>
-            ]}
-        >
-            <PaperOrderModal ref={addRef} id={id} />
-        </Modal>
+                }}
+                footer={[
+                    <Button key="submit" type="primary" onClick={() => handleOk()}>
+                        提交
+                    </Button>,
+                    <Button key="back" onClick={() => {
+                        addRef.current?.resetFields();
+                        setVisible(false);
+                    }}>
+                        取消
+                    </Button>
+                ]}
+            >
+                <PaperOrderModal ref={addRef} id={id} />
+            </Modal>
         </>
     )
 }

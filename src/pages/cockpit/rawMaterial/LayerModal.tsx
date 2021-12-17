@@ -125,7 +125,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                                 const result = userData?.filter((item: any) => item.id === val)[0].children || [];
                                 setType(result);
                                 form.setFieldsValue({
-                                    note1: undefined
+                                    materialCategory: undefined
                                 })
                             }}>
                                 {

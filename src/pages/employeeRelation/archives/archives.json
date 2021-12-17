@@ -877,17 +877,35 @@
         {
             "title": "*亲属姓名",
             "width": 100,
-            "dataIndex": "name"
+            "dataIndex": "name",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入亲属姓名..."
+                }
+            ]
         },
         {
             "title": "*亲属关系",
             "width": 100,
-            "dataIndex": "relation"
+            "dataIndex": "relation",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入亲属关系..."
+                }
+            ]
         },
         {
             "title": "*亲属所在部门",
             "width": 100,
-            "dataIndex": "department"
+            "dataIndex": "department",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入亲属所在部门..."
+                }
+            ]
         },
         {
             "title": "职务",

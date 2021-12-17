@@ -1,8 +1,6 @@
 import { Button, Input, message, Modal } from 'antd'
 import React, { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import ConfirmableButton from '../../components/ConfirmableButton'
-import { IClient } from '../IClient'
 import RequestUtil from '../../utils/RequestUtil'
 import { clientMegt } from "./clientMegt.json"
 import { Page } from '../common'

@@ -30,14 +30,14 @@
             "width": 100,
             "dataIndex": "ssStartMonth",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM"
         },
         {
             "title": "社保结束月",
             "width": 100,
             "dataIndex": "ssEndMonth",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM"
         },
         {
             "title": "社保申报基数",
@@ -49,14 +49,14 @@
             "width": 100,
             "dataIndex": "pfaStartMonth",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM"
         },
         {
             "title": "公积金结束月",
             "width": 100,
             "dataIndex": "pfaEndMonth",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM"
         },
         {
             "title": "公积金申报基数",

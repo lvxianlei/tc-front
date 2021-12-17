@@ -5,10 +5,10 @@ import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { taskNoticeEditBaseInfo, taskNoticeEditSpec, salesAssist, productAssist } from "../managementDetailData.json"
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { materialStandardOptions } from "../../../configuration/DictionaryOptions"
 export default function SalesPlanEdit() {
     const history = useHistory()
-    const materialStandardEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/management/:type/salesPlan/:projectId/:id")
     const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/management/:type/salesPlan/:projectId")
     const match = editMatch || newMatch

@@ -13,7 +13,6 @@ export default function Edit() {
     const [baseInfo] = Form.useForm()
     const [invoiceForm] = Form.useForm()
     const [billingForm] = Form.useForm()
-
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
@@ -72,7 +71,6 @@ export default function Edit() {
         } catch (error) {
             console.log(error)
         }
-
     }
 
     const handleBaseInfoChange = async (fields: any) => {

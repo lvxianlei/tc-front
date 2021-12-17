@@ -7,15 +7,14 @@ import { frameAgreementColumns, materialListColumns } from '../managementDetailD
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
-import ApplicationContext from "../../../configuration/ApplicationContext"
 import { changeTwoDecimal_f } from '../../../utils/KeepDecimals';
+import { winBidTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function FrameAgreementEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
-    const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
-    const bidType = dictionaryOptions["122"]
+    const bidType = winBidTypeOptions
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/frameAgreement/${params.id}`)
@@ -95,21 +94,22 @@ export default function FrameAgreementEdit(): JSX.Element {
                     columns={frameAgreementColumns.map((item) => item.dataIndex === "bidType" ? ({
                         ...item,
                         type: "select",
-                        enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name }))
+                        enum: bidType?.map((bid: any) => ({ value: bid.id, label: bid.name }))
                     }) : item)}
                     dataSource={
-                        {   ...data,
+                        {
+                            ...data,
                             implementWeight: data?.implementWeight ? changeTwoDecimal_f(data?.implementWeight) : "0.00000000",
                             implementMoney: data?.implementMoney ? changeTwoDecimal_f(data?.implementMoney) : "0.00",
                             implementWeightPro: data?.implementWeightPro ? data?.implementWeightPro : "0.00",
                             implementMoneyPro: data?.implementMoneyPro ? data?.implementMoneyPro : "0.00",
                         }
                         || {
-                                implementWeight: "0.00000000",
-                                implementMoney: "0.00",
-                                implementWeightPro: "0.00",
-                                implementMoneyPro: "0.00"
-                            }
+                            implementWeight: "0.00000000",
+                            implementMoney: "0.00",
+                            implementWeightPro: "0.00",
+                            implementMoneyPro: "0.00"
+                        }
                     } edit
                     onChange={handleBaseInfoChange}
                 />
