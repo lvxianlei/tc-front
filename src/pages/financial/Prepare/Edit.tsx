@@ -114,7 +114,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             })
             baseForm.setFieldsValue({
                 pleasePayAmount,
-                receiptNumbers: fields.relatednotes.value
+                receiptNumbers: fields.relatednotes.records.map((item: any) => item.receiptNumbers).join(","),
             })
         }
         if (fields.supplierName) {
@@ -183,7 +183,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     case "pleasePayType":
                         return ({ ...item, render: (data: any, props: any) => {
                             return <Form.Item name="pleasePayType">
-                                <Select onChange={(e: string) => {
+                                <Select disabled={ type === 'edit' } onChange={(e: string) => {
                                     setPleasePayType(e);
                                     baseForm.setFieldsValue({businessType: e === '1156' ? 1 : e === '1157' ? 3 : e === '1158' ? 2 : ''})
                                     if(e === '1156') {
@@ -217,7 +217,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     case 'businessId': 
                         return ({ ...item, render: (data: any, props: any) => {
                             return <Form.Item name="businessId">
-                                <Select onChange={(e: string) => businessIdChange(e)}>
+                                <Select disabled={ type === 'edit' } onChange={(e: string) => businessIdChange(e)}>
                                     { companyList && companyList.map((item: any) => {
                                         return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
                                     }) }

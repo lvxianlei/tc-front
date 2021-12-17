@@ -500,7 +500,13 @@
         {
             "title": "请款类别",
             "dataIndex": "pleasePayType",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择请款类别..."
+                }
+            ]
         },
         {
             "title": "企业类型",
@@ -598,6 +604,12 @@
                     "label": "现金",
                     "value": 3
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择付款方式..."
+                }
             ]
         },
         {
@@ -608,7 +620,13 @@
         {
             "title": "请款机构",
             "dataIndex": "pleasePayOrganization",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择请款机构..."
+                }
+            ]
         },
         {
             "title": "请款金额",
