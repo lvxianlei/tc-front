@@ -44,20 +44,12 @@
             "dataIndex": "abroadMoney"
         },
         {
-            "title": "来款银行",
-            "dataIndex": "payBank"
-        },
-        {
             "title": "付款方式",
             "dataIndex": "payType"
         },
         {
             "title": "收款银行",
             "dataIndex": "returnBank"
-        },
-        {
-            "title": "收款银行账号",
-            "dataIndex": "returnBankNumber"
         },
         {
             "title": "确认人",
@@ -151,11 +143,11 @@
             "type": "select",
             "enum": [
                 {
-                    "value": 0,
+                    "value": 1171,
                     "label": "投标保证金"
                 },
                 {
-                    "value": 1,
+                    "value": 1172,
                     "label": "合同应收款"
                 }
             ],
@@ -180,21 +172,6 @@
                     "title": "付款单号",
                     "dataIndex": "payNumber",
                     "search": true
-                },
-                {
-                    "title": "付款类型",
-                    "dataIndex": "payType",
-                    "type": "select",
-                    "enum": [
-                        {
-                            "label": "请款",
-                            "value": 0
-                        },
-                        {
-                            "label": "报销",
-                            "value": 1
-                        }
-                    ]
                 },
                 {
                     "title": "付款状态",

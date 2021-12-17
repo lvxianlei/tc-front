@@ -6,7 +6,7 @@ import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import moment, { Moment } from 'moment'
 import { stringify } from 'query-string';
-export type FormItemTypesType = "text" | "number" | "select" | "date" | "textarea" | "popForm" | "rangePicker" | undefined
+export type FormItemTypesType = "text" | "number" | "phone" | "select" | "date" | "textarea" | "popForm" | "rangePicker" | undefined
 
 interface SelectOption {
     value: string | number
@@ -231,13 +231,16 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
             {...props}
             disabled={data.disabled}
             style={{ width: data.width || "100%", height: "100%", ...props.style }}
-            maxLength={data.maxLength}
             {...componentProps}
         />,
         text: <Input {...props}
             disabled={data.disabled}
             style={{ width: data.width || "100%", height: "100%", ...props.style }}
-            maxLength={data.maxLength}
+            {...componentProps}
+        />,
+        phone: <Input {...props}
+            disabled={data.disabled}
+            style={{ width: data.width || "100%", height: "100%", ...props.style }}
             {...componentProps}
         />,
         number: <InputNumber

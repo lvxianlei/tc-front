@@ -38,7 +38,6 @@ export default function SelectProductGroup(props: any): JSX.Element {
         setProjectSelect(selectedRowKeys)
         setProjectSelectRows(selectRows)
     }
-    console.log(props.select, projectSelect)
     return <Modal title="选择确认明细" width={1011} {...props} destroyOnClose onOk={() => props.onOk && props.onOk(projectSelectRows)} >
         <CommonTable
             loading={loading}
@@ -57,7 +56,7 @@ export default function SelectProductGroup(props: any): JSX.Element {
             rowSelection={{
                 selectedRowKeys: projectSelect,
                 type: "checkbox",
-                onChange: onProductGroupChange,
+                onChange: onProductGroupChange
             }}
         />
     </Modal>

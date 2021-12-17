@@ -412,21 +412,21 @@
     { // 开票申请
       "name": "开票申请",
       "path": "/project/invoicing",
-      "module": "./pages/project/Invoicing/index",
+      "module": "./pages/project/invoicing/index",
       "exact": true,
       "authority": "project_invoicing_requisition"
     },
     { // 开票申请详情
       "name": "开票申请详情",
       "path": "/project/invoicing/detail/:id",
-      "module": "./pages/project/Invoicing/Overview",
+      "module": "./pages/project/invoicing/Overview",
       "exact": true,
       "authority": "project"
     },
     { // 开票申请
       "name": "新增开票申请",
       "path": "/project/invoicing/edit/:id",
-      "module": "./pages/project/Invoicing/Edit",
+      "module": "./pages/project/invoicing/Edit",
       "exact": true,
       "authority": "project"
     },
@@ -447,21 +447,29 @@
     { // 回款申请
       "name": "回款申请",
       "path": "/project/collection",
-      "module": "./pages/collection/index",
+      "module": "./pages/project/collection/index",
       "exact": true,
       "authority": "project_collection_confirmation"
     },
     { // 回款申请详情
       "name": "回款确认详情",
       "path": "/project/collection/detail/:id",
-      "module": "./pages/collection/Overview",
+      "module": "./pages/project/collection/Overview",
       "exact": true,
       "authority": "project"
     },
     { // 回款申请详情
       "name": "回款确认",
       "path": "/project/collection/edit/:id",
-      "module": "./pages/collection/Edit",
+      "module": "./pages/project/collection/Edit",
+      "exact": true,
+      "authority": "project"
+    },
+    // 图纸确认信息
+    {
+      "name": "图纸确认",
+      "path": "/project/drawing",
+      "module": "./pages/project/drawing",
       "exact": true,
       "authority": "project"
     },
@@ -515,10 +523,18 @@
       "authority": "sale_order"
     },
     {
-      // 项目新建/编辑
+      // 项目新建
       "name": "项目新建",
       "path": "/project/management/new",
-      "module": "./pages/project/ManagementEdit",
+      "module": "./pages/project/Edit/BaseInfoEdit",
+      "exact": true,
+      "authority": "project_edit"
+    },
+    {
+      // 项目编辑
+      "name": "项目新建",
+      "path": "/project/management/edit/base/:id",
+      "module": "./pages/project/Edit/BaseInfoEdit",
       "exact": true,
       "authority": "project_edit"
     },
@@ -529,52 +545,38 @@
       "exact": true,
       "authority": "project_detail"
     },
-    { // 项目管理基础信息编辑
-      "name": "基础信息编辑",
-      "path": "/project/management/edit/base/:id",
-      "module": "./pages/project/ManagementDetailEdit/BaseInfoEdit",
-      "exact": true,
-      "authority": "project_detail"
-    },
-    { // 项目管理成本评估编辑
-      "name": "成本评估编辑",
-      "path": "/project/management/edit/cost/:projectId",
-      "module": "./pages/project/Cost/CostEdit",
-      "exact": true,
-      "authority": "project_detail"
-    },
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
       "path": "/project/management/new/cost/:projectId",
-      "module": "./pages/project/Cost/CostEdit",
+      "module": "./pages/project/cost/Edit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理标书制作编辑
       "name": "标书制作编辑",
       "path": "/project/management/edit/bidDoc/:id",
-      "module": "./pages/project/ManagementDetailEdit/BidDocEdit",
+      "module": "./pages/project/Edit/BidDocEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理招标结果编辑
       "name": "招标结果编辑",
       "path": "/project/management/edit/bidResult/:id",
-      "module": "./pages/project/ManagementDetailEdit/BidResultEdit",
+      "module": "./pages/project/Edit/BidResultEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理框架协议编辑
       "name": "框架协议编辑",
       "path": "/project/management/edit/frameAgreement/:id",
-      "module": "./pages/project/ManagementDetailEdit/FrameAgreementEdit",
+      "module": "./pages/project/Edit/FrameAgreementEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 杆塔明细编辑
       "name": "杆塔明细编辑",
       "path": "/project/management/edit/productGroup/:projectId/:id",
-      "module": "./pages/project/ManagementDetailEdit/ProductGroupEdit",
+      "module": "./pages/project/Edit/ProductGroupEdit",
       "exact": true,
       "authority": "project_detail"
     },
@@ -588,21 +590,21 @@
     { // 新增杆塔明细
       "name": "新增杆塔明细",
       "path": "/project/management/new/productGroup/:id",
-      "module": "./pages/project/ManagementDetailEdit/ProductGroupEdit",
+      "module": "./pages/project/Edit/ProductGroupEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 销售计划编辑
       "name": "销售计划编辑",
       "path": "/project/management/edit/salesPlan/:projectId/:id",
-      "module": "./pages/project/ManagementDetailEdit/SalesPlanEdit",
+      "module": "./pages/project/Edit/SalesPlanEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 新增销售计划编辑
       "name": "新增销售计划",
       "path": "/project/management/new/salesPlan/:id",
-      "module": "./pages/project/ManagementDetailEdit/SalesPlanEdit",
+      "module": "./pages/project/Edit/SalesPlanEdit",
       "exact": true,
       "authority": "project_detail"
     },
@@ -2331,6 +2333,34 @@
       "module": "./pages/planBaseSetting/prodUnit/prodUnit",
       "exact": true,
       "authority": "production_unit_management"
+    },
+    { //物料平衡-一次套料
+      "name": "一次套料",
+      "path": "/materialBalance/PrimaryNesting",
+      "module": "./pages/materialBalance/PrimaryNesting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案-编辑
+      "name": "库平采购",
+      "path": "/materialBalance/purchase",
+      "module": "./pages/materialBalance/PrimaryNesting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案-编辑
+      "name": "二次套料",
+      "path": "/materialBalance/secondary",
+      "module": "./pages/materialBalance/PrimaryNesting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 人资-社保福利-员工保险档案-编辑
+      "name": "套料设置",
+      "path": "/materialBalance/Nesting",
+      "module": "./pages/materialBalance/PrimaryNesting",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }

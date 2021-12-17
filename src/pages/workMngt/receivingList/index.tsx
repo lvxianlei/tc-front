@@ -166,7 +166,7 @@ export default function Invoicing() {
                 {
                     name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input placeholder="供应商/联系人/收货单号/联系电话" style={{ width: 300 }} />
+                    children: <Input placeholder="供应商/联系人/收货单号/联系电话/纸质单号/车牌号" style={{ width: 300 }} />
                 },
             ]}
         />

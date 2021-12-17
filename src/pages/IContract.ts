@@ -41,4 +41,13 @@ export interface IContract {
     readonly payCompanyName?: string;
     readonly purchaseOrderNumber?: string;
     readonly takeOverTime?: string;
+    readonly contractList?: IResponseList;
+}
+
+interface IResponseList {
+    readonly id: number;
+    readonly size: number;
+    readonly current: number;
+    readonly total: number;
+    readonly records: IContract[];
 }

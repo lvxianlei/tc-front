@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
 import { useHistory, useParams, Link } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle, Attachment } from '../common'
-import CostDetail from './Cost'
+import CostDetail from './cost'
 import PayInfo from './payInfo'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
@@ -14,6 +14,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
+import { changeTwoDecimal_f } from '../../utils/KeepDecimals';
 import { bidTypeOptions, winBidTypeOptions } from '../../configuration/DictionaryOptions'
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
 const productAssistStatistics = [
@@ -62,7 +63,6 @@ export default function ManagementDetail(): React.ReactNode {
         const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`)
         resole(result)
     }), { refreshDeps: [params.tab] })
-
     const { loading: projectGroupLoading, data: projectGroupData, run: projectGroupRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductAssist?productGroupId=${id}`)
@@ -286,7 +286,22 @@ export default function ManagementDetail(): React.ReactNode {
                     value: fitem.id, label: fitem.name
                 }))
             }) : item)}
-                dataSource={data || {}} />
+                dataSource={
+                    {
+                        ...data,
+                        implementWeight: data?.implementWeight ? changeTwoDecimal_f(data?.implementWeight) : "0.00000000",
+                        implementMoney: data?.implementMoney ? changeTwoDecimal_f(data?.implementMoney) : "0.00",
+                        implementWeightPro: data?.implementWeightPro ? data?.implementWeightPro : "0.00",
+                        implementMoneyPro: data?.implementMoneyPro ? data?.implementMoneyPro : "0.00",
+                    }
+                    || {
+                        implementWeight: "0.00000000",
+                        implementMoney: "0.00",
+                        implementWeightPro: "0.00",
+                        implementMoneyPro: "0.00"
+                    }
+                }
+            />
             <DetailTitle title="合同物资清单" />
             <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', width: 50, key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -352,7 +367,12 @@ export default function ManagementDetail(): React.ReactNode {
                     <Radio.Button value="1" >已通过</Radio.Button>
                 </Radio.Group>
             </Row>
-            {salesPlanStatus === "" && <Row><Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>新增</Button></Row>}
+            <div style={{ width: "100%", display: "flex", flexWrap: "nowrap", justifyContent: "space-between", marginTop: 10, marginBottom: 10 }}>
+                {
+                    salesPlanStatus === "" && <Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>新增</Button>
+                }
+                <Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>导出</Button>
+            </div>
             <CommonTable columns={[...taskNotice, {
                 title: "操作",
                 dataIndex: "opration",

@@ -164,7 +164,9 @@ export default function SalesPlanEdit() {
         </Modal>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
-            <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange}
+            <BaseInfo
+                form={baseInfoForm}
+                onChange={handleBaseInfoChange}
                 columns={taskNoticeEditBaseInfo.map((item: any) => item.dataIndex === "saleOrderNumber" ? ({
                     ...item,
                     path: `${item.path}?projectId=${match.params.projectId}&taskStatus=0,1`
@@ -173,7 +175,7 @@ export default function SalesPlanEdit() {
             <BaseInfo form={cargoDtoForm}
                 columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)}
                 dataSource={data || {}} edit col={3} />
-            <DetailTitle title="产品信息" operation={[<Button key="select" type="primary" disabled={!saleOrderId} onClick={handleSelectClick}>选择杆塔明细</Button>]} />
+            <DetailTitle title="杆塔信息" operation={[<Button key="select" type="primary" disabled={!saleOrderId} onClick={handleSelectClick}>选择杆塔明细</Button>]} />
             <CommonTable columns={[...salesAssist, {
                 title: "操作",
                 dataIndex: "opration",
