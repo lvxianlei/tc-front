@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Row, Col, Table, Form, Select, InputNumber, message } from 'antd';
+import { Modal, Button, Row, Col, Table, Form, Select, Spin, message } from 'antd';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil';
 import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
@@ -184,7 +184,7 @@ export default function IngredientsModal(props: any) {
     }
 
     // 保存并提交
-    const { run: purchaseSave, data: purchaseSaveData } = useRequest((serarchData: any) => new Promise(async (resole, reject) => {
+    const { loading, run: purchaseSave, data: purchaseSaveData } = useRequest((serarchData: any) => new Promise(async (resole, reject) => {
         try {
             // 对数据进行处理
             const schemeList = []
@@ -384,167 +384,169 @@ export default function IngredientsModal(props: any) {
                 </Button>
             ]}
         >
-            <Row>
-                {/* 左右布局 */}
-                <Col span={12}>
-                   <DetailTitle title="配料策略" />
-                   {/* 配料策略 */}
-                   <Form form={serarchForm} style={{paddingLeft: "14px", display: "flex", flexWrap: "nowrap"}}>
-                        <Form.Item
-                            name="num1"
-                            label="开数"
-                            initialValue={policyDetailed && policyDetailed[0]}
-                        >
-                                <Select style={{ width: 120 }} placeholder="请选择">
-                                    {policyDetailed && policyDetailed.map((item: any, index: number) => {
-                                        return <Select.Option value={item} key={index}>{item}</Select.Option>
-                                    })}
-                                </Select>
-                        </Form.Item>&nbsp;
-                        <Form.Item
-                            name="num3"
-                            initialValue={batchingLength && batchingLength[0]}
-                            label="米数"
-                        >
-                                <Select style={{ width: 80 }} placeholder="请选择">
-                                    {batchingLength && batchingLength.map((item: any, index: number) => {
-                                        return <Select.Option value={item} key={index}>{item}</Select.Option>
-                                    })}
-                                </Select>
-                        </Form.Item>
-                        <Form.Item
-                            initialValue={batchingLength && batchingLength[batchingLength.length - 1]}
-                            name="num4">
-                                <Select style={{ width: 80 }} placeholder="请选择">
-                                    {batchingLength && batchingLength.map((item: any, index: number) => {
-                                        return <Select.Option value={item} key={index}>{item}</Select.Option>
-                                    })}
-                                </Select>
-                        </Form.Item>&nbsp;
-                        <Form.Item
-                            name="num5"
-                            initialValue={utilizationRate && utilizationRate[0]}
-                            label="利用率"
-                        >
-                                <Select style={{ width: 80 }} placeholder="请选择">
-                                    {utilizationRate && utilizationRate.map((item: any, index: number) => {
-                                        return <Select.Option value={item} key={index}>{item}</Select.Option>
-                                    })}
-                                </Select>
-                        </Form.Item>
-                    </Form>
-                   <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
-                      <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类</span>
-                      <span style={{color: "#FF8C00"}}>未分配/全部：{construNumber}/{(userData as any) && (userData as any).totalNum}</span>
-                   </div>
-                   <Table
-                        size="small"
-                        rowSelection={{
-                        type: selectionType,
-                        ...rowSelection,
-                        }}
-                        columns={ConstructionClassification}
-                        dataSource={constructionClassification}
-                        pagination={false}
-                        scroll={{ y: 400 }}
-                     />
-                     <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
-                      <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类明细</span>
-                      <span style={{color: "#FF8C00"}}>已配： {construNumberDetail} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum}</span>
-                   </div>
-                   <Table
-                        size="small"
-                        rowSelection={{
-                        type: "checkbox",
-                        ...rowSelectionCheck,
-                        }}
-                        columns={ConstructionClassificationDetail}
-                        dataSource={constructionClassificationDetail}
-                        pagination={false}
-                        scroll={{ y: 400 }}
-                     />
-                </Col>
-                <Col span={12}>
-                    <DetailTitle title="配料方案" />
-                    <CommonTable
-                        columns={[
-                            ...BatchingScheme,
-                            {
-                                title: "操作",
-                                dataIndex: "opration",
-                                fixed: "right",
-                                width: 100,
-                                render: (_: any, record: any, index: number) => {
-                                    return (
-                                        <>
-                                            <Button type="link" onClick={() => handleDelete(record, index)}>移除</Button>
-                                        </>
-                                    )
-                                }
-                            }
-                        ]} dataSource={schemeData} pagination={false} scroll={{ y: 400 }}
-                    />
-                    <DetailTitle title="备选方案" />
-                    <CommonTable
-                        columns={[
-                            ...alternative.map((item: any) => {
-                                if (
-                                    item.dataIndex === 'component1'
-                                    || item.dataIndex === "num1"
-                                    || item.dataIndex === "len1"
-                                    || item.dataIndex === 'component2'
-                                    || item.dataIndex === "num2"
-                                    || item.dataIndex === "len2"
-                                    || item.dataIndex === 'component3'
-                                    || item.dataIndex === "num3"
-                                    || item.dataIndex === "len3"
-                                    || item.dataIndex === 'component4'
-                                    || item.dataIndex === "num4"
-                                    || item.dataIndex === "len4"
-                                ) {
-                                    return ({
-                                        title: item.title,
-                                        dataIndex: item.dataIndex,
-                                        width: 50,
-                                        render: (_: any, record: any): React.ReactNode => (
-                                            <div style={{
-                                                color: record.isHighlight.includes(item.dataIndex) ? "#fff" : "black",
-                                                backgroundColor: record.isHighlight.includes(item.dataIndex) ? "green" : "",
-                                                height: "32px",
-                                                lineHeight: "32px"
-                                            }}>{record[item.dataIndex]}</div>
+            <Spin spinning={loading}>
+                <Row>
+                    {/* 左右布局 */}
+                    <Col span={12}>
+                    <DetailTitle title="配料策略" />
+                    {/* 配料策略 */}
+                    <Form form={serarchForm} style={{paddingLeft: "14px", display: "flex", flexWrap: "nowrap"}}>
+                            <Form.Item
+                                name="num1"
+                                label="开数"
+                                initialValue={policyDetailed && policyDetailed[0]}
+                            >
+                                    <Select style={{ width: 120 }} placeholder="请选择">
+                                        {policyDetailed && policyDetailed.map((item: any, index: number) => {
+                                            return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                        })}
+                                    </Select>
+                            </Form.Item>&nbsp;
+                            <Form.Item
+                                name="num3"
+                                initialValue={batchingLength && batchingLength[0]}
+                                label="米数"
+                            >
+                                    <Select style={{ width: 80 }} placeholder="请选择">
+                                        {batchingLength && batchingLength.map((item: any, index: number) => {
+                                            return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                        })}
+                                    </Select>
+                            </Form.Item>
+                            <Form.Item
+                                initialValue={batchingLength && batchingLength[batchingLength.length - 1]}
+                                name="num4">
+                                    <Select style={{ width: 80 }} placeholder="请选择">
+                                        {batchingLength && batchingLength.map((item: any, index: number) => {
+                                            return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                        })}
+                                    </Select>
+                            </Form.Item>&nbsp;
+                            <Form.Item
+                                name="num5"
+                                initialValue={utilizationRate && utilizationRate[0]}
+                                label="利用率"
+                            >
+                                    <Select style={{ width: 80 }} placeholder="请选择">
+                                        {utilizationRate && utilizationRate.map((item: any, index: number) => {
+                                            return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                        })}
+                                    </Select>
+                            </Form.Item>
+                        </Form>
+                    <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
+                        <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类</span>
+                        <span style={{color: "#FF8C00"}}>未分配/全部：{construNumber}/{(userData as any) && (userData as any).totalNum}</span>
+                    </div>
+                    <Table
+                            size="small"
+                            rowSelection={{
+                            type: selectionType,
+                            ...rowSelection,
+                            }}
+                            columns={ConstructionClassification}
+                            dataSource={constructionClassification}
+                            pagination={false}
+                            scroll={{ y: 400 }}
+                        />
+                        <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
+                        <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类明细</span>
+                        <span style={{color: "#FF8C00"}}>已配： {construNumberDetail} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum}</span>
+                    </div>
+                    <Table
+                            size="small"
+                            rowSelection={{
+                            type: "checkbox",
+                            ...rowSelectionCheck,
+                            }}
+                            columns={ConstructionClassificationDetail}
+                            dataSource={constructionClassificationDetail}
+                            pagination={false}
+                            scroll={{ y: 400 }}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <DetailTitle title="配料方案" />
+                        <CommonTable
+                            columns={[
+                                ...BatchingScheme,
+                                {
+                                    title: "操作",
+                                    dataIndex: "opration",
+                                    fixed: "right",
+                                    width: 100,
+                                    render: (_: any, record: any, index: number) => {
+                                        return (
+                                            <>
+                                                <Button type="link" onClick={() => handleDelete(record, index)}>移除</Button>
+                                            </>
                                         )
-                                    })
+                                    }
                                 }
-                                if (item.dataIndex === 'utilizationRate') {
-                                    return ({
-                                        title: item.title,
-                                        dataIndex: item.dataIndex,
-                                        width: 50,
-                                        render: (_: any, record: any): React.ReactNode => (
-                                            <span>{record.utilizationRate}%</span>
+                            ]} dataSource={schemeData} pagination={false} scroll={{ y: 400 }}
+                        />
+                        <DetailTitle title="备选方案" />
+                        <CommonTable
+                            columns={[
+                                ...alternative.map((item: any) => {
+                                    if (
+                                        item.dataIndex === 'component1'
+                                        || item.dataIndex === "num1"
+                                        || item.dataIndex === "len1"
+                                        || item.dataIndex === 'component2'
+                                        || item.dataIndex === "num2"
+                                        || item.dataIndex === "len2"
+                                        || item.dataIndex === 'component3'
+                                        || item.dataIndex === "num3"
+                                        || item.dataIndex === "len3"
+                                        || item.dataIndex === 'component4'
+                                        || item.dataIndex === "num4"
+                                        || item.dataIndex === "len4"
+                                    ) {
+                                        return ({
+                                            title: item.title,
+                                            dataIndex: item.dataIndex,
+                                            width: 50,
+                                            render: (_: any, record: any): React.ReactNode => (
+                                                <div style={{
+                                                    color: record.isHighlight.includes(item.dataIndex) ? "#fff" : "black",
+                                                    backgroundColor: record.isHighlight.includes(item.dataIndex) ? "green" : "",
+                                                    height: "32px",
+                                                    lineHeight: "32px"
+                                                }}>{record[item.dataIndex]}</div>
+                                            )
+                                        })
+                                    }
+                                    if (item.dataIndex === 'utilizationRate') {
+                                        return ({
+                                            title: item.title,
+                                            dataIndex: item.dataIndex,
+                                            width: 50,
+                                            render: (_: any, record: any): React.ReactNode => (
+                                                <span>{record.utilizationRate}%</span>
+                                            )
+                                        })
+                                    }
+                                    return item;
+                                }),
+                                {
+                                    title: "操作",
+                                    dataIndex: "opration",
+                                    fixed: "right",
+                                    width: 100,
+                                    render: (_: any, record: any) => {
+                                        return (
+                                            <>
+                                                <Button type="link" onClick={() => handleChecked(record)}>选中</Button>
+                                            </>
                                         )
-                                    })
+                                    }
                                 }
-                                return item;
-                            }),
-                            {
-                                title: "操作",
-                                dataIndex: "opration",
-                                fixed: "right",
-                                width: 100,
-                                render: (_: any, record: any) => {
-                                    return (
-                                        <>
-                                            <Button type="link" onClick={() => handleChecked(record)}>选中</Button>
-                                        </>
-                                    )
-                                }
-                            }
-                        ]} dataSource={preparation} pagination={false} scroll={{ y: 400 }} className="prepartion"
-                    />
-                </Col>
-            </Row>
+                            ]} dataSource={preparation} pagination={false} scroll={{ y: 400 }} className="prepartion"
+                        />
+                    </Col>
+                </Row>
+            </Spin>
         </Modal>
     )
 }

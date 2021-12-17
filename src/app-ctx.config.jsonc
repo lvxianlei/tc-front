@@ -531,12 +531,12 @@
                         "label": "计划排产",
                         "icon": "technology",
                         "path": "/planProd",
-                        "authority": "planned_production_scheduling",
+                        "authority": "production_plan_management",
                         "items": [
                             {
                                 "label": "计划排产",
                                 "path": "/planProd/planMgmt",
-                                "authority": "planned_production_scheduling_list"
+                                "authority": "production_plan_management"
                             }
                         ]
                     },
@@ -806,42 +806,42 @@
                             {
                                 "label": "招聘入职",
                                 "path": "/employeeRelation/recruit",
-                                "authority": "approvalm"
+                                "authority": "employee_information_list"
                             },
                             {
                                 "label": "员工档案",
                                 "path": "/employeeRelation/archives",
-                                "authority": "approvalm"
+                                "authority": "employee_archives_list"
                             },
                             {
                                 "label": "劳动合同",
                                 "path": "/employeeRelation/labour",
-                                "authority": "approvalm"
+                                "authority": "employee_labor_contract_list"
                             },
                             {
                                 "label": "转正考核",
                                 "path": "/employeeRelation/full",
-                                "authority": "approvalm"
+                                "authority": "positive_check_list"
                             },
                             {
                                 "label": "员工调动",
                                 "path": "/employeeRelation/transfer",
-                                "authority": "approvalm"
+                                "authority": "hr_employee_transfer_page"
                             },
                             {
                                 "label": "员工离职",
                                 "path": "/employeeRelation/quit",
-                                "authority": "approvalm"
+                                "authority": "hr_employee_departurenc_page"
                             },
                             {
                                 "label": "办理离职",
                                 "path": "/employeeRelation/quitProcedures",
-                                "authority": "approvalm"
+                                "authority": "hr_employee_departurenc_handlePage"
                             },
                             {
                                 "label": "员工复职",
                                 "path": "/employeeRelation/reinstate",
-                                "authority": "approvalm"
+                                "authority": "hr_employee_reinstatement_page"
                             }
                         ]
                     },
@@ -854,12 +854,12 @@
                             {
                                 "label": "保险方案",
                                 "path": "/socialSecurity/plan",
-                                "authority": "approvalm"
+                                "authority": "hr_insurance_plan_page"
                             },
                             {
                                 "label": "员工保险档案",
                                 "path": "/socialSecurity/archives",
-                                "authority": "approvalm"
+                                "authority": "hr_insurance_archives_page"
                             }
                         ]
                     },
@@ -872,12 +872,12 @@
                             {
                                 "label": "生产环节管理",
                                 "path": "/planBaseSetting/prodLink",
-                                "authority": "approvalm"
+                                "authority": "production_link_management"
                             },
                             {
                                 "label": "生产单元管理",
                                 "path": "/planBaseSetting/prodUnit",
-                                "authority": "approvalm"
+                                "authority": "production_unit_management"
                             } 
                         ]
                     }
