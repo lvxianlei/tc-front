@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
-import { useHistory, useParams, Link } from 'react-router-dom'
+import { useHistory, useParams, Link, useRouteMatch, useLocation } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle, Attachment } from '../common'
 import CostDetail from './cost'
 import PayInfo from './payInfo'
@@ -16,6 +16,8 @@ import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
 import { changeTwoDecimal_f } from '../../utils/KeepDecimals';
 import { bidTypeOptions, winBidTypeOptions } from '../../configuration/DictionaryOptions'
+
+import ExportList from '../../components/export/list';
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
 const productAssistStatistics = [
     {
@@ -37,6 +39,9 @@ export default function ManagementDetail(): React.ReactNode {
     const bidType = bidTypeOptions
     const frangmentBidType = winBidTypeOptions
     const [productGroupFlag, setProductGroupFlag] = useState<"productAssistDetailVos" | "productAssistStatisticsVos">("productAssistDetailVos")
+    const [isExport, setIsExportStoreList] = useState(false)
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
     const [productGroupData, setProductGroupData] = useState<{ productAssistDetailVos: any[], productAssistStatisticsVos: any[] }>({
         productAssistDetailVos: [],
         productAssistStatisticsVos: []
@@ -371,7 +376,10 @@ export default function ManagementDetail(): React.ReactNode {
                 {
                     salesPlanStatus === "" && <Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>新增</Button>
                 }
-                <Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>导出</Button>
+                <Button type="primary" onClick={()=>{
+                    // setIsExportStoreList(true)
+                    message.error("导出暂未开发");
+                }}>导出</Button>
             </div>
             <CommonTable columns={[...taskNotice, {
                 title: "操作",
@@ -408,5 +416,25 @@ export default function ManagementDetail(): React.ReactNode {
         <Spin spinning={loading}>
             {tabItems['tab_' + (params.tab || 'base')]}
         </Spin>
+        {/* 销售计划导出 (待放开) */}
+        {isExport?<ExportList
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => {
+                let keys = [...taskNotice, {
+                    "title": "审批状态",
+                    "dataIndex": "taskReviewStatus"
+                }]
+                keys.pop()
+                return keys
+            }}
+            current={data?.current || 1}
+            size={data?.size || 10}
+            total={data?.total || 0}
+            url={`/tower-market/taskNotice`}
+            serchObj={{projectId: params.id }}
+            closeExportList={() => { setIsExportStoreList(false) }}
+        />:null}
     </>
 }
