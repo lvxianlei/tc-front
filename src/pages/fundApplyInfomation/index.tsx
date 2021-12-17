@@ -271,7 +271,7 @@
              />
              {/* 查看 */}
              <OverView
-                payApplyId={payApplyId}
+                 payApplyId={payApplyId}
                  title={confirmed}
                  visible={visibleOverView}
                  ref={viewRef}

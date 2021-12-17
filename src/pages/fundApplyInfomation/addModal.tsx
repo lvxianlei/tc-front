@@ -11,7 +11,7 @@ interface AddModalProps extends ModalFuncProps {
   payApplyId?: string;
   amountPayable?: string;
 }
-export default function AddModal(props: AddModalProps): JSX.Element {
+export default function AddModal(props: AddModalProps): JSX.Element { 
   //处理是addColums enum
     if(props.visible){
         const enums:any = payTypeOptions?.map(item=>{

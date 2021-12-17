@@ -1,5 +1,5 @@
 {
-    "PaymentListHead": [
+    "paymentListHead": [
         {
             "title": "付款单号",
             "dataIndex": "payNumber"
@@ -15,21 +15,6 @@
         {
             "title": "业务经理",
             "dataIndex": "projectLeader"
-        },
-        {
-            "title": "付款类型",
-            "dataIndex": "payType",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "请款",
-                    "value": 0
-                },
-                {
-                    "label": "报销",
-                    "value": 1
-                }
-            ]
         },
         {
             "title": "付款状态",
@@ -86,7 +71,7 @@
             ]
         }
     ],
-    "PaymentList": [
+    "paymentList": [
         {
             "title": "付款单号",
             "dataIndex": "payNumber"
@@ -100,27 +85,63 @@
             "dataIndex": "projectName"
         },
         {
+            "title": "请款类型",
+            "dataIndex": "costType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1151,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1152,
+                    "label": "中标服务费"
+                },
+                {
+                    "value": 1153,
+                    "label": "标书费"
+                },
+                {
+                    "value": 1154,
+                    "label": "杂费"
+                },
+                {
+                    "value": 1155,
+                    "label": "投标服务费"
+                }
+            ]
+        },
+        {
             "title": "业务经理",
             "dataIndex": "projectLeader"
         },
         {
-            "title": "费用名称",
-            "dataIndex": "costName"
+            "title": "申请人",
+            "dataIndex": "applicantName"
         },
         {
-            "title": "付款类型",
-            "dataIndex": "payType",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "请款",
-                    "value": 0
-                },
-                {
-                    "label": "报销",
-                    "value": 1
-                }
-            ]
+            "title": "申请时间",
+            "dataIndex": "applicantTime"
+        },
+        {
+            "title": "总金额",
+            "dataIndex": "sumMoney"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "收款方",
+            "dataIndex": "payee"
+        },
+        {
+            "title": "账号",
+            "dataIndex": "accNum"
+        },
+        {
+            "title": "开户行",
+            "dataIndex": "bankName"
         },
         {
             "title": "付款状态",
@@ -136,18 +157,6 @@
                     "value": 1
                 }
             ]
-        },
-        {
-            "title": "金额（元）",
-            "dataIndex": "sumMoney"
-        },
-        {
-            "title": "申请时间",
-            "dataIndex": "applicantTime"
-        },
-        {
-            "title": "申请人",
-            "dataIndex": "applicantName"
         },
         {
             "title": "审批状态",
@@ -211,6 +220,22 @@
             "dataIndex": "sumMoney"
         },
         {
+            "title": " 付款方式",
+            "dataIndex": "payType"
+        },
+        {
+            "title": " 收款方",
+            "dataIndex": "payee"
+        },
+        {
+            "title": " 账号",
+            "dataIndex": "accountNumber"
+        },
+        {
+            "title": " 开户行",
+            "dataIndex": "bankName"
+        },
+        {
             "title": " 付款状态",
             "dataIndex": "payStatus"
         },
@@ -244,63 +269,28 @@
     ],
     "paymentdetail": [
         {
-            "title": "费用类型",
-            "dataIndex": "costType",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "标书费",
-                    "value": 0
-                },
-                {
-                    "label": "投标服务费",
-                    "value": 1
-                },
-                {
-                    "label": "投标保证金",
-                    "value": 2
-                },
-                {
-                    "label": "中标服务费",
-                    "value": 3
-                },
-                {
-                    "label": "杂费",
-                    "value": 4
-                }
-            ]
-        },
-        {
-            "title": "费用名称",
-            "dataIndex": "costName"
-        },
-        {
-            "title": "支付类型",
-            "dataIndex": "payType"
+            "title": "票据号",
+            "dataIndex": "billNumber"
         },
         {
             "title": "金额（元）",
-            "dataIndex": "money"
+            "dataIndex": "billMoney"
         },
         {
-            "title": "付款时间",
-            "dataIndex": "payTime"
+            "title": "票据单位",
+            "dataIndex": "billCompany"
         },
         {
-            "title": "收款方",
-            "dataIndex": "payee"
+            "title": "票据类型",
+            "dataIndex": "billType"
         },
         {
-            "title": "账号",
-            "dataIndex": "accNum"
-        },
-        {
-            "title": "开户行",
-            "dataIndex": "bankName"
+            "title": "票据日期",
+            "dataIndex": "billTime"
         },
         {
             "title": "备注",
-            "dataIndex": "remark"
+            "dataIndex": "description"
         }
     ],
     "reimbursementdta": [

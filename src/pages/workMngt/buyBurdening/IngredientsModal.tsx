@@ -324,6 +324,14 @@ export default function IngredientsModal(props: any) {
                 let num:number = map.get(result[i]?.code) || 0;
                 result[i].notConfigured = result[i].num - num;
                 numberDetail += num;
+                // 处理未配为0的情况
+                if (result[i].notConfigured === 0) {
+                    if (selectedRowKeysCheck.indexOf(result[i].id) !== -1) {
+                        // 说明存在
+                        const v = selectedRowKeysCheck.filter((item: any) => item !== result[i].id);
+                        setSelectedRowKeysCheck(v);
+                    }
+                }
             } else {
                 result[i].notConfigured = result[i].num;
             }

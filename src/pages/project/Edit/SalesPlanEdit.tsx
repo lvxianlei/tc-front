@@ -173,7 +173,7 @@ export default function SalesPlanEdit() {
             <BaseInfo form={cargoDtoForm}
                 columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)}
                 dataSource={data || {}} edit col={3} />
-            <DetailTitle title="产品信息" operation={[<Button key="select" type="primary" disabled={!saleOrderId} onClick={handleSelectClick}>选择杆塔明细</Button>]} />
+            <DetailTitle title="杆塔信息" operation={[<Button key="select" type="primary" disabled={!saleOrderId} onClick={handleSelectClick}>选择杆塔明细</Button>]} />
             <CommonTable columns={[...salesAssist, {
                 title: "操作",
                 dataIndex: "opration",

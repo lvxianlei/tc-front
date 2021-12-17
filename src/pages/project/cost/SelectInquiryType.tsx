@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Modal, Row, Col, Select, Spin, ModalFuncProps } from "antd"
+import { Modal, Row, Col, Select, ModalFuncProps } from "antd"
 export default function SelectAuditType(props: ModalFuncProps): JSX.Element {
     const [selectValue, setSelectValue] = useState("")
 

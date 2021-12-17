@@ -1,10 +1,10 @@
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Radio } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../common'
-import { collectionListHead } from "./CollectionData.json"
+import { Page } from '../../common'
+import { collectionListHead } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
-import RequestUtil from '../../utils/RequestUtil'
+import RequestUtil from '../../../utils/RequestUtil'
 export default function Collection() {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const history = useHistory()
@@ -60,7 +60,7 @@ export default function Collection() {
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="编号/来款单位名称/来款银行" style={{ width: 300 }} />
+                children: <Input placeholder="编号/来款单位名称" style={{ width: 300 }} />
             },
             {
                 name: 'startRefundTime',

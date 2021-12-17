@@ -39,6 +39,8 @@ export enum DictionaryEnums {
     DATA_TYPE = 1215,
     CERTIFICATE_TYPE = 1216,
     COLLECTION_TYPE = 117,
+    CONTRACT_PLAN_STATUS = 1217,
+    CONTRACT_FORM = 1218,
 }
 
 let productType: IDict[] | undefined = [];
@@ -51,6 +53,7 @@ let refundMode: IDict[] | undefined = [];
 let clientType: IDict[] | undefined = [];
 let winBidType: IDict[] | undefined = [];
 let saleType: IDict[] | undefined = [];
+let bidType: IDict[] | undefined = [];
 let boltType: IDict[] | undefined = [];
 let warehouseType: IDict[] | undefined = [];
 let carType: IDict[] | undefined = [];
@@ -70,11 +73,12 @@ let materialTexture: IDict[] | undefined = [];
 let supplierType: IDict[] | undefined = [];
 let qualityAssurance: IDict[] | undefined = [];
 let supplyProducts: IDict[] | undefined = [];
+let contractPlanStatus: IDict[] | undefined = [];
+let contractForm: IDict[] | undefined = [];
 let paymentCategory: IDict[] | undefined = [];
 let source: IDict[] | undefined = [];
 let materialStandardType: IDict[] | undefined = [];
 let payCategory: IDict[] | undefined = [];
-let bidType: IDict[] | undefined = [];
 let collectionType: IDict[] | undefined = [];
 
 if (dictionary) {
@@ -88,6 +92,7 @@ if (dictionary) {
     clientType = dictionary[DictionaryEnums.CLIENT_TYPE];
     winBidType = dictionary[DictionaryEnums.WIN_BID_TYPE];
     saleType = dictionary[DictionaryEnums.SALE_TYPE];
+    bidType = dictionary[DictionaryEnums.BID_TYPE];
     boltType = dictionary[DictionaryEnums.BOLT_TYPE];
     warehouseType = dictionary[DictionaryEnums.WAREHOUSE_TYPE];
     carType = dictionary[DictionaryEnums.CAR_TYPE];
@@ -107,6 +112,8 @@ if (dictionary) {
     supplierType = dictionary[DictionaryEnums.SUPPLIER_TYPE];
     qualityAssurance = dictionary[DictionaryEnums.QUALITY_ASSURANCE];
     supplyProducts = dictionary[DictionaryEnums.SUPPLY_PRODUCTS];
+    contractPlanStatus = dictionary[DictionaryEnums.CONTRACT_PLAN_STATUS];
+    contractForm = dictionary[DictionaryEnums.CONTRACT_FORM];
     paymentCategory = dictionary[DictionaryEnums.PAYMENT_CATEGORY];
     source = dictionary[DictionaryEnums.SOURCE];
     materialStandardType = dictionary[DictionaryEnums.MATERIAL_STANDARD_TYPE];
@@ -125,6 +132,7 @@ export const refundModeOptions = refundMode; //来款方式
 export const clientTypeOptions = clientType; //客户类型
 export const winBidTypeOptions = winBidType; //中标类型
 export const saleTypeOptions = saleType; //销售类型
+export const bidTypeOptions = bidType; //标书类别
 export const boltTypeOptions = boltType; //螺栓类型
 export const warehouseOptions = warehouseType; //仓库类型
 export const carOptions = carType; //车辆类型
@@ -144,9 +152,10 @@ export const materialTextureOptions = materialTexture; //材质
 export const supplierTypeOptions = supplierType; //供应商类型
 export const qualityAssuranceOptions = qualityAssurance; //质量保证体系
 export const supplyProductsOptions = supplyProducts; //供应商供货产品
+export const contractPlanStatusOptions = contractPlanStatus; // 合同计划状态
+export const contractFormOptions = contractForm; // 收到合同形式
 export const paymentCategoryOptions = paymentCategory; //支付类别
 export const sourceOptions = source; //来源
 export const materialStandardTypeOptions = materialStandardType; //原材料标准类型
 export const payCategoryOptions = payCategory; //来款性质
-export const bidTypeOptions = bidType; //标书类别
 export const collectionTypeeOptions = collectionType; // 回款类型

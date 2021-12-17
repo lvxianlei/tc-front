@@ -7,10 +7,11 @@ import { DetailTitle,BaseInfo,CommonTable,Attachment } from '../common';
 import { fundRecordColumns } from './fundRecord.json';
 import { payTypeOptions } from '../../configuration/DictionaryOptions';
 import RequestUtil from '../../utils/RequestUtil';
+
 interface ViewModalProps extends ModalFuncProps {
     payApplyId?: string;
     ref?: React.RefObject<{ getDetail: () => Promise<any> }>
-  }
+}
 export default forwardRef(function OverView(props: ViewModalProps,ref): JSX.Element {
     const [baseInfo, setBaseInfo] = useState<any>({});//基本信息
     const [attachInfoVOList, setInfoVOList] = useState<any>([]);//附件信息
@@ -35,7 +36,7 @@ export default forwardRef(function OverView(props: ViewModalProps,ref): JSX.Elem
             width={800}
             footer={[
                 <Button key="back" onClick={props?.onCancel}>
-                取消
+                    取消
                 </Button>
             ]}
         >

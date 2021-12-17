@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from "react"
 import { useParams } from "react-router-dom"
-import { Modal, Upload, Button, Form, message } from "antd"
-import { DetailTitle, CommonTable, BaseInfo, EditTable, Attachment, AttachmentRef } from "../../common"
-import { enclosure } from "../managementDetailData.json"
-import { supplyBaseInfo, logisticBaseInfo, workmanshipBaseInfo, askLogistics } from "./costData.json"
-import AuthUtil from "../../../utils/AuthUtil"
-import { downLoadFile } from "../../../utils"
+import { Modal, Form, message } from "antd"
+import { DetailTitle, BaseInfo, EditTable, Attachment, AttachmentRef } from "../../common"
+import { supplyBaseInfo, logisticBaseInfo, workmanshipBaseInfo, askLogistics } from "./cost.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export type SelectType = "selectA" | "selectB" | "selectC"
