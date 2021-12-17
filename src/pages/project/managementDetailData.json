@@ -1602,7 +1602,7 @@
             "dataIndex": "totalWeight"
         },
         {
-            "title": "客户交货日期",
+            "title": "*客户交货日期",
             "dataIndex": "deliveryTime",
             "type": "date",
             "format": "YYYY-MM-DD",

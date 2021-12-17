@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
 import { Button, Form, message, Modal, Spin } from "antd"
-import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../../common"
+import { DetailContent, BaseInfo, DetailTitle, CommonTable, FormItemType } from "../../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { taskNoticeEditBaseInfo, taskNoticeEditSpec, salesAssist, productAssist } from "../managementDetailData.json"
@@ -16,10 +16,13 @@ export default function SalesPlanEdit() {
     const [selectRows, setSelectRows] = useState<any[]>([])
     const [productDetails, setProductDetails] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
+    const [settingVisible, setSettingVisible] = useState<boolean>(false)
     const [saleOrderId, setSaleOrderId] = useState<string>("")
     const [contractId, setContractId] = useState<string>("")
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
+    const [productDetailsForm] = Form.useForm()
+    const [deliveryTimeForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/${match.params.id}`)
@@ -65,17 +68,24 @@ export default function SalesPlanEdit() {
         try {
             const baseInfoData = await baseInfoForm.validateFields()
             const cargoDtoData = await cargoDtoForm.validateFields()
+            const productDetailsData = await productDetailsForm.validateFields()
+            const submitProductDetailsData = productDetails.map((item: any) => ({
+                id: item.id,
+                deliveryTime: productDetailsData[item.id].deliveryTime && (productDetailsData[item.id].deliveryTime + " 00:00:00")
+            }))
             if (productDetails.length <= 0) {
                 message.error("请添加产品信息...")
                 return
             }
             const submitData = {
-                ...data, ...baseInfoData, ...cargoDtoData,
+                ...data,
+                ...baseInfoData,
+                ...cargoDtoData,
                 projectId: match.params.projectId,
                 contractId,
                 saleOrderId,
                 saleOrder: baseInfoData.saleOrderNumber.saleOrderId || "",
-                productIds: productDetails.map(item => item.id),
+                productIds: submitProductDetailsData,
                 saleOrderNumber: baseInfoData.saleOrderNumber.value || baseInfoData.saleOrderNumber
             }
             if (type === "save") {
@@ -127,12 +137,30 @@ export default function SalesPlanEdit() {
     }
 
     const handleModalOk = () => {
-        setProductDetails([...selectRows, ...productDetails.filter((pro: any) => !selectRows.map((item: any) => item.id).includes(pro.id))])
+        setProductDetails([
+            ...selectRows,
+            ...productDetails.filter((pro: any) => !selectRows.map((item: any) => item.id).includes(pro.id))])
         setVisible(false)
+        setSettingVisible(true)
+    }
+
+    const handleSettingModalOk = async () => {
+        const newProductDetailsForm: { [key: string]: { deliveryTime: string } } = {}
+        const deliveryTime = await deliveryTimeForm.validateFields()
+        const newProductDetails = productDetails.map((item: any) => {
+            newProductDetailsForm[item.id] = { ...deliveryTime }
+            return ({ ...item, ...deliveryTime })
+        })
+        setProductDetails(newProductDetails)
+        productDetailsForm.setFieldsValue(newProductDetailsForm)
+        setSettingVisible(false)
     }
 
     const deleteProject = (id: string) => {
-        setProductDetails(productDetails.filter((pro: any) => pro.id !== id))
+        const productDetailsResult = productDetails.filter((pro: any) => pro.id !== id)
+        setProductDetails(productDetailsResult)
+        setSelect(productDetailsResult.map(item => item.id))
+        setSelectRows(productDetailsResult)
     }
 
     return <DetailContent operation={[
@@ -146,6 +174,23 @@ export default function SalesPlanEdit() {
             onClick={() => handleSubmit("saveAndApprove")}>保存并提交审核</Button>,
         <Button key="cacel" onClick={() => history.goBack()} >取消</Button>
     ]}>
+        <Modal title="设置杆塔交货日期"
+            visible={settingVisible}
+            width={506}
+            onCancel={() => setSettingVisible(false)}
+            onOk={handleSettingModalOk}
+            destroyOnClose>
+            <Form form={deliveryTimeForm}>
+                <Form.Item name="deliveryTime" label="交货日期" rules={[
+                    {
+                        "required": true,
+                        "message": "请选择交货日期..."
+                    }
+                ]}>
+                    <FormItemType type="date" data={{ format: "YYYY-MM-DD" }} />
+                </Form.Item>
+            </Form>
+        </Modal>
         <Modal
             title="选择明细"
             visible={visible}
@@ -176,15 +221,32 @@ export default function SalesPlanEdit() {
                 columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)}
                 dataSource={data || {}} edit col={3} />
             <DetailTitle title="杆塔信息" operation={[<Button key="select" type="primary" disabled={!saleOrderId} onClick={handleSelectClick}>选择杆塔明细</Button>]} />
-            <CommonTable columns={[...salesAssist, {
-                title: "操作",
-                dataIndex: "opration",
-                width: 30,
-                fixed: true,
-                render: (_: any, records: any) => <>
-                    <Button type="link" onClick={() => deleteProject(records.id)}>删除</Button>
-                </>
-            }]} scroll={{ x: true }} dataSource={productDetails} />
+            <Form form={productDetailsForm}>
+                <CommonTable
+                    columns={[...salesAssist.map((item: any) => {
+                        if (item.dataIndex === "deliveryTime") {
+                            return ({
+                                ...item,
+                                render: (value: string, record: any) => <Form.Item
+                                    name={[record.id, item.dataIndex]}
+                                    rules={item.rules}
+                                >
+                                    <FormItemType value={value} type={item.type} data={item} />
+                                </Form.Item>
+                            })
+                        }
+                        return item
+                    }),
+                    {
+                        title: "操作",
+                        dataIndex: "opration",
+                        fixed: "right",
+                        render: (_: any, records: any) => <>
+                            <Button type="link" onClick={() => deleteProject(records.id)}>删除</Button>
+                        </>
+                    }]}
+                    dataSource={productDetails} />
+            </Form>
         </Spin>
     </DetailContent>
 }

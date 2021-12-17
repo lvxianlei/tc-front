@@ -130,7 +130,6 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
             onChange: this.onTableChange,
             dataSource: this.getTableDataSource(item),
             columns: this.getTableColumns(item),
-            onRow: () => ({ className: styles.tableRow })
         };
     }
 

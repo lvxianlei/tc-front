@@ -4,6 +4,9 @@
     border: none;
     &:nth-child(odd){
         background-color: @backgroundColor;
+       :global(.ant-table-cell-fix-right) {
+            background: @backgroundColor !important;
+        }
     }
 }
 
