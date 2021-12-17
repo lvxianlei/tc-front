@@ -45,6 +45,7 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
                 onHeaderCell: () => ({ isResizable: data.isResizable }),
+                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
                 ...data
             })
     }
@@ -94,7 +95,7 @@ export function ResizableTitle({ isResizable = false, width = 120, ...props }: R
     const onResize = (event: SyntheticEvent, { size }: ResizeCallbackData) => {
         setIWidth(size.width)
     }
-    
+
     return isResizable ? <Resizable
         {...props as any}
         axis="x"

@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
-import { PaymentListHead } from "./PaymentData.json"
+import { paymentListHead } from "./payment.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Payment() {
@@ -46,7 +46,7 @@ export default function Payment() {
     return <Page
         path="/tower-market/payApply"
         columns={[
-            ...PaymentListHead,
+            ...paymentListHead,
             {
                 title: "操作",
                 dataIndex: "opration",

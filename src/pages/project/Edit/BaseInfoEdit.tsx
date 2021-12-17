@@ -34,11 +34,11 @@ export default function BaseInfoEdit(): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }))
+    }), { manual: params.id === "new" })
 
     const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/projectInfo`, postData)
+            const result: { [key: string]: any } = await RequestUtil[params.id === "new" ? "post" : "put"](`/tower-market/projectInfo`, postData)
             resole(result)
         } catch (error) {
             reject(error)
@@ -79,7 +79,7 @@ export default function BaseInfoEdit(): JSX.Element {
         }
     }
     return <>
-        <ManagementDetailTabsTitle />
+        {params.id !== "new" && <ManagementDetailTabsTitle />}
         <DetailContent operation={[
             <Button
                 key="save"

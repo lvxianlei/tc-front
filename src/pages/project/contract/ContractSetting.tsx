@@ -8,7 +8,9 @@ import { withRouter } from "react-router-dom";
 import ClientSelectionComponent from "../../../components/ClientSelectionModal";
 import {
   winBidTypeOptions,
-  saleTypeOptions
+  saleTypeOptions,
+  contractPlanStatusOptions, // 合同计划状态
+  contractFormOptions, // 收到合同形式
 } from "../../../configuration/DictionaryOptions";
 import { IFormItemGroup } from "../../entrust/EntrustDetail";
 import { ContractSetting } from "../../prom/contract/ContractSetting";
@@ -72,7 +74,7 @@ class ManagementContractSetting extends ContractSetting {
                   message: "请输入合同/工程名称",
                 },
               ],
-              children: <Input maxLength={100} />,
+              children: <Input maxLength={500} />,
             },
             {
               label: "合同总重(吨)",
@@ -298,7 +300,7 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <FormItemType data={{ dataIndex: "signContractTime" }} type="date" />
+                <FormItemType data={{ dataIndex: "signContractTime" }} type="date" format="YYYY-MM-DD"/>
                 // <DatePicker
                 //   format="YYYY-MM-DD"
                 //   onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}
@@ -322,21 +324,15 @@ class ManagementContractSetting extends ContractSetting {
               label: "要求交货日期",
               name: "deliveryTime",
               initialValue: contract?.deliveryTime
-                ? moment(contract?.deliveryTime)
+                ? contract?.deliveryTime 
                 : "",
               rules: [
                 {
                   required: true,
-                  message: "请选择要求交货日期",
+                  message: "请输入要求交货日期",
                 },
               ],
-              children: (
-                <FormItemType data={{ dataIndex: "deliveryTime" }} type="date" />
-                // <DatePicker
-                //   format="YYYY-MM-DD"
-                //   className={layoutStyles.width100}
-                // />
-              ),
+              children: (<Input placeholder="请输入要求交货日期"/>),
             },
             {
               label: "有无技术协议",
@@ -408,12 +404,12 @@ class ManagementContractSetting extends ContractSetting {
               children: (<Input value={contract?.country} />),
             },
             {
-              label: "销售业务员",
+              label: "业务经理",
               name: "salesman",
               rules: [
                 {
                   required: true,
-                  message: "请输入销售业务员",
+                  message: "请输入业务经理",
                 },
               ],
               initialValue: contract?.salesman,
@@ -428,9 +424,9 @@ class ManagementContractSetting extends ContractSetting {
             {
               label: "合同接管日期",
               name: "takeOverTime",
-              initialValue: contract?.takeOverTime,
+              initialValue: contract?.takeOverTime ? moment(contract?.takeOverTime).format("YYYY-MM-DD") : "",
               children: (
-                <FormItemType data={{ dataIndex: "takeOverTime" }} type="date" />
+                <FormItemType data={{ dataIndex: "takeOverTime",format:"YYYY-MM-DD" }} type="date" />
                 // <DatePicker
                 //   format="YYYY-MM-DD"
                 //   className={layoutStyles.width100}
@@ -438,16 +434,75 @@ class ManagementContractSetting extends ContractSetting {
               ),
             },
             {
-              label: "是否收到合同原件",
-              name: "isReceivedContract",
-              initialValue: contract?.isReceivedContract || 0,
+              label: "收到合同形式",
+              name: "receivedContractShape",
+              initialValue: contract?.receivedContractShape  || (contractFormOptions && contractFormOptions[0].id),
               children: (
-                <Select value={contract?.isReceivedContract}
+                <Select value={contract?.receivedContractShape}
                 >
-                  <Select.Option value={0}>是</Select.Option>
-                  <Select.Option value={1}>否</Select.Option>
+                  {contractFormOptions &&
+                    contractFormOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
                 </Select>
               ),
+            },
+            {
+              label: "合同份数",
+              name: "contractFraction",
+              initialValue: contract?.contractFraction || 0,
+              children: (
+                <InputNumber style={{width: "100%"}}/>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请输入合同份数",
+                },
+              ]
+            },
+            {
+              label: "合同页数",
+              name: "contractPage",
+              initialValue: contract?.contractPage || 0,
+              children: (
+                <InputNumber style={{width: "100%"}}/>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请输入合同页数",
+                },
+              ]
+            },
+            {
+              label: "合同计划状态",
+              name: "contractPlanStatus",
+              initialValue: contract?.contractPlanStatus,
+              children: (
+                <Select value={contract?.contractPlanStatus}
+                  placeholder="请选择合同计划状态"
+                >
+                  {contractPlanStatusOptions &&
+                    contractPlanStatusOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
+                </Select>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请选择合同计划状态",
+                },
+              ]
             }
           ],
         },
@@ -504,7 +559,7 @@ class ManagementContractSetting extends ContractSetting {
                   message: "请输入合同/工程名称",
                 },
               ],
-              children: <Input maxLength={100} />,
+              children: <Input maxLength={500} />,
             },
             {
               label: "合同总重(吨)",
@@ -753,17 +808,15 @@ class ManagementContractSetting extends ContractSetting {
               label: "要求交货日期",
               name: "deliveryTime",
               initialValue: contract?.deliveryTime
-                ? moment(contract?.deliveryTime)
+                ? contract?.deliveryTime
                 : "",
               rules: [
                 {
                   required: true,
-                  message: "请选择要求交货日期",
+                  message: "请输入要求交货日期",
                 },
               ],
-              children: (
-                <FormItemType data={{ dataIndex: "deliveryTime" }} type="date" />
-              ),
+              children: <Input placeholder="请输入要求交货日期"/>,
             },
             {
               label: "有无技术协议",
@@ -829,12 +882,12 @@ class ManagementContractSetting extends ContractSetting {
               ),
             },
             {
-              label: "销售业务员",
+              label: "业务经理",
               name: "salesman",
               rules: [
                 {
                   required: true,
-                  message: "请输入销售业务员",
+                  message: "请输入业务经理",
                 },
               ],
               initialValue: contract?.salesman,
@@ -849,22 +902,82 @@ class ManagementContractSetting extends ContractSetting {
             {
               label: "合同接管日期",
               name: "takeOverTime",
-              initialValue: contract?.takeOverTime,
+              initialValue: contract?.takeOverTime ? moment(contract?.takeOverTime).format("YYYY-MM-DD") : "",
               children: (
-                <FormItemType data={{ dataIndex: "takeOverTime" }} type="date" />
+                <FormItemType data={{ dataIndex: "takeOverTime",format:"YYYY-MM-DD" }} type="date" />
               ),
             },
             {
-              label: "是否收到合同原件",
-              name: "isReceivedContract",
-              initialValue: contract?.isReceivedContract || 0,
+              label: "收到合同形式",
+              name: "receivedContractShape",
+              initialValue: contract?.receivedContractShape || (contractFormOptions && contractFormOptions[0].id),
               children: (
-                <Select value={contract?.isReceivedContract}
+                <Select value={contract?.receivedContractShape}
+                  placeholder="请选择收到合同形式"
                 >
-                  <Select.Option value={0}>是</Select.Option>
-                  <Select.Option value={1}>否</Select.Option>
+                  {contractFormOptions &&
+                    contractFormOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
                 </Select>
               ),
+            },
+            {
+              label: "合同份数",
+              name: "contractFraction",
+              initialValue: contract?.contractFraction || 0,
+              children: (
+                <InputNumber style={{width: "100%"}}/>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请输入合同份数",
+                },
+              ]
+            },
+            {
+              label: "合同页数",
+              name: "contractPage",
+              initialValue: contract?.contractPage || 0,
+              children: (
+                <InputNumber style={{width: "100%"}}/>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请输入合同页数",
+                },
+              ]
+            },
+            {
+              label: "合同计划状态",
+              name: "contractPlanStatus",
+              initialValue: contract?.contractPlanStatus,
+              children: (
+                <Select value={contract?.contractPlanStatus}
+                  placeholder="请选择合同计划状态"
+                >
+                  {contractPlanStatusOptions &&
+                    contractPlanStatusOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
+                </Select>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请选择合同计划状态",
+                },
+              ]
             }
           ],
         },

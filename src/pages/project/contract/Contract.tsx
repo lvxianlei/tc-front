@@ -110,7 +110,7 @@ class ManagementContract extends PromContract {
         }
       },
       {
-        title: "销售业务员",
+        title: "业务经理",
         dataIndex: "salesman",
       },
       {
@@ -131,7 +131,7 @@ class ManagementContract extends PromContract {
         dataIndex: "operation",
         render: (_: undefined, record: object): React.ReactNode => (
           <Space direction="horizontal" size="small">
-            <Button type="link" disabled={(record as IContract).isRelateOrder === 1}>
+            <Button type="link">
               <Link
                 to={`/project/contract/setting/${projectId}/${(record as IContract).id}`}
               >
@@ -215,7 +215,10 @@ class ManagementContract extends PromContract {
 
   protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
     return (
-      <Button type="primary" onClick={this.onNewClick}>新增合同</Button>
+      <>
+        <Button type="primary" onClick={this.onNewClick}>新增合同</Button>
+        <p>合同重量合计：{this.state.contractWeightAll}吨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;合同金额合计：{this.state.contractAmountAll}元</p>
+      </>
     );
   }
 

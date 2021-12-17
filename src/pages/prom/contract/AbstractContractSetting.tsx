@@ -70,6 +70,10 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly takeOverTime: string;
     readonly payCompanyId: string;
     readonly isReceivedContract: number;
+    readonly receivedContractShape: string; // 收到合同形式
+    readonly contractPlanStatus: string; // 合同计划状态
+    readonly contractFraction: number; // 合同份数
+    readonly contractPage: number; // 合同页数
 }
 
 export interface ICustomerInfoDto {
