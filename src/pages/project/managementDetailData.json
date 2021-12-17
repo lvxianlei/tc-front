@@ -1403,18 +1403,6 @@
             "format": "YYYY-MM-DD"
         },
         {
-            "title": "客户交货日期",
-            "dataIndex": "deliveryTime",
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择客户交货日期..."
-                }
-            ]
-        },
-        {
             "title": "备注",
             "dataIndex": "description",
             "type": "textarea"
@@ -1612,6 +1600,18 @@
         {
             "title": "总重(kg)",
             "dataIndex": "totalWeight"
+        },
+        {
+            "title": "客户交货日期",
+            "dataIndex": "deliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择客户交货日期..."
+                }
+            ]
         },
         {
             "title": "备注",
