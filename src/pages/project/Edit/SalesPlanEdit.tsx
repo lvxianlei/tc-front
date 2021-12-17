@@ -164,7 +164,9 @@ export default function SalesPlanEdit() {
         </Modal>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
-            <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange}
+            <BaseInfo
+                form={baseInfoForm}
+                onChange={handleBaseInfoChange}
                 columns={taskNoticeEditBaseInfo.map((item: any) => item.dataIndex === "saleOrderNumber" ? ({
                     ...item,
                     path: `${item.path}?projectId=${match.params.projectId}&taskStatus=0,1`
