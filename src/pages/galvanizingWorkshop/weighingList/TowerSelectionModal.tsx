@@ -8,10 +8,10 @@ import { TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
-import styles from '../../components/AbstractSelectableModal.module.less';
-import RequestUtil from '../../utils/RequestUtil';
-import AbstractFilteredSelectionModal from '../../components/AbstractFilteredSelecableModal';
-import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../components/AbstractSelectableModal';
+import styles from '../../../components/AbstractSelectableModal.module.less';
+import RequestUtil from '../../../utils/RequestUtil';
+import AbstractFilteredSelectionModal from '../../../components/AbstractFilteredSelecableModal';
+import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../../components/AbstractSelectableModal';
 
 export interface ITowerSelectionModalProps extends IAbstractSelectableModalProps {
 }

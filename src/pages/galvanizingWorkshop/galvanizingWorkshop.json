@@ -1,0 +1,192 @@
+{    
+    "columns": [
+        {
+            "key": "taskNum",
+            "title": "状态",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "订单工程名称",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "电压等级",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "计划号",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "塔型",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "基数",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "下达重量",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "角钢重量",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "连板重量",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "穿卦班组",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "酸洗班组",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "检修班组",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "锌锅班组",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "开镀锌时间",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "updateStatusTime",
+            "title": "要求车间送齐时间",
+            "width": 200,
+            "dataIndex": "updateStatusTime"
+        },
+        {
+            "key": "weight",
+            "title": "要求大锅镀锌完成时间",
+            "width": 200,
+            "dataIndex": "weight"
+        },
+        {
+            "key": "externalTaskNum",
+            "title": "要求连板镀锌完成时间",
+            "width": 200,
+            "dataIndex": "externalTaskNum"
+        },
+        {
+            "key": "saleOrderNumber",
+            "title": "送齐成品库时间",
+            "width": 200,
+            "dataIndex": "saleOrderNumber"
+        },
+        {
+            "key": "internalNumber",
+            "title": "包装班组",
+            "width": 200,
+            "dataIndex": "internalNumber"
+        }
+    ],
+    "weighingListColumns": [
+        {
+            "key": "taskNum",
+            "title": "过磅单号",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "重量",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "抱杆号",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "类型",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "过磅日期",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "司磅员",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "穿挂班组",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "检修班组",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "酸洗班组",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "锌锅班组",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "穿卦班组",
+            "width": 150,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "taskNum",
+            "title": "制单时间",
+            "width": 150,
+            "dataIndex": "taskNum"
+        }
+    ]
+}

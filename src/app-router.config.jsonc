@@ -1762,28 +1762,28 @@
     { // 镀锌车间-日计划列表
       "name": "日计划列表",
       "path": "/galvanizingWorkshop/dailySchedule",
-      "module": "./pages/galvanizingWorkshop/DailySchedule",
+      "module": "./pages/galvanizingWorkshop/dailyPlan/DailySchedule",
       "exact": true,
       "authority": "galvanizing_workshop_daily_plan_list"
     },
     { // 镀锌车间-过磅单列表
       "name": "过磅单列表",
       "path": "/galvanizingWorkshop/weighingList",
-      "module": "./pages/galvanizingWorkshop/WeighingList",
+      "module": "./pages/galvanizingWorkshop/weighingList/WeighingList",
       "exact": true,
       "authority": "galvanizing_workshop_weighing_list"
     },
     { // 镀锌车间-新增过磅单
       "name": "新增",
       "path": "/galvanizingWorkshop/weighingList/weighingNew",
-      "module": "./pages/galvanizingWorkshop/WeighingNew",
+      "module": "./pages/galvanizingWorkshop/weighingList/WeighingNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 镀锌车间-编辑过磅单
       "name": "编辑",
       "path": "/galvanizingWorkshop/weighingList/weighingSetting/:id",
-      "module": "./pages/galvanizingWorkshop/WeighingNew",
+      "module": "./pages/galvanizingWorkshop/weighingList/WeighingNew",
       "exact": true,
       "authority": "approvalm"
     },

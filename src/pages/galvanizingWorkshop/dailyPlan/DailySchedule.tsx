@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Input, DatePicker, Button, Form, Modal, Row, Col } from 'antd';
-import { Page } from '../common';
+import { Input, DatePicker, Button, Form, Modal, Row, Col, Radio } from 'antd';
+import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './DailySchedule.module.less';
-import { useLocation } from 'react-router-dom';
-import RequestUtil from '../../utils/RequestUtil';
-import TeamSelectionModal from '../../components/TeamSelectionModal';
+import RequestUtil from '../../../utils/RequestUtil';
+import TeamSelectionModal from '../../../components/TeamSelectionModal';
+import { IDailySchedule } from '../IGalvanizingWorkshop';
+import { columns } from "../galvanizingWorkshop.json";
+
 interface IDetail {
     readonly accountEquipmentName?: string;
 }
@@ -13,150 +15,9 @@ interface IDetail {
 export default function DailySchedule(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: {} }>();
-
-    const columns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'taskNum',
-            title: '是否指派',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '订单工程名称',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '电压等级',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '计划号',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '塔型',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '基数',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '下达重量',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '角钢重量',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '连板重量',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '镀锌厂区',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '穿卦班组',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '酸洗班组',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '检修班组',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '锌锅班组',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'taskNum',
-            title: '开镀锌时间',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'updateStatusTime',
-            title: '要求车间送齐时间',
-            width: 200,
-            dataIndex: 'updateStatusTime'
-        },
-        {
-            key: 'weight',
-            title: '要求大锅镀锌完成时间',
-            width: 200,
-            dataIndex: 'weight'
-        },
-        {
-            key: 'externalTaskNum',
-            title: '要求连板镀锌完成时间',
-            width: 200,
-            dataIndex: 'externalTaskNum'
-        },
-        {
-            key: 'saleOrderNumber',
-            title: '送齐成品库时间',
-            width: 200,
-            dataIndex: 'saleOrderNumber'
-        },
-        {
-            key: 'internalNumber',
-            title: '包装班组',
-            width: 200,
-            dataIndex: 'internalNumber'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            fixed: 'right' as FixedType,
-            width: 150,
-            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Button type="link" onClick={() => {
-                    setVisible(true);
-                }}>派工</Button>
-            )
-        }
-    ]
-
+    const [confirmStatus, setConfirmStatus] = useState<number>(0);
+    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
+    const [ selectedRows, setSelectedRows ] = useState<IDailySchedule[]>([]);
     const [visible, setVisible] = useState(false);
     const [detail, setDetail] = useState<IDetail>({});
     const [form] = Form.useForm();
@@ -171,22 +32,80 @@ export default function DailySchedule(): React.ReactNode {
 
     }
 
+    const operationChange = (event: any) => {
+        setConfirmStatus(parseFloat(`${event.target.value}`));
+        setRefresh(!refresh);
+    }
+
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: IDailySchedule[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
+
     return <>
         <Page
             path="/tower-science/loftingTask/taskPage"
-            columns={columns}
-            headTabs={[{
-                label: '未指派',
-                key: 0
-            }, {
-                label: '已指派',
-                key: 1
-            }]}
-            requestData={{ status: location.state }}
-            extraOperation={<Button type="primary" onClick={() => {
-                setVisible(true);
-            }}>派工</Button>}
+            columns={
+                confirmStatus === 0 || confirmStatus === 1 || confirmStatus === 2 ? 
+                [{
+                    "key": "index",
+                    "title": "序号",
+                    "dataIndex": "index",
+                    "width": 50,
+                    render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                }, ...columns, {
+                    "key": "operation",
+                    "title": "操作",
+                    "dataIndex": "operation",
+                    fixed: "right" as FixedType,
+                    "width": 150,
+                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                        confirmStatus === 0 ? <Button type="link" onClick={() => {
+                            RequestUtil.get(``).then(res => {
+                                setRefresh(!refresh);
+                            });
+                        }}>确认</Button> : confirmStatus === 1 ? <Button type="link" onClick={() => {
+                            setVisible(true);
+                        }}>派工</Button>: confirmStatus === 2 ? <><Button type="link" onClick={() => {
+                            setVisible(true);
+                        }}>重新派工</Button><Button type="link" onClick={() => {
+                            RequestUtil.get(``).then(res => {
+                                setRefresh(!refresh);
+                            });
+                        }}>完成</Button></> : null
+                    )
+                }] : [{
+                    "key": "index",
+                    "title": "序号",
+                    "dataIndex": "index",
+                    "width": 50,
+                    render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                }, ...columns]}
+            headTabs={[]}
+            requestData={{ status: confirmStatus }}
+            extraOperation={<>
+                <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
+                    <Radio.Button value={0}>未确认</Radio.Button>
+                    <Radio.Button value={1}>未指派</Radio.Button>
+                    <Radio.Button value={2}>已指派</Radio.Button>
+                    <Radio.Button value={3}>已完成</Radio.Button>
+                </Radio.Group>
+                <span>统计<span className={styles.statistical}>下达总重量：{}吨</span><span className={styles.statistical}>角钢总重量：{}吨</span><span className={styles.statistical}>连板总重量：{}吨</span></span>
+                {confirmStatus === 0 ? <Button type="primary" onClick={() => {
+                    RequestUtil.get(``).then(res => {
+                        setRefresh(!refresh);
+                    });
+                }}>批量确认</Button> : confirmStatus === 1 ? <Button type="primary" onClick={() => {
+                    setVisible(true);
+                }}>派工</Button> : null}
+                </>}
             refresh={refresh}
+            tableProps={{
+                rowSelection: {
+                    selectedRowKeys: selectedKeys,
+                    onChange: SelectChange
+                }
+            }}
             searchFormItems={[
                 {
                     name: 'fuzzyMsg',

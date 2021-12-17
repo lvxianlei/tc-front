@@ -6,12 +6,12 @@
 import React, { useState } from 'react';
 import { Spin, Button, Space, Form, Input, Descriptions, DatePicker } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailTitle, DetailContent, CommonTable } from '../common';
-import RequestUtil from '../../utils/RequestUtil';
+import { DetailTitle, DetailContent, CommonTable } from '../../common';
+import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './WeighingList.module.less';
-import WorkshopUserSelectionComponent, { IUser } from '../../components/WorkshopUserModal';
-import TeamSelectionModal from '../../components/TeamSelectionModal';
+import WorkshopUserSelectionComponent, { IUser } from '../../../components/WorkshopUserModal';
+import TeamSelectionModal from '../../../components/TeamSelectionModal';
 import { CloseOutlined } from '@ant-design/icons';
 import TowerSelectionModal from './TowerSelectionModal';
 import { FixedType } from 'rc-table/lib/interface';
