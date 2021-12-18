@@ -379,7 +379,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 materialStandardName: item.materialStandardName,
                 num: item.num,
                 contractUnitPrice: item.price,
-                quantity: item.quantity ? item.quantity : 0
+                quantity: item.num ? item.num : 0
             }
             delete postData.id
             return postData

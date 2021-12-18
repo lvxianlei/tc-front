@@ -74,10 +74,10 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
             dataIndex: 'openBankName'
         },
         {
-            key: 'openBank',
+            key: 'bankAccount',
             title: '银行账号',
             width: 200,
-            dataIndex: 'openBank'
+            dataIndex: 'bankAccount'
         },
         {
             key: 'description',
@@ -223,8 +223,14 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                             <Input placeholder="自动生成" bordered={false} disabled/>
                         </Form.Item>
                     </Descriptions.Item>
-                    <Descriptions.Item label="装卸公司名称">
-                        <Form.Item name="stevedoreCompanyName">
+                    <Descriptions.Item label={<span>装卸公司名称<span style={{ color: 'red' }}>*</span></span>}>
+                        <Form.Item name="stevedoreCompanyName" rules={[{ 
+                                "required": true,
+                                "message": "请输入装卸公司名称" 
+                            }, {
+                                pattern: /^[^\s]*$/,
+                                message: '禁止输入空格',
+                        }]}>
                             <Input placeholder="请输入" maxLength={50} bordered={false} disabled={ title === '详情' }/>
                         </Form.Item>
                     </Descriptions.Item>

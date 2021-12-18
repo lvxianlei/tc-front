@@ -523,12 +523,12 @@
                         "label": "计划排产",
                         "icon": "technology",
                         "path": "/planProd",
-                        "authority": "production_plan_management",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "计划排产",
                                 "path": "/planProd/planMgmt",
-                                "authority": "production_plan_management"
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -864,12 +864,12 @@
                             {
                                 "label": "生产环节管理",
                                 "path": "/planBaseSetting/prodLink",
-                                "authority": "production_link_management"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "生产单元管理",
                                 "path": "/planBaseSetting/prodUnit",
-                                "authority": "production_unit_management"
+                                "authority": "approvalm"
                             }
                         ]
                     }
