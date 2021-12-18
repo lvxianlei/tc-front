@@ -144,7 +144,8 @@ export default function AssessmentTaskDetail(): React.ReactNode {
                                 history.go(0);
                             });
                         }}>接收</Button>
-                            <Button type="ghost" onClick={() => setVisible(true)}>拒绝</Button></>
+                            {/* <Button type="ghost" onClick={() => setVisible(true)}>拒绝</Button> */}
+                        </>
                         :
                         null
                 }
