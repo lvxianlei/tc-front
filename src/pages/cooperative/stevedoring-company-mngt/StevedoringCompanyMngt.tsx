@@ -223,7 +223,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                             <Input placeholder="自动生成" bordered={false} disabled/>
                         </Form.Item>
                     </Descriptions.Item>
-                    <Descriptions.Item label="装卸公司名称">
+                    <Descriptions.Item label={<span>装卸公司名称<span style={{ color: 'red' }}>*</span></span>}>
                         <Form.Item name="stevedoreCompanyName" rules={[{ 
                                 "required": true,
                                 "message": "请输入装卸公司名称" 

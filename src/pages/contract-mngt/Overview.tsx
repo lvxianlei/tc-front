@@ -44,11 +44,17 @@ export default function Overview({id}: OverviewProps): JSX.Element {
                     return item
             }
         })} dataSource={data || {}}/>
-        <p>运费信息<span>运费：含税金额合计（元）：{data?.transportBearVo?.transportTaxTotalAmount}   不含税金额合计（元）{data?.transportBearVo?.transportTotalAmount}</span></p>
+        <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px' }}>运费信息
+            <p style={{ fontSize: '18px', color: '#FF8C00' }}><span>运费：含税金额合计（元）：{data?.transportBearVo?.transportTaxTotalAmount}   不含税金额合计（元）{data?.transportBearVo?.transportTotalAmount}</span></p>
+        </p>
         <BaseInfo col={4} columns={freightOverview} dataSource={data?.transportBearVo || {}} />
-        <p>装卸费信息<span>装卸费：含税金额合计（元）：{data?.unloadBearVo?.unloadTaxTotalAmount}   不含税金额合计（元）{data?.unloadBearVo?.unloadTotalAmount}</span></p>
+        <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px' }}>装卸费信息
+            <p style={{ fontSize: '18px', color: '#FF8C00' }}><span>装卸费：含税金额合计（元）：{data?.unloadBearVo?.unloadTaxTotalAmount}   不含税金额合计（元）{data?.unloadBearVo?.unloadTotalAmount}</span></p>
+        </p>
         <BaseInfo col={4} columns={stevedoringOverview} dataSource={data?.unloadBearVo || {}} />
-        <p>原材料信息<span>重量合计（吨）：{data?.totalWeight} 含税金额合计（元）：{data?.totalTaxAmount}   不含税金额合计（元）{data?.totalAmount}</span></p>
+        <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px' }}>原材料信息
+            <p style={{ fontSize: '18px', color: '#FF8C00' }}><span>重量合计（吨）：{data?.totalWeight} 含税金额合计（元）：{data?.totalTaxAmount}   不含税金额合计（元）{data?.totalAmount}</span></p>
+        </p>
         <Row></Row>
         <CommonTable columns={material} dataSource={data?.materialContractDetailVos || []}/>
         <Attachment dataSource={data?.materialContractAttachInfoVos || []}/>
