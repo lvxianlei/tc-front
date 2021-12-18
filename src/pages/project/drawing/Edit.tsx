@@ -47,7 +47,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         ...baseData,
         internalNumber: baseData.internalNumber?.value,
         contractId: baseData.internalNumber?.id,
-        serviceManager: baseData.serviceManager?.id,
+        serviceManager: baseData.serviceManager?.value,
         serviceManagerId: baseData.serviceManager?.id,
         saveType,
         fileIds: attchsRef.current?.getDataSource().map(item => item.id)
@@ -58,10 +58,23 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
       reject(false)
     }
   })
-
+  const handleBaseInfoChange = (fields: any) => {
+    if (fields.internalNumber) {
+      baseForm.setFieldsValue({
+        contractName: fields.internalNumber.records?.[0]?.contractName,
+        customerCompany: fields.internalNumber.records?.[0]?.customerCompany
+      })
+    }
+  }
   useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
   return <Spin spinning={loading}>
-    <BaseInfo form={baseForm} columns={setting} col={3} dataSource={data || {}} edit />
+    <BaseInfo
+      form={baseForm}
+      onChange={handleBaseInfoChange}
+      columns={setting}
+      col={3}
+      dataSource={data || {}}
+      edit />
     <Attachment title="附件" ref={attchsRef} dataSource={data?.invoiceAttachInfoVos} edit />
   </Spin>
 })

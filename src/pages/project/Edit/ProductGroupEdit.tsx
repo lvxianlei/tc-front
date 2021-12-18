@@ -118,7 +118,7 @@ export default function ProductGroupEdit() {
             width: 30,
             fixed: true,
             render: (_: any, records: any) => <>
-                <Button type="link" onClick={() => deleteProject(records.id)}>删除</Button>
+                <Button type="link" disabled={!["0", 0, null].includes(records.taskNoticeId)} onClick={() => deleteProject(records.id)}>删除</Button>
             </>
         }, ...productAssist]} dataSource={select} />
     </DetailContent>
