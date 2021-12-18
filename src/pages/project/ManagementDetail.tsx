@@ -376,7 +376,7 @@ export default function ManagementDetail(): React.ReactNode {
                 {
                     salesPlanStatus === "" && <Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>新增</Button>
                 }
-                <Button type="primary" onClick={()=>{
+                <Button type="primary" onClick={() => {
                     // setIsExportStoreList(true)
                     message.error("导出暂未开发");
                 }}>导出</Button>
@@ -387,23 +387,23 @@ export default function ManagementDetail(): React.ReactNode {
                 fixed: "right",
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" onClick={() => history.push(`/project/management/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
+                        <Button type="link" size="small" onClick={() => history.push(`/project/management/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
                         {record.taskReviewStatus === 0 && <>
-                            <Button type="link" onClick={async () => {
+                            <Button type="link" size="small" onClick={async () => {
                                 const result = await noticeAdoptRun(record.id)
                                 result && message.success("审批通过成功...")
                                 history.go(0)
                             }}>审批通过</Button>
-                            <Button type="link" onClick={async () => {
+                            <Button type="link" size="small" onClick={async () => {
                                 const result = await noticeRejectRun(record.id)
                                 result && message.success("审批已驳回...")
                                 history.go(0)
                             }}>驳回</Button>
                         </>}
                         {[2, -1].includes(record.taskReviewStatus) && <>
-                            <Link to={`/project/management/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link>
-                            <Button type="link" onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>
-                            <Button type="link" loading={noticeLoading} onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
+                            <Button type="link" size="small"><Link to={`/project/management/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link></Button>
+                            <Button type="link" size="small" onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>
+                            <Button type="link" size="small" loading={noticeLoading} onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
                         </>}
                     </>
                 }
@@ -417,7 +417,7 @@ export default function ManagementDetail(): React.ReactNode {
             {tabItems['tab_' + (params.tab || 'base')]}
         </Spin>
         {/* 销售计划导出 (待放开) */}
-        {isExport?<ExportList
+        {isExport ? <ExportList
             history={history}
             location={location}
             match={match}
@@ -433,8 +433,8 @@ export default function ManagementDetail(): React.ReactNode {
             size={data?.size || 10}
             total={data?.total || 0}
             url={`/tower-market/taskNotice`}
-            serchObj={{projectId: params.id }}
+            serchObj={{ projectId: params.id }}
             closeExportList={() => { setIsExportStoreList(false) }}
-        />:null}
+        /> : null}
     </>
 }

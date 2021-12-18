@@ -73,8 +73,8 @@ export default function SalesPlanEdit() {
                 id: item.id,
                 deliveryTime: productDetailsData[item.id].deliveryTime && (productDetailsData[item.id].deliveryTime + " 00:00:00")
             }))
-            if (productDetails.length <= 0) {
-                message.error("请添加产品信息...")
+            if (submitProductDetailsData.length <= 0) {
+                message.warning("请选择杆塔明细...")
                 return
             }
             const submitData = {
@@ -85,7 +85,7 @@ export default function SalesPlanEdit() {
                 contractId,
                 saleOrderId,
                 saleOrder: baseInfoData.saleOrderNumber.saleOrderId || "",
-                productIds: submitProductDetailsData,
+                productInfoList: submitProductDetailsData,
                 saleOrderNumber: baseInfoData.saleOrderNumber.value || baseInfoData.saleOrderNumber
             }
             if (type === "save") {
@@ -137,9 +137,21 @@ export default function SalesPlanEdit() {
     }
 
     const handleModalOk = () => {
-        setProductDetails([
+        const productDetailsData = productDetailsForm.getFieldsValue()
+        const newProductDetailsData: { [key: string]: any } = {}
+        productDetailsForm.resetFields()
+        const newProductDetails = [
             ...selectRows,
-            ...productDetails.filter((pro: any) => !selectRows.map((item: any) => item.id).includes(pro.id))])
+            ...productDetails.filter((pro: any) => !select.includes(pro.id))]
+        newProductDetails.forEach(item => {
+            if (productDetailsData[item.id]) {
+                newProductDetailsData[item.id] = { ...item, ...productDetailsData[item.id] }
+            } else {
+                newProductDetailsData[item.id] = item
+            }
+        })
+        setProductDetails(newProductDetails)
+        productDetailsForm.setFieldsValue(newProductDetailsData)
         setVisible(false)
         setSettingVisible(true)
     }
@@ -147,9 +159,14 @@ export default function SalesPlanEdit() {
     const handleSettingModalOk = async () => {
         const newProductDetailsForm: { [key: string]: { deliveryTime: string } } = {}
         const deliveryTime = await deliveryTimeForm.validateFields()
+        const productDetailsFormData = productDetailsForm.getFieldsValue()
         const newProductDetails = productDetails.map((item: any) => {
-            newProductDetailsForm[item.id] = { ...deliveryTime }
-            return ({ ...item, ...deliveryTime })
+            if (productDetailsFormData[item.id].deliveryTime) {
+                return item
+            } else {
+                newProductDetailsForm[item.id] = { ...deliveryTime }
+                return ({ ...item, ...deliveryTime })
+            }
         })
         setProductDetails(newProductDetails)
         productDetailsForm.setFieldsValue(newProductDetailsForm)
@@ -157,8 +174,14 @@ export default function SalesPlanEdit() {
     }
 
     const deleteProject = (id: string) => {
+        const productDetailsData = productDetailsForm.getFieldsValue()
         const productDetailsResult = productDetails.filter((pro: any) => pro.id !== id)
+        Object.keys(productDetailsData).forEach((item: string) => {
+            item === id && delete productDetailsData[item]
+        })
         setProductDetails(productDetailsResult)
+        productDetailsForm.setFieldsValue(productDetailsData)
+        console.log(productDetailsForm.getFieldsValue())
         setSelect(productDetailsResult.map(item => item.id))
         setSelectRows(productDetailsResult)
     }
@@ -203,6 +226,9 @@ export default function SalesPlanEdit() {
                     rowSelection={{
                         selectedRowKeys: select,
                         type: "checkbox",
+                        getCheckboxProps: (records: any) => ({
+                            disabled: productDetails.map(item => item.id).includes(records.id)
+                        }),
                         onChange: onRowsChange,
                     }} />
             </Spin>
