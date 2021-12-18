@@ -4,7 +4,7 @@
 */
 
 import React, { useState } from 'react';
-import { Spin, Button, Space, Form, Input, Descriptions, DatePicker } from 'antd';
+import { Spin, Button, Space, Form, Input, Descriptions, DatePicker, Select, message } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -15,16 +15,19 @@ import TeamSelectionModal from '../../../components/TeamSelectionModal';
 import { CloseOutlined } from '@ant-design/icons';
 import TowerSelectionModal from './TowerSelectionModal';
 import { FixedType } from 'rc-table/lib/interface';
+import { weighingtypeOptions } from '../../../configuration/DictionaryOptions';
+import { IWeighingList } from '../IGalvanizingWorkshop';
 
 export default function WeighingNew(): React.ReactNode {
     const history = useHistory();
     const [ form ] = Form.useForm();
+    const [ relationProducts, setRelationProducts ] = useState<IWeighingList[]>([]);
     const params = useParams<{ id: string }>();
-    const [ user, setUser ] = useState([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        let data = {};
+        let data: IWeighingList = {};
         if(params.id) {
-            data = await RequestUtil.get(`/tower-science/boltRecord/detail`, { productCategory: params.id })
+            data = await RequestUtil.get<IWeighingList>(`/tower-production/weighing/detail/${ params.id }`);
+            setRelationProducts(data?.relationProducts || [])
         }
         resole(data)
     }), {})
@@ -37,34 +40,34 @@ export default function WeighingNew(): React.ReactNode {
     
     const tableColumns = [
         {
-            key: 'createDeptName',
+            key: 'internalNumber',
             title: '内部合同号',
-            dataIndex: 'createDeptName', 
+            dataIndex: 'internalNumber', 
         },
         {  
-            key: 'createUserName', 
+            key: 'planNo', 
             title: '计划号', 
-            dataIndex: 'createUserName' 
+            dataIndex: 'planNo' 
         },
         { 
-            key: 'createTime', 
+            key: 'orderName', 
             title: '工程名称', 
-            dataIndex: 'createTime' 
+            dataIndex: 'orderName' 
         },
         {
-            key: 'currentStatus', 
+            key: 'productCategoryName', 
             title: '关联塔型', 
-            dataIndex: 'currentStatus'
+            dataIndex: 'productCategoryName'
         },
         {
-            key: 'currentStatus', 
+            key: 'productNum', 
             title: '总基数', 
-            dataIndex: 'currentStatus'
+            dataIndex: 'productNum'
         },
         {
-            key: 'currentStatus', 
+            key: 'voltageGrade', 
             title: '电压等级', 
-            dataIndex: 'currentStatus'
+            dataIndex: 'voltageGrade'
         },
         {
             key: 'operation',
@@ -72,127 +75,137 @@ export default function WeighingNew(): React.ReactNode {
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
             width: 150,
-            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Button type="link" onClick={ delRow }>删除</Button>
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Button type="link" onClick={ () => delRow(index) }>删除</Button>
             )
         }
     ]
 
     const specialColums = [
         {
-            dataIndex: "materialSandard",
+            dataIndex: "weighingNo",
             title: "过磅单号",
             children: <Input placeholder="过磅编号自动生成" disabled/>,
-            initialValue: detailData.materialSandard
+            initialValue: detailData.weighingNo
         },
         {
-            dataIndex: "materialSandard",
-            title: "重量（kg）",
+            dataIndex: "weight",
+            title: "* 重量（kg）",
             rules: [{
                 required: true,
                 message: '请输入重量'
             }],
-            
-            children: <Input />
+            initialValue: detailData.weight,
+            children: <Input maxLength={50}/>
         },
         {
-            dataIndex: "materialSandard",
-            title: "抱杆号",
+            dataIndex: "derrickNo",
+            title: "* 抱杆号",
             rules: [{
                 required: true,
                 message: '请输入抱杆号'
             }],
+            initialValue: detailData.derrickNo,
             children: <Input />
         },
         {
-            dataIndex: "materialSandard",
-            title: "过磅类型",
+            dataIndex: "weighingTypeId",
+            title: "* 过磅类型",
             rules: [{
                 required: true,
                 message: '请选择过磅类型'
             }],
-            // children:  <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-            //     { warehouseOptions && warehouseOptions.map(({ id, name }, index) => {
-            //         return <Select.Option key={index} value={id+','+name}>
-            //             {name}
-            //         </Select.Option>
-            //     }) }
-            // </Select>
+            initialValue: detailData.weighingTypeId,
+            children:  <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                { weighingtypeOptions && weighingtypeOptions.map(({ id, name }, index) => {
+                    return <Select.Option key={index} value={id}>
+                        {name}
+                    </Select.Option>
+                }) }
+            </Select>
         },
         {
-            dataIndex: "materialSandard",
+            dataIndex: "weighingDate",
             title: "过磅日期",
-            children: <DatePicker.RangePicker />
+            initialValue: detailData.weighingDate,
+            format: 'YYYY-MM-DD',
+            children: <DatePicker style={{ width: '100%' }} />
         },
         {
-            dataIndex: "materialSandard",
+            dataIndex: "weighManName",
             title: "司磅员",
+            initialValue: detailData.weighManName,
             children: <Input maxLength={ 50 } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
-                setUser(selectedRows);
-                form.setFieldsValue({leaderName: selectedRows[0].name});
+                form.setFieldsValue({weighManName: selectedRows[0].name, weighManId: selectedRows[0].id});
             } } buttonType="link" buttonTitle="+选择人员" /> } disabled/>
         },
         {
-            dataIndex: "materialSandard",
+            dataIndex: "wearHangTeamName",
             title: "穿挂班组",
+            initialValue: detailData.wearHangTeamName,
             children: <Input maxLength={ 50 } addonBefore={ <TeamSelectionModal onSelect={ (selectedRows: object[] | any) => {
-                // setSelectedRows(selectedRows);
-                // setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
-                form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
+                form.setFieldsValue({ wearHangTeamName: selectedRows[0].name, wearHangTeamId: selectedRows[0].id})
             } }/> }  addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={ () => {
-                // setSelectedRows([]);
-                // setDetail({ ...detail, accountEquipmentName: '', accountEquipmentId: '' });
-                // form.setFieldsValue({ accountEquipmentName: '', accountEquipmentId: '' })
-            } }><CloseOutlined /></Button>}  disabled/>
+                form.setFieldsValue({ wearHangTeamName: '', wearHangTeamId: '' })
+            } }><CloseOutlined /></Button>} disabled/>
         },
         {
-            dataIndex: "materialSandard",
+            dataIndex: "picklingTeamName",
             title: "酸洗班组",
+            initialValue: detailData.picklingTeamName,
             children: <Input maxLength={ 50 } addonBefore={ <TeamSelectionModal onSelect={ (selectedRows: object[] | any) => {
-                // setSelectedRows(selectedRows);
-                // setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
-                form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
+                form.setFieldsValue({ picklingTeamName: selectedRows[0].name, picklingTeamId: selectedRows[0].id })
             } }/> }  addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={ () => {
-                // setSelectedRows([]);
-                // setDetail({ ...detail, accountEquipmentName: '', accountEquipmentId: '' });
-                // form.setFieldsValue({ accountEquipmentName: '', accountEquipmentId: '' })
-            } }><CloseOutlined /></Button>}  disabled/>
+                form.setFieldsValue({ picklingTeamName: '', picklingTeamId: '' })
+            } }><CloseOutlined /></Button>} disabled/>
         },
         {
-            dataIndex: "materialSandard",
+            dataIndex: "maintenanceTeamName",
             title: "检修班组",
+            initialValue: detailData.maintenanceTeamName,
             children: <Input maxLength={ 50 } addonBefore={ <TeamSelectionModal onSelect={ (selectedRows: object[] | any) => {
-                // setSelectedRows(selectedRows);
-                // setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
-                form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
+                form.setFieldsValue({ maintenanceTeamName: selectedRows[0].name, maintenanceTeamId: selectedRows[0].id })
             } }/> }  addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={ () => {
-                // setSelectedRows([]);
-                // setDetail({ ...detail, accountEquipmentName: '', accountEquipmentId: '' });
-                // form.setFieldsValue({ accountEquipmentName: '', accountEquipmentId: '' })
-            } }><CloseOutlined /></Button>}  disabled/>
+                form.setFieldsValue({ maintenanceTeamName: '', maintenanceTeamId: '' })
+            } }><CloseOutlined /></Button>} disabled/>
         },
         {
-            dataIndex: "materialSandard",
+            dataIndex: "zincPotTeamName",
             title: "锌锅班组",
+            initialValue: detailData.zincPotTeamName,
             children: <Input maxLength={ 50 } addonBefore={ <TeamSelectionModal onSelect={ (selectedRows: object[] | any) => {
-                // setSelectedRows(selectedRows);
-                // setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
-                form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
+                form.setFieldsValue({ zincPotTeamName: selectedRows[0].name, zincPotTeamId: selectedRows[0].id })
             } }/> }  addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={ () => {
-                // setSelectedRows([]);
-                // setDetail({ ...detail, accountEquipmentName: '', accountEquipmentId: '' });
-                // form.setFieldsValue({ accountEquipmentName: '', accountEquipmentId: '' })
-            } }><CloseOutlined /></Button>}  disabled/>
+                form.setFieldsValue({ zincPotTeamName: '', zincPotTeamId: '' })
+            } }><CloseOutlined /></Button>} disabled/>
         },
     ]
 
-    const delRow = () => {
+    const delRow = (index: number) => {
+        relationProducts.splice(index, 1);
+        setRelationProducts(relationProducts);
+    }
 
+    const save = () => {
+        if(form) {
+            form.validateFields().then(res => {
+                const values = form.getFieldsValue(true);
+                console.log(values)
+                RequestUtil.post(`/tower-production/galvanized/daily/plan/dispatching`, { 
+                    ...values,
+                    relationProducts: relationProducts.map((res: any) => ( { ...res, weighingId: params.id} )),
+                    id: params.id 
+                }).then(res => {
+                    message.success("保存成功");
+                    history.goBack();
+                });
+            })
+        }
     }
 
     return  <DetailContent operation={ [
         <Space direction="horizontal" size="small" >
-            <Button type="primary" onClick={ () => history.goBack() }>保存</Button>
+            <Button type="primary" onClick={ save }>保存</Button>
             <Button type="ghost" onClick={ () => history.goBack() }>关闭</Button>
         </Space>
     ] }>
@@ -210,11 +223,10 @@ export default function WeighingNew(): React.ReactNode {
             </Descriptions>    
         </Form>
         <DetailTitle title="塔型信息"/>
-        <TowerSelectionModal  onSelect={ (selectedRows: object[] | any) => {
-            // setSelectedRows(selectedRows);
-            // setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
-            form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
+        <TowerSelectionModal onSelect={ (selectedRows: object[] | any) => {
+            console.log(selectedRows)
+            setRelationProducts(selectedRows)
         } } />
-        <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
+        <CommonTable columns={ tableColumns } dataSource={[...relationProducts]} pagination={ false } />
     </DetailContent>
 }

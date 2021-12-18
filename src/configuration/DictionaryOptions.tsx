@@ -32,6 +32,7 @@ export enum DictionaryEnums {
     CAR_TYPE = 146,
     SUPPLY_PRODUCTS = 146,
     EMPLOYEE_TYPE = 149,
+    WEIGHING_TYPE = 151,
     INVOICE_TYPE = 1210,
     PAY_TYPE = 1211,
     STAFF_TYPE = 1213,
@@ -78,6 +79,7 @@ let paymentCategory: IDict[] | undefined = [];
 let source: IDict[] | undefined = [];
 let materialStandardType: IDict[] | undefined = [];
 let payCategory: IDict[] | undefined = [];
+let weighingtype: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -117,6 +119,7 @@ if (dictionary) {
     materialStandardType = dictionary[DictionaryEnums.MATERIAL_STANDARD_TYPE];
     payCategory = dictionary[DictionaryEnums.PAY_CATEGORY];
     bidType = dictionary[DictionaryEnums.BID_TYPE];
+    weighingtype = dictionary[DictionaryEnums.WEIGHING_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -155,3 +158,4 @@ export const paymentCategoryOptions = paymentCategory; //支付类别
 export const sourceOptions = source; //来源
 export const materialStandardTypeOptions = materialStandardType; //原材料标准类型
 export const payCategoryOptions = payCategory; //来款性质
+export const weighingtypeOptions = weighingtype; //过磅类型

@@ -46,7 +46,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
     }
 
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-equipment/device', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-production/galvanized/daily/plan/weighing', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
@@ -65,7 +65,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
 
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
-            name: 'selectName',
+            name: 'fuzzyMsg',
             children: <Input placeholder="请输入塔型名称/计划号/内部合同编号/工程名称进行查询" />
         }];
     }
@@ -97,34 +97,34 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
 
     public getTableColumns(): TableColumnType<object>[] {
         return [{
-            key: 'deviceTypeName',
+            key: 'internalNumber',
             title: '内部合同编号',
-            dataIndex: 'deviceTypeName',
+            dataIndex: 'internalNumber',
             width: '20%',
         }, {
-            key: 'deviceName',
+            key: 'planNo',
             title: '计划号',
-            dataIndex: 'deviceName',
+            dataIndex: 'planNo',
             width: '20%',
         }, {
-            key: 'spec',
+            key: 'orderName',
             title: '工程名称',
-            dataIndex: 'spec',
+            dataIndex: 'orderName',
             width: '20%',
         }, {
-            key: 'deviceNumber',
+            key: 'productCategoryName',
             title: '塔型名称',
-            dataIndex: 'deviceNumber',
+            dataIndex: 'productCategoryName',
             width: '20%',
         }, {
-            key: 'deviceNumber',
+            key: 'voltageGrade',
             title: '电压等级',
-            dataIndex: 'deviceNumber',
+            dataIndex: 'voltageGrade',
             width: '20%',
         }, {
-            key: 'deviceNumber',
+            key: 'productNum',
             title: '总基数',
-            dataIndex: 'deviceNumber',
+            dataIndex: 'productNum',
             width: '20%',
         }];
     }

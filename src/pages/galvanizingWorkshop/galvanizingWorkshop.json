@@ -1,192 +1,211 @@
 {    
     "columns": [
         {
-            "key": "taskNum",
+            "key": "status",
             "title": "状态",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                { 
+                    "value": 1, 
+                    "label": "未确认" 
+                },
+                { 
+                    "value": 2, 
+                    "label": "未指派" 
+                },
+                { 
+                    "value": 3, 
+                    "label": "已指派" 
+                },
+                { 
+                    "value": 4, 
+                    "label": "已完成" 
+                }
+            ]
         },
         {
-            "key": "taskNum",
+            "key": "orderName",
             "title": "订单工程名称",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "orderName"
         },
         {
-            "key": "taskNum",
+            "key": "voltageGrade",
             "title": "电压等级",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "voltageGrade"
         },
         {
-            "key": "taskNum",
+            "key": "planNo",
             "title": "计划号",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "planNo"
         },
         {
-            "key": "taskNum",
+            "key": "productCategoryName",
             "title": "塔型",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "productCategoryName"
         },
         {
-            "key": "taskNum",
+            "key": "productNum",
             "title": "基数",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "productNum"
         },
         {
-            "key": "taskNum",
+            "key": "issueWeight",
             "title": "下达重量",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "issueWeight"
         },
         {
-            "key": "taskNum",
+            "key": "angleWeight",
             "title": "角钢重量",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "angleWeight"
         },
         {
-            "key": "taskNum",
+            "key": "plateWeight",
             "title": "连板重量",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "plateWeight"
         },
         {
-            "key": "taskNum",
+            "key": "wearHangTeamName",
             "title": "穿卦班组",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "wearHangTeamName"
         },
         {
-            "key": "taskNum",
+            "key": "picklingTeamName",
             "title": "酸洗班组",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "picklingTeamName"
         },
         {
-            "key": "taskNum",
+            "key": "maintenanceTeamName",
             "title": "检修班组",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "maintenanceTeamName"
         },
         {
-            "key": "taskNum",
+            "key": "zincPotTeamName",
             "title": "锌锅班组",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "zincPotTeamName"
         },
         {
-            "key": "taskNum",
+            "key": "galvanizedStartTime",
             "title": "开镀锌时间",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "galvanizedStartTime"
         },
         {
-            "key": "updateStatusTime",
+            "key": "deliveryTime",
             "title": "要求车间送齐时间",
             "width": 200,
-            "dataIndex": "updateStatusTime"
+            "dataIndex": "deliveryTime"
         },
         {
-            "key": "weight",
+            "key": "potGalvanizedCompleteTime",
             "title": "要求大锅镀锌完成时间",
             "width": 200,
-            "dataIndex": "weight"
+            "dataIndex": "potGalvanizedCompleteTime"
         },
         {
-            "key": "externalTaskNum",
+            "key": "plateGalvanizedCompleteTime",
             "title": "要求连板镀锌完成时间",
             "width": 200,
-            "dataIndex": "externalTaskNum"
+            "dataIndex": "plateGalvanizedCompleteTime"
         },
         {
-            "key": "saleOrderNumber",
+            "key": "productDeliveryTime",
             "title": "送齐成品库时间",
             "width": 200,
-            "dataIndex": "saleOrderNumber"
+            "dataIndex": "productDeliveryTime"
         },
         {
-            "key": "internalNumber",
+            "key": "packagingTeamName",
             "title": "包装班组",
             "width": 200,
-            "dataIndex": "internalNumber"
+            "dataIndex": "packagingTeamName"
         }
     ],
     "weighingListColumns": [
         {
-            "key": "taskNum",
+            "key": "weighingNo",
             "title": "过磅单号",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "weighingNo"
         },
         {
-            "key": "taskNum",
+            "key": "weight",
             "title": "重量",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "weight"
         },
         {
-            "key": "taskNum",
+            "key": "derrickNo",
             "title": "抱杆号",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "derrickNo"
         },
         {
-            "key": "taskNum",
+            "key": "weighingTypeName",
             "title": "类型",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "weighingTypeName"
         },
         {
-            "key": "taskNum",
+            "key": "weighingDate",
             "title": "过磅日期",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "weighingDate"
         },
         {
-            "key": "taskNum",
+            "key": "weighManName",
             "title": "司磅员",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "weighManName"
         },
         {
-            "key": "taskNum",
+            "key": "wearHangTeamName",
             "title": "穿挂班组",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "wearHangTeamName"
         },
         {
-            "key": "taskNum",
+            "key": "maintenanceTeamName",
             "title": "检修班组",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "maintenanceTeamName"
         },
         {
-            "key": "taskNum",
+            "key": "picklingTeamName",
             "title": "酸洗班组",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "picklingTeamName"
         },
         {
-            "key": "taskNum",
+            "key": "zincPotTeamName",
             "title": "锌锅班组",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "zincPotTeamName"
         },
         {
-            "key": "taskNum",
-            "title": "穿卦班组",
+            "key": "wearHangTeamName",
+            "title": "穿挂班组",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "wearHangTeamName"
         },
         {
-            "key": "taskNum",
+            "key": "createTime",
             "title": "制单时间",
             "width": 150,
-            "dataIndex": "taskNum"
+            "dataIndex": "createTime"
         }
     ]
 }

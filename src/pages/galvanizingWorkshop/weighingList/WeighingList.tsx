@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Popconfirm } from 'antd';
+import { Space, Input, DatePicker, Button, Popconfirm, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 // import styles from './DailySchedule.module.less';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import { weighingListColumns } from "../galvanizingWorkshop.json";
 
 export default function WeighingList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state: {} }>();
 
     return <Page
-        path="/tower-science/loftingTask/taskPage"
+        path="/tower-production/weighing"
         columns={[
             {
                 "key": "index",
@@ -30,14 +29,13 @@ export default function WeighingList(): React.ReactNode {
                 fixed: 'right' as FixedType,
                 width: 150,
                 render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    <Space direction="horizontal" size="small"
-                        // className={styles.operationBtn}
-                    >
+                    <Space direction="horizontal" size="small">
                         <Link to={`/galvanizingWorkshop/weighingList/weighingSetting/${record.id}`}><Button type="link">编辑</Button></Link>
                         <Popconfirm
                             title="确认删除?"
                             onConfirm={() => {
-                                RequestUtil.delete(``).then(res => {
+                                RequestUtil.delete(`/tower-production/weighing/${ record.id }`).then(res => {
+                                    message.success('删除成功');
                                     setRefresh(!refresh);
                                 });
                             }}
@@ -51,7 +49,6 @@ export default function WeighingList(): React.ReactNode {
             }
         ]}
         headTabs={[]}
-        requestData={{ status: location.state }}
         extraOperation={<Link to={`/galvanizingWorkshop/weighingList/weighingNew`}><Button type="primary">新增过磅单</Button></Link>}
         refresh={refresh}
         searchFormItems={[
@@ -61,17 +58,17 @@ export default function WeighingList(): React.ReactNode {
                 children: <Input style={{ width: '300px' }} placeholder="请输入塔型/抱杆号进行查询" />
             },
             {
-                name: 'updateStatusTime',
+                name: 'time',
                 label: '过磅日期',
                 children: <DatePicker.RangePicker />
             }
         ]}
         filterValue={filterValue}
         onFilterSubmit={(values: Record<string, any>) => {
-            if (values.updateStatusTime) {
-                const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-                values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+            if (values.time) {
+                const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
+                values.weighingStartTime = formatDate[0] + ' 00:00:00';
+                values.weighingEndTime = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
             return values;
