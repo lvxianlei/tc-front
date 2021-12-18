@@ -11,11 +11,9 @@ import { TabTypes } from "../ManagementDetail"
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
-    const [attachVosData, setAttachVosData] = useState<any[]>([])
     const [address, setAddress] = useState<string>("")
     const [baseInfoForm] = Form.useForm()
     const [cargoVOListForm] = Form.useForm()
-    const [attachVosForm] = Form.useForm()
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -25,12 +23,16 @@ export default function BaseInfoEdit(): JSX.Element {
             if (result && result.cargoVOList && result.cargoVOList.length > 0) {
                 result.cargoVOList.forEach((item: any) => item.amount = item.amount <= 0 ? 0 : item.amount)
             }
-            setAttachVosData(result.attachVos)
             baseInfoForm.setFieldsValue(result)
             cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
-            attachVosForm.setFieldsValue(result.attachVos)
             setAddress(result.address)
-            resole({ ...result, addressList: [...addressList.map(item => ({ value: item.name, label: item.name })), { value: "其他-国外", label: "其他-国外" }] })
+            resole({
+                ...result,
+                addressList: [...addressList.map(item => ({
+                    value: `${item.bigRegion}-${item.name}`,
+                    label: `${item.bigRegion}-${item.name}`
+                })), { value: "其他-国外", label: "其他-国外" }]
+            })
         } catch (error) {
             reject(error)
         }
@@ -50,9 +52,12 @@ export default function BaseInfoEdit(): JSX.Element {
             const baseInfoData = await baseInfoForm.validateFields()
             const cargoVOListData = await cargoVOListForm.validateFields()
             const projectLeaderType = typeof baseInfoData.projectLeader === "string" ? true : false
+            const [bigRegion, address] = baseInfoData.address !== "其他-国外" ? baseInfoData.address.split("-") : ["", "其他-国外"]
             const result = await run({
                 ...baseInfoData,
                 id: data?.id,
+                address,
+                bigRegion,
                 fileIds: attchsRef.current?.getDataSource().map(item => item.id),
                 cargoDTOList: cargoVOListData.submit,
                 projectLeaderId: projectLeaderType ? (data as any).projectLeaderId : baseInfoData.projectLeader?.records[0].id,
@@ -103,7 +108,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
                 <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
-                <Attachment title="附件信息" maxCount={10} ref={attchsRef} edit dataSource={attachVosData} />
+                <Attachment title="附件信息" maxCount={10} ref={attchsRef} edit dataSource={data?.attachVos} />
             </Spin>
         </DetailContent>
     </>

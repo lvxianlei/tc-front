@@ -2271,35 +2271,7 @@
       "path": "/planBaseSetting/prodUnit",
       "module": "./pages/planBaseSetting/prodUnit/prodUnit",
       "exact": true,
-      "authority": "approvalm"
-    },
-    { //物料平衡-一次套料
-      "name": "一次套料",
-      "path": "/materialBalance/PrimaryNesting",
-      "module": "./pages/materialBalance/PrimaryNesting",
-      "exact": true,
-      "authority": "approvalm"
-    },
-    { // 人资-社保福利-员工保险档案-编辑
-      "name": "库平采购",
-      "path": "/materialBalance/purchase",
-      "module": "./pages/materialBalance/PrimaryNesting",
-      "exact": true,
-      "authority": "approvalm"
-    },
-    { // 人资-社保福利-员工保险档案-编辑
-      "name": "二次套料",
-      "path": "/materialBalance/secondary",
-      "module": "./pages/materialBalance/PrimaryNesting",
-      "exact": true,
-      "authority": "approvalm"
-    },
-    { // 人资-社保福利-员工保险档案-编辑
-      "name": "套料设置",
-      "path": "/materialBalance/Nesting",
-      "module": "./pages/materialBalance/PrimaryNesting",
-      "exact": true,
-      "authority": "approvalm"
+      "authority": "production_unit_management"
     }
   ]
 }

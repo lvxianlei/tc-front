@@ -870,34 +870,6 @@
                                 "authority": "approvalm"
                             }
                         ]
-                    },
-                    {
-                        "label": "物料平衡",
-                        "icon": "customer",
-                        "path": "/materialBalance",
-                        "authority": "approvalm",
-                        "items": [
-                            {
-                                "label": "一次套料",
-                                "path": "/materialBalance/PrimaryNesting",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "库平采购",
-                                "path": "/materialBalance/purchase",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "二次套料",
-                                "path": "/materialBalance/secondary",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "套料设置",
-                                "path": "/materialBalance/Nesting",
-                                "authority": "approvalm"
-                            }
-                        ]
                     }
                 ]
             }

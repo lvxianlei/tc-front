@@ -70,7 +70,8 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
 
     const handleChange = (id: string, value: number, name: string) => {
-        setMaterials(materials.map((item: any) => item.materialCode === id ? ({
+        setMaterials(materials.map((item: any) => item.materialCode + item.length === id ? 
+        ({
             ...item,
             [name]: value
         }) : item))
@@ -117,15 +118,16 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
             ]
         }]} dataSource={{}} edit />
         <DetailTitle title="询价原材料" />
-        <CommonTable rowKey={(record: Record<string, any>) => {return record.code + record.length}} columns={addPriceHead.map((item: any) => {
+        <CommonTable  columns={addPriceHead.map((item: any) => {
             if (item.dataIndex === "taxOffer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "taxOffer")} /> })
+                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.code + records.length, value, "taxOffer")} /> })
             }
             if (item.dataIndex === "offer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "offer")} /> })
+                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.code + records.length, value, "offer")} /> })
             }
             return item
-        })} dataSource={materials} />
+        })} 
+        dataSource={materials} />
         <Attachment dataSource={data?.inquiryQuotationAttachInfoVos || []} ref={attachRef} edit />
     </Spin>
 })

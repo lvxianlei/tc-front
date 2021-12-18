@@ -37,6 +37,8 @@ export default function Overview(): JSX.Element {
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [detailId, setDetailId] = useState<string>("")
     const [materialLists, setMaterialList] = useState<any[]>([])
+    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
+    const [ selectedRows, setSelectedRows ] = useState<[]>([]);
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${params.id}`)
@@ -105,6 +107,12 @@ export default function Overview(): JSX.Element {
         }
     })
 
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: []): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
+
+
     return <Spin spinning={loading}>
         <Modal
             width={1011}
@@ -139,15 +147,18 @@ export default function Overview(): JSX.Element {
             visible={supplierVisible}
             footer={[<Button type="primary" key="confirm" onClick={() => {
                 const list = materialLists.map(res => {
-                    return {
-                        ...res,
-                        winBidSupplierId: supplier
+                    if(selectedKeys.indexOf(res.id) === -1) {
+                        return res
+                    } else {
+                        return {
+                            ...res,
+                            winBidSupplierId: supplier
+                        }
                     }
                 }) 
                 setSupplierVisible(false)
                 setSupplier("")
                 setMaterialList(list);
-                console.log(list)
             }}>确定</Button>]}
             onCancel={() => {
                 setSupplier("")
@@ -212,7 +223,11 @@ export default function Overview(): JSX.Element {
                         value={item.supplierId}
                         key={item.id}>{item.supplierName}</Select.Option>)}
                 </Select>)
-            }]} dataSource={materialLists} />
+            }]}
+            rowSelection={{
+                selectedRowKeys: selectedKeys,
+                onChange: SelectChange,
+            }} dataSource={materialLists} />
             <DetailTitle title="询价报价信息" />
             <CommonTable
                 haveIndex
