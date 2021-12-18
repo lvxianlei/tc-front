@@ -927,7 +927,7 @@ class ManagementContractNew extends ContractNew {
             {
               label: "收到合同形式",
               name: "receivedContractShape",
-              initialValue: contract?.receivedContractShape || (contractFormOptions && contractFormOptions[0].id),
+              initialValue: contract?.receivedContractShape || (contractFormOptions && contractFormOptions?.[0]?.id),
               children: (
                 <Select value={contract?.receivedContractShape}
                 >
