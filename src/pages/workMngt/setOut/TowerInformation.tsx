@@ -122,7 +122,7 @@ export default function TowerInformation(): React.ReactNode {
                 switch (pattern) {
                     case 1:
                         return '是';
-                    case 2:
+                    case 0:
                         return '否';
                 }
             }
