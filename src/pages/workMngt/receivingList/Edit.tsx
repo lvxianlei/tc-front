@@ -496,12 +496,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const handleBaseInfoChange = (fields: any) => {
         console.log(fields, "带回来的数据")
-        // 如果修改供应商 清空合同编号
-        if (fields.supplierName) {
-            form.setFieldsValue({
-                contractNumber: ""
-            })
-        }
         if (fields.contractNumber) {
             setContractId(fields.contractNumber.id);
 
@@ -535,14 +529,16 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const supplierData = fields.supplierName.records[0]
             setColumns(columns.map((item: any) => {
                 if (item.dataIndex === "contractNumber") {
+                    console.log(item.path, "path")
                     return ({
                         ...item,
-                        path:`${item.path}&supplierId=${fields.supplierName.id}`
+                        path:`/tower-supply/materialContract?contractStatus=1&supplierId=${fields.supplierName.id}`
                     })
                 }
                 return item
             }))
             form.setFieldsValue({
+                contractNumber: "",
                 contactsUser: supplierData.contactMan,
                 contactsPhone: supplierData.contactManTel
             })
