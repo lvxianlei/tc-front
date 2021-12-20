@@ -82,7 +82,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     }
 
     private async modalShow(): Promise<void> {
-        const data = this.props.type === 'message'||this.props.type === 'detail'? await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`):await RequestUtil.get<IAppointed>(`/tower-science/productSegment`, {productCategoryId: this.props.id })
+        const data = this.props.type === 'message'||this.props.type === 'detail'? await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`):await RequestUtil.get<IAppointed>(`/tower-science/productSegment/${ this.props.id }`)
         const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
             return {
