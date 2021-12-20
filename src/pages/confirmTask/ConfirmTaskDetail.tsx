@@ -90,14 +90,14 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                             });  
                         }}
                     >接收</Button>
-                    <Button 
+                    {/* <Button 
                         key="edit" 
                         style={{ marginRight: '10px' }} 
                         type="primary" 
                         onClick={() => {
                             setVisible(true)
                         }}
-                    >拒绝</Button>
+                    >拒绝</Button> */}
                 </Space>
                 }
                 </>,
