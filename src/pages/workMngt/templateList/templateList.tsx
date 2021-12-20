@@ -34,8 +34,8 @@ export default function TemplateList() {
             align: 'center',
         },
         {
-            title: '任务单编号',
-            dataIndex: 'externalTaskNum',
+            title: '计划号',
+            dataIndex: 'planNumber',
             align: 'center',
         },
         {
@@ -150,7 +150,7 @@ export default function TemplateList() {
                     {
                         name: 'fuzzyMsg',
                         label: '查询',
-                        children: <Input placeholder="放样任务编号/内部合同编号/任务单编号/塔型" style={{ width: 300 }} />
+                        children: <Input placeholder="放样任务编号/内部合同编号/计划号/塔型" style={{ width: 300 }} />
                     }
                 ]}
             />

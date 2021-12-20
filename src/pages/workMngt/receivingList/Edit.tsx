@@ -198,14 +198,15 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
             }
         }
         if (serarchForm.getFieldValue("materialStandardName")
+            || serarchForm.getFieldValue("materialTexture")
             || serarchForm.getFieldValue("num2")
             || serarchForm.getFieldValue("spec")
             || serarchForm.getFieldValue("length1")
             || serarchForm.getFieldValue("length2")
         ) {
-            setSelectList(result);
+            setSelectList(result.slice(0));
         } else {
-            setSelectList(waitingArea);
+            setSelectList(waitingArea.slice(0));
         }
     }
     return <Spin spinning={loading}>
@@ -495,12 +496,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const handleBaseInfoChange = (fields: any) => {
         console.log(fields, "带回来的数据")
-        // 如果修改供应商 清空合同编号
-        if (fields.supplierName) {
-            form.setFieldsValue({
-                contractNumber: ""
-            })
-        }
         if (fields.contractNumber) {
             setContractId(fields.contractNumber.id);
 
@@ -534,14 +529,16 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const supplierData = fields.supplierName.records[0]
             setColumns(columns.map((item: any) => {
                 if (item.dataIndex === "contractNumber") {
+                    console.log(item.path, "path")
                     return ({
                         ...item,
-                        path:`${item.path}&supplierId=${fields.supplierName.id}`
+                        path:`/tower-supply/materialContract?contractStatus=1&supplierId=${fields.supplierName.id}`
                     })
                 }
                 return item
             }))
             form.setFieldsValue({
+                contractNumber: "",
                 contactsUser: supplierData.contactMan,
                 contactsPhone: supplierData.contactManTel
             })

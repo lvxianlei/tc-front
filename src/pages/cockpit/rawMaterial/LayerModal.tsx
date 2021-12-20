@@ -144,11 +144,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                                 }
                             </Select>
                         </Form.Item>
-                        <Form.Item name="structureSpec" label="规格">
-                            <Input placeholder="请输入规格" />
-                        </Form.Item>
                         <Form.Item name="fuzzyQuery" label="查询">
-                            <Input placeholder="请输入编号/品名" />
+                            <Input placeholder="请输入编号/品名/规格" />
                         </Form.Item>
                     </div>
                 </Col>

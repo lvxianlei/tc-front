@@ -48,7 +48,7 @@
             "dataIndex": "completionProgres"
         },
         {
-            "title": "任务单编号",
+            "title": "计划号",
             "dataIndex": "taskNoticeNumber"
         },
         {

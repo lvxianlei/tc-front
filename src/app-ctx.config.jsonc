@@ -314,12 +314,12 @@
                         "label": "评估任务",
                         "icon": "technology",
                         "path": "/assessmentTask",
-                        "authority": "d_assess_task_management",
+                        "authority": "rd_assess_task_management",
                         "items": [
                             {
                                 "label": "评估任务",
                                 "path": "/assessmentTask",
-                                "authority": "d_assess_task_management"
+                                "authority": "rd_assess_task_management"
                             }
                         ]
                     },

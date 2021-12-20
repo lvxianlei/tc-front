@@ -880,14 +880,14 @@
       "path": "/assessmentTask",
       "module": "./pages/assessmentTask/AssessmentTaskList",
       "exact": true,
-      "authority": "d_assess_task_management"
+      "authority": "rd_assess_task_management"
     },
     { // 评估任务详情
       "name": "评估任务详情",
       "path": "/assessmentTask/assessmentTaskDetail/:id",
       "module": "./pages/assessmentTask/AssessmentTaskDetail",
       "exact": true,
-      "authority": "d_assess_task_management"
+      "authority": "rd_assess_task_management"
     },
     { // 工作管理-提料列表
       "name": "提料列表",
