@@ -95,7 +95,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             }
             detailData?.loftingUserDepartment && this.onDepartmentChange(detailData?.loftingUserDepartment || '', '放样');
             detailData?.checkUserDepartment && this.onDepartmentChange(detailData?.checkUserDepartment || '', '校对');
-            this.getForm()?.setFieldsValue({ ...detailData, ...data });
+            this.getForm()?.setFieldsValue({  ...data, ...detailData });
         }
     }
     
@@ -231,7 +231,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 </Descriptions.Item></>
                                 : <>
                                 <Descriptions.Item label="试组装">
-                                <Form.Item name="trialAssemble" initialValue={ this.props.detailData?.trialAssemble === '1'?1:0 }
+                                <Form.Item name="trialAssemble" 
                                     rules={[{
                                         required: true,
                                         message: '请选择试组装'
