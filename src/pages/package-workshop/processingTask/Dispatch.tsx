@@ -12,41 +12,20 @@ import AuthUtil from '../../../utils/AuthUtil';
 import moment from 'moment';
 
 const tableColumns = [
-    { title: '订单工程名称', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '电压等级', dataIndex: 'createDeptName', key: 'createDeptName', },
-    { title: '计划号', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '塔型', dataIndex: 'createTime', key: 'createTime' },
-    // { title: '任务状态', dataIndex: 'status', key: 'status',  render: (value: number, record: object): React.ReactNode => {
-    //     const renderEnum: any = [
-    //         {
-    //             value: 0,
-    //             label: "已拒绝"
-    //         },
-    //         {
-    //             value: 1,
-    //             label: "待修改"
-    //         },
-    //         {
-    //             value: 2,
-    //             label: "已修改"
-    //         },
-    //         {
-    //             value: 3,
-    //             label: "已删除"
-    //         },
-    //     ]
-    //     return <>{renderEnum.find((item: any) => item.value === value).label}</>
-    // }},
-    { title: '基数', dataIndex: 'description', key: 'description' },
-    { title: '下达重量', dataIndex: 'description', key: 'description' },
-    { title: '角钢重量', dataIndex: 'description', key: 'description' },
-    { title: '连板重量', dataIndex: 'description', key: 'description' },
-    { title: '加工厂区', dataIndex: 'description', key: 'description' },
-    { title: '加工车间', dataIndex: 'description', key: 'description' },
-    { title: '送齐成品库时间', dataIndex: 'description', key: 'description' },
-    { title: '报补件时间', dataIndex: 'description', key: 'description' },
-    { title: '包装入库时间', dataIndex: 'description', key: 'description' },
-    { title: '客户交货日期', dataIndex: 'description', key: 'description' },
+    { title: '订单工程名称', dataIndex: 'orderProjectName', key: 'orderProjectName', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+    { title: '电压等级', dataIndex: 'voltageName', key: 'voltageName', },
+    { title: '计划号', dataIndex: 'planNum', key: 'planNum' },
+    { title: '塔型', dataIndex: 'productCategoryName', key: 'productCategoryName' },
+    { title: '基数', dataIndex: 'number', key: 'number' },
+    { title: '下达重量', dataIndex: 'weight', key: 'weight' },
+    { title: '角钢重量', dataIndex: 'angleWeight', key: 'angleWeight' },
+    { title: '连板重量', dataIndex: 'boardWeight', key: 'boardWeight' },
+    { title: '加工厂区', dataIndex: 'processFactory', key: 'processFactory' },
+    { title: '加工车间', dataIndex: 'processWorkshop', key: 'processWorkshop' },
+    { title: '送齐成品库时间', dataIndex: 'sendWarehouseTime', key: 'sendWarehouseTime' },
+    { title: '报补件时间', dataIndex: 'reportFixTime', key: 'reportFixTime' },
+    { title: '包装入库时间', dataIndex: 'packingWarehouseTime', key: 'packingWarehouseTime' },
+    { title: '客户交货日期', dataIndex: 'deliverCustomerTime', key: 'deliverCustomerTime' },
 ]
 
 export default function Dispatch(): React.ReactNode {
@@ -111,10 +90,10 @@ export default function Dispatch(): React.ReactNode {
                 <Form form={form} { ...formItemLayout }>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="equipmentName" label="派工设备" initialValue={undefined} rules={[
+                            <Form.Item name="equipmentName" label="工作中心" initialValue={undefined} rules={[
                                 {
                                     "required": true,
-                                    "message": "请选择派工设备"
+                                    "message": "请选择工作中心"
                                 }
                             ]}>
                                 <Input maxLength={ 50 } addonAfter={ <WorkshopEquipmentSelectionComponent onSelect={ (selectedRows: any[] | any) => {
@@ -125,30 +104,18 @@ export default function Dispatch(): React.ReactNode {
                                         deptProcessesName: selectedRows[0].name,
                                         productionLinesName: selectedRows[0].name
                                     });
-                                } } buttonType="link" buttonTitle="+选择设备"  disabled={show}/> } disabled={show}/>
+                                } } buttonType="link" buttonTitle="+选择工作中心"  disabled={show}/> } disabled={show}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="workshopDeptName" label="派工车间" initialValue={undefined}>
+                            <Form.Item name="workshopDeptName" label="生产单元" initialValue={undefined}>
                                 <Input disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="deptProcessesName" label="工序" initialValue={undefined}>
-                                <Input disabled/>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="productionLinesName" label="产线" initialValue={undefined}>
-                                <Input disabled/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="time" label="任务时间范围" initialValue={[moment('2015-01-01'), moment('2015-01-01')]} style={{width:'100%'}} rules={[
+                            <Form.Item name="time" label="任务时间范围" initialValue={[moment(new Date()), moment(new Date().setDate(new Date().getDate()+1))]} style={{width:'100%'}} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择任务时间范围"

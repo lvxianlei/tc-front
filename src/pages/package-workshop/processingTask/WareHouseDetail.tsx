@@ -7,6 +7,7 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import WorkshopUserSelectionComponent from '../../../components/WorkshopUserModal';
 import moment from 'moment';
+import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 
 
 
@@ -19,7 +20,9 @@ export default function ProcessDetail(): React.ReactNode {
     const [packageDataSource,setPackageDataSource] = useState<any>([]);
     const [userDataSource,setUserDataSource] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // let data = await RequestUtil.get(``,{})
+        const data: any = await RequestUtil.get(`/packageWorkshop/taskCollectDetail/${params.id}`)
+        const packageData= await RequestUtil.get(`tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
+        setPackageDataSource(packageData)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -28,18 +31,21 @@ export default function ProcessDetail(): React.ReactNode {
         setUserDataSource([...userDataSource]);
     }
     const tableColumns = [
-        { title: '杆塔号', dataIndex: 'createDeptName', key: 'createDeptName', },
-        { title: '呼高', dataIndex: 'createUserName', key: 'createUserName' },
-        { title: '入库重量', dataIndex: 'createTime', key: 'createTime' },
-        { title: '总基数', dataIndex: 'description', key: 'description' },
-        { title: '入库基数', dataIndex: 'operation', key: 'operation'}
+        { title: '塔型', dataIndex: 'productCategoryName', key: 'productCategoryName', },
+        { title: '杆塔号', dataIndex: 'productNumber', key: 'productNumber' },
+        { title: '呼高', dataIndex: 'productHeight', key: 'productHeight' },
+        { title: '入库重量', dataIndex: 'warehouseWeight', key: 'warehouseWeight'},
+        { title: '总基数', dataIndex: 'number', key: 'number'},
+        { title: '入库基数', dataIndex: 'currentStatus', key: 'currentStatus'},
     ]
     const packageColumns = [
-        { title: '捆号/包号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-        { title: '包类型', dataIndex: 'createDeptName', key: 'createDeptName', },
-        { title: '重量', dataIndex: 'createUserName', key: 'createUserName' },
-        { title: '入库数', dataIndex: 'createTime', key: 'createTime' },
-        { title: '区位', dataIndex: 'description', key: 'description' }
+        { title: '捆号/包号', dataIndex: 'balesCode', key: 'balesCode', },
+        { title: '包类型', dataIndex: 'typeName', key: 'typeName' },
+        { title: '重量', dataIndex: 'weight', key: 'weight' },
+        { title: '包长度', dataIndex: 'weight', key: 'weight' },
+        { title: '包高度', dataIndex: 'weight', key: 'weight' },
+        { title: '入库数', dataIndex: 'num', key: 'num'},
+        { title: '库位', dataIndex: 'warehousePosition', key: 'warehousePosition' }
     ]
     const formItemLayout = {
         labelCol: { span: 6 },
@@ -67,49 +73,47 @@ export default function ProcessDetail(): React.ReactNode {
                 <Form form={form} { ...formItemLayout }>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="time" label="入库单编号" initialValue={undefined}>
+                            <Form.Item name="warehouseNumber" label="入库单编号" >
                                 <Input disabled/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="time" label="内部合同编号" initialValue={undefined}>
-                                <Input disabled/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="time" label="订单编号" initialValue={undefined}>
-                                <Input disabled/>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="time" label="工程名称" initialValue={undefined}>
+                            <Form.Item name="internalNumber" label="内部合同编号">
                                 <Input disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="noDispatchStatus" label="产品类型" initialValue={1}>
+                            <Form.Item name="saleOrderNumber" label="订单编号" >
+                                <Input disabled/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="orderProjectName" label="工程名称" >
+                                <Input disabled/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="productType" label="产品类型" >
                                 <Select style={{width:'100%'}}>
-                                    <Select.Option value={1} key={1}>角钢塔</Select.Option>
-                                    <Select.Option value={2} key={2}>钢管</Select.Option>
+                                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                            return <Select.Option key={index} value={id}>
+                                                {name}
+                                            </Select.Option>
+                                    })}
                                 </Select>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="time" label="计划号" initialValue={undefined}>
+                            <Form.Item name="planNumber" label="计划号" >
                                 <Input disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={12}>
-                            <Form.Item name="time" label="塔型" initialValue={undefined}>
-                                <Input disabled/>
-                            </Form.Item>
-                        </Col>
                         <Col span={12}>
                             <Form.Item name="time" label="包装时间" initialValue={[moment('2015-01-01'), moment('2015-01-01')]} style={{width:'100%'}} rules={[
                                 {
@@ -120,10 +124,8 @@ export default function ProcessDetail(): React.ReactNode {
                                 <DatePicker.RangePicker showTime style={{width:'100%'}} />
                             </Form.Item>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col span={12}>
-                            <Form.Item name="noDispatchStatus" label="仓库" initialValue={1} rules={[
+                            <Form.Item name="warehouseId" label="仓库" initialValue={1} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择仓库"
@@ -135,15 +137,11 @@ export default function ProcessDetail(): React.ReactNode {
                                 </Select>
                             </Form.Item>
                         </Col>
-                        <Col span={12}>
-                            <Form.Item name="time" label="车间" initialValue={undefined}>
-                                <Input disabled/>
-                            </Form.Item>
-                        </Col>
                     </Row>
                     <Row>
+                        
                         <Col span={12}>
-                            <Form.Item name="time" label="班组" initialValue={undefined}>
+                            <Form.Item name="time" label="生产单元" initialValue={undefined}>
                                 <Input disabled/>
                             </Form.Item>
                         </Col>
@@ -158,6 +156,14 @@ export default function ProcessDetail(): React.ReactNode {
                                     <Select.Option value={1} key={1}>角钢成品库</Select.Option>
                                     <Select.Option value={2} key={2}>钢管成品库</Select.Option>
                                 </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                       
+                        <Col span={12}>
+                            <Form.Item name="teamName" label="班组" initialValue={undefined}>
+                                <Input disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -189,7 +195,7 @@ export default function ProcessDetail(): React.ReactNode {
                     onRow={record => {
                         return {
                           onClick: async event => {
-                              const packageData= await RequestUtil.get(``,{id:record.id});
+                              const packageData= await RequestUtil.get(`tower-production/packageWorkshop/packageList/${record.id}`);
                               setPackageDataSource(packageData)
                           }, // 点击行
                         };
