@@ -6,7 +6,7 @@
         },
         {
             "title": "供应商类型",
-            "dataIndex": "supplierType"
+            "dataIndex": "supplierTypeName"
         },
         {
             "title": "供应商名称",
@@ -26,7 +26,7 @@
         },
         {
             "title": "质量保证体系",
-            "dataIndex": "qualityAssurance"
+            "dataIndex": "qualityAssuranceName"
         },
         {
             "title": "供货产品",

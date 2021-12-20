@@ -5,6 +5,7 @@ import { BasicInformation, editCargoDetails, SelectedArea, Selected, freightInfo
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { materialStandardTypeOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
+import { changeTwoDecimal_f } from "../../../utils/KeepDecimals";
 interface ChooseModalProps {
     id: string,
     initChooseList: any[]
@@ -197,14 +198,15 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
             }
         }
         if (serarchForm.getFieldValue("materialStandardName")
+            || serarchForm.getFieldValue("materialTexture")
             || serarchForm.getFieldValue("num2")
             || serarchForm.getFieldValue("spec")
             || serarchForm.getFieldValue("length1")
             || serarchForm.getFieldValue("length2")
         ) {
-            setSelectList(result);
+            setSelectList(result.slice(0));
         } else {
-            setSelectList(waitingArea);
+            setSelectList(waitingArea.slice(0));
         }
     }
     return <Spin spinning={loading}>
@@ -379,7 +381,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 materialStandardName: item.materialStandardName,
                 num: item.num,
                 contractUnitPrice: item.price,
-                quantity: item.quantity ? item.quantity : 0
+                quantity: item.num ? item.num : 0
             }
             delete postData.id
             return postData
@@ -405,11 +407,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
         setFreightInformation({
             ...freightInformation,
-            transportPriceCount, // 运费价税合计（元）
+            transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
         })
         setHandlingCharges({
             ...handlingCharges,
-            unloadPriceCount
+            unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
         })
         form.setFieldsValue({ price: priceAll })
     }
@@ -476,7 +478,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 supplierName: baseFormData.supplierName.value,
                 contractId: baseFormData.contractNumber.id,
                 contractNumber: baseFormData.contractNumber.value,
-                lists: cargoData
+                lists: cargoData,
+                quantity: baseFormData.num
             })
             resole(true)
         } catch (error) {
@@ -493,6 +496,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const handleBaseInfoChange = (fields: any) => {
         console.log(fields, "带回来的数据")
+        // 如果修改供应商 清空合同编号
+        if (fields.supplierName) {
+            form.setFieldsValue({
+                contractNumber: ""
+            })
+        }
         if (fields.contractNumber) {
             setContractId(fields.contractNumber.id);
 
@@ -513,13 +522,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 transportBear:  fields.contractNumber.records[0].transportBear === 1 ? "需方" : '供方', // 运输承担
                 transportCompany: fields.contractNumber.records[0].transportCompany ? fields.contractNumber.records[0].transportCompany : "", // 运输公司
                 transportTaxPrice: fields.contractNumber.records[0].transportTaxPrice ? fields.contractNumber.records[0].transportTaxPrice : "0", // 合同单价
-                transportPriceCount, // 运费价税合计（元）
+                transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
             })
             setHandlingCharges({
                 unloadBear: fields.contractNumber.records[0].unloadBear === 1 ? "需方" : '供方',
                 unloadCompany: fields.contractNumber.records[0].unloadCompany ? fields.contractNumber.records[0].unloadCompany : "",
                 unloadTaxPrice: fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0",
-                unloadPriceCount
+                unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
             })
         }
         if (fields.supplierName) {
@@ -555,9 +564,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         <DetailTitle title="收货单基础信息" />
         <BaseInfo form={form} onChange={handleBaseInfoChange} columns={columns} dataSource={{}} edit />
         <DetailTitle title="运费信息" />
-        <BaseInfo form={form} columns={freightInfo} dataSource={(freightInformation as any)} />
+        <BaseInfo columns={freightInfo} dataSource={(freightInformation as any)} />
         <DetailTitle title="装卸费信息" />
-        <BaseInfo form={form} columns={handlingChargesInfo} dataSource={(handlingCharges as any)} />
+        <BaseInfo columns={handlingChargesInfo} dataSource={(handlingCharges as any)} />
         <DetailTitle title="货物明细" operation={[<Button
             type="primary" key="choose" ghost
             onClick={() => {

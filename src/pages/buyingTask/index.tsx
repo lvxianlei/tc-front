@@ -58,7 +58,9 @@ export default function RawMaterial() {
     const submit = async (rejectionDescription: string, id: number) => {
         const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/taskRejection`, { rejectionDescription, id }, { "Content-Type": "application/json" })
         message.success("拒绝成功！");
-        setIsModalVisible3(false)
+        setIsModalVisible3(false);
+        setIsModalVisible(false);
+        history.go(0);
     }
     // 关闭
     const handleClose = () => {

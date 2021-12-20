@@ -30,6 +30,12 @@ export default function SetOutList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
+            key: 'planNumber',
+            title: '计划号',
+            width: 150,
+            dataIndex: 'planNumber'
+        },
+        {
             key: 'internalNumber',
             title: '内部合同编号',
             dataIndex: 'internalNumber',
@@ -111,7 +117,7 @@ export default function SetOutList(): React.ReactNode {
     const checkUser: any = data || [];
     return <Page
         path="/tower-science/loftingList/loftingPage"
-        exportPath={`/tower-science/loftingList/loftingPage`}
+        exportPath={`/tower-science/loftingList`}
         columns={columns}
         headTabs={[]}
         requestData={{ status: location.state?.state, loftingLeader: location.state?.userId }}
@@ -162,7 +168,7 @@ export default function SetOutList(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="放样任务编号/任务单编号/订单编号/内部合同编号/塔型/塔型钢印号" />
+                children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号" />
             }
         ]}
         onFilterSubmit={(values: Record<string, any>) => {

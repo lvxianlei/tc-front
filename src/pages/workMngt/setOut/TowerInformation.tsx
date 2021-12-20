@@ -114,6 +114,21 @@ export default function TowerInformation(): React.ReactNode {
             
         },
         {
+            key: 'trialAssemble',
+            title: '试组装',
+            dataIndex: 'trialAssemble',
+            width: 80,
+            render: (pattern: number): React.ReactNode => {
+                switch (pattern) {
+                    case 1:
+                        return '是';
+                    case 0:
+                        return '否';
+                }
+            }
+            
+        },
+        {
             key: 'loftingUserName',
             title: '放样人',
             width: 200,
@@ -290,18 +305,18 @@ export default function TowerInformation(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'loftingUser',
-                    label: '放样人',
+                    name: 'personnel',
+                    label: '人员',
                     children: <Row>
                         <Col>
-                            <Form.Item name="loftingUserDept">
+                            <Form.Item name="personnelDept">
                                 <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'loftingUserDept') } } style={{ width: "150px" }}>
                                     { renderTreeNodes(wrapRole2DataNode(departmentData)) }
                                 </TreeSelect>
                             </Form.Item>
                         </Col>
                         <Col>
-                            <Form.Item name="loftingUser">
+                            <Form.Item name="personnel">
                                 <Select placeholder="请选择" style={{ width: "150px" }}>
                                     { loftingUser && loftingUser.map((item: any) => {
                                         return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
@@ -311,28 +326,28 @@ export default function TowerInformation(): React.ReactNode {
                         </Col>
                     </Row>
                 },
-                {
-                    name: 'checkUser',
-                    label: '校核人',
-                    children: <Row>
-                        <Col>
-                            <Form.Item name="checkUserDept">
-                                <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'checkUserDept') } } style={{ width: "150px" }}>
-                                    { renderTreeNodes(wrapRole2DataNode(departmentData)) }
-                                </TreeSelect>
-                            </Form.Item>
-                        </Col>
-                        <Col>
-                            <Form.Item name="checkUser">
-                                <Select placeholder="请选择" style={{ width: "150px" }}>
-                                    { checkUser && checkUser.map((item: any) => {
-                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                                    }) }
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                }
+                // {
+                //     name: 'checkUser',
+                //     label: '校核人',
+                //     children: <Row>
+                //         <Col>
+                //             <Form.Item name="checkUserDept">
+                //                 <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'checkUserDept') } } style={{ width: "150px" }}>
+                //                     { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                //                 </TreeSelect>
+                //             </Form.Item>
+                //         </Col>
+                //         <Col>
+                //             <Form.Item name="checkUser">
+                //                 <Select placeholder="请选择" style={{ width: "150px" }}>
+                //                     { checkUser && checkUser.map((item: any) => {
+                //                         return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                //                     }) }
+                //                 </Select>
+                //             </Form.Item>
+                //         </Col>
+                //     </Row>
+                // }
             ] }
             onFilterSubmit = { (values: Record<string, any>) => {
                 if(values.updateStatusTime) {

@@ -44,6 +44,7 @@ export interface IPackingList {
     readonly toChooseList?: IBundle[];
     readonly id?: string;
     readonly description?: string;
+    readonly packageType?: string;
 }
 
 export default function PackingListNew(): React.ReactNode {
@@ -54,6 +55,7 @@ export default function PackingListNew(): React.ReactNode {
     const [ stayDistrict, setStayDistrict ] = useState<IBundle[]>([]);
     const location = useLocation<{productCategoryName: string, productNumber: string}>();
     const [ balesCode, setBalesCode ] = useState<string>();
+    const [ packageType, setPackageType ] = useState<string>();
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ userList, setUserList ] = useState([]);
 
@@ -314,6 +316,17 @@ export default function PackingListNew(): React.ReactNode {
         setPackagingData([...data]);
     } 
 
+    const packageChange = (e: string) => {
+        setPackageType(e);
+        const data: IBundle[] = packagingData.map((item: IBundle) => {
+            return {
+                ...item,
+                packageType: e,
+            }
+        })
+        setPackagingData([...data]);
+    } 
+
     const numChange = (e: number, structureCount: number, index: number) => {
         packagingData[index] = {
             ...packagingData[index],
@@ -411,30 +424,39 @@ export default function PackingListNew(): React.ReactNode {
             <CommonTable columns={ packingColumns } pagination={ false } dataSource={ packagingData } />
         </DetailContent>
         <Modal visible={ visible } title="创建包" onCancel={ () => setVisible(false) } onOk={ () => {
-            if(balesCode&&/^[^\s]*$/.test(balesCode)&&/^[0-9a-zA-Z-]*$/.test(balesCode)) {
+            if(packageType && balesCode&&/^[^\s]*$/.test(balesCode)&&/^[0-9a-zA-Z-]*$/.test(balesCode)) {
                 const value = {
                     balesCode: balesCode,
                     id: params.packId,
                     productCategoryId: params.id,
+                    packageType: packageType,
                     productCategoryName: detailData.productCategoryName,
                     productId: params.productId,
                     productNumber: detailData.productNumber,
                     packageRecordSaveDTOList: packagingData,
                 };
-                RequestUtil.post(`/tower-science/packageStructure/save`, value).then(res => {
+                RequestUtil.post(`/towe/tower-science/packageStructure`, value).then(res => {
                     message.success('包装清单保存成功');
                     setVisible(false);
                     history.goBack();
                 })
             } else {
-                message.warning('请输入捆号');
+                message.warning('请输入捆号或包类型');
             }   
         } }>
             <Row>
                 <Col span={ 4 }>捆号</Col>   
-                <Col span={ 19 } offset={ 1 }>
+                <Col span={ 8 } offset={ 1 }>
                     <Input placeholder="请输入捆号" defaultValue={ detailData?.balesCode } onChange={ (e) => balesCodeChange(e) } maxLength={10}/> 
-                </Col>  
+                </Col> 
+                <Col span={ 4 }>包类型</Col>   
+                <Col span={ 8 } offset={ 1 }>
+                    <Select placeholder="请选择包类型" defaultValue={ detailData?.packageType } onChange={ (e:string) => packageChange(e) }>
+                        <Select.Option value="角钢" key="0">角钢</Select.Option>
+                        <Select.Option value="连板" key="1">连板</Select.Option>
+                        <Select.Option value="螺栓" key="2">螺栓</Select.Option>
+                    </Select> 
+                </Col>   
             </Row>  
         </Modal>
     </>

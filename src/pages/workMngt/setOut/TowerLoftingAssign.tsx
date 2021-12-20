@@ -48,6 +48,7 @@ interface IAppointed {
     readonly checkUserName?: string;
     readonly plannedDeliveryTime?: string | moment.Moment;
     readonly patternName?: string;
+    readonly trialAssemble?: number
 }
 
 class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, TowerLoftingAssignState> {
@@ -120,7 +121,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                     checkUser: values.checkUser.split('-')[0],
                     checkUserName: values.checkUser.split('-')[1],
                 }
-                RequestUtil.post(`/tower-science/productSegment/submit`, { ...values }).then(() => {
+                RequestUtil.post(`/tower-science/productSegment`, { ...values }).then(() => {
                     message.success('指派成功');
                 }).then(() => {
                     this.getForm()?.resetFields();
@@ -212,7 +213,11 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 { this.state.appointed?.patternName }
                             </Descriptions.Item>
                             { this.props.type === 'detail' ?
-                                <><Descriptions.Item label="段信息">
+                                <>
+                                <Descriptions.Item label="试组装">
+                                    { this.props.detailData?.trialAssemble === 1? '是': '否' || '' }
+                                </Descriptions.Item>
+                                <Descriptions.Item label="段信息">
                                     { this.props.detailData?.name || '' }
                                 </Descriptions.Item>
                                 <Descriptions.Item label="放样人">
@@ -224,9 +229,22 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 <Descriptions.Item label="交付时间">
                                     { this.props.detailData?.plannedDeliveryTime || '' }
                                 </Descriptions.Item></>
-                                : <><Descriptions.Item label="段信息">
-                                <Form.Item name="name" initialValue={ this.props.detailData?.name }
+                                : <>
+                                <Descriptions.Item label="试组装">
+                                <Form.Item name="trialAssemble" initialValue={ this.props.detailData?.trialAssemble }
                                     rules={[{
+                                        required: true,
+                                        message: '请选择试组装'
+                                    }]} style={ { width: '50%', display: 'inline-block' } }>
+                                    <Select placeholder="请选择" style={{width:'120px'}}>
+                                        <Select.Option key={ '1' } value={ 1 }>是</Select.Option>
+                                        <Select.Option key={ '0' } value={ 0 }>否</Select.Option>
+                                    </Select>
+                                </Form.Item>
+                                </Descriptions.Item>
+                                <Descriptions.Item label="段信息">
+                                <Form.Item name="name" initialValue={ this.props.detailData?.name }
+                                    rules={[{ 
                                         required: true,
                                         message: '请输入段信息'
                                     },

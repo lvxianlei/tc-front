@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Select } from 'antd';
+import { Input, Select } from 'antd';
 import { Page } from '../common';
 import moment from 'moment';
 import { patternTypeOptions } from '../../configuration/DictionaryOptions';
@@ -21,10 +21,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'taskNum'
         },
         {
-            key: 'externalTaskNum',
-            title: '任务单编号',
+            key: 'planNumber',
+            title: '计划号',
             width: 100,
-            dataIndex: 'externalTaskNum'
+            dataIndex: 'planNumber'
         },
         {
             key: 'saleOrderNumber',
@@ -50,37 +50,6 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             width: 100,
             dataIndex: 'priorityName'
         },
-        // {
-        //     key: 'priority',
-        //     title: '优先级',
-        //     width: 100,
-        //     dataIndex: 'priority',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: -1,
-        //                 label: "-"
-        //             },
-        //             {
-        //                 value: 0,
-        //                 label: "紧急"
-        //             },
-        //             {
-        //                 value: 1,
-        //                 label: "高"
-        //             },
-        //             {
-        //                 value: 2,
-        //                 label: "中"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "低"
-        //             },
-        //         ]
-        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'num',
             title: '基数',
@@ -105,45 +74,6 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             width: 100,
             dataIndex: 'materialStatusName',
         },
-        // {
-        //     key: 'materialStatus',
-        //     title: '塔型提料状态',
-        //     width: 100,
-        //     dataIndex: 'materialStatus',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: null,
-        //                 label: "-"
-        //             },
-        //             {
-        //                 value: -1,
-        //                 label: "-"
-        //             },
-        //             {
-        //                 value: 1,
-        //                 label: "待指派"
-        //             },
-        //             {
-        //                 value: 2,
-        //                 label: "提料中"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "配段中"
-        //             },
-        //             {
-        //                 value: 4,
-        //                 label: "已完成"
-        //             },
-        //             {
-        //                 value: 5,
-        //                 label: "已提交"
-        //             },
-        //         ]
-        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'materialLeaderName',
             title: '提料负责人',
@@ -186,49 +116,6 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             width: 200,
             dataIndex: 'loftingStatusName'
         },
-        // {
-        //     key: 'loftingStatus',
-        //     title: '塔型放样状态',
-        //     width: 100,
-        //     dataIndex: 'loftingStatus',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: null,
-        //                 label: "-"
-        //             },
-        //             {
-        //                 value: -1,
-        //                 label: "-"
-        //             },
-        //             {
-        //                 value: 1,
-        //                 label: "待指派"
-        //             },
-        //             {
-        //                 value: 2,
-        //                 label: "放样中"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "组焊中"
-        //             },
-        //             {
-        //                 value: 4,
-        //                 label: "配段中"
-        //             },
-        //             {
-        //                 value: 5,
-        //                 label: "已完成"
-        //             },
-        //             {
-        //                 value: 6,
-        //                 label: "已提交"
-        //             },
-        //         ]
-        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'loftingLeaderName',
             title: '放样负责人',
@@ -412,7 +299,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入放样任务编号/任务单号/订单编号/内部合同编号进行查询" maxLength={200} />
+                children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号进行查询" maxLength={200} />
             },
         ]}
     />
