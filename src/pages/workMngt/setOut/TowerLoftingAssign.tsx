@@ -215,7 +215,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                             { this.props.type === 'detail' ?
                                 <>
                                 <Descriptions.Item label="试组装">
-                                    { this.props.detailData?.trialAssemble === '1'? '是': '否' || '' }
+                                    { this.props.detailData?.trialAssemble === 1? '是': '否' || '' }
                                 </Descriptions.Item>
                                 <Descriptions.Item label="段信息">
                                     { this.props.detailData?.name || '' }
