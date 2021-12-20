@@ -363,7 +363,8 @@
         {
             "title": "开票日",
             "dataIndex": "collectInvoiceDate",
-            "type": "string"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         }
     ],
     "billOperationInfo": [
@@ -499,7 +500,13 @@
         {
             "title": "请款类别",
             "dataIndex": "pleasePayType",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择请款类别..."
+                }
+            ]
         },
         {
             "title": "企业类型",
@@ -518,11 +525,23 @@
                     "label": "运输公司",
                     "value": 3
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择企业类型..."
+                }
             ]
         },
         {
             "title": "所属企业",
-            "dataIndex": "businessId"
+            "dataIndex": "businessId",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择所属企业..."
+                }
+            ]
         },
         {
             "title": "关联票据",
@@ -553,7 +572,8 @@
                 {
                     "title": "开票日",
                     "dataIndex": "collectInvoiceDate",
-                    "type": "string"
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
                 },
                 {
                     "title": "发票类型",
@@ -596,6 +616,12 @@
                     "label": "现金",
                     "value": 3
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择付款方式..."
+                }
             ]
         },
         {
@@ -606,7 +632,13 @@
         {
             "title": "请款机构",
             "dataIndex": "pleasePayOrganization",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择请款机构..."
+                }
+            ]
         },
         {
             "title": "请款金额",

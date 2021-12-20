@@ -205,7 +205,7 @@ export default function Invoice() {
                 {
                     name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input placeholder="票据编号/请款编号/发票号" style={{ width: 230 }} />
+                    children: <Input placeholder="票据编号/请款编号/发票号/企业名称" style={{ width: 230 }} />
                 }
             ]}
         />

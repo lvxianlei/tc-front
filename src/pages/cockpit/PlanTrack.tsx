@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Select } from 'antd';
-import { Link } from 'react-router-dom';
+import { Input, Select } from 'antd';
 import { Page } from '../common';
 import moment from 'moment';
 
@@ -33,10 +32,10 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'internalNumber'
         },
         {
-            key: 'externalTaskNum',
-            title: '任务单编号',
+            key: 'planNumber',
+            title: '计划号',
             width: 100,
-            dataIndex: 'externalTaskNum'
+            dataIndex: 'planNumber'
         },
         {
             key: 'productCategoryName',
@@ -50,33 +49,6 @@ export default function PlanTrack(): React.ReactNode {
             width: 100,
             dataIndex: 'priorityName'
         },
-        // {
-        //     key: 'priority',
-        //     title: '优先级',
-        //     width: 100,
-        //     dataIndex: 'priority',
-        //     render: (value: any, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: 0,
-        //                 label: "紧急"
-        //             },
-        //             {
-        //                 value: 1,
-        //                 label: "高"
-        //             },
-        //             {
-        //                 value: 2,
-        //                 label: "中"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "低"
-        //             },
-        //         ]
-        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'num',
             title: '基数',
@@ -95,45 +67,6 @@ export default function PlanTrack(): React.ReactNode {
             width: 200,
             dataIndex: 'materialStatusName'
         },
-        // {
-        //     key: 'materialStatus',
-        //     title: '塔型提料状态',
-        //     width: 100,
-        //     dataIndex: 'materialStatus',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: null,
-        //                 label: "-"
-        //             },
-        //             {
-        //                 value: -1,
-        //                 label: "-"
-        //             },
-        //             {
-        //                 value: 1,
-        //                 label: "待指派"
-        //             },
-        //             {
-        //                 value: 2,
-        //                 label: "提料中"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "配段中"
-        //             },
-        //             {
-        //                 value: 4,
-        //                 label: "已完成"
-        //             },
-        //             {
-        //                 value: 5,
-        //                 label: "已提交"
-        //             },
-        //         ]
-        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'materialDeliverTime',
             title: '提料计划交付时间',
@@ -152,49 +85,6 @@ export default function PlanTrack(): React.ReactNode {
             width: 200,
             dataIndex: 'loftingStatusName'
         },
-        // {
-        //     key: 'loftingStatus',
-        //     title: '塔型放样状态',
-        //     width: 100,
-        //     dataIndex: 'loftingStatus',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: null,
-        //                 label: "-"
-        //             },
-        //             {
-        //                 value: -1,
-        //                 label: "-"
-        //             },
-        //             {
-        //                 value: 1,
-        //                 label: "待指派"
-        //             },
-        //             {
-        //                 value: 2,
-        //                 label: "放样中"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "组焊中"
-        //             },
-        //             {
-        //                 value: 4,
-        //                 label: "配段中"
-        //             },
-        //             {
-        //                 value: 5,
-        //                 label: "已完成"
-        //             },
-        //             {
-        //                 value: 6,
-        //                 label: "已提交"
-        //             },
-        //         ]
-        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'loftingDeliverTime',
             title: '放样计划交付时间',
@@ -258,7 +148,6 @@ export default function PlanTrack(): React.ReactNode {
                                 <Select.Option value={2} key={2}>提料中</Select.Option>
                                 <Select.Option value={3} key={3}>配段中</Select.Option>
                                 <Select.Option value={4} key={4}>已完成</Select.Option>
-                                {/* <Select.Option value={5} key={5}>已提交</Select.Option> */}
                             </Select>
             },
             {
@@ -271,13 +160,12 @@ export default function PlanTrack(): React.ReactNode {
                                 <Select.Option value={3} key={3}>组焊中</Select.Option>
                                 <Select.Option value={4} key={4}>配段中</Select.Option>
                                 <Select.Option value={5} key={5}>已完成</Select.Option>
-                                {/* <Select.Option value={6} key={6}>已提交</Select.Option> */}
                             </Select>
             },
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号进行查询" maxLength={200} />
+                children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号进行查询" maxLength={200} />
             },
         ]}
     />

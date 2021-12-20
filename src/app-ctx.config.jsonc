@@ -168,7 +168,7 @@
                             {
                                 "label": "工作台",
                                 "path": "/workBench/workBenchMngt",
-                                "authority": "workbench_list"
+                                "authority": "rd_workbench"
                             },
                             {
                                 "label": "供应工作台",
@@ -186,12 +186,12 @@
                             {
                                 "label": "计划跟踪",
                                 "path": "/cockpit/planTrack",
-                                "authority": "cockpit_plan_tracking"
+                                "authority": "rd_cockpit"
                             },
                             {
                                 "label": "放样计划",
                                 "path": "/cockpit/planSetOut",
-                                "authority": "cockpit_setting_out_plan"
+                                "authority": "rd_cockpit"
                             },
                             {
                                 "label": "库存看板",
@@ -314,12 +314,12 @@
                         "label": "评估任务",
                         "icon": "technology",
                         "path": "/assessmentTask",
-                        "authority": "assessment_task",
+                        "authority": "d_assess_task_management",
                         "items": [
                             {
                                 "label": "评估任务",
                                 "path": "/assessmentTask",
-                                "authority": "assessment_task_list"
+                                "authority": "d_assess_task_management"
                             }
                         ]
                     },
@@ -327,12 +327,12 @@
                         "label": "确认任务",
                         "icon": "technology",
                         "path": "/confirmTask",
-                        "authority": "approvalm",
+                        "authority": "rd_draw",
                         "items": [
                             {
                                 "label": "确认任务",
                                 "path": "/confirmTask/ConfirmTaskMngt",
-                                "authority": "approvalm"
+                                "authority": "rd_draw"
                             }
                         ]
                     },
@@ -340,14 +340,12 @@
                         "label": "放样任务",
                         "icon": "technology",
                         "path": "/setOutTask",
-                        // "authority": "loft_task",
-                        "authority": "approvalm",
+                        "authority": "rd_lofting_task",
                         "items": [
                             {
                                 "label": "放样任务",
                                 "path": "/setOutTask",
-                                // "authority": "loft_task_list"
-                                "authority": "approvalm"
+                                "authority": "rd_lofting_task"
                             }
                         ]
                     },
@@ -373,42 +371,42 @@
                             {
                                 "label": "评估列表",
                                 "path": "/workMngt/evaluationList",
-                                "authority": "work_management_evaluation_list"
+                                "authority": "rd_assessment_task_list"
                             },
                             {
                                 "label": "确认列表",
                                 "path": "/workMngt/confirmList",
-                                "authority": "work_management_confirmation_list"
+                                "authority": "rd_draw_product_detail"
                             },
                             {
                                 "label": "指派列表",
                                 "path": "/workMngt/scheduleList",
-                                "authority": "work_management_assignment_list"
+                                "authority": "rd_lofting_task_assign"
                             },
                             {
                                 "label": "提料列表",
                                 "path": "/workMngt/pickList",
-                                "authority": "work_management_picking_list"
+                                "authority": "rd_product_material_list"
                             },
                             {
                                 "label": "放样列表",
                                 "path": "/workMngt/setOutList",
-                                "authority": "work_management_loft_list"
+                                "authority": "rd_loft_task_list"
                             },
                             {
                                 "label": "螺栓列表",
                                 "path": "/workMngt/boltList",
-                                "authority": "work_management_bolt_list"
+                                "authority": "rd_bolt_management"
                             },
                             {
                                 "label": "小样图列表",
                                 "path": "/workMngt/sampleDrawList",
-                                "authority": "work_management_List_of_small_samples"
+                                "authority": "rd_small_sample_management"
                             },
                             {
                                 "label": "组焊列表",
                                 "path": "/workMngt/assemblyWeldingList",
-                                "authority": "work_management_assembly_welding_list"
+                                "authority": "rd_welding"
                             },
                             {
                                 "label": "工程报价列表",
@@ -453,7 +451,7 @@
                             {
                                 "label": "样板列表",
                                 "path": "/workMngt/templateList",
-                                "authority": "work_management_template_list"
+                                "authority": "rd_template_record"
                             }
                         ]
                     },
@@ -461,12 +459,12 @@
                         "label": "图纸塔型",
                         "icon": "technology",
                         "path": "/drawTower",
-                        "authority": "drawing_tower_type",
+                        "authority": "rd_draw_product_category_management",
                         "items": [
                             {
                                 "label": "图纸塔型",
                                 "path": "/drawTower/drawTowerMngt",
-                                "authority": "drawing_tower_type_list"
+                                "authority": "rd_draw_product_category_management"
                             }
                         ]
                     },
@@ -474,12 +472,12 @@
                         "label": "放样塔型",
                         "icon": "technology",
                         "path": "/setOutTower",
-                        "authority": "lofting_tower_type",
+                        "authority": "rd_product_category",
                         "items": [
                             {
                                 "label": "放样塔型",
                                 "path": "/setOutTower/setOutTowerMngt",
-                                "authority": "lofting_tower_type_list"
+                                "authority": "rd_product_category"
                             }
                         ]
                     },
@@ -487,12 +485,12 @@
                         "label": "问题单",
                         "icon": "technology",
                         "path": "/question",
-                        "authority": "questionnaire",
+                        "authority": "rd_issue",
                         "items": [
                             {
                                 "label": "问题单",
                                 "path": "/question/questionMngt",
-                                "authority": "questionnaire_list"
+                                "authority": "rd_issue"
                             }
                         ]
                     },
@@ -523,12 +521,12 @@
                         "label": "计划排产",
                         "icon": "technology",
                         "path": "/planProd",
-                        "authority": "production_plan_management",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "计划排产",
                                 "path": "/planProd/planMgmt",
-                                "authority": "production_plan_management"
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -613,7 +611,7 @@
                             {
                                 "label": "基础设置",
                                 "path": "/baseSetting/baseSettingMngt",
-                                "authority": "basic_settings_list"
+                                "authority": "config_list"
                             },
                             {
                                 "label": "产线管理",
@@ -864,39 +862,11 @@
                             {
                                 "label": "生产环节管理",
                                 "path": "/planBaseSetting/prodLink",
-                                "authority": "production_link_management"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "生产单元管理",
                                 "path": "/planBaseSetting/prodUnit",
-                                "authority": "production_unit_management"
-                            }
-                        ]
-                    },
-                    {
-                        "label": "物料平衡",
-                        "icon": "customer",
-                        "path": "/materialBalance",
-                        "authority": "approvalm",
-                        "items": [
-                            {
-                                "label": "一次套料",
-                                "path": "/materialBalance/PrimaryNesting",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "库平采购",
-                                "path": "/materialBalance/purchase",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "二次套料",
-                                "path": "/materialBalance/secondary",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "套料设置",
-                                "path": "/materialBalance/Nesting",
                                 "authority": "approvalm"
                             }
                         ]

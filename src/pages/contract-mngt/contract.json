@@ -40,10 +40,6 @@
             "dataIndex": "totalWeight"
         },
         {
-            "title": "标准",
-            "dataIndex": "materialStandard"
-        },
-        {
             "title": "含税金额（元）合计",
             "dataIndex": "totalTaxAmount"
         },
@@ -98,14 +94,6 @@
         {
             "title": "材料名称",
             "dataIndex": "materialName"
-        },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandard"
-        },
-        {
-            "title": "材质",
-            "dataIndex": "materialTextureId"
         },
         {
             "title": "规格",

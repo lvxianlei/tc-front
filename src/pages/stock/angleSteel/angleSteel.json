@@ -54,15 +54,11 @@
             "title": "策略项",
             "dataIndex": "policy",
             "type": "string",
-            "disabled": true,
-            "width": 150
+            "disabled": true
         },
         {
             "title": "配置数据",
             "dataIndex": "configData",
-            "type": "number",
-            "width": 100,
-            "disabled": true,
             "rules": [
                 {
                     "required": true,
@@ -73,8 +69,8 @@
         {
             "title": "说明",
             "dataIndex": "description",
-            "disabled": true,
-            "type": "textarea"
+            "type": "textarea",
+            "disabled": true
         }
     ],
     "material": [

@@ -91,7 +91,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const comparisonPriceDetailVos = result?.comparisonPriceDetailVos.map((res: any) => {
                 return {
                     ...res,
-                    materialTextureId: res.source === 1 ? res.materialTexture : res.materialTextureId
+                    materialTextureId: res.source === 1 ? res.materialTexture : res.materialTextureId,
+                    materialStandardName: res.source === 1 ? res.materialStandard : res.materialStandardName,
+                    materialStandard: res.source === 1 ? res.materialStandardName : res.materialStandard
                 }
             })
             setMaterialList(comparisonPriceDetailVos || [])
@@ -124,6 +126,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         id: '',
                         materialTexture: item.source === 1 ? item.materialTextureId : item.materialTexture,
                         materialTextureId: item.source === 1 ? '' :item.materialTextureId,
+                        materialStandard: item.source === 1 ? item.materialStandardName : item.materialStandard,
+                        materialStandardName: item.source === 1 ? item.materialStandard :item.materialStandardName,
                     }
                     // delete item.id
                 })
@@ -178,8 +182,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             source: 1,
             totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(2),
             materialTextureId: item.structureTexture,
-            standardName: item.standardName,
-            materialStandard: item.standard,
+            materialStandard: item.standardName,
+            materialStandardName: item.standard,
             materialCode: item.code
         })))
         setChooseVisible(false)

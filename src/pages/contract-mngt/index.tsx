@@ -86,10 +86,10 @@ export default function ContractMngt(): JSX.Element {
                 title="详情"
                 width={1011}
                 visible={overviewVisible}
-                footer={[<Button type="primary" key="close" onClick={() => {
+                footer={[<><Button type="primary" key="close" onClick={() => {
                     setDetailId("")
                     setOverviewVisible(false)
-                }}>关闭</Button>]}
+                }}>关闭</Button><Button type="primary">打印合同</Button></>]}
                 onCancel={() => {
                     setDetailId("")
                     setOverviewVisible(false)

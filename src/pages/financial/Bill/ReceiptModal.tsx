@@ -120,7 +120,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                         <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value="" key="6">全部</Select.Option>
                             { materialList && materialList.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                return <Select.Option key={ item.id } value={ item.id }>{ item.materialName }</Select.Option>
                             }) }
                         </Select>
                     </Form.Item>

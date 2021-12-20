@@ -1403,18 +1403,6 @@
             "format": "YYYY-MM-DD"
         },
         {
-            "title": "客户交货日期",
-            "dataIndex": "deliveryTime",
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择客户交货日期..."
-                }
-            ]
-        },
-        {
             "title": "备注",
             "dataIndex": "description",
             "type": "textarea"
@@ -1504,6 +1492,10 @@
                 {
                     "value": 1,
                     "label": "已下发"
+                },
+                {
+                    "value": 2,
+                    "label": "审批中"
                 }
             ]
         },
@@ -1542,7 +1534,7 @@
         },
         {
             "title": " 单重（kg）",
-            "dataIndex": "singleWight"
+            "dataIndex": "monomerWeight"
         },
         {
             "title": " 其他单重（kg）",
@@ -1570,6 +1562,10 @@
                 {
                     "value": 1,
                     "label": "已下发"
+                },
+                {
+                    "value": 2,
+                    "label": "审批中"
                 }
             ]
         },
@@ -1603,7 +1599,7 @@
         },
         {
             "title": "单重(kg)",
-            "dataIndex": "singleWeight"
+            "dataIndex": "monomerWeight"
         },
         {
             "title": "其他重量(kg)",
@@ -1612,6 +1608,18 @@
         {
             "title": "总重(kg)",
             "dataIndex": "totalWeight"
+        },
+        {
+            "title": "*客户交货日期",
+            "dataIndex": "deliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择客户交货日期..."
+                }
+            ]
         },
         {
             "title": "备注",
