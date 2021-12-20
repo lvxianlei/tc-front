@@ -23,21 +23,27 @@
      const [AddVisible, setAddVisible] = useState(false);
      const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
      const [ payApplyId, setPayApplyId ] = useState<string>("");
+     const [ amountPayable, setAmountPayable ] = useState<string>("0"); // 应付款金额
      const confirmed = [{ "title": "备注", "dataIndex": "description"}];
      const viewRef = useRef<ViewRefProps>();
      //请求部门
      useRequest(() => new Promise(async (resole, reject) => {
-         const deptData: SelectDataNode[] = await RequestUtil.get(`/tower-system/department/tree`);
+         const deptData: SelectDataNode[] = await RequestUtil.get(`/tower-system/department`);
          setDepartData(deptData);
      }), {})
      const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
          roles && roles.forEach((role: any & SelectDataNode): void => {
-             role.value = role.id;
-             role.isLeaf = false;
-             if (role.children && role.children.length > 0) {
-                 wrapRole2DataNode(role.children);
-             }
+            if (role.type === 2) {
+                role.disabled = true;
+            }
+            role.value = role.id;
+            role.title = role.name;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
          });
+         console.log(roles, "eoless")
          return roles;
      }
      // 查询按钮
@@ -47,6 +53,7 @@
              value.endPayApplyTime = `${formatDate[1]} 23:59:59`
              value.startPayApplyTime = `${formatDate[0]} 00:00:00`
          }
+         console.log(departData, "departData")
          value.payStatus=payStatus;
          return value
      }
@@ -195,7 +202,11 @@
                                         <>
                                         {/* 等于2为已付款 */}
                                         {record.payStatus != 2 ?
-                                            <Button type="link" onClick={() => { setAddVisible(true);setPayApplyId(record.id) } }>新增付款记录</Button>
+                                            <Button type="link" onClick={() => { 
+                                                setAddVisible(true);
+                                                setPayApplyId(record.id);
+                                                setAmountPayable(record.payMoney);
+                                             } }>新增付款记录</Button>
                                         :""}
                                             <Button type="link"  onClick={() => {viewShow(record)}}>详情</Button>
                                         </>
@@ -252,8 +263,9 @@
              />
              {/* 新增 */}
              <AddModal
-                payApplyId={payApplyId}
+                 payApplyId={payApplyId}
                  visible={AddVisible}
+                 amountPayable={amountPayable}
                  onCancel={() => setAddVisible(false)}
                  onOk={handleOk}
              />

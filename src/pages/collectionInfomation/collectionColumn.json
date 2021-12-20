@@ -37,6 +37,10 @@
             "dataIndex": "returnBank"
         },
         {
+            "title": "回款类型",
+            "dataIndex": "returnType"
+        },
+        {
             "title": "确认方",
             "dataIndex": "confirmer"
         },
@@ -233,6 +237,24 @@
         {
             "title": "确认方",
             "dataIndex": "confirmer"
+        }
+    ],
+    "contractInformation": [
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName"
+        },
+        {
+            "title": "回款金额",
+            "dataIndex": "refundAmount"
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "salesman"
         }
     ]
 }

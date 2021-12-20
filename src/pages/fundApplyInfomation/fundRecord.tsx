@@ -25,16 +25,20 @@ import OtherDetail from '../questionMngt/OtherDetail';
      const viewRef = useRef<ViewRefProps>();
      //请求部门
      useRequest(() => new Promise(async (resole, reject) => {
-         const deptData: SelectDataNode[] = await RequestUtil.get(`/tower-system/department/tree`);
+         const deptData: SelectDataNode[] = await RequestUtil.get(`/tower-system/department`);
          setDepartData(deptData);
      }), {})
      const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
          roles && roles.forEach((role: any & SelectDataNode): void => {
-             role.value = role.id;
-             role.isLeaf = false;
-             if (role.children && role.children.length > 0) {
-                 wrapRole2DataNode(role.children);
-             }
+            if (role.type === 2) {
+                role.disabled = true;
+            }
+            role.title = role.name;
+            role.value = role.id;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
          });
          return roles;
      }
