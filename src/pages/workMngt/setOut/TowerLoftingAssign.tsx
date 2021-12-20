@@ -48,7 +48,7 @@ interface IAppointed {
     readonly checkUserName?: string;
     readonly plannedDeliveryTime?: string | moment.Moment;
     readonly patternName?: string;
-    readonly trialAssemble?: number
+    readonly trialAssemble?: number | string
 }
 
 class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, TowerLoftingAssignState> {
@@ -215,7 +215,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                             { this.props.type === 'detail' ?
                                 <>
                                 <Descriptions.Item label="试组装">
-                                    { this.props.detailData?.trialAssemble === 1? '是': '否' || '' }
+                                    { this.props.detailData?.trialAssemble === '1'? '是': '否' || '' }
                                 </Descriptions.Item>
                                 <Descriptions.Item label="段信息">
                                     { this.props.detailData?.name || '' }
@@ -231,7 +231,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 </Descriptions.Item></>
                                 : <>
                                 <Descriptions.Item label="试组装">
-                                <Form.Item name="trialAssemble" initialValue={ this.props.detailData?.trialAssemble }
+                                <Form.Item name="trialAssemble" initialValue={ this.props.detailData?.trialAssemble === '1'?1:0 }
                                     rules={[{
                                         required: true,
                                         message: '请选择试组装'
