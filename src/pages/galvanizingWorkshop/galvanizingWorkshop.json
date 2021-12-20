@@ -1,0 +1,193 @@
+{    
+    "columns": [
+        {
+            "key": "status",
+            "title": "状态",
+            "width": 150,
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                { 
+                    "value": 1, 
+                    "label": "未确认" 
+                },
+                { 
+                    "value": 2, 
+                    "label": "未指派" 
+                },
+                { 
+                    "value": 3, 
+                    "label": "已指派" 
+                },
+                { 
+                    "value": 4, 
+                    "label": "已完成" 
+                }
+            ]
+        },
+        {
+            "key": "orderName",
+            "title": "订单工程名称",
+            "width": 150,
+            "dataIndex": "orderName"
+        },
+        {
+            "key": "voltageGrade",
+            "title": "电压等级",
+            "width": 150,
+            "dataIndex": "voltageGrade"
+        },
+        {
+            "key": "planNo",
+            "title": "计划号",
+            "width": 150,
+            "dataIndex": "planNo"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "width": 150,
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "productNum",
+            "title": "基数",
+            "width": 150,
+            "dataIndex": "productNum"
+        },
+        {
+            "key": "issueWeight",
+            "title": "下达重量",
+            "width": 150,
+            "dataIndex": "issueWeight"
+        },
+        {
+            "key": "angleWeight",
+            "title": "角钢重量",
+            "width": 150,
+            "dataIndex": "angleWeight"
+        },
+        {
+            "key": "plateWeight",
+            "title": "连板重量",
+            "width": 150,
+            "dataIndex": "plateWeight"
+        },
+        {
+            "key": "wearHangTeamName",
+            "title": "穿卦班组",
+            "width": 150,
+            "dataIndex": "wearHangTeamName"
+        },
+        {
+            "key": "picklingTeamName",
+            "title": "酸洗班组",
+            "width": 150,
+            "dataIndex": "picklingTeamName"
+        },
+        {
+            "key": "maintenanceTeamName",
+            "title": "检修班组",
+            "width": 150,
+            "dataIndex": "maintenanceTeamName"
+        },
+        {
+            "key": "zincPotTeamName",
+            "title": "锌锅班组",
+            "width": 150,
+            "dataIndex": "zincPotTeamName"
+        },
+        {
+            "key": "galvanizedStartTime",
+            "title": "开始时间",
+            "width": 150,
+            "dataIndex": "galvanizedStartTime"
+        },
+        {
+            "key": "galvanizedEndTime",
+            "title": "结束时间",
+            "width": 200,
+            "dataIndex": "galvanizedEndTime"
+        },
+        {
+            "key": "packagingTeamName",
+            "title": "包装班组",
+            "width": 200,
+            "dataIndex": "packagingTeamName"
+        }
+    ],
+    "weighingListColumns": [
+        {
+            "key": "weighingNo",
+            "title": "过磅单号",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weight",
+            "title": "重量",
+            "width": 150,
+            "dataIndex": "weight"
+        },
+        {
+            "key": "derrickNo",
+            "title": "抱杆号",
+            "width": 150,
+            "dataIndex": "derrickNo"
+        },
+        {
+            "key": "weighingTypeName",
+            "title": "类型",
+            "width": 150,
+            "dataIndex": "weighingTypeName"
+        },
+        {
+            "key": "weighingDate",
+            "title": "过磅日期",
+            "width": 150,
+            "dataIndex": "weighingDate"
+        },
+        {
+            "key": "weighManName",
+            "title": "司磅员",
+            "width": 150,
+            "dataIndex": "weighManName"
+        },
+        {
+            "key": "wearHangTeamName",
+            "title": "穿挂班组",
+            "width": 150,
+            "dataIndex": "wearHangTeamName"
+        },
+        {
+            "key": "maintenanceTeamName",
+            "title": "检修班组",
+            "width": 150,
+            "dataIndex": "maintenanceTeamName"
+        },
+        {
+            "key": "picklingTeamName",
+            "title": "酸洗班组",
+            "width": 150,
+            "dataIndex": "picklingTeamName"
+        },
+        {
+            "key": "zincPotTeamName",
+            "title": "锌锅班组",
+            "width": 150,
+            "dataIndex": "zincPotTeamName"
+        },
+        {
+            "key": "wearHangTeamName",
+            "title": "穿挂班组",
+            "width": 150,
+            "dataIndex": "wearHangTeamName"
+        },
+        {
+            "key": "createTime",
+            "title": "制单时间",
+            "width": 150,
+            "dataIndex": "createTime"
+        }
+    ]
+}

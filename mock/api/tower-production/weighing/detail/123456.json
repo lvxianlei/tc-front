@@ -1,0 +1,60 @@
+{
+    "code":200,
+    "msg":"lab",
+    "success":true,
+    "data":{
+        "derrickNo":"consequat et mollit occaecat proident",
+        "id":92135818,
+        "maintenanceTeamName":"minim eu ut sunt",
+        "picklingTeamName":"incididunt commodo nulla",
+        "relationProducts":[
+            {
+                "weighingId":-43470548,
+                "id":39919711,
+                "internalNumber":"non ess",
+                "orderName":"voluptate Excepteur nulla dolore",
+                "planNo":"esse minim cillum sint",
+                "productCategoryName":"adipisicing aliqua consectetur sit laborum",
+                "productNum":88970007,
+                "voltageGrade":"sunt reprehenderit Excepteur dolore dolor"
+            },
+            {
+                "weighingId":-77900649,
+                "id":44161276,
+                "internalNumber":"irure in eiusmod ullamco Excepteur",
+                "orderName":"tempor",
+                "planNo":"commodo officia",
+                "productCategoryName":"dolor commodo ullamco esse",
+                "productNum":-23251084,
+                "voltageGrade":"Excepteur amet dolore voluptate sunt"
+            },
+            {
+                "weighingId":-7857362,
+                "id":16080810,
+                "internalNumber":"Ut aute",
+                "orderName":"aliqui",
+                "planNo":"dolor",
+                "productCategoryName":"laboris culpa ad",
+                "productNum":66581892,
+                "voltageGrade":"commodo nulla sunt"
+            },
+            {
+                "weighingId":66800505,
+                "id":52022430,
+                "internalNumber":"deserunt reprehenderit",
+                "orderName":"consequat",
+                "planNo":"deserunt consectetur",
+                "productCategoryName":"irure",
+                "productNum":-77186323,
+                "voltageGrade":"occaecat est proident"
+            }
+        ],
+        "wearHangTeamName":"ullamco ipsum",
+        "weighMan":67501410,
+        "weighingDate":"1993-10-28",
+        "weighingNo":"sit",
+        "weighingType":-87893114,
+        "weight":-25858198.636104837,
+        "zincPotTeamName":"officia proident aliqua sit"
+    }
+}

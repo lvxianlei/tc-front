@@ -47,7 +47,7 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
     }
 
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-equipment/device', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-production/team/page', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
@@ -98,24 +98,24 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
 
     public getTableColumns(): TableColumnType<object>[] {
         return [{
-            key: 'deviceTypeName',
+            key: 'name',
             title: '班组名称',
-            dataIndex: 'deviceTypeName',
+            dataIndex: 'name',
             width: '25%',
         }, {
-            key: 'deviceName',
+            key: 'workshopDeptName',
             title: '所属车间',
-            dataIndex: 'deviceName',
+            dataIndex: 'workshopDeptName',
             width: '25%',
         }, {
-            key: 'spec',
+            key: 'deptProcessesName',
             title: '工序',
-            dataIndex: 'spec',
+            dataIndex: 'deptProcessesName',
             width: '25%',
         }, {
-            key: 'deviceNumber',
+            key: 'productionLinesName',
             title: '设备所属产线',
-            dataIndex: 'deviceNumber',
+            dataIndex: 'productionLinesName',
             width: '25%',
         }];
     }

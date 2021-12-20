@@ -56,7 +56,7 @@ export default function Particulars(): React.ReactNode {
                 </Form.Item>
             },
             {
-                name: 'fuzzyQuery',
+                name: 'receiveNumber',
                 children: <Input placeholder="请输入收货单进行查询" style={{ width: 300 }} />
             },
         ]}

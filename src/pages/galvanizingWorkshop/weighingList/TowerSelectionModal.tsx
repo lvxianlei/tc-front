@@ -4,14 +4,13 @@
  * @description 选择塔型
  */
 import { Button, FormItemProps, Input, Modal, Space, TableColumnType } from 'antd';
-import { TablePaginationConfig } from 'antd/lib/table';
+import Table, { TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
-
-import styles from '../../components/AbstractSelectableModal.module.less';
-import RequestUtil from '../../utils/RequestUtil';
-import AbstractFilteredSelectionModal from '../../components/AbstractFilteredSelecableModal';
-import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../components/AbstractSelectableModal';
+import styles from '../../../components/AbstractSelectableModal.module.less';
+import RequestUtil from '../../../utils/RequestUtil';
+import AbstractFilteredSelectionModal from '../../../components/AbstractFilteredSelecableModal';
+import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../../components/AbstractSelectableModal';
 
 export interface ITowerSelectionModalProps extends IAbstractSelectableModalProps {
 }
@@ -37,7 +36,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
             ...super.getState(),
             tablePagination: {
                 current: 1,
-                pageSize: 10,
+                pageSize: 1000,
                 total: 0,
                 showSizeChanger: false
             },
@@ -46,14 +45,18 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
     }
 
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-equipment/device', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-production/galvanized/daily/plan/weighing', {
             ...filterValues,
+            fuzzyMsg: '',
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
         });
+        const data = resData.records.filter((res: any) => {
+            return this.props.selectKey.indexOf(res.id) === -1
+        })
         this.setState({
             ...filterValues,
-            tableDataSource: resData.records,
+            tableDataSource: data,
             tablePagination: {
                 ...this.state.tablePagination,
                 current: resData.current,
@@ -65,8 +68,8 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
 
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
-            name: 'selectName',
-            children: <Input placeholder="请输入塔型名称/计划号/内部合同编号/工程名称进行查询" />
+            name: 'fuzzyMsg',
+            children: <Input style={{ width: '400px' }} placeholder="请输入塔型名称/计划号/内部合同编号/工程名称进行查询" />
         }];
     }
     
@@ -91,41 +94,49 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
         });
     }
 
+    /**
+     * @description modal内表格 
+     */
+     protected renderTableContent(): React.ReactNode {
+        return (
+            <Table
+                {...this.getTableProps()}
+                pagination={false}
+                scroll={{ x: 1200 }}
+                className={styles.modalTable}
+            />
+        );
+    }
+
     public getTableDataSource(): object[] {
         return this.state.tableDataSource;
     }
 
     public getTableColumns(): TableColumnType<object>[] {
         return [{
-            key: 'deviceTypeName',
+            key: 'internalNumber',
             title: '内部合同编号',
-            dataIndex: 'deviceTypeName',
-            width: '20%',
+            dataIndex: 'internalNumber'
         }, {
-            key: 'deviceName',
+            key: 'planNo',
             title: '计划号',
-            dataIndex: 'deviceName',
-            width: '20%',
+            dataIndex: 'planNo'
         }, {
-            key: 'spec',
+            key: 'orderName',
             title: '工程名称',
-            dataIndex: 'spec',
-            width: '20%',
+            dataIndex: 'orderName'
         }, {
-            key: 'deviceNumber',
+            key: 'productCategoryName',
             title: '塔型名称',
-            dataIndex: 'deviceNumber',
-            width: '20%',
+            dataIndex: 'productCategoryName'
         }, {
-            key: 'deviceNumber',
+            key: 'voltageGrade',
             title: '电压等级',
-            dataIndex: 'deviceNumber',
-            width: '20%',
+            dataIndex: 'voltageGrade'
         }, {
-            key: 'deviceNumber',
+            key: 'productNum',
             title: '总基数',
-            dataIndex: 'deviceNumber',
-            width: '20%',
+            dataIndex: 'productNum'
         }];
     }
 

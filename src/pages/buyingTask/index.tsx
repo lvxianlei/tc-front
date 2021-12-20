@@ -191,7 +191,7 @@ export default function RawMaterial() {
             <Modal width={1011} title="原材料采购任务详情" visible={isModalVisible} footer={buttons} onCancel={handleCancel}>
                 {/* 基本信息 */}
                 <Descriptions title="基本信息" column={2} bordered>
-                    <Descriptions.Item label="任务单编号">{obj.taskNoticeNumber}</Descriptions.Item>
+                    <Descriptions.Item label="计划号">{obj.taskNoticeNumber}</Descriptions.Item>
                     <Descriptions.Item label="订单编号">{obj.saleOrderNumber}</Descriptions.Item>
                     <Descriptions.Item label="内部合同编号">{obj.internalNumber}</Descriptions.Item>
                     <Descriptions.Item label="订单工程名称">{obj.orderProjectName}</Descriptions.Item>
