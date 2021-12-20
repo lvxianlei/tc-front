@@ -2259,6 +2259,20 @@
       "exact": true,
       "authority": "hr_insurance_archives_save"
     },
+    { // 生产工序管理
+      "name": "生产工序管理",
+      "path": "/workshopPlanBasic/processMngt",
+      "module": "./pages/workshopPlanBasic/processMngt/ProcessMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作中心管理
+      "name": "工作中心管理",
+      "path": "/planBaseSetting/workCenterMngt",
+      "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 生产环节管理
       "name": "生产环节管理",
       "path": "/planBaseSetting/prodLink",

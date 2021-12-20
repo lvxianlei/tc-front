@@ -4,10 +4,9 @@
  * @description 选择塔型
  */
 import { Button, FormItemProps, Input, Modal, Space, TableColumnType } from 'antd';
-import { TablePaginationConfig } from 'antd/lib/table';
+import Table, { TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
-
 import styles from '../../../components/AbstractSelectableModal.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractFilteredSelectionModal from '../../../components/AbstractFilteredSelecableModal';
@@ -37,7 +36,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
             ...super.getState(),
             tablePagination: {
                 current: 1,
-                pageSize: 10,
+                pageSize: 1000,
                 total: 0,
                 showSizeChanger: false
             },
@@ -52,9 +51,12 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
         });
+        const data = resData.records.filter((res: any) => {
+            return this.props.selectKey.indexOf(res.id) === -1
+        })
         this.setState({
             ...filterValues,
-            tableDataSource: resData.records,
+            tableDataSource: data,
             tablePagination: {
                 ...this.state.tablePagination,
                 current: resData.current,
@@ -90,6 +92,20 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
             total: 0,
             showSizeChanger: false
         });
+    }
+
+    /**
+     * @description modal内表格 
+     */
+     protected renderTableContent(): React.ReactNode {
+        return (
+            <Table
+                {...this.getTableProps()}
+                pagination={false}
+                scroll={{ x: 1200 }}
+                className={styles.modalTable}
+            />
+        );
     }
 
     public getTableDataSource(): object[] {

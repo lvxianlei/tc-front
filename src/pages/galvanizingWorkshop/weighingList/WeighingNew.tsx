@@ -183,15 +183,17 @@ export default function WeighingNew(): React.ReactNode {
     ]
 
     const delRow = (index: number) => {
+        console.log(index)
         relationProducts.splice(index, 1);
-        setRelationProducts(relationProducts);
+        console.log(relationProducts)
+        setRelationProducts([...relationProducts]);
     }
 
     const save = () => {
         if(form) {
             form.validateFields().then(res => {
                 const values = form.getFieldsValue(true);
-                RequestUtil.post(`/tower-production/galvanized/daily/plan/dispatching`, { 
+                RequestUtil.post(`/tower-production/weighing`, { 
                     ...values,
                     weighingDate: values?.weighingDate && values?.weighingDate.format('YYYY-MM-DD'),
                     relationProducts: relationProducts,
@@ -224,8 +226,9 @@ export default function WeighingNew(): React.ReactNode {
             </Descriptions>    
         </Form>
         <DetailTitle title="塔型信息"/>
-        <TowerSelectionModal onSelect={ (selectedRows: object[] | any) => {
-            setRelationProducts([ ...relationProducts, ...selectedRows.map((res: any) => { return { ...res, dailyPlanId: res.id, id: '', weighingId: params.id} })])
+        <TowerSelectionModal selectKey={[...relationProducts].map((res: any) => {return res.dailyPlanId})} onSelect={ (selectedRows: object[] | any) => {
+            const list = [ ...relationProducts, ...selectedRows.map((res: any) => { return { ...res, dailyPlanId: res.id, id: '', weighingId: params.id} })]
+            setRelationProducts(list)
         } } />
         <CommonTable columns={ tableColumns } dataSource={[...relationProducts]} pagination={ false } />
     </DetailContent>
