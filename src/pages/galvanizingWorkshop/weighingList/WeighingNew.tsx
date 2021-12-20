@@ -17,6 +17,7 @@ import TowerSelectionModal from './TowerSelectionModal';
 import { FixedType } from 'rc-table/lib/interface';
 import { weighingtypeOptions } from '../../../configuration/DictionaryOptions';
 import { IWeighingList } from '../IGalvanizingWorkshop';
+import moment from 'moment';
 
 export default function WeighingNew(): React.ReactNode {
     const history = useHistory();
@@ -127,7 +128,7 @@ export default function WeighingNew(): React.ReactNode {
         {
             dataIndex: "weighingDate",
             title: "过磅日期",
-            initialValue: detailData.weighingDate,
+            initialValue: detailData.weighingDate ? moment(detailData.weighingDate) : '',
             format: 'YYYY-MM-DD',
             children: <DatePicker style={{ width: '100%' }} />
         },
@@ -190,10 +191,10 @@ export default function WeighingNew(): React.ReactNode {
         if(form) {
             form.validateFields().then(res => {
                 const values = form.getFieldsValue(true);
-                console.log(values)
                 RequestUtil.post(`/tower-production/galvanized/daily/plan/dispatching`, { 
                     ...values,
-                    relationProducts: relationProducts.map((res: any) => ( { ...res, weighingId: params.id} )),
+                    weighingDate: values.weighingDate.format('YYYY-MM-DD'),
+                    relationProducts: relationProducts.map((res: any) => { return { ...res, weighingId: params.id} }),
                     id: params.id 
                 }).then(res => {
                     message.success("保存成功");
@@ -224,7 +225,6 @@ export default function WeighingNew(): React.ReactNode {
         </Form>
         <DetailTitle title="塔型信息"/>
         <TowerSelectionModal onSelect={ (selectedRows: object[] | any) => {
-            console.log(selectedRows)
             setRelationProducts(selectedRows)
         } } />
         <CommonTable columns={ tableColumns } dataSource={[...relationProducts]} pagination={ false } />

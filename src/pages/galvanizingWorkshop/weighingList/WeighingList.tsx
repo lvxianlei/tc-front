@@ -67,8 +67,8 @@ export default function WeighingList(): React.ReactNode {
         onFilterSubmit={(values: Record<string, any>) => {
             if (values.time) {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
-                values.weighingStartTime = formatDate[0] + ' 00:00:00';
-                values.weighingEndTime = formatDate[1] + ' 23:59:59';
+                values.weighingStartTime = formatDate[0];
+                values.weighingEndTime = formatDate[1];
             }
             setFilterValue(values);
             return values;

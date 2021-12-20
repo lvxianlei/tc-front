@@ -48,6 +48,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-production/galvanized/daily/plan/weighing', {
             ...filterValues,
+            fuzzyMsg: '',
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
         });
@@ -66,7 +67,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
             name: 'fuzzyMsg',
-            children: <Input placeholder="请输入塔型名称/计划号/内部合同编号/工程名称进行查询" />
+            children: <Input style={{ width: '400px' }} placeholder="请输入塔型名称/计划号/内部合同编号/工程名称进行查询" />
         }];
     }
     
@@ -99,33 +100,27 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
         return [{
             key: 'internalNumber',
             title: '内部合同编号',
-            dataIndex: 'internalNumber',
-            width: '20%',
+            dataIndex: 'internalNumber'
         }, {
             key: 'planNo',
             title: '计划号',
-            dataIndex: 'planNo',
-            width: '20%',
+            dataIndex: 'planNo'
         }, {
             key: 'orderName',
             title: '工程名称',
-            dataIndex: 'orderName',
-            width: '20%',
+            dataIndex: 'orderName'
         }, {
             key: 'productCategoryName',
             title: '塔型名称',
-            dataIndex: 'productCategoryName',
-            width: '20%',
+            dataIndex: 'productCategoryName'
         }, {
             key: 'voltageGrade',
             title: '电压等级',
-            dataIndex: 'voltageGrade',
-            width: '20%',
+            dataIndex: 'voltageGrade'
         }, {
             key: 'productNum',
             title: '总基数',
-            dataIndex: 'productNum',
-            width: '20%',
+            dataIndex: 'productNum'
         }];
     }
 
