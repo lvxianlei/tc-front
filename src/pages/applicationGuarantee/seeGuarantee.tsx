@@ -35,6 +35,11 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                     </>
                 )
             }
+            <Attachment
+                title={"保函申请相关附件"}
+                dataSource={ props?.userData?.applyAttachListVO || [] }
+                ref={fillGuarantee}
+            />
             {
                 (props.acceptStatus === 3 || props.acceptStatus === 2) && props?.userData?.guaranteeVO && (
                     <>
@@ -63,6 +68,7 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                 (props.acceptStatus === 3 || props.acceptStatus === 2) && props?.userData?.attachInfoVOList && (
                     <>
                         <Attachment
+                            title={"保函相关附件"}
                             dataSource={ props?.userData?.attachInfoVOList || [] }
                             ref={fillGuarantee}
                         />
