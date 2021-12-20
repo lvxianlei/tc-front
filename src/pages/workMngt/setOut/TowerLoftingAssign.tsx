@@ -80,7 +80,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     }
 
     private async modalShow(): Promise<void> {
-        const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/detail/${ this.props.id }`);
+        const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/${ this.props.id }`);
         const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         this.setState({
             departmentData: departmentData,
