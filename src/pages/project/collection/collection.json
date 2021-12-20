@@ -248,19 +248,19 @@
             "title": "合同号",
             "dataIndex": "contractNumber",
             "disabled": true,
-            "width": 200
+            "width": "100%"
         },
         {
             "title": "合同/工程名称",
             "dataIndex": "contractName",
             "disabled": true,
-            "width": 200
+            "width": "100%"
         },
         {
             "title": "回款金额",
             "dataIndex": "refundAmount",
             "type": "number",
-            "width": 200,
+            "width": "100%",
             "rules": [
                 {
                     "required": true,
@@ -272,7 +272,7 @@
             "title": "业务经理",
             "dataIndex": "salesman",
             "disabled": true,
-            "width": 200
+            "width": "100%"
         },
         {
             "title": "回款计划名称",
@@ -316,19 +316,19 @@
             "title": "计划回款金额",
             "dataIndex": "returnedAmount",
             "disabled": true,
-            "width": 200
+            "width": "100%"
         },
         {
             "title": "已回款金额",
             "dataIndex": "paymentReceived",
             "disabled": true,
-            "width": 200
+            "width": "100%"
         },
         {
             "title": "未回款金额",
             "dataIndex": "noPaymentReceived",
             "disabled": true,
-            "width": 200
+            "width": "100%"
         }
     ],
     "contractInformationDetail": [

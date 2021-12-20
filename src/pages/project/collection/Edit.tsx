@@ -79,12 +79,22 @@ export default function Edit() {
     }), { manual: true })
 
     const handleSubmit = async () => {
-        const baseInfo = await baseForm.validateFields()
-        const confirmBackMoneyInfoDTOList = await contractInfosForm.validateFields()
-        if (returnType === 1172 && confirmBackMoneyInfoDTOList?.submit?.length <= 0) {
-            message.warning("回款类型为合同应收款时，必须选择合同和回款计划")
-            return
-        } else {
+        try {
+            const baseInfo = await baseForm.validateFields()
+            const confirmBackMoneyInfoDTOList = await contractInfosForm.validateFields()
+            if (returnType === 1172) {
+                if (confirmBackMoneyInfoDTOList?.submit?.length <= 0) {
+                    message.warning("回款类型为合同应收款时，必须选择合同和回款计划")
+                    return
+                }
+                const refundAmountTotol = confirmBackMoneyInfoDTOList.submit.reduce((total: string, item: any) => {
+                    return (parseFloat(total) + parseFloat(item.refundAmount)).toFixed(2)
+                }, 0)
+                if (refundAmountTotol !== data?.payMoney) {
+                    message.warning("回款金额总和必须等于来款金额")
+                    return
+                }
+            }
             const result = await saveRun({
                 ...baseInfo,
                 payNum: returnType === 1171 ? baseInfo.payNum?.records?.[0].payNumber || data?.payNum || "" : "",
@@ -98,6 +108,8 @@ export default function Edit() {
                 message.success("保存成功")
                 history.go(-1)
             }
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -106,11 +118,13 @@ export default function Edit() {
             setReturnType(fields.returnType)
         }
     }
+
     const handleOk = async () => {
         const contractInfos = await contractInfosForm.getFieldsValue()
         contractInfosForm.setFieldsValue({ submit: [...contractInfos.submit, { ...popContent.records, key: popContent.id }] })
         setVisible(false)
     }
+
     const handleCancel = () => setVisible(false)
     const handleChange = (event: any) => setPopContent({ id: event[0].id, value: event[0][contract.value || "name" || "id"], records: event[0] })
 

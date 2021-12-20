@@ -375,9 +375,9 @@ export default function ManagementDetail(): React.ReactNode {
                 {
                     salesPlanStatus === "" && <Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>新增</Button>
                 }
-                <Button type="primary" onClick={() => {
-                    // setIsExportStoreList(true)
-                    message.error("导出暂未开发");
+                <Button type="primary" ghost onClick={() => {
+                    setIsExportStoreList(true)
+                    // message.error("导出暂未开发");
                 }}>导出</Button>
             </div>
             <CommonTable columns={[...taskNotice, {
@@ -420,14 +420,7 @@ export default function ManagementDetail(): React.ReactNode {
             history={history}
             location={location}
             match={match}
-            columnsKey={() => {
-                let keys = [...taskNotice, {
-                    "title": "审批状态",
-                    "dataIndex": "taskReviewStatus"
-                }]
-                keys.pop()
-                return keys
-            }}
+            columnsKey={() => taskNotice as any[]}
             current={data?.current || 1}
             size={data?.size || 10}
             total={data?.total || 0}
