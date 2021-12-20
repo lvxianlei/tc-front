@@ -42,8 +42,12 @@ export default function Invoicing() {
             value.endCompleteTime = formatDate[1] + " 23:59:59"
         }
         if (value.createUserDeptId) {
-            value.createUserDeptId = value.createUserDeptId.first
-            value.createUserId = value.createUserDeptId.second
+            const {
+                first,
+                second
+            } = value.createUserDeptId;
+            value.createUserDeptId = first
+            value.createUserId = second
         }
         return value
     }
