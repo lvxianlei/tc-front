@@ -31,7 +31,7 @@ export default function DailySchedule(): React.ReactNode {
                 RequestUtil.post(`/tower-production/galvanized/daily/plan/dispatching`, { ...values, id: selectedKeys.join(',') }).then(res => {
                     message.success("派工成功");
                     setRefresh(!refresh);
-                    setSelectedKeys([]);
+                    closeModal();
                 });
             })
         }
@@ -49,7 +49,7 @@ export default function DailySchedule(): React.ReactNode {
     return <>
         <Page
             path="/tower-production/galvanized/daily/plan"
-            sourceKey="records.galvanizedDailyPlanVOS"
+            sourceKey="galvanizedDailyPlanVOS.records"
             columns={
                 confirmStatus === 1 || confirmStatus === 2 || confirmStatus === 3 ? 
                 [{
@@ -69,6 +69,7 @@ export default function DailySchedule(): React.ReactNode {
                             RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, [record.id]).then(res => {
                                 message.success("确认成功");
                                 setRefresh(!refresh);
+                                setSelectedKeys([]);
                             });
                         }}>确认</Button> : confirmStatus === 2 ? <Button type="link" onClick={() => {
                             setVisible(true);
@@ -102,7 +103,7 @@ export default function DailySchedule(): React.ReactNode {
                     <Radio.Button value={3}>已指派</Radio.Button>
                     <Radio.Button value={4}>已完成</Radio.Button>
                 </Radio.Group>
-                <span className={styles.statistical}>统计<span className={styles.statistical}>下达总重量：{data?.records?.issueTotalWeight}吨</span><span className={styles.statistical}>角钢总重量：{data?.records?.angleTotalWeight}吨</span><span className={styles.statistical}>连板总重量：{data?.records?.plateTotalWeight}吨</span></span>
+                <span className={styles.statistical}>统计<span className={styles.statistical}>下达总重量：{data?.issueTotalWeight}吨</span><span className={styles.statistical}>角钢总重量：{data?.angleTotalWeight}吨</span><span className={styles.statistical}>连板总重量：{data?.plateTotalWeight}吨</span></span>
                 {confirmStatus === 1 ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
                     RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, selectedKeys).then(res => {
                         message.success("确认成功");
@@ -135,8 +136,8 @@ export default function DailySchedule(): React.ReactNode {
             onFilterSubmit={(values: Record<string, any>) => {
                 if (values.time) {
                     const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
-                    values.deliveryStartTime = formatDate[0] + ' 00:00:00';
-                    values.deliveryEndTime = formatDate[1] + ' 23:59:59';
+                    values.galvanizedStartTime = formatDate[0];
+                    values.galvanizedEndTime = formatDate[1];
                 }
                 setFilterValue(values);
                 return values;
@@ -151,7 +152,7 @@ export default function DailySchedule(): React.ReactNode {
                             message: '请选择穿挂班组'
                         }]}>
                             <Input maxLength={50} value={detail.wearHangTeamName} addonBefore={<TeamSelectionModal onSelect={(selectedRows: object[] | any) => {
-                                form.setFieldsValue({ wearHangTeamName: selectedRows[0].name, wearHangTeamId: selectedRows[0].id })
+                                form.setFieldsValue({ wearHangTeamName: selectedRows && selectedRows[0].name, wearHangTeamId: selectedRows && selectedRows[0].id })
                             }} />} disabled />
                         </Form.Item>
                     </Col>
@@ -161,7 +162,7 @@ export default function DailySchedule(): React.ReactNode {
                             message: '请选择酸洗班组'
                         }]}>
                             <Input maxLength={50} value={detail.picklingTeamName} addonBefore={<TeamSelectionModal onSelect={(selectedRows: object[] | any) => {
-                                form.setFieldsValue({ picklingTeamName: selectedRows[0].name, picklingTeamId: selectedRows[0].id })
+                                form.setFieldsValue({ picklingTeamName: selectedRows && selectedRows[0].name, picklingTeamId: selectedRows && selectedRows[0].id })
                             }} />} disabled />
                         </Form.Item>
                     </Col>
@@ -173,7 +174,7 @@ export default function DailySchedule(): React.ReactNode {
                             message: '请选择检修班组'
                         }]}>
                             <Input maxLength={50} value={detail.maintenanceTeamName} addonBefore={<TeamSelectionModal onSelect={(selectedRows: object[] | any) => {
-                                form.setFieldsValue({ maintenanceTeamName: selectedRows[0].name, maintenanceTeamId: selectedRows[0].id })
+                                form.setFieldsValue({ maintenanceTeamName: selectedRows && selectedRows[0].name, maintenanceTeamId: selectedRows && selectedRows[0].id })
                             }} />} disabled />
                         </Form.Item>
                     </Col>
@@ -183,7 +184,7 @@ export default function DailySchedule(): React.ReactNode {
                             message: '请选择锌锅班组'
                         }]}>
                             <Input maxLength={50} value={detail.zincPotTeamName} addonBefore={<TeamSelectionModal onSelect={(selectedRows: object[] | any) => {
-                                form.setFieldsValue({ zincPotTeamName: selectedRows[0].name, zincPotTeamId: selectedRows[0].id })
+                                form.setFieldsValue({ zincPotTeamName: selectedRows && selectedRows[0].name, zincPotTeamId: selectedRows && selectedRows[0].id })
                             }} />} disabled />
                         </Form.Item>
                     </Col>

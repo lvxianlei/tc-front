@@ -193,8 +193,8 @@ export default function WeighingNew(): React.ReactNode {
                 const values = form.getFieldsValue(true);
                 RequestUtil.post(`/tower-production/galvanized/daily/plan/dispatching`, { 
                     ...values,
-                    weighingDate: values.weighingDate.format('YYYY-MM-DD'),
-                    relationProducts: relationProducts.map((res: any) => { return { ...res, weighingId: params.id} }),
+                    weighingDate: values?.weighingDate && values?.weighingDate.format('YYYY-MM-DD'),
+                    relationProducts: relationProducts,
                     id: params.id 
                 }).then(res => {
                     message.success("保存成功");
@@ -225,7 +225,7 @@ export default function WeighingNew(): React.ReactNode {
         </Form>
         <DetailTitle title="塔型信息"/>
         <TowerSelectionModal onSelect={ (selectedRows: object[] | any) => {
-            setRelationProducts(selectedRows)
+            setRelationProducts(selectedRows.map((res: any) => { return { ...res, dailyPlanId: res.id, id: '', weighingId: params.id} }))
         } } />
         <CommonTable columns={ tableColumns } dataSource={[...relationProducts]} pagination={ false } />
     </DetailContent>
