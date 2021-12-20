@@ -5,6 +5,7 @@ import { BasicInformation, editCargoDetails, SelectedArea, Selected, freightInfo
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { materialStandardTypeOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
+import { changeTwoDecimal_f } from "../../../utils/KeepDecimals";
 interface ChooseModalProps {
     id: string,
     initChooseList: any[]
@@ -405,11 +406,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
         setFreightInformation({
             ...freightInformation,
-            transportPriceCount, // 运费价税合计（元）
+            transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
         })
         setHandlingCharges({
             ...handlingCharges,
-            unloadPriceCount
+            unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
         })
         form.setFieldsValue({ price: priceAll })
     }
@@ -520,13 +521,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 transportBear:  fields.contractNumber.records[0].transportBear === 1 ? "需方" : '供方', // 运输承担
                 transportCompany: fields.contractNumber.records[0].transportCompany ? fields.contractNumber.records[0].transportCompany : "", // 运输公司
                 transportTaxPrice: fields.contractNumber.records[0].transportTaxPrice ? fields.contractNumber.records[0].transportTaxPrice : "0", // 合同单价
-                transportPriceCount, // 运费价税合计（元）
+                transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
             })
             setHandlingCharges({
                 unloadBear: fields.contractNumber.records[0].unloadBear === 1 ? "需方" : '供方',
                 unloadCompany: fields.contractNumber.records[0].unloadCompany ? fields.contractNumber.records[0].unloadCompany : "",
                 unloadTaxPrice: fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0",
-                unloadPriceCount
+                unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
             })
         }
         if (fields.supplierName) {
