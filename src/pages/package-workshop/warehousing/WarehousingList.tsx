@@ -3,6 +3,7 @@ import { Space, Input, DatePicker, Select, Button } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory } from 'react-router-dom';
+import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export default function WarehousingList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
@@ -17,64 +18,64 @@ export default function WarehousingList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'name',
+            key: 'warehouseCode',
             title: '入库单编号',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'warehouseCode'
         },
         {
-            key: 'steelProductShape',
+            key: 'internalNumber',
             title: '内部合同编号',
-            dataIndex: 'steelProductShape',
+            dataIndex: 'internalNumber',
             width: 120
         },
         {
-            key: 'taskCode',
+            key: 'saleOrderNumber',
             title: '订单号',
             width: 150,
-            dataIndex: 'taskCode'
+            dataIndex: 'saleOrderNumber'
         },
         {
-            key: 'saleOrderNumber',
+            key: 'projectName',
             title: '工程名称',
-            dataIndex: 'saleOrderNumber',
+            dataIndex: 'projectName',
             width: 200
         },
         {
-            key: 'internalNumber',
+            key: 'planNum',
             title: '计划号',
             width: 200,
-            dataIndex: 'internalNumber'
+            dataIndex: 'planNum'
         },
         {
-            key: 'internalNumber',
+            key: 'productTypeName',
             title: '产品类型',
             width: 200,
-            dataIndex: 'internalNumber'
+            dataIndex: 'productTypeName'
         },
         {
-            key: 'structureCount',
+            key: 'warehouse',
             title: '仓库',
             width: 200,
-            dataIndex: 'structureCount'
+            dataIndex: 'warehouse'
         },
         {
-            key: 'steelAngleCount',
+            key: 'packagingTime',
             title: '包装日期',
             width: 200,
-            dataIndex: 'steelAngleCount',
+            dataIndex: 'packagingTime',
         },
         {
-            key: 'steelPlateCount',
+            key: 'pushWarehouseTime',
             title: '入库日期',
             width: 200,
-            dataIndex: 'steelPlateCount',
+            dataIndex: 'pushWarehouseTime',
         },
         {
-            key: 'steelPlateCount',
+            key: 'teamName',
             title: '班组',
             width: 200,
-            dataIndex: 'steelPlateCount',
+            dataIndex: 'teamName',
         },
         {
             key: 'description',
@@ -97,7 +98,7 @@ export default function WarehousingList(): React.ReactNode {
     ]
 
     return <Page
-        path="/tower-science/materialTask"
+        path="/tower-production/workshopDept/finishedProduct"
         columns={ columns }
         headTabs={ [] }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
@@ -107,10 +108,11 @@ export default function WarehousingList(): React.ReactNode {
                 name: 'pattern',
                 label: '产品类型',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value={ "" } key="">全部</Select.Option>
-                    <Select.Option value={ 1 } key="1">角钢塔</Select.Option>
-                    <Select.Option value={ 2 } key="2">钢结构</Select.Option>
-                    <Select.Option value={ 3 } key="3">钢管杆</Select.Option>
+                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                    })}
                 </Select>
             },
             {
@@ -128,8 +130,8 @@ export default function WarehousingList(): React.ReactNode {
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.time) {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
-                values.creationTimeStart = formatDate[0] + ' 00:00:00';
-                values.creationTimeEnd = formatDate[1] + ' 23:59:59';
+                values.startTime = formatDate[0] + ' 00:00:00';
+                values.endTime = formatDate[1] + ' 23:59:59';
                 delete values.time;
             }
             setFilterValue(values);

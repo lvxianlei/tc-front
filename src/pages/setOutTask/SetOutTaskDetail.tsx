@@ -79,9 +79,9 @@ const productColumns = [
         dataIndex: 'loftingAbortTime' 
     },
     { 
-        key: 'createTime', 
+        key: 'materialAbortTime', 
         title: '提料截止时间', 
-        dataIndex: 'createTime' 
+        dataIndex: 'materialAbortTime' 
     },
     {
         key: 'totalWeight', 

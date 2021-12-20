@@ -1,49 +1,49 @@
 {
     "baseInfoData": [
         {
-            "dataIndex": "contractName",
+            "dataIndex": "internalNumber",
             "title": "内部合同编号"
         },
         {
-            "dataIndex": "customerName",
+            "dataIndex": "saleOrderNumber",
             "title": "订单编号"
         },
         {
-            "dataIndex": "aeName",
+            "dataIndex": "productTypeName",
             "title": "产品类型"
         },
         {
-            "dataIndex": "aePhone",
+            "dataIndex": "orderProjectName",
             "title": "工程名称"
         },
         {
-            "dataIndex": "designContactsName",
+            "dataIndex": "planNumber",
             "title": "计划号"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "productCategoryName",
             "title": "塔型"
         }
     ],
     "packageData": [
         {
-            "dataIndex": "contractName",
+            "dataIndex": "planNumber",
             "title": "计划号"
         },
         {
-            "dataIndex": "customerName",
+            "dataIndex": "orderProjectName",
             "title": "工程名称"
         },
         {
-            "dataIndex": "aeName",
+            "dataIndex": "productCategoryName",
             "title": "塔型"
         },
         {
-            "dataIndex": "aePhone",
-            "title": "杆号"
+            "dataIndex": "productNumber",
+            "title": "杆塔号"
         },
         {
-            "dataIndex": "designContactsName",
+            "dataIndex": "total",
             "title": "总数量"
         }
     ]
