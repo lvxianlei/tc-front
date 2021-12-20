@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Row, Col, Table, Form, Select, Spin, message } from 'antd';
+import { Modal, Button, Row, Col, Table, Form, Select, Spin, message, InputNumber } from 'antd';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil';
 import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
@@ -432,14 +432,15 @@ export default function IngredientsModal(props: any) {
                             </Form.Item>&nbsp;
                             <Form.Item
                                 name="num5"
-                                initialValue={utilizationRate && utilizationRate[0]}
+                                initialValue={90}
                                 label="利用率"
                             >
-                                    <Select style={{ width: 80 }} placeholder="请选择">
+                                    {/* <Select style={{ width: 80 }} placeholder="请选择">
                                         {utilizationRate && utilizationRate.map((item: any, index: number) => {
                                             return <Select.Option value={item} key={index}>{item}</Select.Option>
                                         })}
-                                    </Select>
+                                    </Select> */}
+                                    <InputNumber step={1} min={ 1 } maxLength={ 100 } precision={ 0 } style={{ width: 80 }} />
                             </Form.Item>
                         </Form>
                     <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>

@@ -476,7 +476,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 supplierName: baseFormData.supplierName.value,
                 contractId: baseFormData.contractNumber.id,
                 contractNumber: baseFormData.contractNumber.value,
-                lists: cargoData
+                lists: cargoData,
+                quantity: baseFormData.num
             })
             resole(true)
         } catch (error) {
@@ -493,6 +494,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const handleBaseInfoChange = (fields: any) => {
         console.log(fields, "带回来的数据")
+        // 如果修改供应商 清空合同编号
+        if (fields.supplierName) {
+            form.setFieldsValue({
+                contractNumber: ""
+            })
+        }
         if (fields.contractNumber) {
             setContractId(fields.contractNumber.id);
 
@@ -555,9 +562,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         <DetailTitle title="收货单基础信息" />
         <BaseInfo form={form} onChange={handleBaseInfoChange} columns={columns} dataSource={{}} edit />
         <DetailTitle title="运费信息" />
-        <BaseInfo form={form} columns={freightInfo} dataSource={(freightInformation as any)} />
+        <BaseInfo columns={freightInfo} dataSource={(freightInformation as any)} />
         <DetailTitle title="装卸费信息" />
-        <BaseInfo form={form} columns={handlingChargesInfo} dataSource={(handlingCharges as any)} />
+        <BaseInfo columns={handlingChargesInfo} dataSource={(handlingCharges as any)} />
         <DetailTitle title="货物明细" operation={[<Button
             type="primary" key="choose" ghost
             onClick={() => {
