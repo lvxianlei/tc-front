@@ -225,7 +225,7 @@ export default function WeighingNew(): React.ReactNode {
         </Form>
         <DetailTitle title="塔型信息"/>
         <TowerSelectionModal onSelect={ (selectedRows: object[] | any) => {
-            setRelationProducts(selectedRows.map((res: any) => { return { ...res, dailyPlanId: res.id, id: '', weighingId: params.id} }))
+            setRelationProducts([ ...relationProducts, ...selectedRows.map((res: any) => { return { ...res, dailyPlanId: res.id, id: '', weighingId: params.id} })])
         } } />
         <CommonTable columns={ tableColumns } dataSource={[...relationProducts]} pagination={ false } />
     </DetailContent>
