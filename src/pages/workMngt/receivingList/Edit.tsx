@@ -198,14 +198,15 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
             }
         }
         if (serarchForm.getFieldValue("materialStandardName")
+            || serarchForm.getFieldValue("materialTexture")
             || serarchForm.getFieldValue("num2")
             || serarchForm.getFieldValue("spec")
             || serarchForm.getFieldValue("length1")
             || serarchForm.getFieldValue("length2")
         ) {
-            setSelectList(result);
+            setSelectList(result.slice(0));
         } else {
-            setSelectList(waitingArea);
+            setSelectList(waitingArea.slice(0));
         }
     }
     return <Spin spinning={loading}>
