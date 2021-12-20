@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select, message } from 'antd';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Space, Input, DatePicker, Button, Form, Select } from 'antd';
+import { useHistory, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
-import { Popconfirm } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -38,38 +37,11 @@ export default function SampleDrawList(): React.ReactNode {
             width: 100,
             dataIndex: 'priorityName'
         },
-        // {
-        //     key: 'priority',
-        //     title: '优先级',
-        //     width: 100,
-        //     dataIndex: 'priority',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: 0,
-        //                 label: "紧急"
-        //             },
-        //             {
-        //                 value: 1,
-        //                 label: "高"
-        //             },
-        //             {
-        //                 value: 2,
-        //                 label: "中"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "低"
-        //             },
-        //         ]
-        //         return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
-            key: 'externalTaskNum',
-            title: '任务单编号',
+            key: 'planNumber',
+            title: '计划号',
             width: 100,
-            dataIndex: 'externalTaskNum'
+            dataIndex: 'planNumber'
         },
         {
             key: 'saleOrderNumber',
@@ -107,33 +79,6 @@ export default function SampleDrawList(): React.ReactNode {
             width: 100,
             dataIndex: 'smallSampleStatusName'
         },
-        // {
-        //     key: 'smallSampleStatus',
-        //     title: '小样图状态',
-        //     width: 100,
-        //     dataIndex: 'smallSampleStatus',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: -1,
-        //                 label: ""
-        //             },
-        //             {
-        //                 value: 1,
-        //                 label: "待开始"
-        //             },
-        //             {
-        //                 value: 2,
-        //                 label: "进行中"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "已完成"
-        //             },
-        //         ]
-        //         return <>{value && renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'smallSampleUpdateStatusTime',
             title: '最新状态变更时间',
@@ -180,8 +125,6 @@ export default function SampleDrawList(): React.ReactNode {
         }
         if (value.planTime) {
             const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
-            // value.plannedDeliveryTimeStart = formatDate[0]+ ' 00:00:00';
-            // value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
             value.smallSampleDeliverTimeStart = formatDate[0]+ ' 00:00:00';
             value.smallSampleDeliverTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.planTime
@@ -198,7 +141,6 @@ export default function SampleDrawList(): React.ReactNode {
             refresh={refresh}
             requestData={ { smallSampleStatus: location.state?.state, smallSampleLeader: location.state?.userId } }
             exportPath="/tower-science/smallSample"
-            // extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {
                     name: 'statusUpdateTime',
@@ -214,7 +156,6 @@ export default function SampleDrawList(): React.ReactNode {
                             <Select.Option value={1} key={1}>待开始</Select.Option>
                             <Select.Option value={2} key={2}>进行中</Select.Option>
                             <Select.Option value={3} key={3}>已完成</Select.Option>
-                            {/* <Select.Option value={0} key={0}>已拒绝</Select.Option> */}
                         </Select>
                     </Form.Item> 
                 },
@@ -249,7 +190,7 @@ export default function SampleDrawList(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
+                    children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
                 },
             ]}
         />
