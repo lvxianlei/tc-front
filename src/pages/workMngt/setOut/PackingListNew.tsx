@@ -435,7 +435,7 @@ export default function PackingListNew(): React.ReactNode {
                     productNumber: detailData.productNumber,
                     packageRecordSaveDTOList: packagingData,
                 };
-                RequestUtil.post(`/towe/tower-science/packageStructure`, value).then(res => {
+                RequestUtil.post(`/tower-science/packageStructure`, value).then(res => {
                     message.success('包装清单保存成功');
                     setVisible(false);
                     history.goBack();
