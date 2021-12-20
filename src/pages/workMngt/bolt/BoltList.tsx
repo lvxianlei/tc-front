@@ -271,9 +271,9 @@ export default function BoltList(): React.ReactNode {
                     </Form.Item>
                 },
                 {
-                    name: 'boltLeader',
+                    name: 'personnel',
                     label: '人员',
-                    children: <Form.Item name="boltLeader" initialValue={location.state?.userId || ''}>
+                    children: <Form.Item name="personnel" initialValue={location.state?.userId || ''}>
                         <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value="" key="6">全部</Select.Option>
                             { checkUser && checkUser.map((item: any) => {
