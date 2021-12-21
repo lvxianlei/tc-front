@@ -1,0 +1,42 @@
+{
+    "baseInfo": [
+        {
+            "title": "开始时间",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "完成时间",
+            "dataIndex": "contractName"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "refundAmount"
+        },
+        {
+            "title": "杆塔",
+            "dataIndex": "salesman"
+        }
+    ],
+    "operationInformation": [
+        {
+            "title": "操作部门",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "contractName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "refundAmount"
+        },
+        {
+            "title": "任务状态",
+            "dataIndex": "salesman"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "salesman"
+        }
+    ]
+}
