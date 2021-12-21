@@ -446,7 +446,7 @@ export default function IngredientsModal(props: any) {
                         </Form>
                     <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
                         <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类</span>
-                        <span style={{color: "#FF8C00"}}>未分配/全部：{construNumber}/{(userData as any) && (userData as any).totalNum}</span>
+                        <span style={{color: "#FF8C00"}}>未分配/全部：{construNumber}/{(userData as any) && (userData as any).totalNum || 0}</span>
                     </div>
                     <Table
                             size="small"
@@ -461,7 +461,7 @@ export default function IngredientsModal(props: any) {
                         />
                         <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
                         <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类明细</span>
-                        <span style={{color: "#FF8C00"}}>已配： {construNumberDetail} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum}</span>
+                        <span style={{color: "#FF8C00"}}>已配： {construNumberDetail} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum || 0}</span>
                     </div>
                     <Table
                             size="small"

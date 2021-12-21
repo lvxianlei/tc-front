@@ -2,33 +2,33 @@
     "baseInfo": [
         {
             "title": "开始时间",
-            "dataIndex": "internalNumber"
+            "dataIndex": "startTime"
         },
         {
             "title": "完成时间",
-            "dataIndex": "contractName"
+            "dataIndex": "endTime"
         },
         {
             "title": "塔型",
-            "dataIndex": "refundAmount"
+            "dataIndex": "productCategoryName"
         },
         {
             "title": "杆塔",
-            "dataIndex": "salesman"
+            "dataIndex": "product"
         }
     ],
     "operationInformation": [
         {
             "title": "操作部门",
-            "dataIndex": "internalNumber"
+            "dataIndex": "deptName"
         },
         {
             "title": "操作人",
-            "dataIndex": "contractName"
+            "dataIndex": "optUserName"
         },
         {
             "title": "操作时间",
-            "dataIndex": "refundAmount"
+            "dataIndex": "optTime"
         },
         {
             "title": "任务状态",
@@ -36,7 +36,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "salesman"
+            "dataIndex": "description"
         }
     ]
 }
