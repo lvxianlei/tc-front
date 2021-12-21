@@ -82,12 +82,15 @@ const ProdUnitAdd = (props: any) => {
         const value = form.getFieldsValue(true);
         const submitValue = {
             ...value,
+            productUnitCode:value.productUnitCode,
             productionLinkDTOList: value.productionLinkDTOList.map((item: string) => {
                 return {
                     productionLinkId: item,
-                    productionUnitId: props.id
+                    productionUnitId: props.id,
+
                 }
-            })
+            }),
+           
         }
         await RequestUtil.post('/tower-aps/productionUnit', {
             ...submitValue,
@@ -136,7 +139,7 @@ const ProdUnitAdd = (props: any) => {
             })
             let datas: any[] = [
                 {
-                    name: '已排产',
+                    name: '已下达',
                     type: 'bar',
                     stack: 'stack',
                     emphasis: {
@@ -151,7 +154,7 @@ const ProdUnitAdd = (props: any) => {
                     data: []
                 },
                 {
-                    name: '已反馈',
+                    name: '已下发',
                     type: 'bar',
                     stack: 'stack',
                     emphasis: {
@@ -165,21 +168,21 @@ const ProdUnitAdd = (props: any) => {
                     },
                     data: []
                 },
-                {
-                    name: '待确认',
-                    type: 'bar',
-                    stack: 'stack',
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    markLine: {
-                        data: [{
-                            name:'产力值',
-                           yAxis:max
-                        }]
-                    },
-                    data: []
-                },
+                // {
+                //     name: '待确认',
+                //     type: 'bar',
+                //     stack: 'stack',
+                //     emphasis: {
+                //         focus: 'series'
+                //     },
+                //     markLine: {
+                //         data: [{
+                //             name:'产力值',
+                //            yAxis:max
+                //         }]
+                //     },
+                //     data: []
+                // },
                 {
                     name: '已锁定',
                     type: 'bar',
@@ -256,6 +259,7 @@ const ProdUnitAdd = (props: any) => {
     return (
         <div className='public_page'>
             <Modal
+                getContainer={false}
                 className='public_modal_input ProdUnitAdd'
                 title={props.id ? '编辑' : '新增'}
                 // visible={isModal}
@@ -325,7 +329,37 @@ const ProdUnitAdd = (props: any) => {
                 <Form form={ form } {...formItemLayout}>
                     <Row>
                         <Col  span={24}>
-                            <Form.Item label="生产单元名称" rules={[{required:true,message:'请填写生产单元名称'}]} name='name'>
+                            <Form.Item label="生产单元名称" rules={[{required:true, message:'请填写生产单元名称'},]} name='name'>
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col  span={24}>
+                            {/* <Form.Item label="生产环节编码" rules={[{required:true,message:'请选择生产环节编码'}]} name='productionLinknum'>
+                                <Select
+                                    className='input'
+                                    placeholder='请选择' */}
+                                    {/* // onChange={(value) => { */}
+                                    {/* //     changeItemInfo(value, 'productionLinkDTOList')
+                                    // }} */}
+                                {/* > */}
+                                     {/* <Select.Option value={1}>德汇</Select.Option>
+                                     <Select.Option value={2}>汇金通</Select.Option> */}
+                                    {/* {
+                                        prodLinkList.map((item: any, index: number) => {
+                                            return (
+                                                <Select.Option
+                                                    key={index}
+                                                    value={item.id}
+                                                    disabled={item.isUse}
+                                                >{item.name}</Select.Option>
+                                            )
+                                        })
+                                    } */}
+                                {/* </Select>
+                            </Form.Item> */}
+                            <Form.Item label="生产单元编码" rules={[{required:true,pattern: new RegExp(/[0-9a-z]{1,20}$/),message:'请输入数字与字母'},{max:20,message:"最多只能输入20个字符与数字"}]} name='productUnitCode'>
                                 <Input/>
                             </Form.Item>
                         </Col>
