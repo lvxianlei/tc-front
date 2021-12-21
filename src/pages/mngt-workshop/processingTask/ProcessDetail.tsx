@@ -8,33 +8,18 @@ import RequestUtil from '../../../utils/RequestUtil';
 import WorkshopUserSelectionComponent, { IUser } from '../../../components/WorkshopUserModal';
 
 const tableColumns = [
-    { title: '工序', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '产线', dataIndex: 'createDeptName', key: 'createDeptName', },
-    { title: '派工设备', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '班组', dataIndex: 'createTime', key: 'createTime' },
-    // { title: '任务状态', dataIndex: 'status', key: 'status',  render: (value: number, record: object): React.ReactNode => {
-    //     const renderEnum: any = [
-    //         {
-    //             value: 0,
-    //             label: "已拒绝"
-    //         },
-    //         {
-    //             value: 1,
-    //             label: "待修改"
-    //         },
-    //         {
-    //             value: 2,
-    //             label: "已修改"
-    //         },
-    //         {
-    //             value: 3,
-    //             label: "已删除"
-    //         },
-    //     ]
-    //     return <>{renderEnum.find((item: any) => item.value === value).label}</>
-    // }},
-    { title: '完成时间', dataIndex: 'description', key: 'description' },
-    { title: '状态', dataIndex: 'description', key: 'description' }
+    { title: '工作中心', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+    { title: '班组', dataIndex: 'teamName', key: 'teamName'},
+    { title: '实际完成时间', dataIndex: 'description', key: 'description' },
+    { title: '状态', dataIndex: 'description', key: 'description', render: (status: number): React.ReactNode => {
+        switch (status) {
+            case 1:
+                return '已完成';
+            case 0:
+                return '未完成';
+        }
+        return <>{status}</>
+    } }
 ]
 
 export default function ProcessDetail(): React.ReactNode {

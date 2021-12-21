@@ -501,19 +501,9 @@
                         "authority": "workshop_work_management",
                         "items": [
                             {
-                                "label": "加工任务面板",
+                                "label": "加工任务",
                                 "path": "/workshopManagement/processingTask",
                                 "authority": "workshop_work_management_machining_task_panel"
-                            },
-                            {
-                                "label": "试装计划任务列表",
-                                "path": "/workshopManagement/trialAssemblyTask",
-                                "authority": "workshop_work_management_trial_assembly_plan_task_list"
-                            },
-                            {
-                                "label": "车间转运接收列表",
-                                "path": "/workshopManagement/workshopTransfer",
-                                "authority": "workshop_work_management_workshop_transfer_receiving_list"
                             }
                         ]
                     },
@@ -555,17 +545,17 @@
                         "authority": "packaging_workshop",
                         "items": [
                             {
-                                "label": "加工任务面板",
+                                "label": "包装计划列表",
                                 "path": "/packagingWorkshop/processingTask",
                                 "authority": "packaging_workshop_machining_task_panel"
                             },
                             {
-                                "label": "成品入库列表",
+                                "label": "成品入库",
                                 "path": "/packagingWorkshop/warehousing",
                                 "authority": "packaging_workshop_finished_goods_warehousing_list"
                             },
                             {
-                                "label": "成品出库计划",
+                                "label": "成品出库任务",
                                 "path": "/packagingWorkshop/deliveryPlan",
                                 "authority": "packaging_workshop_finished_goods_delivery_plan"
                             },
