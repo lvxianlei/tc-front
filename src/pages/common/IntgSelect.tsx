@@ -29,7 +29,7 @@ export default function IntgSelect({ onChange, width, value = { first: "", secon
 
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/user?departmentId=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/user?departmentId=${id}&size=1000`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -48,7 +48,7 @@ export default function IntgSelect({ onChange, width, value = { first: "", secon
     }, [setUserId, deptId, onChange])
 
     return <div style={{ width: width || "100%" }}>
-        <Select placeholder="部门" value={deptId||undefined} style={{ width: "50%" }} onChange={handleFirstChange} >{deptData?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
-        <Select placeholder="人员" value={userId||undefined} style={{ width: "50%" }} onChange={handleChange} disabled={!deptId}>{userData?.records?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
+        <Select placeholder="部门" value={deptId || undefined} style={{ width: "50%" }} onChange={handleFirstChange} >{deptData?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
+        <Select placeholder="人员" value={userId || undefined} style={{ width: "50%" }} onChange={handleChange} disabled={!deptId}>{userData?.records?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
     </div>
 }

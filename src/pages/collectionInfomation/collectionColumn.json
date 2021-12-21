@@ -38,7 +38,7 @@
         },
         {
             "title": "回款类型",
-            "dataIndex": "returnType"
+            "dataIndex": "returnTypeName"
         },
         {
             "title": "确认方",

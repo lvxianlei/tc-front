@@ -144,7 +144,7 @@ class EntrustList extends AbstractMngtComponent<IEntrustListWithRouteProps, IEnt
             width: 50,
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
-                <Space direction="horizontal" size="small">{console.log(record)}
+                <Space direction="horizontal" size="small">
                     <DeliveryAcceptance id={(record as ITowerModelVO).id} productCategoryId={(record as ITowerModelVO).productCategoryId} entrustId={(record as ITowerModelVO).entrustId} getTable={() => this.fetchTableData({})} />
                 </Space>
             )

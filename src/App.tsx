@@ -30,26 +30,26 @@ export default class App extends React.Component<{}, IAppState> {
      * @param module 
      * @returns route 
      */
-   protected renderRoute(module: string | undefined): (props: RouteComponentProps<{}>) => React.ReactNode {
+  protected renderRoute(module: string | undefined): (props: RouteComponentProps<{}>) => React.ReactNode {
     return (props: RouteComponentProps<{}>): React.ReactNode => {
-        if (this.state.shouldRender === undefined) {
-            ApplicationContext.doFiltersAll(props).then((permit: boolean): void => {
-                this.setState({
-                    shouldRender: permit
-                });
-            });
-        }
-        return (
-            <>
-                {
-                    this.state.shouldRender
-                    ?
-                    <AsyncPanel module={ module}/>
-                    :
-                    null
-                }
-            </>
-        );
+      if (this.state.shouldRender === undefined) {
+        ApplicationContext.doFiltersAll(props).then((permit: boolean): void => {
+          this.setState({
+            shouldRender: permit
+          });
+        });
+      }
+      return (
+        <>
+          {
+            this.state.shouldRender
+              ?
+              <AsyncPanel module={module} />
+              :
+              null
+          }
+        </>
+      );
     }
   }
 
@@ -60,31 +60,33 @@ export default class App extends React.Component<{}, IAppState> {
   public render(): React.ReactNode {
     const frame: ComponentClazz | undefined = ApplicationContext.get().layout?.frame;
     const FrameComponent: React.ComponentClass | undefined = frame?.componentClass;
-    // const effective: boolean = this.state.isEffective;
     return (
       <Router>
         <Switch>
-          { 
+          {
             ApplicationContext.get().globalRouters?.map<React.ReactNode>((router: IRouterItem): React.ReactNode => {
-              
-              if( !router.path ){
+
+              if (!router.path) {
                 return null;
               }
 
-              if( router.redirect ){
-                return <Redirect from={ router.path }  key={ router.path } exact={ router.exact } to={ router.redirect }/>
+              if (router.redirect) {
+                return <Redirect from={router.path} key={router.path} exact={router.exact} to={router.redirect} />
               }
 
-              return  <Route path={ router.path } key={ router.path } exact={ router.exact }
-              render={ this.renderRoute(router.module) }/>
+              return <Route
+                path={router.path}
+                key={router.path}
+                exact={router.exact}
+                render={this.renderRoute(router.module)} />
             })
-          } 
+          }
           {
             FrameComponent
-            ? 
-            <FrameComponent { ...frame?.props }/>
-            :
-            null
+              ?
+              <FrameComponent {...frame?.props} />
+              :
+              null
           }
         </Switch>
       </Router>

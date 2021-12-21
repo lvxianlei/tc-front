@@ -14,7 +14,7 @@ interface priceSourceEnumData {
 interface EditProps {
     id: string
     type: "new" | "edit",
-    priceSourceEnum: {[key: string]: any} | undefined
+    priceSourceEnum: { [key: string]: any } | undefined
 }
 
 const materialList = {
@@ -87,10 +87,8 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/${id}`);
-            console.log(result, "dddddd")
             // 根据价格来源去查询价格来源的id
             const priceSource = priceSourceEnum && priceSourceEnum?.filter((item: any) => item.label === result.priceSource);
-            console.log(priceSource, priceSourceEnum, result.priceSource)
             materialForm.setFieldsValue(result)
             priceInfoForm.setFieldsValue(
                 {
@@ -132,9 +130,9 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
         const priceInfoData = await priceInfoForm.validateFields()
         console.log("priceInfoData", priceInfoData)
         const materialStandardName = materialStandard?.filter((item: any) => item.value === materialData.materialStandard),
-           structureTexture = materialCategoryName?.filter((item: any) => item.value === materialData.structureTextureId),
-           priceSource = priceSourceEnum && priceSourceEnum?.filter((item: any) => item.value === priceInfoData.priceSource);
-           console.log(priceSource, "priceSource", priceSourceEnum, 'id', priceInfoData.priceSource)
+            structureTexture = materialCategoryName?.filter((item: any) => item.value === materialData.structureTextureId),
+            priceSource = priceSourceEnum && priceSourceEnum?.filter((item: any) => item.value === priceInfoData.priceSource);
+        console.log(priceSource, "priceSource", priceSourceEnum, 'id', priceInfoData.priceSource)
         try {
             await saveRun({
                 // id:  popContent?.records.id || popContent?.records.id,
@@ -160,7 +158,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
     useImperativeHandle(ref, () => ({ onSubmit, loading: saveLoading }), [onSubmit, saveLoading])
 
     // 选择原材料名称后的回调处理
-    const handleChangeName = (fields: { [key: string]: any}) => {
+    const handleChangeName = (fields: { [key: string]: any }) => {
         console.log(fields.materialName, 'fields')
         if (fields.materialName) {
             materialForm.setFieldsValue({
@@ -171,7 +169,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
             setPopContent({ id: fields.id, records: fields.materialName.records[0] })
         }
     }
-    const handleTest =  async (fields: any) => {
+    const handleTest = async (fields: any) => {
         console.log(fields, 'fields')
         if (fields.materialName) {
             materialForm.setFieldsValue({
@@ -180,7 +178,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
                 materialCategoryName: fields.records[0].materialCategoryName, // 原材料类型
             })
         }
-      }
+    }
 
     return <Spin spinning={loading}>
         {/* <Modal width={1011} title="选择" destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
@@ -189,9 +187,9 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
         <DetailTitle title="原材料信息" operation={[
             <Button disabled={type === "edit"} type="primary" ghost key="choose" onClick={() => setVisible(true)}>选择</Button>
         ]} /> */}
-        <BaseInfo form={materialForm} onChange={handleChangeName}  col={2} columns={[
+        <BaseInfo form={materialForm} onChange={handleChangeName} col={2} columns={[
             ...materialInfo.map((item: any) => {
-                if(item.dataIndex === "materialName") {
+                if (item.dataIndex === "materialName") {
                     return (
                         {
                             ...item,
@@ -227,7 +225,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
         <BaseInfo form={priceInfoForm} col={3} columns={priceInfo.map((item: any) => {
             if (item.dataIndex === "priceSource") {
                 return ({ ...item, type: "select", enum: priceSourceEnum })
-            }   
+            }
             return item
         })} dataSource={data || {}} edit />
     </Spin>

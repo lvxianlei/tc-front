@@ -8,7 +8,7 @@
       "name": "首页",
       "path": "/",
       "exact": true,
-      "redirect": "/client/mngt"
+      "redirect": "/chooseApply"
     },
     {
       "name": "登录",

@@ -5,7 +5,6 @@
 import { Button, Col, Layout, Popconfirm, Row } from 'antd';
 import { SiderTheme } from 'antd/lib/layout/Sider';
 import React from 'react';
-
 import ApplicationContext from '../configuration/ApplicationContext';
 import EventBus from '../utils/EventBus';
 import styles from './AbstractFrame.module.less';
@@ -106,7 +105,7 @@ export default abstract class AbstractFrame<
     protected getMenuTheme(): SiderTheme {
         return ApplicationContext.get().layout?.navigationPanel?.props?.theme || 'light';
     }
-    
+
     protected logOut(): void {
         AuthUtil.removeTenantId();
         AuthUtil.removeSinzetechAuth();
@@ -123,78 +122,64 @@ export default abstract class AbstractFrame<
     public render(): React.ReactNode {
         return (
             <Layout className={layoutStyles.height100}>
-                <div style={{ position: 'absolute', width: '200px', height:'64px' }} className={ layoutStyles.bk }/>
+                <div style={{ position: 'absolute', width: '200px', height: '64px' }} className={layoutStyles.bk} />
                 <div className={layoutStyles.logout}>
                     <Row>
                         <Col>
-                            <Link to={`/approvalm/management`} className={ layoutStyles.btn }>我的审批</Link>
+                            <Link to={`/approvalm/management`} className={layoutStyles.btn}>我的审批</Link>
                         </Col>
                         <Col>
-                            <Link to={`/homePage/notice`} className={ layoutStyles.btn }><BellOutlined className={ layoutStyles.icon }/></Link>
+                            <Link to={`/homePage/notice`} className={layoutStyles.btn}><BellOutlined className={layoutStyles.icon} /></Link>
                         </Col>
                         <Col>
-                            <Link to={`/homePage/personalCenter`} className={ layoutStyles.btn }><UserOutlined className={ layoutStyles.icon }/>{ AuthUtil.getRealName() }</Link>
+                            <Link to={`/homePage/personalCenter`} className={layoutStyles.btn}><UserOutlined className={layoutStyles.icon} />{AuthUtil.getRealName()}</Link>
                         </Col>
                         <Col>
                             <Popconfirm
                                 title="确认退出登录?"
-                                onConfirm={ this.logOut }
+                                onConfirm={this.logOut}
                                 okText="确认"
                                 cancelText="取消"
                             >
-                                <Button type="link" className={ layoutStyles.btn }>退出</Button>
+                                <Button type="link" className={layoutStyles.btn}>退出</Button>
                             </Popconfirm>
                         </Col>
                     </Row>
                 </div>
-                { this.state.detailData && this.state.detailData.map((res: IAnnouncement, index: number) => {
-                    return <NoticeModal detailData={ res } key={ index }/>
-                }) }
+                {this.state.detailData && this.state.detailData.map((res: IAnnouncement, index: number) => {
+                    return <NoticeModal detailData={res} key={index} />
+                })}
                 <Layout.Header className={styles.header}>
                     <Layout>
-                        <Layout.Sider className={styles.logo} theme={this.getMenuTheme()} collapsedWidth={48} width={this.getMenuContainerWidth()}>
-                            {this.renderLogo()}
+                        <Layout.Sider
+                            className={styles.logo}
+                            theme={this.getMenuTheme()}
+                            collapsedWidth={48}
+                            width={this.getMenuContainerWidth()}>
+                            <span className={styles.logoStyle} onClick={() => (this.props as any).history.replace("/chooseApply")}>{this.renderLogo()}</span>
                         </Layout.Sider>
                         <Layout.Content className={styles.headerContent}>
                             {this.renderHeaderPanel()}
                         </Layout.Content>
                     </Layout>
                 </Layout.Header>
-                <Layout>
-                    <Layout.Sider theme={this.getMenuTheme()} collapsed={this.state.collapsed}
-                        collapsedWidth={48}
-                        style={{ backgroundColor: "#F8F8F8" }}
-                        width={this.getMenuContainerWidth()}>
-                        <div className={styles.navigation}>
-                            {this.renderNavigationPanel()}
-                        </div>
-                        {/* <Layout.Footer>
-                        { this.renderFooterPanel() }
-                    </Layout.Footer> */}
-                    </Layout.Sider>
-                    <Layout.Content className={styles.content}>
+                {
+                    (this.props as any).location.pathname === "/chooseApply" ? <Layout className={styles.content}>
                         {this.renderContentPanel()}
-                    </Layout.Content>
-                </Layout>
-                {/**
-                <Layout.Header>
-                    { this.renderHeaderPanel() }
-                </Layout.Header>
-                <Layout>
-                    <Layout.Sider theme="light" width={ this.getMenuContainerWidth() }>
-                        { this.renderNavigationPanel() }
-                    </Layout.Sider>
-                    <Layout>
-                        <Layout.Content className={ styles.content }>
-                            { this.renderContentPanel() }
+                    </Layout> : <Layout>
+                        <Layout.Sider theme={this.getMenuTheme()} collapsed={this.state.collapsed}
+                            collapsedWidth={48}
+                            style={{ backgroundColor: "#F8F8F8" }}
+                            width={this.getMenuContainerWidth()}>
+                            <div className={styles.navigation}>
+                                {this.renderNavigationPanel()}
+                            </div>
+                        </Layout.Sider>
+                        <Layout.Content className={styles.content}>
+                            {this.renderContentPanel()}
                         </Layout.Content>
-                        <Layout.Footer>
-                            { this.renderFooterPanel() }
-                        </Layout.Footer>
                     </Layout>
-                </Layout>
-                */}
-               
+                }
             </Layout>
         );
     }
