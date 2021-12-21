@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import { baseColumns, specialColums, productColumns } from './SetOutTaskDetail.json';
+import { baseColumns, specialColums } from './SetOutTaskDetail.json';
 import styles from './SetOutTask.module.less';
 
 const tableColumns = [
@@ -57,11 +57,61 @@ const tableColumns = [
     }
 ]
 
+const productColumns = [
+    { 
+        key: 'productCategoryName', 
+        title: '塔型', 
+        dataIndex: 'productCategoryName', 
+    },
+    {
+        key: 'productNum',
+        title: '杆塔（基）',
+        dataIndex: 'productNum', 
+    },
+    {  
+        key: 'productType', 
+        title: '产品类型', 
+        dataIndex: 'productType' 
+    },
+    { 
+        key: 'loftingAbortTime', 
+        title: '放样截止时间', 
+        dataIndex: 'loftingAbortTime' 
+    },
+    { 
+        key: 'materialAbortTime', 
+        title: '提料截止时间', 
+        dataIndex: 'materialAbortTime' 
+    },
+    {
+        key: 'totalWeight', 
+        title: '总重量（kg）', 
+        dataIndex: 'totalWeight',
+    },
+    { 
+        key: 'description', 
+        title: '备注', 
+        dataIndex: 'description' 
+    }
+]
 export default function SetOutTaskDetail(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
+    const [ tableDataSource, setTableDataSource ] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/loftingTask/detail?id=${ params.id }`)
+        const data:any = await RequestUtil.get(`/tower-science/loftingTask/detail?id=${ params.id }`)
+        setTableDataSource([
+            {
+                productCategoryName: data.productCategoryName,
+                productNum: data.productNum,
+                productType: data.productType,
+                productCategoryNum: data.productCategoryNum,
+                totalWeight: data.totalWeight,
+                loftingAbortTime: data.loftingAbortTime,
+                materialAbortTime: data.materialAbortTime,
+                description: data.description
+            },
+        ])
         resole(data)
     }), {})
     const detailData: any = data;
@@ -89,7 +139,8 @@ export default function SetOutTaskDetail(): React.ReactNode {
                             history.goBack();
                         });
                     } }>接收</Button> 
-                    <Button type="ghost" onClick={ () => setVisible(true) }>拒绝</Button></>
+                    {/* <Button type="ghost" onClick={ () => setVisible(true) }>拒绝</Button> */}
+                    </>
                     : null
                 }
             </Space>
@@ -99,7 +150,8 @@ export default function SetOutTaskDetail(): React.ReactNode {
             <DetailTitle title="特殊要求" />
             <BaseInfo columns={ specialColums } dataSource={ detailData } col={ 2 } />
             <DetailTitle title="产品信息" />
-            <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
+            {/* <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } /> */}
+            <CommonTable columns={ productColumns } dataSource={ tableDataSource } pagination={ false }/>
             <Attachment dataSource={ detailData.attachVos } />
             <DetailTitle title="操作信息"/>
             <CommonTable columns={ tableColumns } dataSource={ detailData.stateRecordVOS } pagination={ false }/>

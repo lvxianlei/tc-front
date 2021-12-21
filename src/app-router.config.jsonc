@@ -1505,7 +1505,7 @@
     { // 车间工作管理-加工任务面板
       "name": "加工任务面板",
       "path": "/workshopManagement/processingTask",
-      "module": "./pages/mngt-workshop/processingTask/ProcessingTaskList",
+      "module": "./pages/mngt-workshop/WorkShopMngt",
       "exact": true,
       "authority": "workshop_work_management_machining_task_panel"
     },
@@ -1701,28 +1701,28 @@
     { // 镀锌车间-日计划列表
       "name": "日计划列表",
       "path": "/galvanizingWorkshop/dailySchedule",
-      "module": "./pages/galvanizingWorkshop/DailySchedule",
+      "module": "./pages/galvanizingWorkshop/dailyPlan/DailySchedule",
       "exact": true,
       "authority": "galvanizing_workshop_daily_plan_list"
     },
     { // 镀锌车间-过磅单列表
       "name": "过磅单列表",
       "path": "/galvanizingWorkshop/weighingList",
-      "module": "./pages/galvanizingWorkshop/WeighingList",
+      "module": "./pages/galvanizingWorkshop/weighingList/WeighingList",
       "exact": true,
       "authority": "galvanizing_workshop_weighing_list"
     },
     { // 镀锌车间-新增过磅单
       "name": "新增",
       "path": "/galvanizingWorkshop/weighingList/weighingNew",
-      "module": "./pages/galvanizingWorkshop/WeighingNew",
+      "module": "./pages/galvanizingWorkshop/weighingList/WeighingNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 镀锌车间-编辑过磅单
       "name": "编辑",
       "path": "/galvanizingWorkshop/weighingList/weighingSetting/:id",
-      "module": "./pages/galvanizingWorkshop/WeighingNew",
+      "module": "./pages/galvanizingWorkshop/weighingList/WeighingNew",
       "exact": true,
       "authority": "approvalm"
     },
@@ -2258,6 +2258,20 @@
       "module": "./pages/socialSecurity/archives/Edit",
       "exact": true,
       "authority": "hr_insurance_archives_save"
+    },
+    { // 生产工序管理
+      "name": "生产工序管理",
+      "path": "/workshopPlanBasic/processMngt",
+      "module": "./pages/workshopPlanBasic/processMngt/ProcessMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作中心管理
+      "name": "工作中心管理",
+      "path": "/planBaseSetting/workCenterMngt",
+      "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterMngt",
+      "exact": true,
+      "authority": "approvalm"
     },
     { // 生产环节管理
       "name": "生产环节管理",
