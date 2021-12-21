@@ -199,41 +199,45 @@
                         "label": "驾驶舱",
                         "icon": "technology",
                         "path": "/cockpit",
+                        "appName": "RD",
                         "authority": "cockpit",
                         "items": [
                             {
                                 "label": "计划跟踪",
-                                "appName": "RD",
                                 "path": "/cockpit/planTrack",
                                 "authority": "rd_cockpit"
                             },
                             {
                                 "label": "放样计划",
-                                "appName": "RD",
                                 "path": "/cockpit/planSetOut",
                                 "authority": "rd_cockpit"
-                            },
+                            }
+                        ]
+                    },
+                    {
+                        "label": "驾驶舱",
+                        "icon": "technology",
+                        "path": "/cockpit",
+                        "appName": "SW",
+                        "authority": "cockpit",
+                        "items": [
                             {
                                 "label": "库存看板",
-                                "appName": "SW",
                                 "path": "/cockpit/viewPanel",
                                 "authority": "cockpit_inventory_kanban"
                             },
                             {
                                 "label": "原材料看板",
-                                "appName": "SW",
                                 "path": "/cockpit/rawMaterial",
                                 "authority": "cockpit_raw_material_kanban"
                             },
                             {
                                 "label": "收货单看板",
-                                "appName": "SW",
                                 "path": "/cockpit/receiveTask",
                                 "authority": "cockpit_receipt_kanban"
                             },
                             {
                                 "label": "合同看板",
-                                "appName": "SW",
                                 "path": "/cockpit/contract",
                                 "authority": "cockpit_contract_kanban"
                             }
