@@ -5,14 +5,11 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Select, Form, Popconfirm, message } from 'antd';
+import { Space, Input, Button, Modal, Form, Popconfirm, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
-import useRequest from '@ahooksjs/use-request';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { useHistory } from 'react-router-dom';
-import styles from './WorkshopEquipmentMngt.module.less';
 import { IDetailData } from '../IWorkshopPlanBasic';
 
 
@@ -28,7 +25,7 @@ export default function ProcessMngt(): React.ReactNode {
     const columns = [
         {
             key: 'name',
-            title: '产线名称',
+            title: '工序名称',
             width: 150,
             dataIndex: 'name'
         },
@@ -43,12 +40,11 @@ export default function ProcessMngt(): React.ReactNode {
                     <Button type="link" onClick={ () => {
                         setVisible(true);
                         setTitle("编辑");
-                        getList(record.id);
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.delete(`/tower-production/productionLines/remove?id=${ record.id }`).then(res => {
+                            RequestUtil.delete(`/tower-aps/product/process/${ record.id }`).then(res => {
                                 message.success('删除成功');
                                 // setRefresh(!refresh);
                                 history.go(0);
@@ -71,7 +67,7 @@ export default function ProcessMngt(): React.ReactNode {
                 ...value,
                 id: detailData.id,
             }
-            RequestUtil.post<IDetailData>(`/tower-production/productionLines/submit`, { ...value }).then(res => {
+            RequestUtil.post<IDetailData>(`/tower-aps/product/process`, { ...value }).then(res => {
                 message.success('保存成功！');
                 setVisible(false);
                 setRefresh(!refresh);
@@ -87,23 +83,18 @@ export default function ProcessMngt(): React.ReactNode {
         setVisible(false);
     }
 
-    const getList = async (id: string) => {
-        const data = await RequestUtil.get<IDetailData>(`/tower-production/productionLines/detail?id=${ id }`);
-        setDetailData(data);
-        form.setFieldsValue({...data})
-    }
 
     return (
         <>
             <Page
-                path="/tower-production/productionLines/page"
+                path="/tower-aps/product/process"
                 columns={ columns }
                 headTabs={ [] }
                 extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} } ghost>新增</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {
-                        name: 'productionLinesName',
+                        name: 'name',
                         label: '',
                         children: <Input placeholder="生产工序名称"/>
                     }
