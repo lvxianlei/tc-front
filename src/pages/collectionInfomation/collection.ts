@@ -10,6 +10,7 @@ export interface TitleType {
 export interface OverViewProps {
     title: TitleType[];
     visible?: boolean;
+    status?: number;
     userData?: object | undefined;
     contractList?: Contract[];
     onCancel: () => void
