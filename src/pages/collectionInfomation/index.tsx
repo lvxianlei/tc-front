@@ -205,7 +205,7 @@ export default function CollectionInfomation(): React.ReactNode {
                         children: (
                             <Select placeholder="请选择回款类型" style={{ width: "140px" }}>
                                 { collectionTypeeOptions && collectionTypeeOptions.map(({ id, name }, index) => {
-                                    return <Select.Option key={index} value={name}>
+                                    return <Select.Option key={index} value={id}>
                                         {name}
                                     </Select.Option>
                                 }) }
