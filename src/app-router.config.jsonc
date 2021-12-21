@@ -1356,14 +1356,14 @@
       "path": "/workMngt/buyBurdening/detail/:id",
       "module": "./pages/workMngt/buyBurdening/Overview",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "buy_burdening_overview"
     },
     { // 工作管理-采购配料
       "name": "配料明细",
       "path": "/workMngt/buyBurdening/component/:id/:status",
       "module": "./pages/workMngt/buyBurdening/Detail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "buy_burdening_detail"
     },
     { // 问题单
       "name": "问题单列表",
