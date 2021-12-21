@@ -20,9 +20,9 @@ export default function ProcessDetail(): React.ReactNode {
     const [packageDataSource,setPackageDataSource] = useState<any>([]);
     const [userDataSource,setUserDataSource] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/packageWorkshop/taskCollectDetail/${params.id}`)
-        const packageData= await RequestUtil.get(`tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
-        setPackageDataSource(packageData)
+        // const data: any = await RequestUtil.get(`/packageWorkshop/taskCollectDetail/${params.id}`)
+        // const packageData:any = await RequestUtil.get(`tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
+        // setPackageDataSource(packageData)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -55,14 +55,12 @@ export default function ProcessDetail(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={params.status!=='3'?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    // setVisible(true)
-                    form.validateFields().then(()=>{
-                        let value = form.getFieldsValue(true);
-                        RequestUtil.post(``).then(()=>{
-                            message.success('入库成功！')
-                        }).then(()=>{
-                            history.push(`/packagingWorkshop/processingTask`)
-                        })
+                    await  form.validateFields();
+                    let value = form.getFieldsValue(true);
+                    RequestUtil.put(`/packageWorkshop/confirmWarehouse`).then(()=>{
+                        message.success('入库成功！')
+                    }).then(()=>{
+                        history.push(`/packagingWorkshop/processingTask`)
                     })
                 }}>确认入库</Button>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
@@ -98,7 +96,7 @@ export default function ProcessDetail(): React.ReactNode {
                     <Row>
                         <Col span={12}>
                             <Form.Item name="productType" label="产品类型" >
-                                <Select style={{width:'100%'}}>
+                                <Select style={{width:'100%'}} disabled>
                                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                             return <Select.Option key={index} value={id}>
                                                 {name}
@@ -115,13 +113,13 @@ export default function ProcessDetail(): React.ReactNode {
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="time" label="包装时间" initialValue={[moment('2015-01-01'), moment('2015-01-01')]} style={{width:'100%'}} rules={[
+                            <Form.Item name="time" label="包装时间"  style={{width:'100%'}} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择包装时间"
                                 }
                             ]}>
-                                <DatePicker.RangePicker showTime style={{width:'100%'}} />
+                                <DatePicker style={{width:'100%'}} />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -141,12 +139,12 @@ export default function ProcessDetail(): React.ReactNode {
                     <Row>
                         
                         <Col span={12}>
-                            <Form.Item name="time" label="生产单元" initialValue={undefined}>
+                            <Form.Item name="unit" label="生产单元" initialValue={undefined}>
                                 <Input disabled/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="noDispatchStatus" label="库位" initialValue={1} rules={[
+                            <Form.Item name="noDispatchStatus" label="库区" initialValue={1} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择库位"
@@ -175,15 +173,21 @@ export default function ProcessDetail(): React.ReactNode {
                                     "message": "请选择包装人员"
                                 }
                             ]}>
-                                <Input maxLength={ 50 } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: any[] | any) => {
-                                    console.log(selectedRows)
-                                    // setEquipment(selectedRows);
-                                    form.setFieldsValue({
-                                        equipmentName: selectedRows.map((item: any,index:number)=>{
-                                            return item.name
-                                        })
-                                    });
-                                } } buttonType="link" buttonTitle="+编辑" rowSelectionType="checkbox"/> } disabled/>
+                                <Input maxLength={ 50 } addonAfter={ 
+                                    <Button type='link' onClick={()=>{
+                                        setVisible(true)
+                                    }} style={{ paddingBottom: '0', paddingTop: '0', height: 'auto', lineHeight: 1 }}>+编辑</Button>
+                                // <WorkshopUserSelectionComponent onSelect={ (selectedRows: any[] | any) => {
+                                //     console.log(selectedRows)
+                                //     // setEquipment(selectedRows);
+                                //     form.setFieldsValue({
+                                //         equipmentName: selectedRows.map((item: any,index:number)=>{
+                                //             return item.name
+                                //         })
+                                //     });
+                                // } 
+                                // } buttonType="link" buttonTitle="+编辑" rowSelectionType="checkbox"/> 
+                                } disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -209,10 +213,10 @@ export default function ProcessDetail(): React.ReactNode {
                     pagination={false}
                 />
             </DetailContent>
-            {/* <Modal
+            <Modal
                 visible={ visible } 
                 width="40%" 
-                title="采集确认-选择员工"
+                title="采集入库-包装人员"
                 footer={ <Space>
                     <Button type="primary" ghost  onClick={() => setVisible(false) }>取消</Button>
                     <Button type="primary" onClick={async () => {
@@ -222,16 +226,15 @@ export default function ProcessDetail(): React.ReactNode {
                         }).then(()=>{
                             history.push(`/workshopManagement/processingTask`)
                         })
-                    }} disabled={!(userDataSource.length>0)}>确认加工完成</Button>
+                    }} disabled={!(userDataSource.length>0)}>确认</Button>
                 </Space> } 
                 onCancel={ () => setVisible(false) }
             >
                 <WorkshopUserSelectionComponent onSelect={ (selectedRows: object[] | any) => {
                     let temp = [...userDataSource];    
-  
                     temp.push(selectedRows[0]);
                     setUserDataSource(temp);
-                    } } buttonTitle="添加员工" rowSelectionType="checkbox"/>
+                    } } buttonTitle="添加员工" selectKey={[...userDataSource]}/>
                 <Table 
                     columns={[
                         { title: '姓名', dataIndex: 'name', key:'name' },
@@ -248,10 +251,11 @@ export default function ProcessDetail(): React.ReactNode {
                             </Space>
                         ) }
                     ]}
+                    size="small"
                     dataSource={[...userDataSource]} 
                     pagination={false}
                 />
-            </Modal> */}
+            </Modal>
         </Spin>
     </>
 }
