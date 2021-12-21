@@ -573,6 +573,20 @@
                         ]
                     },
                     {
+                        "label": "车间加工计划",
+                        "icon": "technology",
+                        "path": "/shopFloorPlan",
+                        "authority": "approvalm",
+                        "appName": "MC",
+                        "items": [
+                            {
+                                "label": "车间加工计划",
+                                "path": "/shopFloorPlan",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "镀锌车间",
                         "icon": "technology",
                         "path": "/galvanizingWorkshop",
