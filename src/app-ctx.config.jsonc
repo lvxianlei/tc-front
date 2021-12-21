@@ -888,17 +888,20 @@
                     {
                         "label": "车间计划基础配置",
                         "icon": "customer",
+                        "appName": "MC",
                         "path": "/workshopPlanBasic",
                         "authority": "approvalm",
                         "items": [
                             {
                                 "label": "生产工序管理",
                                 "path": "/workshopPlanBasic/processMngt",
+                                "appName": "MC",
                                 "authority": "approvalm"
                             },
                             {
                                 "label": "工作中心管理",
-                                "path": "/planBaseSetting/workCenterMngt",
+                                "path": "/workshopPlanBasic/workCenterMngt",
+                                "appName": "MC",
                                 "authority": "approvalm"
                             }
                         ]

@@ -1,13 +1,12 @@
 import React, { useImperativeHandle, forwardRef, useRef, useState } from "react"
 import { Spin, Form, Select, Input, InputNumber, Popconfirm, Space, Button, TimePicker, Table } from 'antd'
-import { DetailTitle, BaseInfo, Attachment, AttachmentRef } from '../../common'
+import { DetailTitle, BaseInfo } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { invoiceTypeOptions } from "../../../configuration/DictionaryOptions"
 import styles from './WorkCenterMngt.module.less';
 import { IWorkCenterMngt } from "../IWorkshopPlanBasic"
+import { materialTextureOptions } from "../../../configuration/DictionaryOptions"
 
-// import { PopTable } from "./ReceiptModal"
 interface EditProps {
     type: "new" | "edit",
     id: string
@@ -18,10 +17,12 @@ interface IResponse {
 
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const [ companyList, setCompanyList ] = useState([]);
-    const attchsRef = useRef<AttachmentRef>()
-    const [baseForm] = Form.useForm()
+    const [baseForm] = Form.useForm();
+    const [form] = Form.useForm();
     const [ processList, setProcessList ] = useState<IWorkCenterMngt[]>([]);
-    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
+    // const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
+    const [ allMaterialList, setAllMaterialList ] = useState<any>([]);
+    const [ specifications, setSpecifications ]= useState<any>({});
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/invoice/${id}`)
@@ -36,6 +37,19 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             reject(error)
         }
     }), { manual: type === "new", refreshDeps: [id] })
+
+    const { data: materialList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/material?size=1000`);
+            setAllMaterialList(result?.records);
+            var newArr = result?.records.filter((item: any,index: any,self: any) => {
+                return self.findIndex((el: any) => el.materialName === item.materialName) === index
+            })
+            resole(newArr)
+        } catch (error) {
+            reject(error)
+        }
+    }))
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
@@ -62,7 +76,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     receiptId: item.receiptId,
                     receiptNumber: item.receiptNumber,
                 })),
-                fileIds: attchsRef.current?.getDataSource().map(item => item.id)
             })
             resolve(true)
         } catch (error) {
@@ -70,11 +83,18 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         }
     })
     const resetFields = () => {
-        baseForm.resetFields()
-        attchsRef.current?.resetFields()
+        baseForm.resetFields();
     }
 
-    
+    const materialChange = (e: string, index: number) => {
+        var newArr = allMaterialList.filter((item: any,index: any,self: any) => {
+            return e === item.materialName
+        })
+        setSpecifications({
+            ...specifications,
+            [index]: newArr
+        })
+    }
 
     const baseColumns = [
         {
@@ -168,7 +188,11 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["deptProcessesDetailList", index, "sort"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入顺序" }]}>
-                    <Input />
+                    <Select placeholder="请选择"  style={{ width: '200px' }}onChange={(e: string) => materialChange(e, index)}>
+                        { materialList?.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.materialName }>{ item.materialName }</Select.Option>
+                        }) }
+                    </Select>
                 </Form.Item>
             )  
         },
@@ -180,7 +204,11 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["deptProcessesDetailList", index, "sort"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请选择规格" }]}>
-                    <Input />
+                    <Select placeholder="请选择" style={{ width: '200px' }} key={index} onChange={(e: string) => materialChange(e, index)}>
+                        { specifications[index]?.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.structureSpec }>{ item.structureSpec }</Select.Option>
+                        }) }
+                    </Select>
                 </Form.Item>
             )  
         },
@@ -192,7 +220,9 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["deptProcessesDetailList", index, "sort"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请选择材质" }]}>
-                    <Input />
+                    <Select style={{ width: '200px' }}>
+                        { materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>) }
+                    </Select>
                 </Form.Item>
             )  
         },
@@ -228,74 +258,70 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     ]
 
     const businessTypeChange = async (e: number) => {
-        let result: IResponse = {};
-        let list: any = {};
-        if(e === 1) {
-            result = await RequestUtil.get(`/tower-supply/supplier?size=100`);
-            list = result?.records?.map((item: { supplierName: string }) => {
+        let result: IResponse = await RequestUtil.get(`/tower-supply/supplier?size=100`);
+        let list: any = result?.records?.map((item: { supplierName: string }) => {
                 return{
                     ...item,
                     name: item.supplierName
                 }
             })
-        } else if(e === 2) {
-            result = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
-            list = result?.records?.map((item: { stevedoreCompanyName: string }) => {
-                return{
-                    ...item,
-                    name: item.stevedoreCompanyName
-                }
-            })
-        } else {
-            result = await RequestUtil.get(`/tower-logistic/carrier?size=100`);
-            list = result?.records?.map((item: { companyName: string }) => {
-                return{
-                    ...item,
-                    name: item.companyName
-                }
-            })
-        }
         setCompanyList(list || []);
     }
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
     const addRow = () => {
-        let processListValues = baseForm.getFieldsValue(true).deptProcessesDetailList || [];
+        let processListValues = form.getFieldsValue(true).deptProcessesDetailList || [];
         let newData = {
             name: '',
             sort: undefined
         }
         setProcessList([...processListValues, newData]);
-        baseForm.setFieldsValue({ deptProcessesDetailList: [...processListValues, newData] })
+        form.setFieldsValue({ deptProcessesDetailList: [...processListValues, newData] })
     }
 
     const delRow = (index?: number) => {
-        let processListValues = baseForm.getFieldsValue(true).deptProcessesDetailList || []; 
-        processListValues.splice(index, 1);
-        setProcessList([...processListValues]);
+        let processListValues = form.getFieldsValue(true).deptProcessesDetailList || []; 
+        // if(index) {
+            processListValues.splice(index, 1);
+            setProcessList([...processListValues]);
+        // } else {
+        //     processListValues.filter((item: any) => {
+        //         if(selectedKeys.indexOf(item) === -1) {
+        //             return selectedKeys.indexOf(item.id) === -1
+        //         }            
+        //     })
+        //     selectedKeys.forEach((item) => {
+        //         processListValues.splice(item, 1);
+        //     })
+        // }
+        
         baseForm.setFieldsValue({ deptProcessesDetailList: [...processListValues] })
     }
 
-    const SelectChange = (selectedRowKeys: React.Key[]): void => {
-        setSelectedKeys(selectedRowKeys);
-    }
+    // const SelectChange = (selectedRowKeys: React.Key[]): void => {
+    //     setSelectedKeys(selectedRowKeys);
+    // }
 
     return <Spin spinning={loading}>
         <DetailTitle title="基本信息" />
         <BaseInfo form={baseForm} columns={baseColumns} col={2} dataSource={{}} edit />
-        <DetailTitle title="产能矩阵" operation={[<>
-            <Button type="primary" onClick={ addRow }>新增一行</Button>
-            <Button type="primary" onClick={ () => delRow }>删除</Button>
-        </>]}/>
-        <Table 
-            rowKey="id" 
-            dataSource={[...processList]} 
-            rowSelection={{
-                selectedRowKeys: selectedKeys,
-                onChange: SelectChange
-            }}
-            pagination={false} 
-            columns={tableColumns} 
-            className={styles.addModal}/>
+        <DetailTitle title="产能矩阵" operation={[<Space size="small">
+            <Button type="primary" onClick={ addRow }>新增</Button>
+            {/* <Button type="primary" onClick={ () => {
+                console.log(selectedKeys)
+            } }>删除</Button> */}
+        </Space>]}/>
+        <Form form={form}>
+            <Table 
+                rowKey="id" 
+                dataSource={[...processList]} 
+                // rowSelection={{
+                //     selectedRowKeys: selectedKeys,
+                //     onChange: SelectChange
+                // }}
+                pagination={false} 
+                columns={tableColumns} 
+                className={styles.addModal}/>
+        </Form>
     </Spin>
 })

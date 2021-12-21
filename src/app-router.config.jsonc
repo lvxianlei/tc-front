@@ -2268,7 +2268,7 @@
     },
     { // 工作中心管理
       "name": "工作中心管理",
-      "path": "/planBaseSetting/workCenterMngt",
+      "path": "/workshopPlanBasic/workCenterMngt",
       "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterMngt",
       "exact": true,
       "authority": "approvalm"
