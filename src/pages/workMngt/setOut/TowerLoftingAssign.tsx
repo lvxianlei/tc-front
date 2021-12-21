@@ -48,7 +48,7 @@ interface IAppointed {
     readonly checkUserName?: string;
     readonly plannedDeliveryTime?: string | moment.Moment;
     readonly patternName?: string;
-    readonly trialAssemble?: number
+    readonly trialAssemble?: number | string
 }
 
 class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, TowerLoftingAssignState> {
@@ -80,7 +80,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     }
 
     private async modalShow(): Promise<void> {
-        const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/detail?productCategoryId=${ this.props.id }`);
+        const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/${ this.props.id }`);
         const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         this.setState({
             departmentData: departmentData,
@@ -95,7 +95,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             }
             detailData?.loftingUserDepartment && this.onDepartmentChange(detailData?.loftingUserDepartment || '', '放样');
             detailData?.checkUserDepartment && this.onDepartmentChange(detailData?.checkUserDepartment || '', '校对');
-            this.getForm()?.setFieldsValue({ ...detailData, ...data });
+            this.getForm()?.setFieldsValue({  ...data, ...detailData });
         }
     }
     
@@ -231,7 +231,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 </Descriptions.Item></>
                                 : <>
                                 <Descriptions.Item label="试组装">
-                                <Form.Item name="trialAssemble" initialValue={ this.props.detailData?.trialAssemble }
+                                <Form.Item name="trialAssemble" 
                                     rules={[{
                                         required: true,
                                         message: '请选择试组装'

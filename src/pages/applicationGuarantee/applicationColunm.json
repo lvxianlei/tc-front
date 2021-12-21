@@ -191,6 +191,18 @@
             ]
         },
         {
+            "dataIndex": "cancelledReturnTime",
+            "title": "注销办理日期",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择注销办理日期"
+                }
+            ]
+        },
+        {
             "dataIndex": "reason",
             "title": "原因",
             "placeholder": "请输入原因"
@@ -307,6 +319,10 @@
                 { "value": 1, "label": "是" },
                 { "value": 0, "label": "否" }
             ]
+        },
+        {
+            "dataIndex": "cancelledReturnTime",
+            "title": "注销办理日期"
         },
         {
             "dataIndex": "reason",

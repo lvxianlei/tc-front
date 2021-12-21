@@ -67,7 +67,7 @@
                  total: 0,
                  showSizeChanger: false
              },
-             confirmTitle: "选择设备"
+             confirmTitle: "选择工作中心"
          };
      }
  
@@ -143,29 +143,14 @@
      public getTableColumns(): ColumnType<object>[] {
          return [{
              key: 'type',
-             title: '派工设备名称',
-             width: '20%',
+             title: '班组名称',
+             width: '50%',
              dataIndex: 'type',
          }, {
              key: 'name',
-             title: '所属车间',
-             width: '20%',
+             title: '生产单元',
+             width: '50%',
              dataIndex: 'name'
-         }, {
-             key: 'departmentName',
-             title: '工序',
-             width: '20%',
-             dataIndex: 'departmentName'
-         }, {
-             key: 'stationName',
-             title: '设备所属产线',
-             width: '20%',
-             dataIndex: 'stationName'
-         }, {
-             key: 'phone',
-             title: '班长',
-             width: '20%',
-             dataIndex: 'phone'
          }];
      }
  

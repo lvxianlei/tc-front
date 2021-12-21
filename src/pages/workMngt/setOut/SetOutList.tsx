@@ -116,7 +116,7 @@ export default function SetOutList(): React.ReactNode {
     }), {})
     const checkUser: any = data || [];
     return <Page
-        path="/tower-science/loftingList/loftingPage"
+        path="/tower-science/loftingList"
         exportPath={`/tower-science/loftingList`}
         columns={columns}
         headTabs={[]}

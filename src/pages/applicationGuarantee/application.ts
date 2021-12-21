@@ -16,6 +16,7 @@ export interface UserData {
     guaranteeRecoveryVO?: object // 保函回收信息
     attachInfoVOList?: [] // 附件信息
     approveRecordVO?: [] // 审批记录
+    applyAttachListVO?: [] // 保函申请相关附件
 }
 export interface OverViewProps {
     visible?: boolean
