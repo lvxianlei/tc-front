@@ -9,6 +9,7 @@ import { CheckCircleOutlined, RightOutlined, SoundOutlined } from '@ant-design/i
 import useRequest from '@ahooksjs/use-request';
 import { Spin, Table } from 'antd';
 import AuthUtil from '../../../utils/AuthUtil';
+import ApplicationContext from '../../../configuration/ApplicationContext';
 
 export interface WorkBenchMngtProps { }
 export interface IWorkBenchMngtRouteProps extends RouteComponentProps<WorkBenchMngtProps>, WithTranslation { }
@@ -27,11 +28,85 @@ interface IList {
 	readonly type?: string;
 	readonly userId?: string;
 	readonly createUserId?: string;
+	readonly authority?: string;
 }
 
 export default function WorkBenchMngt(): React.ReactNode {
 	const userId = AuthUtil.getUserId();
-	const assessVO = [ //评估员
+    const authorities = ApplicationContext.get().authorities;
+	const workBenchList = [ 
+		{
+			title: '评估任务',
+			child: [
+				{
+					title: '待确认',
+					dataIndex: 'assessToBeConfirmed',
+					path: '/assessmentTask',
+					state: 1,
+					authority: 'assess_to_be_confirmed'
+				}, {
+					title: '待指派',
+					dataIndex: 'assessToBeAssigned',
+					path: '/assessmentTask',
+					state: 2,
+					authority: 'assess_to_be_assigned'
+				}, {
+					title: '待提交',
+					dataIndex: 'assessToBeSubmitted',
+					path: '/assessmentTask',
+					state: 4,
+					authority: 'assess_to_be_submitted'
+				}
+			]
+		},
+		{
+			title: '确认任务',
+			child: [
+				{
+					title: '待确认',
+					dataIndex: 'confirmToBeConfirmed',
+					path: '/confirmTask/ConfirmTaskMngt',
+					state: 1,
+					authority: 'confirm_to_be_confirmed'
+				}, {
+					title: '待指派',
+					dataIndex: 'confirmToBeAssigned',
+					path: '/confirmTask/ConfirmTaskMngt',
+					state: 2,
+					authority: 'confirm_to_be_assigned'
+				}, {
+					title: '待提交',
+					dataIndex: 'confirmToBeSubmitted',
+					path: '/confirmTask/ConfirmTaskMngt',
+					state: 4,
+					authority: 'confirm_to_be_submitted'
+				}
+			]
+		},
+		{
+			title: '放样任务',
+			child: [
+				{
+					title: '待确认',
+					dataIndex: 'loftingToBeConfirmed',
+					path: '/setOutTask',
+					state: 1,
+					authority: 'lofting_to_be_confirmed'
+				}, {
+					title: '待指派',
+					dataIndex: 'loftingToBeAssigned',
+					path: '/workMngt/scheduleList',
+					state: 2,
+					authority: 'lofting_to_be_confirmed'
+				}, {
+					title: '待提交',
+					dataIndex: 'loftingToBeSubmitted',
+					path: '/setOutTask',
+					state: 4,
+					authority: 'lofting_to_be_submitted'
+				}
+			]
+		},
 		{
 			title: '评估任务',
 			col: 2,
@@ -41,42 +116,11 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'assessToBeComplete',
 					path: '/workMngt/evaluationList',
 					state: 3,
-					userId: userId
-				}
-			]
-		}
-	]
-
-	const boltLeaderVO = [ //螺栓负责人
-		{
-			title: '问题单',
-			col: 2,
-			child: [
-				{
-					title: '待修改',
-					dataIndex: 'boltProblemPending',
-					path: '/question/questionMngt',
-					state: 1,
-					userId: userId
+					userId: userId,
+					authority: 'assess_to_be_complete'
 				}
 			]
 		},
-		{
-			title: '螺栓列表',
-			col: 2,
-			child: [  
-				{
-					title: '待制作',
-					dataIndex: 'boltToBeMade',
-					path: '/workMngt/boltList',
-					state: 2,
-					userId: userId
-				}
-			]
-		}
-	]
-
-	const confirmVO = [ //确认员
 		{
 			title: '确认任务',
 			col: 2,
@@ -86,140 +130,74 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'confirmToBeComplete',
 					path: '/workMngt/confirmList',
 					state: 3,
-					userId: userId
+					userId: userId,
+					authority: 'confirm_to_be_complete'
 				}
 			]
-		}
-	]
-
-	const director = [ //主任
+		},
 		{
-			title: '评估任务',
+			title: '提料任务',
 			child: [
 				{
-					title: '待确认',
-					dataIndex: 'assessToBeConfirmed',
-					path: '/assessmentTask',
-					state: 1
+					title: '待提料',
+					dataIndex: 'segmentMaterialToBeMaterial',
+					path: '/workMngt/pickList',
+					state: 2,
+					authority: 'segment_material_to_be_material'
+				}, {
+					title: '待校核',
+					dataIndex: 'segmentMaterialToBeCheck',
+					path: '/workMngt/pickList',
+					state: 2,
+					authority: 'segment_material_to_be_check'
 				}, {
 					title: '待指派',
-					dataIndex: 'assessToBeAssigned',
-					path: '/assessmentTask',
-					state: 2
-				}, {
-					title: '待提交',
-					dataIndex: 'assessToBeSubmitted',
-					path: '/assessmentTask',
-					state: 4
-				}
-			]
-		}, {
-			title: '确认任务',
-			child: [
-				{
-					title: '待确认',
-					dataIndex: 'confirmToBeConfirmed',
-					path: '/confirmTask/ConfirmTaskMngt',
-					state: 1
-				}, {
-					title: '待指派',
-					dataIndex: 'confirmToBeAssigned',
-					path: '/confirmTask/ConfirmTaskMngt',
-					state: 2
-				}, {
-					title: '待提交',
-					dataIndex: 'confirmToBeSubmitted',
-					path: '/confirmTask/ConfirmTaskMngt',
-					state: 4
-				}
-			]
-		}, {
-			title: '放样任务',
-			child: [
-				{
-					title: '待确认',
-					dataIndex: 'loftingToBeConfirmed',
-					path: '/setOutTask',
-					state: 1
-				}, {
-					title: '待指派',
-					dataIndex: 'loftingToBeAssigned',
-					path: '/workMngt/scheduleList',
-					state: 2
-				}, {
-					title: '待提交',
-					dataIndex: 'loftingToBeSubmitted',
-					path: '/setOutTask',
-					state: 4
-				}
-			]
-		}
-	]
-
-	const drawVO = [ //图纸负责人
-		{
-			title: '图纸',
-			col: 2,
-			child: [
-				{
-					title: '待上传',
-					dataIndex: 'drawToUpload',
-					path: '/workMngt/templateList',
+					dataIndex: 'materialToBeAssigned',
+					path: '/workMngt/pickList',
 					state: 1,
-					userId: userId
+					userId: userId,
+					authority: 'material_to_be_assigned'
+				}, {
+					title: '待配段',
+					dataIndex: 'rodMaterialToBeMatch',
+					path: '/workMngt/pickList',
+					state: 3,
+					userId: userId,
+					authority: 'rod_material_to_be_match'
 				}
 			]
-		}
-	]
-
-	const loftingLeaderVO = [ //放样负责人
+		},
 		{
 			title: '问题单',
 			child: [
 				{
-					title: '待修改',
-					dataIndex: 'segmentAndBoltProblemPending',
-					path: '/question/questionMngt',
-					state: 1,
-					userId: userId
-				},
-				{
-					title: '我创建的',
+					title: '我创建的',//问题单-我创建的-提料信息-塔
 					dataIndex: 'segmentAndBoltProblemEstablish',
 					path: '/question/questionMngt',
-					createUserId: userId
-				}
-			]
-		},
-		{
-			title: '螺栓列表',
-			child: [  
-				{
-					title: '待制作',
-					dataIndex: 'boltToBeMade',
-					path: '/workMngt/boltList',
-					state: 2,
-					userId: userId
-				},
-				{
-					title: '待校核',
-					dataIndex: 'boltToBeMade',
-					path: '/workMngt/boltList',
-					state: 3
-				}
-				
-			]
-		},
-		{
-			title: '图纸',
-			col: 2,
-			child: [
-				{
-					title: '待上传',
-					dataIndex: 'drawToUpload',
-					path: '/workMngt/templateList',
+					type: 'WTD-TL',
+					createUserId: userId,
+					authority: 'problem_establish'
+				}, {
+					title: '我创建的', //问题单-我创建的-放样任务-塔
+					dataIndex: 'segmentAndBoltProblemEstablish',
+					path: '/question/questionMngt',
+					type: 'WTD-FY',
+					createUserId: userId,
+					authority: 'segment_problem_establish'
+				}, {
+					title: '我创建的',//问题单-我创建的-放样任务-螺栓
+					dataIndex: 'boltProblemPending',
+					path: '/question/questionMngt',
+					type: 'WTD-LS',
+					createUserId: userId,
+					authority: 'bolt_problem_establish'
+				}, {
+					title: '待修改',//问题单-待修改
+					dataIndex: 'boltProblemPending',
+					path: '/question/questionMngt',
 					state: 1,
-					userId: userId
+					userId: userId,
+					authority: 'problem_pending'
 				}
 			]
 		}, {
@@ -227,32 +205,84 @@ export default function WorkBenchMngt(): React.ReactNode {
 			child: [
 				{
 					title: '待指派',
-					dataIndex: 'productToBeAssigned',
+					dataIndex: 'loftingToBeAssigned',
 					path: '/workMngt/setOutList',
 					state: 1,
-					userId: userId
+					userId: userId,
+					authority: 'product_to_be_assigned'
 				}, {
 					title: '待出单',
-					dataIndex: 'productToBeSubmittedLofting',
+					dataIndex: 'rodProductToBeIssue',
 					path: '/workMngt/setOutList',
-					state: 4
+					state: 4,
+					authority: 'rod_product_to_be_issue'
 				}, {
 					title: '待配段',
-					dataIndex: 'productToBeSubmittedWelding',
+					dataIndex: 'rodProductToBeMatch',
 					path: '/workMngt/setOutList',
-					state: 4
+					state: 4,
+					authority: 'rod_product_to_be_match'
 				}, {
 					title: '待校核',
 					dataIndex: 'segmentProductToBeCheck',
 					path: '/workMngt/setOutList',
 					state: 2,
-					userId: userId
+					userId: userId,
+					authority: 'segment_product_to_be_check'
 				}, {
 					title: '待放样',
 					dataIndex: 'segmentProductToBeLofting',
 					path: '/workMngt/setOutList',
 					state: 2,
-					userId: userId
+					userId: userId,
+					authority: 'segment_product_to_be_lofting'
+				}
+			]
+		}, {
+			title: '组焊工作',
+			child: [
+				{
+					title: '待指派',
+					dataIndex: 'weldingToBeAssigned',
+					path: '/workMngt/assemblyWeldingList',
+					state: 2,
+					userId: userId,
+					authority: 'welding_to_be_assigned'
+				},
+				{
+					title: '待组焊',
+					dataIndex: 'weldingToBeWelding',
+					path: '/workMngt/assemblyWeldingList',
+					state: 3,
+					userId: userId,
+					authority: 'welding_to_be_welding'
+				}
+			]
+		},  {
+			title: '螺栓列表',
+			child: [ 
+				{
+					title: '待指派',
+					dataIndex: 'boltToBeAssigned',
+					path: '/workMngt/boltList',
+					state: 2,
+					userId: userId,
+					authority: 'bolt_to_be_assigned'
+				}, 
+				{
+					title: '待制作',
+					dataIndex: 'boltToBeMade',
+					path: '/workMngt/boltList',
+					state: 3,
+					userId: userId,
+					authority: 'bolt_to_be_made'
+				},
+				{
+					title: '待校核',
+					dataIndex: 'boltToBeCheck',
+					path: '/workMngt/boltList',
+					state: 4,
+					authority: 'bolt_to_be_check'
 				}
 			]
 		}, {
@@ -264,231 +294,21 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'sampleToBeUploaded',
 					path: '/workMngt/sampleDrawList',
 					state: 2,
-					userId: userId
+					userId: userId,
+					authority: 'sample_to_be_uploaded'
 				}
 			]
 		}, {
-			title: '组焊工作',
-			col: 2,
-			child: [
-				{
-					title: '待组焊',
-					dataIndex: 'weldingToBeWelding',
-					path: '/workMngt/assemblyWeldingList',
-					state: 2,
-					userId: userId
-				}
-			]
-		}
-	]
-
-	const loftingToCheckVO = [ //放样校核员
-		{
-			title: '问题单',
-			col: 2,
-			child: [
-				{
-					title: '放样任务',
-					dataIndex: 'segmentProblemEstablish',
-					path: '/question/questionMngt',
-					type: 'WTD-FY',
-					createUserId: userId
-				}
-			]
-		}, {
-			title: '放样任务',
-			child: [
-				{
-					title: '待校核',
-					dataIndex: 'segmentProductToBeCheck',
-					path: '/workMngt/setOutList',
-					state: 2
-				}, {
-					title: '待放样',
-					dataIndex: 'segmentProductToBeLofting',
-					path: '/workMngt/setOutList',
-					state: 2
-				}
-			]
-		}
-	]
-
-	const materialToCheckVO = [ //提料校核员
-		{
-			title: '提料任务',
-			child: [
-				{
-					title: '待提料',
-					dataIndex: 'segmentMaterialToBeMaterial',
-					path: '/workMngt/pickList',
-					state: 2
-				}, {
-					title: '待校核',
-					dataIndex: 'segmentMaterialToBeCheck',
-					path: '/workMngt/pickList',
-					state: 2
-				}
-			]
-		},
-		{
-			title: '问题单',
-			child: [
-				{
-					title: '提料信息',
-					dataIndex: 'materialProblemEstablish',
-					path: '/question/questionMngt',
-					type: 'WTD-TL',
-					createUserId: userId
-				}, 
-				{
-					title: '待修改',
-					dataIndex: 'segmentProblemEstablish',
-					path: '/question/questionMngt',
-					type: 'WTD-TL',
-					state: 1,
-					userId: userId
-				}
-			]
-		}
-	]
-
-	const materialToBeMatchVO = [ //提料/配段负责人
-		{
-			title: '提料任务',
-			child: [
-				{
-					title: '待指派',
-					dataIndex: 'materialToBeAssigned',
-					path: '/workMngt/pickList',
-					state: 1,
-					userId: userId
-				}, {
-					title: '待提料',
-					dataIndex: 'segmentMaterialToBeMaterial',
-					path: '/workMngt/pickList',
-					state: 2,
-					userId: userId
-				}, {
-					title: '待校核',
-					dataIndex: 'segmentMaterialToBeCheck',
-					path: '/workMngt/pickList',
-					state: 2
-				}, {
-					title: '待配段',
-					dataIndex: 'rodMaterialToBeMatch',
-					path: '/workMngt/pickList',
-					state: 3,
-					userId: userId
-				}
-			]
-		}, {
-			title: '问题单',
-			child: [
-				{
-					title: '提料信息',
-					dataIndex: 'materialProblemEstablish',
-					path: '/question/questionMngt',
-					type: 'WTD-TL',
-					createUserId: userId
-				}, {
-					title: '待修改',
-					dataIndex: 'materialProblemPending',
-					path: '/question/questionMngt',
-					type: 'WTD-TL',
-					state: 1,
-					userId: userId
-				}
-			]
-		}
-	]
-
-	const sampleLeaderVO = [ //小样图负责人
-		{
-			title: '放样任务',
-			col: 2,
-			child: [
-				{
-					title: '待放样',
-					dataIndex: 'segmentProductToBeLofting',
-					path: '/workMngt/setOutList',
-					state: 2
-				}
-			]
-		},
-		{
-			title: '小样图',
+			title: '图纸',
 			col: 2,
 			child: [
 				{
 					title: '待上传',
-					dataIndex: 'sampleToBeUploaded',
-					path: '/workMngt/sampleDrawList',
-					state: 2,
-					userId: userId
-				}
-			]
-		}
-	]
-
-	const weldingLeaderVO = [ //编程负责人
-		{
-			title: '问题单',
-			child: [
-				{
-					title: '螺栓',
-					dataIndex: 'boltProblemEstablish',
-					path: '/question/questionMngt',
-					type: 'WTD-LS',
-					createUserId: userId
-				}, {
-					title: '待修改',
-					dataIndex: 'boltProblemPending',
-					path: '/question/questionMngt',
-					type: 'WTD-LS',
+					dataIndex: 'drawToUpload',
+					path: '/workMngt/templateList',
 					state: 1,
-					userId: userId
-				}
-			]
-		}, {
-			title: '螺栓工作',
-			col: 2,
-			child: [
-				{
-					title: '待校核',
-					dataIndex: 'boltToBeCheck',
-					path: '/workMngt/boltList',
-					state: 3
-				}
-			]
-		}, {
-			title: '放样任务',
-			child: [
-				{
-					title: '待放样',
-					dataIndex: 'segmentProductToBeLofting',
-					path: '/workMngt/setOutList',
-					state: 2
-				}, {
-					title: '待配段',
-					dataIndex: 'rodProductToBeMatch',
-					path: '/workMngt/setOutList',
-					state: 4
-				}, {
-					title: '待出单',
-					dataIndex: 'rodProductToBeIssue',
-					path: '/workMngt/setOutList',
-					state: 4
-				}
-			]
-		}, {
-			title: '组焊工作',
-			child: [
-				{
-					title: '待组焊',
-					dataIndex: 'weldingToBeWelding',
-					path: '/workMngt/assemblyWeldingList',
-					state: 2,
-					userId: userId
+					userId: userId,
+					authority: 'draw_to_upload'
 				}
 			]
 		}
@@ -500,7 +320,6 @@ export default function WorkBenchMngt(): React.ReactNode {
 	}), {})
 	const detailData: any = data;
 	const history = useHistory();
-	console.log(userId)
 	if (loading) {
 		return <Spin spinning={loading}>
 			<div style={{ width: '100%', height: '300px' }}></div>
@@ -513,11 +332,28 @@ export default function WorkBenchMngt(): React.ReactNode {
 			<div>{
 				res?.child && res?.child.map((item: IList, index: number) => {
 					const dataIndex: string | undefined = item.dataIndex;
-					return <div className={res.col !== 2 ? styles.content : styles.content2} key={ind + '_' + index}>
-						<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: { state: item?.state, type: item?.type, userId: item?.userId, createUserId: item?.createUserId} }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
-						<p className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</p>
-						{/* <div className={styles.draw}><Line keyIndex={dataIndex + '_' + index} valueList={[Math.ceil(Math.random() * 80), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 150), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 90), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)]} /></div> */}
-					</div>
+					if(authorities?.indexOf(item?.authority || '') === -1) {
+						return null
+					} else {
+						return <div className={res.col !== 2 ? styles.content : styles.content2} key={ind + '_' + index}>
+							<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: { state: item?.state, type: item?.type, userId: item?.userId, createUserId: item?.createUserId} }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
+							<p className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</p>
+							 <div className={styles.draw}>
+								<Line 
+									keyIndex={dataIndex + '_' + index} 
+									valueList={[
+										Math.ceil(Math.random() * 80), 
+										Math.ceil(Math.random() * 100), 
+										Math.ceil(Math.random() * 150), 
+										Math.ceil(Math.random() * 100),
+										Math.ceil(Math.random() * 90), 
+										Math.ceil(Math.random() * 100), 
+										Math.ceil(Math.random() * 100)
+									]} 
+								/>
+							</div>
+						</div>	
+					}
 				})
 			}</div>
 		</div>
@@ -526,68 +362,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 	return <div className={styles.all}>
 		<div className={styles.left}>
 			{
-				detailData.assessVO ? assessVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.assessVO)}</>
-				})
-				: null
-			}
-			{
-				detailData.boltLeaderVO ? boltLeaderVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.boltLeaderVO)}</>
-				})
-				: null
-			}
-			{
-				detailData.confirmVO ? confirmVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.confirmVO)}</>
-				})
-				: null
-			}
-			{
-				detailData.director ? director.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.director)}</>
-				})
-				: null
-			}
-			{
-				detailData.drawVO ? drawVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.drawVO)}</>
-				})
-				: null
-			}
-			{
-				detailData.loftingLeaderVO ? loftingLeaderVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.loftingLeaderVO)}</>
-				})
-				: null
-			}
-			{
-				detailData.loftingToCheckVO ? loftingToCheckVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.loftingToCheckVO)}</>
-				})
-				: null
-			}
-			{
-				detailData.materialToCheckVO ? materialToCheckVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.materialToCheckVO)}</>
-				})
-				: null
-			}
-			{
-				detailData.materialToBeMatchVO ? materialToBeMatchVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.materialToBeMatchVO)}</>
-				})
-				: null
-			}
-			{
-				detailData.sampleLeaderVO ? sampleLeaderVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.sampleLeaderVO)}</>
-				})
-				: null
-			}
-			{
-				detailData.weldingLeaderVO ? weldingLeaderVO.map((res: IList, ind: number) => {
-					return <>{getChildContent(res, ind, detailData.weldingLeaderVO)}</>
+				detailData ? workBenchList.map((res: IList, ind: number) => {
+					return <>{getChildContent(res, ind, detailData)}</>
 				})
 				: null
 			}

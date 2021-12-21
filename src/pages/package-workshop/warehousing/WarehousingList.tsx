@@ -66,12 +66,6 @@ export default function WarehousingList(): React.ReactNode {
             dataIndex: 'packingWarehouseRealTime',
         },
         {
-            key: 'warehouseTime',
-            title: '入库日期',
-            width: 200,
-            dataIndex: 'warehouseTime',
-        },
-        {
             key: 'teamName',
             title: '班组',
             width: 200,

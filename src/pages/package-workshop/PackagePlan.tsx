@@ -88,8 +88,8 @@ export default function DailySchedule(): React.ReactNode {
 
     return <>
         <Page
-            path="/tower-production/galvanized/daily/plan"
-            sourceKey="galvanizedDailyPlanVOS.records"
+            path="/tower-production/packageWorkshop/dispatchView"
+            sourceKey="packingTaskListVODetail"
             columns={
                 confirmStatus === 1 || confirmStatus === 2 || confirmStatus === 3 ? 
                 [ {

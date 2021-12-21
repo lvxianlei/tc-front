@@ -20,12 +20,9 @@ const tableColumns = [
     { title: '下达重量', dataIndex: 'weight', key: 'weight' },
     { title: '角钢重量', dataIndex: 'angleWeight', key: 'angleWeight' },
     { title: '连板重量', dataIndex: 'boardWeight', key: 'boardWeight' },
-    { title: '加工厂区', dataIndex: 'processFactory', key: 'processFactory' },
-    { title: '加工车间', dataIndex: 'processWorkshop', key: 'processWorkshop' },
-    { title: '送齐成品库时间', dataIndex: 'sendWarehouseTime', key: 'sendWarehouseTime' },
-    { title: '报补件时间', dataIndex: 'reportFixTime', key: 'reportFixTime' },
-    { title: '包装入库时间', dataIndex: 'packingWarehouseTime', key: 'packingWarehouseTime' },
-    { title: '客户交货日期', dataIndex: 'deliverCustomerTime', key: 'deliverCustomerTime' },
+    { title: '开始包装时间', dataIndex: 'processFactory', key: 'processFactory' },
+    { title: '入库时间', dataIndex: 'processWorkshop', key: 'processWorkshop' },
+    { title: '包装班组', dataIndex: 'sendWarehouseTime', key: 'sendWarehouseTime' }
 ]
 
 export default function Dispatch(): React.ReactNode {
@@ -73,7 +70,7 @@ export default function Dispatch(): React.ReactNode {
                     formRef.validateFields().then(async (res)=>{
                         let value = formRef.getFieldsValue(true);
                         if(selectedRowKeys.length>0){
-                            await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
+                            await RequestUtil.post(`/tower-production/packageWorkshop/confirmDispatch`,{id:params.id}).then(()=>{
                                 message.success('派工成功！')
                             }).then(()=>{
                                 history.goBack()

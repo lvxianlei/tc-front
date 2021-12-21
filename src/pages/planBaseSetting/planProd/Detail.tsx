@@ -96,7 +96,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
       });
     }
     onConfirm =async (id:any)=>{
-      await RequestUtil.post<any>(`/tower-aps/planUnitLink/issue?id=${id}`).then(()=>{
+      await RequestUtil.get<any>(`/tower-aps/planUnitLink/issue?id=${id}`).then(()=>{
         message.success('下发成功！')
       }).then(async ()=>{
         // this.props.history.go(0)
