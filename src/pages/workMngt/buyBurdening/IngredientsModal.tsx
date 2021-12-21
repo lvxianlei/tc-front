@@ -318,24 +318,25 @@ export default function IngredientsModal(props: any) {
         }
         // 循环构建分类明细
         let result:any = constructionClassificationDetail;
+        let selectKeys = selectedRowKeysCheck;
         for (let i = 0; i < result.length; i += 1) {
             if (map.has(result[i].code)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(result[i]?.code) || 0;
                 result[i].notConfigured = result[i].num - num;
                 numberDetail += num;
-                // 处理未配为0的情况
-                if (result[i].notConfigured === 0) {
-                    if (selectedRowKeysCheck.indexOf(result[i].id) !== -1) {
-                        // 说明存在
-                        const v = selectedRowKeysCheck.filter((item: any) => item !== result[i].id);
-                        setSelectedRowKeysCheck(v);
-                    }
-                }
             } else {
                 result[i].notConfigured = result[i].num;
             }
+            // 处理未配为0的情况
+            if (result[i].notConfigured === 0) {
+                if (selectedRowKeysCheck.indexOf(result[i].id) !== -1) {
+                    // 说明存在
+                    selectKeys = selectKeys.filter((item: any) => item !== result[i].id);
+                }
+            }
         }
+        setSelectedRowKeysCheck(selectKeys);
         setConstructionClassificationDetail(result.slice(0));
         setConstruNumberDetail(numberDetail)
     }, [numbers])
