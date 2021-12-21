@@ -91,11 +91,12 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             let detailData = this.props.detailData;
             detailData = {
                 ...detailData,
-                plannedDeliveryTime: detailData?.plannedDeliveryTime ? moment(detailData?.plannedDeliveryTime) : ''
+                plannedDeliveryTime: detailData?.plannedDeliveryTime ? moment(detailData?.plannedDeliveryTime) : '',
+                ...data,
             }
             detailData?.loftingUserDepartment && this.onDepartmentChange(detailData?.loftingUserDepartment || '', '放样');
             detailData?.checkUserDepartment && this.onDepartmentChange(detailData?.checkUserDepartment || '', '校对');
-            this.getForm()?.setFieldsValue({  ...data, ...detailData });
+            this.getForm()?.setFieldsValue({  ...detailData, trialAssemble: this.props.detailData?.trialAssemble });
         }
     }
     
