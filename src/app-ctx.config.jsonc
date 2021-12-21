@@ -603,16 +603,16 @@
                                 "path": "/baseSetting/baseSettingMngt",
                                 "authority": "config_list"
                             },
-                            {
-                                "label": "产线管理",
-                                "path": "/baseSetting/productionLineMngt",
-                                "authority": "basic_settings_production_line_management"
-                            },
-                            {
-                                "label": "工序管理",
-                                "path": "/baseSetting/processMngt",
-                                "authority": "basic_settings_process_management"
-                            },
+                            // {
+                            //     "label": "产线管理",
+                            //     "path": "/baseSetting/productionLineMngt",
+                            //     "authority": "basic_settings_production_line_management"
+                            // },
+                            // {
+                            //     "label": "工序管理",
+                            //     "path": "/baseSetting/processMngt",
+                            //     "authority": "basic_settings_process_management"
+                            // },
                             {
                                 "label": "车间派工设备管理",
                                 "path": "/baseSetting/workshopEquipmentMngt",
@@ -844,7 +844,25 @@
                         ]
                     },
                     {
-                        "label": "计划基础配置",
+                        "label": "车间计划基础配置",
+                        "icon": "customer",
+                        "path": "/workshopPlanBasic",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "生产工序管理",
+                                "path": "/workshopPlanBasic/processMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "工作中心管理",
+                                "path": "/planBaseSetting/workCenterMngt",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "主生产计划",
                         "icon": "customer",
                         "path": "/planBaseSetting",
                         "authority": "approvalm",

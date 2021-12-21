@@ -18,6 +18,16 @@
             "dataIndex": "contractName"
         },
         {
+            "title": "产品类型",
+            "dataIndex": "productType",
+            "type": "string"
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltage",
+            "type": "string"
+        },
+        {
             "title": "开票合计金额(元)",
             "dataIndex": "ticketMoney",
             "type": "number"
@@ -41,6 +51,11 @@
                     "label": "增值税专项发票"
                 }
             ]
+        },
+        {
+            "title": "请款机构",
+            "dataIndex": "payer",
+            "type": "string"
         },
         {
             "title": "申请人",

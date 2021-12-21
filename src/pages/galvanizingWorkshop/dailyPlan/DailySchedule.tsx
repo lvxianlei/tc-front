@@ -71,21 +71,26 @@ export default function DailySchedule(): React.ReactNode {
                                 setRefresh(!refresh);
                                 setSelectedKeys([]);
                             });
-                        }}>确认</Button> : confirmStatus === 2 ? <Button type="link" onClick={() => {
+                        }}>确认</Button> : 
+                        confirmStatus === 2 ? <Button type="link" onClick={() => {
                             setVisible(true);
                             setSelectedKeys([record.id]);
-                        }}>派工</Button>: confirmStatus === 3 ? <><Button type="link" onClick={async () => {
-                            const data: IDailySchedule = await RequestUtil.get(`/tower-production/galvanized/daily/plan/detail/${record.id}`);
-                            form.setFieldsValue({ ...data });
-                            setDetail(data);
-                            setSelectedKeys([record.id]);
-                            setVisible(true);
-                        }}>重新派工</Button><Button type="link" onClick={() => {
-                            RequestUtil.get(`/tower-production/galvanized/daily/plan/complete/${record.id}`).then(res => {
-                                message.success("完成！");
-                                setRefresh(!refresh);
-                            });
-                        }}>完成</Button></> : null
+                        }}>派工</Button> : 
+                        confirmStatus === 3 ? <>
+                            { new Date(Date.parse(record?.galvanizedStartTime.replace(/-/g,"/"))) > new Date() ? <Button type="link" onClick={async () => {
+                                const data: IDailySchedule = await RequestUtil.get(`/tower-production/galvanized/daily/plan/detail/${record.id}`);
+                                form.setFieldsValue({ ...data });
+                                setDetail(data);
+                                setSelectedKeys([record.id]);
+                                setVisible(true);
+                            }}>重新派工</Button> : null}
+                            <Button type="link" onClick={() => {
+                                RequestUtil.get(`/tower-production/galvanized/daily/plan/complete/${record.id}`).then(res => {
+                                    message.success("完成！");
+                                    setRefresh(!refresh);
+                                });
+                            }}>完成</Button>
+                        </> : null
                     )
                 }] : [{
                     "key": "index",

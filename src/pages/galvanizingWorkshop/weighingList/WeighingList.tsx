@@ -30,7 +30,7 @@ export default function WeighingList(): React.ReactNode {
                 width: 150,
                 render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                     <Space direction="horizontal" size="small">
-                        <Link to={`/galvanizingWorkshop/weighingList/weighingSetting/${record.id}`}><Button type="link">编辑</Button></Link>
+                        <Link to={`/galvanizingWorkshop/weighingList/weighingSetting/${ record.id }`}><Button type="link">编辑</Button></Link>
                         <Popconfirm
                             title="确认删除?"
                             onConfirm={() => {
