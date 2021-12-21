@@ -1650,21 +1650,21 @@
       "authority": "approvalm"
     },
     { // 包装车间-成品出库计划
-      "name": "成品出库计划",
+      "name": "成品出库任务",
       "path": "/packagingWorkshop/deliveryPlan",
       "module": "./pages/package-workshop/deliveryPlan/DeliveryPlanList",
       "exact": true,
       "authority": "packaging_workshop_finished_goods_delivery_plan"
     },
     { // 包装车间-成品出库计划-查看
-      "name": "成品出库计划",
+      "name": "查看",
       "path": "/packagingWorkshop/deliveryPlan/detail/:id",
       "module": "./pages/package-workshop/deliveryPlan/DeliveryView",
       "exact": true,
       "authority": "approvalm"
     },
     { // 包装车间-成品出库计划-成品出库
-      "name": "成品出库计划",
+      "name": "成品出库",
       "path": "/packagingWorkshop/deliveryPlan/delivery/:id",
       "module": "./pages/package-workshop/deliveryPlan/Delivery",
       "exact": true,
