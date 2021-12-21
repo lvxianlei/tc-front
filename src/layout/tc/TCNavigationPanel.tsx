@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import AsyncComponent from '../../components/AsyncComponent';
 import { hasAuthority } from '../../components/AuthorityComponent';
 import ApplicationContext from '../../configuration/ApplicationContext';
+import AuthUtil from '../../utils/AuthUtil';
 import EventBus from '../../utils/EventBus';
 import IMenuItem from './IMenuItem';
 import styles from './TCNavigationPanel.module.less';
@@ -61,11 +62,21 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
     }
 
     /**
+     * @protected
+     * @description Gets menu theme
+     * @returns menu theme 
+     */
+    protected getMenuItemForAppName(): IMenuItem[] {
+        const currentApp = AuthUtil.getCurrentAppName()
+        return this.props.menu.filter((item: any) => [currentApp, ""].includes(item.appName))
+    }
+
+    /**
      * @description Renders TCNavigationPanel
      * @returns render 
      */
     public render(): React.ReactNode {
-        const { menu, location } = this.props;
+        const { location } = this.props;
         const selectedDarkMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, location.pathname);
         const selectedSubMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(selectedDarkMenuItem?.items || [], location.pathname);
         return (
@@ -73,7 +84,7 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
                 defaultSelectedKeys={[selectedSubMenuItem?.path || selectedDarkMenuItem?.path || '']}
                 defaultOpenKeys={[selectedDarkMenuItem?.path || '']}>
                 {
-                    menu.map<React.ReactNode>((item: IMenuItem): React.ReactNode => (
+                    this.getMenuItemForAppName().map<React.ReactNode>((item: IMenuItem): React.ReactNode => (
                         hasAuthority(item.authority)
                             ?
                             (

@@ -8,5 +8,6 @@ export default interface IMenuItem {
     readonly path: string;
     readonly icon?: string;
     readonly authority: string;
+    readonly appName: string;
     readonly items?: IMenuItem[];
 }
