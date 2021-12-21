@@ -32,7 +32,7 @@
         },
         {
             "title": "任务状态",
-            "dataIndex": "salesman"
+            "dataIndex": "optName"
         },
         {
             "title": "备注",

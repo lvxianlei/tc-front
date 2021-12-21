@@ -51,6 +51,8 @@ export default function IngredientsModal(props: any) {
     const [ preparation, setPreparation ] = useState([]);
     // 配料方案
     const [schemeData, setSchemeData] = useState<any>([]);
+    // 采购配料信息
+    const [purchaseBatchingDataList, setPurchaseBatchingDataList] = useState<any>([]);
     let [numbers, setNumbers] = useState<any>(0);
     const [ serarchForm ] = Form.useForm();
 
@@ -83,6 +85,17 @@ export default function IngredientsModal(props: any) {
         // 调用手动配料
         purchaseBatchingScheme(serarchData, result, detail);
     }
+
+    // 获取采购配料信息
+    const { run: runPurchaseBatchingScheme, data: purchaseBatchingData } = useRequest<{ [key: string]: any }>((purchaseTaskTowerId: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/summary/${purchaseTaskTowerId}`);
+            resole(result);
+            setPurchaseBatchingDataList(result || []);
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     // 获取配料策略
     const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -233,6 +246,8 @@ export default function IngredientsModal(props: any) {
             getBatchingStrategy();
             // 获取编辑配料方案信息
             purchaseListRun(props.id);
+            // 获取采购配料信息
+            runPurchaseBatchingScheme(props.id);
     }, [props.id && props.visible])
 
     const rowSelection = {
@@ -488,7 +503,7 @@ export default function IngredientsModal(props: any) {
                                     }
                                 }
                             ]}
-                            dataSource={[]}
+                            dataSource={purchaseBatchingDataList}
                             pagination={false}
                             scroll={{ y: 400 }}
                         />

@@ -110,6 +110,7 @@ export default function Invoicing() {
                 history.go(0);
                 setDetailOver(false)
             }}
+            id={detailId}
             onCancel={() => setDetailOver(false)}
         />
         <Page
@@ -129,8 +130,11 @@ export default function Invoicing() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" onClick={() => setDetailOver(true)}>详情</Button>
-                            <Button type="link" disabled={userId !== record.batcherId}><Link to={`/workMngt/production/detailed/${record.id}`}>明细</Link></Button>
+                            <Button type="link" onClick={() => {
+                                setDetailId(record.id)
+                                setDetailOver(true)
+                            }}>详情</Button>
+                            <Button type="link"><Link to={`/workMngt/production/detailed/${record.id}`}>明细</Link></Button>
                             <Button type="link" disabled={userId !== record.batcherId}
                                 onClick={() => {
                                     setDetailId(record.id)
