@@ -22,12 +22,12 @@ export default function Stock() {
             }
         ]}
             dataSource={[
-                { name: "仓库管理", path: "/stock/warehouse" },
-                { name: "原材料类型管理", path: "/sys/materialType" },
-                { name: "原材料管理", path: "/sys/material" },
-                { name: "角钢配置策略", path: "/stock/angleSteel" },
-                { name: "安全库存配置", path: "/stock/securitySetting" },
-                { name: "其他参数配置", path: "/stock/otherParameters" }
+                { name: "仓库管理", path: "/stock/warehouse", id: "warehouse" },
+                { name: "原材料类型管理", path: "/sys/materialType", id: "materialType" },
+                { name: "原材料管理", path: "/sys/material", id: "material" },
+                { name: "角钢配置策略", path: "/stock/angleSteel", id: "angleSteel" },
+                { name: "安全库存配置", path: "/stock/securitySetting", id: "securitySetting" },
+                { name: "其他参数配置", path: "/stock/otherParameters", id: "otherParameters" }
             ]} />
     </DetailContent>
 }
