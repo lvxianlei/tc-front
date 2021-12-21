@@ -347,11 +347,11 @@
     "auditIdRecord": [
         {
             "title": "部门",
-            "dataIndex": "dept"
+            "dataIndex": "department"
         },
         {
             "title": "审批人",
-            "dataIndex": "auditor"
+            "dataIndex": "approver"
         },
         {
             "title": "职位",
@@ -359,11 +359,11 @@
         },
         {
             "title": "审批时间",
-            "dataIndex": "updateTime"
+            "dataIndex": "batchTime"
         },
         {
             "title": "审批结果",
-            "dataIndex": "auditStatus",
+            "dataIndex": "batchResult",
             "type": "select",
             "enum": [
                 {
@@ -386,7 +386,7 @@
         },
         {
             "title": "意见",
-            "dataIndex": "description"
+            "dataIndex": "opinion"
         }
     ],
     "drawH": [

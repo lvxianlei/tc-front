@@ -559,6 +559,20 @@
                         ]
                     },
                     {
+                        "label": "原材料领料",
+                        "icon": "technology",
+                        "path": "/materialPicking",
+                        "appName": "MC",
+                        "authority": "workshop_work_management",
+                        "items": [
+                            {
+                                "label": "原材料领料单",
+                                "path": "/materialPicking/picking",
+                                "authority": "workshop_work_management_machining_task_panel"
+                            }
+                        ]
+                    },
+                    {
                         "label": "计划排产",
                         "icon": "technology",
                         "path": "/planProd",
