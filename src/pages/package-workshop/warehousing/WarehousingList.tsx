@@ -18,10 +18,10 @@ export default function WarehousingList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'warehouseCode',
+            key: 'warehouseNumber',
             title: '入库单编号',
             width: 150,
-            dataIndex: 'warehouseCode'
+            dataIndex: 'warehouseNumber'
         },
         {
             key: 'internalNumber',
@@ -36,16 +36,16 @@ export default function WarehousingList(): React.ReactNode {
             dataIndex: 'saleOrderNumber'
         },
         {
-            key: 'projectName',
+            key: 'orderProjectName',
             title: '工程名称',
-            dataIndex: 'projectName',
+            dataIndex: 'orderProjectName',
             width: 200
         },
         {
-            key: 'planNum',
+            key: 'planNumber',
             title: '计划号',
             width: 200,
-            dataIndex: 'planNum'
+            dataIndex: 'planNumber'
         },
         {
             key: 'productTypeName',
@@ -54,22 +54,22 @@ export default function WarehousingList(): React.ReactNode {
             dataIndex: 'productTypeName'
         },
         {
-            key: 'warehouse',
+            key: 'warehouseName',
             title: '仓库',
             width: 200,
-            dataIndex: 'warehouse'
+            dataIndex: 'warehouseName'
         },
         {
-            key: 'packagingTime',
+            key: 'packingWarehouseRealTime',
             title: '包装日期',
             width: 200,
-            dataIndex: 'packagingTime',
+            dataIndex: 'packingWarehouseRealTime',
         },
         {
-            key: 'pushWarehouseTime',
+            key: 'warehouseTime',
             title: '入库日期',
             width: 200,
-            dataIndex: 'pushWarehouseTime',
+            dataIndex: 'warehouseTime',
         },
         {
             key: 'teamName',
@@ -88,7 +88,7 @@ export default function WarehousingList(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 200,
+            width: 80,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/warehousing/detail/${ record.id }` )}}>查看</Button>
@@ -98,14 +98,14 @@ export default function WarehousingList(): React.ReactNode {
     ]
 
     return <Page
-        path="/tower-production/workshopDept/finishedProduct"
+        path="/tower-production/packageWorkshop/finishedProduct"
         columns={ columns }
         headTabs={ [] }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
         refresh={ refresh }
         searchFormItems={ [
             {
-                name: 'pattern',
+                name: 'productType',
                 label: '产品类型',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {

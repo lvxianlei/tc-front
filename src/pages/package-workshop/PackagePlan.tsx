@@ -3,6 +3,8 @@ import { Input, DatePicker, Button, Form, Radio, message } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
+import styles from './workshop.module.less';
+import { useHistory } from 'react-router-dom';
 
 export default function DailySchedule(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -10,6 +12,7 @@ export default function DailySchedule(): React.ReactNode {
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [form] = Form.useForm();
+    const history = useHistory();
     const columns=[
         {
             title: "状态",
@@ -103,12 +106,13 @@ export default function DailySchedule(): React.ReactNode {
                     "width": 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         confirmStatus === 1 ? <Button type="link" onClick={() => {
-                            
-                        }}>派工</Button> : confirmStatus === 2 ? <Button type="link" onClick={() => {
-                            
-                        }}>详情</Button>: confirmStatus === 3 ? <Button type="link" onClick={() => {
-                           
-                        }}>详情</Button>: null
+                        }}>确认</Button> : confirmStatus === 2 ? <Button type="link" onClick={() => {
+                            history.push(`/packagingWorkshop/processingTask/dispatch/${record.id}`)
+                        }}>派工</Button>: confirmStatus === 3 ? <Button type="link" onClick={() => {
+                            history.push(`/packagingWorkshop/processingTask/detail/${record.id}/${record.status}`)
+                        }}>详情</Button>:<Button type="link" onClick={() => {
+                            history.push(`/packagingWorkshop/processingTask/detail/${record.id}/4`)
+                        }}>详情</Button>
                     )
                 }] : [{
                     "key": "index",
@@ -126,6 +130,7 @@ export default function DailySchedule(): React.ReactNode {
                     <Radio.Button value={3}>未采集</Radio.Button>
                     <Radio.Button value={4}>已完成</Radio.Button>
                 </Radio.Group>
+                <span className={styles.statistical}>统计<span className={styles.statistical}>下达总重量：{data?.issueTotalWeight}吨</span><span className={styles.statistical}>角钢总重量：{data?.angleTotalWeight}吨</span><span className={styles.statistical}>连板总重量：{data?.plateTotalWeight}吨</span></span>
                 {confirmStatus === 1 ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
                     RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, selectedKeys).then(res => {
                         message.success("确认成功");
