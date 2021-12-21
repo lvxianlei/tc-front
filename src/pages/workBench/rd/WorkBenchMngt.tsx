@@ -29,6 +29,7 @@ interface IList {
 	readonly userId?: string;
 	readonly createUserId?: string;
 	readonly authority?: string;
+	readonly weldingUserId?: string;
 }
 
 export default function WorkBenchMngt(): React.ReactNode {
@@ -254,7 +255,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'weldingToBeWelding',
 					path: '/workMngt/assemblyWeldingList',
 					state: 3,
-					userId: userId,
+					weldingUserId: userId,
 					authority: 'welding_to_be_welding'
 				}
 			]
@@ -266,7 +267,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'boltToBeAssigned',
 					path: '/workMngt/boltList',
 					state: 2,
-					userId: userId,
+					weldingUserId: userId,
 					authority: 'bolt_to_be_assigned'
 				}, 
 				{
@@ -282,6 +283,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'boltToBeCheck',
 					path: '/workMngt/boltList',
 					state: 4,
+					userId: userId,
 					authority: 'bolt_to_be_check'
 				}
 			]
@@ -336,7 +338,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 						return null
 					} else {
 						return <div className={res.col !== 2 ? styles.content : styles.content2} key={ind + '_' + index}>
-							<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: { state: item?.state, type: item?.type, userId: item?.userId, createUserId: item?.createUserId} }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
+							<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: { state: item?.state, type: item?.type, userId: item?.userId, createUserId: item?.createUserId, weldingUserId: item?.weldingUserId} }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
 							<p className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</p>
 							 <div className={styles.draw}>
 								<Line 
