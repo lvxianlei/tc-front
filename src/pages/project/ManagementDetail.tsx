@@ -177,6 +177,12 @@ export default function ManagementDetail(): React.ReactNode {
                 if (["projectLeader", "biddingPerson"].includes(item.dataIndex)) {
                     return ({ title: item.title, dataIndex: item.dataIndex })
                 }
+                if (item.dataIndex === "address") {
+                    return ({
+                        ...item,
+                        render: (record: any) => `${record.bigRegion}-${record.address}`
+                    })
+                }
                 return item
             }).filter((item: any) => !(item.dataIndex === "country" && data?.address !== "其他-国外"))} dataSource={data || {}} />
             <DetailTitle title="物资清单" />

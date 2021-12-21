@@ -35,6 +35,14 @@ export default function ChooseApply(): React.ReactNode {
         },
         {
             authority: "",
+            icon: marketing,
+            title: "计划中心",
+            description: "包含客户、合同、订单等",
+            path: "SC",
+            appName: "SC",
+        },
+        {
+            authority: "",
             icon: develop,
             title: "研发中心",
             description: "包含提料、放样等",
@@ -88,6 +96,14 @@ export default function ChooseApply(): React.ReactNode {
             description: "人资管理相关功能",
             path: "HR",
             appName: "HR"
+        },
+        {
+            authority: "",
+            icon: hr,
+            title: "财务中心",
+            description: "人资管理相关功能",
+            path: "FC",
+            appName: "FC"
         },
         {
             authority: "",

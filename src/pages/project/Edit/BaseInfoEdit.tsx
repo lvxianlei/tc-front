@@ -23,11 +23,11 @@ export default function BaseInfoEdit(): JSX.Element {
             if (result && result.cargoVOList && result.cargoVOList.length > 0) {
                 result.cargoVOList.forEach((item: any) => item.amount = item.amount <= 0 ? 0 : item.amount)
             }
-            baseInfoForm.setFieldsValue(result)
             cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
             setAddress(result.address)
             resole({
                 ...result,
+                address: `${result.bigRegion}-${result.address}`,
                 addressList: [...addressList.map(item => ({
                     value: `${item.bigRegion}-${item.name}`,
                     label: `${item.bigRegion}-${item.name}`
@@ -103,8 +103,16 @@ export default function BaseInfoEdit(): JSX.Element {
                     columns={
                         address === "其他-国外" ?
                             baseInfoData.map((item: any) => item.dataIndex === "address" ?
-                                ({ ...item, type: "select", enum: data?.addressList }) : item) :
-                            baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item).filter((item: any) => item.dataIndex !== "country")
+                                ({
+                                    ...item,
+                                    type: "select",
+                                    enum: data?.addressList
+                                }) : item) :
+                            baseInfoData.map((item: any) => item.dataIndex === "address" ? ({
+                                ...item,
+                                type: "select",
+                                enum: data?.addressList
+                            }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
                 <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
