@@ -26,24 +26,8 @@ export default function StockList(): React.ReactNode {
             key: 'teamName',
             title: '入库班组',
             dataIndex: 'teamName',
-            width: 120
+            width: 150
         },
-        // {
-        //     key: 'pattern',
-        //     title: '类型',
-        //     width: 200,
-        //     dataIndex: 'pattern',
-        //     render: (status: number): React.ReactNode => {
-        //         switch (status) {
-        //             case 1:
-        //                 return '新放';
-        //             case 2:
-        //                 return '重新出卡';
-        //             case 3:
-        //                 return '套用';
-        //         }
-        //     }
-        // },
         {
             key: 'position',
             title: '库位',
@@ -54,7 +38,7 @@ export default function StockList(): React.ReactNode {
             key: 'region',
             title: '区位',
             dataIndex: 'region',
-            width: 200
+            width: 150
         },
         {
             key: 'internalNumber',
@@ -73,80 +57,61 @@ export default function StockList(): React.ReactNode {
             title: '计划号',
             width: 200,
             dataIndex: 'planNumber',
-            render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
-            )
         },
         {
             key: 'productCategoryName',
             title: '塔型',
             width: 200,
             dataIndex: 'productCategoryName',
-            render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
-            )  
         },
         {
             key: 'productHeight',
             title: '呼高',
-            width: 200,
+            width: 100,
             dataIndex: 'productHeight',
             render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
+                <span>{ _ === -1 ? '-' : _ }</span>
             )  
         },
         {
             key: 'productNumber',
             title: '杆塔号',
-            width: 200,
+            width: 150,
             dataIndex: 'productNumber'
         },
         {
             key: 'balesCode',
             title: '包名',
-            width: 200,
+            width: 100,
             dataIndex: 'balesCode'
         },
         {
             key: 'balesWeight',
             title: '包单重',
-            width: 200,
+            width: 150,
             dataIndex: 'balesWeight',
             render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
+                <span>{ _ === -1 ? '-' : _ }</span>
             )  
         },
         {
             key: 'balesWarehouseNumber',
             title: '库存数',
-            width: 200,
+            width: 100,
             dataIndex: 'balesWarehouseNumber',
             render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
+                <span>{ _ === -1 ? '-' : _ }</span>
             )  
         },
         {
             key: 'balesNumber',
             title: '包件数',
-            width: 200,
+            width: 100,
             dataIndex: 'balesNumber',
             render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
+                <span>{ _ === -1 ? '-' : _ }</span>
             )  
-        },
-        // {
-        //     key: 'operation',
-        //     title: '操作',
-        //     dataIndex: 'operation',
-        //     fixed: 'right' as FixedType,
-        //     width: 200,
-        //     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-        //         <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-        //             <Link to={ `/drawTower/drawTowerMngt/towerInformation/${ record.id }` }>塔型信息</Link>
-        //             <Link to={ `/drawTower/drawTowerMngt/componentInformation/${ record.id }/${ record.structureCount === -1 ? 0 : record.structureCount }` }>塔型构件</Link>
-        //         </Space>
-        //     )
-        // }
+        }
     ]
 
     return <Page

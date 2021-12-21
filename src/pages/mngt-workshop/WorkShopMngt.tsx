@@ -125,16 +125,13 @@ export default function DailySchedule(): React.ReactNode {
                     <Radio.Button value={1}>未派工</Radio.Button>
                     <Radio.Button value={2}>未采集</Radio.Button>
                     <Radio.Button value={3}>已完成</Radio.Button>
-                    <Radio.Button value={4}>已完成</Radio.Button>
                 </Radio.Group>
                 {confirmStatus === 1 ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
                     RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, selectedKeys).then(res => {
                         message.success("确认成功");
                         setRefresh(!refresh);
                     });
-                }}>批量确认</Button> : confirmStatus === 2 ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
-                    setVisible(true);
-                }}>派工</Button> : null}
+                }}>批量确认</Button> : null}
                 </>}
             refresh={refresh}
             tableProps={{

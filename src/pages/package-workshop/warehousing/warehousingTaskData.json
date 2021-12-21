@@ -1,7 +1,7 @@
 {
     "baseInfoData": [
         {
-            "dataIndex": "contractName",
+            "dataIndex": "warehouseNumber",
             "title": "入库单编号"
         },
         {
@@ -25,7 +25,7 @@
             "title": "计划号"
         },
         {
-            "dataIndex": "packingWarehouseRealTime",
+            "dataIndex": "packingWarehouseTime",
             "title": "包装时间"
         },
         {
