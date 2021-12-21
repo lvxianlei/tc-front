@@ -249,6 +249,7 @@ export default function CollectionInfomation(): React.ReactNode {
                 visible={visibleOverView}
                 userData={userData}
                 contractList={contractList}
+                status={confirmStatus}
                 onCancel={() => setVisibleOverView(false)}
             />
         </>
