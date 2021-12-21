@@ -69,6 +69,10 @@ export default function Drawing(): React.ReactNode {
             visible={visible}
             width={1011}
             title="图纸确认任务"
+            onCancel={() => {
+                setDetailedId("")
+                setVisible(false)
+            }}
             footer={[
                 <Button key="save" type="primary" ghost onClick={() => handleModalOk(1)}>保存</Button>,
                 <Button key="saveAndSubmit" type="primary" ghost onClick={() => handleModalOk(2)}>保存并发起</Button>

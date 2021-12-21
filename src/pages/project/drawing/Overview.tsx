@@ -19,6 +19,6 @@ export default function Overview({ id }: OverviewProps) {
 
     return <Spin spinning={loading}>
         <BaseInfo columns={setting} col={2} dataSource={data || {}} />
-        <Attachment title="附件" dataSource={data?.invoiceAttachInfoVos || []} />
+        <Attachment title="附件" dataSource={data?.fileSources || []} />
     </Spin>
 }

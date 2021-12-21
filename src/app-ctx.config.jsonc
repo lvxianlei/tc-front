@@ -171,17 +171,25 @@
                         "label": "工作台",
                         "icon": "technology",
                         "path": "/workBench",
+                        "appName": "RD",
                         "authority": "workbench",
                         "items": [
                             {
                                 "label": "工作台",
-                                "appName": "RD",
                                 "path": "/workBench/workBenchMngt",
                                 "authority": "rd_workbench"
-                            },
+                            }
+                        ]
+                    },
+                    {
+                        "label": "工作台",
+                        "icon": "technology",
+                        "path": "/workBench",
+                        "appName": "SW",
+                        "authority": "workbench",
+                        "items": [
                             {
                                 "label": "供应工作台",
-                                "appName": "SW",
                                 "path": "/workBench/sw",
                                 "authority": "workbench_supply"
                             }
@@ -895,13 +903,11 @@
                             {
                                 "label": "生产工序管理",
                                 "path": "/workshopPlanBasic/processMngt",
-                                "appName": "MC",
                                 "authority": "approvalm"
                             },
                             {
                                 "label": "工作中心管理",
                                 "path": "/workshopPlanBasic/workCenterMngt",
-                                "appName": "MC",
                                 "authority": "approvalm"
                             }
                         ]
