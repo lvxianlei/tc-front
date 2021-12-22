@@ -100,7 +100,7 @@ export default function RecruitEdit(): React.ReactNode {
      * @description 获取杆塔明细
      */
     const getProdLinkLists = async () => {
-        const data: any = await RequestUtil.get(`/?id${params.productCategoryId}`)
+        const data: any = await RequestUtil.get(`/tower-aps/planUnitLink/product?id=${params.productCategoryId}`)
         setTowerList(data)
         setTowerList(data)
         let status = data.filter((item: any) => { return item.productStatus === 1 })
