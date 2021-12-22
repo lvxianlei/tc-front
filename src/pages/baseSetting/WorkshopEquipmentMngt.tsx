@@ -15,9 +15,9 @@ import EquipmentSelectionModal, { IData } from '../../components/EquipmentSelect
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { IProcess } from './ProductionLineMngt';
-import { ILineList } from './WorkshopTeamMngt';
 import { SelectValue } from 'antd/lib/select';
 import { CloseOutlined } from '@ant-design/icons';
+import { ILineList } from './IBaseSetting';
 
 interface IDetail {
     readonly name?: string;

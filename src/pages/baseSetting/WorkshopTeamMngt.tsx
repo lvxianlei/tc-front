@@ -13,40 +13,10 @@ import RequestUtil from '../../utils/RequestUtil';
 import WorkshopUserSelectionComponent from '../../components/WorkshopUserModal';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
-import { IProcess } from './ProductionLineMngt';
 import styles from './WorkshopEquipmentMngt.module.less';
 import { DataType } from '../../components/AbstractSelectableModal';
+import { IDetail, ITeamUserList } from './IBaseSetting';
 
-interface IDetail {
-    readonly name?: string;
-    readonly id?: string;
-    readonly deptProcessesId?: string;
-    readonly deptProcessesName?: string;
-    readonly productionLinesId?: string;
-    readonly productionLinesName?: string;
-    readonly workshopDeptId?: string;
-    readonly workshopDeptName?: string;
-    readonly teamUserVOList?: ITeamUserList[];
-}
-
-interface ITeamUserList {
-    readonly name?: string;
-    readonly position?: string;
-    readonly teamId?: string;
-    readonly userId?: string;
-}
-
-export interface ILineList {
-    readonly createTime?: string;
-    readonly createUserName?: string;
-    readonly deptProcessesId?: string;
-    readonly deptProcessesName?: string;
-    readonly description?: string;
-    readonly id?: string;
-    readonly name?: string;
-    readonly workshopDeptId?: string;
-    readonly workshopDeptName?: string;
-}
 
 export default function WorkshopTeamMngt(): React.ReactNode {
     const columns = [
@@ -64,10 +34,10 @@ export default function WorkshopTeamMngt(): React.ReactNode {
             dataIndex: 'name'
         },
         {
-            key: 'productionLinesName',
+            key: 'productUnitName',
             title: '生产单元',
             width: 200,
-            dataIndex: 'productionLinesName'
+            dataIndex: 'productUnitName'
         },
         {
             key: 'createUserName',
@@ -89,10 +59,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
             width: 150,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={ () => {
-                        setVisible(true);
-                        setTitle('编辑');
-                    } }>编辑</Button>
+                    <Button type="link" onClick={ () => edit(record.id) } >编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
@@ -148,13 +115,12 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 value = {
                     ...value,
                     id: detail.id,
-                    workshopDeptId: value.workshopDeptId.split(',')[0],
-                    workshopDeptName: value.workshopDeptId.split(',')[1],
-                    deptProcessesId: value.deptProcessesId.split(',')[0],
-                    deptProcessesName: value.deptProcessesId.split(',')[1],
-                    productionLinesId: value.productionLinesId.split(',')[0],
-                    productionLinesName: value.productionLinesId.split(',')[1],
-                    teamUserSaveDTOList: userList
+                    teamUserSaveDTOList: userList.map((res: ITeamUserList) => {
+                        return {
+                            ...res,
+                            teamId: detail.id
+                        }
+                    })
                 }
                 RequestUtil.post<IDetail>(`/tower-production/team`, { ...value }).then(res => {
                     message.success('保存成功！');
@@ -162,19 +128,28 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                     setRefresh(!refresh);
                 });
             } else {
-                message.warning('车间班组员工不可为空')
+                message.warning('车间班组成员不可为空')
             }
         })
+    }
+
+    const edit = async (id: string) => {
+        const data = await RequestUtil.get<IDetail>(`/tower-production/team?id=${ id }`);
+        setDetail(data);
+        form.setFieldsValue({ ...data });
+        setUserList(data?.teamUserVOList || [])
+        setVisible(true);
+        setTitle('编辑');
+
     }
 
     const close = () => {
         setVisible(false);
         setUserList([]);
         setDetail({});
-        setProcess([]);
         setLoading(true);
         form.resetFields();
-        form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', workshopDeptId: '' })
+        form.setFieldsValue({ name: '', productUnitId: '' })
     }
 
     const cancel = () => {
@@ -192,13 +167,12 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     const [ userList, setUserList ] = useState<ITeamUserList[]>([]);
     const [ title, setTitle ] = useState('新增');
     const [ detail, setDetail ] = useState<IDetail>({});
-    const [ process, setProcess ] = useState<IProcess[]>([]);
     const [ loading, setLoading ] = useState(true);
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
-        resole(data);
+        const data: any = await RequestUtil.get<SelectDataNode[]>(`/tower-aps/productionUnit?size=1000`);
+        resole(data?.records);
     }), {})
-    const departmentData: any = data || [];
+    const productUnitData: any = data || [];
     return (
         <>
             <Page
@@ -213,15 +187,6 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                         name: 'vehicleName',
                         label: '',
                         children: <Input placeholder="请输入班组名称进行查询"/>
-                    },
-                    {
-                        name: 'vehicleType',
-                        label: '车辆类型',
-                        children: <Select placeholder="请选择" style={{ width: "150px" }}>
-                            { process.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                            }) }
-                        </Select>
                     }
                 ] }
             />
@@ -230,13 +195,13 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                     <Form form={ form } labelCol={{ span: 6 }}>
                         <Row>
                             <Col span={ 12 }>
-                                <Form.Item name="workshopDeptId" initialValue={ detail.workshopDeptId } label="所属车间" rules={[{
+                                <Form.Item name="productUnitId" initialValue={ detail.productUnitId } label="所属生产单元" rules={[{
                                         "required": true,
-                                        "message": "请选择所属车间"
+                                        "message": "请选择所属生产单元"
                                     }]}>
                                     <Select placeholder="请选择">
-                                        { departmentData.map((item: any) => {
-                                            return <Select.Option key={ item.id + ',' + item.deptName } value={ item.id + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                                        { productUnitData?.map((item: any) => {
+                                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                                         }) }
                                     </Select>
                                 </Form.Item>
