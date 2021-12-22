@@ -30,7 +30,7 @@ export default function StockList(): React.ReactNode {
         },
         {
             key: 'position',
-            title: '库位',
+            title: '库区',
             width: 150,
             dataIndex: 'position'
         },
