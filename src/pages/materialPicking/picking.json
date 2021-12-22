@@ -92,7 +92,7 @@
         },
         {
             "title": "加工计划编号",
-            "dataIndex": "workPlanNumberId",
+            "dataIndex": "workPlanNumber",
             "type": "popTable",
             "path": "",
             "width": 1011,
