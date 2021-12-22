@@ -6,12 +6,11 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Space, Input, Button, Modal, Form, Popconfirm, message } from 'antd';
+import { Space, Input, Button, Modal, Popconfirm, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
-import { useHistory } from 'react-router';
-import { EditRefProps, IDetailData, IWorkCenterMngt } from '../IWorkshopPlanBasic';
+import { EditRefProps } from '../IWorkshopPlanBasic';
 import Edit from "./WorkCenterSetting"
 
 export default function ProcessMngt(): React.ReactNode {

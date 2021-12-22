@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, DatePicker, Button, Radio, Table, Select, Form, Row, Col, Spin } from 'antd';
+import { Input, DatePicker, Button, Radio, Table, Select, Form, Row, Col, Spin, message } from 'antd';
 import { CommonTable, DetailContent } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
@@ -12,10 +12,10 @@ import styles from './ShopFloorPlan.module.less';
 
 export default function ShopFloorPlan(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [ filterValue, setFilterValue ] = useState({});
     const [ confirmStatus, setConfirmStatus ] = useState<number>(1);
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [ form ] = Form.useForm();
+    const [ type, setType ] = useState<number>();
 
     const { data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-aps/productionUnit?size=1000`);
@@ -24,8 +24,8 @@ export default function ShopFloorPlan(): React.ReactNode {
     const productUnitData: any = data || [];
 
     const operationChange = (event: any) => {
+        run({ status: event.target.value, type: type})
         setConfirmStatus(parseFloat(`${event.target.value}`));
-        setRefresh(!refresh);
     }
 
     const SelectChange = (selectedRowKeys: React.Key[]): void => {
@@ -34,22 +34,32 @@ export default function ShopFloorPlan(): React.ReactNode {
 
     const { loading, data: pageList, run } = useRequest<IShopFloorPlan[]>((filterValue) => new Promise(async (resole, reject) => {
         try {
-            const result: IShopFloorPlan[] = await RequestUtil.get(`/tower-aps/workPlan`, {
-                ...filterValue
-            })
-            resole(result)
+            if(filterValue.type) {
+                const result: IShopFloorPlan[] = await RequestUtil.get(`/tower-aps/workPlan`, {
+                    ...filterValue
+                })
+                resole(result)
+            } else {
+                message.warning('请选择类型')
+                resole([])
+            }
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
 
-    return <Spin spinning={ loading }>
-        <DetailContent>
-        <Form form={form} onFinish={async (values) => await run({
+    const finish = async (values: any) => {
+        await run({
             ...values,
+            sttus: confirmStatus,
             startTime: values.time && moment(values?.time[0]),
             endTime: values.time && moment(values?.time[1])
-        })}>
+        })
+    }
+
+    return <Spin spinning={ loading }>
+        <DetailContent>
+        <Form form={form} onFinish={(values) => finish(values)}>
             <Row>
                 <Col className={ styles.right }>
                     <Form.Item label="" name="fuzzyMsg" >
@@ -61,7 +71,7 @@ export default function ShopFloorPlan(): React.ReactNode {
                         "required": true,
                         "message": "请选择统计类型" 
                     }]}>
-                        <Select placeholder="请选择" style={{ width: '150px' }}>
+                        <Select placeholder="请选择" style={{ width: '150px' }} onChange={(e: number) => setType(e)}>
                             <Select.Option key={ 1 } value={ 1 }>按件数</Select.Option>
                             <Select.Option key={ 2 } value={ 2 }>按孔数</Select.Option>
                             <Select.Option key={ 3 } value={ 3 }>按重量</Select.Option>
@@ -93,7 +103,7 @@ export default function ShopFloorPlan(): React.ReactNode {
             <Radio.Button value={2}>加工中</Radio.Button>
             <Radio.Button value={3}>已完成</Radio.Button>
         </Radio.Group>
-        { confirmStatus === 1 ? <Link to={`/shopFloorPlan/automaticScheduling/1${ selectedKeys.join(',') }`}><Button disabled={ selectedKeys.length <= 0 } type="primary">确认并预排产</Button></Link> : null }
+        { confirmStatus === 1 ? <Link to={`/shopFloorPlan/automaticScheduling/${ selectedKeys.join(',') }`}><Button disabled={ selectedKeys.length <= 0 } type="primary">确认并预排产</Button></Link> : null }
         <CommonTable 
             dataSource={[...pageList || []]}
             columns={ confirmStatus === 1 ? columns :

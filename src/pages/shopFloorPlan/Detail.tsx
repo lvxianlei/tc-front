@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Input, DatePicker, Button, Form, Modal, Row, Col, Radio, message, Table, Select, Spin, Space } from 'antd';
-import { CommonTable, DetailContent, Page } from '../common';
+import { Input, DatePicker, Button, Form, Row, Col, message, Select, Spin, Space } from 'antd';
+import { CommonTable, DetailContent } from '../common';
 import styles from './ShopFloorPlan.module.less';
 import RequestUtil from '../../utils/RequestUtil';
 import { ISchedulingList } from './IShopFloorPlan';
@@ -16,8 +16,9 @@ export default function Detail(): React.ReactNode {
 
     const { loading, data: detailList, run } = useRequest<ISchedulingList[]>((filterValue) => new Promise(async (resole, reject) => {
         try {
-            const result: ISchedulingList[] = await RequestUtil.get(`/tower-aps/aps/check?ids=${params.id}`,{
-                ...filterValue
+            const result: ISchedulingList[] = await RequestUtil.get(`/tower-aps/workPlan/productionSchedule`,{
+                ...filterValue,
+                workPlanId: params.id
             });
             resole(result)
         } catch (error) {

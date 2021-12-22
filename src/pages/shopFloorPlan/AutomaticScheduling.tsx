@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Input, DatePicker, Button, Form, Modal, Row, Col, Radio, message, Table, Select, Spin, Space } from 'antd';
-import { CommonTable, DetailContent, Page } from '../common';
+import { Input, DatePicker, Button, Form, Row, Col, message, Select, Spin, Space } from 'antd';
+import { CommonTable, DetailContent } from '../common';
 import styles from './ShopFloorPlan.module.less';
 import RequestUtil from '../../utils/RequestUtil';
 import { ISchedulingList } from './IShopFloorPlan';
@@ -14,11 +14,15 @@ export default function AutomaticScheduling(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const history = useHistory();
 
-    const { loading, data } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
+    const { loading, data, run: checkRun} = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/aps/check?ids=${params.id}`);
             if(result) {
                 run();
+                clearTimeout();
+            } else {
+                setTimeout(() => checkRun(), 4000)
+                // checkRun();
             }
             resole(result)
         } catch (error) {
