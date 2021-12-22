@@ -55,10 +55,12 @@ export default function Delivery(): React.ReactNode {
                 <Space>
                     <Button type='primary' onClick={() => {
                         if(selectedRows.length>0){
-                            console.log(selectedRows)
                             if(tableUserDataSource.length>0){
-                                console.log(tableUserDataSource)
-                                RequestUtil.post(`tower-production/productionLines/ex`,{}).then(()=>{
+                                RequestUtil.post(`tower-production/productionLines/ex`,{
+                                    id:params.id,
+                                    packingExTeamUserDTOList: tableUserDataSource,
+                                    packingExTowerDTOList: selectedRows
+                                }).then(()=>{
                                     message.success('出库成功！')
                                 }).then(()=>{
                                     history.push(`/packagingWorkshop/deliveryPlan`);
@@ -77,13 +79,10 @@ export default function Delivery(): React.ReactNode {
                 <Tabs onChange={tabChange} type="card">
                     <Tabs.TabPane tab={`未出库`} key={1}>
                         <Form layout="inline"  form={ form } onFinish={async (value: any) => {
-                            getDataSource();
-                            const tableUserDataSource: any = await RequestUtil.get(`/packageWorkshop/packageWarehouseUser`, {
-                                teamId: selectedUser.id,
-                                planNumber: params.planNumber
-                            });
-                            setTableDataSource(tableDataSource)
-                            setTableUserDataSource(tableUserDataSource);
+                            getDataSource('1',selectedUser.id);
+                            const tableUserDataSource: any = await RequestUtil.get(`/tower-production/team?id=${ selectedUser.id }`);
+                            // setTableDataSource(tableDataSource)
+                            setTableUserDataSource(tableUserDataSource?.teamUserVOList);
                             setShow(true)
                         }} style={{ margin: '10px' }}>
                             <Form.Item label='班组' name='teamName' rules={[{required:true,message:'请选择班组'}]}>
@@ -91,7 +90,7 @@ export default function Delivery(): React.ReactNode {
                                     disabled
                                     addonAfter={<WorkshopTeamSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                         console.log(selectedRows);
-                                        setSelectedUser(selectedRows);
+                                        setSelectedUser(selectedRows[0]);
                                         form.setFieldsValue({
                                             teamName: selectedRows[0].name
                                         })
@@ -117,7 +116,7 @@ export default function Delivery(): React.ReactNode {
                         </Form>
                         {show&&<><DetailTitle title="杆塔信息" />
                         <Table
-                            dataSource={tableDataSource}
+                            dataSource={[...tableDataSource]}
                             columns={tableColumns}
                             rowKey='id'
                             rowSelection={{
@@ -129,17 +128,19 @@ export default function Delivery(): React.ReactNode {
                             }}
                         />
                         <DetailTitle title="发包人员" operation={[<WorkshopUserModal onSelect={onUserSelect} saleOrderId={''} selectKey={tableUserDataSource} />]} />
-                        <CommonTable columns={[
+                        <Table columns={[
                             { title: '姓名', dataIndex: 'name', key: 'name' },
                             {
                                 title: '操作', dataIndex: 'operation', key: 'operation', render: (_: any, record: any, index: number) => (<>
                                     <Button type="link" onClick={() => {
                                         tableUserDataSource.splice(index, 1);
-                                        setTableUserDataSource(tableUserDataSource);
+                                        console.log(tableUserDataSource)
+                                        setTableUserDataSource([...tableUserDataSource]);
+                                        console.log(tableUserDataSource)
                                     }}>删除</Button>
                                 </>)
                             }
-                        ]} dataSource={tableUserDataSource} pagination={false} /></>}
+                        ]} dataSource={[...tableUserDataSource]} pagination={false} rowKey={'id'}/></>}
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={`已出库`} key={3}>
                         <CommonTable columns={[...tableColumns, { title: '发包人员', dataIndex: 'packageUserNames', key: 'packageUserNames' }]} dataSource={tableDataSource} pagination={false} />
