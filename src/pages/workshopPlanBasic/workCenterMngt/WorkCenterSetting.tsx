@@ -27,7 +27,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/${id}`)
             baseForm.setFieldsValue({
                 ...result,
-                time: [moment(result.workStartTime, 'HH:mm'), moment(result.workEndTime, 'HH:mm')]
+                time: [moment(result.workStartTime, 'HH:mm'), moment(result.workEndTime, 'HH:mm')],
+                equipmentId: result?.equipmentId && result?.equipmentId.split(',')
             })
             form.setFieldsValue({ workCenterRelations: [...result?.workCenterRelations] });
             setWorkCenterRelationsList(result?.workCenterRelations);
@@ -86,7 +87,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     ...baseData,
                     workStartTime: baseData.time[0].format('HH:mm'),
                     workEndTime: baseData.time[1].format('HH:mm'),
-                    workCenterRelations: [...data.workCenterRelations]
+                    workCenterRelations: [...data.workCenterRelations],
+                    equipmentId: baseData.equipmentId.join(',')
                 })
             } else {
                message.warning("请添加产能矩阵")
@@ -304,7 +306,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 return ({ ...item, type: 'select', 
                     render:  (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name="equipmentId">
-                            <Select>
+                            <Select mode="multiple">
                                 { equipmentList?.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.deviceName }</Select.Option>
                                 }) }
