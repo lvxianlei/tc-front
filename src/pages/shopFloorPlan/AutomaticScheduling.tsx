@@ -68,7 +68,7 @@ export default function AutomaticScheduling(): React.ReactNode {
                         <Input style={{ width: '300px' }} placeholder="请输入加工计划编号/计划号/塔型进行查询" />
                     </Form.Item>
                 </Col>
-                <Col>
+                <Col className={ styles.right }>
                     <Form.Item label="生产单元" name="unitId">
                         <Select placeholder="请选择" style={{ width: '150px' }}>
                             { productUnitData?.map((item: any) => {
@@ -77,7 +77,7 @@ export default function AutomaticScheduling(): React.ReactNode {
                         </Select>
                     </Form.Item>
                 </Col>
-                <Col>
+                <Col className={ styles.right }>
                     <Form.Item label="工作中心" name="workCenterId">
                         <Select placeholder="请选择" style={{ width: '150px' }}>
                             { workCenterData?.map((item: any) => {
@@ -86,13 +86,13 @@ export default function AutomaticScheduling(): React.ReactNode {
                         </Select>
                     </Form.Item>
                 </Col>
-                <Col>   
+                <Col className={ styles.right }>   
                     <Form.Item label="完成时间" name="time">
                         <DatePicker.RangePicker />
                     </Form.Item>
                 </Col>
-                <Col>
-                    <Button type='primary' htmlType="submit">查询</Button>
+                <Col className={ styles.right }>
+                    <Button type='primary' htmlType="submit" className={ styles.right }>查询</Button>
                     <Button type='ghost' htmlType="reset">重置</Button>
                 </Col>
             </Row>
