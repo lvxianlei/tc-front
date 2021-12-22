@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
-import { Button, Form, message } from "antd"
+import { Button, Form, message, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../../common"
 import SelectProductGroup from "./SelectProductGroup"
 import { newProductGroup, productAssist } from '../managementDetailData.json'
@@ -77,49 +77,53 @@ export default function ProductGroupEdit() {
     }
 
     const handleModalOk = (selectRows: any[]) => {
-        setSelect([...select, ...selectRows.filter((item: any) => !select.map((item: any) => item.id).includes(item.id))])
+        setSelect(selectRows)
         setVisible(false)
     }
+
     const deleteProject = (id: string) => {
         setSelect(select.filter((item: any) => item.id !== id))
     }
+
     return <DetailContent
         title={[<Button key="pro" type="primary" onClick={() => setVisible(true)}>导入确认明细</Button>]}
         operation={[
             <Button key="save" type="primary" style={{ marginRight: "12px" }} onClick={handleSubmit} loading={saveStatus}>保存</Button>,
             <Button key="goback" type="default" onClick={() => history.goBack()}>返回</Button>
         ]}>
-        <SelectProductGroup
-            projectId={match.params.projectId}
-            productGroupId={match.params.id}
-            select={select.map(item => item.id)}
-            visible={visible}
-            onCancel={() => setVisible(false)}
-            onOk={handleModalOk} />
-        <DetailTitle title="基本信息" />
-        <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={newProductGroup.map((item: any) => {
-            switch (item.dataIndex) {
-                case "saleOrderNumber":
-                    return ({
-                        ...item,
-                        disabled: [1, 2].includes(data?.status),
-                        path: `${item.path}?projectId=${match.params.projectId}`
-                    })
-                case "description":
-                    return ({ ...item, disabled: [1, 2].includes(data?.status) })
-                default:
-                    return item
-            }
-        })} dataSource={data || {}} edit />
-        <DetailTitle title="明细" />
-        <CommonTable columns={[{
-            title: "操作",
-            dataIndex: "opration",
-            width: 30,
-            fixed: true,
-            render: (_: any, records: any) => <>
-                <Button type="link" disabled={!["0", 0, null].includes(records.taskNoticeId)} onClick={() => deleteProject(records.id)}>删除</Button>
-            </>
-        }, ...productAssist]} dataSource={select} />
+        <Spin spinning={loading}>
+            <SelectProductGroup
+                projectId={match.params.projectId}
+                productGroupId={match.params.id}
+                select={select.map(item => item.id)}
+                visible={visible}
+                onCancel={() => setVisible(false)}
+                onOk={handleModalOk} />
+            <DetailTitle title="基本信息" />
+            <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={newProductGroup.map((item: any) => {
+                switch (item.dataIndex) {
+                    case "saleOrderNumber":
+                        return ({
+                            ...item,
+                            disabled: [1, 2].includes(data?.status),
+                            path: `${item.path}?projectId=${match.params.projectId}`
+                        })
+                    case "description":
+                        return ({ ...item, disabled: [1, 2].includes(data?.status) })
+                    default:
+                        return item
+                }
+            })} dataSource={data || {}} edit />
+            <DetailTitle title="明细" />
+            <CommonTable columns={[{
+                title: "操作",
+                dataIndex: "opration",
+                width: 30,
+                fixed: "left",
+                render: (_: any, records: any) => <>
+                    <Button type="link" disabled={!["0", 0, null].includes(records.taskNoticeId)} onClick={() => deleteProject(records.id)}>删除</Button>
+                </>
+            }, ...productAssist]} dataSource={select} />
+        </Spin>
     </DetailContent>
 }

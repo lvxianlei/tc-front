@@ -161,6 +161,7 @@ export default function Drawing(): React.ReactNode {
             columns={[...drawing, {
                 title: "操作",
                 dataIndex: "opration",
+                fixed: "right",
                 render: (_: undefined, record: any) => <>
                     <Button
                         type="link"
