@@ -77,7 +77,7 @@ const ProdLink = (): React.ReactNode => {
             },
             {
                 type:"lofting",
-                typeName:"放料"
+                typeName:"放样"
             },  {
                 type:"ingredients",
                 typeName:"配料"
