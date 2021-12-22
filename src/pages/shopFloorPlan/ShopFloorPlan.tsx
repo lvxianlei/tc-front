@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
-import { Input, DatePicker, Button, Form, Modal, Row, Col, Radio, message, Table, Select } from 'antd';
+import { Input, DatePicker, Button, Radio, Table, Select } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from './ShopFloorPlan.module.less';
 import RequestUtil from '../../utils/RequestUtil';
-import TeamSelectionModal from '../../components/TeamSelectionModal';
-import { IShopFloorPlan } from './IShopFloorPlan';
 import { columns } from "./shopFloorPlan.json";
 import { Link } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
 
 export default function ShopFloorPlan(): React.ReactNode {
-    const [refresh, setRefresh] = useState<boolean>(false);
-    const [filterValue, setFilterValue] = useState({});
-    const [confirmStatus, setConfirmStatus] = useState<number>(1);
+    const [ refresh, setRefresh ] = useState<boolean>(false);
+    const [ filterValue, setFilterValue ] = useState({});
+    const [ confirmStatus, setConfirmStatus ] = useState<number>(1);
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
-    const [form] = Form.useForm();
 
     const { data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-aps/productionUnit?size=1000`);
@@ -44,24 +40,19 @@ export default function ShopFloorPlan(): React.ReactNode {
                     fixed: "right" as FixedType,
                     "width": 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        confirmStatus === 1 ? <Link to={`/shopFloorPlan/shopFloorDetail/detail/${record.id }`}></Link> : null
+                        confirmStatus === 1 ? <Link to={`/shopFloorPlan/shopFloorDetail/${record.id }`}>详情</Link> : null
                     )
                 }]}
             headTabs={[]}
             requestData={{ status: confirmStatus }}
-            extraOperation={(data: any) =><>
+            extraOperation={<>
                 <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
                     <Radio.Button value={1}>未确认</Radio.Button>
                     <Radio.Button value={2}>加工中</Radio.Button>
                     <Radio.Button value={3}>已完成</Radio.Button>
                 </Radio.Group>
-                {confirmStatus === 1 ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
-                    RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, selectedKeys).then(res => {
-                        message.success("确认成功");
-                        setRefresh(!refresh);
-                    });
-                }}>确认并预排产</Button> : null}
-                </>}
+                { confirmStatus === 1 ? <Link to={`/shopFloorPlan/automaticScheduling/1${ selectedKeys.join(',') }`}><Button disabled={ selectedKeys.length <= 0 } type="primary">确认并预排产</Button></Link> : null }
+            </>}
             refresh={refresh}
             tableProps={{
                 rowSelection: {

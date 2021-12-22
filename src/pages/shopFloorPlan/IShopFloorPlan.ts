@@ -1,3 +1,4 @@
+
 export interface IShopFloorPlan {
     readonly id?: string;
     readonly angle110?: string;
@@ -17,5 +18,28 @@ export interface IShopFloorPlan {
     readonly unitId?: string;
     readonly unitName?: string;
     readonly weight?: number;
+    readonly workPlanNumber?: string;
+}
+
+export interface ISchedulingList {
+    readonly id?: string;
+    readonly basicsPartNum?: string;
+    readonly code?: string;
+    readonly endTime?: string;
+    readonly holesNum?: string;
+    readonly length?: string;
+    readonly materialName?: string;
+    readonly planNumber?: string;
+    readonly processFlow?: string;
+    readonly processingNum?: string;
+    readonly productCategoryName?: string;
+    readonly segmentName?: string;
+    readonly startTime?: string;
+    readonly structureSpec?: string;
+    readonly totalWeight?: string;
+    readonly type?: string;
+    readonly workCenterId?: string;
+    readonly workCenterName?: string;
+    readonly workPlanId?: string;
     readonly workPlanNumber?: string;
 }
