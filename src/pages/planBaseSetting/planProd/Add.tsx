@@ -42,7 +42,7 @@ export default function RecruitEdit(): React.ReactNode {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
         getProdLinkList();
-settypenum(data.status)
+        params.productCategoryId &&settypenum(data.status)
         getProdUnitList();
         const value: any = params.productCategoryId && await RequestUtil.get('/tower-aps/productionUnit', {
             current: 1,
@@ -50,10 +50,10 @@ settypenum(data.status)
             productionLinkId: data.linkId
         })
 
-        const listValue: any = params.productCategoryId && value.records.length > 0 ? value.records.filter((res: any) => { return res.id === data.unitId }) : [{}]
+        // const listValue: any = params.productCategoryId && value.records.length > 0 ? value.records.filter((res: any) => { return res.id === data.unitId }) : [{}]
 
-        params.productCategoryId && setProductivity(listValue[0].productivity?listValue[0].productivity:'')
-        params.productCategoryId&& seeLoad(listValue[0].productivity, data.unitId)
+        // params.productCategoryId && setProductivity(listValue[0].productivity?listValue[0].productivity:'')
+        // params.productCategoryId&& seeLoad(listValue[0].productivity, data.unitId)
         params.productCategoryId && setProdUnitList(value.records)
         form.setFieldsValue(params.productCategoryId ? {
             ...data,
