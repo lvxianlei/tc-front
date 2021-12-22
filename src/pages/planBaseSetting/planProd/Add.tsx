@@ -94,20 +94,29 @@ export default function RecruitEdit(): React.ReactNode {
        * @description 下发
        */
     const culIssue = async () => {
+        if(towerList){
+            if (selectedKeys.length > 0) {
+                let productIds = []
+                productIds = selectedKeys
 
-        if (selectedKeys.length > 0) {
-            let productIds = []
-            productIds = selectedKeys
-
+                RequestUtil.post('/tower-aps/planUnitLink/issue', {
+                    id: params.productCategoryId,
+                    productIds
+                }).then((res) => {
+                    message.success("下发成功")
+                    history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
+                })
+            } else {
+                message.success("至少选取一个塔型")
+            }
+        }else{
             RequestUtil.post('/tower-aps/planUnitLink/issue', {
                 id: params.productCategoryId,
-                productIds
+                productIds:[]
             }).then((res) => {
                 message.success("下发成功")
                 history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
             })
-        } else {
-            message.success("至少选取一个塔型")
         }
 
 
