@@ -12,24 +12,24 @@ import AuthUtil from '../../../utils/AuthUtil';
 import moment from 'moment';
 
 const tableColumns = [
-    { title: '加工班组', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '段', dataIndex: 'createDeptName', key: 'createDeptName', },
-    { title: '件号', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '材料', dataIndex: 'createTime', key: 'createTime' },
+    { title: '加工班组', dataIndex: 'name', key: 'name'},
+    { title: '段', dataIndex: 'segmentNum', key: 'segmentNum', },
+    { title: '件号', dataIndex: 'partNumber', key: 'partNumber' },
+    { title: '材料', dataIndex: 'structureTexture', key: 'structureTexture' },
     { title: '材质', dataIndex: 'description', key: 'description' },
-    { title: '规格', dataIndex: 'description', key: 'description' },
-    { title: '长度(mm)', dataIndex: 'description', key: 'description' },
-    { title: '单件孔数', dataIndex: 'description', key: 'description' },
-    { title: '数量', dataIndex: 'description', key: 'description' },
-    { title: '重量(kg)', dataIndex: 'description', key: 'description' },
-    { title: '电焊', dataIndex: 'description', key: 'description' },
+    { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
+    { title: '长度(mm)', dataIndex: 'length', key: 'length' },
+    { title: '单件孔数', dataIndex: 'holesNum', key: 'holesNum' },
+    { title: '数量', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
+    { title: '重量(kg)', dataIndex: 'basicsWeight', key: 'basicsWeight' },
+    { title: '电焊', dataIndex: 'electricWelding', key: 'electricWelding' },
     { title: '备注', dataIndex: 'description', key: 'description' },
-    { title: '冲引孔', dataIndex: 'description', key: 'description' },
-    { title: '是否弧边', dataIndex: 'description', key: 'description' },
-    { title: '件号类型', dataIndex: 'description', key: 'description' },
-    { title: '个孔径孔数', dataIndex: 'description', key: 'description' },
-    { title: '钻孔孔径孔数', dataIndex: 'description', key: 'description' },
-    { title: '扩孔孔径孔数', dataIndex: 'description', key: 'description' },
+    { title: '冲引孔', dataIndex: 'punchHole', key: 'punchHole' },
+    { title: '是否弧边', dataIndex: 'arcEdge', key: 'arcEdge' },
+    { title: '件号类型', dataIndex: 'numberType', key: 'numberType' },
+    { title: '个孔径孔数', dataIndex: 'apertureNumber', key: 'apertureNumber' },
+    { title: '钻孔孔径孔数', dataIndex: 'drillApertureNumber', key: 'drillApertureNumber' },
+    { title: '扩孔孔径孔数', dataIndex: 'reamingApertureNumber', key: 'reamingApertureNumber' },
 ]
 
 export default function Dispatch(): React.ReactNode {
@@ -50,10 +50,8 @@ export default function Dispatch(): React.ReactNode {
             // data = await RequestUtil.get(`/tower-science/issue/material?id=${params.id}`);
             form.setFieldsValue({
                 equipmentName:'',
-                workshopDeptName:'',
-                deptProcessesName:'',
                 productionLinesName:'',
-                time:[moment(),moment()],
+                time:[moment(),moment(new Date().setDate(new Date().getDate()+7))],
                 noDispatchStatus:1,
             });
             formRef.setFieldsValue({
@@ -62,6 +60,10 @@ export default function Dispatch(): React.ReactNode {
             setShow(true);
             setTableDataSource([{id:"1"}]);
             setSelectedRowKeys([{id:"1"}].map((item:any)=>{return item.id}))
+        }else{
+            form.setFieldsValue({
+                time:[moment(),moment(new Date().setDate(new Date().getDate()+2))],
+            });
         }
         resole(data)
     }), {})
@@ -104,28 +106,26 @@ export default function Dispatch(): React.ReactNode {
                                     setEquipment(selectedRows);
                                     form.setFieldsValue({
                                         equipmentName: selectedRows[0].name,
-                                        workshopDeptName: selectedRows[0].name,
-                                        deptProcessesName: selectedRows[0].name,
                                         productionLinesName: selectedRows[0].name
                                     });
-                                } } buttonType="link" buttonTitle="+选择设备"  disabled={show}/> } disabled={show}/>
+                                } } buttonType="link" buttonTitle="+选择工作中心"  disabled={show}/> } disabled={show}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="workshopDeptName" label="生产单元" initialValue={undefined}>
+                            <Form.Item name="productionLinesName" label="生产单元" initialValue={undefined}>
                                 <Input disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="time" label="任务时间范围" initialValue={[moment('2015-01-01'), moment('2015-01-01')]} style={{width:'100%'}} rules={[
+                            <Form.Item name="time" label="任务时间范围" style={{width:'100%'}} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择任务时间范围"
                                 }
                             ]}>
-                                <DatePicker.RangePicker showTime style={{width:'100%'}} disabled={show}/>
+                                <DatePicker.RangePicker  style={{width:'100%'}} disabled={show}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -182,7 +182,7 @@ export default function Dispatch(): React.ReactNode {
                                         "message": "请选择派工班组"
                                     }
                                 ]}>
-                                    <Input maxLength={ 50 } addonAfter={ <WorkshopTeamSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                                    <Input maxLength={ 50 } disabled addonAfter={ <WorkshopTeamSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                         setTeam(selectedRows);
                                         formRef.setFieldsValue({equipmentName: selectedRows[0].name});
                                     } } buttonType="link" buttonTitle="+选择班组" /> }/>

@@ -18,13 +18,21 @@ export default function DailySchedule(): React.ReactNode {
     const columns=[
         {
             title: "状态",
-            width: 150,
-            dataIndex: "issueWeight"
+            width: 100,
+            dataIndex: "status",
+            render:(status:number)=>{
+                switch(status){
+                    case 1: return '未确认'
+                    case 2: return '未派工'
+                    case 3: return '未采集'
+                    case 4: return '已完成'
+                }
+            }
         },
         {
             title: "订单工程名称",
             width: 150,
-            dataIndex: "issueWeight"
+            dataIndex: "orderProjectName"
         },
         {
             title: "电压等级",
@@ -34,42 +42,42 @@ export default function DailySchedule(): React.ReactNode {
         {
             title: "计划号",
             width: 150,
-            dataIndex: "angleWeight"
+            dataIndex: "planNumber"
         },
         {
             title: "塔型",
             width: 150,
-            dataIndex: "plateWeight"
+            dataIndex: "productCategoryName"
         },
         {
             title: "基数",
             width: 150,
-            dataIndex: "wearHangTeamName"
+            dataIndex: "number"
         },
         {
             title: "下达重量",
             width: 150,
-            dataIndex: "picklingTeamName"
+            dataIndex: "weight"
         },
         {
             title: "角钢重量",
             width: 150,
-            dataIndex: "maintenanceTeamName"
+            dataIndex: "angleWeight"
         },
         {
             title: "连板重量",
             width: 150,
-            dataIndex: "zincPotTeamName"
+            dataIndex: "boardWeight"
         },
         {
             title: "开始包装时间",
             width: 150,
-            dataIndex: "galvanizedStartTime"
+            dataIndex: "processFactory"
         },
         {
             title: "入库时间",
             width: 100,
-            dataIndex: "galvanizedEndTime"
+            dataIndex: "processWorkshop"
         },
         {
             title: "包装班组",
@@ -90,8 +98,8 @@ export default function DailySchedule(): React.ReactNode {
 
     return <>
         <Page
-            path="/tower-production/packageWorkshop/dispatchView"
-            sourceKey="packingTaskDetailVOList"
+            path="/tower-production/packageWorkshop"
+            sourceKey="packageDailyPlanVOS.records"
             columns={
                 confirmStatus === 1 || confirmStatus === 2 || confirmStatus === 3 ? 
                 [ {
@@ -110,6 +118,12 @@ export default function DailySchedule(): React.ReactNode {
                         confirmStatus === 1 ? <Button type="link" onClick={() => {
                         }}>确认</Button> : confirmStatus === 2 ? <WorkshopTeamSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                             console.log(selectedRows);
+                            RequestUtil.put(`tower-production/packageWorkshop/confirmDispatch`,{
+                                teamId: selectedRows[0].id,
+                                name: selectedRows[0].name
+                            }).then(()=>{
+                                message.success('派工成功！')
+                            })
                         } } buttonType="link" buttonTitle="派工" />: confirmStatus === 3 ? <Button type="link" onClick={() => {
                             history.push(`/packagingWorkshop/processingTask/detail/${record.id}/${record.status}`)
                         }}>详情</Button>:<Button type="link" onClick={() => {
@@ -168,8 +182,8 @@ export default function DailySchedule(): React.ReactNode {
             onFilterSubmit={(values: Record<string, any>) => {
                 if (values.time) {
                     const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
-                    values.galvanizedStartTime = formatDate[0];
-                    values.galvanizedEndTime = formatDate[1];
+                    values.startTime = formatDate[0]+' 00:00:00';
+                    values.endTime = formatDate[1]+' 23:59:59';
                 }
                 setFilterValue(values);
                 return values;

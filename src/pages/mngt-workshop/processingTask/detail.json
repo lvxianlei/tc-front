@@ -1,87 +1,87 @@
 {
     "baseInfoData": [
         {
-            "dataIndex": "contractName",
+            "dataIndex": "planNumber",
             "title": "计划号"
         },
         {
-            "dataIndex": "customerName",
+            "dataIndex": "productCategoryName",
             "title": "塔型"
         },
         {
-            "dataIndex": "aeName",
+            "dataIndex": "steelProductShape",
             "title": "钢印号"
         },
         {
-            "dataIndex": "aePhone",
+            "dataIndex": "projectName",
             "title": "工程名称"
         },
         {
-            "dataIndex": "designContactsName",
+            "dataIndex": "segmentNum",
             "title": "段"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "partNumber",
             "title": "件号"
         },
         {
-            "dataIndex": "contractName",
+            "dataIndex": "materialName",
             "title": "材料"
         },
         {
-            "dataIndex": "customerName",
+            "dataIndex": "structureTexture",
             "title": "材质"
         },
         {
-            "dataIndex": "aeName",
+            "dataIndex": "structureSpec",
             "title": "规格"
         },
         {
-            "dataIndex": "aePhone",
+            "dataIndex": "length",
             "title": "长度（mm）"
         },
         {
-            "dataIndex": "designContactsName",
+            "dataIndex": "holesNum",
             "title": "单件孔数"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "basicsPartNum",
             "title": "数量"
         },
         {
-            "dataIndex": "aeName",
+            "dataIndex": "basicsWeight",
             "title": "重量（kg）"
         },
         {
-            "dataIndex": "aePhone",
+            "dataIndex": "electricWelding",
             "title": "是否电焊"
         },
         {
-            "dataIndex": "designContactsName",
+            "dataIndex": "description",
             "title": "备注"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "punchHole",
             "title": "冲引孔"
         },
         {
-            "dataIndex": "aeName",
+            "dataIndex": "arcEdge",
             "title": "是否弧边"
         },
         {
-            "dataIndex": "aePhone",
+            "dataIndex": "numberType",
             "title": "件号类型"
         },
         {
-            "dataIndex": "designContactsName",
+            "dataIndex": "apertureNumber",
             "title": "个孔径孔数"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "drillApertureNumber",
             "title": "钻孔孔径孔数"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "reamingApertureNumber",
             "title": "扩孔孔径孔数"
         }
     ]

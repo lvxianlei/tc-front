@@ -176,5 +176,43 @@
             "dataIndex": "description",
             "type": "textarea"
         }
-    ]
+    ],
+    "connectContract": {
+        "title": "相关合同",
+        "dataIndex": "contractId",
+        "type": "popTable",
+        "path": "/tower-market/contract",
+        "width": 1011,
+        "value": "contractName",
+        "dependencies": true,
+        "readOnly": true,
+        "columns": [
+            {
+                "title": "合同编号",
+                "dataIndex": "contractNumber",
+                "search": true
+            },
+            {
+                "title": "合同名称",
+                "dataIndex": "contractName"
+            },
+            {
+                "title": "业主单位",
+                "dataIndex": "customerCompany",
+                "search": true
+            },
+            {
+                "title": "合同签订单位",
+                "dataIndex": "signCustomerName"
+            },
+            {
+                "title": "合同签订日期",
+                "dataIndex": "signContractTime"
+            },
+            {
+                "title": "要求交货日期",
+                "dataIndex": "deliveryTime"
+            }
+        ]
+    }
 }

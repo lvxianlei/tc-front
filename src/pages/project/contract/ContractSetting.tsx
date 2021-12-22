@@ -12,6 +12,7 @@ import {
   contractPlanStatusOptions, // 合同计划状态
   contractFormOptions, // 收到合同形式
   deliverywayOptions, // 交货方式
+  currencyTypeOptions, // 币种
 } from "../../../configuration/DictionaryOptions";
 import { IFormItemGroup } from "../../entrust/EntrustDetail";
 import { ContractSetting } from "../../prom/contract/ContractSetting";
@@ -403,6 +404,24 @@ class ManagementContractSetting extends ContractSetting {
               name: "country",
               initialValue: contract?.country,
               children: (<Input value={contract?.country} />),
+            },
+            {
+              label: "币种",
+              name: "currencyType",
+              initialValue: contract?.currencyType || (currencyTypeOptions && currencyTypeOptions[0].id),
+              children: (
+                <Select value={contract?.currencyType}
+                >
+                  {currencyTypeOptions &&
+                    currencyTypeOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
+                </Select>
+              ),
             },
             {
               label: "业务经理",
@@ -925,6 +944,24 @@ class ManagementContractSetting extends ContractSetting {
                     );
                   })}
                   <Select.Option value="其他-国外">其他-国外</Select.Option>
+                </Select>
+              ),
+            },
+            {
+              label: "币种",
+              name: "currencyType",
+              initialValue: contract?.currencyType || (currencyTypeOptions && currencyTypeOptions[0].id),
+              children: (
+                <Select value={contract?.currencyType}
+                >
+                  {currencyTypeOptions &&
+                    currencyTypeOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
                 </Select>
               ),
             },

@@ -30,7 +30,7 @@ export default function ProcessDetail(): React.ReactNode {
     const [tableDataSource,setTableDataSource] = useState<any>([]);
     const [userDataSource,setUserDataSource] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // let data = await RequestUtil.get(``,{})
+        // const data = await RequestUtil.get(`/tower-aps/machining/detail/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -49,13 +49,13 @@ export default function ProcessDetail(): React.ReactNode {
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
                 <DetailTitle title="部件详情" />
-                <BaseInfo columns={baseInfoData} dataSource={detailData || {}}/>
-                <DetailTitle title="当前进度" />
+                <BaseInfo columns={baseInfoData} dataSource={detailData?.dispatchVO || {}}/>
+                {/* <DetailTitle title="当前进度" />
                 <CommonTable 
                     columns={tableColumns}
                     dataSource={tableDataSource} 
                     pagination={false}
-                />
+                /> */}
             </DetailContent>
             <Modal
                 visible={ visible } 
@@ -64,7 +64,10 @@ export default function ProcessDetail(): React.ReactNode {
                 footer={ <Space>
                     <Button type="primary" ghost  onClick={() => setVisible(false) }>取消</Button>
                     <Button type="primary" onClick={async () => {
-                        await RequestUtil.get(``,{}).then(()=>{
+                        await RequestUtil.put(`/tower-aps/machining/collection`,{
+                            id:params.id,
+                            staffList: userDataSource
+                        }).then(()=>{
                             message.success('确认成功！');
                             setVisible(false);
                         }).then(()=>{
@@ -98,6 +101,7 @@ export default function ProcessDetail(): React.ReactNode {
                     ]}
                     dataSource={[...userDataSource]} 
                     pagination={false}
+                    size='small'
                 />
             </Modal>
         </Spin>

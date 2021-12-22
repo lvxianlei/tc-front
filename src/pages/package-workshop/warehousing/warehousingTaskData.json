@@ -45,7 +45,7 @@
             "title": "班组"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "packageUserNames",
             "title": "打包人员"
         }
     ]

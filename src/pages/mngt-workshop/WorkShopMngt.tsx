@@ -1,105 +1,96 @@
 import React, { useState } from 'react';
-import { Input, DatePicker, Button, Form, Modal, Row, Col, Radio, message } from 'antd';
+import { Input, DatePicker, Button, Radio, Select } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from './workshop.module.less';
 import RequestUtil from '../../utils/RequestUtil';
 import { useHistory } from 'react-router-dom';
+import useRequest from '@ahooksjs/use-request';
 
 export default function DailySchedule(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const history = useHistory()
-    const [confirmStatus, setConfirmStatus] = useState<number>(1);
-    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
-    const [visible, setVisible] = useState(false);
-    const [detail, setDetail] = useState<any>({});
-    const [form] = Form.useForm();
+    const [ confirmStatus, setConfirmStatus] = useState<number>(1);
+    const [ work, setWork ] = useState<any[]>([]);
+    const [ unit, setUnit ] = useState<any[]>([]);
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        // const work = await RequestUtil.get(`/tower-system/notice/getNoticeById`)
+        // const unit = await RequestUtil.get(`/tower-system/notice/getNoticeById`)
+        // setWork(work)
+        // setUnit(unit)
+        resole(data)
+    }), {})
     const columns=[
         {
             title: "工作中心",
             width: 150,
-            dataIndex: "issueWeight"
+            dataIndex: "workCenterName"
         },
         {
             title: "开始时间",
             width: 150,
-            dataIndex: "angleWeight"
+            dataIndex: "startTime"
         },
         {
             title: "完成时间",
             width: 150,
-            dataIndex: "plateWeight"
+            dataIndex: "endTime"
         },
         {
             title: "状态",
             width: 150,
-            dataIndex: "wearHangTeamName"
+            dataIndex: "status",
+            render:(status:number)=>{
+                switch(status){
+                    case 0: return '未派工'
+                    case 1: return '未采集'
+                    case 2: return '已完成'
+                }
+            }
         },
         {
             title: "加工计划编号",
             width: 150,
-            dataIndex: "picklingTeamName"
+            dataIndex: "workPlanNumber"
         },
         {
             title: "计划号",
             width: 150,
-            dataIndex: "maintenanceTeamName"
+            dataIndex: "planNumber"
         },
         {
             title: "塔型",
             width: 150,
-            dataIndex: "zincPotTeamName"
+            dataIndex: "productCategoryName"
         },
         {
             title: "零件号",
             width: 150,
-            dataIndex: "galvanizedStartTime"
+            dataIndex: "code"
         },
         {
             title: "加工数量",
             width: 100,
-            dataIndex: "galvanizedEndTime"
+            dataIndex: "processingNum"
         },
         {
             title: "总重（kg）",
             width: 200,
-            dataIndex: "packagingTeamName"
+            dataIndex: "totalWeight"
         }
     ]
-    const closeModal = () => {
-        setVisible(false);
-        form.resetFields();
-        // setDetail({});
-        setSelectedKeys([]);
-    }
 
-    const submit = () => {
-        if(form) {
-            form.validateFields().then(res => {
-                const values = form.getFieldsValue(true);
-                RequestUtil.post(`/tower-production/galvanized/daily/plan/dispatching`, { ...values, id: selectedKeys.join(',') }).then(res => {
-                    message.success("派工成功");
-                    setRefresh(!refresh);
-                    closeModal();
-                });
-            })
-        }
-    }
 
     const operationChange = (event: any) => {
         setConfirmStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
     }
 
-    const SelectChange = (selectedRowKeys: React.Key[]): void => {
-        setSelectedKeys(selectedRowKeys);
-    }
 
     return <>
         <Page
-            path="/tower-production/galvanized/daily/plan"
-            sourceKey="galvanizedDailyPlanVOS.records"
+            path="/tower-aps/machining"
+            // sourceKey="galvanizedDailyPlanVOS.records"
             columns={
                 confirmStatus === 1 || confirmStatus === 2 || confirmStatus === 3 ? 
                 [ ...columns, {
@@ -126,29 +117,46 @@ export default function DailySchedule(): React.ReactNode {
                     <Radio.Button value={2}>未采集</Radio.Button>
                     <Radio.Button value={3}>已完成</Radio.Button>
                 </Radio.Group>
-                {confirmStatus === 1 ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
-                    RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, selectedKeys).then(res => {
-                        message.success("确认成功");
-                        setRefresh(!refresh);
-                    });
-                }}>批量确认</Button> : null}
+                {confirmStatus === 1 ? <Button type="primary"  onClick={() => {
+                    history.push(`/workshopManagement/processingTask/dispatch/new`)
+                }}>派工</Button> : null}
                 </>}
             refresh={refresh}
-            tableProps={{
-                rowSelection: {
-                    selectedRowKeys: selectedKeys,
-                    onChange: SelectChange
-                }
-            }}
+            // tableProps={{
+            //     rowSelection: {
+            //         selectedRowKeys: selectedKeys,
+            //         onChange: SelectChange
+            //     }
+            // }}
             searchFormItems={[
                 {
                     name: 'fuzzyMsg',
                     label: '',
-                    children: <Input style={{ width: '300px' }} placeholder="请输入订单工程名称/计划号/塔型进行查询" />
+                    children: <Input style={{ width: '300px' }} placeholder="请输入塔型/构件号进行查询" />
+                },
+                {
+                    name: 'productionLinesName',
+                    label: '生产单元',
+                    children: <Select placeholder="请选择" style={{ width: "150px" }}>  
+                        <Select.Option value="" key="">全部</Select.Option>
+                        { unit && unit.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        }) }
+                    </Select>
+                },
+                {
+                    name: 'workCenterName',
+                    label: '工作中心',
+                    children: <Select placeholder="请选择" style={{ width: "150px" }}>  
+                        <Select.Option value="" key="">全部</Select.Option>
+                        { work && work.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        }) }
+                    </Select>
                 },
                 {
                     name: 'time',
-                    label: '送齐时间',
+                    label: '时间范围',
                     children: <DatePicker.RangePicker />
                 }
             ]}
@@ -156,8 +164,8 @@ export default function DailySchedule(): React.ReactNode {
             onFilterSubmit={(values: Record<string, any>) => {
                 if (values.time) {
                     const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
-                    values.galvanizedStartTime = formatDate[0];
-                    values.galvanizedEndTime = formatDate[1];
+                    values.startTime = formatDate[0]+' 00:00:00';
+                    values.endTime = formatDate[1]+' 23:59:59';
                 }
                 setFilterValue(values);
                 return values;
