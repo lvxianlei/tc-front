@@ -1781,8 +1781,8 @@
       "exact": true,
       "authority": "basic_settings_workshop_dispatch_equipment_management"
     },
-    { // 基础配置-车间班组管理
-      "name": "车间班组管理",
+    { // 基础配置-生产班组管理
+      "name": "生产班组管理",
       "path": "/baseSetting/workshopTeamMngt",
       "module": "./pages/baseSetting/WorkshopTeamMngt",
       "exact": true,
