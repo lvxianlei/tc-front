@@ -35,6 +35,7 @@ export default function RecruitEdit(): React.ReactNode {
     const [towerList, setTowerList] = useState<any[]>([])
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<IAnnouncement[]>([]);
+    const [typenum,settypenum]=useState<any>()
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: IAnnouncement[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -42,7 +43,7 @@ export default function RecruitEdit(): React.ReactNode {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
         getProdLinkList();
-
+settypenum(data.status)
         getProdUnitList();
         const value: any = params.productCategoryId && await RequestUtil.get('/tower-aps/productionUnit', {
             current: 1,
@@ -315,7 +316,7 @@ export default function RecruitEdit(): React.ReactNode {
 
                     }}>保存</Button>
                     {
-                        params.productCategoryId && <Button onClick={() => culIssue()}>下发</Button>
+                        params.productCategoryId &&typenum&&typenum==2&& <Button onClick={() => culIssue()}>下发</Button>
                     }
 
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
