@@ -125,9 +125,9 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
             dataIndex: 'contractName',
             width: '15%',
         }, {
-            key: 'saleType',
+            key: 'saleTypeName',
             title: '销售类型',
-            dataIndex: 'saleType',
+            dataIndex: 'saleTypeName',
             width: '15%',
         }, {
             key: 'customerCompany',

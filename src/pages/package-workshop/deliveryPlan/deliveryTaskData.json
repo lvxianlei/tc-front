@@ -1,31 +1,31 @@
 {
     "baseInfoData": [
         {
-            "dataIndex": "taskCode",
+            "dataIndex": "outWarehouseNumber",
             "title": "出库计划号"
         },
         {
-            "dataIndex": "deliveryNoticeCode",
+            "dataIndex": "wayBillNumber",
             "title": "发货通知单编号"
         },
         {
-            "dataIndex": "projectName",
+            "dataIndex": "orderProjectName",
             "title": "项目名称"
         },
         {
-            "dataIndex": "shippingTime",
+            "dataIndex": "departPlanTime",
             "title": "出库日期"
         },
         {
-            "dataIndex": "planNum",
+            "dataIndex": "planNumber",
             "title": "计划号"
         },
         {
-            "dataIndex": "driver",
+            "dataIndex": "driverName",
             "title": "司机"
         },
         {
-            "dataIndex": "carNum",
+            "dataIndex": "driverNumber",
             "title": "车牌号"
         },
         {
@@ -33,9 +33,9 @@
             "title": "出库状态",
             "type": "select",
             "enum": [
-                { "value": 0, "label": "未出库" },
-                { "value": 1, "label": "部分出库" },
-                { "value": 2, "label": "已出库" }
+                { "value": 1, "label": "未出库" },
+                { "value": 2, "label": "部分出库" },
+                { "value": 3, "label": "已出库" }
             ]
         },
         {

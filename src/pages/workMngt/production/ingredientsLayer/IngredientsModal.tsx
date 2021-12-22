@@ -51,6 +51,8 @@ export default function IngredientsModal(props: any) {
     const [ preparation, setPreparation ] = useState([]);
     // 配料方案
     const [schemeData, setSchemeData] = useState<any>([]);
+    // 采购配料信息
+    const [purchaseBatchingDataList, setPurchaseBatchingDataList] = useState<any>([]);
     let [numbers, setNumbers] = useState<any>(0);
     const [ serarchForm ] = Form.useForm();
 
@@ -83,6 +85,17 @@ export default function IngredientsModal(props: any) {
         // 调用手动配料
         purchaseBatchingScheme(serarchData, result, detail);
     }
+
+    // 获取采购配料信息
+    const { run: runPurchaseBatchingScheme, data: purchaseBatchingData } = useRequest<{ [key: string]: any }>((purchaseTaskTowerId: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/summary/${purchaseTaskTowerId}`);
+            resole(result);
+            setPurchaseBatchingDataList(result || []);
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     // 获取配料策略
     const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -233,6 +246,8 @@ export default function IngredientsModal(props: any) {
             getBatchingStrategy();
             // 获取编辑配料方案信息
             purchaseListRun(props.id);
+            // 获取采购配料信息
+            runPurchaseBatchingScheme(props.id);
     }, [props.id && props.visible])
 
     const rowSelection = {
@@ -318,24 +333,25 @@ export default function IngredientsModal(props: any) {
         }
         // 循环构建分类明细
         let result:any = constructionClassificationDetail;
+        let selectKeys = selectedRowKeysCheck;
         for (let i = 0; i < result.length; i += 1) {
             if (map.has(result[i].code)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(result[i]?.code) || 0;
                 result[i].notConfigured = result[i].num - num;
                 numberDetail += num;
-                // 处理未配为0的情况
-                if (result[i].notConfigured === 0) {
-                    if (selectedRowKeysCheck.indexOf(result[i].id) !== -1) {
-                        // 说明存在
-                        const v = selectedRowKeysCheck.filter((item: any) => item !== result[i].id);
-                        setSelectedRowKeysCheck(v);
-                    }
-                }
             } else {
                 result[i].notConfigured = result[i].num;
             }
+            // 处理未配为0的情况
+            if (result[i].notConfigured === 0) {
+                if (selectedRowKeysCheck.indexOf(result[i].id) !== -1) {
+                    // 说明存在
+                    selectKeys = selectKeys.filter((item: any) => item !== result[i].id);
+                }
+            }
         }
+        setSelectedRowKeysCheck(selectKeys);
         setConstructionClassificationDetail(result.slice(0));
         setConstruNumberDetail(numberDetail)
     }, [numbers])
@@ -440,7 +456,7 @@ export default function IngredientsModal(props: any) {
                         </Form>
                         <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
                             <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类</span>
-                            <span style={{color: "#FF8C00"}}>未分配/全部：{construNumber}/{(userData as any) && (userData as any).totalNum}</span>
+                            <span style={{color: "#FF8C00"}}>未分配/全部：{construNumber}/{(userData as any) && (userData as any).totalNum || 0}</span>
                         </div>
                         <Table
                             size="small"
@@ -455,7 +471,7 @@ export default function IngredientsModal(props: any) {
                         />
                         <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
                             <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类明细</span>
-                            <span style={{color: "#FF8C00"}}>已配： {construNumberDetail} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum}</span>
+                            <span style={{color: "#FF8C00"}}>已配： {construNumberDetail} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum || 0}</span>
                         </div>
                         <Table
                             size="small"
@@ -487,7 +503,7 @@ export default function IngredientsModal(props: any) {
                                     }
                                 }
                             ]}
-                            dataSource={[]}
+                            dataSource={purchaseBatchingDataList}
                             pagination={false}
                             scroll={{ y: 400 }}
                         />

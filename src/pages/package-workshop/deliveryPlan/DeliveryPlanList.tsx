@@ -17,15 +17,15 @@ export default function DeliveryPlanList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'taskCode',
+            key: 'outWarehouseNumber',
             title: '出库任务编号',
             width: 150,
-            dataIndex: 'taskCode'
+            dataIndex: 'outWarehouseNumber'
         },
         {
-            key: 'deliveryNoticeCode',
+            key: 'wayBillNumber',
             title: '发货通知单编号',
-            dataIndex: 'deliveryNoticeCode',
+            dataIndex: 'wayBillNumber',
             width: 120
         },
         // {
@@ -45,34 +45,34 @@ export default function DeliveryPlanList(): React.ReactNode {
         //     }
         // },
         {
-            key: 'shippingTime',
+            key: 'departPlanTime',
             title: '发运日期',
             width: 150,
-            dataIndex: 'shippingTime'
+            dataIndex: 'departPlanTime'
         },
         {
-            key: 'projectName',
+            key: 'orderProjectName',
             title: '工程名称',
-            dataIndex: 'projectName',
+            dataIndex: 'orderProjectName',
             width: 200
         },
         {
-            key: 'planNum',
+            key: 'planNumber',
             title: '计划号',
             width: 200,
-            dataIndex: 'planNum'
+            dataIndex: 'planNumber'
         },
         {
-            key: 'driver',
+            key: 'driverName',
             title: '司机',
             width: 200,
-            dataIndex: 'driver'
+            dataIndex: 'driverName'
         },
         {
-            key: 'carNum',
+            key: 'driverNumber',
             title: '车牌号',
             width: 200,
-            dataIndex: 'carNum',
+            dataIndex: 'driverNumber',
         },
         {
             key: 'status',
@@ -83,11 +83,11 @@ export default function DeliveryPlanList(): React.ReactNode {
                 switch (status) {
                     case -1:
                         return '-';
-                    case 0:
-                        return '未出库';
                     case 1:
-                        return '部分出库';
+                        return '未出库';
                     case 2:
+                        return '部分出库';
+                    case 3:
                         return '已出库';
                 }
             }
@@ -114,7 +114,7 @@ export default function DeliveryPlanList(): React.ReactNode {
     ]
 
     return <Page
-        path="/tower-production/productionLines/exPage"
+        path="/tower-production/packageWorkshop/exWarehouse"
         columns={ columns }
         headTabs={ [] }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
@@ -125,9 +125,9 @@ export default function DeliveryPlanList(): React.ReactNode {
                 label: '出库状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     <Select.Option value={ "" } key="">全部</Select.Option>
-                    <Select.Option value={ 0 } key="0">未出库</Select.Option>
-                    <Select.Option value={ 1 } key="1">部分出库</Select.Option>
-                    <Select.Option value={ 2 } key="2">已出库</Select.Option>
+                    <Select.Option value={ 1 } key="1">未出库</Select.Option>
+                    <Select.Option value={ 2 } key="2">部分出库</Select.Option>
+                    <Select.Option value={ 3 } key="3">已出库</Select.Option>
                 </Select>
             },
             {

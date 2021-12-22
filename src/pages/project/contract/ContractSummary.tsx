@@ -166,6 +166,22 @@ class ManagementContractSummary extends ContractSummary {
             label: "合同重量与计划重量差值",
             value: baseInfo?.contractWeightDiff
           }
+        ],
+        [
+          {
+            label: "交货方式",
+            value: baseInfo?.deliveryWay,
+          },
+          {
+            label: "交货地点",
+            value: baseInfo?.deliveryAddress
+          }
+        ],
+        [
+          {
+            label: "备注",
+            value: baseInfo?.description,
+          }
         ]
       ],
     };

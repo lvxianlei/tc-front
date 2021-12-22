@@ -189,10 +189,6 @@
                     "dataIndex": "createUserName"
                 },
                 {
-                    "title": "材料名称",
-                    "dataIndex": "productName"
-                },
-                {
                     "title": "重量（吨）合计",
                     "dataIndex": "weight"
                 },
@@ -932,7 +928,7 @@
         },
         {
             "title": "付款方式",
-            "dataIndex": "payType"
+            "dataIndex": "payTypeName"
         },
         {
             "title": "付款金额",

@@ -4,6 +4,8 @@ import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './workshop.module.less';
+import { IUser } from '../../components/WorkshopEquipmentModal';
+import WorkshopTeamSelectionComponent from '../../components/WorkshopTeamModal';
 import { useHistory } from 'react-router-dom';
 
 export default function DailySchedule(): React.ReactNode {
@@ -89,7 +91,7 @@ export default function DailySchedule(): React.ReactNode {
     return <>
         <Page
             path="/tower-production/packageWorkshop/dispatchView"
-            sourceKey="packingTaskListVODetail"
+            sourceKey="packingTaskDetailVOList"
             columns={
                 confirmStatus === 1 || confirmStatus === 2 || confirmStatus === 3 ? 
                 [ {
@@ -106,9 +108,9 @@ export default function DailySchedule(): React.ReactNode {
                     "width": 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         confirmStatus === 1 ? <Button type="link" onClick={() => {
-                        }}>确认</Button> : confirmStatus === 2 ? <Button type="link" onClick={() => {
-                            history.push(`/packagingWorkshop/processingTask/dispatch/${record.id}`)
-                        }}>派工</Button>: confirmStatus === 3 ? <Button type="link" onClick={() => {
+                        }}>确认</Button> : confirmStatus === 2 ? <WorkshopTeamSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                            console.log(selectedRows);
+                        } } buttonType="link" buttonTitle="派工" />: confirmStatus === 3 ? <Button type="link" onClick={() => {
                             history.push(`/packagingWorkshop/processingTask/detail/${record.id}/${record.status}`)
                         }}>详情</Button>:<Button type="link" onClick={() => {
                             history.push(`/packagingWorkshop/processingTask/detail/${record.id}/4`)

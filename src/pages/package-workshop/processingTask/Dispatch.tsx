@@ -175,10 +175,7 @@ export default function Dispatch(): React.ReactNode {
                                         "message": "请选择派工班组"
                                     }
                                 ]}>
-                                    <Input maxLength={ 50 } addonAfter={ <WorkshopTeamSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
-                                        setTeam(selectedRows);
-                                        formRef.setFieldsValue({equipmentName: selectedRows[0].name});
-                                    } } buttonType="link" buttonTitle="+选择班组" /> }/>
+                                    <Input maxLength={ 50 } />
                                 </Form.Item>
                             </Col>
                         </Row>

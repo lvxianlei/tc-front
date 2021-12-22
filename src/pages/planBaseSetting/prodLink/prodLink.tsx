@@ -179,27 +179,27 @@ const ProdLink = (): React.ReactNode => {
                         label: '查询',
                         children: <Input placeholder="生产环节名称" style={{ width: 300 }} />
                     },
-                    {
-                        name: 'type',
-                        label: '类型',
-                        children: <Select style={{width:150}}
-                    >
-                        <Select.Option
-                            key={''}
-                            value={''}
-                        >全部</Select.Option>
-                        {
-                            typeList.map((item: any, index: number) => {
-                                return (
-                                    <Select.Option
-                                        key={index}
-                                        value={item.type}
-                                    >{item.typeName}</Select.Option>
-                                )
-                            })
-                        }
-                    </Select>
-                    }
+                    // {
+                    //     name: 'type',
+                    //     label: '类型',
+                    //     children: <Select style={{width:150}}
+                    // >
+                    //     <Select.Option
+                    //         key={''}
+                    //         value={''}
+                    //     >全部</Select.Option>
+                    //     {
+                    //         typeList.map((item: any, index: number) => {
+                    //             return (
+                    //                 <Select.Option
+                    //                     key={index}
+                    //                     value={item.type}
+                    //                 >{item.typeName}</Select.Option>
+                    //             )
+                    //         })
+                    //     }
+                    // </Select>
+                    // }
                 ]}
             />
             <Modal
@@ -219,7 +219,7 @@ const ProdLink = (): React.ReactNode => {
                 <Form form={ form } {...formItemLayout}>
                 <Row>
                         <Col  span={24}>
-                            <Form.Item label="类型" rules={[{required:true,message:'请选择生产环节类型'}]} name='type'>
+                            <Form.Item label="生产环节类型" rules={[{required:true,message:'请选择生产环节类型'}]} name='type'>
                                 <Select
                                     placeholder='请选择'
                                     onChange={(value: string)=>{

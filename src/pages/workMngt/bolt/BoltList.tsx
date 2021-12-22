@@ -126,7 +126,7 @@ export default function BoltList(): React.ReactNode {
         }
     ]
 
-    const location = useLocation<{ state?: number, userId?: string }>();
+    const location = useLocation<{ state?: number, userId?: string, weldingOperator?: string }>();
     const userId = AuthUtil.getUserId();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
@@ -249,7 +249,7 @@ export default function BoltList(): React.ReactNode {
             headTabs={[]}
             refresh={ refresh }
             exportPath={`/tower-science/boltRecord`}
-            requestData={{ boltStatus: location.state?.state, boltLeader: location.state?.userId }}
+            requestData={{ boltStatus: location.state?.state, weldingLeader: location.state?.userId }}
             searchFormItems={[
                 {
                     name: 'updateTime',
