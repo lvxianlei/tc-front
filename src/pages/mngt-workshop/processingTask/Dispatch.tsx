@@ -108,6 +108,7 @@ export default function Dispatch(): React.ReactNode {
                                 <Input maxLength={ 50 } addonAfter={ <WorkshopEquipmentSelectionComponent onSelect={ (selectedRows: any) => {
                                     setEquipment(selectedRows[0]);
                                     form.setFieldsValue({
+                                        time:[moment(),moment(new Date().setDate(new Date().getDate()+2))],
                                         workCenterName: selectedRows[0].workCenterName,
                                         productUnitName: selectedRows[0].unitName
                                     });
@@ -154,7 +155,6 @@ export default function Dispatch(): React.ReactNode {
                         const formatDate = value.time.map((item: any) => item.format("YYYY-MM-DD HH:mm:ss"))
                         value.startTime = formatDate[0];
                         value.endTime = formatDate[1];
-                        delete value.time
                     }
                     let submitValue={
                         ...value,
