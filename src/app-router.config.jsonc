@@ -1728,15 +1728,15 @@
     },
     { // 车间加工计划-详情
       "name": "详情",
-      "path": "/shopFloorPlan/shopFloorDetail/:state/:id",
+      "path": "/shopFloorPlan/shopFloorDetail/:id",
       "module": "./pages/shopFloorPlan/Detail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 车间加工计划-自动排产
       "name": "自动排产",
-      "path": "/shopFloorPlan/shopFloorDetail/:state/:id",
-      "module": "./pages/shopFloorPlan/Detail",
+      "path": "/shopFloorPlan/automaticScheduling/:id",
+      "module": "./pages/shopFloorPlan/AutomaticScheduling",
       "exact": true,
       "authority": "approvalm"
     },
