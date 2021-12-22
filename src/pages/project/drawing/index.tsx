@@ -31,7 +31,7 @@ export default function Drawing(): React.ReactNode {
 
     const { run: cancelRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/withdraw?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/drawingConfirmation/withdraw?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -161,6 +161,7 @@ export default function Drawing(): React.ReactNode {
             columns={[...drawing, {
                 title: "操作",
                 dataIndex: "opration",
+                fixed: "right",
                 render: (_: undefined, record: any) => <>
                     <Button
                         type="link"
@@ -181,7 +182,7 @@ export default function Drawing(): React.ReactNode {
                     <Button
                         type="link"
                         size="small"
-                        disabled={record.auditStatus !== 4}
+                        disabled={![null, "-1", -1, 0, 4].includes(record.auditStatus)}
                         onClick={() => {
                             setDetailedId(record.id)
                             setConnectVisible(true)

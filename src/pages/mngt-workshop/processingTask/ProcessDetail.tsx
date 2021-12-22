@@ -40,7 +40,7 @@ export default function ProcessDetail(): React.ReactNode {
     }
     return <>
         <Spin spinning={loading}>
-            <DetailContent operation={params.status!=='3'?[
+            <DetailContent operation={params.status === '3'?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     setVisible(true)
                 }}>数据采集</Button>,

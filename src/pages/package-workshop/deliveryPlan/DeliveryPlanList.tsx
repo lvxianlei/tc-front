@@ -3,6 +3,7 @@ import { Space, Input, DatePicker, Select, Button } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory } from 'react-router-dom';
+import moment from 'moment';
 
 export default function DeliveryPlanList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
@@ -48,7 +49,10 @@ export default function DeliveryPlanList(): React.ReactNode {
             key: 'departPlanTime',
             title: '发运日期',
             width: 150,
-            dataIndex: 'departPlanTime'
+            dataIndex: 'departPlanTime',
+            render:(departPlanTime:string)=>{
+                return departPlanTime?moment(departPlanTime).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'orderProjectName',
@@ -107,7 +111,7 @@ export default function DeliveryPlanList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/deliveryPlan/detail/${ record.id }` )}}>查看</Button>
-                    <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/deliveryPlan/delivery/${ record.id }` )}}>成品出库</Button>
+                    <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/deliveryPlan/delivery/${ record.id }` )}} disabled={record.status === 3}>成品出库</Button>
                 </Space>
             )
         }

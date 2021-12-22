@@ -23,7 +23,7 @@ export default function Invoicing() {
     const [filterValue, setFilterValue] = useState({});
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/materialPicking/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -58,7 +58,7 @@ export default function Invoicing() {
     const handleModalOk = (type?: "saveAndApply" | "save") => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit(type)
-            message.success("票据创建成功...")
+            message.success("领料单新增成功...")
             setVisible(false)
             history.go(0)
             resove(true)

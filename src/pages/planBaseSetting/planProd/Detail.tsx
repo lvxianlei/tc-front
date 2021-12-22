@@ -73,6 +73,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           dataSource: newValue
         })
         gantt.parse(newValue)
+        gantt.render();
       });
     }
     onLock=async (id:any)=>{
@@ -93,6 +94,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           dataSource: newValue
         })
         gantt.parse(newValue)
+        gantt.render();
       });
     }
     onConfirm =async (id:any)=>{
@@ -113,6 +115,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           dataSource: newValue
         })
         gantt.parse(newValue)
+        gantt.render();
       });
     }
     componentDidUpdate() {
@@ -164,42 +167,48 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
               case 2:
                 return '已锁定'
               case 3:
-                return '待确认'
+                return '已下发'
               case 4:
-                return '已反馈'
-              case 5:
-                return '已排产'
+                return '已下达'
+             
             }
           }},
           {label:'操作',name: "buttons",width: 100, align: "left", template: function (task:any) {
-            if(task.status===2||task.status===3||task.status===5){
-              if(task.status===2){
-                return (
-                  `
-                  <a style="color:#FF8C00" id='view'>查看</a>
-                  <a style="color:#FF8C00" id='unLock'>解锁</a>
-                  `
-                );
-              }else{
-                return (
-                  `
-                  <a style="color:#FF8C00" id='view'>查看</a>
-                  `
-                );
-              }
-            
-            }
-            else{
+            if(task.status===1){
+              
               return (
                 `
-                <a style="color:#FF8C00" id='view'>查看</a> 
-                <a style="color:#FF8C00" id='edit' >编辑</a>
+                <a style="color:#FF8C00" id='view'>查看</a>
                 <a style="color:#FF8C00" id='lock'>锁定</a>
+                <a style="color:#FF8C00" id='edit' >编辑</a>
                 `
               );
-            }  
-              
-          }}
+            
+          
+          }
+          else if(task.status===2){
+            return (
+              `
+              <a style="color:#FF8C00" id='view'>查看</a>
+              <a style="color:#FF8C00" id='unLock'>解锁</a>
+              <a style="color:#FF8C00" id='edit' >编辑</a>
+             
+              `
+            );
+          }  
+            
+        
+          else if(task.status===3||task.status===4){
+            return (
+              `
+              <a style="color:#FF8C00" id='view'>查看</a> 
+             
+              `
+            );
+          }  
+           
+            
+        }}
         ];
         gantt.templates.task_text = function(start,end,task){
           return task.linkName?`<b title='生产环节:${task.linkName}'>生产环节:</b> `+task.linkName:`<b  title='生产环节:-'>生产环节:</b> `+"-";

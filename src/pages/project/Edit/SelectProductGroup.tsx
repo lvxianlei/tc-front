@@ -8,9 +8,12 @@ export default function SelectProductGroup(props: any): JSX.Element {
     const [select, setSelect] = useState<any[]>([])
     const [projectSelect, setProjectSelect] = useState<string[]>(props.select || [])
     const [projectSelectRows, setProjectSelectRows] = useState<any[]>([])
+
     useEffect(() => {
         setProjectSelect(props.select)
+        setProjectSelectRows(projectSelectRows.filter((item: any) => props.select.includes(item.id)))
     }, [JSON.stringify(props.select)])
+    
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract?projectId=${props.projectId}`)

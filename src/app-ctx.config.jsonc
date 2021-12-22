@@ -19,7 +19,7 @@
                         "label": "客户管理",
                         "icon": "customer",
                         "path": "/client",
-                        "appName": "COMM",
+                        "appName": "SC",
                         "authority": "customer_page",
                         "items": [
                             {
@@ -143,7 +143,7 @@
                         "label": "开票申请管理",
                         "icon": "examine",
                         "path": "/invoicing",
-                        "appName": "SC",
+                        "appName": "FC",
                         "authority": "approvalm_invoicing",
                         "items": [
                             {
@@ -157,7 +157,7 @@
                         "label": "审批管理",
                         "icon": "examine",
                         "path": "/approvalm",
-                        "appName": "COMM",
+                        "appName": "SC",
                         "authority": "approval_management",
                         "items": [
                             {
@@ -576,7 +576,7 @@
                         "label": "计划排产",
                         "icon": "technology",
                         "path": "/planProd",
-                        "appName": "",
+                        "appName": "PS",
                         "authority": "approvalm",
                         "items": [
                             {
@@ -704,7 +704,7 @@
                             //     "authority": "basic_settings_workshop_dispatch_equipment_management"
                             // },
                             {
-                                "label": "车间班组管理",
+                                "label": "生产班组管理",
                                 "path": "/baseSetting/workshopTeamMngt",
                                 "authority": "basic_settings_workshop_team_management"
                             },
@@ -928,7 +928,7 @@
                     {
                         "label": "车间计划基础配置",
                         "icon": "customer",
-                        "appName": "MC",
+                        "appName": "PS",
                         "path": "/workshopPlanBasic",
                         "authority": "approvalm",
                         "items": [
@@ -947,7 +947,7 @@
                     {
                         "label": "主生产计划",
                         "icon": "customer",
-                        "appName": "",
+                        "appName": "PS",
                         "path": "/planBaseSetting",
                         "authority": "approvalm",
                         "items": [

@@ -90,7 +90,7 @@ export default function Edit() {
                 const refundAmountTotol = confirmBackMoneyInfoDTOList.submit.reduce((total: string, item: any) => {
                     return (parseFloat(total) + parseFloat(item.refundAmount)).toFixed(2)
                 }, 0)
-                if (refundAmountTotol !== data?.payMoney) {
+                if (parseFloat(refundAmountTotol) !== parseFloat(data?.payMoney)) {
                     message.warning("回款金额总和必须等于来款金额")
                     return
                 }

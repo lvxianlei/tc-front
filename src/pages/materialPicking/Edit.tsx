@@ -1,7 +1,7 @@
-import React, { useImperativeHandle, forwardRef } from "react"
-import { Button, Form, Spin } from 'antd'
+import React, { useImperativeHandle, forwardRef, useState } from "react"
+import { Button, Form, Modal, Spin } from 'antd'
 import { useParams } from 'react-router-dom'
-import { DetailTitle, BaseInfo, CommonTable, PopTable } from '../common'
+import { DetailTitle, BaseInfo, CommonTable, PopTableContent } from '../common'
 import { setting, materialInfo, chooseMaterial } from "./picking.json"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -12,21 +12,20 @@ export interface EditProps {
 }
 
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
-    const params = useParams<{ id: string }>()
+    const [visible, setVisible] = useState<boolean>(false)
     const [baseForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/materialPicking/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: type === "new" })
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
+    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/getLogicWeightByContractId?contractId=
-            ${id}`)
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/materialPicking`, data)
             resole(result)
         } catch (error) {
             reject(error)
@@ -38,7 +37,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const baseData = await baseForm.validateFields()
             const postData = type === "new" ? {
                 ...baseData,
-
             } : {
                 ...baseData
             }
@@ -50,10 +48,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     })
 
     const handleBaseInfoChange = async (fields: any) => {
-        if (fields.contractCode) {
-            const contractValue = fields.contractCode.records[0]
+        if (fields.workPlanNumber) {
+            const workPlanNumberData = fields.workPlanNumber.records[0]
             baseForm.setFieldsValue({
-
+                projectName: workPlanNumberData.projectName,
+                salePlanNumber: workPlanNumberData.salePlanNumber,
+                productCategoryName: workPlanNumberData.productCategoryName,
             })
         }
     }
@@ -61,16 +61,30 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
 
     return <Spin spinning={loading}>
-        <PopTable data={chooseMaterial as any} />
+        <Modal
+            title=""
+            width={1011}
+            destroyOnClose
+            onCancel={() => {
+                setVisible(false)
+            }}
+            visible={visible}
+            onOk={() => {
+
+            }}>
+            <PopTableContent data={chooseMaterial as any} />
+        </Modal>
         <DetailTitle title="基础信息" />
         <BaseInfo
             onChange={handleBaseInfoChange}
             form={baseForm}
             columns={setting}
             col={3}
-            dataSource={{}} edit />
+            dataSource={data || {}} edit />
         <DetailTitle title="原材料信息" operation={[
-            <Button type="primary" ghost>选择原材料</Button>
+            <Button type="primary" ghost onClick={() => {
+                setVisible(true)
+            }}>选择原材料</Button>
         ]} />
         <CommonTable columns={materialInfo} dataSource={[]} />
     </Spin>

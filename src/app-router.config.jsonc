@@ -25,14 +25,14 @@
   ],
   "routers": [
     {
-      "name": "", // 显示在面包屑中的名称
+      "name": "",
       "path": "/notice/:name",
       "module": "./pages/notice/index",
       "exact": true,
       "authority": "all"
     },
     { // 客户管理
-      "name": "客户管理", // 显示在面包屑中的名称
+      "name": "客户管理",
       "path": "/client/mngt",
       "module": "./pages/clientMngt/index",
       "exact": true,
@@ -530,16 +530,8 @@
       "authority": "sale_order"
     },
     {
-      // 项目新建
-      "name": "项目新建",
-      "path": "/project/management/new",
-      "module": "./pages/project/Edit/BaseInfoEdit",
-      "exact": true,
-      "authority": "project_edit"
-    },
-    {
       // 项目编辑
-      "name": "项目新建",
+      "name": "新增/编辑项目",
       "path": "/project/management/edit/base/:id",
       "module": "./pages/project/Edit/BaseInfoEdit",
       "exact": true,
@@ -1789,8 +1781,8 @@
       "exact": true,
       "authority": "basic_settings_workshop_dispatch_equipment_management"
     },
-    { // 基础配置-车间班组管理
-      "name": "车间班组管理",
+    { // 基础配置-生产班组管理
+      "name": "生产班组管理",
       "path": "/baseSetting/workshopTeamMngt",
       "module": "./pages/baseSetting/WorkshopTeamMngt",
       "exact": true,

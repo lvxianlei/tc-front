@@ -4,6 +4,7 @@ import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory } from 'react-router-dom';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
+import moment from 'moment';
 
 export default function WarehousingList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
@@ -64,6 +65,9 @@ export default function WarehousingList(): React.ReactNode {
             title: '包装日期',
             width: 200,
             dataIndex: 'packingWarehouseRealTime',
+            render:(packingWarehouseRealTime:string)=>{
+                return packingWarehouseRealTime?moment(packingWarehouseRealTime).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             key: 'teamName',

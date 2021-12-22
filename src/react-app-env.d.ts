@@ -6,10 +6,9 @@ declare module "*.module.less" {
 }
 
 declare module "*.jsonc" {
-    const classes: { [key: string]: string };
+    const classes: { [key: string]: string } | any[];
     export default classes;
 }
-
 
 declare module "@loadable/component" {
     type LoadableOptions = {

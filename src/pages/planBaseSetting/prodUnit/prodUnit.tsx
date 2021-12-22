@@ -7,7 +7,7 @@ import { Page } from '../../common';
 const ProdUnit = (): React.ReactNode => {
     const columns: TableColumnProps<object>[] = [
         {
-            title: '生产环节编码',
+            title: '生产单元编码',
             dataIndex: 'productUnitCode',
         },
         {

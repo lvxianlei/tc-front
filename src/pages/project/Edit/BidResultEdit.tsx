@@ -237,7 +237,7 @@ export default function BidResultEdit(): JSX.Element {
                                 columns={bidInfoColumns}
                                 dataSource={data}
                                 opration={[<UploadXLS key="xlxs" readEnd={async (_data) => {
-                                    const vilidateCols = ["包号", "投标人名称", "分标编号", "货物类别", "项目单位", "总价（万元）", "重量（吨）"]
+                                    const vilidateCols = ["包号", "投标人名称", "分标编号", "货物类别", "项目单位", "总价（元）", "重量（吨）"]
                                     if (_data.length <= 0) {
                                         message.error("文件不能为空...")
                                         return
