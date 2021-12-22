@@ -698,11 +698,11 @@
                             //     "path": "/baseSetting/processMngt",
                             //     "authority": "basic_settings_process_management"
                             // },
-                            {
-                                "label": "车间派工设备管理",
-                                "path": "/baseSetting/workshopEquipmentMngt",
-                                "authority": "basic_settings_workshop_dispatch_equipment_management"
-                            },
+                            // {
+                            //     "label": "车间派工设备管理",
+                            //     "path": "/baseSetting/workshopEquipmentMngt",
+                            //     "authority": "basic_settings_workshop_dispatch_equipment_management"
+                            // },
                             {
                                 "label": "车间班组管理",
                                 "path": "/baseSetting/workshopTeamMngt",
