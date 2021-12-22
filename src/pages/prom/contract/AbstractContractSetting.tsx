@@ -74,6 +74,9 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly contractPlanStatus: string; // 合同计划状态
     readonly contractFraction: number; // 合同份数
     readonly contractPage: number; // 合同页数
+    readonly deliveryWay: string; // 交货方式
+    readonly deliveryAddress: string; // 交货地点
+    readonly description: string; // 备注
 }
 
 export interface ICustomerInfoDto {
