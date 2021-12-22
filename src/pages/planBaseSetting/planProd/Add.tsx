@@ -8,6 +8,7 @@ import AuthUtil from '../../../utils/AuthUtil';
 import moment from 'moment';
 import * as echarts from 'echarts';
 import { IAnnouncement } from '../../announcement/AnnouncementMngt';
+import dayjs from 'dayjs';
 
 export default function RecruitEdit(): React.ReactNode {
     const columns: TableColumnProps<object>[] = [
@@ -27,7 +28,7 @@ export default function RecruitEdit(): React.ReactNode {
     const [form] = Form.useForm();
     const [type,settype]=useState<any>();
     const [productivity, setProductivity] = useState<any>('');
-    const [value, setValue] = useState<any>();
+    const [value, setValue] = useState<any>([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(6, 'day').format('YYYY-MM-DD'))]);
     const [dates, setDates] = useState<any>([]);
     const [prodLinkList, setProdLinkList] = useState<any[]>([])
     const [prodUnitList, setProdUnitList] = useState<any[]>([])
