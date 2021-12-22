@@ -201,7 +201,8 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
   protected getOrderColumns(): TableColumnType<object>[] {
     const productStatus: any = {
       0: "未下发",
-      1: "已下发"
+      1: "已下发",
+      2: "审批中"
     }
     return [{
       title: '序号',
@@ -210,11 +211,11 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
       title: '状态',
       dataIndex: 'productStatus',
       render: (status: number): React.ReactNode => {
-        return productStatus[status]
+        return productStatus[productStatus]
       }
     },
     {
-      title: "线路名称",
+      title: "线路名称11",
       dataIndex: "lineName",
     },
     {
