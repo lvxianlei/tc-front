@@ -155,43 +155,47 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
 
     //table-column
     public getTableColumns(): ColumnType<object>[] {
-        return [{
-            key: 'type',
-            title: '员工编号',
-            width: '15%',
-            dataIndex: 'type',
-        }, {
+        return [
+        // {
+        //     key: 'type',
+        //     title: '员工编号',
+        //     width: '15%',
+        //     dataIndex: 'type',
+        // }, 
+        {
             key: 'name',
             title: '姓名',
-            width: '15%',
+            width: '25%',
             dataIndex: 'name'
         }, {
             key: 'departmentName',
             title: '部门',
-            width: '15%',
+            width: '25%',
             dataIndex: 'departmentName'
-        }, {
-            key: 'stationName',
-            title: '岗位',
-            width: '15%',
-            dataIndex: 'stationName'
-        }, {
-            key: 'stationStatus',
-            title: '在职状态',
-            width: '15%',
-            dataIndex: 'stationStatus',
-            render: (stationStatus: number): React.ReactNode => {
-                switch (stationStatus) {
-                    case 0:
-                        return '不在职';
-                    case 1:
-                        return '在职';
-                }
-            }  
-        }, {
+        },
+        //  {
+        //     key: 'stationName',
+        //     title: '岗位',
+        //     width: '15%',
+        //     dataIndex: 'stationName'
+        // }, {
+        //     key: 'stationStatus',
+        //     title: '在职状态',
+        //     width: '15%',
+        //     dataIndex: 'stationStatus',
+        //     render: (stationStatus: number): React.ReactNode => {
+        //         switch (stationStatus) {
+        //             case 0:
+        //                 return '不在职';
+        //             case 1:
+        //                 return '在职';
+        //         }
+        //     }  
+        // }, 
+        {
             key: 'phone',
             title: '联系电话',
-            width: '25%',
+            width: '50%',
             dataIndex: 'phone'
         }];
     }
