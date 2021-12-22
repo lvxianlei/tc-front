@@ -70,6 +70,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 productCategoryName: workPlanNumberData.productCategoryName,
             })
             setPlanNumber(workPlanNumberData.planNumber)
+            setProduct(workPlanNumberData.productNumbers)
+            setProductCategoryName(workPlanNumberData.productCategoryName)
         }
     }
 
@@ -89,7 +91,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             }}>
             <PopTableContent data={{
                 ...chooseMaterial as any,
-                path: `${chooseMaterial.path}?planNumber=${planNumber}`
+                path: `${chooseMaterial.path}?planNumber=${planNumber}&product=${product}&productCategoryName=${productCategoryName}`
             }} />
         </Modal>
         <DetailTitle title="基础信息" />

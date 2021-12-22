@@ -14,11 +14,11 @@
             "type": "select",
             "enum": [
                 {
-                    "value": 0,
+                    "value": 1171,
                     "label": "投标保证金"
                 },
                 {
-                    "value": 1,
+                    "value": 1172,
                     "label": "合同应收款"
                 }
             ]

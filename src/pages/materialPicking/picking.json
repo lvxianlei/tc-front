@@ -225,7 +225,36 @@
         "selectType": "checkbox",
         "dependencies": true,
         "readOnly": true,
-        "columns": []
+        "columns": [
+            {
+                "title": "",
+                "dataIndex": ""
+            },
+            {
+                "title": "",
+                "dataIndex": ""
+            },
+            {
+                "title": "",
+                "dataIndex": ""
+            },
+            {
+                "title": "",
+                "dataIndex": ""
+            },
+            {
+                "title": "",
+                "dataIndex": ""
+            },
+            {
+                "title": "",
+                "dataIndex": ""
+            },
+            {
+                "title": "",
+                "dataIndex": ""
+            }
+        ]
     },
     "materialInfo": [
         {

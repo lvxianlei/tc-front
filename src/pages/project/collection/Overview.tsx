@@ -22,7 +22,7 @@ export default function Overview() {
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={promotionalTourism} dataSource={data || {}} />
-            {data?.returnType === 1 && <>
+            {data?.returnType === 1172 && <>
                 <DetailTitle title="合同信息" />
                 <CommonTable columns={contractInformationDetail} dataSource={data?.backMoneyVOList || []} />
             </>}
