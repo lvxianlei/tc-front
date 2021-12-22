@@ -48,9 +48,9 @@ export default function RecruitEdit(): React.ReactNode {
             productionLinkId: data.linkId
         })
         const listValue: any = params.productCategoryId && value.records.length > 0 ? value.records.filter((res: any) => { return res.id === data.unitId }) : [{}]
-        // params.productCategoryId && setProductivity(listValue[0].productivity?listValue[0].productivity:'')
-        // params.productCategoryId&& seeLoad(listValue[0].productivity, data.unitId)
-        // params.productCategoryId && setProdUnitList(value.records)
+        params.productCategoryId && setProductivity(listValue[0].productivity?listValue[0].productivity:'')
+        params.productCategoryId&& seeLoad(listValue[0].productivity, data.unitId)
+        params.productCategoryId && setProdUnitList(value.records)
         form.setFieldsValue(params.productCategoryId ? {
             ...data,
             startTime: data?.startTime ? moment(data?.startTime) : '',
