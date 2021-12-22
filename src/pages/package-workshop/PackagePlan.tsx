@@ -6,6 +6,7 @@ import RequestUtil from '../../utils/RequestUtil';
 import styles from './workshop.module.less';
 import WorkshopTeamSelectionComponent from '../../components/WorkshopTeamModal';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 
 export default function DailySchedule(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -71,12 +72,18 @@ export default function DailySchedule(): React.ReactNode {
         {
             title: "开始包装时间",
             width: 150,
-            dataIndex: "startTime"
+            dataIndex: "startTime",
+            render:(startTime:string)=>{
+                return startTime?moment(startTime).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             title: "入库时间",
             width: 100,
-            dataIndex: "endTime"
+            dataIndex: "endTime",
+            render:(endTime:string)=>{
+                return endTime?moment(endTime).format('YYYY-MM-DD'):'-'
+            }
         },
         {
             title: "包装班组",
