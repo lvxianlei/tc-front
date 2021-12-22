@@ -31,10 +31,10 @@ export default function Invoicing() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.applyTimeStart) {
+            const formatDate = value.applyTimeStart.map((item: any) => item.format("YYYY-MM-DD"))
+            value.applyTimeStart = formatDate[0]
+            value.applyTimeEnd = formatDate[1]
         }
         setFilterValue(value)
         return value
@@ -104,7 +104,7 @@ export default function Invoicing() {
             <OverView id={detailId} />
         </Modal>
         <Page
-            path=""
+            path="/tower-supply/materialPicking"
             filterValue={filterValue}
             columns={[
                 ...picking,
@@ -138,7 +138,7 @@ export default function Invoicing() {
                     children: <Input placeholder="工程名称/销售计划号/塔型/加工计划编号/领料人" style={{ width: 300 }} />
                 },
                 {
-                    name: 'isOpen',
+                    name: 'pickingUnitId',
                     label: '领料生产单元',
                     children: <Select style={{ width: 200 }}>
                         <Select.Option value="2">发票未开全</Select.Option>
@@ -146,17 +146,18 @@ export default function Invoicing() {
                     </Select>
                 },
                 {
-                    name: 'contractType',
+                    name: 'state',
                     label: '状态',
                     children: <Select style={{ width: 200 }}>
                         <Select.Option value="1">已创建</Select.Option>
                         <Select.Option value="2">已撤回</Select.Option>
-                        <Select.Option value="3">已放料</Select.Option>
-                        <Select.Option value="4">未放料</Select.Option>
+                        <Select.Option value="3">未放料</Select.Option>
+                        <Select.Option value="4">部分放料</Select.Option>
+                        <Select.Option value="5">已放料</Select.Option>
                     </Select>
                 },
                 {
-                    name: 'startLaunchTime',
+                    name: 'applyTimeStart',
                     label: '申请日期',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 }
