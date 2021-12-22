@@ -120,7 +120,7 @@ export default function BoltList(): React.ReactNode {
                     <Button type='link' onClick={async () => { 
                         setDrawTaskId(record.id);
                         setAssignVisible(true); 
-                    }} disabled={ record.status !== 2 }>指派</Button>
+                    }} disabled={ record.boltStatus !== 2 }>指派</Button>
                 </Space>
             )
         }
