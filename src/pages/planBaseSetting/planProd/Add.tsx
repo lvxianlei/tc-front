@@ -350,6 +350,9 @@ export default function RecruitEdit(): React.ReactNode {
                                             if (list[0].issuedType == 'towerName') {
                                                 setType(list[0].issuedType)
                                                 await getProdLinkLists()
+                                            }else{
+                                                setType(list[0].issuedType)
+                                                setTowerList([])
                                             }
                                         }
 
