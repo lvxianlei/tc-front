@@ -42,7 +42,8 @@ export default function ChooseApply(): React.ReactNode {
     const history = useHistory()
     return <DetailContent>
         <DetailTitle title="选择应用" />
-        {
+        <div className={ styles.content }>
+           {
             (apps as IApplyType[]).map((res: IApplyType, index: number) => (
                 <div className={styles.apply} key={index} onClick={() => {
                     AuthUtil.setCurrentAppName(res.appName)
@@ -53,6 +54,8 @@ export default function ChooseApply(): React.ReactNode {
                     <div className={styles.description}>{res.description}</div>
                 </div>
             ))
-        }
+        } 
+        </div>
+        
     </DetailContent>
 }
