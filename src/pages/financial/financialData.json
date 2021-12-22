@@ -928,7 +928,7 @@
         },
         {
             "title": "付款方式",
-            "dataIndex": "payType"
+            "dataIndex": "payTypeName"
         },
         {
             "title": "付款金额",
