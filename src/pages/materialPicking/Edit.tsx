@@ -1,8 +1,8 @@
-import React, { useImperativeHandle, forwardRef, useState } from "react"
+import React, { useImperativeHandle, forwardRef } from "react"
 import { Button, Form, Spin } from 'antd'
-import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../common'
-import { setting, materialInfo } from "./picking.json"
+import { useParams } from 'react-router-dom'
+import { DetailTitle, BaseInfo, CommonTable, PopTable } from '../common'
+import { setting, materialInfo, chooseMaterial } from "./picking.json"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 export interface EditProps {
@@ -13,7 +13,6 @@ export interface EditProps {
 
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const params = useParams<{ id: string }>()
-    const history = useHistory()
     const [baseForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -34,7 +33,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         }
     }), { manual: true })
 
-
     const onSubmit = (saveType?: "save" | "saveAndApply") => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields()
@@ -42,8 +40,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 ...baseData,
 
             } : {
-                ...baseData,
-
+                ...baseData
             }
             await saveRun(postData, saveType)
             resolve(true)
@@ -64,6 +61,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
 
     return <Spin spinning={loading}>
+        <PopTable data={chooseMaterial as any} />
         <DetailTitle title="基础信息" />
         <BaseInfo
             onChange={handleBaseInfoChange}

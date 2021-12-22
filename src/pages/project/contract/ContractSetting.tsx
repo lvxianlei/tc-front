@@ -11,6 +11,7 @@ import {
   saleTypeOptions,
   contractPlanStatusOptions, // 合同计划状态
   contractFormOptions, // 收到合同形式
+  deliverywayOptions, // 交货方式
 } from "../../../configuration/DictionaryOptions";
 import { IFormItemGroup } from "../../entrust/EntrustDetail";
 import { ContractSetting } from "../../prom/contract/ContractSetting";
@@ -503,7 +504,53 @@ class ManagementContractSetting extends ContractSetting {
                   message: "请选择合同计划状态",
                 },
               ]
-            }
+            },
+            {
+              label: "交货方式",
+              name: "deliveryWay",
+              initialValue: contract?.deliveryWay || (deliverywayOptions && deliverywayOptions[0].id),
+              children: (
+                <Select value={contract?.deliveryWay}
+                >
+                  {deliverywayOptions &&
+                    deliverywayOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
+                </Select>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请选择交货方式",
+                },
+              ]
+            },
+            {
+              label: "交货地点",
+              name: "deliveryAddress",
+              initialValue: contract?.deliveryAddress,
+              children: (
+                <Input style={{width: "100%"}}/>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请输入交货地点",
+                },
+              ]
+            },
+            {
+              label: "备注",
+              name: "description",
+              initialValue: contract?.description,
+              children: (
+                <Input.TextArea style={{width: "100%"}}/>
+              )
+            },
           ],
         },
       ],
@@ -978,7 +1025,53 @@ class ManagementContractSetting extends ContractSetting {
                   message: "请选择合同计划状态",
                 },
               ]
-            }
+            },
+            {
+              label: "交货方式",
+              name: "deliveryWay",
+              initialValue: contract?.deliveryWay || (deliverywayOptions && deliverywayOptions[0].id),
+              children: (
+                <Select value={contract?.deliveryWay}
+                >
+                  {deliverywayOptions &&
+                    deliverywayOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
+                </Select>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请选择交货方式",
+                },
+              ]
+            },
+            {
+              label: "交货地点",
+              name: "deliveryAddress",
+              initialValue: contract?.deliveryAddress,
+              children: (
+                <Input style={{width: "100%"}}/>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请输入交货地点",
+                },
+              ]
+            },
+            {
+              label: "备注",
+              name: "description",
+              initialValue: contract?.description,
+              children: (
+                <Input.TextArea style={{width: "100%"}}/>
+              )
+            },
           ],
         },
       ],

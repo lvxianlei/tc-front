@@ -11,6 +11,8 @@ import production from "../../../public/production.png";
 import qualityInspection from "../../../public/qualityInspection.png";
 import sales from "../../../public/sales.png";
 import supply from "../../../public/supply.png";
+import plan from "../../../public/plan.png";
+import fc from "../../../public/fc.png";
 import { useHistory } from "react-router";
 import AuthUtil from "../../utils/AuthUtil";
 type AppType = "SC" | "SW" | "FC" | "RD" | "TMS" | "HR" | "COMM" | "ASM" | "QMS" | "MC"
@@ -30,15 +32,15 @@ export default function ChooseApply(): React.ReactNode {
             icon: marketing,
             title: "营销中心",
             description: "包含客户、合同、订单等",
-            path: "SC",
+            path: "/notice/SC",
             appName: "SC",
         },
         {
             authority: "",
-            icon: marketing,
+            icon: plan,
             title: "计划中心",
             description: "包含客户、合同、订单等",
-            path: "SC",
+            path: "/notice/SC",
             appName: "SC",
         },
         {
@@ -46,7 +48,7 @@ export default function ChooseApply(): React.ReactNode {
             icon: develop,
             title: "研发中心",
             description: "包含提料、放样等",
-            path: "RD",
+            path: "/notice/RD",
             appName: "RD"
         },
         {
@@ -54,7 +56,7 @@ export default function ChooseApply(): React.ReactNode {
             icon: supply,
             title: "供应中心",
             description: "包含配料、采购合同、采购计划、收货单等",
-            path: "SW",
+            path: "/workBench/sw",
             appName: "SW"
         },
         {
@@ -62,7 +64,7 @@ export default function ChooseApply(): React.ReactNode {
             icon: qualityInspection,
             title: "质检中心",
             description: "质检过程相关功能",
-            path: "QMS",
+            path: "/notice/QMS",
             appName: "QMS"
         },
         {
@@ -70,7 +72,7 @@ export default function ChooseApply(): React.ReactNode {
             icon: production,
             title: "生产中心",
             description: "生产过程管理相关功能",
-            path: "MC",
+            path: "/notice/MC",
             appName: "MC"
         },
         {
@@ -78,7 +80,7 @@ export default function ChooseApply(): React.ReactNode {
             icon: logistic,
             title: "物流中心",
             description: "配车、发货等相关功能",
-            path: "TMS",
+            path: "/notice/TMS",
             appName: "TMS"
         },
         {
@@ -86,7 +88,7 @@ export default function ChooseApply(): React.ReactNode {
             icon: sales,
             title: "售后中心",
             description: "售后服务相关功能",
-            path: "ASM",
+            path: "/notice/ASM",
             appName: "ASM"
         },
         {
@@ -94,15 +96,15 @@ export default function ChooseApply(): React.ReactNode {
             icon: hr,
             title: "人资中心",
             description: "人资管理相关功能",
-            path: "HR",
+            path: "/notice/HR",
             appName: "HR"
         },
         {
             authority: "",
-            icon: hr,
+            icon: fc,
             title: "财务中心",
             description: "人资管理相关功能",
-            path: "FC",
+            path: "/notice/FC",
             appName: "FC"
         },
         {
@@ -110,7 +112,7 @@ export default function ChooseApply(): React.ReactNode {
             icon: general,
             title: "通用中心",
             description: "必备基础功能",
-            path: "COMM",
+            path: "/notice/COMM",
             appName: "COMM"
         }
     ]

@@ -232,27 +232,23 @@
     "PurchaseIngredients": [
         {
             "title": "材质",
-            "dataIndex": "code"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",
-            "dataIndex": "length",
-            "width": 100,
-            "type": "number"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "长度（mm）",
-            "dataIndex": "notConfigured",
-            "width": 100,
-            "type": "string"
+            "dataIndex": "length"
         },
         {
             "title": "已用",
-            "dataIndex": "num"
+            "dataIndex": "consumeNum"
         },
         {
             "title": "未用",
-            "dataIndex": "num"
+            "dataIndex": "surplusNum"
         }
     ]
 }

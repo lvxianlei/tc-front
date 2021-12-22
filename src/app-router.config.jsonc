@@ -24,6 +24,13 @@
     }
   ],
   "routers": [
+    {
+      "name": "", // 显示在面包屑中的名称
+      "path": "/notice/:name",
+      "module": "./pages/notice/index",
+      "exact": true,
+      "authority": "all"
+    },
     { // 客户管理
       "name": "客户管理", // 显示在面包屑中的名称
       "path": "/client/mngt",
