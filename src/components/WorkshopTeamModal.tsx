@@ -14,7 +14,7 @@
  import { RowSelectionType } from 'antd/lib/table/interface';
  
  export interface IWorkshopTeamSelectionComponentState extends IAbstractSelectableModalState {
-     readonly tableDataSource: IUser[];
+     readonly tableDataSource: any[];
  }
  export interface IWorkshopTeamSelectionComponentProps extends IAbstractSelectableModalProps {
      readonly saleOrderId?: string | number;
@@ -93,21 +93,18 @@
          })
      };
  
-     //componentDidMount
-     public componentDidMount(): void {
-         this.getTable({})
-     }
+ 
  
      //接口、获值
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-         let resData: IResponseData = await RequestUtil.get<IResponseData>(`/sinzetech-user/user`, {
-             ...filterValues,
-             current: pagination.current || this.state.tablePagination?.current,
-             size: pagination.pageSize || this.state.tablePagination?.pageSize
-         });
+        let resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-production/team/page', {
+            ...filterValues,
+            current: pagination.current || this.state.tablePagination?.current,
+            size: pagination.pageSize || this.state.tablePagination?.pageSize,
+        });
          const selectKeys: [] = this.props.selectKey;
-         let newData: IUser[] = resData.records;
-         selectKeys?.forEach((item: IUser) => {
+         let newData: any[] = resData.records;
+         selectKeys?.forEach((item: any) => {
              newData = newData.filter(res => res.id !== item.id);
          })
          this.setState({
@@ -142,10 +139,10 @@
      //table-column
      public getTableColumns(): ColumnType<object>[] {
          return [{
-             key: 'type',
+             key: 'name',
              title: '班组名称',
              width: '50%',
-             dataIndex: 'type',
+             dataIndex: 'name',
          }, {
              key: 'name',
              title: '所属生产单元',
@@ -159,16 +156,6 @@
          return 'id';
      }
  
-     public showModal = (): void => {
-         if (this.props.saleOrderId) {
-             this.setState({
-                 isModalVisible: true
-             })
-             this.getTable({})
-         }
- 
-     }
- 
      public render(): React.ReactNode {
          return (
              <>
@@ -176,6 +163,7 @@
                      this.setState({
                          isModalVisible: true
                      })
+                     this.getTable({})
                  }}  disabled={this.props.disabled}>{this.props.buttonTitle || '选择班组'}</Button>
                  <Modal
                      title={this.state.confirmTitle}

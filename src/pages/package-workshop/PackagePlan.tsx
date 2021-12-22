@@ -4,7 +4,6 @@ import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './workshop.module.less';
-import { IUser } from '../../components/WorkshopEquipmentModal';
 import WorkshopTeamSelectionComponent from '../../components/WorkshopTeamModal';
 import { useHistory } from 'react-router-dom';
 
@@ -37,7 +36,7 @@ export default function DailySchedule(): React.ReactNode {
         {
             title: "电压等级",
             width: 150,
-            dataIndex: "issueWeight"
+            dataIndex: "voltage"
         },
         {
             title: "计划号",
@@ -72,17 +71,17 @@ export default function DailySchedule(): React.ReactNode {
         {
             title: "开始包装时间",
             width: 150,
-            dataIndex: "processFactory"
+            dataIndex: "startTime"
         },
         {
             title: "入库时间",
             width: 100,
-            dataIndex: "processWorkshop"
+            dataIndex: "endTime"
         },
         {
             title: "包装班组",
             width: 200,
-            dataIndex: "packagingTeamName"
+            dataIndex: "teamName"
         }
     ]
 
@@ -90,6 +89,7 @@ export default function DailySchedule(): React.ReactNode {
     const operationChange = (event: any) => {
         setConfirmStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
+        setSelectedKeys([]);
     }
 
     const SelectChange = (selectedRowKeys: React.Key[]): void => {
@@ -101,7 +101,6 @@ export default function DailySchedule(): React.ReactNode {
             path="/tower-production/packageWorkshop"
             sourceKey="packageDailyPlanVOS.records"
             columns={
-                confirmStatus === 1 || confirmStatus === 2 || confirmStatus === 3 ? 
                 [ {
                     "key": "index",
                     "title": "序号",
@@ -113,16 +112,26 @@ export default function DailySchedule(): React.ReactNode {
                     "title": "操作",
                     "dataIndex": "operation",
                     fixed: "right" as FixedType,
-                    "width": 150,
+                    "width": 80,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         confirmStatus === 1 ? <Button type="link" onClick={() => {
-                        }}>确认</Button> : confirmStatus === 2 ? <WorkshopTeamSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                            RequestUtil.post(`/tower-production/packageWorkshop/confirm`, [record.id]).then(res => {
+                                message.success("确认成功");
+                                setRefresh(!refresh);
+                            });
+                        }}>确认</Button> : confirmStatus === 2 ? <WorkshopTeamSelectionComponent onSelect={ (selectedRows:  any) => {
                             console.log(selectedRows);
                             RequestUtil.put(`tower-production/packageWorkshop/confirmDispatch`,{
                                 teamId: selectedRows[0].id,
-                                name: selectedRows[0].name
+                                name: selectedRows[0].name,
+                                planList:[{
+                                    id:record.id,
+                                    planNumber: record.planNumber,
+                                    productCategoryName: record.productCategoryName
+                                }]
                             }).then(()=>{
                                 message.success('派工成功！')
+                                setRefresh(!refresh)
                             })
                         } } buttonType="link" buttonTitle="派工" />: confirmStatus === 3 ? <Button type="link" onClick={() => {
                             history.push(`/packagingWorkshop/processingTask/detail/${record.id}/${record.status}`)
@@ -130,13 +139,7 @@ export default function DailySchedule(): React.ReactNode {
                             history.push(`/packagingWorkshop/processingTask/detail/${record.id}/4`)
                         }}>详情</Button>
                     )
-                }] : [{
-                    "key": "index",
-                    "title": "序号",
-                    "dataIndex": "index",
-                    "width": 50,
-                    render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                }, ...columns]}
+                }] }
             headTabs={[]}
             requestData={{ status: confirmStatus }}
             extraOperation={(data: any) =><>
@@ -146,9 +149,9 @@ export default function DailySchedule(): React.ReactNode {
                     <Radio.Button value={3}>未采集</Radio.Button>
                     <Radio.Button value={4}>已完成</Radio.Button>
                 </Radio.Group>
-                <span className={styles.statistical}>统计<span className={styles.statistical}>下达总重量：{data?.issueTotalWeight}吨</span><span className={styles.statistical}>角钢总重量：{data?.angleTotalWeight}吨</span><span className={styles.statistical}>连板总重量：{data?.plateTotalWeight}吨</span></span>
+                <span className={styles.statistical}>统计：<span className={styles.statistical}>下达总重量：{data?.issueTotalWeight}吨</span><span className={styles.statistical}>角钢总重量：{data?.angleTotalWeight}吨</span><span className={styles.statistical}>连板总重量：{data?.plateTotalWeight}吨</span></span>
                 {confirmStatus === 1 ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
-                    RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, selectedKeys).then(res => {
+                    RequestUtil.post(`/tower-production/packageWorkshop/confirm`, selectedKeys).then(res => {
                         message.success("确认成功");
                         setRefresh(!refresh);
                     });
@@ -165,11 +168,6 @@ export default function DailySchedule(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '',
-                    children: <Input style={{ width: '300px' }} placeholder="请输入订单工程名称/计划号/塔型进行查询" />
-                },
-                {
-                    name: 'fuzzyMsg',
-                    label: '状态',
                     children: <Input style={{ width: '300px' }} placeholder="请输入订单工程名称/计划号/塔型进行查询" />
                 },
                 {

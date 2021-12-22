@@ -40,7 +40,7 @@ export default function PackageDetail(): React.ReactNode {
                 <DetailTitle title="件号明细" />
                 <CommonTable 
                     columns={tableColumns}
-                    dataSource={detailData.packingStructureVOList} 
+                    dataSource={detailData?.packingStructureVOList} 
                     pagination={false}
                 />
             </DetailContent>

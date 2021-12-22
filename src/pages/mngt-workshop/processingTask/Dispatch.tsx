@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Col, DatePicker, Form, Input, message, Modal, Row, Select, Space, Spin } from 'antd';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
-// import { baseInfoData } from './question.json';
+import { Button, Col, DatePicker, Form, Input, message, Row, Select, Space, Spin } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
+import { DetailContent, CommonTable, DetailTitle } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import WorkshopEquipmentSelectionComponent, { IUser } from '../../../components/WorkshopEquipmentModal';
 import WorkshopTeamSelectionComponent from '../../../components/WorkshopTeamModal';
-import TextArea from 'antd/lib/input/TextArea';
 import AuthUtil from '../../../utils/AuthUtil';
 import moment from 'moment';
 
@@ -24,9 +22,9 @@ const tableColumns = [
     { title: '重量(kg)', dataIndex: 'basicsWeight', key: 'basicsWeight' },
     { title: '电焊', dataIndex: 'electricWelding', key: 'electricWelding' },
     { title: '备注', dataIndex: 'description', key: 'description' },
-    { title: '冲引孔', dataIndex: 'punchHole', key: 'punchHole' },
-    { title: '是否弧边', dataIndex: 'arcEdge', key: 'arcEdge' },
-    { title: '件号类型', dataIndex: 'numberType', key: 'numberType' },
+    // { title: '冲引孔', dataIndex: 'punchHole', key: 'punchHole' },
+    // { title: '是否弧边', dataIndex: 'arcEdge', key: 'arcEdge' },
+    { title: '类型', dataIndex: 'numberType', key: 'numberType' },
     { title: '个孔径孔数', dataIndex: 'apertureNumber', key: 'apertureNumber' },
     { title: '钻孔孔径孔数', dataIndex: 'drillApertureNumber', key: 'drillApertureNumber' },
     { title: '扩孔孔径孔数', dataIndex: 'reamingApertureNumber', key: 'reamingApertureNumber' },
@@ -102,10 +100,10 @@ export default function Dispatch(): React.ReactNode {
                                     "message": "请选择工作中心"
                                 }
                             ]}>
-                                <Input maxLength={ 50 } addonAfter={ <WorkshopEquipmentSelectionComponent onSelect={ (selectedRows: any[] | any) => {
+                                <Input maxLength={ 50 } addonAfter={ <WorkshopEquipmentSelectionComponent onSelect={ (selectedRows: any) => {
                                     setEquipment(selectedRows);
                                     form.setFieldsValue({
-                                        equipmentName: selectedRows[0].name,
+                                        equipmentName: selectedRows[0].workCenterName,
                                         productionLinesName: selectedRows[0].name
                                     });
                                 } } buttonType="link" buttonTitle="+选择工作中心"  disabled={show}/> } disabled={show}/>

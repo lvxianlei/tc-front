@@ -107,7 +107,7 @@ export default function DeliveryPlanList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/deliveryPlan/detail/${ record.id }` )}}>查看</Button>
-                    <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/deliveryPlan/delivery/${ record.id }` )}}>成品出库</Button>
+                    <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/deliveryPlan/delivery/${ record.id }` )}} disabled={record.status === 3}>成品出库</Button>
                 </Space>
             )
         }

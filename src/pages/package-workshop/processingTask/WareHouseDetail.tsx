@@ -76,7 +76,7 @@ export default function ProcessDetail(): React.ReactNode {
     };
     return <>
         <Spin spinning={loading}>
-            <DetailContent operation={params.status!=='3'?[
+            <DetailContent operation={params.status==='3'?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await  form.validateFields();
                     let value = form.getFieldsValue(true);
@@ -209,7 +209,7 @@ export default function ProcessDetail(): React.ReactNode {
                 
                 <Table 
                     columns={tableColumns}
-                    dataSource={[{id:'1'}]} 
+                    dataSource={detailData?.productVOList} 
                     onRow={record => {
                         return {
                           onClick: async event => {

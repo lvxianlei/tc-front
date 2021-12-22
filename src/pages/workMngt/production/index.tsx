@@ -7,8 +7,6 @@ import Overview from "./Edit"
 import useRequest from "@ahooksjs/use-request";
 import RequestUtil from "../../../utils/RequestUtil";
 import AuthUtil from "../../../utils/AuthUtil"
-// 引入配料
-import IngredientsModal from "./ingredientsLayer/IngredientsModal";
 // 引入明细
 import DetailOverView from './DetailOverView';
 export default function Invoicing() {
@@ -93,16 +91,6 @@ export default function Invoicing() {
                 </Form.Item>
             </Form>
         </Modal>
-        {/* 新增配料 */}
-        <IngredientsModal
-            id={"1472776290945937410"}
-            visible={ingredientsvisible}
-            onOk={() => {
-                history.go(0);
-                setIngredientsvisible(false)
-            }}
-            onCancel={() => setIngredientsvisible(false)}
-        />
         {/* 新增明细 */}
         <DetailOverView
             visible={detailOver}
@@ -156,7 +144,6 @@ export default function Invoicing() {
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" loading={loading} ghost onClick={() => setGenerteVisible(true)}>临时生成生产数据</Button>
-                <Button type="primary" ghost onClick={() => setIngredientsvisible(true)}>添加的配料入口</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
