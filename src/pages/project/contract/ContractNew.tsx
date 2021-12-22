@@ -9,7 +9,7 @@ import ClientSelectionComponent from "../../../components/ClientSelectionModal";
 import {
   winBidTypeOptions,
   saleTypeOptions,
-  currencyTypeOptions,
+  currencyTypeOptions, // 币种
   contractPlanStatusOptions, // 合同计划状态
   contractFormOptions, // 收到合同形式
   deliverywayOptions, // 交货方式
@@ -409,6 +409,24 @@ class ManagementContractNew extends ContractNew {
               name: "regionOther",
               initialValue: contract?.regionOther,
               children: (<Input value={contract?.regionOther} />),
+            },
+            {
+              label: "币种",
+              name: "currencyType",
+              initialValue: contract?.currencyType || (currencyTypeOptions && currencyTypeOptions[0].id),
+              children: (
+                <Select value={contract?.currencyType}
+                >
+                  {currencyTypeOptions &&
+                    currencyTypeOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
+                </Select>
+              ),
             },
             {
               label: "业务经理",
@@ -939,6 +957,24 @@ class ManagementContractNew extends ContractNew {
                     );
                   })}
                   <Select.Option value="其他-国外">其他-国外</Select.Option>
+                </Select>
+              ),
+            },
+            {
+              label: "币种",
+              name: "currencyType",
+              initialValue: contract?.currencyType || (currencyTypeOptions && currencyTypeOptions[0].id),
+              children: (
+                <Select value={contract?.currencyType}
+                >
+                  {currencyTypeOptions &&
+                    currencyTypeOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
                 </Select>
               ),
             },

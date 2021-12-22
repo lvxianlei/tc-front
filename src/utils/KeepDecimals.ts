@@ -16,3 +16,28 @@
 　　}  
 　　return sx;  
 }
+
+/**
+ * 
+ */
+ export function doNumber(x: any,n: any) {
+    var f_x = parseFloat(x);
+    if (isNaN(f_x)) {
+      console.log('function:changeTwoDecimal->parameter error');
+      return x;
+    }
+    if(n<=0){
+       return parseInt(x);
+    }
+    var f = Math.round(x*10*n)/(10*n); 
+    var s = f.toString(); 
+    var rs = s.indexOf('.'); 
+    if (rs < 0) { 
+      rs = s.length; 
+      s += '.'; 
+    } 
+    while (s.length <= rs + n) { 
+      s += '0'; 
+    } 
+    return s; 
+}
