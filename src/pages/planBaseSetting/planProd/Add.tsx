@@ -94,7 +94,7 @@ export default function RecruitEdit(): React.ReactNode {
        * @description 下发
        */
     const culIssue = async () => {
-        if(towerList){
+        if(towerList.length>0){
             if (selectedKeys.length > 0) {
                 let productIds = []
                 productIds = selectedKeys
