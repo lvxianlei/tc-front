@@ -26,10 +26,11 @@ export default function RecruitEdit(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, productCategoryId: string, planId: string }>();
     const [form] = Form.useForm();
-    const [type,settype]=useState<any>();
+    const [type,setType]=useState<any>();
     const [productivity, setProductivity] = useState<any>('');
     const [value, setValue] = useState<any>([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(6, 'day').format('YYYY-MM-DD'))]);
     const [dates, setDates] = useState<any>([]);
+    const [towerData, setTowerData] = useState<any>({});
     const [prodLinkList, setProdLinkList] = useState<any[]>([])
     const [prodUnitList, setProdUnitList] = useState<any[]>([])
     const [towerList, setTowerList] = useState<any[]>([])
@@ -50,6 +51,7 @@ export default function RecruitEdit(): React.ReactNode {
             size: 1000,
             productionLinkId: data.linkId
         })
+        params.productCategoryId && setTowerData(data)
 
         // const listValue: any = params.productCategoryId && value.records.length > 0 ? value.records.filter((res: any) => { return res.id === data.unitId }) : [{}]
 
@@ -84,10 +86,13 @@ export default function RecruitEdit(): React.ReactNode {
             current: 1,
             size: 1000
         })
-        settype(data.records[0].issuedType)
         setProdLinkList(data.records)
+        const value = data.records.filter((item:any)=>{
+            return item.id = towerData.linkId
+        })
+        setType(value[0].issuedType)
 
-        params.productCategoryId && data.records[0].issuedType == 'productCategoryName' && getProdLinkLists()
+        params.productCategoryId && value[0].issuedType == 'towerName' && getProdLinkLists()
     }
 
     /**
@@ -342,8 +347,8 @@ export default function RecruitEdit(): React.ReactNode {
                                         })
                                        
                                         if (params.productCategoryId) {
-                                            if (list[0].issuedType == 'productCategoryName') {
-                                                settype(list[0].issuedType)
+                                            if (list[0].issuedType == 'towerName') {
+                                                setType(list[0].issuedType)
                                                 await getProdLinkLists()
                                             }
                                         }
@@ -497,7 +502,7 @@ export default function RecruitEdit(): React.ReactNode {
                 </Row> */}
                 </Form>
                 {
-                    params.productCategoryId && type && type == 'productCategoryName' ? <Table dataSource={towerList} rowKey={"id"}
+                    params.productCategoryId && type && type == 'towerName' ? <Table dataSource={towerList} rowKey={"id"}
                         rowSelection={{
                             selectedRowKeys: selectedKeys,
                             onChange: SelectChange
