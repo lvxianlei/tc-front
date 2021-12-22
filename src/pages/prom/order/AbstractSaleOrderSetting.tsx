@@ -19,6 +19,7 @@ import { IContract } from '../../IContract';
 import layoutStyles from '../../../layout/Layout.module.less';
 import TowerSelectionModal from './TowerSelectionModal';
 import { GetRowKey } from 'rc-table/lib/interface';
+import { doNumber } from "../../../utils/KeepDecimals";
 export interface IAbstractSaleOrderSettingState extends IAbstractFillableComponentState {
     readonly saleOrder?: ISaleOrder;
     readonly orderQuantity?: number;
@@ -238,9 +239,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const price: number = saleOrderValue.price;
         let amount: number | undefined = 0;
         amount = orderWeight * price;
-        amount = amount && parseFloat(amount.toFixed(4));
-        this.getForm()?.setFieldsValue({ amount: (amount + "").indexOf(".") !== -1 ? amount : `${amount}.0000` });
+        console.log(amount, doNumber(amount, 4))
+        this.getForm()?.setFieldsValue({ amount: doNumber(amount, 4) });
     }
+
 
     /**
      * @description 根据税率计算含税金额
@@ -251,8 +253,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const taxPrice: number = saleOrderValue.taxPrice;
         let taxAmount: number | undefined = 0;
         taxAmount = orderWeight * taxPrice;
-        taxAmount = taxAmount && parseFloat(taxAmount.toFixed(4));
-        this.getForm()?.setFieldsValue({ taxAmount: (taxAmount + "").indexOf(".") !== -1 ? taxAmount : `${taxAmount}.0000` });
+        console.log(taxAmount, doNumber(taxAmount, 4))
+        this.getForm()?.setFieldsValue({ taxAmount: doNumber(taxAmount, 4) });
     }
 
     /**
@@ -265,8 +267,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const taxRate: number = saleOrderValue.taxRate * 1; // 税率
         let result: number | undefined = 0;
         result = taxPrice / (1 + taxRate);
-        result = result && parseFloat(result.toFixed(4));
-        this.getForm()?.setFieldsValue({ price: (result + "").indexOf(".") !== -1 ? result : `${result}.0000` });
+        this.getForm()?.setFieldsValue({ price: doNumber(result, 4) });
     }
 
     /**
@@ -490,10 +491,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             children: (
                                 <InputNumber
                                     min="0"
-                                    step="0.01"
+                                    step="0.0001"
                                     stringMode={false}
                                     disabled={true}
-                                    precision={2}
+                                    precision={4}
                                     onChange={this.amountBlur}
                                     className={layoutStyles.width100}
                                 />
@@ -502,20 +503,20 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                         {
                             label: "不含税金额",
                             name: "amount",
-                            initialValue: saleOrder?.amount || "0.00",
+                            initialValue: saleOrder?.amount || "0.0000",
                             children: <Input prefix="￥" disabled={true} readOnly={true} />,
                         },
                         {
                             label: "含税单价",
                             name: "taxPrice",
-                            initialValue: saleOrder?.taxPrice || "0.00",
+                            initialValue: saleOrder?.taxPrice || "0.0000",
                             rules: [
                                 {
                                     required: true,
                                     message: "请输入含税单价",
                                 },
                             ],
-                            children: <InputNumber onChange={() => {this.getTaxAmount(); this.unitPriceExcludingTax()}} max={999999999999.99} />,
+                            children: <InputNumber step="0.0001" precision={4} onChange={() => {this.getTaxAmount(); this.unitPriceExcludingTax()}} max={999999999999.99} />,
                         },
                         {
                             label: "不含税单价",
@@ -527,7 +528,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     message: "请输入不含税单价",
                                 },
                             ],
-                            children: <InputNumber onChange={this.getAmount} max={999999999999.99} disabled={true} />,
+                            children: <InputNumber step="0.0001" precision={4} onChange={this.getAmount} max={999999999999.99} disabled={true} />,
                         },
                         {
                             label: "税率",
@@ -547,7 +548,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     precision={2}
                                     max={100}
                                     className={layoutStyles.width100}
-                                    onChange={this.unitPriceExcludingTax}
+                                    onChange={() => {
+                                        this.unitPriceExcludingTax();
+                                        this.getAmount();
+                                    }}
                                 />
                             ),
                         },
@@ -618,22 +622,22 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 />
                             ),
                         },
-                        {
-                            label: "保函类型",
-                            name: "guaranteeType",
-                            initialValue:
-                                saleOrder?.guaranteeType === "-1"
-                                    ? undefined
-                                    : saleOrder?.guaranteeType,
-                            children: (
-                                <Select maxLength={50} className={layoutStyles.width100}>
-                                    <Select.Option value="履约保函">履约保函</Select.Option>
-                                    <Select.Option value="预付款保函">预付款保函</Select.Option>
-                                    <Select.Option value="质保保函以及履约保函">质保保函以及履约保函</Select.Option>
-                                    <Select.Option value="预付款保函和质保保函">预付款保函和质保保函</Select.Option>
-                                </Select>
-                            ),
-                        },
+                        // {
+                        //     label: "保函类型",
+                        //     name: "guaranteeType",
+                        //     initialValue:
+                        //         saleOrder?.guaranteeType === "-1"
+                        //             ? undefined
+                        //             : saleOrder?.guaranteeType,
+                        //     children: (
+                        //         <Select maxLength={50} className={layoutStyles.width100}>
+                        //             <Select.Option value="履约保函">履约保函</Select.Option>
+                        //             <Select.Option value="预付款保函">预付款保函</Select.Option>
+                        //             <Select.Option value="质保保函以及履约保函">质保保函以及履约保函</Select.Option>
+                        //             <Select.Option value="预付款保函和质保保函">预付款保函和质保保函</Select.Option>
+                        //         </Select>
+                        //     ),
+                        // },
                         {
                             label: "销售业务员",
                             name: "salesman",
@@ -646,22 +650,22 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             ],
                             children: <Input maxLength={20} />,
                         },
-                        {
-                            label: "港口费用",
-                            name: "portCharge",
-                            initialValue:
-                                saleOrder?.portCharge || "0.00",
-                            children: (
-                                <InputNumber
-                                    min={0}
-                                    step="0.01"
-                                    stringMode={false}
-                                    precision={2}
-                                    max={999999999999.99}
-                                    className={layoutStyles.width100}
-                                />
-                            ),
-                        },
+                        // {
+                        //     label: "港口费用",
+                        //     name: "portCharge",
+                        //     initialValue:
+                        //         saleOrder?.portCharge || "0.00",
+                        //     children: (
+                        //         <InputNumber
+                        //             min={0}
+                        //             step="0.01"
+                        //             stringMode={false}
+                        //             precision={2}
+                        //             max={999999999999.99}
+                        //             className={layoutStyles.width100}
+                        //         />
+                        //     ),
+                        // },
                         {
                             label: "保函金额",
                             name: "guaranteeAmount",
@@ -679,54 +683,54 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             ),
                         },
 
-                        {
-                            label: "海运及保险费",
-                            name: "insuranceCharge",
-                            initialValue:
-                                saleOrder?.insuranceCharge || "0.00",
-                            children: (
-                                <InputNumber
-                                    min={0}
-                                    step="0.01"
-                                    stringMode={false}
-                                    precision={2}
-                                    max={999999999999.99}
-                                    className={layoutStyles.width100}
-                                />
-                            ),
-                        },
-                        {
-                            label: "出口信用保险",
-                            name: "creditInsurance",
-                            initialValue:
-                                saleOrder?.creditInsurance || "0.00",
-                            children: (
-                                <InputNumber
-                                    min={0}
-                                    step="0.01"
-                                    stringMode={false}
-                                    precision={2}
-                                    max={999999999999.99}
-                                    className={layoutStyles.width100}
-                                />
-                            ),
-                        },
-                        {
-                            label: "佣金",
-                            name: "commissionCharge",
-                            initialValue:
-                                saleOrder?.commissionCharge || "0.00",
-                            children: (
-                                <InputNumber
-                                    min={0}
-                                    step="0.01"
-                                    stringMode={false}
-                                    precision={2}
-                                    max={999999999999.99}
-                                    className={layoutStyles.width100}
-                                />
-                            ),
-                        },
+                        // {
+                        //     label: "海运及保险费",
+                        //     name: "insuranceCharge",
+                        //     initialValue:
+                        //         saleOrder?.insuranceCharge || "0.00",
+                        //     children: (
+                        //         <InputNumber
+                        //             min={0}
+                        //             step="0.01"
+                        //             stringMode={false}
+                        //             precision={2}
+                        //             max={999999999999.99}
+                        //             className={layoutStyles.width100}
+                        //         />
+                        //     ),
+                        // },
+                        // {
+                        //     label: "出口信用保险",
+                        //     name: "creditInsurance",
+                        //     initialValue:
+                        //         saleOrder?.creditInsurance || "0.00",
+                        //     children: (
+                        //         <InputNumber
+                        //             min={0}
+                        //             step="0.01"
+                        //             stringMode={false}
+                        //             precision={2}
+                        //             max={999999999999.99}
+                        //             className={layoutStyles.width100}
+                        //         />
+                        //     ),
+                        // },
+                        // {
+                        //     label: "佣金",
+                        //     name: "commissionCharge",
+                        //     initialValue:
+                        //         saleOrder?.commissionCharge || "0.00",
+                        //     children: (
+                        //         <InputNumber
+                        //             min={0}
+                        //             step="0.01"
+                        //             stringMode={false}
+                        //             precision={2}
+                        //             max={999999999999.99}
+                        //             className={layoutStyles.width100}
+                        //         />
+                        //     ),
+                        // },
                         {
                             label: "备注",
                             name: "description",

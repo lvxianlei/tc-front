@@ -170,7 +170,7 @@ class ManagementContractSummary extends ContractSummary {
         [
           {
             label: "交货方式",
-            value: baseInfo?.deliveryWay,
+            value: baseInfo?.deliveryWayName,
           },
           {
             label: "交货地点",
@@ -181,6 +181,10 @@ class ManagementContractSummary extends ContractSummary {
           {
             label: "备注",
             value: baseInfo?.description,
+          },
+          {
+            label: "币种",
+            value: baseInfo?.currencyTypeName
           }
         ]
       ],

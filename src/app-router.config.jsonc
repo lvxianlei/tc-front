@@ -552,6 +552,13 @@
       "exact": true,
       "authority": "project_detail"
     },
+    { // 项目管理成本评估编辑
+      "name": "成本评估编辑",
+      "path": "/project/management/edit/cost/:projectId",
+      "module": "./pages/project/cost/Edit",
+      "exact": true,
+      "authority": "project_detail"
+    },
     { // 项目管理标书制作编辑
       "name": "标书制作编辑",
       "path": "/project/management/edit/bidDoc/:id",
