@@ -31,7 +31,7 @@ export default function Drawing(): React.ReactNode {
 
     const { run: cancelRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/withdraw?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/drawingConfirmation/withdraw?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
