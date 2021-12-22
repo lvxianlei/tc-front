@@ -446,11 +446,11 @@ export default function PackingListNew(): React.ReactNode {
         } }>
             <Row>
                 <Col span={ 4 }>捆号</Col>   
-                <Col span={ 8 } offset={ 1 }>
+                <Col span={ 6 } offset={ 1 }>
                     <Input placeholder="请输入捆号" defaultValue={ detailData?.balesCode } onChange={ (e) => balesCodeChange(e) } maxLength={10}/> 
                 </Col> 
                 <Col span={ 4 }>包类型</Col>   
-                <Col span={ 8 } offset={ 1 }>
+                <Col span={ 6 } offset={ 1 }>
                     <Select placeholder="请选择包类型" defaultValue={ detailData?.packageType } onChange={ (e:string) => packageChange(e) }>
                         <Select.Option value="角钢" key="0">角钢</Select.Option>
                         <Select.Option value="连板" key="1">连板</Select.Option>
