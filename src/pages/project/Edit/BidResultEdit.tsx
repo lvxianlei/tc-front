@@ -24,7 +24,6 @@ const columns = [
     {
         title: '批次',
         dataIndex: 'batch',
-        type: "number",
         rules: [
             {
                 required: true,
@@ -34,35 +33,16 @@ const columns = [
     },
     {
         title: '中标包号',
-        dataIndex: "packageNum",
-        rules: [
-            {
-                required: true,
-                message: "请输入中标包号..."
-            }
-        ]
+        dataIndex: "packageNum", disabled: "true"
     },
     {
         title: '中标价(元)',
-        dataIndex: "bidMoney",
-        type: "number",
-        rules: [
-            {
-                required: true,
-                message: "请输入中标价(元)..."
-            }
-        ]
+        dataIndex: "bidMoney", disabled: "true"
     },
     {
         title: '中标重量(吨)',
         dataIndex: "bidWeight",
-        type: "number",
-        rules: [
-            {
-                required: true,
-                message: "请输入中标重量(吨)..."
-            }
-        ]
+        type: "number", disabled: "true"
     },
     {
         title: '是否中标',

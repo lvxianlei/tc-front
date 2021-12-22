@@ -86,7 +86,7 @@
             "disabled": true
         },
         {
-            "title": "销售计划号",
+            "title": "计划号",
             "dataIndex": "salePlanNumber",
             "disabled": true
         },
@@ -94,32 +94,31 @@
             "title": "加工计划编号",
             "dataIndex": "workPlanNumber",
             "type": "popTable",
-            "path": "",
+            "path": "/tower-aps/workPlan/material",
             "width": 1011,
-            "value": "receiveNumber",
-            "selectType": "checkbox",
+            "value": "planNumber",
             "dependencies": true,
             "readOnly": true,
             "columns": [
                 {
                     "title": "加工计划编号",
-                    "dataIndex": ""
+                    "dataIndex": "workPlanNumber"
                 },
                 {
                     "title": "工程名称",
-                    "dataIndex": ""
+                    "dataIndex": "orderProjectName"
                 },
                 {
                     "title": "计划号",
-                    "dataIndex": ""
+                    "dataIndex": "planNumber"
                 },
                 {
                     "title": "塔型",
-                    "dataIndex": ""
+                    "dataIndex": "productCategoryName"
                 },
                 {
                     "title": "计划完成日期",
-                    "dataIndex": "",
+                    "dataIndex": "endTime",
                     "type": "date",
                     "format": "YYYY-MM-DD"
                 }
@@ -178,39 +177,37 @@
         },
         {
             "title": "领料人",
-            "dataIndex": "pickingUserName"
+            "dataIndex": "pickingUserName",
+            "type": "popTable",
+            "width": 1011,
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
         },
         {
             "title": "申请日期",
             "dataIndex": "applyTime",
             "disabled": true
-        },
-        {
-            "title": "状态",
-            "dataIndex": "state",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "已创建"
-                },
-                {
-                    "value": 2,
-                    "label": "已撤回"
-                },
-                {
-                    "value": 3,
-                    "label": "未放料"
-                },
-                {
-                    "value": 4,
-                    "label": "部分放料"
-                },
-                {
-                    "value": 5,
-                    "label": "已放料"
-                }
-            ]
         },
         {
             "title": "备注",
@@ -222,7 +219,7 @@
         "title": "配料信息",
         "dataIndex": "",
         "type": "popTable",
-        "path": "/tower-storage/receiveStock",
+        "path": "/tower-supply/produceIngredients/getLoftingSchemes",
         "width": 1011,
         "value": "receiveNumber",
         "selectType": "checkbox",

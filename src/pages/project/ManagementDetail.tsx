@@ -180,7 +180,7 @@ export default function ManagementDetail(): React.ReactNode {
                 if (item.dataIndex === "address") {
                     return ({
                         ...item,
-                        render: (record: any) => `${record.bigRegion}-${record.address}`
+                        render: (record: any) => `${["null", null].includes(record.bigRegion) ? "" : record.bigRegion}-${["null", null].includes(record.address) ? "" : record.address}`
                     })
                 }
                 return item
@@ -347,7 +347,7 @@ export default function ManagementDetail(): React.ReactNode {
                         ellipsis: false,
                         width: 250,
                         render: (_: any, record: any) => <>
-                        <Button type="link" size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
+                            <Button type="link" size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
                             <Button type="link" size="small" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
                             <Button type="link" size="small" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
                             <Button type="link" size="small" disabled={`${record.status}` !== "0"} onClick={() => deleteProductGroupItem(record.id)} >删除</Button>

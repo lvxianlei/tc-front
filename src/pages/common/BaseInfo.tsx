@@ -76,7 +76,7 @@ const popTableTransform = (value: any) => {
 const generateRules = (type: string, columnItems: any) => {
     let rules = columnItems.rules || []
     if (columnItems.required) {
-        const inputType = ["date", "select"].includes(columnItems.type) ? "选择" : "输入"
+        const inputType = ["date", "select", "popTable"].includes(columnItems.type) ? "选择" : "输入"
         rules = [
             {
                 "required": true,
@@ -107,7 +107,7 @@ const generateRules = (type: string, columnItems: any) => {
 const generatePlaceholder = (columnItems: any): string => {
     let placeholder = columnItems.placeholder || ""
     if (!columnItems.disabled) {
-        const inputType = ["date", "select"].includes(columnItems.type) ? "选择" : "输入"
+        const inputType = ["date", "select", "popTable"].includes(columnItems.type) ? "选择" : "输入"
         placeholder = `请${inputType}${columnItems.title}`
     }
     return placeholder

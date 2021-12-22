@@ -411,7 +411,12 @@ export default function Information(): React.ReactNode {
             <DetailTitle title="申请明细" />
             <EditTable haveNewButton={false} form={outFactoryTableForm} onChange={outFactoryTableChange} columns={addanewone} dataSource={[]} />
         </Modal>
-        <SelectAuditType visible={visible} title="新建审批" okText="创建" onOk={handleOk} onCancel={() => setVisible(false)} />
+        <SelectAuditType
+            visible={visible}
+            title="新建审批"
+            okText="创建"
+            onOk={handleOk}
+            onCancel={() => setVisible(false)} />
         <ApprovalTypesView
             title={auditEnum[currentView]}
             visible={viewVisible}

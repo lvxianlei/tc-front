@@ -39,7 +39,7 @@ export default function BaseInfoEdit(): JSX.Element {
             setAddress(result.address)
             resole({
                 ...result,
-                address: `${result.bigRegion}-${result.address}`
+                address: `${["null", null].includes(result.bigRegion) ? "" : result.bigRegion}-${["null", null].includes(result.address) ? "" : result.address}`
             })
         } catch (error) {
             reject(error)

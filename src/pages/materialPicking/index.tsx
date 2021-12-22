@@ -9,7 +9,7 @@ import Edit from "./Edit"
 import OverView from "./Overview"
 
 interface EditRefProps {
-    onSubmit: (type?: "saveAndApply" | "save") => void
+    onSubmit: (type?: 1 | 2) => void
     resetFields: () => void
 }
 
@@ -23,7 +23,16 @@ export default function Invoicing() {
     const [filterValue, setFilterValue] = useState({});
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/materialPicking/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPicking/${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: cancelRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply//materialPicking/withdraw?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -55,7 +64,23 @@ export default function Invoicing() {
             })
         })
     }
-    const handleModalOk = (type?: "saveAndApply" | "save") => new Promise(async (resove, reject) => {
+
+    const handleCancel = (id: string) => {
+        Modal.confirm({
+            title: "撤回",
+            content: "确定撤回此领料单吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    resove(await cancelRun(id))
+                    message.success("撤回成功...")
+                    history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+    const handleModalOk = (type: 1 | 2) => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit(type)
             message.success("领料单新增成功...")
@@ -70,8 +95,8 @@ export default function Invoicing() {
         <Modal visible={visible} destroyOnClose
             width={1011} title={type === "new" ? "新增领料单" : "编辑领料单"}
             footer={[
-                <Button key="saveOr" type="primary" onClick={() => handleModalOk("saveAndApply")} >保存并提交</Button>,
-                <Button key="save" type="primary" onClick={() => handleModalOk()}>保存</Button>,
+                <Button key="saveOrSubmit" type="primary" onClick={() => handleModalOk(2)} >保存并提交</Button>,
+                <Button key="save" type="primary" onClick={() => handleModalOk(1)}>保存</Button>,
                 <Button
                     key="close"
                     type="primary"
@@ -115,14 +140,32 @@ export default function Invoicing() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" size="small" onClick={() => {
-
-                            }}>详情</Button>
-                            <Button type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => {
-
-                            }}>编辑</Button>
-                            <Button type="link" size="small" disabled={record.state !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
-                            <Button type="link" size="small" disabled={record.state !== 0} onClick={() => handleDelete(record.id)}>撤回</Button>
+                            <Button
+                                type="link"
+                                size="small"
+                                onClick={() => {
+                                    setDetailId(record.id)
+                                    setDetailVisible(true)
+                                }}>详情</Button>
+                            <Button
+                                type="link"
+                                size="small"
+                                disabled={![1, 2].includes(record.state)}
+                                onClick={() => {
+                                    setDetailId(record.id)
+                                    setType("edit")
+                                    setVisible(true)
+                                }}>编辑</Button>
+                            <Button
+                                type="link"
+                                size="small"
+                                disabled={![1, 2].includes(record.state)}
+                                onClick={() => handleDelete(record.id)}>删除</Button>
+                            <Button
+                                type="link"
+                                size="small"
+                                disabled={record.state !== 3}
+                                onClick={() => handleCancel(record.id)}>撤回</Button>
                         </>
                     }
                 }]}

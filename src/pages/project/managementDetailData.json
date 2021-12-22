@@ -1286,18 +1286,6 @@
             "dataIndex": "materialDemand"
         },
         {
-            "title": "客户交货日期",
-            "dataIndex": "deliveryTime",
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请填写客户交货日期..."
-                }
-            ]
-        },
-        {
             "title": "计划交货日期",
             "dataIndex": "planDeliveryTime",
             "type": "date",
@@ -1308,10 +1296,6 @@
             "dataIndex": "taskReviewStatus",
             "type": "select",
             "enum": [
-                {
-                    "value": -1,
-                    "label": "-"
-                },
                 {
                     "value": 0,
                     "label": "审批中"
@@ -1373,7 +1357,13 @@
         {
             "title": "计划号",
             "dataIndex": "planNumber",
-            "maxLength": 20
+            "maxLength": 20,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入计划号..."
+                }
+            ]
         },
         {
             "title": "内部合同编号",
