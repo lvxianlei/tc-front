@@ -1,5 +1,4 @@
 import React from 'react'
-import { useHistory } from 'react-router'
 import styles from '../rd/WorkBench.module.less'
 import RequestUtil from '../../../utils/RequestUtil'
 import { DetailTitle } from '../../common'
@@ -25,7 +24,7 @@ export default function SWWorkBench(): React.ReactNode {
                         return <div key={index} className={item.col !== 2 ? styles.content : styles.content2}>
                             <Link to={workbenchItem.path}>
                                 <p><CheckCircleOutlined />{workbenchItem.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
-                                <p className={styles.total}>{data?.[item.dataIndex]?.num || 0}</p>
+                                <p className={styles.total}>{data?.[item.dataIndex]?.[workbenchItem.dataIndex] || 0}</p>
                                 <div className={styles.draw}>
                                     <Line keyIndex={`${ind}${index}`}
                                         valueList={[

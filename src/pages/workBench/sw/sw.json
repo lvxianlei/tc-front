@@ -3,7 +3,7 @@
         {
             "title": "工程报价任务",
             "path": "询价任务",
-            "dataIndex": "inquiryTaskWorkBenchVO",
+            "dataIndex": "inquiryTaskWorkBenchVo",
             "col": 1,
             "workbenchItemVos": [
                 {
@@ -70,7 +70,7 @@
                 },
                 {
                     "title": "待提交",
-                    "dataIndex": "",
+                    "dataIndex": "boBeSubmitNum",
                     "path": {
                         "pathname": "/buyingTask/index",
                         "state": {
@@ -81,7 +81,7 @@
                 },
                 {
                     "title": "待指派",
-                    "dataIndex": "",
+                    "dataIndex": "assignedNum",
                     "path": {
                         "pathname": "/buyingTask/index",
                         "state": {
@@ -100,7 +100,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "dataIndex": "",
+                    "dataIndex": "toBeCompleteNum",
                     "path": {
                         "pathname": "/workMngt/buyBurdening",
                         "state": {
@@ -119,7 +119,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "dataIndex": "",
+                    "dataIndex": "pendingNum",
                     "path": {
                         "pathname": "/workMngt/production",
                         "state": {
@@ -138,7 +138,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "dataIndex": "",
+                    "dataIndex": "toBeCompleteNum",
                     "path": {
                         "pathname": "/workMngt/purchaseList",
                         "state": {
@@ -157,7 +157,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "dataIndex": "",
+                    "dataIndex": "pendingNum",
                     "path": {
                         "pathname": "/workMngt/planList",
                         "state": {
@@ -176,7 +176,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待处理",
-                    "dataIndex": "",
+                    "dataIndex": "pendingNum",
                     "path": {
                         "pathname": "/workMngt/differentList",
                         "state": {
@@ -195,7 +195,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待处理",
-                    "dataIndex": "",
+                    "dataIndex": "pendingNum",
                     "path": {
                         "pathname": "/workMngt/shortageList",
                         "state": {
@@ -214,7 +214,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "dataIndex": "",
+                    "dataIndex": "materialWarehousingNum",
                     "path": {
                         "pathname": "/stock/rawMaterialWarehousing",
                         "state": {
@@ -233,7 +233,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "dataIndex": "",
+                    "dataIndex": "materialExWarehouseNum",
                     "path": {
                         "pathname": "/stock/rawMaterialExWarehouse",
                         "state": {
@@ -252,7 +252,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "dataIndex": "",
+                    "dataIndex": "surplusExWarehouseNum",
                     "path": {
                         "pathname": "/stock/surplusMaterialWarehousing",
                         "state": {
@@ -271,7 +271,7 @@
             "workbenchItemVos": [
                 {
                     "title": "我发起的",
-                    "dataIndex": "",
+                    "dataIndex": "startNum",
                     "path": {
                         "pathname": "/financial/prepare",
                         "state": {
@@ -282,7 +282,7 @@
                 },
                 {
                     "title": "我接收的",
-                    "dataIndex": "",
+                    "dataIndex": "completeNum",
                     "path": {
                         "pathname": "/financial/prepare",
                         "state": {
