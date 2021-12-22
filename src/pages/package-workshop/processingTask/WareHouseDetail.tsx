@@ -36,12 +36,12 @@ export default function ProcessDetail(): React.ReactNode {
                 return item.name
             }).join(',')
         })
-        data?.packageUserVOList&&setUserDataSource(data.packageUserVOList)
+        data?.packageUserVOList && setUserDataSource(data.packageUserVOList)
         
-        setPackageDataSource(data?.packageVOList)
+        data?.packageVOList && setPackageDataSource(data?.packageVOList)
         // const packageData:any = data.productVOList.length>0 && await RequestUtil.get(`tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
         // data.productVOList.length>0 && 
-        data?.packageVOList.length>0 && formRef.setFieldsValue({ dataV: data?.packageVOList })
+        data?.packageVOList && data?.packageVOList.length>0 && formRef.setFieldsValue({ dataV: data?.packageVOList })
         const warehouse:any = await RequestUtil.get(`/tower-production/warehouse?current=1&size=1000`);
         setWareHouse(warehouse?.records)
         resole(data)

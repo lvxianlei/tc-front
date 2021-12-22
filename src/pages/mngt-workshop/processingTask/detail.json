@@ -13,15 +13,15 @@
             "title": "钢印号"
         },
         {
-            "dataIndex": "projectName",
+            "dataIndex": "orderProjectName",
             "title": "工程名称"
         },
         {
-            "dataIndex": "segmentNum",
+            "dataIndex": "segmentName",
             "title": "段"
         },
         {
-            "dataIndex": "partNumber",
+            "dataIndex": "code",
             "title": "件号"
         },
         {
@@ -45,7 +45,7 @@
             "title": "单件孔数"
         },
         {
-            "dataIndex": "basicsPartNum",
+            "dataIndex": "processingNum",
             "title": "数量"
         },
         {
@@ -54,22 +54,25 @@
         },
         {
             "dataIndex": "electricWelding",
-            "title": "是否电焊"
+            "title": "是否电焊",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "是"
+                },
+                {
+                    "value": 0,
+                    "label": "否"
+                }
+            ]
         },
         {
             "dataIndex": "description",
             "title": "备注"
         },
         {
-            "dataIndex": "punchHole",
-            "title": "冲引孔"
-        },
-        {
-            "dataIndex": "arcEdge",
-            "title": "是否弧边"
-        },
-        {
-            "dataIndex": "numberType",
+            "dataIndex": "type",
             "title": "件号类型"
         },
         {

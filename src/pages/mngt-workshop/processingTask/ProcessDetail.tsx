@@ -18,7 +18,6 @@ const tableColumns = [
             case 0:
                 return '未完成';
         }
-        return <>{status}</>
     } }
 ]
 
@@ -30,7 +29,7 @@ export default function ProcessDetail(): React.ReactNode {
     const [tableDataSource,setTableDataSource] = useState<any>([]);
     const [userDataSource,setUserDataSource] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data = await RequestUtil.get(`/tower-aps/machining/detail/${params.id}`)
+        const data = await RequestUtil.get(`/tower-aps/machining/detail/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -40,7 +39,7 @@ export default function ProcessDetail(): React.ReactNode {
     }
     return <>
         <Spin spinning={loading}>
-            <DetailContent operation={params.status === '3'?[
+            <DetailContent operation={params.status === '1'?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     setVisible(true)
                 }}>数据采集</Button>,
@@ -64,9 +63,15 @@ export default function ProcessDetail(): React.ReactNode {
                 footer={ <Space>
                     <Button type="primary" ghost  onClick={() => setVisible(false) }>取消</Button>
                     <Button type="primary" onClick={async () => {
+                        console.log(userDataSource)
                         await RequestUtil.put(`/tower-aps/machining/collection`,{
                             id:params.id,
-                            staffList: userDataSource
+                            staffList: userDataSource.map((item:any)=>{
+                                return {
+                                    userId: item.id,
+                                    userName: item.name
+                                }
+                            })
                         }).then(()=>{
                             message.success('确认成功！');
                             setVisible(false);

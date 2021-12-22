@@ -11,20 +11,20 @@ import moment from 'moment';
 
 const tableColumns = [
     { title: '加工班组', dataIndex: 'name', key: 'name'},
-    { title: '段', dataIndex: 'segmentNum', key: 'segmentNum', },
-    { title: '件号', dataIndex: 'partNumber', key: 'partNumber' },
+    { title: '段', dataIndex: 'segmentName', key: 'segmentName', },
+    { title: '件号', dataIndex: 'code', key: 'code' },
     { title: '材料', dataIndex: 'structureTexture', key: 'structureTexture' },
     { title: '材质', dataIndex: 'description', key: 'description' },
     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
     { title: '长度(mm)', dataIndex: 'length', key: 'length' },
     { title: '单件孔数', dataIndex: 'holesNum', key: 'holesNum' },
-    { title: '数量', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
+    { title: '数量', dataIndex: 'processingNum', key: 'processingNum' },
     { title: '重量(kg)', dataIndex: 'basicsWeight', key: 'basicsWeight' },
     { title: '电焊', dataIndex: 'electricWelding', key: 'electricWelding' },
     { title: '备注', dataIndex: 'description', key: 'description' },
     // { title: '冲引孔', dataIndex: 'punchHole', key: 'punchHole' },
     // { title: '是否弧边', dataIndex: 'arcEdge', key: 'arcEdge' },
-    { title: '类型', dataIndex: 'numberType', key: 'numberType' },
+    { title: '类型', dataIndex: 'type', key: 'type' },
     { title: '个孔径孔数', dataIndex: 'apertureNumber', key: 'apertureNumber' },
     { title: '钻孔孔径孔数', dataIndex: 'drillApertureNumber', key: 'drillApertureNumber' },
     { title: '扩孔孔径孔数', dataIndex: 'reamingApertureNumber', key: 'reamingApertureNumber' },
@@ -36,8 +36,8 @@ export default function Dispatch(): React.ReactNode {
     const [formRef] = Form.useForm();
     const params = useParams<{ id: string }>();
     const [show, setShow] = useState<boolean>(false);
-    const [equipment, setEquipment] = useState({});
-    const [team, setTeam] = useState({});
+    const [equipment, setEquipment] = useState<any>({});
+    const [team, setTeam] = useState<any>({});
     const [selectedRowKeys,setSelectedRowKeys] = useState<React.Key[]>([]);
     const [selectedRows,setSelectedRows] = useState([]);
     const [tableDataSource,setTableDataSource] = useState<any>([]);
@@ -45,19 +45,22 @@ export default function Dispatch(): React.ReactNode {
         console.log(params.id)
         let data:any = {};
         if(params.id!=='new'){
-            // data = await RequestUtil.get(`/tower-science/issue/material?id=${params.id}`);
+            const data:any = await RequestUtil.get(`/tower-aps/machining?current=1&size=20&status=0&id=${params.id}`);
             form.setFieldsValue({
-                equipmentName:'',
-                productionLinesName:'',
-                time:[moment(),moment(new Date().setDate(new Date().getDate()+7))],
-                noDispatchStatus:1,
+                ...data.records[0],
+                time:[moment(data.records[0].startTime.split(' ')[0]),moment(data.records[0].endTime.split(' ')[0])],
+                type:1,
             });
-            formRef.setFieldsValue({
-                equipmentName:'',
-            })
+            let submitValue={
+                ...data.records[0],
+                startTime: data.records[0].startTime+':00',
+                endTime: data.records[0].endTime+':59',
+                status:0,
+            }
+            const tableDataSource: any = await RequestUtil.get(`tower-aps/machining/dispatchView`,submitValue)
+            setTableDataSource(tableDataSource);
+            setSelectedRowKeys(tableDataSource.map((item:any)=>{return item.id}))
             setShow(true);
-            setTableDataSource([{id:"1"}]);
-            setSelectedRowKeys([{id:"1"}].map((item:any)=>{return item.id}))
         }else{
             form.setFieldsValue({
                 time:[moment(),moment(new Date().setDate(new Date().getDate()+2))],
@@ -75,9 +78,11 @@ export default function Dispatch(): React.ReactNode {
             <DetailContent operation={[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     formRef.validateFields().then(async (res)=>{
-                        let value = formRef.getFieldsValue(true);
                         if(selectedRowKeys.length>0){
-                            await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
+                            await RequestUtil.put(`/tower-aps/machining/confirmDispatch`,{
+                                teamId:team.id,
+                                idList:selectedRowKeys
+                            }).then(()=>{
                                 message.success('派工成功！')
                             }).then(()=>{
                                 history.goBack()
@@ -94,23 +99,23 @@ export default function Dispatch(): React.ReactNode {
                 <Form form={form} { ...formItemLayout }>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="equipmentName" label="工作中心" initialValue={undefined} rules={[
+                            <Form.Item name="workCenterName" label="工作中心" initialValue={undefined} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择工作中心"
                                 }
                             ]}>
                                 <Input maxLength={ 50 } addonAfter={ <WorkshopEquipmentSelectionComponent onSelect={ (selectedRows: any) => {
-                                    setEquipment(selectedRows);
+                                    setEquipment(selectedRows[0]);
                                     form.setFieldsValue({
-                                        equipmentName: selectedRows[0].workCenterName,
-                                        productionLinesName: selectedRows[0].name
+                                        workCenterName: selectedRows[0].workCenterName,
+                                        productUnitName: selectedRows[0].unitName
                                     });
                                 } } buttonType="link" buttonTitle="+选择工作中心"  disabled={show}/> } disabled={show}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="productionLinesName" label="生产单元" initialValue={undefined}>
+                            <Form.Item name="productUnitName" label="生产单元" >
                                 <Input disabled/>
                             </Form.Item>
                         </Col>
@@ -127,7 +132,7 @@ export default function Dispatch(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="noDispatchStatus" label="仅显示未派工明细" initialValue={1} rules={[
+                            <Form.Item name="type" label="仅显示未派工明细" initialValue={1} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择是否显示未派工明细"
@@ -142,24 +147,24 @@ export default function Dispatch(): React.ReactNode {
                     </Row>
                 </Form>
                 <Space>
-                <Button type='primary' onClick={()=>{
-                    // form.validateFields().then(res => {
-                    //     let value = form.getFieldsValue(true);
-                    //     if (value.time) {
-                    //         const formatDate = value.time.map((item: any) => item.format("YYYY-MM-DD HH:mm:ss"))
-                    //         value.startTime = formatDate[0];
-                    //         value.endTime = formatDate[1];
-                    //         delete value.time
-                    //     }
-                    //     RequestUtil.get(`/workshopOperating/dispatchDetail`,{startTime,endTime,equipmentId,noDispatchStatus}).then(()=>{
-                    //         message.success('查询成功！')
-                    //     }).then(()=>{
-                    //         setShow(true)
-                    //     })
-                    // })
+                <Button type='primary' onClick={async ()=>{
+                    await form.validateFields()
+                    let value = form.getFieldsValue(true);
+                    if (value.time) {
+                        const formatDate = value.time.map((item: any) => item.format("YYYY-MM-DD HH:mm:ss"))
+                        value.startTime = formatDate[0];
+                        value.endTime = formatDate[1];
+                        delete value.time
+                    }
+                    let submitValue={
+                        ...value,
+                        status:0,
+                    }
+                    const tableDataSource: any = await RequestUtil.get(`tower-aps/machining/dispatchView`,submitValue)
+                    message.success('查询成功！')
+                    setTableDataSource(tableDataSource);
+                    setSelectedRowKeys(tableDataSource.map((item:any)=>{return item.id}))
                     setShow(true);
-                    setTableDataSource([{id:"1"}]);
-                    setSelectedRowKeys([{id:"1"}].map((item:any)=>{return item.id}))
                 }}>查询</Button>
                 <Button type='primary' ghost onClick={()=>{
                     setShow(false)
@@ -174,15 +179,15 @@ export default function Dispatch(): React.ReactNode {
                     <Form form={formRef} { ...formItemLayout }>
                         <Row>
                             <Col span={12}>
-                                <Form.Item name="equipmentName" label="派工班组" initialValue={undefined} rules={[
+                                <Form.Item name="teamName" label="派工班组" initialValue={undefined} rules={[
                                     {
                                         "required": true,
                                         "message": "请选择派工班组"
                                     }
                                 ]}>
                                     <Input maxLength={ 50 } disabled addonAfter={ <WorkshopTeamSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
-                                        setTeam(selectedRows);
-                                        formRef.setFieldsValue({equipmentName: selectedRows[0].name});
+                                        setTeam(selectedRows[0]);
+                                        formRef.setFieldsValue({teamName: selectedRows[0].name});
                                     } } buttonType="link" buttonTitle="+选择班组" /> }/>
                                 </Form.Item>
                             </Col>
