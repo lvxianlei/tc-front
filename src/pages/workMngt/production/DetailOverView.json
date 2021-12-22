@@ -1,0 +1,42 @@
+{
+    "baseInfo": [
+        {
+            "title": "开始时间",
+            "dataIndex": "startTime"
+        },
+        {
+            "title": "完成时间",
+            "dataIndex": "endTime"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "title": "杆塔",
+            "dataIndex": "product"
+        }
+    ],
+    "operationInformation": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "任务状态",
+            "dataIndex": "optName"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ]
+}
