@@ -58,8 +58,10 @@ export default function Delivery(): React.ReactNode {
                             if(tableUserDataSource.length>0){
                                 RequestUtil.post(`tower-production/productionLines/ex`,{
                                     id:params.id,
-                                    packingExTeamUserDTOList: tableUserDataSource,
-                                    packingExTowerDTOList: selectedRows
+                                    teamId: selectedUser.id,
+                                    teamName: selectedUser.name,
+                                    packageUserDTOList: tableUserDataSource,
+                                    packageExProductDTOList: selectedRows
                                 }).then(()=>{
                                     message.success('出库成功！')
                                 }).then(()=>{
@@ -89,7 +91,6 @@ export default function Delivery(): React.ReactNode {
                                 <Input 
                                     disabled
                                     addonAfter={<WorkshopTeamSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
-                                        console.log(selectedRows);
                                         setSelectedUser(selectedRows[0]);
                                         form.setFieldsValue({
                                             teamName: selectedRows[0].name
