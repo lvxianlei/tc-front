@@ -7,7 +7,6 @@ import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import moment from 'moment';
 import * as echarts from 'echarts';
-import dayjs from 'dayjs';
 import { IAnnouncement } from '../../announcement/AnnouncementMngt';
 
 export default function RecruitEdit(): React.ReactNode {
@@ -22,53 +21,51 @@ export default function RecruitEdit(): React.ReactNode {
         },
       
     ]
-    const [typenum,settypenum]=useState<any>(null)
+    
     const history = useHistory()
     const params = useParams<{ id: string, productCategoryId: string, planId: string }>();
     const [form] = Form.useForm();
-    const [value, setValue] = useState<any>([moment(dayjs().format('YYYY-MM-DD')), moment(dayjs().add(6, 'day').format('YYYY-MM-DD'))]);
+    const [productivity, setProductivity] = useState<any>('');
+    const [value, setValue] = useState<any>();
     const [dates, setDates] = useState<any>([]);
     const [ prodLinkList, setProdLinkList] = useState<any[]>([])
     const [ prodUnitList, setProdUnitList] = useState<any[]>([])
-    const [list,setList]=useState<any[]>([])
-    const [ TowerList, setTowerList] = useState<any[]>([])
-    const [productivity, setProductivity] = useState<any>('');
+    const [ towerList, setTowerList] = useState<any[]>([])   
+    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
+    const [ selectedRows, setSelectedRows ] = useState<IAnnouncement[]>([]);
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: IAnnouncement[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
-        
-        if(params.productCategoryId){
-            getProdLinkList(data.linkId);
-        }else{
-            getProdLinkList();
-        }
-        const tree =params.productCategoryId && await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks`,{
-            planProductCategoryId:params.id,
-            
-          });
-        params.productCategoryId && getProdLinkLists(tree.planId,tree.name);
+        getProdLinkList();
+      
+        getProdUnitList();
         const value: any = params.productCategoryId &&await RequestUtil.get('/tower-aps/productionUnit', {
             current: 1,
             size: 1000,
             productionLinkId:data.linkId
         })
+ 
         const listValue: any = params.productCategoryId&& value.records.length>0?value.records.filter((res: any) => {return res.id === data.unitId}):[{}]
+      
         params.productCategoryId && setProductivity(listValue[0].productivity?listValue[0].productivity:'')
         params.productCategoryId&& seeLoad(listValue[0].productivity, data.unitId)
         params.productCategoryId && setProdUnitList(value.records)
         form.setFieldsValue( params.productCategoryId?{
             ...data,
             startTime: data?.startTime?moment(data?.startTime):'',
-            endTime: data?.startTime && data.minCompletionDays?moment(new Date( data?.startTime).setDate(new Date( data?.startTime).getDate()+ data.minCompletionDays-1)):'',
+            endTime: data?.startTime && data.minCompletionDays?moment(new Date( data?.startTime).setDate(new Date( data?.startTime).getDate()+ data.minCompletionDays)):'',
         }:{})
-        console.log(data)
         resole(data)
     }), {})
     const disabledDate = (current: any) => {
         if (!dates || dates.length === 0) {
           return false;
         }
-        const tooLate = dates[0] && current.diff(dates[0], 'days') > 6;
-        const tooEarly = dates[1] && dates[1].diff(current, 'days') > 6;
+        const tooLate = dates[0] && current.diff(dates[0], 'days') > 7;
+        const tooEarly = dates[1] && dates[1].diff(current, 'days') > 7;
         return tooEarly || tooLate;
     };
     const detailData: any = data;
@@ -79,46 +76,66 @@ export default function RecruitEdit(): React.ReactNode {
     /**
      * @description 获取生产环节
      */
-    const getProdLinkList = async (linkId?:string) => {
+    const getProdLinkList = async () => {
         const data: any = await RequestUtil.get('/tower-aps/productionLink', {
             current: 1,
             size: 1000
-        }) 
+        })
         setProdLinkList(data.records)
-        // const list= params.productCategoryId && data.records.filter((item:any,index:any)=>{
-        //     return item.id === linkId
-        // })
-        // params.productCategoryId && setList(list)
-       
+        
+        params.productCategoryId&&data.records[0].issuedType=='productCategoryName'&& getProdLinkLists()
+    }
+    
+  /**
+     * @description 下发
+     */
+   const culIssue = async () => {
+      
+  if(selectedKeys.length>0){
+      let productIds=[]
+      productIds=selectedKeys
+    
+    RequestUtil.post('/tower-aps/planUnitLink/issue', {
+        id: params.productCategoryId,
+        productIds
+    }).then((res)=>{
+      message.success("下发成功")
+       history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
+    })
+  }else{
+      message.success("至少选取一个塔型")
+  }
+    
+  
+}
+/**
+     * @description 获取生产单元
+     */
+    const getProdUnitList = async () => {
+        const data: any = await RequestUtil.get('/tower-aps/productionUnit', {
+            current: 1,
+            size: 1000
+        })
+           setProdUnitList(data.records)
     }
       /**
      * @description 获取杆塔明细
      */
-       const getProdLinkLists = async (planId:string,name:string) => {
+       const getProdLinkLists = async () => {
         const data: any = await RequestUtil.get(`/tower-aps/planUnitLink/product`,{
-            planId:planId,
-            id:'1473243926239657986',
-            productCategoryName:name
+           
+            id:params.productCategoryId,
+            
         })
-        
         setTowerList(data)
+          let status=data.filter((item:any)=>{return item.productStatus===1})
+         
+        let ids:any=[]
+        status.forEach((item: any,index: any) => {
+                 ids[index]=item.id
+        });
+        setSelectedKeys(ids);
     }
-    /**
-     * @description 获取生产单元
-     */
-    const getProdUnitList = async (id:any) => {
-        form.setFieldsValue({
-            unitId:''
-        })
-        const data: any = await RequestUtil.get('/tower-aps/productionUnit', {
-            current: 1,
-            size: 1000,
-            productionLinkId:id
-        })
-        setProdUnitList(data.records)
-        
-    }
-   
     /**
      * @description
      */
@@ -223,70 +240,6 @@ export default function RecruitEdit(): React.ReactNode {
             initCharts(dates, datas)
         }
     }
-     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
-    const [ selectedRows, setSelectedRows ] = useState<IAnnouncement[]>([]);
-    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: IAnnouncement[]): void => {
-        console.log('====================================');
-        console.log(selectedRows);
-        console.log('====================================');
-        setSelectedKeys(selectedRowKeys);
-        setSelectedRows(selectedRows)
-    }
-   const onUnLock=async (id:any)=>{
-        await RequestUtil.post<any>(`/tower-aps/planUnitLink/unlock?id=${id}`).then(()=>{
-          message.success('解锁成功！')
-        }).then(async ()=>{
-          // this.props.history.go(0)
-        //   const value = this.state.dataSource.data.map((item:any)=>{
-        //     return{
-        //       ...item,
-        //       status: item.id===id?1:item.status
-        //     }
-        //   })
-        //   const newValue={
-        //     data: value
-        //   }
-        //   this.setState({
-        //     dataSource: newValue
-        //   })
-        //   gantt.parse(newValue)
-        });
-      }
-    const  onLock=async (id:any)=>{
-        await RequestUtil.post<any>(`/tower-aps/planUnitLink/lock?id=${id}`).then(()=>{
-          message.success('锁定成功！')
-        }).then(async ()=>{
-          // this.props.history.go(0)
-        //   const value = this.state.dataSource.data.map((item:any)=>{
-        //     return{
-        //       ...item,
-        //       status: item.id===id?2:item.status
-        //     }
-        //   })
-        //   const newValue={
-        //     data: value
-        //   }
-        //   this.setState({
-        //     dataSource: newValue
-        //   })
-        //   gantt.parse(newValue)
-        });
-      }
-    const  onConfirm =async (id:any)=>{
-        console.log('====================================');
-        console.log(selectedRows);
-        console.log('====================================');
-        let ids:any=[]
-        selectedRows.forEach((item,index)=>{
-            ids[index].id=item.id
-        })
-        await RequestUtil.post(`/tower-aps/planUnitLink/issue`,{
-            id:id,
-            productIds:ids
-        }).then(()=>{
-          message.success('下发成功！')
-        })
-      }
     /**
      * @description
      */
@@ -314,9 +267,8 @@ export default function RecruitEdit(): React.ReactNode {
                 }
             ],
             yAxis: [
-               
                 {
-                    type: 'value',
+                    type: 'value'
                 }
             ],
             series:datas,
@@ -326,7 +278,8 @@ export default function RecruitEdit(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button type="primary" onClick={async () => {
+                    <Button type="primary" onClick={() => {
+                        form.validateFields().then(async res=>{
                             await form.validateFields();
                             const value= form.getFieldsValue(true);
                             const submitValue={
@@ -337,51 +290,36 @@ export default function RecruitEdit(): React.ReactNode {
                                 endTime:value.endTime?moment(value.endTime).format('YYYY-MM-DD'):undefined,
 
                             }
-                            if(list&&list[0]&&list[0].issuedType=='productCategoryName'){
-                                if(selectedKeys.length>0){
-                                    let newValue={
-                                        ...submitValue,
-                                        selectedKeys
-                                    }
-                                    RequestUtil.post(`/tower-aps/planUnitLink`,newValue).then(()=>{
-                                        message.success('保存成功！')
-                                    }).then(()=>{
-                                        history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
-                                    })
-                                }else{
-                                        message.error('当前未选择杆塔号，不可保存！')
-                                }
-                            }else{
-                                RequestUtil.post(`/tower-aps/planUnitLink`,submitValue).then(()=>{
-                                    message.success('保存成功！')
-                                }).then(()=>{
-                                    history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
-                                })
-                            }
-                           
+                            // const value= form.getFieldsValue(true);
+                            // value.planId = params.planId;
+                            // value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
+                            // value.planProductCategoryId = params.id;
+                            // value.startTime= value.startTime?moment(value.startTime).format('YYYY-MM-DD'):undefined;
+                            // value.endTime= value.endTime?moment(value.endTime).format('YYYY-MM-DD'):undefined;
+                            // value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
+                            // value.submitType = 'save';
+                            // RequestUtil.post(`/tower-aps/planUnitLink`,value).then(()=>{
+                            //     message.success('保存成功！')
+                            // }).then(()=>{
+                            //     history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
+                            // })
+                            RequestUtil.post(`/tower-aps/planUnitLink`,submitValue).then(()=>{
+                                message.success('保存成功！')
+                            }).then(()=>{
+                                history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
+                            })
+                        })
                         
                     }}>保存</Button>
+                    {
+                        params.productCategoryId&&<Button  onClick={() => culIssue()}>下发</Button>
+                    }
+                     
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
             ]}>
-                
-                 <Button   onClick={() => { 
-                      settypenum("2")
-                    //  onLock(params.productCategoryId)
-                    }
-                     
-                     }>锁定</Button>
-                 <Button  onClick={() =>{
-                     settypenum("1")
-                    //  onUnLock(params.productCategoryId)
-                 }}>解除锁定</Button>
-                 <Button  disabled={typenum==='1'? true:false} onClick={() => onConfirm('1473243926239657986')}>下发</Button>
             <DetailTitle title={params.productCategoryId?"编辑环节":"新增环节"}/>
-            {/* <Button key="goback" onClick={() => history.goBack()}>锁定</Button>
-            <Button key="goback" onClick={() => history.goBack()}>解除锁定</Button>
-            <Button key="goback" onClick={() => history.goBack()}>下发</Button> */}
             <Form form={ form } { ...formItemLayout }>
-         
                 <Row>
                     <Col span={12}>
                         <Form.Item label="生产环节" rules={[{required:true,message:'请选择生产环节'}]} name='linkId'>
@@ -389,19 +327,7 @@ export default function RecruitEdit(): React.ReactNode {
                                 className='input'
                                 placeholder='请选择'
                                 style={{width:'100%'}}
-                                onChange={async (value:any)=>{
-                                    getProdUnitList(value)
-                                     const list= prodLinkList.filter((item,index)=>{
-                                        return item.id===value
-                                    })
-
-                                    setList(list)
-                                    const tree = await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks`,{
-                                        planProductCategoryId:params.id,
-                                        
-                                      });
-                                      getProdLinkLists(tree.planId,tree.name);
-                                }}
+                               
                             >
                                 {
                                     prodLinkList.map((item: any, index: number) => {
@@ -432,11 +358,6 @@ export default function RecruitEdit(): React.ReactNode {
                                 className='input'
                                 placeholder='请选择'
                                 style={{width:'100%'}}
-                                onChange={(select:any)=>{
-                                    console.log(select)
-                                    const list: any = prodUnitList.filter((res: any) => {return res.id === select})
-                                    setProductivity(list[0].productivity?list[0].productivity:'')
-                                }}
                             >
                                 {
                                     prodUnitList.map((item: any, index: number) => {
@@ -455,13 +376,13 @@ export default function RecruitEdit(): React.ReactNode {
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label="完成天数" rules={[{required:true,message:'请填写完成天数'}]} name='minCompletionDays'>
-                            <InputNumber maxLength={10} min={1} style={{width:'100%'}} precision={0} onChange={
+                        <Form.Item label="最小完成天数" rules={[{required:true,message:'请填写最小完成天数'}]} name='minCompletionDays'>
+                            <InputNumber maxLength={10} min={0} style={{width:'100%'}} onChange={
                                 e=>{
                                     const value = form.getFieldsValue().startTime
                                     if(value){
                                         const newDate = new Date(value)
-                                        const endTime =  newDate.setDate(newDate.getDate()+e-1)
+                                        const endTime =  newDate.setDate(newDate.getDate()+e)
                                         form.setFieldsValue({
                                             endTime: moment(endTime)
                                         })
@@ -479,9 +400,9 @@ export default function RecruitEdit(): React.ReactNode {
                                 const value = form.getFieldsValue().minCompletionDays||0
                                 const newDate = current?.format('YYYY-MM-DD')
                                 var formatDate2 = new Date(`${newDate}`)
-                                const endTime =  formatDate2.setDate(formatDate2.getDate()+value-1)
+                                const endTime =  formatDate2.setDate(formatDate2.getDate()+value)
                                 form.setFieldsValue({
-                                    endTime: endTime?moment(endTime):''
+                                    endTime: moment(endTime)
                                 })
                             }}/>
                         </Form.Item>
@@ -523,13 +444,39 @@ export default function RecruitEdit(): React.ReactNode {
                 <Row>
                     <Col span={12}>
                         <Form.Item label="优化检测"  name='useProduc'>
-                            <Input defaultValue={'当前排产超最大产力值/产力值空余过多'} maxLength={12} min={0} style={{width:'100%'}} />
+                            <Input value={'当前排产超最大产力值/产力值空余过多'} maxLength={12} min={0} style={{width:'100%'}} />
                         </Form.Item>
                     </Col>
                 </Row>
+         
+                {/* <Row>
+                    <Col span={12}>
+                        <Form.Item label="负荷">
+                            <DatePicker.RangePicker
+                                disabledDate={disabledDate}
+                                onCalendarChange={(val: any) => setDates(val)}
+                                value={value}
+                                onChange={(value) => {
+                                    setValue(value)
+                                }}
+                                onOpenChange={(open: boolean) => {
+                                    if (open) {
+                                        setDates([]);
+                                        setValue([])
+                                    }
+                                }}
+                            />
+                            <Button
+                                onClick={() => {
+                                    seeLoad(productivity)
+                                }}
+                            >查看负荷</Button>
+                        </Form.Item>
+                    </Col>
+                </Row> */}
             </Form>
             {
-               list&&list[0]&&list[0].issuedType=='productCategoryName'?<Table dataSource={TowerList}  rowKey={"userName"}    
+               params.productCategoryId&&prodLinkList[0]&&prodLinkList[0].issuedType=='productCategoryName'?<Table dataSource={towerList}  rowKey={"id"}    
                 rowSelection={{
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange

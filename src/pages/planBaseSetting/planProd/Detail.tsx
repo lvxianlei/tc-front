@@ -129,7 +129,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         
         gantt.config.column_width = 20;
         gantt.config.columns = [
-          {label:'生产环节', name: "linkName", align: "center",  resize: true, width:130 , template: function (task:any) {
+          {label:'生产环节', name: "linkName",  resize: true, width:130 , template: function (task:any) {
             return (
               `
               <span  title="${task.linkName}" >${task.linkName}</span>
@@ -175,8 +175,9 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
             if(task.status===2||task.status===3||task.status===5){
               if(task.status===2){
                 return (
-                  `  <a style="color:#FF8C00" id='edit' >编辑</a>
-                 
+                  `
+                  <a style="color:#FF8C00" id='view'>查看</a>
+                  <a style="color:#FF8C00" id='unLock'>解锁</a>
                   `
                 );
               }else{
