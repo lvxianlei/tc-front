@@ -1,112 +1,121 @@
 {
     "columns": [
         {
-            "key": "weighingNo",
+            "key": "status",
             "title": "状态",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "未确认",
+                    "value": 1
+                },
+                {
+                    "label": "加工中",
+                    "value": 2
+                },
+                {
+                    "label": "已完成",
+                    "value": 3
+                }
+            ]
         },
         {
-            "key": "weighingNo",
+            "key": "workPlanNumber",
             "title": "加工计划编号",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "workPlanNumber"
         },
         {
-            "key": "weighingNo",
+            "key": "orderProjectName",
             "title": "工程名称",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "orderProjectName"
         },
         {
-            "key": "weighingNo",
+            "key": "planNumber",
             "title": "计划号",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "planNumber"
         },
         {
-            "key": "weighingNo",
+            "key": "productCategoryName",
             "title": "塔型",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "productCategoryName"
         },
         {
-            "key": "weighingNo",
+            "key": "productNum",
             "title": "基数",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "productNum"
         },
         {
-            "key": "weighingNo",
+            "key": "weight",
             "title": "下达重量（kg）",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "weight"
         },
         {
-            "key": "weighingNo",
+            "key": "endTime",
             "title": "计划完成日期",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "endTime"
         },
         {
-            "key": "weighingNo",
+            "key": "angle40",
             "title": "角钢X≦40",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "angle40"
         },
         {
-            "key": "weighingNo",
+            "key": "angle50",
             "title": "角钢40<X≦50",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "angle50"
         },
         {
-            "key": "weighingNo",
+            "key": "angle63",
             "title": "角钢50<X<63",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "angle63"
         },
         {
-            "key": "weighingNo",
+            "key": "angle70",
             "title": "角钢63≦X<70",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "angle70"
         },
         {
-            "key": "weighingNo",
+            "key": "angle75",
             "title": "角钢70≦X<75",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "angle75"
         },
         {
-            "key": "weighingNo",
+            "key": "angle90",
             "title": "角钢75≦X<90",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "angle90"
         },
         {
-            "key": "weighingNo",
+            "key": "angle110",
             "title": "角钢90≦X<110",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "angle110"
         },
         {
-            "key": "weighingNo",
+            "key": "angle160",
             "title": "角钢110≦X≦160*12",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "angle160"
         },
         {
-            "key": "weighingNo",
+            "key": "angle161",
             "title": "角钢X>160*12&Q420B/C",
             "width": 150,
-            "dataIndex": "weighingNo"
-        },
-        {
-            "key": "weighingNo",
-            "title": "排产计划",
-            "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "angle161"
         }
     ],
     "detailColumns": [

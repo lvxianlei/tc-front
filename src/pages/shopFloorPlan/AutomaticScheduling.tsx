@@ -9,7 +9,7 @@ import { IShopFloorPlan } from './IShopFloorPlan';
 import { detailColumns } from "./shopFloorPlan.json";
 import { Link } from 'react-router-dom';
 
-export default function Detail(): React.ReactNode {
+export default function AutomaticScheduling(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
