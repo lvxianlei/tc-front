@@ -17,15 +17,15 @@ export default function DeliveryPlanList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'name',
+            key: 'outWarehouseNumber',
             title: '出库任务编号',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'outWarehouseNumber'
         },
         {
-            key: 'steelProductShape',
+            key: 'wayBillNumber',
             title: '发货通知单编号',
-            dataIndex: 'steelProductShape',
+            dataIndex: 'wayBillNumber',
             width: 120
         },
         // {
@@ -45,50 +45,50 @@ export default function DeliveryPlanList(): React.ReactNode {
         //     }
         // },
         {
-            key: 'taskCode',
+            key: 'departPlanTime',
             title: '发运日期',
             width: 150,
-            dataIndex: 'taskCode'
+            dataIndex: 'departPlanTime'
         },
         {
-            key: 'saleOrderNumber',
+            key: 'orderProjectName',
             title: '工程名称',
-            dataIndex: 'saleOrderNumber',
+            dataIndex: 'orderProjectName',
             width: 200
         },
         {
-            key: 'internalNumber',
+            key: 'planNumber',
             title: '计划号',
             width: 200,
-            dataIndex: 'internalNumber'
+            dataIndex: 'planNumber'
         },
         {
-            key: 'structureCount',
+            key: 'driverName',
             title: '司机',
             width: 200,
-            dataIndex: 'structureCount'
+            dataIndex: 'driverName'
         },
         {
-            key: 'steelAngleCount',
+            key: 'driverNumber',
             title: '车牌号',
             width: 200,
-            dataIndex: 'steelAngleCount',
+            dataIndex: 'driverNumber',
         },
         {
-            key: 'steelPlateCount',
+            key: 'status',
             title: '出库状态',
             width: 200,
-            dataIndex: 'steelPlateCount',
+            dataIndex: 'status',
             render: (status: number): React.ReactNode => {
                 switch (status) {
                     case -1:
                         return '-';
                     case 1:
-                        return '已出库';
+                        return '未出库';
                     case 2:
                         return '部分出库';
                     case 3:
-                        return '未出库';
+                        return '已出库';
                 }
             }
         },
@@ -114,20 +114,20 @@ export default function DeliveryPlanList(): React.ReactNode {
     ]
 
     return <Page
-        path="/tower-science/materialTask"
+        path="/tower-production/packageWorkshop/exWarehouse"
         columns={ columns }
         headTabs={ [] }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
         refresh={ refresh }
         searchFormItems={ [
             {
-                name: 'pattern',
+                name: 'status',
                 label: '出库状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     <Select.Option value={ "" } key="">全部</Select.Option>
-                    <Select.Option value={ 1 } key="1">已出库</Select.Option>
+                    <Select.Option value={ 1 } key="1">未出库</Select.Option>
                     <Select.Option value={ 2 } key="2">部分出库</Select.Option>
-                    <Select.Option value={ 3 } key="3">未出库</Select.Option>
+                    <Select.Option value={ 3 } key="3">已出库</Select.Option>
                 </Select>
             },
             {
@@ -145,8 +145,8 @@ export default function DeliveryPlanList(): React.ReactNode {
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.time) {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
-                values.creationTimeStart = formatDate[0] + ' 00:00:00';
-                values.creationTimeEnd = formatDate[1] + ' 23:59:59';
+                values.shippingTimeStart = formatDate[0] + ' 00:00:00';
+                values.shippingTimeEnd = formatDate[1] + ' 23:59:59';
                 delete values.time;
             }
             setFilterValue(values);

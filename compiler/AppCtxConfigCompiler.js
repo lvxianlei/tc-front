@@ -9,7 +9,7 @@ const pascalcase = require('pascalcase');
 const stripJsonComments = require('strip-json-comments');
 
 class AppCtxConfigCompiler {
-    
+
     compile(source) {
         const appCtxConfig = camelcaseKeys(
             JSON.parse(
@@ -38,7 +38,7 @@ class AppCtxConfigCompiler {
             } else if (typeof value === 'array' || typeof value === 'object') {
                 appCtxAlt += `${key}: ${JSON.stringify(value)},`;
             }
-        } 
+        }
         appCtxAlt += '}';
         return source.replace('const ctxConfigJson: IApplicationContext = {};', `const ctxConfigJson: IApplicationContext = ${appCtxAlt};`);
     }
@@ -53,8 +53,7 @@ class AppCtxConfigCompiler {
             } else {
                 layoutAlt += `${key}:{componentClass:${ClazzName},props:{}},`;
             }
-            // imports += `import ${ ClazzName } from '${ path.resolve(__dirname, '../src/', this.getLayoutClazz(layout[key])) }';\n`;
-            imports += `import ${ClazzName} from '${ this.getRelativePathFromSrc(this.getLayoutClazz(layout[key])) }';\n`;
+            imports += `import ${ClazzName} from '${this.getRelativePathFromSrc(this.getLayoutClazz(layout[key]))}';\n`;
         }
         layoutAlt += `}`;
         return {

@@ -17,44 +17,28 @@ export default function StockList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'name',
+            key: 'warehouseName',
             title: '所在仓库',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'warehouseName'
         },
         {
-            key: 'steelProductShape',
+            key: 'teamName',
             title: '入库班组',
-            dataIndex: 'steelProductShape',
-            width: 120
+            dataIndex: 'teamName',
+            width: 150
         },
-        // {
-        //     key: 'pattern',
-        //     title: '类型',
-        //     width: 200,
-        //     dataIndex: 'pattern',
-        //     render: (status: number): React.ReactNode => {
-        //         switch (status) {
-        //             case 1:
-        //                 return '新放';
-        //             case 2:
-        //                 return '重新出卡';
-        //             case 3:
-        //                 return '套用';
-        //         }
-        //     }
-        // },
         {
-            key: 'taskCode',
+            key: 'position',
             title: '库位',
             width: 150,
-            dataIndex: 'taskCode'
+            dataIndex: 'position'
         },
         {
-            key: 'saleOrderNumber',
+            key: 'region',
             title: '区位',
-            dataIndex: 'saleOrderNumber',
-            width: 200
+            dataIndex: 'region',
+            width: 150
         },
         {
             key: 'internalNumber',
@@ -63,94 +47,75 @@ export default function StockList(): React.ReactNode {
             dataIndex: 'internalNumber'
         },
         {
-            key: 'structureCount',
+            key: 'orderProjectName',
             title: '工程名称',
             width: 200,
-            dataIndex: 'structureCount'
+            dataIndex: 'orderProjectName'
         },
         {
-            key: 'steelAngleCount',
+            key: 'planNumber',
             title: '计划号',
             width: 200,
-            dataIndex: 'steelAngleCount',
-            render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
-            )
+            dataIndex: 'planNumber',
         },
         {
-            key: 'steelPlateCount',
+            key: 'productCategoryName',
             title: '塔型',
             width: 200,
-            dataIndex: 'steelPlateCount',
-            render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
-            )  
+            dataIndex: 'productCategoryName',
         },
         {
-            key: 'createTime',
+            key: 'productHeight',
             title: '呼高',
-            width: 200,
-            dataIndex: 'createTime',
+            width: 100,
+            dataIndex: 'productHeight',
             render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
+                <span>{ _ === -1 ? '-' : _ }</span>
             )  
         },
         {
-            key: 'updateUserName',
+            key: 'productNumber',
             title: '杆塔号',
-            width: 200,
-            dataIndex: 'updateUserName'
+            width: 150,
+            dataIndex: 'productNumber'
         },
         {
-            key: 'updateTime',
+            key: 'balesCode',
             title: '包名',
-            width: 200,
-            dataIndex: 'updateTime'
+            width: 100,
+            dataIndex: 'balesCode'
         },
         {
-            key: 'updateTime',
+            key: 'balesWeight',
             title: '包单重',
-            width: 200,
-            dataIndex: 'updateTime',
+            width: 150,
+            dataIndex: 'balesWeight',
             render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
+                <span>{ _ === -1 ? '-' : _ }</span>
             )  
         },
         {
-            key: 'updateTime',
+            key: 'balesWarehouseNumber',
             title: '库存数',
-            width: 200,
-            dataIndex: 'updateTime',
+            width: 100,
+            dataIndex: 'balesWarehouseNumber',
             render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
+                <span>{ _ === -1 ? '-' : _ }</span>
             )  
         },
         {
-            key: 'updateTime',
+            key: 'balesNumber',
             title: '包件数',
-            width: 200,
-            dataIndex: 'updateTime',
+            width: 100,
+            dataIndex: 'balesNumber',
             render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
+                <span>{ _ === -1 ? '-' : _ }</span>
             )  
-        },
-        // {
-        //     key: 'operation',
-        //     title: '操作',
-        //     dataIndex: 'operation',
-        //     fixed: 'right' as FixedType,
-        //     width: 200,
-        //     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-        //         <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-        //             <Link to={ `/drawTower/drawTowerMngt/towerInformation/${ record.id }` }>塔型信息</Link>
-        //             <Link to={ `/drawTower/drawTowerMngt/componentInformation/${ record.id }/${ record.structureCount === -1 ? 0 : record.structureCount }` }>塔型构件</Link>
-        //         </Space>
-        //     )
-        // }
+        }
     ]
 
     return <Page
-        path="/tower-science/productCategory/draw/page"
+        path="/tower-production/packageWorkshop/packageWarehouse"
         columns={ columns }
         headTabs={ [] }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }

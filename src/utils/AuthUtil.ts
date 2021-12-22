@@ -14,6 +14,7 @@ const REFRENSH_TOKEN: string = 'SINZETECH_REFRENSH_TOKEN'
 const USER_ID: string = 'USER_ID'
 const TENANT_NAME: string = 'SINZETECH_TENANT_NAME'
 const REAL_NAME: string = 'REAL_NAME';
+const APP_Name: string = 'CURRENT_APP_NAME';
 export default abstract class AuthUtil {
 
     static timeLength = 50 * 60 * 1000
@@ -49,6 +50,25 @@ export default abstract class AuthUtil {
 
     /**
      * @static
+     * @description Gets app name
+     * @returns App name
+     */
+    public static getCurrentAppName(): string {
+        return Cookies.get(APP_Name) || ''
+    }
+
+    /**
+     * @static
+     * @description Sets app name
+     * @param appName 
+     * @param [options] 
+     */
+    public static setCurrentAppName(appName: string, options?: CookieAttributes): void {
+        Cookies.set(APP_Name, appName, options)
+    }
+
+    /**
+     * @static
      * @description Sets tenant id
      * @param tenantId 
      * @param [options] 
@@ -80,10 +100,10 @@ export default abstract class AuthUtil {
      * @description remove tenant name
      * @returns tenant name 
      */
-     public static removeTenantName(): void {
+    public static removeTenantName(): void {
         Cookies.remove(TENANT_NAME)
     }
-    
+
     /**
      * @static
      * @description Gets sinzetech auth
@@ -136,7 +156,7 @@ export default abstract class AuthUtil {
      * @description Gets sinzetech auth
      * @returns sinzetech auth 
      */
-     public static getRealName(): string {
+    public static getRealName(): string {
         return Cookies.get(REAL_NAME) || '';
     }
 
@@ -159,25 +179,25 @@ export default abstract class AuthUtil {
     public static removeRealName(): void {
         Cookies.remove(REAL_NAME);
     }
-   
+
     public static setUserId(userId: string): void {
         sessionStorage.setItem(USER_ID, userId)
     }
 
     public static getUserId(): any {
-        return sessionStorage.getItem(USER_ID)||'';
-    } 
+        return sessionStorage.getItem(USER_ID) || '';
+    }
 
     public static removeUserId(): void {
         sessionStorage.removeItem(USER_ID);
-    } 
-    
+    }
+
     /**
      * @static
      * @description Gets sinzetech auth
      * @returns sinzetech auth 
      */
-     public static getRefreshToken(): string {
+    public static getRefreshToken(): string {
         return sessionStorage.getItem(REFRENSH_TOKEN) || ''
     }
 

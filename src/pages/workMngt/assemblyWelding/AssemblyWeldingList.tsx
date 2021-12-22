@@ -113,7 +113,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
     ]
 
     const [ refresh, setRefresh ] = useState(false);
-    const location = useLocation<{ state?: number, userId?: string }>();
+    const location = useLocation<{ state?: number, userId?: string, weldingOperator?: string }>();
     const userId = AuthUtil.getUserId();
     const [ filterValue, setFilterValue ] = useState<Record<string, any>>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -212,7 +212,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
             columns={ columns }
             headTabs={ [] }
             refresh={ refresh }
-            requestData={ { status: location.state?.state, weldingLeader: location.state?.userId } }
+            requestData={ { status: location.state?.state, boltLeader: location.state?.userId, boltOperator: location.state?.weldingOperator } }
             filterValue={filterValue}
             searchFormItems={ [
                 {
@@ -237,7 +237,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 {
                     name: 'personnel',
                     label: '人员',
-                    children: <Form.Item name="personnel" initialValue={location.state?.userId || ""}>
+                    children: <Form.Item name="personnel">
                         <Select placeholder="请选择" style={{ width: "150px" }}>  
                             <Select.Option value="" key="6">全部</Select.Option>
                             { checkUser && checkUser.map((item: any) => {

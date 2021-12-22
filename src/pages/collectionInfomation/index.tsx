@@ -3,7 +3,7 @@
  * 2021/11/22
  */
 import React, { useState, useRef } from 'react';
-import { Button, Input, DatePicker, Radio, message, Modal, Popconfirm, Upload } from 'antd'
+import { Button, Input, DatePicker, Radio, message, Modal, Popconfirm, Upload, Select } from 'antd'
 import useRequest from '@ahooksjs/use-request'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../common'
@@ -13,7 +13,8 @@ import AuthUtil from '../../utils/AuthUtil';
 import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 import AddModal from './addModal'; // 新增
 import OverView from './overView'; // 查看
-import { EditRefProps } from './collection';
+import { EditRefProps, Contract } from './collection';
+import { collectionTypeeOptions } from '../../configuration/DictionaryOptions';
 
 export default function CollectionInfomation(): React.ReactNode {
     const history = useHistory()
@@ -21,8 +22,11 @@ export default function CollectionInfomation(): React.ReactNode {
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
     const [visible, setVisible] = useState(false);
     const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
+    const [ contractList, setContractList ] = useState<Contract[]>([]);
     const addRef = useRef<EditRefProps>()
-    const confirmed = [{ "title": "备注", "dataIndex": "description"}],
+    const confirmed = [
+        { "title": "备注", "dataIndex": "description"}
+    ],
         confirmedEnd = [
             { "title": "回款类型", "dataIndex": "returnType" },
             { "title": "确认日期", "dataIndex": "confirmTime" },
@@ -33,6 +37,7 @@ export default function CollectionInfomation(): React.ReactNode {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/backMoney/${id}`)
             resole(result)
             setVisibleOverView(true);
+            setContractList(result.contractList || [])
         } catch (error) {
             reject(error)
         }
@@ -195,6 +200,19 @@ export default function CollectionInfomation(): React.ReactNode {
                         children: <Input placeholder="请输入来款单位进行查询" style={{ width: 300 }} />
                     },
                     {
+                        name: 'returnType',
+                        label: '回款类型',
+                        children: (
+                            <Select placeholder="请选择回款类型" style={{ width: "140px" }}>
+                                { collectionTypeeOptions && collectionTypeeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={index} value={id}>
+                                        {name}
+                                    </Select.Option>
+                                }) }
+                            </Select>
+                        )
+                    },
+                    {
                         name: 'startRefundTime',
                         label: '来款日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
@@ -230,6 +248,8 @@ export default function CollectionInfomation(): React.ReactNode {
                 title={confirmStatus === 1 ? confirmed : confirmedEnd}
                 visible={visibleOverView}
                 userData={userData}
+                contractList={contractList}
+                status={confirmStatus}
                 onCancel={() => setVisibleOverView(false)}
             />
         </>

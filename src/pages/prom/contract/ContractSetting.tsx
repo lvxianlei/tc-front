@@ -98,6 +98,9 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             receivedContractShape: contract?.receivedContractShape,
             contractFraction: contract?.contractFraction,
             contractPage: contract?.contractPage,
+            deliveryWay: contract?.deliveryWay,
+            deliveryAddress: contract?.deliveryAddress,
+            ecpContractNumber: contract?.ecpContractNumber
         });
     }
 

@@ -1,0 +1,222 @@
+{
+    "columns": [
+        {
+            "key": "weighingNo",
+            "title": "状态",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "加工计划编号",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "工程名称",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "计划号",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "塔型",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "基数",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "下达重量（kg）",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "计划完成日期",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "角钢X≦40",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "角钢40<X≦50",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "角钢50<X<63",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "角钢63≦X<70",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "角钢70≦X<75",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "角钢75≦X<90",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "角钢90≦X<110",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "角钢110≦X≦160*12",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "角钢X>160*12&Q420B/C",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "排产计划",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "weighingNo",
+            "title": "工作中心",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "开始时间",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "完成时间",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "加工计划编号",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "计划号",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "计划号",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "段号",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "零件号",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "材料",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "规格",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "长度",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "类型",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "单件孔数",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "单段数",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "加工数量",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "试装数",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "总重（kg）",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "weighingNo",
+            "title": "工艺流程",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        }
+    ]
+}

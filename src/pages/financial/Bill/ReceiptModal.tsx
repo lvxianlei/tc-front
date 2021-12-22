@@ -116,16 +116,6 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         }}>
             <Row gutter={[8, 8]}>
                 <Col>
-                    <Form.Item name="materialType" label="材料名称" initialValue="">
-                        <Select placeholder="请选择" style={{ width: "150px" }}>
-                            <Select.Option value="" key="6">全部</Select.Option>
-                            { materialList && materialList.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.materialName }</Select.Option>
-                            }) }
-                        </Select>
-                    </Form.Item>
-                </Col>
-                <Col>
                     <Form.Item name="receiveTime" label="月份选择" initialValue="">
                         <DatePicker.RangePicker />
                     </Form.Item>

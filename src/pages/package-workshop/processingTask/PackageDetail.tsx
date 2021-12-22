@@ -10,19 +10,24 @@ import RequestUtil from '../../../utils/RequestUtil';
 
 export default function PackageDetail(): React.ReactNode {
     const history = useHistory();
-    const [tableDataSource,setTableDataSource] = useState<any>([]);
-    const [userDataSource,setUserDataSource] = useState<any>([]);
+    const params = useParams<{ id: string, status: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // let data = await RequestUtil.get(``,{})
+        const value:any = await RequestUtil.get(`tower-production/packageWorkshop/taskDetail/${params.id}`)
+        const data = await RequestUtil.get(`tower-production/packageWorkshop/packageDetail`,{
+            planId: params.id,
+            planNumber: value.planNumber,
+            productCategoryName: value.productCategoryName,
+            productNumber: value.productNumber,
+        })
         resole(data)
     }), {})
     const detailData: any = data;
     const tableColumns = [
-        { title: '捆号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-        { title: '件号', dataIndex: 'createDeptName', key: 'createDeptName', },
-        { title: '材料规格', dataIndex: 'createUserName', key: 'createUserName' },
-        { title: '长度', dataIndex: 'createTime', key: 'createTime' },
-        { title: '数量', dataIndex: 'description', key: 'description' },
+        { title: '捆号', dataIndex: 'balesCode', key: 'balesCode' },
+        { title: '件号', dataIndex: 'pieceCode', key: 'pieceCode', },
+        { title: '材料规格', dataIndex: 'materialSpec', key: 'materialSpec' },
+        { title: '长度', dataIndex: 'length', key: 'length' },
+        { title: '数量', dataIndex: 'num', key: 'num' },
         { title: '备注', dataIndex: 'description', key: 'description' }
     ]
     return <>
@@ -35,7 +40,7 @@ export default function PackageDetail(): React.ReactNode {
                 <DetailTitle title="件号明细" />
                 <CommonTable 
                     columns={tableColumns}
-                    dataSource={tableDataSource} 
+                    dataSource={detailData.packingStructureVOList} 
                     pagination={false}
                 />
             </DetailContent>

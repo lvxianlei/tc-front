@@ -1,39 +1,45 @@
 {
     "baseInfoData": [
         {
-            "dataIndex": "contractName",
+            "dataIndex": "outWarehouseNumber",
             "title": "出库计划号"
         },
         {
-            "dataIndex": "customerName",
+            "dataIndex": "wayBillNumber",
             "title": "发货通知单编号"
         },
         {
-            "dataIndex": "aeName",
+            "dataIndex": "orderProjectName",
             "title": "项目名称"
         },
         {
-            "dataIndex": "aePhone",
+            "dataIndex": "departPlanTime",
             "title": "出库日期"
         },
         {
-            "dataIndex": "designContactsName",
+            "dataIndex": "planNumber",
             "title": "计划号"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "driverName",
             "title": "司机"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "driverNumber",
             "title": "车牌号"
         },
         {
-            "dataIndex": "designPhone",
-            "title": "出库状态"
+            "dataIndex": "status",
+            "title": "出库状态",
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "未出库" },
+                { "value": 2, "label": "部分出库" },
+                { "value": 3, "label": "已出库" }
+            ]
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "description",
             "title": "备注"
         }
     ]

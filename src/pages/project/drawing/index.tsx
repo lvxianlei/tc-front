@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { Page, PopTableContent } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { drawing } from './drawing.json'
@@ -64,11 +64,18 @@ export default function Drawing(): React.ReactNode {
         })
     }
     return <>
+        <Modal>
+            {/* <PopTableContent data={{}} onChange={()=>{}}/> */}
+        </Modal>
         <Modal
             destroyOnClose
             visible={visible}
             width={1011}
             title="图纸确认任务"
+            onCancel={() => {
+                setDetailedId("")
+                setVisible(false)
+            }}
             footer={[
                 <Button key="save" type="primary" ghost onClick={() => handleModalOk(1)}>保存</Button>,
                 <Button key="saveAndSubmit" type="primary" ghost onClick={() => handleModalOk(2)}>保存并发起</Button>

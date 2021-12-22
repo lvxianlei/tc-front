@@ -1,46 +1,44 @@
 import React, { useState } from 'react'
 import { Button, Form, Input, message, Space, Spin, Table, Tabs } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
-import { baseInfoData } from './deliveryTaskData.json';
+import { DetailContent, CommonTable, DetailTitle } from '../../common';
 import WorkshopUserModal from '../../../components/WorkshopUserModal';
-import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import WorkshopTeamSelectionComponent, { IUser } from '../../../components/WorkshopTeamModal';
+import { useForm } from 'antd/lib/form/Form';
 
 const tableColumns = [
-    { title: '产品名称', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '包名称', dataIndex: 'createTime', key: 'createTime' },
-    { title: '塔型', dataIndex: 'currentStatus', key: 'currentStatus' },
-    { title: '塔位号', dataIndex: 'currentStatus', key: 'currentStatus' },
-    { title: '呼高', dataIndex: 'currentStatus', key: 'currentStatus' },
-    { title: '基数', dataIndex: 'description', key: 'description' },
-    { title: '班组', dataIndex: 'description', key: 'description' },
+    { title: '产品名称', dataIndex: 'productTypeName', key: 'productTypeName' },
+    { title: '包名称', dataIndex: 'balesCode', key: 'balesCode' },
+    { title: '塔型', dataIndex: 'productCategoryName', key: 'productCategoryName' },
+    { title: '塔位号', dataIndex: 'productNumber', key: 'productNumber' },
+    { title: '呼高', dataIndex: 'productHeight', key: 'productHeight' },
+    { title: '基数', dataIndex: 'number', key: 'number' },
+    { title: '班组', dataIndex: 'teamName', key: 'teamName' },
 ]
 
 
 export default function Delivery(): React.ReactNode {
-    const history = useHistory()
-    const params = useParams<{ id: string }>();
-    const [dataSource, setDataSource] = useState<[]>([]);
+    const history = useHistory();
+    const params = useParams<{ id: string, planNumber: string }>();
+    const [form] = useForm();
+    const [show, setShow] = useState<boolean>(false);
     const [activeKey, setActiveKey] = useState<string>('');
     const [selectedKeys, setSelectKeys] = useState<any[]>([]);
     const [selectedRows, setSelectRows] = useState<any[]>([]);
+    const [selectedUser, setSelectedUser] = useState<any>([]);
     const [tableDataSource, setTableDataSource] = useState([]);
     const [tableUserDataSource, setTableUserDataSource] = useState<any[]>([]);
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/drawTask/getDrawTaskById?drawTaskId=${params.id}`)
-        resole(data)
-    }), {})
-    const getDataSource = async (basicHeightId?: string) => {
-        const data: [] = await RequestUtil.get(`/tower-science/boltRecord/checkList`, {
-            basicHeightId: basicHeightId,
-            productCategoryId: params.id
+    const getDataSource = async (basicHeightId?: string,teamId?: string) => {
+        const data: any = await RequestUtil.get(`/tower-production/packageWorkshop/exWarehouseProduct`, {
+            status: basicHeightId,
+            taskId: params.id,
+            planNumber: params.planNumber,
+            teamId: teamId
         })
-        setDataSource(data);
+        setTableDataSource(data);
     }
-
-    const detailData: any = data || [];
-
+    
     const tabChange = (activeKey: string) => {
         getDataSource(activeKey);
         setActiveKey(activeKey);
@@ -60,7 +58,7 @@ export default function Delivery(): React.ReactNode {
                             console.log(selectedRows)
                             if(tableUserDataSource.length>0){
                                 console.log(tableUserDataSource)
-                                RequestUtil.post(``,{}).then(()=>{
+                                RequestUtil.post(`tower-production/productionLines/ex`,{}).then(()=>{
                                     message.success('出库成功！')
                                 }).then(()=>{
                                     history.push(`/packagingWorkshop/deliveryPlan`);
@@ -78,18 +76,46 @@ export default function Delivery(): React.ReactNode {
                 <DetailTitle title="成品出库" />
                 <Tabs onChange={tabChange} type="card">
                     <Tabs.TabPane tab={`未出库`} key={1}>
-                        <Form layout="inline" onFinish={async (value: any) => {
-                            const tableDataSource: any = await RequestUtil.get(``, value);
+                        <Form layout="inline"  form={ form } onFinish={async (value: any) => {
+                            getDataSource();
+                            const tableUserDataSource: any = await RequestUtil.get(`/packageWorkshop/packageWarehouseUser`, {
+                                teamId: selectedUser.id,
+                                planNumber: params.planNumber
+                            });
                             setTableDataSource(tableDataSource)
+                            setTableUserDataSource(tableUserDataSource);
+                            setShow(true)
                         }} style={{ margin: '10px' }}>
-                            <Form.Item label='班组'>
-                                <Input />
+                            <Form.Item label='班组' name='teamName' rules={[{required:true,message:'请选择班组'}]}>
+                                <Input 
+                                    disabled
+                                    addonAfter={<WorkshopTeamSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                                        console.log(selectedRows);
+                                        setSelectedUser(selectedRows);
+                                        form.setFieldsValue({
+                                            teamName: selectedRows[0].name
+                                        })
+                                    } } buttonType="link" buttonTitle="+选择班组" />}
+                                />
                             </Form.Item>
                             <Form.Item>
                                 <Button type="primary" htmlType="submit">查询</Button>
                             </Form.Item>
+                            <Form.Item>
+                                <Button onClick={()=>{
+                                    form.setFieldsValue({
+                                        teamName:''
+                                    })
+                                    setTableDataSource([]);
+                                    setSelectRows([]);
+                                    setSelectKeys([]);
+                                    setSelectedUser([]);
+                                    setTableUserDataSource([]);
+                                    setShow(false)
+                                }}>重置</Button>
+                            </Form.Item>
                         </Form>
-                        <DetailTitle title="杆塔信息" />
+                        {show&&<><DetailTitle title="杆塔信息" />
                         <Table
                             dataSource={tableDataSource}
                             columns={tableColumns}
@@ -113,10 +139,10 @@ export default function Delivery(): React.ReactNode {
                                     }}>删除</Button>
                                 </>)
                             }
-                        ]} dataSource={tableUserDataSource} pagination={false} />
+                        ]} dataSource={tableUserDataSource} pagination={false} /></>}
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab={`已出库`} key={2}>
-                        <CommonTable columns={[...tableColumns, { title: '发包人员', dataIndex: 'description', key: 'description' }]} dataSource={[]} pagination={false} />
+                    <Tabs.TabPane tab={`已出库`} key={3}>
+                        <CommonTable columns={[...tableColumns, { title: '发包人员', dataIndex: 'packageUserNames', key: 'packageUserNames' }]} dataSource={tableDataSource} pagination={false} />
                     </Tabs.TabPane>
                 </Tabs>
             </DetailContent>

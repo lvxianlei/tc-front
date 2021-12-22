@@ -37,7 +37,7 @@ export default function Edit() {
             <CommonTable columns={paymentdetail} dataSource={data?.payInfoVOList || []} />
             <Attachment dataSource={data?.attachVos || []} />
             <DetailTitle title="审批记录" />
-            <CommonTable haveIndex columns={auditIdRecord} dataSource={[]} />
+            <CommonTable haveIndex columns={auditIdRecord} dataSource={data?.approveRecordVOList || []} />
         </Spin>
     </DetailContent>
 }

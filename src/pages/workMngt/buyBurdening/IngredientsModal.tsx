@@ -318,24 +318,25 @@ export default function IngredientsModal(props: any) {
         }
         // 循环构建分类明细
         let result:any = constructionClassificationDetail;
+        let selectKeys = selectedRowKeysCheck;
         for (let i = 0; i < result.length; i += 1) {
             if (map.has(result[i].code)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(result[i]?.code) || 0;
                 result[i].notConfigured = result[i].num - num;
                 numberDetail += num;
-                // 处理未配为0的情况
-                if (result[i].notConfigured === 0) {
-                    if (selectedRowKeysCheck.indexOf(result[i].id) !== -1) {
-                        // 说明存在
-                        const v = selectedRowKeysCheck.filter((item: any) => item !== result[i].id);
-                        setSelectedRowKeysCheck(v);
-                    }
-                }
             } else {
                 result[i].notConfigured = result[i].num;
             }
+            // 处理未配为0的情况
+            if (result[i].notConfigured === 0) {
+                if (selectedRowKeysCheck.indexOf(result[i].id) !== -1) {
+                    // 说明存在
+                    selectKeys = selectKeys.filter((item: any) => item !== result[i].id);
+                }
+            }
         }
+        setSelectedRowKeysCheck(selectKeys);
         setConstructionClassificationDetail(result.slice(0));
         setConstruNumberDetail(numberDetail)
     }, [numbers])
@@ -445,7 +446,7 @@ export default function IngredientsModal(props: any) {
                         </Form>
                     <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
                         <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类</span>
-                        <span style={{color: "#FF8C00"}}>未分配/全部：{construNumber}/{(userData as any) && (userData as any).totalNum}</span>
+                        <span style={{color: "#FF8C00"}}>未分配/全部：{construNumber}/{(userData as any) && (userData as any).totalNum || 0}</span>
                     </div>
                     <Table
                             size="small"
@@ -460,7 +461,7 @@ export default function IngredientsModal(props: any) {
                         />
                         <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
                         <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类明细</span>
-                        <span style={{color: "#FF8C00"}}>已配： {construNumberDetail} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum}</span>
+                        <span style={{color: "#FF8C00"}}>已配： {construNumberDetail} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum || 0}</span>
                     </div>
                     <Table
                             size="small"

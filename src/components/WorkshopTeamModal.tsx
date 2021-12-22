@@ -126,7 +126,7 @@
      public getFilterFormItemProps(): FormItemProps[] {
          return [{
              name: 'name',
-             children: <Input placeholder="请输入班组名称/车间名称/产线进行查询" />
+             children: <Input placeholder="请输入班组名称/所属生产单元进行查询" style={{width:'300px'}}/>
          }, ]
      }
  
@@ -144,23 +144,13 @@
          return [{
              key: 'type',
              title: '班组名称',
-             width: '30%',
+             width: '50%',
              dataIndex: 'type',
          }, {
              key: 'name',
-             title: '所属车间',
-             width: '25%',
+             title: '所属生产单元',
+             width: '50%',
              dataIndex: 'name'
-         }, {
-             key: 'departmentName',
-             title: '工序',
-             width: '20%',
-             dataIndex: 'departmentName'
-         }, {
-             key: 'stationName',
-             title: '设备所属产线',
-             width: '25%',
-             dataIndex: 'stationName'
          }];
      }
  

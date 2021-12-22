@@ -75,17 +75,17 @@ export default function Management(): React.ReactNode {
                 children: <Input placeholder="项目名称/项目编码/项目负责人/批次号/内部合同编号/订单编号/计划号" style={{ width: 260 }} />
             },
             {
-                name: 'InterContract',
+                name: 'contractNumber',
                 label: '内部合同编号',
                 children: <Input placeholder="内部合同编号" style={{ width: 210 }} />
             },
             {
-                name: 'OrderNumber',
+                name: 'saleOrderNumber',
                 label: '订单编号',
                 children: <Input placeholder="订单编号" style={{ width: 210 }} />
             },
             {
-                name: 'PlanNumber',
+                name: 'taskNumber',
                 label: '计划号',
                 children: <Input placeholder="计划号" style={{ width: 210 }} />
             },
@@ -109,7 +109,7 @@ export default function Management(): React.ReactNode {
                     <Select.Option value={3}>合同执行</Select.Option>
                     <Select.Option value={4}>项目结束</Select.Option>
                 </Select>
-            },
+            }
         ]}
     />
 }

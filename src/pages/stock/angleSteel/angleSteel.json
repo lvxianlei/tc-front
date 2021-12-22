@@ -2,8 +2,9 @@
     "angleConfigStrategy": [
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
+            "dataIndex": "materialTextureIds",
             "type": "string",
+            "mode": "multiple",
             "rules": [
                 {
                     "required": true,

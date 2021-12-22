@@ -60,6 +60,7 @@ export default forwardRef(function RecoveryGuaranteeLayer({id, requiredReturnTim
   const onSubmit = () => new Promise(async (resolve, reject) => {
       try {
           const baseData = await addCollectionForm.validateFields()
+          // baseData.cancelledReturnTime = moment(baseData.cancelledReturnTime).format("YYYY-MM-DD");
           await run({path: "/tower-finance/guarantee/saveRecycledGuarantee", data: {...baseData, id}})
           resolve(true)
       } catch (error) {

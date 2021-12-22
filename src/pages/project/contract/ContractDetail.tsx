@@ -52,7 +52,7 @@ class ManagementContractDetail extends ContractDetail {
           }/${this.state.detail.signCustomerName}/${this.state.detail.contractNumber}/${(this.state.detail as any).projectId}
           `}>添加回款记录</Link>
       </Button>,
-      <Button key="setting" disabled={this.state.detail.isRelateOrder === 1}>
+      <Button key="setting">
         <Link to={`/project/contract/setting/${(this.props.match.params as any).projectId}/${this.props.match.params.id}`}>
           编辑
         </Link>

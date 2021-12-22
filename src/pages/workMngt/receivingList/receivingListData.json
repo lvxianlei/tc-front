@@ -77,12 +77,12 @@
         },
         {
             "title": "运费价税合计（元）",
-            "dataIndex": "transportTaxPrice",
+            "dataIndex": "transportPriceCount",
             "type": "string"
         },
         {
             "title": "装卸费价税合计（元）",
-            "dataIndex": "unloadTaxPrice",
+            "dataIndex": "unloadPriceCount",
             "type": "string"
         },
         {
