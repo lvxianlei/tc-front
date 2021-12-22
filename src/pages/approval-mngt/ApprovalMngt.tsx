@@ -315,7 +315,7 @@ export default function Information(): React.ReactNode {
             title="履约保证金审批"
             width={1011}
             visible={performanceBondVisible}
-            okText="审请"
+            okText="申请"
             onCancel={() => {
                 setPerformanceBondVisible(false)
                 handleCancel()
