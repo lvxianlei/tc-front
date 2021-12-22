@@ -1,5 +1,5 @@
-import React, { useImperativeHandle, forwardRef } from "react"
-import { Button, Form, Spin } from 'antd'
+import React, { useImperativeHandle, forwardRef, useState } from "react"
+import { Button, Form, Modal, Spin } from 'antd'
 import { useParams } from 'react-router-dom'
 import { DetailTitle, BaseInfo, CommonTable, PopTable } from '../common'
 import { setting, materialInfo, chooseMaterial } from "./picking.json"
@@ -12,6 +12,7 @@ export interface EditProps {
 }
 
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
+    const [visible, setVisible] = useState<boolean>(false)
     const params = useParams<{ id: string }>()
     const [baseForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -61,7 +62,17 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
 
     return <Spin spinning={loading}>
-        <PopTable data={chooseMaterial as any} />
+        <Modal
+            title=""
+            width={1011}
+            destroyOnClose
+            onCancel={() => {
+                setVisible(false)
+            }}
+            visible={visible}
+            onOk={() => { }}>
+            <PopTable data={chooseMaterial as any} />
+        </Modal>
         <DetailTitle title="基础信息" />
         <BaseInfo
             onChange={handleBaseInfoChange}
@@ -70,7 +81,9 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             col={3}
             dataSource={{}} edit />
         <DetailTitle title="原材料信息" operation={[
-            <Button type="primary" ghost>选择原材料</Button>
+            <Button type="primary" ghost onClick={() => {
+                setVisible(true)
+            }}>选择原材料</Button>
         ]} />
         <CommonTable columns={materialInfo} dataSource={[]} />
     </Spin>

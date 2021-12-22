@@ -15,7 +15,7 @@ import plan from "../../../public/plan.png";
 import fc from "../../../public/fc.png";
 import { useHistory } from "react-router";
 import AuthUtil from "../../utils/AuthUtil";
-type AppType = "SC" | "SW" | "FC" | "RD" | "TMS" | "HR" | "COMM" | "ASM" | "QMS" | "MC"
+type AppType = "SC" | "SW" | "FC" | "RD" | "TMS" | "HR" | "COMM" | "ASM" | "QMS" | "MC" | "PS"
 interface IApplyType {
     readonly authority?: string;
     readonly icon?: string;
@@ -41,7 +41,7 @@ export default function ChooseApply(): React.ReactNode {
             title: "计划中心",
             description: "包含客户、合同、订单等",
             path: "/notice/SC",
-            appName: "SC",
+            appName: "PS",
         },
         {
             authority: "",
