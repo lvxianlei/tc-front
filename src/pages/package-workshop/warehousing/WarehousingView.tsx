@@ -27,11 +27,8 @@ const packageColumns = [
 export default function WarehousingView(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string ,status: string}>();
-    const [ packageDataSource, setPackageDataSource] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-production/packageWorkshop/taskCollectDetail/${params.id}`)
-        const packageData= await RequestUtil.get(`/tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
-        setPackageDataSource(packageData)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -46,20 +43,20 @@ export default function WarehousingView(): React.ReactNode {
                 <Table 
                     columns={tableColumns}
                     dataSource={detailData?.productVOList} 
-                    onRow={record => {
-                        return {
-                          onClick: async event => {
-                              const packageData= await RequestUtil.get(`tower-production/packageWorkshop/packageList/${record.id}`);
-                              setPackageDataSource(packageData)
-                          }, // 点击行
-                        };
-                    }}
+                    // onRow={record => {
+                    //     return {
+                    //       onClick: async event => {
+                    //           const packageData= await RequestUtil.get(`tower-production/packageWorkshop/packageList/${record.id}`);
+                    //           setPackageDataSource(packageData)
+                    //       }, // 点击行
+                    //     };
+                    // }}
                     pagination={false}
                 />
                 <DetailTitle title="包信息" />
                 <CommonTable 
                     columns={packageColumns}
-                    dataSource={packageDataSource} 
+                    dataSource={detailData?.packageVOList} 
                     pagination={false}
                 />
             </DetailContent>

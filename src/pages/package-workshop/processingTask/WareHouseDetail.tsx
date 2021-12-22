@@ -37,9 +37,10 @@ export default function ProcessDetail(): React.ReactNode {
         })
         data?.packageUserVOList&&setUserDataSource(data.packageUserVOList)
         
-        const packageData:any = data.productVOList.length>0 && await RequestUtil.get(`tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
-        data.productVOList.length>0 && setPackageDataSource(packageData)
-        data.productVOList.length>0 && formRef.setFieldsValue({ dataV: packageData })
+        setPackageDataSource(data?.packageVOList)
+        // const packageData:any = data.productVOList.length>0 && await RequestUtil.get(`tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
+        // data.productVOList.length>0 && 
+        data?.packageVOList.length>0 && formRef.setFieldsValue({ dataV: data?.packageVOList })
         const warehouse:any = await RequestUtil.get(`/tower-production/warehouse?current=1&size=1000`);
         setWareHouse(warehouse?.records)
         resole(data)
@@ -268,21 +269,21 @@ export default function ProcessDetail(): React.ReactNode {
                 <Table 
                     columns={tableColumns}
                     dataSource={detailData?.productVOList} 
-                    onRow={record => {
-                        return {
-                          onClick: async event => {
-                              const packageData= await RequestUtil.get(`tower-production/packageWorkshop/packageList/${record.id}`);
-                              setPackageDataSource(packageData)
-                          }, // 点击行
-                        };
-                    }}
+                    // onRow={record => {
+                    //     return {
+                    //       onClick: async event => {
+                    //           const packageData= await RequestUtil.get(`tower-production/packageWorkshop/packageList/${record.id}`);
+                    //           setPackageDataSource(packageData)
+                    //       }, // 点击行
+                    //     };
+                    // }}
                     pagination={false}
                 />
                 <DetailTitle title="包信息" />
                 <Form form={formRef}>
                     <CommonTable 
                         columns={packageColumns}
-                        dataSource={packageDataSource} 
+                        dataSource={[...packageDataSource]} 
                         pagination={false}
                     />
                 </Form>
