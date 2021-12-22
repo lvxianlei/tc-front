@@ -8,7 +8,7 @@ import AttachFile from "./AttachFile"
 import { ApplicationForPayment } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { costTypeOptions, payTypeOptions } from "../../../configuration/DictionaryOptions"
 
 interface EditRefProps {
     onSubmit: (type?: "saveAndApply" | "save") => void
@@ -17,11 +17,11 @@ interface EditRefProps {
 
 export default function ApplyPayment() {
     const history = useHistory()
-    const pleasePayTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1212"].map((item: { id: string, name: string }) => ({
+    const pleasePayTypeEnum = costTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
-    const paymentMethodEnum = (ApplicationContext.get().dictionaryOption as any)["1211"].map((item: { id: string, name: string }) => ({
+    const paymentMethodEnum = payTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -32,7 +32,7 @@ export default function ApplyPayment() {
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [successVisible, setSuccessVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
-    const [filterValue, setFilterValue] = useState<any>({})
+    const [filterValue, setFilterValue] = useState<object>(history.location.state as object)
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/applyPayment?id=${id}`)
@@ -75,7 +75,7 @@ export default function ApplyPayment() {
             value.updateStartTime = formatDate[0] + " 00:00:00"
             value.updateEndTime = formatDate[1] + " 23:59:59"
         }
-        setFilterValue({ ...filterValue, ...value })
+        setFilterValue(value)
         return value
     }
     const handleModalOk = (type?: "saveAndApply" | "save") => new Promise(async (resove, reject) => {
@@ -243,20 +243,20 @@ export default function ApplyPayment() {
                             <Button type="link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
                             <Button type="link" disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
-                            <Button
+                            {/* <Button
                                 type="link"
                                 disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleSuccess(record.id)}
-                            >通过</Button>
+                            >通过</Button> */}
                             <Button type="link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
-                            <Button
+                            {/* <Button
                                 type="link"
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setSuccessVisible(true)
                                 }}
                                 disabled={(record.pleasePayStatus === 3 && record.applyStatus === 4) ? true : false}
-                            >完成</Button>
+                            >完成</Button> */}
                         </>
                     }
                 }]}
@@ -303,7 +303,17 @@ export default function ApplyPayment() {
                     label: '请款类别',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>
-                        {pleasePayTypeEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
+                        {pleasePayTypeEnum?.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
+                    </Select>
+                },
+                {
+                    name: 'businessType',
+                    label: '企业类型',
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
+                        <Select.Option value="1">供应商</Select.Option>
+                        <Select.Option value="2">装卸公司</Select.Option>
+                        <Select.Option value="3">运输公司</Select.Option>
                     </Select>
                 },
                 {

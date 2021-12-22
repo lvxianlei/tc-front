@@ -7,6 +7,8 @@ import Overview from "./Edit"
 import useRequest from "@ahooksjs/use-request";
 import RequestUtil from "../../../utils/RequestUtil";
 import AuthUtil from "../../../utils/AuthUtil"
+// 引入明细
+import DetailOverView from './DetailOverView';
 export default function Invoicing() {
     const [form] = Form.useForm()
     const history = useHistory()
@@ -14,6 +16,8 @@ export default function Invoicing() {
     const [visible, setVisible] = useState<boolean>(false)
     const [generaterVisible, setGenerteVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
+    const [ingredientsvisible, setIngredientsvisible] = useState<boolean>(false);
+    const [detailOver, setDetailOver] = useState<boolean>(false);
     const { loading, run: saveRun } = useRequest<any[]>((id: string, productCategoryName: string) => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-supply/initData/ingredients?materialTaskCode=${id}&productCategoryName=${productCategoryName}`)
@@ -87,6 +91,16 @@ export default function Invoicing() {
                 </Form.Item>
             </Form>
         </Modal>
+        {/* 新增明细 */}
+        <DetailOverView
+            visible={detailOver}
+            onOk={() => {
+                history.go(0);
+                setDetailOver(false)
+            }}
+            id={detailId}
+            onCancel={() => setDetailOver(false)}
+        />
         <Page
             path="/tower-supply/produceIngredients"
             columns={[
@@ -104,7 +118,11 @@ export default function Invoicing() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" disabled={userId !== record.batcherId}><Link to={`/workMngt/production/detailed/${record.id}`}>明细</Link></Button>
+                            <Button type="link" onClick={() => {
+                                setDetailId(record.id)
+                                setDetailOver(true)
+                            }}>详情</Button>
+                            <Button type="link"><Link to={`/workMngt/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}`}>明细</Link></Button>
                             <Button type="link" disabled={userId !== record.batcherId}
                                 onClick={() => {
                                     setDetailId(record.id)

@@ -24,45 +24,7 @@ export default function ConfirmMessage(): React.ReactNode {
             ]}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
-                {/* <DetailTitle title="相关附件"/> */}
-                {/* <CommonTable columns={[
-                    {
-                        title: '附件名称',
-                        dataIndex: 'name',
-                        key: 'name',
-                    },
-                    {
-                        key: 'operation',
-                        title: '操作',
-                        dataIndex: 'operation',
-                        render: (_: undefined, record: any): React.ReactNode => (
-                            <Space direction="horizontal" size="small">
-                                <Button type='link' onClick={()=>{window.open(record.filePath)}}>下载</Button>
-                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>:null}
-                                {['jpg','jpeg', 'png', 'gif'].includes(record.fileSuffix)?<Button type='link' onClick={()=>{setPictureUrl(record.id?record.filePath:record.link);setPictureVisible(true);}}>预览</Button>:null}
-                            </Space>
-                        )
-                    }
-                ]} dataSource={detailData?.attachInfoList} pagination={ false }/> */}
                 <Attachment dataSource={detailData?.fileVOList} />
-                {/* <DetailTitle title="完成信息" />
-                <CommonTable columns={[
-                    {
-                        title: '附件名称',
-                        dataIndex: 'name',
-                        key: 'name',
-                    },
-                    {
-                        key: 'operation',
-                        title: '操作',
-                        dataIndex: 'operation',
-                        render: (_: undefined, record: any): React.ReactNode => (
-                            <Space direction="horizontal" size="small">
-                                <Button type='link'>删除</Button>
-                            </Space>
-                        )
-                    }
-                ]} dataSource={detailData?.cargoVOList} /> */}
             </DetailContent>
             <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
                 <Image src={pictureUrl} preview={false}/>

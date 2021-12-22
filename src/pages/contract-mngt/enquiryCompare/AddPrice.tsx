@@ -1,10 +1,11 @@
 import React, { forwardRef, useState, useImperativeHandle, useRef } from "react"
 import { useParams } from "react-router-dom"
 import { Form, Spin, InputNumber } from "antd"
-import { addPriceHead } from "./enquiry.json"
+import { addPriceHead, supplier } from "./enquiry.json"
 import { BaseInfo, CommonTable, DetailTitle, Attachment, AttachmentRef } from "../../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { qualityAssuranceOptions } from "../../../configuration/DictionaryOptions"
 interface AddPriceProps {
     id: string,
     type: "new" | "edit"
@@ -19,6 +20,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
     const [form] = Form.useForm()
     const attachRef = useRef<AttachmentRef>()
     const params = useParams<{ id: string }>()
+    const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryQuotation/${id}`)
@@ -70,7 +72,9 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
 
     const handleChange = (id: string, value: number, name: string) => {
-        setMaterials(materials.map((item: any) => item.materialCode === id ? ({
+        console.log(id,materials)
+        setMaterials(materials.map((item: any) => item.materialCode + item.length === id ? 
+        ({
             ...item,
             [name]: value
         }) : item))
@@ -78,54 +82,31 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
 
     return <Spin spinning={loading}>
         <DetailTitle title="询比价基本信息" />
-        <BaseInfo form={form} col={1} columns={[{
-            "title": "供应商",
-            "dataIndex": "supplier",
-            "type": "popTable",
-            "path": "/tower-supply/supplier",
-            "width": 1011,
-            "value": "supplierName",
-            "dependencies": true,
-            "readOnly": true,
-            "columns": [
-                {
-                    "title": "供应商编号",
-                    "dataIndex": "supplierCode"
-                },
-                {
-                    "title": "供应商名称",
-                    "dataIndex": "supplierName"
-                },
-                {
-                    "title": "联系人",
-                    "dataIndex": "contactMan"
-                },
-                {
-                    "title": "联系电话",
-                    "dataIndex": "contactManTel"
-                },
-                {
-                    "title": "供货产品",
-                    "dataIndex": "supplyProductsName"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择供应商..."
-                }
-            ]
-        }]} dataSource={{}} edit />
-        <DetailTitle title="询价原材料" />
-        <CommonTable columns={addPriceHead.map((item: any) => {
-            if (item.dataIndex === "taxOffer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "taxOffer")} /> })
-            }
-            if (item.dataIndex === "offer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "offer")} /> })
+        <BaseInfo form={form} col={1} columns={supplier.map((item: any) => {
+            if(item.dataIndex === 'supplier') {
+                return ({ ...item, search: item.search.map((res: any) => {
+                    if(res.dataIndex === 'supplierType') {
+                        return ({
+                            ...res,
+                            enum: qualityAssuranceEnum
+                        })
+                    }
+                    return res
+                })})
             }
             return item
-        })} dataSource={materials} />
+        })} dataSource={{}} edit />
+        <DetailTitle title="询价原材料" />
+        <CommonTable  columns={addPriceHead.map((item: any) => {
+            if (item.dataIndex === "taxOffer") {
+                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode + records.length, value, "taxOffer")} /> })
+            }
+            if (item.dataIndex === "offer") {
+                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode + records.length, value, "offer")} /> })
+            }
+            return item
+        })} 
+        dataSource={materials} />
         <Attachment dataSource={data?.inquiryQuotationAttachInfoVos || []} ref={attachRef} edit />
     </Spin>
 })

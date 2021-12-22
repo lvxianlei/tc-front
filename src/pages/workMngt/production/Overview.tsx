@@ -6,6 +6,8 @@ import Ingredients from "./Ingredients"
 import { ConstructionDetails, ProductionIngredients } from "./productionData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+// 引入配料
+import IngredientsModal from "./ingredientsLayer/IngredientsModal";
 
 interface IngredientsRef {
     onSubmit: (type: "save" | "saveAndSubmit") => void
@@ -13,8 +15,9 @@ interface IngredientsRef {
 export default function Overview() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, materialTaskCode: string, productCategoryName: string }>()
     const ingredientRef = useRef<IngredientsRef>({ onSubmit: () => { } })
+    const [ingredientsvisible, setIngredientsvisible] = useState<boolean>(false);
     const { loading, data } = useRequest<{ detail: any[], programme: any[] }>(() => new Promise(async (resole, reject) => {
         try {
             const detail: any[] = await RequestUtil.get(`/tower-supply/produceIngredients/detail/${params.id}`)
@@ -39,9 +42,21 @@ export default function Overview() {
         ]} visible={visible} onCancel={() => setVisible(false)}>
             <Ingredients ref={ingredientRef} />
         </Modal>
+        {/* 新增配料 */}
+        <IngredientsModal
+            id={params.id}
+            materialTaskCode={params.materialTaskCode}
+            productCategoryName={params.productCategoryName}
+            visible={ingredientsvisible}
+            onOk={() => {
+                history.go(0);
+                setIngredientsvisible(false)
+            }}
+            onCancel={() => setIngredientsvisible(false)}
+        />
         <DetailContent title={[
             <Button key="export" type="primary" style={{ marginRight: 16 }}>导出</Button>,
-            <Button key="peiliao" type="primary" ghost onClick={() => setVisible(true)} style={{ marginRight: 16 }}>配料</Button>
+            <Button key="peiliao" type="primary" ghost onClick={() => setIngredientsvisible(true)} style={{ marginRight: 16 }}>配料</Button>
         ]} operation={[
             <Button type="primary" ghost key="cancel" onClick={() => history.go(-1)}>返回</Button>
         ]}>

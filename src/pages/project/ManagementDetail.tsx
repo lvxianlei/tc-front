@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
-import { useHistory, useParams, Link } from 'react-router-dom'
+import { useHistory, useParams, Link, useRouteMatch, useLocation } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle, Attachment } from '../common'
-import CostDetail from './Cost'
+import CostDetail from './cost'
 import PayInfo from './payInfo'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
@@ -14,7 +14,10 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
-import ApplicationContext from "../../configuration/ApplicationContext"
+import { changeTwoDecimal_f } from '../../utils/KeepDecimals';
+import { bidTypeOptions, winBidTypeOptions } from '../../configuration/DictionaryOptions'
+
+import ExportList from '../../components/export/list';
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
 const productAssistStatistics = [
     {
@@ -33,10 +36,12 @@ const productAssistStatistics = [
 export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, tab?: TabTypes }>()
-    const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
-    const bidType = dictionaryOptions["124"]
-    const frangmentBidType = dictionaryOptions["122"]
+    const bidType = bidTypeOptions
+    const frangmentBidType = winBidTypeOptions
     const [productGroupFlag, setProductGroupFlag] = useState<"productAssistDetailVos" | "productAssistStatisticsVos">("productAssistDetailVos")
+    const [isExport, setIsExportStoreList] = useState(false)
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
     const [productGroupData, setProductGroupData] = useState<{ productAssistDetailVos: any[], productAssistStatisticsVos: any[] }>({
         productAssistDetailVos: [],
         productAssistStatisticsVos: []
@@ -63,7 +68,6 @@ export default function ManagementDetail(): React.ReactNode {
         const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`)
         resole(result)
     }), { refreshDeps: [params.tab] })
-
     const { loading: projectGroupLoading, data: projectGroupData, run: projectGroupRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductAssist?productGroupId=${id}`)
@@ -173,6 +177,12 @@ export default function ManagementDetail(): React.ReactNode {
                 if (["projectLeader", "biddingPerson"].includes(item.dataIndex)) {
                     return ({ title: item.title, dataIndex: item.dataIndex })
                 }
+                if (item.dataIndex === "address") {
+                    return ({
+                        ...item,
+                        render: (record: any) => `${record.bigRegion}-${record.address}`
+                    })
+                }
                 return item
             }).filter((item: any) => !(item.dataIndex === "country" && data?.address !== "其他-国外"))} dataSource={data || {}} />
             <DetailTitle title="物资清单" />
@@ -197,7 +207,7 @@ export default function ManagementDetail(): React.ReactNode {
             <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
                 ...item,
                 type: "select",
-                enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name }))
+                enum: bidType?.map((bid: any) => ({ value: bid.id, label: bid.name }))
             }) : item)} dataSource={data || {}} col={4} />
             <DetailTitle title="填写记录" />
             <CommonTable columns={[
@@ -283,11 +293,26 @@ export default function ManagementDetail(): React.ReactNode {
             <DetailTitle title="基本信息" />
             <BaseInfo columns={frameAgreementColumns.map((item: any) => item.dataIndex === "bidType" ? ({
                 ...item,
-                enum: frangmentBidType.map((fitem: any) => ({
+                enum: frangmentBidType?.map((fitem: any) => ({
                     value: fitem.id, label: fitem.name
                 }))
             }) : item)}
-                dataSource={data || {}} />
+                dataSource={
+                    {
+                        ...data,
+                        implementWeight: data?.implementWeight ? changeTwoDecimal_f(data?.implementWeight) : "0.00000000",
+                        implementMoney: data?.implementMoney ? changeTwoDecimal_f(data?.implementMoney) : "0.00",
+                        implementWeightPro: data?.implementWeightPro ? data?.implementWeightPro : "0.00",
+                        implementMoneyPro: data?.implementMoneyPro ? data?.implementMoneyPro : "0.00",
+                    }
+                    || {
+                        implementWeight: "0.00000000",
+                        implementMoney: "0.00",
+                        implementWeightPro: "0.00",
+                        implementMoneyPro: "0.00"
+                    }
+                }
+            />
             <DetailTitle title="合同物资清单" />
             <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', width: 50, key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -322,7 +347,7 @@ export default function ManagementDetail(): React.ReactNode {
                         ellipsis: false,
                         width: 250,
                         render: (_: any, record: any) => <>
-                            <Button type="link" size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
+                        <Button type="link" size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
                             <Button type="link" size="small" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
                             <Button type="link" size="small" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
                             <Button type="link" size="small" disabled={`${record.status}` !== "0"} onClick={() => deleteProductGroupItem(record.id)} >删除</Button>
@@ -353,30 +378,38 @@ export default function ManagementDetail(): React.ReactNode {
                     <Radio.Button value="1" >已通过</Radio.Button>
                 </Radio.Group>
             </Row>
-            {salesPlanStatus === "" && <Row><Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>新增</Button></Row>}
+            <div style={{ width: "100%", display: "flex", flexWrap: "nowrap", justifyContent: "space-between", marginTop: 10, marginBottom: 10 }}>
+                {
+                    salesPlanStatus === "" && <Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>新增</Button>
+                }
+                <Button type="primary" ghost onClick={() => {
+                    setIsExportStoreList(true)
+                    // message.error("导出暂未开发");
+                }}>导出</Button>
+            </div>
             <CommonTable columns={[...taskNotice, {
                 title: "操作",
                 dataIndex: "opration",
                 fixed: "right",
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" onClick={() => history.push(`/project/management/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
+                        <Button type="link" size="small" onClick={() => history.push(`/project/management/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
                         {record.taskReviewStatus === 0 && <>
-                            <Button type="link" onClick={async () => {
+                            <Button type="link" size="small" onClick={async () => {
                                 const result = await noticeAdoptRun(record.id)
                                 result && message.success("审批通过成功...")
                                 history.go(0)
                             }}>审批通过</Button>
-                            <Button type="link" onClick={async () => {
+                            <Button type="link" size="small" onClick={async () => {
                                 const result = await noticeRejectRun(record.id)
                                 result && message.success("审批已驳回...")
                                 history.go(0)
                             }}>驳回</Button>
                         </>}
                         {[2, -1].includes(record.taskReviewStatus) && <>
-                            <Link to={`/project/management/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link>
-                            <Button type="link" onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>
-                            <Button type="link" loading={noticeLoading} onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
+                            <Button type="link" size="small"><Link to={`/project/management/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link></Button>
+                            <Button type="link" size="small" onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>
+                            <Button type="link" size="small" loading={noticeLoading} onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
                         </>}
                     </>
                 }
@@ -389,5 +422,18 @@ export default function ManagementDetail(): React.ReactNode {
         <Spin spinning={loading}>
             {tabItems['tab_' + (params.tab || 'base')]}
         </Spin>
+        {/* 销售计划导出 (待放开) */}
+        {isExport ? <ExportList
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => taskNotice as any[]}
+            current={data?.current || 1}
+            size={data?.size || 10}
+            total={data?.total || 0}
+            url={`/tower-market/taskNotice`}
+            serchObj={{ projectId: params.id }}
+            closeExportList={() => { setIsExportStoreList(false) }}
+        /> : null}
     </>
 }

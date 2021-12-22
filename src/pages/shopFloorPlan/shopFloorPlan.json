@@ -1,0 +1,231 @@
+{
+    "columns": [
+        {
+            "key": "status",
+            "title": "状态",
+            "width": 150,
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "未确认",
+                    "value": 1
+                },
+                {
+                    "label": "加工中",
+                    "value": 2
+                },
+                {
+                    "label": "已完成",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "key": "workPlanNumber",
+            "title": "加工计划编号",
+            "width": 150,
+            "dataIndex": "workPlanNumber"
+        },
+        {
+            "key": "orderProjectName",
+            "title": "工程名称",
+            "width": 150,
+            "dataIndex": "orderProjectName"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "width": 150,
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "width": 150,
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "productNum",
+            "title": "基数",
+            "width": 150,
+            "dataIndex": "productNum"
+        },
+        {
+            "key": "weight",
+            "title": "下达重量（kg）",
+            "width": 150,
+            "dataIndex": "weight"
+        },
+        {
+            "key": "endTime",
+            "title": "计划完成日期",
+            "width": 150,
+            "dataIndex": "endTime"
+        },
+        {
+            "key": "angle40",
+            "title": "角钢X≦40",
+            "width": 150,
+            "dataIndex": "angle40"
+        },
+        {
+            "key": "angle50",
+            "title": "角钢40<X≦50",
+            "width": 150,
+            "dataIndex": "angle50"
+        },
+        {
+            "key": "angle63",
+            "title": "角钢50<X<63",
+            "width": 150,
+            "dataIndex": "angle63"
+        },
+        {
+            "key": "angle70",
+            "title": "角钢63≦X<70",
+            "width": 150,
+            "dataIndex": "angle70"
+        },
+        {
+            "key": "angle75",
+            "title": "角钢70≦X<75",
+            "width": 150,
+            "dataIndex": "angle75"
+        },
+        {
+            "key": "angle90",
+            "title": "角钢75≦X<90",
+            "width": 150,
+            "dataIndex": "angle90"
+        },
+        {
+            "key": "angle110",
+            "title": "角钢90≦X<110",
+            "width": 150,
+            "dataIndex": "angle110"
+        },
+        {
+            "key": "angle160",
+            "title": "角钢110≦X≦160*12",
+            "width": 150,
+            "dataIndex": "angle160"
+        },
+        {
+            "key": "angle161",
+            "title": "角钢X>160*12&Q420B/C",
+            "width": 150,
+            "dataIndex": "angle161"
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "workCenterName",
+            "title": "工作中心",
+            "width": 150,
+            "dataIndex": "workCenterName"
+        },
+        {
+            "key": "startTime",
+            "title": "开始时间",
+            "width": 150,
+            "dataIndex": "startTime"
+        },
+        {
+            "key": "endTime",
+            "title": "完成时间",
+            "width": 150,
+            "dataIndex": "endTime"
+        },
+        {
+            "key": "workPlanNumber",
+            "title": "加工计划编号",
+            "width": 150,
+            "dataIndex": "workPlanNumber"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "width": 150,
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "width": 150,
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "segmentName",
+            "title": "段号",
+            "width": 150,
+            "dataIndex": "segmentName"
+        },
+        {
+            "key": "code",
+            "title": "零件号",
+            "width": 150,
+            "dataIndex": "code"
+        },
+        {
+            "key": "materialName",
+            "title": "材料",
+            "width": 150,
+            "dataIndex": "materialName"
+        },
+        {
+            "key": "structureSpec",
+            "title": "规格",
+            "width": 150,
+            "dataIndex": "structureSpec"
+        },
+        {
+            "key": "length",
+            "title": "长度",
+            "width": 150,
+            "dataIndex": "length"
+        },
+        {
+            "key": "type",
+            "title": "类型",
+            "width": 150,
+            "dataIndex": "type"
+        },
+        {
+            "key": "holesNum",
+            "title": "单件孔数",
+            "width": 150,
+            "dataIndex": "holesNum"
+        },
+        {
+            "key": "basicsPartNum",
+            "title": "单段数",
+            "width": 150,
+            "dataIndex": "basicsPartNum"
+        },
+        {
+            "key": "processingNum",
+            "title": "加工数量",
+            "width": 150,
+            "dataIndex": "processingNum"
+        },
+        {
+            "key": "weighingNo",
+            "title": "试装数",
+            "width": 150,
+            "dataIndex": "weighingNo"
+        },
+        {
+            "key": "totalWeight",
+            "title": "总重（kg）",
+            "width": 150,
+            "dataIndex": "totalWeight"
+        },
+        {
+            "key": "processFlow",
+            "title": "工艺流程",
+            "width": 150,
+            "dataIndex": "processFlow"
+        }
+    ]
+}

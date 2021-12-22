@@ -52,9 +52,30 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         }
       } 
       this.onLock = this.onLock.bind(this);
+      this.onUnLock = this.onUnLock.bind(this);
       this.onConfirm = this.onConfirm.bind(this);
     }
-
+    onUnLock=async (id:any)=>{
+      await RequestUtil.post<any>(`/tower-aps/planUnitLink/unlock?id=${id}`).then(()=>{
+        message.success('解锁成功！')
+      }).then(async ()=>{
+        // this.props.history.go(0)
+        const value = this.state.dataSource.data.map((item:any)=>{
+          return{
+            ...item,
+            status: item.id===id?1:item.status
+          }
+        })
+        const newValue={
+          data: value
+        }
+        this.setState({
+          dataSource: newValue
+        })
+        gantt.parse(newValue)
+        gantt.render();
+      });
+    }
     onLock=async (id:any)=>{
       await RequestUtil.post<any>(`/tower-aps/planUnitLink/lock?id=${id}`).then(()=>{
         message.success('锁定成功！')
@@ -73,6 +94,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           dataSource: newValue
         })
         gantt.parse(newValue)
+        gantt.render();
       });
     }
     onConfirm =async (id:any)=>{
@@ -93,6 +115,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           dataSource: newValue
         })
         gantt.parse(newValue)
+        gantt.render();
       });
     }
     componentDidUpdate() {
@@ -109,8 +132,20 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         
         gantt.config.column_width = 20;
         gantt.config.columns = [
-          {label:'生产环节', name: "linkName", tree: true, resize: true, width:100 },
-          {label:'生产单元',name: "unitName", align: "center", resize: true, width:100 },
+          {label:'生产环节', name: "linkName",  resize: true, width:130 , template: function (task:any) {
+            return (
+              `
+              <span  title="${task.linkName}" >${task.linkName}</span>
+              `
+            );
+          }},
+          {label:'生产单元',name: "unitName", align: "center", resize: true, width:120, template: function (task:any) {
+            return (
+              `
+              <span  title="${task.unitName}" >${task.unitName}</span>
+              `
+            );
+          }},
           {label:'开始时间',name: "startTime", align: "center", width:100 , template: function (task:any) {
             return (
               `
@@ -132,50 +167,56 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
               case 2:
                 return '已锁定'
               case 3:
-                return '待确认'
+                return '已下发'
               case 4:
-                return '已反馈'
-              case 5:
-                return '已排产'
+                return '已下达'
+             
             }
           }},
-          {label:'操作',name: "buttons",width: 150, align: "left", template: function (task:any) {
-            if(task.status===2||task.status===3||task.status===5){
-              if(task.status===2){
-                return (
-                  `
-                  <a style="color:#FF8C00" id='view'>查看</a>
-                  <a style="color:#FF8C00" id='confirm'>下发</a>
-                  `
-                );
-              }else{
-                return (
-                  `
-                  <a style="color:#FF8C00" id='view'>查看</a>
-                  `
-                );
-              }
-            
-            }
-            else{
+          {label:'操作',name: "buttons",width: 100, align: "left", template: function (task:any) {
+            if(task.status===1){
+              
               return (
                 `
-                <a style="color:#FF8C00" id='view'>查看</a> 
-                <a style="color:#FF8C00" id='edit' >编辑</a>
+                <a style="color:#FF8C00" id='view'>查看</a>
                 <a style="color:#FF8C00" id='lock'>锁定</a>
+                <a style="color:#FF8C00" id='edit' >编辑</a>
                 `
               );
-            }  
-              
-          }}
+            
+          
+          }
+          else if(task.status===2){
+            return (
+              `
+              <a style="color:#FF8C00" id='view'>查看</a>
+              <a style="color:#FF8C00" id='unLock'>解锁</a>
+              <a style="color:#FF8C00" id='edit' >编辑</a>
+             
+              `
+            );
+          }  
+            
+        
+          else if(task.status===3||task.status===4){
+            return (
+              `
+              <a style="color:#FF8C00" id='view'>查看</a> 
+             
+              `
+            );
+          }  
+           
+            
+        }}
         ];
         gantt.templates.task_text = function(start,end,task){
-          return task.linkName?"<b>生产环节:</b> "+task.linkName:"<b>生产环节:</b> "+"-";
+          return task.linkName?`<b title='生产环节:${task.linkName}'>生产环节:</b> `+task.linkName:`<b  title='生产环节:-'>生产环节:</b> `+"-";
         };
         gantt.config.scales = [
           {unit:"day", step:1, date:"%d" },
           {unit:"month", step:1, date:"%F, %Y" },
-          {unit:"year", step:1, date:"%Y" }
+          // {unit:"year", step:1, date:"%Y" }
         ];
 
         gantt.config.row_height = 22;
@@ -187,6 +228,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
         gantt.config.drag_resize = false;//拖拽工期
         gantt.config.drag_progress = false;//拖拽进度
         gantt.config.drag_links = false;//通过拖拽的方式新增任务依赖的线条
+        gantt.config.drag_move = false;
         gantt.config.layout = {
           css: "gantt_container",
           cols: [
@@ -247,9 +289,13 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           if(e.target.id === 'lock'){
             this.onLock(id);
           }
+          if(e.target.id === 'unLock'){
+            this.onUnLock(id);
+          }
           if(e.target.id === 'confirm'){
             this.onConfirm(id);
           }
+          
           return e
         },'');
     }
@@ -260,6 +306,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
           value.endTime = formatDate[1]+ ' 23:59:59';
           delete value.time
       }
+      gantt.clearAll();
       const tree = await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks`,{
         planProductCategoryId:this.props.match.params.id,
         ...value

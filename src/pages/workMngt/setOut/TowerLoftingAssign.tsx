@@ -48,6 +48,7 @@ interface IAppointed {
     readonly checkUserName?: string;
     readonly plannedDeliveryTime?: string | moment.Moment;
     readonly patternName?: string;
+    readonly trialAssemble?: number | string
 }
 
 class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, TowerLoftingAssignState> {
@@ -79,7 +80,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     }
 
     private async modalShow(): Promise<void> {
-        const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/detail?productCategoryId=${ this.props.id }`);
+        const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/${ this.props.id }`);
         const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         this.setState({
             departmentData: departmentData,
@@ -90,11 +91,12 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             let detailData = this.props.detailData;
             detailData = {
                 ...detailData,
-                plannedDeliveryTime: detailData?.plannedDeliveryTime ? moment(detailData?.plannedDeliveryTime) : ''
+                plannedDeliveryTime: detailData?.plannedDeliveryTime ? moment(detailData?.plannedDeliveryTime) : '',
+                ...data,
             }
             detailData?.loftingUserDepartment && this.onDepartmentChange(detailData?.loftingUserDepartment || '', '放样');
             detailData?.checkUserDepartment && this.onDepartmentChange(detailData?.checkUserDepartment || '', '校对');
-            this.getForm()?.setFieldsValue({ ...detailData, ...data });
+            this.getForm()?.setFieldsValue({  ...detailData, trialAssemble: this.props.detailData?.trialAssemble });
         }
     }
     
@@ -120,7 +122,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                     checkUser: values.checkUser.split('-')[0],
                     checkUserName: values.checkUser.split('-')[1],
                 }
-                RequestUtil.post(`/tower-science/productSegment/submit`, { ...values }).then(() => {
+                RequestUtil.post(`/tower-science/productSegment`, { ...values }).then(() => {
                     message.success('指派成功');
                 }).then(() => {
                     this.getForm()?.resetFields();
@@ -212,7 +214,11 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 { this.state.appointed?.patternName }
                             </Descriptions.Item>
                             { this.props.type === 'detail' ?
-                                <><Descriptions.Item label="段信息">
+                                <>
+                                <Descriptions.Item label="试组装">
+                                    { this.props.detailData?.trialAssemble === 1? '是': '否' || '' }
+                                </Descriptions.Item>
+                                <Descriptions.Item label="段信息">
                                     { this.props.detailData?.name || '' }
                                 </Descriptions.Item>
                                 <Descriptions.Item label="放样人">
@@ -224,9 +230,22 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 <Descriptions.Item label="交付时间">
                                     { this.props.detailData?.plannedDeliveryTime || '' }
                                 </Descriptions.Item></>
-                                : <><Descriptions.Item label="段信息">
-                                <Form.Item name="name" initialValue={ this.props.detailData?.name }
+                                : <>
+                                <Descriptions.Item label="试组装">
+                                <Form.Item name="trialAssemble" 
                                     rules={[{
+                                        required: true,
+                                        message: '请选择试组装'
+                                    }]} style={ { width: '50%', display: 'inline-block' } }>
+                                    <Select placeholder="请选择" style={{width:'120px'}}>
+                                        <Select.Option key={ '1' } value={ 1 }>是</Select.Option>
+                                        <Select.Option key={ '0' } value={ 0 }>否</Select.Option>
+                                    </Select>
+                                </Form.Item>
+                                </Descriptions.Item>
+                                <Descriptions.Item label="段信息">
+                                <Form.Item name="name" initialValue={ this.props.detailData?.name }
+                                    rules={[{ 
                                         required: true,
                                         message: '请输入段信息'
                                     },

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Button, Spin, Space, Form, Select, DatePicker, Row, Col, Input, message} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef } from '../../common';
+import { DetailContent, CommonTable, DetailTitle, Attachment, BaseInfo, AttachmentRef, FormItemType } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
@@ -37,28 +37,34 @@ export default function Quit(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button type="primary" onClick={() => {
-                        form.validateFields().then(res=>{
-                            const value= form.getFieldsValue(true);
-                            value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
-                            value.id = params.id!=='0'?params.id:undefined;
-                            value.submitType='save';
-                            RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
-                                message.success('保存成功！')
-                                history.push(`/employeeRelation/quit`)
-                            })
-                        })
-                        
-                    }}>保存</Button>
-                    <Button type="primary" onClick={() => {
+                    <Button type="primary" onClick={async () => {
+                        await form.validateFields();
                         const value= form.getFieldsValue(true);
-                        value.departureDate= moment(value.departureDate).format('YYYY-MM-DD');
-                        value.id = params.id!=='0'?params.id:undefined;
-                        value.submitType='submit';
-                        RequestUtil.post(`/tower-hr/employeeDeparture/save`,value).then(()=>{
+                        const postValue = {
+                            ...value,
+                            id : params.id&&params.id!=='0'?params.id:undefined,
+                            departureDate: value.departureDate?moment(value.departureDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            submitType: 'save',
+                        }
+                        RequestUtil.post(`/tower-hr/employeeDeparture/save`,postValue).then(()=>{
+                            message.success('保存成功！')
+                            history.push(`/employeeRelation/quit`)
+                        })
+                    }}>保存</Button>
+                    <Button type="primary" onClick={async () => {
+                        await form.validateFields();
+                        const value= form.getFieldsValue(true);
+                        const postValue = {
+                            ...value,
+                            id : params.id&&params.id!=='0'?params.id:undefined,
+                            departureDate: value.departureDate?moment(value.departureDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            submitType: 'submit',
+                        }
+                        RequestUtil.post(`/tower-hr/employeeDeparture/save`,postValue).then(()=>{
                             message.success('提交成功！')
                             history.push(`/employeeRelation/quit`)
                         })
+                        
                     }}>保存并提交审批</Button>
                     <Button key="goback" onClick={() => history.push(`/employeeRelation/quit`)}>返回</Button>
                 </Space>
@@ -115,7 +121,7 @@ export default function Quit(): React.ReactNode {
                 <Row>
                     <Col span={12}>
                         <Form.Item label='入职日期' name='inductionDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} disabled/>
+                            <DatePicker  style={{ width: '100%' }} disabled/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -135,11 +141,11 @@ export default function Quit(): React.ReactNode {
                             required:true, 
                             message:'请选择离职日期'
                         }]} name='departureDate'>
-                            <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
-                                disabledDate={(current)=>{
+                            <FormItemType data={{
+                                disabledDate:(current:any)=>{
                                     return current && current< form.getFieldsValue().inductionDate
-                                }}
-                            />
+                                },
+                                format:"YYYY-MM-DD"}} type="date" />
                         </Form.Item>
                     </Col>
                     <Col span={12}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Select, TreeSelect, Form } from 'antd'
+import { Space, Input, DatePicker, Button, Select, Form } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common'
@@ -9,18 +9,14 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import styles from './confirm.module.less';
 import AuthUtil from '../../../utils/AuthUtil';
-import { dataTool } from 'echarts';
 
 export default function ConfirmList(): React.ReactNode {
-    // const [confirmLeader, setConfirmLeader] = useState<any | undefined>([]);
     const [department, setDepartment] = useState<any | undefined>([]);
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state?: number, userId?: string }>();
     const history = useHistory();
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        // const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         const data: any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
-        // setDepartment(departmentData);
         resole(data)
     }), {})
     const confirmLeader: any = data?.records || [];
@@ -62,41 +58,6 @@ export default function ConfirmList(): React.ReactNode {
             width: 200,
             dataIndex: 'statusName'
         },
-        // {
-        //     key: 'status',
-        //     title: '状态',
-        //     width: 100,
-        //     dataIndex: 'status',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: 0,
-        //                 label: "已拒绝"
-        //             },
-        //             {
-        //                 value: 1,
-        //                 label: "待确认"
-        //             },
-        //             {
-        //                 value: 2,
-        //                 label: "待指派"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "待完成"
-        //             },
-        //             {
-        //                 value: 4,
-        //                 label: "已完成"
-        //             },
-        //             {
-        //                 value: 5,
-        //                 label: "已提交"
-        //             }
-        //         ]
-        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'updateStatusTime',
             title: '状态时间',
@@ -117,16 +78,6 @@ export default function ConfirmList(): React.ReactNode {
             )
         }
     ];
-    // const onDepartmentChange = async (value: Record<string, any>) => {
-    //     if (value) {
-    //         const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
-    //         setConfirmLeader(userData.records);
-    //     } else {
-
-    //         setConfirmLeader([]);
-    //     }
-
-    // }
     const renderTreeNodes = (data: any) =>
         data.map((item: any) => {
             if (item.children) {
@@ -174,13 +125,9 @@ export default function ConfirmList(): React.ReactNode {
                     label: '任务状态',
                     children: <Form.Item name="status" initialValue={location.state?.state}>
                         <Select style={{ width: "100px" }}>
-                            {/* <Select.Option value={1} key={1}>待确认</Select.Option>
-                            <Select.Option value={2} key={2}>待指派</Select.Option> */}
                             <Select.Option value={''} key={''}>全部</Select.Option>
                             <Select.Option value={3} key={3}>待完成</Select.Option>
                             <Select.Option value={4} key={4}>已完成</Select.Option>
-                            {/* <Select.Option value={5} key={5}>已提交</Select.Option>
-                            <Select.Option value={0} key={0}>已拒绝</Select.Option> */}
                         </Select>
                     </Form.Item>
                 },
@@ -189,16 +136,6 @@ export default function ConfirmList(): React.ReactNode {
                     label: '计划交付时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
-                // {
-                //     name: 'confirmDept',
-                //     label: '确认人',
-                //     children: <TreeSelect style={{ width: '200px' }}
-                //         allowClear
-                //         onChange={onDepartmentChange}
-                //     >
-                //         {renderTreeNodes(wrapRole2DataNode(department))}
-                //     </TreeSelect>
-                // },
                 {
                     name: 'confirmId',
                     // label: '',

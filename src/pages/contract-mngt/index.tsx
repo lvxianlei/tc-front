@@ -1,18 +1,18 @@
 // 合同管理-原材料合同管理
 import React, { useState, useRef } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { DatePicker, Select, Input, Button, Modal, message } from 'antd'
-import { Page } from "../common"
+import { DatePicker, Select, Input, Button, Modal, message, Form, Space } from 'antd'
+import { IntgSelect, Page } from "../common"
 import Edit from "./Edit"
 import Overview from "./Overview"
 import { contract } from "./contract.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import ApplicationContext from "../../configuration/ApplicationContext"
+import { deliverywayOptions, materialStandardOptions, transportationTypeOptions } from '../../configuration/DictionaryOptions'
 export default function ContractMngt(): JSX.Element {
-    const materialStandardEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const deliveryMethodEnum = (ApplicationContext.get().dictionaryOption as any)["128"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const transportMethodEnum = (ApplicationContext.get().dictionaryOption as any)["129"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const transportMethodEnum = transportationTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const history = useHistory()
     const [editVisible, setEditVisible] = useState<boolean>(false)
     const [overviewVisible, setOverviewVisible] = useState<boolean>(false)
@@ -60,6 +60,9 @@ export default function ContractMngt(): JSX.Element {
             value.signStartTime = formatDate[0] + " 00:00:00"
             value.signEndTime = formatDate[1] + " 23:59:59"
         }
+        if(value.operatorId) {
+            value.operatorId = value.operatorId?.second
+        }
         return value
     }
     return (
@@ -83,10 +86,10 @@ export default function ContractMngt(): JSX.Element {
                 title="详情"
                 width={1011}
                 visible={overviewVisible}
-                footer={[<Button type="primary" key="close" onClick={() => {
+                footer={[<><Button type="primary" key="close" onClick={() => {
                     setDetailId("")
                     setOverviewVisible(false)
-                }}>关闭</Button>]}
+                }}>关闭</Button><Button type="primary">打印合同</Button></>]}
                 onCancel={() => {
                     setDetailId("")
                     setOverviewVisible(false)
@@ -120,7 +123,7 @@ export default function ContractMngt(): JSX.Element {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        render: (_: any, records: any) => <>
+                        render: (_: any, records: any) => <Space direction="horizontal" size="small">
                             <Button type="link" disabled={records.isReceiptRef === 1}
                                 onClick={() => {
                                     setOprationType("edit")
@@ -133,7 +136,7 @@ export default function ContractMngt(): JSX.Element {
                             }}>详情</Button>
                             <Button type="link" disabled={records.isReceiptRef === 1}
                                 onClick={() => handleDelete(records.id)}>删除</Button>
-                        </>
+                        </Space>
                     }
                 ]}
                 extraOperation={<>
@@ -159,6 +162,11 @@ export default function ContractMngt(): JSX.Element {
                             <Select.Option value="1">执行中</Select.Option>
                             <Select.Option value="2">已完成</Select.Option>
                         </Select>
+                    },
+                    {
+                        name: 'operatorId',
+                        label: '经办人',
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'fuzzyQuery',

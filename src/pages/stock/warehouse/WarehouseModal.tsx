@@ -6,6 +6,7 @@ import './WarehouseModal.less';
 import AuthUtil from '../../../utils/AuthUtil';
 import ApplicationContext from '../../../configuration/ApplicationContext';
 import { Key } from 'rc-select/lib/interface/generator';
+import { warehouseOptions } from '../../../configuration/DictionaryOptions';
 // import { SelectValue } from 'antd/lib/select';
 const { Option } = Select;
 
@@ -303,7 +304,7 @@ const WarehouseModal = (props: Props) => {
                                 }}
                             >
                                 {
-                                    (ApplicationContext.get().dictionaryOption as any)["127"].map((item: { id: string, name: string }) => ({
+                                    warehouseOptions?.map((item: { id: string, name: string }) => ({
                                         value: item.id,
                                         label: item.name
                                     })).map((t: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, i: any) => {

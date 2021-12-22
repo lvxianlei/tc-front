@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
 import { IntgSelect, Page } from '../../common'
 import AuthUtil from "../../../utils/AuthUtil"
 export default function EnquiryList(): React.ReactNode {
-    const [filterValue, setFilterValue] = useState({});
+    const history = useHistory()
+    const [filterValue, setFilterValue] = useState<object>(history.location.state as object);
     const userId = AuthUtil.getUserId()
     const onFilterSubmit = (value: any) => {
         if (value.startBatcheStatusUpdateTime) {

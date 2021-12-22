@@ -3,6 +3,7 @@ import React, { useEffect, useState, } from 'react'
 import { Button, Table, Pagination, TableColumnProps, Row, Col, Select, } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import ApplicationContext from "../../../configuration/ApplicationContext"
+import { materialStandardTypeOptions } from '../../../configuration/DictionaryOptions';
 const { Option } = Select;
 const ViewPanel = (): React.ReactNode => {
     const columns: TableColumnProps<object>[] = [
@@ -187,7 +188,7 @@ const ViewPanel = (): React.ReactNode => {
                     >
                         <Option value={''}>全部</Option>
                         {
-                            (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
+                            materialStandardTypeOptions?.map((item: { id: string, name: string }) => ({
                                 value: item.id,
                                 label: item.name
                             })).map((t: any, i: any) => {

@@ -169,9 +169,9 @@ export default function FullList(): React.ReactNode {
                         label: '考核结果',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="">全部</Select.Option>
-                            <Select.Option value={1} key="1">提前转正</Select.Option>
-                            <Select.Option value={2} key="2">正常转正</Select.Option>
-                            <Select.Option value={3} key="3">延期转正</Select.Option>
+                            <Select.Option value={'提前转正'} key="1">提前转正</Select.Option>
+                            <Select.Option value={'正常转正'} key="2">正常转正</Select.Option>
+                            <Select.Option value={'延期转正'} key="3">延期转正</Select.Option>
                         </Select>
                     },
                     {

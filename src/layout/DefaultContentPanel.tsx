@@ -11,7 +11,7 @@ import { AuthorityBasic, hasAuthority } from '../components/AuthorityComponent';
 import ApplicationContext from '../configuration/ApplicationContext';
 import { IRouterItem } from '../configuration/IApplicationContext';
 
-export interface IDefaultContentPanelProps {}
+export interface IDefaultContentPanelProps { }
 export interface IDefaultContentPanelState {
     readonly shouldRender: boolean | undefined;
 }
@@ -19,7 +19,7 @@ export interface IDefaultContentPanelState {
 /**
  * Default Content Panel
  */
- export default class DefaultContentPanel<P extends IDefaultContentPanelProps, S extends IDefaultContentPanelState> extends AsyncComponent<P, S> {
+export default class DefaultContentPanel<P extends IDefaultContentPanelProps, S extends IDefaultContentPanelState> extends AsyncComponent<P, S> {
 
     /**
      * @description State  of default content panel
@@ -53,11 +53,11 @@ export interface IDefaultContentPanelState {
             return (
                 <>
                     {
-                        hasAuthority(authority) && this.state.shouldRender
-                        ?
-                        <AsyncPanel module={ module}/>
-                        :
-                        null
+                        (hasAuthority(authority) || authority === "all") && this.state.shouldRender
+                            ?
+                            <AsyncPanel module={module} />
+                            :
+                            null
                     }
                 </>
             );
@@ -74,11 +74,11 @@ export interface IDefaultContentPanelState {
                 {
                     ApplicationContext.get().routers?.map<React.ReactNode>((router: IRouterItem): React.ReactNode => (
                         router.path
-                        ?
-                        <Route path={ router.path } key={ router.path } exact={ router.exact }
-                            render={ this.renderRoute(router.module, router.authority) }/>
-                        :
-                        null
+                            ?
+                            <Route path={router.path} key={router.path} exact={router.exact}
+                                render={this.renderRoute(router.module, router.authority)} />
+                            :
+                            null
                     ))
                 }
             </>

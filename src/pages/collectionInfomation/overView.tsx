@@ -3,8 +3,8 @@
  */
 import React from 'react';
 import { Modal, Form, Button } from 'antd';
-import { BaseInfo } from '../common';
-import { overViewColunms } from './collectionColumn.json';
+import { BaseInfo, DetailTitle, CommonTable } from '../common';
+import { overViewColunms, contractInformation } from './collectionColumn.json';
 import { OverViewProps } from './collection';
 export default function OverView(props: OverViewProps): JSX.Element {
     const [addCollectionForm] = Form.useForm();
@@ -15,17 +15,16 @@ export default function OverView(props: OverViewProps): JSX.Element {
     }
     return (
         <Modal
-            title={'查看回款信息'}
+            title={'回款信息'}
             visible={props.visible}
             onCancel={handleCancle}
             maskClosable={false}
             width={800}
             footer={[
-                <Button key="back" onClick={props?.onCancel}>
-                取消
-                </Button>
+                <Button key="back" onClick={props?.onCancel}>关闭</Button>
             ]}
         >
+            <DetailTitle title="基本信息" />
             <BaseInfo
                 form={addCollectionForm}
                 dataSource={props.userData || {}}
@@ -35,6 +34,15 @@ export default function OverView(props: OverViewProps): JSX.Element {
                     ...props.title
                 ]}
             />
+            {
+                props.status === 2 && props.userData && (props.userData as any)?.returnType === "合同应收款" && (
+                    <>
+                        <DetailTitle title="合同信息" />
+                        <CommonTable columns={contractInformation} dataSource={props.contractList || []} pagination={ false }/>
+                    </>
+                )
+            }
+            
         </Modal>
     )
 }

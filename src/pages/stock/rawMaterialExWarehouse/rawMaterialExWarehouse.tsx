@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
+import { Space, Button, Input, DatePicker, Select, Table } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -15,7 +15,7 @@ export default function RawMaterialStock(): React.ReactNode {
     const [dateValue, setDateValue] = useState<any>([]);//时间
     const [dateString, setDateString] = useState<any>([]);//时间字符串格式
     const [keyword, setKeyword] = useState<any>('');//关键字搜索
-    const [status, setStatus] = useState('');//状态
+    const [status, setStatus] = useState(`${(history.location.state as any)?.status || ""}`);//状态
     const [departmentId, setDepartmentId] = useState('');//部门
     const [applyStaffId, setPersonnelId] = useState('');//人员
     const [Listdata, setListdata] = useState<any[]>([]);//列表数据
@@ -26,10 +26,7 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '序号',
             dataIndex: 'id',
             width: 50,
-            render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
-                return <span>{index + 1}</span>
-            }
+            render: (text: any, item: any, index: any) => <span>{index + 1}</span>
         },
         {
             title: '领料编号',

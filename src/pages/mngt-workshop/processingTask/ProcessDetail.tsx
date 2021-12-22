@@ -8,33 +8,18 @@ import RequestUtil from '../../../utils/RequestUtil';
 import WorkshopUserSelectionComponent, { IUser } from '../../../components/WorkshopUserModal';
 
 const tableColumns = [
-    { title: '工序', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '产线', dataIndex: 'createDeptName', key: 'createDeptName', },
-    { title: '派工设备', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '班组', dataIndex: 'createTime', key: 'createTime' },
-    // { title: '任务状态', dataIndex: 'status', key: 'status',  render: (value: number, record: object): React.ReactNode => {
-    //     const renderEnum: any = [
-    //         {
-    //             value: 0,
-    //             label: "已拒绝"
-    //         },
-    //         {
-    //             value: 1,
-    //             label: "待修改"
-    //         },
-    //         {
-    //             value: 2,
-    //             label: "已修改"
-    //         },
-    //         {
-    //             value: 3,
-    //             label: "已删除"
-    //         },
-    //     ]
-    //     return <>{renderEnum.find((item: any) => item.value === value).label}</>
-    // }},
-    { title: '完成时间', dataIndex: 'description', key: 'description' },
-    { title: '状态', dataIndex: 'description', key: 'description' }
+    { title: '工作中心', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+    { title: '班组', dataIndex: 'teamName', key: 'teamName'},
+    { title: '实际完成时间', dataIndex: 'description', key: 'description' },
+    { title: '状态', dataIndex: 'description', key: 'description', render: (status: number): React.ReactNode => {
+        switch (status) {
+            case 1:
+                return '已完成';
+            case 0:
+                return '未完成';
+        }
+        return <>{status}</>
+    } }
 ]
 
 export default function ProcessDetail(): React.ReactNode {
@@ -45,7 +30,7 @@ export default function ProcessDetail(): React.ReactNode {
     const [tableDataSource,setTableDataSource] = useState<any>([]);
     const [userDataSource,setUserDataSource] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // let data = await RequestUtil.get(``,{})
+        // const data = await RequestUtil.get(`/tower-aps/machining/detail/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -55,7 +40,7 @@ export default function ProcessDetail(): React.ReactNode {
     }
     return <>
         <Spin spinning={loading}>
-            <DetailContent operation={params.status!=='3'?[
+            <DetailContent operation={params.status === '3'?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     setVisible(true)
                 }}>数据采集</Button>,
@@ -64,13 +49,13 @@ export default function ProcessDetail(): React.ReactNode {
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
                 <DetailTitle title="部件详情" />
-                <BaseInfo columns={baseInfoData} dataSource={detailData || {}}/>
-                <DetailTitle title="当前进度" />
+                <BaseInfo columns={baseInfoData} dataSource={detailData?.dispatchVO || {}}/>
+                {/* <DetailTitle title="当前进度" />
                 <CommonTable 
                     columns={tableColumns}
                     dataSource={tableDataSource} 
                     pagination={false}
-                />
+                /> */}
             </DetailContent>
             <Modal
                 visible={ visible } 
@@ -79,7 +64,10 @@ export default function ProcessDetail(): React.ReactNode {
                 footer={ <Space>
                     <Button type="primary" ghost  onClick={() => setVisible(false) }>取消</Button>
                     <Button type="primary" onClick={async () => {
-                        await RequestUtil.get(``,{}).then(()=>{
+                        await RequestUtil.put(`/tower-aps/machining/collection`,{
+                            id:params.id,
+                            staffList: userDataSource
+                        }).then(()=>{
                             message.success('确认成功！');
                             setVisible(false);
                         }).then(()=>{
@@ -94,7 +82,7 @@ export default function ProcessDetail(): React.ReactNode {
   
                     temp.push(selectedRows[0]);
                     setUserDataSource(temp);
-                    } } buttonTitle="添加员工"/>
+                    } } buttonTitle="添加员工" selectKey={[...userDataSource]}/>
                 <Table 
                     columns={[
                         { title: '姓名', dataIndex: 'name', key:'name' },
@@ -113,6 +101,7 @@ export default function ProcessDetail(): React.ReactNode {
                     ]}
                     dataSource={[...userDataSource]} 
                     pagination={false}
+                    size='small'
                 />
             </Modal>
         </Spin>

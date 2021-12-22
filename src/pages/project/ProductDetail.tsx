@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Form, Spin } from "antd"
+import { Button, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../common"
 import { newProductGroup, productAssist } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'

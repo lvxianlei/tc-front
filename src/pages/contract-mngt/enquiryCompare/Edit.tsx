@@ -1,10 +1,11 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
 import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber } from "antd"
-import { BaseInfo, CommonTable, DetailTitle, PopTableContent, IntgSelect } from "../../common"
+import { BaseInfo, CommonTable, DetailTitle, IntgSelect } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
+import { PopTableContent } from "./ComparesModal"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
 interface EditProps {
     id: string
     type: "new" | "edit"
@@ -69,7 +70,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
 })
 
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
-    const materialStandardEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: {
+    const materialStandardEnum = materialStandardOptions?.map((item: {
         id: string,
         name: string
     }) => ({
@@ -81,12 +82,21 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [chooseVisible, setChooseVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
-    const [form] = Form.useForm()
+    const [form] = Form.useForm();
+    const [ purchasePlanId, setPurchasePlanId ] = useState('');
     const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${id}`)
             form.setFieldsValue(result)
-            setMaterialList(result?.comparisonPriceDetailVos || [])
+            const comparisonPriceDetailVos = result?.comparisonPriceDetailVos.map((res: any) => {
+                return {
+                    ...res,
+                    materialTextureId: res.source === 1 ? res.materialTexture : res.materialTextureId,
+                    materialStandardName: res.source === 1 ? res.materialStandard : res.materialStandardName,
+                    materialStandard: res.source === 1 ? res.materialStandardName : res.materialStandard
+                }
+            })
+            setMaterialList(comparisonPriceDetailVos || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -95,7 +105,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const postData = type === "new" ? data : ({ ...data, id })
+            const postData = type === "new" ? { ...data, purchasePlanId: purchasePlanId} : ({ ...data, id, purchasePlanId: purchasePlanId })
             const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/comparisonPrice`, postData)
             resole(result)
         } catch (error) {
@@ -111,8 +121,15 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             await saveRun({
                 ...baseData,
                 comparisonPriceDetailDtos: materialList.map((item: any) => {
-                    delete item.id
-                    return item
+                    return {
+                        ...item,
+                        id: '',
+                        materialTexture: item.source === 1 ? item.materialTextureId : item.materialTexture,
+                        materialTextureId: item.source === 1 ? '' :item.materialTextureId,
+                        materialStandard: item.source === 1 ? item.materialStandardName : item.materialStandard,
+                        materialStandardName: item.source === 1 ? item.materialStandard :item.materialStandardName,
+                    }
+                    // delete item.id
                 })
             })
             resove(true)
@@ -153,7 +170,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
 
     const handleChoosePlanOk = () => {
-        const chooseData = choosePlanRef.current?.selectRows
+        const chooseData = choosePlanRef.current?.selectRows;
+        setPurchasePlanId(chooseData[0].id);
         setMaterialList(chooseData[0]?.materials.map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",
@@ -163,9 +181,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             weight: item.singleWeight || 0,
             source: 1,
             totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(2),
-            materialTexture: item.structureTexture,
-            standardName: item.standardName,
-            materialStandard: item.standard,
+            materialTextureId: item.structureTexture,
+            materialStandard: item.standardName,
+            materialStandardName: item.standard,
             materialCode: item.code
         })))
         setChooseVisible(false)
@@ -183,6 +201,21 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             }
             return item
         }))
+    }
+
+    const lengthChange = (value: number, id: string) => {
+        const list = materialList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    length: value,
+                    weight: item.weightAlgorithm === '0' ? (item.proportion * item.thickness * item.width * value).toFixed(3) : item.weightAlgorithm === '1' ? (item.proportion * value).toFixed(3) : null,
+                    totalWeight: (parseFloat(item.weight || "0.00") * item.num).toFixed(3)
+                })
+            }
+            return item
+        })
+        setMaterialList(list);
     }
 
     return <Spin spinning={loading}>
@@ -207,7 +240,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     source: 2,
                     materialTexture: item.structureTexture,
                     standardName: item.standardName,
-                    materialStandard: item.standard
+                    materialStandard: item.standard,
+                    proportion: item.proportion == -1 ? 0 : item.proportion
                 })))} />
         </Modal>
         <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk}
@@ -232,6 +266,55 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                 min={0}
                                 value={value === -1 ? 0 : value}
                                 onChange={(value: number) => handleInputChange(value, records.id)} />
+                        })
+                    }
+                    if (item.dataIndex === "length") {
+                        return ({
+                            ...item,
+                            render: (value: number, records: any) => records.source === 1 ? value : <InputNumber
+                                min={0}
+                                value={value === -1 ? 0 : value}
+                                onChange={(value: number) => lengthChange(value, records.id)} />
+                        })
+                    }
+                    if (item.dataIndex === "materialStandard") {
+                        return ({
+                            ...item,
+                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <Select style={{ width: '150px' }} value={ materialList[key].materialStandard && materialList[key].materialStandard + ',' +  materialList[key].materialStandardName } onChange={(e: string) => {
+                                const newData = materialList.map((item: any, index: number) => {
+                                    if(index === key) {
+                                        return {
+                                            ...item,
+                                            materialStandard: e.split(',')[0],
+                                            materialStandardName: e.split(',')[1]
+                                        }
+                                    } 
+                                    return item
+                                })
+                                setMaterialList(newData)
+                            }}>
+                                {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
+                            </Select>
+                        })
+                    }
+                    if (item.dataIndex === "materialTextureId") {
+                        return ({
+                            ...item,
+                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <Select style={{ width: '150px' }} value={ materialList[key].materialTextureId && materialList[key].materialTextureId + ',' +  materialList[key].materialTexture } onChange={(e: string) => {
+                                const newData = materialList.map((item: any, index: number) => {
+                                    if(index === key) {
+                                        return {
+                                            ...item,
+                                            materialTextureId: e.split(',')[0],
+                                            materialTexture: e.split(',')[1]
+                                        }
+                                    } 
+                                    return item
+                                })
+                                setMaterialList(newData)
+                            }}>
+                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
+                            </Select>
                         })
                     }
                     return item

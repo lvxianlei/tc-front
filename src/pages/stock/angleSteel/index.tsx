@@ -7,7 +7,7 @@ import { baseInfo, material } from './angleSteel.json'
 import RequestUtil from "../../../utils/RequestUtil"
 import Edit from "./Edit"
 import useRequest from '@ahooksjs/use-request'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { materialTextureOptions } from '../../../configuration/DictionaryOptions'
 type typeProps = "new" | "edit"
 const AngleSteel = () => {
     const history = useHistory()
@@ -18,7 +18,7 @@ const AngleSteel = () => {
     const [materialData, setMaterialData] = useState<{ [key: string]: any }>({})
     const [materialId, setMaterialId] = useState<string>()
     const [baseInfoForm] = Form.useForm()
-    const materialTextureEnum = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+    const materialTextureEnum = materialTextureOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))

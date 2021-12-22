@@ -34,8 +34,8 @@ export default function TemplateList() {
             align: 'center',
         },
         {
-            title: '任务单编号',
-            dataIndex: 'externalTaskNum',
+            title: '计划号',
+            dataIndex: 'planNumber',
             align: 'center',
         },
         {
@@ -67,7 +67,7 @@ export default function TemplateList() {
             title: '操作',
             dataIndex: 'operation',
             align: 'center',
-            render: (text: string, item: { id: string,productCategoryId:string,},) => {
+            render: (text: string, item: { id: string, productCategoryId: string, },) => {
                 return (
                     <div className='operation'>
                         <span
@@ -87,16 +87,16 @@ export default function TemplateList() {
             value.updateStatusTimeStart = `${formatDate[0]} 00:00:00`
             value.updateStatusTimeEnd = `${formatDate[1]} 23:59:59`
         }
-        setFilterValue({ ...filterValue, ...value })
+        setFilterValue(value)
         return value
     }
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        const data: any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
         resole(data?.records);
     }), {})
     const checkUser: any = data || [];
-    
+
     return (
         <>
             <Page
@@ -127,12 +127,12 @@ export default function TemplateList() {
                         name: 'status',
                         label: '上传状态',
                         children: (<Form.Item name="status" initialValue={location.state?.state || ""}>
-                                <Select style={{ width: 200 }} placeholder="请选择">
-                                    <Select.Option value="">全部</Select.Option>
-                                    <Select.Option value={1}>待上传</Select.Option>
-                                    <Select.Option value={2}>已上传</Select.Option>
-                                </Select>
-                            </Form.Item>
+                            <Select style={{ width: 200 }} placeholder="请选择">
+                                <Select.Option value="">全部</Select.Option>
+                                <Select.Option value={1}>待上传</Select.Option>
+                                <Select.Option value={2}>已上传</Select.Option>
+                            </Select>
+                        </Form.Item>
                         )
                     },
                     {
@@ -141,16 +141,16 @@ export default function TemplateList() {
                         children: <Form.Item name="drawLeader" initialValue={location.state?.userId || ""}>
                             <Select placeholder="请选择" style={{ width: "150px" }}>
                                 <Select.Option value="" key="6">全部</Select.Option>
-                                { checkUser && checkUser.map((item: any) => {
-                                    return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                                }) }
+                                {checkUser && checkUser.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                })}
                             </Select>
                         </Form.Item>
                     },
                     {
                         name: 'fuzzyMsg',
                         label: '查询',
-                        children: <Input placeholder="放样任务编号/内部合同编号/任务单编号/塔型" style={{ width: 300 }} />
+                        children: <Input placeholder="放样任务编号/内部合同编号/计划号/塔型" style={{ width: 300 }} />
                     }
                 ]}
             />

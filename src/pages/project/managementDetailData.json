@@ -1,4 +1,86 @@
 {
+    "baseList": [
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "isResizable": true,
+            "width": 120
+        },
+        {
+            "title": "项目编码",
+            "dataIndex": "projectNumber"
+        },
+        {
+            "title": "招标批次列",
+            "dataIndex": "bidBatch"
+        },
+        {
+            "title": "项目类型",
+            "dataIndex": "projectType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "公开招标"
+                },
+                {
+                    "value": 1,
+                    "label": "用户工程"
+                }
+            ]
+        },
+        {
+            "title": "标书购买截至日期",
+            "dataIndex": "bidBuyEndTime"
+        },
+        {
+            "title": "投标截至日期",
+            "dataIndex": "biddingEndTime"
+        },
+        {
+            "title": "项目阶段",
+            "dataIndex": "currentProjectStage",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "准备投标"
+                },
+                {
+                    "value": 1,
+                    "label": "投标"
+                },
+                {
+                    "value": 2,
+                    "label": "合同签订"
+                },
+                {
+                    "value": 3,
+                    "label": "合同执行"
+                },
+                {
+                    "value": 4,
+                    "label": "项目结束"
+                }
+            ]
+        },
+        {
+            "title": "项目负责人",
+            "dataIndex": "projectLeader"
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime"
+        },
+        {
+            "title": "发布时间",
+            "dataIndex": "releaseDate"
+        },
+        {
+            "title": "说明",
+            "dataIndex": "bidExplain"
+        }
+    ],
     "baseInfoData": [
         {
             "title": "项目名称",
@@ -12,13 +94,11 @@
         },
         {
             "title": "项目编码",
-            "dataIndex": "projectNumber",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入项目编码..."
-                }
-            ]
+            "dataIndex": "projectNumber"
+        },
+        {
+            "title": "招标批次",
+            "dataIndex": "bidBatch"
         },
         {
             "title": "项目类型",
@@ -40,6 +120,12 @@
                     "message": "请选择项目类型..."
                 }
             ]
+        },
+        {
+            "title": "发布日期",
+            "dataIndex": "releaseDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "标书购买截至日期",
@@ -69,12 +155,46 @@
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入国家..."
+                    "message": "请选择国家..."
                 }
             ]
         },
         {
-            "title": "招标人",
+            "title": "业务经理",
+            "dataIndex": "projectLeader",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择业务经理..."
+                }
+            ],
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
+        },
+        {
+            "title": "招标人/客户",
             "dataIndex": "biddingPerson",
             "type": "popTable",
             "path": "/tower-customer/customer",
@@ -133,46 +253,6 @@
                     "title": "联系电话",
                     "dataIndex": "phone"
                 }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择招标代理机构..."
-                }
-            ]
-        },
-        {
-            "title": "项目负责人",
-            "dataIndex": "projectLeader",
-            "type": "popTable",
-            "path": "/sinzetech-user/user",
-            "value": "name",
-            "readOnly": true,
-            "dependencies": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择项目负责人..."
-                }
-            ],
-            "columns": [
-                {
-                    "title": "登录账号",
-                    "dataIndex": "account"
-                },
-                {
-                    "title": "用户姓名",
-                    "dataIndex": "name",
-                    "search": true
-                },
-                {
-                    "title": "所属角色",
-                    "dataIndex": "userRoleNames"
-                },
-                {
-                    "title": "所属机构",
-                    "dataIndex": "departmentName"
-                }
             ]
         },
         {
@@ -200,19 +280,22 @@
                     "value": 4,
                     "label": "项目结束"
                 }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择当前项目阶段..."
-                }
             ]
         },
         {
-            "title": "发布日期",
-            "dataIndex": "releaseDate",
-            "type": "date",
-            "format": "YYYY-MM-DD"
+            "title": "是否签订合同",
+            "dataIndex": "isContract",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "是"
+                },
+                {
+                    "value": 0,
+                    "label": "否"
+                }
+            ]
         },
         {
             "title": "说明",
@@ -295,7 +378,7 @@
             "dataIndex": "money",
             "type": "number",
             "required": true,
-            "decimal":"4",
+            "decimal": "4",
             "rules": [
                 {
                     "required": true,
@@ -307,7 +390,7 @@
             "title": "重量（吨）",
             "dataIndex": "weight",
             "type": "number",
-            "decimal":"3",
+            "decimal": "3",
             "required": true,
             "rules": [
                 {
@@ -396,7 +479,31 @@
         },
         {
             "title": "制作人员",
-            "dataIndex": "mackUser"
+            "dataIndex": "mackUser",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
         },
         {
             "title": "接收人",
@@ -408,12 +515,60 @@
             "type": "date"
         },
         {
-            "title": "授权人",
-            "dataIndex": "warrantUser"
+            "title": "授权代表",
+            "dataIndex": "warrantUser",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
         },
         {
             "title": "检查人",
-            "dataIndex": "checkUser"
+            "dataIndex": "checkUser",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
         },
         {
             "title": "开标日期",
@@ -576,7 +731,7 @@
             "disabled": true
         },
         {
-            "title": "合同总重(吨)",
+            "title": "预估总重(吨)",
             "dataIndex": "contractWeight",
             "type": "number",
             "rules": [
@@ -587,12 +742,12 @@
             ]
         },
         {
-            "title": "合同单价(元/吨)",
+            "title": "预估单价(元/吨)",
             "dataIndex": "contractMoney",
             "type": "number"
         },
         {
-            "title": "合同总价(元)",
+            "title": "预估总价(元)",
             "dataIndex": "contractMoneyCount",
             "type": "number",
             "rules": [
@@ -601,6 +756,26 @@
                     "message": "请输入合同总价..."
                 }
             ]
+        },
+        {
+            "title": "执行重量",
+            "dataIndex": "implementWeight",
+            "disabled": true
+        },
+        {
+            "title": "执行金额",
+            "dataIndex": "implementMoney",
+            "disabled": true
+        },
+        {
+            "title": "执行重量百分比(%)",
+            "dataIndex": "implementWeightPro",
+            "disabled": true
+        },
+        {
+            "title": "执行金额百分比(%)",
+            "dataIndex": "implementMoneyPro",
+            "disabled": true
         },
         {
             "title": "中标类型",
@@ -1196,6 +1371,11 @@
             ]
         },
         {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "maxLength": 20
+        },
+        {
             "title": "内部合同编号",
             "dataIndex": "internalNumber",
             "disabled": true
@@ -1221,18 +1401,6 @@
             "disabled": true,
             "type": "date",
             "format": "YYYY-MM-DD"
-        },
-        {
-            "title": "客户交货日期",
-            "dataIndex": "deliveryTime",
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择客户交货日期..."
-                }
-            ]
         },
         {
             "title": "备注",
@@ -1324,16 +1492,21 @@
                 {
                     "value": 1,
                     "label": "已下发"
+                },
+                {
+                    "value": 2,
+                    "label": "审批中"
                 }
             ]
         },
         {
-            "title": "基数",
-            "dataIndex": "number"
-        },
-        {
             "title": "线路名称",
             "dataIndex": "lineName",
+            "width": 120
+        },
+        {
+            "title": "杆塔号",
+            "dataIndex": "productNumber",
             "width": 120
         },
         {
@@ -1342,9 +1515,8 @@
             "width": 120
         },
         {
-            "title": "杆塔号",
-            "dataIndex": "productNumber",
-            "width": 120
+            "title": "基数",
+            "dataIndex": "number"
         },
         {
             "title": "产品类型",
@@ -1361,8 +1533,16 @@
             "dataIndex": "productHeight"
         },
         {
-            "title": "杆塔重量（kg）",
-            "dataIndex": "productWeight"
+            "title": " 单重（kg）",
+            "dataIndex": "monomerWeight"
+        },
+        {
+            "title": " 其他单重（kg）",
+            "dataIndex": "otherWeight"
+        },
+        {
+            "title": " 总重（kg）",
+            "dataIndex": "totalWeight"
         },
         {
             "title": "备注",
@@ -1382,6 +1562,10 @@
                 {
                     "value": 1,
                     "label": "已下发"
+                },
+                {
+                    "value": 2,
+                    "label": "审批中"
                 }
             ]
         },
@@ -1414,8 +1598,28 @@
             "dataIndex": "productHeight"
         },
         {
-            "title": "杆塔重量（kg）",
-            "dataIndex": "productWeight"
+            "title": "单重(kg)",
+            "dataIndex": "monomerWeight"
+        },
+        {
+            "title": "其他重量(kg)",
+            "dataIndex": "otherWeight"
+        },
+        {
+            "title": "总重(kg)",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "*客户交货日期",
+            "dataIndex": "deliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择客户交货日期..."
+                }
+            ]
         },
         {
             "title": "备注",

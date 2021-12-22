@@ -22,6 +22,7 @@ export default function Particulars(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const onFilterSubmit = (value: any) => {
+        value.contractId = params.id
         return value
     }
 
@@ -29,34 +30,37 @@ export default function Particulars(): React.ReactNode {
         path="/tower-storage/receiveStock/detail"
         onFilterSubmit={onFilterSubmit}
         sourceKey={"receiveStockDetailPage.records"}
-        extraOperation={(data) => 
-            <>
-                <span style={{marginLeft:"20px", fontSize: 16, color: "#FF8C00", fontWeight: "bold"}}>
-                    已收货：重量(支)合计：{data?.receiveWeight || 0}&nbsp;
-                    价税合计(元)合计：{data?.receivePrice || 0}&nbsp;
-                    未收货：重量(支)合计：{data?.waitWeight || 0}&nbsp;
-                    价税合计(元)合计：{data?.waitPrice || 0}
-                </span>
-                <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
-            </>
+        extraOperation={(data) =>
+            {
+                return (
+                    <>
+                        <span style={{marginLeft:"20px", fontSize: 16, color: "#FF8C00", fontWeight: "bold"}}>
+                            已收货：重量(支)合计：{data?.receiveStockMessage?.receiveWeight || 0}&nbsp;
+                            价税合计(元)合计：{data?.receiveStockMessage?.receivePrice || 0}&nbsp;
+                            未收货：重量(支)合计：{data?.receiveStockMessage?.waitWeight || 0}&nbsp;
+                            价税合计(元)合计：{data?.receiveStockMessage?.waitPrice || 0}
+                        </span>
+                        <Button type="primary" ghost>导出</Button>
+                        <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                    </>
+                )
+            }
         }
         filterValue={{ contractId: params.id }}
         searchFormItems={[
             {
-                name: 'state',
+                name: 'receiveStatus',
                 label: '采购状态',
-                children: <Form.Item name="state" initialValue="">
+                children: <Form.Item name="receiveStatus" initialValue="">
                     <Select placeholder="请选择" style={{ width: "150px" }}>
                         <Select.Option value={''} key="3">全部</Select.Option>
-                        <Select.Option value={0} key="0">草稿</Select.Option>
-                        <Select.Option value={1} key="1">已发布</Select.Option>
-                        <Select.Option value={2} key="2">已撤回</Select.Option>
+                        <Select.Option value={0} key="0">待收货</Select.Option>
+                        <Select.Option value={1} key="1">已收货</Select.Option>
                     </Select>
                 </Form.Item>
             },
             {
-                name: 'fuzzyQuery',
+                name: 'receiveNumber',
                 children: <Input placeholder="请输入收货单进行查询" style={{ width: 300 }} />
             },
         ]}

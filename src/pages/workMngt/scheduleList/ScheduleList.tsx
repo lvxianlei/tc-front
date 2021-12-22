@@ -21,10 +21,10 @@ export default function ScheduleList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'externalTaskNum',
-            title: '任务单编号',
+            key: 'planNumber',
+            title: '计划号',
             width: 100,
-            dataIndex: 'externalTaskNum'
+            dataIndex: 'planNumber'
         },
         {
             key: 'saleOrderNumber',
@@ -65,40 +65,6 @@ export default function ScheduleList(): React.ReactNode {
             title: '状态',
             dataIndex: 'statusName'
         },
-        // {
-        //     key: 'status',
-        //     title: '状态',
-        //     dataIndex: 'status',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //           {
-        //             value: 0,
-        //             label: "已拒绝"
-        //           },
-        //           {
-        //             value: 1,
-        //             label: "待确认"
-        //           },
-        //           {
-        //             value: 2,
-        //             label: "待指派"
-        //           },
-        //           {
-        //             value: 3,
-        //             label: "待完成"
-        //           },
-        //           {
-        //             value: 4,
-        //             label: "已完成"
-        //           },
-        //           {
-        //             value: 5,
-        //             label: "已提交"
-        //           },
-        //         ]
-        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'updateStatusTime',
             title: '最新状态变更时间',
@@ -139,7 +105,6 @@ export default function ScheduleList(): React.ReactNode {
             path="/tower-science/loftingTask"
             columns={columns}
             exportPath="/tower-science/loftingTask"
-            // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             requestData={{
@@ -157,25 +122,15 @@ export default function ScheduleList(): React.ReactNode {
                     children: <Form.Item name="status" initialValue={ location.state?.state || '' }>
                         <Select style={{width:"100px"}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
-                            {/* <Select.Option value={0} key={0}>已拒绝</Select.Option>
-                            <Select.Option value={1} key={1}>待确认</Select.Option> */}
                             <Select.Option value={2} key={2}>待指派</Select.Option>
                             <Select.Option value={3} key={3}>待完成</Select.Option>
-                            {/* <Select.Option value={4} key={4}>已完成</Select.Option>
-                            <Select.Option value={5} key={5}>已提交</Select.Option> */}
                         </Select>
                     </Form.Item>
                 },
-                // {
-                //     name: 'planTime',
-                //     label: '计划交付时间',
-                //     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                // },
-                
                 {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号进行查询" maxLength={200} />
+                    children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号进行查询" maxLength={200} />
                 },
             ]}
         />

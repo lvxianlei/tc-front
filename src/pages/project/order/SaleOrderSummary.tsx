@@ -181,41 +181,11 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         ],
         [
           {
-            label: "保函类型",
-            value:
-              baseInfo?.guaranteeType === "-1"
-                ? undefined
-                : baseInfo?.guaranteeType,
-          },
-          {
             label: "保函金额",
             value:
               baseInfo?.guaranteeAmount === -1
                 ? undefined
                 : baseInfo?.guaranteeAmount,
-          },
-        ],
-        [
-          {
-            label: "海运及保险费",
-            value:
-              baseInfo?.insuranceCharge === -1
-                ? undefined
-                : baseInfo?.insuranceCharge,
-          },
-          {
-            label: "港口费用",
-            value:
-              baseInfo?.portCharge === -1 ? undefined : baseInfo?.portCharge,
-          },
-        ],
-        [
-          {
-            label: "出口信用保险",
-            value:
-              baseInfo?.creditInsurance === -1
-                ? undefined
-                : baseInfo?.creditInsurance,
           },
           {
             label: "佣金",
@@ -224,14 +194,15 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
                 ? undefined
                 : baseInfo?.commissionCharge,
           },
-        ],
+        ]
       ],
     };
   }
   protected getOrderColumns(): TableColumnType<object>[] {
     const productStatus: any = {
       0: "未下发",
-      1: "已下发"
+      1: "已下发",
+      2: "审批中"
     }
     return [{
       title: '序号',
@@ -240,11 +211,11 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
       title: '状态',
       dataIndex: 'productStatus',
       render: (status: number): React.ReactNode => {
-        return productStatus[status]
+        return productStatus[productStatus]
       }
     },
     {
-      title: "线路名称",
+      title: "线路名称11",
       dataIndex: "lineName",
     },
     {

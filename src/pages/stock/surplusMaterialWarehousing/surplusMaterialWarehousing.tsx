@@ -20,7 +20,7 @@ export default function RawMaterialStock(): React.ReactNode {
     const [dateValue, setDateValue] = useState<any>([]);//时间
     const [dateString, setDateString] = useState<any>([]);//时间字符串格式
     const [keyword, setKeyword] = useState<any>('');//关键字搜索
-    const [status, setStatus] = useState('');//状态
+    const [status, setStatus] = useState(`${(history.location.state as any)?.receiveStatus || ""}`)//状态
     const [departmentId, setDepartmentId] = useState('');//部门
     const [personnelId, setPersonnelId] = useState('');//人员
     const [Listdata, setListdata] = useState<any[]>([]);//数据列表

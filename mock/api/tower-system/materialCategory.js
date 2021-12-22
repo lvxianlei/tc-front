@@ -8,7 +8,9 @@ for (let i = 1; i < 10; ++i) {
         "id": Random.increment(),
         "code": Random.increment(),
         "name": `${ Random.ctitle(7, 10) }`,
-        "level|1-3": 1,
+        "level|1-2": 1,
+        "ruleFront": Random.ctitle(7, 10),
+        "unit": Random.ctitle(1,3)
     });
 }
 
@@ -19,12 +21,16 @@ module.exports = {
         "id": 10,
         "code": Random.increment(),
         "name": Random.ctitle(7, 10),
-        "level|1-3": 1,
+        "level": 1,
+        "ruleFront": Random.ctitle(7, 10),
+        "unit": Random.ctitle(1,3),
         "children":[{
             "id": 101,
             "code": Random.increment(),
             "name": Random.ctitle(7, 10),
-            "level|1-3": 1,
+            "level|1-2": 1,
+            "ruleFront": Random.ctitle(7, 10),
+            "unit": Random.ctitle(1,3)
         }].concat(records)
     }].concat(records),
     current: Random.natural(1, 20),

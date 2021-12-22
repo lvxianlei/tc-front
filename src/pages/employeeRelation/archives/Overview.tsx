@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Button, Modal, Spin, Tabs, Image } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
-import { baseInfo, overviewWorkExperience, family, companyInfo, other, relatives } from "./archives.json"
+import { baseInfo, overviewWorkExperience, family, companyInfo, other, relatives, disabilityCols } from "./archives.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 type TabTypes = "baseInfo" | "family" | "employee" | "work"
@@ -16,6 +16,20 @@ export default function Overview() {
     const history = useHistory()
     const params = useParams<{ archiveId: string }>()
     const [activeTab, setActiveTab] = useState<TabTypes>("baseInfo")
+    const baseInfoColumns = baseInfo.map((item: any) => {
+        if (item.dataIndex === "image") {
+            return ({
+                ...item,
+                render: (dataSource: any) => {
+                    return <Image width={48} src={dataSource.image} alt="" />
+                }
+            })
+        }
+        if (item.dataIndex === "bankNameId") {
+            return ({ ...item, type: "string", dataIndex: "bankName" })
+        }
+        return item
+    })
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`${tabPaths[activeTab]}?employeeId=${params.archiveId}`)
@@ -31,20 +45,11 @@ export default function Overview() {
             ]}>
                 <Spin spinning={loading}>
                     <DetailTitle title="基本信息" />
-                    <BaseInfo columns={baseInfo.map((item: any) => {
-                        if (item.dataIndex === "image") {
-                            return ({
-                                ...item,
-                                render: (dataSource: any) => {
-                                    return <Image width={48} src={dataSource.image} alt="" />
-                                }
-                            })
-                        }
-                        if (item.dataIndex === "bankNameId") {
-                            return ({ ...item, type: "string", dataIndex: "bankName" })
-                        }
-                        return item
-                    })} dataSource={data || {}} />
+                    <BaseInfo
+                        columns={data?.isDisability ? [...baseInfoColumns,
+                        ...disabilityCols] : baseInfoColumns}
+                        dataSource={data || {}}
+                    />
                     <DetailTitle title="公司信息" />
                     <BaseInfo columns={companyInfo.map((item: any) => {
                         if (item.dataIndex === "postType") {

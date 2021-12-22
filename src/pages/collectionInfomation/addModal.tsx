@@ -7,8 +7,8 @@ import { BaseInfo } from '../common';
 import { baseColums } from './collectionColumn.json';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil';
-import ApplicationContext from "../../configuration/ApplicationContext"
 import { EditProps } from './collection';
+import { currencyTypeOptions, payCategoryOptions, refundModeOptions } from '../../configuration/DictionaryOptions';
 
 export default forwardRef(function AddModal({}: EditProps, ref) {
     const [ addCollectionForm ] = Form.useForm();
@@ -16,17 +16,17 @@ export default forwardRef(function AddModal({}: EditProps, ref) {
     const [ status, setStatus ] = useState<boolean>(true);
 
     // 币种
-    const currencyEnum = (ApplicationContext.get().dictionaryOption as any)["111"].map((item: { id: string, name: string }) => ({
+    const currencyEnum = (currencyTypeOptions || []).map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
     // 来款方式
-    const payTypeEnum = (ApplicationContext.get().dictionaryOption as any)["113"].map((item: { id: string, name: string }) => ({
+    const payTypeEnum = refundModeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
     // 来款性质
-    const payCategoryEnum = (ApplicationContext.get().dictionaryOption as any)["114"].map((item: { id: string, name: string }) => ({
+    const payCategoryEnum = payCategoryOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -65,7 +65,7 @@ export default forwardRef(function AddModal({}: EditProps, ref) {
 
     const handleBaseInfoChange = (fields: any) => {
         const standard = addCollectionForm.getFieldValue("currencyType"),
-            results = currencyEnum.filter((items: any) => items.value === standard);
+            results = currencyEnum?.filter((items: any) => items.value === standard);
         // 币种改变对应的禁用处理
         const result = columns.map((item: any) => {
             if (fields.currencyType && item.dataIndex === 'currencyType') {

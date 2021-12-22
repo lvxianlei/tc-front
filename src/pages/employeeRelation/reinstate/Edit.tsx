@@ -40,37 +40,35 @@ export default function RecruitEdit(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space> 
-                    <Button type="primary" onClick={() => {
-                        form.validateFields().then(res=>{
-                            const value= form.getFieldsValue(true);
-                            value.id =  params.id&&params.id!=='0'?params.id:undefined;
-                            value.reinstatementDate = value.reinstatementDate?value.reinstatementDate:undefined;
-                            // value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
-                            // value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
-                            value.submitType = 'save';
-                            RequestUtil.post(`/tower-hr/employeeReinstatement/save`,value).then(()=>{
-                                message.success('保存成功！')
-                            }).then(()=>{
-                                history.push('/employeeRelation/reinstate')
-                            })
-                    })
-                        
-                    }}>保存</Button>
-                    {params.status!=='3' && <Button type="primary" onClick={() =>{
-                        form.validateFields().then(res=>{
-                            const value= form.getFieldsValue(true);
-                            value.id =  params.id&&params.id!=='0'?params.id:undefined;
-                            value.reinstatementDate = value.reinstatementDate?value.reinstatementDate:undefined;
-                            // value.inductionDate= value.inductionDate?moment(value.inductionDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
-                            // value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
-                            value.submitType = 'submit';
-                            RequestUtil.post(`/tower-hr/employeeReinstatement/save`,value).then(()=>{
-                                message.success('提交成功！')
-                            }).then(()=>{
-                                history.push('/employeeRelation/reinstate')
-                            })
+                    <Button type="primary" onClick={async () => {
+                        await form.validateFields();
+                        const value= form.getFieldsValue(true);
+                        const postValue = {
+                            ...value,
+                            id : params.id&&params.id!=='0'?params.id:undefined,
+                            reinstatementDate: value.reinstatementDate?moment(value.reinstatementDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            submitType: 'save',
+                        }
+                        RequestUtil.post(`/tower-hr/employeeReinstatement/save`,postValue).then(()=>{
+                            message.success('保存成功！')
+                        }).then(()=>{
+                            history.push('/employeeRelation/reinstate')
                         })
-                        
+                    }}>保存</Button>
+                    {params.status!=='3' && <Button type="primary" onClick={async () =>{
+                        await form.validateFields();
+                        const value= form.getFieldsValue(true);
+                        const postValue = {
+                            ...value,
+                            id : params.id&&params.id!=='0'?params.id:undefined,
+                            reinstatementDate: value.reinstatementDate?moment(value.reinstatementDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
+                            submitType: 'submit',
+                        }
+                        RequestUtil.post(`/tower-hr/employeeReinstatement/save`,postValue).then(()=>{
+                            message.success('提交成功！')
+                        }).then(()=>{
+                            history.push('/employeeRelation/reinstate')
+                        })
                     }}>保存并提交审批</Button>}
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
@@ -135,16 +133,11 @@ export default function RecruitEdit(): React.ReactNode {
                             required:true, 
                             message:'请选择复职日期'
                         }]} name='reinstatementDate'>
-                            <FormItemType data={{
-                                disabledDate:(current:any)=>{
-                                    return current && current< form.getFieldsValue().departureDate
-                                },
-                                format:"YYYY-MM-DD"}} type="date" />
-                            {/* <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }}
+                            <DatePicker  style={{ width: '100%' }}
                                 disabledDate={(current)=>{
                                     return current && current< form.getFieldsValue().departureDate
                                 }}
-                            /> */}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>

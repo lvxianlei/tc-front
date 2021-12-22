@@ -6,7 +6,7 @@
     "clientId": "tower-erp", // 后端提供clientId
     "clientSecret": "tower-erp-secret", // 后端提供clientSecret
     "logo": "home",
-    "home": "/client/mngt", // 登录后，进入的首页
+    "home": "/chooseApply", // 登录后，进入的首页
     "layout": { // 布局配置
         "frame": "./layout/tc/TCFrame", // 主体框架
         "navigation-panel": { // 导航面板
@@ -19,6 +19,7 @@
                         "label": "客户管理",
                         "icon": "customer",
                         "path": "/client",
+                        "appName": "SC",
                         "authority": "customer_page",
                         "items": [
                             {
@@ -32,6 +33,7 @@
                         "label": "系统管理",
                         "icon": "system",
                         "path": "/sys",
+                        "appName": "COMM",
                         "authority": "dictionary_type_list",
                         "items": [
                             {
@@ -55,6 +57,7 @@
                         "label": "权限管理",
                         "icon": "rules",
                         "path": "/auth",
+                        "appName": "COMM",
                         "authority": "auth_section",
                         "items": [
                             {
@@ -73,6 +76,7 @@
                         "label": "放样外协服务",
                         "icon": "lofting",
                         "path": "/outsource",
+                        "appName": "RD",
                         "authority": "entrust_page",
                         "items": [
                             {
@@ -87,23 +91,11 @@
                             }
                         ]
                     },
-                    // {
-                    //     "label": "产品管理",
-                    //     "icon": "product",
-                    //     "path": "/product",
-                    //     "authority": "product_section",
-                    //     "items": [
-                    //         {
-                    //             "label": "塔型管理",
-                    //             "path": "/product/towershape",
-                    //             "authority": "product_towershape"
-                    //         }
-                    //     ]
-                    // },
                     {
                         "label": "招标信息",
                         "icon": "zhaobiao2",
                         "path": "/bidding",
+                        "appName": "SC",
                         "authority": "bidding",
                         "items": [
                             {
@@ -117,6 +109,7 @@
                         "label": "项目管理",
                         "icon": "xiangmuguanli",
                         "path": "/project",
+                        "appName": "SC",
                         "authority": "project",
                         "items": [
                             {
@@ -130,13 +123,18 @@
                                 "authority": "project_invoicing_requisition"
                             },
                             {
-                                "label": "付款申请",
+                                "label": "请款申请",
                                 "path": "/project/payment",
                                 "authority": "project_payment_application"
                             },
                             {
                                 "label": "回款确认",
                                 "path": "/project/collection",
+                                "authority": "project_collection_confirmation"
+                            },
+                            {
+                                "label": "图纸确认任务",
+                                "path": "/project/drawing",
                                 "authority": "project_collection_confirmation"
                             }
                         ]
@@ -145,6 +143,7 @@
                         "label": "开票申请管理",
                         "icon": "examine",
                         "path": "/invoicing",
+                        "appName": "FC",
                         "authority": "approvalm_invoicing",
                         "items": [
                             {
@@ -158,6 +157,7 @@
                         "label": "审批管理",
                         "icon": "examine",
                         "path": "/approvalm",
+                        "appName": "SC",
                         "authority": "approval_management",
                         "items": [
                             {
@@ -171,13 +171,23 @@
                         "label": "工作台",
                         "icon": "technology",
                         "path": "/workBench",
+                        "appName": "RD",
                         "authority": "workbench",
                         "items": [
                             {
                                 "label": "工作台",
                                 "path": "/workBench/workBenchMngt",
-                                "authority": "workbench_list"
-                            },
+                                "authority": "rd_workbench"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "工作台",
+                        "icon": "technology",
+                        "path": "/workBench",
+                        "appName": "SW",
+                        "authority": "workbench",
+                        "items": [
                             {
                                 "label": "供应工作台",
                                 "path": "/workBench/sw",
@@ -189,18 +199,28 @@
                         "label": "驾驶舱",
                         "icon": "technology",
                         "path": "/cockpit",
+                        "appName": "RD",
                         "authority": "cockpit",
                         "items": [
                             {
                                 "label": "计划跟踪",
                                 "path": "/cockpit/planTrack",
-                                "authority": "cockpit_plan_tracking"
+                                "authority": "rd_cockpit"
                             },
                             {
                                 "label": "放样计划",
                                 "path": "/cockpit/planSetOut",
-                                "authority": "cockpit_setting_out_plan"
-                            },
+                                "authority": "rd_cockpit"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "驾驶舱",
+                        "icon": "technology",
+                        "path": "/cockpit",
+                        "appName": "SW",
+                        "authority": "cockpit",
+                        "items": [
                             {
                                 "label": "库存看板",
                                 "path": "/cockpit/viewPanel",
@@ -227,6 +247,7 @@
                         "label": "工程报价任务",
                         "icon": "technology",
                         "path": "/enquiryTask",
+                        "appName": "SW",
                         "authority": "enquiryTask",
                         "items": [
                             {
@@ -237,14 +258,20 @@
                         ]
                     },
                     {
-                        "label": "供应商管理",
+                        "label": "合作企业管理",
                         "icon": "technology",
-                        "path": "/supplier-mngt",
+                        "path": "/cooperative",
+                        "appName": "COMM",
                         "authority": "supplier_mngt",
                         "items": [
                             {
                                 "label": "供应商管理",
-                                "path": "/supplier-mngt/index",
+                                "path": "/cooperative/supplier-mngt/index",
+                                "authority": "supplier_mngt_list"
+                            },
+                            {
+                                "label": "装卸公司管理",
+                                "path": "/cooperative/stevedoring-company-mngt/stevedoringCompany",
                                 "authority": "supplier_mngt_list"
                             }
                         ]
@@ -253,6 +280,7 @@
                         "label": "合同管理",
                         "icon": "technology",
                         "path": "/contract-mngt",
+                        "appName": "SW",
                         "authority": "contract_mngt",
                         "items": [
                             {
@@ -271,6 +299,7 @@
                         "label": "库存管理",
                         "icon": "technology",
                         "path": "/stock",
+                        "appName": "SW",
                         "authority": "inventory_management",
                         "items": [
                             {
@@ -299,6 +328,7 @@
                         "label": "财务管理",
                         "icon": "technology",
                         "path": "/financial",
+                        "appName": "SW",
                         "authority": "financial_management",
                         "items": [
                             {
@@ -317,12 +347,13 @@
                         "label": "评估任务",
                         "icon": "technology",
                         "path": "/assessmentTask",
-                        "authority": "assessment_task",
+                        "appName": "RD",
+                        "authority": "rd_assess_task_management",
                         "items": [
                             {
                                 "label": "评估任务",
                                 "path": "/assessmentTask",
-                                "authority": "assessment_task_list"
+                                "authority": "rd_assess_task_management"
                             }
                         ]
                     },
@@ -330,12 +361,13 @@
                         "label": "确认任务",
                         "icon": "technology",
                         "path": "/confirmTask",
-                        "authority": "approvalm",
+                        "appName": "RD",
+                        "authority": "rd_draw",
                         "items": [
                             {
                                 "label": "确认任务",
                                 "path": "/confirmTask/ConfirmTaskMngt",
-                                "authority": "approvalm"
+                                "authority": "rd_draw"
                             }
                         ]
                     },
@@ -343,14 +375,13 @@
                         "label": "放样任务",
                         "icon": "technology",
                         "path": "/setOutTask",
-                        // "authority": "loft_task",
-                        "authority": "approvalm",
+                        "appName": "RD",
+                        "authority": "rd_lofting_task",
                         "items": [
                             {
                                 "label": "放样任务",
                                 "path": "/setOutTask",
-                                // "authority": "loft_task_list"
-                                "authority": "approvalm"
+                                "authority": "rd_lofting_task"
                             }
                         ]
                     },
@@ -358,6 +389,7 @@
                         "label": "采购任务",
                         "icon": "technology",
                         "path": "/buyingTask",
+                        "appName": "SW",
                         "authority": "procurement_task",
                         "items": [
                             {
@@ -371,48 +403,63 @@
                         "label": "工作管理",
                         "icon": "technology",
                         "path": "/workMngt",
+                        "appName": "RD",
                         "authority": "work_management",
                         "items": [
                             {
                                 "label": "评估列表",
                                 "path": "/workMngt/evaluationList",
-                                "authority": "work_management_evaluation_list"
+                                "authority": "rd_assessment_task_list"
                             },
                             {
                                 "label": "确认列表",
                                 "path": "/workMngt/confirmList",
-                                "authority": "work_management_confirmation_list"
+                                "authority": "rd_draw_product_detail"
                             },
                             {
                                 "label": "指派列表",
                                 "path": "/workMngt/scheduleList",
-                                "authority": "work_management_assignment_list"
+                                "authority": "rd_lofting_task_assign"
                             },
                             {
                                 "label": "提料列表",
                                 "path": "/workMngt/pickList",
-                                "authority": "work_management_picking_list"
+                                "authority": "rd_product_material_list"
                             },
                             {
                                 "label": "放样列表",
                                 "path": "/workMngt/setOutList",
-                                "authority": "work_management_loft_list"
+                                "authority": "rd_loft_task_list"
                             },
                             {
                                 "label": "螺栓列表",
                                 "path": "/workMngt/boltList",
-                                "authority": "work_management_bolt_list"
+                                "authority": "rd_bolt_management"
                             },
                             {
                                 "label": "小样图列表",
                                 "path": "/workMngt/sampleDrawList",
-                                "authority": "work_management_List_of_small_samples"
+                                "authority": "rd_small_sample_management"
                             },
                             {
                                 "label": "组焊列表",
                                 "path": "/workMngt/assemblyWeldingList",
-                                "authority": "work_management_assembly_welding_list"
+                                "authority": "rd_welding"
                             },
+                            {
+                                "label": "样板列表",
+                                "path": "/workMngt/templateList",
+                                "authority": "rd_template_record"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "工作管理",
+                        "icon": "technology",
+                        "path": "/workMngt",
+                        "appName": "SW",
+                        "authority": "work_management",
+                        "items": [
                             {
                                 "label": "工程报价列表",
                                 "path": "/workMngt/enquiry",
@@ -452,11 +499,6 @@
                                 "label": "缺料列表",
                                 "path": "/workMngt/shortageList",
                                 "authority": "work_management_shortage_list"
-                            },
-                            {
-                                "label": "样板列表",
-                                "path": "/workMngt/templateList",
-                                "authority": "work_management_template_list"
                             }
                         ]
                     },
@@ -464,12 +506,13 @@
                         "label": "图纸塔型",
                         "icon": "technology",
                         "path": "/drawTower",
-                        "authority": "drawing_tower_type",
+                        "appName": "RD",
+                        "authority": "rd_draw_product_category_management",
                         "items": [
                             {
                                 "label": "图纸塔型",
                                 "path": "/drawTower/drawTowerMngt",
-                                "authority": "drawing_tower_type_list"
+                                "authority": "rd_draw_product_category_management"
                             }
                         ]
                     },
@@ -477,12 +520,13 @@
                         "label": "放样塔型",
                         "icon": "technology",
                         "path": "/setOutTower",
-                        "authority": "lofting_tower_type",
+                        "appName": "RD",
+                        "authority": "rd_product_category",
                         "items": [
                             {
                                 "label": "放样塔型",
                                 "path": "/setOutTower/setOutTowerMngt",
-                                "authority": "lofting_tower_type_list"
+                                "authority": "rd_product_category"
                             }
                         ]
                     },
@@ -490,12 +534,13 @@
                         "label": "问题单",
                         "icon": "technology",
                         "path": "/question",
-                        "authority": "questionnaire",
+                        "appName": "RD",
+                        "authority": "rd_issue",
                         "items": [
                             {
                                 "label": "问题单",
                                 "path": "/question/questionMngt",
-                                "authority": "questionnaire_list"
+                                "authority": "rd_issue"
                             }
                         ]
                     },
@@ -503,22 +548,27 @@
                         "label": "车间工作管理",
                         "icon": "technology",
                         "path": "/workshopManagement",
+                        "appName": "MC",
                         "authority": "workshop_work_management",
                         "items": [
                             {
-                                "label": "加工任务面板",
+                                "label": "加工任务",
                                 "path": "/workshopManagement/processingTask",
                                 "authority": "workshop_work_management_machining_task_panel"
-                            },
+                            }
+                        ]
+                    },
+                    {
+                        "label": "原材料领料",
+                        "icon": "technology",
+                        "path": "/materialPicking",
+                        "appName": "MC",
+                        "authority": "workshop_work_management",
+                        "items": [
                             {
-                                "label": "试装计划任务列表",
-                                "path": "/workshopManagement/trialAssemblyTask",
-                                "authority": "workshop_work_management_trial_assembly_plan_task_list"
-                            },
-                            {
-                                "label": "车间转运接收列表",
-                                "path": "/workshopManagement/workshopTransfer",
-                                "authority": "workshop_work_management_workshop_transfer_receiving_list"
+                                "label": "原材料领料单",
+                                "path": "/materialPicking/picking",
+                                "authority": "workshop_work_management_machining_task_panel"
                             }
                         ]
                     },
@@ -526,12 +576,27 @@
                         "label": "计划排产",
                         "icon": "technology",
                         "path": "/planProd",
-                        "authority": "planned_production_scheduling",
+                        "appName": "PS",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "计划排产",
                                 "path": "/planProd/planMgmt",
-                                "authority": "planned_production_scheduling_list"
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "车间加工计划",
+                        "icon": "technology",
+                        "path": "/shopFloorPlan",
+                        "authority": "approvalm",
+                        "appName": "MC",
+                        "items": [
+                            {
+                                "label": "车间加工计划",
+                                "path": "/shopFloorPlan",
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -540,6 +605,7 @@
                         "icon": "technology",
                         "path": "/galvanizingWorkshop",
                         "authority": "galvanizing_workshop",
+                        "appName": "MC",
                         "items": [
                             {
                                 "label": "日计划列表",
@@ -557,20 +623,21 @@
                         "label": "包装车间",
                         "icon": "technology",
                         "path": "/packagingWorkshop",
+                        "appName": "MC",
                         "authority": "packaging_workshop",
                         "items": [
                             {
-                                "label": "加工任务面板",
+                                "label": "包装计划列表",
                                 "path": "/packagingWorkshop/processingTask",
                                 "authority": "packaging_workshop_machining_task_panel"
                             },
                             {
-                                "label": "成品入库列表",
+                                "label": "成品入库",
                                 "path": "/packagingWorkshop/warehousing",
                                 "authority": "packaging_workshop_finished_goods_warehousing_list"
                             },
                             {
-                                "label": "成品出库计划",
+                                "label": "成品出库任务",
                                 "path": "/packagingWorkshop/deliveryPlan",
                                 "authority": "packaging_workshop_finished_goods_delivery_plan"
                             },
@@ -585,6 +652,7 @@
                         "label": "车辆转运",
                         "icon": "technology",
                         "path": "/vehicleTransport",
+                        "appName": "MC",
                         "authority": "vehicle_transfer",
                         "items": [
                             {
@@ -598,6 +666,7 @@
                         "label": "配置管理",
                         "icon": "technology",
                         "path": "/config",
+                        "appName": "SW",
                         "authority": "configuration_management",
                         "items": [
                             {
@@ -611,30 +680,31 @@
                         "label": "基础设置",
                         "icon": "technology",
                         "path": "/baseSetting",
+                        "appName": "COMM",
                         "authority": "basic_settings",
                         "items": [
                             {
                                 "label": "基础设置",
                                 "path": "/baseSetting/baseSettingMngt",
-                                "authority": "basic_settings_list"
+                                "authority": "config_list"
                             },
+                            // {
+                            //     "label": "产线管理",
+                            //     "path": "/baseSetting/productionLineMngt",
+                            //     "authority": "basic_settings_production_line_management"
+                            // },
+                            // {
+                            //     "label": "工序管理",
+                            //     "path": "/baseSetting/processMngt",
+                            //     "authority": "basic_settings_process_management"
+                            // },
+                            // {
+                            //     "label": "车间派工设备管理",
+                            //     "path": "/baseSetting/workshopEquipmentMngt",
+                            //     "authority": "basic_settings_workshop_dispatch_equipment_management"
+                            // },
                             {
-                                "label": "产线管理",
-                                "path": "/baseSetting/productionLineMngt",
-                                "authority": "basic_settings_production_line_management"
-                            },
-                            {
-                                "label": "工序管理",
-                                "path": "/baseSetting/processMngt",
-                                "authority": "basic_settings_process_management"
-                            },
-                            {
-                                "label": "车间派工设备管理",
-                                "path": "/baseSetting/workshopEquipmentMngt",
-                                "authority": "basic_settings_workshop_dispatch_equipment_management"
-                            },
-                            {
-                                "label": "车间班组管理",
+                                "label": "生产班组管理",
                                 "path": "/baseSetting/workshopTeamMngt",
                                 "authority": "basic_settings_workshop_team_management"
                             },
@@ -651,22 +721,10 @@
                         ]
                     },
                     {
-                        "label": "选择应用",
-                        "icon": "technology",
-                        "path": "/chooseApply",
-                        "authority": "approvalm",
-                        "items": [
-                            {
-                                "label": "选择应用",
-                                "path": "/chooseApply",
-                                "authority": "approvalm"
-                            }
-                        ]
-                    },
-                    {
                         "label": "公告管理",
                         "icon": "technology",
                         "path": "/announcement",
+                        "appName": "COMM",
                         "authority": "announcement_management",
                         "items": [
                             {
@@ -680,6 +738,7 @@
                         "label": "档案管理",
                         "icon": "technology",
                         "path": "/archivesMngt",
+                        "appName": "COMM",
                         "authority": "file_management",
                         "items": [
                             {
@@ -698,6 +757,7 @@
                         "label": "部门管理",
                         "icon": "technology",
                         "path": "/dept",
+                        "appName": "COMM",
                         "authority": "department_management",
                         "items": [
                             {
@@ -721,6 +781,7 @@
                         "label": "基础数据",
                         "icon": "technology",
                         "path": "/basicData",
+                        "appName": "COMM",
                         "authority": "basic_data",
                         "items": [
                             {
@@ -734,6 +795,7 @@
                         "label": "系统日志",
                         "icon": "technology",
                         "path": "/systemLog",
+                        "appName": "COMM",
                         "authority": "system_log",
                         "items": [
                             {
@@ -752,16 +814,17 @@
                         "label": "请款申请管理",
                         "icon": "customer",
                         "path": "/fundApply",
+                        "appName": "FC",
                         "authority": "payment_application_management",
                         "items": [
                             {
                                 "label": "请款申请列表",
-                                "path":  "/fundApply/infomation",
+                                "path": "/fundApply/infomation",
                                 "authority": "payment_application_management_list"
                             },
                             {
                                 "label": "付款记录",
-                                "path":  "/fundApply/record",
+                                "path": "/fundApply/record",
                                 "authority": "payment_application_management_payment_record"
                             }
                         ]
@@ -770,6 +833,7 @@
                         "label": "回款信息管理",
                         "icon": "customer",
                         "path": "/collection",
+                        "appName": "FC",
                         "authority": "collection_information_management",
                         "items": [
                             {
@@ -783,6 +847,7 @@
                         "label": "保函申请管理",
                         "icon": "customer",
                         "path": "/application",
+                        "appName": "FC",
                         "authority": "guarantee_application_management",
                         "items": [
                             {
@@ -795,72 +860,94 @@
                     {
                         "label": "员工关系",
                         "icon": "customer",
+                        "appName": "HR",
                         "path": "/employeeRelation",
                         "authority": "approvalm",
                         "items": [
                             {
                                 "label": "招聘入职",
                                 "path": "/employeeRelation/recruit",
-                                "authority": "approvalm"
+                                "authority": "employee_information_list"
                             },
                             {
                                 "label": "员工档案",
                                 "path": "/employeeRelation/archives",
-                                "authority": "approvalm"
+                                "authority": "employee_archives_list"
                             },
                             {
                                 "label": "劳动合同",
                                 "path": "/employeeRelation/labour",
-                                "authority": "approvalm"
+                                "authority": "employee_labor_contract_list"
                             },
                             {
                                 "label": "转正考核",
                                 "path": "/employeeRelation/full",
-                                "authority": "approvalm"
+                                "authority": "positive_check_list"
                             },
                             {
                                 "label": "员工调动",
                                 "path": "/employeeRelation/transfer",
-                                "authority": "approvalm"
+                                "authority": "hr_employee_transfer_page"
                             },
                             {
                                 "label": "员工离职",
                                 "path": "/employeeRelation/quit",
-                                "authority": "approvalm"
+                                "authority": "hr_employee_departurenc_page"
                             },
                             {
                                 "label": "办理离职",
                                 "path": "/employeeRelation/quitProcedures",
-                                "authority": "approvalm"
+                                "authority": "hr_employee_departurenc_handlePage"
                             },
                             {
                                 "label": "员工复职",
                                 "path": "/employeeRelation/reinstate",
-                                "authority": "approvalm"
+                                "authority": "hr_employee_reinstatement_page"
                             }
                         ]
                     },
                     {
                         "label": "社保福利",
                         "icon": "customer",
+                        "appName": "HR",
                         "path": "/socialSecurity",
                         "authority": "approvalm",
                         "items": [
                             {
                                 "label": "保险方案",
                                 "path": "/socialSecurity/plan",
-                                "authority": "approvalm"
+                                "authority": "hr_insurance_plan_page"
                             },
                             {
                                 "label": "员工保险档案",
                                 "path": "/socialSecurity/archives",
+                                "authority": "hr_insurance_archives_page"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "车间计划基础配置",
+                        "icon": "customer",
+                        "appName": "PS",
+                        "path": "/workshopPlanBasic",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "生产工序管理",
+                                "path": "/workshopPlanBasic/processMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "工作中心管理",
+                                "path": "/workshopPlanBasic/workCenterMngt",
                                 "authority": "approvalm"
                             }
                         ]
                     },
                     {
-                        "label": "计划基础配置",
+                        "label": "主生产计划",
                         "icon": "customer",
+                        "appName": "PS",
                         "path": "/planBaseSetting",
                         "authority": "approvalm",
                         "items": [
@@ -873,7 +960,7 @@
                                 "label": "生产单元管理",
                                 "path": "/planBaseSetting/prodUnit",
                                 "authority": "approvalm"
-                            } 
+                            }
                         ]
                     }
                 ]
@@ -881,7 +968,8 @@
         },
         "content-panel": "./layout/DefaultContentPanel", // 内容面板
         "header-panel": "./layout/tc/TCHeader", // 头部面板
-        "footer-panel": "./layout/DefaultFooter" // 底部面板
+        "footer-panel": "./layout/DefaultFooter", // 底部面板
+        "complete-panel": "./layout/CompletePanel" //完整面板（不分模块）
     },
     "filters": [ // 过滤器
         "./filters/AuthorizationFilter", // 权限过滤器

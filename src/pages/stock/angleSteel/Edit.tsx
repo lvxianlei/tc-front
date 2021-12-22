@@ -4,7 +4,7 @@ import { BaseInfo } from '../../common'
 import { angleConfigStrategy } from "./angleSteel.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import { materialTextureOptions } from "../../../configuration/DictionaryOptions"
 interface EditProps {
     type: "new" | "edit",
     data?: { [key: string]: any }
@@ -12,7 +12,7 @@ interface EditProps {
 }
 
 export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
-    const materialTextureEnum = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+    const materialTextureEnum = materialTextureOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -35,10 +35,12 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
             const baseData = await baseForm.validateFields()
             await saveRun(type === "new" ? ({
                 ...baseData,
+                materialTextureIds: baseData.materialTextureIds.join(","),
                 thickness: `${baseData.thicknessMin}~${baseData.thicknessMax}`,
                 width: `${baseData.widthMin}~${baseData.widthMax}`
             }) : ({
                 ...baseData,
+                materialTextureIds: baseData.materialTextureIds.join(","),
                 thickness: `${baseData.thicknessMin}~${baseData.thicknessMax}`,
                 width: `${baseData.widthMin}~${baseData.widthMax}`,
                 id: data?.id
@@ -66,8 +68,12 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
         form={baseForm}
         columns={angleConfigStrategy.map((item: any) => {
             switch (item.dataIndex) {
-                case "materialTexture":
-                    return ({ ...item, type: "select", enum: materialTextureEnum })
+                case "materialTextureIds":
+                    return ({
+                        ...item,
+                        type: "select",
+                        enum: materialTextureEnum
+                    })
                 case "thickness":
                     return ({
                         ...item,

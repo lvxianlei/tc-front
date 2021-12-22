@@ -1,0 +1,372 @@
+{
+    "collectionListHead": [
+        {
+            "title": "编号",
+            "dataIndex": "returnNum"
+        },
+        {
+            "title": "来款单位名称",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "回款类型",
+            "dataIndex": "returnType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1,
+                    "label": "合同应收款"
+                }
+            ]
+        },
+        {
+            "title": "来款金额",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "来款日期",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currency"
+        },
+        {
+            "title": "汇率",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "外币金额",
+            "dataIndex": "abroadMoney"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "收款银行",
+            "dataIndex": "returnBank"
+        },
+        {
+            "title": "确认人",
+            "dataIndex": "updateUserName",
+            "type": "string"
+        },
+        {
+            "title": "确认时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "confirmStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "未确认",
+                    "value": 0
+                },
+                {
+                    "label": "已确认",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark"
+        }
+    ],
+    "promotionalTourism": [
+        {
+            "title": "编号",
+            "dataIndex": "returnNum",
+            "disabled": true
+        },
+        {
+            "title": "来款单位名称",
+            "dataIndex": "payCompany",
+            "disabled": true
+        },
+        {
+            "title": "来款金额(元)",
+            "dataIndex": "payMoney",
+            "disabled": true
+        },
+        {
+            "title": "来款日期",
+            "dataIndex": "payTime",
+            "type": "date",
+            "disabled": true
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "payType",
+            "disabled": true
+        },
+        {
+            "title": "收款银行",
+            "dataIndex": "returnBank",
+            "disabled": true
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currency",
+            "disabled": true
+        },
+        {
+            "title": "汇率",
+            "dataIndex": "exchangeRate",
+            "disabled": true
+        },
+        {
+            "title": "外币金额",
+            "dataIndex": "abroadMoney",
+            "disabled": true
+        },
+        {
+            "title": "回款类型",
+            "dataIndex": "returnType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1171,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1172,
+                    "label": "合同应收款"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择回款类型..."
+                }
+            ]
+        },
+        {
+            "title": "付款单号",
+            "dataIndex": "payNum",
+            "type": "popTable",
+            "path": "/tower-market/payApply",
+            "readOnly": true,
+            "width": 1011,
+            "value": "payNumber",
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "付款单号",
+                    "dataIndex": "payNumber",
+                    "search": true
+                },
+                {
+                    "title": "付款状态",
+                    "dataIndex": "payStatus",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "label": "待付款",
+                            "value": 0
+                        },
+                        {
+                            "label": "已付款",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "title": "项目名称",
+                    "dataIndex": "projectName",
+                    "search": true
+                },
+                {
+                    "title": "金额",
+                    "dataIndex": "sumMoney"
+                },
+                {
+                    "title": "申请时间",
+                    "dataIndex": "applicantTime"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择付款单号..."
+                }
+            ]
+        },
+        {
+            "title": "确认人",
+            "dataIndex": "updateUserName",
+            "disabled": true
+        },
+        {
+            "title": "确认时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "disabled": true
+        },
+        {
+            "title": "状态",
+            "dataIndex": "confirmStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "未确认",
+                    "value": 0
+                },
+                {
+                    "label": "已确认",
+                    "value": 1
+                }
+            ],
+            "disabled": true
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "disabled": true,
+            "type": "textarea"
+        }
+    ],
+    "contractInformation": [
+        {
+            "title": "合同号",
+            "dataIndex": "contractNumber",
+            "disabled": true,
+            "width": "100%"
+        },
+        {
+            "title": "合同/工程名称",
+            "dataIndex": "contractName",
+            "disabled": true,
+            "width": "100%"
+        },
+        {
+            "title": "回款金额",
+            "dataIndex": "refundAmount",
+            "type": "number",
+            "width": "100%",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入回款金额..."
+                }
+            ]
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "salesman",
+            "disabled": true,
+            "width": "100%"
+        },
+        {
+            "title": "回款计划名称",
+            "dataIndex": "paymentPlanId",
+            "type": "popTable",
+            "path": "/tower-market/contract/getPaymentPlansByContractId?contractId=",
+            "width": 1011,
+            "value": "name",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "期次",
+                    "dataIndex": "period"
+                },
+                {
+                    "title": "回款计划名称",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "计划回款日期",
+                    "dataIndex": "returnedTime"
+                },
+                {
+                    "title": "计划回款占比(%)",
+                    "dataIndex": "returnedRate"
+                },
+                {
+                    "title": "计划回款金额",
+                    "dataIndex": "returnedAmount"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择相关合同..."
+                }
+            ]
+        },
+        {
+            "title": "计划回款金额",
+            "dataIndex": "returnedAmount",
+            "disabled": true,
+            "width": "100%"
+        },
+        {
+            "title": "已回款金额",
+            "dataIndex": "paymentReceived",
+            "disabled": true,
+            "width": "100%"
+        },
+        {
+            "title": "未回款金额",
+            "dataIndex": "noPaymentReceived",
+            "disabled": true,
+            "width": "100%"
+        }
+    ],
+    "contractInformationDetail": [
+        {
+            "title": "合同号",
+            "dataIndex": "contractNumber",
+            "disabled": true,
+            "width": 200
+        },
+        {
+            "title": "合同/工程名称",
+            "dataIndex": "contractName",
+            "disabled": true,
+            "width": 200
+        },
+        {
+            "title": "回款金额",
+            "dataIndex": "refundAmount",
+            "type": "number",
+            "width": 200,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入回款金额..."
+                }
+            ]
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "salesman",
+            "disabled": true,
+            "width": 200
+        },
+        {
+            "title": "回款计划名称",
+            "dataIndex": "paymentPlanName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择回款计划..."
+                }
+            ]
+        },
+        {
+            "title": "计划回款金额",
+            "dataIndex": "paymentPlanMoney",
+            "disabled": true,
+            "width": 200
+        }
+    ]
+}

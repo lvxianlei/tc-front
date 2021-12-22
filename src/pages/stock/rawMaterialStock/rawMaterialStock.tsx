@@ -8,6 +8,7 @@ import { IClient } from '../../IClient';
 import RequestUtil from '../../../utils/RequestUtil';
 import ApplicationContext from "../../../configuration/ApplicationContext"
 import '../StockPublicStyle.less';
+import { materialStandardTypeOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory(),
@@ -203,7 +204,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         >
                             <Select.Option value='' key={'aa'}>全部</Select.Option>
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+                                materialTextureOptions?.map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
                                 })).map((item: any, index: number) => {
@@ -249,7 +250,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         >
                             <Select.Option value='' key={'aa'}>全部</Select.Option>
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
+                                materialStandardTypeOptions?.map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
                                 })).map((item: any, index: number) => {

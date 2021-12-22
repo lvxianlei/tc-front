@@ -1,51 +1,51 @@
 {
     "baseInfoData": [
         {
-            "dataIndex": "contractName",
+            "dataIndex": "warehouseNumber",
             "title": "入库单编号"
         },
         {
-            "dataIndex": "customerName",
+            "dataIndex": "internalNumber",
             "title": "内部合同编号"
         },
         {
-            "dataIndex": "aeName",
+            "dataIndex": "saleOrderNumber",
             "title": "订单编号"
         },
         {
-            "dataIndex": "aePhone",
+            "dataIndex": "orderProjectName",
             "title": "工程名称"
         },
         {
-            "dataIndex": "designContactsName",
+            "dataIndex": "productTypeName",
             "title": "产品类别"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "planNumber",
             "title": "计划号"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "packingWarehouseTime",
             "title": "包装时间"
         },
         {
             "dataIndex": "designPhone",
-            "title": "车间"
+            "title": "生产单元"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "warehouseName",
             "title": "仓库"
         },
         {
-            "dataIndex": "designPhone",
-            "title": "库位"
+            "dataIndex": "warehouseRegion",
+            "title": "库区"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "teamName",
             "title": "班组"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "packageUserNames",
             "title": "打包人员"
         }
     ]

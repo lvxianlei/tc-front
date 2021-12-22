@@ -12,14 +12,15 @@ interface TaskAssignRef {
     resetFields: () => void
 }
 export default function RawMaterial() {
+    const history = useHistory();
     const [detailId, setDetailId] = useState<string>("")
+    const [filterValue, setFilterValue] = useState<object>(history.location.state as object)
     const tarkRef = useRef<TaskAssignRef>({ onSubmit: () => { }, resetFields: () => { } })
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible1, setIsModalVisible1] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const [isModalVisible3, setIsModalVisible3] = useState(false);
     const [id, setId] = useState(0);//采购任务id
-    const [inquiryId, setInquiryId] = useState("");
     const [obj, setObj] = useState<any>({});
     const [rejectionDescription, setRejectionDescription] = useState("");
     const { run: generaterRun } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -30,7 +31,6 @@ export default function RawMaterial() {
             reject(false)
         }
     }), { manual: true })
-    const history = useHistory();
 
     const handleCancel = () => {
         setIsModalVisible(false);
@@ -46,8 +46,7 @@ export default function RawMaterial() {
     };
     const detail = async (purchaseId: any) => {
         setIsModalVisible(true);
-        setId(purchaseId);
-        setInquiryId(purchaseId);
+        setId(purchaseId)
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchaseTask/${purchaseId}`)
         setObj(result);
     }
@@ -59,7 +58,9 @@ export default function RawMaterial() {
     const submit = async (rejectionDescription: string, id: number) => {
         const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/taskRejection`, { rejectionDescription, id }, { "Content-Type": "application/json" })
         message.success("拒绝成功！");
-        setIsModalVisible3(false)
+        setIsModalVisible3(false);
+        setIsModalVisible(false);
+        history.go(0);
     }
     // 关闭
     const handleClose = () => {
@@ -115,6 +116,7 @@ export default function RawMaterial() {
             value.startStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
+        setFilterValue(value)
         return value
     }
 
@@ -147,6 +149,7 @@ export default function RawMaterial() {
                         </>
                     }
                 ]}
+                filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={<Button type="primary" ghost onClick={async () => {
                     await generaterRun()
@@ -188,7 +191,7 @@ export default function RawMaterial() {
             <Modal width={1011} title="原材料采购任务详情" visible={isModalVisible} footer={buttons} onCancel={handleCancel}>
                 {/* 基本信息 */}
                 <Descriptions title="基本信息" column={2} bordered>
-                    <Descriptions.Item label="任务单编号">{obj.taskNoticeNumber}</Descriptions.Item>
+                    <Descriptions.Item label="计划号">{obj.taskNoticeNumber}</Descriptions.Item>
                     <Descriptions.Item label="订单编号">{obj.saleOrderNumber}</Descriptions.Item>
                     <Descriptions.Item label="内部合同编号">{obj.internalNumber}</Descriptions.Item>
                     <Descriptions.Item label="订单工程名称">{obj.orderProjectName}</Descriptions.Item>

@@ -2,15 +2,16 @@
  * 新增请款申请
  */
 import React, { useState,useRef } from 'react';
-import { Modal, Form, Button, ModalFuncProps } from 'antd';
+import { Modal, Form, Button, ModalFuncProps, message } from 'antd';
 import { BaseInfo,Attachment,AttachmentRef,EditTable } from '../common';
 import { addColums } from './fundListHead.json';
 import { payTypeOptions } from '../../configuration/DictionaryOptions';
 import RequestUtil from '../../utils/RequestUtil';
 interface AddModalProps extends ModalFuncProps {
   payApplyId?: string;
+  amountPayable?: string;
 }
-export default function AddModal(props: AddModalProps): JSX.Element {
+export default function AddModal(props: AddModalProps): JSX.Element { 
   //处理是addColums enum
     if(props.visible){
         const enums:any = payTypeOptions?.map(item=>{
@@ -32,6 +33,10 @@ export default function AddModal(props: AddModalProps): JSX.Element {
     // 提交
     const handleSure = async () => {
       const postData = await addFund.validateFields();
+      if (((props.amountPayable as any) * 1) < postData.payMoney) {
+        message.error("付款金额已经超出最大应付款余额，请确认！");
+        return false;
+      }
       try{
         setLoading(true);
         const v = [];

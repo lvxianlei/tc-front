@@ -40,6 +40,12 @@ export default function PackingList(): React.ReactNode {
             dataIndex: 'balesCode'
         },
         {
+            key: 'packageType',
+            title: '包类型',
+            width: 150,
+            dataIndex: 'packageType'
+        },
+        {
             key: 'balesCount',
             title: '捆件数',
             dataIndex: 'balesCount',
@@ -133,7 +139,7 @@ export default function PackingList(): React.ReactNode {
     const [ isExport, setIsExport ] = useState(false);
     const [ bundleData, setBundleData ] = useState<IBundle[]>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/packageStructure/list`, { productId: params.productId })
+        const data = await RequestUtil.get(`/tower-science/packageStructure/${params.productId}`)
         resole(data)
     }), {})
     const detailData: any = data;

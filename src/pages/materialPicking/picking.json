@@ -1,0 +1,255 @@
+{
+    "picking": [
+        {
+            "title": "领料单编号",
+            "dataIndex": "pickingNumber"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "salePlanNumber"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "title": "加工计划编号",
+            "dataIndex": "workPlanNumber"
+        },
+        {
+            "title": "领料仓库",
+            "dataIndex": "pickingWareHouse"
+        },
+        {
+            "title": "领料生产单元",
+            "dataIndex": "pickingUnit"
+        },
+        {
+            "title": "领料班组",
+            "dataIndex": "pickingTeam"
+        },
+        {
+            "title": "领料人",
+            "dataIndex": "pickingUserName"
+        },
+        {
+            "title": "申请日期",
+            "dataIndex": "applyTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "state",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "已创建"
+                },
+                {
+                    "value": 2,
+                    "label": "已撤回"
+                },
+                {
+                    "value": 3,
+                    "label": "未放料"
+                },
+                {
+                    "value": 4,
+                    "label": "部分放料"
+                },
+                {
+                    "value": 5,
+                    "label": "已放料"
+                }
+            ]
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "setting": [
+        {
+            "title": "领料单编号",
+            "dataIndex": "pickingNumber",
+            "disabled": true
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "projectName",
+            "disabled": true
+        },
+        {
+            "title": "销售计划号",
+            "dataIndex": "salePlanNumber",
+            "disabled": true
+        },
+        {
+            "title": "加工计划编号",
+            "dataIndex": "workPlanNumber",
+            "type": "popTable",
+            "path": "",
+            "width": 1011,
+            "value": "receiveNumber",
+            "selectType": "checkbox",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "加工计划编号",
+                    "dataIndex": ""
+                },
+                {
+                    "title": "工程名称",
+                    "dataIndex": ""
+                },
+                {
+                    "title": "计划号",
+                    "dataIndex": ""
+                },
+                {
+                    "title": "塔型",
+                    "dataIndex": ""
+                },
+                {
+                    "title": "计划完成日期",
+                    "dataIndex": "",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
+                }
+            ]
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "disabled": true
+        },
+        {
+            "title": "领料仓库",
+            "dataIndex": "pickingWareHouse",
+            "type": "popTable",
+            "path": "tower-storage/warehouse",
+            "width": 1011,
+            "value": "name",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "编号",
+                    "dataIndex": "warehouseNumber"
+                },
+                {
+                    "title": "仓库名称",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "分类",
+                    "dataIndex": "warehouseCategoryName"
+                },
+                {
+                    "title": "负责人",
+                    "dataIndex": "personName"
+                },
+                {
+                    "title": "保管员",
+                    "dataIndex": "staffName"
+                },
+                {
+                    "title": "车间",
+                    "dataIndex": "shopName"
+                }
+            ]
+        },
+        {
+            "title": "领料生产单元",
+            "dataIndex": "pickingUnit",
+            "disabled": true
+        },
+        {
+            "title": "领料班组",
+            "dataIndex": "pickingTeam",
+            "disabled": true
+        },
+        {
+            "title": "领料人",
+            "dataIndex": "pickingUserName"
+        },
+        {
+            "title": "申请日期",
+            "dataIndex": "applyTime",
+            "disabled": true
+        },
+        {
+            "title": "状态",
+            "dataIndex": "state",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "已创建"
+                },
+                {
+                    "value": 2,
+                    "label": "已撤回"
+                },
+                {
+                    "value": 3,
+                    "label": "未放料"
+                },
+                {
+                    "value": 4,
+                    "label": "部分放料"
+                },
+                {
+                    "value": 5,
+                    "label": "已放料"
+                }
+            ]
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "chooseMaterial": {
+        "title": "配料信息",
+        "dataIndex": "",
+        "type": "popTable",
+        "path": "/tower-storage/receiveStock",
+        "width": 1011,
+        "value": "receiveNumber",
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "columns": []
+    },
+    "materialInfo": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length"
+        },
+        {
+            "title": "申请数量",
+            "dataIndex": "quantity"
+        }
+    ]
+}

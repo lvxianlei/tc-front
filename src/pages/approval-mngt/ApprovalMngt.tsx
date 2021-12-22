@@ -8,7 +8,7 @@ import useRequest from '@ahooksjs/use-request'
 import { auditHead } from "./approvalHeadData.json"
 import { bondBaseInfo, drawH, drawingCofirm, baseInfo, outFactoryHead, addanewone } from "./approvalHeadData.json"
 import RequestUtil from '../../utils/RequestUtil'
-import ApplicationContext from "../../configuration/ApplicationContext"
+import { currencyTypeOptions, paymentCategoryOptions } from '../../configuration/DictionaryOptions'
 const auditEnum: any = {
     "performance_bond": "履约保证金申请",
     "drawing_handover": "图纸交接申请",
@@ -17,11 +17,11 @@ const auditEnum: any = {
     "out_factory": "出厂价申请"
 }
 export default function Information(): React.ReactNode {
-    const currencyTypeEnum = (ApplicationContext.get().dictionaryOption as any)["111"].map((item: { id: string, name: string }) => ({
+    const currencyTypeEnum = currencyTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
-    const paymentCategoryEnum = (ApplicationContext.get().dictionaryOption as any)["136"].map((item: { id: string, name: string }) => ({
+    const paymentCategoryEnum = paymentCategoryOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -315,7 +315,7 @@ export default function Information(): React.ReactNode {
             title="履约保证金审批"
             width={1011}
             visible={performanceBondVisible}
-            okText="审请"
+            okText="申请"
             onCancel={() => {
                 setPerformanceBondVisible(false)
                 handleCancel()

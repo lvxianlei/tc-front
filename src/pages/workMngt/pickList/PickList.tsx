@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Form, Modal, Select } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { CommonTable, Page } from '../../common';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
@@ -10,7 +10,6 @@ import RequestUtil from '../../../utils/RequestUtil';
 
 export default function PickList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
-    const [form] = Form.useForm();
     const history = useHistory();
     const [taskId,setTaskId] = useState('');
     const [filterValue, setFilterValue] = useState({});
@@ -35,10 +34,10 @@ export default function PickList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'externalTaskNum',
-            title: '任务单编号',
+            key: 'planNumber',
+            title: '计划号',
             width: 100,
-            dataIndex: 'externalTaskNum'
+            dataIndex: 'planNumber'
         },
         {
             key: 'internalNumber',
@@ -82,24 +81,6 @@ export default function PickList(): React.ReactNode {
             width: 100,
             dataIndex: 'materialLeaderName'
         },
-        // {
-        //     key: 'status',
-        //     title: '塔型提料状态',
-        //     width: 100,
-        //     dataIndex: 'status',
-        //     render: (status: number): React.ReactNode => {
-        //         switch (status) {
-        //             case 1:
-        //                 return '待指派';
-        //             case 2:
-        //                 return '提料中';
-        //             case 3:
-        //                 return '配段中';
-        //             case 4:
-        //                 return '已完成';
-        //         }
-        //     }
-        // },
         {
             key: 'statusName',
             title: '塔型提料状态',
@@ -194,7 +175,6 @@ export default function PickList(): React.ReactNode {
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
                 exportPath="/tower-science/materialTask"
-                // extraOperation={<Button type="primary">导出</Button>}
                 requestData={ { status: location.state?.state, materialLeader: location.state?.userId } }
                 searchFormItems={[
                     {
@@ -212,7 +192,6 @@ export default function PickList(): React.ReactNode {
                                 <Select.Option value={2} key={2}>提料中</Select.Option>
                                 <Select.Option value={3} key={3}>配段中</Select.Option>
                                 <Select.Option value={4} key={4}>已完成</Select.Option>
-                                {/* <Select.Option value={5} key={5}>已提交</Select.Option> */}
                             </Select>
                         </Form.Item>
                     },
@@ -242,7 +221,7 @@ export default function PickList(): React.ReactNode {
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
                     },
                 ]}
             />

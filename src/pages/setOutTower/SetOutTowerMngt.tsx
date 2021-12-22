@@ -38,10 +38,10 @@ export default function SetOutTowerMngt(): React.ReactNode {
             dataIndex: 'patternName',
         },
         {
-            key: 'taskNumber',
-            title: '任务单编号',
+            key: 'planNumber',
+            title: '计划号',
             width: 100,
-            dataIndex: 'taskNumber'
+            dataIndex: 'planNumber'
         },
         {
             key: 'saleOrderNumber',
@@ -216,7 +216,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input placeholder="请输入塔型/塔型钢印号/任务单编号/订单编号/内部合同编号进行查询" maxLength={200} />
+                    children: <Input placeholder="请输入塔型/塔型钢印号/计划号/订单编号/内部合同编号进行查询" maxLength={200} />
                 },
             ]}
         />

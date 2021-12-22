@@ -194,25 +194,34 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
             }], [{
                 label: '外汇单价',
                 value: baseInfo?.foreignPrice === -1 ? undefined : baseInfo?.foreignPrice
-            }, {
-                label: '保函类型',
-                value: baseInfo?.guaranteeType === '-1' ? undefined : baseInfo?.guaranteeType
-            }], [{
+            }, 
+            // {
+            //     label: '保函类型',
+            //     value: baseInfo?.guaranteeType === '-1' ? undefined : baseInfo?.guaranteeType
+            // }
+            ], [{
                 label: '保函金额',
                 value: baseInfo?.guaranteeAmount === -1 ? undefined : baseInfo?.guaranteeAmount
-            }, {
-                label: '港口费用',
-                value: baseInfo?.portCharge === -1 ? undefined : baseInfo?.portCharge
-            }], [{
-                label: '海运及保险费',
-                value: baseInfo?.insuranceCharge === -1 ? undefined : baseInfo?.insuranceCharge
-            }, {
-                label: '佣金',
-                value: baseInfo?.commissionCharge === -1 ? undefined : baseInfo?.commissionCharge
-            }], [{
-                label: '出口信用保险',
-                value: baseInfo?.creditInsurance === -1 ? undefined : baseInfo?.creditInsurance
-            }]]
+            }, 
+            // {
+            //     label: '港口费用',
+            //     value: baseInfo?.portCharge === -1 ? undefined : baseInfo?.portCharge
+            // }
+            ], [
+            //     {
+                //     label: '海运及保险费',
+                //     value: baseInfo?.insuranceCharge === -1 ? undefined : baseInfo?.insuranceCharge
+            //     }, 
+            // {
+            //     label: '佣金',
+            //     value: baseInfo?.commissionCharge === -1 ? undefined : baseInfo?.commissionCharge
+            // }
+            ], [
+                // {
+                //     label: '出口信用保险',
+                //     value: baseInfo?.creditInsurance === -1 ? undefined : baseInfo?.creditInsurance
+                // }
+            ]]
         };
     }
 

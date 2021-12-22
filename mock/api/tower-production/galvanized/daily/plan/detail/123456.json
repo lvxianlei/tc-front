@@ -1,0 +1,16 @@
+{
+    "code": 200,
+    "msg":"Duis sit",
+    "success":true,
+    "data":{
+        "id":4614665,
+        "maintenanceTeamId":2191515,
+        "maintenanceTeamName":"nisi non et adipisicing amet",
+        "picklingTeamId":88592578,
+        "picklingTeamName":"in",
+        "wearHangTeamId":37146766,
+        "wearHangTeamName":"ut",
+        "zincPotTeamId":58558249,
+        "zincPotTeamName":"nulla commodo in sunt"
+    }
+}

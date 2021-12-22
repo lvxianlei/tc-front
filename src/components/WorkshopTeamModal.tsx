@@ -14,7 +14,7 @@
  import { RowSelectionType } from 'antd/lib/table/interface';
  
  export interface IWorkshopTeamSelectionComponentState extends IAbstractSelectableModalState {
-     readonly tableDataSource: IUser[];
+     readonly tableDataSource: any[];
  }
  export interface IWorkshopTeamSelectionComponentProps extends IAbstractSelectableModalProps {
      readonly saleOrderId?: string | number;
@@ -93,21 +93,18 @@
          })
      };
  
-     //componentDidMount
-     public componentDidMount(): void {
-         this.getTable({})
-     }
+ 
  
      //接口、获值
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-         let resData: IResponseData = await RequestUtil.get<IResponseData>(`/sinzetech-user/user`, {
-             ...filterValues,
-             current: pagination.current || this.state.tablePagination?.current,
-             size: pagination.pageSize || this.state.tablePagination?.pageSize
-         });
+        let resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-production/team/page', {
+            ...filterValues,
+            current: pagination.current || this.state.tablePagination?.current,
+            size: pagination.pageSize || this.state.tablePagination?.pageSize,
+        });
          const selectKeys: [] = this.props.selectKey;
-         let newData: IUser[] = resData.records;
-         selectKeys?.forEach((item: IUser) => {
+         let newData: any[] = resData.records;
+         selectKeys?.forEach((item: any) => {
              newData = newData.filter(res => res.id !== item.id);
          })
          this.setState({
@@ -126,7 +123,7 @@
      public getFilterFormItemProps(): FormItemProps[] {
          return [{
              name: 'name',
-             children: <Input placeholder="请输入班组名称/车间名称/产线进行查询" />
+             children: <Input placeholder="请输入班组名称/所属生产单元进行查询" style={{width:'300px'}}/>
          }, ]
      }
  
@@ -142,41 +139,21 @@
      //table-column
      public getTableColumns(): ColumnType<object>[] {
          return [{
-             key: 'type',
+             key: 'name',
              title: '班组名称',
-             width: '30%',
-             dataIndex: 'type',
+             width: '50%',
+             dataIndex: 'name',
          }, {
              key: 'name',
-             title: '所属车间',
-             width: '25%',
+             title: '所属生产单元',
+             width: '50%',
              dataIndex: 'name'
-         }, {
-             key: 'departmentName',
-             title: '工序',
-             width: '20%',
-             dataIndex: 'departmentName'
-         }, {
-             key: 'stationName',
-             title: '设备所属产线',
-             width: '25%',
-             dataIndex: 'stationName'
          }];
      }
  
      //row-key
      protected getTableRowKey(): string | GetRowKey<object> {
          return 'id';
-     }
- 
-     public showModal = (): void => {
-         if (this.props.saleOrderId) {
-             this.setState({
-                 isModalVisible: true
-             })
-             this.getTable({})
-         }
- 
      }
  
      public render(): React.ReactNode {
@@ -186,6 +163,7 @@
                      this.setState({
                          isModalVisible: true
                      })
+                     this.getTable({})
                  }}  disabled={this.props.disabled}>{this.props.buttonTitle || '选择班组'}</Button>
                  <Modal
                      title={this.state.confirmTitle}

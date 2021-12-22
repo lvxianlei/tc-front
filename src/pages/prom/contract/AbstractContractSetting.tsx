@@ -70,6 +70,13 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly takeOverTime: string;
     readonly payCompanyId: string;
     readonly isReceivedContract: number;
+    readonly receivedContractShape: string; // 收到合同形式
+    readonly contractPlanStatus: string; // 合同计划状态
+    readonly contractFraction: number; // 合同份数
+    readonly contractPage: number; // 合同页数
+    readonly deliveryWay: string; // 交货方式
+    readonly deliveryAddress: string; // 交货地点
+    readonly description: string; // 备注
 }
 
 export interface ICustomerInfoDto {
@@ -213,7 +220,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     }
 
     public onPayCompanyNameSelect = (selectedRows: DataType[]): void => {
-        console.log(selectedRows)
         const contract: IContractInfo | undefined = this.state.contract;
         if (selectedRows && selectedRows.length > 0) {
             this.setState(({
