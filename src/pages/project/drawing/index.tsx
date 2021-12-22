@@ -31,7 +31,7 @@ export default function Drawing(): React.ReactNode {
 
     const { run: cancelRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/drawingConfirmation?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/withdraw?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -94,7 +94,7 @@ export default function Drawing(): React.ReactNode {
 
     const handleCancel = (id: string) => {
         Modal.confirm({
-            title: "删除",
+            title: "撤销",
             content: "确定撤销此任务吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
