@@ -30,6 +30,7 @@ export default function ProcessDetail(): React.ReactNode {
         const data: any = await RequestUtil.get(`tower-production/packageWorkshop/taskCollectDetail/${params.id}`)
         form.setFieldsValue({
             ...data,
+            warehouseNumber: data.warehouseNumber?data.warehouseNumber:'系统自动生成',
             packingWarehouseTime:data.packingWarehouseTime?moment(data.packingWarehouseTime):'',
             packageName: data?.packageUserVOList && data?.packageUserVOList.map((item:any)=>{
                 return item.name
@@ -64,28 +65,28 @@ export default function ProcessDetail(): React.ReactNode {
         { title: '呼高', dataIndex: 'productHeight', key: 'productHeight' },
         { title: '入库重量', dataIndex: 'warehouseWeight', key: 'warehouseWeight'},
         { title: '总基数', dataIndex: 'number', key: 'number'},
-        { title: '入库基数', dataIndex: 'currentStatus', key: 'currentStatus'},
+        { title: '入库基数', dataIndex: 'warehouseNumber', key: 'warehouseNumber'},
     ]
     const packageColumns = [
         { title: '捆号/包号', dataIndex: 'balesCode', key: 'balesCode', },
         { title: '包类型', dataIndex: 'packageType', key: 'packageType' },
-        { title: '重量', dataIndex: 'balesWeight', key: 'balesWeight' },
-        { title: '包长度', dataIndex: 'packageLength', key: 'packageLength', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-            <Form.Item name={['dataV',index, "packageLength"]} initialValue={ _a } >
+        { title: '重量', dataIndex: 'weightCount', key: 'weightCount' },
+        { title: '包长度', dataIndex: 'balesLength', key: 'balesLength', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+            <Form.Item name={['dataV',index, "balesLength"]} initialValue={ _a } >
                 <InputNumber style={{width:'100%'}} precision={0} min={0}/>
             </Form.Item>
         ) },
-        { title: '包高度', dataIndex: 'packageHeight', key: 'packageHeight', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-            <Form.Item name={['dataV',index, "packageHeight"]} initialValue={ _a } >
+        { title: '包高度', dataIndex: 'balesWidth', key: 'balesWidth', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+            <Form.Item name={['dataV',index, "balesWidth"]} initialValue={ _a } >
                 <InputNumber style={{width:'100%'}} precision={0} min={0}/>
             </Form.Item>
         ) },
-        { title: '入库数', dataIndex: 'balesWarehouseNumber', key: 'balesWarehouseNumber'},
-        { title: '库位', dataIndex: 'warehousePositionId', key: 'warehousePositionId', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-            <Form.Item name={['dataV',index, "warehousePositionId"]} initialValue={ _a } rules={[{required:true, message:'请选择'}]}>
+        { title: '入库数', dataIndex: 'num', key: 'num'},
+        { title: '库位', dataIndex: 'warehousePosition', key: 'warehousePosition', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+            <Form.Item name={['dataV',index, "warehousePosition"]} initialValue={ _a } rules={[{required:true, message:'请选择'}]}>
                 <Select>
                     {balesWarehouse && balesWarehouse.map(({ id, position }:any, index:any) => {
-                        return <Select.Option key={index} value={id}>
+                        return <Select.Option key={index} value={position}>
                             {position}
                         </Select.Option>
                     })}
@@ -112,7 +113,12 @@ export default function ProcessDetail(): React.ReactNode {
                         warehouseId: value.warehouseId.split(',')[0],
                         warehouse: value.warehouseId.split(',')[1],
                         warehouseRegion: value.warehouseRegion.split(',')[1],
-                        packageUserDTOList: userDataSource,
+                        packageUserDTOList: userDataSource.map((item:any)=>{
+                            return {
+                                ...item,
+                                teamId: detailData?.teamId,
+                            }
+                        }),
                         packageRepertoryInfoDTOList: formRef.getFieldsValue(true).dataV.map((item:any,index:number)=>{
                             return {
                                 ...packageDataSource[index],
@@ -137,7 +143,7 @@ export default function ProcessDetail(): React.ReactNode {
                     <Row>
                         <Col span={12}>
                             <Form.Item name="warehouseNumber" label="入库单编号" >
-                                <Input disabled/>
+                                <Input disabled value={'系统自动生成'}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -215,7 +221,7 @@ export default function ProcessDetail(): React.ReactNode {
                     <Row>
                         
                         <Col span={12}>
-                            <Form.Item name="unit" label="生产单元" initialValue={undefined}>
+                            <Form.Item name="workUnit" label="生产单元" initialValue={undefined}>
                                 <Input disabled/>
                             </Form.Item>
                         </Col>

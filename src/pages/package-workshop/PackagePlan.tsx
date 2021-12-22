@@ -37,7 +37,7 @@ export default function DailySchedule(): React.ReactNode {
         {
             title: "电压等级",
             width: 150,
-            dataIndex: "voltage"
+            dataIndex: "voltageGradeName"
         },
         {
             title: "计划号",

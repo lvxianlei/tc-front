@@ -29,7 +29,7 @@ export default function ProcessDetail(): React.ReactNode {
         { title: '总基数', dataIndex: 'number', key: 'number' },
         { title: '包装清单', dataIndex: 'operation', key: 'operation',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             <Button type="link" onClick={()=>{
-                history.push(`/packagingWorkshop/processingTask/detail/${params.id}/${params.status}/detail/${record.id}`)
+                history.push(`/packagingWorkshop/processingTask/detail/${params.id}/${params.status}/detail/${record.id}/${record.productNumber}`)
             }}>明细</Button>
         ) }
     ]

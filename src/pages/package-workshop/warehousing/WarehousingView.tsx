@@ -12,8 +12,7 @@ const tableColumns = [
     { title: '呼高', dataIndex: 'productHeight', key: 'productHeight' },
     { title: '入库重量', dataIndex: 'warehouseWeight', key: 'warehouseWeight'},
     { title: '总基数', dataIndex: 'number', key: 'number'},
-    { title: '入库基数', dataIndex: 'warehouseNumber', key: 'warehouseNumber'},
-    { title: '备注', dataIndex: 'description', key: 'description' }
+    { title: '入库基数', dataIndex: 'warehouseNumber', key: 'warehouseNumber'}
 ]
 
 const packageColumns = [

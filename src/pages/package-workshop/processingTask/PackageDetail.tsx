@@ -10,15 +10,16 @@ import RequestUtil from '../../../utils/RequestUtil';
 
 export default function PackageDetail(): React.ReactNode {
     const history = useHistory();
-    const params = useParams<{ id: string, status: string }>();
+    const params = useParams<{ id: string, status: string, productNumber: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const value:any = await RequestUtil.get(`tower-production/packageWorkshop/taskDetail/${params.id}`)
-        const data = await RequestUtil.get(`tower-production/packageWorkshop/packageDetail`,{
+        const data:any = await RequestUtil.get(`tower-production/packageWorkshop/packageDetail`,{
             planId: params.id,
             planNumber: value.planNumber,
             productCategoryName: value.productCategoryName,
-            productNumber: value.productNumber,
+            productNumber: params.productNumber,
         })
+        data.productNumber=params.productNumber
         resole(data)
     }), {})
     const detailData: any = data;

@@ -1636,7 +1636,7 @@
     },
     { // 包装车间-包装清单详情
       "name": "包装清单详情",
-      "path": "/packagingWorkshop/processingTask/detail/:id/:status/detail/:packageId",
+      "path": "/packagingWorkshop/processingTask/detail/:id/:status/detail/:packageId/:productNumber",
       "module": "./pages/package-workshop/processingTask/PackageDetail",
       "exact": true,
       "authority": "approvalm"

@@ -29,7 +29,7 @@
             "title": "包装时间"
         },
         {
-            "dataIndex": "designPhone",
+            "dataIndex": "workUnit",
             "title": "生产单元"
         },
         {

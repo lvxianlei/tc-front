@@ -76,12 +76,6 @@ export default function WarehousingList(): React.ReactNode {
             dataIndex: 'teamName',
         },
         {
-            key: 'description',
-            title: '备注',
-            width: 200,
-            dataIndex: 'description',
-        },
-        {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
