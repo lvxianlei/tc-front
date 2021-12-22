@@ -35,7 +35,7 @@ export default function RecruitEdit(): React.ReactNode {
     const [productivity, setProductivity] = useState<any>('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
-        
+      
         if(params.productCategoryId){
             getProdLinkList(data.linkId);
         }else{
@@ -97,7 +97,7 @@ export default function RecruitEdit(): React.ReactNode {
        const getProdLinkLists = async (planId:string,name:string) => {
         const data: any = await RequestUtil.get(`/tower-aps/planUnitLink/product`,{
             planId:planId,
-            id:'1473243926239657986',
+            id:params.productCategoryId,
             productCategoryName:name
         })
         
@@ -226,9 +226,6 @@ export default function RecruitEdit(): React.ReactNode {
      const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [ selectedRows, setSelectedRows ] = useState<IAnnouncement[]>([]);
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: IAnnouncement[]): void => {
-        console.log('====================================');
-        console.log(selectedRows);
-        console.log('====================================');
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
     }
@@ -273,9 +270,6 @@ export default function RecruitEdit(): React.ReactNode {
         });
       }
     const  onConfirm =async (id:any)=>{
-        console.log('====================================');
-        console.log(selectedRows);
-        console.log('====================================');
         let ids:any=[]
         selectedRows.forEach((item,index)=>{
             ids[index].id=item.id
@@ -337,7 +331,7 @@ export default function RecruitEdit(): React.ReactNode {
                                 endTime:value.endTime?moment(value.endTime).format('YYYY-MM-DD'):undefined,
 
                             }
-                            if(list&&list[0]&&list[0].issuedType=='productCategoryName'){
+                            if(params.productCategoryId&&list[0].issuedType=='productCategoryName'){
                                 if(selectedKeys.length>0){
                                     let newValue={
                                         ...submitValue,
@@ -365,21 +359,19 @@ export default function RecruitEdit(): React.ReactNode {
                 </Space>
             ]}>
                 
-                 <Button   onClick={() => { 
-                      settypenum("2")
-                    //  onLock(params.productCategoryId)
+                 {params.productCategoryId?<div className='nav'>
+                     <Button   onClick={() => { 
+                         settypenum("2")
+                          onLock(params.productCategoryId)
                     }
-                     
                      }>锁定</Button>
                  <Button  onClick={() =>{
                      settypenum("1")
-                    //  onUnLock(params.productCategoryId)
+                     onUnLock(params.productCategoryId)
                  }}>解除锁定</Button>
-                 <Button  disabled={typenum==='1'? true:false} onClick={() => onConfirm('1473243926239657986')}>下发</Button>
+                 <Button  disabled={typenum==='1'? true:false} onClick={() => onConfirm(params.productCategoryId)}>下发</Button></div>:null}
             <DetailTitle title={params.productCategoryId?"编辑环节":"新增环节"}/>
-            {/* <Button key="goback" onClick={() => history.goBack()}>锁定</Button>
-            <Button key="goback" onClick={() => history.goBack()}>解除锁定</Button>
-            <Button key="goback" onClick={() => history.goBack()}>下发</Button> */}
+           
             <Form form={ form } { ...formItemLayout }>
          
                 <Row>
@@ -389,19 +381,19 @@ export default function RecruitEdit(): React.ReactNode {
                                 className='input'
                                 placeholder='请选择'
                                 style={{width:'100%'}}
-                                onChange={async (value:any)=>{
-                                    getProdUnitList(value)
-                                     const list= prodLinkList.filter((item,index)=>{
-                                        return item.id===value
-                                    })
+                                // onChange={async (value:any)=>{
+                                //     getProdUnitList(value)
+                                //      const list= prodLinkList.filter((item,index)=>{
+                                //         return item.id===value
+                                //     })
 
-                                    setList(list)
-                                    const tree = await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks`,{
-                                        planProductCategoryId:params.id,
+                                //     // setList(list)
+                                //     // const tree = await RequestUtil.get<any>(`/tower-aps/productionPlan/unitLinks`,{
+                                //     //     planProductCategoryId:params.id,
                                         
-                                      });
-                                      getProdLinkLists(tree.planId,tree.name);
-                                }}
+                                //     //   });
+                                //     //   getProdLinkLists(tree.planId,tree.name);
+                                // }}
                             >
                                 {
                                     prodLinkList.map((item: any, index: number) => {
@@ -529,7 +521,7 @@ export default function RecruitEdit(): React.ReactNode {
                 </Row>
             </Form>
             {
-               list&&list[0]&&list[0].issuedType=='productCategoryName'?<Table dataSource={TowerList}  rowKey={"userName"}    
+               params.productCategoryId&&list[0].issuedType=='productCategoryName'?<Table dataSource={TowerList}  rowKey={"userName"}    
                 rowSelection={{
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange
