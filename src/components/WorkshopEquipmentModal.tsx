@@ -152,10 +152,10 @@ export default class WorkshopEquipmentSelectionComponent extends AbstractFiltere
             width: '50%',
             dataIndex: 'workCenterName'
         }, {
-            key: 'name',
+            key: 'unitName',
             title: '生产单元',
             width: '30%',
-            dataIndex: 'name'
+            dataIndex: 'unitName'
         }];
     }
 

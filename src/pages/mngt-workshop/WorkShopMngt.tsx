@@ -10,13 +10,13 @@ export default function DailySchedule(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const history = useHistory()
-    const [ confirmStatus, setConfirmStatus] = useState<number>(1);
+    const [ confirmStatus, setConfirmStatus] = useState<number>(0);
     const [ work, setWork ] = useState<any[]>([]);
     const [ unit, setUnit ] = useState<any[]>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const work = await RequestUtil.get(`/tower-system/notice/getNoticeById`)
+        const work: any = await RequestUtil.get(`/tower-aps/work/center/info?size=1000&current=1`)
         // const unit = await RequestUtil.get(`/tower-system/notice/getNoticeById`)
-        // setWork(work)
+        setWork(work.records)
         // setUnit(unit)
         resole(data)
     }), {})
@@ -92,7 +92,7 @@ export default function DailySchedule(): React.ReactNode {
             path="/tower-aps/machining"
             // sourceKey="galvanizedDailyPlanVOS.records"
             columns={
-                confirmStatus === 1 || confirmStatus === 2 || confirmStatus === 3 ? 
+                confirmStatus === 0 || confirmStatus === 1 || confirmStatus === 2 ? 
                 [ ...columns, {
                     "key": "operation",
                     "title": "操作",
@@ -100,11 +100,11 @@ export default function DailySchedule(): React.ReactNode {
                     fixed: "right" as FixedType,
                     "width": 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        confirmStatus === 1 ? <Button type="link" onClick={() => {
+                        confirmStatus === 0 ? <Button type="link" onClick={() => {
                             history.push(`/workshopManagement/processingTask/dispatch/${record.id}`)
-                        }}>派工</Button> : confirmStatus === 2 ? <Button type="link" onClick={() => {
+                        }}>派工</Button> : confirmStatus === 1 ? <Button type="link" onClick={() => {
                             history.push(`/workshopManagement/processingTask/detail/${record.id}/${record.status}`)
-                        }}>详情</Button>: confirmStatus === 3 ? <Button type="link" onClick={() => {
+                        }}>详情</Button>: confirmStatus === 2 ? <Button type="link" onClick={() => {
                             history.push(`/workshopManagement/processingTask/detail/${record.id}/3`)
                         }}>详情</Button>: null
                     )
@@ -113,11 +113,11 @@ export default function DailySchedule(): React.ReactNode {
             requestData={{ status: confirmStatus }}
             extraOperation={(data: any) =><>
                 <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
-                    <Radio.Button value={1}>未派工</Radio.Button>
-                    <Radio.Button value={2}>未采集</Radio.Button>
-                    <Radio.Button value={3}>已完成</Radio.Button>
+                    <Radio.Button value={0}>未派工</Radio.Button>
+                    <Radio.Button value={1}>未采集</Radio.Button>
+                    <Radio.Button value={2}>已完成</Radio.Button>
                 </Radio.Group>
-                {confirmStatus === 1 ? <Button type="primary"  onClick={() => {
+                {confirmStatus === 0 ? <Button type="primary"  onClick={() => {
                     history.push(`/workshopManagement/processingTask/dispatch/new`)
                 }}>派工</Button> : null}
                 </>}
@@ -150,7 +150,7 @@ export default function DailySchedule(): React.ReactNode {
                     children: <Select placeholder="请选择" style={{ width: "150px" }}>  
                         <Select.Option value="" key="">全部</Select.Option>
                         { work && work.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.workCenterName }</Select.Option>
                         }) }
                     </Select>
                 },
