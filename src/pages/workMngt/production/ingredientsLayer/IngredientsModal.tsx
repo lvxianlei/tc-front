@@ -25,8 +25,9 @@ interface SchemeList {
     structureSpec: string,
     structureTexture: string,
     utilizationRate: string,
-    schemeComponentList: SchemeComponentList[]
+    loftingComponentInfoDtos: SchemeComponentList[]
 }
+
 export default function IngredientsModal(props: any) {
     const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>('radio');
     // 构建分类选择的集合
@@ -53,6 +54,8 @@ export default function IngredientsModal(props: any) {
     const [schemeData, setSchemeData] = useState<any>([]);
     // 采购配料信息
     const [purchaseBatchingDataList, setPurchaseBatchingDataList] = useState<any>([]);
+    // 构建分类当前选中项
+    const [selectedRowsRadio, setSelectedRowsRadio] = useState<any>([]);
     let [numbers, setNumbers] = useState<any>(0);
     const [ serarchForm ] = Form.useForm();
 
@@ -83,13 +86,13 @@ export default function IngredientsModal(props: any) {
             }
         }
         // 调用手动配料
-        purchaseBatchingScheme(serarchData, result, detail);
+        purchaseBatchingScheme(serarchData, result, detail, true);
     }
 
     // 获取采购配料信息
-    const { run: runPurchaseBatchingScheme, data: purchaseBatchingData } = useRequest<{ [key: string]: any }>((purchaseTaskTowerId: string) => new Promise(async (resole, reject) => {
+    const { run: runPurchaseBatchingScheme, data: purchaseBatchingData } = useRequest<{ [key: string]: any }>((purchaseTaskTowerId: string, materialTaskCode: string, productCategoryName: string) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/summary/${purchaseTaskTowerId}`);
+            const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/summary/${materialTaskCode}/${productCategoryName}`);
             resole(result);
             setPurchaseBatchingDataList(result || []);
         } catch (error) {
@@ -124,7 +127,7 @@ export default function IngredientsModal(props: any) {
     // 获取构建分类
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseTaskTower/component/material/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/loftingScheme/${id}`)
             result?.materialList.map((element: any, index: number) => {
                 element["key"] = `${element.structureTexture}_${index}`
             });
@@ -134,6 +137,7 @@ export default function IngredientsModal(props: any) {
             if (result?.materialList.length > 0) {
                 // 默认选中第一条
                 setSelectSort([result?.materialList[0].key])
+                setSelectedRowsRadio(result?.materialList[0])
                 // 获取构建分类明细
                 getSortDetail(props.id, result?.materialList[0]?.structureSpec, result?.materialList[0]?.structureTexture);
             }
@@ -145,7 +149,7 @@ export default function IngredientsModal(props: any) {
     // 获取构建分类明细
     const { run: getSortDetail, data: sortDetailList } = useRequest<{ [key: string]: any }>((purchaseTowerId: string, spec: string, texture: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseTaskTower/component/${purchaseTowerId}/${spec}/${texture}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/loftingScheme/${purchaseTowerId}/${spec}/${texture}`)
             result?.componentList.map((element: any, index: number) => {
                 element["key"] = `${element.id}`
             });
@@ -159,19 +163,19 @@ export default function IngredientsModal(props: any) {
     }), { manual: true })
 
     // 手动配料
-    const { run: purchaseBatchingScheme, data: purchaseBatchingSchemeData } = useRequest((serarchData: any, resultSort: any, detail: any) => new Promise(async (resole, reject) => {
+    const { run: purchaseBatchingScheme, data: purchaseBatchingSchemeData } = useRequest((serarchData: any, resultSort: any, detail: any, flag: boolean, aloneList?: string ) => new Promise(async (resole, reject) => {
         try {
             const obj = {
-                openNumber: serarchData.num1, // 开数
-                startMetre: serarchData.num3, // 开始米数
-                endMetre: serarchData.num4, // 结束米数
-                utilizationRate: serarchData.num5, // 利用率
-                purchaseTowerId: props.id, // 采购塔型id
+                openNumber: flag ? serarchData.num1 : serarchForm.getFieldValue("num1"), // 开数
+                startMetre: flag ? serarchData.num3 : aloneList, // 开始米数
+                endMetre: flag ? serarchData.num4 : aloneList, // 结束米数
+                utilizationRate: flag ? serarchData.num5 : serarchForm.getFieldValue("num5"), // 利用率
+                produceId: props.id, // 采购塔型id
                 structureSpec: resultSort[0].structureSpec,  // 规格
                 structureTexture: resultSort[0].structureTexture, // 材质
                 components: detail
             }
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/purchaseBatchingScheme/batcher/scheme`, obj);
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/produceIngredients/batcher/scheme`, obj);
             if (result && result.schemeData && result.schemeData.length > 0) {
                 setPreparation(result.schemeData || []);
             } else {
@@ -209,29 +213,30 @@ export default function IngredientsModal(props: any) {
                     structureSpec: schemeData[i].structureSpec,
                     structureTexture: schemeData[i].structureTexture,
                     utilizationRate: schemeData[i].utilizationRate,
-                    schemeComponentList: []
+                    loftingComponentInfoDtos: []
                 }
                 const component1 = isExistence(schemeData[i], "component1", "len1", "num1");
                 const component2 = isExistence(schemeData[i], "component2", "len2", "num2");
                 const component3 = isExistence(schemeData[i], "component3", "len3", "num3");
                 const component4 = isExistence(schemeData[i], "component4", "len4", "num4");
                 if (component1) {
-                    v.schemeComponentList.push((component1 as any))
+                    v.loftingComponentInfoDtos.push((component1 as any))
                 }
                 if (component2) {
-                    v.schemeComponentList.push((component2 as any))
+                    v.loftingComponentInfoDtos.push((component2 as any))
                 }
                 if (component3) {
-                    v.schemeComponentList.push((component3 as any))
+                    v.loftingComponentInfoDtos.push((component3 as any))
                 }
                 if (component4) {
-                    v.schemeComponentList.push((component4 as any))
+                    v.loftingComponentInfoDtos.push((component4 as any))
                 }
                 schemeList.push(v);
             }
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/purchaseBatchingScheme`, {
-                purchaseTaskTowerId: props.id,
-                schemeList: schemeList
+                produceId: props.id,
+                schemeDtos: schemeList,
+                batchingSchemeSummaryDtos: purchaseBatchingDataList
             });
             resole(result);
             message.success("配料成功！")
@@ -247,16 +252,17 @@ export default function IngredientsModal(props: any) {
             // 获取编辑配料方案信息
             purchaseListRun(props.id);
             // 获取采购配料信息
-            runPurchaseBatchingScheme(props.id);
+            runPurchaseBatchingScheme(props.id, props.materialTaskCode, props.productCategoryName);
     }, [props.id && props.visible])
 
     const rowSelection = {
         selectedRowKeys: selectSort,
-        onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+        onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
             // 构建分类改变了，获取构建分类明细
             getSortDetail(props.id, selectedRows[0]?.structureSpec, selectedRows[0]?.structureTexture);
             setSelectSort(selectedRowKeys);
             setSelectedRowKeysCheck([]);
+            setSelectedRowsRadio(selectedRows)
         },
         getCheckboxProps: (record: any) => ({
             disabled: record.notConfigured <= 0, // Column configuration not to be checked
@@ -330,7 +336,16 @@ export default function IngredientsModal(props: any) {
                     map.set(schemeData[i].component4, schemeData[i].num4);
                 }
             }
+
+            // 添加采购配料信息的map
+            if (map.has(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}_${schemeData[i].length}`)) {
+                const result = map.get(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}_${schemeData[i].length}`) || 0;
+                map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}_${schemeData[i].length}`, result + 1);
+            } else {
+                map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}_${schemeData[i].length}`, 1);
+            }
         }
+        console.log(map, "--------------")
         // 循环构建分类明细
         let result:any = constructionClassificationDetail;
         let selectKeys = selectedRowKeysCheck;
@@ -354,6 +369,19 @@ export default function IngredientsModal(props: any) {
         setSelectedRowKeysCheck(selectKeys);
         setConstructionClassificationDetail(result.slice(0));
         setConstruNumberDetail(numberDetail)
+
+        // 循环采购配料信息
+        let s:any = purchaseBatchingDataList;
+        for (let i = 0; i < s.length; i += 1) {
+            if (map.has(`${s[i].structureTexture}_${s[i].structureSpec}_${s[i].length}`)) {
+                // map对应存在，则需要减少
+                let num:number = map.get(`${s[i].structureTexture}_${s[i].structureSpec}_${s[i].length}`) || 0;
+                s[i].consumeNum = s[i].totalNum - num;
+            } else {
+                s[i].consumeNum = 0;
+            }
+        }
+        setPurchaseBatchingDataList(s.slice(0));
     }, [numbers])
 
     // 移除
@@ -374,6 +402,34 @@ export default function IngredientsModal(props: any) {
         setConstruNumber(numsConstrue);
     }
 
+    // 点击配料
+    const handleIngredients = (record: any) => {
+        // 清空备选方案
+        setPreparation([]);
+        /**
+         * 跟手动配料一致
+         */
+        if (serarchForm.getFieldValue("num1") * 1 !== selectedRowKeysCheck.length) {
+            message.error("勾选的分类明细跟开数不符！");
+            return false;
+        }
+        // 构建分类
+        const result = constructionClassification.filter((item: any) => item.key === selectSort[0]);
+        // 构建分类明细
+        const detail = [];
+        for (let i = 0; i < selectedRowKeysCheck.length; i += 1) {
+            const v = constructionClassificationDetail.filter((item: any) => item.id === selectedRowKeysCheck[i]);
+            if (v && v.length > 0) {
+                const detailObj = {
+                    id: v[0].id,
+                    notConfigured: v[0].notConfigured
+                }
+                detail.push(detailObj)
+            }
+        }
+        purchaseBatchingScheme({}, result, detail, false, record.length ? (record.length / 1000 + "") : "");
+    }
+
     return (
         <Modal
             title={'配料'}
@@ -390,11 +446,11 @@ export default function IngredientsModal(props: any) {
                 props.onCancel();
             }}
             footer={[
-                <Button type="primary" onClick={() => {
-                    message.warning("该功能暂未开发！")
-                }}>
-                    自动配料
-                </Button>,
+                // <Button type="primary" onClick={() => {
+                //     message.warning("该功能暂未开发！")
+                // }}>
+                //     自动配料
+                // </Button>,
                 <Button key="submit" type="primary" onClick={() => handleOkuseState()}>
                     手动配料
                 </Button>,
@@ -497,7 +553,7 @@ export default function IngredientsModal(props: any) {
                                     render: (_: any, record: any, index: number) => {
                                         return (
                                             <>
-                                                <Button type="link">配料</Button>
+                                                <Button type="link" disabled={record.structureTexture !== selectedRowsRadio?.structureTexture || record.structureSpec !== selectedRowsRadio?.structureSpec} onClick={() => handleIngredients(record)}>配料</Button>
                                             </>
                                         )
                                     }
@@ -511,6 +567,11 @@ export default function IngredientsModal(props: any) {
                     <Col span={12}>
                         <DetailTitle title="配料方案" />
                         <CommonTable
+                            onRow={(records: any) => {
+                                if (records.source === "缺料") {
+                                    return ({ style: { background: "red" } })
+                                }
+                            }}
                             columns={[
                                 ...BatchingScheme,
                                 {
@@ -532,6 +593,24 @@ export default function IngredientsModal(props: any) {
                         <CommonTable
                             columns={[
                                 ...alternative.map((item: any, index: number) => {
+                                    if (item.dataIndex === "source") {
+                                        return ({
+                                            title: item.title,
+                                            dataIndex: item.dataIndex,
+                                            width: 50,
+                                            render: (_: any, record: any): React.ReactNode => (
+                                                <div style={{
+                                                    color: record.source === "缺料" ?
+                                                        "white" : "black",
+                                                    backgroundColor: record.source === "其他库存" ?
+                                                        "yellow" : record.source === "缺料" ?
+                                                        "red" : "",
+                                                    height: "32px",
+                                                    lineHeight: "32px"
+                                                }} key={index}>{record[item.dataIndex]}</div>
+                                            )
+                                        })
+                                    }
                                     if (
                                         item.dataIndex === 'component1'
                                         || item.dataIndex === "num1"

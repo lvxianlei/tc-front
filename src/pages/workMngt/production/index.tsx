@@ -122,7 +122,7 @@ export default function Invoicing() {
                                 setDetailId(record.id)
                                 setDetailOver(true)
                             }}>详情</Button>
-                            <Button type="link"><Link to={`/workMngt/production/detailed/${record.id}`}>明细</Link></Button>
+                            <Button type="link"><Link to={`/workMngt/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}`}>明细</Link></Button>
                             <Button type="link" disabled={userId !== record.batcherId}
                                 onClick={() => {
                                     setDetailId(record.id)

@@ -15,7 +15,7 @@ interface IngredientsRef {
 export default function Overview() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, materialTaskCode: string, productCategoryName: string }>()
     const ingredientRef = useRef<IngredientsRef>({ onSubmit: () => { } })
     const [ingredientsvisible, setIngredientsvisible] = useState<boolean>(false);
     const { loading, data } = useRequest<{ detail: any[], programme: any[] }>(() => new Promise(async (resole, reject) => {
@@ -45,6 +45,8 @@ export default function Overview() {
         {/* 新增配料 */}
         <IngredientsModal
             id={params.id}
+            materialTaskCode={params.materialTaskCode}
+            productCategoryName={params.productCategoryName}
             visible={ingredientsvisible}
             onOk={() => {
                 history.go(0);

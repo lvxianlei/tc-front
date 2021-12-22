@@ -1024,7 +1024,7 @@
     },
     { // 工作管理-生产配料-构件明细
       "name": "构件明细",
-      "path": "/workMngt/production/detailed/:id",
+      "path": "/workMngt/production/detailed/:id/:materialTaskCode/:productCategoryName",
       "module": "./pages/workMngt/production/Overview",
       "exact": true,
       "authority": "approvalm"

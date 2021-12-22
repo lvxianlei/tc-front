@@ -375,11 +375,11 @@ export default function IngredientsModal(props: any) {
                 props.onCancel();
             }}
             footer={[
-                <Button type="primary" onClick={() => {
-                    message.warning("该功能暂未开发！")
-                }}>
-                    自动配料
-                </Button>,
+                // <Button type="primary" onClick={() => {
+                //     message.warning("该功能暂未开发！")
+                // }}>
+                //     自动配料
+                // </Button>,
                 <Button key="submit" type="primary" onClick={() => handleOkuseState()}>
                     手动配料
                 </Button>,
