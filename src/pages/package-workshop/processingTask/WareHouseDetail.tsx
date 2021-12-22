@@ -30,8 +30,13 @@ export default function ProcessDetail(): React.ReactNode {
         const data: any = await RequestUtil.get(`tower-production/packageWorkshop/taskCollectDetail/${params.id}`)
         form.setFieldsValue({
             ...data,
-            packingWarehouseTime:data.packingWarehouseTime?moment(data.packingWarehouseTime):''
+            packingWarehouseTime:data.packingWarehouseTime?moment(data.packingWarehouseTime):'',
+            packageName: data?.packageUserVOList && data?.packageUserVOList.map((item:any)=>{
+                return item.name
+            }).join(',')
         })
+        data?.packageUserVOList&&setUserDataSource(data.packageUserVOList)
+        
         const packageData:any = data.productVOList.length>0 && await RequestUtil.get(`tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
         data.productVOList.length>0 && setPackageDataSource(packageData)
         data.productVOList.length>0 && formRef.setFieldsValue({ dataV: packageData })
@@ -99,21 +104,28 @@ export default function ProcessDetail(): React.ReactNode {
                     await formRef.validateFields();
                     let value = form.getFieldsValue(true);
                     let submitValue={
+                        id:params.id,
                         packageTeamId: detailData?.packageTeamId,
-                        packingWarehouseRealTime: moment(value.packingWarehouseRealTime),
+                        teamId: detailData?.teamId,
+                        packingWarehouseRealTime: moment(value.packingWarehouseRealTime).format('YYYY-MM-DD HH:mm:ss'),
                         warehouseId: value.warehouseId.split(',')[0],
                         warehouse: value.warehouseId.split(',')[1],
                         warehouseRegion: value.warehouseRegion.split(',')[1],
                         packageUserDTOList: userDataSource,
-                        packageRepertoryInfoDTOList: formRef.getFieldsValue(true).dataV
+                        packageRepertoryInfoDTOList: formRef.getFieldsValue(true).dataV.map((item:any,index:number)=>{
+                            return {
+                                ...packageDataSource[index],
+                                ...item
+                            }
+                        })
                     }
                     console.log(value);
                     console.log(formRef.getFieldsValue(true).dataV)
-                    // RequestUtil.put(`tower-production/packageWorkshop/collectWarehouse`).then(()=>{
-                    //     message.success('入库成功！')
-                    // }).then(()=>{
-                    //     history.push(`/packagingWorkshop/processingTask`)
-                    // })
+                    RequestUtil.put(`tower-production/packageWorkshop/collectWarehouse`,submitValue).then(()=>{
+                        message.success('入库成功！')
+                    }).then(()=>{
+                        history.push(`/packagingWorkshop/processingTask`)
+                    })
                 }}>确认入库</Button>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]:[
@@ -236,7 +248,7 @@ export default function ProcessDetail(): React.ReactNode {
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="equipmentName" label="包装人员" initialValue={undefined} rules={[
+                            <Form.Item name="packageName" label="包装人员" initialValue={undefined} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择包装人员"
@@ -282,7 +294,7 @@ export default function ProcessDetail(): React.ReactNode {
                 footer={ <Space>
                     <Button type="primary" onClick={async () => {
                         form.setFieldsValue({
-                            equipmentName: userDataSource && userDataSource.map((item:any)=>{
+                            packageName: userDataSource && userDataSource.map((item:any)=>{
                                 return item.name
                             }).join(',')
                         })
