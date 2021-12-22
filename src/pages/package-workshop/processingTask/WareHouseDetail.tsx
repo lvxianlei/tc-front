@@ -21,6 +21,11 @@ export default function ProcessDetail(): React.ReactNode {
     const [packageDataSource,setPackageDataSource] = useState<any>([]);
     const [userDataSource,setUserDataSource] = useState<any>([]);
     const [paragraphList,setParagraphList] = useState<any>([]);
+    const [warehouse, setWareHouse] = useState<any>([]);
+    const [allWarehouse, setAllWarehouse] = useState<any>([]);
+    const [warehouseRegion, setWarehouseRegion] = useState<any>([]);
+    const [balesWarehouse, setBalesWarehouse] = useState<any>([]);
+    
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`tower-production/packageWorkshop/taskCollectDetail/${params.id}`)
         form.setFieldsValue({
@@ -30,12 +35,22 @@ export default function ProcessDetail(): React.ReactNode {
         const packageData:any = data.productVOList.length>0 && await RequestUtil.get(`tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
         data.productVOList.length>0 && setPackageDataSource(packageData)
         data.productVOList.length>0 && formRef.setFieldsValue({ dataV: packageData })
+        const warehouse:any = await RequestUtil.get(`/tower-production/warehouse?current=1&size=1000`);
+        setWareHouse(warehouse?.records)
         resole(data)
     }), {})
     const detailData: any = data;
     const delRow = (index: number) => {
         userDataSource.splice(index, 1);
         setUserDataSource([...userDataSource]);
+    }
+
+
+    const warehouseRegionChange = (e: string, index?: number) => {
+        var newArr = allWarehouse.filter((item: any,index: any,self: any) => {
+            return e === item.region
+        })
+        setBalesWarehouse(newArr);
     }
     const tableColumns = [
         { title: '塔型', dataIndex: 'productCategoryName', key: 'productCategoryName', },
@@ -48,7 +63,7 @@ export default function ProcessDetail(): React.ReactNode {
     const packageColumns = [
         { title: '捆号/包号', dataIndex: 'balesCode', key: 'balesCode', },
         { title: '包类型', dataIndex: 'packageType', key: 'packageType' },
-        { title: '重量', dataIndex: 'weightCount', key: 'weightCount' },
+        { title: '重量', dataIndex: 'balesWeight', key: 'balesWeight' },
         { title: '包长度', dataIndex: 'packageLength', key: 'packageLength', render:(_a: any, _b: any, index: number): React.ReactNode =>(
             <Form.Item name={['dataV',index, "packageLength"]} initialValue={ _a } >
                 <InputNumber style={{width:'100%'}} precision={0} min={0}/>
@@ -59,13 +74,15 @@ export default function ProcessDetail(): React.ReactNode {
                 <InputNumber style={{width:'100%'}} precision={0} min={0}/>
             </Form.Item>
         ) },
-        { title: '入库数', dataIndex: 'num', key: 'num'},
-        { title: '库位', dataIndex: 'warehousePosition', key: 'warehousePosition', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-            <Form.Item name={['dataV',index, "warehousePosition"]} initialValue={ _a } rules={[{required:true, message:'请选择'}]}>
+        { title: '入库数', dataIndex: 'balesWarehouseNumber', key: 'balesWarehouseNumber'},
+        { title: '库位', dataIndex: 'warehousePositionId', key: 'warehousePositionId', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+            <Form.Item name={['dataV',index, "warehousePositionId"]} initialValue={ _a } rules={[{required:true, message:'请选择'}]}>
                 <Select>
-                    { paragraphList.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
-                    }) }
+                    {balesWarehouse && balesWarehouse.map(({ id, position }:any, index:any) => {
+                        return <Select.Option key={index} value={id}>
+                            {position}
+                        </Select.Option>
+                    })}
                 </Select>
             </Form.Item>
         ) }
@@ -78,13 +95,25 @@ export default function ProcessDetail(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={params.status==='3'?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    await  form.validateFields();
+                    await form.validateFields();
+                    await formRef.validateFields();
                     let value = form.getFieldsValue(true);
-                    RequestUtil.put(`/packageWorkshop/confirmWarehouse`).then(()=>{
-                        message.success('入库成功！')
-                    }).then(()=>{
-                        history.push(`/packagingWorkshop/processingTask`)
-                    })
+                    let submitValue={
+                        packageTeamId: detailData?.packageTeamId,
+                        packingWarehouseRealTime: moment(value.packingWarehouseRealTime),
+                        warehouseId: value.warehouseId.split(',')[0],
+                        warehouse: value.warehouseId.split(',')[1],
+                        warehouseRegion: value.warehouseRegion.split(',')[1],
+                        packageUserDTOList: userDataSource,
+                        packageRepertoryInfoDTOList: formRef.getFieldsValue(true).dataV
+                    }
+                    console.log(value);
+                    console.log(formRef.getFieldsValue(true).dataV)
+                    // RequestUtil.put(`tower-production/packageWorkshop/collectWarehouse`).then(()=>{
+                    //     message.success('入库成功！')
+                    // }).then(()=>{
+                    //     history.push(`/packagingWorkshop/processingTask`)
+                    // })
                 }}>确认入库</Button>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]:[
@@ -136,7 +165,7 @@ export default function ProcessDetail(): React.ReactNode {
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="packingWarehouseTime" label="包装时间"  style={{width:'100%'}} rules={[
+                            <Form.Item name="packingWarehouseRealTime" label="包装时间"  style={{width:'100%'}} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择包装时间"
@@ -146,15 +175,26 @@ export default function ProcessDetail(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="warehouseId" label="仓库" initialValue={1} rules={[
+                            <Form.Item name="warehouseId" label="仓库" rules={[
                                 {
                                     "required": true,
                                     "message": "请选择仓库"
                                 }
                             ]}>
-                                <Select style={{width:'100%'}}>
-                                    <Select.Option value={1} key={1}>成品仓库</Select.Option>
-                                    <Select.Option value={2} key={2}>半成品仓库</Select.Option>
+                                <Select style={{width:'100%'}} onChange={async (value:string)=>{
+                                    const warehouseRegion:any = await RequestUtil.get(`/tower-production/warehouse/detail/${value.split(',')[0]}`);
+                                    setAllWarehouse(warehouseRegion?.warehousePositionVOList)
+                                    var newArr = warehouseRegion?.warehousePositionVOList.filter((item: any,index: any,self: any) => {
+                                        return self.findIndex((el: any) => el.region === item.region) === index
+                                    })
+                                    setWarehouseRegion(newArr)
+                                    
+                                }}>
+                                    {warehouse && warehouse.map(({ id, name }:any, index:any) => {
+                                            return <Select.Option key={index} value={id+','+name}>
+                                                {name}
+                                            </Select.Option>
+                                    })}
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -167,15 +207,21 @@ export default function ProcessDetail(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="noDispatchStatus" label="库区" initialValue={1} rules={[
+                            <Form.Item name="warehouseRegion" label="库区" initialValue={1} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择库位"
                                 }
                             ]}>
-                                <Select style={{width:'100%'}}>
-                                    <Select.Option value={1} key={1}>角钢成品库</Select.Option>
-                                    <Select.Option value={2} key={2}>钢管成品库</Select.Option>
+                                <Select style={{width:'100%'}} onChange={async (value:string)=>{
+                                    warehouseRegionChange(value.split(',')[1])
+                                    
+                                }}>
+                                    {warehouseRegion && warehouseRegion.map(({ id, region }:any, index:any) => {
+                                            return <Select.Option key={index} value={id+','+region}>
+                                                {region}
+                                            </Select.Option>
+                                    })}
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -234,12 +280,13 @@ export default function ProcessDetail(): React.ReactNode {
                 width="40%" 
                 title="采集入库-包装人员"
                 footer={ <Space>
-                    <Button type="primary" ghost  onClick={() => setVisible(false) }>取消</Button>
                     <Button type="primary" onClick={async () => {
-                        await RequestUtil.get(``,{}).then(()=>{
-                            message.success('确认成功！');
-                            setVisible(false);
+                        form.setFieldsValue({
+                            equipmentName: userDataSource && userDataSource.map((item:any)=>{
+                                return item.name
+                            }).join(',')
                         })
+                        setVisible(false);
                     }} disabled={!(userDataSource.length>0)}>确认</Button>
                 </Space> } 
                 onCancel={ () => setVisible(false) }
