@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { Button, Spin, Space, Modal, Form, message, Image, Table } from 'antd';
+import { Button, Spin, Table } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
 import { baseInfoData } from './warehousingTaskData.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import TextArea from 'antd/lib/input/TextArea';
 
 const tableColumns = [
     { title: '塔型', dataIndex: 'productCategoryName', key: 'productCategoryName', },
@@ -13,14 +12,14 @@ const tableColumns = [
     { title: '呼高', dataIndex: 'productHeight', key: 'productHeight' },
     { title: '入库重量', dataIndex: 'warehouseWeight', key: 'warehouseWeight'},
     { title: '总基数', dataIndex: 'number', key: 'number'},
-    { title: '入库基数', dataIndex: 'currentStatus', key: 'currentStatus'},
+    { title: '入库基数', dataIndex: 'warehouseNumber', key: 'warehouseNumber'},
     { title: '备注', dataIndex: 'description', key: 'description' }
 ]
 
 const packageColumns = [
     { title: '捆号/包号', dataIndex: 'balesCode', key: 'balesCode', },
-    { title: '包类型', dataIndex: 'typeName', key: 'typeName' },
-    { title: '重量', dataIndex: 'weight', key: 'weight' },
+    { title: '包类型', dataIndex: 'packageType', key: 'packageType' },
+    { title: '重量', dataIndex: 'weightCount', key: 'weightCount' },
     { title: '入库数', dataIndex: 'num', key: 'num'},
     { title: '库位', dataIndex: 'warehousePosition', key: 'warehousePosition' }
 ]
@@ -30,8 +29,8 @@ export default function WarehousingView(): React.ReactNode {
     const params = useParams<{ id: string ,status: string}>();
     const [ packageDataSource, setPackageDataSource] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/packageWorkshop/taskCollectDetail/${params.id}`)
-        const packageData= await RequestUtil.get(`tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
+        const data: any = await RequestUtil.get(`/tower-production/packageWorkshop/taskCollectDetail/${params.id}`)
+        const packageData= await RequestUtil.get(`/tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
         setPackageDataSource(packageData)
         resole(data)
     }), {})

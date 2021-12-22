@@ -33,8 +33,6 @@
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await addCollectionForm.validateFields();
-            console.log(baseData, 'baseData');
-            console.log(attachVosData, "附件");
             const fileIds = [];
             if (attachVosData.length > 0) {
                 for (let i = 0; i < attachVosData.length; i += 1) {

@@ -8,7 +8,7 @@
       "name": "首页",
       "path": "/",
       "exact": true,
-      "redirect": "/client/mngt"
+      "redirect": "/chooseApply"
     },
     {
       "name": "登录",
@@ -1356,14 +1356,14 @@
       "path": "/workMngt/buyBurdening/detail/:id",
       "module": "./pages/workMngt/buyBurdening/Overview",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "buy_burdening_overview"
     },
     { // 工作管理-采购配料
       "name": "配料明细",
       "path": "/workMngt/buyBurdening/component/:id/:status",
       "module": "./pages/workMngt/buyBurdening/Detail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "buy_burdening_detail"
     },
     { // 问题单
       "name": "问题单列表",
@@ -1551,6 +1551,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 车间工作管理-车间转运接收列表-构件明细
+      "name": "原材料领料单",
+      "path": "/materialPicking/picking",
+      "module": "./pages/materialPicking/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 计划排产
       "name": "计划排产",
       "path": "/planProd/planMgmt",
@@ -1594,9 +1601,9 @@
       "authority": "approvalm"
     },
     { // 包装车间-加工任务面板
-      "name": "加工任务面板",
+      "name": "包装计划列表",
       "path": "/packagingWorkshop/processingTask",
-      "module": "./pages/package-workshop/processingTask/ProcessingTaskList",
+      "module": "./pages/package-workshop/PackagePlan",
       "exact": true,
       "authority": "packaging_workshop_machining_task_panel"
     },
@@ -1643,21 +1650,21 @@
       "authority": "approvalm"
     },
     { // 包装车间-成品出库计划
-      "name": "成品出库计划",
+      "name": "成品出库任务",
       "path": "/packagingWorkshop/deliveryPlan",
       "module": "./pages/package-workshop/deliveryPlan/DeliveryPlanList",
       "exact": true,
       "authority": "packaging_workshop_finished_goods_delivery_plan"
     },
     { // 包装车间-成品出库计划-查看
-      "name": "成品出库计划",
+      "name": "查看",
       "path": "/packagingWorkshop/deliveryPlan/detail/:id",
       "module": "./pages/package-workshop/deliveryPlan/DeliveryView",
       "exact": true,
       "authority": "approvalm"
     },
     { // 包装车间-成品出库计划-成品出库
-      "name": "成品出库计划",
+      "name": "成品出库",
       "path": "/packagingWorkshop/deliveryPlan/delivery/:id",
       "module": "./pages/package-workshop/deliveryPlan/Delivery",
       "exact": true,
@@ -1695,6 +1702,27 @@
       "name": "任务详情",
       "path": "/vehicleTransport/transportTask/taskDetail/:id",
       "module": "./pages/vehicleTransport/TaskDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间加工计划
+      "name": "车间加工计划",
+      "path": "/shopFloorPlan",
+      "module": "./pages/shopFloorPlan/ShopFloorPlan",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间加工计划-详情
+      "name": "详情",
+      "path": "/shopFloorPlan/shopFloorDetail/:state/:id",
+      "module": "./pages/shopFloorPlan/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间加工计划-自动排产
+      "name": "自动排产",
+      "path": "/shopFloorPlan/shopFloorDetail/:state/:id",
+      "module": "./pages/shopFloorPlan/Detail",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1774,7 +1802,7 @@
       "path": "/chooseApply",
       "module": "./pages/chooseApply/ChooseApply",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "all"
     },
     { // 首页-个人中心
       "name": "个人中心",
@@ -2268,7 +2296,7 @@
     },
     { // 工作中心管理
       "name": "工作中心管理",
-      "path": "/planBaseSetting/workCenterMngt",
+      "path": "/workshopPlanBasic/workCenterMngt",
       "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterMngt",
       "exact": true,
       "authority": "approvalm"

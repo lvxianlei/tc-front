@@ -19,7 +19,7 @@ export default forwardRef(function ({ id }: OverviewProps, ref) {
 
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/user?departmentId=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/user?departmentId=${id}&size=1000`)
             resole(result)
         } catch (error) {
             reject(error)

@@ -13,7 +13,7 @@ export default function ProcessDetail(): React.ReactNode {
     const params = useParams<{ id: string, status: string }>();
     const [userDataSource,setUserDataSource] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        let data = await RequestUtil.get(`tower-production/packageWorkshop/taskDetail/${params.id}`)
+        const data = await RequestUtil.get(`tower-production/packageWorkshop/taskDetail/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -48,7 +48,7 @@ export default function ProcessDetail(): React.ReactNode {
                 <DetailTitle title="任务明细" />
                 <CommonTable 
                     columns={tableColumns}
-                    dataSource={detailData.productVOList} 
+                    dataSource={detailData?.productVOList} 
                     pagination={false}
                 />
             </DetailContent>

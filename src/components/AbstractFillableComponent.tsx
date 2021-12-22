@@ -38,7 +38,6 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
         super(props);
         this.onFormFinish = this.onFormFinish.bind(this);
         this.onSubmitAndContinue = this.onSubmitAndContinue.bind(this);
-        // console.log(this)
     }
 
     /**

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Col, DatePicker, Form, Input, message, Modal, Popconfirm, Row, Select, Space, Spin, Table } from 'antd';
+import { Button, Col, DatePicker, Form, Input, InputNumber, message, Modal, Popconfirm, Row, Select, Space, Spin, Table } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
 import { baseInfoData } from './detail.json';
@@ -14,15 +14,22 @@ import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 export default function ProcessDetail(): React.ReactNode {
     const history = useHistory();
     const [form] = Form.useForm();
+    const [formRef] = Form.useForm();
     const params = useParams<{ id: string, status: string }>();
     const [visible, setVisible] = useState<boolean>(false);
     const [tableDataSource,setTableDataSource] = useState<any>([]);
     const [packageDataSource,setPackageDataSource] = useState<any>([]);
     const [userDataSource,setUserDataSource] = useState<any>([]);
+    const [paragraphList,setParagraphList] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/packageWorkshop/taskCollectDetail/${params.id}`)
-        const packageData= await RequestUtil.get(`tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
-        setPackageDataSource(packageData)
+        const data: any = await RequestUtil.get(`tower-production/packageWorkshop/taskCollectDetail/${params.id}`)
+        form.setFieldsValue({
+            ...data,
+            packingWarehouseTime:data.packingWarehouseTime?moment(data.packingWarehouseTime):''
+        })
+        const packageData:any = data.productVOList.length>0 && await RequestUtil.get(`tower-production/packageWorkshop/packageList/${data.productVOList[0].id}`);
+        data.productVOList.length>0 && setPackageDataSource(packageData)
+        data.productVOList.length>0 && formRef.setFieldsValue({ dataV: packageData })
         resole(data)
     }), {})
     const detailData: any = data;
@@ -40,12 +47,28 @@ export default function ProcessDetail(): React.ReactNode {
     ]
     const packageColumns = [
         { title: '捆号/包号', dataIndex: 'balesCode', key: 'balesCode', },
-        { title: '包类型', dataIndex: 'typeName', key: 'typeName' },
-        { title: '重量', dataIndex: 'weight', key: 'weight' },
-        { title: '包长度', dataIndex: 'weight', key: 'weight' },
-        { title: '包高度', dataIndex: 'weight', key: 'weight' },
+        { title: '包类型', dataIndex: 'packageType', key: 'packageType' },
+        { title: '重量', dataIndex: 'weightCount', key: 'weightCount' },
+        { title: '包长度', dataIndex: 'packageLength', key: 'packageLength', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+            <Form.Item name={['dataV',index, "packageLength"]} initialValue={ _a } >
+                <InputNumber style={{width:'100%'}} precision={0} min={0}/>
+            </Form.Item>
+        ) },
+        { title: '包高度', dataIndex: 'packageHeight', key: 'packageHeight', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+            <Form.Item name={['dataV',index, "packageHeight"]} initialValue={ _a } >
+                <InputNumber style={{width:'100%'}} precision={0} min={0}/>
+            </Form.Item>
+        ) },
         { title: '入库数', dataIndex: 'num', key: 'num'},
-        { title: '库位', dataIndex: 'warehousePosition', key: 'warehousePosition' }
+        { title: '库位', dataIndex: 'warehousePosition', key: 'warehousePosition', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+            <Form.Item name={['dataV',index, "warehousePosition"]} initialValue={ _a } rules={[{required:true, message:'请选择'}]}>
+                <Select>
+                    { paragraphList.map((item: any) => {
+                        return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
+                    }) }
+                </Select>
+            </Form.Item>
+        ) }
     ]
     const formItemLayout = {
         labelCol: { span: 6 },
@@ -55,14 +78,12 @@ export default function ProcessDetail(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={params.status!=='3'?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    // setVisible(true)
-                    form.validateFields().then(()=>{
-                        let value = form.getFieldsValue(true);
-                        RequestUtil.post(``).then(()=>{
-                            message.success('入库成功！')
-                        }).then(()=>{
-                            history.push(`/packagingWorkshop/processingTask`)
-                        })
+                    await  form.validateFields();
+                    let value = form.getFieldsValue(true);
+                    RequestUtil.put(`/packageWorkshop/confirmWarehouse`).then(()=>{
+                        message.success('入库成功！')
+                    }).then(()=>{
+                        history.push(`/packagingWorkshop/processingTask`)
                     })
                 }}>确认入库</Button>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
@@ -98,7 +119,7 @@ export default function ProcessDetail(): React.ReactNode {
                     <Row>
                         <Col span={12}>
                             <Form.Item name="productType" label="产品类型" >
-                                <Select style={{width:'100%'}}>
+                                <Select style={{width:'100%'}} disabled>
                                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                             return <Select.Option key={index} value={id}>
                                                 {name}
@@ -115,13 +136,13 @@ export default function ProcessDetail(): React.ReactNode {
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="time" label="包装时间" initialValue={[moment('2015-01-01'), moment('2015-01-01')]} style={{width:'100%'}} rules={[
+                            <Form.Item name="packingWarehouseTime" label="包装时间"  style={{width:'100%'}} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择包装时间"
                                 }
                             ]}>
-                                <DatePicker.RangePicker showTime style={{width:'100%'}} />
+                                <DatePicker style={{width:'100%'}} />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -141,12 +162,12 @@ export default function ProcessDetail(): React.ReactNode {
                     <Row>
                         
                         <Col span={12}>
-                            <Form.Item name="time" label="生产单元" initialValue={undefined}>
+                            <Form.Item name="unit" label="生产单元" initialValue={undefined}>
                                 <Input disabled/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="noDispatchStatus" label="库位" initialValue={1} rules={[
+                            <Form.Item name="noDispatchStatus" label="库区" initialValue={1} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择库位"
@@ -175,20 +196,17 @@ export default function ProcessDetail(): React.ReactNode {
                                     "message": "请选择包装人员"
                                 }
                             ]}>
-                                <Input maxLength={ 50 } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: any[] | any) => {
-                                    console.log(selectedRows)
-                                    // setEquipment(selectedRows);
-                                    form.setFieldsValue({
-                                        equipmentName: selectedRows.map((item: any,index:number)=>{
-                                            return item.name
-                                        })
-                                    });
-                                } } buttonType="link" buttonTitle="+编辑" rowSelectionType="checkbox"/> } disabled/>
+                                <Input maxLength={ 50 } addonAfter={ 
+                                    <Button type='link' onClick={()=>{
+                                        setVisible(true)
+                                    }} style={{ paddingBottom: '0', paddingTop: '0', height: 'auto', lineHeight: 1 }}>+编辑</Button>
+                                } disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
                 </Form>
                 <DetailTitle title="杆塔明细" />
+                
                 <Table 
                     columns={tableColumns}
                     dataSource={[{id:'1'}]} 
@@ -203,35 +221,34 @@ export default function ProcessDetail(): React.ReactNode {
                     pagination={false}
                 />
                 <DetailTitle title="包信息" />
-                <CommonTable 
-                    columns={packageColumns}
-                    dataSource={packageDataSource} 
-                    pagination={false}
-                />
+                <Form form={formRef}>
+                    <CommonTable 
+                        columns={packageColumns}
+                        dataSource={packageDataSource} 
+                        pagination={false}
+                    />
+                </Form>
             </DetailContent>
-            {/* <Modal
+            <Modal
                 visible={ visible } 
                 width="40%" 
-                title="采集确认-选择员工"
+                title="采集入库-包装人员"
                 footer={ <Space>
                     <Button type="primary" ghost  onClick={() => setVisible(false) }>取消</Button>
                     <Button type="primary" onClick={async () => {
                         await RequestUtil.get(``,{}).then(()=>{
                             message.success('确认成功！');
                             setVisible(false);
-                        }).then(()=>{
-                            history.push(`/workshopManagement/processingTask`)
                         })
-                    }} disabled={!(userDataSource.length>0)}>确认加工完成</Button>
+                    }} disabled={!(userDataSource.length>0)}>确认</Button>
                 </Space> } 
                 onCancel={ () => setVisible(false) }
             >
                 <WorkshopUserSelectionComponent onSelect={ (selectedRows: object[] | any) => {
                     let temp = [...userDataSource];    
-  
                     temp.push(selectedRows[0]);
                     setUserDataSource(temp);
-                    } } buttonTitle="添加员工" rowSelectionType="checkbox"/>
+                    } } buttonTitle="添加员工" selectKey={[...userDataSource]}/>
                 <Table 
                     columns={[
                         { title: '姓名', dataIndex: 'name', key:'name' },
@@ -248,10 +265,11 @@ export default function ProcessDetail(): React.ReactNode {
                             </Space>
                         ) }
                     ]}
+                    size="small"
                     dataSource={[...userDataSource]} 
                     pagination={false}
                 />
-            </Modal> */}
+            </Modal>
         </Spin>
     </>
 }

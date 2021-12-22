@@ -15,7 +15,7 @@ export default function OverView(props: OverViewProps): JSX.Element {
     }
     return (
         <Modal
-            title={'查看回款信息'}
+            title={'回款信息'}
             visible={props.visible}
             onCancel={handleCancle}
             maskClosable={false}
@@ -34,8 +34,15 @@ export default function OverView(props: OverViewProps): JSX.Element {
                     ...props.title
                 ]}
             />
-            <DetailTitle title="合同信息" />
-            <CommonTable columns={contractInformation} dataSource={props.contractList || []} pagination={ false }/>
+            {
+                props.status === 2 && props.userData && (props.userData as any)?.returnType === "合同应收款" && (
+                    <>
+                        <DetailTitle title="合同信息" />
+                        <CommonTable columns={contractInformation} dataSource={props.contractList || []} pagination={ false }/>
+                    </>
+                )
+            }
+            
         </Modal>
     )
 }

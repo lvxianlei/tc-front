@@ -15,23 +15,31 @@ export default function BaseInfoEdit(): JSX.Element {
     const [baseInfoForm] = Form.useForm()
     const [cargoVOListForm] = Form.useForm()
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
+
+    const { loading: addressLoading, data: addressList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const addressList: any[] = await RequestUtil.get(`/tower-system/region/00`)
+            resole([...addressList.map(item => ({
+                value: `${item.bigRegion}-${item.name}`,
+                label: `${item.bigRegion}-${item.name}`
+            })), { value: "其他-国外", label: "其他-国外" }])
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
-            const addressList: any[] = await RequestUtil.get(`/tower-system/region/00`)
             // 对数据进行处理
             if (result && result.cargoVOList && result.cargoVOList.length > 0) {
                 result.cargoVOList.forEach((item: any) => item.amount = item.amount <= 0 ? 0 : item.amount)
             }
-            baseInfoForm.setFieldsValue(result)
             cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
             setAddress(result.address)
             resole({
                 ...result,
-                addressList: [...addressList.map(item => ({
-                    value: `${item.bigRegion}-${item.name}`,
-                    label: `${item.bigRegion}-${item.name}`
-                })), { value: "其他-国外", label: "其他-国外" }]
+                address: `${result.bigRegion}-${result.address}`
             })
         } catch (error) {
             reject(error)
@@ -95,7 +103,7 @@ export default function BaseInfoEdit(): JSX.Element {
             >保存</Button>,
             <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
         ]}>
-            <Spin spinning={loading}>
+            <Spin spinning={loading || addressLoading}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo
                     onChange={handleBaseInfoChange}
@@ -103,8 +111,16 @@ export default function BaseInfoEdit(): JSX.Element {
                     columns={
                         address === "其他-国外" ?
                             baseInfoData.map((item: any) => item.dataIndex === "address" ?
-                                ({ ...item, type: "select", enum: data?.addressList }) : item) :
-                            baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item).filter((item: any) => item.dataIndex !== "country")
+                                ({
+                                    ...item,
+                                    type: "select",
+                                    enum: addressList
+                                }) : item) :
+                            baseInfoData.map((item: any) => item.dataIndex === "address" ? ({
+                                ...item,
+                                type: "select",
+                                enum: addressList
+                            }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
                 <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />

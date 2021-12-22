@@ -175,10 +175,8 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
             if(task.status===2||task.status===3||task.status===5){
               if(task.status===2){
                 return (
-                  `
-                  <a style="color:#FF8C00" id='view'>查看</a>
-                  <a style="color:#FF8C00" id='unLock'>解锁</a>
-                  <a style="color:#FF8C00" id='confirm'>下发</a>
+                  `  <a style="color:#FF8C00" id='edit' >编辑</a>
+                 
                   `
                 );
               }else{

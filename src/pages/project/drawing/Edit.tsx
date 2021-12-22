@@ -75,6 +75,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
       col={3}
       dataSource={data || {}}
       edit />
-    <Attachment title="附件" ref={attchsRef} dataSource={data?.invoiceAttachInfoVos} edit />
+    <Attachment title="附件" ref={attchsRef} dataSource={data?.fileSources} edit />
   </Spin>
 })

@@ -244,14 +244,14 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
           <Form.Item label='生产计划号/塔型' name='fuzzyMsg'>
               <Input/>
           </Form.Item>
-          {/* <Form.Item label='计划状态' name='planStatus'>
+          <Form.Item label='计划状态' name='planStatus'>
               <Select placeholder="请选择" style={{ width: "150px" }}>
                   <Select.Option value={''} key="">全部</Select.Option>
                   <Select.Option value={1} key="1">待排产</Select.Option>
                   <Select.Option value={2} key="2">排产中</Select.Option>
                   <Select.Option value={3} key="3">已排产</Select.Option>
               </Select>
-          </Form.Item> */}
+          </Form.Item>
           <Form.Item label='交货时间' name='time'>
               <DatePicker.RangePicker format="YYYY-MM-DD" />
           </Form.Item>

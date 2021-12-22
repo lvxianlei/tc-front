@@ -7,12 +7,17 @@ import useRequest from '@ahooksjs/use-request';
 const ProdLink = (): React.ReactNode => {
     const columns: TableColumnProps<object>[] = [
         {
+            title: '生产环节类型',
+            dataIndex: 'typeName',
+        },
+        {
             title: '生产环节名称',
             dataIndex: 'name',
         },
+      
         {
-            title: '类型',
-            dataIndex: 'typeName',
+            title: '下发数据类型',
+            dataIndex: 'issuedTypeName',
         },
         {
             title: '操作',
@@ -29,7 +34,8 @@ const ProdLink = (): React.ReactNode => {
                                 setName(item.name)
                                 form.setFieldsValue({
                                     name:item.name,
-                                    type:item.type
+                                    type:item.type,
+                                    issuedType:item.issuedType
                                 })
                             }}
                         >编辑</span>
@@ -64,7 +70,32 @@ const ProdLink = (): React.ReactNode => {
      * @description 获取类型
      */
     const getTypeList = async () => {
-        const data: any = await RequestUtil.get('/tower-aps/productionLink/type')
+        const data: any = [
+            {
+                type:"material",
+                typeName:"提料"
+            },
+            {
+                type:"lofting",
+                typeName:"放料"
+            },  {
+                type:"ingredients",
+                typeName:"配料"
+            },               
+            {
+                type:"process",
+                typeName:"黑件加工"
+            },{
+                type:"trialAssembly",
+                typeName:"试装"
+            },{
+                type:"packaging",
+                typeName:"成品包装"
+            },{
+                type:"galvanize",
+                typeName:"镀锌"
+            },
+        ]
         setTypeList(data)
         
     }
@@ -90,6 +121,7 @@ const ProdLink = (): React.ReactNode => {
         await RequestUtil.post('/tower-aps/productionLink', {
             name: value.name,
             type: value.type,
+            issuedType:value.issuedType,
             id,
         })
         message.success('操作成功')
@@ -115,6 +147,7 @@ const ProdLink = (): React.ReactNode => {
      * @returns 
      */
     const onFilterSubmit = (value: any) => {
+       
         setFilterValue({ ...filterValue, ...value })
         return value
     }
@@ -137,7 +170,7 @@ const ProdLink = (): React.ReactNode => {
                             ghost
                             onClick={() => { setIsModal(true) }}
                             style={{ marginLeft: 10, }}
-                        >添加</Button>
+                        >新增</Button>
                     </div>
                 }
                 searchFormItems={[
@@ -146,30 +179,31 @@ const ProdLink = (): React.ReactNode => {
                         label: '查询',
                         children: <Input placeholder="生产环节名称" style={{ width: 300 }} />
                     },
-                    {
-                        name: 'type',
-                        label: '类型',
-                        children: <Select style={{width:150}}
-                    >
-                        <Select.Option
-                            key={''}
-                            value={''}
-                        >全部</Select.Option>
-                        {
-                            typeList.map((item: any, index: number) => {
-                                return (
-                                    <Select.Option
-                                        key={index}
-                                        value={item.type}
-                                    >{item.typeName}</Select.Option>
-                                )
-                            })
-                        }
-                    </Select>
-                    }
+                    // {
+                    //     name: 'type',
+                    //     label: '类型',
+                    //     children: <Select style={{width:150}}
+                    // >
+                    //     <Select.Option
+                    //         key={''}
+                    //         value={''}
+                    //     >全部</Select.Option>
+                    //     {
+                    //         typeList.map((item: any, index: number) => {
+                    //             return (
+                    //                 <Select.Option
+                    //                     key={index}
+                    //                     value={item.type}
+                    //                 >{item.typeName}</Select.Option>
+                    //             )
+                    //         })
+                    //     }
+                    // </Select>
+                    // }
                 ]}
             />
             <Modal
+                getContainer={false}
                 className='public_modal_input'
                 title={id ? '编辑' : '新增'}
                 visible={isModal}
@@ -183,6 +217,48 @@ const ProdLink = (): React.ReactNode => {
                 okText='确定'
             >
                 <Form form={ form } {...formItemLayout}>
+                <Row>
+                        <Col  span={24}>
+                            <Form.Item label="生产环节类型" rules={[{required:true,message:'请选择生产环节类型'}]} name='type'>
+                                <Select
+                                    placeholder='请选择'
+                                    onChange={(value: string)=>{
+                             if(value=="material"||value=='lofting'||value=='trialAssembly'||value=='galvanize'){
+                                form.setFieldsValue({
+                                   
+                                    issuedType:'productCategoryName'
+                                })
+                               }else{
+                                form.setFieldsValue({
+                                   
+                                    issuedType:'towerName'
+                                })
+                             }
+                         }}
+                                >
+                                     {/* <Select.Option value={'material '} >提料</Select.Option>
+                                      <Select.Option value={'lofting'} >放样</Select.Option>
+                                      <Select.Option value={'ingredients'} >配料</Select.Option>
+                                      <Select.Option value={'process'} >车间加工</Select.Option>
+                                      <Select.Option value={'trialAssembly'} >镀锌</Select.Option>
+                                      <Select.Option value={'试装'} >试装</Select.Option>
+                                      <Select.Option value={'成品包装'} >成品包装</Select.Option> */}
+                                    
+                                    {
+                                        typeList.map((item: any, index: number) => {
+                                            return (
+                                                <Select.Option
+                                           
+                                                    key={index}
+                                                    value={item.type}
+                                                >{item.typeName}</Select.Option>
+                                            )
+                                        })
+                                    }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col  span={24}>
                             <Form.Item label="生产环节名称" rules={[{required:true,message:'请填写生产环节名称'}]} name='name'>
@@ -192,22 +268,21 @@ const ProdLink = (): React.ReactNode => {
                     </Row>
                     <Row>
                         <Col  span={24}>
-                            <Form.Item label="类型" rules={[{required:true,message:'请选择类型'}]} name='type'>
+                            <Form.Item label="下发数据类型类型" rules={[{required:true,message:'请选择数据类型'}]} name='issuedType' >
                                 <Select
                                     placeholder='请选择'
-                                    // mode='multiple'
-                                    // maxTagCount={10}
+                                   
+                                   
                                 >
-                                    {
+                                      <Select.Option value={'productCategoryName'} key={'塔型'} >塔型</Select.Option>
+                                      <Select.Option value={'towerName'} key={'杆塔'} >杆塔</Select.Option>
+                                    {/* {
                                         typeList.map((item: any, index: number) => {
                                             return (
-                                                <Select.Option
-                                                    key={index}
-                                                    value={item.type}
-                                                >{item.typeName}</Select.Option>
+                                              
                                             )
                                         })
-                                    }
+                                    } */}
                                 </Select>
                             </Form.Item>
                         </Col>
