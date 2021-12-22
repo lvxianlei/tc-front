@@ -139,6 +139,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
         form.setFieldsValue({ ...data });
         setUserList(data?.teamUserVOList || [])
         setVisible(true);
+        setLoading(false)
         setTitle('编辑');
 
     }
@@ -184,11 +185,12 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 refresh={ refresh }
                 searchFormItems={ [
                     {
-                        name: 'vehicleName',
+                        name: 'name',
                         label: '',
                         children: <Input placeholder="请输入班组名称进行查询"/>
                     }
                 ] }
+                onFilterSubmit={(values: Record<string, any>) => { return values; }}
             />
             <Modal visible={ visible } width="40%" title={ title + "班组" } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
                 <Spin spinning={loading}>

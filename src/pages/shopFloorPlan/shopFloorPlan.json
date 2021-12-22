@@ -120,94 +120,94 @@
     ],
     "detailColumns": [
         {
-            "key": "weighingNo",
+            "key": "workCenterName",
             "title": "工作中心",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "workCenterName"
         },
         {
-            "key": "weighingNo",
+            "key": "startTime",
             "title": "开始时间",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "startTime"
         },
         {
-            "key": "weighingNo",
+            "key": "endTime",
             "title": "完成时间",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "endTime"
         },
         {
-            "key": "weighingNo",
+            "key": "workPlanNumber",
             "title": "加工计划编号",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "workPlanNumber"
         },
         {
-            "key": "weighingNo",
+            "key": "planNumber",
             "title": "计划号",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "planNumber"
         },
         {
-            "key": "weighingNo",
-            "title": "计划号",
+            "key": "productCategoryName",
+            "title": "塔型",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "productCategoryName"
         },
         {
-            "key": "weighingNo",
+            "key": "segmentName",
             "title": "段号",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "segmentName"
         },
         {
-            "key": "weighingNo",
+            "key": "code",
             "title": "零件号",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "code"
         },
         {
-            "key": "weighingNo",
+            "key": "materialName",
             "title": "材料",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "materialName"
         },
         {
-            "key": "weighingNo",
+            "key": "structureSpec",
             "title": "规格",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "structureSpec"
         },
         {
-            "key": "weighingNo",
+            "key": "length",
             "title": "长度",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "length"
         },
         {
-            "key": "weighingNo",
+            "key": "type",
             "title": "类型",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "type"
         },
         {
-            "key": "weighingNo",
+            "key": "holesNum",
             "title": "单件孔数",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "holesNum"
         },
         {
-            "key": "weighingNo",
+            "key": "basicsPartNum",
             "title": "单段数",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "basicsPartNum"
         },
         {
-            "key": "weighingNo",
+            "key": "processingNum",
             "title": "加工数量",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "processingNum"
         },
         {
             "key": "weighingNo",
@@ -216,16 +216,16 @@
             "dataIndex": "weighingNo"
         },
         {
-            "key": "weighingNo",
+            "key": "totalWeight",
             "title": "总重（kg）",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "totalWeight"
         },
         {
-            "key": "weighingNo",
+            "key": "processFlow",
             "title": "工艺流程",
             "width": 150,
-            "dataIndex": "weighingNo"
+            "dataIndex": "processFlow"
         }
     ]
 }
