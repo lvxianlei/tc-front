@@ -171,6 +171,16 @@ export default function IngredientsModal(props: any) {
         }
     }), { manual: true })
 
+    // 自动配料
+    const { run: handleAutomatic, data: Automatic } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/purchaseBatchingScheme/batcher/scheme/auto`, {purchaseTowerId: id})
+            console.log(result, "自动配料")
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     // 是否存在
     const isExistence = (schemeData: any, component: string, len: string, num: string) => {
         if (schemeData[component] && schemeData[len] && schemeData[num]) {
@@ -375,11 +385,9 @@ export default function IngredientsModal(props: any) {
                 props.onCancel();
             }}
             footer={[
-                // <Button type="primary" onClick={() => {
-                //     message.warning("该功能暂未开发！")
-                // }}>
-                //     自动配料
-                // </Button>,
+                <Button type="primary" onClick={() => handleAutomatic(props.id)}>
+                    自动配料
+                </Button>,
                 <Button key="submit" type="primary" onClick={() => handleOkuseState()}>
                     手动配料
                 </Button>,

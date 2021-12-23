@@ -15,6 +15,7 @@ interface ManagementSaleOrderBaseInfo extends ISaleOrderBaseInfo {
   orderWeight?: number;
   productType?: number;
   voltageGrade?: number;
+  createUserName?: string;
 }
 
 class ManagementSaleOrderSummary extends SaleOrderSummary {
@@ -94,7 +95,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         [
           {
             label: "制单人",
-            value: baseInfo?.createUser,
+            value: baseInfo?.createUserName,
           },
           {
             label: "制单时间",
@@ -247,7 +248,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
     },
     {
       title: "单重（kg）",
-      dataIndex: "monomerWeight",
+      dataIndex: "singleWeight",
     },
     {
       title: "其他单重（kg）",
