@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import { ContractSummary } from "../../prom/contract/ContractSummary";
 import RequestUtil from "../../../utils/RequestUtil";
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions'
+import { doNumber } from "../../../utils/KeepDecimals";
 const isIta: any = {
   0: "无",
   1: "原件",
@@ -179,12 +180,18 @@ class ManagementContractSummary extends ContractSummary {
         ],
         [
           {
-            label: "备注",
-            value: baseInfo?.description,
+            label: "招标计划",
+            value: baseInfo?.bidBatch,
           },
           {
             label: "币种",
             value: baseInfo?.currencyTypeName
+          }
+        ],
+        [
+          {
+            label: "备注",
+            value: baseInfo?.description,
           }
         ]
       ],
@@ -246,14 +253,17 @@ class ManagementContractSummary extends ContractSummary {
       {
         title: "含税金额(元)",
         dataIndex: "taxAmount",
+        render: (text: any) => <span>{doNumber(text, 4)}</span>
       },
       {
         title: "合同重量(吨)",
         dataIndex: "orderWeight",
+        render: (text: any) => <span>{doNumber(text, 4)}</span>
       },
       {
         title: "含税单价(元/吨)",
         dataIndex: "taxPrice",
+        render: (text: any) => <span>{doNumber(text, 4)}</span>
       },
       {
         title: "签订日期",

@@ -567,6 +567,20 @@ class ManagementContractNew extends ContractNew {
               ]
             },
             {
+              label: "招标批次",
+              name: "bidBatch",
+              initialValue: contract?.bidBatch,
+              children: (
+                <Input style={{width: "100%"}}/>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请输入招标批次",
+                },
+              ]
+            },
+            {
               label: "备注",
               name: "description",
               initialValue: contract?.description,
@@ -1113,6 +1127,20 @@ class ManagementContractNew extends ContractNew {
                 {
                   required: true,
                   message: "请输入交货地点",
+                },
+              ]
+            },
+            {
+              label: "招标批次",
+              name: "bidBatch",
+              initialValue: contract?.bidBatch,
+              children: (
+                <Input style={{width: "100%"}}/>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请输入招标批次",
                 },
               ]
             },

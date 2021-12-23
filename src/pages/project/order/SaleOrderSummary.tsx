@@ -1,3 +1,4 @@
+import React from "react";
 import { TableColumnType } from "antd";
 import { withTranslation } from "react-i18next";
 import { withRouter } from "react-router-dom";
@@ -7,6 +8,7 @@ import {
   SaleOrderSummary,
 } from "../../prom/order/SaleOrderSummary";
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import { doNumber } from "../../../utils/KeepDecimals";
 interface ManagementSaleOrderBaseInfo extends ISaleOrderBaseInfo {
   createUser?: number;
   createTime?: string;
@@ -127,27 +129,27 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         [
           {
             label: "订单总重",
-            value: baseInfo?.orderWeight,
+            value: doNumber(baseInfo?.orderWeight, 8),
           },
           {
             label: "含税金额",
-            value: baseInfo?.taxAmount,
+            value: doNumber(baseInfo?.taxAmount, 4),
           },
         ],
         [
           {
             label: "含税单价",
-            value: baseInfo?.taxPrice,
+            value: doNumber(baseInfo?.taxPrice, 4),
           },
           {
             label: "不含税金额",
-            value: baseInfo?.amount,
+            value: doNumber(baseInfo?.amount, 4),
           },
         ],
         [
           {
             label: "不含税单价",
-            value: baseInfo?.price,
+            value: doNumber(baseInfo?.price, 4),
           },
           {
             label: "币种",
@@ -199,11 +201,6 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
     };
   }
   protected getOrderColumns(): TableColumnType<object>[] {
-    const productStatus: any = {
-      0: "未下发",
-      1: "已下发",
-      2: "审批中"
-    }
     return [{
       title: '序号',
       dataIndex: 'index'
@@ -211,11 +208,17 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
       title: '状态',
       dataIndex: 'productStatus',
       render: (status: number): React.ReactNode => {
-        return productStatus[productStatus]
+        return (
+          <span>{
+            status === 0 ? "未下发" :
+              status === 1 ? "已下发" :
+              "审批中"  
+          }</span>
+        )
       }
     },
     {
-      title: "线路名称11",
+      title: "线路名称",
       dataIndex: "lineName",
     },
     {
@@ -243,8 +246,16 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
       dataIndex: "productHeight",
     },
     {
-      title: "杆塔重量（kg）",
-      dataIndex: "productWeight",
+      title: "单重（kg）",
+      dataIndex: "monomerWeight",
+    },
+    {
+      title: "其他单重（kg）",
+      dataIndex: "otherWeight",
+    },
+    {
+      title: "总重（kg）",
+      dataIndex: "totalWeight",
     },
     {
       title: "备注",

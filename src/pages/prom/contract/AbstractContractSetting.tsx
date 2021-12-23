@@ -77,6 +77,7 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly deliveryWay: string; // 交货方式
     readonly deliveryAddress: string; // 交货地点
     readonly description: string; // 备注
+    readonly bidBatch: string; // 招标批次
 }
 
 export interface ICustomerInfoDto {
