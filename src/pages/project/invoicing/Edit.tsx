@@ -62,7 +62,9 @@ export default function Edit() {
                 invoicingDetailDtos: billingData.submit,
                 fileIds: attchRef.current?.getDataSource().map(item => item.id),
                 invoicingInfoDto: {
-                    ...invoicData, id: data?.invoicingInfoVo.id || "",
+                    ...invoicData,
+                    id: data?.invoicingInfoVo.id || "",
+                    name: invoicData.name.value,
                     invoicingId: data?.invoicingInfoVo.invoicingId || ""
                 }
             }
