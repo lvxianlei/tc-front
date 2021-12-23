@@ -194,12 +194,8 @@ export default function IngredientsModal(props: any) {
     }
 
     // 保存并提交
-    const { loading, run: purchaseSave, data: purchaseSaveData } = useRequest((serarchData: any) => new Promise(async (resole, reject) => {
+    const { loading, run: purchaseSave, data: purchaseSaveData } = useRequest(() => new Promise(async (resole, reject) => {
         try {
-            if (schemeData.length < 1) {
-                message.error("请先生成配料方案！");
-                return false;
-            }
             // 对数据进行处理
             const schemeList = []
             for (let i = 0; i < schemeData.length; i += 1) {
@@ -395,7 +391,13 @@ export default function IngredientsModal(props: any) {
                 <Button key="submit" type="primary" onClick={() => handleOkuseState()}>
                     手动配料
                 </Button>,
-                <Button type="primary" onClick={purchaseSave}>
+                <Button type="primary" onClick={() => {
+                    if (schemeData.length < 1) {
+                        message.error("请先生成配料方案！");
+                        return false;
+                    }
+                    purchaseSave();
+                }}>
                     保存并提交
                 </Button>,
                 <Button key="back" onClick={() => {
