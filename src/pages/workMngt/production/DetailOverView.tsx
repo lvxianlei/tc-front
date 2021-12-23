@@ -33,7 +33,10 @@ export default function DetailOverView(props: OverViewProps): JSX.Element {
     const { run: runProduceIngredients, data: produceIngredientsData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/receive?produceId=${id}`)
-            resole(result)
+            resole(result);
+            if (result) {
+                props.onOk();
+            }
         } catch (error) {
             reject(error)
         }
