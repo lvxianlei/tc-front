@@ -17,7 +17,17 @@ export default function Edit() {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
             billingForm.setFieldsValue({ submit: result.invoicingDetailVos.map((item: any) => formatData(billingHead, item)) })
-            resole(result)
+            resole({
+                ...result,
+                invoicingInfoVo: {
+                    ...result.invoicingInfoVo,
+                    name: {
+                        value: result.invoicingInfoVo.name,
+                        id: result.invoicingInfoVo.customerId,
+                    }
+                }
+
+            })
         } catch (error) {
             reject(error)
         }
@@ -65,6 +75,7 @@ export default function Edit() {
                     ...invoicData,
                     id: data?.invoicingInfoVo.id || "",
                     name: invoicData.name.value,
+                    customerId: invoicData.name.customerId,
                     invoicingId: data?.invoicingInfoVo.invoicingId || ""
                 }
             }
