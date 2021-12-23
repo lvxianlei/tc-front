@@ -45,11 +45,6 @@
                                 "label": "字典管理",
                                 "path": "/sys/dxnry",
                                 "authority": "dxnry"
-                            },
-                            {
-                                "label": "成本评估配置",
-                                "path": "/sys/costconfig",
-                                "authority": "costconfig"
                             }
                         ]
                     },
