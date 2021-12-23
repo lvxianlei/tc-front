@@ -37,7 +37,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         gantt.clearAll();
         gantt.config.column_width = 20;
         gantt.config.columns = [
-          {label:'计划号', name: "planNumber", align: "center", tree: true, resize: true , width:170, template: function (task:any) {
+          {label:'计划号', name: "planNumber", tree: true, resize: true , width:170, template: function (task:any) {
             if(!task.parent){
               // href='/planProd/planMgmt/detail/${task.id}/${task.planId}'
               return (

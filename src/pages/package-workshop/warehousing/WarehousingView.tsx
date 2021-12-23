@@ -28,6 +28,9 @@ export default function WarehousingView(): React.ReactNode {
     const params = useParams<{ id: string ,status: string}>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-production/packageWorkshop/taskCollectDetail/${params.id}`)
+        data.packageUserNames = data?.packageUserVOList&& data?.packageUserVOList.length>0 &&data?.packageUserVOList.map((item:any)=>{
+            return item.name
+        }).join(',')
         resole(data)
     }), {})
     const detailData: any = data;
