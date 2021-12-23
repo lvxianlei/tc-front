@@ -37,7 +37,17 @@ export default function BaseInfoEdit(): JSX.Element {
     const handleSubmit = async () => {
         try {
             const baseInfoData = await baseInfoForm.validateFields()
-            const result = await saveRun({ ...data, ...baseInfoData, projectId: params.id })
+            const result = await saveRun({
+                ...data,
+                ...baseInfoData,
+                mackUser: baseInfoData.mackUser?.value,
+                mackUserId: baseInfoData.mackUser?.id,
+                checkUser: baseInfoData.checkUser?.value,
+                checkUserId: baseInfoData.checkUser?.id,
+                warrantUser: baseInfoData.warrantUser?.value,
+                warrantUserId: baseInfoData.warrantUser?.id,
+                projectId: params.id
+            })
             if (result) {
                 message.success("保存成功...")
                 history.goBack()

@@ -227,31 +227,75 @@
         "readOnly": true,
         "columns": [
             {
-                "title": "",
+                "title": "品名",
                 "dataIndex": ""
             },
             {
-                "title": "",
+                "title": "材质",
+                "dataIndex": "structureTexture"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "原材料长度(mm)",
                 "dataIndex": ""
             },
             {
-                "title": "",
+                "title": "零件1",
                 "dataIndex": ""
             },
             {
-                "title": "",
+                "title": "长度",
                 "dataIndex": ""
             },
             {
-                "title": "",
+                "title": "数量",
                 "dataIndex": ""
             },
             {
-                "title": "",
+                "title": "零件2",
                 "dataIndex": ""
             },
             {
-                "title": "",
+                "title": "长度",
+                "dataIndex": ""
+            },
+            {
+                "title": "数量",
+                "dataIndex": ""
+            },
+            {
+                "title": "零件3",
+                "dataIndex": ""
+            },
+            {
+                "title": "长度",
+                "dataIndex": ""
+            },
+            {
+                "title": "数量",
+                "dataIndex": ""
+            },
+            {
+                "title": "零件4",
+                "dataIndex": ""
+            },
+            {
+                "title": "长度",
+                "dataIndex": ""
+            },
+            {
+                "title": "数量",
+                "dataIndex": ""
+            },
+            {
+                "title": "余料长度",
+                "dataIndex": ""
+            },
+            {
+                "title": "利用率",
                 "dataIndex": ""
             }
         ]

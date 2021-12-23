@@ -61,7 +61,10 @@ export default function Edit() {
                 contractCode: baseInfoData.contractCode || data?.contractCode,
                 invoicingDetailDtos: billingData.submit,
                 fileIds: attchRef.current?.getDataSource().map(item => item.id),
-                invoicingInfoDto: { ...invoicData, id: data?.invoicingInfoVo.id || "", invoicingId: data?.invoicingInfoVo.invoicingId || "" }
+                invoicingInfoDto: {
+                    ...invoicData, id: data?.invoicingInfoVo.id || "",
+                    invoicingId: data?.invoicingInfoVo.invoicingId || ""
+                }
             }
             const result = params.id === "new" ? await createRun(saveData) : await saveRun({ ...saveData, id: data?.id })
             if (result) {
@@ -153,6 +156,7 @@ export default function Edit() {
                         case "productTypeId":
                             return ({
                                 ...item,
+                                dataIndex: "productTypeId",
                                 enum: productTypeOptions?.map((product: any) => ({
                                     value: product.id,
                                     label: product.name
@@ -173,6 +177,7 @@ export default function Edit() {
                         case "voltage":
                             return ({
                                 ...item,
+                                dataIndex: "voltageId",
                                 enum: voltageGradeOptions?.map((product: any) => ({
                                     value: product.id,
                                     label: product.name

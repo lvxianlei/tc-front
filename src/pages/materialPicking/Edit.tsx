@@ -17,9 +17,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const [planNumber, setPlanNumber] = useState<string>("")
     const [productCategoryName, setProductCategoryName] = useState<string>("")
     const [product, setProduct] = useState<string>("")
+    const [materials, setMaterials] = useState<any[]>([])
+    const [materialPickingInfoDTOS, setMaterialPickingInfoDTOS] = useState<any[]>([])
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPicking/${id}`)
+            setMaterialPickingInfoDTOS(result?.materialPickingInfoVOS)
             resole({
                 ...result,
                 workPlanNumber: { value: result.workPlanNumber, id: result.workPlanNumberId },
@@ -79,7 +82,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     return <Spin spinning={loading}>
         <Modal
-            title=""
+            title="选择原材料"
             width={1011}
             destroyOnClose
             onCancel={() => {
@@ -92,7 +95,9 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             <PopTableContent data={{
                 ...chooseMaterial as any,
                 path: `${chooseMaterial.path}?planNumber=${planNumber}&product=${product}&productCategoryName=${productCategoryName}`
-            }} />
+            }}
+                onChange={(records: any) => setMaterials(records)}
+            />
         </Modal>
         <DetailTitle title="基础信息" />
         <BaseInfo
@@ -110,6 +115,11 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     setVisible(true)
                 }}>选择原材料</Button>
         ]} />
-        <CommonTable columns={materialInfo} dataSource={data?.materialPickingInfoVOS || []} />
+        <CommonTable columns={[{
+            title: "操作",
+            dataIndex: "opration",
+            fixed: "left",
+            render: (_: undefined, records: any) => <Button type="link" size="small">删除</Button>
+        }, ...materialInfo]} dataSource={materialPickingInfoDTOS} />
     </Spin>
 })
