@@ -39,6 +39,8 @@ export default function BaseInfoEdit(): JSX.Element {
             setAddress(result.address)
             resole({
                 ...result,
+                projectLeader: { value: result.projectLeader, id: result.projectLeaderId },
+                biddingPerson: { value: result.biddingPerson, id: result?.biddingPersonId },
                 address: `${["null", null].includes(result.bigRegion) ? "" : result.bigRegion}-${["null", null].includes(result.address) ? "" : result.address}`
             })
         } catch (error) {
@@ -68,10 +70,10 @@ export default function BaseInfoEdit(): JSX.Element {
                 bigRegion,
                 fileIds: attchsRef.current?.getDataSource().map(item => item.id),
                 cargoDTOList: cargoVOListData.submit,
-                projectLeaderId: projectLeaderType ? (data as any).projectLeaderId : baseInfoData.projectLeader?.records[0].id,
-                projectLeader: baseInfoData.projectLeader?.value || baseInfoData.projectLeader,
-                biddingPerson: baseInfoData.biddingPerson?.value || baseInfoData.biddingPerson,
-                biddingAgency: baseInfoData.biddingAgency?.value || baseInfoData.biddingAgency
+                projectLeaderId: baseInfoData.projectLeader?.id,
+                projectLeader: baseInfoData.projectLeader?.value,
+                biddingPerson: baseInfoData.biddingPerson?.value,
+                biddingAgency: baseInfoData.biddingAgency?.value
             })
             if (result) {
                 message.success("保存成功...")
