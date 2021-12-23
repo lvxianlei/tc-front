@@ -99,7 +99,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                         ...item,
                         render: (_a: any, record: any) => `${record.voltage}kv${record.productName}`
                     }) : item)} dataSource={data?.askLogisticsVOS || []} />
-                    <Attachment title="咨询附件" dataSource={data?.replyAttachVos || []} />
+                    <Attachment title="咨询附件" dataSource={data?.attachVos || []} />
                 </>}
                 {radioValue === "records" && <>
                     <BaseInfo columns={logisticBaseInfo} dataSource={data || {}} />

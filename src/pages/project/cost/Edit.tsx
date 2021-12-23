@@ -172,7 +172,7 @@ export default function CostEdit() {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const askInfo: any = await RequestUtil.get(`/tower-market/askInfo?projectId=${params.projectId}`)
-            setAskProductDtos(askInfo.productArr.map((item: any, index: number) => ({
+            setAskProductDtos(askInfo?.productArr?.map((item: any, index: number) => ({
                 ...item,
                 id: index,
                 data: [({ ...item.data })]
@@ -301,7 +301,7 @@ export default function CostEdit() {
                 <DetailTitle title="基本信息" />
                 <BaseInfo form={baseInfo} columns={costBase} dataSource={{}} edit col={3} />
                 <DetailTitle title="产品类型成本评估" operation={[<Button key="newType" type="primary" onClick={handleNewProduct} >新增产品类型</Button>]} />
-                <EditableProTableList data={askProductDtos} ref={formRef} deleteProduct={deleteProduct} />
+                <EditableProTableList data={askProductDtos||[]} ref={formRef} deleteProduct={deleteProduct} />
             </DetailContent>
         </Spin>
     </>
