@@ -35,7 +35,7 @@ export default function RecruitEdit(): React.ReactNode {
     ]
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
-        getProdLinkList();
+        getProdLinkList(data?.linkId);
         // getProdUnitList();
         const value: any = params.productCategoryId &&await RequestUtil.get('/tower-aps/productionUnit', {
             current: 1,
@@ -69,17 +69,17 @@ export default function RecruitEdit(): React.ReactNode {
     /**
      * @description 获取生产环节
      */
-    const getProdLinkList = async () => {
+     const getProdLinkList = async (linkId?: string) => {
         const data: any = await RequestUtil.get('/tower-aps/productionLink', {
             current: 1,
             size: 1000
         })
         setProdLinkList(data.records)
-        const value = data.records.filter((item:any)=>{
-            return item.id === towerData.linkId
+        const value = linkId && data.records.filter((item:any)=>{
+            return item.id === linkId
         })
 
-        params.productCategoryId && value.length>0 &&value[0]?.issuedType == 'towerName' && getProdLinkLists()
+        params.productCategoryId && value.length>0 && value[0]?.issuedType == 'towerName' && getProdLinkLists()
     }
     
     /**
@@ -389,7 +389,7 @@ export default function RecruitEdit(): React.ReactNode {
                 </Row>
             </Form>
             {
-                params.productCategoryId && prodLinkList[0] && prodLinkList[0].issuedType == 'towerName' && <Table dataSource={towerList} rowKey={"id"}
+                params.productCategoryId && towerList.length>0 && <Table dataSource={towerList} rowKey={"id"}
                     // rowSelection={{
                     //     selectedRowKeys: selectedKeys,
                     //     onChange: SelectChange

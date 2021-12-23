@@ -170,6 +170,8 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
                 return '已下发'
               case 4:
                 return '已下达'
+              case 5:
+                return '已完成'
             }
           }},
           {label:'操作',name: "buttons",width: 100, align: "left", template: function (task:any) {
@@ -196,13 +198,14 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
             );
           }  
             
-        
+          else{
             return (
               `
               <a style="color:#FF8C00" id='view'>查看</a> 
              
               `
             );
+          }
           }  
            
             
@@ -348,6 +351,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
                       <Select.Option value={2} key="2">已锁定</Select.Option>
                       <Select.Option value={3} key="3">已下发</Select.Option>
                       <Select.Option value={4} key="4">已下达</Select.Option>
+                      <Select.Option value={5} key="5">已完成</Select.Option>
                   </Select>
               </Form.Item>
               <Form.Item label='时间范围' name='time'>

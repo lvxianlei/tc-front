@@ -43,7 +43,12 @@ export default function RecruitEdit(): React.ReactNode {
     }
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);
-        getProdLinkList();
+        params.productCategoryId && setTowerData(data)
+        if(params.productCategoryId){
+            getProdLinkList(data?.linkId);
+        }else{
+            getProdLinkList();
+        }
         params.productCategoryId &&settypenum(data.status)
         getProdUnitList();
         const value: any = params.productCategoryId && await RequestUtil.get('/tower-aps/productionUnit', {
@@ -51,8 +56,6 @@ export default function RecruitEdit(): React.ReactNode {
             size: 1000,
             productionLinkId: data.linkId
         })
-        params.productCategoryId && setTowerData(data)
-
         const listValue: any = params.productCategoryId && value.records.length > 0 ? value.records.filter((res: any) => { return res.id === data.unitId }) : [{}]
         params.productCategoryId && setProductivity(listValue[0].productivity?listValue[0].productivity:'')
         params.productCategoryId&& seeLoad(listValue[0].productivity, data.unitId)
@@ -80,14 +83,14 @@ export default function RecruitEdit(): React.ReactNode {
     /**
      * @description 获取生产环节
      */
-    const getProdLinkList = async () => {
+    const getProdLinkList = async (linkId?: string) => {
         const data: any = await RequestUtil.get('/tower-aps/productionLink', {
             current: 1,
             size: 1000
         })
         setProdLinkList(data.records)
-        const value = data.records.filter((item:any)=>{
-            return item.id === towerData.linkId
+        const value = linkId && data.records.filter((item:any)=>{
+            return item.id === linkId
         })
         value.length>0 && setType(value[0].issuedType)
 
