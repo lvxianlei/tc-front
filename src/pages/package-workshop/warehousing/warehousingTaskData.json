@@ -25,7 +25,7 @@
             "title": "计划号"
         },
         {
-            "dataIndex": "packingWarehouseTime",
+            "dataIndex": "packingWarehouseRealTime",
             "title": "包装时间"
         },
         {

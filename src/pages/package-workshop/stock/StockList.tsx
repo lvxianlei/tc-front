@@ -95,10 +95,10 @@ export default function StockList(): React.ReactNode {
             )  
         },
         {
-            key: 'balesWarehouseNumber',
+            key: 'balesNumber',
             title: '库存数',
             width: 100,
-            dataIndex: 'balesWarehouseNumber',
+            dataIndex: 'balesNumber',
             render: (_: number): React.ReactNode => ( 
                 <span>{ _ === -1 ? '-' : _ }</span>
             )  
