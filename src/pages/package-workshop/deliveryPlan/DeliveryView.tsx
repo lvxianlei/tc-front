@@ -26,7 +26,7 @@ const tableColumns = [
     { title: '呼高', dataIndex: 'productHeight', key: 'productHeight'},
     { title: '基数', dataIndex: 'number', key: 'number' },
     { title: '班组', dataIndex: 'teamName', key: 'teamName' },
-    { title: '发包人员', dataIndex: 'packageUserNames', key: 'packageUserNames'}
+    { title: '发包人员', dataIndex: 'userNames', key: 'userNames'}
 ]
 
 

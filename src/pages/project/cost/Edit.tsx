@@ -176,7 +176,7 @@ export default function CostEdit() {
                 ...item,
                 id: index,
                 data: [({ ...item.data })]
-            })))
+            })) || [])
             baseInfo.setFieldsValue(askInfo.askInfoVo)
             resole(askInfo)
         } catch (error) {
@@ -301,7 +301,7 @@ export default function CostEdit() {
                 <DetailTitle title="基本信息" />
                 <BaseInfo form={baseInfo} columns={costBase} dataSource={{}} edit col={3} />
                 <DetailTitle title="产品类型成本评估" operation={[<Button key="newType" type="primary" onClick={handleNewProduct} >新增产品类型</Button>]} />
-                <EditableProTableList data={askProductDtos||[]} ref={formRef} deleteProduct={deleteProduct} />
+                <EditableProTableList data={askProductDtos || []} ref={formRef} deleteProduct={deleteProduct} />
             </DetailContent>
         </Spin>
     </>
