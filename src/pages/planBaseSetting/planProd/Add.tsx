@@ -54,7 +54,6 @@ export default function RecruitEdit(): React.ReactNode {
         params.productCategoryId && setTowerData(data)
 
         const listValue: any = params.productCategoryId && value.records.length > 0 ? value.records.filter((res: any) => { return res.id === data.unitId }) : [{}]
-
         params.productCategoryId && setProductivity(listValue[0].productivity?listValue[0].productivity:'')
         params.productCategoryId&& seeLoad(listValue[0].productivity, data.unitId)
         params.productCategoryId && setProdUnitList(value.records)
@@ -88,7 +87,7 @@ export default function RecruitEdit(): React.ReactNode {
         })
         setProdLinkList(data.records)
         const value = data.records.filter((item:any)=>{
-            return item.id = towerData.linkId
+            return item.id === towerData.linkId
         })
         setType(value[0].issuedType)
 

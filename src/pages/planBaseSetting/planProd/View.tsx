@@ -76,7 +76,7 @@ export default function RecruitEdit(): React.ReactNode {
         })
         setProdLinkList(data.records)
         const value = data.records.filter((item:any)=>{
-            return item.id = towerData.linkId
+            return item.id === towerData.linkId
         })
 
         params.productCategoryId && value[0].issuedType == 'towerName' && getProdLinkLists()
