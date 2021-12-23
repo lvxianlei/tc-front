@@ -141,7 +141,7 @@ export default function Dispatch(): React.ReactNode {
                             ]}>
                                 <Select style={{width:'100%'}} disabled={show}>
                                     <Select.Option value={1} key={1}>是</Select.Option>
-                                    <Select.Option value={2} key={2}>否</Select.Option>
+                                    <Select.Option value={0} key={0}>否</Select.Option>
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -157,7 +157,11 @@ export default function Dispatch(): React.ReactNode {
                         value.endTime = formatDate[1];
                     }
                     let submitValue={
-                        ...value,
+                        startTime: value.startTime,
+                        endTime: value.endTime,
+                        type: value.type,
+                        productionUnitId: equipment.productionUnitId,
+                        workCenterId: equipment.id,
                         status:0,
                     }
                     const tableDataSource: any = await RequestUtil.get(`tower-aps/machining/dispatchView`,submitValue)
