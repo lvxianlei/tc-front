@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, DatePicker, Button, Form, Row, Col, message, Select, Spin, Space } from 'antd';
+import { Input, DatePicker, Button, Form, Row, Col, Select, Spin, Space } from 'antd';
 import { CommonTable, DetailContent } from '../common';
 import styles from './ShopFloorPlan.module.less';
 import RequestUtil from '../../utils/RequestUtil';
@@ -88,27 +88,10 @@ export default function Detail(): React.ReactNode {
         <Spin spinning={loading}>
             <Space className={ styles.bottom } direction="horizontal">
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                <Button type="primary" onClick={() => {
-                    RequestUtil.post(`/tower-aps/aps/issue?ids=${ params.id }`).then(res => {
-                        message.success('加工任务下发成功');
-                        history.goBack();
-                    })
-                }}>加工任务下发</Button>
             </Space>
             <CommonTable 
                 dataSource={detailList || []} 
-                columns={[...detailColumns, 
-                    // {
-                    //     "key": "operation",
-                    //     "title": "操作",
-                    //     "dataIndex": "operation",
-                    //     "fixed": "right" as FixedType,
-                    //     "width": 150,
-                    //     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    //         <Button type='link'>调整</Button>
-                    //     )
-                    // }
-                ]}/>
+                columns={[...detailColumns]}/>
         </Spin>
     </DetailContent>
 }

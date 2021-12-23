@@ -114,7 +114,7 @@ export default function ShopFloorPlan(): React.ReactNode {
                     fixed: "right" as FixedType,
                     "width": 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        confirmStatus === 1 ? <Link to={`/shopFloorPlan/shopFloorDetail/${record.id }`}>详情</Link> : null
+                        <Link to={`/shopFloorPlan/shopFloorDetail/${record.id }`}>详情</Link>
                     )
                 }]
             }

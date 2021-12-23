@@ -16,15 +16,17 @@ export default function AutomaticScheduling(): React.ReactNode {
 
     const { loading, data, run: checkRun} = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/aps/check?ids=${params.id}`);
-            if(result) {
-                run();
-                clearTimeout();
-            } else {
-                setTimeout(() => checkRun(), 4000)
-                // checkRun();
-            }
-            resole(result)
+            await RequestUtil.post(`/tower-aps/aps?ids=${params.id}`).then(async res => {
+                const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/aps/check?ids=${params.id}`);
+                if(result) {
+                    run();
+                    clearTimeout();
+                } else {
+                    setTimeout(() => checkRun(), 4000)
+                    // checkRun();
+                }
+                resole(result)
+            })  
         } catch (error) {
             reject(error)
         }
