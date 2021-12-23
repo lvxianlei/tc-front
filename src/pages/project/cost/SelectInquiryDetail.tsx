@@ -82,7 +82,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                 </>}
                 {radioValue === "records" && <>
                     <BaseInfo columns={supplyBaseInfo} dataSource={data || {}} />
-                    <Attachment dataSource={data?.replyAttachVos || []} />
+                    <Attachment dataSource={data?.startAttachVos || []} />
                 </>}
             </>}
 
@@ -109,7 +109,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                         render: (_a: any, record: any) => `${record.voltage}${record.productName}`
                     }) : item)} dataSource={data?.askLogisticsVOS || {}} />
 
-                    <Attachment title="附件" dataSource={data?.replyAttachVos || []} />
+                    <Attachment title="附件" dataSource={data?.startAttachVos || []} />
                 </>}
             </>}
 
@@ -124,7 +124,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                 </>}
                 {radioValue === "records" && <>
                     <BaseInfo columns={workmanshipBaseInfo} dataSource={data || {}} />
-                    <Attachment title="附件" dataSource={data?.replyAttachVos || []} />
+                    <Attachment title="附件" dataSource={data?.startAttachVos || []} />
                 </>}
             </>}
             {radioValue === "records" && data?.askStatus === 1 && <Button type="primary" style={{ marginTop: 10 }} onClick={() => handleSelectInquiryTypeOk()}>重新申请</Button>}
