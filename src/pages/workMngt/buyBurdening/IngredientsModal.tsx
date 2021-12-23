@@ -176,6 +176,17 @@ export default function IngredientsModal(props: any) {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/purchaseBatchingScheme/batcher/scheme/auto`, {purchaseTowerId: id})
             console.log(result, "自动配料")
+            if (result && result.schemeData && result.schemeData.length > 0) {
+                setSchemeData(result.schemeData || []);
+                setNumbers(numbers += 1);
+                // 需要减少构建分类的数量
+                for (let i = 0; i < schemeData.length; i += 1) {
+
+                }
+            } else {
+                message.error("自动配料有误，请联系管理员！");
+                return false;
+            }
         } catch (error) {
             reject(error)
         }
@@ -275,15 +286,6 @@ export default function IngredientsModal(props: any) {
             ...schemeData
         ]);
         setNumbers(numbers += 1);
-        const nums = (record.num1 || 0) + (record.num2 || 0) + (record.num3 || 0) + (record.num4 || 0);
-        // 构建分类
-        const result = constructionClassification;
-        const index = constructionClassification.findIndex((item: any) => item.structureSpec === record.structureSpec && item.structureTexture === record.structureTexture);
-        result[index].notConfigured = result[index].notConfigured - nums;
-        setConstructionClassification(result.slice(0));
-        // 设置构建分类的数量
-        const numsConstrue = (construNumber - nums <= 0 ? 0 : (construNumber - nums))
-        setConstruNumber(numsConstrue);
         // 清空备选方案
         setPreparation([]);
     }
@@ -325,7 +327,18 @@ export default function IngredientsModal(props: any) {
                     map.set(schemeData[i].component4, schemeData[i].num4);
                 }
             }
+
+            // 添加构建分类map
+            if (map.has(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`)) {
+                const result = map.get(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`) || 0;
+                let num = (schemeData[i].num1 || 0) + (schemeData[i].num2 || 0) + (schemeData[i].num3 || 0) + (schemeData[i].num4 || 0)
+                map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, result + num);
+            } else {
+                let num = (schemeData[i].num1 || 0) + (schemeData[i].num2 || 0) + (schemeData[i].num3 || 0) + (schemeData[i].num4 || 0)
+                map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, num);
+            }
         }
+        console.log(map, "map")
         // 循环构建分类明细
         let result:any = constructionClassificationDetail;
         let selectKeys = selectedRowKeysCheck;
@@ -349,24 +362,31 @@ export default function IngredientsModal(props: any) {
         setSelectedRowKeysCheck(selectKeys);
         setConstructionClassificationDetail(result.slice(0));
         setConstruNumberDetail(numberDetail)
+
+        // 循环构建分类
+        let sort: any = constructionClassification,
+            sortNum = 0;
+        for (let i = 0; i < sort.length; i += 1) {
+            if (map.has(`${sort[i].structureTexture}_${sort[i].structureSpec}`)) {
+                // map对应存在，则需要减少
+                let num:number = map.get(`${sort[i].structureTexture}_${sort[i].structureSpec}`) || 0;
+                sort[i].notConfigured = sort[i].totalNum - num;
+            } else {
+                sort[i].notConfigured = sort[i].totalNum;
+            }
+            sortNum = sort[i].notConfigured += sortNum;
+        }
+        setConstructionClassification(sort.slice(0));
+        setConstruNumber(sortNum);
     }, [numbers])
 
     // 移除
     const handleDelete = (record: any, idx: number) => {
-        const nums = (record.num1 || 0) + (record.num2 || 0) + (record.num3 || 0) + (record.num4 || 0);
-        // 构建分类
-        const result = constructionClassification;
-        const index = constructionClassification.findIndex((item: any) => item.structureSpec === record.structureSpec && item.structureTexture === record.structureTexture);
-        result[index].notConfigured = result[index].notConfigured + nums;
-        setConstructionClassification(result.slice(0));
         // 移除配料方案的数据
         const preList = schemeData;
         preList.splice(idx, 1);
         setSchemeData(schemeData.slice(0));
         setNumbers(numbers += 1);
-        // 构建分类
-        const numsConstrue = (construNumber + nums <= 0 ? 0 : (construNumber + nums))
-        setConstruNumber(numsConstrue);
     }
 
     return (

@@ -288,15 +288,6 @@ export default function IngredientsModal(props: any) {
             ...schemeData
         ]);
         setNumbers(numbers += 1);
-        const nums = (record.num1 || 0) + (record.num2 || 0) + (record.num3 || 0) + (record.num4 || 0);
-        // 构建分类
-        const result = constructionClassification;
-        const index = constructionClassification.findIndex((item: any) => item.structureSpec === record.structureSpec && item.structureTexture === record.structureTexture);
-        result[index].notConfigured = result[index].notConfigured - nums;
-        setConstructionClassification(result.slice(0));
-        // 设置构建分类的数量
-        const numsConstrue = (construNumber - nums <= 0 ? 0 : (construNumber - nums))
-        setConstruNumber(numsConstrue);
         // 清空备选方案
         setPreparation([]);
     }
@@ -346,6 +337,16 @@ export default function IngredientsModal(props: any) {
             } else {
                 map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}_${schemeData[i].length}`, 1);
             }
+
+            // 添加构建分类map
+            if (map.has(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`)) {
+                const result = map.get(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`) || 0;
+                let num = (schemeData[i].num1 || 0) + (schemeData[i].num2 || 0) + (schemeData[i].num3 || 0) + (schemeData[i].num4 || 0)
+                map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, result + num);
+            } else {
+                let num = (schemeData[i].num1 || 0) + (schemeData[i].num2 || 0) + (schemeData[i].num3 || 0) + (schemeData[i].num4 || 0)
+                map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, num);
+            }
         }
         console.log(map, "--------------")
         // 循环构建分类明细
@@ -378,34 +379,47 @@ export default function IngredientsModal(props: any) {
             if (map.has(`${s[i].structureTexture}_${s[i].structureSpec}_${s[i].length}`)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(`${s[i].structureTexture}_${s[i].structureSpec}_${s[i].length}`) || 0;
-                s[i].consumeNum = s[i].totalNum - num;
+                s[i].consumeNum = num;
+                s[i].surplusNum = s[i].totalNum - num;
             } else {
                 s[i].consumeNum = 0;
+                s[i].surplusNum = s[i].totalNum - 0;
             }
         }
         setPurchaseBatchingDataList(s.slice(0));
+
+        // 循环构建分类
+        let sort: any = constructionClassification,
+            sortNum = 0;
+        for (let i = 0; i < sort.length; i += 1) {
+            if (map.has(`${sort[i].structureTexture}_${sort[i].structureSpec}`)) {
+                // map对应存在，则需要减少
+                let num:number = map.get(`${sort[i].structureTexture}_${sort[i].structureSpec}`) || 0;
+                sort[i].notConfigured = sort[i].totalNum - num;
+            } else {
+                sort[i].notConfigured = sort[i].totalNum;
+            }
+            sortNum = sort[i].notConfigured += sortNum;
+        }
+        setConstructionClassification(sort.slice(0));
+        setConstruNumber(sortNum);
     }, [numbers])
 
     // 移除
     const handleDelete = (record: any, idx: number) => {
-        const nums = (record.num1 || 0) + (record.num2 || 0) + (record.num3 || 0) + (record.num4 || 0);
-        // 构建分类
-        const result = constructionClassification;
-        const index = constructionClassification.findIndex((item: any) => item.structureSpec === record.structureSpec && item.structureTexture === record.structureTexture);
-        result[index].notConfigured = result[index].notConfigured + nums;
-        setConstructionClassification(result.slice(0));
         // 移除配料方案的数据
         const preList = schemeData;
         preList.splice(idx, 1);
         setSchemeData(schemeData.slice(0));
         setNumbers(numbers += 1);
-        // 构建分类
-        const numsConstrue = (construNumber + nums <= 0 ? 0 : (construNumber + nums))
-        setConstruNumber(numsConstrue);
     }
 
     // 点击配料
     const handleIngredients = (record: any) => {
+        if (record.surplusNum <= 0) {
+            message.error("暂无合适的配料!");
+            return false;
+        }
         // 清空备选方案
         setPreparation([]);
         /**
