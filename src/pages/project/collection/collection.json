@@ -265,6 +265,12 @@
             "width": "100%"
         },
         {
+            "title": "币种",
+            "dataIndex": "currencyTypeName",
+            "disabled": true,
+            "width": "100%"
+        },
+        {
             "title": "回款计划名称",
             "dataIndex": "paymentPlanId",
             "type": "popTable",
@@ -348,6 +354,12 @@
         },
         {
             "title": "业务经理",
+            "dataIndex": "currencyTypeName",
+            "disabled": true,
+            "width": 200
+        },
+        {
+            "title": "币种",
             "dataIndex": "salesman",
             "disabled": true,
             "width": 200

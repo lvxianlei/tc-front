@@ -101,7 +101,8 @@ export default function Edit() {
                 contractDevTime: contractValue.deliveryTime,
                 business: contractValue.salesman,
                 projectCode: contractValue.projectNumber, // 项目编码
-                contractCode: contractValue.internalNumber
+                contractCode: contractValue.internalNumber,
+                contractType: contractValue.contractType
             })
         }
         if (fields.backProportion) {

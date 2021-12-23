@@ -469,9 +469,10 @@
             ]
         },
         {
-            "title": "开票时合同状态",
+            "title": "合同下计划状态",
             "dataIndex": "contractType",
             "type": "select",
+            "disabled": true,
             "enum": [
                 {
                     "value": 1,
