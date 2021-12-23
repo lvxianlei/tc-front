@@ -50,16 +50,18 @@ export default function RecruitEdit(): React.ReactNode {
             getProdLinkList();
         }
         params.productCategoryId &&settypenum(data.status)
-        getProdUnitList();
+        // getProdUnitList();
         const value: any = params.productCategoryId && await RequestUtil.get('/tower-aps/productionUnit', {
             current: 1,
             size: 1000,
             productionLinkId: data.linkId
         })
-        const listValue: any = params.productCategoryId && value.records.length > 0 ? value.records.filter((res: any) => { return res.id === data.unitId }) : [{}]
-        params.productCategoryId && setProductivity(listValue[0].productivity?listValue[0].productivity:'')
-        params.productCategoryId&& seeLoad(listValue[0].productivity, data.unitId)
         params.productCategoryId && setProdUnitList(value.records)
+        const listValue: any = params.productCategoryId && value.records.length > 0 && value.records.filter((res: any) => { return res.id === data?.unitId })
+        console.log(listValue)
+        params.productCategoryId && setProductivity(listValue[0]?.productivity?listValue[0].productivity:'')
+        params.productCategoryId&& seeLoad(listValue[0]?.productivity, data.unitId)
+        
         form.setFieldsValue(params.productCategoryId ? {
             ...data,
             startTime: data?.startTime ? moment(data?.startTime) : '',
@@ -128,13 +130,28 @@ export default function RecruitEdit(): React.ReactNode {
 
 
     }
+    // /**
+    //      * @description 获取生产单元
+    //      */
+    // const getProdUnitList = async () => {
+    //     const data: any = await RequestUtil.get('/tower-aps/productionUnit', {
+    //         current: 1,
+    //         size: 1000
+    //     })
+    //     setProdUnitList(data.records)
+    // }
+
     /**
-         * @description 获取生产单元
-         */
-    const getProdUnitList = async () => {
+     * @description 获取生产单元
+     */
+     const getProdUnitList = async (id:any) => {
+        form.setFieldsValue({
+            unitId:''
+        })
         const data: any = await RequestUtil.get('/tower-aps/productionUnit', {
             current: 1,
-            size: 1000
+            size: 1000,
+            productionLinkId:id
         })
         setProdUnitList(data.records)
     }
@@ -357,6 +374,7 @@ export default function RecruitEdit(): React.ReactNode {
                                                 setTowerList([])
                                             }
                                         }
+                                        getProdUnitList(value)
 
                                     }}
                                 >
