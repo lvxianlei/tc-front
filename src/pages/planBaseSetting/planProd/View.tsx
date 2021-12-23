@@ -79,7 +79,7 @@ export default function RecruitEdit(): React.ReactNode {
             return item.id === towerData.linkId
         })
 
-        params.productCategoryId && value[0].issuedType == 'towerName' && getProdLinkLists()
+        params.productCategoryId && value.length>0 &&value[0]?.issuedType == 'towerName' && getProdLinkLists()
     }
     
     /**
@@ -130,12 +130,12 @@ export default function RecruitEdit(): React.ReactNode {
             // endTime: times[1] ? `${times[1]} 23:59:59` : null,
         })
         if (data) {
-            let dates = (data.loadList || []).map((item: { dayTime: string }) => {
+            let dates = (data?.loadList || []).map((item: { dayTime: string }) => {
                 return item.dayTime
             })
             let datas: any[] = [
                 {
-                    name: '已排产',
+                    name: '已下达',
                     type: 'bar',
                     stack: 'stack',
                     emphasis: {
@@ -143,14 +143,14 @@ export default function RecruitEdit(): React.ReactNode {
                     },
                     markLine: {
                         data: [{
-                            name:'产力值',
-                           yAxis:max
+                            name: '产力值',
+                            yAxis: max
                         }]
                     },
                     data: []
                 },
                 {
-                    name: '已反馈',
+                    name: '已下发',
                     type: 'bar',
                     stack: 'stack',
                     emphasis: {
@@ -158,27 +158,27 @@ export default function RecruitEdit(): React.ReactNode {
                     },
                     markLine: {
                         data: [{
-                            name:'产力值',
-                           yAxis:max
+                            name: '产力值',
+                            yAxis: max
                         }]
                     },
                     data: []
                 },
-                {
-                    name: '待确认',
-                    type: 'bar',
-                    stack: 'stack',
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    markLine: {
-                        data: [{
-                            name:'产力值',
-                           yAxis:max
-                        }]
-                    },
-                    data: []
-                },
+                // {
+                //     name: '待确认',
+                //     type: 'bar',
+                //     stack: 'stack',
+                //     emphasis: {
+                //         focus: 'series'
+                //     },
+                //     markLine: {
+                //         data: [{
+                //             name:'产力值',
+                //            yAxis:max
+                //         }]
+                //     },
+                //     data: []
+                // },
                 {
                     name: '已锁定',
                     type: 'bar',
@@ -188,8 +188,8 @@ export default function RecruitEdit(): React.ReactNode {
                     },
                     markLine: {
                         data: [{
-                            name:'产力值',
-                           yAxis:max
+                            name: '产力值',
+                            yAxis: max
                         }]
                     },
                     data: []
@@ -203,7 +203,7 @@ export default function RecruitEdit(): React.ReactNode {
             // });
             (data.loadList || []).forEach((item: { productivityList:  any }, index: any) => {
                 datas.map((res: any, i: number) => {
-                    if(item?.productivityList?.length > 0 && res.name === item.productivityList[i].statusName ){
+                    if(item?.productivityList?.length > 0 && res.name === item.productivityList[i]?.statusName ){
                         res.data.push(item.productivityList[i].productivity || 0)
                     }  else  {
                         res.data.push(undefined)

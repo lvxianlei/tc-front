@@ -89,9 +89,9 @@ export default function RecruitEdit(): React.ReactNode {
         const value = data.records.filter((item:any)=>{
             return item.id === towerData.linkId
         })
-        setType(value[0].issuedType)
+        value.length>0 && setType(value[0].issuedType)
 
-        params.productCategoryId && value[0].issuedType == 'towerName' && getProdLinkLists()
+        params.productCategoryId && value.length>0 && value[0]?.issuedType == 'towerName' && getProdLinkLists()
     }
 
     /**
