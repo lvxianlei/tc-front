@@ -160,7 +160,7 @@ export default function Dispatch(): React.ReactNode {
                         startTime: value.startTime,
                         endTime: value.endTime,
                         type: value.type,
-                        productionUnitId: equipment.productionUnitId,
+                        productionUnitId: equipment.unitId,
                         workCenterId: equipment.id,
                         status:0,
                     }
