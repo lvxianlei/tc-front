@@ -279,7 +279,7 @@ class ManagementContractSummary extends ContractSummary {
       },
       {
         title: "制单人",
-        dataIndex: "createUser",
+        dataIndex: "createUserName",
       },
       {
         title: "制单时间",

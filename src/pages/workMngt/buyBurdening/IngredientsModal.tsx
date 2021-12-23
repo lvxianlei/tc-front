@@ -196,6 +196,10 @@ export default function IngredientsModal(props: any) {
     // 保存并提交
     const { loading, run: purchaseSave, data: purchaseSaveData } = useRequest((serarchData: any) => new Promise(async (resole, reject) => {
         try {
+            if (schemeData.length < 1) {
+                message.error("请先生成配料方案！");
+                return false;
+            }
             // 对数据进行处理
             const schemeList = []
             for (let i = 0; i < schemeData.length; i += 1) {
