@@ -49,7 +49,7 @@
         },
         {
             "title": "计划号",
-            "dataIndex": "taskNoticeNumber"
+            "dataIndex": "planNumber"
         },
         {
             "title": "订单编号",
