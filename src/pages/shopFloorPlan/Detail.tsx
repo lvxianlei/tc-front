@@ -47,8 +47,8 @@ export default function Detail(): React.ReactNode {
     return <DetailContent>
         <Form form={form} onFinish={async (values) => await run({
             ...values,
-            startTime: values.time && moment(values?.time[0]),
-            endTime: values.time && moment(values?.time[1])
+            startTime: values.time && values?.time[0].format('YYYY-MM-DD') + ' 00:00:00',
+            endTime: values.time && values?.time[1].format('YYYY-MM-DD') + ' 23:59:59'
         })}>
             <Row>
                 <Col className={ styles.right }>
@@ -56,7 +56,7 @@ export default function Detail(): React.ReactNode {
                         <Input style={{ width: '300px' }} placeholder="请输入加工计划编号/计划号/塔型进行查询" />
                     </Form.Item>
                 </Col>
-                <Col>
+                <Col className={ styles.right }>
                     <Form.Item label="生产单元" name="unitId">
                         <Select placeholder="请选择" style={{ width: '150px' }}>
                             { productUnitData?.map((item: any) => {
@@ -65,7 +65,7 @@ export default function Detail(): React.ReactNode {
                         </Select>
                     </Form.Item>
                 </Col>
-                <Col>
+                <Col className={ styles.right }>
                     <Form.Item label="工作中心" name="workCenterId">
                         <Select placeholder="请选择" style={{ width: '150px' }}>
                             { workCenterData?.map((item: any) => {
@@ -74,13 +74,13 @@ export default function Detail(): React.ReactNode {
                         </Select>
                     </Form.Item>
                 </Col>
-                <Col>   
+                <Col className={ styles.right }>   
                     <Form.Item label="完成时间" name="time">
                         <DatePicker.RangePicker />
                     </Form.Item>
                 </Col>
-                <Col>
-                    <Button type='primary' htmlType="submit">查询</Button>
+                <Col className={ styles.right }>
+                    <Button type='primary' htmlType="submit" className={ styles.right }>查询</Button>
                     <Button type='ghost' htmlType="reset">重置</Button>
                 </Col>
             </Row>
