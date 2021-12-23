@@ -1,6 +1,6 @@
 import React, { useState, useRef, useImperativeHandle, forwardRef } from "react"
 import { Button, Form, message, Spin, Modal, Select } from "antd"
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory, useParams, useRouteMatch } from "react-router-dom"
 import { BaseInfo, DetailContent, DetailTitle, EditTable } from '../../common'
 import { costBase } from '../managementDetailData.json'
 import type { TabTypes } from "../ManagementDetail"
@@ -155,11 +155,10 @@ export default function CostEdit() {
     const history = useHistory()
     const [baseInfo] = Form.useForm()
     const formRef = useRef([])
-    const params = useParams<{ type: "new" | "edit", projectId: string, tab?: TabTypes }>()
+    const params = useRouteMatch("/project/management/:type/:tab/:projectId")?.params as any
     const [visible, setVisible] = useState<boolean>(false)
     const [askProductDtos, setAskProductDtos] = useState<any[]>([])
     const [form] = Form.useForm()
-
     const { data: productTypeEnum } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const productType: any = await RequestUtil.get(`/tower-market/ProductType/getProduct`)
@@ -232,7 +231,14 @@ export default function CostEdit() {
                 (formRef.current as any).data = (formRef.current as any).data.filter((item: any) => item != null);
             }
             const askProductDtoDatas = await Promise.all((formRef.current as any).data.map((item: any) => item.formRef.validateFields()))
-            await saveRun({
+            const submitData = params.type === "new" ? {
+                ...baseInfoData,
+                askProductDtos: askProductDtoDatas.map((item: any, index: number) => ({
+                    params: Object.keys(item.submit[0]).map((itemKey: any) => `${itemKey}-${item.submit[0][itemKey]}`).join(","),
+                    productName: askProductDtos[index].productName,
+                    voltage: askProductDtos[index].voltage
+                }))
+            } : {
                 ...baseInfoData,
                 id: data?.askInfoVo.id,
                 askProductDtos: askProductDtoDatas.map((item: any, index: number) => ({
@@ -240,7 +246,8 @@ export default function CostEdit() {
                     productName: askProductDtos[index].productName,
                     voltage: askProductDtos[index].voltage
                 }))
-            })
+            }
+            await saveRun(submitData)
             message.success("保存成功...")
             history.go(-1)
         } catch (error: any) {
