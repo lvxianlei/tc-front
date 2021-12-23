@@ -51,7 +51,7 @@ export default function ShopFloorPlan(): React.ReactNode {
     const finish = async (values: any) => {
         await run({
             ...values,
-            sttus: confirmStatus,
+            status: confirmStatus,
             startTime: values.time && moment(values?.time[0]),
             endTime: values.time && moment(values?.time[1])
         })
