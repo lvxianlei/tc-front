@@ -25,6 +25,7 @@ interface SchemeList {
     structureSpec: string,
     structureTexture: string,
     utilizationRate: string,
+    source: string;
     loftingComponentInfoDtos: SchemeComponentList[]
 }
 
@@ -213,6 +214,7 @@ export default function IngredientsModal(props: any) {
                     structureSpec: schemeData[i].structureSpec,
                     structureTexture: schemeData[i].structureTexture,
                     utilizationRate: schemeData[i].utilizationRate,
+                    source: schemeData[i].source,
                     loftingComponentInfoDtos: []
                 }
                 const component1 = isExistence(schemeData[i], "component1", "len1", "num1");
