@@ -39,6 +39,7 @@ export interface IAbstractContractSettingState extends IAbstractFillableComponen
     readonly url: { link?: string | undefined, fileSuffix?: string | undefined };
     readonly isVisible: boolean;
     readonly attchRef: AttachmentRef;
+    readonly biddingBatch?: string;
 }
 
 export interface ITabItem {
@@ -139,12 +140,24 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         contract: {},
         url: { link: "", fileSuffix: "" },
         isVisible: false,
-        region: ""
+        region: "",
+        biddingBatch: "",
     } as S;
 
     public async componentDidMount() {
         super.componentDidMount();
         this.getRegionInfo({});
+        this.getRegionInfoContract();
+    }
+
+    public getRegionInfoContract = async () => {
+        const resData: any = await RequestUtil.get(`/tower-market/projectInfo/${(this.props.match.params as any).projectId}`);
+        this.setState({
+            biddingBatch: resData?.bidBatch
+        })
+        this.getForm()?.setFieldsValue({
+            bidBatch: resData?.bidBatch
+        })
     }
 
     protected getAttchsRef(): AttachmentRef | null {

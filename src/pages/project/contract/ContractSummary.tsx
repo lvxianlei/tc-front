@@ -180,7 +180,7 @@ class ManagementContractSummary extends ContractSummary {
         ],
         [
           {
-            label: "招标计划",
+            label: "招标批次",
             value: baseInfo?.bidBatch,
           },
           {

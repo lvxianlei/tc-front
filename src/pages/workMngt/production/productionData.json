@@ -7,7 +7,7 @@
         },
         {
             "title": "计划号",
-            "dataIndex": "productionBatch",
+            "dataIndex": "planNumber",
             "type": "string"
         },
         {
