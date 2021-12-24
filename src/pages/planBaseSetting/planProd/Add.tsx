@@ -36,7 +36,7 @@ export default function RecruitEdit(): React.ReactNode {
     const [towerList, setTowerList] = useState<any[]>([])
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<IAnnouncement[]>([]);
-    const [typenum,settypenum]=useState<any>()
+    const [typenum,settypenum]=useState<any>(1)
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: IAnnouncement[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -312,7 +312,7 @@ export default function RecruitEdit(): React.ReactNode {
             <DetailContent operation={[
                 <Space>
                     {
-                        params.productCategoryId && typenum && typenum!==2 &&
+                        typenum && typenum!==2 &&
                    
                         <Button type="primary" onClick={() => {
                             form.validateFields().then(async res => {
