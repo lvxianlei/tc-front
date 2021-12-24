@@ -2027,6 +2027,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 合同回款统计
+      "name": "合同回款统计",
+      "path": "/receivables/constract",
+      "module": "./pages/receivables/constract/index",
+      "exact": true,
+      "authority": "approvalm_invoicing_list"
+    },
     { // 查看任务信息
       "name": "任务信息",
       "path": "/invoicing/taskInfo/:invoicingId",

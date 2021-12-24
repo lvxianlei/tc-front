@@ -149,6 +149,20 @@
                         ]
                     },
                     {
+                        "label": "应收账款",
+                        "icon": "examine",
+                        "path": "/receivables",
+                        "appName": "FC",
+                        "authority": "approvalm_invoicing",
+                        "items": [
+                            {
+                                "label": "合同回款统计",
+                                "path": "/receivables/constract",
+                                "authority": "approvalm_invoicing_list"
+                            }
+                        ]
+                    },
+                    {
                         "label": "审批管理",
                         "icon": "examine",
                         "path": "/approvalm",

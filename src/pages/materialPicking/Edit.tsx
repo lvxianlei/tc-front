@@ -122,9 +122,16 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     return ({
                         ...item,
                         disabled: false,
-                        path: `${item.path}?id=${fields.pickingTeam.id}`
+                        path: `${item.path.split("?")[0]}?id=${fields.pickingTeam.id}`
                     })
                 }
+                baseForm.setFieldsValue({
+                    pickingUserName: {
+                        value: "",
+                        records: [],
+                        id: ""
+                    }
+                })
                 return item
             }))
         }
@@ -160,7 +167,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     }
 
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
-    console.log(materialPickingInfoDTOS.reduce((total: any[], item: any) => total.concat(item.ids.map((item: string) => ({ id: item }))), []))
+    
     return <Spin spinning={loading}>
         <Modal
             title="选择原材料"
