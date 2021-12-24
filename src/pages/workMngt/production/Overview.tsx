@@ -15,7 +15,7 @@ interface IngredientsRef {
 export default function Overview() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
-    const params = useParams<{ id: string, materialTaskCode: string, productCategoryName: string }>()
+    const params = useParams<{ id: string, materialTaskCode: string, productCategoryName: string, loftingState: string }>()
     const ingredientRef = useRef<IngredientsRef>({ onSubmit: () => { } })
     const [ingredientsvisible, setIngredientsvisible] = useState<boolean>(false);
     const { loading, data } = useRequest<{ detail: any[], programme: any[] }>(() => new Promise(async (resole, reject) => {
@@ -54,10 +54,14 @@ export default function Overview() {
             }}
             onCancel={() => setIngredientsvisible(false)}
         />
-        <DetailContent title={[
-            <Button key="export" type="primary" style={{ marginRight: 16 }}>导出</Button>,
-            <Button key="peiliao" type="primary" ghost onClick={() => setIngredientsvisible(true)} style={{ marginRight: 16 }}>配料</Button>
-        ]} operation={[
+        <div style={{marginTop: 20, paddingLeft: 20, boxSizing: "border-box"}}>
+            <Button key="export" type="primary" style={{ marginRight: 16 }}>导出</Button>
+            {
+                (params.loftingState as any) * 1 === 1 && <Button key="peiliao" type="primary" ghost onClick={() => setIngredientsvisible(true)} style={{ marginRight: 16 }}>配料</Button>
+            }
+            
+        </div>
+        <DetailContent title={[]} operation={[
             <Button type="primary" ghost key="cancel" onClick={() => history.go(-1)}>返回</Button>
         ]}>
             <Spin spinning={loading}>
