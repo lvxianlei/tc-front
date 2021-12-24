@@ -408,9 +408,9 @@ class ManagementContractNew extends ContractNew {
             },
             {
               label: "国家",
-              name: "regionOther",
-              initialValue: contract?.regionOther,
-              children: (<Input value={contract?.regionOther} />),
+              name: "country",
+              initialValue: contract?.country,
+              children: (<Input value={contract?.country} />),
             },
             {
               label: "币种",
