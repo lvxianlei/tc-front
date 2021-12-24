@@ -42,7 +42,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
               // href='/planProd/planMgmt/detail/${task.id}/${task.planId}'
               return (
                 `
-                <span style="color:#FF8C00" title="客户：${task.customerCompany}&#10;线路：${task.lineName}" >${task.planNumber}</span>
+                <span style="color:#FF8C00" title="计划号：${task.planNumber}&#10;客户：${task.customerCompany}&#10;线路：${task.lineName}" >${task.planNumber}</span>
                 `
               )
             }

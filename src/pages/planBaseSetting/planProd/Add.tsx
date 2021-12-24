@@ -311,41 +311,32 @@ export default function RecruitEdit(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space>
-                    <Button type="primary" onClick={() => {
-                        form.validateFields().then(async res => {
-                            await form.validateFields();
-                            const value = form.getFieldsValue(true);
-                            const submitValue = {
-                                ...value,
-                                planId: params.planId,
-                                planProductCategoryId: params.id,
-                                startTime: value.startTime ? moment(value.startTime).format('YYYY-MM-DD') : undefined,
-                                endTime: value.endTime ? moment(value.endTime).format('YYYY-MM-DD') : undefined,
-
-                            }
-                            // const value= form.getFieldsValue(true);
-                            // value.planId = params.planId;
-                            // value.reinstatementDate = moment(value.reinstatementDate).format('YYYY-MM-DD HH:mm:ss');
-                            // value.planProductCategoryId = params.id;
-                            // value.startTime= value.startTime?moment(value.startTime).format('YYYY-MM-DD'):undefined;
-                            // value.endTime= value.endTime?moment(value.endTime).format('YYYY-MM-DD'):undefined;
-                            // value.departureDate= value.departureDate?moment(value.departureDate).format('YYYY-MM-DD HH:mm:ss'):undefined;
-                            // value.submitType = 'save';
-                            // RequestUtil.post(`/tower-aps/planUnitLink`,value).then(()=>{
-                            //     message.success('保存成功！')
-                            // }).then(()=>{
-                            //     history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
-                            // })
-                            RequestUtil.post(`/tower-aps/planUnitLink`, submitValue).then(() => {
-                                message.success('保存成功！')
-                            }).then(() => {
-                                history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
-                            })
-                        })
-
-                    }}>保存</Button>
                     {
-                        params.productCategoryId &&typenum&&typenum==2&& <Button onClick={() => culIssue()}>下发</Button>
+                        params.productCategoryId && typenum && typenum!==2 &&
+                   
+                        <Button type="primary" onClick={() => {
+                            form.validateFields().then(async res => {
+                                await form.validateFields();
+                                const value = form.getFieldsValue(true);
+                                const submitValue = {
+                                    ...value,
+                                    planId: params.planId,
+                                    planProductCategoryId: params.id,
+                                    startTime: value.startTime ? moment(value.startTime).format('YYYY-MM-DD') : undefined,
+                                    endTime: value.endTime ? moment(value.endTime).format('YYYY-MM-DD') : undefined,
+
+                                }
+                                RequestUtil.post(`/tower-aps/planUnitLink`, submitValue).then(() => {
+                                    message.success('保存成功！')
+                                }).then(() => {
+                                    history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
+                                })
+                            })
+
+                        }}>保存</Button> 
+                    }
+                    {
+                        params.productCategoryId &&typenum&&typenum==2&& <Button onClick={() => culIssue() } type='primary'>下发</Button>
                     }
 
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
@@ -377,6 +368,7 @@ export default function RecruitEdit(): React.ReactNode {
                                         getProdUnitList(value)
 
                                     }}
+                                    disabled={params.productCategoryId &&typenum&&typenum==2}
                                 >
                                     {
                                         prodLinkList.map((item: any, index: number) => {
@@ -396,7 +388,7 @@ export default function RecruitEdit(): React.ReactNode {
                     <Row>
                         <Col span={12}>
                             <Form.Item label="占用产力" rules={[{ required: true, message: '请填写占用产力' }]} name='useProductivity'>
-                                <InputNumber maxLength={12} min={0} style={{ width: '100%' }} />
+                                <InputNumber maxLength={12} min={0} style={{ width: '100%' }} disabled={params.productCategoryId &&typenum&&typenum==2}/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -407,6 +399,7 @@ export default function RecruitEdit(): React.ReactNode {
                                     className='input'
                                     placeholder='请选择'
                                     style={{ width: '100%' }}
+                                    disabled={params.productCategoryId &&typenum&&typenum==2}
                                 >
                                     {
                                         prodUnitList.map((item: any, index: number) => {
@@ -438,7 +431,7 @@ export default function RecruitEdit(): React.ReactNode {
                                         }
 
                                     }
-                                } />
+                                } disabled={params.productCategoryId &&typenum&&typenum==2}/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -453,7 +446,7 @@ export default function RecruitEdit(): React.ReactNode {
                                     form.setFieldsValue({
                                         endTime: moment(endTime)
                                     })
-                                }} />
+                                }} disabled={params.productCategoryId &&typenum&&typenum==2}/>
                             </Form.Item>
                         </Col>
                     </Row>
