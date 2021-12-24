@@ -266,7 +266,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const taxPrice: number = saleOrderValue.taxPrice * 1; // 含税单价
         const taxRate: number = saleOrderValue.taxRate * 1; // 税率
         let result: number | undefined = 0;
-        result = taxPrice / (1 + taxRate);
+        result = taxPrice / (1 + taxRate) / 100;
         this.getForm()?.setFieldsValue({ price: doNumber(result, 4) });
     }
 
