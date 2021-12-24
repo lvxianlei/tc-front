@@ -125,7 +125,12 @@ export default function Invoicing() {
                                 setDetailOver(true)
                                 setLoftingState(record.loftingState)
                             }}>详情</Button>
-                            <Button type="link" disabled={userId !== record.batcherId}><Link to={`/workMngt/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}`}>明细</Link></Button>
+                            <Button
+                                type="link"
+                                disabled={userId !== record.batcherId || record.loftingState === 3}
+                            >
+                                <Link to={`/workMngt/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}`}>明细</Link>
+                            </Button>
                             <Button type="link" disabled={userId !== record.batcherId}
                                 onClick={() => {
                                     setDetailId(record.id)
