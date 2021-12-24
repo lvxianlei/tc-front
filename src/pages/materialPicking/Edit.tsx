@@ -66,7 +66,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const handleBaseInfoChange = async (fields: any) => {
         if (fields.workPlanNumber) {
-            const workPlanNumberData = fields.workPlanNumber.records[0]
+            const workPlanNumberData = fields.workPlanNumber.records[0] || {}
             baseForm.setFieldsValue({
                 projectName: workPlanNumberData.orderProjectName,
                 salePlanNumber: workPlanNumberData.planNumber,
@@ -75,6 +75,11 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             setPlanNumber(workPlanNumberData.planNumber)
             setProduct(workPlanNumberData.productNumbers)
             setProductCategoryName(workPlanNumberData.productCategoryName)
+        }
+        if (fields.pickingTeam) {
+            baseForm.setFieldsValue({
+                pickingUnit: fields.pickingTeam.records[0]?.productUnitName
+            })
         }
     }
 
@@ -85,17 +90,17 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             title="选择原材料"
             width={1011}
             destroyOnClose
-            onCancel={() => {
-                setVisible(false)
-            }}
+            onCancel={() => setVisible(false)}
             visible={visible}
             onOk={() => {
-
+                console.log(materials)
+                setVisible(false)
             }}>
-            <PopTableContent data={{
-                ...chooseMaterial as any,
-                path: `${chooseMaterial.path}?planNumber=${planNumber}&product=${product}&productCategoryName=${productCategoryName}`
-            }}
+            <PopTableContent
+                data={{
+                    ...chooseMaterial as any,
+                    path: `${chooseMaterial.path}?planNumber=${planNumber}&product=${product}&productCategoryName=${productCategoryName}`
+                }}
                 onChange={(records: any) => setMaterials(records)}
             />
         </Modal>
@@ -111,15 +116,14 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 type="primary"
                 key="add"
                 ghost
-                onClick={() => {
-                    setVisible(true)
-                }}>选择原材料</Button>
+                onClick={() => setVisible(true)}>选择原材料</Button>
         ]} />
         <CommonTable columns={[{
             title: "操作",
             dataIndex: "opration",
             fixed: "left",
             render: (_: undefined, records: any) => <Button type="link" size="small">删除</Button>
-        }, ...materialInfo]} dataSource={materialPickingInfoDTOS} />
+        }, ...materialInfo]}
+            dataSource={materialPickingInfoDTOS} />
     </Spin>
 })
