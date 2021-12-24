@@ -140,7 +140,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 })
             }
         })
-        console.log(materialPickingInfos)
         setMaterialPickingInfoDTOS(materialPickingInfos)
     }
 
@@ -164,6 +163,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 }}
                 onChange={(records: any) => setMaterials((records.map((item: any) => ({
                     ...item,
+                    spec: item.structureSpec,
+                    materialTexture: item.structureTexture,
                     onlyId: `${item.materialName}${item.structureTexture}${item.structureSpec}${item.length}`
                 }))))}
             />
