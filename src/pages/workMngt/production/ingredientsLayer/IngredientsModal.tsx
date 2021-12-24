@@ -399,7 +399,7 @@ export default function IngredientsModal(props: any) {
             } else {
                 sort[i].notConfigured = sort[i].totalNum;
             }
-            sortNum = sort[i].notConfigured += sortNum;
+            sortNum = sort[i].notConfigured + sortNum;
         }
         setConstructionClassification(sort.slice(0));
         setConstruNumber(sortNum);

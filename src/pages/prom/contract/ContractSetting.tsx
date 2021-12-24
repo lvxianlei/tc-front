@@ -138,7 +138,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             customerPhone: values.customerPhone
         };
         values.signContractTime = values.signContractTime && moment(values.signContractTime).format('YYYY-MM-DD');
-        values.deliveryTime = values.deliveryTime && moment(values.deliveryTime).format('YYYY-MM-DD');
+        values.deliveryTime = values.deliveryTime;
         values.reviewTime = values.reviewTime && moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
         values.paymentPlanDtos = values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
             return {

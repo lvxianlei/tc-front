@@ -175,14 +175,9 @@ export default function IngredientsModal(props: any) {
     const { run: handleAutomatic, data: Automatic } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/purchaseBatchingScheme/batcher/scheme/auto`, {purchaseTowerId: id})
-            console.log(result, "自动配料")
             if (result && result.schemeData && result.schemeData.length > 0) {
                 setSchemeData(result.schemeData || []);
                 setNumbers(numbers += 1);
-                // 需要减少构建分类的数量
-                for (let i = 0; i < schemeData.length; i += 1) {
-
-                }
             } else {
                 message.error("自动配料有误，请联系管理员！");
                 return false;
@@ -374,7 +369,7 @@ export default function IngredientsModal(props: any) {
             } else {
                 sort[i].notConfigured = sort[i].totalNum;
             }
-            sortNum = sort[i].notConfigured += sortNum;
+            sortNum = sort[i].notConfigured + sortNum;
         }
         setConstructionClassification(sort.slice(0));
         setConstruNumber(sortNum);
