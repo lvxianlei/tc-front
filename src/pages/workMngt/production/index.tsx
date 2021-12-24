@@ -18,6 +18,7 @@ export default function Invoicing() {
     const [detailId, setDetailId] = useState<string>("")
     const [ingredientsvisible, setIngredientsvisible] = useState<boolean>(false);
     const [detailOver, setDetailOver] = useState<boolean>(false);
+    const [loftingState, setLoftingState] = useState<number>(0);
     const { loading, run: saveRun } = useRequest<any[]>((id: string, productCategoryName: string) => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-supply/initData/ingredients?materialTaskCode=${id}&productCategoryName=${productCategoryName}`)
@@ -98,6 +99,7 @@ export default function Invoicing() {
                 history.go(0);
                 setDetailOver(false)
             }}
+            loftingState={loftingState}
             id={detailId}
             onCancel={() => setDetailOver(false)}
         />
@@ -121,6 +123,7 @@ export default function Invoicing() {
                             <Button type="link" disabled={userId !== record.batcherId} onClick={() => {
                                 setDetailId(record.id)
                                 setDetailOver(true)
+                                setLoftingState(record.loftingState)
                             }}>详情</Button>
                             <Button type="link" disabled={userId !== record.batcherId}><Link to={`/workMngt/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}`}>明细</Link></Button>
                             <Button type="link" disabled={userId !== record.batcherId}

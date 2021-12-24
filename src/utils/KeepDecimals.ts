@@ -18,26 +18,17 @@
 }
 
 /**
- * 
+ * 强制保留n位小数
  */
- export function doNumber(x: any,n: any) {
-    var f_x = parseFloat(x);
-    if (isNaN(f_x)) {
-      console.log('function:changeTwoDecimal->parameter error');
-      return x;
-    }
-    if(n<=0){
-       return parseInt(x);
-    }
-    var f = Math.round(x*10*n)/(10*n); 
-    var s = f.toString(); 
-    var rs = s.indexOf('.'); 
-    if (rs < 0) { 
-      rs = s.length; 
-      s += '.'; 
+ export function doNumber(value: any,n: any) {
+    var f = Math.round(value*Math.pow(10,n))/Math.pow(10,n);
+    var s = f.toString();
+    var rs = s.indexOf('.');   
+    if (rs < 0) {     
+        s += '.';   
     } 
-    while (s.length <= rs + n) { 
-      s += '0'; 
-    } 
-    return s; 
+    for(var i = s.length - s.indexOf('.'); i <= n; i++){
+      s += "0";
+    }
+    return s;
 }
