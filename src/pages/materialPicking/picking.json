@@ -342,5 +342,39 @@
             "title": "申请数量",
             "dataIndex": "applyQuantity"
         }
+    ],
+    "materialInfoDetail": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length"
+        },
+        {
+            "title": "申请数量",
+            "dataIndex": "applyQuantity"
+        },
+        {
+            "title": "未出库数量",
+            "dataIndex": "notIssuedQuantity"
+        },
+        {
+            "title": "已出库数量",
+            "dataIndex": "checkoutQuantity"
+        },
+        {
+            "title": "缺料数量",
+            "dataIndex": "materialShortageQuantity"
+        }
     ]
 }

@@ -138,10 +138,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     }
 
     const materialsUseMaterialPickingInfoDTOS = () => {
-        let materialPickingInfos: MaterialData[] = materialPickingInfoDTOS
+        let materialPickingInfos: MaterialData[] = []
         materials.forEach((mItem: any) => {
-            if (materialPickingInfoDTOS.map(item => item.onlyId).includes(mItem.onlyId)) {
-                materialPickingInfos = materialPickingInfoDTOS.map(pitem => {
+            if (materialPickingInfos.map(item => item.onlyId).includes(mItem.onlyId)) {
+                materialPickingInfos = materialPickingInfos.map(pitem => {
                     if (pitem.onlyId === mItem.onlyId) {
                         return ({
                             ...pitem,
@@ -167,7 +167,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     }
 
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
-    
+
     return <Spin spinning={loading}>
         <Modal
             title="选择原材料"
@@ -184,7 +184,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     ...chooseMaterial as any,
                     path: `${chooseMaterial.path}?planNumber=${chooseMaterialParmas.planNumber}&product=${chooseMaterialParmas.product}&productCategoryName=${chooseMaterialParmas.productCategoryName}`
                 }}
-                value={{ value: "", id: "", records: materialPickingInfoDTOS.reduce((total: any[], item: any) => total.concat(item.ids), []) }}
+                value={{
+                    value: "", id: "",
+                    records: materialPickingInfoDTOS.reduce((total: any[], item: any) => total.concat(item.ids.map((id: any) => ({ id }))), [])
+                }}
                 onChange={(records: any) => setMaterials((records.map((item: any) => ({
                     ...item,
                     spec: item.structureSpec,

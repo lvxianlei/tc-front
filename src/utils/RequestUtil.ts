@@ -14,6 +14,13 @@ interface IResponse<T> {
     readonly msg: string;
 }
 
+export function jsonStringifyReplace(key: string, value: any) {
+    if (typeof value === 'undefined') {
+        return null
+    }
+    return value
+}
+
 /**
  * @abstract
  * @description Request util
@@ -137,7 +144,7 @@ export default abstract class RequestUtil {
         NProgress.inc();
         return this.request(path, {
             method: 'POST',
-            body: (headers as any || {})['Content-Type'] === 'application/x-www-form-urlencoded' ? stringify(params) : JSON.stringify(params),
+            body: (headers as any || {})['Content-Type'] === 'application/x-www-form-urlencoded' ? stringify(params) : JSON.stringify(params, jsonStringifyReplace),
             headers: headers
         });
     }
@@ -155,7 +162,7 @@ export default abstract class RequestUtil {
         NProgress.inc();
         return this.request(path, {
             method: 'PUT',
-            body: JSON.stringify(params),
+            body: JSON.stringify(params, jsonStringifyReplace),
             headers: headers
         });
     }
@@ -173,7 +180,7 @@ export default abstract class RequestUtil {
         NProgress.inc();
         return this.request(path, {
             method: 'DELETE',
-            body: JSON.stringify(params),
+            body: JSON.stringify(params, jsonStringifyReplace),
             headers: headers
         });
     }
