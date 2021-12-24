@@ -171,12 +171,9 @@ export default function RecruitEdit(): React.ReactNode {
     const getProdLinkLists = async () => {
         const data: any = await RequestUtil.get(`/tower-aps/planUnitLink/product?id=${params.productCategoryId}`)
         setTowerList(data)
-        let status = data.filter((item: any) => { return item.productStatus === 1 })
-
-        let ids: any = []
-        status.forEach((item: any, index: any) => {
-            ids[index] = item.id
-        });
+        let ids = data.filter((item: any) => { return item.productStatus === 1 }).map((item:any)=>{
+            return item.id
+        })
         setSelectedKeys(ids);
     }
     /**
@@ -528,14 +525,17 @@ export default function RecruitEdit(): React.ReactNode {
                 </Row> */}
                 </Form>
                 {
-                    params.productCategoryId && type && type == 'towerName' ? <Table dataSource={towerList} rowKey={"id"}
+                    params.productCategoryId && type && type == 'towerName' ? <Table dataSource={towerList} rowKey="id"
                         rowSelection={{
                             selectedRowKeys: selectedKeys,
                             onChange: SelectChange,
-                            getCheckboxProps: (record: any) => ({
-                                disabled: record.productStatus === 1
-                            }),
-                        }} columns={columns} /> : ""
+                            getCheckboxProps: (record: any) => {
+                                return ({
+                                    ...record,
+                                    disabled: record.productStatus === 1?true:false
+                                })
+                            },
+                        }} columns={columns}  pagination={false}/> : ""
                 }
                 <div id='detailGantt' style={{ width: '100%', height: 300 }}></div>
             </DetailContent>
