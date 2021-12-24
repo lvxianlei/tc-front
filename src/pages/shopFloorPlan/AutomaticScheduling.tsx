@@ -13,24 +13,33 @@ export default function AutomaticScheduling(): React.ReactNode {
     const [ form ] = Form.useForm();
     const params = useParams<{ id: string }>();
     const history = useHistory();
+    const [ loading, setLoading ] = useState(true);
 
-    const { loading, data, run: checkRun} = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
+    const { data } = useRequest((filterValue) => new Promise(async (resole, reject) => {
         try {
-            await RequestUtil.post(`/tower-aps/aps?ids=${params.id}`).then(async res => {
-                const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/aps/check?ids=${params.id}`);
-                if(result) {
-                    run();
-                    clearTimeout();
-                } else {
-                    setTimeout(() => checkRun(), 4000)
-                    // checkRun();
-                }
-                resole(result)
-            })  
+            const result = await RequestUtil.post(`/tower-aps/aps?ids=${params.id}`);
+            checkRun()
+            resole(result)
         } catch (error) {
             reject(error)
         }
     }))
+
+    const {  run: checkRun } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/aps/check?ids=${params.id}`);
+            if(result) {
+                run();
+                setLoading(false);
+                clearTimeout();
+            } else {
+                setTimeout(() => checkRun(), 2000);
+            }
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     const { data: schedulingList, run } = useRequest<ISchedulingList[]>((filterValue) => new Promise(async (resole, reject) => {
         try {
