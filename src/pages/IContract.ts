@@ -42,6 +42,7 @@ export interface IContract {
     readonly purchaseOrderNumber?: string;
     readonly takeOverTime?: string;
     readonly contractList?: IResponseList;
+    readonly payServiceManager?: string;
 }
 
 interface IResponseList {
