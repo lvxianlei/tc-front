@@ -135,8 +135,8 @@ class ManagementContractSummary extends ContractSummary {
             value: this.state.region?.find((reItem: any) => reItem.code === baseInfo?.region)?.name || baseInfo?.region,
           },
           {
-            label: "合同接管人",
-            value: baseInfo?.takeOverUser,
+            label: "国家",
+            value: baseInfo?.regionOther,
           },
         ],
         [
@@ -187,6 +187,16 @@ class ManagementContractSummary extends ContractSummary {
             label: "币种",
             value: baseInfo?.currencyTypeName
           }
+        ],
+        [
+          {
+            label: "业务经理",
+            value: baseInfo?.salesman,
+          },
+          {
+            label: "合同接管人",
+            value: baseInfo?.takeOverUser,
+          },
         ],
         [
           {
