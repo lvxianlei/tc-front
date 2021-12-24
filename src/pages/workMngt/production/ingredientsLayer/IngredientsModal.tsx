@@ -379,7 +379,7 @@ export default function IngredientsModal(props: any) {
             if (map.has(`${s[i].structureTexture}_${s[i].structureSpec}_${s[i].length}`)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(`${s[i].structureTexture}_${s[i].structureSpec}_${s[i].length}`) || 0;
-                s[i].consumeNum = num;
+                s[i].consumeNum = num >= s[i].totalNum ? s[i].totalNum : num;
                 s[i].surplusNum = (s[i].totalNum - num) <= 0 ? 0 : s[i].totalNum - num;
             } else {
                 s[i].consumeNum = 0;
