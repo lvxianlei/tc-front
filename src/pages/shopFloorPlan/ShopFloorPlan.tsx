@@ -11,7 +11,6 @@ import moment from 'moment';
 import styles from './ShopFloorPlan.module.less';
 
 export default function ShopFloorPlan(): React.ReactNode {
-    const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ confirmStatus, setConfirmStatus ] = useState<number>(1);
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [ form ] = Form.useForm();

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, DatePicker, Button, Form, Row, Col, message, Select, Spin, Space } from 'antd';
 import { CommonTable, DetailContent } from '../common';
 import styles from './ShopFloorPlan.module.less';
@@ -14,26 +14,32 @@ export default function AutomaticScheduling(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const history = useHistory();
     const [ loading, setLoading ] = useState(true);
-
+    let timer: any = {};
+   
+    useEffect(() => {
+        return ()=> {
+            clearInterval(timer);
+        };
+    })
     const { data } = useRequest((filterValue) => new Promise(async (resole, reject) => {
         try {
             const result = await RequestUtil.post(`/tower-aps/aps?ids=${params.id}`);
-            checkRun()
+            checkRun();
             resole(result)
         } catch (error) {
             reject(error)
         }
     }))
 
-    const {  run: checkRun } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
+    const { run: checkRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/aps/check?ids=${params.id}`);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/aps/check?ids=${params.id}`);     
             if(result) {
                 run();
+                clearInterval(timer);
                 setLoading(false);
-                clearTimeout();
             } else {
-                setTimeout(() => checkRun(), 2000);
+                timer = setTimeout(() => checkRun(), 4000)
             }
             resole(result)
         } catch (error) {
@@ -71,7 +77,7 @@ export default function AutomaticScheduling(): React.ReactNode {
         }
     }))
 
-    return <DetailContent>
+    return <div id="plan"><DetailContent key="scheduling">
         <Form form={form} onFinish={async (values) => await run({
             ...values,
             startTime: values.time && moment(values?.time[0]),
@@ -137,5 +143,5 @@ export default function AutomaticScheduling(): React.ReactNode {
                     // }
                 ]}/>
         </Spin>
-    </DetailContent>
+    </DetailContent></div>
 }
