@@ -97,7 +97,7 @@ export default function RecruitEdit(): React.ReactNode {
         const value = linkId && data.records.filter((item:any)=>{
             return item.id === linkId
         })
-        value.length>0 && setType(value[0].issuedType)
+        linkId && value && value.length>0 && setType(value[0].issuedType)
 
         params.productCategoryId && value.length>0 && value[0]?.issuedType == 'towerName' && getProdLinkLists()
     }
@@ -107,9 +107,11 @@ export default function RecruitEdit(): React.ReactNode {
        */
     const culIssue = async () => {
         if(towerList.length>0){
-            if(selectedKeys.length>0){
-                const value:any[] = selectedKeys.filter((item:any)=>{
+            if(selectedRows.length>0){
+                const value:any[] = selectedRows.filter((item:any)=>{
                     return item.productStatus !== 1
+                }).map((item:any)=>{
+                    return item.id
                 })
                 if (value.length > 0) {
                     RequestUtil.post('/tower-aps/planUnitLink/issue', {
