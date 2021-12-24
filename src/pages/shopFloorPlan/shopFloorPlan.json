@@ -222,10 +222,10 @@
             "dataIndex": "totalWeight"
         },
         {
-            "key": "processFlow",
+            "key": "technology",
             "title": "工艺流程",
             "width": 150,
-            "dataIndex": "processFlow"
+            "dataIndex": "technology"
         }
     ]
 }
