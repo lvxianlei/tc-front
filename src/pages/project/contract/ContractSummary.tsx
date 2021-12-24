@@ -136,7 +136,7 @@ class ManagementContractSummary extends ContractSummary {
           },
           {
             label: "国家",
-            value: baseInfo?.regionOther,
+            value: baseInfo?.country,
           },
         ],
         [
