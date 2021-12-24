@@ -253,20 +253,19 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const taxPrice: number = saleOrderValue.taxPrice;
         let taxAmount: number | undefined = 0;
         taxAmount = orderWeight * taxPrice;
-        console.log(taxAmount, doNumber(taxAmount, 4))
         this.getForm()?.setFieldsValue({ taxAmount: doNumber(taxAmount, 4) });
     }
 
     /**
      * 根据含税单价以及税率计算不含税单价:
-     *      不含税单价 = 含税单价 / （1+税率），保留4位小数
+     *      不含税单价 = 含税单价 / （1+税率/100），保留4位小数
      */
     public unitPriceExcludingTax = ():void => {
         const saleOrderValue:any = this.getForm()?.getFieldsValue(true);
         const taxPrice: number = saleOrderValue.taxPrice * 1; // 含税单价
         const taxRate: number = saleOrderValue.taxRate * 1; // 税率
         let result: number | undefined = 0;
-        result = taxPrice / (1 + taxRate) / 100;
+        result = taxPrice / (1 + taxRate  / 100);
         this.getForm()?.setFieldsValue({ price: doNumber(result, 4) });
     }
 

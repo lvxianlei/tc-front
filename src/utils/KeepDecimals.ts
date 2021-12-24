@@ -23,7 +23,6 @@
  export function doNumber(x: any,n: any) {
     var f_x = parseFloat(x);
     if (isNaN(f_x)) {
-      console.log('function:changeTwoDecimal->parameter error');
       return x;
     }
     if(n<=0){
