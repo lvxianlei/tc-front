@@ -168,6 +168,7 @@
         {
             "title": "领料生产单元",
             "dataIndex": "pickingUnit",
+            "type": "popTable",
             "disabled": true
         },
         {
@@ -203,7 +204,7 @@
             "dataIndex": "pickingUserName",
             "type": "popTable",
             "width": 1011,
-            "path": "/tower-production/team",
+            "path": "/tower-production/team/teamUsers",
             "value": "name",
             "readOnly": true,
             "dependencies": true,
@@ -339,7 +340,7 @@
         },
         {
             "title": "申请数量",
-            "dataIndex": "quantity"
+            "dataIndex": "applyQuantity"
         }
     ]
 }

@@ -19,7 +19,7 @@ interface MaterialData {
     spec: string
     materialTexture: string
     length: number | string
-    quantity: number
+    applyQuantity: number
     onlyId: string
     ids: string[]
 }
@@ -38,12 +38,21 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPicking/${id}`)
-            setMaterialPickingInfoDTOS(result?.materialPickingInfoVOS)
+            setMaterialPickingInfoDTOS(result?.materialPickingInfoVOS.map((item: any) => ({
+                ...item,
+                onlyId: `${item.materialName}${item.materialTexture}${item.spec}${item.length}`
+            })))
+            setChooseMaterialParmas({
+                planNumber: result?.planNumber,
+                product: result?.productNumbers,
+                productCategoryName: result?.productCategoryName
+            })
             resole({
                 ...result,
                 workPlanNumber: { value: result.workPlanNumber, id: result.workPlanNumberId },
                 pickingUserName: { value: result.pickingUserName, id: result.pickingUserId },
-                pickingWareHouse: { value: result.pickingWareHouse, id: result.pickingWareHouseId }
+                pickingWareHouse: { value: result.pickingWareHouse, id: result.pickingWareHouseId },
+                pickingUnit: { value: result.pickingUnit, id: result.pickingUnitId },
             })
         } catch (error) {
             reject(error)
@@ -65,6 +74,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const baseData = await baseForm.validateFields()
             await saveRun({
                 ...baseData,
+                pickingUnit: baseData.pickingUnit?.value,
+                pickingUnitId: baseData.pickingUnit?.id,
                 workPlanNumber: baseData.workPlanNumber?.value,
                 workPlanNumberId: baseData.workPlanNumber?.id,
                 pickingUserName: baseData.pickingUserName?.value,
@@ -100,7 +111,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             })
         }
         if (fields.pickingTeam && fields.pickingTeam.records[0]) {
-            baseForm.setFieldsValue({ pickingUnit: fields.pickingTeam.records[0]?.productUnitName })
+            baseForm.setFieldsValue({
+                pickingUnit: {
+                    value: fields.pickingTeam.records[0]?.productUnitName,
+                    id: fields.pickingTeam.records[0]?.productUnitId
+                }
+            })
             setSettingColumns(settingColumns.map((item: any) => {
                 if (item.dataIndex === "pickingUserName") {
                     return ({
@@ -123,19 +139,19 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         return ({
                             ...pitem,
                             ids: [...pitem.ids, mItem.id],
-                            quantity: pitem.quantity + 1
+                            applyQuantity: pitem.applyQuantity + 1
                         })
                     }
                     return pitem
                 })
             } else {
                 materialPickingInfos.push({
-                    onlyId: `${mItem.materialName}${mItem.structureTexture}${mItem.structureSpec}${mItem.length}`,
+                    onlyId: mItem.onlyId,
                     materialName: mItem.materialName,
                     materialTexture: mItem.materialTexture,
                     spec: mItem.spec,
                     length: mItem.length,
-                    quantity: 1,
+                    applyQuantity: 1,
                     ids: [mItem.id]
                 })
             }
@@ -144,7 +160,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     }
 
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
-
+    console.log(materialPickingInfoDTOS.reduce((total: any[], item: any) => total.concat(item.ids.map((item: string) => ({ id: item }))), []))
     return <Spin spinning={loading}>
         <Modal
             title="选择原材料"
@@ -161,6 +177,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     ...chooseMaterial as any,
                     path: `${chooseMaterial.path}?planNumber=${chooseMaterialParmas.planNumber}&product=${chooseMaterialParmas.product}&productCategoryName=${chooseMaterialParmas.productCategoryName}`
                 }}
+                value={{ value: "", id: "", records: materialPickingInfoDTOS.reduce((total: any[], item: any) => total.concat(item.ids), []) }}
                 onChange={(records: any) => setMaterials((records.map((item: any) => ({
                     ...item,
                     spec: item.structureSpec,
@@ -181,6 +198,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 type="primary"
                 key="add"
                 ghost
+                disabled={!chooseMaterialParmas.planNumber}
                 onClick={() => setVisible(true)}>选择原材料</Button>
         ]} />
         <CommonTable

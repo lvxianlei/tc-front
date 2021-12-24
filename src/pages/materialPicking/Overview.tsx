@@ -1,7 +1,7 @@
 import React from "react"
-import { Button, Spin } from 'antd'
+import { Spin } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../common'
+import { DetailTitle, BaseInfo, CommonTable } from '../common'
 import { setting, materialInfo } from "./picking.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
