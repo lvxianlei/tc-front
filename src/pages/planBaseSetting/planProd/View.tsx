@@ -30,6 +30,9 @@ export default function RecruitEdit(): React.ReactNode {
         {
             title: '杆塔要求完成时间',
             dataIndex: 'completionTime',
+            render:(time:string)=>{
+                return time?moment(time).format('YYYY-MM-DD'):'-'
+            }
         },
 
     ]
