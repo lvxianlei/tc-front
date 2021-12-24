@@ -366,7 +366,7 @@
             "type": "number"
         },
         {
-            "title": "合同最后发货日期",
+            "title": "最后发货日期",
             "dataIndex": "contractLastTime",
             "type": "date",
             "format": "YYYY-MM-DD"

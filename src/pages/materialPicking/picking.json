@@ -173,17 +173,41 @@
         {
             "title": "领料班组",
             "dataIndex": "pickingTeam",
-            "disabled": true
+            "type": "popTable",
+            "width": 1011,
+            "path": "/tower-production/team/page",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "班组名称",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "所属车间",
+                    "dataIndex": "workshopDeptName"
+                },
+                {
+                    "title": "工序",
+                    "dataIndex": "deptProcessesName"
+                },
+                {
+                    "title": "设备所属产线",
+                    "dataIndex": "productionLinesName"
+                }
+            ]
         },
         {
             "title": "领料人",
             "dataIndex": "pickingUserName",
             "type": "popTable",
             "width": 1011,
-            "path": "/sinzetech-user/user",
+            "path": "/tower-production/team",
             "value": "name",
             "readOnly": true,
             "dependencies": true,
+            "disabled": true,
             "columns": [
                 {
                     "title": "登录账号",
@@ -228,75 +252,80 @@
         "columns": [
             {
                 "title": "品名",
-                "dataIndex": ""
+                "dataIndex": "materialName"
             },
             {
                 "title": "材质",
-                "dataIndex": "structureTexture"
+                "dataIndex": "structureTexture",
+                "type": "string"
             },
             {
                 "title": "规格",
-                "dataIndex": "structureSpec"
+                "dataIndex": "structureSpec",
+                "type": "string"
             },
             {
-                "title": "原材料长度(mm)",
-                "dataIndex": ""
+                "title": "原材料长度（mm）",
+                "dataIndex": "length",
+                "type": "number"
             },
             {
                 "title": "零件1",
-                "dataIndex": ""
+                "dataIndex": "component1",
+                "type": "number"
             },
             {
-                "title": "长度",
-                "dataIndex": ""
+                "title": "长度（mm）",
+                "dataIndex": "len1",
+                "type": "string"
             },
             {
                 "title": "数量",
-                "dataIndex": ""
+                "dataIndex": "num1"
             },
             {
                 "title": "零件2",
-                "dataIndex": ""
+                "dataIndex": "component2"
             },
             {
-                "title": "长度",
-                "dataIndex": ""
+                "title": "长度（mm）",
+                "dataIndex": "len2"
             },
             {
                 "title": "数量",
-                "dataIndex": ""
+                "dataIndex": "num2"
             },
             {
                 "title": "零件3",
-                "dataIndex": ""
+                "dataIndex": "component3"
             },
             {
-                "title": "长度",
-                "dataIndex": ""
+                "title": "长度（mm）",
+                "dataIndex": "len3"
             },
             {
                 "title": "数量",
-                "dataIndex": ""
+                "dataIndex": "num3"
             },
             {
                 "title": "零件4",
-                "dataIndex": ""
+                "dataIndex": "component4"
             },
             {
-                "title": "长度",
-                "dataIndex": ""
+                "title": "长度（mm）",
+                "dataIndex": "len4"
             },
             {
                 "title": "数量",
-                "dataIndex": ""
+                "dataIndex": "num4"
             },
             {
                 "title": "余料长度",
-                "dataIndex": ""
+                "dataIndex": "plannedSurplusLength"
             },
             {
                 "title": "利用率",
-                "dataIndex": ""
+                "dataIndex": "utilizationRate"
             }
         ]
     },
