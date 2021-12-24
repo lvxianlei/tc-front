@@ -107,19 +107,24 @@ export default function RecruitEdit(): React.ReactNode {
        */
     const culIssue = async () => {
         if(towerList.length>0){
-            if (selectedKeys.length > 0) {
-                let productIds = []
-                productIds = selectedKeys
-
-                RequestUtil.post('/tower-aps/planUnitLink/issue', {
-                    id: params.productCategoryId,
-                    productIds
-                }).then((res) => {
-                    message.success("下发成功")
-                    history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
+            if(selectedKeys.length>0){
+                const value:any[] = selectedKeys.filter((item:any)=>{
+                    return item.productStatus !== 1
                 })
-            } else {
-                message.success("至少选取一个塔型")
+                if (value.length > 0) {
+                    RequestUtil.post('/tower-aps/planUnitLink/issue', {
+                        id: params.productCategoryId,
+                        productIds: value
+                    }).then(() => {
+                        message.success("下发成功")
+                        history.push(`/planProd/planMgmt/detail/${params.id}/${params.planId}`)
+                    })
+                } else{
+                    message.error("至少选取一个塔型！")
+                }
+            }
+            else {
+                message.error("至少选取一个塔型！")
             }
         }else{
             RequestUtil.post('/tower-aps/planUnitLink/issue', {
@@ -524,7 +529,10 @@ export default function RecruitEdit(): React.ReactNode {
                     params.productCategoryId && type && type == 'towerName' ? <Table dataSource={towerList} rowKey={"id"}
                         rowSelection={{
                             selectedRowKeys: selectedKeys,
-                            onChange: SelectChange
+                            onChange: SelectChange,
+                            getCheckboxProps: (record: any) => ({
+                                disabled: record.productStatus === 1
+                            }),
                         }} columns={columns} /> : ""
                 }
                 <div id='detailGantt' style={{ width: '100%', height: 300 }}></div>
