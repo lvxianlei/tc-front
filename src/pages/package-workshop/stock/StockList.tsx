@@ -29,15 +29,15 @@ export default function StockList(): React.ReactNode {
             width: 150
         },
         {
-            key: 'position',
+            key: 'warehousePosition',
             title: '库区',
             width: 150,
-            dataIndex: 'position'
+            dataIndex: 'warehousePosition'
         },
         {
-            key: 'region',
+            key: 'warehouseRegion',
             title: '区位',
-            dataIndex: 'region',
+            dataIndex: 'warehouseRegion',
             width: 150
         },
         {
@@ -95,10 +95,10 @@ export default function StockList(): React.ReactNode {
             )  
         },
         {
-            key: 'balesWarehouseNumber',
+            key: 'balesNumber',
             title: '库存数',
             width: 100,
-            dataIndex: 'balesWarehouseNumber',
+            dataIndex: 'balesNumber',
             render: (_: number): React.ReactNode => ( 
                 <span>{ _ === -1 ? '-' : _ }</span>
             )  
