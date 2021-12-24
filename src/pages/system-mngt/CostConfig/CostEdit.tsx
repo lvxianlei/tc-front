@@ -15,7 +15,7 @@ export default function CostEdit() {
 
     const { loading, data, run } = useRequest<{ [key: string]: any }>((productName = id) => new Promise(async (resole, reject) => {
         try {
-            const [productType, proport]: Promise<any>[] = await Promise.all([
+            const [productType, proport]: Promise<any>[] = await Promise.all<any>([
                 RequestUtil.get(`/tower-market/ProductType/getProductTypeInfo?productName=${productName}`),
                 RequestUtil.get(`/tower-market/ProductType/getProductParamProportion?productName=${productName}`)
             ])
