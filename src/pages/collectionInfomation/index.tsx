@@ -99,6 +99,7 @@ export default function CollectionInfomation(): React.ReactNode {
                         key: 'index',
                         title: '序号',
                         dataIndex: 'index',
+                        fixed: "left",
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },

@@ -168,6 +168,7 @@
         {
             "title": "领料生产单元",
             "dataIndex": "pickingUnit",
+            "type": "popTable",
             "disabled": true
         },
         {
@@ -203,7 +204,7 @@
             "dataIndex": "pickingUserName",
             "type": "popTable",
             "width": 1011,
-            "path": "/tower-production/team",
+            "path": "/tower-production/team/teamUsers",
             "value": "name",
             "readOnly": true,
             "dependencies": true,
@@ -339,7 +340,41 @@
         },
         {
             "title": "申请数量",
-            "dataIndex": "quantity"
+            "dataIndex": "applyQuantity"
+        }
+    ],
+    "materialInfoDetail": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length"
+        },
+        {
+            "title": "申请数量",
+            "dataIndex": "applyQuantity"
+        },
+        {
+            "title": "未出库数量",
+            "dataIndex": "notIssuedQuantity"
+        },
+        {
+            "title": "已出库数量",
+            "dataIndex": "checkoutQuantity"
+        },
+        {
+            "title": "缺料数量",
+            "dataIndex": "materialShortageQuantity"
         }
     ]
 }

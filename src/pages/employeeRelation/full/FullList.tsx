@@ -162,7 +162,7 @@ export default function FullList(): React.ReactNode {
                     {
                         name: 'employeeName',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入员工名称进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入员工名称进行查询" maxLength={200} style={{width:'200px'}}/>
                     },
                     {
                         name: 'checkResult',

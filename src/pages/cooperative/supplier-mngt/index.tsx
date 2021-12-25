@@ -12,6 +12,7 @@ import useRequest from '@ahooksjs/use-request'
 import { qualityAssuranceOptions, supplierTypeOptions, supplyProductsOptions } from '../../../configuration/DictionaryOptions'
 export default function SupplierMngt(): React.ReactNode {
     const history = useHistory()
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
     const [editVisible, setEditVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
     const [overviewVisible, setOverviewVisible] = useState<boolean>(false)
@@ -36,6 +37,7 @@ export default function SupplierMngt(): React.ReactNode {
             value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.statusUpdateTime
         }
+        setFilterValue(value)
         return value
     }
     const handleDelete = async (id: string) => {
@@ -83,6 +85,7 @@ export default function SupplierMngt(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-supply/supplier"
+            filterValue={filterValue}
             columns={[
                 {
                     title: "序号",
@@ -143,7 +146,7 @@ export default function SupplierMngt(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'supplyProducts',
+                    name: 'materialCategoryId',
                     label: '供货产品',
                     children: <Select style={{ width: "150px" }} defaultValue="请选择">
                         {

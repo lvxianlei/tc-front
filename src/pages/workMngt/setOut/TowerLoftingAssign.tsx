@@ -176,8 +176,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
 
     public renderTreeNodes = (data:any) => data.map((item:any) => {
         if (item.children) {
-            item.disabled = true;
-            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } className={ styles.node } >
                 { this.renderTreeNodes(item.children) }
             </TreeNode>);
         }

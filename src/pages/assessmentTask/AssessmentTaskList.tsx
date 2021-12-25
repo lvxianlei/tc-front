@@ -21,6 +21,7 @@ export default function AssessmentTaskList(): React.ReactNode {
         {
             key: 'index',
             title: '序号',
+            fixed: "left" as FixedType,
             dataIndex: 'index',
             width: 50,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
@@ -149,7 +150,7 @@ export default function AssessmentTaskList(): React.ReactNode {
     }
 
     return (
-        <>
+        <div className={styles.list}>
             <Page
                 path="/tower-science/assessTask"
                 columns={columns}
@@ -223,6 +224,6 @@ export default function AssessmentTaskList(): React.ReactNode {
                     return values;
                 }}
             />
-        </>
+        </div>
     )
 }

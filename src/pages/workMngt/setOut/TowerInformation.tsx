@@ -55,8 +55,7 @@ export default function TowerInformation(): React.ReactNode {
 
     const renderTreeNodes = (data:any) => data.map((item:any) => {
         if (item.children) {
-            item.disabled = true;
-            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id }  className={ styles.node } >
                 { renderTreeNodes(item.children) }
             </TreeNode>);
         }
@@ -114,19 +113,18 @@ export default function TowerInformation(): React.ReactNode {
             
         },
         {
-            key: 'trialAssemble',
+            key: 'trialAssembleName',
             title: '试组装',
-            dataIndex: 'trialAssemble',
+            dataIndex: 'trialAssembleName',
             width: 80,
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
-                    case 1:
-                        return '是';
-                    case 0:
-                        return '否';
-                }
-            }
-            
+            // render: (pattern: number): React.ReactNode => {
+            //     switch (pattern) {
+            //         case 1:
+            //             return '是';
+            //         case 0:
+            //             return '否';
+            //     }
+            // }
         },
         {
             key: 'loftingUserName',

@@ -45,6 +45,11 @@
                                 "label": "字典管理",
                                 "path": "/sys/dxnry",
                                 "authority": "dxnry"
+                            },
+                            {
+                                "label": "成本评估配置",
+                                "path": "/sys/costconfig",
+                                "authority": "costconfig"
                             }
                         ]
                     },
@@ -144,6 +149,20 @@
                             {
                                 "label": "开票申请列表",
                                 "path": "/invoicing",
+                                "authority": "approvalm_invoicing_list"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "应收账款",
+                        "icon": "examine",
+                        "path": "/receivables",
+                        "appName": "FC",
+                        "authority": "approvalm_invoicing",
+                        "items": [
+                            {
+                                "label": "合同回款统计",
+                                "path": "/receivables/constract",
                                 "authority": "approvalm_invoicing_list"
                             }
                         ]

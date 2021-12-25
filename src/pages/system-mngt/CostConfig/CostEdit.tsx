@@ -51,11 +51,16 @@ export default function CostEdit() {
             const saveData = await baseForm.validateFields()
             const proportionDtos = await tableRowForm.validateFields()
             await productTypeRun({
-                ...saveData, addOrUpdateProportionDtos: proportionDtos.submit.map((item: any) => ({
-                    params: Object.keys(item).map((co: string) => `${co}-${item[co]}`).join(","),
-                    productName,
-                    voltage: item.vd
-                }))
+                ...saveData,
+                addOrUpdateProportionDtos: proportionDtos.submit.map((item: any) => {
+                    delete item.index
+                    delete item.opration
+                    return ({
+                        params: Object.keys({ ...item, ...saveData }).map((co: string) => `${co}-${({ ...item, ...saveData })[co] || 0}`).join(","),
+                        productName,
+                        voltage: item.vd
+                    })
+                })
             })
             message.success("数据保存成功...")
             history.go(-1)

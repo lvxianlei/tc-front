@@ -45,13 +45,11 @@ const tableColumns = [
                 case 1:
                     return '待开始';
                 case 2:
-                    return '组焊中';
+                    return '待指派';
                 case 3:
-                    return '校核中';
+                    return '组焊中';
                 case 4:
                     return '已完成';
-                case 5:
-                    return '已提交';
             }
         }
     }

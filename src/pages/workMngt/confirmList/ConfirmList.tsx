@@ -81,9 +81,8 @@ export default function ConfirmList(): React.ReactNode {
     const renderTreeNodes = (data: any) =>
         data.map((item: any) => {
             if (item.children) {
-                item.disabled = true;
                 return (
-                    <TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node}>
+                    <TreeNode key={item.id} title={item.title} value={item.id} className={styles.node}>
                         {renderTreeNodes(item.children)}
                     </TreeNode>
                 );

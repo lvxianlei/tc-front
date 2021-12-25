@@ -461,7 +461,7 @@ export default function Lofting(): React.ReactNode {
             <Form.Item label='段名' name='segmentName'>
                 <Input maxLength={ 50 }/>
             </Form.Item>
-            <Form.Item label='查询' name='structureTexture'>
+            <Form.Item label='查询' name='code'>
                 <Input placeholder="请输入构件编号查询" maxLength={ 50 }/>
             </Form.Item>
             <Form.Item>
