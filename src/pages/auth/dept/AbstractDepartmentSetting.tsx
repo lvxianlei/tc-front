@@ -120,7 +120,7 @@ export default abstract class AbstractDepartmentSetting<P extends RouteComponent
                 label: '部门排序',
                 name: 'sort',
                 initialValue: deptDeatil?.sort,
-                children: <InputNumber placeholder="请输入部门排序" maxLength={30} className={ layoutStyles.width100 }/>,
+                children: <InputNumber placeholder="请输入部门排序" maxLength={10} className={ layoutStyles.width100 }/>,
                 rules: [{
                     required: true,
                     message: '请输入部门排序'
