@@ -52,10 +52,15 @@ export default function Edit() {
     const [form] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detail`, {
+            const v: any = {
                 receiveStockId: params.id,
-                ...filterValue
-            })
+            }
+            if (filterValue) {
+                const formatDate = filterValue.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+                v.startStatusUpdateTime = `${formatDate[0]} 00:00:00`
+                v.endStatusUpdateTime = `${formatDate[1]} 23:59:59`
+            }
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detail`, v)
             resole(result)
         } catch (error) {
             reject(error)

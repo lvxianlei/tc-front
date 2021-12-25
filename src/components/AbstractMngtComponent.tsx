@@ -217,7 +217,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
             <Form layout="inline" onFinish={this.onFilterSubmit}>
                 {
                     this.getFilterFormItemProps(item).map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                        <Form.Item key={`${props.name}_${index}`} {...props} />
+                        <Form.Item key={`${props.name}_${index}`} {...props} style={{marginBottom: 16}}/>
                     ))
                 }
                 <Form.Item>
