@@ -494,7 +494,7 @@ export default function Lofting(): React.ReactNode {
     }>
         <Form form={form}>
             <Button onClick={()=>{
-                tableDataSource.push([])
+                tableDataSource.push({})
                 setTableDataSource([...tableDataSource])
                 console.log(tableDataSource)
                 form.setFieldsValue({ dataV: [...tableDataSource]})
