@@ -173,8 +173,8 @@ export default function QuestionMngt(): React.ReactNode {
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待修改</Select.Option>
                             <Select.Option value={2} key={2}>已修改</Select.Option>
-                            <Select.Option value={3} key={3}>已拒绝</Select.Option>
-                            <Select.Option value={4} key={4}>已删除</Select.Option>
+                            <Select.Option value={0} key={0}>已拒绝</Select.Option>
+                            <Select.Option value={3} key={3}>已删除</Select.Option>
                         </Select>
                     </Form.Item>
                 },
