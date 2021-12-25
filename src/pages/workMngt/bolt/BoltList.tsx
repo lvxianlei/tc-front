@@ -272,7 +272,7 @@ export default function BoltList(): React.ReactNode {
                     label: '人员',
                     children: <Row>
                         <Col>
-                            <Form.Item name="dept" rules={[{required:true,message:"请选择部门"}]}>
+                            <Form.Item name="dept">
                                 <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value:any)=>{
                                     const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
                                     setCheckUser(userData.records)  
