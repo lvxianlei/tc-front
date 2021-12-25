@@ -94,6 +94,7 @@ export default function Overview(): React.ReactNode {
                     {
                         "title": "序号",
                         "dataIndex": "index",
+                        "fixed": "left",
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...priceMaintain.map((item: any) => {

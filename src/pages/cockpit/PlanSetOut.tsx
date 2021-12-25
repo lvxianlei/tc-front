@@ -3,6 +3,7 @@ import { Input, Select } from 'antd';
 import { Page } from '../common';
 import moment from 'moment';
 import { patternTypeOptions } from '../../configuration/DictionaryOptions';
+import { FixedType } from 'rc-table/lib/interface';
 
 export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负责人直接返回名称，无需增加-Name字段   30号：加Name
     const [filterValue, setFilterValue] = useState({});
@@ -11,6 +12,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             key: 'index',
             title: '序号',
             dataIndex: 'index',
+            fixed: "left" as FixedType,
             width: 50,
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },

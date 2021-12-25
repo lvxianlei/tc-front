@@ -21,6 +21,7 @@ export default function AssessmentTaskList(): React.ReactNode {
         {
             key: 'index',
             title: '序号',
+            fixed: "left" as FixedType,
             dataIndex: 'index',
             width: 50,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)

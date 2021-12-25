@@ -259,9 +259,9 @@ export default forwardRef(function ({
             {children}
         </Upload>}
         {isTable && <div>
-            <Row style={{ backgroundColor: "#fafafa", height: 32, lineHeight: "32px" }}>
-                <Col span={12} style={{ padding: 8 }}>文件名称</Col>
-                <Col span={12} style={{ padding: 8 }}>操作</Col>
+            <Row style={{ backgroundColor: "#fafafa", padding: 8, }}>
+                <Col span={12}>文件名称</Col>
+                <Col span={12}>操作</Col>
             </Row>
             {!attchs.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
             {attchs.map((item, index: number) => <Spin key={item.uid} spinning={item.loading} size="small">

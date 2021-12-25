@@ -44,7 +44,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
     }), { manual: true })
 
     // 获取树结构
-    const { run: getUser, data: authority = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { loading: loadingTree, run: getUser, data: authority = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: IAuthority[] = await RequestUtil.get<IAuthority[]>(`/sinzetech-system/function/tree`);
             resole(result);
@@ -112,53 +112,46 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
         return data;
     }
 
-    if (loading) {
-        return <Spin spinning={loading} />
-    }
-
-    if (authority.length > 0) {
-        return (
-            <>
-                <Form
-                    name="basic"
-                    labelCol={{ span: 4 }}
-                    wrapperCol={{ span: 20 }}
-                    initialValues={{ remember: true }}
-                    onFinish={onSubmit}
-                    onFinishFailed={resetFields}
-                    autoComplete="off"
-                    form={addCollectionForm}
+    return (
+        <Spin spinning={loading || loadingTree}>
+            <Form
+                name="basic"
+                labelCol={{ span: 4 }}
+                wrapperCol={{ span: 20 }}
+                initialValues={{ remember: true }}
+                onFinish={onSubmit}
+                onFinishFailed={resetFields}
+                autoComplete="off"
+                form={addCollectionForm}
+            >
+                <Form.Item
+                    label="名称"
+                    name="name"
+                    rules={[{ required: true, message: '请输入名称' }]}
                 >
-                    <Form.Item
-                        label="名称"
-                        name="name"
-                        rules={[{ required: true, message: '请输入名称' }]}
-                    >
-                        <Input placeholder="请输入名称" />
-                    </Form.Item>
-                    <Form.Item
-                        label="功能权限"
-                        name="functionIdList"
-                    // rules={[{ type: 'array', required: true, message: 'Please input your username!' }]}
-                    >
-                        <div style={{ height: "500px", overflow: 'auto', }}>
-                            <Tree
-                                checkable
-                                onExpand={onExpand}
-                                expandedKeys={expandedKeys}
-                                autoExpandParent={autoExpandParent}
-                                onCheck={onCheck}
-                                checkedKeys={checkedKeys}
-                                selectedKeys={selectedKeys}
-                                // defaultCheckedKeys={checkedKeys}
-                                defaultExpandAll
-                                treeData={wrapAuthority2DataNode(authority as (IAuthority & DataNode)[])}
-                            />
-                        </div>
-                    </Form.Item>
-                </Form>
-            </>
-        )
-    }
-    return <></>
+                    <Input placeholder="请输入名称" />
+                </Form.Item>
+                <Form.Item
+                    label="功能权限"
+                    name="functionIdList"
+                // rules={[{ type: 'array', required: true, message: 'Please input your username!' }]}
+                >
+                    <div style={{ height: "500px", overflow: 'auto', }}>
+                        <Tree
+                            checkable
+                            onExpand={onExpand}
+                            expandedKeys={expandedKeys}
+                            autoExpandParent={autoExpandParent}
+                            onCheck={onCheck}
+                            checkedKeys={checkedKeys}
+                            selectedKeys={selectedKeys}
+                            // defaultCheckedKeys={checkedKeys}
+                            defaultExpandAll
+                            treeData={wrapAuthority2DataNode(authority as (IAuthority & DataNode)[])}
+                        />
+                    </div>
+                </Form.Item>
+            </Form>
+            </Spin>
+    )
 })
