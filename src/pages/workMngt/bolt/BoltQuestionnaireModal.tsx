@@ -227,6 +227,7 @@ class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRout
         this.getForm()?.setFieldsValue({ description: record.description, newValue: record.newValue });
         return <>
             <Modal
+                className={ styles.boltModal }
                 visible={ this.props.visible } 
                 width="50%" 
                 title={ this.props.title }

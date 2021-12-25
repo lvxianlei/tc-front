@@ -299,13 +299,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         <BaseInfo form={baseForm} columns={baseColumns.map((item: any) => {
             if (item.dataIndex === "time") {
                 return ({ ...item, type: 'date', 
-                    render:  (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time"><TimePicker.RangePicker style={{width: '100%'}} format="HH:mm" /></Form.Item>) 
+                    render:  (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time" style={{width: '100%'}}><TimePicker.RangePicker style={{width: '100%'}} format="HH:mm" /></Form.Item>) 
                 })
             }
             if(item.dataIndex === "equipmentId") {
                 return ({ ...item, type: 'select', 
                     render:  (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name="equipmentId">
+                        <Form.Item name="equipmentId" style={{width: '100%'}}>
                             <Select mode="multiple">
                                 { equipmentList?.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.deviceName }</Select.Option>

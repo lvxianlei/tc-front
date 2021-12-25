@@ -78,7 +78,7 @@ export default function ProcessMngt(): React.ReactNode {
                 path="/tower-aps/product/process"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} } ghost>新增</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} }>新增</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {

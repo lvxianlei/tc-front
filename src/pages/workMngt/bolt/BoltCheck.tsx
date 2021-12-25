@@ -166,7 +166,7 @@ export default function BoltCheck(): React.ReactNode {
     }
 
 
-    return <>
+    return <div className={ styles.boltModal }>
         <DetailContent>
             <Space direction="horizontal" size="small" className={styles.topbtn}>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
@@ -174,5 +174,5 @@ export default function BoltCheck(): React.ReactNode {
             <CommonTable columns={columnsSetting} dataSource={dataSource} pagination={false} />
         </DetailContent>
         <BoltQuestionnaireModal title={title} visible={visible} modalCancel={() => setVisible(false)} record={record} update={() => getDataSource(params.id)} productCategory={params.boltId} />
-    </>
+    </div>
 }

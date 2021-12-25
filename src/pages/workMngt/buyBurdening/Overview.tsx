@@ -11,12 +11,14 @@ export default function Overview(): React.ReactNode {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [chooseId, setChooseId] = useState<string>("")
+    const [ filterValue, setFilterValue ] = useState({purchaseTaskId: params.id});
     const onFilterSubmit = (value: any) => {
         if (value.startBatcheStatusUpdateTime) {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startBatcheStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endBatcheStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
+        setFilterValue(Object.assign({}, { ...value, purchaseTaskId: params.id }))
         return ({ ...value, purchaseTaskId: params.id })
     }
 
@@ -77,7 +79,7 @@ export default function Overview(): React.ReactNode {
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
             </>}
-            filterValue={{ purchaseTaskId: params.id }}
+            filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
