@@ -151,11 +151,13 @@ export default function RawMaterial() {
                 ]}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
-                extraOperation={<Button type="primary" ghost onClick={async () => {
-                    await generaterRun()
-                    await message.success("成功生成采购任务...")
-                    history.go(0)
-                }}>临时生成采购任务</Button>}
+            //     extraOperation={
+            //     <Button type="primary" ghost onClick={async () => {
+            //         await generaterRun()
+            //         await message.success("成功生成采购任务...")
+            //         history.go(0)
+            //     }}>临时生成采购任务</Button>
+            // }
                 searchFormItems={[
                     {
                         name: 'startStatusUpdateTime',

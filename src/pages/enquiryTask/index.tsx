@@ -164,11 +164,11 @@ export default function EnquiryTask(): React.ReactNode {
                 }]}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost onClick={async () => {
+                {/* <Button type="primary" ghost onClick={async () => {
                     await generateRun()
                     await message.success("成功生成工程报价任务...")
                     history.go(0)
-                }}>临时生成工程报价任务</Button>
+                }}>临时生成工程报价任务</Button> */}
             </>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}

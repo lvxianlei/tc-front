@@ -46,8 +46,9 @@ export default function Invoicing() {
                 first,
                 second
             } = value.createUserDeptId;
-            value.createUserDeptId = first
+            // value.createUserDeptId = first
             value.createUserId = second
+            delete value.createUserDeptId
         }
         return value
     }
