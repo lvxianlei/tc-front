@@ -113,19 +113,18 @@ export default function TowerInformation(): React.ReactNode {
             
         },
         {
-            key: 'trialAssemble',
+            key: 'trialAssembleName',
             title: '试组装',
-            dataIndex: 'trialAssemble',
+            dataIndex: 'trialAssembleName',
             width: 80,
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
-                    case 1:
-                        return '是';
-                    case 0:
-                        return '否';
-                }
-            }
-            
+            // render: (pattern: number): React.ReactNode => {
+            //     switch (pattern) {
+            //         case 1:
+            //             return '是';
+            //         case 0:
+            //             return '否';
+            //     }
+            // }
         },
         {
             key: 'loftingUserName',
