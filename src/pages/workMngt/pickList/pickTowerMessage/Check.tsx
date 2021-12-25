@@ -122,7 +122,7 @@ export default function PickCheckList(): React.ReactNode {
                         children: <Input  maxLength={200} />
                     },
                     {
-                        name: 'partName',
+                        name: 'segmentName',
                         label: '段号',
                         children: <Input  maxLength={200} />
                     },
