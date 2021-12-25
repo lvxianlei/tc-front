@@ -56,7 +56,7 @@ export default function Delivery(): React.ReactNode {
                     <Button type='primary' onClick={() => {
                         if(selectedRows.length>0){
                             if(tableUserDataSource.length>0){
-                                RequestUtil.post(`tower-production/productionLines/ex`,{
+                                RequestUtil.post(`tower-production/packageWorkshop/confirmOutWarehouse`,{
                                     id:params.id,
                                     teamId: selectedUser.id,
                                     teamName: selectedUser.name,
