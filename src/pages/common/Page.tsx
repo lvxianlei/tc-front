@@ -137,7 +137,6 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
             showSizeChanger: false
         }
         const postValue: any = this.props.onFilterSubmit && this.props.onFilterSubmit(values)
-        this.props.onFilterSubmit && this.props.onFilterSubmit(values);
         this.fetchTableData(postValue, tablePagination);
     }
 
