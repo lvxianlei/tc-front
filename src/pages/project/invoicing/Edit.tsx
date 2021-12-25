@@ -5,7 +5,12 @@ import { DetailContent, DetailTitle, BaseInfo, EditTable, formatData, Attachment
 import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { productTypeOptions, voltageGradeOptions, saleTypeOptions } from "../../../configuration/DictionaryOptions"
+import {
+    productTypeOptions,
+    voltageGradeOptions,
+    saleTypeOptions,
+    contractPlanStatusOptions
+} from "../../../configuration/DictionaryOptions"
 export default function Edit() {
     const params = useParams<{ id: string }>()
     const history = useHistory()
@@ -187,6 +192,14 @@ export default function Edit() {
                                         lable: item.name
                                     }))
                                 }) : coItem))
+                            })
+                        case "contractType":
+                            return ({
+                                ...item,
+                                enum: contractPlanStatusOptions?.map(item => ({
+                                    value: item.id,
+                                    label: item.name
+                                }))
                             })
                         case "voltage":
                             return ({
