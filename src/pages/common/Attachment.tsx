@@ -233,6 +233,9 @@ export default forwardRef(function ({
                         }}
                         method="put"
                         showUploadList={false}
+                        customRequest={(options: any) => {
+                            console.log(options, "---")
+                        }}
                         beforeUpload={handleBeforeUpload}
                         onChange={uploadChange}
                     >

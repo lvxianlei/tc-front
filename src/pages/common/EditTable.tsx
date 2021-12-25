@@ -119,7 +119,7 @@ export default function EditableTable({
                                 </WindowScroller>
                             </Row> */}
                             <div style={{ overflowX: "auto" }}>
-                                <Row className={styles.FormHeader} style={{height: 36, lineHeight: 36}}>
+                                <Row className={styles.FormHeader}>
                                     {columns.map((item, index) => (<Col
                                         key={`Editable_${index}`}
                                         style={{ width: 100, backgroundColor: "#f5f5f5" }}
