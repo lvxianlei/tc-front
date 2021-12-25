@@ -30,7 +30,7 @@ export default function QuestionMngt(): React.ReactNode {
         },
         {
             key: 'statusName',
-            title: '问题单编号',
+            title: '问题单状态',
             width: 100,
             dataIndex: 'statusName'
         },
