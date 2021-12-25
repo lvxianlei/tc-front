@@ -19,6 +19,11 @@ export default function EnquiryList(): React.ReactNode {
             value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
             value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
+        if (value.startPlannedDeliveryTime) {
+            const formatDate = value.startPlannedDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startPlannedDeliveryTime = formatDate[0] + " 00:00:00"
+            value.endPlannedDeliveryTime = formatDate[1] + " 23:59:59"
+        }
         if (value.inquirerId) {
             value.deptId = value.inquirerId.first
             value.inquirerId = value.inquirerId.second
