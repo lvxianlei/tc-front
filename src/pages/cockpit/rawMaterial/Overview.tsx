@@ -147,11 +147,6 @@ export default function Overview(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'materialName',
-                        label: '原材料名称',
-                        children: <Input placeholder="原材料名称" />
-                    },
-                    {
                         name: 'fuzzyQuery',
                         label: '查询',
                         children: <Input placeholder="原材料名称/规格" />
