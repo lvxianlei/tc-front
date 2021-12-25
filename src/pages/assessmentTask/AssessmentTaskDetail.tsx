@@ -6,6 +6,7 @@ import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './AssessmentTask.module.less';
 import Attachment, { FileProps } from '../common/Attachment';
+import { FixedType } from 'rc-table/lib/interface';
 
 interface IDetail {
     readonly id?: string;
@@ -35,6 +36,7 @@ const tableColumns = [
         key: 'index',
         title: '序号',
         dataIndex: 'index',
+        fixed: "left" as FixedType,
         width: 50,
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
     },

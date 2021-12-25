@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Input, Select } from 'antd';
 import { Page } from '../common';
 import moment from 'moment';
+import { FixedType } from 'rc-table/lib/interface';
 
 export default function PlanTrack(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
@@ -11,6 +12,7 @@ export default function PlanTrack(): React.ReactNode {
             title: '序号',
             width: 50,
             dataIndex: 'index',
+            fixed: "left" as FixedType,
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {

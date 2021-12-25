@@ -49,9 +49,9 @@ const tableColumns = [
                 case 3:
                     return '待完成';
                 case 4:
-                    return '已完成';
+                    return '待校核';
                 case 5:
-                    return '已提交';
+                    return '已完成';
             }
         }
     }

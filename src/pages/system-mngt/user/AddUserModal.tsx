@@ -101,7 +101,7 @@
                          name="name"
                          rules={[{ required: true, message: '请输入用户姓名' }]}
                      >
-                         <Input placeholder="请输入用户姓名" />
+                         <Input placeholder="请输入用户姓名" maxLength={30}/>
                      </Form.Item>
 
                      <Form.Item
@@ -109,7 +109,7 @@
                          name="account"
                          rules={[{ required: true, message: '请输入账号' }]}
                      >
-                         <Input placeholder="请输入账号" />
+                         <Input placeholder="请输入账号" maxLength={30} />
                      </Form.Item>
 
                      <Form.Item
