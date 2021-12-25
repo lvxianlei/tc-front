@@ -6,6 +6,8 @@ import moment from "moment";
 import { withTranslation } from "react-i18next";
 import { withRouter } from "react-router-dom";
 import ClientSelectionComponent from "../../../components/ClientSelectionModal";
+// 业务经理的弹框
+import ServiceManagerComponent from "../../../components/ServiceManagernModal";
 import {
   winBidTypeOptions,
   saleTypeOptions,
@@ -406,9 +408,9 @@ class ManagementContractNew extends ContractNew {
             },
             {
               label: "国家",
-              name: "regionOther",
-              initialValue: contract?.regionOther,
-              children: (<Input value={contract?.regionOther} />),
+              name: "country",
+              initialValue: contract?.country,
+              children: (<Input value={contract?.country} />),
             },
             {
               label: "币种",
@@ -431,14 +433,26 @@ class ManagementContractNew extends ContractNew {
             {
               label: "业务经理",
               name: "salesman",
+              initialValue: contract?.salesman,
               rules: [
                 {
                   required: true,
-                  message: "请输入业务经理",
+                  message: "请选择结算单位",
                 },
               ],
-              initialValue: contract?.salesman,
-              children: (<Input value={contract?.salesman} />),
+              children: (
+                <>
+                  <Input
+                    value={contract?.salesman}
+                    suffix={
+                      <ServiceManagerComponent
+                        onSelect={this.onServiceManager}
+                        selectKey={[contract?.payServiceManager]}
+                      />
+                    }
+                  />
+                </>
+              ),
             },
             {
               label: "合同接管人",
@@ -989,14 +1003,26 @@ class ManagementContractNew extends ContractNew {
             {
               label: "业务经理",
               name: "salesman",
+              initialValue: contract?.salesman,
               rules: [
                 {
                   required: true,
-                  message: "请输入业务经理",
+                  message: "请选择结算单位",
                 },
               ],
-              initialValue: contract?.salesman,
-              children: (<Input value={contract?.salesman} />),
+              children: (
+                <>
+                  <Input
+                    value={contract?.salesman}
+                    suffix={
+                      <ServiceManagerComponent
+                        onSelect={this.onServiceManager}
+                        selectKey={[contract?.payServiceManager]}
+                      />
+                    }
+                  />
+                </>
+              ),
             },
             {
               label: "合同接管人",
