@@ -35,6 +35,14 @@ export default function Edit() {
     }), { manual: true })
 
     const handleSave = async (saveType: 1 | 2) => {
+        if (invoicingDetailVos.some((item: any) => [null, undefined, ""].includes(item.ticketNumber))) {
+            message.warning("必须填写发票号码...")
+            return
+        }
+        if (invoicingDetailVos.some((item: any) => [null, undefined, "", 0.00].includes(item.taxRate))) {
+            message.warning("必须填写税率并且不能为0.00...")
+            return
+        }
         try {
             await saveRun({
                 id: params.invoicingId,
@@ -120,10 +128,10 @@ export default function Edit() {
                             title: `* ${item.title}`,
                             render: (value: number, _: any, index) => <InputNumber
                                 value={([-1, "-1"].includes(value) || !value) ? 0 : value}
-                                step={1}
+                                step={0.01}
                                 min={0}
                                 max={100}
-                                formatter={(value: any) => parseFloat(value).toFixed(2)}
+                                precision={2}
                                 onChange={(value: number) => handleEditTableChange("taxRate", value, index)}
                             />
                         })

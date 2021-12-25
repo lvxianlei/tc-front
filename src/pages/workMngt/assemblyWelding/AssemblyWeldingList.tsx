@@ -116,18 +116,15 @@ export default function AssemblyWeldingList(): React.ReactNode {
     const location = useLocation<{ state?: number, userId?: string, weldingOperator?: string }>();
     const userId = AuthUtil.getUserId();
     const [ filterValue, setFilterValue ] = useState<Record<string, any>>();
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+    const { loading } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         setDepartment(departmentData);
-        resole(data?.records);
     }), {})
-    const checkUser: any = data || [];
     const [user, setUser] = useState<any[]|undefined>([]);
-    const [confirmLeader, setConfirmLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
     const [assignVisible, setAssignVisible] = useState<boolean>(false);
     const [drawTaskId, setDrawTaskId] = useState<string>('');
+    const [ checkUser, setCheckUser ] = useState([]);
     const [form] = Form.useForm();
     
     const handleAssignModalOk = async () => {
@@ -229,21 +226,34 @@ export default function AssemblyWeldingList(): React.ReactNode {
                             <Select.Option value={2} key="2">待指派</Select.Option>
                             <Select.Option value={3} key="3">组焊中</Select.Option>
                             <Select.Option value={4} key="4">已完成</Select.Option>
-                           
                         </Select>
                     </Form.Item>
                 },
                 {
                     name: 'personnel',
                     label: '人员',
-                    children: <Form.Item name="personnel">
-                        <Select placeholder="请选择" style={{ width: "150px" }}>  
-                            <Select.Option value="" key="6">全部</Select.Option>
-                            { checkUser && checkUser.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                            }) }
-                        </Select>
-                    </Form.Item>
+                    children: <Row>
+                        <Col>
+                            <Form.Item name="dept" rules={[{required:true,message:"请选择部门"}]}>
+                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value:any)=>{
+                                    const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+                                    setCheckUser(userData.records)  
+                                }}>
+                                    {renderTreeNodes(wrapRole2DataNode( department ))}
+                                </TreeSelect>
+                            </Form.Item>
+                        </Col>
+                        <Col>
+                            <Form.Item name="personnel">
+                                <Select placeholder="请选择" style={{ width: "150px" }}>  
+                                    <Select.Option value="" key="6">全部</Select.Option>
+                                    { checkUser && checkUser.map((item: any) => {
+                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                    }) }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
                 },
                 {
                     name: 'plannedTime',

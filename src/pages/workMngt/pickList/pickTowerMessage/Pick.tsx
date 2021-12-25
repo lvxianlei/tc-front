@@ -220,7 +220,7 @@ export default function Lofting(): React.ReactNode {
                     return {
                         ...col,
                         render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <p>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</p>
+                            <p className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  ''}>{parseFloat(`${(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}`).toFixed(2)}</p>
                         )
                     }
                 }else if(col.dataIndex==='length'){
@@ -234,7 +234,7 @@ export default function Lofting(): React.ReactNode {
                     return {
                         ...col,
                         render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <p >{_===-1?0:_}</p>
+                            <p className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  ''}>{_===-1?0:_}</p>
                         )
                     }
                 }
@@ -494,10 +494,11 @@ export default function Lofting(): React.ReactNode {
     }>
         <Form form={form}>
             <Button onClick={()=>{
-                tableDataSource.push([])
-                setTableDataSource([...tableDataSource])
-                console.log(tableDataSource)
-                form.setFieldsValue({ dataV: [...tableDataSource]})
+                const value = form.getFieldsValue(true).dataV||[];
+                value.push({})
+                setTableDataSource([...value])
+                console.log(value)
+                form.setFieldsValue({ dataV: [...value]})
             }} type='primary' ghost>添加一行</Button>
             <Table
                 columns={[

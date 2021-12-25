@@ -94,7 +94,7 @@ export default function ModelList(): React.ReactNode {
     return <>
         <Page
             path={ `/tower-science/productSegment/modelList` }
-            exportPath={`/tower-science/productStructure/list`}
+            exportPath={`/tower-science/productSegment/modelList`}
             columns={ columns }
             headTabs={ [] }
             refresh={ refresh }

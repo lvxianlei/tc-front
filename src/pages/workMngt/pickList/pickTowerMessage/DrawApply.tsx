@@ -83,11 +83,15 @@ export default function LoftingTowerApplication(): React.ReactNode {
             dataIndex: 'operation', 
             key:'operation', 
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Button type='link' onClick={ () => {
-                RequestUtil.post(`/tower-science/drawProductStructure/reuse?productSegmentId=${paragraph}&passivityProductSegment=${record.id}`).then(() => {
-                    message.success('套用成功'); 
-                }).then(()=>{
-                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
-                });
+                if(paragraph){
+                    RequestUtil.post(`/tower-science/drawProductStructure/reuse?productSegmentId=${paragraph}&passivityProductSegment=${record.id}`).then(() => {
+                        message.success('套用成功'); 
+                    }).then(()=>{
+                        history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
+                    });
+                }else{
+                    message.error('未选择段落，不可选择套用！')
+                }
             } }>选择套用</Button>)
         }
     ]
@@ -132,14 +136,8 @@ export default function LoftingTowerApplication(): React.ReactNode {
             ]}>
                 <DetailTitle title="套用" />
                 <Form form={ form } onFinish={ onFinish } layout="inline"  className={ styles.topForm }>
-                    <Form.Item name="externalTaskNum" label="放样任务单号">
-                        <Input placeholder="请输入"/>
-                    </Form.Item>
-                    <Form.Item name="productCategoryName" label="塔型名称">
-                        <Input placeholder="请输入"/>
-                    </Form.Item>
-                    <Form.Item name="steelProductShape" label="塔型钢印号">
-                        <Input placeholder="请输入" />
+                    <Form.Item name="fuzzyMsg" label="查询">
+                        <Input placeholder="放样任务单号/塔型名称/塔型钢印号" />
                     </Form.Item>
                     <Space direction="horizontal" className={ styles.btnRight }>
                         <Button type="primary" htmlType="submit">搜索</Button>

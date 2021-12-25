@@ -182,7 +182,7 @@ export default function Drawing(): React.ReactNode {
                     <Button
                         type="link"
                         size="small"
-                        disabled={([null, "-1", -1, 0, 4].includes(record.auditStatus)) || record.contractId}
+                        disabled={(![null, "-1", -1, 4].includes(record.auditStatus)) || record.contractId}
                         onClick={() => {
                             setDetailedId(record.id)
                             setConnectVisible(true)
