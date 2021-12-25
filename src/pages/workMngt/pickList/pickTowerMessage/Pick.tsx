@@ -494,10 +494,11 @@ export default function Lofting(): React.ReactNode {
     }>
         <Form form={form}>
             <Button onClick={()=>{
-                tableDataSource.push({})
-                setTableDataSource([...tableDataSource])
-                console.log(tableDataSource)
-                form.setFieldsValue({ dataV: [...tableDataSource]})
+                const value = form.getFieldsValue(true).dataV||[];
+                value.push({})
+                setTableDataSource([...value])
+                console.log(value)
+                form.setFieldsValue({ dataV: [...value]})
             }} type='primary' ghost>添加一行</Button>
             <Table
                 columns={[
