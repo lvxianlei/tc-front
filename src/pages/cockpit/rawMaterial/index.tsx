@@ -6,6 +6,8 @@ import { materialPrice } from "./rawMaterial.json"
 import { Page } from '../../common'
 import HistoryPrice from './HistoryPrice'
 import DataSource from './DataSource'
+import RequestUtil from '../../../utils/RequestUtil'
+import useRequest from '@ahooksjs/use-request'
 import { materialStandardOptions } from '../../../configuration/DictionaryOptions'
 
 export default function ViewRawMaterial(): React.ReactNode {
@@ -26,6 +28,15 @@ export default function ViewRawMaterial(): React.ReactNode {
         }
         return value
     }
+    // 原材料类型
+    const { data: materialCategory } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/materialCategory/category`)
+            resove(result.map((item: any) => ({ label: item.materialCategoryName, value: item.materialCategoryId })));
+        } catch (error) {
+            reject(error)
+        }
+    }))
 
     return (<>
         <Modal
@@ -105,7 +116,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                     name: 'materialCategoryId',
                     label: '原材料类型',
                     children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
-                        {/* {projectType.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)} */}
+                        {materialCategory?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {

@@ -5,7 +5,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { BaseInfo, DetailTitle, PopTableContent } from "../../common"
 import { PopTable } from './LayerModal';
-import { materialStandardTypeOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
+import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
 
 interface priceSourceEnumData {
     label: string
@@ -74,7 +74,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
     const [materialForm] = Form.useForm()
     const [priceInfoForm] = Form.useForm();
     // 原材料标准
-    const materialStandard = materialStandardTypeOptions?.map((item: { id: string, name: string }) => ({
+    const materialStandard = materialStandardOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))

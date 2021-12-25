@@ -423,10 +423,16 @@ export default function Lofting(): React.ReactNode {
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
                         <Popconfirm
                             title="确认删除?"
-                            onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ selectedKeys.join(',') }`).then(()=>{
-                                message.success('删除成功！');
-                                setRefresh(!refresh);
-                            })}
+                            onConfirm={ async () => {
+                                if(!(selectedKeys.length > 100)){
+                                    await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ selectedKeys.join(',') }`).then(()=>{
+                                        message.success('删除成功！');
+                                        setRefresh(!refresh);   
+                                    })
+                                }else{
+                                    message.error('当前选择数量过多，请重新选择！')
+                                }
+                            }}
                             okText="提交"
                             cancelText="取消"
                             disabled={!(selectedKeys.length>0)}
@@ -491,6 +497,7 @@ export default function Lofting(): React.ReactNode {
                 tableDataSource.push([])
                 setTableDataSource([...tableDataSource])
                 console.log(tableDataSource)
+                form.setFieldsValue({ dataV: [...tableDataSource]})
             }} type='primary' ghost>添加一行</Button>
             <Table
                 columns={[
