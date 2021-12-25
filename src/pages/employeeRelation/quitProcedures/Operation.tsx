@@ -65,7 +65,7 @@ export default function QuitProceduresOperation(): React.ReactNode {
                             employeeId: detailData.employeeId,
                             transactDate: value.transactDate?moment(value.transactDate).format('YYYY-MM-DD')+' 00:00:00':undefined,
                             handleType: 'submit',
-                            isProcessingCompleted: false,
+                            isProcessingCompleted: true,
                             fileIds: attachRef.current?.getDataSource().map((item:any)=>{
                                 return item.id
                             }),
