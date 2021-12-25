@@ -150,7 +150,7 @@ export default function AssessmentTaskList(): React.ReactNode {
     }
 
     return (
-        <>
+        <div className={styles.list}>
             <Page
                 path="/tower-science/assessTask"
                 columns={columns}
@@ -224,6 +224,6 @@ export default function AssessmentTaskList(): React.ReactNode {
                     return values;
                 }}
             />
-        </>
+        </div>
     )
 }
