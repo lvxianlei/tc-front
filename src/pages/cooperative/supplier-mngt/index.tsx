@@ -1,7 +1,7 @@
 //供应商管理
 import React, { Key, useRef, useState } from 'react'
 import { Input, Select, Button, Modal, message } from 'antd'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom'
 import { Page } from '../../common'
 import { supplierMngt } from "./supplier.json"
 import ApplicationContext from "../../../configuration/ApplicationContext"
@@ -10,6 +10,7 @@ import Overview from "./Overview"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { qualityAssuranceOptions, supplierTypeOptions, supplyProductsOptions } from '../../../configuration/DictionaryOptions'
+import ExportList from '../../../components/export/list';
 export default function SupplierMngt(): React.ReactNode {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
@@ -17,6 +18,9 @@ export default function SupplierMngt(): React.ReactNode {
     const [detailId, setDetailId] = useState<string>("")
     const [overviewVisible, setOverviewVisible] = useState<boolean>(false)
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     const editRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const supplierTypeEnum = supplierTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
@@ -123,7 +127,7 @@ export default function SupplierMngt(): React.ReactNode {
                 }
             ]}
             extraOperation={<>
-                <Button type="primary">导出</Button>
+                <Button type="primary" onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
                 <Button
                     type="primary"
                     ghost
@@ -174,5 +178,21 @@ export default function SupplierMngt(): React.ReactNode {
                 },
             ]}
         />
+        {isExport?<ExportList
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => {
+                let keys = [...supplierMngt]
+                keys.pop()
+                return keys
+            }}
+            current={0}
+            size={0}
+            total={0}
+            url={`/tower-supply/supplier`}
+            serchObj={{}}
+            closeExportList={() => { setIsExportStoreList(false) }}
+        />:null}
     </>
 }

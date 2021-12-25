@@ -74,8 +74,8 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         ],
         [
           {
-            label: "销售业务员",
-            value: (baseInfo as any)?.salesman,
+            label: "制单时间",
+            value: baseInfo?.createTime,
           },
           {
             label: "合同要求交货日期",
@@ -96,11 +96,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
           {
             label: "制单人",
             value: baseInfo?.createUserName,
-          },
-          {
-            label: "制单时间",
-            value: baseInfo?.createTime,
-          },
+          }
         ],
       ],
     };
