@@ -230,7 +230,7 @@ export default function ReinstateList(): React.ReactNode {
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入员工姓名/电话/身份证号进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入员工姓名/电话/身份证号进行查询" maxLength={200} style={{width:'300px'}}/>
                     },
                     {
                         name: 'reinstatementNature',
