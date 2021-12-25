@@ -68,8 +68,8 @@ export default function Overview(): React.ReactNode {
                                 setChooseId(records.id)
                                 setVisible(true)
                             }} >配料方案</Button>
-                        <Button type="link" onClick={() => handleCreateComponent(records.id)
-                        } >临时造数据</Button>
+                        {/* <Button type="link" onClick={() => handleCreateComponent(records.id)
+                        } >临时造数据</Button> */}
                     </>)
                 }
             ]}

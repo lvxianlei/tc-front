@@ -136,7 +136,7 @@ export default function Invoicing() {
                                     setDetailId(record.id)
                                     setVisible(true)
                                 }}>配料单</Button>
-                            <Button type="link" disabled={userId !== record.batcherId}
+                            {/* <Button type="link" disabled={userId !== record.batcherId}
                                 onClick={async () => {
                                     await getLoftingRun(record.productionBatch)
                                     message.success("成功生成放样构件...")
@@ -145,13 +145,13 @@ export default function Invoicing() {
                                 onClick={async () => {
                                     await loftingRun(record.productCategoryName, record.materialTaskId, record.productionBatch)
                                     message.warning("成功生成差异列表...")
-                                }}>生成差异列表</Button>
+                                }}>生成差异列表</Button> */}
                         </>
                     }
                 }]}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
-                <Button type="primary" loading={loading} ghost onClick={() => setGenerteVisible(true)}>临时生成生产数据</Button>
+                {/* <Button type="primary" loading={loading} ghost onClick={() => setGenerteVisible(true)}>临时生成生产数据</Button> */}
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
