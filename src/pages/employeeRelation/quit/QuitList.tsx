@@ -167,7 +167,7 @@ export default function QuitList(): React.ReactNode {
                     {
                         name: 'employeeName',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入员工姓名进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入员工姓名进行查询" maxLength={200} style={{width:'200px'}}/>
                     },
                     {
                         name: 'departureType',

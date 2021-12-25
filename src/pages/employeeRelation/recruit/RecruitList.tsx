@@ -253,7 +253,7 @@ export default function RecruitList(): React.ReactNode {
                     {
                         name: 'keyword',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入应聘者姓名/联系电话/身份证号进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入应聘者姓名/联系电话/身份证号进行查询" maxLength={200} style={{width:'300px'}}/>
                     },
                 ]}
             />
