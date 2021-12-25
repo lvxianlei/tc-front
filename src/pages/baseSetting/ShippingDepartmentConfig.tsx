@@ -42,6 +42,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
         {
             key: 'index',
             title: '序号',
+            fixed: "left" as FixedType,
             dataIndex: 'index',
             width: 80,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
@@ -150,6 +151,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
         {
             key: 'index',
             title: '序号',
+            fixed: "left" as FixedType,
             dataIndex: 'index',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },

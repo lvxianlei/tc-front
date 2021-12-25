@@ -78,6 +78,7 @@ export default function ViewRawMaterial(): React.ReactNode {
             columns={[
                 {
                     "title": "序号",
+                    "fixed": "left",
                     "dataIndex": "index",
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },

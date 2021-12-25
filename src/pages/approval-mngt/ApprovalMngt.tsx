@@ -433,6 +433,7 @@ export default function Information(): React.ReactNode {
                 {
                     key: 'index',
                     title: '序号',
+                    fixed: "left",
                     dataIndex: 'index',
                     width: 50,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
