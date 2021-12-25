@@ -193,7 +193,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 ] }
                 onFilterSubmit={(values: Record<string, any>) => { return values; }}
             />
-            <Modal visible={ visible } width="40%" title={ title + "班组" } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
+            <Modal visible={ visible } width="50%" title={ title + "班组" } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
                 <Spin spinning={loading}>
                     <Form form={ form } labelCol={{ span: 6 }}>
                         <Row>
@@ -223,7 +223,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             </Col>
                         </Row>
                     </Form>
-                    <p><span style={{ color: 'red' }}>*</span>班组成员</p>
+                    <p><span style={{ color: 'red', paddingRight: '5px' }}>*</span>班组成员</p>
                     <WorkshopUserSelectionComponent rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={ (selectedRows: object[] | any) => {
                         selectedRows = selectedRows.map((item: DataType) => {
                             return {
