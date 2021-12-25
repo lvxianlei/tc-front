@@ -168,6 +168,7 @@ export default function Invoicing() {
                         <Select.Option value="">全部</Select.Option>
                         <Select.Option value="1">待完成</Select.Option>
                         <Select.Option value="2">已完成</Select.Option>
+                        <Select.Option value="3">待确认</Select.Option>
                     </Select>
                 },
                 {
