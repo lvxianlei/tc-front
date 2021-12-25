@@ -6,12 +6,14 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 import { productTypeOptions, voltageGradeOptions } from '../../configuration/DictionaryOptions';
+import { FixedType } from 'rc-table/lib/interface';
 
 const towerColumns=[
     {
         key: 'index',
         title: '序号',
         dataIndex: 'index',
+        fixed: "left" as FixedType,
         width: 50,
         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
     },
