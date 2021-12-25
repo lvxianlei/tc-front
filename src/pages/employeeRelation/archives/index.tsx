@@ -10,8 +10,8 @@ export default function ArchivesList(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-            value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+            value.updateStatusTimeStart = formatDate[0];
+            value.updateStatusTimeEnd = formatDate[1];
             delete value.statusUpdateTime
         }
         if (value.postName) {

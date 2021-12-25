@@ -94,6 +94,7 @@ export default function Overview(): React.ReactNode {
                     {
                         "title": "序号",
                         "dataIndex": "index",
+                        "fixed": "left",
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...priceMaintain.map((item: any) => {
@@ -145,11 +146,6 @@ export default function Overview(): React.ReactNode {
                             <Select.Option value="">全部</Select.Option>
                             {invoiceTypeEnum?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
-                    },
-                    {
-                        name: 'materialName',
-                        label: '原材料名称',
-                        children: <Input placeholder="原材料名称" />
                     },
                     {
                         name: 'fuzzyQuery',

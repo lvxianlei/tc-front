@@ -165,7 +165,7 @@ export default function LabourList(): React.ReactNode {
                     {
                         name: 'keyword',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入合同号/员工姓名/身份证号进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入合同号/员工姓名/身份证号进行查询" maxLength={200} style={{width:'300px'}}/>
                     },
                     {
                         name: 'contractType',

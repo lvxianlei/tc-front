@@ -40,6 +40,11 @@ export default function AutomaticScheduling(): React.ReactNode {
                 setLoading(false);
             } else {
                 timer = setTimeout(() => checkRun(), 4000)
+                setTimeout(() => {
+                    message.warning('当前没有适用的工作中心');
+                    clearInterval(timer);
+                    setLoading(false);
+                }, 10000)
             }
             resole(result)
         } catch (error) {
@@ -121,7 +126,7 @@ export default function AutomaticScheduling(): React.ReactNode {
         <Spin spinning={loading}>
             <Space className={ styles.bottom } direction="horizontal">
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                <Button type="primary" onClick={() => {
+                <Button type="primary" disabled={ (schedulingList || []).length <= 0 } onClick={() => {
                     RequestUtil.post(`/tower-aps/aps/issue?ids=${ params.id }`).then(res => {
                         message.success('加工任务下发成功');
                         history.goBack();

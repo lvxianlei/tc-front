@@ -79,6 +79,7 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly deliveryAddress: string; // 交货地点
     readonly description: string; // 备注
     readonly bidBatch: string; // 招标批次
+    readonly payServiceManager: string; // 业务经理的id
 }
 
 export interface ICustomerInfoDto {
@@ -244,6 +245,26 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }
             }) as any)
             this.getForm()?.setFieldsValue({ payCompanyName: selectedRows[0].name });
+        }
+    }
+
+    /**
+     * 
+     * @param selectedRows 当前选中的列
+     * 业务经理弹框回调
+     */
+    public onServiceManager = (selectedRows: DataType[]): void => {
+        const contract: IContractInfo | undefined = this.state.contract;
+        console.log(selectedRows, "dssdsdsdd")
+        if (selectedRows && selectedRows.length > 0) {
+            this.setState(({
+                contract: {
+                    ...(contract || {}),
+                    salesman: selectedRows[0].name,
+                    payServiceManager: selectedRows[0].id?.toString()
+                }
+            }) as any)
+            this.getForm()?.setFieldsValue({ salesman: selectedRows[0].name, payServiceManager: selectedRows[0].id?.toString() });
         }
     }
 

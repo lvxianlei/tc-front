@@ -37,6 +37,7 @@ export default function BaseInfoEdit(): JSX.Element {
     const handleSubmit = async () => {
         try {
             const baseInfoData = await baseInfoForm.validateFields()
+            console.log(baseInfoData)
             const result = await saveRun({
                 ...data,
                 ...baseInfoData,

@@ -250,13 +250,18 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                         mainPartId: this.state.mainPartId,
                         weldingDetailedStructureList: [ ...(weldingDetailedStructureList || []) ]
                     }
-                    RequestUtil.post(`/tower-science/welding`, { ...value }).then(res => {
-                        message.success('添加成功');
-                        this.setState({
-                            visible: false
-                        });
-                        this.props.updateList();
-                    })
+                    if(value.electricWeldingMeters > 0) {
+                        RequestUtil.post(`/tower-science/welding`, { ...value }).then(res => {
+                            message.success('添加成功');
+                            this.setState({
+                                visible: false
+                            });
+                            this.props.updateList();
+                        })
+
+                    } else {
+                        message.warning('电焊米数需大于0');
+                    }
                 }
             })
         }

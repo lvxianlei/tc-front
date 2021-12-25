@@ -142,8 +142,8 @@ export default function LoftingTowerApplication(): React.ReactNode {
                 <Button key="goback" onClick={ () => history.goBack() }>关闭</Button>
             ]}>
                 <DetailTitle title="套用" />
-                <Form form={ form } onFinish={ onFinish } layout="inline"  className={ styles.topForm }>
-                    <Form.Item name="steelProductShape" label="查询">
+                <Form form={ form } onFinish={ onFinish } layout="inline" className={ styles.topForm }>
+                    <Form.Item name="fuzzyMsg" label="查询">
                         <Input placeholder="放样任务单号/塔型名称/塔型钢印号" />
                     </Form.Item>
                     <Space direction="horizontal" className={ styles.btnRight }>

@@ -46,7 +46,7 @@ const towerColumns = [
     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
     { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
     { title: '长度', dataIndex: 'length', key: 'length' },
-    { title: '宽度', dataIndex: 'width', key: 'width' },
+    // { title: '宽度', dataIndex: 'width', key: 'width' },
     { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)  },
     { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
     { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight',render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
