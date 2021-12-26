@@ -11,6 +11,7 @@ export default function EnquiryList(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, status: string }>()
     const [visible, setVisible] = useState<boolean>(false)
+    const [ filterValue, setFilterValue ] = useState({ purchaseTaskTowerId: params.id });
     const ref = useRef<{ data: any }>()
     const { run } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -41,6 +42,7 @@ export default function EnquiryList(): React.ReactNode {
 
 
     const onFilterSubmit = (value: any) => {
+        setFilterValue({ ...value, purchaseTaskTowerId: params.id });
         return { ...value, purchaseTaskTowerId: params.id }
     }
 
@@ -110,7 +112,7 @@ export default function EnquiryList(): React.ReactNode {
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
                 {/* <Button type="primary" ghost onClick={() => createBatchingScheme()}>临时创建配料方案</Button> */}
             </>}
-            filterValue={{ purchaseTaskTowerId: params.id }}
+            filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

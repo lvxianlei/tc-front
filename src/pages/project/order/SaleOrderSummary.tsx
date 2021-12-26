@@ -247,7 +247,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
       dataIndex: "singleWeight",
     },
     {
-      title: "其他单重（kg）",
+      title: "其他重量（kg）",
       dataIndex: "otherWeight",
     },
     {
