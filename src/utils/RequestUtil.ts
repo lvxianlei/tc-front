@@ -48,7 +48,7 @@ export default abstract class RequestUtil {
      * @param [init] 
      * @returns request 
      */
-    private static request<T>(path: string, init?: RequestInit, cancel?: (abort: AbortController) => void): Promise<T> {
+    private static request<T>(path: string, init?: RequestInit, cancel?: (abort: AbortController) => void, changePath: boolean = true): Promise<T> {
         return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
             let headers: HeadersInit = {
                 'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ export default abstract class RequestUtil {
             const controller = new AbortController();
             const { signal } = controller;
             cancel && cancel(controller)
-            fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
+            fetch(changePath ? this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || '') : path, {
                 mode: 'cors',
                 ...(init || {}),
                 headers: {
@@ -165,6 +165,26 @@ export default abstract class RequestUtil {
             body: JSON.stringify(params, jsonStringifyReplace),
             headers: headers
         });
+    }
+
+    /**
+     * @static
+     * @description Puts request util
+     * @template T 
+     * @param path 
+     * @param [params] 
+     * @param [headers] 
+     * @returns put 
+     */
+    public static putFile<T>(path: string, params: Record<string, any> = {}): Promise<T> {
+        NProgress.inc();
+        return this.request(path, {
+            method: 'PUT',
+            body: params as any,
+            headers: {
+                "Content-Type": "application/octet-stream"
+            }
+        }, () => { }, false);
     }
 
     /**
