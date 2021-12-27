@@ -40,14 +40,14 @@
     },
     { // 新增客户
       "name": "新增客户",
-      "path": "/client/mngt/:type",
+      "path": "/client/mngt/eidt/new",
       "module": "./pages/clientMngt/Edit",
       "exact": true,
       "authority": "customer_detail"
     },
     { // 编辑客户
       "name": "编辑客户",
-      "path": "/client/mngt/:type/:id",
+      "path": "/client/mngt/edit/:id",
       "module": "./pages/clientMngt/Edit",
       "exact": true,
       "authority": "customer_detail"

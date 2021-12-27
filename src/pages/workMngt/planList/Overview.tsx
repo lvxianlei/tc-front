@@ -1,13 +1,14 @@
-import React from "react"
+import React, { useState } from "react"
 import { Button, Row } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, CommonTable } from '../../common'
+import { DetailContent, CommonTable, Page } from '../../common'
 import { PurchaseList, PurchaseTypeStatistics } from "./planListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
+    const [filterValue, setFilterValue] = useState()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/list/${params.id}`)
@@ -30,7 +31,12 @@ export default function Edit() {
     return <DetailContent title={[
         <Button key="export" type="primary" ghost>导出</Button>
     ]} operation={[<Button key="" type="primary" ghost onClick={() => history.goBack()}>返回</Button>]}>
-        <CommonTable loading={loading} columns={PurchaseList} dataSource={data?.records || []} />
+        <Page
+            path={`/tower-supply/materialPurchasePlan/list/${params.id}`}
+            columns={PurchaseList}
+            filterValue={filterValue}
+            searchFormItems={[]}
+        />
         <span>
             {` 采购类型统计： 圆钢总重（t）：${purchasePlanData?.total?.roundSteelTotal === -1 ? "0" : purchasePlanData?.total?.roundSteelTotal}    角钢总重（t）：${purchasePlanData?.total?.angleSteelTotal === -1 ? "0" : purchasePlanData?.total?.angleSteelTotal}        钢板总重（t）：${purchasePlanData?.total?.steelPlateTotal === -1 ? "0" : purchasePlanData?.total?.steelPlateTotal}`}
         </span>

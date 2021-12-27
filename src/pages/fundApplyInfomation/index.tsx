@@ -43,7 +43,6 @@
                 wrapRole2DataNode(role.children);
             }
          });
-         console.log(roles, "eoless")
          return roles;
      }
      // 查询按钮
@@ -53,7 +52,6 @@
              value.endPayApplyTime = `${formatDate[1]} 23:59:59`
              value.startPayApplyTime = `${formatDate[0]} 00:00:00`
          }
-         console.log(departData, "departData")
          value.payStatus=payStatus;
          return value
      }
