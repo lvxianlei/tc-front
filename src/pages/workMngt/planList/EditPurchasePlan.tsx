@@ -7,6 +7,7 @@
  import useRequest from '@ahooksjs/use-request'
  import RequestUtil from '../../../utils/RequestUtil';
  import { applicationdetails, ingredientsColumn } from './EditPurchasePlan.json';
+ import { materialStandardOptions } from "../../../configuration/DictionaryOptions";
 
  interface EditProps {
     id?: string
@@ -122,7 +123,20 @@
                     width: 50,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
-                ...ingredientsColumn,
+                ...ingredientsColumn.map((item: any) => {
+                    if (item.dataIndex === "standard") {
+                        return ({
+                            title: item.title,
+                            dataIndex: item.dataIndex,
+                            width: 50,
+                            render: (_: any, record: any): React.ReactNode => {
+                                const result = materialStandardOptions?.filter((v: any) => v.id === record.standard);
+                                return <span>{result && result.length > 0 ? result[0].name : ""}</span>
+                            }
+                        })
+                    }
+                    return item;
+                }),
                 {
                     title: '计划采购（本次）',
                     dataIndex: 'purchasePlan',
