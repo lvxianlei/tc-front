@@ -5,6 +5,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import { useHistory } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
+import moment from 'moment';
 
 export default function DailySchedule(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -12,6 +13,7 @@ export default function DailySchedule(): React.ReactNode {
     const history = useHistory()
     const [ confirmStatus, setConfirmStatus] = useState<number>(0);
     const [ work, setWork ] = useState<any[]>([]);
+    const [ dates, setDates ] = useState<any>([]);
     const [ unit, setUnit ] = useState<any[]>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const work: any = await RequestUtil.get(`/tower-aps/work/center/info?size=1000&current=1`)
@@ -85,12 +87,18 @@ export default function DailySchedule(): React.ReactNode {
         setConfirmStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
     }
-
+    const disabledDate = (current: any) => {
+        if (!dates || dates.length === 0) {
+          return false;
+        }
+        const tooLate = dates[0] && current.diff(dates[0], 'days') > 30;
+        const tooEarly = dates[1] && dates[1].diff(current, 'days') > 30;
+        return tooEarly || tooLate;
+    };
 
     return <>
         <Page
             path="/tower-aps/machining"
-            // sourceKey="galvanizedDailyPlanVOS.records"
             columns={
                 confirmStatus === 0 || confirmStatus === 1 || confirmStatus === 2 ? 
                 [ ...columns, {
@@ -110,7 +118,7 @@ export default function DailySchedule(): React.ReactNode {
                     )
                 }] : [ ...columns]}
             headTabs={[]}
-            requestData={{ status: confirmStatus }}
+            requestData={{ status: confirmStatus,startTime: moment().format('YYYY-MM-DD')+' 00:00:00', endTime: moment().add(7, "days").format('YYYY-MM-DD')+' 23:59:59'  }}
             extraOperation={(data: any) =><>
                 <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
                     <Radio.Button value={0}>未派工</Radio.Button>
@@ -157,7 +165,7 @@ export default function DailySchedule(): React.ReactNode {
                 {
                     name: 'time',
                     label: '时间范围',
-                    children: <DatePicker.RangePicker />
+                    children: <DatePicker.RangePicker defaultValue={[moment(),moment().add(7, "days")]} onCalendarChange={val => setDates(val)} disabledDate={disabledDate}/>
                 }
             ]}
             filterValue={filterValue}
@@ -166,6 +174,7 @@ export default function DailySchedule(): React.ReactNode {
                     const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
                     values.startTime = formatDate[0]+' 00:00:00';
                     values.endTime = formatDate[1]+' 23:59:59';
+                    delete values.time
                 }
                 setFilterValue(values);
                 return values;
