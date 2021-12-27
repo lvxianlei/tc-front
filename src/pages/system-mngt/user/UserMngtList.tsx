@@ -129,10 +129,10 @@ export default function RoleMngtList(): React.ReactNode {
                     render: (_: any, record: any) => {
                         return (
                             <>
-                                <Button type="link" onClick={() => {
+                                <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}} onClick={() => {
                                     setId(record.id);
                                     setVisible(true)
-                                }}>编辑</Button>
+                                }}>编辑</span>
                                 <Popconfirm
                                     title="您确定重置密码吗?"
                                     onConfirm={() => {
@@ -140,7 +140,7 @@ export default function RoleMngtList(): React.ReactNode {
                                     }}
                                     okText="确认"
                                     cancelText="取消"
-                                ><Button type="link">重置密码</Button></Popconfirm>
+                                ><Button type="link" style={{padding: 0, marginRight: 12}}>重置密码</Button></Popconfirm>
                                 <Popconfirm
                                     title="您确定删除该用户吗?"
                                     onConfirm={() => {
@@ -148,7 +148,7 @@ export default function RoleMngtList(): React.ReactNode {
                                     }}
                                     okText="确认"
                                     cancelText="取消"
-                                ><Button type="link">删除</Button></Popconfirm>
+                                ><Button type="link" style={{padding: 0}}>删除</Button></Popconfirm>
                             </>
                         )
                     }
