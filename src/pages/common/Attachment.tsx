@@ -142,44 +142,49 @@ export default forwardRef(function ({
     }), [attchs, setAttachs, setUploadOSSUrlInfo])
 
     const uploadChange = useCallback((event: any) => {
-        setAttachs(attchs.map(item => {
-            if (item.uid === event.file.uid) {
-                return ({
-                    ...item,
-                    loading: false,
-                    filePath: uploadOSSUrlInfo?.downloadUrl || "",
-                    originalName: uploadOSSUrlInfo?.originalName || "",
-                    fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
-                    fileSize: uploadOSSUrlInfo?.fileSize || "",
-                    downloadUrl: uploadOSSUrlInfo?.downloadUrl || "",
-                    id: uploadOSSUrlInfo?.id || "",
-                })
-            }
-            return item
-        }))
-        if (multiple) {
-            const list = uploadOSSUrlList.map((res: any) => {
-                return {
-                    id: res?.id || "",
-                    uid: event.file.uid,
-                    filePath: res?.downloadUrl || "",
-                    originalName: res?.originalName || "",
-                    fileSuffix: res?.fileSuffix || "",
-                    fileSize: res?.fileSize || "",
-                    downloadUrl: res?.downloadUrl || ""
+        console.log(event)
+        if (event.file.status === "done") {
+            if (event.file.xhr.status === 200) {
+                setAttachs(attchs.map(item => {
+                    if (item.uid === event.file.uid) {
+                        return ({
+                            ...item,
+                            loading: false,
+                            filePath: uploadOSSUrlInfo?.downloadUrl || "",
+                            originalName: uploadOSSUrlInfo?.originalName || "",
+                            fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
+                            fileSize: uploadOSSUrlInfo?.fileSize || "",
+                            downloadUrl: uploadOSSUrlInfo?.downloadUrl || "",
+                            id: uploadOSSUrlInfo?.id || "",
+                        })
+                    }
+                    return item
+                }))
+                if (multiple) {
+                    const list = uploadOSSUrlList.map((res: any) => {
+                        return {
+                            id: res?.id || "",
+                            uid: event.file.uid,
+                            filePath: res?.downloadUrl || "",
+                            originalName: res?.originalName || "",
+                            fileSuffix: res?.fileSuffix || "",
+                            fileSize: res?.fileSize || "",
+                            downloadUrl: res?.downloadUrl || ""
+                        }
+                    })
+                    onDoneChange([...list])
+                } else {
+                    onDoneChange([{
+                        id: uploadOSSUrlInfo?.id || "",
+                        uid: event.file.uid,
+                        filePath: uploadOSSUrlInfo?.downloadUrl || "",
+                        originalName: uploadOSSUrlInfo?.originalName || "",
+                        fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
+                        fileSize: uploadOSSUrlInfo?.fileSize || "",
+                        downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
+                    }])
                 }
-            })
-            onDoneChange([...list])
-        } else {
-            onDoneChange([{
-                id: uploadOSSUrlInfo?.id || "",
-                uid: event.file.uid,
-                filePath: uploadOSSUrlInfo?.downloadUrl || "",
-                originalName: uploadOSSUrlInfo?.originalName || "",
-                fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
-                fileSize: uploadOSSUrlInfo?.fileSize || "",
-                downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
-            }])
+            }
         }
     }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo])
 
@@ -247,8 +252,11 @@ export default forwardRef(function ({
                         method="put"
                         showUploadList={false}
                         customRequest={async (options: any) => {
-                            await uploadRun(options.action, options.file)
-
+                            const file: any = options.file
+                            const result: any = await uploadRun(options.action, options.file)
+                            file.status = "done"
+                            file.xhr = { status: 200, response: result }
+                            uploadChange({ file })
                         }}
                         beforeUpload={handleBeforeUpload}
                         onChange={uploadChange}
@@ -269,12 +277,20 @@ export default forwardRef(function ({
                 expires: new URL(uploadOSSUrlInfo?.pushUrl).searchParams.get("Expires") || ""
             }}
             method="put"
-            beforeUpload={handleBeforeUpload}
             showUploadList={false}
+            customRequest={async (options: any) => {
+                const file: any = options.file
+                const result: any = await uploadRun(options.action, options.file)
+                file.status = "done"
+                file.xhr = { status: 200, response: result }
+                uploadChange({ file })
+            }}
+            beforeUpload={handleBeforeUpload}
             onChange={uploadChange}
         >
             {children}
-        </Upload>}
+        </Upload>
+        }
         {isTable && <div>
             <Row style={{ backgroundColor: "#fafafa", padding: 8, }}>
                 <Col span={12}>文件名称</Col>
