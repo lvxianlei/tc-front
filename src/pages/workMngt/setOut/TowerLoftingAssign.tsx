@@ -18,6 +18,7 @@ export interface ITowerLoftingAssignRouteProps extends RouteComponentProps<Tower
     readonly type?: string;  //detail为展示，此时需传detailData
     readonly detailData?: IAppointed;
     readonly rowId?: string;
+    readonly patternName?: string;
 }
 
 export interface TowerLoftingAssignState {
@@ -210,7 +211,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式">
-                                { this.state.appointed?.patternName }
+                                { this.props.patternName || this.state.appointed?.patternName }
                             </Descriptions.Item>
                             { this.props.type === 'detail' ?
                                 <>

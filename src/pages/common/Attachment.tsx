@@ -89,7 +89,7 @@ export default forwardRef(function ({
         pushUrl: "http://www."
     })
     const [uploadOSSUrlList, setUploadOSSUrlList] = useState<any>([])
-    const [picUrl, setPicUrl] = useState<string>()
+    const [picInfo, setPicInfo] = useState<{ [key: string]: any }>({ url: "", title: "" })
     const { run: saveFile } = useRequest<URLProps>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: URLProps = await RequestUtil.post(`/sinzetech-resource/oss/endpoint/get-upload-url`, data)
@@ -110,7 +110,7 @@ export default forwardRef(function ({
 
     useEffect(() => setAttachs(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || []), [JSON.stringify(dataSource)])
 
-    useEffect(() => setUploadOSSUrlList([...uploadOSSUrlList]), [JSON.stringify(uploadOSSUrlList)])
+    useEffect(() => setUploadOSSUrlList([...uploadOSSUrlList]), [JSON.stringify([...uploadOSSUrlList])])
 
     const deleteAttachData = useCallback((uid: string) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== uid : item.id !== uid)), [setAttachs, attchs])
 
@@ -138,9 +138,11 @@ export default forwardRef(function ({
         } catch (error) {
             reject(false)
         }
+        return false
     }), [attchs, setAttachs, setUploadOSSUrlInfo])
 
     const uploadChange = useCallback((event: any) => {
+        console.log(event)
         if (event.file.status === "done") {
             if (event.file.xhr.status === 200) {
                 setAttachs(attchs.map(item => {
@@ -182,10 +184,9 @@ export default forwardRef(function ({
                         downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
                     }])
                 }
-
             }
         }
-    }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo])
+    }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo, uploadOSSUrlList])
 
     const getDataSource = useCallback(() => attchs, [attchs])
 
@@ -195,14 +196,17 @@ export default forwardRef(function ({
 
     const handlePreview = useCallback((record: FileProps) => {
         if (["png", "jpeg", "jpg", "gif"].includes(record?.fileSuffix || "")) {
-            setPicUrl(record.downloadUrl)
+            setPicInfo({
+                url: record.downloadUrl,
+                title: record.originalName
+            })
             setVisible(true)
         } else if (["pdf"].includes(record?.fileSuffix || "")) {
             window.open(record.downloadUrl)
         } else {
             message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf预览...")
         }
-    }, [setPicUrl, setVisible])
+    }, [setPicInfo, setVisible])
 
     const handleCancel = useCallback(() => setVisible(false), [setVisible])
 
@@ -222,8 +226,13 @@ export default forwardRef(function ({
     }, [attchs])
 
     return <>
-        <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
-            <Image src={picUrl} preview={false} />
+        <Modal
+            title={`${picInfo.title}`}
+            width={1011}
+            visible={visible}
+            onCancel={handleCancel}
+            footer={false}>
+            <Image src={picInfo.url} preview={false} />
         </Modal>
         {isTable && <DetailTitle
             title={title}
@@ -243,16 +252,11 @@ export default forwardRef(function ({
                         method="put"
                         showUploadList={false}
                         customRequest={async (options: any) => {
-                            const reader: any = new FileReader();
-                            reader.addEventListener('load', async (event: any) => {
-                                try {
-                                    const result = await uploadRun(options.action, reader.result)
-                                    options.onSuccess(result, options.file)
-                                } catch (error) {
-                                    options.onError(error)
-                                }
-                            });
-                            reader.readAsBinaryString(options.file);
+                            const file: any = options.file
+                            const result: any = await uploadRun(options.action, options.file)
+                            file.status = "done"
+                            file.xhr = { status: 200, response: result }
+                            uploadChange({ file })
                         }}
                         beforeUpload={handleBeforeUpload}
                         onChange={uploadChange}
@@ -273,12 +277,20 @@ export default forwardRef(function ({
                 expires: new URL(uploadOSSUrlInfo?.pushUrl).searchParams.get("Expires") || ""
             }}
             method="put"
-            beforeUpload={handleBeforeUpload}
             showUploadList={false}
+            customRequest={async (options: any) => {
+                const file: any = options.file
+                const result: any = await uploadRun(options.action, options.file)
+                file.status = "done"
+                file.xhr = { status: 200, response: result }
+                uploadChange({ file })
+            }}
+            beforeUpload={handleBeforeUpload}
             onChange={uploadChange}
         >
             {children}
-        </Upload>}
+        </Upload>
+        }
         {isTable && <div>
             <Row style={{ backgroundColor: "#fafafa", padding: 8, }}>
                 <Col span={12}>文件名称</Col>

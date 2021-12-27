@@ -198,7 +198,7 @@ export default function TowerInformation(): React.ReactNode {
                             <Button type="link">删除</Button>
                         </Popconfirm> : <Button type="link" disabled>删除</Button>
                     }
-                    <TowerLoftingAssign type={record.status === 1 ? 'edit' : 'detail'} title="指派信息" detailData={ {...record, loftingUser: record.loftingUser + '-' + record.loftingUserName, checkUser: record.checkUser + '-' + record.checkUserName } } id={ params.id } update={ onRefresh } rowId={ record.id }/>
+                    <TowerLoftingAssign type={record.status === 1 ? 'edit' : 'detail'} title="指派信息" detailData={ {...record, loftingUser: record.loftingUser + '-' + record.loftingUserName, checkUser: record.checkUser + '-' + record.checkUserName } } id={ params.id } patternName={ record.pattern } update={ onRefresh } rowId={ record.id }/>
                     <Button type="link" onClick={async () => {
                         const data: ISectionData[] = await RequestUtil.get(`/tower-science/productSegment/segmentList`, { productSegmentGroupId: record.id });
                         setSectionData(data);
@@ -367,7 +367,7 @@ export default function TowerInformation(): React.ReactNode {
             }
         </Space> }>
             <Form form={ form }>
-                <Table columns={ sectionColumns } showHeader={ false } pagination={ false } dataSource={ sectionData } />
+                <Table columns={ sectionColumns } pagination={ false } dataSource={ sectionData } />
             </Form>
         </Modal>
     </>
