@@ -21,6 +21,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [baseForm] = Form.useForm()
     const [freightForm] = Form.useForm()
     const [stevedoringForm] = Form.useForm()
+    const [ newFreight , setNewFreight ] = useState<any>(freight);
+    const [ newStevedoring , setNewStevedoring ] = useState<any>(stevedoring);
+    const [freightCol, setFreightCol] =useState(4)
+    const [stevedoringCol, setStevedoringCol] =useState(4)
     const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({ getDataSource: () => [], resetFields: () => { } })
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
@@ -321,22 +325,83 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })}
             dataSource={{}} edit />
         <DetailTitle title="运费信息" />
-        <BaseInfo form={freightForm} col={4} columns={freight.map((item: any) => {
-            if (item.dataIndex === "transportCompanyId") {
-                return ({ ...item, render: (data: any, props: any) => {
-                    return <Form.Item name="transportCompanyId">
-                        <Select>
-                            { companyList && companyList.map((item: any) => {
-                                return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
-                            }) }
-                        </Select>
-                    </Form.Item>
-                } })
-            }
-            return item
-        })} dataSource={{}} edit />
+        <BaseInfo form={freightForm} col={freightCol} columns={ 
+            [{
+                "title": "运输承担",
+                "dataIndex": "transportBear",
+                "type": "select",
+                "enum": [
+                    {
+                        "value": 1,
+                        "label": "供方"
+                    },
+                    {
+                        "value": 2,
+                        "label": "需方"
+                    }
+                ],
+                "rules": [
+                    {
+                        "required": true,
+                        "message": "请选择运输承担..."
+                    }
+                ]
+            }, ...newFreight].map((item: any) => {
+                if (item.dataIndex === "transportCompanyId") {
+                    return ({ ...item, render: (data: any, props: any) => {
+                        return <Form.Item name="transportCompanyId">
+                            <Select>
+                                { companyList && companyList.map((item: any) => {
+                                    return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
+                                }) }
+                            </Select>
+                        </Form.Item>
+                    } })
+                }
+                if(item.dataIndex === 'transportBear') {
+                    return ({ ...item, render: (data: any, props: any) => {
+                        return <Form.Item name="transportBear">
+                            <Select style={{ width: '150px' }} placeholder="请选择运输承担" onChange={(e: number) => {
+                                
+                                if( e == 1 ) {
+                                    setNewFreight([]);
+                                    setFreightCol(1);
+                                } else {  
+                                    setNewFreight(freight)
+                                    setFreightCol(4);
+                                }
+                            }}>
+                                <Select.Option value="1">供方</Select.Option>
+                                <Select.Option value="2">需方</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    } })
+                }
+                return item
+            })} dataSource={{}} edit />
         <DetailTitle title="装卸费信息" />
-        <BaseInfo form={stevedoringForm} col={4} columns={stevedoring.map((item: any) => {
+        <BaseInfo form={stevedoringForm} col={stevedoringCol} columns={[
+            {
+                "title": "卸车承担",
+                "dataIndex": "unloadBear",
+                "type": "select",
+                "enum": [
+                    {
+                        "value": 1,
+                        "label": "供方"
+                    },
+                    {
+                        "value": 2,
+                        "label": "需方"
+                    }
+                ],
+                "rules": [
+                    {
+                        "required": true,
+                        "message": "请选择卸车承担..."
+                    }
+                ]
+            }, ...newStevedoring].map((item: any) => {
             if (item.dataIndex === "unloadCompanyId") {
                 return ({ ...item, render: (data: any, props: any) => {
                     return <Form.Item name="unloadCompanyId">
@@ -344,6 +409,25 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                             { stevedoreCompanyList && stevedoreCompanyList.map((item: any) => {
                                 return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
                             }) }
+                        </Select>
+                    </Form.Item>
+                } })
+            }
+            if(item.dataIndex === 'unloadBear') {
+                return ({ ...item, render: (data: any, props: any) => {
+                    return <Form.Item name="unloadBear">
+                        <Select style={{ width: '150px' }} placeholder="请选择卸车承担" onChange={(e: number) => {
+                            
+                            if( e == 1 ) {
+                                setNewStevedoring([]);
+                                setStevedoringCol(1);
+                            } else {  
+                                setNewStevedoring(stevedoring);
+                                setStevedoringCol(4);
+                            }
+                        }}>
+                            <Select.Option value="1">供方</Select.Option>
+                            <Select.Option value="2">需方</Select.Option>
                         </Select>
                     </Form.Item>
                 } })

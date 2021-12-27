@@ -256,12 +256,12 @@ class ManagementContractNew extends ContractNew {
             },
             {
               label: "付款方式",
-              name: "customerPhone",
-              initialValue: contract?.customerInfoVo?.customerPhone,
+              name: "payType",
+              initialValue: contract?.payType,
               children: (
                 <>
                   <Select
-                    value={contract?.customerInfoVo?.customerPhone}
+                    value={contract?.payType}
                   >
                     <Select.Option value="1">转账</Select.Option>
                     <Select.Option value="2">现金</Select.Option>
@@ -832,11 +832,11 @@ class ManagementContractNew extends ContractNew {
             {
               label: "付款方式",
               name: "customerPhone",
-              initialValue: contract?.customerInfoVo?.customerPhone,
+              initialValue: contract?.payType,
               children: (
                 <>
                   <Select
-                    value={contract?.customerInfoVo?.customerPhone}
+                    value={contract?.payType}
                   >
                     <Select.Option value="1">转账</Select.Option>
                     <Select.Option value="2">现金</Select.Option>

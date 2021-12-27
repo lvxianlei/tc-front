@@ -22,7 +22,7 @@ const ProdLink = (): React.ReactNode => {
         {
             title: '操作',
             dataIndex: 'operation',
-            align: 'center',
+            align: 'left',
             render: (text, item: any, index) => {
                 return (
                     <div className='operation'>

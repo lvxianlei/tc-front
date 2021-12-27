@@ -336,7 +336,7 @@ export default function ManagementDetail(): React.ReactNode {
                 </Tabs.TabPane>
             </Tabs></>,
         tab_productGroup: <DetailContent title={[
-            <Button key="new" type="primary" onClick={() => history.push(`/project/management/new/productGroup/${params.id}`)}>新增</Button>
+            <Button key="new" type="primary" onClick={() => history.push(`/project/management/new/productGroup/${params.id}`)} style={{marginBottom: 16}}>新增</Button>
         ]}>
             <CommonTable
                 columns={[
@@ -347,7 +347,7 @@ export default function ManagementDetail(): React.ReactNode {
                         ellipsis: false,
                         width: 250,
                         render: (_: any, record: any) => <>
-                            <Button type="link" size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
+                            <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 7}} onClick={() => handleProductGroupClick(record.id)}>详情</span>
                             <Button type="link" size="small" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
                             <Button type="link" size="small" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
                             <Button type="link" size="small" disabled={`${record.status}` !== "0"} onClick={() => deleteProductGroupItem(record.id)} >删除</Button>
@@ -355,7 +355,7 @@ export default function ManagementDetail(): React.ReactNode {
                     }]}
                 dataSource={data?.records}
             />
-            <Row><Radio.Group
+            <Row style={{marginBottom: 16}}><Radio.Group
                 value={productGroupFlag}
                 onChange={(event: any) => setProductGroupFlag(event.target.value)}
                 options={[
