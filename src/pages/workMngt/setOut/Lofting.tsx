@@ -570,6 +570,8 @@ export default function Lofting(): React.ReactNode {
                                     message.success('删除成功');
                                     history.go(0);
                                 }) 
+                            } else if(selectedKeys.length > 100) {
+                                message.warning('删除项不可大于100')
                             } else {
                                 message.warning('请选择要删除的数据')
                             }

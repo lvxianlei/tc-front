@@ -23,17 +23,20 @@
         {
             "dataIndex": "orderDeliveryTime",
             "title": "订单交货日期",
-            "type": "date"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "dataIndex": "customerDeliveryTime",
             "title": "客户交货日期",
-            "type": "date"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "dataIndex": "plannedDeliveryCargoTime",
             "title": "计划交货日期",
-            "type": "date"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "dataIndex": "description",
