@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, useRouteMatch, useLocation } from 'react-router-dom'
 import { Page } from '../../common'
 import { baseInfoList } from "./planListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 // 引入编辑采购计划
 import EditPurchasePlan from './EditPurchasePlan';
+import ExportList from '../../../components/export/list';
 interface EditRefProps {
     id?: string
     onSubmit: () => void
@@ -16,6 +17,9 @@ export default function Invoicing() {
     const [ visible, setVisible ] = useState<boolean>(false);
     const addRef = useRef<EditRefProps>();
     const history = useHistory()
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     const [filterValue, setFilterValue] = useState<any>({})
     const [ id, setId ] = useState<string>();
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -97,7 +101,7 @@ export default function Invoicing() {
                         }
                     }]}
                 extraOperation={<>
-                    <Button type="primary" ghost>导出</Button>
+                    <Button type="primary" ghost onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
                     <Button type="primary" ghost onClick={() => message.warning("预留按钮,暂无功能...")}>创建采购计划</Button>
                 </>}
                 onFilterSubmit={onFilterSubmit}
@@ -157,6 +161,21 @@ export default function Invoicing() {
             >
                 <EditPurchasePlan ref={addRef} id={id} />
             </Modal>
+            {isExport?<ExportList
+                history={history}
+                location={location}
+                match={match}
+                columnsKey={() => {
+                    let keys = [...baseInfoList]
+                    return keys
+                }}
+                current={0}
+                size={0}
+                total={0}
+                url={`/tower-supply/materialPurchasePlan`}
+                serchObj={{}}
+                closeExportList={() => { setIsExportStoreList(false) }}
+            />:null}
         </>
     )
 }
