@@ -148,7 +148,7 @@ export default function ConfirmList(): React.ReactNode {
                     </Form.Item>
                 },
                 {
-                    name: 'fuzzyQueryItem',
+                    name: 'fuzzyMsg',
                     label: '模糊查询项',
                     children: <Input placeholder="请输入任务编号/合同名称进行查询" maxLength={200} />
                 },
