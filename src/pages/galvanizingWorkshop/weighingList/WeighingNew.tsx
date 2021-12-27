@@ -191,18 +191,23 @@ export default function WeighingNew(): React.ReactNode {
 
     const save = () => {
         if(form) {
-            form.validateFields().then(res => {
-                const values = form.getFieldsValue(true);
-                RequestUtil.post(`/tower-production/weighing`, { 
-                    ...values,
-                    weighingDate: values?.weighingDate && values?.weighingDate.format('YYYY-MM-DD'),
-                    relationProducts: relationProducts,
-                    id: params.id 
-                }).then(res => {
-                    message.success("保存成功");
-                    history.goBack();
-                });
-            })
+            if(relationProducts.length > 0) {
+                form.validateFields().then(res => {
+                    const values = form.getFieldsValue(true);
+                    RequestUtil.post(`/tower-production/weighing`, { 
+                        ...values,
+                        weighingDate: values?.weighingDate && values?.weighingDate.format('YYYY-MM-DD'),
+                        relationProducts: relationProducts,
+                        id: params.id 
+                    }).then(res => {
+                        message.success("保存成功");
+                        history.goBack();
+                    });
+                })
+            } else {
+                message.warning("请新增塔型信息");
+            }
+            
         }
     }
 
