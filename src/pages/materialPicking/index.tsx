@@ -21,6 +21,20 @@ export default function Invoicing() {
     const [detailId, setDetailId] = useState<string>("")
     const history = useHistory()
     const [filterValue, setFilterValue] = useState({});
+
+    const { data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        try {
+            const work: any = await RequestUtil.get(`/tower-aps/productionUnit?size=1000&current=1`)
+            resole(work?.records.map((item: any) => ({
+                value: item.id,
+                label: item.name
+            })) || [])
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        }
+    }))
+
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPicking/${id}`)
@@ -184,8 +198,7 @@ export default function Invoicing() {
                     name: 'pickingUnitId',
                     label: '领料生产单元',
                     children: <Select style={{ width: 200 }}>
-                        <Select.Option value="2">发票未开全</Select.Option>
-                        <Select.Option value="3">发票已开全</Select.Option>
+                        {data?.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {
