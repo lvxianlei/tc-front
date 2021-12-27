@@ -87,7 +87,7 @@ export default function ProcessDetail(): React.ReactNode {
   
                     temp.push(selectedRows[0]);
                     setUserDataSource(temp);
-                    } } buttonTitle="添加员工" selectKey={[...userDataSource]}/>
+                    } } buttonTitle="添加员工" selectKey={[...userDataSource]} saleOrderId={detailData?.dispatchVO?.teamId}/>
                 <Table 
                     columns={[
                         { title: '姓名', dataIndex: 'name', key:'name' },

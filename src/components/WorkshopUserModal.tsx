@@ -14,7 +14,7 @@ import { ButtonType } from 'antd/lib/button';
 import { RowSelectionType } from 'antd/lib/table/interface';
 
 export interface IWorkshopUserSelectionComponentState extends IAbstractSelectableModalState {
-    readonly tableDataSource: IUser[];
+    readonly tableDataSource: any[];
 }
 export interface IWorkshopUserSelectionComponentProps extends IAbstractSelectableModalProps {
     readonly saleOrderId?: string | number;
@@ -24,7 +24,7 @@ export interface IWorkshopUserSelectionComponentProps extends IAbstractSelectabl
 }
 
 export interface IResponseDataMore extends IResponseData {
-    readonly IUser: [];
+    readonly any: [];
 }
 
 export interface IUser {
@@ -109,24 +109,25 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
 
     //接口、获值
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        let resData: IResponseData = await RequestUtil.get<IResponseData>(`/sinzetech-user/user`, {
+        let resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-production/team/listTeamUser`, {
+            teamId: this.props.saleOrderId,
             ...filterValues,
-            current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize || this.state.tablePagination?.pageSize
+            // current: pagination.current || this.state.tablePagination?.current,
+            // size: pagination.pageSize || this.state.tablePagination?.pageSize
         });
         const selectKeys: [] = this.props.selectKey;
-        let newData: IUser[] = resData.records;
-        selectKeys?.forEach((item: IUser) => {
-            newData = newData.filter(res => res.id !== item.id);
+        let newData: any = resData;
+        selectKeys?.forEach((item: any) => {
+            newData = newData.filter((res:any) => res.id !== item.id);
         })
         this.setState({
             ...filterValues,
             tableDataSource: newData,
             tablePagination: {
                 ...this.state.tablePagination,
-                current: resData.current,
-                pageSize: resData.size,
-                total: resData.total
+                // current: resData.current,
+                // pageSize: resData.size,
+                // total: resData.total
             }
         });
     }
@@ -134,7 +135,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
     //查询字段
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
-            name: 'name',
+            name: 'fuzzyMsg',
             children: <Input placeholder="请输入姓名进行查询" />
         }, ]
     }
@@ -142,10 +143,10 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
     //查询
     public onFilterSubmit = async (values: Record<string, any>) => {
         this.getTable(values, {
-            current: 1,
-            pageSize: 10,
-            total: 0,
-            showSizeChanger: false
+            // current: 1,
+            // pageSize: 10,
+            // total: 0,
+            // showSizeChanger: false
         });
     }
     //dataSource
@@ -165,13 +166,13 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         {
             key: 'name',
             title: '姓名',
-            width: '25%',
+            width: '50%',
             dataIndex: 'name'
         }, {
-            key: 'departmentName',
-            title: '部门',
-            width: '25%',
-            dataIndex: 'departmentName'
+            key: 'position',
+            title: '职位',
+            width: '50%',
+            dataIndex: 'position'
         },
         //  {
         //     key: 'stationName',
@@ -192,12 +193,13 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         //         }
         //     }  
         // }, 
-        {
-            key: 'phone',
-            title: '联系电话',
-            width: '50%',
-            dataIndex: 'phone'
-        }];
+        // {
+        //     key: 'phone',
+        //     title: '联系电话',
+        //     width: '50%',
+        //     dataIndex: 'phone'
+        // }
+        ];
     }
 
     //row-key
