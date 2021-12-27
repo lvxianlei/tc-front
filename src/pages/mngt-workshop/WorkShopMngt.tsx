@@ -15,9 +15,9 @@ export default function DailySchedule(): React.ReactNode {
     const [ unit, setUnit ] = useState<any[]>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const work: any = await RequestUtil.get(`/tower-aps/work/center/info?size=1000&current=1`)
-        // const unit = await RequestUtil.get(`/tower-system/notice/getNoticeById`)
-        setWork(work.records)
-        // setUnit(unit)
+        const unit:any = await RequestUtil.get(`/tower-aps/productionUnit?current=1&size=1000`)
+        setWork(work?.records)
+        setUnit(unit?.records)
         resole(data)
     }), {})
     const columns=[
