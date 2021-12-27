@@ -84,7 +84,9 @@ export default function SetOutTaskList(): React.ReactNode {
             key: 'plannedDeliveryTime',
             title: '计划交付时间',
             width: 200,
-            dataIndex: 'plannedDeliveryTime'
+            dataIndex: 'plannedDeliveryTime',
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             key: 'operation',

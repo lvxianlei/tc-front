@@ -76,12 +76,16 @@ const productColumns = [
     { 
         key: 'loftingAbortTime', 
         title: '放样截止时间', 
-        dataIndex: 'loftingAbortTime' 
+        dataIndex: 'loftingAbortTime',
+        "type": "date",
+        "format": "YYYY-MM-DD" 
     },
     { 
         key: 'materialAbortTime', 
         title: '提料截止时间', 
-        dataIndex: 'materialAbortTime' 
+        dataIndex: 'materialAbortTime',
+        "type": "date",
+        "format": "YYYY-MM-DD"
     },
     {
         key: 'totalWeight', 
