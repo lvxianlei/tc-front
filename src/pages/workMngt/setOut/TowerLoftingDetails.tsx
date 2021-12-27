@@ -189,10 +189,10 @@ const columns = [
         )
     },
     {
-        key: 'apertureNumber',
+        key: 'type',
         title: '类型',
         width: 200,
-        dataIndex: 'apertureNumber'
+        dataIndex: 'type'
     },
     {
         key: 'surfaceArea',
