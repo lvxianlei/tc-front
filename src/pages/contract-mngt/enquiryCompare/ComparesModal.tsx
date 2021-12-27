@@ -137,7 +137,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 </Col>
                 <Col>
                     <Form.Item name="fuzzyQuery" label="查询" initialValue="">
-                        <Input placeholder="品名/规格" />
+                        <Input placeholder="品名/规格/物料编号" />
                     </Form.Item>
                 </Col>
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>

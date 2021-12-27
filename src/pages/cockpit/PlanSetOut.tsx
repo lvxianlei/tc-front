@@ -12,9 +12,8 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             key: 'index',
             title: '序号',
             dataIndex: 'index',
-            fixed: "left" as FixedType,
             width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            render: (_a: any, _b: any, index: number) => {return index + 1}
         },
         {
             key: 'taskNum',

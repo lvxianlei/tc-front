@@ -128,7 +128,7 @@ export default function Delivery(): React.ReactNode {
                                 }
                             }}
                         />
-                        <DetailTitle title="发包人员" operation={[<WorkshopUserModal onSelect={onUserSelect} saleOrderId={''} selectKey={tableUserDataSource} />]} />
+                        <DetailTitle title="发包人员" operation={[<WorkshopUserModal onSelect={onUserSelect} selectKey={tableUserDataSource}  saleOrderId={selectedUser?.id}/>]}/>
                         <Table columns={[
                             { title: '姓名', dataIndex: 'name', key: 'name' },
                             {

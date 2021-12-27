@@ -135,9 +135,10 @@ export default function PackingList(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, productId: string }>();
     const match = useRouteMatch();
-    const location = useLocation();
     const [ isExport, setIsExport ] = useState(false);
     const [ bundleData, setBundleData ] = useState<IBundle[]>([]);
+    const location = useLocation<{ status: number }>();
+
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get(`/tower-science/packageStructure/${params.productId}`)
         resole(data)
@@ -156,23 +157,29 @@ export default function PackingList(): React.ReactNode {
     }
     
     return <>
-        <Space direction="horizontal" size="small" className={ styles.topcontent }><span>塔型：{ detailData.productCategoryName }</span> <span>杆号：{ detailData.productNumber }</span><span>
-            捆数: { detailData.packageStructureCount }</span></Space>
+        <Space direction="horizontal" size="small" className={ styles?.topcontent }><span>塔型：{ detailData?.productCategoryName }</span> <span>杆号：{ detailData?.productNumber }</span><span>
+            捆数: { detailData?.packageStructureCount }</span>
+        </Space>
         <Space direction="horizontal" size="small" className={ `${ styles.padding16 } ${ styles.btnRight }` }>
             <Button type="primary" ghost>导出</Button>
-            <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListNew`, state: { productCategoryName: detailData.productCategoryName, productNumber: detailData.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
-            <Popconfirm
-                title="确认完成?"
-                onConfirm={ () => RequestUtil.post(`/tower-science/packageStructure/submit?productId=${ params.productId }`).then(res => history.goBack()) }
-                okText="确认"
-                cancelText="取消"
-            >
-                <Button type="primary">完成</Button>
-            </Popconfirm>
+            {
+                location?.state?.status === 4 ? 
+                null : <>
+                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.       productId }/packingListNew`, state: { productCategoryName: detailData?.productCategoryName, productNumber: detailData?.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
+                    <Popconfirm
+                        title="确认完成?"
+                        onConfirm={ () => RequestUtil.post(`/tower-science/packageStructure/submit?productId=${ params.productId }`).then(res => history.goBack()) }
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="primary">完成</Button>
+                    </Popconfirm>
+                </>
+            }
             <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
         </Space>
         <DetailContent>
-            <CommonTable columns={ columns } style={{ marginBottom: '50px' }} dataSource={ detailData.packageStructureVOList } pagination={ false } onRow={ (record: Record<string, any>, index: number) => ({
+            <CommonTable columns={ location?.state?.status === 4 ? columns.splice(7, 1) : columns } style={{ marginBottom: '50px' }} dataSource={ detailData?.packageStructureVOList } pagination={ false } onRow={ (record: Record<string, any>, index: number) => ({
                 onClick: async () => { getBundleData(record.id); }
             })}/>
             <CommonTable dataSource={ [...bundleData] } columns={ bundleColumns } pagination={ false }/>

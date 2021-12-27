@@ -26,7 +26,7 @@ export default function PickTower(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [matchLeader, setMatchLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string,status: string }>()
     const history = useHistory();
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState({});
@@ -158,8 +158,8 @@ export default function PickTower(): React.ReactNode {
                             })
                             form.setFieldsValue({detailData:detailData});
                             
-                    }} disabled={record.materialStatus!==2||AuthUtil.getUserId()!==record.materialUser}>配段</Button>
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==3}>杆塔提料明细</Button>
+                    }} disabled={record.materialStatus!==2||AuthUtil.getUserId()!==record.materialUser|| params.status!=='3'}>配段</Button>
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==3}>杆塔提料明细</Button>
                 </Space>
             )
         }
@@ -287,7 +287,7 @@ export default function PickTower(): React.ReactNode {
                         children: <Select style={{width:'100px'}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待开始</Select.Option>
-                            <Select.Option value={2} key={2}>配段中</Select.Option>
+                            <Select.Option value={2} key={2}>待配段</Select.Option>
                             <Select.Option value={3} key={3}>已完成</Select.Option>
                         </Select>
                     },

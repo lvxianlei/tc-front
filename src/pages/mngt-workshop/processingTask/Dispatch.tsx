@@ -170,6 +170,13 @@ export default function Dispatch(): React.ReactNode {
                     setSelectedRowKeys(tableDataSource.map((item:any)=>{return item.id}))
                     setShow(true);
                 }}>查询</Button>
+                {params.id!=='new'&& <Button type='primary' onClick={()=>{
+                    setShow(false)
+                    // setEquipment({});
+                    // setTeam({})
+                    // form.resetFields();
+                    // formRef.resetFields();
+                }}>编辑</Button>}
                 <Button type='primary' ghost onClick={()=>{
                     setShow(false)
                     setEquipment({});

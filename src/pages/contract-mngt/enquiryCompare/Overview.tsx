@@ -205,7 +205,12 @@ export default function Overview(): JSX.Element {
                 ghost 
                 key="select"
                 onClick={() => {
-                    setSupplierVisible(true)
+                    if(selectedKeys.length > 0) {
+                        setSupplierVisible(true)
+                    } else {
+                        message.warning('请选择要批量中标的数据');
+                    }
+                    
                 }}>批量中标选择</Button>
         ]} operation={[
             <Button type="primary" ghost key="goback" onClick={() => history.goBack()}>返回</Button>
