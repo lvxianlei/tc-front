@@ -202,7 +202,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
                     label: '类型',
                     children:   <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
                         { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={ index } value={ id + ',' + name }>
+                            return <Select.Option key={ index } value={ id }>
                                 { name }
                             </Select.Option>
                         }) }

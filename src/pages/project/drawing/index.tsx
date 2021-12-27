@@ -121,6 +121,7 @@ export default function Drawing(): React.ReactNode {
                 setDetailedId("")
                 setConenctData({})
                 setConnectVisible(false)
+                history.go(0)
             }}
             onCancel={() => {
                 setDetailedId("")
@@ -186,7 +187,6 @@ export default function Drawing(): React.ReactNode {
                         onClick={() => {
                             setDetailedId(record.id)
                             setConnectVisible(true)
-
                         }}>关联合同</Button>
                     <Button
                         type="link"

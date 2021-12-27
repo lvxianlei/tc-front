@@ -99,6 +99,15 @@ export default forwardRef(function ({
         }
     }), { manual: true })
 
+    const { run: uploadRun } = useRequest<URLProps>((action: string, data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: URLProps = await RequestUtil.putFile(action, data)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     useEffect(() => setAttachs(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || []), [JSON.stringify(dataSource)])
 
     useEffect(() => setUploadOSSUrlList([...uploadOSSUrlList]), [JSON.stringify(uploadOSSUrlList)])
@@ -233,8 +242,17 @@ export default forwardRef(function ({
                         }}
                         method="put"
                         showUploadList={false}
-                        customRequest={(options: any) => {
-                            console.log(options, "---")
+                        customRequest={async (options: any) => {
+                            const reader: any = new FileReader();
+                            reader.addEventListener('load', async (event: any) => {
+                                try {
+                                    const result = await uploadRun(options.action, reader.result)
+                                    options.onSuccess(result, options.file)
+                                } catch (error) {
+                                    options.onError(error)
+                                }
+                            });
+                            reader.readAsBinaryString(options.file);
                         }}
                         beforeUpload={handleBeforeUpload}
                         onChange={uploadChange}
