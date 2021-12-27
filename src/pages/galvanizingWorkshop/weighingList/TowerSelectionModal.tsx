@@ -101,6 +101,10 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
         return (
             <Table
                 {...this.getTableProps()}
+                rowSelection={{
+                type: "checkbox",
+                selectedRowKeys: this.state.selectedRowKeys,
+                onChange: this.onSelectChange}}
                 pagination={false}
                 scroll={{ x: 1200 }}
                 className={styles.modalTable}
@@ -172,6 +176,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
                     width="80%"
                 >
                     <Space direction="vertical" className={styles.modalTable}>
+                        {  this.renderFilterContent() }
                         {this.renderTableContent()}
                     </Space>
                 </Modal>

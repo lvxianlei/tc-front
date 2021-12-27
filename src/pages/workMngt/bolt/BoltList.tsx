@@ -282,7 +282,7 @@ export default function BoltList(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col>
-                            <Form.Item name="personnel" initialValue={location.state?.userId || ''}>
+                            <Form.Item name="personnel">
                                 <Select placeholder="请选择" style={{ width: "150px" }}>
                                     <Select.Option value="" key="6">全部</Select.Option>
                                     { checkUser && checkUser.map((item: any) => {
@@ -297,8 +297,8 @@ export default function BoltList(): React.ReactNode {
                     name: 'priority',
                     label: '优先级',
                     children: <Select style={{ width: '120px' }} placeholder="请选择">
-                        <Select.Option value="" key="">全部</Select.Option>
-                        <Select.Option value="" key="0">紧急</Select.Option>
+                        <Select.Option value="" key="9">全部</Select.Option>
+                        <Select.Option value="0" key="0">紧急</Select.Option>
                         <Select.Option value="1" key="1">高</Select.Option>
                         <Select.Option value="2" key="2">中</Select.Option>
                         <Select.Option value="3" key="3">低</Select.Option>
