@@ -89,7 +89,7 @@ export default forwardRef(function ({
         pushUrl: "http://www."
     })
     const [uploadOSSUrlList, setUploadOSSUrlList] = useState<any>([])
-    const [picUrl, setPicUrl] = useState<string>()
+    const [picInfo, setPicInfo] = useState<{ [key: string]: any }>({ url: "", title: "" })
     const { run: saveFile } = useRequest<URLProps>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: URLProps = await RequestUtil.post(`/sinzetech-resource/oss/endpoint/get-upload-url`, data)
@@ -138,52 +138,48 @@ export default forwardRef(function ({
         } catch (error) {
             reject(false)
         }
+        return false
     }), [attchs, setAttachs, setUploadOSSUrlInfo])
 
     const uploadChange = useCallback((event: any) => {
-        if (event.file.status === "done") {
-            if (event.file.xhr.status === 200) {
-                setAttachs(attchs.map(item => {
-                    if (item.uid === event.file.uid) {
-                        return ({
-                            ...item,
-                            loading: false,
-                            filePath: uploadOSSUrlInfo?.downloadUrl || "",
-                            originalName: uploadOSSUrlInfo?.originalName || "",
-                            fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
-                            fileSize: uploadOSSUrlInfo?.fileSize || "",
-                            downloadUrl: uploadOSSUrlInfo?.downloadUrl || "",
-                            id: uploadOSSUrlInfo?.id || "",
-                        })
-                    }
-                    return item
-                }))
-                if (multiple) {
-                    const list = uploadOSSUrlList.map((res: any) => {
-                        return {
-                            id: res?.id || "",
-                            uid: event.file.uid,
-                            filePath: res?.downloadUrl || "",
-                            originalName: res?.originalName || "",
-                            fileSuffix: res?.fileSuffix || "",
-                            fileSize: res?.fileSize || "",
-                            downloadUrl: res?.downloadUrl || ""
-                        }
-                    })
-                    onDoneChange([...list])
-                } else {
-                    onDoneChange([{
-                        id: uploadOSSUrlInfo?.id || "",
-                        uid: event.file.uid,
-                        filePath: uploadOSSUrlInfo?.downloadUrl || "",
-                        originalName: uploadOSSUrlInfo?.originalName || "",
-                        fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
-                        fileSize: uploadOSSUrlInfo?.fileSize || "",
-                        downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
-                    }])
-                }
-
+        setAttachs(attchs.map(item => {
+            if (item.uid === event.file.uid) {
+                return ({
+                    ...item,
+                    loading: false,
+                    filePath: uploadOSSUrlInfo?.downloadUrl || "",
+                    originalName: uploadOSSUrlInfo?.originalName || "",
+                    fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
+                    fileSize: uploadOSSUrlInfo?.fileSize || "",
+                    downloadUrl: uploadOSSUrlInfo?.downloadUrl || "",
+                    id: uploadOSSUrlInfo?.id || "",
+                })
             }
+            return item
+        }))
+        if (multiple) {
+            const list = uploadOSSUrlList.map((res: any) => {
+                return {
+                    id: res?.id || "",
+                    uid: event.file.uid,
+                    filePath: res?.downloadUrl || "",
+                    originalName: res?.originalName || "",
+                    fileSuffix: res?.fileSuffix || "",
+                    fileSize: res?.fileSize || "",
+                    downloadUrl: res?.downloadUrl || ""
+                }
+            })
+            onDoneChange([...list])
+        } else {
+            onDoneChange([{
+                id: uploadOSSUrlInfo?.id || "",
+                uid: event.file.uid,
+                filePath: uploadOSSUrlInfo?.downloadUrl || "",
+                originalName: uploadOSSUrlInfo?.originalName || "",
+                fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
+                fileSize: uploadOSSUrlInfo?.fileSize || "",
+                downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
+            }])
         }
     }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo])
 
@@ -195,14 +191,17 @@ export default forwardRef(function ({
 
     const handlePreview = useCallback((record: FileProps) => {
         if (["png", "jpeg", "jpg", "gif"].includes(record?.fileSuffix || "")) {
-            setPicUrl(record.downloadUrl)
+            setPicInfo({
+                url: record.downloadUrl,
+                title: record.originalName
+            })
             setVisible(true)
         } else if (["pdf"].includes(record?.fileSuffix || "")) {
             window.open(record.downloadUrl)
         } else {
             message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf预览...")
         }
-    }, [setPicUrl, setVisible])
+    }, [setPicInfo, setVisible])
 
     const handleCancel = useCallback(() => setVisible(false), [setVisible])
 
@@ -222,8 +221,13 @@ export default forwardRef(function ({
     }, [attchs])
 
     return <>
-        <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
-            <Image src={picUrl} preview={false} />
+        <Modal
+            title={`${picInfo.title}`}
+            width={1011}
+            visible={visible}
+            onCancel={handleCancel}
+            footer={false}>
+            <Image src={picInfo.url} preview={false} />
         </Modal>
         {isTable && <DetailTitle
             title={title}
@@ -243,16 +247,8 @@ export default forwardRef(function ({
                         method="put"
                         showUploadList={false}
                         customRequest={async (options: any) => {
-                            const reader: any = new FileReader();
-                            reader.addEventListener('load', async (event: any) => {
-                                try {
-                                    const result = await uploadRun(options.action, reader.result)
-                                    options.onSuccess(result, options.file)
-                                } catch (error) {
-                                    options.onError(error)
-                                }
-                            });
-                            reader.readAsBinaryString(options.file);
+                            await uploadRun(options.action, options.file)
+
                         }}
                         beforeUpload={handleBeforeUpload}
                         onChange={uploadChange}

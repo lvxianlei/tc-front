@@ -92,6 +92,7 @@ export default abstract class RequestUtil {
                         if (!path.includes("sinzetech-auth/oauth")) {
                             setTimeout(this.backToLogin, 10);
                         } else {
+                            message.warning("登录已过期！请重新登录...")
                             console.log("token过期。。。。")
                         }
                     } else {
@@ -101,7 +102,9 @@ export default abstract class RequestUtil {
                 })
                 .catch((e: Error) => {
                     NProgress.done();
-                    if (e.name === 'AbortError') {
+                    if (e.message === "Unexpected end of JSON input") {
+                        resolve("" as any)
+                    } else if (e.name === 'AbortError') {
                         // console.log('abort');
                     } else {
                         message.error(e.message);
