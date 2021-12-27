@@ -105,7 +105,7 @@ const columns = [
         title: '操作',
         dataIndex: 'operation',
         fixed: 'right',
-        width: 100,
+        width: 40,
         render: (_: undefined, record: any): React.ReactNode => (
             <Space direction="horizontal" size="small">
                 <Link to={`/bidding/information/detail/${record.id}`}>查看</Link>

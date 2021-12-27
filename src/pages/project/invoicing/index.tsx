@@ -63,8 +63,8 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 7}} onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</span>
-                        <Button type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
+                        <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}} onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</span>
+                        <Button style={{marginRight: 12}} type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
                         <Button type="link" size="small" disabled={record.state !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
                 }
