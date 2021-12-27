@@ -367,7 +367,7 @@ export default function TowerInformation(): React.ReactNode {
             }
         </Space> }>
             <Form form={ form }>
-                <Table columns={ sectionColumns } showHeader={ false } pagination={ false } dataSource={ sectionData } />
+                <Table columns={ sectionColumns } pagination={ false } dataSource={ sectionData } />
             </Form>
         </Modal>
     </>
