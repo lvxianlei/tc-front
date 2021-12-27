@@ -47,6 +47,14 @@ export default function Invoicing() {
         path="/tower-market/invoicing"
         filterValue={filterValue}
         columns={[
+            {
+                key: 'index',
+                title: '序号',
+                dataIndex: 'index',
+                fixed: "left",
+                width: 50,
+                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            },
             ...invoicingListHead,
             {
                 title: "操作",
@@ -55,7 +63,7 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" size="small" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
+                        <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 7}} onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</span>
                         <Button type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
                         <Button type="link" size="small" disabled={record.state !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>

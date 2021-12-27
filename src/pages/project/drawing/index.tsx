@@ -164,13 +164,12 @@ export default function Drawing(): React.ReactNode {
                 dataIndex: "opration",
                 fixed: "right",
                 render: (_: undefined, record: any) => <>
-                    <Button
-                        type="link"
-                        size="small"
+                    <span
+                        style={{color: "#FF8C00", cursor: "pointer", marginRight: 7}}
                         onClick={() => {
                             setDetailedId(record.id)
                             setDetailVisible(true)
-                        }}>查看</Button>
+                        }}>查看</span>
                     <Button
                         type="link"
                         size="small"

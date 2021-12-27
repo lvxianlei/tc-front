@@ -103,7 +103,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
     return <>
-        {(searchs.length > 0 || data.search) && <Form form={form} onFinish={async () => {
+        {(searchs.length > 0 || data.search) && <Form style={{marginBottom: 16}} form={form} onFinish={async () => {
             setPagenation({ ...pagenation, current: 1, pageSize: 10 })
             await run()
         }}>
