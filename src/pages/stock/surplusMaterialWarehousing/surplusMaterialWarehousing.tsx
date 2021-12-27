@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { Page } from '../../common';
@@ -8,6 +8,7 @@ import { IClient } from '../../IClient';
 import RequestUtil from '../../../utils/RequestUtil';
 import ApplicationContext from "../../../configuration/ApplicationContext";
 import AuthUtil from '../../../utils/AuthUtil';
+import ExportList from '../../../components/export/list';
 import '../StockPublicStyle.less';
 import './modal.less';
 const { RangePicker } = DatePicker;
@@ -41,6 +42,9 @@ export default function RawMaterialStock(): React.ReactNode {
     const [Location, setLocation] = useState<any[]>([]);//入库库位数据
     const [departmentList, setDepartmentList] = useState<any[]>([]);//部门数据
     const [userList, setuserList] = useState<any[]>([]);//申请人数据数据
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     const columns = [
         {
             title: '序号',
@@ -446,6 +450,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Button
                     type="primary"
                     className='func_btn'
+                    onClick={()=>{setIsExportStoreList(true)}}
                 >导出</Button>
             </div>
             <div className="page_public_Stock">
@@ -655,6 +660,22 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
             </Modal>
+            {isExport?<ExportList
+                history={history}
+                location={location}
+                match={match}
+                columnsKey={() => {
+                    let keys = [...columns]
+                    keys.pop()
+                    return keys
+                }}
+                current={0}
+                size={0}
+                total={0}
+                url={`/tower-storage/receiveStock/excess`}
+                serchObj={{}}
+                closeExportList={() => { setIsExportStoreList(false) }}
+            />:null}
         </div>
     )
 }

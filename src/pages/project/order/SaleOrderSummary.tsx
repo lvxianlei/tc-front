@@ -177,23 +177,23 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
             value:
               baseInfo?.foreignPrice === -1 ? undefined : baseInfo?.foreignPrice,
           },
-        ],
-        [
-          {
-            label: "保函金额",
-            value:
-              baseInfo?.guaranteeAmount === -1
-                ? undefined
-                : baseInfo?.guaranteeAmount,
-          },
-          {
-            label: "佣金",
-            value:
-              baseInfo?.commissionCharge === -1
-                ? undefined
-                : baseInfo?.commissionCharge,
-          },
         ]
+        // [
+        //   {
+        //     label: "保函金额",
+        //     value:
+        //       baseInfo?.guaranteeAmount === -1
+        //         ? undefined
+        //         : baseInfo?.guaranteeAmount,
+        //   },
+        //   {
+        //     label: "佣金",
+        //     value:
+        //       baseInfo?.commissionCharge === -1
+        //         ? undefined
+        //         : baseInfo?.commissionCharge,
+        //   },
+        // ]
       ],
     };
   }

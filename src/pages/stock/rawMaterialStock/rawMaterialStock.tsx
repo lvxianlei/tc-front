@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch, useLocation } from 'react-router-dom';
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { Page } from '../../common';
 import { IClient } from '../../IClient';
 import RequestUtil from '../../../utils/RequestUtil';
 import ApplicationContext from "../../../configuration/ApplicationContext"
+import ExportList from '../../../components/export/list';
 import '../StockPublicStyle.less';
 import { materialStandardTypeOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 
@@ -27,6 +28,9 @@ export default function RawMaterialStock(): React.ReactNode {
         [warehouseList, setWarehouseList] = useState<any>([]),//筛选仓库数据
         [weight, setWeight] = useState<number | string>(0),//合计重量
         [quantity, setQuantity] = useState<number | string>(0);//合计数量
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     // console.log((ApplicationContext.get().dictionaryOption as any)["111"],'ssss')
     const columns = [
         {
@@ -367,6 +371,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Button
                     type="primary"
                     className='func_btn'
+                    onClick={()=>{setIsExportStoreList(true)}}
                 >导出</Button>
             </div>
             <div className="tip_public_Stock">
@@ -403,6 +408,22 @@ export default function RawMaterialStock(): React.ReactNode {
                     }}
                 />
             </div>
+            {isExport?<ExportList
+                history={history}
+                location={location}
+                match={match}
+                columnsKey={() => {
+                    let keys = [...columns]
+                    keys.pop()
+                    return keys
+                }}
+                current={0}
+                size={0}
+                total={0}
+                url={`/tower-storage/materialStock`}
+                serchObj={{}}
+                closeExportList={() => { setIsExportStoreList(false) }}
+            />:null}
         </div>
     )
 }

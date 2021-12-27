@@ -1,18 +1,22 @@
 import React, { useState, useRef } from 'react'
 import { Button, Select, Input, Modal, message } from 'antd'
-import { useHistory, } from 'react-router-dom'
+import { useHistory, useRouteMatch, useLocation } from 'react-router-dom'
 import { priceMaintain } from "./rawMaterial.json"
 import { Page } from '../../common'
 import Edit from "./Edit"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { materialStandardOptions } from '../../../configuration/DictionaryOptions'
+import ExportList from '../../../components/export/list';
 
 export default function Overview(): React.ReactNode {
     const history = useHistory()
     const [editId, setEditId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [visible, setVisible] = useState<boolean>(false)
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     const editRef = useRef<{ onSubmit: () => void, loading: boolean }>({ onSubmit: () => { }, loading: false })
     const invoiceTypeEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
@@ -122,7 +126,7 @@ export default function Overview(): React.ReactNode {
                     }
                 ]}
                 extraOperation={<>
-                    <Button type="primary" ghost>导出</Button>
+                    <Button type="primary" ghost onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
                     <Button type="primary" ghost>导入</Button>
                     <Button type="primary" onClick={() => {
                         setOprationType("new")
@@ -154,6 +158,21 @@ export default function Overview(): React.ReactNode {
                     },
                 ]}
             />
+            {isExport?<ExportList
+                history={history}
+                location={location}
+                match={match}
+                columnsKey={() => {
+                    let keys = [...priceMaintain]
+                    return keys
+                }}
+                current={0}
+                size={0}
+                total={0}
+                url={`/tower-supply/materialPrice`}
+                serchObj={{}}
+                closeExportList={() => { setIsExportStoreList(false) }}
+            />:null}
         </>
     )
 }

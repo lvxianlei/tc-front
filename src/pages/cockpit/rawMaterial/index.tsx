@@ -1,13 +1,14 @@
 //原材料看板
 import React, { useState } from 'react'
 import { Button, Select, DatePicker, Input, Modal } from 'antd'
-import { Link, useHistory, } from 'react-router-dom'
+import { Link, useHistory, useRouteMatch, useLocation } from 'react-router-dom'
 import { materialPrice } from "./rawMaterial.json"
 import { Page } from '../../common'
 import HistoryPrice from './HistoryPrice'
 import DataSource from './DataSource'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
+import ExportList from '../../../components/export/list';
 import { materialStandardOptions } from '../../../configuration/DictionaryOptions'
 
 export default function ViewRawMaterial(): React.ReactNode {
@@ -20,6 +21,9 @@ export default function ViewRawMaterial(): React.ReactNode {
     const [materialName, setMaterialName] = useState<string>("")
     const [priceVisible, setPriceVisible] = useState<boolean>(false)
     const [dataVisible, setDataVisible] = useState<boolean>(false)
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     const onFilterSubmit = (value: any) => {
         if (value.startUpdateTime) {
             const formatDate = value.startUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -103,7 +107,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                 }
             ]}
             extraOperation={<>
-                <Button type="primary" ghost >导出</Button>
+                <Button type="primary" ghost onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
                 <Button type="primary" ghost><Link to={`/cockpit/rawMaterial/price`}>价格维护</Link></Button>
             </>}
             onFilterSubmit={onFilterSubmit}
@@ -134,6 +138,21 @@ export default function ViewRawMaterial(): React.ReactNode {
                 }
             ]}
         />
+        {isExport?<ExportList
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => {
+                let keys = [...materialPrice]
+                return keys
+            }}
+            current={0}
+            size={0}
+            total={0}
+            url={`/tower-supply/materialPrice`}
+            serchObj={{}}
+            closeExportList={() => { setIsExportStoreList(false) }}
+        />:null}
     </>
     )
 }
