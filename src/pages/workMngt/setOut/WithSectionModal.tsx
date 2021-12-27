@@ -136,7 +136,10 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item key={ index } label="段数">    
-                                            <Form.Item key={ index+'_'+this.props.id } name={ ["productSegmentListDTOList", index, "count"] } initialValue={ items.count }>
+                                            <Form.Item key={ index+'_'+this.props.id } name={ ["productSegmentListDTOList", index, "count"] } initialValue={ items.count } rules={[{
+                                                pattern: /^[0-9-,]*$/,
+                                                message: '仅可输入数字/特殊字符',
+                                            }]}>
                                                 <Input placeholder="请输入"/>
                                             </Form.Item>
                                         </Descriptions.Item>

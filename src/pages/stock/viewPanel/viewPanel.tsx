@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, } from 'react'
-import { Button, Table, Pagination, TableColumnProps, Row, Col, Select, } from 'antd';
+import { useHistory, useRouteMatch, useLocation } from 'react-router-dom'
+import { Button, Table, Pagination, TableColumnProps, Row, Col, Select, Input } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import ApplicationContext from "../../../configuration/ApplicationContext"
 import { materialStandardTypeOptions } from '../../../configuration/DictionaryOptions';
+import ExportList from '../../../components/export/list';
 const { Option } = Select;
 const ViewPanel = (): React.ReactNode => {
     const columns: TableColumnProps<object>[] = [
@@ -92,6 +94,10 @@ const ViewPanel = (): React.ReactNode => {
         specs: [],
     });
     // let [total, setTotal] = useState(0);
+    const history = useHistory()
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     let [size, setSize] = useState(10);
     let [current, setCurrent] = useState(1);
     let [condition, setCondition] = useState('');
@@ -99,12 +105,14 @@ const ViewPanel = (): React.ReactNode => {
     let [productName, setProductName] = useState('');
     let [spec, setSpec] = useState('');
     let [standard, setStandard] = useState('');
+    let [fuzzyQuery, setProductNameAdd] = useState(""); // 新加的品名/规格输入搜索
     let [searchInfo, setSearchInfo] = useState({
         condition: '',
         materialTexture: '',
         productName: '',
         spec: '',
         standard: '',
+        fuzzyQuery: ""
     })
     useEffect(() => {
         getColumnsData()
@@ -139,6 +147,7 @@ const ViewPanel = (): React.ReactNode => {
         setSpec('')
         setStandard('')
         setCurrent(1)
+        setProductNameAdd("");
         if (current === 1) {
             getColumnsData()
         }
@@ -205,56 +214,6 @@ const ViewPanel = (): React.ReactNode => {
                     md={12}
                     className='search_item'
                 >
-                    <span className='tip'>品名：</span>
-                    <Select
-                        className='input'
-                        value={productName}
-                        style={{ width: 120 }}
-                        onChange={(value) => {
-                            setProductName(value)
-                        }}
-                    >
-                        <Option value={''}>全部</Option>
-                        {
-                            selects.materialTextures?.map((item: string, index: number) => {
-                                return (
-                                    <Option value={item} key={index}>{item}</Option>
-                                )
-                            })
-                        }
-                    </Select>
-                </Col>
-                <Col
-                    xxl={6}
-                    xl={6}
-                    md={12}
-                    className='search_item'
-                >
-                    <span className='tip'>规格：</span>
-                    <Select
-                        className='input'
-                        value={spec}
-                        style={{ width: 120 }}
-                        onChange={(value) => {
-                            setSpec(value)
-                        }}
-                    >
-                        <Option value={''}>全部</Option>
-                        {
-                            selects.specs?.map((item: string) => {
-                                return (
-                                    <Option value={item} key={item}>{item}</Option>
-                                )
-                            })
-                        }
-                    </Select>
-                </Col>
-                <Col
-                    xxl={6}
-                    xl={6}
-                    md={12}
-                    className='search_item'
-                >
                     <span className='tip'>库存状态：</span>
                     <Select
                         className='input'
@@ -271,6 +230,17 @@ const ViewPanel = (): React.ReactNode => {
                     </Select>
                 </Col>
                 <Col
+                    xxl={6}
+                    xl={6}
+                    md={12}
+                    className='search_item'
+                >
+                    <span className='tip'>品名/规格：</span>
+                    <Input placeholder="请输入品名/规格" onChange={(e: any) => {
+                        setProductNameAdd(e.target.value)
+                    }} style={{width: 150}} />
+                </Col>
+                <Col
                     className='search_btn_box'
                 >
                     <Button
@@ -281,6 +251,7 @@ const ViewPanel = (): React.ReactNode => {
                             searchInfo.productName = productName;
                             searchInfo.spec = spec;
                             searchInfo.standard = standard;
+                            searchInfo.fuzzyQuery = fuzzyQuery;
                             setSearchInfo(searchInfo)
                             getColumnsData()
                         }}
@@ -299,6 +270,7 @@ const ViewPanel = (): React.ReactNode => {
                         <Button
                             className='func_item'
                             type='primary'
+                            onClick={()=>{setIsExportStoreList(true)}}
                         >导出</Button>
                     </div>
                 </div>
@@ -325,6 +297,21 @@ const ViewPanel = (): React.ReactNode => {
                     />
                 </div>
             </div>
+            {isExport?<ExportList
+                history={history}
+                location={location}
+                match={match}
+                columnsKey={() => {
+                    let keys = [...columns]
+                    return keys
+                }}
+                current={0}
+                size={0}
+                total={0}
+                url={`/tower-storage/safetyStock/board`}
+                serchObj={{}}
+                closeExportList={() => { setIsExportStoreList(false) }}
+            />:null}
         </div>
     )
 }

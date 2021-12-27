@@ -314,7 +314,7 @@ export default function ProcessDetail(): React.ReactNode {
                     let temp = [...userDataSource];    
                     temp.push(selectedRows[0]);
                     setUserDataSource(temp);
-                    } } buttonTitle="添加员工" selectKey={[...userDataSource]}/>
+                    } } buttonTitle="添加员工" selectKey={[...userDataSource]}  saleOrderId={detailData?.teamId}/>
                 <Table 
                     columns={[
                         { title: '姓名', dataIndex: 'name', key:'name' },

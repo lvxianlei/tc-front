@@ -279,7 +279,7 @@ export default function PackingListNew(): React.ReactNode {
             materialSpec: record.structureSpec,
             productCategoryId: detailData.productCategoryId,
             productId: detailData.productId,
-            structureId: record.id,
+            structureId: record.id || record.topId,
             structureCount: record.structureNum,
             topId: record.id,
             id: ''

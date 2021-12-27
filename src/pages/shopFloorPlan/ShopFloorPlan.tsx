@@ -51,8 +51,8 @@ export default function ShopFloorPlan(): React.ReactNode {
         await run({
             ...values,
             status: confirmStatus,
-            startTime: values.time && moment(values?.time[0]),
-            endTime: values.time && moment(values?.time[1])
+            startTime: values.time && values?.time[0].format('YYYY-MM-DD') + ' 00:00:00',
+            endTime: values.time && values?.time[1].format('YYYY-MM-DD') + ' 23:59:59'
         })
     }
 
@@ -66,7 +66,7 @@ export default function ShopFloorPlan(): React.ReactNode {
                     </Form.Item>
                 </Col>
                 <Col className={ styles.right }>
-                    <Form.Item label="统计类型" name="type" rules={[{ 
+                    <Form.Item label="统计类型" name="type" initialValue={1} rules={[{ 
                         "required": true,
                         "message": "请选择统计类型" 
                     }]}>

@@ -209,6 +209,12 @@ const columns = [
         )
     },
     {
+        key: 'type',
+        title: '类型',
+        width: 200,
+        dataIndex: 'type'
+    },
+    {
         key: 'surfaceArea',
         title: '表面积',
         editable: true,

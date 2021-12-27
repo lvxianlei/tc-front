@@ -95,10 +95,10 @@ export default function StockList(): React.ReactNode {
             )  
         },
         {
-            key: 'balesNumber',
+            key: 'balesWarehouseNumber',
             title: '库存数',
             width: 100,
-            dataIndex: 'balesNumber',
+            dataIndex: 'balesWarehouseNumber',
             render: (_: number): React.ReactNode => ( 
                 <span>{ _ === -1 ? '-' : _ }</span>
             )  
@@ -124,7 +124,7 @@ export default function StockList(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入内部合同编号/工程名称/计划号进行查询"/>
+                children: <Input placeholder="请输入内部合同编号/工程名称/计划号进行查询" style={{width: '300px'}}/>
             }
         ] }
         filterValue={ filterValue }

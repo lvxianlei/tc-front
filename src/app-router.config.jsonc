@@ -276,6 +276,13 @@
       "exact": true,
       "authority": "entrust_page_list"
     },
+    { // 已委托列表
+      "name": "已完成委托",
+      "path": "/outsource/entrustFinal",
+      "module": "./pages/entrust/FinalEntrustList",
+      "exact": true,
+      "authority": "entrust_page_list"
+    },
     { // 委托新增
       "name": "委托新增",
       "path": "/outsource/entrust/new",

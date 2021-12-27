@@ -144,10 +144,10 @@
              width: '50%',
              dataIndex: 'name',
          }, {
-             key: 'name',
+             key: 'productUnitName',
              title: '所属生产单元',
              width: '50%',
-             dataIndex: 'name'
+             dataIndex: 'productUnitName'
          }];
      }
  

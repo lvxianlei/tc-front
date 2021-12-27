@@ -93,12 +93,6 @@ const columns = [
         dataIndex: 'totalWeight'
     },
     {
-        key: 'ncName',
-        title: 'NC程序名称',
-        width: 200,
-        dataIndex: 'ncName'
-    },
-    {
         key: 'description',
         title: '备注',
         width: 200,
@@ -187,6 +181,12 @@ const columns = [
         render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
             <span>{ _ === -1  ? undefined : _ }</span>
         )
+    },
+    {
+        key: 'type',
+        title: '类型',
+        width: 200,
+        dataIndex: 'type'
     },
     {
         key: 'surfaceArea',
