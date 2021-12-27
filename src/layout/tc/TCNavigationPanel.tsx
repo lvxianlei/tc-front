@@ -90,7 +90,7 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
                             (
                                 (item.items && item.items.length)
                                     ?
-                                    <Menu.SubMenu className={styles.subMenu} key={item.path} title={item.label} icon={<i className={`font_family iconfont icon-${item.icon} ${styles.icon}`}></i>}>
+                                    <Menu.SubMenu className={styles.subMenu} key={item.path} title={item.label} icon={<i className={`font_family icon-${item.icon} ${styles.icon}`}></i>}>
                                         {
                                             item.items.map<React.ReactNode>((subItem: IMenuItem): React.ReactNode => (
                                                 hasAuthority(subItem.authority)
