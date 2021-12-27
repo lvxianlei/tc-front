@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-concat */
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Modal, Checkbox, message, Radio, } from 'antd';
+import { Modal, Checkbox, message, Radio } from 'antd';
 import './list.less';
 import AuthUtil from '../../utils/AuthUtil';
 const CheckboxGroup = Checkbox.Group;
