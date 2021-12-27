@@ -34,7 +34,13 @@ export default function RecruitEdit(): React.ReactNode {
                 return time?moment(time).format('YYYY-MM-DD'):'-'
             }
         },
-
+        {
+            title: '下发状态',
+            dataIndex: 'productStatus',
+            render:(status:number)=>{
+                return status?status===1?'已下发':'未下发':'-'
+            }
+        },
     ]
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = params.productCategoryId && await RequestUtil.get(`/tower-aps/planUnitLink/${params.productCategoryId}`);

@@ -256,7 +256,7 @@ export default function PickTower(): React.ReactNode {
                         </Form.List> 
                     </Row>
                 </Form>:null}
-                <Space style={{position:'relative',left:'80%'}}>
+                <Space style={{position:'relative',left:'75%'}}>
                     <Button type="primary" ghost onClick={()=>handleModalCancel()}>取消</Button>
                     <Button type="primary" onClick={()=>handleModalSave()}>保存</Button>
                     <Button type="primary" onClick={()=>handleModalOk()}>保存并提交</Button>

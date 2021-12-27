@@ -79,8 +79,8 @@ export default function Edit() {
                 invoicingInfoDto: {
                     ...invoicData,
                     id: data?.invoicingInfoVo.id || "",
-                    name: invoicData.name.value,
-                    customerId: invoicData.name.customerId,
+                    name: invoicData.name?.value,
+                    customerId: invoicData.name?.id,
                     invoicingId: data?.invoicingInfoVo.invoicingId || ""
                 }
             }
