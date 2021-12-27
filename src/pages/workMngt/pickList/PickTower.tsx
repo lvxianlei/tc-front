@@ -287,7 +287,7 @@ export default function PickTower(): React.ReactNode {
                         children: <Select style={{width:'100px'}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待开始</Select.Option>
-                            <Select.Option value={2} key={2}>配段中</Select.Option>
+                            <Select.Option value={2} key={2}>待配段</Select.Option>
                             <Select.Option value={3} key={3}>已完成</Select.Option>
                         </Select>
                     },
