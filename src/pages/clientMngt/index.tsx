@@ -46,12 +46,14 @@ export default function Index(): JSX.Element {
         columns={[...clientMegt, {
             title: '操作',
             dataIndex: 'operation',
+            width: 80,
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
-                    <Button type="link" size="small"><Link to={`/client/mngt/edit/${record?.id}`}>编辑</Link></Button>
+                    <Button type="link" size="small" style={{padding: 0, marginRight: 12}}><Link to={`/client/mngt/edit/${record?.id}`}>编辑</Link></Button>
                     <Button
                         type="link"
                         size="small"
+                        style={{padding: 0}}
                         onClick={() => handleDelete(record?.id)}
                     >删除</Button>
                 </>

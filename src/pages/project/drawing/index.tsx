@@ -57,8 +57,8 @@ export default function Drawing(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.startRefundTime) {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startRefundTime = formatDate[0]
-            value.endRefundTime = formatDate[1]
+            value.startRefundTime = formatDate[0] + " 00:00:00"
+            value.endRefundTime = formatDate[1] + " 23:59:59"
         }
         setFilterValue(value)
         return value
@@ -164,13 +164,12 @@ export default function Drawing(): React.ReactNode {
                 dataIndex: "opration",
                 fixed: "right",
                 render: (_: undefined, record: any) => <>
-                    <Button
-                        type="link"
-                        size="small"
+                    <span
+                        style={{color: "#FF8C00", cursor: "pointer", marginRight: 7}}
                         onClick={() => {
                             setDetailedId(record.id)
                             setDetailVisible(true)
-                        }}>查看</Button>
+                        }}>查看</span>
                     <Button
                         type="link"
                         size="small"

@@ -432,13 +432,16 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
      * @description Gets tab items
      * @returns tab items 
      */
+    // public getTabItems(): ITabItem[] {
+    //     return [{
+    //         label: '已完成塔型列表',
+    //         key: ""
+    //     }];
+    // }
     public getTabItems(): ITabItem[] {
-        return [{
-            label: '已完成塔型列表',
-            key: ""
-        }];
+        let tab = [{ label: '', key: 'item_0' }]
+        return tab;
     }
-
     /**
      * @implements
      * @description Determines whether tab change on

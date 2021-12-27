@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 import { Table } from "antd";
 import { withRouter } from "react-router-dom";
 import { ContractSummary } from "../../prom/contract/ContractSummary";
@@ -102,7 +103,13 @@ class ManagementContractSummary extends ContractSummary {
         [
           {
             label: "付款方式",
-            value: baseInfo?.customerInfoVo?.customerPhone,
+            value: baseInfo?.payType ?
+              baseInfo?.payType === "1" ?
+              "转账" : baseInfo?.payType === "2" ?
+              "现金" : baseInfo?.payType === "3" ? 
+              "支票" : baseInfo?.payType === "4" ?
+              "电汇" : "承兑"
+              : "-",
           },
           {
             label: "结算单位",
@@ -142,7 +149,7 @@ class ManagementContractSummary extends ContractSummary {
         [
           {
             label: "合同接管日期",
-            value: baseInfo?.takeOverTime
+            value: baseInfo?.takeOverTime ? moment(baseInfo?.takeOverTime).format("YYYY-MM-DD") : "-"
           },
           {
             label: "收到合同形式",

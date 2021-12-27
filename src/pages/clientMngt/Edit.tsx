@@ -55,7 +55,7 @@ export default function Edit(): JSX.Element {
             style={{ marginRight: 16 }}
             loading={saveLoading}
             onClick={onSubmit}>保存</Button>,
-        <Button key="cancel" type="primary" style={{ marginRight: 16 }} onClick={() => history.goBack()}>取消</Button>,
+        <Button key="cancel" style={{ marginRight: 16 }} onClick={() => history.goBack()}>取消</Button>,
     ]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />

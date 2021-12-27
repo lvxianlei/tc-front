@@ -256,10 +256,10 @@ class ManagementContractSetting extends ContractSetting {
             {
               label: "付款方式",
               name: "payType",
-              initialValue: contract?.customerInfoVo?.payType,
+              initialValue: contract?.payType,
               children: (
                 <Select
-                  value={contract?.customerInfoVo?.payType}
+                  value={contract?.payType}
                 >
                   <Select.Option value="1">转账</Select.Option>
                   <Select.Option value="2">现金</Select.Option>
@@ -829,10 +829,10 @@ class ManagementContractSetting extends ContractSetting {
             {
               label: "付款方式",
               name: "payType",
-              initialValue: contract?.customerInfoVo?.payType,
+              initialValue: contract?.payType,
               children: (
                 <Select
-                  value={contract?.customerInfoVo?.payType}
+                  value={contract?.payType}
                 >
                   <Select.Option value="1">转账</Select.Option>
                   <Select.Option value="2">现金</Select.Option>

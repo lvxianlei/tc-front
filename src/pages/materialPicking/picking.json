@@ -122,7 +122,8 @@
                     "type": "date",
                     "format": "YYYY-MM-DD"
                 }
-            ]
+            ],
+            "required": true
         },
         {
             "title": "塔型",
@@ -138,6 +139,7 @@
             "value": "name",
             "dependencies": true,
             "readOnly": true,
+            "required": true,
             "columns": [
                 {
                     "title": "编号",
@@ -179,6 +181,7 @@
             "path": "/tower-production/team/page",
             "value": "name",
             "readOnly": true,
+            "required": true,
             "dependencies": true,
             "columns": [
                 {
@@ -207,6 +210,7 @@
             "path": "/tower-production/team/teamUsers",
             "value": "name",
             "readOnly": true,
+            "required": true,
             "dependencies": true,
             "disabled": true,
             "columns": [
