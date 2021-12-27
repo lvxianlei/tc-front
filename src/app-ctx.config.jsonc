@@ -85,6 +85,11 @@
                                 "authority": "entrust_page_list"
                             },
                             {
+                                "label": "已完成委托",
+                                "path": "/outsource/Final",
+                                "authority": "entrust_page_list"
+                            },
+                            {
                                 "label": "已完成塔型",
                                 "path": "/outsource/towershape",
                                 "authority": "entrust_product_category_complete"
