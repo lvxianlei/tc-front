@@ -12,8 +12,7 @@ export default function PlanTrack(): React.ReactNode {
             title: '序号',
             width: 50,
             dataIndex: 'index',
-            fixed: "left" as FixedType,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            render: (_a: any, _b: any, index: number) => {return index + 1}
         },
         {
             key: 'businessUserName',
