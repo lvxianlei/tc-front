@@ -189,6 +189,12 @@ const columns = [
         )
     },
     {
+        key: 'apertureNumber',
+        title: '类型',
+        width: 200,
+        dataIndex: 'apertureNumber'
+    },
+    {
         key: 'surfaceArea',
         title: '表面积',
         width: 200,
