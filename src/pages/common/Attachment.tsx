@@ -110,7 +110,7 @@ export default forwardRef(function ({
 
     useEffect(() => setAttachs(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || []), [JSON.stringify(dataSource)])
 
-    useEffect(() => setUploadOSSUrlList([...uploadOSSUrlList]), [JSON.stringify(uploadOSSUrlList)])
+    useEffect(() => setUploadOSSUrlList([...uploadOSSUrlList]), [JSON.stringify([...uploadOSSUrlList])])
 
     const deleteAttachData = useCallback((uid: string) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== uid : item.id !== uid)), [setAttachs, attchs])
 
@@ -186,7 +186,7 @@ export default forwardRef(function ({
                 }
             }
         }
-    }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo])
+    }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo, uploadOSSUrlList])
 
     const getDataSource = useCallback(() => attchs, [attchs])
 
