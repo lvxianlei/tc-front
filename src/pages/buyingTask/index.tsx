@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Descriptions, Button, DatePicker, Select, Input, message } from 'antd';
-import { CommonTable, DetailContent, DetailTitle, Page } from '../common'
+import { CommonTable, DetailContent, DetailTitle, IntgSelect, Page } from '../common'
 import { buyingTask, operatingInformation } from "./buyingTask.json"
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
@@ -116,6 +116,14 @@ export default function RawMaterial() {
             value.startStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
+        if (value.batcherId) {
+            value.batcherDeptId = value.batcherId.first
+            value.batcherId = value.batcherId.second
+        }
+        if (value.purchaserId) {
+            value.purchaserDeptId = value.purchaserId.first
+            value.purchaserId = value.purchaserId.second
+        }
         setFilterValue(value)
         return value
     }
@@ -151,13 +159,13 @@ export default function RawMaterial() {
                 ]}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
-            //     extraOperation={
-            //     <Button type="primary" ghost onClick={async () => {
-            //         await generaterRun()
-            //         await message.success("成功生成采购任务...")
-            //         history.go(0)
-            //     }}>临时生成采购任务</Button>
-            // }
+                //     extraOperation={
+                //     <Button type="primary" ghost onClick={async () => {
+                //         await generaterRun()
+                //         await message.success("成功生成采购任务...")
+                //         history.go(0)
+                //     }}>临时生成采购任务</Button>
+                // }
                 searchFormItems={[
                     {
                         name: 'startStatusUpdateTime',
@@ -167,7 +175,7 @@ export default function RawMaterial() {
                     {
                         name: 'taskStatus',
                         label: '任务状态',
-                        children: <Select style={{ width: "100px" }}>
+                        children: <Select style={{ width: 100 }}>
                             <Select.Option value={1} key={1}>待确认</Select.Option>
                             <Select.Option value={2} key={2}>已完成</Select.Option>
                             <Select.Option value={3} key={3}>待指派</Select.Option>
@@ -178,16 +186,20 @@ export default function RawMaterial() {
                         </Select>
                     },
                     {
-                        name: 'confirmId',
-                        label: '询价人',
-                        children: <div>
-                        </div>
+                        name: 'batcherId',
+                        label: '配料人',
+                        children: <IntgSelect width={200} />
+                    },
+                    {
+                        name: 'purchaserId',
+                        label: '采购人',
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'fuzzyQuery',
                         label: '查询',
-                        children: <Input maxLength={200} />
-                    },
+                        children: <Input placeholder="任务编号/计划号/订单编号/内部合同编号" style={{ width: 260 }} maxLength={200} />
+                    }
                 ]}
             />
             <Modal width={1011} title="原材料采购任务详情" visible={isModalVisible} footer={buttons} onCancel={handleCancel}>

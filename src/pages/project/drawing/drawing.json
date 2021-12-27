@@ -105,12 +105,6 @@
                     "dataIndex": "signContractTime",
                     "type": "date",
                     "format": "YYYY-MM-DD"
-                },
-                {
-                    "title": "要求交货日期",
-                    "dataIndex": "deliveryTime",
-                    "type": "date",
-                    "format": "YYYY-MM-DD"
                 }
             ]
         },
