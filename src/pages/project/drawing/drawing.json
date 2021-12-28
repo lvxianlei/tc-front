@@ -168,7 +168,8 @@
         {
             "title": "备注",
             "dataIndex": "description",
-            "type": "textarea"
+            "type": "textarea",
+            "maxLength": 300
         }
     ],
     "connectContract": {
