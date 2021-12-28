@@ -3,6 +3,7 @@ import { Button, Input, DatePicker, Select } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../common'
 import { invoicingListHead } from "./InvoicingData.json"
+import { productTypeOptions } from "../../configuration/DictionaryOptions"
 export default function Invoicing() {
     const history = useHistory()
     const onFilterSubmit = (value: any) => {
@@ -17,7 +18,18 @@ export default function Invoicing() {
     return <Page
         path="/tower-finance/invoicing"
         columns={[
-            ...invoicingListHead,
+            ...invoicingListHead.map((item: any) => {
+                if (item.dataIndex === "productTypeId") {
+                    return ({
+                        ...item,
+                        enum: productTypeOptions?.map(item => ({
+                            value: item.id,
+                            label: item.name
+                        }))
+                    })
+                }
+                return item
+            }),
             {
                 title: "操作",
                 dataIndex: "opration",

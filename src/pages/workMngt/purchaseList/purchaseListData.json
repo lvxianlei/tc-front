@@ -60,6 +60,12 @@
                     "value": 3
                 }
             ]
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "purchaseStatusUpdateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
         }
     ],
     "ListIngredient": [
