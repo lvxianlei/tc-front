@@ -106,7 +106,7 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
                 span: 4
             },
             valueCol: {
-                span: 8
+                span: 6
             },
             rows: [[{
                 label: '订单编号',

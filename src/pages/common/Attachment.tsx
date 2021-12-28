@@ -4,6 +4,7 @@ import { DetailTitle } from "../common"
 import RequestUtil from "../../utils/RequestUtil"
 import useRequest from '@ahooksjs/use-request'
 import { downLoadFile } from "../../utils"
+import moment from 'moment'
 export interface FileProps {
     id?: string,
     uid?: number | string,
@@ -220,11 +221,10 @@ export default forwardRef(function ({
         }
         return <>
             {!edit && <Button size="small" type="link" onClick={() => handlePreview(records)}>预览</Button>}
-            <Button size="small" type="link" onClick={() => downLoadFile(records.downloadUrl)}>下载</Button>
+            <Button size="small" type="link" onClick={() => downLoadFile(records.downloadUrl, records.originalName)}>下载</Button>
             {edit && <Button size="small" type="link" onClick={() => deleteAttachData(records.uid)}>删除</Button>}
         </>
     }, [attchs])
-
     return <>
         <Modal
             title={`${picInfo.title}`}

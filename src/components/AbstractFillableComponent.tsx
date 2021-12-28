@@ -174,7 +174,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                 {
                     items.map<React.ReactNode>((group: IFormItemGroup): React.ReactNode => (
                         <React.Fragment key={group.title}>
-                            <div className={styles.title}>{group.title}</div>
+                            <div className={styles.titleWrapper} style={{marginBottom: 12}}>{group.title}</div>
                             {
                                 group.itemCol
                                     ?
@@ -206,7 +206,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
     public render(): React.ReactNode {
         const formItemGroups: IFormItemGroup[][] = this.getFormItemGroups();
         return (
-            <Card title={this.getTitle()}>
+            <Card title={this.getTitle()} className={styles.cardWrapper}>
                 <Form {...this.getFormProps()} ref={this.form}>
                     <Space size="large" direction="vertical" className={`${layoutStyles.width100} ${styles.space}`}>
                         <Space size="middle" direction="horizontal" className={`${layoutStyles.width100} ${styles.hspace}`}>
@@ -217,7 +217,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                         {
                             this.renderExtraSections().map<React.ReactNode>((section: IRenderedSection): React.ReactNode => (
                                 <React.Fragment key={section.title}>
-                                    <div className={styles.title}>{section.title}</div>
+                                    <div className={styles.titleWrapper}>{section.title}</div>
                                     {section.render.call(this)}
                                 </React.Fragment>
                             ))

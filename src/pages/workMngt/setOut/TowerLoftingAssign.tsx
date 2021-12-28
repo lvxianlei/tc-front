@@ -204,7 +204,6 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 onCancel={ () => this.modalCancel() }
             >
                 <DetailContent className={ styles.modalHeight }>
-                    <p>指派信息</p>
                     <Form ref={ this.form } className={ styles.descripForm }>
                         <Descriptions title="" bordered size="small" colon={ false } column={ 3 }>
                             <Descriptions.Item label="塔型">

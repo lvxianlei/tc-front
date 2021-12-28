@@ -151,13 +151,13 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 comparisonPriceNumber: baseInfo.comparisonPriceNumber.records ? baseInfo.comparisonPriceNumber.records[0].comparisonPriceNumber : baseInfo.comparisonPriceNumber,
                 transportBearDto: {
                     ...freightInfo,
-                    transportCompanyId: freightInfo.transportCompanyId.split(',')[0],
-                    transportCompany: freightInfo.transportCompanyId.split(',')[1]
+                    transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
+                    transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
                 },
                 unloadBearDto: {
                     ...stevedoringInfo,
-                    unloadCompanyId: stevedoringInfo.unloadCompanyId.split(',')[0],
-                    unloadCompany: stevedoringInfo.unloadCompanyId.split(',')[1],
+                    unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
+                    unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
                 },
                 materialContractDetailDtos: materialList.map((item: any) => {
                     const id = item.materialTextureId;
