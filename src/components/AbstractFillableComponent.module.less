@@ -3,13 +3,14 @@
 .hspace {
     align-items: baseline;
     :global(.ant-space-item) {
-        padding: 20px;
+        // padding: 20px;
     }
 }
 
 .space :global(.ant-space-item),
 .hspace :global(.ant-space-item) {
     width: 100%;
+    margin-bottom: 12px !important;
 }
 
 .btnOperationContainer {
@@ -22,4 +23,17 @@
     padding-left: 10px;
     font-weight: 500;
     margin-bottom: @margin-lg;
+}
+
+// 新增合同的修改
+.cardWrapper {
+    :global(.ant-card-body) {
+        padding: 16px !important;
+    }
+}
+
+.titleWrapper {
+    font-size: 16px;
+    color: #181818;
+    font-weight: bold;
 }

@@ -32,7 +32,7 @@ class ManagementContractSetting extends ContractSetting {
         {
           title: "基础信息",
           itemCol: {
-            span: 8,
+            span: 6,
           },
           itemProps: [
             {
@@ -601,7 +601,7 @@ class ManagementContractSetting extends ContractSetting {
         {
           title: "基础信息",
           itemCol: {
-            span: 8,
+            span: 6,
           },
           itemProps: [
             {
