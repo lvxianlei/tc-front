@@ -34,7 +34,7 @@ export default function TransferList(): React.ReactNode {
                     "dataIndex": "operation",
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>
-                            <Button type="link" size="small"><Link to={`/employeeRelation/transfer/detail/${record.id}`}>查看</Link></Button>
+                            <Button type="link" style={{marginRight: 12}} size="small"><Link to={`/employeeRelation/transfer/detail/${record.id}`}>查看</Link></Button>
                             <Button disabled={[2, 3].includes(record.status)} type="link" size="small"><Link to={`/employeeRelation/transfer/edit/${record.id}`}>编辑</Link></Button>
                         </>
                     )

@@ -200,7 +200,7 @@
                                         <>
                                         {/* 等于2为已付款 */}
                                         {record.payStatus != 2 ?
-                                            <Button type="link" onClick={() => { 
+                                            <Button type="link" style={{marginRight: 12}} onClick={() => { 
                                                 setAddVisible(true);
                                                 setPayApplyId(record.id);
                                                 setAmountPayable(record.payMoney);
