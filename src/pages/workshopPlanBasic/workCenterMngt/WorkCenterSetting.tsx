@@ -252,7 +252,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["workCenterRelations", index, "workHour"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入标准工时" }]}>
-                    <InputNumber step={1} min={ 0 } maxLength={ 10 } precision={ 0 } key={ index } />
+                    <InputNumber step={1} min={ 0 } max={ 3600 } precision={ 0 } key={ index } />
                 </Form.Item>
             )  
         },
