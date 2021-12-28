@@ -92,11 +92,11 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     workCenterRelations: [...data.workCenterRelations],
                     equipmentId: baseData.equipmentId.join(',')
                 })
+                resolve(true);
             } else {
-               message.warning("请添加产能矩阵")
+               message.warning("请添加产能矩阵");
+               reject(false);
             }
-            
-            resolve(true)
         } catch (error) {
             reject(false)
         }
