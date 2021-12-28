@@ -213,19 +213,6 @@
             "type": "string"
         },
         {
-            "title": "合同交货日期",
-            "dataIndex": "contractDevTime",
-            "disabled": true,
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择合同交货日期..."
-                }
-            ]
-        },
-        {
             "title": "开票日期",
             "dataIndex": "ticketTime",
             "type": "date",

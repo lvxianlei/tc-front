@@ -40,6 +40,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPicking/${id}`)
             setMaterialPickingInfoDTOS(result?.materialPickingInfoVOS.map((item: any) => ({
                 ...item,
+                ids: item.ids.split(","),
                 onlyId: `${item.materialName}${item.materialTexture}${item.spec}${item.length}`
             })))
             setChooseMaterialParmas({

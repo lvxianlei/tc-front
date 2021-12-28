@@ -41,7 +41,7 @@ export default function Index(): JSX.Element {
         path="/tower-customer/customer"
         filterValue={filterValue}
         extraOperation={[
-            <Button key="new" type="primary"><Link to="/client/mngt/new">新增客户</Link></Button>
+            <Button key="new" type="primary"><Link to="/client/mngt/edit/new">新增客户</Link></Button>
         ]}
         columns={[...clientMegt, {
             title: '操作',
@@ -49,11 +49,11 @@ export default function Index(): JSX.Element {
             width: 80,
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
-                    <Button type="link" size="small" style={{padding: 0, marginRight: 12}}><Link to={`/client/mngt/edit/${record?.id}`}>编辑</Link></Button>
+                    <Button type="link" size="small" style={{ padding: 0, marginRight: 12 }}><Link to={`/client/mngt/edit/${record?.id}`}>编辑</Link></Button>
                     <Button
                         type="link"
                         size="small"
-                        style={{padding: 0}}
+                        style={{ padding: 0 }}
                         onClick={() => handleDelete(record?.id)}
                     >删除</Button>
                 </>

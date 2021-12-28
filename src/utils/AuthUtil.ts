@@ -54,7 +54,7 @@ export default abstract class AuthUtil {
      * @returns App name
      */
     public static getCurrentAppName(): string {
-        return Cookies.get(APP_Name) || ''
+        return sessionStorage.getItem(APP_Name) || ''
     }
 
     /**
@@ -63,8 +63,8 @@ export default abstract class AuthUtil {
      * @param appName 
      * @param [options] 
      */
-    public static setCurrentAppName(appName: string, options?: CookieAttributes): void {
-        Cookies.set(APP_Name, appName, options)
+    public static setCurrentAppName(appName: string): void {
+        sessionStorage.setItem(APP_Name, appName)
     }
 
     /**
@@ -149,6 +149,7 @@ export default abstract class AuthUtil {
     public static removeSinzetechAuth(): void {
         sessionStorage.removeItem(TOKEN_KEY);
         sessionStorage.removeItem(REFRENSH_TOKEN);
+        sessionStorage.removeItem(APP_Name);
     }
 
     /**

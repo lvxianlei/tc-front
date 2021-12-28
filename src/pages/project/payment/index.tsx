@@ -54,7 +54,7 @@ export default function Payment() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 7}} onClick={() => history.push(`/project/payment/detail/${record.id}`)}>查看</span>
+                        <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}} onClick={() => history.push(`/project/payment/detail/${record.id}`)}>查看</span>
                         <Button type="link" size="small" disabled={![4, 6].includes(record.applyStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
                 }

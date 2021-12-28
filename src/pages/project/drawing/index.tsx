@@ -165,7 +165,7 @@ export default function Drawing(): React.ReactNode {
                 fixed: "right",
                 render: (_: undefined, record: any) => <>
                     <span
-                        style={{color: "#FF8C00", cursor: "pointer", marginRight: 7}}
+                        style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}}
                         onClick={() => {
                             setDetailedId(record.id)
                             setDetailVisible(true)
@@ -174,6 +174,7 @@ export default function Drawing(): React.ReactNode {
                         type="link"
                         size="small"
                         disabled={![0, 3].includes(record.auditStatus)}
+                        style={{marginRight: 12}}
                         onClick={() => {
                             setType("edit")
                             setDetailedId(record.id)
@@ -183,6 +184,7 @@ export default function Drawing(): React.ReactNode {
                         type="link"
                         size="small"
                         disabled={(![null, "-1", -1, 4].includes(record.auditStatus)) || record.contractId}
+                        style={{marginRight: 12}}
                         onClick={() => {
                             setDetailedId(record.id)
                             setConnectVisible(true)
@@ -192,6 +194,7 @@ export default function Drawing(): React.ReactNode {
                         size="small"
                         disabled={![0, 3].includes(record.auditStatus)}
                         onClick={() => handleDelete(record.id)}
+                        style={{marginRight: 12}}
                     >删除</Button>
                     <Button
                         type="link"
