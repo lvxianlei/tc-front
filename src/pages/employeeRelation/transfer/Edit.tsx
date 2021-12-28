@@ -83,7 +83,7 @@ export default function Edit() {
             })
         }
         if (changeFields.newDepartmentName) {
-            console.log()
+            console.log(changeFields.newDepartmentName)
             form.setFieldsValue({
                 newCompanyName: AuthUtil.getTenantName(),
                 newDepartmentName: {

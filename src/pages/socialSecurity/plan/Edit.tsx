@@ -242,7 +242,7 @@ export default function Edit() {
                                     ...item,
                                     render: (value: any, record: any, index: number) => <Form.Item
                                         name={[index, item.dataIndex]}>
-                                        <Input.TextArea autoSize={{ maxRows: 1 }} value={value} />
+                                        <Input.TextArea maxLength={300} autoSize={{ maxRows: 1 }} value={value} />
                                     </Form.Item>
                                 })
                             case "insuranceAmount":
