@@ -7,7 +7,6 @@ import { ISchedulingList } from './IShopFloorPlan';
 import { detailColumns } from "./shopFloorPlan.json";
 import { useHistory, useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
-import moment from 'moment';
 
 export default function Detail(): React.ReactNode {
     const [ form ] = Form.useForm();
