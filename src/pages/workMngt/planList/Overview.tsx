@@ -43,9 +43,9 @@ export default function Edit() {
                     filterValue={filterValue}
                     searchFormItems={[]}
                 />
-                <span>
+                <div style={{marginBottom: 12}}>
                     {` 采购类型统计： 圆钢总重（t）：${purchasePlanData?.total?.roundSteelTotal === -1 ? "0" : purchasePlanData?.total?.roundSteelTotal}    角钢总重（t）：${purchasePlanData?.total?.angleSteelTotal === -1 ? "0" : purchasePlanData?.total?.angleSteelTotal}        钢板总重（t）：${purchasePlanData?.total?.steelPlateTotal === -1 ? "0" : purchasePlanData?.total?.steelPlateTotal}`}
-                </span>
+                </div>
                 <CommonTable loading={purchasePlanLoading} columns={PurchaseTypeStatistics} dataSource={purchasePlanData?.data || []} />
             </DetailContent>
             {isExport ? <ExportList
@@ -56,9 +56,9 @@ export default function Edit() {
                     let keys = [...PurchaseList]
                     return keys
                 }}
-                current={0}
-                size={0}
-                total={0}
+                current={purchasePlanData?.current || 1}
+                size={purchasePlanData?.size || 10}
+                total={purchasePlanData?.total || 0}
                 url={`/tower-supply/materialPurchasePlan/list/total/${params.id}`}
                 serchObj={{}}
                 closeExportList={() => { setIsExportStoreList(false) }}
