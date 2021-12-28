@@ -29,7 +29,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         span: 4,
       },
       valueCol: {
-        span: 8,
+        span: 6,
       },
       rows: [
         [
