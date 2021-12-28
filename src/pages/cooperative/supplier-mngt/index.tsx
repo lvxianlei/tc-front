@@ -109,12 +109,12 @@ export default function SupplierMngt(): React.ReactNode {
                     dataIndex: "opration",
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" onClick={() => {
+                            <Button type="link" style={{marginRight: 12}} onClick={() => {
                                 setOprationType("edit")
                                 setDetailId(record.id)
                                 setEditVisible(true)
                             }}>编辑</Button>
-                            <Button type="link" onClick={() => {
+                            <Button type="link" style={{marginRight: 12}} onClick={() => {
                                 setDetailId(record.id)
                                 setOverviewVisible(true)
                             }}>详情</Button>
