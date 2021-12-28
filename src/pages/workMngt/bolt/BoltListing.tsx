@@ -367,7 +367,7 @@ export default function BoltList(): React.ReactNode {
                     <Button type="primary" hidden={params.status === '3' && params.boltLeader === userId ? false : true} ghost>导入</Button>
                 </Upload>
                 {params.status === '3' && params.boltLeader === userId ? editorLock === '锁定' ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => { getDataSource() }} /> : null}
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
             </Space>
             <Form form={form}>
                 <Table columns={tableColumns} dataSource={dataSource} pagination={false} onRow={ () => ({ className: AbstractMngtComponentStyles.tableRow })}/>

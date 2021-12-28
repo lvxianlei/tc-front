@@ -780,7 +780,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     onClick={() => {
                         history.go(-1)
                     }}
-                >返回上一级</Button>
+                >返回</Button>
             </div>
             <div className="tip_public_Stock">
                 <div>总重量： {Number(weight) > 0 ? weight : 0} 吨， 缺料总重量：{MaterialShortageTotalWeight} 吨</div>

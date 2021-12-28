@@ -76,7 +76,7 @@ export default function Overview() {
                         history.go(0)
                     }
                 }}>缺料申请</Button>
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
             </>}
             filterValue={{ ...filterValue, diffId: params.id }}
             onFilterSubmit={onFilterSubmit}

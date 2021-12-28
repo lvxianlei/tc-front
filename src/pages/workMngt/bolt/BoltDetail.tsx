@@ -170,7 +170,7 @@ export default function BoltCheck(): React.ReactNode {
                             <Button type="primary" ghost onClick={() => { }} style={{ marginLeft: 10, }}>导入</Button>
                         </Upload>
                         <Button type="primary" ghost onClick={() => { setIsAddModal(true) }} style={{ marginLeft: 10, }}>添加</Button>
-                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
+                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
                     </div>
                 }
                 headTabs={[]}
