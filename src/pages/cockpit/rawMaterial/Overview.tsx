@@ -112,7 +112,7 @@ export default function Overview(): React.ReactNode {
                         width: 100,
                         render: (_: any, record: any): React.ReactNode => {
                             return <>
-                                <Button type="link" onClick={() => {
+                                <Button type="link" style={{marginRight: 12}} onClick={() => {
                                     setOprationType("edit")
                                     setEditId(record.id)
                                     setVisible(true)
