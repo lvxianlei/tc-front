@@ -152,7 +152,7 @@ export default function TemplateDetail() {
                         }
                     })
                 }}><Button type="primary" ghost>上传</Button></Attachment>
-                <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
+                <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
             </div>
             <CommonTable columns={columns} dataSource={data} />
             <Modal visible={isImgModal} onCancel={() => { cancelModal() }} footer={false}>

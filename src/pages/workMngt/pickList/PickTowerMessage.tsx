@@ -266,7 +266,7 @@ export default function PickTowerMessage(): React.ReactNode {
                         <Button type="primary" ghost>提交</Button>
                     </Popconfirm>:null}
                     { (params.status==='1'||params.status==='2')&& params.materialLeader===AuthUtil.getUserId() ? <TowerPickAssign title="塔型提料指派" id={ params.id } update={ onRefresh } /> : null }
-                    <Button type="primary" onClick={()=>history.push('/workMngt/pickList')} ghost>返回上一级</Button>
+                    <Button type="primary" onClick={()=>history.push('/workMngt/pickList')} ghost>返回</Button>
                     </Space>
                 }
                 searchFormItems={[
