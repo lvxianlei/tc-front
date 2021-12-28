@@ -77,14 +77,15 @@ export default function PackingList(): React.ReactNode {
             width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListSetting/${ record.id }` }><Button type="link">编辑</Button></Link>
+                    <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListSetting/${ record.id }` }><Button type="link" disabled={location?.state?.status === 4}>编辑</Button></Link>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => { RequestUtil.delete(`/tower-science/packageStructure?id=${ record.id }`).then(res => history.go(0)) } }
                         okText="确认"
                         cancelText="取消"
+                        disabled={location?.state?.status === 4}
                     >
-                        <Button type="link">删除</Button>
+                        <Button type="link" disabled={location?.state?.status === 4}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -179,7 +180,7 @@ export default function PackingList(): React.ReactNode {
             <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
         </Space>
         <DetailContent>
-            <CommonTable columns={ location?.state?.status === 4 ? columns.splice(1, 6) : columns } style={{ marginBottom: '50px' }} dataSource={ detailData?.packageStructureVOList } pagination={ false } onRow={ (record: Record<string, any>, index: number) => ({
+            <CommonTable columns={ columns } style={{ marginBottom: '50px' }} dataSource={ detailData?.packageStructureVOList } pagination={ false } onRow={ (record: Record<string, any>, index: number) => ({
                 onClick: async () => { getBundleData(record.id); }
             })}/>
             <CommonTable dataSource={ [...bundleData] } columns={ bundleColumns } pagination={ false }/>
@@ -196,8 +197,8 @@ export default function PackingList(): React.ReactNode {
             current={detailData?.current || 1}
             size={detailData?.size || 10}
             total={detailData?.total || 0}
-            url={`/tower-science/packageStructure/list`}
-            serchObj={{ productId: params.productId  }}
+            url={`/tower-science/packageStructure/exportByProductId`}
+            serchObj={{productId: params.productId}}
             closeExportList={() => setIsExport(false)}
         /> : null}
     </>

@@ -14,7 +14,7 @@ export default function ShopFloorPlan(): React.ReactNode {
     const [ confirmStatus, setConfirmStatus ] = useState<number>(1);
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [ form ] = Form.useForm();
-    const [ type, setType ] = useState<number>();
+    const [ type, setType ] = useState<number>(1);
 
     const { data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-aps/productionUnit?size=1000`);

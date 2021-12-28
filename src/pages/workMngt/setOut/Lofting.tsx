@@ -565,13 +565,15 @@ export default function Lofting(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => { 
-                            if(selectedKeys.length > 0) {
-                                RequestUtil.delete(`/tower-science/productStructure?productStructureIdList=${selectedKeys.join(',')}`).then(res => {
-                                    message.success('删除成功');
-                                    history.go(0);
-                                }) 
-                            } else if(selectedKeys.length > 100) {
-                                message.warning('删除项不可大于100')
+                            if(selectedKeys.length > 0) { 
+                                if(selectedKeys.length > 100) {
+                                    message.warning('删除项不可大于100')
+                                } else {
+                                    RequestUtil.delete(`/tower-science/productStructure?productStructureIdList=${selectedKeys.join(',')}`).then(res => {
+                                        message.success('删除成功');
+                                        history.go(0);
+                                    }) 
+                                }
                             } else {
                                 message.warning('请选择要删除的数据')
                             }
