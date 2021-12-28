@@ -37,7 +37,6 @@ export default function EnquiryList(): React.ReactNode {
                     render: (_: any, records: any) => <Button type="link" disabled={userId !== records.batcherId} ><Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link></Button>
                 }
             ]}
-            extraOperation={{}}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
