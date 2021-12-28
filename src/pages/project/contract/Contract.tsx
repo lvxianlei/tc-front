@@ -40,6 +40,14 @@ class ManagementContract extends PromContract {
     const projectId = (this.props.match.params as any).id;
     return [
       {
+        key: 'index',
+        title: '序号',
+        dataIndex: 'index',
+        fixed: "left",
+        width: 50,
+        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+      },
+      {
         key: "contractNumber",
         title: "合同编号",
         dataIndex: "contractNumber",
@@ -128,6 +136,7 @@ class ManagementContract extends PromContract {
       {
         key: "operation",
         title: "操作",
+        fixed: "right",
         dataIndex: "operation",
         render: (_: undefined, record: object): React.ReactNode => (
           <Space direction="horizontal" size="small">
