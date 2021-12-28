@@ -6,9 +6,10 @@ import { collectionListHead } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Collection() {
-    const [ refresh, setRefresh ] = useState<boolean>(false);
+    const [refresh, setRefresh] = useState<boolean>(false);
     const history = useHistory()
     const [confirmStatus, setConfirmStatus] = useState<number>(0)
+    const [filterValue, setFilterValue] = useState<any>({ confirmStatus });
     const { loading, data, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/backMoney`, { ...params })
@@ -24,11 +25,13 @@ export default function Collection() {
             value.startRefundTime = formatDate[0]
             value.endRefundTime = formatDate[1]
         }
+        setFilterValue({ confirmStatus, ...value })
         return value
     }
 
     const operationChange = (event: any) => {
         setConfirmStatus(parseFloat(`${event.target.value}`));
+        setFilterValue({ confirmStatus: event.target.value })
         setRefresh(!refresh);
     }
 
@@ -48,7 +51,7 @@ export default function Collection() {
                     return <Button type="link" onClick={() => history.push(`/project/collection/detail/${record.id}`)}>查看</Button>
                 }
             }]}
-            refresh={ refresh }
+        refresh={refresh}
         extraOperation={<>
             <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
                 <Radio.Button value={0}>未确认</Radio.Button>
@@ -56,7 +59,7 @@ export default function Collection() {
             </Radio.Group>
         </>}
         onFilterSubmit={onFilterSubmit}
-        filterValue={{ confirmStatus }}
+        filterValue={filterValue}
         searchFormItems={[
             {
                 name: 'fuzzyQuery',

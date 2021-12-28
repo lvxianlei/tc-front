@@ -92,17 +92,17 @@ export default function CostDetail() {
                     点击<Link to={`/project/management/new/cost/${params.id}`}>创建</Link>开始成本评估
                 </nav>
             } />}
-            {data?.askInfo?.askInfoVo && <DetailContent title={[
-                <Button key="push" style={{ marginRight: '16px' }} type="primary" onClick={handleNewAudit}>发起询价任务</Button>,
-                <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/cost/${params.id}`)}>编辑</Button>,
-                <Button key="delete" style={{ marginRight: '16px' }} type="primary" onClick={hadleDelete}>删除</Button>,
+            {data?.askInfo?.askInfoVo && <DetailContent operation={[
+                <Button key="push" style={{ marginRight: '12px' }} type="primary" onClick={handleNewAudit}>发起询价任务</Button>,
+                <Button key="edit" style={{ marginRight: '12px' }} type="primary" onClick={() => history.push(`/project/management/edit/cost/${params.id}`)}>编辑</Button>,
+                <Button key="delete" style={{ marginRight: '12px' }} type="primary" onClick={hadleDelete}>删除</Button>,
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo
                     columns={costBase.map((item: any) => ["projectLeader", "biddingPerson"].includes(item.dataIndex) ? ({ title: item.title, dataIndex: item.dataIndex }) : item)}
                     dataSource={data?.askInfo?.askInfoVo || {}} />
-                <DetailTitle title="产品类型成本评估" />
+                <DetailTitle title="产品类型成本评估" padding={true} />
                 {data?.askInfo?.productArr.map((item: any, index: number) => <div key={index}>
                     <DetailTitle title={`${item.voltage}kv${item.productName}`} />
                     <CommonTable columns={[
