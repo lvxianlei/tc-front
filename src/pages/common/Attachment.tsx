@@ -204,7 +204,7 @@ export default forwardRef(function ({
             setVisible(true)
         } else if (["pdf"].includes(record?.fileSuffix || "")) {
             // window.open(record.downloadUrl)
-            fileLinkToStreamDownload(record?.downloadUrl, record?.fileName, 'pdf')
+            fileLinkToStreamDownload(record?.downloadUrl, record?.originalName, 'pdf')
         } else {
             message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf预览...")
         }
