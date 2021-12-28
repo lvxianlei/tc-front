@@ -366,6 +366,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                 if( e == 1 ) {
                                     setNewFreight([]);
                                     setFreightCol(1);
+                                    freightForm.setFieldsValue({
+                                        transportBear: e,
+                                        transportCompanyId: '',
+                                        transportTaxPrice: '',
+                                        transportPrice: ''
+                                    })
                                 } else {  
                                     setNewFreight(freight)
                                     setFreightCol(4);
@@ -417,10 +423,15 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({ ...item, render: (data: any, props: any) => {
                     return <Form.Item name="unloadBear">
                         <Select style={{ width: '150px' }} placeholder="请选择卸车承担" onChange={(e: number) => {
-                            
                             if( e == 1 ) {
                                 setNewStevedoring([]);
                                 setStevedoringCol(1);
+                                stevedoringForm.setFieldsValue({
+                                    unloadBear: e,
+                                    unloadCompanyId: '',
+                                    unloadTaxPrice: '',
+                                    unloadPrice: ''
+                                })
                             } else {  
                                 setNewStevedoring(stevedoring);
                                 setStevedoringCol(4);

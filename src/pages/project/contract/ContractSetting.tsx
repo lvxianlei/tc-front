@@ -26,7 +26,6 @@ class ManagementContractSetting extends ContractSetting {
 
   public getFormItemGroups(): IFormItemGroup[][] {
     const contract = this.state.contract as ProjectContractInfo | undefined;
-    console.log(contract, "-=--------------")
     return this.state.region === "其他-国外" ? [
       [
         {
