@@ -179,7 +179,7 @@ export default function PackingList(): React.ReactNode {
             <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
         </Space>
         <DetailContent>
-            <CommonTable columns={ location?.state?.status === 4 ? columns.splice(1, 7) : columns } style={{ marginBottom: '50px' }} dataSource={ detailData?.packageStructureVOList } pagination={ false } onRow={ (record: Record<string, any>, index: number) => ({
+            <CommonTable columns={ location?.state?.status === 4 ? columns.splice(1, 6) : columns } style={{ marginBottom: '50px' }} dataSource={ detailData?.packageStructureVOList } pagination={ false } onRow={ (record: Record<string, any>, index: number) => ({
                 onClick: async () => { getBundleData(record.id); }
             })}/>
             <CommonTable dataSource={ [...bundleData] } columns={ bundleColumns } pagination={ false }/>
