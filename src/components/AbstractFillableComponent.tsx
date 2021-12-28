@@ -143,7 +143,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @returns extra operation area 
      */
     protected renderExtraOperationArea(): React.ReactNode {
-        return <Button type="primary" htmlType="button" onClick={this.onSubmitAndContinue}>保存并继续新增</Button>;
+        return <Button type="primary" htmlType="button" style={{marginRight: 16, position: "absolute", top: 20}} onClick={this.onSubmitAndContinue}>保存并继续新增</Button>;
     }
 
     /**
@@ -151,7 +151,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @returns extra operation area 
      */
     protected cancelOperationButton(): React.ReactNode {
-        return <Button type="ghost" htmlType="reset" onClick={this.onCancel}>取消</Button>;
+        return <Button type="ghost" htmlType="reset" style={{marginRight: 16, position: "absolute", top: 20, left: 94}} onClick={this.onCancel}>取消</Button>;
     }
 
     /**
@@ -159,7 +159,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @returns primary operation button
      */
     protected getPrimaryOperationButton(): React.ReactNode {
-        return <Button type="primary" htmlType="submit">保存</Button>;
+        return <Button type="primary" htmlType="submit" style={{marginRight: 16, position: "absolute", top: 20}}>保存</Button>;
     }
     /**
      * @protected
@@ -205,29 +205,32 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      */
     public render(): React.ReactNode {
         const formItemGroups: IFormItemGroup[][] = this.getFormItemGroups();
+        const height = document.documentElement.clientHeight - 140;
         return (
-            <Card title={this.getTitle()} className={styles.cardWrapper}>
+            <Card className={styles.cardWrapper}>
                 <Form {...this.getFormProps()} ref={this.form}>
                     <Space size="large" direction="vertical" className={`${layoutStyles.width100} ${styles.space}`}>
-                        <Space size="middle" direction="horizontal" className={`${layoutStyles.width100} ${styles.hspace}`}>
+                        <div style={{height: height, "overflowY": "auto", overflowX: "hidden"}}>
+                            <Space size="middle" direction="horizontal" className={`${layoutStyles.width100} ${styles.hspace}`}>
+                                {
+                                    formItemGroups.map<React.ReactNode>((items: IFormItemGroup[], itemIndex: number): React.ReactNode => this.renderFormItems(items, itemIndex))
+                                }
+                            </Space>
                             {
-                                formItemGroups.map<React.ReactNode>((items: IFormItemGroup[], itemIndex: number): React.ReactNode => this.renderFormItems(items, itemIndex))
+                                this.renderExtraSections().map<React.ReactNode>((section: IRenderedSection): React.ReactNode => (
+                                    <React.Fragment key={section.title}>
+                                        <div className={styles.titleWrapper}>{section.title}</div>
+                                        {section.render.call(this)}
+                                    </React.Fragment>
+                                ))
                             }
-                        </Space>
-                        {
-                            this.renderExtraSections().map<React.ReactNode>((section: IRenderedSection): React.ReactNode => (
-                                <React.Fragment key={section.title}>
-                                    <div className={styles.titleWrapper}>{section.title}</div>
-                                    {section.render.call(this)}
-                                </React.Fragment>
-                            ))
-                        }
+                        </div>
                         <div className={styles.btnOperationContainer}>
-                            <Space direction="horizontal" size="large">
+                            {/* <Space direction="horizontal" size="large"> */}
                                 {this.getPrimaryOperationButton()}
                                 {this.renderExtraOperationArea()}
                                 {this.cancelOperationButton()}
-                            </Space>
+                            {/* </Space> */}
                         </div>
                     </Space>
                 </Form>

@@ -1,17 +1,13 @@
 import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button } from 'antd'
-import { Link, useHistory, useRouteMatch, useLocation } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
 import { IntgSelect, Page } from '../../common'
 import AuthUtil from "../../../utils/AuthUtil";
-import ExportList from '../../../components/export/list';
 export default function EnquiryList(): React.ReactNode {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<object>(history.location.state as object);
     const userId = AuthUtil.getUserId()
-    const match = useRouteMatch()
-    const location = useLocation<{ state: {} }>();
-    const [isExport, setIsExportStoreList] = useState(false)
     const onFilterSubmit = (value: any) => {
         if (value.startBatcheStatusUpdateTime) {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -29,6 +25,7 @@ export default function EnquiryList(): React.ReactNode {
     return <>
         <Page
             path="/tower-supply/materialPurchaseTask/inquirer"
+            exportPath={`/tower-supply/materialPurchaseTask/inquirer`}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...baseInfo,
@@ -40,7 +37,6 @@ export default function EnquiryList(): React.ReactNode {
                     render: (_: any, records: any) => <Button type="link" disabled={userId !== records.batcherId} ><Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link></Button>
                 }
             ]}
-            extraOperation={<Button type="primary" ghost onClick={()=>{setIsExportStoreList(true)}}>导出</Button>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
@@ -71,20 +67,5 @@ export default function EnquiryList(): React.ReactNode {
                 },
             ]}
         />
-        {isExport?<ExportList
-            history={history}
-            location={location}
-            match={match}
-            columnsKey={() => {
-                let keys = [...baseInfo]
-                return keys
-            }}
-            current={0}
-            size={0}
-            total={0}
-            url={`/tower-supply/materialPurchaseTask/inquirer`}
-            serchObj={{}}
-            closeExportList={() => { setIsExportStoreList(false) }}
-        />:null}
     </>
 }

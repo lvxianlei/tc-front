@@ -305,9 +305,9 @@ const ViewPanel = (): React.ReactNode => {
                     let keys = [...columns]
                     return keys
                 }}
-                current={0}
-                size={0}
-                total={0}
+                current={current}
+                size={size}
+                total={columnsData.length}
                 url={`/tower-storage/safetyStock/board`}
                 serchObj={{}}
                 closeExportList={() => { setIsExportStoreList(false) }}

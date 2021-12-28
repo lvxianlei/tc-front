@@ -54,7 +54,9 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const { data: equipmentList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100`);
-            resole(result?.records)
+            const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/euqipment`);
+            const data = result?.records?.filter((item: any) => list.some((ele: any) => ele === item.id));
+            resole(data)
         } catch (error) {
             reject(error)
         }
@@ -90,11 +92,11 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     workCenterRelations: [...data.workCenterRelations],
                     equipmentId: baseData.equipmentId.join(',')
                 })
+                resolve(true);
             } else {
-               message.warning("请添加产能矩阵")
+               message.warning("请添加产能矩阵");
+               reject(false);
             }
-            
-            resolve(true)
         } catch (error) {
             reject(false)
         }
@@ -250,7 +252,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["workCenterRelations", index, "workHour"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入标准工时" }]}>
-                    <InputNumber step={1} min={ 0 } maxLength={ 10 } precision={ 0 } key={ index } />
+                    <InputNumber step={1} min={ 0 } max={ 3600 } precision={ 0 } key={ index } />
                 </Form.Item>
             )  
         },

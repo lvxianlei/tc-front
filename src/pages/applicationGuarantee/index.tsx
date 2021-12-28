@@ -153,11 +153,11 @@ export default function ApplicationColunm(): React.ReactNode {
                         render: (_: any, record: any) => {
                             return (
                                 <>
-                                    <Button type="link" onClick={() => {
+                                    <Button type="link" style={{marginRight: 12}} onClick={() => {
                                         getUser(record.id)
                                         setId(record.id);
                                     }}>查看</Button>
-                                    {acceptStatus === 1 && <Button type="link" onClick={() => {
+                                    {acceptStatus === 1 && <Button type="link" style={{marginRight: 12}} onClick={() => {
                                         setVisible(true);
                                         setId(record.id);
                                     }}>填写保函信息</Button>}
