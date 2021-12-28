@@ -203,8 +203,7 @@ export default forwardRef(function ({
             })
             setVisible(true)
         } else if (["pdf"].includes(record?.fileSuffix || "")) {
-            // window.open(record.downloadUrl)
-            fileLinkToStreamDownload(record?.downloadUrl, record?.originalName, 'pdf')
+            window.open(record.downloadUrl)
         } else {
             message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf预览...")
         }
@@ -222,48 +221,10 @@ export default forwardRef(function ({
         }
         return <>
             {!edit && <Button size="small" type="link" onClick={() => handlePreview(records)}>预览</Button>}
-            <Button size="small" type="link" onClick={() => downLoadFile(records.downloadUrl)}>下载</Button>
+            <Button size="small" type="link" onClick={() => downLoadFile(records.downloadUrl, records.originalName)}>下载</Button>
             {edit && <Button size="small" type="link" onClick={() => deleteAttachData(records.uid)}>删除</Button>}
         </>
     }, [attchs])
-    const fileLinkToStreamDownload=(url: any, fileName: any, type: string)=> {
-        let reg = /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+).)+([A-Za-z0-9-~\/])+$/;
-        if (!reg.test(url)) {
-            throw new Error("传入参数不合法,不是标准的文件链接");
-        } else {
-            let xhr = new XMLHttpRequest();
-            xhr.open('get', url, true);
-            xhr.setRequestHeader('Content-Type', `application/${type}`);
-            xhr.responseType = "blob";
-            xhr.onload = function () {
-                if (this.status == 200) {
-                //接受二进制文件流
-                    var blob = this.response;
-                    downloadExportFile(blob, fileName, type)
-                }
-            }
-            xhr.send();
-        }
-    }
-
-    const downloadExportFile=(blob: any, tagFileName: any, fileType: any)=>{
-        let downloadElement = document.createElement('a');
-        let href = blob;
-        if (typeof blob == 'string') {
-            downloadElement.target = '_blank';
-        } else {
-            href = window.URL.createObjectURL(blob); //创建下载的链接
-        }
-        downloadElement.href = href;
-        downloadElement.download = tagFileName + moment(new Date().getTime()).format('YYYYMMDDhhmmss') + '.' + fileType; //下载后文件名
-        document.body.appendChild(downloadElement);
-        downloadElement.click(); //点击下载
-        document.body.removeChild(downloadElement); //下载完成移除元素
-        if (typeof blob != 'string') {
-            window.URL.revokeObjectURL(href); //释放掉blob对象
-        }
-        
-    }
     return <>
         <Modal
             title={`${picInfo.title}`}
