@@ -81,10 +81,10 @@ export default function BoltCheck(): React.ReactNode {
         <div>
             <Page
                 path={`/tower-science/boltRecord/basicHeight/${params.id}`}
+                exportPath={`/tower-science/boltRecord/basicHeight/${params.id}`}
                 columns={columns}
                 extraOperation={
                     <div>
-                        <Button type="primary" ghost>导出</Button>
                         <Button type="primary" ghost onClick={() => { successCheck() }} style={{ marginLeft: 10, }}>完成核验</Button>
                         <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
                     </div>

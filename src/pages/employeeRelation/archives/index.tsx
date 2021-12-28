@@ -51,7 +51,11 @@ export default function ArchivesList(): React.ReactNode {
                 {
                     name: 'keyword',
                     label: '模糊查询项',
-                    children: <Input placeholder="请输入员工姓名/电话/身份证号" maxLength={200} />
+                    children: <Input
+                        placeholder="请输入员工姓名/电话/身份证号"
+                        maxLength={200}
+                        style={{ width: 200 }}
+                    />
                 },
                 {
                     name: 'employeeNature',

@@ -17,7 +17,7 @@
         "authority": "",
         "title": "研发中心",
         "description": "包含提料、放样等",
-        "path": "/notice/RD",
+        "path": "/workBench/workBenchMngt",
         "appName": "RD"
     },
     {

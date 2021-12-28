@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useRouteMatch, useLocation } from 'react-router-dom'
 import { IntgSelect, Page } from '../../common'
 import { baseInfo } from "./purchaseListData.json"
 import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
 import AuthUtil from "../../../utils/AuthUtil"
+import ExportList from '../../../components/export/list';
 export default function Invoicing() {
     const history = useHistory()
     const userId = AuthUtil.getUserId()
@@ -14,6 +15,9 @@ export default function Invoicing() {
     const [generateVisible, setGenerateVisible] = useState<boolean>(false)
     const [generateIds, setGenerateIds] = useState<string[]>([])
     const [chooseId, setChooseId] = useState<string>("")
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     const onFilterSubmit = (value: any) => {
         if (value.startPurchaseStatusUpdateTime) {
             const formatDate = value.startPurchaseStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -66,7 +70,7 @@ export default function Invoicing() {
                     }}>配料方案</Button>
                 }]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
                 <Button type="primary" ghost onClick={() => {
                     if (!generateIds || generateIds.length <= 0) {
                         message.warning("必须选择任务才能生成采购计划...")
@@ -119,5 +123,20 @@ export default function Invoicing() {
                 }
             }}
         />
+        {isExport?<ExportList
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => {
+                let keys = [...baseInfo]
+                return keys
+            }}
+            current={0}
+            size={0}
+            total={0}
+            url={`/tower-supply/purchaseTaskTower/purchaser`}
+            serchObj={{}}
+            closeExportList={() => { setIsExportStoreList(false) }}
+        />:null}
     </>
 }

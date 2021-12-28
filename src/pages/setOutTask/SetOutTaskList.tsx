@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Popconfirm, Form } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Modal, message } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOutTask.module.less';
@@ -103,20 +103,24 @@ export default function SetOutTaskList(): React.ReactNode {
                         : 
                         <Button type="link" disabled>交付物</Button>
                     }
+                    
                     {
                         record.status === 4 ? 
-                        <Popconfirm
-                            title="确认提交?"
-                            onConfirm={ () => {
-                                RequestUtil.post(`/tower-science/loftingTask/submit`, { id: record.id }).then(res => {
-                                    setRefresh(!refresh);
-                                });
-                            } }
-                            okText="提交"
-                            cancelText="取消"
-                        >
-                            <Button type="link">提交任务</Button>
-                        </Popconfirm>
+                        <Button type="link" onClick={ () => {
+                            Modal.confirm({
+                                title: "确认提交?",
+                                onOk: async () => new Promise(async (resove, reject) => {
+                                    try {
+                                        RequestUtil.post(`/tower-science/loftingTask/submit`, { id: record.id }).then(res => {
+                                            message.success("提交成功");
+                                            setRefresh(!refresh);
+                                        });
+                                    } catch (error) {
+                                        reject(error)
+                                    }
+                                })
+                            })
+                        }}>提交任务</Button>
                         : 
                         <Button type="link" disabled>提交任务</Button>
                     }

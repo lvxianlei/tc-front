@@ -122,7 +122,7 @@ export default function EditableTable({
                                 <Row className={styles.FormHeader}>
                                     {columns.map((item, index) => (<Col
                                         key={`Editable_${index}`}
-                                        style={{ width: 100, backgroundColor: "#f5f5f5" }}
+                                        style={{ width: 100, backgroundColor: "#f5f5f5", height: "32px", lineHeight: "32px" }}
                                         className={item.required ? styles.required : ""} span={item.span || 2}>{item.title}</Col>))}
                                 </Row>
                                 <div style={{ height: autoScroll ? "600px" : '', overflow: autoScroll ? 'auto' : '' }}>
