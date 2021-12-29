@@ -55,17 +55,17 @@ export default function DailySchedule(): React.ReactNode {
             dataIndex: "number"
         },
         {
-            title: "下达重量",
+            title: "下达重量（kg）",
             width: 150,
             dataIndex: "weight"
         },
         {
-            title: "角钢重量",
+            title: "角钢重量（kg）",
             width: 150,
             dataIndex: "angleWeight"
         },
         {
-            title: "连板重量",
+            title: "连板重量（kg）",
             width: 150,
             dataIndex: "boardWeight"
         },
