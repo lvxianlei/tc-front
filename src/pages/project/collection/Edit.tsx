@@ -1,10 +1,11 @@
 import React, { useState } from "react"
 import { Button, Spin, Form, Modal, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData } from '../../common'
+import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData, FormItemType, CommonTable } from '../../common'
 import { promotionalTourism, contractInformation, contract } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { RuleObject } from "antd/lib/form"
 type ReturnType = 1171 | 1172 | -1 | "-1" | undefined
 export default function Edit() {
     const history = useHistory()
@@ -106,8 +107,7 @@ export default function Edit() {
 
     const getCheckboxProps = (record: any) => {
         return ({
-            // disabled: selectedConstarct.includes(record.id)
-            disabled: ["1475772856470204418"].includes(record.id)
+            disabled: false
         })
     }
 
@@ -137,11 +137,28 @@ export default function Edit() {
                         if (item.dataIndex === "paymentPlanId") {
                             return ({
                                 ...item,
-                                path: item.path + popContent.id
+                                path: item.path + popContent.id,
+                                getCheckboxProps
                             })
                         }
-                        if (item.dataIndex === "paymentPlanId") {
-                            return ({ ...item, getCheckboxProps })
+                        if (item.dataIndex === "refundAmount") {
+                            return ({
+                                ...item,
+                                dependencies: ["paymentPlanId"],
+                                rules: [
+                                    ...item.rules,
+                                    {
+                                        validator: (_: any, value: number, fieldKey: number) => new Promise((resove, reject) => {
+                                            const records = contractInfosForm.getFieldsValue().submit?.[fieldKey]
+                                            if (value > parseFloat(records?.noPaymentReceived)) {
+                                                reject("’回款金额‘必须小于或等于’未回款金额‘...")
+                                            } else {
+                                                resove(value)
+                                            }
+                                        })
+                                    }
+                                ]
+                            })
                         }
                         return item
                     })}

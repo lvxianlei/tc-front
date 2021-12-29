@@ -382,10 +382,6 @@
         {
             "title": "身份证号",
             "dataIndex": "idNumber",
-            "validateTrigger": [
-                "onChange",
-                "onBlur"
-            ],
             "rules": [
                 {
                     "required": true,

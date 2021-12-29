@@ -85,7 +85,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
         <BaseInfo form={form} col={1} columns={supplier.map((item: any) => {
             if(item.dataIndex === 'supplier') {
                 return ({ ...item, search: item.search.map((res: any) => {
-                    if(res.dataIndex === 'supplierType') {
+                    if(res.dataIndex === 'qualityAssurance') {
                         return ({
                             ...res,
                             enum: qualityAssuranceEnum
