@@ -164,13 +164,10 @@ const ProdLink = (): React.ReactNode => {
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={
-                    <div>
-                        <Button
-                            type="primary"
-                            onClick={() => { setIsModal(true) }}
-                            style={{ marginLeft: 10, }}
-                        >新增</Button>
-                    </div>
+                    <Button
+                        type="primary"
+                        onClick={() => { setIsModal(true) }}
+                    >新增</Button>
                 }
                 searchFormItems={[
                     {
