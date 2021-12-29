@@ -128,7 +128,6 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
     const onSubmit = async () => new Promise(async (resove, reject) => {
         const materialData = await materialForm.validateFields()
         const priceInfoData = await priceInfoForm.validateFields()
-        console.log("priceInfoData", priceInfoData)
         const materialStandardName = materialStandard?.filter((item: any) => item.value === materialData.materialStandard),
             structureTexture = materialCategoryName?.filter((item: any) => item.value === materialData.structureTextureId),
             priceSource = priceSourceEnum && priceSourceEnum?.filter((item: any) => item.value === priceInfoData.priceSource);
