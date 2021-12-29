@@ -67,7 +67,7 @@
     {
         "authority": "",
         "title": "财务中心",
-        "description": "人资管理相关功能",
+        "description": "财务管理相关功能",
         "path": "/notice/FC",
         "appName": "FC"
     },
