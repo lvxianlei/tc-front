@@ -160,7 +160,7 @@ export default function InformationDetail(): React.ReactNode {
             </Form>
         </Modal>
         <DetailContent
-            title={[
+            operation={[
                 <Button key="setting" type="primary" style={{ marginRight: "16px" }} onClick={() => history.push(`/bidding/information/edit/${params.id}`)}>编辑</Button>,
                 <Button key="delete" type="default" style={{ marginRight: "16px" }} onClick={handleDelete}>删除</Button>,
                 data.biddingStatus === 0 && <Button key="bidding" style={{ marginRight: "16px" }} onClick={() => setVisible(true)}>是否应标</Button>,
