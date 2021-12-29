@@ -99,6 +99,8 @@ export default function EnquiryList(): React.ReactNode {
         </Modal> */}
         <Page
             path="/tower-supply/purchaseTaskTower/component"
+            exportPath={"/tower-supply/purchaseTaskTower/component"}
+            exportObject={{ purchaseTaskTowerId: params.id }}
             columns={ComponentDetails.map((item: any) => {
                 if (item.dataIndex === "completionProgres") {
                     return ({ ...item, render: (text: any, records: any) => <>{records.completionProgres} / {records.num}</> })
@@ -106,7 +108,6 @@ export default function EnquiryList(): React.ReactNode {
                 return item
             })}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
                 <Button type="primary" disabled={params.status !== "1"} ghost onClick={handleSuccess}>完成</Button>
                 <Button type="primary" disabled={params.status !== "1"} ghost onClick={() => setVisible(true)}>配料</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>

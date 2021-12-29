@@ -117,8 +117,8 @@ export default function IngredientsModal(props: any) {
     // 相当于编辑获取配料方案
     const { run: purchaseListRun, data: purchaseList } = useRequest<{ [key: string]: any }>((purchaseTaskTowerId: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/${purchaseTaskTowerId}`);
-            setSchemeData(result?.schemeData || []);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/programme/${purchaseTaskTowerId}`);
+            setSchemeData(result || []);
             resole(result)
         } catch (error) {
             reject(error)
