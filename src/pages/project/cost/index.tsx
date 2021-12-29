@@ -98,13 +98,18 @@ export default function CostDetail() {
                 <Button key="delete" style={{ marginRight: '12px' }} type="primary" onClick={hadleDelete}>删除</Button>,
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
-                <DetailTitle title="基本信息" />
+                <DetailTitle title="基本信息" style={{padding: "0 0 8px 0",}} />
                 <BaseInfo
                     columns={costBase.map((item: any) => ["projectLeader", "biddingPerson"].includes(item.dataIndex) ? ({ title: item.title, dataIndex: item.dataIndex }) : item)}
                     dataSource={data?.askInfo?.askInfoVo || {}} />
-                <DetailTitle title="产品类型成本评估" padding={true} />
+                {/* <DetailTitle title="产品类型成本评估" /> */}
+                <div style={{marginTop: 24, fontSize: 16, color: "#181818", fontWeight: "bold", marginBottom: 8}}>产品类型成本评估</div>
                 {data?.askInfo?.productArr.map((item: any, index: number) => <div key={index}>
-                    <DetailTitle title={`${item.voltage}kv${item.productName}`} />
+                    {/* <DetailTitle title={`${item.voltage}kv$`} padding={index === 0 ? true : false} /> */}
+                    <div style={{marginTop: index === 0 ? 0 : 24, fontSize: 16, color: "#181818", fontWeight: "bold", marginBottom: 8}}>
+                        <span style={{color: "#FF8C00", fontSize: 18}}>{item.voltage}kv&nbsp;&nbsp;</span>
+                        {item.productName}
+                    </div>
                     <CommonTable columns={[
                         {
                             title: '序号',

@@ -184,7 +184,7 @@ export default function ManagementDetail(): React.ReactNode {
                 type="primary" onClick={() => history.push(`/project/management/edit/base/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="基本信息" style={{padding: "0 0 8px 0",}} />
             <BaseInfo columns={baseInfoData.map((item: any) => {
                 if (["projectLeader", "biddingPerson"].includes(item.dataIndex)) {
                     return ({ title: item.title, dataIndex: item.dataIndex })
@@ -215,7 +215,7 @@ export default function ManagementDetail(): React.ReactNode {
                     onClick={() => history.push(`/project/management/edit/bidDoc/${params.id}`)} >编辑</Button>,
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
-            <DetailTitle title="标书制作记录表" />
+            <DetailTitle title="标书制作记录表"  style={{padding: "0 0 8px 0",}} />
             <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
                 ...item,
                 type: "select",
@@ -236,7 +236,7 @@ export default function ManagementDetail(): React.ReactNode {
                 onClick={() => history.push(`/project/management/edit/bidResult/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="基本信息"  style={{padding: "0 0 8px 0",}} />
             <BaseInfo columns={[
                 {
                     title: '年份',
@@ -302,7 +302,7 @@ export default function ManagementDetail(): React.ReactNode {
             <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/frameAgreement/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="基本信息"  style={{padding: "0 0 8px 0",}} />
             <BaseInfo columns={frameAgreementColumns.map((item: any) => item.dataIndex === "bidType" ? ({
                 ...item,
                 enum: frangmentBidType?.map((fitem: any) => ({
