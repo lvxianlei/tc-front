@@ -2,54 +2,10 @@ import React, { useState } from "react"
 import { Button, Spin, Form, Modal, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData } from '../../common'
-import { promotionalTourism, contractInformation } from "./collection.json"
+import { promotionalTourism, contractInformation, contract } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 type ReturnType = 1171 | 1172 | -1 | "-1" | undefined
-const contract = {
-    "title": "相关合同",
-    "dataIndex": "contractId",
-    "type": "popTable",
-    "path": "/tower-market/contract",
-    "width": 1011,
-    "value": "contractName",
-    "dependencies": true,
-    "readOnly": true,
-    "columns": [
-        {
-            "title": "合同编号",
-            "dataIndex": "contractNumber",
-            "search": true
-        },
-        {
-            "title": "合同名称",
-            "dataIndex": "contractName"
-        },
-        {
-            "title": "业主单位",
-            "dataIndex": "customerCompany",
-            "search": true
-        },
-        {
-            "title": "合同签订单位",
-            "dataIndex": "signCustomerName"
-        },
-        {
-            "title": "合同签订日期",
-            "dataIndex": "signContractTime"
-        },
-        {
-            "title": "要求交货日期",
-            "dataIndex": "deliveryTime"
-        }
-    ],
-    "rules": [
-        {
-            "required": true,
-            "message": "请选择相关合同..."
-        }
-    ]
-}
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
@@ -164,10 +120,15 @@ export default function Edit() {
                     form={contractInfosForm}
                     haveNewButton={false}
                     onChange={handleContractInfosChange}
-                    columns={contractInformation.map((item: any) => item.dataIndex === "paymentPlanId" ? ({
-                        ...item,
-                        path: item.path + popContent.id
-                    }) : item)}
+                    columns={contractInformation.map((item: any) => {
+                        if (item.dataIndex === "paymentPlanId") {
+                            return ({
+                                ...item,
+                                path: item.path + popContent.id
+                            })
+                        }
+                        return item
+                    })}
                     dataSource={[]} />
             </>}
         </Spin>

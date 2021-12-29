@@ -3,6 +3,7 @@ import { Button, Input, DatePicker, Select } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../common'
 import { invoicingListHead } from "./InvoicingData.json"
+import { productTypeOptions } from "../../configuration/DictionaryOptions"
 export default function Invoicing() {
     const history = useHistory()
     const onFilterSubmit = (value: any) => {
@@ -17,7 +18,18 @@ export default function Invoicing() {
     return <Page
         path="/tower-finance/invoicing"
         columns={[
-            ...invoicingListHead,
+            ...invoicingListHead.map((item: any) => {
+                if (item.dataIndex === "productTypeId") {
+                    return ({
+                        ...item,
+                        enum: productTypeOptions?.map(item => ({
+                            value: item.id,
+                            label: item.name
+                        }))
+                    })
+                }
+                return item
+            }),
             {
                 title: "操作",
                 dataIndex: "opration",
@@ -25,8 +37,8 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" onClick={() => history.push(`/invoicing/taskInfo/${record.id}`)}>查看任务信息</Button>
-                        {record.taskType === 1 && <Button type="link" onClick={() => history.push(`/invoicing/edit/${record.id}`)}>填写开票信息</Button>}
+                        <Button type="link" style={{marginRight: 12}} onClick={() => history.push(`/invoicing/taskInfo/${record.id}`)}>查看任务信息</Button>
+                        {record.taskType === 1 && <Button type="link" style={{marginRight: 12}} onClick={() => history.push(`/invoicing/edit/${record.id}`)}>填写开票信息</Button>}
                         {record.taskType === 2 && <Button type="link" onClick={() => history.push(`/invoicing/detail/${record.id}`)}>查看开票信息</Button>}
                     </>
                 }

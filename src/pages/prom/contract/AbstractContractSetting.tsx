@@ -782,8 +782,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             render: (): React.ReactNode => {
                 return (
                     <>
-                        <Form.Item name="planType" initialValue={contract?.planType || 0}>
-                            <Radio.Group onChange={(e: RadioChangeEvent) => {
+                        <Form.Item name="planType" style={{margin: 0}} initialValue={contract?.planType || 0}>
+                            <Radio.Group style={{position: "relative", left: "-67px", top: "7px"}} onChange={(e: RadioChangeEvent) => {
                                 this.setState({
                                     contract: {
                                         ...(contract || {}),
@@ -813,9 +813,10 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                             {
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
                                                     <Row key={`${field.name}_${index}`} className={styles.FormItem}>
-                                                        <Col span={2}>{index + 1}</Col>
+                                                        <Col span={2} style={{height: "32px", lineHeight: "32px"}}>{index + 1}</Col>
                                                         <Col span={4}>
                                                             <Form.Item
+                                                                style={{margin: 0}}
                                                                 {...field}
                                                                 name={[field.name, 'name']}
                                                                 fieldKey={[field.fieldKey, 'name']}
@@ -829,6 +830,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         </Col>
                                                         <Col span={4}>
                                                             <Form.Item
+                                                                style={{margin: 0}}
                                                                 {...field}
                                                                 name={[field.name, 'returnedTime']}
                                                                 fieldKey={[field.fieldKey, 'returnedTime']}
@@ -841,7 +843,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={4}>
-                                                            <Form.Item {...field} name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']} rules={[{
+                                                            <Form.Item
+                                                                style={{margin: 0}} {...field} name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']} rules={[{
                                                                 required: this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined,
                                                                 message: '请输入计划回款占比'
                                                             }, {
@@ -864,7 +867,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={4}>
-                                                            <Form.Item {...field} name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']} rules={[{
+                                                            <Form.Item 
+                                                                style={{margin: 0}} {...field} name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']} rules={[{
                                                                 required: this.state.contract?.planType === planType.AMOUNT,
                                                                 message: '请输入计划回款金额'
                                                             }, {
@@ -887,7 +891,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={4}>
-                                                            <Form.Item {...field} name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
+                                                            <Form.Item 
+                                                                style={{margin: 0}} {...field} name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
                                                                 <Input.TextArea rows={1} maxLength={300} />
                                                             </Form.Item>
                                                         </Col>
@@ -895,7 +900,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
                                                                 type="link" placement="topRight"
                                                                 onConfirm={() => { operation.remove(index); }}>
-                                                                <DeleteOutlined />
+                                                                <Button type="link">删除</Button>
                                                             </ConfirmableButton>
                                                         </Col>
                                                     </Row>
@@ -910,9 +915,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 );
             }
         }, {
-            title: '附件',
+            title: '',
             render: (): React.ReactNode => {
-                return (<Attachment ref={this.attachRef} title={false} edit dataSource={this.state.contract.attachInfoDtos} />)
+                return (<Attachment ref={this.attachRef} title={'附件'} edit dataSource={this.state.contract.attachInfoDtos} />)
             }
         }];
     }

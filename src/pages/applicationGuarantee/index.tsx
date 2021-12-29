@@ -153,8 +153,11 @@ export default function ApplicationColunm(): React.ReactNode {
                         render: (_: any, record: any) => {
                             return (
                                 <>
-                                    <Button type="link" onClick={() => getUser(record.id)}>查看</Button>
-                                    {acceptStatus === 1 && <Button type="link" onClick={() => {
+                                    <Button type="link" style={{marginRight: 12}} onClick={() => {
+                                        getUser(record.id)
+                                        setId(record.id);
+                                    }}>查看</Button>
+                                    {acceptStatus === 1 && <Button type="link" style={{marginRight: 12}} onClick={() => {
                                         setVisible(true);
                                         setId(record.id);
                                     }}>填写保函信息</Button>}
@@ -254,6 +257,7 @@ export default function ApplicationColunm(): React.ReactNode {
             <SeeGuarantee
                 visible={visibleSee}
                 userData={userData}
+                id={id}
                 acceptStatus={acceptStatus}
                 onCancel={() => setVisibleSee(false)}
                 onOk={() => setVisibleSee(false)}

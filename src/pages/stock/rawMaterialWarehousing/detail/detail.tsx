@@ -397,7 +397,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     onClick={() => {
                         history.go(-1)
                     }}
-                >返回上一级</Button>
+                >返回</Button>
             </div>
             <div className="tip_public_Stock">
                 <div>已收货：重量(吨)合计：{receiveWeight}, 已收货：价税合计(元)合计：{receivePrice} ,  待收货：重量(吨)合计：{waitWeight}待收货：价税合计(元)合计：{waitPrice}</div>

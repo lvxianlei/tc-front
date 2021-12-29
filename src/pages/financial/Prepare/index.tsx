@@ -228,20 +228,21 @@ export default function ApplyPayment() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <a onClick={() => {
+                            <a style={{marginRight: 12}} onClick={() => {
                                 setDetailId(record.id)
                                 setDetailVisible(true)
                             }}>详情</a>
                             <Button
                                 type="link"
+                                style={{marginRight: 12}} 
                                 disabled={![0, 3].includes(record.applyStatus)}
                                 onClick={() => {
                                     setType("edit")
                                     setDetailId(record.id)
                                     setVisible(true)
                                 }}>编辑</Button>
-                            <Button type="link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
-                            <Button type="link" disabled={![1].includes(record.applyStatus)}
+                            <Button type="link" style={{marginRight: 12}} disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
+                            <Button type="link" style={{marginRight: 12}} disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
                             {/* <Button
                                 type="link"

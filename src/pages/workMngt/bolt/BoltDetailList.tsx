@@ -1,5 +1,4 @@
 import { Button, Col, Input, message, Modal, Popconfirm, Row, Select } from 'antd';
-import TextArea from 'rc-textarea';
 import React, { useState } from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
 import AuthUtil from '../../../utils/AuthUtil';
@@ -188,7 +187,7 @@ export default function BoltCheck(): React.ReactNode {
                             style={{ marginLeft: 10, }}
                             hidden={params.status === '3' && params.boltLeader === userId ? false : true}
                         >添加</Button>
-                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
+                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
                     </div>
                 }
                 headTabs={[]}
@@ -256,7 +255,7 @@ export default function BoltCheck(): React.ReactNode {
                             className='search_item'
                         >
                             <span className='tip'>说明：</span>
-                            <TextArea
+                            <Input.TextArea
                                 className="input"
                                 placeholder="请输入"
                                 maxLength={400}

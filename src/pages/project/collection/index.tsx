@@ -25,7 +25,7 @@ export default function Collection() {
             value.startRefundTime = formatDate[0]
             value.endRefundTime = formatDate[1]
         }
-        setFilterValue({ confirmStatus, ...value })
+        setFilterValue({ confirmStatus })
         return value
     }
 

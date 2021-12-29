@@ -45,7 +45,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
         return ( <Space direction="horizontal" size="small">
                 {/* <Button type="primary">导入</Button> */}
                 <Button type="primary" onClick={this.onNewClick}>新增一级类目</Button>
-                <Button type="primary" onClick={() => this.props.history.push('/config')} ghost>返回上一级</Button>
+                <Button type="primary" onClick={() => this.props.history.push('/config')} ghost>返回</Button>
             </Space>
         );
     }

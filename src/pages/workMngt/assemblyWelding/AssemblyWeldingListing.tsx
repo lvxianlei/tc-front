@@ -225,7 +225,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                     >
                         <Button type="primary" ghost>导入</Button>
                     </Upload></> : null }
-                    <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
+                    <Button type="primary" onClick={ () => history.goBack() } ghost>返回</Button>
                 </Space>
                 <CommonTable 
                     dataSource={ detailData?.records } 
