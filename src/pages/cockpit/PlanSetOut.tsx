@@ -13,6 +13,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             title: '序号',
             dataIndex: 'index',
             width: 50,
+            fixed: "left" as FixedType,
             render: (_a: any, _b: any, index: number) => {return index + 1}
         },
         {
