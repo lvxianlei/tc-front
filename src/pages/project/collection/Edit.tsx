@@ -12,6 +12,8 @@ export default function Edit() {
     const [returnType, setReturnType] = useState<ReturnType | string>(-1)
     const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: "", id: "", records: {} })
     const [visible, setVisible] = useState<boolean>(false)
+    //存取已选中回款计划信息
+    const [selectedConstarct, setSelectedConstranct] = useState<string[]>([])
     const [baseForm] = Form.useForm()
     const [contractInfosForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -82,7 +84,10 @@ export default function Edit() {
     }
 
     const handleCancel = () => setVisible(false)
-    const handleChange = (event: any) => setPopContent({ id: event[0].id, value: event[0][contract.value || "name" || "id"], records: event[0] })
+
+    const handleChange = (event: any) => {
+        setPopContent({ id: event[0].id, value: event[0][contract.value || "name" || "id"], records: event[0] })
+    }
 
     const handleContractInfosChange = (fields: any, allFields: any) => {
         if (fields.submit.length - 1 >= 0) {
@@ -98,6 +103,14 @@ export default function Edit() {
             }
         }
     }
+
+    const getCheckboxProps = (record: any) => {
+        return ({
+            // disabled: selectedConstarct.includes(record.id)
+            disabled: ["1475772856470204418"].includes(record.id)
+        })
+    }
+
     return <DetailContent operation={[
         <Button key="save" type="primary" loading={saveLoading} style={{ marginRight: 16 }} onClick={handleSubmit}>确认回款信息</Button>,
         <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
@@ -126,6 +139,9 @@ export default function Edit() {
                                 ...item,
                                 path: item.path + popContent.id
                             })
+                        }
+                        if (item.dataIndex === "paymentPlanId") {
+                            return ({ ...item, getCheckboxProps })
                         }
                         return item
                     })}

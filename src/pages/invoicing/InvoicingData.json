@@ -584,7 +584,7 @@
         },
         {
             "title": "生产名称(实际)",
-            "dataIndex": "devName"
+            "dataIndex": "productionName"
         },
         {
             "title": "规格型号",

@@ -142,7 +142,7 @@
             "title": "关联采购计划",
             "dataIndex": "purchasePlan",
             "type": "popTable",
-            "path": "/tower-supply/materialPurchasePlan",
+            "path": "/tower-supply/materialPurchasePlan?planStatus=1",
             "width": 1011,
             "value": "purchasePlanCode",
             "dependencies": true,
