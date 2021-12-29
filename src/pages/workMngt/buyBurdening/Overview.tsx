@@ -55,6 +55,7 @@ export default function Overview(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-supply/purchaseTaskTower"
+            exportPath={`/tower-supply/purchaseTaskTower`}
             columns={[
                 ...SeeList,
                 {
@@ -76,7 +77,6 @@ export default function Overview(): React.ReactNode {
                 }
             ]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
             </>}
             filterValue={filterValue}
