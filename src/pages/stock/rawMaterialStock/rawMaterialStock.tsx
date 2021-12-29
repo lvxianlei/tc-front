@@ -136,11 +136,19 @@ export default function RawMaterialStock(): React.ReactNode {
             spec,
         });
         console.log(data, 'res')
-        setListdata(data.materialStockPage.records);
+        setListdata(data.records);
+        // setWeight(data.weight)
+        // setQuantity(data.quantity);
+        // console.log(data.total)
+        // setTotal(data.materialStockPage.total);
+    }
+    const getMaterialStockStatics = async () => {
+        const data: any = await RequestUtil.get(`/tower-storage/materialStock/getMaterialStockStatics`);
+        setListdata(data.records);
         setWeight(data.weight)
-        setQuantity(data.quantity);
-        console.log(data.total)
-        setTotal(data.materialStockPage.total);
+        // setQuantity(data.quantity);
+        // console.log(data.total)
+        // setTotal(data.materialStockPage.total);
     }
     // 获取仓库/库区/库位
     const getWarehousing = async (id?: any, type?: any) => {
@@ -170,6 +178,8 @@ export default function RawMaterialStock(): React.ReactNode {
     //进入页面刷新
     useEffect(() => {
         loadData()
+        // 统计相关数据
+        getMaterialStockStatics();
     }, [current, pageSize, spec, warehouseId, materialTexture, productName, standard, classify, lengthMax])
     return (
         <div id="RawMaterialStock">
@@ -358,7 +368,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Button
                             className="btn"
                             type="primary"
-                            onClick={() => { loadData() }}
+                            onClick={() => { loadData(); getMaterialStockStatics() }}
                         >查询</Button>
                         <Button
                             className="btn"
