@@ -87,7 +87,7 @@ export default function StockList(): React.ReactNode {
         },
         {
             key: 'balesWeight',
-            title: '包单重',
+            title: '包单重（kg）',
             width: 150,
             dataIndex: 'balesWeight',
             render: (_: number): React.ReactNode => ( 

@@ -25,7 +25,7 @@ export default function ProcessDetail(): React.ReactNode {
         { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
         { title: '杆塔号', dataIndex: 'productNumber', key: 'productNumber', },
         { title: '呼高', dataIndex: 'productHeight', key: 'productHeight' },
-        { title: '入库重量', dataIndex: 'warehouseWeight', key: 'warehouseWeight' },
+        { title: '入库重量（kg）', dataIndex: 'warehouseWeight', key: 'warehouseWeight' },
         { title: '总基数', dataIndex: 'number', key: 'number' },
         { title: '包装清单', dataIndex: 'operation', key: 'operation',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             <Button type="link" onClick={()=>{

@@ -63,14 +63,14 @@ export default function ProcessDetail(): React.ReactNode {
         { title: '塔型', dataIndex: 'productCategoryName', key: 'productCategoryName', },
         { title: '杆塔号', dataIndex: 'productNumber', key: 'productNumber' },
         { title: '呼高', dataIndex: 'productHeight', key: 'productHeight' },
-        { title: '入库重量', dataIndex: 'warehouseWeight', key: 'warehouseWeight'},
+        { title: '入库重量（kg）', dataIndex: 'warehouseWeight', key: 'warehouseWeight'},
         { title: '总基数', dataIndex: 'number', key: 'number'},
         { title: '入库基数', dataIndex: 'warehouseNumber', key: 'warehouseNumber'},
     ]
     const packageColumns = [
         { title: '捆号/包号', dataIndex: 'balesCode', key: 'balesCode', },
         { title: '包类型', dataIndex: 'packageType', key: 'packageType' },
-        { title: '重量', dataIndex: 'weightCount', key: 'weightCount' },
+        { title: '重量（kg）', dataIndex: 'weightCount', key: 'weightCount' },
         { title: '包长度', dataIndex: 'balesLength', key: 'balesLength', render:(_a: any, _b: any, index: number): React.ReactNode =>(
             <Form.Item name={['dataV',index, "balesLength"]} initialValue={ _a } >
                 <InputNumber style={{width:'100%'}} precision={0} min={0}/>
