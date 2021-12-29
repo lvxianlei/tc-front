@@ -91,7 +91,6 @@ const ProdUnit = (): React.ReactNode => {
                     <div>
                         <Button
                             type="primary"
-                            ghost
                             onClick={() => { setIsModal(true) }}
                             style={{ marginLeft: 10, }}
                         >添加</Button>
