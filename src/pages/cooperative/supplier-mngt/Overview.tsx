@@ -1,6 +1,6 @@
 import React from "react"
 import { Spin } from "antd"
-import { DetailTitle, BaseInfo, CommonTable } from "../../common"
+import { DetailTitle, BaseInfo, CommonTable, OperationRecord } from "../../common"
 import { editColums, oprationInfo, supplierFormHead } from "./supplier.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -58,7 +58,6 @@ export default function Overview({ id }: OverviewProps) {
                     return item
             }
         })} dataSource={data || {}} />
-        <DetailTitle title="操作信息" />
-        <CommonTable columns={oprationInfo} dataSource={[]} />
+        <OperationRecord serviceId={id} serviceName="tower-supply" />
     </Spin>
 }

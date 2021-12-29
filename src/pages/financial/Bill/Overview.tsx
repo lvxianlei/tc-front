@@ -1,6 +1,6 @@
 import React from "react"
 import { Spin } from 'antd'
-import { DetailTitle, BaseInfo, Attachment, CommonTable } from '../../common'
+import { DetailTitle, BaseInfo, Attachment, CommonTable, OperationRecord } from '../../common'
 import { billinformation, billOperationInfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -31,7 +31,6 @@ export default function Overview({ id }: OverviewProps) {
             return item
         })} col={2} dataSource={data || {}} />
         <Attachment dataSource={data?.invoiceAttachInfoVos || []} />
-        <DetailTitle title="操作信息" />
-        <CommonTable columns={billOperationInfo} dataSource={data?.operationRecordInfoVos || []} />
+        <OperationRecord serviceId={id} serviceName="tower-supply" operateTypeEnum="OPERATION" />
     </Spin>
 }

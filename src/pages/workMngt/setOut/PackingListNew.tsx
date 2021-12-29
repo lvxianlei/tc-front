@@ -64,6 +64,7 @@ export default function PackingListNew(): React.ReactNode {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${ params.packId }`);
             setPackagingData(data?.packageRecordVOList || []);
             setBalesCode(data?.balesCode || '');
+            setPackageType(data?.packageType || '');
             resole(data);
         } else {
             resole({ productCategoryName: location.state.productCategoryName, productNumber:location.state.productNumber });
@@ -344,7 +345,11 @@ export default function PackingListNew(): React.ReactNode {
     return <> 
         <DetailContent operation={ [
             <Space direction="horizontal" size="small" >
-                <Button type="primary" onClick={ () => setVisible(true) }>创建包</Button>
+                <Button type="primary" onClick={ () => {
+                    setVisible(true);
+                    setBalesCode(detailData?.balesCode);
+                    setPackageType(detailData?.packageType);
+                } }>保存包</Button>
                 <Button type="ghost" onClick={ () => history.goBack() }>关闭</Button>
             </Space>
         ] }>
@@ -423,7 +428,11 @@ export default function PackingListNew(): React.ReactNode {
             <p className={ styles.title }>包装区<span className={ styles.description }>已选择构件数：{ packagingData.length }</span><span className={ styles.description }>已选择构件总重量：{ eval(packagingData.map(item => { return Number(item.num) * Number(item.basicsWeight) }).join('+')) || 0 }吨</span></p>
             <CommonTable columns={ packingColumns } pagination={ false } dataSource={ packagingData } />
         </DetailContent>
-        <Modal visible={ visible } title="创建包" onCancel={ () => setVisible(false) } onOk={ () => {
+        <Modal visible={ visible } title="保存包" onCancel={ () => {
+            setVisible(false);
+            setBalesCode('');
+            setPackageType('');
+        } } onOk={ () => {
             if(packageType && balesCode&&/^[^\s]*$/.test(balesCode)&&/^[0-9a-zA-Z-]*$/.test(balesCode)) {
                 const value = {
                     balesCode: balesCode,
@@ -445,13 +454,13 @@ export default function PackingListNew(): React.ReactNode {
             }   
         } }>
             <Row>
-                <Col span={ 4 }>捆号</Col>   
-                <Col span={ 6 } offset={ 1 }>
-                    <Input placeholder="请输入捆号" defaultValue={ detailData?.balesCode } onChange={ (e) => balesCodeChange(e) } maxLength={10}/> 
+                <Col span={ 4 }><span>捆号</span></Col>   
+                <Col span={ 8 }>
+                    <Input placeholder="请输入捆号" value={ balesCode } onChange={ (e) => balesCodeChange(e) } maxLength={10}/> 
                 </Col> 
-                <Col span={ 4 }>包类型</Col>   
-                <Col span={ 6 } offset={ 1 }>
-                    <Select placeholder="请选择包类型" defaultValue={ detailData?.packageType } onChange={ (e:string) => packageChange(e) }>
+                <Col span={ 4 } offset={ 1 }><span>包类型</span></Col>   
+                <Col span={ 7 }>
+                    <Select placeholder="请选择包类型" style={{ width: "100%" }} value={ packageType } onChange={ (e:string) => packageChange(e) }>
                         <Select.Option value="角钢" key="0">角钢</Select.Option>
                         <Select.Option value="连板" key="1">连板</Select.Option>
                         <Select.Option value="螺栓" key="2">螺栓</Select.Option>

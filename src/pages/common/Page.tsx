@@ -67,10 +67,11 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
      * @returns 
      */
     public getHierarchy = (resData: IResponseData) => {
-        const dataKey:string[] = this.props.sourceKey?.split(".").filter((item: any) => item !== this.props.sourceKey?.split(".")[this.props.sourceKey?.split(".").length - 1]) || [];
-        const result =  this.props.sourceKey ? dataKey.reduce((acc: any, key: any) => {
-            return acc && key in acc ? acc[key] : null;},
-        (resData as any)) : resData.records || resData;
+        const dataKey: string[] = this.props.sourceKey?.split(".").filter((item: any) => item !== this.props.sourceKey?.split(".")[this.props.sourceKey?.split(".").length - 1]) || [];
+        const result = this.props.sourceKey ? dataKey.reduce((acc: any, key: any) => {
+            return acc && key in acc ? acc[key] : null;
+        },
+            (resData as any)) : resData.records || resData;
         return result;
     }
 
@@ -92,7 +93,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                 tableDataSource: this.props.sourceKey ? sourceDataKey.reduce((acc, key) => {
                     return acc && key in acc ? acc[key] : null;
                 },
-                (resData as any)) : resData.records || resData,
+                    (resData as any)) : resData.records || resData,
                 tablePagination: {
                     ...this.state.tablePagination,
                     current: this.props.sourceKey ? result.current : resData.current,
@@ -137,7 +138,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
             showSizeChanger: false
         }
         const postValue: any = this.props.onFilterSubmit && this.props.onFilterSubmit(values)
-        this.fetchTableData(postValue, tablePagination);
+        this.fetchTableData({ ...postValue, ...this.props.filterValue }, tablePagination);
     }
 
     public getTabItems(): ITabItem[] {

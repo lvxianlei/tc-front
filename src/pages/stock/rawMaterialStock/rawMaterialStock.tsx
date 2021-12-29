@@ -417,9 +417,9 @@ export default function RawMaterialStock(): React.ReactNode {
                     keys.pop()
                     return keys
                 }}
-                current={0}
-                size={0}
-                total={0}
+                current={current}
+                size={pageSize}
+                total={total}
                 url={`/tower-storage/materialStock`}
                 serchObj={{}}
                 closeExportList={() => { setIsExportStoreList(false) }}

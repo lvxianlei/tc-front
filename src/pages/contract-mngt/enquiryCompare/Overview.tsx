@@ -156,6 +156,8 @@ export default function Overview(): JSX.Element {
                         }
                     }
                 }) 
+                setSelectedKeys([]);
+                setSelectedRows([]);
                 setSupplierVisible(false)
                 setSupplier("")
                 setMaterialList(list);

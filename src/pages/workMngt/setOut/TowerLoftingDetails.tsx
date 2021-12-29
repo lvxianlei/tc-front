@@ -226,7 +226,7 @@ export default function TowerLoftingDetails(): React.ReactNode {
         requestData={ { productSegmentGroupId: params.productSegmentId } }
         extraOperation={ 
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                <Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>
+                <Button type="primary" onClick={() => history.goBack()} ghost>返回</Button>
             </Space> 
         }
         searchFormItems={ [] }

@@ -143,9 +143,8 @@ export default function ContractMngt() {
                                 setVisible(true)
                             }}>编辑</Button>
                             <Button type="link" onClick={() => {
-                                // setDetailId(records.id)
-                                // setOprationVisible(true)
-                                message.warning("功能加急开发中...")
+                                setDetailId(records.id)
+                                setOprationVisible(true)
                             }}>操作信息</Button>
                         </Space>
                     }

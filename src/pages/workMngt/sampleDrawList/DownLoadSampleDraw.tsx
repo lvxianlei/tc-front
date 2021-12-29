@@ -87,7 +87,7 @@ export default function SampleDrawList(): React.ReactNode {
                 <Space>
                 {/* <Button type="primary">导出</Button> */}
                 <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/batchSegmentModelDownload', '大样图工艺卡', {segmentRecordIdList: selectedKeys} , true, "array") } ghost disabled={!(selectedKeys.length>0)}>下载</Button>
-                <Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>
+                <Button type="primary" onClick={() => history.goBack()} ghost>返回</Button>
                 </Space>
             }
             searchFormItems={[]}

@@ -107,7 +107,5 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     return item
             }
         })} dataSource={{}} edit />
-        <DetailTitle title="操作信息" />
-        <CommonTable columns={oprationInfo} dataSource={[]} />
     </Spin>
 })

@@ -22,6 +22,7 @@ export interface OverViewProps {
     visible?: boolean
     userData?: UserData | undefined
     acceptStatus?: number
+    id?: string
     onCancel: () => void
     onOk: () => void
 }

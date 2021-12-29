@@ -132,11 +132,10 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
         const materialStandardName = materialStandard?.filter((item: any) => item.value === materialData.materialStandard),
             structureTexture = materialCategoryName?.filter((item: any) => item.value === materialData.structureTextureId),
             priceSource = priceSourceEnum && priceSourceEnum?.filter((item: any) => item.value === priceInfoData.priceSource);
-        console.log(priceSource, "priceSource", priceSourceEnum, 'id', priceInfoData.priceSource)
         try {
             await saveRun({
                 // id:  popContent?.records.id || popContent?.records.id,
-                materialCategoryId: popContent?.records.materialType || popContent?.records.materialType, // 列表没有
+                materialCategoryId: popContent?.records.materialCategory || popContent?.records.materialCategory, // 列表没有
                 materialCategoryName: materialData.materialCategoryName, // 原材料类型名称
                 materialId: popContent?.records.id || popContent?.records.materialId, // 原材料id
                 materialName: materialData.materialName.value, // 原材料名称

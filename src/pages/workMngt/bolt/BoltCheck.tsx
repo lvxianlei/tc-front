@@ -169,7 +169,7 @@ export default function BoltCheck(): React.ReactNode {
     return <div className={ styles.boltModal }>
         <DetailContent>
             <Space direction="horizontal" size="small" className={styles.topbtn}>
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
             </Space>
             <CommonTable columns={columnsSetting} dataSource={dataSource} pagination={false} />
         </DetailContent>

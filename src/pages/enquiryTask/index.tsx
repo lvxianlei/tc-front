@@ -145,16 +145,16 @@ export default function EnquiryTask(): React.ReactNode {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <a onClick={() => {
+                            <a style={{marginRight: 12}} onClick={() => {
                                 setDetailId(record.id)
                                 setCurrentData(record)
                                 setOverviewVisible(true)
                             }}>任务详情</a>
-                            <Button type="link" disabled={record.inquiryStatus !== 3} onClick={() => {
+                            <Button style={{marginRight: 12}} type="link" disabled={record.inquiryStatus !== 3} onClick={() => {
                                 setDetailId(record.id)
                                 setTaskVisible(true)
                             }}>指派</Button>
-                            <Button type="link" disabled={record.inquiryStatus !== 2} onClick={() => {
+                            <Button style={{marginRight: 12}} type="link" disabled={record.inquiryStatus !== 2} onClick={() => {
                                 setDetailId(record.id)
                                 setTaskResultVisible(true)
                             }}>工程报价结果</Button>
