@@ -98,7 +98,7 @@ export default function CostDetail() {
                 <Button key="delete" style={{ marginRight: '12px' }} type="primary" onClick={hadleDelete}>删除</Button>,
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
-                <DetailTitle title="基本信息" padding={true} />
+                <DetailTitle title="基本信息" style={{padding: "0 0 8px 0",}} />
                 <BaseInfo
                     columns={costBase.map((item: any) => ["projectLeader", "biddingPerson"].includes(item.dataIndex) ? ({ title: item.title, dataIndex: item.dataIndex }) : item)}
                     dataSource={data?.askInfo?.askInfoVo || {}} />
