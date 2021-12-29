@@ -88,13 +88,10 @@ const ProdUnit = (): React.ReactNode => {
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={
-                    <div>
-                        <Button
-                            type="primary"
-                            onClick={() => { setIsModal(true) }}
-                            style={{ marginLeft: 10, }}
-                        >添加</Button>
-                    </div>
+                    <Button
+                        type="primary"
+                        onClick={() => { setIsModal(true) }}
+                    >添加</Button>
                 }
                 searchFormItems={[
                     {

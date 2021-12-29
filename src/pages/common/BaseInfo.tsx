@@ -127,8 +127,30 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             layout="inline"
             labelCol={{ style: { width: '100px', whiteSpace: "break-spaces" } }}
         >
-            <Row>
-                {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={item.type === "textarea" ? 24 : (24 / col)}>
+            <Row wrap={true}>
+                {columns.map((item: any, index: number) => <Col
+                    key={`form_item_${index}`}
+                    {...{
+                        xs: {
+                            span: item.type === "textarea" ? 24 : 24
+                        },
+                        sm: {
+                            span: item.type === "textarea" ? 24 : 24
+                        },
+                        md: {
+                            span: item.type === "textarea" ? 24 : 12
+                        },
+                        lg: {
+                            span: item.type === "textarea" ? 24 : 8
+                        },
+                        xl: {
+                            span: item.type === "textarea" ? 24 : (24 / col)
+                        },
+                        xxl: {
+                            span: item.type === "textarea" ? 24 : (24 / col)
+                        }
+                    }}
+                >
                     <Col span={24} >
                         <div style={{ minHeight: 56, marginBottom: item.type === "textarea" ? 20 : 0 }}>
                             <Form.Item
@@ -145,7 +167,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                 </Col>
                 )}
             </Row>
-        </Form>
+        </Form >
     }
     return <Descriptions bordered column={col} size="small" >
         {columns.map((item: any, index: number) => <Descriptions.Item

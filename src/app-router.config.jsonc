@@ -167,21 +167,21 @@
     { // 成本评估配置
       "name": "成本评估配置",
       "path": "/sys/costconfig",
-      "module": "./pages/system-mngt/CostConfig/index",
+      "module": "./pages/system-mngt/costConfigs/index",
       "exact": true,
       "authority": "costconfig"
     },
     { // 成本评估配置编辑
       "name": "成本评估配置编辑",
       "path": "/sys/costconfig/edit/:id",
-      "module": "./pages/system-mngt/CostConfig/CostEdit",
+      "module": "./pages/system-mngt/costConfigs/CostEdit",
       "exact": true,
       "authority": "auth_section"
     },
     { // 成本评估配置编辑
       "name": "成本评估配置编辑",
       "path": "/sys/costconfig/detail/:id",
-      "module": "./pages/system-mngt/CostConfig/CostDetail",
+      "module": "./pages/system-mngt/costConfigs/CostDetail",
       "exact": true,
       "authority": "auth_section"
     },
