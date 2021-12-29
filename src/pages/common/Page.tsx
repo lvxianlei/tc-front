@@ -28,6 +28,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     readonly exportPath?: string; //导出接口
     sourceKey?: string,
     isSunmryLine?: (result: IResponseData) => void;//添加计算行
+    exportObject?: {[key: string]: any}, // 导出可能会包含的id等
 }
 
 export interface IResponseData {
@@ -177,7 +178,8 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                     url={this.props.exportPath}
                     serchObj={{
                         ...JSON.parse(JSON.stringify(this.props.filterValue || {})),
-                        ...JSON.parse(JSON.stringify(this.props?.requestData || {}))
+                        ...JSON.parse(JSON.stringify(this.props?.requestData || {})),
+                        ...JSON.parse(JSON.stringify(this.props?.exportObject || {}))
                     }}
                     closeExportList={() => {
                         this.setState({
