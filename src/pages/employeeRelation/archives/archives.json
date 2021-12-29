@@ -606,6 +606,7 @@
         },
         {
             "title": "残疾证号",
+            "required": true,
             "dataIndex": "disabilityNumber"
         }
     ],
