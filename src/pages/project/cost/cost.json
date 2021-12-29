@@ -13,6 +13,8 @@
         {
             "title": "投标截止日期",
             "dataIndex": "biddingEndTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "disabled": true
         },
         {
@@ -69,6 +71,8 @@
         {
             "title": "投标截止日期",
             "dataIndex": "biddingEndTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "disabled": true
         },
         {
@@ -284,6 +288,8 @@
         {
             "title": "投标截止日期",
             "dataIndex": "biddingEndTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "disabled": true
         },
         {

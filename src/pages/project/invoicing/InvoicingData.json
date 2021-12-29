@@ -445,7 +445,7 @@
         },
         {
             "title": "理重",
-            "dataIndex": "reasonWeight",
+            "dataIndex": "logicWeight",
             "type": "number",
             "disabled": true
         },

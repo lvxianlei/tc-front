@@ -1,7 +1,7 @@
 import React, { useState, } from "react"
 import { Input, DatePicker, Select, Form, } from 'antd'
 import { Page } from '../../common'
-import { useHistory, useLocation } from "react-router-dom"
+import { Link, useHistory, useLocation } from "react-router-dom"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
 export default function TemplateList() {
@@ -66,17 +66,9 @@ export default function TemplateList() {
         {
             title: '操作',
             dataIndex: 'operation',
-            align: 'center',
-            render: (text: string, item: { id: string, productCategoryId: string, },) => {
+            render: (text: string, record: Record<string, any>): React.ReactNode => {
                 return (
-                    <div className='operation'>
-                        <span
-                            style={{ cursor: 'pointer', color: '#FF8C00' }}
-                            onClick={() => {
-                                history.push(`/workMngt/templateList/${item.id}/${item.productCategoryId}`)
-                            }}
-                        >查看</span>
-                    </div>
+                    <Link to={`/workMngt/templateList/${record.id}/${record.productCategoryId}`}>查看</Link>
                 )
             }
         },

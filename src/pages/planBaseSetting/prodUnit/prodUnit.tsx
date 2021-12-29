@@ -21,7 +21,6 @@ const ProdUnit = (): React.ReactNode => {
         {
             title: '操作',
             dataIndex: 'operation',
-            align: 'center',
             render: (text, item: any, index) => {
                 return (
                     <div className='operation'>
