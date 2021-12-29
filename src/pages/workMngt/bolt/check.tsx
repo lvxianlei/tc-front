@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Space } from 'antd';
 import React from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -75,10 +75,10 @@ export default function BoltCheck(): React.ReactNode {
                 exportPath={`/tower-science/boltRecord/basicHeight/${params.id}`}
                 columns={columns}
                 extraOperation={
-                    <div>
-                        <Button type="primary" ghost onClick={() => { successCheck() }} style={{ marginLeft: 10, }}>完成核验</Button>
-                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
-                    </div>
+                    <Space size="small">
+                        <Button type="primary" ghost onClick={() => { successCheck() }}>完成核验</Button>
+                        <Button type="primary" ghost onClick={() => { history.go(-1) }}>返回</Button>
+                    </Space>
                 }
                 headTabs={[]}
                 searchFormItems={[]}

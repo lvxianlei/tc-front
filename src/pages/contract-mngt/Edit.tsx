@@ -388,8 +388,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                         setFreightCol(4);
                                     }
                                 }}>
-                                    <Select.Option value="1">供方</Select.Option>
-                                    <Select.Option value="2">需方</Select.Option>
+                                    <Select.Option value={1}>供方</Select.Option>
+                                    <Select.Option value={2}>需方</Select.Option>
                                 </Select>
                             </Form.Item>
                         }
@@ -452,8 +452,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                         setStevedoringCol(4);
                                     }
                                 }}>
-                                    <Select.Option value="1">供方</Select.Option>
-                                    <Select.Option value="2">需方</Select.Option>
+                                    <Select.Option value={1}>供方</Select.Option>
+                                    <Select.Option value={2}>需方</Select.Option>
                                 </Select>
                             </Form.Item>
                         }

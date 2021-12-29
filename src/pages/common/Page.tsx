@@ -149,14 +149,19 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     protected renderExtraOperationContent(): React.ReactNode {
         return (
             <>
-                <Space direction="horizontal" size="middle">
-                    {this.props.exportPath ? <Button type="primary" ghost onClick={() => {
-                        this.setState({
-                            isExport: true
-                        })
-                    }}>导出</Button> : null}
-                    {typeof this.props.extraOperation === "function" ? this.props.extraOperation(this.state.resData) : this.props.extraOperation}
-                </Space>
+                {  
+                    (this.props.extraOperation || this.props.exportPath) && (
+                        <Space direction="horizontal" size="middle">
+                            {this.props.exportPath && <Button type="primary" ghost onClick={() => {
+                                this.setState({
+                                    isExport: true
+                                })
+                            }}>导出</Button>}
+                            {typeof this.props.extraOperation === "function" ? this.props.extraOperation(this.state.resData) : this.props.extraOperation}
+                        </Space>
+                    )
+                }
+                
                 {this.state.isExport ? <ExportList
                     history={this.props.history}
                     location={this.props.location}

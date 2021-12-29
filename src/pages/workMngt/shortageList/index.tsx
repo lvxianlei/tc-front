@@ -74,6 +74,7 @@ export default function Invoicing() {
         </Modal>
         <Page
             path="/tower-supply/materialShortage"
+            exportPath={"/tower-supply/materialShortage"}
             filterValue={filterValue}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
@@ -103,7 +104,7 @@ export default function Invoicing() {
                     }
                 }]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
+                {/* <Button type="primary" ghost>导出</Button> */}
                 <Button type="primary" ghost onClick={() => {
                     if (!generateIds || generateIds.length <= 0) {
                         message.warning("必须选择任务才能生成采购计划...")

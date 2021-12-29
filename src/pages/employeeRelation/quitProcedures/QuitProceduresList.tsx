@@ -164,6 +164,7 @@ export default function QuitProceduresList(): React.ReactNode {
                 path={`/tower-hr/employeeDeparture/handlePage`}
                 columns={columns}
                 refresh={refresh}
+                requestData={{ isTransactProcedure: 'false' }}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 searchFormItems={[
@@ -175,7 +176,7 @@ export default function QuitProceduresList(): React.ReactNode {
                     {
                         name: 'isTransactProcedure',
                         label: '是否办理离职手续',
-                        children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                        children: <Select placeholder="请选择" style={{ width: "150px" }} defaultValue={'false'}>
                             <Select.Option value={''} key="">全部</Select.Option>
                             <Select.Option value={'true'} key="0">是</Select.Option>
                             <Select.Option value={'false'} key="1">否</Select.Option>
