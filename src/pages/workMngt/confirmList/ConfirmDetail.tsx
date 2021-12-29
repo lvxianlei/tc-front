@@ -708,7 +708,7 @@ export default function ConfirmDetail(): React.ReactNode {
                    
                 </Space>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>} 
             </>]}>
-                <div style={{display:'flex',justifyContent:'space-between'}}>
+                <div style={{display:'flex',justifyContent:'space-between',marginBottom:'10px'}}>
                     <Space>
                       <Button type='primary' onClick={()=>{downloadTemplate(`/tower-science/drawProductDetail/export?drawTaskId=${params.id}`, '杆塔信息')}}>导出</Button>
                         <Button type="primary" onClick={ () => downloadTemplate('/tower-science/drawProductDetail/importTemplate', '确认明细模板') } ghost>模板下载</Button>

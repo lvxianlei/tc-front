@@ -130,7 +130,7 @@ export default function CollectionInfomation(): React.ReactNode {
                         render: (_: any, record: any) => {
                             return (
                                 <>
-                                    <Button type="link" onClick={() => getUser(record.id)}>查看</Button>
+                                    <Button type="link" style={{marginRight: 12}} onClick={() => getUser(record.id)}>查看</Button>
                                     {record.confirmStatus === 1 && (
                                        <Popconfirm
                                             title="您确定删除该条回款信息?"

@@ -64,7 +64,7 @@
                         render: (_: any, record: any) => {
                             return (
                                 <>
-                                <Button type="link" onClick={() => {
+                                <Button type="link" style={{marginRight: 12}} onClick={() => {
                                     setId(record.id);
                                     setVisible(true)
                                 }}>编辑</Button>

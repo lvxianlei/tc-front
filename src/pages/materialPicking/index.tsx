@@ -157,6 +157,7 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 size="small"
+                                style={{marginRight: 12}} 
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setDetailVisible(true)
@@ -164,6 +165,7 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 size="small"
+                                style={{marginRight: 12}} 
                                 disabled={![1, 2].includes(record.state)}
                                 onClick={() => {
                                     setDetailId(record.id)
@@ -173,6 +175,7 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 size="small"
+                                style={{marginRight: 12}} 
                                 disabled={![1, 2].includes(record.state)}
                                 onClick={() => handleDelete(record.id)}>删除</Button>
                             <Button

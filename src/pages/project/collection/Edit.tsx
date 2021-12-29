@@ -2,60 +2,18 @@ import React, { useState } from "react"
 import { Button, Spin, Form, Modal, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData } from '../../common'
-import { promotionalTourism, contractInformation } from "./collection.json"
+import { promotionalTourism, contractInformation, contract } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 type ReturnType = 1171 | 1172 | -1 | "-1" | undefined
-const contract = {
-    "title": "相关合同",
-    "dataIndex": "contractId",
-    "type": "popTable",
-    "path": "/tower-market/contract",
-    "width": 1011,
-    "value": "contractName",
-    "dependencies": true,
-    "readOnly": true,
-    "columns": [
-        {
-            "title": "合同编号",
-            "dataIndex": "contractNumber",
-            "search": true
-        },
-        {
-            "title": "合同名称",
-            "dataIndex": "contractName"
-        },
-        {
-            "title": "业主单位",
-            "dataIndex": "customerCompany",
-            "search": true
-        },
-        {
-            "title": "合同签订单位",
-            "dataIndex": "signCustomerName"
-        },
-        {
-            "title": "合同签订日期",
-            "dataIndex": "signContractTime"
-        },
-        {
-            "title": "要求交货日期",
-            "dataIndex": "deliveryTime"
-        }
-    ],
-    "rules": [
-        {
-            "required": true,
-            "message": "请选择相关合同..."
-        }
-    ]
-}
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const [returnType, setReturnType] = useState<ReturnType | string>(-1)
     const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: "", id: "", records: {} })
     const [visible, setVisible] = useState<boolean>(false)
+    //存取已选中回款计划信息
+    const [selectedConstarct, setSelectedConstranct] = useState<string[]>([])
     const [baseForm] = Form.useForm()
     const [contractInfosForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -126,7 +84,10 @@ export default function Edit() {
     }
 
     const handleCancel = () => setVisible(false)
-    const handleChange = (event: any) => setPopContent({ id: event[0].id, value: event[0][contract.value || "name" || "id"], records: event[0] })
+
+    const handleChange = (event: any) => {
+        setPopContent({ id: event[0].id, value: event[0][contract.value || "name" || "id"], records: event[0] })
+    }
 
     const handleContractInfosChange = (fields: any, allFields: any) => {
         if (fields.submit.length - 1 >= 0) {
@@ -142,6 +103,14 @@ export default function Edit() {
             }
         }
     }
+
+    const getCheckboxProps = (record: any) => {
+        return ({
+            // disabled: selectedConstarct.includes(record.id)
+            disabled: ["1475772856470204418"].includes(record.id)
+        })
+    }
+
     return <DetailContent operation={[
         <Button key="save" type="primary" loading={saveLoading} style={{ marginRight: 16 }} onClick={handleSubmit}>确认回款信息</Button>,
         <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
@@ -164,10 +133,18 @@ export default function Edit() {
                     form={contractInfosForm}
                     haveNewButton={false}
                     onChange={handleContractInfosChange}
-                    columns={contractInformation.map((item: any) => item.dataIndex === "paymentPlanId" ? ({
-                        ...item,
-                        path: item.path + popContent.id
-                    }) : item)}
+                    columns={contractInformation.map((item: any) => {
+                        if (item.dataIndex === "paymentPlanId") {
+                            return ({
+                                ...item,
+                                path: item.path + popContent.id
+                            })
+                        }
+                        if (item.dataIndex === "paymentPlanId") {
+                            return ({ ...item, getCheckboxProps })
+                        }
+                        return item
+                    })}
                     dataSource={[]} />
             </>}
         </Spin>

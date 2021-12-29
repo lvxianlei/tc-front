@@ -204,6 +204,7 @@
 .ant-modal-content {
     .ant-modal-confirm-title {
         font-size: 16px !important;
+        font-weight: bold;
     }
 }
 
@@ -212,4 +213,9 @@
 **/
 .ant-table table {
     border: 1px solid #eee;
+}
+
+// radio组选中的字体加粗
+.ant-radio-button-wrapper-checked:not([class*=' ant-radio-button-wrapper-disabled']).ant-radio-button-wrapper:first-child {
+    font-weight: bold;
 }

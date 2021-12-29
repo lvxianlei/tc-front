@@ -185,7 +185,7 @@ export default function SampleDraw(): React.ReactNode {
                     >   
                         <Button type="primary">完成小样图</Button>
                     </Popconfirm>:null}
-                    <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
+                    <Button type="primary" onClick={() => history.goBack()}>返回</Button>
                     <span>小样图数：{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount+headerName?.noSmallSampleCount}</span>
                     </Space>
                 }

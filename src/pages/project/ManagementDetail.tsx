@@ -42,6 +42,8 @@ export default function ManagementDetail(): React.ReactNode {
     const [isExport, setIsExportStoreList] = useState(false)
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
+    const [contractStatus, setContractStatus] = useState<string>("contract");
+    const [contractLoading, setContractLoaing] = useState<boolean>(false);
     const [productGroupData, setProductGroupData] = useState<{ productAssistDetailVos: any[], productAssistStatisticsVos: any[] }>({
         productAssistDetailVos: [],
         productAssistStatisticsVos: []
@@ -166,13 +168,23 @@ export default function ManagementDetail(): React.ReactNode {
             history.go(0)
         }
     }
+
+    // 点击合同以及订单
+    const operationChange = (event: any) => {
+        setContractStatus(event.target.value);
+        setContractLoaing(true);
+        setTimeout(() => {
+            setContractLoaing(false);
+        }, 500);
+    }
+
     const tabItems: { [key: string]: JSX.Element | React.ReactNode } = {
         tab_base: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '16px' }}
                 type="primary" onClick={() => history.push(`/project/management/edit/base/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="基本信息" style={{padding: "0 0 8px 0",}} />
             <BaseInfo columns={baseInfoData.map((item: any) => {
                 if (["projectLeader", "biddingPerson"].includes(item.dataIndex)) {
                     return ({ title: item.title, dataIndex: item.dataIndex })
@@ -203,7 +215,7 @@ export default function ManagementDetail(): React.ReactNode {
                     onClick={() => history.push(`/project/management/edit/bidDoc/${params.id}`)} >编辑</Button>,
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
-            <DetailTitle title="标书制作记录表" />
+            <DetailTitle title="标书制作记录表"  style={{padding: "0 0 8px 0",}} />
             <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
                 ...item,
                 type: "select",
@@ -224,7 +236,7 @@ export default function ManagementDetail(): React.ReactNode {
                 onClick={() => history.push(`/project/management/edit/bidResult/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="基本信息"  style={{padding: "0 0 8px 0",}} />
             <BaseInfo columns={[
                 {
                     title: '年份',
@@ -290,7 +302,7 @@ export default function ManagementDetail(): React.ReactNode {
             <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/frameAgreement/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="基本信息"  style={{padding: "0 0 8px 0",}} />
             <BaseInfo columns={frameAgreementColumns.map((item: any) => item.dataIndex === "bidType" ? ({
                 ...item,
                 enum: frangmentBidType?.map((fitem: any) => ({
@@ -327,16 +339,32 @@ export default function ManagementDetail(): React.ReactNode {
             ]} dataSource={data || {}} />
         </DetailContent>,
         tab_contract: <>
-            <Tabs defaultActiveKey="合同" >
-                <Tabs.TabPane tab="合同" key="合同">
-                    <ManagementContract />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="订单" key="订单">
-                    <ManagementOrder />
-                </Tabs.TabPane>
-            </Tabs></>,
+            <>
+                {/* <Tabs defaultActiveKey="合同" >
+                    <Tabs.TabPane tab="合同" key="合同">
+                        <ManagementContract />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="订单" key="订单">
+                        <ManagementOrder />
+                    </Tabs.TabPane>
+                </Tabs> */}
+                <div style={{ padding: "24px 0 10px 24px", boxSizing: "border-box" }}>
+                    <Radio.Group defaultValue={"contract"} onChange={operationChange}>
+                        <Radio.Button value={"contract"} key={`contract`}>合同</Radio.Button>
+                        <Radio.Button value={"order"} key={"order"}>订单</Radio.Button>
+                    </Radio.Group>
+                </div>
+                <Spin spinning={contractLoading}>
+                    {
+                        contractStatus === "contract" ?
+                            <ManagementContract />
+                            : <ManagementOrder />
+                    }
+                </Spin>
+            </>
+        </>,
         tab_productGroup: <DetailContent title={[
-            <Button key="new" type="primary" onClick={() => history.push(`/project/management/new/productGroup/${params.id}`)} style={{marginBottom: 16}}>新增</Button>
+            <Button key="new" type="primary" onClick={() => history.push(`/project/management/new/productGroup/${params.id}`)} style={{ marginBottom: 16 }}>新增</Button>
         ]}>
             <CommonTable
                 columns={[
@@ -347,7 +375,7 @@ export default function ManagementDetail(): React.ReactNode {
                         ellipsis: false,
                         width: 250,
                         render: (_: any, record: any) => <>
-                            <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 7}} onClick={() => handleProductGroupClick(record.id)}>详情</span>
+                            <Button type="link" size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
                             <Button type="link" size="small" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
                             <Button type="link" size="small" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
                             <Button type="link" size="small" disabled={`${record.status}` !== "0"} onClick={() => deleteProductGroupItem(record.id)} >删除</Button>
@@ -355,7 +383,7 @@ export default function ManagementDetail(): React.ReactNode {
                     }]}
                 dataSource={data?.records}
             />
-            <Row style={{marginBottom: 16}}><Radio.Group
+            <Row style={{ marginBottom: 16 }}><Radio.Group
                 value={productGroupFlag}
                 onChange={(event: any) => setProductGroupFlag(event.target.value)}
                 options={[
@@ -364,7 +392,11 @@ export default function ManagementDetail(): React.ReactNode {
                 ]}
                 optionType="button"
             /></Row>
-            <CommonTable columns={productGroupFlag === "productAssistStatisticsVos" ? productAssistStatistics : productAssist} dataSource={productGroupData[productGroupFlag]} />
+            <CommonTable
+                rowKey="productCategoryName"
+                columns={productGroupFlag === "productAssistStatisticsVos" ? productAssistStatistics : productAssist}
+                dataSource={productGroupData[productGroupFlag]}
+            />
         </DetailContent>,
         tab_salesPlan: <DetailContent>
             <Row>

@@ -247,7 +247,7 @@ export default function SetOutTaskTower(): React.ReactNode {
         headTabs={ [] }
         extraOperation={ 
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                <Button type="ghost" onClick={() => history.goBack()}>返回上一级</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space> 
         }
         searchFormItems={ [] }

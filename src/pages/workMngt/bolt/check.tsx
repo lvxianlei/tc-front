@@ -19,16 +19,7 @@ export default function BoltCheck(): React.ReactNode {
         {
             title: '塔位号',
             width: 150,
-            dataIndex: 'gantahao',
-            render: (text: any, item: { productNumVOList: { id: string, productNumber: string }[] }): React.ReactNode => {
-                return (
-                    <span>
-                        {
-                            item.productNumVOList?.map((item: any) => `${item.productNumber}，`)
-                        }
-                    </span>
-                )
-            }
+            dataIndex: 'productNames'
         },
         {
             title: '呼高m',
@@ -86,7 +77,7 @@ export default function BoltCheck(): React.ReactNode {
                 extraOperation={
                     <div>
                         <Button type="primary" ghost onClick={() => { successCheck() }} style={{ marginLeft: 10, }}>完成核验</Button>
-                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
+                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
                     </div>
                 }
                 headTabs={[]}

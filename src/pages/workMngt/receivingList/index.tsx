@@ -112,16 +112,17 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Link to={`/workMngt/receiving/detail/${record.id}`}>明细</Link>
+                        <Link style={{marginRight: 12}} to={`/workMngt/receiving/detail/${record.id}`}>明细</Link>
                         <Button
                             type="link"
+                            style={{marginRight: 12}} 
                             disabled={record.receiveStatus === 1}
                             onClick={() => {
                                 setDetailId(record.id)
                                 setType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                        <Button type="link" onClick={() => {
+                        <Button type="link" style={{marginRight: 12}} onClick={() => {
                             setVisibleSee(true);
                             setDetailId(record.id);
                         }}>详情</Button>

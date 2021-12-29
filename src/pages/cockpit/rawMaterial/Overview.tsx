@@ -1,22 +1,19 @@
 import React, { useState, useRef } from 'react'
-import { Button, Select, Input, Modal, message } from 'antd'
-import { useHistory, useRouteMatch, useLocation } from 'react-router-dom'
+import { Button, Select, Input, Modal, message, Upload } from 'antd'
+import { useHistory } from 'react-router-dom'
 import { priceMaintain } from "./rawMaterial.json"
 import { Page } from '../../common'
 import Edit from "./Edit"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
+import AuthUtil from '../../../utils/AuthUtil';
 import { materialStandardOptions } from '../../../configuration/DictionaryOptions'
-import ExportList from '../../../components/export/list';
 
 export default function Overview(): React.ReactNode {
     const history = useHistory()
     const [editId, setEditId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [visible, setVisible] = useState<boolean>(false)
-    const match = useRouteMatch()
-    const location = useLocation<{ state: {} }>();
-    const [isExport, setIsExportStoreList] = useState(false)
     const editRef = useRef<{ onSubmit: () => void, loading: boolean }>({ onSubmit: () => { }, loading: false })
     const invoiceTypeEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
@@ -94,6 +91,7 @@ export default function Overview(): React.ReactNode {
             </Modal>
             <Page
                 path="/tower-supply/materialPrice"
+                exportPath={`/tower-supply/materialPrice`}
                 columns={[
                     {
                         "title": "序号",
@@ -115,7 +113,7 @@ export default function Overview(): React.ReactNode {
                         width: 100,
                         render: (_: any, record: any): React.ReactNode => {
                             return <>
-                                <Button type="link" onClick={() => {
+                                <Button type="link" style={{marginRight: 12}} onClick={() => {
                                     setOprationType("edit")
                                     setEditId(record.id)
                                     setVisible(true)
@@ -126,13 +124,37 @@ export default function Overview(): React.ReactNode {
                     }
                 ]}
                 extraOperation={<>
-                    <Button type="primary" ghost onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
-                    <Button type="primary" ghost>导入</Button>
+                    <Upload 
+                        accept=".xls,.xlsx"
+                        action={ () => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl+'/tower-supply/materialPrice/import'
+                        } } 
+                        headers={
+                            {
+                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
+                        }
+                        showUploadList={ false }
+                        onChange={ (info) => {
+                            if(info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            }else if(info.file.response && info.file.response?.success){
+                                message.success('导入成功！');
+                                history.go(0);
+                            }
+                            
+                        } }
+                    >
+                        <Button type="primary" ghost>导入</Button>
+                    </Upload>
                     <Button type="primary" onClick={() => {
                         setOprationType("new")
                         setVisible(true)
                     }} ghost>添加</Button>
-                    <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                    <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
                 </>}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
@@ -158,21 +180,6 @@ export default function Overview(): React.ReactNode {
                     },
                 ]}
             />
-            {isExport?<ExportList
-                history={history}
-                location={location}
-                match={match}
-                columnsKey={() => {
-                    let keys = [...priceMaintain]
-                    return keys
-                }}
-                current={0}
-                size={0}
-                total={0}
-                url={`/tower-supply/materialPrice`}
-                serchObj={{}}
-                closeExportList={() => { setIsExportStoreList(false) }}
-            />:null}
         </>
     )
 }

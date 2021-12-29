@@ -309,7 +309,7 @@ export default function TowerCheck(): React.ReactNode {
                 >
                     <Button type="primary" ghost>完成校核</Button>
                 </Popconfirm>
-                <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
+                <Button type="primary" onClick={ () => history.goBack() } ghost>返回</Button>
             </Space> }
             searchFormItems={ [
                 {

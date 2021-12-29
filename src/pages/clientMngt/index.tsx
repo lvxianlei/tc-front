@@ -43,7 +43,17 @@ export default function Index(): JSX.Element {
         extraOperation={[
             <Button key="new" type="primary"><Link to="/client/mngt/edit/new">新增客户</Link></Button>
         ]}
-        columns={[...clientMegt, {
+        columns={[
+            {
+                key: 'index',
+                title: '序号',
+                dataIndex: 'index',
+                fixed: "left",
+                width: 50,
+                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            },
+            ...clientMegt, 
+            {
             title: '操作',
             dataIndex: 'operation',
             width: 80,

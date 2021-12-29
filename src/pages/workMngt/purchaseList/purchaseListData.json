@@ -43,6 +43,10 @@
             "type": "string"
         },
         {
+            "title": "最新状态变更时间",
+            "dataIndex": "purchaseStatusUpdateTime"
+        },
+        {
             "title": "塔型采购状态",
             "dataIndex": "purchaseTaskStatus",
             "type": "select",
@@ -60,6 +64,12 @@
                     "value": 3
                 }
             ]
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "purchaseStatusUpdateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
         }
     ],
     "ListIngredient": [
@@ -107,22 +117,22 @@
         {
             "title": "生产未领料（支）",
             "dataIndex": "uncollectedMaterial",
-            "type": ""
+            "type": "number"
         },
         {
             "title": "仓库库存（支）",
             "dataIndex": "warehouseStock",
-            "type": "string"
+            "type": "number"
         },
         {
             "title": "在途库存（支）",
             "dataIndex": "transitStock",
-            "type": "string"
+            "type": "number"
         },
         {
             "title": "计划采购（本次）",
             "dataIndex": "purchasePlanNumber",
-            "type": "string"
+            "type": "number"
         }
     ],
     "ListIngredients": [

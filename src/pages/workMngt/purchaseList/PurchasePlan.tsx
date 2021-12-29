@@ -51,22 +51,25 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         <Row gutter={10}>
             <Col span={12}>
                 <DetailTitle title="配料方案" />
-                <CommonTable haveIndex columns={ListIngredients} dataSource={data?.lists || []} pagination={false} />
+                <CommonTable haveIndex
+                    rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
+                    columns={ListIngredients} dataSource={data?.lists || []} pagination={false} />
             </Col>
             <Col span={12}>
                 <DetailTitle title="计划列表" />
-                <CommonTable columns={PlanList.map((item: any) => {
-                    if (item.dataIndex === "purchasePlanNumber") {
-                        return ({
-                            ...item,
-                            render: (_: any, record: any, index: number) => {
-                                console.log(_, record.purchasePlanNumber)
-                                return <InputNumber value={record.purchasePlanNumber} key={index} onChange={(value: number) => handleInputChange(value, index)} style={{ height: 27 }} />
-                            }
-                        })
-                    }
-                    return item
-                })} dataSource={dataSource || []} pagination={false} />
+                <CommonTable
+                    rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
+                    columns={PlanList.map((item: any) => {
+                        if (item.dataIndex === "purchasePlanNumber") {
+                            return ({
+                                ...item,
+                                render: (_: any, record: any, index: number) => {
+                                    return <InputNumber value={record.purchasePlanNumber} key={index} onChange={(value: number) => handleInputChange(value, index)} style={{ height: 27 }} />
+                                }
+                            })
+                        }
+                        return item
+                    })} dataSource={dataSource || []} pagination={false} />
             </Col>
         </Row>
     </Spin>

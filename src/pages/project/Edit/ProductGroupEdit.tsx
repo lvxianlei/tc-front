@@ -77,7 +77,7 @@ export default function ProductGroupEdit() {
     }
 
     const handleModalOk = (selectRows: any[]) => {
-        setSelect(selectRows)
+        setSelect([...select, ...selectRows.filter((item: any) => !select.map((item: any) => item.id).includes(item.id))])
         setVisible(false)
     }
 

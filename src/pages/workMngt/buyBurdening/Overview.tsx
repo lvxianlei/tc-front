@@ -55,6 +55,7 @@ export default function Overview(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-supply/purchaseTaskTower"
+            exportPath={`/tower-supply/purchaseTaskTower`}
             columns={[
                 ...SeeList,
                 {
@@ -65,7 +66,7 @@ export default function Overview(): React.ReactNode {
                         <Button type="link" disabled={![1, 3].includes(records.batcheTaskStatus)} >
                             <Link to={`/workMngt/buyBurdening/component/${records.id}/${records.batcheTaskStatus}`}>明细</Link>
                         </Button>
-                        <Button type="link" disabled={![3].includes(records.batcheTaskStatus)}
+                        <Button type="link" style={{marginLeft: 12}} disabled={![3].includes(records.batcheTaskStatus)}
                             onClick={() => {
                                 setChooseId(records.id)
                                 setVisible(true)
@@ -76,7 +77,6 @@ export default function Overview(): React.ReactNode {
                 }
             ]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
             </>}
             filterValue={filterValue}

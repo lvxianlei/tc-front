@@ -101,7 +101,8 @@ export default function Edit() {
             baseInfo.setFieldsValue({
                 contractCompany: contractValue.signCustomerName,
                 contractSignTime: contractValue.signContractTime,
-                ticketWeight: logicWeight.logicWeight,
+                logicWeight: logicWeight.logicWeight,
+                planCode: logicWeight.planNumbers,
                 planWeight: contractValue.plannedWeight,
                 contractDevTime: contractValue.deliveryTime,
                 business: contractValue.salesman,

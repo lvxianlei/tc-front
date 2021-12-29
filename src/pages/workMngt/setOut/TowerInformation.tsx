@@ -284,7 +284,7 @@ export default function TowerInformation(): React.ReactNode {
                     </>
                     : null
                 }
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
             </Space> }
             searchFormItems={ [
                 {

@@ -80,7 +80,7 @@ export default function PoleInformation(): React.ReactNode {
                     { record.loftingStatus === 4 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/poleLoftingDetails/${ record.id }` }>杆塔放样明细</Link> : <Button type="link" disabled>杆塔放样明细</Button>}
                     {   userId === record.loftingUser ?
                         <>{  
-                            record.loftingStatus === 3 && record.loftingStatus === 4 ? <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }`, state: { status: record.loftingStatus } }}>包装清单</Link> : <Button type="link" disabled>包装清单</Button> 
+                            record.loftingStatus === 3 || record.loftingStatus === 4 ? <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }`, state: { status: record.loftingStatus } }}>包装清单</Link> : <Button type="link" disabled>包装清单</Button> 
                         }</>
                         : null
                     }
@@ -144,7 +144,7 @@ export default function PoleInformation(): React.ReactNode {
         requestData={{ productCategoryId: params.id }}
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
-            <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
+            <Button type="primary" onClick={ () => history.goBack() } ghost>返回</Button>
         </Space>}
         searchFormItems={ [
             {
