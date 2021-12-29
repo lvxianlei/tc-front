@@ -508,7 +508,7 @@ export default function RawMaterialStock(): React.ReactNode {
             lengthMax: record.length,//长度最大值
             spec: record.spec,//规格
         });
-        setOutLibraryListdata(data.materialStockPage.records);
+        setOutLibraryListdata(data.records);
         setIsOutLibraryModal(true)
     }
     // 出库弹框列表输入框

@@ -76,6 +76,7 @@ export default function EnquiryList(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-supply/inquiryTask/inquirer"
+            exportPath={"/tower-supply/inquiryTask/inquirer"}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...baseInfo,
@@ -93,7 +94,7 @@ export default function EnquiryList(): React.ReactNode {
                             setVisible(true)
                         }}>工程报价信息</Button>
                 }]}
-            extraOperation={<Button type="primary">导出</Button>}
+            // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

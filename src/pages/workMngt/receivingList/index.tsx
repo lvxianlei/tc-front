@@ -98,6 +98,7 @@ export default function Invoicing() {
         />
         <Page
             path="/tower-storage/receiveStock"
+            exportPath={"/tower-storage/receiveStock"}
             columns={[{
                 title: "序号",
                 dataIndex: "index",
@@ -131,7 +132,7 @@ export default function Invoicing() {
                 }
             }]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
+                {/* <Button type="primary" ghost>导出</Button> */}
                 <Button type="primary" ghost onClick={() => {
                     setType("new")
                     setVisible(true)

@@ -105,6 +105,7 @@ export default function Invoicing() {
         />
         <Page
             path="/tower-supply/produceIngredients"
+            exportPath={"/tower-supply/produceIngredients"}
             columns={[
                 {
                     title: "序号",
@@ -150,10 +151,10 @@ export default function Invoicing() {
                         </>
                     }
                 }]}
-            extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
-                {/* <Button type="primary" loading={loading} ghost onClick={() => setGenerteVisible(true)}>临时生成生产数据</Button> */}
-            </>}
+            // extraOperation={<>
+            //     <Button type="primary" ghost>导出</Button>
+            //     {/* <Button type="primary" loading={loading} ghost onClick={() => setGenerteVisible(true)}>临时生成生产数据</Button> */}
+            // </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
 

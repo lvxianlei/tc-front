@@ -46,6 +46,7 @@ export default function Invoicing() {
 
     return <Page
         path="/tower-supply/componentDiff"
+        exportPath={"/tower-supply/componentDiff"}
         columns={[
             { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
             ...baseInfoList,
@@ -60,7 +61,7 @@ export default function Invoicing() {
                 }
             }]}
         filterValue={filterValue}
-        extraOperation={<Button type="primary" ghost>导出</Button>}
+        // extraOperation={<Button type="primary" ghost>导出</Button>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
