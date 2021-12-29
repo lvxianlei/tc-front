@@ -108,7 +108,7 @@ export default function Edit() {
         <Row>
             <Button type="primary" ghost>导出</Button>
             <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} style={{ marginRight: 16, marginLeft: 16 }}>申请质检</Button>
-            <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+            <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
         </Row>
         <Row style={{ lineHeight: "32px", fontWeight: 600 }} gutter={10}>
             <Col>已收货：重量(支)合计：{data?.receiveStockMessage.receiveWeight === -1 ? 0 : data?.receiveStockMessage.receiveWeight}</Col>

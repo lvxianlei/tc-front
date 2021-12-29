@@ -177,7 +177,7 @@ export default function PackingList(): React.ReactNode {
                     </Popconfirm>
                 </>
             }
-            <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
+            <Button type="primary" onClick={ () => history.goBack() } ghost>返回</Button>
         </Space>
         <DetailContent>
             <CommonTable columns={ columns } style={{ marginBottom: '50px' }} dataSource={ detailData?.packageStructureVOList } pagination={ false } onRow={ (record: Record<string, any>, index: number) => ({

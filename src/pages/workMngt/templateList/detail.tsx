@@ -1,6 +1,6 @@
 import React, { useRef, useState, } from "react"
-import { Button, message, Modal, Popconfirm, Image, } from 'antd'
-import { Attachment, CommonTable, Page } from '../../common'
+import { Button, message, Modal, Popconfirm, Image, Space, } from 'antd'
+import { Attachment, CommonTable, DetailContent } from '../../common'
 import { useHistory, useParams, } from "react-router-dom"
 import RequestUtil from "../../../utils/RequestUtil"
 import { downLoadFile } from "../../../utils";
@@ -9,7 +9,6 @@ import useRequest from "@ahooksjs/use-request"
 export default function TemplateDetail() {
     const history = useHistory()
     const params: any = useParams<{ id: string, productCategoryId: string }>()
-    const [refresh, setRefresh] = useState<boolean>(false);
     const [isImgModal, setIsImgModal] = useState<boolean>(false);
     const [imgUrl, setImgUrl] = useState<string>('');
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
@@ -55,7 +54,7 @@ export default function TemplateDetail() {
             title: '操作',
             dataIndex: 'operation',
             align: 'center',
-            render: (text: string, item: { id: string, isView: number },) => {
+            render: (text: string, item: { id: string, isView: number }) => {
                 return (
                     <div className='operation'>
                         <span
@@ -128,33 +127,37 @@ export default function TemplateDetail() {
     }
     return (
         <>
-            <div>
+            <DetailContent>
                 {/* <Button type="primary" ghost>上传</Button> */}
-                <Attachment isTable={false} ref={attchsRef} onDoneChange={(dataInfo: FileProps[]) => {
-                    console.log(attchsRef.current.getDataSource(), '0000000')
-                    let fileList = attchsRef.current.getDataSource().map((item, index) => {
-                        return {
-                            name: item.originalName,
-                            fileId: item.id,
-                            templateId: params.id,
-                            productCategoryId: params.productCategoryId,
-                            createUser: sessionStorage.getItem('USER_ID') || '',
-                            createUserName: sessionStorage.getItem('USER_NAME') || '',
+                <Space size="small" style={{ marginBottom: "24px" }}>
+                    <Attachment isTable={false} ref={attchsRef} onDoneChange={(dataInfo: FileProps[]) => {
+                        console.log(attchsRef.current.getDataSource(), '0000000')
+                        let fileList = attchsRef.current.getDataSource().map((item, index) => {
+                            return {
+                                name: item.originalName,
+                                fileId: item.id,
+                                templateId: params.id,
+                                productCategoryId: params.productCategoryId,
+                                createUser: sessionStorage.getItem('USER_ID') || '',
+                                createUserName: sessionStorage.getItem('USER_NAME') || '',
+                            }
+                        })
+                        if (!fileList.length) {
+                            return;
                         }
-                    })
-                    if (!fileList.length) {
-                        return;
-                    }
-                    RequestUtil.post(`/tower-science/loftingTemplate/upload`, [...fileList]).then(res => {
-                        if (res) {
-                            message.success('上传成功');
-                            history.go(0)
-                        }
-                    })
-                }}><Button type="primary" ghost>上传</Button></Attachment>
-                <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
-            </div>
-            <CommonTable columns={columns} dataSource={data} />
+                        RequestUtil.post(`/tower-science/loftingTemplate/upload`, [...fileList]).then(res => {
+                            if (res) {
+                                message.success('上传成功');
+                                history.go(0)
+                            }
+                        })
+                    }}>
+                        <Button type="primary" ghost>上传</Button>
+                    </Attachment>
+                    <Button type="primary" ghost onClick={() => { history.go(-1) }}>返回</Button>
+                </Space>
+                <CommonTable columns={columns} dataSource={data} />
+            </DetailContent>
             <Modal visible={isImgModal} onCancel={() => { cancelModal() }} footer={false}>
                 <Image src={imgUrl} preview={false} />
             </Modal>
