@@ -184,7 +184,7 @@ export default function ManagementDetail(): React.ReactNode {
                 type="primary" onClick={() => history.push(`/project/management/edit/base/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="基本信息" padding={true} />
             <BaseInfo columns={baseInfoData.map((item: any) => {
                 if (["projectLeader", "biddingPerson"].includes(item.dataIndex)) {
                     return ({ title: item.title, dataIndex: item.dataIndex })
@@ -215,7 +215,7 @@ export default function ManagementDetail(): React.ReactNode {
                     onClick={() => history.push(`/project/management/edit/bidDoc/${params.id}`)} >编辑</Button>,
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
-            <DetailTitle title="标书制作记录表" />
+            <DetailTitle title="标书制作记录表" padding={true} />
             <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
                 ...item,
                 type: "select",
@@ -236,7 +236,7 @@ export default function ManagementDetail(): React.ReactNode {
                 onClick={() => history.push(`/project/management/edit/bidResult/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="基本信息" padding={true} />
             <BaseInfo columns={[
                 {
                     title: '年份',
@@ -302,7 +302,7 @@ export default function ManagementDetail(): React.ReactNode {
             <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/frameAgreement/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="基本信息" padding={true} />
             <BaseInfo columns={frameAgreementColumns.map((item: any) => item.dataIndex === "bidType" ? ({
                 ...item,
                 enum: frangmentBidType?.map((fitem: any) => ({
@@ -375,9 +375,9 @@ export default function ManagementDetail(): React.ReactNode {
                         ellipsis: false,
                         width: 250,
                         render: (_: any, record: any) => <>
-                            <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 7}} onClick={() => handleProductGroupClick(record.id)}>详情</span>
-                            <Button type="link" size="small" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
-                            <Button type="link" size="small" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
+                            <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}} onClick={() => handleProductGroupClick(record.id)}>详情</span>
+                            <Button type="link" style={{marginRight: 12}} size="small" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
+                            <Button type="link" style={{marginRight: 12}} size="small" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
                             <Button type="link" size="small" disabled={`${record.status}` !== "0"} onClick={() => deleteProductGroupItem(record.id)} >删除</Button>
                         </>
                     }]}
