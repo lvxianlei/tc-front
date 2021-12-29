@@ -1,11 +1,10 @@
 import React, { useState } from "react"
 import { Button, Spin, Form, Modal, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData, FormItemType, CommonTable } from '../../common'
+import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData } from '../../common'
 import { promotionalTourism, contractInformation, contract } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { RuleObject } from "antd/lib/form"
 type ReturnType = 1171 | 1172 | -1 | "-1" | undefined
 export default function Edit() {
     const history = useHistory()
@@ -101,13 +100,14 @@ export default function Edit() {
                     noPaymentReceived: parseFloat(item.paymentPlanId.records[0].returnedAmount || "0") - parseFloat(item.paymentPlanId.records[0].paymentReceived || "0")
                 }) : item)
                 contractInfosForm.setFieldsValue({ submit: newFields })
+                setSelectedConstranct(allFields.submit.map((item: any) => item.paymentPlanId.id))
             }
         }
     }
 
     const getCheckboxProps = (record: any) => {
         return ({
-            disabled: false
+            disabled: selectedConstarct.includes(record.id)
         })
     }
 
