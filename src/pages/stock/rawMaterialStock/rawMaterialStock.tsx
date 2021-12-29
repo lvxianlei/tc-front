@@ -14,7 +14,7 @@ import { materialStandardTypeOptions, materialTextureOptions } from '../../../co
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory(),
         [current, setCurrent] = useState(1),
-        [total, setTotal] = useState(100),
+        [total, setTotal] = useState(0),
         [pageSize, setPageSize] = useState<number>(10),
         [warehouseId, setWarehouseId] = useState(''),//仓库
         [materialTexture, setMaterialTexture] = useState(''),//材质
@@ -140,7 +140,7 @@ export default function RawMaterialStock(): React.ReactNode {
         // setWeight(data.weight)
         // setQuantity(data.quantity);
         // console.log(data.total)
-        // setTotal(data.materialStockPage.total);
+        setTotal(data.total);
     }
     const getMaterialStockStatics = async () => {
         const data: any = await RequestUtil.get(`/tower-storage/materialStock/getMaterialStockStatics`);
