@@ -290,23 +290,22 @@ export default forwardRef(function ({
             {children}
         </Upload>
         }
-        {isTable && <div>
+        {isTable && <div style={{border: "1px solid #eee"}}>
             <Row style={{ backgroundColor: "#fafafa", padding: 8, }}>
                 <Col span={12}>文件名称</Col>
                 <Col span={12} style={{paddingLeft: 16, boxSizing: "border-box"}}>操作</Col>
             </Row>
             {!attchs.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
             {attchs.map((item, index: number) => <Spin key={item.uid} spinning={item.loading} size="small">
-                <Row style={{ height: 28, lineHeight: "28px", backgroundColor: index % 2 === 0 ? "#fff" : "#f8f8f8" }} >
+                <Row style={{ backgroundColor: index % 2 === 0 ? "#fff" : "#f8f8f8" }} >
                     <Col span={12} style={{
-                        color: "red",
-                        padding: "0px 8px",
+                        padding: "8px 8px",
                         width: "100%",
                         whiteSpace: "nowrap",
                         textOverflow: "ellipsis",
                         overflow: "hidden"
                     }}>{item.originalName}</Col>
-                    <Col span={12} style={{ padding: "0 8px" }}>{operationRender(item)}</Col>
+                    <Col span={12} style={{ padding: "8px 8px" }}>{operationRender(item)}</Col>
                 </Row>
             </Spin>)}
         </div>}
