@@ -186,7 +186,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         "pattern": /^[^\s]*$/,
                         "message": '禁止输入空格',
                     }]}>
-                    <Select placeholder="请选择" style={{ width: '200px' }}>
+                    <Select placeholder="请选择" style={{ width: '200px' }} size="small">
                         { processList?.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                         }) }
@@ -203,7 +203,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["workCenterRelations", index, "materialName"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请选择材料" }]}>
-                    <Select placeholder="请选择"  style={{ width: '200px' }} onChange={(e: string) => materialChange(e, index)}>
+                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} onChange={(e: string) => materialChange(e, index)}>
                         { materialList?.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.materialName }>{ item.materialName }</Select.Option>
                         }) }
@@ -220,7 +220,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["workCenterRelations", index, "specificationName"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请选择规格" }]}>
-                    <Select placeholder="请选择" style={{ width: '200px' }} key={index} onChange={(e: string) => materialChange(e, index)}>
+                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} key={index} onChange={(e: string) => materialChange(e, index)}>
                         { specifications[index]?.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.structureSpec }>{ item.structureSpec }</Select.Option>
                         }) }
@@ -237,7 +237,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["workCenterRelations", index, "materialTextureName"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请选择材质" }]}>
-                    <Select style={{ width: '200px' }}>
+                    <Select style={{ width: '200px' }} size="small">
                         { materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>) }
                     </Select>
                 </Form.Item>
@@ -252,7 +252,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["workCenterRelations", index, "workHour"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入标准工时" }]}>
-                    <InputNumber step={1} min={ 0 } max={ 3600 } precision={ 0 } key={ index } />
+                    <InputNumber step={1} min={ 0 } max={ 3600 } precision={ 0 } size="small" key={ index } />
                 </Form.Item>
             )  
         },
@@ -297,7 +297,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     }
 
     return <Spin spinning={loading}>
-        <DetailTitle title="基本信息" />
+        <DetailTitle title="基本信息" style={{ padding:'0 0 8px' }}/>
         <BaseInfo form={baseForm} columns={baseColumns.map((item: any) => {
             if (item.dataIndex === "time") {
                 return ({ ...item, type: 'date', 

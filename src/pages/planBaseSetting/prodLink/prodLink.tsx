@@ -167,7 +167,6 @@ const ProdLink = (): React.ReactNode => {
                     <div>
                         <Button
                             type="primary"
-                            ghost
                             onClick={() => { setIsModal(true) }}
                             style={{ marginLeft: 10, }}
                         >新增</Button>

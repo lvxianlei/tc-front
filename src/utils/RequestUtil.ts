@@ -102,8 +102,8 @@ export default abstract class RequestUtil {
                 })
                 .catch((e: Error) => {
                     NProgress.done();
-                    if (e.message === "Unexpected end of JSON input") {
-                        resolve("" as any)
+                    if (e.message === "Unexpected end of JSON input" || e.message === "JSON.parse: unexpected end of data at line 1 column 1 of the JSON data") {
+                        resolve({} as any)
                     } else if (e.name === 'AbortError') {
                         // console.log('abort');
                     } else {
