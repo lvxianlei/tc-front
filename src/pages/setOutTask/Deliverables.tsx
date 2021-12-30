@@ -131,7 +131,7 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
                 onCancel={ () => this.modalCancel() }
             >
                 <DetailContent>
-                    <p>交付物清单</p>
+                    <p style={{ paddingBottom: "0 12px", fontWeight: "bold", fontSize: '14PX' }}>交付物清单</p>
                     <CommonTable columns={ tableColumns } dataSource={ data } pagination={ false }/>
                 </DetailContent>
             </Modal>
