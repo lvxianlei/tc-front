@@ -35,10 +35,24 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 supplier: { id: result.supplierId, value: result.supplierName },
                 purchasePlan: { id: result.purchasePlanId, value: result.purchasePlanNumber }
             })
+            if (result?.transportBearVo?.transportBear == 1) {
+                setNewFreight([]);
+                setFreightCol(1);
+            } else {
+                setNewFreight(freight)
+                setFreightCol(4);
+            }
             freightForm.setFieldsValue({
                 ...result.transportBearVo,
                 transportCompanyId: result.transportBearVo.transportCompanyId + ',' + result.transportBearVo.transportCompany
             })
+            if (result?.unloadBearVo?.unloadBear == 1) {
+                setNewStevedoring([]);
+                setStevedoringCol(1);
+            } else {
+                setNewStevedoring(stevedoring);
+                setStevedoringCol(4);
+            }
             stevedoringForm.setFieldsValue({
                 ...result.unloadBearVo,
                 unloadCompanyId: result.unloadBearVo.unloadCompanyId + ',' + result.unloadBearVo.unloadCompany
