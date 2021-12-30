@@ -73,7 +73,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                     <Radio.Button value="base">咨询结果</Radio.Button>
                     <Radio.Button value="records">咨询信息</Radio.Button>
                 </Radio.Group>
-                <DetailTitle title="询价类型：供应询价" />
+                <DetailTitle title="询价类型：供应询价" style={{padding: "0 0 8px 0"}}/>
                 {radioValue === "base" && <>
                     <BaseInfo columns={supplyAskInfo} dataSource={data || {}}  col={2}/>
                     <DetailTitle title="国网批次招标投标原材料报价" />
@@ -91,7 +91,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                     <Radio.Button value="base">咨询结果</Radio.Button>
                     <Radio.Button value="records">咨询信息</Radio.Button>
                 </Radio.Group>
-                <DetailTitle title="询价类型：物流询价" />
+                <DetailTitle title="询价类型：物流询价" style={{padding: "0 0 8px 0"}}/>
                 {radioValue === "base" && <>
                     <BaseInfo columns={logisticAskInfo} dataSource={data || {}}  col={2}/>
                     <DetailTitle title="产品类型信息" />
