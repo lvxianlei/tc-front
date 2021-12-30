@@ -53,9 +53,9 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const { data: equipmentList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100`);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100&operatingStatus=0`);
             const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/euqipment`);
-            const data = result?.records?.filter((item: any) => list.some((ele: any) => ele === item.id));
+            const data = result?.records?.filter((item: any) => !list.some((ele: any) => ele === item.id));
             resole(data)
         } catch (error) {
             reject(error)

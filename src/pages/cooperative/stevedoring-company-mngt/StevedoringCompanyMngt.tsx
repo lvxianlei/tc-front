@@ -302,7 +302,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
             </Form>
             { title === '详情' ? 
                 <><DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={detail?.operationLog} pagination={false} /></>
+                <CommonTable columns={tableColumns} dataSource={detail?.operationLog?.records} pagination={false} /></>
             : null }
         </Modal>
     </>
