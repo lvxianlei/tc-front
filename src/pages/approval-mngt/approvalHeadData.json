@@ -30,7 +30,7 @@
         },
         {
             "title": "项目单位",
-            "dataIndex": "projectCompany",
+            "dataIndex": "biddingPerson",
             "disabled": true
         },
         {

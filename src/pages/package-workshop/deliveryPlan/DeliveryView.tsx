@@ -14,8 +14,6 @@ const tableColumns = [
             case 1:
                 return '未出库';
             case 2:
-                return '部分出库';
-            case 3:
                 return '已出库';
         }
     } },
