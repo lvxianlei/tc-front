@@ -11,7 +11,7 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
     switch (type) {
         case "date":
             return ({
-                ellipsis: !data.fixed,
+                ellipsis: { showTitle: false },
                 width: 100,
                 onCell: () => ({ className: styles.tableCell }),
                 render: (text: string) => <>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</>,
@@ -19,7 +19,7 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             })
         case "select":
             return ({
-                ellipsis: !data.fixed,
+                ellipsis: { showTitle: false },
                 width: 100,
                 onCell: () => ({ className: styles.tableCell }),
                 render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : (text || "-")}</>,
@@ -27,7 +27,7 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             })
         case "number":
             return ({
-                ellipsis: !data.fixed,
+                ellipsis: { showTitle: false },
                 width: 100,
                 onCell: () => ({ className: styles.tableCell }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : 0}</>,
@@ -35,7 +35,7 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             })
         case "string":
             return ({
-                ellipsis: !data.fixed,
+                ellipsis: { showTitle: false },
                 width: 100,
                 onCell: () => ({ className: styles.tableCell }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
@@ -43,7 +43,7 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             })
         default:
             return ({
-                ellipsis: !data.fixed,
+                ellipsis: { showTitle: false },
                 width: 100,
                 onCell: () => ({ className: styles.tableCell }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
@@ -137,7 +137,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
             size="small"
             scroll={{ x: 1200 }}
             rowKey={rowKey || "id"}
-            columns={IColumns.map(((item, index: number) => ({
+            columns={(columnsResult as any).map(((item: any, index: number) => ({
                 ...item,
                 onHeaderCell: (colItem: any) => ({
                     width: colItem.width,
