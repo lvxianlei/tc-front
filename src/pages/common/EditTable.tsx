@@ -106,7 +106,7 @@ export default function EditableTable({
                                 }
                             }} type="primary" style={{ height: 32, margin: "0 16px 16px 0" }}>{newButtonTitle || "新增一行"}</Button>{opration}</Row>}
 
-                            <div style={{ overflowX: "auto" }}>
+                            <div style={{ overflowX: "auto", border: "1px solid #eee" }}>
                                 <Row className={styles.FormHeader}>
                                     {columns.map((item, index) => (<Col
                                         key={`Editable_${index}`}
