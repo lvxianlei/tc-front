@@ -78,7 +78,7 @@ export default function EditableTable({
         }
     ] : columns
     columns = haveIndex ? [
-        { title: '序号', dataIndex: 'index', span: 1, editable: false, render: (key: number, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+        { title: '序号', dataIndex: 'index', span: 1, editable: false, render: (key: number, index: number): React.ReactNode => (<span style={{marginLeft: 8}}>{index + 1}</span>) },
         ...columns
     ] : columns
     const handleRemove = (remove: any, key: any) => {
@@ -111,12 +111,19 @@ export default function EditableTable({
                                     {columns.map((item, index) => (<Col
                                         key={`Editable_${index}`}
                                         style={{ width: 100, backgroundColor: "#f5f5f5", height: "32px", lineHeight: "32px" }}
-                                        className={item.required ? styles.required : ""} span={item.span || 2}>{item.title}</Col>))}
+                                        className={item.required ? styles.required : ""} span={columns.length > 0 ? 
+                                            Math.floor(24 / columns.length) <= 2 ? 
+                                                2 :
+                                                Math.floor(24 / columns.length)
+                                        : 2}>{item.title}</Col>))}
                                 </Row>
                                 <div style={{ height: autoScroll ? "600px" : '', overflow: autoScroll ? 'auto' : '' }}>
                                     {fields.map(({ key, name, fieldKey, ...restField }, index: number) => (
                                         <Row style={{ width: "100%" }} key={`EditableRow_${key}`} className={`${styles.FormHeader} ${styles.FormRow}`}>
-                                            {columns.map((coItem, coIndex) => (<Col key={`EditableCol_${coIndex}`} span={coItem.span || 2}>
+                                            {columns.map((coItem, coIndex) => (<Col key={`EditableCol_${coIndex}`} span={columns.length > 0 ? 
+                                                    Math.floor(24 / columns.length) <= 2 ?
+                                                        2 : Math.floor(24 / columns.length)
+                                                : 2}>
                                                 <Form.Item
                                                     {...restField}
                                                     className={styles.formItem}
