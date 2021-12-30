@@ -12,40 +12,40 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
         case "date":
             return ({
                 ellipsis: { showTitle: false },
-                width: 100,
                 onCell: () => ({ className: styles.tableCell }),
+                onHeaderCell: () => ({ isResizable: data.isResizable }),
                 render: (text: string) => <>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</>,
                 ...data
             })
         case "select":
             return ({
                 ellipsis: { showTitle: false },
-                width: 100,
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : (text || "-")}</>,
+                onHeaderCell: () => ({ isResizable: data.isResizable }),
+                render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : text}</>,
                 ...data
             })
         case "number":
             return ({
                 ellipsis: { showTitle: false },
-                width: 100,
                 onCell: () => ({ className: styles.tableCell }),
+                onHeaderCell: () => ({ isResizable: data.isResizable }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : 0}</>,
                 ...data
             })
         case "string":
             return ({
                 ellipsis: { showTitle: false },
-                width: 100,
                 onCell: () => ({ className: styles.tableCell }),
+                onHeaderCell: () => ({ isResizable: data.isResizable }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
                 ...data
             })
         default:
             return ({
                 ellipsis: { showTitle: false },
-                width: 100,
                 onCell: () => ({ className: styles.tableCell }),
+                onHeaderCell: () => ({ isResizable: data.isResizable }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
                 ...data
             })
@@ -88,15 +88,22 @@ interface CommonTableProps {
 interface ResizableTitleProps extends React.Attributes {
     isResizable?: boolean
     width?: number
-    onResize?: () => void
 }
 
-export function ResizableTitle({ isResizable = false, onResize, width = 120, ...props }: ResizableTitleProps): JSX.Element {
-    return <Resizable
+export function ResizableTitle({ isResizable = false, width = 120, ...props }: ResizableTitleProps): JSX.Element {
+    const [IWidth, setIWidth] = useState<number>(120)
+    //TODO 拖拽改变宽度
+    const onResize = (event: SyntheticEvent, { size }: ResizeCallbackData) => {
+        setIWidth(size.width)
+    }
+
+    return isResizable ? <Resizable
         {...props as any}
         axis="x"
-        width={width}
+        width={IWidth}
         height={36}
+        minConstraints={[20, 36]}
+        maxConstraints={[Infinity, 36]}
         onResize={onResize}
         draggableOpts={{ enableUserSelectHack: false }}
         handle={
@@ -108,8 +115,8 @@ export function ResizableTitle({ isResizable = false, onResize, width = 120, ...
             />
         }
     >
-        <th {...props} />
-    </ Resizable >
+        <th {...props} style={{ width: 300 }} />
+    </ Resizable > : <th {...props} />
 }
 
 export default function CommonTable({ columns, dataSource = [], rowKey, haveIndex = false, ...props }: CommonTableProps): JSX.Element {
@@ -121,30 +128,12 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         className: styles.tableCell,
         render: (_: any, _a: any, index: number) => <>{index + 1}</>
     }, ...formatColumns] : formatColumns
-    const [IColumns, setIColumns] = useState<any[]>(columnsResult)
-
-    const handleResize = (index: number) => (event: SyntheticEvent, { size }: ResizeCallbackData) => {
-        const newColumns = [...IColumns]
-        newColumns[index] = {
-            ...newColumns[index],
-            width: size.width
-        }
-        setIColumns(newColumns)
-    }
-
     return <nav className={styles.componentsTableResizableColumn}>
         <Table
             size="small"
-            scroll={{ x: 1200 }}
+            scroll={{ x: true }}
             rowKey={rowKey || "id"}
-            columns={(columnsResult as any).map(((item: any, index: number) => ({
-                ...item,
-                onHeaderCell: (colItem: any) => ({
-                    width: colItem.width,
-                    isResizable: colItem.isResizable,
-                    onResize: handleResize(index)
-                })
-            })))}
+            columns={columnsResult as any}
             components={props.components || ({
                 header: {
                     cell: ResizableTitle
