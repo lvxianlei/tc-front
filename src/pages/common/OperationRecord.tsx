@@ -5,47 +5,24 @@ import RequestUtil from "../../utils/RequestUtil"
 import useRequest from '@ahooksjs/use-request'
 const recordColumns: any[] = [
     {
-        "title": "部门",
-        "dataIndex": "department"
+        "title": "部门名称",
+        "dataIndex": "deptName"
     },
     {
-        "title": "审批人",
-        "dataIndex": "approver"
+        "title": "操作人",
+        "dataIndex": "optUserName"
     },
     {
-        "title": "职位",
-        "dataIndex": "position"
+        "title": "操作时间",
+        "dataIndex": "optTime"
     },
     {
-        "title": "审批时间",
-        "dataIndex": "batchTime"
-    },
-    {
-        "title": "审批结果",
-        "dataIndex": "batchResult",
-        "type": "select",
-        "enum": [
-            {
-                "value": 1,
-                "label": "审批中"
-            },
-            {
-                "value": 2,
-                "label": "已同意"
-            },
-            {
-                "value": 3,
-                "label": "已驳回"
-            },
-            {
-                "value": 4,
-                "label": "已转审"
-            }
-        ]
+        "title": "操作类型",
+        "dataIndex": "optName"
     },
     {
         "title": "意见",
-        "dataIndex": "opinion"
+        "dataIndex": "description"
     }
 ]
 
