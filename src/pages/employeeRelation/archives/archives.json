@@ -382,10 +382,6 @@
         {
             "title": "身份证号",
             "dataIndex": "idNumber",
-            "validateTrigger": [
-                "onChange",
-                "onBlur"
-            ],
             "rules": [
                 {
                     "required": true,
@@ -606,6 +602,7 @@
         },
         {
             "title": "残疾证号",
+            "required": true,
             "dataIndex": "disabilityNumber"
         }
     ],

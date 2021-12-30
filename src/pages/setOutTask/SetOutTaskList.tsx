@@ -116,6 +116,7 @@ export default function SetOutTaskList(): React.ReactNode {
                                             message.success("提交成功");
                                             setRefresh(!refresh);
                                         });
+                                        resove(true)
                                     } catch (error) {
                                         reject(error)
                                     }

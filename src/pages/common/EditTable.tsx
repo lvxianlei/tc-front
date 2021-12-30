@@ -106,19 +106,7 @@ export default function EditableTable({
                                 }
                             }} type="primary" style={{ height: 32, margin: "0 16px 16px 0" }}>{newButtonTitle || "新增一行"}</Button>{opration}</Row>}
 
-                            {/* <Row style={{ position: "relative", height: 400 }}>
-                                <WindowScroller>
-                                    {({ height, isScrolling, onChildScroll, scrollTop }) => autoSizer({
-                                        height,
-                                        isScrolling,
-                                        onChildScroll,
-                                        scrollTop,
-                                        fields,
-                                        remove
-                                    })}
-                                </WindowScroller>
-                            </Row> */}
-                            <div style={{ overflowX: "auto" }}>
+                            <div style={{ overflowX: "auto", border: "1px solid #eee" }}>
                                 <Row className={styles.FormHeader}>
                                     {columns.map((item, index) => (<Col
                                         key={`Editable_${index}`}
@@ -134,7 +122,15 @@ export default function EditableTable({
                                                     className={styles.formItem}
                                                     name={[name, coItem.dataIndex]}
                                                     fieldKey={[fieldKey, coItem.dataIndex]}
-                                                    rules={coItem.rules || []}
+                                                    rules={coItem.rules?.map((item: any) => {
+                                                        if (item.validator) {
+                                                            return ({
+                                                                ...item,
+                                                                validator: (rules: any, value: any) => item.validator(rules, value, fieldKey)
+                                                            })
+                                                        }
+                                                        return item
+                                                    }) || []}
                                                 >
                                                     {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={name} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={coItem} />}
                                                 </Form.Item>

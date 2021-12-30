@@ -22,7 +22,7 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
                 onHeaderCell: () => ({ isResizable: data.isResizable }),
-                render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : (text || "-")}</>,
+                render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : text}</>,
                 ...data
             })
         case "number":

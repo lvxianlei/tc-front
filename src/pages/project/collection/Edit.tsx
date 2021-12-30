@@ -100,14 +100,14 @@ export default function Edit() {
                     noPaymentReceived: parseFloat(item.paymentPlanId.records[0].returnedAmount || "0") - parseFloat(item.paymentPlanId.records[0].paymentReceived || "0")
                 }) : item)
                 contractInfosForm.setFieldsValue({ submit: newFields })
+                setSelectedConstranct(allFields.submit.map((item: any) => item.paymentPlanId.id))
             }
         }
     }
 
     const getCheckboxProps = (record: any) => {
         return ({
-            // disabled: selectedConstarct.includes(record.id)
-            disabled: ["1475772856470204418"].includes(record.id)
+            disabled: selectedConstarct.includes(record.id)
         })
     }
 
@@ -137,11 +137,28 @@ export default function Edit() {
                         if (item.dataIndex === "paymentPlanId") {
                             return ({
                                 ...item,
-                                path: item.path + popContent.id
+                                path: item.path + popContent.id,
+                                getCheckboxProps
                             })
                         }
-                        if (item.dataIndex === "paymentPlanId") {
-                            return ({ ...item, getCheckboxProps })
+                        if (item.dataIndex === "refundAmount") {
+                            return ({
+                                ...item,
+                                dependencies: ["paymentPlanId"],
+                                rules: [
+                                    ...item.rules,
+                                    {
+                                        validator: (_: any, value: number, fieldKey: number) => new Promise((resove, reject) => {
+                                            const records = contractInfosForm.getFieldsValue().submit?.[fieldKey]
+                                            if (value > parseFloat(records?.noPaymentReceived)) {
+                                                reject("’回款金额‘必须小于或等于’未回款金额‘...")
+                                            } else {
+                                                resove(value)
+                                            }
+                                        })
+                                    }
+                                ]
+                            })
                         }
                         return item
                     })}

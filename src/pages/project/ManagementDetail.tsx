@@ -17,6 +17,10 @@ import ManagementOrder from './order/SaleOrder'
 import { changeTwoDecimal_f } from '../../utils/KeepDecimals';
 import { bidTypeOptions, winBidTypeOptions } from '../../configuration/DictionaryOptions'
 
+// 合同列表
+import ContractList from "./contract/ContractList";
+import SaleOrderList from "./order/SaleOrderList";
+
 import ExportList from '../../components/export/list';
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
 const productAssistStatistics = [
@@ -357,8 +361,11 @@ export default function ManagementDetail(): React.ReactNode {
                 <Spin spinning={contractLoading}>
                     {
                         contractStatus === "contract" ?
-                            <ManagementContract />
-                            : <ManagementOrder />
+                            // <ManagementContract />
+                            <ContractList />
+                            : 
+                                // <ManagementOrder />
+                                <SaleOrderList />
                     }
                 </Spin>
             </>
