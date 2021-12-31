@@ -1,21 +1,28 @@
-import React, { useState } from 'react'
-import { Button, Spin, Space, Image } from 'antd';
+import React, { useState } from 'react';
+import { Button, Spin, Space, Image, TablePaginationConfig, Modal } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle, Page } from '../common';
-import useRequest from '@ahooksjs/use-request';
+import { DetailContent, CommonTable, DetailTitle } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
-import Modal from 'antd/lib/modal/Modal';
+import useRequest from '@ahooksjs/use-request';
+
+interface IResponseData {
+    readonly id: number;
+    readonly size: number;
+    readonly current: number;
+    readonly total: number;
+    readonly records: [];
+}
+
+
 
 export default function TowerMemberInfo(): React.ReactNode {
-    const history = useHistory()
-    const [visible, setVisible] = useState<boolean>(false);
-    const [url, setUrl] = useState('');
+    const history = useHistory();
     const params = useParams<{ id: string, number: string }>()
-    // const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-    //     const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
-    //     resole(data)
-    // }), {})
-    // const detailData: any = data;
+    const [ detailData, setDetailData ] = useState<IResponseData | undefined>(undefined);
+    const page = {
+        current: 1,
+        pageSize: 10
+    };
     const columns = [
         { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
         { title: '段号', dataIndex: 'segmentName', key: 'segmentName', },
@@ -49,26 +56,45 @@ export default function TowerMemberInfo(): React.ReactNode {
             ) 
         }
     ]
+    const [visible, setVisible] = useState<boolean>(false);
+    const [url, setUrl] = useState('');
+    const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<IResponseData>(`/tower-science/productStructure/getDetailPage`, { ...pagination, productCategoryId:params.id });
+        setDetailData(data);
+        resole(data);
+    });
+
+    const { loading } = useRequest<IResponseData>(() => getTableDataSource(page), {});
+
+    if (loading) {
+        return <Spin spinning={loading}>
+            <div style={{ width: '100%', height: '300px' }}></div>
+        </Spin>
+    }
     const handleModalCancel = () => {setVisible(false);setUrl('')}
-    return <>
+    return <DetailContent operation={ [
+        <Space direction="horizontal" size="small" >
+            <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
+        </Space>
+    ] }>
         <Modal title='查看图片'  width={800} visible={visible} onCancel={handleModalCancel} footer={false}>
             <Image src={url||''}/>
         </Modal>
-        <DetailContent operation={[
-            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-        ]}>
-            <DetailTitle title="构件信息" />
-            <div style={{margin:'-16px'}}>
-                <Page
-                    path="/tower-science/productStructure/getDetailPage"
-                    columns={columns}
-                    requestData={{ productCategoryId: params.id }}
-                    // filterValue={filterValue}
-                    // onFilterSubmit={onFilterSubmit}
-                    extraOperation={ <span>件号数：{params.number}</span> }
-                    searchFormItems={[]}
-                />
-            </div>
-        </DetailContent>
-    </>
+        <DetailTitle title="构件信息" />
+        <p>件号数：{ params.number }</p>
+        <CommonTable 
+            columns={ columns } 
+            dataSource={ detailData?.records } 
+            onChange={ (pagination: TablePaginationConfig) => { 
+                getTableDataSource(pagination);
+            } }
+            pagination={{
+                current: detailData?.current || 0,
+                pageSize: detailData?.size || 0,
+                total: detailData?.total || 0,
+                showSizeChanger: true,
+                showTotal: (total: number) => `共${total} 条记录`,
+            }}
+        />
+    </DetailContent>
 }
