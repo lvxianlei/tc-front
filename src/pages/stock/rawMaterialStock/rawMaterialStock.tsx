@@ -146,7 +146,7 @@ export default function RawMaterialStock(): React.ReactNode {
         const data: any = await RequestUtil.get(`/tower-storage/materialStock/getMaterialStockStatics`);
         setListdata(data.records);
         setWeight(data.weight)
-        // setQuantity(data.quantity);
+        setQuantity(data.quantity);
         // console.log(data.total)
         // setTotal(data.materialStockPage.total);
     }
@@ -431,7 +431,16 @@ export default function RawMaterialStock(): React.ReactNode {
                 size={pageSize}
                 total={total}
                 url={`/tower-storage/materialStock`}
-                serchObj={{}}
+                serchObj={{
+                    warehouseId: warehouseId || "",
+                    materialTexture: materialTexture || "",
+                    productName: productName || "",
+                    standard: standard || "",
+                    classify: classify || "",
+                    lengthMin: lengthMin || "",
+                    lengthMax: lengthMax || "",
+                    spec: spec || ""
+                }}
                 closeExportList={() => { setIsExportStoreList(false) }}
             />:null}
         </div>

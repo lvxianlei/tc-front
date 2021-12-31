@@ -673,7 +673,14 @@ export default function RawMaterialStock(): React.ReactNode {
                 size={pageSize}
                 total={total}
                 url={`/tower-storage/receiveStock/excess`}
-                serchObj={{}}
+                serchObj={{
+                    selectName: keyword,
+                    updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
+                    updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
+                    departmentId: departmentId,
+                    stockUser: personnelId,
+                    receiveStatus: status
+                }}
                 closeExportList={() => { setIsExportStoreList(false) }}
             />:null}
         </div>
