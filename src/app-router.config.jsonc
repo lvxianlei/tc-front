@@ -1503,14 +1503,14 @@
     { // 票据管理
       "name": "票据管理",
       "path": "/financial/bill",
-      "module": "./pages/financial/Bill/index",
+      "module": "./pages/financial/bills/index",
       "exact": true,
       "authority": "financial_management_bill_management"
     },
     { // 请款申请
       "name": "请款申请",
       "path": "/financial/prepare",
-      "module": "./pages/financial/Prepare/index",
+      "module": "./pages/financial/prepares/index",
       "exact": true,
       "authority": "financial_management_application_payment"
     },
