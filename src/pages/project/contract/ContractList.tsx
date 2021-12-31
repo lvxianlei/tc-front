@@ -27,7 +27,6 @@ export default function ContractList(): JSX.Element {
         setFilterValue({projectId: params.id})
         return value
     }
-    console.log(params, "parmsss")
 
     const uploadChange = (event: any) => {
         if (event.file.status === "done") {
@@ -132,7 +131,6 @@ export default function ContractList(): JSX.Element {
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
                 extraOperation={(data: any) => {
-                    console.log(data, "data")
                     return (<>
                         <Button type="primary" onClick={() => {
                             history.push(`/project/contract/new/${params.id}`);
