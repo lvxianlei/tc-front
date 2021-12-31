@@ -1,4 +1,4 @@
-import React, {forwardRef, useImperativeHandle} from "react"
+import React from "react"
 import {Spin, Row} from "antd"
 import {BaseInfo, DetailTitle, Attachment, CommonTable} from "../common"
 import {contractOverview, material, freightOverview, stevedoringOverview} from "./contract.json"

@@ -3,7 +3,7 @@ import { WithTranslation } from 'react-i18next';
 import { RouteComponentProps, useHistory } from 'react-router';
 import styles from './WorkBench.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
-import { DetailTitle } from '../../common';
+import { DetailContent, DetailTitle } from '../../common';
 import Line from './Line';
 import { CheckCircleOutlined, RightOutlined, SoundOutlined } from '@ant-design/icons';
 import useRequest from '@ahooksjs/use-request';
@@ -338,7 +338,22 @@ export default function WorkBenchMngt(): React.ReactNode {
 						return null
 					} else {
 						return <div className={res.col !== 2 ? styles.content : styles.content2} key={ind + '_' + index}>
-							<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: { state: item?.state, type: item?.type, userId: item?.userId, createUserId: item?.createUserId, weldingUserId: item?.weldingUserId} }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
+							<p onClick={() => { 
+								if(item.path){
+									history.push({ 
+										pathname: item.path, 
+										state: { 
+											state: item?.state, 
+											type: item?.type, 
+											userId: item?.userId, 
+											createUserId: item?.createUserId, 
+											weldingUserId: item?.weldingUserId
+										} 
+									}) 
+								}
+							}}>
+								<CheckCircleOutlined style={{ paddingRight: "8px" }}/>{item.title}<span className={styles.rightoutlined}><RightOutlined /></span>
+							</p>
 							<p className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</p>
 							 <div className={styles.draw}>
 								<Line 
@@ -361,7 +376,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		</div>
 	}
 
-	return <div className={styles.all}>
+	return <DetailContent>
 		<div className={styles.left}>
 			{
 				detailData ? workBenchList.map((res: IList, ind: number) => {
@@ -398,5 +413,5 @@ export default function WorkBenchMngt(): React.ReactNode {
 				}]} />
 			</div>
 		</div>
-	</div>
+	</DetailContent>
 }
