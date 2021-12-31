@@ -398,7 +398,7 @@
         },
         {
             "title": "关联采购计划",
-            "dataIndex": "comparisonPriceNumber"
+            "dataIndex": "purchasePlanNumber"
         },
         {
             "title": "供应商",

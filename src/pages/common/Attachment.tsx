@@ -290,7 +290,7 @@ export default forwardRef(function ({
             {children}
         </Upload>
         }
-        {isTable && <div style={{border: "1px solid #eee"}}>
+        {isTable && <div style={{border: "1px solid #eee",margin: "0px 0px 24px 0px"}}>
             <Row style={{ backgroundColor: "#fafafa", padding: 8, }}>
                 <Col span={12}>文件名称</Col>
                 <Col span={12} style={{paddingLeft: 16, boxSizing: "border-box"}}>操作</Col>

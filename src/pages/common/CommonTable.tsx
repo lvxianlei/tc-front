@@ -139,7 +139,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
                     cell: ResizableTitle
                 }
             })}
-            className={layoutStyles.opration}
+            className={styles.opration}
             onRow={() => ({ className: styles.tableRow })}
             dataSource={dataSource}
             {...props}

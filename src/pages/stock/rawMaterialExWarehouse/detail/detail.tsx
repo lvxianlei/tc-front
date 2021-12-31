@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../../utils/RequestUtil';
 import AuthUtil from '../../../../utils/AuthUtil';
+import ExportList from '../../../../components/export/list';
 import '../../StockPublicStyle.less';
 import './detail.less';
 import { materialStandardTypeOptions, materialTextureOptions } from '../../../../configuration/DictionaryOptions';
@@ -42,6 +43,9 @@ export default function RawMaterialStock(): React.ReactNode {
     const [tempApplyData, setTempApplyData] = useState<number | string>('');//出库-弹框-缺料申请需要的列表数据
     const [departmentList, setDepartmentList] = useState<any[]>([]);//部门数据
     const [userList, setuserList] = useState<any[]>([]);//申请人数据数据
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     // 标准
     const standardEnum = materialStandardTypeOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
@@ -772,6 +776,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Button
                     type="primary"
                     className='func_btn'
+                    onClick={()=>{setIsExportStoreList(true)}}
                 >导出</Button>
                 <Button
                     className='func_btn'
@@ -946,6 +951,32 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
             </Modal>
+            {isExport?<ExportList
+                history={history}
+                location={location}
+                match={match}
+                columnsKey={() => {
+                    let keys = [...columns]
+                    keys.pop()
+                    return keys
+                }}
+                current={current}
+                size={pageSize}
+                total={total}
+                url={`/tower-storage/outStock/detail`}
+                serchObj={{
+                    id: params.id,
+                    departmentId,
+                    outStockStaffId,
+                    selectName: keyword,
+                    status: status,
+                    materialTexture, // 材质
+                    standard, // 标准
+                    updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
+                    updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
+                }}
+                closeExportList={() => { setIsExportStoreList(false) }}
+            />:null}
         </div>
     )
 }

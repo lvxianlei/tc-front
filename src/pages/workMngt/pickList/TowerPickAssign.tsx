@@ -196,11 +196,23 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
 
     public renderTreeNodes = (data:any) => data.map((item:any) => {
         if (item.children) {
-            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } className={ styles.node } >
-                { this.renderTreeNodes(item.children) }
-            </TreeNode>);
+            return (
+                <TreeNode 
+                    key={ item.id } 
+                    title={ item.title } 
+                    value={ item.id } 
+                    className={ styles.node } 
+                    >
+                    { this.renderTreeNodes(item.children) }
+                </TreeNode>
+            );
         }
-        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id }/>;
+        return <TreeNode 
+                    { ...item } 
+                    key={ item.id } 
+                    title={ item.title } 
+                    value={ item.id }
+                />;
     });
     
      /**
@@ -209,22 +221,52 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
      */
     public render(): React.ReactNode {
         return <>
-            <Button type={ this.props.title === "塔型提料指派" ? "primary" : 'link' } onClick={ () => this.modalShow() } ghost>{ this.props.title }</Button>
+            <Button 
+                type={ this.props.title === "塔型提料指派" ? "primary" : 'link' } 
+                onClick={ () => this.modalShow() } 
+                ghost
+            >
+                { this.props.title }
+            </Button>
             <Modal
                 visible={ this.state.visible } 
                 width="60%" 
                 title="塔型提料指派" 
                 footer={
                     <Space direction="horizontal" className={ styles.bottomBtn }>
-                        <Button type="ghost" onClick={ () => this.modalCancel() }>关闭</Button>
-                        {this.props.type === 'detail'?null:<Button type="primary" onClick={ () => this.onSubmit() } ghost>提交</Button>}
+                        <Button 
+                            type="ghost" 
+                            onClick={ () => this.modalCancel() }
+                        >
+                            关闭
+                        </Button>
+                        {
+                            this.props.type === 'detail'?
+                            null:
+                            <Button 
+                                type="primary" 
+                                onClick={ () => this.onSubmit() } 
+                                ghost
+                            >
+                                提交
+                            </Button>
+                        }
                     </Space>
                 } 
                 onCancel={ () => this.modalCancel() }
             >
                 <DetailContent className={ styles.modalHeight }>
-                    <Form ref={ this.form } className={ styles.descripForm }>
-                        <Descriptions title="" bordered size="small" colon={ false } column={ 3 }>
+                    <Form 
+                        ref={ this.form } 
+                        className={ styles.descripForm }
+                    >
+                        <Descriptions 
+                            title="" 
+                            bordered 
+                            size="small" 
+                            colon={ false } 
+                            column={ 3 }
+                        >
                             <Descriptions.Item label="塔型">
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
@@ -245,7 +287,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     { this.props.detailData?.plannedDeliveryTime || '' }
                                 </Descriptions.Item></>
                                 : <><Descriptions.Item label="段信息">
-                                <Form.Item name="name"
+                                <Form.Item 
+                                    name="name"
                                     rules={[{
                                         required: true,
                                         message: '请输入段信息'
@@ -267,7 +310,16 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         required: true,
                                         message: '请选择部门'
                                     }]} style={ { width: '50%', display: 'inline-block' } }>
-                                    <TreeSelect placeholder="请选择" style={{width:'120px'}} onChange={ (value: any) => { this.onDepartmentChange(value,'提料') } } className={ styles.width200 }>
+                                    <TreeSelect 
+                                        placeholder="请选择" 
+                                        style={{width:'120px'}} 
+                                        onChange={ 
+                                            (value: any) => { 
+                                                this.onDepartmentChange(value,'提料')
+                                            } 
+                                        } 
+                                        className={ styles.width200 }
+                                    >
                                         { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                     </TreeSelect>
                                 </Form.Item>
@@ -275,38 +327,75 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     rules={[{
                                         required: true,
                                         message: '请选择人员'
-                                    }]} style={ { width: '50%', display: 'inline-block' } }>
+                                    }]} 
+                                    style={ { 
+                                        width: '50%', 
+                                        display: 'inline-block' 
+                                    } }
+                                >
                                     <Select placeholder="请选择" style={{width:'120px'}}>
                                         { this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                            return <Select.Option 
+                                                        key={ item.id } 
+                                                        value={ item.id }
+                                                    >
+                                                        { item.name }
+                                                    </Select.Option>
                                         }) }
                                     </Select>
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="校核人">
-                                <Form.Item name="materialCheckLeaderDepartment"
+                                <Form.Item 
+                                    name="materialCheckLeaderDepartment"
                                     rules={[{
                                         required: true,
                                         message: '请选择部门'
-                                    }]} style={ { width: '50%', display: 'inline-block' } }>
-                                    <TreeSelect placeholder="请选择" style={{width:'120px'}} onChange={ (value: any) => { this.onDepartmentChange(value, '校对') } } className={ styles.width200 }>
+                                    }]} 
+                                    style={ { 
+                                        width: '50%', 
+                                        display: 'inline-block' 
+                                    } }
+                                >
+                                    <TreeSelect 
+                                        placeholder="请选择" 
+                                        style={{width:'120px'}} 
+                                        onChange={ 
+                                            (value: any) => { 
+                                                this.onDepartmentChange(value, '校对') 
+                                            } 
+                                        } 
+                                        className={ styles.width200 }
+                                    >
                                         { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                     </TreeSelect>
                                 </Form.Item>
-                                <Form.Item name="materialCheckLeader"
+                                <Form.Item 
+                                    name="materialCheckLeader"
                                     rules={[{
                                         required: true,
                                         message: '请选择人员'
-                                    }]} style={ { width: '50%', display: 'inline-block' } }>
+                                    }]} 
+                                    style={ { 
+                                        width: '50%', 
+                                        display: 'inline-block' 
+                                    } }
+                                >
                                     <Select placeholder="请选择" style={{width:'120px'}}>
                                         { this.state?.materialCheckLeader && this.state.materialCheckLeader.map((item: any) => {
-                                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                            return <Select.Option 
+                                                        key={ item.id } 
+                                                        value={ item.id }
+                                                    >
+                                                        { item.name }
+                                                    </Select.Option>
                                         }) }
                                     </Select>
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="交付时间">
-                                <Form.Item name="plannedDeliveryTime"
+                                <Form.Item 
+                                    name="plannedDeliveryTime"
                                     rules={[{
                                         required: true,
                                         message: '请选择交付时间'

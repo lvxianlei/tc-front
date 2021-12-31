@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Button, Modal, Input, DatePicker, Select, message, Table } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface'
 import RequestUtil from '../../../../utils/RequestUtil';
+import ExportList from '../../../../components/export/list';
 import '../../StockPublicStyle.less';
 import './detail.less';
 
@@ -38,6 +39,9 @@ export default function RawMaterialStock(): React.ReactNode {
     const [batchNumber, setBatchNumber] = useState(""); // 批号
     const [warrantyNumber, setWarrantyNumber] = useState(""); // 质保书号
     const [rollingNumber, setRollingNumber] = useState(""); // 轧制批号	
+    const [isExport, setIsExportStoreList] = useState(false)
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
     const columns = [
         {
             title: '序号',
@@ -231,6 +235,9 @@ export default function RawMaterialStock(): React.ReactNode {
         setLocatorId('');
         setReservoirId('');
         setFurnaceBatchNo('');
+        setBatchNumber('');
+        setWarrantyNumber('');
+        setRollingNumber('');
     }
     // submit收货弹框提交
     const receivingSubmit = async () => {
@@ -355,7 +362,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
                         <Input
-                            placeholder="材料名称/标准/规格/材质"
+                            placeholder="炉批号/收货批次/批号/质保书号/轧制批号"
                             value={keyword}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
@@ -383,7 +390,9 @@ export default function RawMaterialStock(): React.ReactNode {
             <div className="func_public_Stock">
                 <Button
                     type="primary"
-                    className='func_btn'
+                    className='func_btn'onClick={() => {
+                        setIsExportStoreList(true)
+                    }}
                 >导出</Button>
                 <Button
                     type="primary"
@@ -619,6 +628,28 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
             </Modal>
+            {isExport ? <ExportList
+                history={history}
+                location={location}
+                match={match}
+                columnsKey={() => {
+                    let keys = [...columns]
+                    keys.pop()
+                    return keys
+                }}
+                current={current || 1}
+                size={pageSize || 10}
+                total={total || 0}
+                url={`/tower-storage/receiveStock/detail`}
+                serchObj={{ 
+                    fuzzyQuery: keyword,
+                    startStatusUpdateTime: dateString[0] ? dateString[0] + " 00:00:00" : '',
+                    endStatusUpdateTime: dateString[1] ? dateString[1] + " 23:59:59" : '',
+                    receiveStockId: params.id,
+                    receiveStatus: status,
+                 }}
+                closeExportList={() => { setIsExportStoreList(false) }}
+            /> : null}
         </div>
     )
 }

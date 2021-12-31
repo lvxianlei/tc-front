@@ -1,6 +1,6 @@
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { Button, Space, Modal, Form, Input } from 'antd';
-import { DetailContent, Attachment, CommonTable, AttachmentRef } from '../../common';
+import { DetailContent, Attachment, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import { FileProps } from '../../common/Attachment';
 

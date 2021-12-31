@@ -470,9 +470,22 @@ export default function Questionnaire(): React.ReactNode {
             </Space>
         ] }>
             <DetailTitle title="问题信息" />
-            <Row className={ styles.header }><Col>校核前</Col><Col offset={ 1 }>段号：{ detailData.weldingDetailedVO.segmentName } </Col><Col>组件号：{ detailData.weldingDetailedVO.componentId }</Col><Col>主件号：{ detailData.weldingDetailedVO.mainPartId }</Col><Col>电焊米数：{ detailData.weldingDetailedVO.electricWeldingMeters }</Col></Row>
+            <Row className={ styles.header }>
+                <Col>校核前</Col>
+                <Col offset={ 1 }>段号：{ detailData.weldingDetailedVO.segmentName }</Col>
+                <Col>组件号：{ detailData.weldingDetailedVO.componentId }</Col>
+                <Col>主件号：{ detailData.weldingDetailedVO.mainPartId }</Col>
+                <Col>电焊米数：{ detailData.weldingDetailedVO.electricWeldingMeters }</Col>
+            </Row>
             <CommonTable columns={ paragraphColumns } dataSource={ weldingDetailedList } pagination={ false } />
-            <Row className={ styles.header }><Col>校核后</Col><Col offset={ 1 }>段号：{ detailData.weldingDetailedVO.segmentName } </Col><Col>组件号：{ detailData.weldingDetailedVO.componentId }</Col><Col>主件号：{ mainPartId }</Col><Col>电焊米数：{ electricWeldingMeters }</Col><Button type="primary" onClick={ () => getComponentList() } className={ styles.btnright } ghost>选择</Button></Row>
+            <Row className={ styles.header }>
+                <Col>校核后</Col>
+                <Col offset={ 1 }>段号：{ detailData.weldingDetailedVO.segmentName }</Col>
+                <Col>组件号：{ detailData.weldingDetailedVO.componentId }</Col>
+                <Col>主件号：{ mainPartId }</Col>
+                <Col>电焊米数：{ electricWeldingMeters }</Col>
+                <Button type="primary" onClick={ () => getComponentList() } className={ styles.btnright } ghost>选择</Button>
+            </Row>
             <CommonTable columns={ newColumns } dataSource={ weldingDetailedStructureList } pagination={ false } />
             <DetailTitle title="备注" />
             <Input.TextArea value={ description } onChange={(e) => {

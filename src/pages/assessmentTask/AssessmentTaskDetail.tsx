@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, Row, Col, Input, message, Image } from 'antd';
+import { Spin, Button, Space, Modal, Row, Col, Input, message } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';

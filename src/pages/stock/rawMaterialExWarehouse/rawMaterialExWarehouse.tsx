@@ -285,7 +285,14 @@ export default function RawMaterialStock(): React.ReactNode {
                 size={pageSize}
                 total={total}
                 url={`/tower-storage/outStock`}
-                serchObj={{}}
+                serchObj={{
+                    applyStaffId,
+                    departmentId,
+                    status,
+                    updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
+                    updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
+                    selectName: keyword,
+                }}
                 closeExportList={() => { setIsExportStoreList(false) }}
             />:null}
         </div>

@@ -9,8 +9,6 @@ import {
     Space,
     message
 } from 'antd';
-import moment from 'moment';
-import useRequest from '@ahooksjs/use-request'
 import { useHistory, useParams, Link } from 'react-router-dom';
 import { Page } from '../../common';
 import { IContract } from "../../IContract";
@@ -29,7 +27,6 @@ export default function ContractList(): JSX.Element {
         setFilterValue({projectId: params.id})
         return value
     }
-    console.log(params, "parmsss")
 
     const uploadChange = (event: any) => {
         if (event.file.status === "done") {
@@ -38,93 +35,93 @@ export default function ContractList(): JSX.Element {
             }
         }
     }
-      const columns = [
+    const columns = [
+      {
+          key: "contractNumber",
+          title: "合同编号",
+          dataIndex: "contractNumber",
+          render: (_: undefined, record: object): React.ReactNode => {
+            return (
+              <Link
+                to={`/project/contract/detail/${params.id}/${(record as IContract).id
+                  }`}
+              >
+                {(record as IContract).contractNumber}
+              </Link>
+            );
+          },
+        },
         {
-            key: "contractNumber",
-            title: "合同编号",
-            dataIndex: "contractNumber",
-            render: (_: undefined, record: object): React.ReactNode => {
-              return (
-                <Link
-                  to={`/project/contract/detail/${params.id}/${(record as IContract).id
-                    }`}
-                >
-                  {(record as IContract).contractNumber}
-                </Link>
-              );
-            },
+          key: "internalNumber",
+          title: "内部合同编号",
+          dataIndex: "internalNumber",
+          render: (_: undefined, record: object): React.ReactNode => {
+            return (
+              <Link to={`/project/contract/detail/${params.id}/${(record as IContract).id}`}>
+                {(record as IContract).internalNumber}
+              </Link>
+            );
           },
-          {
-            key: "internalNumber",
-            title: "内部合同编号",
-            dataIndex: "internalNumber",
-            render: (_: undefined, record: object): React.ReactNode => {
-              return (
-                <Link to={`/project/contract/detail/${params.id}/${(record as IContract).id}`}>
-                  {(record as IContract).internalNumber}
-                </Link>
-              );
-            },
-          },
-          {
-            key: "contractName",
-            title: "合同/工程名称",
-            dataIndex: "contractName",
-          },
-          {
-            key: "contractTotalWeight",
-            title: "合同总重(吨)",
-            dataIndex: "contractTotalWeight",
-          },
-          {
-            title: "合同金额(元)",
-            dataIndex: "contractAmount",
-          },
-          {
-            title: "业主单位",
-            dataIndex: "customerCompany",
-          },
-          {
-            title: "合同签订单位",
-            dataIndex: "signCustomerName",
-          },
-          {
-            title: "签订日期",
-            dataIndex: "signContractTime",
-          },
-          {
-            title: "要求发货日期",
-            dataIndex: "deliveryTime",
-          },
-          {
-            title: "有无技术协议",
-            dataIndex: "isIta",
-            render: (text: any, records: any) => {
-              let value = "无";
-              if (text === 1) {
-                value = "原件"
-              } else if (text === 2) {
-                value = "复印件"
-              }
-              return <>{value}</>
+        },
+        {
+          key: "contractName",
+          title: "合同/工程名称",
+          dataIndex: "contractName",
+        },
+        {
+          key: "contractTotalWeight",
+          title: "合同总重(吨)",
+          dataIndex: "contractTotalWeight",
+        },
+        {
+          title: "合同金额(元)",
+          dataIndex: "contractAmount",
+        },
+        {
+          title: "业主单位",
+          dataIndex: "customerCompany",
+        },
+        {
+          title: "合同签订单位",
+          dataIndex: "signCustomerName",
+        },
+        {
+          title: "签订日期",
+          dataIndex: "signContractTime",
+        },
+        {
+          title: "要求发货日期",
+          dataIndex: "deliveryTime",
+        },
+        {
+          title: "有无技术协议",
+          dataIndex: "isIta",
+          render: (text: any, records: any) => {
+            let value = "无";
+            if (text === 1) {
+              value = "原件"
+            } else if (text === 2) {
+              value = "复印件"
             }
-          },
-          {
-            title: "业务经理",
-            dataIndex: "salesman",
-          },
-          {
-            title: "备注",
-            dataIndex: "description",
-          },
-          {
-            title: "制单人",
-            dataIndex: "createUserName",
-          },
-          {
-            title: "制单时间",
-            dataIndex: "createTime",
+            return <>{value}</>
           }
+        },
+        {
+          title: "业务经理",
+          dataIndex: "salesman",
+        },
+        {
+          title: "备注",
+          dataIndex: "description",
+        },
+        {
+          title: "制单人",
+          dataIndex: "createUserName",
+        },
+        {
+          title: "制单时间",
+          dataIndex: "createTime",
+        }
     ]
     return (
         <>
@@ -134,7 +131,6 @@ export default function ContractList(): JSX.Element {
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
                 extraOperation={(data: any) => {
-                    console.log(data, "data")
                     return (<>
                         <Button type="primary" onClick={() => {
                             history.push(`/project/contract/new/${params.id}`);
@@ -180,6 +176,7 @@ export default function ContractList(): JSX.Element {
                                 )
                                 if (resData) {
                                     message.success("合同已成功删除...")
+                                    setRefresh(true);
                                 }
                                 }}
                                 disabled={(record as IContract).isRelateOrder === 1}

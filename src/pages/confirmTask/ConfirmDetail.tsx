@@ -111,9 +111,9 @@ export default function ConfirmDetail(): React.ReactNode {
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="杆塔信息"/>
-            <CommonTable columns={towerColumns} dataSource={detailData?.drawProductDetailList} />
+            <CommonTable columns={towerColumns} dataSource={detailData?.drawProductDetailList} pagination={false}/>
             <DetailTitle title="备注"/>
-            <TextArea maxLength={500} showCount rows={3} value={detailData?.description} disabled/>
+            <TextArea maxLength={500} showCount rows={3} value={detailData?.description} disabled style={{padding:'0px 0px 24px 0px'}}/>
             {/* <DetailTitle title="附件"/>
             <CommonTable columns={[
                 {

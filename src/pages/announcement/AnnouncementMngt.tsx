@@ -136,20 +136,22 @@ export default function AnnouncementMngt(): React.ReactNode {
         path="/tower-system/notice"
         columns={ columns }
         headTabs={ [] }
-        extraOperation={ <Space direction="horizontal" size="small">
-            <Link to={{pathname: `/announcement/new`, state:{ type: 'new' } }}><Button type="primary">新发布</Button></Link>
-            { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(0) === -1 && selectedRows.map(items => items.state).indexOf(2) === -1 ? <Button type="primary" onClick={ batchWithdraw } ghost>撤回</Button> : <Button type="primary" disabled ghost>撤回</Button>}
-            { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(1) === -1 ? 
-                <Popconfirm
-                    title="确认删除?"
-                    onConfirm={ batchDel }
-                    okText="确认"
-                    cancelText="取消"
-                >
-                    <Button type="primary" ghost>删除</Button> 
-                </Popconfirm>
-        : <Button type="primary" disabled ghost>删除</Button> }
-        </Space> }
+        extraOperation={ 
+            <Space direction="horizontal" size="small">
+                <Link to={{pathname: `/announcement/new`, state:{ type: 'new' } }}><Button type="primary">新发布</Button></Link>
+                { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(0) === -1 && selectedRows.map(items => items.state).indexOf(2) === -1 ? <Button type="primary" onClick={ batchWithdraw } ghost>撤回</Button> : <Button type="primary" disabled ghost>撤回</Button>}
+                { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(1) === -1 ? 
+                    <Popconfirm
+                        title="确认删除?"
+                        onConfirm={ batchDel }
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="primary" ghost>删除</Button> 
+                    </Popconfirm>
+            : <Button type="primary" disabled ghost>删除</Button> }
+            </Space> 
+        }
         refresh={ refresh }
         tableProps={{
             rowSelection: {

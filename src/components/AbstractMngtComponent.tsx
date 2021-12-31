@@ -196,7 +196,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
                         :
                         null
                 }
-                <Card bordered={false}>
+                <Card bordered={false} style={{padding:'0px'}}>
                     <Space className={layoutStyles.width100} direction="vertical" size="large">
                         {this.renderExtraOperationContent(item)}
                         {this.renderTableContent(item)}
