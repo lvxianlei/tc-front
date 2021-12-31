@@ -95,7 +95,7 @@ export default function Edit() {
                 current={purchasePlanData?.current || 1}
                 size={purchasePlanData?.size || 10}
                 total={purchasePlanData?.total || 0}
-                url={`/tower-supply/materialPurchasePlan/list/total/${params.id}`}
+                url={`/tower-supply/materialPurchasePlan/list/${params.id}`}
                 serchObj={{}}
                 closeExportList={() => { setIsExportStoreList(false) }}
             /> : null}

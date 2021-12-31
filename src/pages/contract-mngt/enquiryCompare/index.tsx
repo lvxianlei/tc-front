@@ -118,6 +118,7 @@ export default function ContractMngt() {
             </Modal>
             <Page
                 path="/tower-supply/comparisonPrice"
+                exportPath={"/tower-supply/comparisonPrice"}
                 columns={[
                     {
                         "title": "序号",
@@ -150,7 +151,6 @@ export default function ContractMngt() {
                     }
                 ]}
                 extraOperation={<>
-                    <Button type="primary" ghost>导出</Button>
                     <Button type="primary" ghost onClick={() => {
                         setOprationType("new")
                         setVisible(true)
