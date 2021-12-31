@@ -3,8 +3,8 @@
  * @copyright © 2021 
  * @description 详情
 */
-import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, Image } from 'antd';
+import React from 'react';
+import { Spin, Button, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
@@ -63,13 +63,12 @@ const baseColums = [
 export default function AssemblyWeldingInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
-    const [pictureVisible, setPictureVisible] = useState(false);
-    const [pictureUrl, setPictureUrl] = useState('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get(`/tower-system/notice/getNoticeById/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
+    
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>

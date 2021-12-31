@@ -94,7 +94,11 @@ export default function DataMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     <Link to={`/archivesMngt/dataMngt/detail/${ record.id }`}>详情</Link>
-                    { record.dataStatus === 0 ? <Link to={{pathname: `/archivesMngt/dataMngt/datasetting`, state:{ type: 'edit', data: [record] } }}><Button type="link">编辑</Button></Link> : <Button type="link" disabled>编辑</Button> }
+                    { 
+                        record.dataStatus === 0 
+                        ? <Link to={{pathname: `/archivesMngt/dataMngt/datasetting`, state:{ type: 'edit', data: [record] } }}><Button type="link">编辑</Button></Link> 
+                        : <Button type="link" disabled>编辑</Button> 
+                    }
                     <Button type="link" onClick={ () => {
                         operation(recordState.LEND, record.id);
                     } } disabled={ record.dataStatus !== 1 }>借出</Button>
@@ -212,38 +216,47 @@ export default function DataMngt(): React.ReactNode {
             columns={ columns }
             headTabs={ [] }
             exportPath={`/tower-system/dataRecord`}
-            extraOperation={ <Space direction="horizontal" size="small">
-                 <Upload 
-                    action={ () => {
-                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                        return baseUrl+'/tower-system/dataRecord/import'
-                    } } 
-                    headers={
-                        {
-                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                            'Tenant-Id': AuthUtil.getTenantId(),
-                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+            extraOperation={ 
+                <Space direction="horizontal" size="small">
+                    <Upload 
+                        action={ () => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl+'/tower-system/dataRecord/import'
+                        } } 
+                        headers={
+                            {
+                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
                         }
+                        showUploadList={ false }
+                        onChange={ (info) => {
+                            if(info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            }
+                            if(info.file.response && info.file.response?.success){
+                                message.success('导入成功！');
+                                setRefresh(!refresh);
+                            } 
+                        } }
+                    >
+                        <Button type="primary">导入</Button>
+                    </Upload>
+                    {/* <Button type="primary" onClick={ () => downloadTemplate('', '资料管理导入模板') } ghost>下载导入模板</Button> */}
+                    <Link to={{pathname: `/archivesMngt/dataMngt/dataNew`, state: { type: 'new' } }}><Button type="primary" ghost>录入</Button></Link>
+                    { 
+                        selectedRows.length > 0 && selectedRows.map(items => items.dataStatus).indexOf(1) === -1 && selectedRows.map(items => items.dataStatus).indexOf(2) === -1 && selectedRows.map(items => items.dataStatus).indexOf(3) === -1 
+                        ? <Link to={{pathname: `/archivesMngt/dataMngt/datasetting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> 
+                        : <Button type="primary" disabled ghost>编辑</Button>
                     }
-                    showUploadList={ false }
-                    onChange={ (info) => {
-                        if(info.file.response && !info.file.response?.success) {
-                            message.warning(info.file.response?.msg)
-                        }
-                        if(info.file.response && info.file.response?.success){
-                            message.success('导入成功！');
-                            setRefresh(!refresh);
-                        } 
-                    } }
-                >
-                    <Button type="primary">导入</Button>
-                </Upload>
-                {/* <Button type="primary" onClick={ () => downloadTemplate('', '资料管理导入模板') } ghost>下载导入模板</Button> */}
-                <Link to={{pathname: `/archivesMngt/dataMngt/dataNew`, state:{ type: 'new' } }}><Button type="primary" ghost>录入</Button></Link>
-                { selectedRows.length > 0 && selectedRows.map(items => items.dataStatus).indexOf(1) === -1 && selectedRows.map(items => items.dataStatus).indexOf(2) === -1 && selectedRows.map(items => items.dataStatus).indexOf(3) === -1 ? <Link to={{pathname: `/archivesMngt/dataMngt/datasetting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button>}
-                { selectedRows.length > 0 && selectedRows.map(items => items.dataStatus).indexOf(1) === -1 && selectedRows.map(items => items.dataStatus).indexOf(2) === -1 && selectedRows.map(items => items.dataStatus).indexOf(3) === -1 ? <Button type="primary" onClick={ batchDel } ghost>删除</Button> : <Button type="primary" disabled ghost>删除</Button>}
-                
-            </Space> }
+                    { 
+                        selectedRows.length > 0 && selectedRows.map(items => items.dataStatus).indexOf(1) === -1 && selectedRows.map(items => items.dataStatus).indexOf(2) === -1 && selectedRows.map(items => items.dataStatus).indexOf(3) === -1 
+                        ? <Button type="primary" onClick={ batchDel } ghost>删除</Button> 
+                        : <Button type="primary" disabled ghost>删除</Button>
+                    }
+                </Space> 
+            }
             refresh={ refresh }
             tableProps={{
                 rowSelection: {

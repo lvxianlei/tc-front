@@ -58,15 +58,17 @@ export default function TowerMemberInfo(): React.ReactNode {
             <Button key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
             <DetailTitle title="构件信息" />
-            <Page
-                path="/tower-science/productStructure/getDetailPage"
-                columns={columns}
-                requestData={{ productCategoryId: params.id }}
-                // filterValue={filterValue}
-                // onFilterSubmit={onFilterSubmit}
-                extraOperation={ <span>件号数：{params.number}</span> }
-                searchFormItems={[]}
-            />
+            <div style={{margin:'-16px'}}>
+                <Page
+                    path="/tower-science/productStructure/getDetailPage"
+                    columns={columns}
+                    requestData={{ productCategoryId: params.id }}
+                    // filterValue={filterValue}
+                    // onFilterSubmit={onFilterSubmit}
+                    extraOperation={ <span>件号数：{params.number}</span> }
+                    searchFormItems={[]}
+                />
+            </div>
         </DetailContent>
     </>
 }
