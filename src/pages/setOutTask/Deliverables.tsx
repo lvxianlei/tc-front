@@ -4,6 +4,7 @@ import { DetailContent, CommonTable } from '../common';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
+import styles from './SetOutTask.module.less';
 
 export interface DeliverablesProps {}
 export interface IDeliverablesRouteProps extends RouteComponentProps<DeliverablesProps>, WithTranslation {
@@ -62,9 +63,8 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
                 key: 'operation',
                 title: '操作',
                 dataIndex: 'operation',
-                width: 120,
                 render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    <Button type="link" onClick={ () => { 
+                    <Button style={{ padding: '0' }} type="link" onClick={ () => { 
                         if(record.requestType === 'zip') {
                             downloadTemplate(record.path + this.props.id , record.use, {}, true)
                         } else {
