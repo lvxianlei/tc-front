@@ -46,7 +46,7 @@ export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const [visible, setVisible] = useState<boolean>(false)
-    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({receiveStockId: params.id})
     const [attchType, setAttachType] = useState<1 | 2>(1)
     const [detailId, setDetailId] = useState<string>("")
     const [saveLoding, setSaveLoading] = useState<boolean>(false)
