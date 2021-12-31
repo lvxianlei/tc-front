@@ -623,18 +623,18 @@
                         "label": "镀锌车间",
                         "icon": "shengchan_duxinchejianduixinchejian",
                         "path": "/galvanizingWorkshop",
-                        "authority": "galvanizing_workshop",
+                        "authority": "approvalm",
                         "appName": "MC",
                         "items": [
                             {
                                 "label": "日计划列表",
                                 "path": "/galvanizingWorkshop/dailySchedule",
-                                "authority": "galvanizing_workshop_daily_plan_list"
+                                "authority": "galvanized_daily_plan_list_management"
                             },
                             {
                                 "label": "过磅单列表",
                                 "path": "/galvanizingWorkshop/weighingList",
-                                "authority": "galvanizing_workshop_weighing_list"
+                                "authority": "weighing_list_management"
                             }
                         ]
                     },
@@ -643,27 +643,27 @@
                         "icon": "shengchan_baozhuangchejianbaozhuangchejian",
                         "path": "/packagingWorkshop",
                         "appName": "MC",
-                        "authority": "packaging_workshop",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "包装计划列表",
                                 "path": "/packagingWorkshop/processingTask",
-                                "authority": "packaging_workshop_machining_task_panel"
+                                "authority": "package_workshop_list_management"
                             },
                             {
                                 "label": "成品入库",
                                 "path": "/packagingWorkshop/warehousing",
-                                "authority": "packaging_workshop_finished_goods_warehousing_list"
+                                "authority": "package_workshop_finished_product_management"
                             },
                             {
                                 "label": "成品出库任务",
                                 "path": "/packagingWorkshop/deliveryPlan",
-                                "authority": "packaging_workshop_finished_goods_delivery_plan"
+                                "authority": "package_workshop_ex_warehouse_management"
                             },
                             {
                                 "label": "成品库存",
                                 "path": "/packagingWorkshop/stock",
-                                "authority": "packaging_workshop_finished_product_inventory"
+                                "authority": "package_workshop_package_warehouse_management"
                             }
                         ]
                     },
