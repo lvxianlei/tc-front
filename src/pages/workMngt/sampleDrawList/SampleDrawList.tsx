@@ -23,6 +23,7 @@ export default function SampleDrawList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
+            fixed: "left" as FixedType,
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
@@ -89,7 +90,7 @@ export default function SampleDrawList(): React.ReactNode {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            width: 230,
+            width: 70,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">

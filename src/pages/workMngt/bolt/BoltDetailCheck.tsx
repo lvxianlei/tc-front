@@ -89,7 +89,7 @@ export default function BoltCheck(): React.ReactNode {
                 columns={columns}
                 refresh={refresh}
                 extraOperation={
-                    <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
+                    <Button type="ghost" onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
                 }
                 headTabs={[]}
                 searchFormItems={[]}

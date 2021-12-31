@@ -780,8 +780,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 >导出</Button>
                 <Button
                     className='func_btn'
-                    type="primary"
-                    ghost
+                    type="ghost"
                     onClick={() => {
                         history.go(-1)
                     }}

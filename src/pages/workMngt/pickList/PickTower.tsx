@@ -272,7 +272,7 @@ export default function PickTower(): React.ReactNode {
                 exportPath="/tower-science/product/material"
                 extraOperation={
                     <Space>
-                        <Button type="primary" onClick={()=>history.push('/workMngt/pickList')}>返回</Button>
+                        <Button type="ghost" onClick={()=>history.push('/workMngt/pickList')}>返回</Button>
                     </Space>
                 }
                 searchFormItems={[

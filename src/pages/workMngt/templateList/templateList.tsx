@@ -13,7 +13,6 @@ export default function TemplateList() {
             title: '序号',
             dataIndex: 'index',
             fixed: true,
-            align: 'center',
             render: (text: any, item: any, index: number) => {
                 return <span>{index + 1}</span>
             }
@@ -21,47 +20,38 @@ export default function TemplateList() {
         {
             title: '放样任务编号',
             dataIndex: 'taskNum',
-            align: 'center',
         },
         {
             title: '上传图纸类型',
             dataIndex: 'uploadDrawTypeName',
-            align: 'center',
         },
         {
             title: '内部合同编号',
             dataIndex: 'internalNumber',
-            align: 'center',
         },
         {
             title: '计划号',
             dataIndex: 'planNumber',
-            align: 'center',
         },
         {
             title: '塔型',
             dataIndex: 'productCategoryName',
-            align: 'center',
         },
         {
             title: '计划交付时间',
             dataIndex: 'deliverTime',
-            align: 'center',
         },
         {
             title: '图纸负责人',
             dataIndex: 'drawLeaderName',
-            align: 'center',
         },
         {
             title: '上传状态',
             dataIndex: 'uploadStatusName',
-            align: 'center',
         },
         {
             title: '最新状态变更时间',
             dataIndex: 'updateStatusTime',
-            align: 'center',
         },
         {
             title: '操作',

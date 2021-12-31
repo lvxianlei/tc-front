@@ -77,7 +77,7 @@ export default function Overview(): React.ReactNode {
                 }
             ]}
             extraOperation={<>
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}

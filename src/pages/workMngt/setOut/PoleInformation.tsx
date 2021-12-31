@@ -144,7 +144,7 @@ export default function PoleInformation(): React.ReactNode {
         requestData={{ productCategoryId: params.id }}
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
-            <Button type="primary" onClick={ () => history.goBack() } ghost>返回</Button>
+            <Button type="ghost" onClick={ () => history.goBack() }>返回</Button>
         </Space>}
         searchFormItems={ [
             {

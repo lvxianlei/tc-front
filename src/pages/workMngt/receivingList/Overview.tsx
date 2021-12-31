@@ -113,7 +113,7 @@ export default function Edit() {
             extraOperation={(data: any) => {
                 return <>
                 <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} style={{ marginRight: 16, marginLeft: 16 }}>申请质检</Button>
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{marginLeft:"20px"}}>
                     已收货：重量(支)合计：{data?.receiveStockMessage.receiveWeight === -1 ? 0 : data?.receiveStockMessage.receiveWeight}
                     价税合计(元)合计：{data?.receiveStockMessage.receivePrice === -1 ? 0 : data?.receiveStockMessage.receivePrice}
