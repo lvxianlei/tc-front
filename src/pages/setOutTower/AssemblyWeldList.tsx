@@ -25,12 +25,14 @@ export default function AssemblyWeldInfo(): React.ReactNode {
             <Button key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
             <DetailTitle title="组焊清单" />
-            <Page
-                path="/tower-science/welding/getWeldingByProductSegmentId"
-                columns={columns}
-                requestData={{productSegmentId: params.id}}
-                searchFormItems={[]}
-            />
+            <div style={{margin:'-24px -16px -16px -16px'}}>
+                <Page
+                    path="/tower-science/welding/getWeldingByProductSegmentId"
+                    columns={columns}
+                    requestData={{productSegmentId: params.id}}
+                    searchFormItems={[]}
+                />
+            </div>
         </DetailContent>
     </>
 }
