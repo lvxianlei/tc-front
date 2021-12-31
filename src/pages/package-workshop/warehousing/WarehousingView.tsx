@@ -42,7 +42,7 @@ export default function WarehousingView(): React.ReactNode {
                 <DetailTitle title="基本信息" />
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
                 <DetailTitle title="杆塔信息" />
-                <Table 
+                {/* <Table 
                     columns={tableColumns}
                     dataSource={detailData?.productVOList} 
                     // onRow={record => {
@@ -53,6 +53,11 @@ export default function WarehousingView(): React.ReactNode {
                     //       }, // 点击行
                     //     };
                     // }}
+                    pagination={false}
+                /> */}
+                <CommonTable 
+                    columns={tableColumns}
+                    dataSource={detailData?.productVOList} 
                     pagination={false}
                 />
                 <DetailTitle title="包信息" />
