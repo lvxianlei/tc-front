@@ -55,7 +55,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100&operatingStatus=0`);
             const resultData: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100&operatingStatus=1`);
-            const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/euqipment`);
+            const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/equipment?workCenterInfoId=${ id }`);
             const data = [...result?.records, ...resultData?.records]?.filter((item: any) => !list.some((ele: any) => ele === item.id));
             resole(data)
         } catch (error) {
@@ -292,7 +292,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const delRow = (index?: number) => {
         let workCenterListValues = form.getFieldsValue(true).workCenterRelations || []; 
         workCenterListValues.splice(index, 1);
-        console.log(workCenterListValues)
         setWorkCenterRelationsList([...workCenterListValues]);
         form.setFieldsValue({ workCenterRelations: [...workCenterListValues] })
     }
@@ -310,7 +309,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     render:  (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name="equipmentId" style={{width: '100%'}}>
                             <Select mode="multiple">
-                                {console.log(equipmentList)}
                                 { equipmentList?.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.deviceName }</Select.Option>
                                 }) }

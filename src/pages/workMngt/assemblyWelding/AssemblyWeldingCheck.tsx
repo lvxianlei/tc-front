@@ -160,7 +160,7 @@ export default function AssemblyWeldingCheck(): React.ReactNode {
                     <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWelding`, { weldingId: params.id }).then(res => {
                         history.goBack();
                     }) } >完成校核</Button>
-                    <Button type="primary" onClick={ () => history.goBack() } ghost>返回</Button>
+                    <Button type="ghost" onClick={ () => history.goBack() }>返回</Button>
                 </Space>
                 <CommonTable 
                     dataSource={ detailData?.records } 

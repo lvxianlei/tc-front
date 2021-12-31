@@ -154,7 +154,7 @@ export default function TemplateDetail() {
                     }}>
                         <Button type="primary" ghost>上传</Button>
                     </Attachment>
-                    <Button type="primary" ghost onClick={() => { history.go(-1) }}>返回</Button>
+                    <Button type="ghost" onClick={() => { history.go(-1) }}>返回</Button>
                 </Space>
                 <CommonTable columns={columns} dataSource={data} />
             </DetailContent>

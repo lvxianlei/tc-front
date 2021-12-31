@@ -126,7 +126,7 @@ const AngleSteel = () => {
                 setType("new")
                 setMaterialData({})
             }}>添加</Button>,
-            <Button key="goback" type="primary" ghost onClick={() => history.goBack()}>返回</Button>
+            <Button key="goback" type="ghost" onClick={() => history.goBack()}>返回</Button>
         ]} />
         <CommonTable
             loading={loading}

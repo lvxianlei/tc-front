@@ -68,7 +68,7 @@ export default function ProcessDetail(): React.ReactNode {
                             id:params.id,
                             staffList: userDataSource.map((item:any)=>{
                                 return {
-                                    userId: item.id,
+                                    userId: item.userId,
                                     userName: item.name
                                 }
                             })

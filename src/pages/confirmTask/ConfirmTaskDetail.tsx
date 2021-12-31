@@ -76,32 +76,32 @@ export default function ConfirmTaskDetail(): React.ReactNode {
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={[
-                <>
-                {
-                    params.status!=='1'?null:
-                    <Space>
-                        <Button 
-                        type="primary"
-                        onClick={async () => {
-                            await RequestUtil.post('/tower-science/drawTask/receiveDrawTask',{drawTaskId: params.id}).then(()=>{
-                                message.success('接收成功！');
-                            }).then(()=>{
-                                history.push(`/confirmTask/ConfirmTaskMngt`)
-                            });  
-                        }}
-                    >接收</Button>
-                    {/* <Button 
-                        key="edit" 
-                        style={{ marginRight: '10px' }} 
-                        type="primary" 
-                        onClick={() => {
-                            setVisible(true)
-                        }}
-                    >拒绝</Button> */}
+                <Space>
+                    {
+                        params.status!=='1'?null:
+                        <Space>
+                            <Button 
+                            type="primary"
+                            onClick={async () => {
+                                await RequestUtil.post('/tower-science/drawTask/receiveDrawTask',{drawTaskId: params.id}).then(()=>{
+                                    message.success('接收成功！');
+                                }).then(()=>{
+                                    history.push(`/confirmTask/ConfirmTaskMngt`)
+                                });  
+                            }}
+                        >接收</Button>
+                        {/* <Button 
+                            key="edit" 
+                            style={{ marginRight: '10px' }} 
+                            type="primary" 
+                            onClick={() => {
+                                setVisible(true)
+                            }}
+                        >拒绝</Button> */}
+                    </Space>
+                    }
+                    <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
-                }
-                </>,
-                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
                 <Modal 
                     title='拒绝'
