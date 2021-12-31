@@ -126,6 +126,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             labelAlign="right"
             layout="inline"
             labelCol={{ style: { width: '100px', whiteSpace: "break-spaces" } }}
+            className="bottom"
         >
             <Row wrap={true}>
                 {columns.map((item: any, index: number) => <Col
@@ -169,7 +170,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             </Row>
         </Form >
     }
-    return <Descriptions bordered column={col} size="small" >
+    return <Descriptions bordered column={col} size="small" className="bottom">
         {columns.map((item: any, index: number) => <Descriptions.Item
             contentStyle={{ ...item.contentStyle, width: `${100 / (col * 2)}%` }}
             labelStyle={{ ...item.labelStyle, width: `${100 / (col * 4)}%` }}

@@ -147,7 +147,7 @@ export default function Dispatch(): React.ReactNode {
                         </Col>
                     </Row>
                 </Form>
-                <Space>
+                <Space style={{padding:'0px 0px 24px 0px'}}>
                 <Button type='primary' onClick={async ()=>{
                     await form.validateFields()
                     let value = form.getFieldsValue(true);

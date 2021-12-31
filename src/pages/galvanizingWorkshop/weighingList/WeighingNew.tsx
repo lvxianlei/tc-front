@@ -218,7 +218,7 @@ export default function WeighingNew(): React.ReactNode {
         </Space>
     ] }>
         <Form form={ form }>
-            <Descriptions title="" bordered size="small" column={ 2 }>
+            <Descriptions title="" bordered size="small" column={ 2 } style={{padding:'0px 0px 24px 0px'}}>
                 {
                     specialColums.map((item: Record<string, any>, index: number) => {
                         return <Descriptions.Item key={ index } label={ item.title } className={ styles.detailItem }>
