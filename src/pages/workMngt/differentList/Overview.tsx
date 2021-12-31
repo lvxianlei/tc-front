@@ -100,7 +100,7 @@ export default function Overview() {
             }}
             searchFormItems={[
                 {
-                    name: 'isOpen',
+                    name: 'diffComponentStatus',
                     label: '状态',
                     children: <Select style={{ width: 200 }}>
                         <Select.Option value="1">未申请</Select.Option>
