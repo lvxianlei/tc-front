@@ -9,7 +9,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IContract } from '../../IContract';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
+import SummaryRenderUtil, { IRenderedGrid } from '../../../utils/SummaryRenderUtil';
 import { ChargeType, IProductVo } from './AbstractSaleOrderSetting';
 //  import styles from './SaleOrderSummary.module.less';
 

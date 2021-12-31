@@ -123,9 +123,21 @@ export default function QuestionnaireDetail(): React.ReactNode {
             </Space>
         ] }>
             <DetailTitle title="问题信息" />
-            <Row className={ styles.header }><Col>校核前</Col><Col offset={ 1 }>段号：{ detailData.weldingDetailedVO.segmentName } </Col><Col>组件号：{ detailData.weldingDetailedVO.componentId }</Col><Col>主件号：{ detailData.weldingDetailedVO.mainPartId }</Col><Col>电焊米数：{ detailData.weldingDetailedVO.electricWeldingMeters }</Col></Row>
+            <Row className={ styles.header }>
+                <Col>校核前</Col>
+                <Col offset={ 1 }>段号：{ detailData.weldingDetailedVO.segmentName } </Col>
+                <Col>组件号：{ detailData.weldingDetailedVO.componentId }</Col>
+                <Col>主件号：{ detailData.weldingDetailedVO.mainPartId }</Col>
+                <Col>电焊米数：{ detailData.weldingDetailedVO.electricWeldingMeters }</Col>
+            </Row>
             <CommonTable columns={ paragraphColumns } dataSource={ detailData.weldingDetailedVO.weldingDetailedStructureList } pagination={ false } />
-            <Row className={ styles.header }><Col>校核后</Col><Col offset={ 1 }>段号：{ detailData.issueWeldingDetailedVO.segmentName } </Col><Col>组件号：{ detailData.issueWeldingDetailedVO.componentId }</Col><Col>主件号：{ detailData.issueWeldingDetailedVO.mainPartId }</Col><Col>电焊米数：{ detailData.issueWeldingDetailedVO.electricWeldingMeters }</Col></Row>
+            <Row className={ styles.header }>
+                <Col>校核后</Col>
+                <Col offset={ 1 }>段号：{ detailData.issueWeldingDetailedVO.segmentName } </Col>
+                <Col>组件号：{ detailData.issueWeldingDetailedVO.componentId }</Col>
+                <Col>主件号：{ detailData.issueWeldingDetailedVO.mainPartId }</Col>
+                <Col>电焊米数：{ detailData.issueWeldingDetailedVO.electricWeldingMeters }</Col>
+            </Row>
             <CommonTable columns={ paragraphColumns } dataSource={ detailData.issueWeldingDetailedVO.weldingDetailedStructureList } pagination={ false } />
             <DetailTitle title="备注" />
             <Input.TextArea value={ detailData.description } disabled />

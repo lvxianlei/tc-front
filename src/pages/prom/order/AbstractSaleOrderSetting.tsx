@@ -2,22 +2,20 @@
  * @author zyc
  * @copyright © 2021
  */
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Popconfirm, Row, Select, Table, TableColumnType, TableProps } from 'antd';
+import { FormProps, Input, InputNumber, Select, TableColumnType, TableProps } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { DeleteOutlined } from '@ant-design/icons';
 
-import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
+import AbstractFillableComponent, { IAbstractFillableComponentState } from '../../../components/AbstractFillableComponent';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 import moment from 'moment';
 import styles from './AbstractSaleOrderSetting.module.less'
 import ContractSelectionComponent from '../../../components/ContractSelectionModal';
 import { DataType } from '../../../components/AbstractSelectableModal';
-import { currencyTypeOptions, productTypeOptions, taxRateOptions, saleTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import { currencyTypeOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import { IProduct } from '../../IProduct';
 import { IContract } from '../../IContract';
 import layoutStyles from '../../../layout/Layout.module.less';
-import TowerSelectionModal from './TowerSelectionModal';
 import { GetRowKey } from 'rc-table/lib/interface';
 import { doNumber } from "../../../utils/KeepDecimals";
 export interface IAbstractSaleOrderSettingState extends IAbstractFillableComponentState {
@@ -242,7 +240,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         console.log(amount, doNumber(amount, 4))
         this.getForm()?.setFieldsValue({ amount: doNumber(amount, 4) });
     }
-
 
     /**
      * @description 根据税率计算含税金额
