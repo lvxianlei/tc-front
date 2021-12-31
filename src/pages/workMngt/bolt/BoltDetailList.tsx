@@ -187,7 +187,7 @@ export default function BoltCheck(): React.ReactNode {
                             style={{ marginLeft: 10, }}
                             hidden={params.status === '3' && params.boltLeader === userId ? false : true}
                         >添加</Button>
-                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
+                        <Button type="ghost" onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
                     </div>
                 }
                 headTabs={[]}

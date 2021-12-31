@@ -401,8 +401,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 >申请质检</Button>
                 <Button
                     className='func_btn'
-                    type="primary"
-                    ghost
+                    type="ghost"
                     onClick={() => {
                         history.go(-1)
                     }}

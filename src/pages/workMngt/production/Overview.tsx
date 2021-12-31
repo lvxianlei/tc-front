@@ -68,7 +68,7 @@ export default function Overview() {
             
         </div>
         <DetailContent title={[]} operation={[
-            <Button type="primary" ghost key="cancel" onClick={() => history.go(-1)}>返回</Button>
+            <Button type="ghost" key="cancel" onClick={() => history.go(-1)}>返回</Button>
         ]}>
             <Spin spinning={loading}>
                 <CommonTable haveIndex columns={ConstructionDetails.map((item: any) => {
