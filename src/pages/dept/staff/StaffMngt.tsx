@@ -12,7 +12,6 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './StaffMngt.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
-import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate';
 import { staffTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export interface IStaff {

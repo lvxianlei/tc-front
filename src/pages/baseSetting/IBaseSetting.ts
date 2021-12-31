@@ -1,4 +1,3 @@
-
 export interface ILineList {
     readonly createTime?: string;
     readonly createUserName?: string;

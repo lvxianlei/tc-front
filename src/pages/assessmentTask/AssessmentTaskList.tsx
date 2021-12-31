@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Row, Col, TreeSelect } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Row, Col } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import { Page } from '../common';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
@@ -84,12 +84,14 @@ export default function AssessmentTaskList(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/assessmentTask/assessmentTaskDetail/${record.id}`}>任务详情</Link>
                     {
-                        record.status === 2 ?
-                            <Assign id={record.id} updataList={() => { setRefresh(!refresh); }} />
-                            : <Button type="link" disabled>指派</Button>
+                        record.status === 2 
+                        ? <Assign id={record.id} updataList={() => { setRefresh(!refresh); }} />
+                        : <Button type="link" disabled>指派</Button>
                     }
                     {
-                        record.status === 4 || record.status === 5 ? <AssessmentInformation id={record.id} /> : <Button type="link" disabled>评估信息</Button>
+                        record.status === 4 || record.status === 5 
+                        ? <AssessmentInformation id={record.id} /> 
+                        : <Button type="link" disabled>评估信息</Button>
                     }
                     <Popconfirm
                         title="确认提交?"

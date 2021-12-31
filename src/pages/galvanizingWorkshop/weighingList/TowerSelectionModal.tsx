@@ -4,7 +4,7 @@
  * @description 选择塔型
  */
 import { Button, FormItemProps, Input, Modal, Space, TableColumnType } from 'antd';
-import Table, { TablePaginationConfig, TableProps } from 'antd/lib/table';
+import Table, { TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 import styles from '../../../components/AbstractSelectableModal.module.less';

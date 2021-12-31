@@ -1,12 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { Spin, Button, Space, Modal, Image, Form, Input } from 'antd';
+import { Spin, Button, Space, Form, Input } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailTitle, DetailContent, Attachment, AttachmentRef } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './AnnouncementMngt.module.less';
 import { IAnnouncement } from './AnnouncementMngt';
-import { downLoadFile } from '../../utils';
 import SelectUserTransfer from './SelectUserTransfer';
 import { IStaff } from '../dept/staff/StaffMngt';
 
@@ -100,7 +99,6 @@ export default function AnnouncementNew(): React.ReactNode {
                     "required": true,
                     "message": "请选择接收人"
                 }]}>
-
                     <Input addonBefore={<SelectUserTransfer save={(selectRows: IStaff[]) => {
                         const userNames = selectRows.map(res => { return res.name }).join(',');
                         const staffList: string[] = selectRows.map((res: IStaff) => { return res.id || '' });

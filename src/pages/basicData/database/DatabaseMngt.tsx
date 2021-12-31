@@ -94,7 +94,6 @@ export default function DatabaseMngt(): React.ReactNode {
                         form.setFieldsValue({ parentName: '', dataPlaceName: '' });
                     })
                 }
-                console.log(form.getFieldsValue(true))
             })
         }
     }
@@ -106,14 +105,28 @@ export default function DatabaseMngt(): React.ReactNode {
             columns={ columns }
             headTabs={ [] }
             refresh={ refresh }
-            extraOperation={ <Button type="ghost" onClick={ () => { setVisible(true); } }>新增一级库</Button> }
+            extraOperation={ <Button type="ghost" onClick={ () => setVisible(true) }>新增一级库</Button> }
             searchFormItems={ [] }
         />
-        <Modal visible={ visible } title={ title } onOk={ save } onCancel={ () => { setVisible(false); setDetail({}); form.resetFields(); form.setFieldsValue({ parentName: '', dataPlaceName: '' }); } }>
+        <Modal 
+            visible={ visible } 
+            title={ title } 
+            onOk={ save } 
+            onCancel={ () => { 
+                setVisible(false); 
+                setDetail({}); 
+                form.resetFields(); 
+                form.setFieldsValue({ parentName: '', dataPlaceName: '' }); 
+            } }
+        >
             <Form form={ form }>
-                { detail.pid !== undefined && detail.pid !== '' ? <Form.Item label={<span><span style={{color: 'red'}}>*</span>上级</span>} name="parentName" initialValue={ detail.parentName }>
-                    <Input maxLength={ 50 } disabled/>
-                </Form.Item> : null}
+                { 
+                    detail.pid !== undefined && detail.pid !== '' 
+                    ? <Form.Item label={<span><span style={{color: 'red'}}>*</span>上级</span>} name="parentName" initialValue={ detail.parentName }>
+                        <Input maxLength={ 50 } disabled/>
+                    </Form.Item> 
+                    : null
+                }
                 <Form.Item label="名称" name="dataPlaceName" initialValue={ detail.dataPlaceName } rules={[{
                     "required": true,
                     "message": "请输入名称"

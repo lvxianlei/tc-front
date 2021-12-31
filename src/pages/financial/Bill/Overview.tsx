@@ -1,7 +1,7 @@
 import React from "react"
 import { Spin } from 'antd'
-import { DetailTitle, BaseInfo, Attachment, CommonTable, OperationRecord } from '../../common'
-import { billinformation, billOperationInfo } from "../financialData.json"
+import { DetailTitle, BaseInfo, Attachment, OperationRecord } from '../../common'
+import { billinformation } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { invoiceTypeOptions } from "../../../configuration/DictionaryOptions"
