@@ -45,7 +45,7 @@ export default function ViewRawMaterial(): React.ReactNode {
             destroyOnClose
             width={1011}
             footer={[
-                <Button key="close" type="primary" ghost onClick={() => {
+                <Button key="close" onClick={() => {
                     setDetailId("")
                     setPriceVisible(false)
                 }}>关闭</Button>
@@ -62,7 +62,7 @@ export default function ViewRawMaterial(): React.ReactNode {
             visible={dataVisible}
             destroyOnClose
             footer={[
-                <Button key="close" type="primary" ghost onClick={() => {
+                <Button key="close" onClick={() => {
                     setDetailId("")
                     setDataVisible(false)
                 }}>关闭</Button>
@@ -91,7 +91,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                     fixed: 'right',
                     width: 100,
                     render: (_: any, record: any): React.ReactNode => (<>
-                        <Button type="link" style={{marginRight: 12}} onClick={() => {
+                        <Button type="link" style={{ marginRight: 12 }} onClick={() => {
                             setDetailId(record.id)
                             setMaterialName(record.materialName)
                             setPriceVisible(true)

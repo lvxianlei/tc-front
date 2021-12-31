@@ -37,8 +37,8 @@ export default function Overview(): JSX.Element {
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [detailId, setDetailId] = useState<string>("")
     const [materialLists, setMaterialList] = useState<any[]>([])
-    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
-    const [ selectedRows, setSelectedRows ] = useState<[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<[]>([]);
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${params.id}`)
@@ -141,13 +141,13 @@ export default function Overview(): JSX.Element {
             }}>
             <AttchFiles id={detailId} />
         </Modal>
-        <Modal 
+        <Modal
             destroyOnClose
             title="中标"
             visible={supplierVisible}
             footer={[<Button type="primary" key="confirm" onClick={() => {
                 const list = materialLists.map(res => {
-                    if(selectedKeys.indexOf(res.id) === -1) {
+                    if (selectedKeys.indexOf(res.id) === -1) {
                         return res
                     } else {
                         return {
@@ -155,7 +155,7 @@ export default function Overview(): JSX.Element {
                             winBidSupplierId: supplier
                         }
                     }
-                }) 
+                })
                 setSelectedKeys([]);
                 setSelectedRows([]);
                 setSupplierVisible(false)
@@ -166,21 +166,21 @@ export default function Overview(): JSX.Element {
                 setSupplier("")
                 setSupplierVisible(false)
             }}>
-                <Row>
-                    <Col offset={1} span={5}>中标供应商</Col>
-                    <Col offset={1} span={17}>
-                        <Select
-                            disabled={data?.comparisonStatus !== 1}
-                            onChange={(value: string) => {
-                                setSupplier(value)
-                            }}
-                            style={{ width: '100%' }}>
-                            {data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData.map((item: any) => <Select.Option
-                                value={item.supplierId}
-                                key={item.id}>{item.supplierName}</Select.Option>)}
-                        </Select>
-                    </Col>
-                </Row>
+            <Row>
+                <Col offset={1} span={5}>中标供应商</Col>
+                <Col offset={1} span={17}>
+                    <Select
+                        disabled={data?.comparisonStatus !== 1}
+                        onChange={(value: string) => {
+                            setSupplier(value)
+                        }}
+                        style={{ width: '100%' }}>
+                        {data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData.map((item: any) => <Select.Option
+                            value={item.supplierId}
+                            key={item.id}>{item.supplierName}</Select.Option>)}
+                    </Select>
+                </Col>
+            </Row>
         </Modal>
         <DetailContent title={[
             <Button type="primary" ghost key="export" style={{ marginRight: 16 }}>导出</Button>,
@@ -204,18 +204,18 @@ export default function Overview(): JSX.Element {
             <Button
                 type="primary"
                 style={{ marginRight: 16 }}
-                ghost 
+                ghost
                 key="select"
                 onClick={() => {
-                    if(selectedKeys.length > 0) {
+                    if (selectedKeys.length > 0) {
                         setSupplierVisible(true)
                     } else {
                         message.warning('请选择要批量中标的数据');
                     }
-                    
+
                 }}>批量中标选择</Button>
         ]} operation={[
-            <Button type="primary" ghost key="goback" onClick={() => history.goBack()}>返回</Button>
+            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
             <DetailTitle title="询价产品信息" />
             <CommonTable haveIndex columns={[...materialColumns, {
@@ -231,10 +231,10 @@ export default function Overview(): JSX.Element {
                         key={item.id}>{item.supplierName}</Select.Option>)}
                 </Select>)
             }]}
-            rowSelection={{
-                selectedRowKeys: selectedKeys,
-                onChange: SelectChange,
-            }} dataSource={materialLists} />
+                rowSelection={{
+                    selectedRowKeys: selectedKeys,
+                    onChange: SelectChange,
+                }} dataSource={materialLists} />
             <DetailTitle title="询价报价信息" />
             <CommonTable
                 haveIndex

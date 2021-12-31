@@ -104,7 +104,7 @@ export default function ContractMngt() {
             <Modal destroyOnClose title="操作信息" width={1011}
                 visible={oprationVisible}
                 onCancel={() => setOprationVisible(false)}
-                footer={[<Button type="primary" ghost key="close" onClick={() => setOprationVisible(false)}>关闭</Button>]}>
+                footer={[<Button key="close" onClick={() => setOprationVisible(false)}>关闭</Button>]}>
                 <OprationInfo id={detailId} />
             </Modal>
             <Modal destroyOnClose title="取消" visible={cancelVisible} onOk={handleCancel} onCancel={() => {
