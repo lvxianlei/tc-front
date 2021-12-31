@@ -1,4 +1,4 @@
-import { Button, message, Modal, Popconfirm, Upload, } from 'antd';
+import { Button, message, Modal, Popconfirm, Upload } from 'antd';
 import React, { useState } from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
 import AuthUtil from '../../../utils/AuthUtil';
