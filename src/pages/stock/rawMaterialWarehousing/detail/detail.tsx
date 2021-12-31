@@ -641,7 +641,13 @@ export default function RawMaterialStock(): React.ReactNode {
                 size={pageSize || 10}
                 total={total || 0}
                 url={`/tower-storage/receiveStock/detail`}
-                serchObj={{ receiveStockId: params.id }}
+                serchObj={{ 
+                    fuzzyQuery: keyword,
+                    startStatusUpdateTime: dateString[0] ? dateString[0] + " 00:00:00" : '',
+                    endStatusUpdateTime: dateString[1] ? dateString[1] + " 23:59:59" : '',
+                    receiveStockId: params.id,
+                    receiveStatus: status,
+                 }}
                 closeExportList={() => { setIsExportStoreList(false) }}
             /> : null}
         </div>
