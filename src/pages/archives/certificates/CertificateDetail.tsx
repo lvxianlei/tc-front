@@ -118,7 +118,7 @@ export default function CertificateDetail(): React.ReactNode {
         resole(data)
     }), {})
     const now = new Date();
-    const time =  new Date(data?.endDate && data?.endDate.toString().replace("-","/") || '');
+    const time = new Date(data?.endDate && data?.endDate.toString().replace("-", "/") || '');
     const detailData: ICertificate = {
         ...data,
         effective: now > time ? '失效' : '有效'
@@ -132,7 +132,7 @@ export default function CertificateDetail(): React.ReactNode {
     return <>
         <DetailContent operation={[
             <Space direction="horizontal" size="small" >
-                <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
+                <Button onClick={() => history.goBack()}>关闭</Button>
             </Space>
         ]}>
             <DetailTitle title="证书信息" />

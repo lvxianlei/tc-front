@@ -137,7 +137,7 @@ export default function AssessmentTaskDetail(): React.ReactNode {
     return <>
         <DetailContent operation={[
             <Space direction="horizontal" size="small" className={styles.bottomBtn}>
-                <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
+                <Button onClick={() => history.goBack()}>关闭</Button>
                 {
                     detailData.status === 1 ?
                         <><Button type="primary" onClick={() => {
@@ -155,7 +155,7 @@ export default function AssessmentTaskDetail(): React.ReactNode {
         ]}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseColumns} dataSource={detailData} col={2} />
-            <Attachment dataSource={ detailData.fileVOList } />
+            <Attachment dataSource={detailData.fileVOList} />
             <DetailTitle title="操作信息" />
             <CommonTable columns={tableColumns} dataSource={detailData.statusRecordList} pagination={false} />
         </DetailContent>

@@ -30,29 +30,29 @@ class NoticeModal extends React.Component<INoticeModalRouteProps, NoticeModalSta
     }
 
 
-     /**
-     * @description Renders AbstractDetailComponent
-     * @returns render 
-     */
+    /**
+    * @description Renders AbstractDetailComponent
+    * @returns render 
+    */
     public render(): React.ReactNode {
         return <Modal
             visible={this.state.visible}
             width="40%"
             title="公告通知"
             footer={null}
-            closable={ false }
-            className={ styles.noticemodal }
+            closable={false}
+            className={styles.noticemodal}
         >
-            <Descriptions bordered column={1} className={ styles.heightScroll }>
+            <Descriptions bordered column={1} className={styles.heightScroll}>
                 <Descriptions.Item label="标题">
-                    { this.props.detailData?.title }
+                    {this.props.detailData?.title}
                 </Descriptions.Item>
                 <Descriptions.Item label="内容">
-                    { this.props.detailData?.content }
+                    {this.props.detailData?.content}
                 </Descriptions.Item>
                 <Descriptions.Item label="附件">
-                    <Attachment title="" dataSource={ this.props.detailData?.attachVos }/>
-                    <Button type="primary" className={ styles.btn } onClick={() => {
+                    <Attachment title="" dataSource={this.props.detailData?.attachVos} />
+                    <Button className={styles.btn} onClick={() => {
                         RequestUtil.post(`/tower-system/notice/staff/read`, { id: this.props.detailData?.id }).then(res => {
                             this.setState({
                                 visible: false

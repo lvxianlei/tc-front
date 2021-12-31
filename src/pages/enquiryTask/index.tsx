@@ -105,12 +105,12 @@ export default function EnquiryTask(): React.ReactNode {
             title="工程报价任务详情"
             visible={overviewVisible}
             footer={[
-                <Button type="primary" key="cancel" onClick={() => {
+                <Button key="cancel" onClick={() => {
                     setDetailId("")
                     setOverviewVisible(false)
                 }}>关闭</Button>,
                 <Fragment key="if">
-                    {currentData?.inquiryStatus === 1 && <Button type="primary" onClick={handleRejection}>拒绝</Button>}
+                    {currentData?.inquiryStatus === 1 && <Button onClick={handleRejection}>拒绝</Button>}
                     {currentData?.inquiryStatus === 1 && <Button type="primary" onClick={handleReceive}>接收</Button>}
                 </Fragment>
             ]}
@@ -145,16 +145,16 @@ export default function EnquiryTask(): React.ReactNode {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <a style={{marginRight: 12}} onClick={() => {
+                            <a style={{ marginRight: 12 }} onClick={() => {
                                 setDetailId(record.id)
                                 setCurrentData(record)
                                 setOverviewVisible(true)
                             }}>任务详情</a>
-                            <Button style={{marginRight: 12}} type="link" disabled={record.inquiryStatus !== 3} onClick={() => {
+                            <Button style={{ marginRight: 12 }} type="link" disabled={record.inquiryStatus !== 3} onClick={() => {
                                 setDetailId(record.id)
                                 setTaskVisible(true)
                             }}>指派</Button>
-                            <Button style={{marginRight: 12}} type="link" disabled={record.inquiryStatus !== 2} onClick={() => {
+                            <Button style={{ marginRight: 12 }} type="link" disabled={record.inquiryStatus !== 2} onClick={() => {
                                 setDetailId(record.id)
                                 setTaskResultVisible(true)
                             }}>工程报价结果</Button>
