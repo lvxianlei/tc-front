@@ -86,19 +86,17 @@ export default function Invoicing() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <a onClick={() => {
-                                // setCancelId(record.id)
-                                // setVisible(true)
-                                message.warning("操作记录加急开发中...")
-                            }}>查看</a>
+                            <Button type="link" onClick={() => {
+                                setCancelId(record.id)
+                                setVisible(true)
+                            }}>查看</Button>
                             <Button
                                 type="link"
                                 disabled={![1].includes(record.shortageStatus)}
                                 onClick={() => {
                                     setCancelId(record.id)
                                     setCancelVisible(true)
-                                }
-                                }
+                                }}
                             >取消</Button>
                         </>
                     }
