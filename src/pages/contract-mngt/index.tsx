@@ -60,7 +60,7 @@ export default function ContractMngt(): JSX.Element {
             value.signStartTime = formatDate[0] + " 00:00:00"
             value.signEndTime = formatDate[1] + " 23:59:59"
         }
-        if(value.operatorId) {
+        if (value.operatorId) {
             value.operatorId = value.operatorId?.second
         }
         return value
@@ -86,7 +86,7 @@ export default function ContractMngt(): JSX.Element {
                 title="详情"
                 width={1011}
                 visible={overviewVisible}
-                footer={[<><Button type="primary" key="close" onClick={() => {
+                footer={[<><Button key="close" onClick={() => {
                     setDetailId("")
                     setOverviewVisible(false)
                 }}>关闭</Button><Button type="primary">打印合同</Button></>]}

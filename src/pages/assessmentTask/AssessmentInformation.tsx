@@ -13,7 +13,7 @@ interface IResponse {
     readonly assessFileVOList?: FileProps[];
 }
 
-export interface AssessmentInformationProps {}
+export interface AssessmentInformationProps { }
 export interface IAssessmentInformationRouteProps extends RouteComponentProps<AssessmentInformationProps>, WithTranslation {
     readonly id: number | string;
 }
@@ -42,7 +42,7 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
     }
 
     private async modalShow(): Promise<void> {
-        const data: IResponse = await RequestUtil.get<IResponse>(`/tower-science/assessTask/infoDetail/${ this.props.id }`);
+        const data: IResponse = await RequestUtil.get<IResponse>(`/tower-science/assessTask/infoDetail/${this.props.id}`);
         this.setState({
             visible: true,
             assessFileVOList: data.assessFileVOList,
@@ -50,32 +50,32 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
         })
     }
 
-     /**
-     * @description Renders AbstractDetailComponent
-     * @returns render 
-     */
+    /**
+    * @description Renders AbstractDetailComponent
+    * @returns render 
+    */
     public render(): React.ReactNode {
         return <>
-            <Button type="link" onClick={ () => this.modalShow() }>评估信息</Button>
+            <Button type="link" onClick={() => this.modalShow()}>评估信息</Button>
             <Modal
-                visible={ this.state.visible } 
-                width="40%" 
-                title="评估信息" 
-                footer={ <Button type="ghost" onClick={() => this.modalCancel() }>关闭</Button> } 
-                onCancel={ () => this.modalCancel() }
+                visible={this.state.visible}
+                width="40%"
+                title="评估信息"
+                footer={<Button onClick={() => this.modalCancel()}>关闭</Button>}
+                onCancel={() => this.modalCancel()}
             >
                 <DetailContent>
                     <p>评估描述</p>
-                    <Input.TextArea disabled value={ this.state.description } />
-                    <Attachment title="评估文件" dataSource={ this.state.assessFileVOList || [] } />
+                    <Input.TextArea disabled value={this.state.description} />
+                    <Attachment title="评估文件" dataSource={this.state.assessFileVOList || []} />
                 </DetailContent>
             </Modal>
-            <Modal visible={ this.state.pictureVisible } onCancel={ () => {
+            <Modal visible={this.state.pictureVisible} onCancel={() => {
                 this.setState({
                     pictureVisible: false
                 })
-            } } footer={ false }>
-                <Image src={ this.state.pictureUrl } preview={ false } />
+            }} footer={false}>
+                <Image src={this.state.pictureUrl} preview={false} />
             </Modal>
         </>
     }

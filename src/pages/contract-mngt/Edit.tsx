@@ -347,7 +347,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })}
             dataSource={{}} edit />
         <DetailTitle title="运费信息" />
-        <BaseInfo form={freightForm} col={freightCol} columns={
+        <BaseInfo col={2} form={freightForm} columns={
             [{
                 "title": "运输承担",
                 "dataIndex": "transportBear",
@@ -373,7 +373,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return ({
                         ...item, render: (data: any, props: any) => {
                             return <Form.Item name="transportCompanyId">
-                                <Select>
+                                <Select style={{ width: "100%" }}>
                                     {companyList && companyList.map((item: any) => {
                                         return <Select.Option key={item.id + ',' + item.name} value={item.id + ',' + item.name}>{item.name}</Select.Option>
                                     })}
@@ -386,8 +386,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return ({
                         ...item, render: (data: any, props: any) => {
                             return <Form.Item name="transportBear">
-                                <Select style={{ width: '150px' }} placeholder="请选择运输承担" onChange={(e: number) => {
-
+                                <Select style={{ width: '100%' }} placeholder="请选择运输承担" onChange={(e: number) => {
                                     if (e == 1) {
                                         setNewFreight([]);
                                         setFreightCol(1);
@@ -412,7 +411,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return item
             })} dataSource={{}} edit />
         <DetailTitle title="装卸费信息" />
-        <BaseInfo form={stevedoringForm} col={stevedoringCol} columns={[
+        <BaseInfo col={2} form={stevedoringForm} columns={[
             {
                 "title": "卸车承担",
                 "dataIndex": "unloadBear",
@@ -438,7 +437,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return ({
                         ...item, render: (data: any, props: any) => {
                             return <Form.Item name="unloadCompanyId">
-                                <Select>
+                                <Select style={{ width: "100%" }}>
                                     {stevedoreCompanyList && stevedoreCompanyList.map((item: any) => {
                                         return <Select.Option key={item.id + ',' + item.name} value={item.id + ',' + item.name}>{item.name}</Select.Option>
                                     })}
@@ -451,7 +450,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return ({
                         ...item, render: (data: any, props: any) => {
                             return <Form.Item name="unloadBear">
-                                <Select style={{ width: '150px' }} placeholder="请选择卸车承担" onChange={(e: number) => {
+                                <Select style={{ width: '100%' }} placeholder="请选择卸车承担" onChange={(e: number) => {
                                     if (e == 1) {
                                         setNewStevedoring([]);
                                         setStevedoringCol(1);
@@ -509,7 +508,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "materialStandard") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select style={{ width: '150px' }} value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName} onChange={(e: string) => {
+                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select style={{ width: '100%' }} value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName} onChange={(e: string) => {
                                 const newData = materialList.map((item: any, index: number) => {
                                     if (index === key) {
                                         return {

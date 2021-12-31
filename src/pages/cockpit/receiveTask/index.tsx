@@ -4,8 +4,8 @@ import { Button, Select, DatePicker, Input, Modal } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
 import { Page } from '../../common'
 import { receiveColumns } from "./receiveTask.json"
-import PrepareOverview from "../../financial/Prepare/Overview"
-import BillOverview from "../../financial/Bill/Overview"
+import PrepareOverview from "../../financial/prepares/Overview"
+import BillOverview from "../../financial/bills/Overview"
 
 /**
  * 拿掉

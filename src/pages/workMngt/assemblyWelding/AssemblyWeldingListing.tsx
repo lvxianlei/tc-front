@@ -6,7 +6,7 @@
 
 import React from 'react'
 import { Button, message, Modal, Popconfirm, Space, Spin, TablePaginationConfig, Upload } from 'antd';
-import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';

@@ -27,7 +27,7 @@ const recordColumns: any[] = [
 ]
 
 interface OperationRecordProps {
-    title?: string
+    title?: string | false
     columns?: any[]
     serviceId: string
     serviceName: string
@@ -78,7 +78,7 @@ export default function OperationRecord({
     }
 
     return <>
-        <DetailTitle title={title} />
+        {title && <DetailTitle title={title} />}
         <CommonTable
             haveIndex
             loading={loading}

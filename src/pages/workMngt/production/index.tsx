@@ -133,7 +133,7 @@ export default function Invoicing() {
                             >
                                 <Link to={`/workMngt/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}`}>明细</Link>
                             </Button>
-                            <Button type="link" disabled={userId !== record.batcherId}
+                            <Button type="link" disabled={userId !== record.batcherId || record.loftingState !== 2}
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setVisible(true)
