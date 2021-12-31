@@ -55,7 +55,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100&operatingStatus=0`);
             const resultData: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100&operatingStatus=1`);
-            const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/euqipment`);
+            const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/equipment?workCenterInfoId=${ id }`);
             const data = [...result?.records, ...resultData?.records]?.filter((item: any) => !list.some((ele: any) => ele === item.id));
             resole(data)
         } catch (error) {

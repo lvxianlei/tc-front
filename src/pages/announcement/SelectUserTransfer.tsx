@@ -104,7 +104,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                 width="40%"
                 title="选择员工"
                 footer={<Space>
-                    <Button type="link" onClick={() => this.modalCancel()}>取消</Button>
+                    <Button type="ghost" onClick={() => this.modalCancel()}>取消</Button>
                     <Button type="primary" onClick={() => { this.setState({ visible: false }); this.props.save(this.state.rightData || []) }} ghost>确定</Button>
                 </Space>}
                 onCancel={() => this.modalCancel()}
