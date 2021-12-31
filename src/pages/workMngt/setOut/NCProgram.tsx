@@ -127,7 +127,7 @@ export default function NCProgram(): React.ReactNode {
                     }
                 })
             } }><Button type="primary" ghost>批量上传</Button></Attachment> : null}
-            <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
+            <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>}
         searchFormItems={ [
             {

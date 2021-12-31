@@ -77,7 +77,7 @@ export default function BoltCheck(): React.ReactNode {
                 extraOperation={
                     <Space size="small">
                         <Button type="primary" ghost onClick={() => { successCheck() }}>完成核验</Button>
-                        <Button type="primary" ghost onClick={() => { history.go(-1) }}>返回</Button>
+                        <Button type="ghost" onClick={() => { history.go(-1) }}>返回</Button>
                     </Space>
                 }
                 headTabs={[]}

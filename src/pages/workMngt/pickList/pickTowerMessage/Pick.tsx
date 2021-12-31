@@ -439,7 +439,7 @@ export default function Lofting(): React.ReactNode {
                         >
                             <Button type="primary" ghost  disabled={!(selectedKeys.length>0)}>删除</Button>
                         </Popconfirm>
-                        <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回</Button>
+                        <Button type="ghost" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回</Button>
                     </Space>
                 }
                 searchFormItems={[]}

@@ -21,7 +21,7 @@ export default function RelationList() {
     }
 
     return <DetailContent operation={[
-        <Button type="primary" key="goback" ghost onClick={() => history.goBack()}>返回</Button>
+        <Button type="ghost" key="goback" onClick={() => history.goBack()}>返回</Button>
     ]}>
         <Page
             path="/tower-supply/purchaseTaskTower/purchaser"

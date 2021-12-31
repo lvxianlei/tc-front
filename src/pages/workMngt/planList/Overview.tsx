@@ -60,7 +60,7 @@ export default function Edit() {
         <>
             <DetailContent title={[
                 <Button key="export" type="primary" ghost onClick={() => { setIsExportStoreList(true) }} style={{marginBottom: 16}}>导出</Button>
-            ]} operation={[<Button key="" type="primary" ghost onClick={() => history.goBack()}>返回</Button>]}>
+            ]} operation={[<Button key="" type="ghost" onClick={() => history.goBack()}>返回</Button>]}>
                 {/* <Page
                     path={`/tower-supply/materialPurchasePlan/list/${params.id}`}
                     columns={PurchaseList}

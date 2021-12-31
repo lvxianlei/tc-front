@@ -41,7 +41,7 @@ export default function Particulars(): React.ReactNode {
                             价税合计(元)合计：{data?.receiveStockMessage?.waitPrice || 0}
                         </span>
                         <Button type="primary" ghost>导出</Button>
-                        <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
+                        <Button type="ghost"  onClick={() => history.goBack()}>返回</Button>
                     </>
                 )
             }
