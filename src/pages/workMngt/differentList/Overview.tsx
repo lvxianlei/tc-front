@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Button, Input, Select, DatePicker, Modal, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { Page } from '../../common'
+import { IntgSelect, Page } from '../../common'
 import { SeeList } from "./differentListData.json"
 import Edit from "./Edit"
 import useRequest from '@ahooksjs/use-request'
@@ -40,6 +40,10 @@ export default function Overview() {
             const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startLaunchTime = formatDate[0]
             value.endLaunchTime = formatDate[1]
+        }
+        if (value.materialLeader) {
+            value.materialLeaderDept = value.materialLeader.first
+            value.materialLeader = value.materialLeader.second
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -106,18 +110,12 @@ export default function Overview() {
                 {
                     name: 'materialLeader',
                     label: '提料人',
-                    children: <Select style={{ width: 200 }}>
-                        <Select.Option value="1">待审批</Select.Option>
-                        <Select.Option value="2">已拒绝</Select.Option>
-                        <Select.Option value="3">已撤回</Select.Option>
-                        <Select.Option value="4">已通过</Select.Option>
-                    </Select>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',
                     children: <Input placeholder="材质/规格/长度" style={{ width: 300 }} />
-                },
-
+                }
             ]}
         />
     </>

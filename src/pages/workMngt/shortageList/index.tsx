@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message, Form } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { IntgSelect, Page } from '../../common'
 import { baseInfo } from "./shortageListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -31,6 +31,10 @@ export default function Invoicing() {
             const formatDate = value.updateStartTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.updateStartTime = formatDate[0]
             value.updateEndTime = formatDate[1]
+        }
+        if (value.handlerId) {
+            // value.handlerDept = value.handlerId.first
+            value.handlerId = value.handlerId.second
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -143,7 +147,8 @@ export default function Invoicing() {
                 },
                 {
                     name: 'handlerId',
-                    label: '处理人'
+                    label: '处理人',
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',
