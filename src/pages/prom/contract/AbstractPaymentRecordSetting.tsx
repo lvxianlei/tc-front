@@ -151,7 +151,11 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
      * @returns primary operation button
      */
     protected getPrimaryOperationButton(): React.ReactNode {
-        return <Button type="primary" htmlType="submit" loading={this.state.loading}>保存</Button>;
+        return <Button type="primary" htmlType="submit" loading={this.state.loading} style={{
+            position: "absolute",
+            top: "20px",
+            left: "16px",
+        }}>保存</Button>
     }
 
     /**
@@ -165,7 +169,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
         return [[{
             title: '回款计划',
             itemCol: {
-                span: 8
+                span: 6
             },
             itemProps: [{
                 label: '关联合同',
@@ -233,7 +237,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
         }, {
             title: '回款信息',
             itemCol: {
-                span: 8
+                span: 6
             },
             itemProps: [{
                 label: '来款时间',
