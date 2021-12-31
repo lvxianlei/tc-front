@@ -292,7 +292,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const delRow = (index?: number) => {
         let workCenterListValues = form.getFieldsValue(true).workCenterRelations || []; 
         workCenterListValues.splice(index, 1);
-        console.log(workCenterListValues)
         setWorkCenterRelationsList([...workCenterListValues]);
         form.setFieldsValue({ workCenterRelations: [...workCenterListValues] })
     }
@@ -310,7 +309,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     render:  (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name="equipmentId" style={{width: '100%'}}>
                             <Select mode="multiple">
-                                {console.log(equipmentList)}
                                 { equipmentList?.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.deviceName }</Select.Option>
                                 }) }

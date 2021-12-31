@@ -583,7 +583,7 @@ export default function Lofting(): React.ReactNode {
                     >
                         <Button type="primary" ghost>删除</Button>
                     </Popconfirm>
-                    <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
+                    <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </Space> }
                 searchFormItems={[]}
             />

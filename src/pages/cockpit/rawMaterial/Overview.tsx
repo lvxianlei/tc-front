@@ -154,7 +154,7 @@ export default function Overview(): React.ReactNode {
                         setOprationType("new")
                         setVisible(true)
                     }} ghost>添加</Button>
-                    <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
+                    <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </>}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[

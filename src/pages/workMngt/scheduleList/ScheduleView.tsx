@@ -747,7 +747,7 @@ export default function ScheduleView(): React.ReactNode {
                 exportPath={`/tower-science/productCategory/taskPage`}
                 extraOperation={
                     <Space>
-                        <Button type="primary" onClick={ () => history.goBack() }>返回</Button>
+                        <Button type="ghost" onClick={ () => history.goBack() }>返回</Button>
                     </Space>
                 }
                 requestData={{ loftingTaskId: params.id }}
