@@ -64,9 +64,9 @@ export default function Overview() {
         </Modal>
         <Page
             path={`/tower-supply/componentDiff/diffDetail`}
+            exportPath={`/tower-supply/componentDiff/diffDetail`}
             columns={[{ title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> }, ...SeeList]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={handleComponentDiff}>处理完成</Button>
                 <Button type="primary" ghost onClick={async () => {
                     // setVisible(true)
