@@ -227,7 +227,7 @@ export default function Overview(): JSX.Element {
         ]} operation={[
             <Button key="back" onClick={() => history.goBack()}>返回</Button>
         ]}>
-            <DetailTitle title="询价产品信息" />
+            <DetailTitle title="询价产品信息" style={{marginTop: "24px"}}/>
             <CommonTable haveIndex columns={[...materialColumns, {
                 title: "中标供应商",
                 dataIndex: "winBidSupplierId",

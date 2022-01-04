@@ -97,18 +97,7 @@
         },
         {
             "title": "状态",
-            "dataIndex": "diffComponentStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "未申请",
-                    "value": 1
-                },
-                {
-                    "label": "已申请",
-                    "value": 2
-                }
-            ]
+            "dataIndex": "diffComponentStatusName"
         }
     ],
     "MaterialShortage": [
