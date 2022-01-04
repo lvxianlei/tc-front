@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react"
 import { Col, message, Row, Select } from "antd"
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory, useParams, useRouteMatch, useLocation } from "react-router-dom"
 import { Button, Modal, Spin } from "antd"
 import { CommonTable, DetailTitle, DetailContent, Attachment } from "../../common"
 import { materialColumns } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import ExportList from '../../../components/export/list';
 import AddPrice from "./AddPrice"
 
 function AttchFiles({ id }: { id: string }): JSX.Element {
@@ -39,6 +40,9 @@ export default function Overview(): JSX.Element {
     const [materialLists, setMaterialList] = useState<any[]>([])
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<[]>([]);
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${params.id}`)
@@ -183,7 +187,13 @@ export default function Overview(): JSX.Element {
             </Row>
         </Modal>
         <DetailContent title={[
-            <Button type="primary" ghost key="export" style={{ marginRight: 16 }}>导出</Button>,
+            <Button
+                type="primary"
+                ghost
+                key="export"
+                style={{ marginRight: 16 }}
+                onClick={()=>{setIsExportStoreList(true)}}
+            >导出</Button>,
             <Button
                 type="primary"
                 ghost key="finish"
@@ -298,5 +308,25 @@ export default function Overview(): JSX.Element {
                 dataSource={data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData || []}
             />
         </DetailContent>
+        {isExport?<ExportList
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => {
+                let keys = [...materialColumns, {
+                    title: "中标供应商",
+                    dataIndex: "winBidSupplierName",
+                }]
+                return keys
+            }}
+            current={1}
+            size={materialLists.length}
+            total={materialLists.length}
+            url={`/tower-supply/comparisonPrice/exportComparisonPriceDetails`}
+            serchObj={{
+                comparisonPriceId: params.id
+            }}
+            closeExportList={() => { setIsExportStoreList(false) }}
+        />:null}
     </Spin>
 }
