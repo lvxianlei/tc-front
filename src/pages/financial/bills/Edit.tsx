@@ -19,7 +19,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         value: item.id,
         label: item.name
     }))
-    const [ companyList, setCompanyList ] = useState([]);
+    const [companyList, setCompanyList] = useState([]);
     const attchsRef = useRef<AttachmentRef>()
     const [baseForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -77,18 +77,18 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const businessTypeChange = async (e: number) => {
         let result: IResponse = {};
         let list: any = {};
-        if(e === 1) {
+        if (e === 1) {
             result = await RequestUtil.get(`/tower-supply/supplier?size=100`);
             list = result?.records?.map((item: { supplierName: string }) => {
-                return{
+                return {
                     ...item,
                     name: item.supplierName
                 }
             })
-        } else if(e === 2) {
+        } else if (e === 2) {
             result = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
             list = result?.records?.map((item: { stevedoreCompanyName: string }) => {
-                return{
+                return {
                     ...item,
                     name: item.stevedoreCompanyName
                 }
@@ -96,7 +96,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         } else {
             result = await RequestUtil.get(`/tower-logistic/carrier?size=100`);
             list = result?.records?.map((item: { companyName: string }) => {
-                return{
+                return {
                     ...item,
                     name: item.companyName
                 }
@@ -111,34 +111,36 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             if (item.dataIndex === "invoiceType") {
                 return ({ ...item, type: "select", enum: invoiceTypeEnum })
             }
-            if(item.dataIndex === 'receiptVos') {
-                return ({ ...item, render: (data: any, props: any) => {
-                    return <PopTable data={data} {
-                        ...props
-                    }/>
-                } })
+            if (item.dataIndex === 'receiptVos') {
+                return ({
+                    ...item, render: (data: any, props: any) => {
+                        return <PopTable data={data} {
+                            ...props
+                        } />
+                    }
+                })
             }
-            if(item.dataIndex === 'businessType') {
-                return ({ ...item, render: (data: any, props: any) => {
-                    return <Form.Item name="businessType">
-                        <Select disabled={ type === 'edit' } onChange={ (e: number) => { businessTypeChange(e); baseForm.setFieldsValue({ businessId: '' }); } }>
+            if (item.dataIndex === 'businessType') {
+                return ({
+                    ...item, render: (data: any, props: any) => {
+                        return <Select disabled={type === 'edit'} style={{ width: "100%" }} onChange={(e: number) => { businessTypeChange(e); baseForm.setFieldsValue({ businessId: '' }); }}>
                             <Select.Option value={1} key="1">供应商</Select.Option>
                             <Select.Option value={2} key="2">装卸公司</Select.Option>
                             <Select.Option value={3} key="3">运输公司</Select.Option>
                         </Select>
-                    </Form.Item>
-                } })
+                    }
+                })
             }
-            if(item.dataIndex === 'businessId') {
-                return ({ ...item, render: (data: any, props: any) => {
-                    return <Form.Item  name="businessId">
-                        <Select disabled={ type === 'edit' }>
-                            { companyList && companyList.map((item: any) => {
-                                return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
-                            }) }
+            if (item.dataIndex === 'businessId') {
+                return ({
+                    ...item, render: (data: any, props: any) => {
+                        return <Select disabled={type === 'edit'} style={{ width: "100%" }}>
+                            {companyList && companyList.map((item: any) => {
+                                return <Select.Option key={item.id + ',' + item.name} value={item.id + ',' + item.name}>{item.name}</Select.Option>
+                            })}
                         </Select>
-                    </Form.Item>
-                } })
+                    }
+                })
             }
             return item
         })} col={2} dataSource={{}} edit />
