@@ -148,7 +148,7 @@ export default function DailySchedule(): React.ReactNode {
                     children: <Select placeholder="请选择" style={{ width: "150px" }}>  
                         <Select.Option value="" key="">全部</Select.Option>
                         { unit && unit.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                            return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
                         }) }
                     </Select>
                 },
