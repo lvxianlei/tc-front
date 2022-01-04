@@ -130,6 +130,7 @@ export default function EnquiryTask(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-supply/inquiryTask"
+            exportPath={`/tower-supply/inquiryTask`}
             columns={[
                 {
                     title: "序号",
@@ -163,7 +164,6 @@ export default function EnquiryTask(): React.ReactNode {
                     }
                 }]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
                 {/* <Button type="primary" ghost onClick={async () => {
                     await generateRun()
                     await message.success("成功生成工程报价任务...")

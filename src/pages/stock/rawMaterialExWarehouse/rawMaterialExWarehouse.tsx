@@ -42,11 +42,11 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         }, {
             title: '状态',
-            dataIndex: 'outStockStatus',
+            dataIndex: 'stockStatusName',
             width: 120,
-            render: (text: any, item: any, index: any) => {
-                return <span>{text == 0 ? '待完成' : '已完成'}</span>
-            }
+            // render: (text: any, item: any, index: any) => {
+            //     return <span>{text == 0 ? '待完成' : '已完成'}</span>
+            // }
         }, {
             title: '最新状态变更时间',
             dataIndex: 'updateTime',

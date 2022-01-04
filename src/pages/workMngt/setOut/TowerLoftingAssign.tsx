@@ -28,9 +28,9 @@ export interface TowerLoftingAssignState {
     readonly repeatModal: boolean;
     readonly repeatNum?: number;
     readonly selectKey?: number;
-    user?: any[];
-    checkUser?: any[];
-    departmentData?: SelectDataNode[];
+    readonly user?: any[];
+    readonly checkUser?: any[];
+    readonly departmentData?: SelectDataNode[];
 }
 
 interface IAppointed {

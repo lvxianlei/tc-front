@@ -12,7 +12,6 @@ import styles from './SetOut.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import QuestionnaireModal, { IRecord } from './QuestionnaireModal';
 import RequestUtil from '../../../utils/RequestUtil';
-import { downloadTemplate } from './downloadTemplate';
 
 
 const columns = [
@@ -296,7 +295,6 @@ export default function TowerCheck(): React.ReactNode {
             headTabs={ [] }
             refresh={ refresh }
             extraOperation={ <Space direction="horizontal" size="small">
-                {/* <Button type="primary" ghost>导出</Button> */}
                 <Popconfirm
                     title="确认完成校核?"
                     onConfirm={ () => { 

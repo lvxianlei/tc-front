@@ -6,7 +6,13 @@ import AuthUtil from "../../../utils/AuthUtil";
  * @protected
  * @description 下载模板
  */
-export function downloadTemplate(path: string, name: string, requestData?: {}, type: boolean = false, requestType: string = ""): Promise<void> {
+export function downloadTemplate(
+    path: string, 
+    name: string, 
+    requestData?: {}, 
+    type: boolean = false, 
+    requestType: string = ""
+): Promise<void> {
     return fetch(`${ process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/') }${ path.replace(/^\/*/, '') }`, {
         mode: 'cors',
         method: 'POST',

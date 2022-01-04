@@ -35,34 +35,7 @@
         {
             "title": "任务状态",
             "width": 50,
-            "dataIndex": "inquiryStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "待确认",
-                    "value": 1
-                },
-                {
-                    "label": "已完成",
-                    "value": 2
-                },
-                {
-                    "label": "待指派",
-                    "value": 3
-                },
-                {
-                    "label": "待完成",
-                    "value": 4
-                },
-                {
-                    "label": "已提交",
-                    "value": 5
-                },
-                {
-                    "label": "已拒绝",
-                    "value": 6
-                }
-            ]
+            "dataIndex": "inquiryStatusName"
         },
         {
             "title": "最新状态变更时间",

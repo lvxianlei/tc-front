@@ -423,7 +423,6 @@ export default function ManagementDetail(): React.ReactNode {
                 }
                 <Button type="primary" ghost onClick={() => {
                     setIsExportStoreList(true)
-                    // message.error("导出暂未开发");
                 }}>导出</Button>
             </div>
             <CommonTable columns={[...taskNotice, {

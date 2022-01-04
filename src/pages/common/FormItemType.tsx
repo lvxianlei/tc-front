@@ -119,8 +119,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 </Col>)}
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" size="small" style={{ marginLeft: 12 }}>搜索</Button>
-                        <Button type="default" size="small" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
+                        <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>查询</Button>
+                        <Button type="default" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
                     </Form.Item>
                 </Col>
             </Row>

@@ -413,13 +413,6 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
 
     protected componentColumns = [
         { 
-            title: '序号', 
-            dataIndex: 'index', 
-            key: 'index', 
-            fixed: 'left' as FixedType,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
-        },
-        { 
             title: '段名', 
             dataIndex: 'segmentName', 
             key: 'segmentName'
@@ -561,14 +554,24 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                 </Space> }
                 onCancel={ () => this.setState({ selectVisible: false }) }
             >
-                <CommonTable columns={ this.componentColumns } dataSource={ this.state.componentList } pagination={ false } rowSelection={ { selectedRowKeys: this.state.selectedRowKeys || [], onChange: (selectedKeys: [], selectedRows: []) => {
-                    this.setState({
-                        selectedRows: selectedRows,
-                        selectedRowKeys: selectedKeys
-                    })
-                }, getCheckboxProps: (record: Record<string, any>) => ({
-                    disabled: Number(record.basicsPartNumNow) === 0
-                }) } } />
+                <CommonTable 
+                    haveIndex
+                    columns={ this.componentColumns } 
+                    dataSource={ this.state.componentList } 
+                    pagination={ false } 
+                    rowSelection={ { 
+                        selectedRowKeys: this.state.selectedRowKeys || [], 
+                        onChange: (selectedKeys: [], selectedRows: []) => {
+                            this.setState({
+                                selectedRows: selectedRows,
+                                selectedRowKeys: selectedKeys
+                            })
+                        }, 
+                        getCheckboxProps: (record: Record<string, any>) => ({
+                            disabled: Number(record.basicsPartNumNow) === 0
+                        }) 
+                    } } 
+                />
             </Modal>
         </> 
     }

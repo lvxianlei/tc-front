@@ -12,7 +12,6 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styles from './SetOut.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import { IMaterialTree } from '../../system-mngt/material/IMaterial';
 
 export interface IBundle {
     readonly id?: string;
@@ -419,13 +418,18 @@ export default function PackingListNew(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-            <p className={ styles.title }>待选区<span className={ styles.description }>未分配：{ stayDistrict.length }</span></p>
+            <p className={ styles.title }>待选区
+                <span className={ styles.description }>未分配：{ stayDistrict.length }</span>
+            </p>
             <CommonTable 
                 columns={ chooseColumns } 
                 pagination={ false } 
                 dataSource={ [...stayDistrict] } 
             />
-            <p className={ styles.title }>包装区<span className={ styles.description }>已选择构件数：{ packagingData.length }</span><span className={ styles.description }>已选择构件总重量：{ eval(packagingData.map(item => { return Number(item.num) * Number(item.basicsWeight) }).join('+')) || 0 }吨</span></p>
+            <p className={ styles.title }>包装区
+                <span className={ styles.description }>已选择构件数：{ packagingData.length }</span>
+                <span className={ styles.description }>已选择构件总重量：{ eval(packagingData.map(item => { return Number(item.num) * Number(item.basicsWeight) }).join('+')) || 0 }吨</span>
+            </p>
             <CommonTable columns={ packingColumns } pagination={ false } dataSource={ packagingData } />
         </DetailContent>
         <Modal visible={ visible } title="保存包" onCancel={ () => {

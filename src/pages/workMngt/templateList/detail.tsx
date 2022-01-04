@@ -56,7 +56,7 @@ export default function TemplateDetail() {
             align: 'center',
             render: (text: string, item: { id: string, isView: number }) => {
                 return (
-                    <div className='operation'>
+                    <Space className='operation'>
                         <span
                             hidden={item.isView === 2}
                             style={{ cursor: 'pointer', color: '#FF8C00', marginRight: 10, }}
@@ -73,9 +73,7 @@ export default function TemplateDetail() {
                             okText="是"
                             cancelText="否"
                         >
-                            <span
-                                style={{ cursor: 'pointer', color: '#FF8C00', marginRight: 10, }}
-                            >删除</span>
+                            <Button type="link">删除</Button>
                         </Popconfirm>
                         <span
                             style={{ cursor: 'pointer', color: '#FF8C00' }}
@@ -83,7 +81,7 @@ export default function TemplateDetail() {
                                 download(item.id)
                             }}
                         >下载</span>
-                    </div>
+                    </Space>
                 )
             }
         },
@@ -128,10 +126,8 @@ export default function TemplateDetail() {
     return (
         <>
             <DetailContent>
-                {/* <Button type="primary" ghost>上传</Button> */}
                 <Space size="small" style={{ marginBottom: "24px" }}>
                     <Attachment isTable={false} ref={attchsRef} onDoneChange={(dataInfo: FileProps[]) => {
-                        console.log(attchsRef.current.getDataSource(), '0000000')
                         let fileList = attchsRef.current.getDataSource().map((item, index) => {
                             return {
                                 name: item.originalName,

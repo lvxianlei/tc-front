@@ -20,6 +20,7 @@ interface MaterialData {
     materialTexture: string
     length: number | string
     applyQuantity: number
+    materialShortageQuantity: number
     onlyId: string
     ids: string[]
 }
@@ -157,6 +158,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     onlyId: mItem.onlyId,
                     materialName: mItem.materialName,
                     materialTexture: mItem.materialTexture,
+                    materialShortageQuantity: mItem.materialShortageQuantity,
                     spec: mItem.spec,
                     length: mItem.length,
                     applyQuantity: 1,
