@@ -1,5 +1,5 @@
 {
-    "buyingTask":[
+    "buyingTask": [
         {
             "title": "原材料采购任务编号",
             "dataIndex": "purchaseNumber"
@@ -68,7 +68,7 @@
             "dataIndex": "purchaser"
         }
     ],
-    "operatingInformation":[
+    "operatingInformation": [
         {
             "title": "操作部门",
             "dataIndex": "deptName"
@@ -90,7 +90,7 @@
             "dataIndex": "description"
         }
     ],
-    "materialList1":[
+    "materialList1": [
         {
             "title": "生产批次",
             "dataIndex": "productionBatch"
@@ -118,6 +118,92 @@
         {
             "title": "数量",
             "dataIndex": "number"
+        }
+    ],
+    "setting": [
+        {
+            "title": "计划号",
+            "dataIndex": "taskNoticeNumber"
+        },
+        {
+            "title": "订单编号",
+            "dataIndex": "saleOrderNumber"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "orderProjectName"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany"
+        },
+        {
+            "title": "合同签订单位",
+            "dataIndex": "signCustomerName"
+        },
+        {
+            "title": "订单交货日期",
+            "dataIndex": "orderDeliveryTime"
+        },
+        {
+            "title": "客户交货日期",
+            "dataIndex": "deliveryTime"
+        },
+        {
+            "title": "计划交货日期",
+            "dataIndex": "planDeliveryTime"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "spec": [
+        {
+            "title": "原材料标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "原材料要求",
+            "dataIndex": "materialDemand"
+        },
+        {
+            "title": "焊接要求",
+            "dataIndex": "weldingDemand"
+        },
+        {
+            "title": "包装要求",
+            "dataIndex": "packDemand"
+        },
+        {
+            "title": "镀锌要求",
+            "dataIndex": "galvanizeDemand"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "peculiarDescription"
+        }
+    ],
+    "productInfo": [
+        {
+            "title": "塔型（个）",
+            "dataIndex": "productCategoryNum"
+        },
+        {
+            "title": "杆塔（基）",
+            "dataIndex": "productNum"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName"
+        },
+        {
+            "title": "总重量（吨）",
+            "dataIndex": "totalWeight"
         }
     ]
 }

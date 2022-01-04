@@ -165,7 +165,7 @@ export default function ApplyPayment() {
         <Modal visible={visible} destroyOnClose
             width={1011} title={type === "new" ? "创建申请信息" : "编辑申请信息"}
             footer={[
-                <Button key="close" onClick={async () => {
+                <Button key="close" type="ghost" onClick={async () => {
                     await editRef.current?.resetFields()
                     setDetailId("")
                     setType("new")

@@ -84,13 +84,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields();
-            if(form.getFieldsValue(true).workCenterRelations) {
+            if(form.getFieldsValue(true).workCenterRelations && form.getFieldsValue(true).workCenterRelations.length > 0) {
                 const data = await form.validateFields();
                 await saveRun({
                     ...baseData,
                     workStartTime: baseData.time[0].format('HH:mm'),
                     workEndTime: baseData.time[1].format('HH:mm'),
-                    workCenterRelations: [...data.workCenterRelations],
+                    workCenterRelations: [...data?.workCenterRelations],
                     equipmentId: baseData.equipmentId.join(',')
                 })
                 resolve(true);
