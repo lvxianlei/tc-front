@@ -96,7 +96,7 @@
             "type": "popTable",
             "path": "/tower-aps/workPlan/material",
             "width": 1011,
-            "value": "planNumber",
+            "value": "workPlanNumber",
             "dependencies": true,
             "readOnly": true,
             "columns": [

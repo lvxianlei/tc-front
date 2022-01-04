@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { Modal, Descriptions, Button, DatePicker, Select, Input, message } from 'antd';
-import { CommonTable, DetailContent, DetailTitle, IntgSelect, Page } from '../common'
-import { buyingTask, operatingInformation } from "./buyingTask.json"
+import { Modal, Button, DatePicker, Select, Input, message } from 'antd';
+import { Attachment, BaseInfo, CommonTable, DetailContent, DetailTitle, IntgSelect, Page } from '../common'
+import { buyingTask, operatingInformation, setting, spec, productInfo } from "./buyingTask.json"
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
 import TaskAssign from './TaskAssign';
@@ -70,12 +70,12 @@ export default function RawMaterial() {
     // 三个按钮
     const buttons: {} | null | undefined = [
         <div>
-            <Button onClick={() => handleClose()}>关闭</Button>&emsp; &emsp; &emsp; &emsp; &emsp;
+            <Button onClick={() => handleClose()}>关闭</Button>
             {
-                obj.taskStatus === 1 ? <span>
+                obj.taskStatus === 1 && <>
                     <Button onClick={() => setIsModalVisible3(true)}>拒绝</Button>
                     <Button onClick={() => { receive(id) }}>接受</Button>
-                </span> : null
+                </>
             }
         </div>
     ]
@@ -100,13 +100,13 @@ export default function RawMaterial() {
     const buttons2: {} | null | undefined = [
         <div>
             <Button onClick={() => setIsModalVisible2(false)}>关闭</Button>
-            <Button >提交/完成</Button>
+            <Button type="primary">提交/完成</Button>
         </div>
     ]
     const buttons3: {} | null | undefined = [
         <div>
             <Button onClick={() => setIsModalVisible3(false)}>关闭</Button>
-            <Button onClick={() => { submit(rejectionDescription, id) }}>提交</Button>
+            <Button type="primary" onClick={() => { submit(rejectionDescription, id) }}>提交</Button>
         </div>
     ]
 
@@ -150,22 +150,15 @@ export default function RawMaterial() {
                         dataIndex: "opration",
                         fixed: "right",
                         render: (_: any, records: any) => <>
-                            <Button type="link" style={{marginRight: 12}} onClick={() => { detail(records.id) }}>任务详情</Button>
-                            <Button type="link" style={{marginRight: 12}} disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
-                            <Button type="link" style={{marginRight: 12}} disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/materialList`)}>用料清单</Button>
+                            <Button type="link" style={{ marginRight: 12 }} onClick={() => { detail(records.id) }}>任务详情</Button>
+                            <Button type="link" style={{ marginRight: 12 }} disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
+                            <Button type="link" style={{ marginRight: 12 }} disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/materialList`)}>用料清单</Button>
                             <Button type="link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button>
                         </>
                     }
                 ]}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
-                //     extraOperation={
-                //     <Button type="primary" ghost onClick={async () => {
-                //         await generaterRun()
-                //         await message.success("成功生成采购任务...")
-                //         history.go(0)
-                //     }}>临时生成采购任务</Button>
-                // }
                 searchFormItems={[
                     {
                         name: 'startStatusUpdateTime',
@@ -203,60 +196,25 @@ export default function RawMaterial() {
                 ]}
             />
             <Modal width={1011} title="原材料采购任务详情" visible={isModalVisible} footer={buttons} onCancel={handleCancel}>
-                {/* 基本信息 */}
-                <Descriptions title="基本信息" column={2} bordered>
-                    <Descriptions.Item label="计划号">{obj.taskNoticeNumber}</Descriptions.Item>
-                    <Descriptions.Item label="订单编号">{obj.saleOrderNumber}</Descriptions.Item>
-                    <Descriptions.Item label="内部合同编号">{obj.internalNumber}</Descriptions.Item>
-                    <Descriptions.Item label="订单工程名称">{obj.orderProjectName}</Descriptions.Item>
-                    <Descriptions.Item label="业主单位">{obj.customerCompany}</Descriptions.Item>
-                    <Descriptions.Item label="合同签订单位">{obj.signCustomerName}</Descriptions.Item>
-                    <Descriptions.Item label="订单交货日期">{obj.orderDeliveryTime}</Descriptions.Item>
-                    <Descriptions.Item label="客户交货日期">{obj.deliveryTime}</Descriptions.Item>
-                    <Descriptions.Item label="计划交货日期">{obj.planDeliveryTime}</Descriptions.Item>
-                    <Descriptions.Item label="备注">{obj.description}</Descriptions.Item>
-                </Descriptions>
-                {/* 特殊要求 */}
-                <Descriptions title="特殊要求" column={2} bordered>
-                    <Descriptions.Item label="原材料标准">{obj.materialStandardName}</Descriptions.Item>
-                    <Descriptions.Item label="原材料要求">{obj.materialDemand}</Descriptions.Item>
-                    <Descriptions.Item label="焊接要求">{obj.weldingDemand}</Descriptions.Item>
-                    <Descriptions.Item label="包装要求">{obj.packDemand}</Descriptions.Item>
-                    <Descriptions.Item label="镀锌要求">{obj.galvanizeDemand}</Descriptions.Item>
-                    <Descriptions.Item label="备注">{obj.peculiarDescription}</Descriptions.Item>
-                </Descriptions>
-                {/* 产品信息 */}
-                <Descriptions title="产品信息" column={2} bordered>
-                    <Descriptions.Item label="塔型（个）">{obj.productCategoryNum}</Descriptions.Item>
-                    <Descriptions.Item label="杆塔（基）">{obj.productNum}</Descriptions.Item>
-                    <Descriptions.Item label="产品类型">{obj.productTypeName}</Descriptions.Item>
-                    <Descriptions.Item label="总重量（吨）">{obj.totalWeight}</Descriptions.Item>
-                </Descriptions>
-                {/* 相关附件 */}
-                <DetailTitle title="相关附件" />
-                <CommonTable columns={[{
-                    title: "操作",
-                    dataIndex: "opration",
-                    render: (_: any, records: any) => <>
-                        <Button type="link" >预览</Button>
-                        <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
-                    </>
-                }]} dataSource={obj.taskNoticeAttachList || []} />
-                {/* 表格 */}
-                <DetailContent>
-                    <DetailTitle title="操作信息" />
-                    <CommonTable
-                        columns={[
-                            {
-                                "title": "序号",
-                                "dataIndex": "index",
-                                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                            },
-                            ...operatingInformation,
-                        ]}
-                        dataSource={obj.optRecordList || []}
-                    />
-                </DetailContent>
+                <DetailTitle title="基本信息" />
+                <BaseInfo columns={setting} dataSource={obj || {}} col={2} />
+                <DetailTitle title="特殊要求" />
+                <BaseInfo columns={spec} dataSource={obj || {}} col={2} />
+                <DetailTitle title="产品信息" />
+                <BaseInfo columns={productInfo} dataSource={obj || {}} col={2} />
+                <Attachment dataSource={obj.taskNoticeAttachList} />
+                <DetailTitle title="操作信息" />
+                <CommonTable
+                    columns={[
+                        {
+                            "title": "序号",
+                            "dataIndex": "index",
+                            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                        },
+                        ...operatingInformation,
+                    ]}
+                    dataSource={obj.optRecordList || []}
+                />
             </Modal>
             <Modal width={1011} title="指派信息" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
                 <TaskAssign id={detailId} ref={tarkRef} />
@@ -264,8 +222,8 @@ export default function RawMaterial() {
             <Modal width={1011} title="提交/完成" visible={isModalVisible2} footer={buttons2} onCancel={handleCancel2} >
                 <div style={{ width: "100%", height: "100%", textAlign: "center" }}>确认提交/完成？</div>
             </Modal>
-            <Modal width={1011} title="拒绝" visible={isModalVisible3} footer={buttons3} onCancel={handleCancel3}>
-                拒绝原因 *<Input placeholder="请输入" value={rejectionDescription} onChange={(e) => { setRejectionDescription(e.target.value) }} />
+            <Modal width={1011} title="拒绝原因" visible={isModalVisible3} footer={buttons3} onCancel={handleCancel3}>
+                <Input placeholder="请输入" value={rejectionDescription} onChange={(e) => { setRejectionDescription(e.target.value) }} />
             </Modal>
         </>
     )

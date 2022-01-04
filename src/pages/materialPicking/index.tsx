@@ -56,8 +56,8 @@ export default function Invoicing() {
     const onFilterSubmit = (value: any) => {
         if (value.applyTimeStart) {
             const formatDate = value.applyTimeStart.map((item: any) => item.format("YYYY-MM-DD"))
-            value.applyTimeStart = formatDate[0]
-            value.applyTimeEnd = formatDate[1]
+            value.applyTimeStart = formatDate[0] + " 00:00:00"
+            value.applyTimeEnd = formatDate[1] + " 23:59:59"
         }
         setFilterValue(value)
         return value
@@ -157,7 +157,7 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 size="small"
-                                style={{marginRight: 12}} 
+                                style={{ marginRight: 12 }}
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setDetailVisible(true)
@@ -165,7 +165,7 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 size="small"
-                                style={{marginRight: 12}} 
+                                style={{ marginRight: 12 }}
                                 disabled={![1, 2].includes(record.state)}
                                 onClick={() => {
                                     setDetailId(record.id)
@@ -175,7 +175,7 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 size="small"
-                                style={{marginRight: 12}} 
+                                style={{ marginRight: 12 }}
                                 disabled={![1, 2].includes(record.state)}
                                 onClick={() => handleDelete(record.id)}>删除</Button>
                             <Button
