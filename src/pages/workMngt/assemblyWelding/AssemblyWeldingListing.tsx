@@ -248,7 +248,21 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <CommonTable dataSource={ paragraphData } columns={ paragraphColumns } pagination={ false }/>
             </DetailContent>
         </Spin>
-        { visible ? <AssemblyWeldingNew id={ params.id } segmentId={ record.id } record={ record } productCategoryId={ params.productCategoryId } name={ name } updateList={ () => history.go(0) } visible={ visible } modalCancel={ () => setVisible(false) } segmentNameList={segmentNameList}/> : null}
+        { 
+            visible ? 
+            <AssemblyWeldingNew 
+                id={ params.id } 
+                segmentId={ record.id } 
+                record={ record } 
+                productCategoryId={ params.productCategoryId } 
+                name={ name } 
+                updateList={ () => history.go(0) } 
+                visible={ visible } 
+                modalCancel={ () => setVisible(false) } 
+                segmentNameList={segmentNameList}
+            /> 
+            : null
+        }
         <Modal 
             visible={urlVisible} 
             onOk={()=>{
