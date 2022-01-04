@@ -140,7 +140,7 @@ export default function DailySchedule(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '',
-                    children: <Input style={{ width: '300px' }} placeholder="请输入塔型/构件号进行查询" />
+                    children: <Input style={{ width: '300px' }} placeholder="请输入塔型/零件号进行查询" />
                 },
                 {
                     name: 'productionLinesName',
