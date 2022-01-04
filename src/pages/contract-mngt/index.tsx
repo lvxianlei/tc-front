@@ -99,6 +99,7 @@ export default function ContractMngt(): JSX.Element {
             </Modal>
             <Page
                 path="/tower-supply/materialContract"
+                exportPath={`/tower-supply/materialContract`}
                 onFilterSubmit={onFilterSubmit}
                 columns={[
                     {
