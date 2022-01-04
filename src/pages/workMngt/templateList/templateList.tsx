@@ -1,11 +1,10 @@
 import React, { useState, } from "react"
-import { Input, DatePicker, Select, Form, } from 'antd'
+import { Input, DatePicker, Select, Form, Spin, } from 'antd'
 import { Page } from '../../common'
-import { Link, useHistory, useLocation } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
 export default function TemplateList() {
-    const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({})
     const location = useLocation<{ state?: number, userId?: string }>();
     const columns: any[] = [
@@ -80,7 +79,7 @@ export default function TemplateList() {
     const checkUser: any = data || [];
 
     return (
-        <>
+        <Spin spinning={ loading }>
             <Page
                 path="/tower-science/loftingTemplate"
                 filterValue={filterValue}
@@ -136,6 +135,6 @@ export default function TemplateList() {
                     }
                 ]}
             />
-        </>
+        </Spin>
     )
 }
