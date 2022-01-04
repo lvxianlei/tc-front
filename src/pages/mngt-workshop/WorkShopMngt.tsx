@@ -108,7 +108,8 @@ export default function DailySchedule(): React.ReactNode {
                     fixed: "right" as FixedType,
                     "width": 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        confirmStatus === 0 ? <Button type="link" onClick={() => {
+                        confirmStatus === 0 ? 
+                        <Button type="link" onClick={() => {
                             history.push(`/workshopManagement/processingTask/dispatch/${record.id}`)
                         }}>派工</Button> : confirmStatus === 1 ? <Button type="link" onClick={() => {
                             history.push(`/workshopManagement/processingTask/detail/${record.id}/${record.status}`)
@@ -118,16 +119,30 @@ export default function DailySchedule(): React.ReactNode {
                     )
                 }] : [ ...columns]}
             headTabs={[]}
-            requestData={{ status: confirmStatus,startTime: moment().format('YYYY-MM-DD')+' 00:00:00', endTime: moment().add(7, "days").format('YYYY-MM-DD')+' 23:59:59'  }}
+            requestData={{ 
+                status: confirmStatus,
+                startTime: moment().format('YYYY-MM-DD')+' 00:00:00', 
+                endTime: moment().add(7, "days").format('YYYY-MM-DD')+' 23:59:59'  
+            }}
             extraOperation={(data: any) =><>
-                <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
+                <Radio.Group 
+                    defaultValue={confirmStatus} 
+                    onChange={operationChange}
+                >
                     <Radio.Button value={0}>未派工</Radio.Button>
                     <Radio.Button value={1}>未采集</Radio.Button>
                     <Radio.Button value={2}>已完成</Radio.Button>
                 </Radio.Group>
-                {confirmStatus === 0 ? <Button type="primary"  onClick={() => {
-                    history.push(`/workshopManagement/processingTask/dispatch/new`)
-                }}>派工</Button> : null}
+                {confirmStatus === 0 ? 
+                    <Button 
+                        type="primary" 
+                        onClick={() => {
+                            history.push(`/workshopManagement/processingTask/dispatch/new`)
+                        }}
+                    >
+                        派工
+                    </Button> 
+                : null}
                 </>}
             refresh={refresh}
             // tableProps={{
