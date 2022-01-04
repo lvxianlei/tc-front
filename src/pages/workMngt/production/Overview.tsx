@@ -72,16 +72,16 @@ export default function Overview() {
         ]}>
             <Spin spinning={loading}>
                 <CommonTable haveIndex columns={ConstructionDetails.map((item: any) => {
-                    if (item.dataIndex === "alreadyIngredients") {
-                        return ({
-                            ...item,
-                            render: (text: any, records: any) => {
-                                const formatText = [-1, "-1", 0, "0"].includes(text) ? "0" : text
-                                const formatNoIngredients = [-1, "-1", 0, "0"].includes(records.noIngredients) ? "0" : records.noIngredients
-                                return <>{formatText} / {formatNoIngredients}</>
-                            }
-                        })
-                    }
+                    // if (item.dataIndex === "alreadyIngredients") {
+                    //     return ({
+                    //         ...item,
+                    //         render: (text: any, records: any) => {
+                    //             const formatText = [-1, "-1", 0, "0"].includes(text) ? "0" : text
+                    //             const formatNoIngredients = [-1, "-1", 0, "0"].includes(records.noIngredients) ? "0" : records.noIngredients
+                    //             return <>{formatText} / {formatNoIngredients}</>
+                    //         }
+                    //     })
+                    // }
                     return item
                 })} dataSource={data?.detail || []} />
                 <DetailTitle title="生产配料方案" />
