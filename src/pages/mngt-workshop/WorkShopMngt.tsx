@@ -148,7 +148,12 @@ export default function DailySchedule(): React.ReactNode {
                     children: <Select placeholder="请选择" style={{ width: "150px" }}>  
                         <Select.Option value="" key="">全部</Select.Option>
                         { unit && unit.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
+                            return <Select.Option 
+                                        key={ item.id } 
+                                        value={ item.name }
+                                    >
+                                        { item.name }
+                                    </Select.Option>
                         }) }
                     </Select>
                 },
@@ -158,14 +163,23 @@ export default function DailySchedule(): React.ReactNode {
                     children: <Select placeholder="请选择" style={{ width: "150px" }}>  
                         <Select.Option value="" key="">全部</Select.Option>
                         { work && work.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.workCenterName }>{ item.workCenterName }</Select.Option>
+                            return <Select.Option 
+                                        key={ item.id } 
+                                        value={ item.workCenterName }
+                                    >
+                                        { item.workCenterName }
+                                    </Select.Option>
                         }) }
                     </Select>
                 },
                 {
                     name: 'time',
                     label: '时间范围',
-                    children: <DatePicker.RangePicker defaultValue={[moment(),moment().add(7, "days")]} onCalendarChange={val => setDates(val)} disabledDate={disabledDate}/>
+                    children: <DatePicker.RangePicker 
+                        defaultValue={[moment(),moment().add(7, "days")]} 
+                        onCalendarChange={val => setDates(val)} 
+                        disabledDate={disabledDate}
+                    />
                 }
             ]}
             filterValue={filterValue}
