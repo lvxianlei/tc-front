@@ -8,23 +8,8 @@
         },
         {
             "title": "采购类型",
-            "dataIndex": "purchaseType",
-            "type": "select",
-            "width": 100,
-            "enum": [
-                {
-                    "label": "外部",
-                    "value": 1
-                },
-                {
-                    "label": "内部",
-                    "value": 2
-                },
-                {
-                    "label": "缺料",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "purchaseTypeName",
+            "width": 100
         },
         {
             "title": "塔型（个）",
@@ -63,22 +48,7 @@
         },
         {
             "title": "计划状态",
-            "dataIndex": "purchasePlanStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "待完成",
-                    "value": 1
-                },
-                {
-                    "label": "已完成",
-                    "value": 2
-                },
-                {
-                    "label": "已取消",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "purchasePlanStatusName"
         },
         {
             "title": "最新状态变更时间",
