@@ -215,7 +215,7 @@ export default function Overview(): JSX.Element {
 
                 }}>批量中标选择</Button>
         ]} operation={[
-            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+            <Button key="back" onClick={() => history.goBack()}>返回</Button>
         ]}>
             <DetailTitle title="询价产品信息" />
             <CommonTable haveIndex columns={[...materialColumns, {
@@ -245,7 +245,7 @@ export default function Overview(): JSX.Element {
                                 ...item,
                                 render: (value: string, records: any) => {
                                     if (records.material.includes(item.dataIndex)) {
-                                        return <span style={{ backgroundColor: "red" }}>{value}</span>
+                                        return <span style={{ backgroundColor: "rgba(2, 89, 161, .48)" }}>{value}</span>
                                     }
                                     return <span>{value}</span>
                                 }
@@ -258,16 +258,30 @@ export default function Overview(): JSX.Element {
                         fixed: "right",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
-                            <Button disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
+                            <Button
+                                style={{
+                                    padding: 0,
+                                    marginRight: 12
+                                }}
+                                disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                            <Button type="link" onClick={() => {
+                            <Button
+                                style={{
+                                    padding: 0,
+                                    marginRight: 12
+                                }}
+                                type="link" onClick={() => {
                                 setDetailId(records.id)
                                 setAttchVisible(true)
                             }}>附件</Button>
-                            <Button disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
+                            <Button
+                                style={{
+                                    padding: 0
+                                }}
+                                disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
                                 Modal.confirm({
                                     title: "删除",
                                     content: "确定删除吗？",

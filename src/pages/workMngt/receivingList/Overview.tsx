@@ -1,4 +1,4 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
+import React, { useState, useRef, forwardRef, useImperativeHandle, useEffect } from "react"
 import { Button, message, Modal, Form, DatePicker, Row, Col, Select, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, CommonTable, Attachment, AttachmentRef } from '../../common'
@@ -50,6 +50,27 @@ export default function Edit() {
     const [attchType, setAttachType] = useState<1 | 2>(1)
     const [detailId, setDetailId] = useState<string>("")
     const [saveLoding, setSaveLoading] = useState<boolean>(false)
+
+    useEffect(() => {
+        getUser();
+    }, [JSON.stringify(filterValue)])
+
+    // 统计数量
+    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detailStatistics`, {
+                receiveStockId: params.id,
+                // receiveStockId: filterValue["receiveStockId"] || "",
+                startStatusUpdateTime: filterValue["startStatusUpdateTime"] || "",
+                endStatusUpdateTime: filterValue["endStatusUpdateTime"] || "",
+                receiveStatus: filterValue["receiveStatus"] || ""
+            })
+            resole(result)
+            console.log(result, "resul")
+        } catch (error) {
+            reject(error)
+        }
+    }), { })
     const handleAttachOk = async () => {
         setSaveLoading(true)
         await receiveRef.current.onSubmit()
@@ -60,7 +81,7 @@ export default function Edit() {
     // 查询按钮
     const onFilterSubmit = (value: any) => {
         if (value.startStatusUpdateTime) {
-            const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
+            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startStatusUpdateTime = `${formatDate[0]} 00:00:00`
             value.endStatusUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.startRefundTime
@@ -109,16 +130,16 @@ export default function Edit() {
                     </Form.Item>
                 }
             ]}
-            sourceKey="receiveStockDetailPage.records"
+            // sourceKey="receiveStockDetailPage.records"
             extraOperation={(data: any) => {
                 return <>
                 <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} style={{ marginRight: 16, marginLeft: 16 }}>申请质检</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{marginLeft:"20px"}}>
-                    已收货：重量(支)合计：{data?.receiveStockMessage.receiveWeight === -1 ? 0 : data?.receiveStockMessage.receiveWeight}
-                    价税合计(元)合计：{data?.receiveStockMessage.receivePrice === -1 ? 0 : data?.receiveStockMessage.receivePrice}
-                    待收货：重量(支)合计：{data?.receiveStockMessage.waitWeight === -1 ? 0 : data?.receiveStockMessage.waitWeight}
-                    价税合计(元)合计：{data?.receiveStockMessage.waitPrice === -1 ? 0 : data?.receiveStockMessage.waitPrice}
+                    已收货：重量(支)合计：{userData?.receiveWeight === -1 ? 0 : userData?.receiveWeight}
+                    价税合计(元)合计：{userData?.receivePrice === -1 ? 0 : userData?.receivePrice}
+                    待收货：重量(支)合计：{userData?.waitWeight === -1 ? 0 : userData?.waitWeight}
+                    价税合计(元)合计：{userData?.waitPrice === -1 ? 0 : userData?.waitPrice}
                 </span>
             </>
             }}

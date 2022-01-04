@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Row, Col, Form, TreeSelect, Button } from 'antd';
+import { Space, Input, DatePicker, Select, Form, Button } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './Evaluation.module.less';
@@ -76,15 +76,11 @@ export default function EvaluationList(): React.ReactNode {
         }
     ]
 
-    // const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        // const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
         resole(data);
     }), {})
-    // const departmentData: any = data || [];
     const programLeader: any = data?.records || [];
-    // const [ programLeader,setProgramLeader ] = useState([]);
     const [ filterValue, setFilterValue ] = useState({});
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
@@ -107,14 +103,6 @@ export default function EvaluationList(): React.ReactNode {
         return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
     });
 
-    // const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-    //     const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
-    //     switch (title) {
-    //         case "programLeader":
-    //             return setProgramLeader(userData.records);
-    //     };
-    // }
-    
     return <Page
         path="/tower-science/assessTask/assessList"
         columns={ columns }
@@ -140,27 +128,15 @@ export default function EvaluationList(): React.ReactNode {
                 children: <DatePicker.RangePicker />
             },
             {
-                // name: 'assess',
                 name: 'assessUser',
                 label: '评估人',
-                children: <Row>
-                    {/* <Col>
-                        <Form.Item name="assessUserDept">
-                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'programLeader') } } style={{ width: "150px" }}>
-                                { renderTreeNodes(wrapRole2DataNode(departmentData)) }
-                            </TreeSelect>
-                        </Form.Item>
-                    </Col> */}
-                    <Col>
-                        <Form.Item name="assessUser" initialValue={ location.state?.userId || '' }>
-                            <Select placeholder="请选择" style={{ width: "150px" }}>
-                                { programLeader && programLeader.map((item: any) => {
-                                    return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                                }) }
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
+                children: <Form.Item name="assessUser" initialValue={ location.state?.userId || '' }>
+                    <Select placeholder="请选择" style={{ width: "150px" }}>
+                        { programLeader && programLeader.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        }) }
+                    </Select>
+                </Form.Item>
             },
             {
                 name: 'fuzzyMsg',
