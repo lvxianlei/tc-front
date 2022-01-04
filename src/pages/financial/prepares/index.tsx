@@ -165,7 +165,7 @@ export default function ApplyPayment() {
         <Modal visible={visible} destroyOnClose
             width={1011} title={type === "new" ? "创建申请信息" : "编辑申请信息"}
             footer={[
-                <Button key="close" type="primary" ghost onClick={async () => {
+                <Button key="close" onClick={async () => {
                     await editRef.current?.resetFields()
                     setDetailId("")
                     setType("new")
@@ -228,21 +228,21 @@ export default function ApplyPayment() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <a style={{marginRight: 12}} onClick={() => {
+                            <a style={{ marginRight: 12 }} onClick={() => {
                                 setDetailId(record.id)
                                 setDetailVisible(true)
                             }}>详情</a>
                             <Button
                                 type="link"
-                                style={{marginRight: 12}} 
+                                style={{ marginRight: 12 }}
                                 disabled={![0, 3].includes(record.applyStatus)}
                                 onClick={() => {
                                     setType("edit")
                                     setDetailId(record.id)
                                     setVisible(true)
                                 }}>编辑</Button>
-                            <Button type="link" style={{marginRight: 12}} disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
-                            <Button type="link" style={{marginRight: 12}} disabled={![1].includes(record.applyStatus)}
+                            <Button type="link" style={{ marginRight: 12 }} disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
+                            <Button type="link" style={{ marginRight: 12 }} disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
                             {/* <Button
                                 type="link"
