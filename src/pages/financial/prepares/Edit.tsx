@@ -182,7 +182,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         })
                     case "pleasePayType":
                         return ({ ...item, render: (data: any, props: any) => {
-                            return <Form.Item name="pleasePayType">
+                            return <Form.Item name="pleasePayType" style={{ width: '100%' }}>
                                 <Select disabled={ type === 'edit' } onChange={(e: string) => {
                                     setPleasePayType(e);
                                     baseForm.setFieldsValue({businessType: e === '1156' ? 1 : e === '1157' ? 3 : e === '1158' ? 2 : ''})
@@ -206,7 +206,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         return ({ ...item, enum: deptData })
                     case 'businessType':
                         return ({ ...item, render: (data: any, props: any) => {
-                            return <Form.Item name="businessType">
+                            return <Form.Item name="businessType" style={{ width: '100%' }}>
                                 <Select disabled={ pleasePayType === '1156' || pleasePayType === '1157' || pleasePayType === '1158' } onChange={ (e: number) => businessTypeChange(e) }>
                                     <Select.Option value={1} key="1">供应商</Select.Option>
                                     <Select.Option value={2} key="2">装卸公司</Select.Option>
@@ -216,7 +216,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         } })
                     case 'businessId': 
                         return ({ ...item, render: (data: any, props: any) => {
-                            return <Form.Item name="businessId">
+                            return <Form.Item name="businessId" style={{ width: '100%' }}>
                                 <Select disabled={ type === 'edit' } onChange={(e: string) => businessIdChange(e)}>
                                     { companyList && companyList.map((item: any) => {
                                         return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
