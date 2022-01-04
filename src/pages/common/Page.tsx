@@ -12,7 +12,7 @@ import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../compon
 import { ITabItem } from '../../components/ITabableComponent'
 import RequestUtil from '../../utils/RequestUtil'
 import { IClient } from '../IClient'
-import '../../components/AbstractMngtComponent.module.less'
+// import '../../components/AbstractMngtComponent.module.less'
 import ExportList from '../../components/export/list'
 export interface PageProps extends RouteComponentProps, WithTranslation {
     path: string
@@ -28,7 +28,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     readonly exportPath?: string; //导出接口
     sourceKey?: string,
     isSunmryLine?: (result: IResponseData) => void;//添加计算行
-    exportObject?: {[key: string]: any}, // 导出可能会包含的id等
+    exportObject?: { [key: string]: any }, // 导出可能会包含的id等
 }
 
 export interface IResponseData {
@@ -150,9 +150,9 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     protected renderExtraOperationContent(): React.ReactNode {
         return (
             <>
-                {  
+                {
                     (this.props.extraOperation || this.props.exportPath) && (
-                        <Space direction="horizontal" size="middle">
+                        <Space direction="horizontal" size="middle" style={{ width: "100%", marginBottom: "12px" }}>
                             {this.props.exportPath && <Button type="primary" ghost onClick={() => {
                                 this.setState({
                                     isExport: true
@@ -162,7 +162,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                         </Space>
                     )
                 }
-                
+
                 {this.state.isExport ? <ExportList
                     history={this.props.history}
                     location={this.props.location}

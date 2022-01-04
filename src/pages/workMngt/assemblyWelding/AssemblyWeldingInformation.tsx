@@ -4,21 +4,14 @@
  * @description 工作管理-组焊列表-组焊信息
 */
 
-import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, Image } from 'antd';
+import React from 'react';
+import { Spin, Button, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 
 const tableColumns = [
-    { 
-        key: 'index', 
-        title: '序号', 
-        dataIndex: 'index', 
-        width: 50, 
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) 
-    },
     {
         key: 'createDeptName',
         title: '操作部门',
@@ -105,8 +98,6 @@ const productColumns = [
 export default function AssemblyWeldingInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
-    const [ pictureVisible, setPictureVisible ] = useState(false);
-    const [ pictureUrl, setPictureUrl ] = useState('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get(`/tower-science/welding/getWeldingTaskById?weldingId=${ params.id }`)
         resole(data)
@@ -130,10 +121,7 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
             <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
             <Attachment dataSource={ detailData.attachInfoList || [] } />
             <DetailTitle title="操作信息"/>
-            <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
+            <CommonTable haveIndex columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
         </DetailContent>
-        <Modal visible={ pictureVisible } onCancel={ () => setPictureVisible(false) } footer={ false }>
-            <Image src={ pictureUrl } preview={ false } />
-        </Modal>
     </>
 }

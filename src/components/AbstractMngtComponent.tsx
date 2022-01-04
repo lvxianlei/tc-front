@@ -3,13 +3,13 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import React from 'react';
-import { Button, Card, Form, FormItemProps, Space, Pagination, Tabs, TabsProps } from 'antd';
+import { Button, Card, Form, FormItemProps, Space, Pagination, Tabs, TabsProps, Row, Col } from 'antd';
 import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import { RouteComponentProps } from 'react-router';
 import layoutStyles from '../layout/Layout.module.less';
 import styles from './AbstractMngtComponent.module.less';
-import './AbstractMngtComponent.module.less';
+// import './AbstractMngtComponent.module.less';
 import AbstractTabableComponent from './AbstractTabableComponent';
 import { ITabItem } from './ITabableComponent';
 import CommonTable from "../pages/common/CommonTable"
@@ -186,21 +186,15 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected renderTabContent(item: ITabItem): React.ReactNode {
         return (
-            <Space direction="vertical" size="small" className={layoutStyles.width100}>
+            <Space direction="vertical" size="middle" className={layoutStyles.width100}>
                 {
-                    this.getFilterFormItemProps(item).length
-                        ?
-                        <Card className={styles.filterCard} bordered={false}>
-                            {this.renderFilterContent(item)}
-                        </Card>
-                        :
-                        null
+                    this.getFilterFormItemProps(item).length && <Card className={styles.filterCard} bordered={false}>
+                        {this.renderFilterContent(item)}
+                    </Card>
                 }
-                <Card bordered={false} style={{padding:'0px'}}>
-                    <Space className={layoutStyles.width100} direction="vertical" size="large">
-                        {this.renderExtraOperationContent(item)}
-                        {this.renderTableContent(item)}
-                    </Space>
+                <Card bordered={false} style={{ padding: '0px' }}>
+                    {this.renderExtraOperationContent(item)}
+                    {this.renderTableContent(item)}
                 </Card>
             </Space>
         );
@@ -215,17 +209,23 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
     protected renderFilterContent(item: ITabItem): React.ReactNode {
         return (
             <Form layout="inline" onFinish={this.onFilterSubmit}>
-                {
-                    this.getFilterFormItemProps(item).map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                        <Form.Item key={`${props.name}_${index}`} {...props} style={{marginBottom: 16}}/>
-                    ))
-                }
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">查询</Button>
-                </Form.Item>
-                <Form.Item>
-                    <Button htmlType="reset">重置</Button>
-                </Form.Item>
+                <Row gutter={[0, 16]}>
+                    {
+                        this.getFilterFormItemProps(item).map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
+                            <Col key={`${props.name}_${index}`}><Form.Item {...props} /></Col>
+                        ))
+                    }
+                    <Col>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit">查询</Button>
+                        </Form.Item>
+                    </Col>
+                    <Col>
+                        <Form.Item>
+                            <Button htmlType="reset">重置</Button>
+                        </Form.Item>
+                    </Col>
+                </Row>
             </Form>
         );
     }

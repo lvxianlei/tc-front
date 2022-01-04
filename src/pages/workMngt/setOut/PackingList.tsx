@@ -77,7 +77,9 @@ export default function PackingList(): React.ReactNode {
             width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListSetting/${ record.id }` }><Button type="link" disabled={location?.state?.status === 4}>编辑</Button></Link>
+                    <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListSetting/${ record.id }` }>
+                        <Button type="link" disabled={location?.state?.status === 4}>编辑</Button>
+                    </Link>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => { RequestUtil.delete(`/tower-science/packageStructure?id=${ record.id }`).then(res => history.go(0)) } }

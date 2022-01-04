@@ -197,6 +197,7 @@ class ManagementContractSetting extends ContractSetting {
               children: (
                 <Input
                   value={contract?.customerInfoDto?.customerCompany}
+                  disabled={true}
                   suffix={
                     <ClientSelectionComponent
                       onSelect={this.onCustomerCompanySelect}
@@ -242,6 +243,7 @@ class ManagementContractSetting extends ContractSetting {
               children: (
                 <Input
                   value={contract?.signCustomerName}
+                  disabled={true}
                   suffix={
                     <ClientSelectionComponent
                       onSelect={this.onCustomerNameSelect}
@@ -281,6 +283,7 @@ class ManagementContractSetting extends ContractSetting {
               children: (
                 <Input
                   value={contract?.payCompanyName}
+                  disabled={true}
                   suffix={
                     <ClientSelectionComponent
                       onSelect={this.onPayCompanyNameSelect}
@@ -432,13 +435,14 @@ class ManagementContractSetting extends ContractSetting {
               rules: [
                 {
                   required: true,
-                  message: "请选择结算单位",
+                  message: "请选择业务经理",
                 },
               ],
               children: (
                 <>
                   <Input
                     value={contract?.salesman}
+                    disabled={true}
                     suffix={
                       <ServiceManagerComponent
                         onSelect={this.onServiceManager}
@@ -767,6 +771,7 @@ class ManagementContractSetting extends ContractSetting {
                 <>
                   <Input
                     value={contract?.customerInfoDto?.customerCompany}
+                    disabled={true}
                     suffix={
                       <ClientSelectionComponent
                         onSelect={this.onCustomerCompanySelect}
@@ -814,6 +819,7 @@ class ManagementContractSetting extends ContractSetting {
                 <>
                   <Input
                     value={contract?.signCustomerName}
+                    disabled={true}
                     suffix={
                       <ClientSelectionComponent
                         onSelect={this.onCustomerNameSelect}
@@ -854,6 +860,7 @@ class ManagementContractSetting extends ContractSetting {
               children: (
                 <Input
                   value={contract?.payCompanyName}
+                  disabled={true}
                   suffix={
                     <ClientSelectionComponent
                       onSelect={this.onPayCompanyNameSelect}
@@ -994,13 +1001,14 @@ class ManagementContractSetting extends ContractSetting {
               rules: [
                 {
                   required: true,
-                  message: "请选择结算单位",
+                  message: "请选择业务经理",
                 },
               ],
               children: (
                 <>
                   <Input
                     value={contract?.salesman}
+                    disabled={true}
                     suffix={
                       <ServiceManagerComponent
                         onSelect={this.onServiceManager}
