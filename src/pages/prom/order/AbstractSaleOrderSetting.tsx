@@ -351,6 +351,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             children: (
                                 <Input
                                     value={saleOrder?.contractInfoDto?.contractNumber}
+                                    disabled={true}
                                     suffix={
                                         <ContractSelectionComponent
                                             onSelect={this.onSelect}

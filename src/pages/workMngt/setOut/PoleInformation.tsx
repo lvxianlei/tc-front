@@ -71,16 +71,26 @@ export default function PoleInformation(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    {   userId === record.loftingUser ?
-                        <>{  
-                            record.loftingStatus === 2 && location?.state?.status === 4 ? <WithSectionModal key={ record.id } id={ record.id } updateList={ () => setRefresh(!refresh) }/> : <Button type="link" disabled>配段</Button> 
-                        }</>
+                    {   
+                        userId === record.loftingUser ?
+                            <>{  
+                                record.loftingStatus === 2 && location?.state?.status === 4 ? 
+                                <WithSectionModal key={ record.id } id={ record.id } updateList={ () => setRefresh(!refresh) }/> 
+                                : <Button type="link" disabled>配段</Button> 
+                            }</>
                         : null
                     }
-                    { record.loftingStatus === 4 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/poleLoftingDetails/${ record.id }` }>杆塔放样明细</Link> : <Button type="link" disabled>杆塔放样明细</Button>}
-                    {   userId === record.loftingUser ?
+                    { 
+                        record.loftingStatus === 4 ? 
+                        <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/poleLoftingDetails/${ record.id }` }>杆塔放样明细</Link> 
+                        : <Button type="link" disabled>杆塔放样明细</Button>
+                    }
+                    {
+                        userId === record.loftingUser ?
                         <>{  
-                            record.loftingStatus === 3 || record.loftingStatus === 4 ? <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }`, state: { status: record.loftingStatus } }}>包装清单</Link> : <Button type="link" disabled>包装清单</Button> 
+                            record.loftingStatus === 3 || record.loftingStatus === 4 ? 
+                            <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }`, state: { status: record.loftingStatus } }}>包装清单</Link> 
+                            : <Button type="link" disabled>包装清单</Button> 
                         }</>
                         : null
                     }
