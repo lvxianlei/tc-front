@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button, DatePicker, Select, Input, message } from 'antd';
-import { Attachment, BaseInfo, CommonTable, DetailContent, DetailTitle, IntgSelect, Page } from '../common'
+import { Attachment, BaseInfo, CommonTable, DetailContent, DetailTitle, IntgSelect, OperationRecord, Page } from '../common'
 import { buyingTask, operatingInformation, setting, spec, productInfo } from "./buyingTask.json"
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
@@ -20,7 +20,7 @@ export default function RawMaterial() {
     const [isModalVisible1, setIsModalVisible1] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const [isModalVisible3, setIsModalVisible3] = useState(false);
-    const [id, setId] = useState(0);//采购任务id
+    const [id, setId] = useState<string>("");//采购任务id
     const [obj, setObj] = useState<any>({});
     const [rejectionDescription, setRejectionDescription] = useState("");
     const { run: generaterRun } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -50,12 +50,12 @@ export default function RawMaterial() {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchaseTask/${purchaseId}`)
         setObj(result);
     }
-    const receive = async (purchaseId: number) => {
+    const receive = async (purchaseId: string) => {
         const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/taskReceive/${purchaseId}`, {}, { "Content-Type": "application/json" })
         setIsModalVisible(false);
         history.go(0);
     }
-    const submit = async (rejectionDescription: string, id: number) => {
+    const submit = async (rejectionDescription: string, id: string) => {
         const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/taskRejection`, { rejectionDescription, id }, { "Content-Type": "application/json" })
         message.success("拒绝成功！");
         setIsModalVisible3(false);
@@ -203,18 +203,7 @@ export default function RawMaterial() {
                 <DetailTitle title="产品信息" />
                 <BaseInfo columns={productInfo} dataSource={obj || {}} col={2} />
                 <Attachment dataSource={obj.taskNoticeAttachList} />
-                <DetailTitle title="操作信息" />
-                <CommonTable
-                    columns={[
-                        {
-                            "title": "序号",
-                            "dataIndex": "index",
-                            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                        },
-                        ...operatingInformation,
-                    ]}
-                    dataSource={obj.optRecordList || []}
-                />
+                <OperationRecord title="操作信息" serviceId={id as string} serviceName="tower-suply" />
             </Modal>
             <Modal width={1011} title="指派信息" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
                 <TaskAssign id={detailId} ref={tarkRef} />
