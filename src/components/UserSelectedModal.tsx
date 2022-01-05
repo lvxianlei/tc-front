@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { Button, FormItemProps, Input, Modal, Space } from 'antd';
-import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
+import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import RequestUtil from '../utils/RequestUtil';
 import { DataType, IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
@@ -13,10 +13,10 @@ import AbstractFilteredSelecableModal from './AbstractFilteredSelecableModal';
 import { ButtonType } from 'antd/lib/button';
 import { RowSelectionType } from 'antd/lib/table/interface';
 
-export interface IWorkshopUserSelectionComponentState extends IAbstractSelectableModalState {
+export interface IWorkshopUserModalState extends IAbstractSelectableModalState {
     readonly tableDataSource: any[];
 }
-export interface IWorkshopUserSelectionComponentProps extends IAbstractSelectableModalProps {
+export interface IWorkshopUserModalProps extends IAbstractSelectableModalProps {
     readonly saleOrderId?: string | number;
     readonly buttonType?: ButtonType;
     readonly buttonTitle?: string;
@@ -50,14 +50,14 @@ export interface IUser {
 /**
  * Workshop User Selection Component
  */
-export default class WorkshopUserSelectionComponent extends AbstractFilteredSelecableModal<IWorkshopUserSelectionComponentProps, IWorkshopUserSelectionComponentState> {
+export default class WorkshopUserModal extends AbstractFilteredSelecableModal<IWorkshopUserModalProps, IWorkshopUserModalState> {
 
     /**
      * @override
      * @description Gets state
      * @returns state 
      */
-    protected getState(): IWorkshopUserSelectionComponentState {
+    protected getState(): IWorkshopUserModalState {
         return {
             ...super.getState(),
             tablePagination: {
@@ -94,7 +94,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
      * @description 取消操作 
      * @param event 
      */
-     public handleCancel = (): void => {
+    public handleCancel = (): void => {
         this.setState({
             isModalVisible: false,
             selectedRowKeys: []
@@ -104,30 +104,29 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
 
     //componentDidMount
     public componentDidMount(): void {
-        
+
     }
 
     //接口、获值
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        let resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-production/team/listTeamUser`, {
-            teamId: this.props.saleOrderId,
+        let resData: IResponseData = await RequestUtil.get<IResponseData>(`sinzetech-user/user`, {
             ...filterValues,
-            // current: pagination.current || this.state.tablePagination?.current,
-            // size: pagination.pageSize || this.state.tablePagination?.pageSize
+            current: pagination.current || this.state.tablePagination?.current,
+            size: pagination.pageSize || this.state.tablePagination?.pageSize
         });
         const selectKeys: [] = this.props.selectKey;
-        let newData: any = resData;
+        let newData: any = resData.records;
         selectKeys?.forEach((item: any) => {
-            newData = newData.filter((res:any) => res.id !== item.id);
+            newData = newData.filter((res: any) => res.id !== item.id);
         })
         this.setState({
             ...filterValues,
             tableDataSource: newData,
             tablePagination: {
                 ...this.state.tablePagination,
-                // current: resData.current,
-                // pageSize: resData.size,
-                // total: resData.total
+                current: resData.current,
+                pageSize: resData.size,
+                total: resData.total
             }
         });
     }
@@ -137,7 +136,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         return [{
             name: 'fuzzyMsg',
             children: <Input placeholder="请输入姓名进行查询" />
-        }, ]
+        },]
     }
 
     //查询
@@ -157,60 +156,60 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
     //table-column
     public getTableColumns(): ColumnType<object>[] {
         return [
-        // {
-        //     key: 'type',
-        //     title: '员工编号',
-        //     width: '15%',
-        //     dataIndex: 'type',
-        // }, 
-        {
-            key: 'name',
-            title: '姓名',
-            width: '50%',
-            dataIndex: 'name'
-        }, {
-            key: 'position',
-            title: '职位',
-            width: '50%',
-            dataIndex: 'position'
-        },
-        //  {
-        //     key: 'stationName',
-        //     title: '岗位',
-        //     width: '15%',
-        //     dataIndex: 'stationName'
-        // }, {
-        //     key: 'stationStatus',
-        //     title: '在职状态',
-        //     width: '15%',
-        //     dataIndex: 'stationStatus',
-        //     render: (stationStatus: number): React.ReactNode => {
-        //         switch (stationStatus) {
-        //             case 0:
-        //                 return '不在职';
-        //             case 1:
-        //                 return '在职';
-        //         }
-        //     }  
-        // }, 
-        // {
-        //     key: 'phone',
-        //     title: '联系电话',
-        //     width: '50%',
-        //     dataIndex: 'phone'
-        // }
+            // {
+            //     key: 'type',
+            //     title: '员工编号',
+            //     width: '15%',
+            //     dataIndex: 'type',
+            // }, 
+            {
+                key: 'name',
+                title: '姓名',
+                width: '50%',
+                dataIndex: 'name'
+            }, {
+                key: 'position',
+                title: '职位',
+                width: '50%',
+                dataIndex: 'position'
+            },
+            //  {
+            //     key: 'stationName',
+            //     title: '岗位',
+            //     width: '15%',
+            //     dataIndex: 'stationName'
+            // }, {
+            //     key: 'stationStatus',
+            //     title: '在职状态',
+            //     width: '15%',
+            //     dataIndex: 'stationStatus',
+            //     render: (stationStatus: number): React.ReactNode => {
+            //         switch (stationStatus) {
+            //             case 0:
+            //                 return '不在职';
+            //             case 1:
+            //                 return '在职';
+            //         }
+            //     }  
+            // }, 
+            // {
+            //     key: 'phone',
+            //     title: '联系电话',
+            //     width: '50%',
+            //     dataIndex: 'phone'
+            // }
         ];
     }
 
     //row-key
     protected getTableRowKey(): string | GetRowKey<object> {
-        return 'userId';
+        return 'id';
     }
 
     public render(): React.ReactNode {
         return (
             <>
-                <Button type={this.props.buttonType || 'primary'} style={this.props.buttonType==='link'?{ paddingBottom: '0', paddingTop: '0', height: 'auto', lineHeight: 1 }:{}} onClick={()=>{
+                <Button type={this.props.buttonType || 'primary'} style={this.props.buttonType === 'link' ? { paddingBottom: '0', paddingTop: '0', height: 'auto', lineHeight: 1 } : {}} onClick={() => {
                     this.getTable({})
                     this.setState({
                         isModalVisible: true
@@ -224,16 +223,14 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
                     onOk={
                         () => {
                             this.setState({
-                                isModalVisible: false,
+                                isModalVisible: false
                             })
                             if (this.state.tableDataSource.length > 0) {
-                               
+                                this.setState({
+                                    selectedRowKeys: []
+                                })
                                 this.getForm()?.resetFields();
                                 this.props.onSelect(this.state.selectedRows)
-                                this.setState({
-                                    selectedRowKeys: [],
-                                    selectedRows:[],
-                                })
                             }
                         }
                     }

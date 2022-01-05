@@ -10,10 +10,10 @@ import { CommonTable, DetailTitle, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './ShippingDepartmentConfig.module.less';
-import WorkshopUserSelectionComponent, { IUser } from '../../components/WorkshopUserModal';
 import { warehouseOptions } from '../../configuration/DictionaryOptions';
 import { useHistory } from 'react-router-dom';
 import { DataType } from '../../components/AbstractSelectableModal';
+import UserSelectedModal, { IUser } from '../../components/UserSelectedModal';
 
 interface IProcessList {
     readonly region?: string;
@@ -372,14 +372,14 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                         </Col>
                         <Col span={ 12 }>
                             <Form.Item name="leaderName" label={<span><span style={{ color: 'red' }}>*</span>负责人</span>} initialValue={ detailData?.leaderName }>
-                                <Input maxLength={ 50 } value={ detailData.leaderName } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                                <Input maxLength={ 50 } value={ detailData.leaderName } addonAfter={ <UserSelectedModal onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
                                     form.setFieldsValue({leaderName: selectedRows[0].name});
                                 } } buttonType="link" buttonTitle="+选择负责人" /> } disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
-                    <DetailTitle title="保管员" operation={[<WorkshopUserSelectionComponent rowSelectionType="checkbox" onSelect={ (selectedRows: IUser[] | any) => {
+                    <DetailTitle title="保管员" operation={[<UserSelectedModal rowSelectionType="checkbox" onSelect={ (selectedRows: IUser[] | any) => {
                         selectedRows = selectedRows.map((item: DataType) => {
                             return {
                                 keeperUserId: item.id,
