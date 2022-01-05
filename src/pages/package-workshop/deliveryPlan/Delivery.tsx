@@ -146,6 +146,7 @@ export default function Delivery(): React.ReactNode {
                         ]} dataSource={[...tableUserDataSource]} pagination={false} rowKey={'id'} size='small'/></>}
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={`已出库`} key={2}>
+                        <DetailTitle title="杆塔信息" />
                         <CommonTable columns={[...tableColumns, { title: '发包人员', dataIndex: 'userNames', key: 'userNames' }]} dataSource={tableDataSource} pagination={false} />
                     </Tabs.TabPane>
                 </Tabs>
