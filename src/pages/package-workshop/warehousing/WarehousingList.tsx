@@ -97,11 +97,11 @@ export default function WarehousingList(): React.ReactNode {
         refresh={ refresh }
         searchFormItems={ [
             {
-                name: 'productType',
+                name: 'productTypeName',
                 label: '产品类型',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id}>
+                            return <Select.Option key={index} value={name}>
                                 {name}
                             </Select.Option>
                     })}
