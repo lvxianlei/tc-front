@@ -141,7 +141,6 @@ export default function ContractMngt(): JSX.Element {
                     }
                 ]}
                 extraOperation={<>
-                    <Button type="primary" ghost>导出</Button>
                     <Link to="/contract-mngt/index"><Button
                         type="primary" ghost
                         onClick={() => {
