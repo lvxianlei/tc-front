@@ -9,17 +9,64 @@ import WorkshopEquipmentSelectionComponent from '../../../components/WorkshopEqu
 import moment from 'moment';
 
 const tableColumns = [
-    { title: '订单工程名称', dataIndex: 'orderProjectName', key: 'orderProjectName', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '电压等级', dataIndex: 'voltageName', key: 'voltageName', },
-    { title: '计划号', dataIndex: 'planNum', key: 'planNum' },
-    { title: '塔型', dataIndex: 'productCategoryName', key: 'productCategoryName' },
-    { title: '基数', dataIndex: 'number', key: 'number' },
-    { title: '下达重量（kg）', dataIndex: 'weight', key: 'weight' },
-    { title: '角钢重量（kg）', dataIndex: 'angleWeight', key: 'angleWeight' },
-    { title: '连板重量（kg）', dataIndex: 'boardWeight', key: 'boardWeight' },
-    { title: '开始包装时间', dataIndex: 'processFactory', key: 'processFactory' },
-    { title: '入库时间', dataIndex: 'processWorkshop', key: 'processWorkshop' },
-    { title: '包装班组', dataIndex: 'sendWarehouseTime', key: 'sendWarehouseTime' }
+    { 
+        title: '订单工程名称', 
+        dataIndex: 'orderProjectName', 
+        key: 'orderProjectName', 
+        render: (_a: any, _b: any, index: number): React.ReactNode => (
+            <span>{index + 1}</span>
+        ) 
+    },
+    { 
+        title: '电压等级', 
+        dataIndex: 'voltageName', 
+        key: 'voltageName', 
+    },
+    { 
+        title: '计划号', 
+        dataIndex: 'planNum', 
+        key: 'planNum' 
+    },
+    { 
+        title: '塔型', 
+        dataIndex: 'productCategoryName', 
+        key: 'productCategoryName' 
+    },
+    { 
+        title: '基数', 
+        dataIndex: 'number', 
+        key: 'number' 
+    },
+    { 
+        title: '下达重量（kg）', 
+        dataIndex: 'weight', 
+        key: 'weight' 
+    },
+    { 
+        title: '角钢重量（kg）', 
+        dataIndex: 'angleWeight', 
+        key: 'angleWeight' 
+    },
+    { 
+        title: '连板重量（kg）',
+        dataIndex: 'boardWeight', 
+        key: 'boardWeight' 
+    },
+    { 
+        title: '开始包装时间', 
+        dataIndex: 'processFactory', 
+        key: 'processFactory' 
+    },
+    { 
+        title: '入库时间', 
+        dataIndex: 'processWorkshop', 
+        key: 'processWorkshop' 
+    },
+    { 
+        title: '包装班组', 
+        dataIndex: 'sendWarehouseTime', 
+        key: 'sendWarehouseTime' 
+    }
 ]
 
 export default function Dispatch(): React.ReactNode {
