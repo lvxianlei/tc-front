@@ -143,7 +143,7 @@ export default function DailySchedule(): React.ReactNode {
                 },
                 {
                     name: 'time',
-                    label: '送齐时间',
+                    label: '结束时间',
                     children: <DatePicker.RangePicker />
                 }
             ]}
