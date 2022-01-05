@@ -95,6 +95,7 @@ export default function Delivery(): React.ReactNode {
                                         form.setFieldsValue({
                                             teamName: selectedRows[0].name
                                         })
+                                        setShow(false)
                                     } } buttonType="link" buttonTitle="+选择班组" />}
                                 />
                             </Form.Item>
@@ -146,7 +147,8 @@ export default function Delivery(): React.ReactNode {
                         ]} dataSource={[...tableUserDataSource]} pagination={false} rowKey={'id'} size='small'/></>}
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={`已出库`} key={2}>
-                        <CommonTable columns={[...tableColumns, { title: '发包人员', dataIndex: 'packageUserNames', key: 'packageUserNames' }]} dataSource={tableDataSource} pagination={false} />
+                        <DetailTitle title="杆塔信息" />
+                        <CommonTable columns={[...tableColumns, { title: '发包人员', dataIndex: 'userNames', key: 'userNames' }]} dataSource={tableDataSource} pagination={false} />
                     </Tabs.TabPane>
                 </Tabs>
             </DetailContent>
