@@ -204,7 +204,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
 
     //row-key
     protected getTableRowKey(): string | GetRowKey<object> {
-        return 'id';
+        return 'userId';
     }
 
     public render(): React.ReactNode {

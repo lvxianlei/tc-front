@@ -66,8 +66,8 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
 
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
-            name: 'selectName',
-            children: <Input placeholder="请输入班组名称/车间名称/产线进行查询" />
+            name: 'name',
+            children: <Input placeholder="请输入班组名称进行查询" />
         }];
     }
     
@@ -100,23 +100,11 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
         return [{
             key: 'name',
             title: '班组名称',
-            dataIndex: 'name',
-            width: '25%',
+            dataIndex: 'name'
         }, {
-            key: 'workshopDeptName',
-            title: '所属车间',
-            dataIndex: 'workshopDeptName',
-            width: '25%',
-        }, {
-            key: 'deptProcessesName',
-            title: '工序',
-            dataIndex: 'deptProcessesName',
-            width: '25%',
-        }, {
-            key: 'productionLinesName',
-            title: '设备所属产线',
-            dataIndex: 'productionLinesName',
-            width: '25%',
+            key: 'productUnitName',
+            title: '所属生产单元',
+            dataIndex: 'productUnitName'
         }];
     }
 
@@ -149,7 +137,7 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
                         }
                     }
                     onCancel={this.handleCancel}
-                    width="80%"
+                    width="40%"
                 >
                     <Space direction="vertical" className={styles.modalTable}>
                         {this.renderTableContent()}

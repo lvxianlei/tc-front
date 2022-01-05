@@ -121,19 +121,19 @@ export default function Invoicing() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" style={{marginRight: 12}} disabled={userId !== record.batcherId} onClick={() => {
+                            <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId} onClick={() => {
                                 setDetailId(record.id)
                                 setDetailOver(true)
                                 setLoftingState(record.loftingState)
                             }}>详情</Button>
                             <Button
                                 type="link"
-                                style={{marginRight: 12}} 
+                                className="btn-operation-link" 
                                 disabled={userId !== record.batcherId || record.loftingState === 3}
                             >
                                 <Link to={`/workMngt/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}`}>明细</Link>
                             </Button>
-                            <Button type="link" disabled={userId !== record.batcherId || record.loftingState !== 2}
+                            <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 2}
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setVisible(true)
