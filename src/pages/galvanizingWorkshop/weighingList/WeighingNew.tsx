@@ -29,6 +29,7 @@ export default function WeighingNew(): React.ReactNode {
         if (params.id) {
             data = await RequestUtil.get<IWeighingList>(`/tower-production/weighing/detail/${params.id}`);
             setRelationProducts(data?.relationProducts || [])
+            form.setFieldsValue({...data})
         }
         resole(data)
     }), {})
@@ -247,7 +248,6 @@ export default function WeighingNew(): React.ReactNode {
 
     const delRow = (index: number) => {
         relationProducts.splice(index, 1);
-        console.log(relationProducts)
         setRelationProducts([...relationProducts]);
     }
 
