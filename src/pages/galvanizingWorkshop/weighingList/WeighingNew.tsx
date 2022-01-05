@@ -4,7 +4,7 @@
 */
 
 import React, { useState } from 'react';
-import { Spin, Button, Space, Form, Input, Descriptions, DatePicker, Select, message } from 'antd';
+import { Spin, Button, Space, Form, Input, Descriptions, DatePicker, Select, message, InputNumber } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -97,7 +97,7 @@ export default function WeighingNew(): React.ReactNode {
                 message: '请输入重量'
             }],
             initialValue: detailData.weight,
-            children: <Input maxLength={50} />
+            children: <InputNumber style={{width: '100%'}} min={0} maxLength={20} />
         },
         {
             dataIndex: "derrickNo",
