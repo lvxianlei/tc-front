@@ -36,7 +36,7 @@ export default function ViewContract(): React.ReactNode {
                 key: 'operation',
                 title: '操作',
                 dataIndex: 'operation',
-                render: (_: any, records: any) => <Button className="btn-operation-link" type="link"><Link to={`/cockpit/contract/${records.id}`}>明细</Link></Button>
+                render: (_: any, records: any) => <Link to={`/cockpit/contract/${records.id}`}>明细</Link>
             }]}
         extraOperation={<Button type="primary">导出</Button>}
         onFilterSubmit={onFilterSubmit}
