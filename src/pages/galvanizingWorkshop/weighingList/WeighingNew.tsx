@@ -10,7 +10,6 @@ import { DetailTitle, DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './WeighingList.module.less';
-import WorkshopUserSelectionComponent, { IUser } from '../../../components/WorkshopUserModal';
 import TeamSelectionModal from '../../../components/TeamSelectionModal';
 import { CloseOutlined } from '@ant-design/icons';
 import TowerSelectionModal from './TowerSelectionModal';
@@ -18,6 +17,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import { weighingtypeOptions } from '../../../configuration/DictionaryOptions';
 import { IWeighingList } from '../IGalvanizingWorkshop';
 import moment from 'moment';
+import UserSelectedModal, { IUser } from '../../../components/UserSelectedModal';
 
 export default function WeighingNew(): React.ReactNode {
     const history = useHistory();
@@ -136,7 +136,7 @@ export default function WeighingNew(): React.ReactNode {
             dataIndex: "weighManName",
             title: "司磅员",
             initialValue: detailData.weighManName,
-            children: <Input maxLength={ 50 } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+            children: <Input maxLength={ 50 } addonAfter={ <UserSelectedModal onSelect={ (selectedRows: IUser[] | any) => {
                 form.setFieldsValue({weighManName: selectedRows[0].name, weighManId: selectedRows[0].id});
             } } buttonType="link" buttonTitle="+选择人员" /> } disabled/>
         },

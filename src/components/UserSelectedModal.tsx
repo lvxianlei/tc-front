@@ -1,15 +1,15 @@
 /**
- * @author lxy
+ * @author zyc
  * @copyright © 2021
  */
 import React from 'react';
 import { Button, FormItemProps, Input, Modal, Space } from 'antd';
 import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
-import RequestUtil from '../../utils/RequestUtil';
-import { DataType, IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../components/AbstractSelectableModal';
-import styles from '../../components/AbstractSelectableModal.module.less';
-import AbstractFilteredSelecableModal from '../../components/AbstractFilteredSelecableModal';
+import RequestUtil from '../utils/RequestUtil';
+import { DataType, IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
+import styles from './AbstractSelectableModal.module.less';
+import AbstractFilteredSelecableModal from './AbstractFilteredSelecableModal';
 import { ButtonType } from 'antd/lib/button';
 import { RowSelectionType } from 'antd/lib/table/interface';
 
@@ -17,7 +17,6 @@ export interface IWorkshopUserModalState extends IAbstractSelectableModalState {
     readonly tableDataSource: any[];
 }
 export interface IWorkshopUserModalProps extends IAbstractSelectableModalProps {
-    readonly saleOrderId?: string | number;
     readonly buttonType?: ButtonType;
     readonly buttonTitle?: string;
     readonly rowSelectionType?: RowSelectionType | undefined;
@@ -97,7 +96,12 @@ export default class WorkshopUserModal extends AbstractFilteredSelecableModal<IW
     public handleCancel = (): void => {
         this.setState({
             isModalVisible: false,
-            selectedRowKeys: []
+            selectedRowKeys: [],
+            tablePagination: {
+                ...this.state.tablePagination,
+                current: 1,
+                pageSize: 10
+            }
         })
         this.getForm()?.resetFields();
     };
@@ -134,7 +138,7 @@ export default class WorkshopUserModal extends AbstractFilteredSelecableModal<IW
     //查询字段
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
-            name: 'fuzzyMsg',
+            name: 'name',
             children: <Input placeholder="请输入姓名进行查询" />
         },]
     }
@@ -142,10 +146,10 @@ export default class WorkshopUserModal extends AbstractFilteredSelecableModal<IW
     //查询
     public onFilterSubmit = async (values: Record<string, any>) => {
         this.getTable(values, {
-            // current: 1,
-            // pageSize: 10,
-            // total: 0,
-            // showSizeChanger: false
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            showSizeChanger: false
         });
     }
     //dataSource
@@ -212,7 +216,8 @@ export default class WorkshopUserModal extends AbstractFilteredSelecableModal<IW
                 <Button type={this.props.buttonType || 'primary'} style={this.props.buttonType === 'link' ? { paddingBottom: '0', paddingTop: '0', height: 'auto', lineHeight: 1 } : {}} onClick={() => {
                     this.getTable({})
                     this.setState({
-                        isModalVisible: true
+                        isModalVisible: true,
+                        selectedRowKeys: this.props.selectKey || []
                     })
                 }}>{this.props.buttonTitle || '添加人员'}</Button>
                 <Modal
@@ -227,7 +232,12 @@ export default class WorkshopUserModal extends AbstractFilteredSelecableModal<IW
                             })
                             if (this.state.tableDataSource.length > 0) {
                                 this.setState({
-                                    selectedRowKeys: []
+                                    selectedRowKeys: [],
+                                    tablePagination: {
+                                        ...this.state.tablePagination,
+                                        current: 1,
+                                        pageSize: 10
+                                    }
                                 })
                                 this.getForm()?.resetFields();
                                 this.props.onSelect(this.state.selectedRows)
