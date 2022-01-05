@@ -95,6 +95,7 @@ export default function Delivery(): React.ReactNode {
                                         form.setFieldsValue({
                                             teamName: selectedRows[0].name
                                         })
+                                        setShow(false)
                                     } } buttonType="link" buttonTitle="+选择班组" />}
                                 />
                             </Form.Item>
