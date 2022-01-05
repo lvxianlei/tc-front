@@ -169,7 +169,9 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                     match={this.props.match}
                     columnsKey={() => {
                         let keys = [...this.getTableColumns()]
-                        keys.pop()
+                        if (!keys[keys.length - 1].isExport) {
+                            keys.pop()
+                        }
                         return keys
                     }}
                     current={this.state.tablePagination?.current || 1}

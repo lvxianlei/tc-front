@@ -10,10 +10,10 @@ import { CommonTable, DetailTitle, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './ShippingDepartmentConfig.module.less';
-import WorkshopUserSelectionComponent, { IUser } from '../../components/WorkshopUserModal';
 import { warehouseOptions } from '../../configuration/DictionaryOptions';
 import { useHistory } from 'react-router-dom';
 import { DataType } from '../../components/AbstractSelectableModal';
+import UserSelectedModal, { IUser } from '../../components/UserSelectedModal';
 
 interface IProcessList {
     readonly region?: string;
@@ -372,25 +372,34 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                         </Col>
                         <Col span={ 12 }>
                             <Form.Item name="leaderName" label={<span><span style={{ color: 'red' }}>*</span>负责人</span>} initialValue={ detailData?.leaderName }>
-                                <Input maxLength={ 50 } value={ detailData.leaderName } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                                <Input maxLength={ 50 } value={ detailData.leaderName } addonAfter={ <UserSelectedModal onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
                                     form.setFieldsValue({leaderName: selectedRows[0].name});
                                 } } buttonType="link" buttonTitle="+选择负责人" /> } disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
-                    <DetailTitle title="保管员" operation={[<WorkshopUserSelectionComponent rowSelectionType="checkbox" onSelect={ (selectedRows: IUser[] | any) => {
-                        selectedRows = selectedRows.map((item: DataType) => {
-                            return {
-                                keeperUserId: item.id,
-                                keeperName: item.name
-                            }
-                        })
-                        const rows = [...userList, ...selectedRows];
-                        const res = new Map();
-                        let newRows = rows.filter((item: DataType) => !res.has(item.keeperUserId) && res.set(item.keeperUserId, 1));
-                        setUserList(newRows);
-                    } } buttonTitle="选择保管员"/>]}/>
+                    <DetailTitle 
+                        title="保管员" 
+                        operation={[
+                            <UserSelectedModal 
+                                rowSelectionType="checkbox" 
+                                selectKey={userList.map(res => { return res.keeperUserId })}
+                                onSelect={ (selectedRows: IUser[] | any) => {
+                                    selectedRows = selectedRows.map((item: DataType) => {
+                                        return {
+                                            keeperUserId: item.id,
+                                            keeperName: item.name
+                                        }
+                                    })
+                                    const rows = [...userList, ...selectedRows];
+                                    const res = new Map();
+                                    let newRows = rows.filter((item: DataType) => !res.has(item.keeperUserId) && res.set(item.keeperUserId, 1));
+                                    setUserList(newRows);
+                                } } 
+                                buttonTitle="选择保管员"/>
+                        ]}
+                    />
                     <CommonTable columns={userColumns} dataSource={userList} showHeader={false} pagination={false} />
                     <p style={{ fontSize: '16px', marginTop: '10px' }}>库区库位信息</p>
                     <Button type="primary" onClick={ addRow }>添加行</Button>

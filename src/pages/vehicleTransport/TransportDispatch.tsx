@@ -13,7 +13,7 @@ import styles from './TransportTask.module.less';
 import { CloseOutlined } from '@ant-design/icons';
 import { FixedType } from 'rc-table/lib/interface';
 import VehicleSelectionModal from '../../components/VehicleSelectionModal';
-import WorkshopUserSelectionComponent from '../../components/WorkshopUserModal';
+import UserSelectedModal from '../../components/UserSelectedModal';
 
 export default function WeighingNew(): React.ReactNode {
     const history = useHistory();
@@ -165,7 +165,7 @@ export default function WeighingNew(): React.ReactNode {
             <Row>
                 <Col span={4}>司机</Col>
                 <Col span={20}>
-                    <Input maxLength={50} value={user} addonBefore={<WorkshopUserSelectionComponent onSelect={(selectedRows: object[] | any) => {
+                    <Input maxLength={50} value={user} addonBefore={<UserSelectedModal onSelect={(selectedRows: object[] | any) => {
                         setUser(selectedRows);
                     }} buttonTitle="+选择人员" buttonType="link" />} addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={() => {
                         setUser([]);
