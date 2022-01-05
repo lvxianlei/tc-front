@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Button, Col, DatePicker, Form, Input, InputNumber, message, Modal, Popconfirm, Row, Select, Space, Spin, Table } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
-import { baseInfoData } from './detail.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import WorkshopUserSelectionComponent from '../../../components/WorkshopUserModal';
@@ -17,10 +16,8 @@ export default function ProcessDetail(): React.ReactNode {
     const [formRef] = Form.useForm();
     const params = useParams<{ id: string, status: string }>();
     const [visible, setVisible] = useState<boolean>(false);
-    const [tableDataSource,setTableDataSource] = useState<any>([]);
     const [packageDataSource,setPackageDataSource] = useState<any>([]);
     const [userDataSource,setUserDataSource] = useState<any>([]);
-    const [paragraphList,setParagraphList] = useState<any>([]);
     const [warehouse, setWareHouse] = useState<any>([]);
     const [allWarehouse, setAllWarehouse] = useState<any>([]);
     const [warehouseRegion, setWarehouseRegion] = useState<any>([]);
@@ -60,39 +57,94 @@ export default function ProcessDetail(): React.ReactNode {
         setBalesWarehouse(newArr);
     }
     const tableColumns = [
-        { title: '塔型', dataIndex: 'productCategoryName', key: 'productCategoryName', },
-        { title: '杆塔号', dataIndex: 'productNumber', key: 'productNumber' },
-        { title: '呼高', dataIndex: 'productHeight', key: 'productHeight' },
-        { title: '入库重量（kg）', dataIndex: 'warehouseWeight', key: 'warehouseWeight'},
-        { title: '总基数', dataIndex: 'number', key: 'number'},
-        { title: '入库基数', dataIndex: 'warehouseNumber', key: 'warehouseNumber'},
+        { 
+            title: '塔型', 
+            dataIndex: 'productCategoryName', 
+            key: 'productCategoryName' 
+        },
+        { 
+            title: '杆塔号', 
+            dataIndex: 'productNumber', 
+            key: 'productNumber' 
+        },
+        { 
+            title: '呼高', 
+            dataIndex: 'productHeight', 
+            key: 'productHeight' 
+        },
+        { 
+            title: '入库重量（kg）', 
+            dataIndex: 'warehouseWeight', 
+            key: 'warehouseWeight'
+        },
+        { 
+            title: '总基数', 
+            dataIndex: 'number', 
+            key: 'number'
+        },
+        { 
+            title: '入库基数', 
+            dataIndex: 'warehouseNumber', 
+            key: 'warehouseNumber'
+        },
     ]
     const packageColumns = [
-        { title: '捆号/包号', dataIndex: 'balesCode', key: 'balesCode', },
-        { title: '包类型', dataIndex: 'packageType', key: 'packageType' },
-        { title: '重量（kg）', dataIndex: 'weightCount', key: 'weightCount' },
-        { title: '包长度', dataIndex: 'balesLength', key: 'balesLength', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-            <Form.Item name={['dataV',index, "balesLength"]} initialValue={ _a } >
-                <InputNumber style={{width:'100%'}} precision={0} min={0}/>
-            </Form.Item>
-        ) },
-        { title: '包高度', dataIndex: 'balesWidth', key: 'balesWidth', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-            <Form.Item name={['dataV',index, "balesWidth"]} initialValue={ _a } >
-                <InputNumber style={{width:'100%'}} precision={0} min={0}/>
-            </Form.Item>
-        ) },
-        { title: '入库数', dataIndex: 'num', key: 'num'},
-        { title: '库位', dataIndex: 'warehousePosition', key: 'warehousePosition', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-            <Form.Item name={['dataV',index, "warehousePosition"]} initialValue={ _a } rules={[{required:true, message:'请选择'}]}>
-                <Select>
-                    {balesWarehouse && balesWarehouse.map(({ id, position }:any, index:any) => {
-                        return <Select.Option key={index} value={position}>
-                            {position}
-                        </Select.Option>
-                    })}
-                </Select>
-            </Form.Item>
-        ) }
+        { 
+            title: '捆号/包号', 
+            dataIndex: 'balesCode', 
+            key: 'balesCode'
+        },
+        { 
+            title: '包类型', 
+            dataIndex: 'packageType', 
+            key: 'packageType' 
+        },
+        { 
+            title: '重量（kg）', 
+            dataIndex: 'weightCount', 
+            key: 'weightCount' 
+        },
+        { 
+            title: '包长度', 
+            dataIndex: 'balesLength', 
+            key: 'balesLength', 
+            render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                <Form.Item name={['dataV',index, "balesLength"]} initialValue={ _a } >
+                    <InputNumber style={{width:'100%'}} precision={0} min={0}/>
+                </Form.Item>
+            ) 
+        },
+        { 
+            title: '包高度',
+            dataIndex: 'balesWidth', 
+            key: 'balesWidth', 
+            render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                <Form.Item name={['dataV',index, "balesWidth"]} initialValue={ _a } >
+                    <InputNumber style={{width:'100%'}} precision={0} min={0}/>
+                </Form.Item>
+            ) 
+        },
+        { 
+            title: '入库数', 
+            dataIndex: 'num', 
+            key: 'num'
+        },
+        { 
+            title: '库位', 
+            dataIndex: 'warehousePosition', 
+            key: 'warehousePosition', 
+            render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                <Form.Item name={['dataV',index, "warehousePosition"]} initialValue={ _a } rules={[{required:true, message:'请选择'}]}>
+                    <Select>
+                        {balesWarehouse && balesWarehouse.map(({ id, position }:any, index:any) => {
+                            return <Select.Option key={index} value={position}>
+                                {position}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+            ) 
+        }
     ]
     const formItemLayout = {
         labelCol: { span: 6 },
