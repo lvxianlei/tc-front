@@ -379,18 +379,27 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <DetailTitle title="保管员" operation={[<UserSelectedModal rowSelectionType="checkbox" onSelect={ (selectedRows: IUser[] | any) => {
-                        selectedRows = selectedRows.map((item: DataType) => {
-                            return {
-                                keeperUserId: item.id,
-                                keeperName: item.name
-                            }
-                        })
-                        const rows = [...userList, ...selectedRows];
-                        const res = new Map();
-                        let newRows = rows.filter((item: DataType) => !res.has(item.keeperUserId) && res.set(item.keeperUserId, 1));
-                        setUserList(newRows);
-                    } } buttonTitle="选择保管员"/>]}/>
+                    <DetailTitle 
+                        title="保管员" 
+                        operation={[
+                            <UserSelectedModal 
+                                rowSelectionType="checkbox" 
+                                selectKey={userList.map(res => { return res.keeperUserId })}
+                                onSelect={ (selectedRows: IUser[] | any) => {
+                                    selectedRows = selectedRows.map((item: DataType) => {
+                                        return {
+                                            keeperUserId: item.id,
+                                            keeperName: item.name
+                                        }
+                                    })
+                                    const rows = [...userList, ...selectedRows];
+                                    const res = new Map();
+                                    let newRows = rows.filter((item: DataType) => !res.has(item.keeperUserId) && res.set(item.keeperUserId, 1));
+                                    setUserList(newRows);
+                                } } 
+                                buttonTitle="选择保管员"/>
+                        ]}
+                    />
                     <CommonTable columns={userColumns} dataSource={userList} showHeader={false} pagination={false} />
                     <p style={{ fontSize: '16px', marginTop: '10px' }}>库区库位信息</p>
                     <Button type="primary" onClick={ addRow }>添加行</Button>

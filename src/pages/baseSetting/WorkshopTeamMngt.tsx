@@ -225,20 +225,24 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                         </Row>
                     </Form>
                     <p><span style={{ color: 'red', paddingRight: '5px' }}>*</span>班组成员</p>
-                    <WorkshopUserModal rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={(selectedRows: object[] | any) => {
-                        selectedRows = selectedRows.map((item: DataType) => {
-                            return {
-                                userId: item.id,
-                                name: item.name,
-                                position: item.stationName || '1',
-                                teamId: detail.id
-                            }
-                        })
-                        const res = new Map();
-                        const rows = [...userList, ...selectedRows]
-                        let newRows = rows.filter((item: DataType) => !res.has(item.userId) && res.set(item.userId, 1));
-                        setUserList(newRows);
-                    }} />
+                    <WorkshopUserModal
+                        rowSelectionType="checkbox"
+                        buttonTitle="添加员工"
+                        selectKey={userList.map(res => { return res.userId })}
+                        onSelect={(selectedRows: object[] | any) => {
+                            selectedRows = selectedRows.map((item: DataType) => {
+                                return {
+                                    userId: item.id,
+                                    name: item.name,
+                                    position: item.stationName || '1',
+                                    teamId: detail.id
+                                }
+                            })
+                            const res = new Map();
+                            const rows = [...userList, ...selectedRows]
+                            let newRows = rows.filter((item: DataType) => !res.has(item.userId) && res.set(item.userId, 1));
+                            setUserList(newRows);
+                        }} />
                     <CommonTable columns={tableColumns} dataSource={userList} pagination={false} />
                 </Spin>
             </Modal>

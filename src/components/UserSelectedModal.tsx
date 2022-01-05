@@ -20,7 +20,6 @@ export interface IWorkshopUserModalProps extends IAbstractSelectableModalProps {
     readonly buttonType?: ButtonType;
     readonly buttonTitle?: string;
     readonly rowSelectionType?: RowSelectionType | undefined;
-    readonly selectKeys?: string[];
 }
 
 export interface IResponseDataMore extends IResponseData {
@@ -217,7 +216,8 @@ export default class WorkshopUserModal extends AbstractFilteredSelecableModal<IW
                 <Button type={this.props.buttonType || 'primary'} style={this.props.buttonType === 'link' ? { paddingBottom: '0', paddingTop: '0', height: 'auto', lineHeight: 1 } : {}} onClick={() => {
                     this.getTable({})
                     this.setState({
-                        isModalVisible: true
+                        isModalVisible: true,
+                        selectedRowKeys: this.props.selectKey || []
                     })
                 }}>{this.props.buttonTitle || '添加人员'}</Button>
                 <Modal
