@@ -3,8 +3,8 @@
  * @copyright © 2021
  * @description 选择班组
  */
-import { Button, FormItemProps, Input, Modal, Select, Space, TableColumnType } from 'antd';
-import { TablePaginationConfig } from 'antd/lib/table';
+import { Button, FormItemProps, Input, Modal, Space, TableColumnType } from 'antd';
+import { TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
@@ -44,6 +44,13 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
             },
             confirmTitle: "选择班组"
         };
+    }
+
+    public getTableProps(): TableProps<object> {
+        return {
+            ...super.getTableProps(),
+            scroll: { x: 400 }
+        }
     }
 
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
@@ -100,11 +107,13 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
         return [{
             key: 'name',
             title: '班组名称',
-            dataIndex: 'name'
+            dataIndex: 'name',
+            width: 200
         }, {
             key: 'productUnitName',
             title: '所属生产单元',
-            dataIndex: 'productUnitName'
+            dataIndex: 'productUnitName',
+            width: 200
         }];
     }
 
