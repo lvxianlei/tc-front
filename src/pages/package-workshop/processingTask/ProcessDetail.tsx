@@ -17,10 +17,6 @@ export default function ProcessDetail(): React.ReactNode {
         resole(data)
     }), {})
     const detailData: any = data;
-    const delRow = (index: number) => {
-        userDataSource.splice(index, 1);
-        setUserDataSource([...userDataSource]);
-    }
     const tableColumns = [
         { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
         { title: '杆塔号', dataIndex: 'productNumber', key: 'productNumber', },

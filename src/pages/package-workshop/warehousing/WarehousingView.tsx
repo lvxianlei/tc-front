@@ -40,7 +40,11 @@ export default function WarehousingView(): React.ReactNode {
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
                 <DetailTitle title="基本信息" />
-                <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
+                <BaseInfo 
+                    columns={baseInfoData} 
+                    dataSource={detailData || {}} 
+                    col={2}
+                />
                 <DetailTitle title="杆塔信息" />
                 {/* <Table 
                     columns={tableColumns}

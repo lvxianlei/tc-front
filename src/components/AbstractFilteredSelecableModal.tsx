@@ -1,5 +1,5 @@
 import { Button, Form, FormInstance, FormItemProps } from 'antd';
-import { TablePaginationConfig } from 'antd/lib/table';
+import { TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
@@ -56,10 +56,10 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
      */
     abstract getFilterFormItemProps(): FormItemProps[];
 
-    public getTableProps() {
+    public getTableProps(): TableProps<object>  {
         return {
             ...super.getTableProps(),
-            pagination: this.state.tablePagination,
+            pagination: this.state?.tablePagination,
             onChange:  this.onTableChange 
         }
     }
