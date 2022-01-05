@@ -78,10 +78,12 @@ export default function Overview(): JSX.Element {
             okText: "提交/完成",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
+                    console.log(materialLists, "materialLists")
                     await finishPriceRun({
                         comparisonPriceDetailDtos: materialLists.map((item: any) => ({
                             ...item,
-                            winBidSupplierId: item.winBidSupplierId === -1 ? null : item.winBidSupplierId
+                            winBidSupplierId: item.winBidSupplierId === -1 ? null : item.winBidSupplierId,
+                            winBidSupplierName: (item.supplierOptionsVos && item.supplierOptionsVos.length > 0 && item.winBidSupplierId) ? item.supplierOptionsVos[0].supplierName : ""
                         }))
                     })
                     resove(true)
