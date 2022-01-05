@@ -6,6 +6,7 @@ import { baseInfoData } from './setOut.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 import Modal from 'antd/lib/modal/Modal';
+import styles from './setOut.module.less';
 
 const componentColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -51,7 +52,7 @@ export default function TowerDetail(): React.ReactNode {
             title: '操作', 
             dataIndex: 'operation', 
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Button type="link" onClick={async ()=>{
                         const data:any = await RequestUtil.get(`/tower-science/productStructure/getSegmentDetailList`,{
                             segmentId: record.id,

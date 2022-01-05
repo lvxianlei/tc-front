@@ -7,6 +7,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from '../setOut/downloadTemplate';
+import styles from './sample.module.less';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string, status: string }>()
@@ -79,7 +80,7 @@ export default function SampleDraw(): React.ReactNode {
             width: 50,
             // fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {params.status==='2'?<Popconfirm
                         title="要删除该条数据吗？"
                         okText="确认"

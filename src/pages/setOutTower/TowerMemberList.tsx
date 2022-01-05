@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
+import styles from './setOut.module.less';
 
 interface IResponseData {
     readonly id: number;
@@ -46,7 +47,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             title: '操作', 
             dataIndex: 'operation', 
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Button type="link" onClick={async ()=>{
                         const url:any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
                         setUrl(url?.filePath);

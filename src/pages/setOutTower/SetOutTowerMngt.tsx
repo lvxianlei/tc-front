@@ -5,6 +5,7 @@ import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 import { patternTypeOptions } from '../../configuration/DictionaryOptions';
+import styles from './setOut.module.less';
 
 export default function SetOutTowerMngt(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
@@ -96,7 +97,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
             width: 230,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerDetail/${record.id}`)}}>塔型信息</Button>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerMember/${record.id}/${record.steelAngleCount+record.steelPlateCount}`)}}>塔型构件</Button>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/assemblyWeld/${record.id}`)}}>组焊清单</Button>
