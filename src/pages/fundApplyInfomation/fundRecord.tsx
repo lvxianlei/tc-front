@@ -178,7 +178,7 @@ import OtherDetail from '../questionMngt/OtherDetail';
                         width: 100,
                         render: (_: any, record: any) => {
                         if(!record.Sunmry){
-                            return <Button type="link" 
+                            return <Button className="btn-operation-link" type="link" 
                             onClick={() => {viewShow(record)}}>详情</Button>
                         }
                         }
