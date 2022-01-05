@@ -107,7 +107,7 @@ export default function WeighingNew(): React.ReactNode {
                 message: '请输入抱杆号'
             }],
             initialValue: detailData.derrickNo,
-            children: <Input />
+            children: <Input maxLength={20} />
         },
         {
             dataIndex: "weighingTypeId",
