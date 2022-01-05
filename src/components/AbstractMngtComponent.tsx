@@ -188,9 +188,13 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
         return (
             <Space direction="vertical" size="middle" className={layoutStyles.width100}>
                 {
+                    this.getFilterFormItemProps(item).length
+                    ?
                     this.getFilterFormItemProps(item).length && <Card className={styles.filterCard} bordered={false}>
                         {this.renderFilterContent(item)}
                     </Card>
+                    :
+                    null
                 }
                 <Card bordered={false} style={{ padding: '0px' }}>
                     {this.renderExtraOperationContent(item)}

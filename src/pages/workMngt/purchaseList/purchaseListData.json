@@ -48,22 +48,7 @@
         },
         {
             "title": "塔型采购状态",
-            "dataIndex": "purchaseTaskStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "待完成",
-                    "value": 1
-                },
-                {
-                    "label": "待接收",
-                    "value": 2
-                },
-                {
-                    "label": "已完成",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "batcheTaskStatusName"
         },
         {
             "title": "最新状态变更时间",
