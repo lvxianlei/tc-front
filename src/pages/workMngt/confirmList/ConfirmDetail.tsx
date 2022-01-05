@@ -260,7 +260,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 塔型钢印号', 
           dataIndex: 'steelProductShape', 
           type:'text',
-          width: 80,
+          width: 100,
           editable: true,
           key: 'steelProductShape' 
       },
@@ -291,7 +291,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 电压等级（kv）', 
           dataIndex: 'voltageLevel',
           type:'select', 
-          width: 100,
+          width: 120,
           editable: true,
           key: 'voltageLevel',
           enums:voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
@@ -314,7 +314,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 呼高（m）', 
           dataIndex: 'basicHeight', 
           type:'number',
-          width: 70,
+          width: 90,
           editable: true,
           key: 'basicHeight',
           render:(value:any)=>{
@@ -348,7 +348,7 @@ export default function ConfirmDetail(): React.ReactNode {
         title: '* 本体重量（kg）', 
         dataIndex: 'bodyWeight', 
         type:'number',
-        width: 100,
+        width: 120,
         editable: true,
         key: 'bodyWeight',
         render:(value:any)=>{
@@ -457,7 +457,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '其他重量（kg）', 
           dataIndex: 'otherWeight', 
           type:'number',
-          width: 100,
+          width: 120,
           editable: true,
           key: 'otherWeight',
           render:(value:any)=>{
@@ -486,7 +486,7 @@ export default function ConfirmDetail(): React.ReactNode {
       {
           key: 'operation',
           title: '操作',
-          width: 70,
+          width: 100,
           dataIndex: 'operation',
           render: (_: any, record: Item) => {
           const editable = isEditing(record);
@@ -708,10 +708,10 @@ export default function ConfirmDetail(): React.ReactNode {
                    
                 </Space>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>} 
             </>]}>
-                <div style={{paddingBottom:'16px'}}>
+                <Space style={{paddingBottom:'16px'}}>
                   <Button type='primary' onClick={()=>{downloadTemplate(`/tower-science/drawProductDetail/export?drawTaskId=${params.id}`, '杆塔信息')}}>导出</Button>
                   <Button type="primary" onClick={ () => downloadTemplate('/tower-science/drawProductDetail/importTemplate', '确认明细模板') } ghost>模板下载</Button>
-                </div>
+                </Space>
                 <DetailTitle title="确认明细"/>
                 <div style={{display:'flex',justifyContent:'space-between',marginBottom:'10px'}}>
                     <Space>
