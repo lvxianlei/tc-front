@@ -62,7 +62,7 @@ export default function Invoicing() {
                     dataIndex: "opration",
                     fixed: "right",
                     width: 100,
-                    render: (_: any, record: any) => <Button disabled={![1, 3].includes(record.purchaseTaskStatus)} type="link" onClick={() => {
+                    render: (_: any, record: any) => <Button className="btn-operation-link" disabled={![1, 3].includes(record.purchaseTaskStatus)} type="link" onClick={() => {
                         setVisible(true)
                         setChooseId(record.id)
                     }}>配料方案</Button>

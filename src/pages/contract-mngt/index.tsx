@@ -124,20 +124,20 @@ export default function ContractMngt(): JSX.Element {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        render: (_: any, records: any) => <Space direction="horizontal" size="small">
-                            <Button type="link" disabled={records.isReceiptRef === 1}
+                        render: (_: any, records: any) => <>
+                            <Button type="link" className="btn-operation-link"disabled={records.isReceiptRef === 1}
                                 onClick={() => {
                                     setOprationType("edit")
                                     setDetailId(records.id)
                                     setEditVisible(true)
                                 }}>编辑</Button>
-                            <Button type="link" onClick={() => {
+                            <Button type="link" className="btn-operation-link"onClick={() => {
                                 setDetailId(records.id)
                                 setOverviewVisible(true)
                             }}>详情</Button>
-                            <Button type="link" disabled={records.isReceiptRef === 1}
+                            <Button type="link" className="btn-operation-link"disabled={records.isReceiptRef === 1}
                                 onClick={() => handleDelete(records.id)}>删除</Button>
-                        </Space>
+                        </>
                     }
                 ]}
                 extraOperation={<>

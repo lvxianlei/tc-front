@@ -150,10 +150,10 @@ export default function RawMaterial() {
                         dataIndex: "opration",
                         fixed: "right",
                         render: (_: any, records: any) => <>
-                            <Button type="link" style={{ marginRight: 12 }} onClick={() => { detail(records.id) }}>任务详情</Button>
-                            <Button type="link" style={{ marginRight: 12 }} disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
-                            <Button type="link" style={{ marginRight: 12 }} disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/materialList`)}>用料清单</Button>
-                            <Button type="link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button>
+                            <Button type="link" className="btn-operation-link" onClick={() => { detail(records.id) }}>任务详情</Button>
+                            <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
+                            <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/materialList`)}>用料清单</Button>
+                            <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button>
                         </>
                     }
                 ]}

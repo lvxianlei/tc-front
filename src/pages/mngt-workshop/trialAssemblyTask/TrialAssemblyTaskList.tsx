@@ -17,7 +17,9 @@ export default function TrialAssemblyTaskList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{ index + 1 }</span>
+            )
         },
         {
             key: 'name',
@@ -71,7 +73,14 @@ export default function TrialAssemblyTaskList(): React.ReactNode {
             dataIndex: 'steelAngleCount',
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={()=>{ history.push(`/workshopManagement/trialAssemblyTask/componentDetail/${ record.id }` )}}>详情</Button>
+                    <Button 
+                        type='link' 
+                        onClick={()=>{ 
+                            history.push(`/workshopManagement/trialAssemblyTask/componentDetail/${ record.id }` )
+                        }}
+                    >
+                        详情
+                    </Button>
                 </Space>
             )
         },
@@ -113,7 +122,14 @@ export default function TrialAssemblyTaskList(): React.ReactNode {
             width: 80,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={()=>{setVisible(true)}}>指派</Button>
+                    <Button 
+                        type='link' 
+                        onClick={()=>{
+                            setVisible(true)
+                        }}
+                    >
+                        指派
+                    </Button>
                 </Space>
             )
         }
@@ -191,17 +207,28 @@ export default function TrialAssemblyTaskList(): React.ReactNode {
             okText="确认指派" 
         >
             <WorkshopUserModal onSelect={onUserSelect} selectKey={tableUserDataSource} />
-            <Table columns={[
-                { title: '姓名', dataIndex: 'name', key: 'name' },
-                {
-                    title: '操作', dataIndex: 'operation', key: 'operation', render: (_: any, record: any, index: number) => (<>
-                        <Button type="link" onClick={() => {
-                            tableUserDataSource.splice(index, 1);
-                            setTableUserDataSource(tableUserDataSource);
-                        }}>删除</Button>
-                    </>)
-                }
-            ]} dataSource={tableUserDataSource} pagination={false} />
+            <Table 
+                columns={[
+                    {   
+                        title: '姓名', 
+                        dataIndex: 'name', 
+                        key: 'name' 
+                    },
+                    {
+                        title: '操作', 
+                        dataIndex: 'operation', 
+                        key: 'operation', 
+                        render: (_: any, record: any, index: number) => (
+                            <Button type="link" onClick={() => {
+                                tableUserDataSource.splice(index, 1);
+                                setTableUserDataSource(tableUserDataSource);
+                            }}>删除</Button>
+                        )
+                    }
+                ]} 
+                dataSource={tableUserDataSource} 
+                pagination={false} 
+            />
         </Modal>
     </>
 }

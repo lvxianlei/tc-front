@@ -153,15 +153,15 @@ export default function ApplicationColunm(): React.ReactNode {
                         render: (_: any, record: any) => {
                             return (
                                 <>
-                                    <Button type="link" style={{marginRight: 12}} onClick={() => {
+                                    <Button type="link" className="btn-operation-link" onClick={() => {
                                         getUser(record.id)
                                         setId(record.id);
                                     }}>查看</Button>
-                                    {acceptStatus === 1 && <Button type="link" style={{marginRight: 12}} onClick={() => {
+                                    {acceptStatus === 1 && <Button type="link" className="btn-operation-link" onClick={() => {
                                         setVisible(true);
                                         setId(record.id);
                                     }}>填写保函信息</Button>}
-                                    {acceptStatus === 2 && <Button type="link" onClick={() => {
+                                    {acceptStatus === 2 && <Button className="btn-operation-link" type="link" onClick={() => {
                                         setVisibleRecovery(true);
                                         setId(record.id);
                                         setRequiredReturnTime(record.requiredReturnTime)
