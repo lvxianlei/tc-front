@@ -137,10 +137,10 @@ export default function FullList(): React.ReactNode {
             width: 230,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/full/view/${record.id}`)}} type='link' >查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/full/sure/${record.id}`)}} type='link' disabled={record.status===2||record.status===3||record.positiveStatus===2}>转正</Button>
-                </Space>
+                <>
+                    <Button className='btn-operation-link' onClick={()=>{history.push(`/employeeRelation/full/view/${record.id}`)}} type='link' >查看</Button>
+                    <Button className='btn-operation-link' onClick={()=>{history.push(`/employeeRelation/full/sure/${record.id}`)}} type='link' disabled={record.status===2||record.status===3||record.positiveStatus===2}>转正</Button>
+                </>
             )
         }
     ];

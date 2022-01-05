@@ -38,8 +38,8 @@ export default function ArchivesList(): React.ReactNode {
                     dataIndex: 'operation',
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>
-                            <Button type="link" style={{marginRight: 12}} size="small"><Link to={`/employeeRelation/archives/detail/${record.id}`}>查看</Link></Button>
-                            <Button disabled={record?.employeeStatus === 2} type="link" size="small"><Link to={`/employeeRelation/archives/edit/${record.id}`}>编辑</Link></Button>
+                            <Button type="link" className='btn-operation-link' size="small"><Link to={`/employeeRelation/archives/detail/${record.id}`}>查看</Link></Button>
+                            <Button disabled={record?.employeeStatus === 2} className='btn-operation-link' type="link" size="small"><Link to={`/employeeRelation/archives/edit/${record.id}`}>编辑</Link></Button>
                         </>
                     )
                 }
