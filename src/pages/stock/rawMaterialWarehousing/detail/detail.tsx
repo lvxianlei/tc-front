@@ -177,8 +177,8 @@ export default function RawMaterialStock(): React.ReactNode {
             receiveStockId: params.id,
             receiveStatus: status,
         });
-        setListdata(data.receiveStockDetailPage.records)
-        setReceiveWeight(data.receiveStockMessage.receiveWeight)
+        setListdata(data.records)
+        setReceiveWeight(data.receiveWeight)
         setReceivePrice(data.receiveStockMessage.receivePrice)
         setWaitWeight(data.receiveStockMessage.waitWeight)
         setwaitPrice(data.receiveStockMessage.waitPrice)
@@ -310,6 +310,7 @@ export default function RawMaterialStock(): React.ReactNode {
     useEffect(() => {
         loadData()
     }, [current, pageSize, status, dateString])
+    
     return (
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
@@ -390,7 +391,7 @@ export default function RawMaterialStock(): React.ReactNode {
             <div className="func_public_Stock">
                 <Button
                     type="primary"
-                    className='func_btn'onClick={() => {
+                    className='func_btn' onClick={() => {
                         setIsExportStoreList(true)
                     }}
                 >导出</Button>
@@ -640,13 +641,13 @@ export default function RawMaterialStock(): React.ReactNode {
                 size={pageSize || 10}
                 total={total || 0}
                 url={`/tower-storage/receiveStock/detail`}
-                serchObj={{ 
+                serchObj={{
                     fuzzyQuery: keyword,
                     startStatusUpdateTime: dateString[0] ? dateString[0] + " 00:00:00" : '',
                     endStatusUpdateTime: dateString[1] ? dateString[1] + " 23:59:59" : '',
                     receiveStockId: params.id,
                     receiveStatus: status,
-                 }}
+                }}
                 closeExportList={() => { setIsExportStoreList(false) }}
             /> : null}
         </div>
