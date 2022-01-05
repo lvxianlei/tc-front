@@ -22,29 +22,83 @@ export default function ProcessDetail(): React.ReactNode {
         setUserDataSource([...userDataSource]);
     }
     const tableColumns = [
-        { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-        { title: '杆塔号', dataIndex: 'productNumber', key: 'productNumber', },
-        { title: '呼高', dataIndex: 'productHeight', key: 'productHeight' },
-        { title: '入库重量（kg）', dataIndex: 'warehouseWeight', key: 'warehouseWeight' },
-        { title: '总基数', dataIndex: 'number', key: 'number' },
-        { title: '包装清单', dataIndex: 'operation', key: 'operation',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            <Button type="link" onClick={()=>{
-                history.push(`/packagingWorkshop/processingTask/detail/${params.id}/${params.status}/detail/${record.id}/${record.productNumber}`)
-            }}>明细</Button>
-        ) }
+        { 
+            title: '序号', 
+            dataIndex: 'index', 
+            key: 'index', 
+            render: (_a: any, _b: any, index: number): React.ReactNode => (
+                <span>{index + 1}</span>
+            ) 
+        },
+        { 
+            title: '杆塔号', 
+            dataIndex: 'productNumber', 
+            key: 'productNumber', 
+        },
+        { 
+            title: '呼高', 
+            dataIndex: 'productHeight', 
+            key: 'productHeight' 
+        },
+        { 
+            title: '入库重量（kg）', 
+            dataIndex: 'warehouseWeight', 
+            key: 'warehouseWeight' 
+        },
+        { 
+            title: '总基数', 
+            dataIndex: 'number', 
+            key: 'number' 
+        },
+        { 
+            title: '包装清单', 
+            dataIndex: 'operation', 
+            key: 'operation',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Button type="link" onClick={()=>{
+                    history.push(`/packagingWorkshop/processingTask/detail/${params.id}/${params.status}/detail/${record.id}/${record.productNumber}`)
+                }}>明细</Button>
+            ) 
+        }
     ]
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={params.status==='3'?[
-                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    history.push(`/packagingWorkshop/processingTask/detail/${params.id}/${params.status}/wareHouse`)
-                }}>采集入库</Button>,
-                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+                <Button 
+                    key="edit" 
+                    style={{ marginRight: '10px' }} 
+                    type="primary" 
+                    onClick={
+                        async () => {
+                            history.push(`/packagingWorkshop/processingTask/detail/${params.id}/${params.status}/wareHouse`)
+                        }
+                    }
+                >
+                    采集入库
+                </Button>,
+                <Button 
+                    key="goback" 
+                    onClick={
+                        () => history.goBack()
+                    }
+                >
+                    返回
+                </Button>
             ]:[
-                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+                <Button 
+                    key="goback" 
+                    onClick={
+                        () => history.goBack()
+                    }
+                >
+                    返回
+                </Button>
             ]}>
                 <DetailTitle title="包装任务基本信息" />
-                <BaseInfo columns={baseInfoData} dataSource={detailData || {}}/>
+                <BaseInfo 
+                    columns={baseInfoData} 
+                    dataSource={detailData || {}}
+                />
                 <DetailTitle title="任务明细" />
                 <CommonTable 
                     columns={tableColumns}

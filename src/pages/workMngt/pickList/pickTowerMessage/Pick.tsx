@@ -381,7 +381,7 @@ export default function Lofting(): React.ReactNode {
                     fixed: 'right' as FixedType,
                     width: 100,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                        <div className={ styles.operationBtn }>
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ record.id }`).then(()=>{
@@ -394,7 +394,7 @@ export default function Lofting(): React.ReactNode {
                             >
                                 <Button type="link" disabled={editorLock==='锁定'}>删除</Button>
                             </Popconfirm>
-                        </Space>
+                        </div>
                     )
                 }] }
                 requestData={{

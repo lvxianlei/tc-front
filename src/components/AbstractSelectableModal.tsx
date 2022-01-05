@@ -136,7 +136,8 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
                 type: "radio",
                 selectedRowKeys: this.state.selectedRowKeys,
                 onChange: this.onSelectChange
-            }
+            },
+            scroll: { x: 1200 }
         }
     }
 
@@ -147,7 +148,6 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
         return (
             <Table
                 {...this.getTableProps()}
-                scroll={{ x: 1200 }}
                 className={styles.modalTable}
             />
         );

@@ -139,10 +139,10 @@ export default function PickTower(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 230,
+            width: 100,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small"  className={styles.operationBtn}>
                     <Button type='link' onClick={async () => {
                         setVisible(true);
                             let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}`)
