@@ -139,10 +139,10 @@ export default function QuitProceduresList(): React.ReactNode {
             width: 230,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/view/${record.id}`)}} type='link'>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/operation/${record.id}`)}} type='link' disabled={record.isProcessingCompleted}>办理离职</Button>
-                </Space>
+                <>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/view/${record.id}`)}} type='link' className='btn-operation-link'>查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/operation/${record.id}`)}} type='link' className='btn-operation-link' disabled={record.isProcessingCompleted}>办理离职</Button>
+                </>
             )
         }
     ];
