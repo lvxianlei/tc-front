@@ -1,5 +1,5 @@
 /**
- * @author lxy
+ * @author zyc
  * @copyright © 2021
  */
 import React from 'react';
@@ -17,10 +17,10 @@ export interface IWorkshopUserModalState extends IAbstractSelectableModalState {
     readonly tableDataSource: any[];
 }
 export interface IWorkshopUserModalProps extends IAbstractSelectableModalProps {
-    readonly saleOrderId?: string | number;
     readonly buttonType?: ButtonType;
     readonly buttonTitle?: string;
     readonly rowSelectionType?: RowSelectionType | undefined;
+    readonly selectKeys?: string[];
 }
 
 export interface IResponseDataMore extends IResponseData {
@@ -97,7 +97,12 @@ export default class WorkshopUserModal extends AbstractFilteredSelecableModal<IW
     public handleCancel = (): void => {
         this.setState({
             isModalVisible: false,
-            selectedRowKeys: []
+            selectedRowKeys: [],
+            tablePagination: {
+                ...this.state.tablePagination,
+                current: 1,
+                pageSize: 10
+            }
         })
         this.getForm()?.resetFields();
     };
@@ -134,7 +139,7 @@ export default class WorkshopUserModal extends AbstractFilteredSelecableModal<IW
     //查询字段
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
-            name: 'fuzzyMsg',
+            name: 'name',
             children: <Input placeholder="请输入姓名进行查询" />
         },]
     }
@@ -142,10 +147,10 @@ export default class WorkshopUserModal extends AbstractFilteredSelecableModal<IW
     //查询
     public onFilterSubmit = async (values: Record<string, any>) => {
         this.getTable(values, {
-            // current: 1,
-            // pageSize: 10,
-            // total: 0,
-            // showSizeChanger: false
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            showSizeChanger: false
         });
     }
     //dataSource
@@ -227,7 +232,12 @@ export default class WorkshopUserModal extends AbstractFilteredSelecableModal<IW
                             })
                             if (this.state.tableDataSource.length > 0) {
                                 this.setState({
-                                    selectedRowKeys: []
+                                    selectedRowKeys: [],
+                                    tablePagination: {
+                                        ...this.state.tablePagination,
+                                        current: 1,
+                                        pageSize: 10
+                                    }
                                 })
                                 this.getForm()?.resetFields();
                                 this.props.onSelect(this.state.selectedRows)
