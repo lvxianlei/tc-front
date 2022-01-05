@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import DetailTitle from "./DetailTitle"
 import CommonTable from "./CommonTable"
 import RequestUtil from "../../utils/RequestUtil"
@@ -37,7 +37,6 @@ interface OperationRecordProps {
 interface OperationRecordStates {
     current: number
     operateTypeEnum: "OPERATE_RECORD" | "APPROVAL_RECORD"
-    serviceId: string
     serviceName: string
     size: number
 }
@@ -60,13 +59,13 @@ export default function OperationRecord({
     const [params, setParams] = useState<OperationRecordStates>({
         current: 1,
         operateTypeEnum: operateTypeEnum === "OPERATION" ? "OPERATE_RECORD" : "APPROVAL_RECORD",
-        serviceId,
         serviceName,
         size: 10
     })
-    const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
+
+    const { loading, data } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: FetchDataSource = await RequestUtil.get(`/tower-system/log`, params)
+            const result: FetchDataSource = await RequestUtil.get(`/tower-system/log`, { ...params, serviceId })
             resole(result?.records)
         } catch (error) {
             reject(error)
@@ -74,7 +73,11 @@ export default function OperationRecord({
     }), { refreshDeps: [serviceId] })
 
     const handleCHange = async (page: number, pageSize: number) => {
-        console.log(page, pageSize)
+        setParams({
+            ...params,
+            size: pageSize,
+            current: page
+        })
     }
 
     return <>
