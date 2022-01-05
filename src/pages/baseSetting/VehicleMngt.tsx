@@ -174,7 +174,8 @@ export default function VehicleMngt(): React.ReactNode {
                     {
                         name: 'vehicleType',
                         label: '车辆类型',
-                        children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: '150px' }}>
+                        children: <Select defaultValue={""} placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: '150px' }}>
+                            <Select.Option value="" key="4">全部</Select.Option>
                             { carOptions && carOptions.map(({ id, name }, index) => {
                                 return <Select.Option key={index} value={id}>
                                     {name}
@@ -185,7 +186,8 @@ export default function VehicleMngt(): React.ReactNode {
                     {
                         name: 'status',
                         label: '状态',
-                        children: <Select placeholder="请选择" style={{ width: '150px' }}>
+                        children: <Select placeholder="请选择" style={{ width: '150px' }} defaultValue={""}>
+                            <Select.Option value="" key="4">全部</Select.Option>
                             <Select.Option value={ 1 } key="1">正常</Select.Option>
                             <Select.Option value={ 2 } key="2">停用</Select.Option>
                             <Select.Option value={ 3 } key="3">维修中</Select.Option>
@@ -240,7 +242,7 @@ export default function VehicleMngt(): React.ReactNode {
                     </Row>
                     <Row>
                         <Col span={ 8 }>
-                            <Form.Item name="status" label="车辆状态" initialValue={ detail?.status } rules={[{
+                            <Form.Item name="status" label="车辆状态" initialValue={ detail?.status || 1 } rules={[{
                                     "required": true,
                                     "message": "请选择车辆状态"
                                 }]}>
