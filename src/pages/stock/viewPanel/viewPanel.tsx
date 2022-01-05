@@ -140,7 +140,6 @@
                         label: '材质',
                         children: (
                             <Select placeholder="请选择回款类型" style={{ width: "140px" }}>
-                                <Select.Option value={''}>全部</Select.Option>
                                 {
                                     selects.materialNames.map((item: string) => {
                                         return (
@@ -156,7 +155,6 @@
                         label: '标准',
                         children: (
                             <Select placeholder="请选择标准" style={{ width: "140px" }}>
-                                <Select.Option value={''}>全部</Select.Option>
                                 {
                                     materialStandardTypeOptions?.map((item: any, index: number) => {
                                         return <Select.Option value={item.name} key={index}>{item.name}</Select.Option>
@@ -170,7 +168,6 @@
                         label: '库存状态',
                         children: (
                             <Select placeholder="请选择库存状态" style={{ width: "140px" }}>
-                                <Select.Option value={''}>全部</Select.Option>
                                 <Select.Option value={'0'}>正常</Select.Option>
                                 <Select.Option value={'1'}>提醒</Select.Option>
                                 <Select.Option value={'2'}>告警</Select.Option>
