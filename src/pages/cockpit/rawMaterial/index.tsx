@@ -116,14 +116,14 @@ export default function ViewRawMaterial(): React.ReactNode {
                 {
                     name: 'materialCategoryId',
                     label: '原材料类型',
-                    children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
+                    children: <Select style={{ width: "150px" }} placeholder="请选择原材料类型">
                         {materialCategory?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {
                     name: 'materialStandard',
                     label: '原材料标准',
-                    children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
+                    children: <Select style={{ width: "150px" }} placeholder="请选择原材料标准">
                         {invoiceTypeEnum?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                     </Select>
                 },
