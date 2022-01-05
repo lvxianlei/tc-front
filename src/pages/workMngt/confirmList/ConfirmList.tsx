@@ -9,7 +9,6 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import styles from './confirm.module.less';
 import AuthUtil from '../../../utils/AuthUtil';
-import conmmentStyles from '../../common/CommonTable.module.less'
 
 export default function ConfirmList(): React.ReactNode {
     const [department, setDepartment] = useState<any | undefined>([]);
@@ -69,10 +68,10 @@ export default function ConfirmList(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 150,
+            width: 100,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={conmmentStyles.opration}>
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Button type='link' onClick={() => { history.push(`/workMngt/confirmList/confirmMessage/${record.id}`) }} disabled={AuthUtil.getUserId() !== record.confirmId}>确认信息</Button>
                     <Button type='link' onClick={() => { history.push(`/workMngt/confirmList/confirmDetail/${record.id}/${record.status}`) }} disabled={record.status < 3 || AuthUtil.getUserId() !== record.confirmId}>确认明细</Button>
                 </Space>
