@@ -203,7 +203,7 @@ export default function RawMaterial() {
                 <DetailTitle title="产品信息" />
                 <BaseInfo columns={productInfo} dataSource={obj || {}} col={2} />
                 <Attachment dataSource={obj.taskNoticeAttachList} />
-                <OperationRecord title="操作信息" serviceId={id as string} serviceName="tower-suply" />
+                <OperationRecord title="操作信息" serviceId={id as string} serviceName="tower-supply" />
             </Modal>
             <Modal width={1011} title="指派信息" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
                 <TaskAssign id={detailId} ref={tarkRef} />
