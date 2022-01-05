@@ -15,8 +15,8 @@ import { downloadTemplate } from './downloadTemplate';
 import { AttachmentRef, FileProps } from '../../common/Attachment';
 
 interface IData {
-    readonly ncCount: string; 
-    readonly structureCount: string; 
+    readonly ncCount: string;
+    readonly structureCount: string;
 }
 
 export default function NCProgram(): React.ReactNode {
@@ -27,7 +27,7 @@ export default function NCProgram(): React.ReactNode {
             dataIndex: 'index',
             width: 50,
             fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'partName',
@@ -63,33 +63,33 @@ export default function NCProgram(): React.ReactNode {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            fixed: 'right' as FixedType,                    
+            fixed: 'right' as FixedType,
             width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Popconfirm
                     title="确认删除?"
-                    onConfirm={ () => RequestUtil.delete(`/tower-science/productNc?fileId=${ record.fileId }`).then(res => {
+                    onConfirm={() => RequestUtil.delete(`/tower-science/productNc?fileId=${record.fileId}`).then(res => {
                         message.success('删除成功');
                         history.go(0);
-                    }) }
+                    })}
                     okText="提交"
                     cancelText="取消"
-                    disabled={ !record.ncName }
+                    disabled={!record.ncName}
                 >
-                    <Button type="link" disabled={ !record.ncName }>删除</Button>
+                    <Button type="link" disabled={!record.ncName}>删除</Button>
                 </Popconfirm>
             )
         }
     ]
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string }>();
-    const [ refresh, setRefresh ] = useState(false);
-    const [ detailData, setDetailData ] = useState<IData>();
+    const [refresh, setRefresh] = useState(false);
+    const [detailData, setDetailData] = useState<IData>();
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const location = useLocation<{ status: number }>();
 
     const getData = async () => {
-        const data = await RequestUtil.get<IData>(`/tower-science/productNc/count?productCategoryId=${ params.id }`);
+        const data = await RequestUtil.get<IData>(`/tower-science/productNc/count?productCategoryId=${params.id}`);
         setDetailData(data)
     }
     const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
@@ -105,31 +105,35 @@ export default function NCProgram(): React.ReactNode {
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
-    
+
     return <Page
         path="/tower-science/productNc"
         requestData={{ id: params.productSegmentId, productCategoryId: params.id }}
-        columns={ location.state.status === 1 || location.state.status === 2 ? columns : columns.splice(0, 5) }
-        headTabs={ [] }
-        refresh={ refresh }
-        extraOperation={ <Space direction="horizontal" size="small">
-            <Button type="primary" ghost onClick={ () => downloadTemplate(`/tower-science/productNc/downloadSummary?productCategoryId=${ params.id }`, "NC文件汇总" , {}, true ) }>下载</Button>
-            <p>NC程序数 { detailData?.ncCount || 0 }/{ detailData?.structureCount || 0 }</p>
-            { location.state.status === 1 || location.state.status === 2 ? <Attachment multiple ref={ attachRef } isTable={ false } dataSource={[]} onDoneChange={ (dataInfo: FileProps[]) => {
-                RequestUtil.post(`/tower-science/productNc/importProductNc`, {
-                    fileVOList: [...dataInfo],
-                    productCategoryId: params.id
-                }).then(res => {
-                    if(res) {
-                        message.success('上传成功');
-                        history.go(0);
-                        getData();
-                    }
-                })
-            } }><Button type="primary" ghost>批量上传</Button></Attachment> : null}
+        columns={location.state.status === 1 || location.state.status === 2 ? columns : columns.splice(0, 5)}
+        headTabs={[]}
+        refresh={refresh}
+        extraOperation={<Space direction="horizontal" size="small">
+            <Button type="primary" ghost onClick={() => downloadTemplate(`/tower-science/productNc/downloadSummary?productCategoryId=${params.id}`, "NC文件汇总", {}, true)}>下载</Button>
+            <p>NC程序数 {detailData?.ncCount || 0}/{detailData?.structureCount || 0}</p>
+            {
+                location.state.status === 1 || location.state.status === 2 ?
+                    <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
+                        RequestUtil.post(`/tower-science/productNc/importProductNc`, {
+                            fileVOList: [...dataInfo],
+                            productCategoryId: params.id
+                        }).then(res => {
+                            if (res) {
+                                message.success('上传成功');
+                                history.go(0);
+                                getData();
+                            }
+                        })
+                    }}><Button type="primary" ghost>批量上传</Button></Attachment>
+                    : null
+            }
             <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>}
-        searchFormItems={ [
+        searchFormItems={[
             {
                 name: 'createTime',
                 label: '上传时间',
@@ -138,25 +142,25 @@ export default function NCProgram(): React.ReactNode {
             {
                 name: 'segmentId',
                 label: '段名',
-                children: <Select placeholder="请选择" style={{width:'120px'}}>
-                    { userList && userList.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                    }) }
+                children: <Select placeholder="请选择" style={{ width: '120px' }}>
+                    {userList && userList.map((item: any) => {
+                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                    })}
                 </Select>
             },
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="NC程序名/构件编号"/>
+                children: <Input placeholder="NC程序名/构件编号" />
             }
-        ] }
-        onFilterSubmit = { (values: Record<string, any>) => {
-            if(values.createTime) {
+        ]}
+        onFilterSubmit={(values: Record<string, any>) => {
+            if (values.createTime) {
                 const formatDate = values.createTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.createTimeStart = formatDate[0] + ' 00:00:00';
                 values.createTimeEnd = formatDate[1] + ' 23:59:59';
             }
             return values;
-        } }
+        }}
     />
 }
