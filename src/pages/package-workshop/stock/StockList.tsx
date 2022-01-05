@@ -14,7 +14,9 @@ export default function StockList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{ index + 1 }</span>
+            )
         },
         {
             key: 'warehouseName',

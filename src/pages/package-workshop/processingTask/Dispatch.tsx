@@ -1,14 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Col, DatePicker, Form, Input, message, Modal, Row, Select, Space, Spin } from 'antd';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
+import { Button, Col, DatePicker, Form, Input, message, Row, Select, Space, Spin } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
+import { DetailContent, CommonTable, DetailTitle } from '../../common';
 // import { baseInfoData } from './question.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import WorkshopEquipmentSelectionComponent, { IUser } from '../../../components/WorkshopEquipmentModal';
-import WorkshopTeamSelectionComponent from '../../../components/WorkshopTeamModal';
-import TextArea from 'antd/lib/input/TextArea';
-import AuthUtil from '../../../utils/AuthUtil';
+import WorkshopEquipmentSelectionComponent from '../../../components/WorkshopEquipmentModal';
 import moment from 'moment';
 
 const tableColumns = [
