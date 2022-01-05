@@ -34,7 +34,7 @@ export default function EnquiryList(): React.ReactNode {
                     width: 100,
                     dataIndex: 'operation',
                     //disabled={![1, 3].includes(records.batcheTaskStatus)}
-                    render: (_: any, records: any) => <Button type="link" disabled={userId !== records.batcherId} ><Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link></Button>
+                    render: (_: any, records: any) => <Button className="btn-operation-link" type="link" disabled={userId !== records.batcherId} ><Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link></Button>
                 }
             ]}
             filterValue={filterValue}

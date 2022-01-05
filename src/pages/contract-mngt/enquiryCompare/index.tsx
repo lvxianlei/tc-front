@@ -131,23 +131,23 @@ export default function ContractMngt() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        render: (_: any, records: any) => <Space direction="horizontal" size="small">
-                            <Link to={`/contract-mngt/enquiryCompare/enquiry/${records.id}`}>询价信息</Link>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => {
+                        render: (_: any, records: any) => <>
+                            <Link className="btn-operation-link" to={`/contract-mngt/enquiryCompare/enquiry/${records.id}`}>询价信息</Link>
+                            <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setCancelVisible(true)
                             }}>取消</Button>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => handleDelete(records.id)}>删除</Button>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => {
+                            <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => handleDelete(records.id)}>删除</Button>
+                            <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                            <Button type="link" onClick={() => {
+                            <Button type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationVisible(true)
                             }}>操作信息</Button>
-                        </Space>
+                        </>
                     }
                 ]}
                 extraOperation={<>

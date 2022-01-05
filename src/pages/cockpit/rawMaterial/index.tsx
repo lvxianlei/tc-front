@@ -91,12 +91,12 @@ export default function ViewRawMaterial(): React.ReactNode {
                     fixed: 'right',
                     width: 100,
                     render: (_: any, record: any): React.ReactNode => (<>
-                        <Button type="link" style={{ marginRight: 12 }} onClick={() => {
+                        <Button type="link" className="btn-operation-link" onClick={() => {
                             setDetailId(record.id)
                             setMaterialName(record.materialName)
                             setPriceVisible(true)
                         }}>历史价格</Button>
-                        <Button type="link" onClick={() => {
+                        <Button type="link" className="btn-operation-link"onClick={() => {
                             setDetailId(record.id)
                             setDataVisible(true)
                         }}>数据源</Button>

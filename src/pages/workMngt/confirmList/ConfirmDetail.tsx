@@ -708,12 +708,15 @@ export default function ConfirmDetail(): React.ReactNode {
                    
                 </Space>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>} 
             </>]}>
+                <div style={{paddingBottom:'16px'}}>
+                  <Button type='primary' onClick={()=>{downloadTemplate(`/tower-science/drawProductDetail/export?drawTaskId=${params.id}`, '杆塔信息')}}>导出</Button>
+                  <Button type="primary" onClick={ () => downloadTemplate('/tower-science/drawProductDetail/importTemplate', '确认明细模板') } ghost>模板下载</Button>
+                </div>
+                <DetailTitle title="确认明细"/>
                 <div style={{display:'flex',justifyContent:'space-between',marginBottom:'10px'}}>
                     <Space>
-                      <Button type='primary' onClick={()=>{downloadTemplate(`/tower-science/drawProductDetail/export?drawTaskId=${params.id}`, '杆塔信息')}}>导出</Button>
-                        <Button type="primary" onClick={ () => downloadTemplate('/tower-science/drawProductDetail/importTemplate', '确认明细模板') } ghost>模板下载</Button>
-                        <span>总基数：{tableDataSource.length}基</span>
-                        <span>总重量：{weight}kg</span>
+                      <span>总基数：{tableDataSource.length}基</span>
+                      <span>总重量：{weight}kg</span>
                     </Space>
                     <Space>
                         {params.status==='3'?
@@ -781,7 +784,7 @@ export default function ConfirmDetail(): React.ReactNode {
                 >
                     当前存在错误数据，请重新下载上传！
                 </Modal>
-                <Form form={formRef} component={false}>
+                <Form form={formRef} component={false} >
                     <Table
                       components={{
                         body: {
@@ -797,14 +800,17 @@ export default function ConfirmDetail(): React.ReactNode {
                       // pagination={{
                       //   onChange: cancel,
                       // }}
+                      style={{paddingBottom: '24px'}}
                       scroll={{x:1000}}
                       pagination={false}
                     />
                 </Form>
-                <DetailTitle title="备注"/>
-                {detailData?<TextArea maxLength={ 200 } defaultValue={detailData?.description} onChange={(e)=>{
-                    setDescription(e.target.value)
-                }} disabled={params.status!=='3'}/>:null}
+                <div style={{paddingBottom: '24px'}}>
+                  <DetailTitle title="备注"/>
+                  {detailData?<TextArea maxLength={ 200 } defaultValue={detailData?.description} onChange={(e)=>{
+                      setDescription(e.target.value)
+                  }} disabled={params.status!=='3'} />:null}
+                </div>
                 {/* <DetailTitle title="附件信息" operation={[params.status==='3'?<Upload
                     action={ () => {
                       const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;

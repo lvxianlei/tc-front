@@ -200,17 +200,17 @@
                                         <>
                                         {/* 等于2为已付款 */}
                                         {record.payStatus != 2 ?
-                                            <Button type="link" style={{marginRight: 12}} onClick={() => { 
+                                            <Button type="link" className="btn-operation-link" onClick={() => { 
                                                 setAddVisible(true);
                                                 setPayApplyId(record.id);
                                                 setAmountPayable(record.payMoney);
                                              } }>新增付款记录</Button>
                                         :""}
-                                            <Button type="link"  onClick={() => {viewShow(record)}}>详情</Button>
+                                            <Button type="link" className="btn-operation-link" onClick={() => {viewShow(record)}}>详情</Button>
                                         </>
                                     )
                                 }
-                                return <Button type="link"onClick={() => { viewShow(record) }}>详情</Button>
+                                return <Button type="link" className="btn-operation-link" onClick={() => { viewShow(record) }}>详情</Button>
                             }
                          }
                  }]}

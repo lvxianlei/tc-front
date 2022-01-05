@@ -32,23 +32,7 @@
         },
         {
             "title": "配料状态",
-            "dataIndex": "batcheTaskStatus",
-            "type": "select",
-            "width": 100,
-            "enum": [
-                {
-                    "label": "待完成",
-                    "value": 1
-                },
-                {
-                    "label": "待接收",
-                    "value": 2
-                },
-                {
-                    "label": "已完成",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "batcheTaskStatusName"
         },
         {
             "title": "最新状态变更时间",
@@ -83,22 +67,7 @@
         },
         {
             "title": "塔型配料状态",
-            "dataIndex": "batcheTaskStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "待完成",
-                    "value": 1
-                },
-                {
-                    "label": "待接收",
-                    "value": 2
-                },
-                {
-                    "label": "已完成",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "batcheTaskStatusName"
         },
         {
             "title": "最新状态变更时间",

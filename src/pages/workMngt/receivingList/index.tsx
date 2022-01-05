@@ -113,21 +113,21 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Link style={{marginRight: 12}} to={`/workMngt/receiving/detail/${record.id}`}>明细</Link>
+                        <Link className="btn-operation-link" to={`/workMngt/receiving/detail/${record.id}`}>明细</Link>
                         <Button
                             type="link"
-                            style={{marginRight: 12}} 
+                            className="btn-operation-link" 
                             disabled={record.receiveStatus === 1}
                             onClick={() => {
                                 setDetailId(record.id)
                                 setType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                        <Button type="link" style={{marginRight: 12}} onClick={() => {
+                        <Button type="link" className="btn-operation-link" onClick={() => {
                             setVisibleSee(true);
                             setDetailId(record.id);
                         }}>详情</Button>
-                        <Button type="link" disabled={record.lists && record.lists.length !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
+                        <Button type="link" className="btn-operation-link" disabled={record.lists && record.lists.length !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
                 }
             }]}

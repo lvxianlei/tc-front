@@ -87,6 +87,7 @@ export default function EnquiryList(): React.ReactNode {
                     dataIndex: "operation",
                     render: (_: any, records: any) => <Button
                         type="link"
+                        className="btn-operation-link"
                         disabled={records.inquirerId !== userId}
                         onClick={() => {
                             setDetailId(records.id)

@@ -63,7 +63,14 @@ export default function ProcessingTaskList(): React.ReactNode {
         </Form>
     </Card>
     <Card>
-        <Button type='primary' onClick={()=>{history.push(`/workshopManagement/processingTask/dispatch/new`)}}>派工</Button>
+        <Button 
+            type='primary' 
+            onClick={()=>{
+                history.push(`/workshopManagement/processingTask/dispatch/new`)
+            }}
+        >
+            派工
+        </Button>
     </Card>
     </>
 }
