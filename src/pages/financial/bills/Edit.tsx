@@ -123,22 +123,26 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             if (item.dataIndex === 'businessType') {
                 return ({
                     ...item, render: (data: any, props: any) => {
-                        return <Select disabled={type === 'edit'} style={{ width: "100%" }} onChange={(e: number) => { businessTypeChange(e); baseForm.setFieldsValue({ businessId: '' }); }}>
-                            <Select.Option value={1} key="1">供应商</Select.Option>
-                            <Select.Option value={2} key="2">装卸公司</Select.Option>
-                            <Select.Option value={3} key="3">运输公司</Select.Option>
-                        </Select>
+                        return <Form.Item name="businessType" style={{ width: "100%" }}>
+                            <Select disabled={type === 'edit'} onChange={(e: number) => { businessTypeChange(e); baseForm.setFieldsValue({ businessId: '' }); }}>
+                                <Select.Option value={1} key="1">供应商</Select.Option>
+                                <Select.Option value={2} key="2">装卸公司</Select.Option>
+                                <Select.Option value={3} key="3">运输公司</Select.Option>
+                            </Select>
+                        </Form.Item>
                     }
                 })
             }
             if (item.dataIndex === 'businessId') {
                 return ({
                     ...item, render: (data: any, props: any) => {
-                        return <Select disabled={type === 'edit'} style={{ width: "100%" }}>
-                            {companyList && companyList.map((item: any) => {
-                                return <Select.Option key={item.id + ',' + item.name} value={item.id + ',' + item.name}>{item.name}</Select.Option>
-                            })}
-                        </Select>
+                        return <Form.Item name="businessId" style={{ width: "100%" }}>
+                            <Select disabled={type === 'edit'}>
+                                {companyList && companyList.map((item: any) => {
+                                    return <Select.Option key={item.id + ',' + item.name} value={item.id + ',' + item.name}>{item.name}</Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
                     }
                 })
             }
