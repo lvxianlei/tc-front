@@ -10,7 +10,7 @@ import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Co
 import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import WorkshopUserModal from './WorkshopUserModal';
+import WorkshopUserModal from '../../components/UserSelectedModal';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { DataType } from '../../components/AbstractSelectableModal';
