@@ -6,10 +6,10 @@ import React from 'react';
 import { Button, FormItemProps, Input, Modal, Space } from 'antd';
 import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
-import RequestUtil from '../../utils/RequestUtil';
-import { DataType, IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../components/AbstractSelectableModal';
-import styles from '../../components/AbstractSelectableModal.module.less';
-import AbstractFilteredSelecableModal from '../../components/AbstractFilteredSelecableModal';
+import RequestUtil from '../utils/RequestUtil';
+import { DataType, IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
+import styles from './AbstractSelectableModal.module.less';
+import AbstractFilteredSelecableModal from './AbstractFilteredSelecableModal';
 import { ButtonType } from 'antd/lib/button';
 import { RowSelectionType } from 'antd/lib/table/interface';
 
