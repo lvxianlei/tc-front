@@ -138,12 +138,12 @@ export default function LabourList(): React.ReactNode {
             width: 230,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/view/${record.id}`)}} type='link' >查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/edit`)}} type='link' disabled={record.employeeStatus===2 || record.status}>编辑</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/change`)}} type='link' disabled={record.employeeStatus===2 || record.status===2 || !record.status}>变更</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/renewal`)}} type='link' disabled={record.employeeStatus===2 || !(record.status=== 2 && record.employeeStatus===1) ||!record.status}>续签</Button>
-                </Space>
+                <>
+                    <Button className='btn-operation-link' onClick={()=>{history.push(`/employeeRelation/labour/view/${record.id}`)}} type='link' >查看</Button>
+                    <Button className='btn-operation-link' onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/edit`)}} type='link' disabled={record.employeeStatus===2 || record.status}>编辑</Button>
+                    <Button className='btn-operation-link' onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/change`)}} type='link' disabled={record.employeeStatus===2 || record.status===2 || !record.status}>变更</Button>
+                    <Button className='btn-operation-link' onClick={()=>{history.push(`/employeeRelation/labour/edit/${record.id}/renewal`)}} type='link' disabled={record.employeeStatus===2 || !(record.status=== 2 && record.employeeStatus===1) ||!record.status}>续签</Button>
+                </>
             )
         }
     ];

@@ -199,11 +199,12 @@ export default function RecruitList(): React.ReactNode {
             width: 230,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/recruit/view/${record.id}`)}} type='link'>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/recruit/edit/${record.id}/${record.status}`)}} type='link' disabled={ record.status === 2||record.status === 3 }>编辑</Button>
+                <>
+                    <Button onClick={()=>{history.push(`/employeeRelation/recruit/view/${record.id}`)}} className='btn-operation-link' type='link'>查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/recruit/edit/${record.id}/${record.status}`)}} type='link' className='btn-operation-link' disabled={ record.status === 2||record.status === 3 }>编辑</Button>
                     <Popconfirm
                         title="确认入职后，员工将信息将更新到员工档案中？"
+                        className='btn-operation-link'
                         onConfirm={ ()=>{RequestUtil.get(`/tower-hr/employee/information/confirm`,{archivesId: record.id}).then(()=>{
                             message.success('入职成功！')
                         }).then(()=>{
@@ -213,10 +214,11 @@ export default function RecruitList(): React.ReactNode {
                         cancelText="取消"
                         disabled={record.status!==3}
                     >
-                        <Button type="link" disabled={record.status!==3}>确认入职</Button> 
+                        <Button type="link" className='btn-operation-link' style={{padding: "0"}} disabled={record.status!==3}>确认入职</Button> 
                     </Popconfirm>
                     <Popconfirm
                         title="确认删除？"
+                        className='btn-operation-link'
                         onConfirm={ ()=>{RequestUtil.delete(`/tower-hr/employee/information?archivesId=${record.id}`).then(()=>{
                             message.success('删除成功！')
                         }).then(()=>{
@@ -226,9 +228,9 @@ export default function RecruitList(): React.ReactNode {
                         cancelText="取消"
                         disabled={record.status!==1}
                     >
-                        <Button type="link"  disabled={record.status!==1}>删除</Button> 
+                        <Button type="link" className='btn-operation-link' style={{padding: "0"}} disabled={record.status!==1}>删除</Button> 
                     </Popconfirm>
-                </Space>
+                </>
             )
         }
     ];
