@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react"
 import { Spin, Form, Modal, Input } from 'antd'
-import { BaseInfo, CommonTable, DetailTitle, Attachment } from '../common'
+import { BaseInfo, CommonTable, DetailTitle, Attachment, OperationRecord } from '../common'
 import { overviewBaseInfo, enquiryTaskAction } from "./enquiryTask.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
@@ -85,7 +85,6 @@ export default forwardRef(function Overview({ id }: OverviewProps, ref) {
         <DetailTitle title="基础信息" />
         <BaseInfo columns={overviewBaseInfo} dataSource={data || {}} col={2} />
         <Attachment title="相关附件" dataSource={data?.projectAttachList} />
-        <DetailTitle title="操作信息" />
-        <CommonTable haveIndex columns={enquiryTaskAction} dataSource={data?.optRecordList || []} />
+        <OperationRecord serviceId={id} serviceName="tower-supply" />
     </Spin>
 })
