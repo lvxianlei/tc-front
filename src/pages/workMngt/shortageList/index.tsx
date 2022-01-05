@@ -90,12 +90,13 @@ export default function Invoicing() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" onClick={() => {
+                            <Button type="link" className="btn-operation-link" onClick={() => {
                                 setCancelId(record.id)
                                 setVisible(true)
                             }}>查看</Button>
                             <Button
                                 type="link"
+                                className="btn-operation-link"
                                 disabled={![1].includes(record.shortageStatus)}
                                 onClick={() => {
                                     setCancelId(record.id)
