@@ -224,14 +224,16 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
                     onOk={
                         () => {
                             this.setState({
-                                isModalVisible: false
+                                isModalVisible: false,
                             })
                             if (this.state.tableDataSource.length > 0) {
-                                this.setState({
-                                    selectedRowKeys: []
-                                })
+                               
                                 this.getForm()?.resetFields();
                                 this.props.onSelect(this.state.selectedRows)
+                                this.setState({
+                                    selectedRowKeys: [],
+                                    selectedRows:[],
+                                })
                             }
                         }
                     }
