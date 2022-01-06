@@ -48,7 +48,22 @@ export default function ChooseApply(): React.ReactNode {
                 (apps as IApplyType[]).map((res: IApplyType, index: number) => (
                     <div className={styles.apply} key={index} onClick={() => {
                         AuthUtil.setCurrentAppName(res.appName)
-                        res.corsWeb ? (window.location.href = res.path) : history.push(res.path)
+                        if (res.corsWeb) {
+                            let herf = res.path
+                            switch (process.env.REACT_APP_ENV) {
+                                case "development":
+                                    herf = res.path.replace("test", "dev")
+                                    break
+                                case "production":
+                                    herf = res.path.replace("test", "uat")
+                                    break
+                                default:
+                                    herf = res.path
+                            }
+                            window.location.href = herf
+                            return
+                        }
+                        history.push(res.path)
                     }}>
                         <div className={styles.icon}><Image preview={false} src={icons[res.appName]} /></div>
                         <div className={styles.title}>{res.title}</div>
