@@ -34,7 +34,7 @@ export default function ArchivesList(): React.ReactNode {
                 {
                     title: '操作',
                     fixed: 'right',
-                    width: 230,
+                    width: 100,
                     dataIndex: 'operation',
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>

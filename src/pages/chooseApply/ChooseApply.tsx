@@ -24,6 +24,7 @@ interface IApplyType {
     readonly description?: string;
     readonly path: string;
     readonly appName: AppType;
+    readonly corsWeb?: boolean;
 }
 const icons: { [key in AppType]: any } = {
     "SC": marketing,
@@ -42,20 +43,20 @@ export default function ChooseApply(): React.ReactNode {
     const history = useHistory()
     return <DetailContent>
         <DetailTitle title="选择应用" />
-        <div className={ styles.content }>
-           {
-            (apps as IApplyType[]).map((res: IApplyType, index: number) => (
-                <div className={styles.apply} key={index} onClick={() => {
-                    AuthUtil.setCurrentAppName(res.appName)
-                    history.push(res.path)
-                }}>
-                    <div className={styles.icon}><Image preview={false} src={icons[res.appName]} /></div>
-                    <div className={styles.title}>{res.title}</div>
-                    <div className={styles.description}>{res.description}</div>
-                </div>
-            ))
-        } 
+        <div className={styles.content}>
+            {
+                (apps as IApplyType[]).map((res: IApplyType, index: number) => (
+                    <div className={styles.apply} key={index} onClick={() => {
+                        AuthUtil.setCurrentAppName(res.appName)
+                        res.corsWeb ? (window.location.href = res.path) : history.push(res.path)
+                    }}>
+                        <div className={styles.icon}><Image preview={false} src={icons[res.appName]} /></div>
+                        <div className={styles.title}>{res.title}</div>
+                        <div className={styles.description}>{res.description}</div>
+                    </div>
+                ))
+            }
         </div>
-        
+
     </DetailContent>
 }
