@@ -12,7 +12,7 @@ interface IResponse {
     readonly assessInfo?: string;
     readonly status?: string | number;
     readonly assessFileVOList?: FileProps[];
-    readonly instructionFileList?: FileProps[];
+    readonly instructionFileVOList?: FileProps[];
 }
 
 export interface EvaluationInformationProps { }
@@ -36,7 +36,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
      * @description Gets ref
      * @returns ref 
      */
-     protected getAttchsRef(): AttachmentRef | null {
+    protected getAttchsRef(): AttachmentRef | null {
         return this.attchsRef?.current
     }
 
@@ -129,7 +129,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
             >
                 <Form onFinish={() => this.onSave()} ref={this.form}>
                     <DetailContent>
-                        <Attachment title="说明文件" dataSource={ this.state.information?.instructionFileList } />
+                        <Attachment title="说明文件" dataSource={this.state.information?.instructionFileVOList} />
                         <p className={styles.topPadding}>评估信息<span style={{ color: 'red' }}>*</span></p>
                         <Form.Item
                             name="description"
@@ -138,7 +138,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                         >
                             <Input.TextArea placeholder="请输入" maxLength={300} disabled={this.state.information?.status === 4} showCount />
                         </Form.Item>
-                        <Attachment title="评估文件" ref={ this.attchsRef } edit={!(this.state.information?.status === 4)} dataSource={this.state.information?.assessFileVOList}/>
+                        <Attachment title="评估文件" ref={this.attchsRef} edit={!(this.state.information?.status === 4)} dataSource={this.state.information?.assessFileVOList} />
                     </DetailContent>
                 </Form>
             </Modal>

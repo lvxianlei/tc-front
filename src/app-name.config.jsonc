@@ -46,7 +46,8 @@
         "icon": "logistic",
         "title": "物流中心",
         "description": "配车、发货等相关功能",
-        "path": "/notice/TMS",
+        "path": "http://tc-logistic-test.dhwy.cn/home",
+        "corsWeb": true,
         "appName": "TMS"
     },
     {

@@ -12,10 +12,10 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { IDetailData } from '../IWorkshopPlanBasic';
 
 export default function ProcessMngt(): React.ReactNode {
-    const [ refresh, setRefresh ] = useState(false);
-    const [ visible, setVisible ] = useState(false);
-    const [ title, setTitle ] = useState('新增');
-    const [ form ] = Form.useForm();
+    const [refresh, setRefresh] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [title, setTitle] = useState('新增');
+    const [form] = Form.useForm();
 
     const columns = [
         {
@@ -32,17 +32,17 @@ export default function ProcessMngt(): React.ReactNode {
             width: 300,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={ () => {
+                    <Button type="link" onClick={() => {
                         setVisible(true);
                         setTitle("编辑");
-                        form.setFieldsValue({name: record.name, id: record.id});
-                    } }>编辑</Button>
+                        form.setFieldsValue({ name: record.name, id: record.id });
+                    }}>编辑</Button>
                     <Button type="link" onClick={() => {
-                         Modal.confirm({
-                            title: "确定删除本条消息吗",
+                        Modal.confirm({
+                            title: "确认删除？",
                             onOk: async () => new Promise(async (resove, reject) => {
                                 try {
-                                    RequestUtil.delete(`/tower-aps/product/process/${ record.id }`).then(res => {
+                                    RequestUtil.delete(`/tower-aps/product/process/${record.id}`).then(res => {
                                         message.success('删除成功');
                                         setRefresh(!refresh);
                                     });
@@ -79,32 +79,32 @@ export default function ProcessMngt(): React.ReactNode {
         <>
             <Page
                 path="/tower-aps/product/process"
-                columns={ columns }
-                headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} }>新增</Button> }
-                refresh={ refresh }
-                searchFormItems={ [
+                columns={columns}
+                headTabs={[]}
+                extraOperation={<Button type="primary" onClick={() => { setVisible(true); setTitle("新增"); }}>新增</Button>}
+                refresh={refresh}
+                searchFormItems={[
                     {
                         name: 'name',
                         label: '',
-                        children: <Input placeholder="生产工序名称"/>
+                        children: <Input placeholder="生产工序名称" />
                     }
-                ] }
-                onFilterSubmit = { (values: Record<string, any>) => {
+                ]}
+                onFilterSubmit={(values: Record<string, any>) => {
                     return values;
-                } }
+                }}
             />
-            <Modal visible={ visible } width="40%" title={ title + "生产工序" } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
-                <Form form={ form } labelCol={{ span: 4 }}>
+            <Modal visible={visible} width="40%" title={title + "生产工序"} okText="保存" cancelText="取消" onOk={save} onCancel={cancel}>
+                <Form form={form} labelCol={{ span: 4 }}>
                     <Form.Item name="name" label="生产工序名称" rules={[{
-                            "required": true,
-                            "message": "请输入生产工序名称"
-                        },
-                        {
+                        "required": true,
+                        "message": "请输入生产工序名称"
+                    },
+                    {
                         pattern: /^[^\s]*$/,
                         message: '禁止输入空格',
-                        }]}>
-                        <Input placeholder="请输入" maxLength={ 50 } />
+                    }]}>
+                        <Input placeholder="请输入" maxLength={50} />
                     </Form.Item>
                 </Form>
             </Modal>

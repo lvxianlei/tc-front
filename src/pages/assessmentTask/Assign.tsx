@@ -26,7 +26,8 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
     }
 
     public state: AssignState = {
-        visible: false
+        visible: true,
+        height: 150
     }
 
     private async modalShow(): Promise<void> {

@@ -16,11 +16,11 @@ interface EditProps {
 
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
-    const [ baseForm ] = Form.useForm();
-    const [ form ] = Form.useForm();
-    const [ workCenterRelationsList, setWorkCenterRelationsList ] = useState<IWorkCenterMngt[]>([]);
-    const [ allMaterialList, setAllMaterialList ] = useState<any>([]);
-    const [ specifications, setSpecifications ]= useState<any>({});
+    const [baseForm] = Form.useForm();
+    const [form] = Form.useForm();
+    const [workCenterRelationsList, setWorkCenterRelationsList] = useState<IWorkCenterMngt[]>([]);
+    const [allMaterialList, setAllMaterialList] = useState<any>([]);
+    const [specifications, setSpecifications] = useState<any>({});
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -42,7 +42,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/material?size=1000`);
             setAllMaterialList(result?.records);
-            var newArr = result?.records.filter((item: any,index: any,self: any) => {
+            var newArr = result?.records.filter((item: any, index: any, self: any) => {
                 return self.findIndex((el: any) => el.materialName === item.materialName) === index
             })
             resole(newArr)
@@ -55,7 +55,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100&operatingStatus=0`);
             const resultData: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100&operatingStatus=1`);
-            const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/equipment?workCenterInfoId=${ id }`);
+            const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/equipment?workCenterInfoId=${id}`);
             const data = [...result?.records, ...resultData?.records]?.filter((item: any) => !list.some((ele: any) => ele === item.id));
             resole(data)
         } catch (error) {
@@ -84,7 +84,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields();
-            if(form.getFieldsValue(true).workCenterRelations && form.getFieldsValue(true).workCenterRelations.length > 0) {
+            if (form.getFieldsValue(true).workCenterRelations && form.getFieldsValue(true).workCenterRelations.length > 0) {
                 const data = await form.validateFields();
                 await saveRun({
                     ...baseData,
@@ -95,8 +95,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 })
                 resolve(true);
             } else {
-               message.warning("请添加产能矩阵");
-               reject(false);
+                message.warning("请添加产能矩阵");
+                reject(false);
             }
         } catch (error) {
             reject(false)
@@ -108,7 +108,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     }
 
     const materialChange = (e: string, index: number) => {
-        var newArr = allMaterialList.filter((item: any,index: any,self: any) => {
+        var newArr = allMaterialList.filter((item: any, index: any, self: any) => {
             return e === item.materialName
         })
         setSpecifications({
@@ -141,7 +141,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 {
                     "required": true,
                     "message": "请输入编码"
-                }, 
+                },
                 {
                     "pattern": /^[0-9a-zA-Z]*$/,
                     "message": '仅可输入数字/字母'
@@ -178,84 +178,88 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             title: <span><span style={{ color: 'red' }}>*</span>工序</span>,
             dataIndex: 'processId',
             width: 210,
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["workCenterRelations", index, "processId"] } initialValue={ _ } rules={[{ 
-                        "required": true,
-                        "message": "请选择工序" 
-                    },
-                    {
-                        "pattern": /^[^\s]*$/,
-                        "message": '禁止输入空格',
-                    }]}>
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={["workCenterRelations", index, "processId"]} initialValue={_} rules={[{
+                    "required": true,
+                    "message": "请选择工序"
+                },
+                {
+                    "pattern": /^[^\s]*$/,
+                    "message": '禁止输入空格',
+                }]}>
                     <Select placeholder="请选择" style={{ width: '200px' }} size="small">
-                        { processList?.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                        }) }
+                        {processList?.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                        })}
                     </Select>
                 </Form.Item>
-            )  
+            )
         },
         {
             key: 'materialName',
             title: <span><span style={{ color: 'red' }}>*</span>材料</span>,
             dataIndex: 'materialName',
             width: 210,
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["workCenterRelations", index, "materialName"] } initialValue={ _ } rules={[{ 
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={["workCenterRelations", index, "materialName"]} initialValue={_} rules={[{
                     "required": true,
-                    "message": "请选择材料" }]}>
+                    "message": "请选择材料"
+                }]}>
                     <Select placeholder="请选择" size="small" style={{ width: '200px' }} onChange={(e: string) => materialChange(e, index)}>
-                        { materialList?.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.materialName }>{ item.materialName }</Select.Option>
-                        }) }
+                        {materialList?.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.materialName}>{item.materialName}</Select.Option>
+                        })}
                     </Select>
                 </Form.Item>
-            )  
+            )
         },
         {
             key: 'specificationName',
             title: <span><span style={{ color: 'red' }}>*</span>规格</span>,
             dataIndex: 'specificationName',
             width: 210,
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["workCenterRelations", index, "specificationName"] } initialValue={ _ } rules={[{ 
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={["workCenterRelations", index, "specificationName"]} initialValue={_} rules={[{
                     "required": true,
-                    "message": "请选择规格" }]}>
+                    "message": "请选择规格"
+                }]}>
                     <Select placeholder="请选择" size="small" style={{ width: '200px' }} key={index} onChange={(e: string) => materialChange(e, index)}>
-                        { specifications[index]?.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.structureSpec }>{ item.structureSpec }</Select.Option>
-                        }) }
+                        {specifications[index]?.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.structureSpec}>{item.structureSpec}</Select.Option>
+                        })}
                     </Select>
                 </Form.Item>
-            )  
+            )
         },
         {
             key: 'materialTextureName',
             title: <span><span style={{ color: 'red' }}>*</span>材质</span>,
             dataIndex: 'materialTextureName',
             width: 210,
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["workCenterRelations", index, "materialTextureName"] } initialValue={ _ } rules={[{ 
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={["workCenterRelations", index, "materialTextureName"]} initialValue={_} rules={[{
                     "required": true,
-                    "message": "请选择材质" }]}>
+                    "message": "请选择材质"
+                }]}>
                     <Select style={{ width: '200px' }} size="small">
-                        { materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>) }
+                        {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
                     </Select>
                 </Form.Item>
-            )  
+            )
         },
         {
             key: 'workHour',
             title: <span><span style={{ color: 'red' }}>*</span>标准工时（s）</span>,
             dataIndex: 'workHour',
             width: 150,
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["workCenterRelations", index, "workHour"] } initialValue={ _ } rules={[{ 
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={["workCenterRelations", index, "workHour"]} initialValue={_} rules={[{
                     "required": true,
-                    "message": "请输入标准工时" }]}>
-                    <InputNumber step={1} min={ 0 } max={ 3600 } precision={ 0 } size="small" key={ index } />
+                    "message": "请输入标准工时"
+                }]}>
+                    <InputNumber step={1} min={0} max={3600} precision={0} size="small" key={index} />
                 </Form.Item>
-            )  
+            )
         },
         {
             key: 'operation',
@@ -267,7 +271,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Space direction="horizontal" size="small">
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ () => delRow(index) }
+                        onConfirm={() => delRow(index)}
                         okText="确认"
                         cancelText="取消"
                     >
@@ -290,46 +294,48 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     }
 
     const delRow = (index?: number) => {
-        let workCenterListValues = form.getFieldsValue(true).workCenterRelations || []; 
+        let workCenterListValues = form.getFieldsValue(true).workCenterRelations || [];
         workCenterListValues.splice(index, 1);
         setWorkCenterRelationsList([...workCenterListValues]);
         form.setFieldsValue({ workCenterRelations: [...workCenterListValues] })
     }
 
     return <Spin spinning={loading}>
-        <DetailTitle title="基本信息" style={{ padding:'0 0 8px' }}/>
+        <DetailTitle title="基本信息" style={{ padding: '0 0 8px' }} />
         <BaseInfo form={baseForm} columns={baseColumns.map((item: any) => {
             if (item.dataIndex === "time") {
-                return ({ ...item, type: 'date', 
-                    render:  (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time" style={{width: '100%'}}><TimePicker.RangePicker style={{width: '100%'}} format="HH:mm" /></Form.Item>) 
+                return ({
+                    ...item, type: 'date',
+                    render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time" style={{ width: '100%' }}><TimePicker.RangePicker style={{ width: '100%' }} format="HH:mm" /></Form.Item>)
                 })
             }
-            if(item.dataIndex === "equipmentId") {
-                return ({ ...item, type: 'select', 
-                    render:  (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name="equipmentId" style={{width: '100%'}}>
+            if (item.dataIndex === "equipmentId") {
+                return ({
+                    ...item, type: 'select',
+                    render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name="equipmentId" style={{ width: '100%' }}>
                             <Select mode="multiple">
-                                { equipmentList?.map((item: any) => {
-                                    return <Select.Option key={ item.id } value={ item.id }>{ item.deviceName }</Select.Option>
-                                }) }
+                                {equipmentList?.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.deviceName}</Select.Option>
+                                })}
                             </Select>
                         </Form.Item>
-                    ) 
+                    )
                 })
             }
             return item
         })} col={2} dataSource={{}} edit />
         <DetailTitle title="产能矩阵" operation={[<Space size="small">
-            <Button type="primary" onClick={ addRow }>新增</Button>
-        </Space>]}/>
+            <Button type="primary" onClick={addRow}>新增</Button>
+        </Space>]} />
         <Form form={form}>
-            <Table 
+            <Table
                 scroll={{ x: 500 }}
-                rowKey="id" 
+                rowKey="id"
                 dataSource={[...workCenterRelationsList]}
-                pagination={false} 
-                columns={tableColumns} 
-                className={styles.addModal}/>
+                pagination={false}
+                columns={tableColumns}
+                className={styles.addModal} />
         </Form>
     </Spin>
 })

@@ -12,7 +12,7 @@ import AuthUtil from '../../../utils/AuthUtil';
 import { useLocation } from 'react-router-dom';
 
 export default function EvaluationList(): React.ReactNode {
-    const [ refresh, setRefresh ] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const location = useLocation<{ state?: number, userId?: string }>();
 
     const columns = [
@@ -21,7 +21,7 @@ export default function EvaluationList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'taskCode',
@@ -66,10 +66,10 @@ export default function EvaluationList(): React.ReactNode {
             fixed: 'right' as FixedType,
             width: 150,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {
                         AuthUtil.getUserId() !== record.assessUser ? <Button type="link" disabled>评估信息</Button>
-                        : <EvaluationInformation id={ record.id } updateList={ () => setRefresh(!refresh) }/>
+                            : <EvaluationInformation id={record.id} updateList={() => setRefresh(!refresh)} />
                     }
                 </Space>
             )
@@ -81,7 +81,7 @@ export default function EvaluationList(): React.ReactNode {
         resole(data);
     }), {})
     const programLeader: any = data?.records || [];
-    const [ filterValue, setFilterValue ] = useState({});
+    const [filterValue, setFilterValue] = useState({});
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
@@ -94,31 +94,31 @@ export default function EvaluationList(): React.ReactNode {
         return roles;
     }
 
-    const renderTreeNodes = (data:any) => data.map((item:any) => {
+    const renderTreeNodes = (data: any) => data.map((item: any) => {
         if (item.children) {
-            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } className={ styles.node } >
-                { renderTreeNodes(item.children) }
+            return (<TreeNode key={item.id} title={item.title} value={item.id} className={styles.node} >
+                {renderTreeNodes(item.children)}
             </TreeNode>);
         }
-        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
+        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
     });
 
     return <Page
         path="/tower-science/assessTask/assessList"
-        columns={ columns }
-        headTabs={ [] }
+        columns={columns}
+        headTabs={[]}
         exportPath={`/tower-science/assessTask/assessList`}
-        refresh={ refresh }
-        requestData={ { status: location.state?.state, assessUser: location.state?.userId } }
-        searchFormItems={ [
+        refresh={refresh}
+        requestData={{ status: location.state?.state, assessUser: location.state?.userId }}
+        searchFormItems={[
             {
                 name: 'status',
                 label: '任务状态',
-                children: <Form.Item name="status" initialValue={ location.state?.state }>
+                children: <Form.Item name="status" initialValue={location.state?.state}>
                     <Select style={{ width: '120px' }} placeholder="请选择">
                         <Select.Option value="" key="2">全部</Select.Option>
-                        <Select.Option value={ 3 } key="3">待完成</Select.Option>
-                        <Select.Option value={ 4 } key="4">已完成</Select.Option>
+                        <Select.Option value={3} key="3">待完成</Select.Option>
+                        <Select.Option value={4} key="4">已完成</Select.Option>
                     </Select>
                 </Form.Item>
             },
@@ -130,29 +130,29 @@ export default function EvaluationList(): React.ReactNode {
             {
                 name: 'assessUser',
                 label: '评估人',
-                children: <Form.Item name="assessUser" initialValue={ location.state?.userId || '' }>
+                children: <Form.Item name="assessUser" initialValue={location.state?.userId || ''}>
                     <Select placeholder="请选择" style={{ width: "150px" }}>
-                        { programLeader && programLeader.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                        }) }
+                        {programLeader && programLeader.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                        })}
                     </Select>
                 </Form.Item>
             },
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="任务编号/项目名称"/>
+                children: <Input placeholder="任务编号/项目名称" />
             }
-        ] }
-        filterValue={ filterValue }
-        onFilterSubmit = { (values: Record<string, any>) => {
-            if(values.expectDeliverTimeAll) {
+        ]}
+        filterValue={filterValue}
+        onFilterSubmit={(values: Record<string, any>) => {
+            if (values.expectDeliverTimeAll) {
                 const formatDate = values.expectDeliverTimeAll.map((item: any) => item.format("YYYY-MM-DD"));
                 values.expectDeliverTimeStart = formatDate[0] + ' 00:00:00';
                 values.expectDeliverTimeEnd = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
             return values;
-        } }
+        }}
     />
 }
