@@ -83,6 +83,7 @@ export default function OperationRecord({
     return <>
         {title && <DetailTitle title={title} />}
         <CommonTable
+            style={{padding: "0",}}
             haveIndex
             loading={loading}
             columns={columns}

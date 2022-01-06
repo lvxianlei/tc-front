@@ -1527,14 +1527,14 @@
       "path": "/workshopManagement/processingTask/dispatch/:id",
       "module": "./pages/mngt-workshop/processingTask/Dispatch",
       "exact": true,
-      "authority": "sw_workshop_work_management_dispatch"
+      "authority": "mc_workshop_work_management_dispatch"
     },
     { // 车间工作管理-加工任务详情
       "name": "加工任务详情",
       "path": "/workshopManagement/processingTask/detail/:id/:status",
       "module": "./pages/mngt-workshop/processingTask/ProcessDetail",
       "exact": true,
-      "authority": "sw_workshop_work_management_machining_task_details"
+      "authority": "mc_workshop_work_management_machining_task_details"
     },
     { // 车间工作管理-试装计划任务列表
       "name": "试装计划任务列表",
@@ -1548,7 +1548,7 @@
       "path": "/workshopManagement/trialAssemblyTask/componentDetail/:id",
       "module": "./pages/mngt-workshop/ComponentDetails",
       "exact": true,
-      "authority": "sw_workshop_work_management_trial_assembly_plan_task_list_details"
+      "authority": "mc_workshop_work_management_trial_assembly_plan_task_list_details"
     },
     { // 车间工作管理-车间转运接收列表
       "name": "车间转运接收列表",
@@ -1562,9 +1562,9 @@
       "path": "/workshopManagement/workshopTransfer/componentDetail/:id",
       "module": "./pages/mngt-workshop/ComponentDetails",
       "exact": true,
-      "authority": "sw_workshop_work_management_workshop_transfer_receiving_list_details"
+      "authority": "mc_workshop_work_management_workshop_transfer_receiving_list_details"
     },
-    { // 车间工作管理-车间转运接收列表-构件明细
+    { // 原材料领料-原材料领料单
       "name": "原材料领料单",
       "path": "/materialPicking/picking",
       "module": "./pages/materialPicking/index",
@@ -2046,14 +2046,14 @@
       "path": "/invoicing/taskInfo/:invoicingId",
       "module": "./pages/invoicing/TaskInfo",
       "exact": true,
-      "authority": "sw_view_task_information"
+      "authority": "fc_view_task_information"
     },
     { // 填写开票申请信息
       "name": "填写开票信息",
       "path": "/invoicing/edit/:invoicingId",
       "module": "./pages/invoicing/Edit",
       "exact": true,
-      "authority": "sw_approvalm_invoicing_list_edit"
+      "authority": "fc_approvalm_invoicing_list_edit"
     },
     { // 人资-员工关系-招聘入职
       "name": "招聘入职",
