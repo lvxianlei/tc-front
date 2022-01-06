@@ -119,7 +119,7 @@ export default function WeighingNew(): React.ReactNode {
             }],
             initialValue: detailData.weighingTypeId,
             children: <Select>
-                {weighingtypeOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
+                {weighingtypeOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
             </Select>
         },
         {

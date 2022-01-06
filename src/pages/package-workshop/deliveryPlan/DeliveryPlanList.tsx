@@ -15,7 +15,9 @@ export default function DeliveryPlanList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{ index + 1 }</span>
+            )
         },
         {
             key: 'outWarehouseNumber',
@@ -110,8 +112,27 @@ export default function DeliveryPlanList(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/deliveryPlan/detail/${ record.id }` )}}>查看</Button>
-                    <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/deliveryPlan/delivery/${ record.id }` )}} disabled={record.status === 3}>成品出库</Button>
+                    <Button 
+                        type='link' 
+                        onClick={
+                            ()=>{ 
+                                history.push(`/packagingWorkshop/deliveryPlan/detail/${ record.id }` )
+                            }
+                        }
+                    >
+                            查看
+                    </Button>
+                    <Button 
+                        type='link' 
+                        onClick={
+                            ()=>{ 
+                                history.push(`/packagingWorkshop/deliveryPlan/delivery/${ record.id }` )
+                            }
+                        } 
+                        disabled={record.status === 3}
+                    >
+                        成品出库
+                    </Button>
                 </Space>
             )
         }
