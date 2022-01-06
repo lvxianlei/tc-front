@@ -51,10 +51,10 @@ export default function ChooseApply(): React.ReactNode {
                         if (res.corsWeb) {
                             let herf = res.path
                             switch (process.env.REACT_APP_ENV) {
-                                case "development":
+                                case "integration":
                                     herf = res.path.replace("test", "dev")
                                     break
-                                case "production":
+                                case "uat":
                                     herf = res.path.replace("test", "uat")
                                     break
                                 default:

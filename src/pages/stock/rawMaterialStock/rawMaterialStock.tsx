@@ -9,6 +9,7 @@ import { listPage } from "./rowMaterial.json"
 import '../StockPublicStyle.less';
 import { materialStandardTypeOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 import { Page } from '../../common';
+import useRequest from '@ahooksjs/use-request';
 
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory(),
@@ -30,7 +31,16 @@ export default function RawMaterialStock(): React.ReactNode {
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [isExport, setIsExportStoreList] = useState(false)
-
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const [warehouseList, askPrice]: { [key: string]: string | number }[] = await Promise.all([
+                RequestUtil.get(`/tower-storage/warehouse/tree?type=0`),
+                RequestUtil.get(`/tower-storage/materialStock/getMaterialStockStatics`)])
+            resole({ warehouseList, ...askPrice })
+        } catch (error) {
+            reject(error)
+        }
+    }))
     // //获取列表数据
     // const loadData = async () => {
     //     const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
@@ -111,7 +121,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 )
             }]}
             extraOperation={
-                <div className="page-count-active">数量合计：{quantity} 重量合计：{weight}</div>
+                <div className="page-count-active">数量合计：{data?.quantity} 重量合计：{data?.weight}</div>
             }
             searchFormItems={[
                 {
@@ -120,7 +130,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     children: <Select style={{ width: "100px" }} defaultValue={""}>
                         <Select.Option value='' key={'aa'}>全部</Select.Option>
                         {
-                            warehouseList.map((item: { id: string, name: string }) => <Select.Option
+                            data?.warehouseList.map((item: { id: string, name: string }) => <Select.Option
                                 value={item.id}
                                 key={item.id}>{item.name}</Select.Option>)
                         }
@@ -132,7 +142,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     children: <Select style={{ width: "100px" }} defaultValue={""}>
                         <Select.Option value='' key={'aa'}>全部</Select.Option>
                         {
-                            warehouseList.map((item: { id: string, name: string }) => <Select.Option
+                            materialTextureOptions?.map((item: { id: string, name: string }) => <Select.Option
                                 value={item.id}
                                 key={item.id}>{item.name}</Select.Option>)
                         }
