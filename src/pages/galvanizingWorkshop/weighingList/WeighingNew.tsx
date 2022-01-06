@@ -29,7 +29,7 @@ export default function WeighingNew(): React.ReactNode {
         if (params.id) {
             data = await RequestUtil.get<IWeighingList>(`/tower-production/weighing/detail/${params.id}`);
             setRelationProducts(data?.relationProducts || [])
-            form.setFieldsValue({...data})
+            form.setFieldsValue({ ...data })
         }
         resole(data)
     }), {})
@@ -98,7 +98,7 @@ export default function WeighingNew(): React.ReactNode {
                 message: '请输入重量'
             }],
             initialValue: detailData.weight,
-            children: <InputNumber style={{width: '100%'}} min={0} maxLength={20} />
+            children: <InputNumber style={{ width: '100%' }} min={0} maxLength={20} />
         },
         {
             dataIndex: "derrickNo",
@@ -119,11 +119,7 @@ export default function WeighingNew(): React.ReactNode {
             }],
             initialValue: detailData.weighingTypeId,
             children: <Select>
-                {weighingtypeOptions && weighingtypeOptions.map(({ id, name }, index) => {
-                    <Select.Option key={index} value={id}>
-                        {name}
-                    </Select.Option>
-                })}
+                {weighingtypeOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
             </Select>
         },
         {
