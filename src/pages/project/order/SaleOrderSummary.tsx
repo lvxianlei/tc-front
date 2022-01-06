@@ -29,7 +29,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         span: 4,
       },
       valueCol: {
-        span: 8,
+        span: 6,
       },
       rows: [
         [
@@ -74,8 +74,8 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         ],
         [
           {
-            label: "销售业务员",
-            value: (baseInfo as any)?.salesman,
+            label: "制单时间",
+            value: baseInfo?.createTime,
           },
           {
             label: "合同要求交货日期",
@@ -96,11 +96,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
           {
             label: "制单人",
             value: baseInfo?.createUserName,
-          },
-          {
-            label: "制单时间",
-            value: baseInfo?.createTime,
-          },
+          }
         ],
       ],
     };
@@ -181,23 +177,23 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
             value:
               baseInfo?.foreignPrice === -1 ? undefined : baseInfo?.foreignPrice,
           },
-        ],
-        [
-          {
-            label: "保函金额",
-            value:
-              baseInfo?.guaranteeAmount === -1
-                ? undefined
-                : baseInfo?.guaranteeAmount,
-          },
-          {
-            label: "佣金",
-            value:
-              baseInfo?.commissionCharge === -1
-                ? undefined
-                : baseInfo?.commissionCharge,
-          },
         ]
+        // [
+        //   {
+        //     label: "保函金额",
+        //     value:
+        //       baseInfo?.guaranteeAmount === -1
+        //         ? undefined
+        //         : baseInfo?.guaranteeAmount,
+        //   },
+        //   {
+        //     label: "佣金",
+        //     value:
+        //       baseInfo?.commissionCharge === -1
+        //         ? undefined
+        //         : baseInfo?.commissionCharge,
+        //   },
+        // ]
       ],
     };
   }
@@ -251,7 +247,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
       dataIndex: "singleWeight",
     },
     {
-      title: "其他单重（kg）",
+      title: "其他重量（kg）",
       dataIndex: "otherWeight",
     },
     {

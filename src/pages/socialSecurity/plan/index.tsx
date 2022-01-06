@@ -57,10 +57,10 @@ export default function ArchivesList(): React.ReactNode {
                     dataIndex: 'operation',
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>
-                            <Button type="link" size="small"><Link to={`/socialSecurity/plan/detail/${record.id}`}>查看</Link></Button>
-                            <Button type="link" size="small"><Link to={`/socialSecurity/plan/edit/${record.id}`}>编辑</Link></Button>
-                            <Button type="link" size="small" disabled={record.status === 1} onClick={() => handleSwichChange(record.id, true)}>启用</Button>
-                            <Button type="link" size="small" disabled={record.status === 2} onClick={() => handleSwichChange(record.id, false)}>禁用</Button>
+                            <Button type="link" className="btn-operation-link" size="small"><Link to={`/socialSecurity/plan/detail/${record.id}`}>查看</Link></Button>
+                            <Button type="link" className="btn-operation-link" size="small"><Link to={`/socialSecurity/plan/edit/${record.id}`}>编辑</Link></Button>
+                            <Button type="link" className="btn-operation-link" size="small" disabled={record.status === 1} onClick={() => handleSwichChange(record.id, true)}>启用</Button>
+                            <Button type="link" className="btn-operation-link" size="small" disabled={record.status === 2} onClick={() => handleSwichChange(record.id, false)}>禁用</Button>
                         </>
                     )
                 }

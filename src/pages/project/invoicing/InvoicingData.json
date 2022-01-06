@@ -79,28 +79,7 @@
             "dataIndex": "contractType",
             "disabled": true,
             "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "不下计划"
-                },
-                {
-                    "value": 2,
-                    "label": "未下计划"
-                },
-                {
-                    "value": 3,
-                    "label": "未下完计划"
-                },
-                {
-                    "value": 4,
-                    "label": "未发完货"
-                },
-                {
-                    "value": 5,
-                    "label": "已发完货"
-                }
-            ]
+            "enum": []
         },
         {
             "title": "承诺回款时间",
@@ -171,6 +150,10 @@
                 {
                     "value": 4,
                     "label": "海关出口报关单"
+                },
+                {
+                    "value": 5,
+                    "label": "计划重量"
                 }
             ]
         },
@@ -258,12 +241,6 @@
                     "dataIndex": "signContractTime",
                     "type": "date",
                     "format": "YYYY-MM-DD"
-                },
-                {
-                    "title": "要求交货日期",
-                    "dataIndex": "deliveryTime",
-                    "type": "date",
-                    "format": "YYYY-MM-DD"
                 }
             ],
             "rules": [
@@ -281,13 +258,7 @@
         {
             "title": "项目编号",
             "dataIndex": "projectCode",
-            "disabled": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "项目编号必填..."
-                }
-            ]
+            "disabled": true
         },
         {
             "title": "合同/工程名称",
@@ -340,19 +311,6 @@
             "dataIndex": "ticketMoney",
             "disabled": true,
             "type": "text"
-        },
-        {
-            "title": "合同交货日期",
-            "dataIndex": "contractDevTime",
-            "disabled": true,
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择合同交货日期..."
-                }
-            ]
         },
         {
             "title": "开票日期",
@@ -459,6 +417,10 @@
                 {
                     "value": 4,
                     "label": "海关出口报关单"
+                },
+                {
+                    "value": 5,
+                    "label": "计划重量"
                 }
             ],
             "rules": [
@@ -473,28 +435,7 @@
             "dataIndex": "contractType",
             "type": "select",
             "disabled": true,
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "不下计划"
-                },
-                {
-                    "value": 2,
-                    "label": "未下计划"
-                },
-                {
-                    "value": 3,
-                    "label": "未下完计划"
-                },
-                {
-                    "value": 4,
-                    "label": "未发完货"
-                },
-                {
-                    "value": 5,
-                    "label": "已发完货"
-                }
-            ],
+            "enum": [],
             "rules": [
                 {
                     "required": true,
@@ -504,13 +445,13 @@
         },
         {
             "title": "理重",
-            "dataIndex": "reasonWeight",
+            "dataIndex": "logicWeight",
             "type": "number",
             "disabled": true
         },
         {
             "title": "计划重量",
-            "dataIndex": "reasonWeight",
+            "dataIndex": "planWeight",
             "type": "number",
             "disabled": true
         },

@@ -419,9 +419,8 @@ export default function ScheduleView(): React.ReactNode {
     const renderTreeNodes = (data:any) =>
     data.map((item:any) => {
     if (item.children) {
-        item.disabled = true;
         return (
-        <TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node}>
+        <TreeNode key={item.id} title={item.title} value={item.id} className={styles.node}>
             {renderTreeNodes(item.children)}
         </TreeNode>
         );
@@ -748,7 +747,7 @@ export default function ScheduleView(): React.ReactNode {
                 exportPath={`/tower-science/productCategory/taskPage`}
                 extraOperation={
                     <Space>
-                        <Button type="primary" onClick={ () => history.goBack() }>返回上一级</Button>
+                        <Button type="ghost" onClick={ () => history.goBack() }>返回</Button>
                     </Space>
                 }
                 requestData={{ loftingTaskId: params.id }}

@@ -1,4 +1,4 @@
-import { Button, message, Modal, Popconfirm, Upload, } from 'antd';
+import { Button, message, Modal, Popconfirm, Upload } from 'antd';
 import React, { useState } from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
 import AuthUtil from '../../../utils/AuthUtil';
@@ -170,7 +170,7 @@ export default function BoltCheck(): React.ReactNode {
                             <Button type="primary" ghost onClick={() => { }} style={{ marginLeft: 10, }}>导入</Button>
                         </Upload>
                         <Button type="primary" ghost onClick={() => { setIsAddModal(true) }} style={{ marginLeft: 10, }}>添加</Button>
-                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
+                        <Button type="ghost" onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
                     </div>
                 }
                 headTabs={[]}

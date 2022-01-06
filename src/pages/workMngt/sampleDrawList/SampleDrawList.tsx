@@ -6,6 +6,7 @@ import { Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
+import styles from './sample.module.less';
 
 export default function SampleDrawList(): React.ReactNode {
     const history = useHistory();
@@ -23,6 +24,7 @@ export default function SampleDrawList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
+            fixed: "left" as FixedType,
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
@@ -89,10 +91,10 @@ export default function SampleDrawList(): React.ReactNode {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            width: 230,
+            width: 70,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small"  className={styles.operationBtn}>
                     {/* <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawMessage/${record.loftingTask}`)}}>小样图信息</Button> */}
                     <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}/${record.smallSampleStatus}`)}} disabled={AuthUtil.getUserId()!==record.smallSampleLeader}>小样图</Button>
                     {/* <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}/${record.smallSampleStatus}`)}}  disabled={record.smallSampleStatus!==3||AuthUtil.getUserId()!==record.loftingLeader}>校核</Button>

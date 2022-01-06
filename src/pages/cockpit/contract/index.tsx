@@ -22,6 +22,7 @@ export default function ViewContract(): React.ReactNode {
                 key: 'index',
                 title: '序号',
                 dataIndex: 'index',
+                fixed: "left",
                 width: 50,
                 render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
             },
@@ -35,7 +36,7 @@ export default function ViewContract(): React.ReactNode {
                 key: 'operation',
                 title: '操作',
                 dataIndex: 'operation',
-                render: (_: any, records: any) => <Button type="link"><Link to={`/cockpit/contract/${records.id}`}>明细</Link></Button>
+                render: (_: any, records: any) => <Link to={`/cockpit/contract/${records.id}`}>明细</Link>
             }]}
         extraOperation={<Button type="primary">导出</Button>}
         onFilterSubmit={onFilterSubmit}

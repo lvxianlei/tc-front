@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Button, Input, DatePicker, Select, Table } from 'antd';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import ExportList from '../../../components/export/list';
 import '../StockPublicStyle.less';
 const { RangePicker } = DatePicker;
 
@@ -21,6 +22,9 @@ export default function RawMaterialStock(): React.ReactNode {
     const [Listdata, setListdata] = useState<any[]>([]);//列表数据
     const [departmentList, setDepartmentList] = useState<any[]>([]);//部门数据
     const [userList, setuserList] = useState<any[]>([]);//申请人数据数据
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     const columns = [
         {
             title: '序号',
@@ -38,11 +42,11 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         }, {
             title: '状态',
-            dataIndex: 'outStockStatus',
+            dataIndex: 'stockStatusName',
             width: 120,
-            render: (text: any, item: any, index: any) => {
-                return <span>{text == 0 ? '待完成' : '已完成'}</span>
-            }
+            // render: (text: any, item: any, index: any) => {
+            //     return <span>{text == 0 ? '待完成' : '已完成'}</span>
+            // }
         }, {
             title: '最新状态变更时间',
             dataIndex: 'updateTime',
@@ -235,7 +239,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Button
                     type="primary"
                     className='func_btn'
-                    onClick={() => { }}
+                    onClick={()=>{setIsExportStoreList(true)}}
                 >导出</Button>
             </div>
             <div className="page_public_Stock">
@@ -268,6 +272,29 @@ export default function RawMaterialStock(): React.ReactNode {
                     }}
                 />
             </div>
+            {isExport?<ExportList
+                history={history}
+                location={location}
+                match={match}
+                columnsKey={() => {
+                    let keys = [...columns]
+                    keys.pop()
+                    return keys
+                }}
+                current={current}
+                size={pageSize}
+                total={total}
+                url={`/tower-storage/outStock`}
+                serchObj={{
+                    applyStaffId,
+                    departmentId,
+                    status,
+                    updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
+                    updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
+                    selectName: keyword,
+                }}
+                closeExportList={() => { setIsExportStoreList(false) }}
+            />:null}
         </div>
     )
 }

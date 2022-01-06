@@ -433,6 +433,7 @@ export default function Information(): React.ReactNode {
                 {
                     key: 'index',
                     title: '序号',
+                    fixed: "left",
                     dataIndex: 'index',
                     width: 50,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
@@ -443,7 +444,7 @@ export default function Information(): React.ReactNode {
                     dataIndex: 'operation',
                     render: (_: undefined, record: any): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Button type="link" onClick={() => handleSeeClick(record.processName, record.id)}>查看</Button>
+                            <span style={{color: "#FF8C00", cursor: "pointer"}} onClick={() => handleSeeClick(record.processName, record.id)}>查看</span>
                         </Space>
                     )
                 }]}

@@ -5,7 +5,12 @@ import { DetailContent, DetailTitle, BaseInfo, EditTable, formatData, Attachment
 import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { productTypeOptions, voltageGradeOptions, saleTypeOptions } from "../../../configuration/DictionaryOptions"
+import {
+    productTypeOptions,
+    voltageGradeOptions,
+    saleTypeOptions,
+    contractPlanStatusOptions
+} from "../../../configuration/DictionaryOptions"
 export default function Edit() {
     const params = useParams<{ id: string }>()
     const history = useHistory()
@@ -74,8 +79,8 @@ export default function Edit() {
                 invoicingInfoDto: {
                     ...invoicData,
                     id: data?.invoicingInfoVo.id || "",
-                    name: invoicData.name.value,
-                    customerId: invoicData.name.customerId,
+                    name: invoicData.name?.value,
+                    customerId: invoicData.name?.id,
                     invoicingId: data?.invoicingInfoVo.invoicingId || ""
                 }
             }
@@ -96,8 +101,9 @@ export default function Edit() {
             baseInfo.setFieldsValue({
                 contractCompany: contractValue.signCustomerName,
                 contractSignTime: contractValue.signContractTime,
-                ticketWeight: logicWeight.logicWeight,
-                reasonWeight: logicWeight.logicWeight,
+                logicWeight: logicWeight.logicWeight,
+                planCode: logicWeight.planNumbers,
+                planWeight: contractValue.plannedWeight,
                 contractDevTime: contractValue.deliveryTime,
                 business: contractValue.salesman,
                 projectCode: contractValue.projectNumber, // 项目编码
@@ -187,6 +193,14 @@ export default function Edit() {
                                         lable: item.name
                                     }))
                                 }) : coItem))
+                            })
+                        case "contractType":
+                            return ({
+                                ...item,
+                                enum: contractPlanStatusOptions?.map(item => ({
+                                    value: item.id,
+                                    label: item.name
+                                }))
                             })
                         case "voltage":
                             return ({

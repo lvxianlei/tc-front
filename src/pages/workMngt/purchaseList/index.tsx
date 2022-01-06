@@ -47,10 +47,12 @@ export default function Invoicing() {
         </Modal>
         <Page
             path="/tower-supply/purchaseTaskTower/purchaser"
+            exportPath={`/tower-supply/purchaseTaskTower/purchaser`}
             columns={[
                 {
                     title: "序号",
                     dataIndex: "index",
+                    fixed: "left",
                     width: 40,
                     render: (_: any, _a: any, index: number) => <>{index + 1}</>
                 },
@@ -60,13 +62,12 @@ export default function Invoicing() {
                     dataIndex: "opration",
                     fixed: "right",
                     width: 100,
-                    render: (_: any, record: any) => <Button disabled={![1, 3].includes(record.purchaseTaskStatus)} type="link" onClick={() => {
+                    render: (_: any, record: any) => <Button className="btn-operation-link" disabled={![1, 3].includes(record.purchaseTaskStatus)} type="link" onClick={() => {
                         setVisible(true)
                         setChooseId(record.id)
                     }}>配料方案</Button>
                 }]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => {
                     if (!generateIds || generateIds.length <= 0) {
                         message.warning("必须选择任务才能生成采购计划...")

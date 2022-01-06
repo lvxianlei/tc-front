@@ -135,12 +135,14 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                 })
                 weldingDetailedStructureList.forEach((items: IComponentList, index: number) => {
                     newData = newData.map((item: IComponentList) => {
+                        console.log(item)
                         if(item.id === items.structureId) {
                             const num = (this.state.settingData && this.state.settingData[index]?.singleNum) || 0;
+                            const now = !!(items.id && items.id?.length > 0) ? Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0) + num : Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0)
                             return {
                                 ...item,
-                                basicsPartNumNow: !!(items.id && items.id?.length > 0) ? Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0) + num : Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0),
-                                totalWeight: Number(item.basicsPartNumNow || 0) *  Number(item.basicsWeight || 0) 
+                                basicsPartNumNow: now,
+                                totalWeight: Number(now || 0) *  Number(item.basicsWeight || 0) 
                             };
                         } else {
                             return {
@@ -411,13 +413,6 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
 
     protected componentColumns = [
         { 
-            title: '序号', 
-            dataIndex: 'index', 
-            key: 'index', 
-            fixed: 'left' as FixedType,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
-        },
-        { 
             title: '段名', 
             dataIndex: 'segmentName', 
             key: 'segmentName'
@@ -559,14 +554,24 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                 </Space> }
                 onCancel={ () => this.setState({ selectVisible: false }) }
             >
-                <CommonTable columns={ this.componentColumns } dataSource={ this.state.componentList } pagination={ false } rowSelection={ { selectedRowKeys: this.state.selectedRowKeys || [], onChange: (selectedKeys: [], selectedRows: []) => {
-                    this.setState({
-                        selectedRows: selectedRows,
-                        selectedRowKeys: selectedKeys
-                    })
-                }, getCheckboxProps: (record: Record<string, any>) => ({
-                    disabled: Number(record.basicsPartNumNow) === 0
-                }) } } />
+                <CommonTable 
+                    haveIndex
+                    columns={ this.componentColumns } 
+                    dataSource={ this.state.componentList } 
+                    pagination={ false } 
+                    rowSelection={ { 
+                        selectedRowKeys: this.state.selectedRowKeys || [], 
+                        onChange: (selectedKeys: [], selectedRows: []) => {
+                            this.setState({
+                                selectedRows: selectedRows,
+                                selectedRowKeys: selectedKeys
+                            })
+                        }, 
+                        getCheckboxProps: (record: Record<string, any>) => ({
+                            disabled: Number(record.basicsPartNumNow) === 0
+                        }) 
+                    } } 
+                />
             </Modal>
         </> 
     }

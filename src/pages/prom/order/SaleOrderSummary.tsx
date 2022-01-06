@@ -9,7 +9,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IContract } from '../../IContract';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
+import SummaryRenderUtil, { IRenderedGrid } from '../../../utils/SummaryRenderUtil';
 import { ChargeType, IProductVo } from './AbstractSaleOrderSetting';
 //  import styles from './SaleOrderSummary.module.less';
 
@@ -106,7 +106,7 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
                 span: 4
             },
             valueCol: {
-                span: 8
+                span: 6
             },
             rows: [[{
                 label: '订单编号',

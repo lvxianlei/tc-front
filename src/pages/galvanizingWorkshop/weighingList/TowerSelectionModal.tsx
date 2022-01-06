@@ -4,7 +4,7 @@
  * @description 选择塔型
  */
 import { Button, FormItemProps, Input, Modal, Space, TableColumnType } from 'antd';
-import Table, { TablePaginationConfig, TableProps } from 'antd/lib/table';
+import Table, { TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 import styles from '../../../components/AbstractSelectableModal.module.less';
@@ -47,7 +47,6 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-production/galvanized/daily/plan/weighing', {
             ...filterValues,
-            fuzzyMsg: '',
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
         });
@@ -85,7 +84,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
         this.getForm()?.resetFields();
     };
 
-    public onFilterSubmit = async (values: Record<string, any>) => {
+    public onFilterSubmit = (values: Record<string, any>) => {
         this.getTable(values, {
             current: 1,
             pageSize: 10,
@@ -101,6 +100,10 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
         return (
             <Table
                 {...this.getTableProps()}
+                rowSelection={{
+                type: "checkbox",
+                selectedRowKeys: this.state.selectedRowKeys,
+                onChange: this.onSelectChange}}
                 pagination={false}
                 scroll={{ x: 1200 }}
                 className={styles.modalTable}
@@ -172,6 +175,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
                     width="80%"
                 >
                     <Space direction="vertical" className={styles.modalTable}>
+                        { this.renderFilterContent() }
                         {this.renderTableContent()}
                     </Space>
                 </Modal>

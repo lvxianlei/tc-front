@@ -105,12 +105,12 @@ export default function EnquiryTask(): React.ReactNode {
             title="工程报价任务详情"
             visible={overviewVisible}
             footer={[
-                <Button type="primary" key="cancel" onClick={() => {
+                <Button key="cancel" onClick={() => {
                     setDetailId("")
                     setOverviewVisible(false)
                 }}>关闭</Button>,
                 <Fragment key="if">
-                    {currentData?.inquiryStatus === 1 && <Button type="primary" onClick={handleRejection}>拒绝</Button>}
+                    {currentData?.inquiryStatus === 1 && <Button onClick={handleRejection}>拒绝</Button>}
                     {currentData?.inquiryStatus === 1 && <Button type="primary" onClick={handleReceive}>接收</Button>}
                 </Fragment>
             ]}
@@ -130,6 +130,7 @@ export default function EnquiryTask(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-supply/inquiryTask"
+            exportPath={`/tower-supply/inquiryTask`}
             columns={[
                 {
                     title: "序号",
@@ -145,30 +146,29 @@ export default function EnquiryTask(): React.ReactNode {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <a onClick={() => {
+                            <a className="btn-operation-link" onClick={() => {
                                 setDetailId(record.id)
                                 setCurrentData(record)
                                 setOverviewVisible(true)
                             }}>任务详情</a>
-                            <Button type="link" disabled={record.inquiryStatus !== 3} onClick={() => {
+                            <Button className="btn-operation-link" type="link" disabled={record.inquiryStatus !== 3} onClick={() => {
                                 setDetailId(record.id)
                                 setTaskVisible(true)
                             }}>指派</Button>
-                            <Button type="link" disabled={record.inquiryStatus !== 2} onClick={() => {
+                            <Button className="btn-operation-link" type="link" disabled={record.inquiryStatus !== 2} onClick={() => {
                                 setDetailId(record.id)
                                 setTaskResultVisible(true)
                             }}>工程报价结果</Button>
-                            <Button type="link" disabled={record.inquiryStatus !== 2} onClick={() => handleFinishTask(record.id)}>提交任务</Button>
+                            <Button type="link" className="btn-operation-link" disabled={record.inquiryStatus !== 2} onClick={() => handleFinishTask(record.id)}>提交任务</Button>
                         </>
                     }
                 }]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost onClick={async () => {
+                {/* <Button type="primary" ghost onClick={async () => {
                     await generateRun()
                     await message.success("成功生成工程报价任务...")
                     history.go(0)
-                }}>临时生成工程报价任务</Button>
+                }}>临时生成工程报价任务</Button> */}
             </>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}

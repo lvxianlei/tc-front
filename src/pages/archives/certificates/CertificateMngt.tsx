@@ -3,65 +3,109 @@ import { Space, Input, Select, Button, Popconfirm, Form, message, TreeSelect, Mo
 import { Link } from 'react-router-dom';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from './DataMngt.module.less';
+import styles from './CertificateMngt.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import { TreeNode } from 'antd/lib/tree-select';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
-import { IDatabaseTree } from '../../basicData/database/DatabaseMngt';
 import useRequest from '@ahooksjs/use-request';
+import { IDatabaseTree } from '../../basicData/database/DatabaseMngt';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import AuthUtil from '../../../utils/AuthUtil';
 
-export interface IData {
+export interface ICertificate {
     readonly id?: string;
-    readonly dataName?: string;
-    readonly dataNumber?: string;
-    readonly dataStatus?: number;
+    readonly certificateDepartment?: string;
+    readonly certificateIntroduce?: string;
+    readonly certificateStatus?: number;
+    readonly certificateLevel?: string;
+    readonly certificateName?: string;
+    readonly certificateNumber?: string;
+    readonly certificateType?: string;
     readonly dataPlaceId?: string;
-    readonly dataType?: string;
     readonly designation?: string;
+    readonly endDate?: string | moment.Moment;
+    readonly staffId?: string;
+    readonly staffName?: string;
+    readonly startDate?: string | moment.Moment;
     readonly updateTime?: string;
+    readonly effective?: string;
+    readonly businessRecordVOList?: []
 }
 
 enum recordState {
     LEND = 1,
     GIVE_BACK = 2,
     LOST = 3
-
 }
 
-export default function DataMngt(): React.ReactNode {
+export default function CertificateMngt(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ filterValue, setFilterValue ] = useState({});
 
     const columns = [
         {
-            key: 'dataNumber',
-            title: '资料编号',
+            key: 'certificateNumber',
+            title: '证书编号',
             width: 150,
-            dataIndex: 'dataNumber',
+            dataIndex: 'certificateNumber',
             render: (_: string, record: Record<string, any>): React.ReactNode => (
-                <Link to={`/archivesMngt/dataMngt/detail/${ record.id }`}>{_}</Link>
+                <Link to={`/archivesMngt/certificateMngt/certificateDetail/${ record.id }`}>{_}</Link>
             )
         },
         {
-            key: 'dataName',
-            title: '资料名称',
+            key: 'certificateName',
+            title: '证书名称',
             width: 150,
-            dataIndex: 'dataName'
+            dataIndex: 'certificateName'
         },
         {
-            key: 'dataTypeName',
-            title: '资料类型',
+            key: 'certificateTypeName',
+            title: '证书类型',
             width: 150,
-            dataIndex: 'dataTypeName'
+            dataIndex: 'certificateTypeName'
         },
         {
-            key: 'dataStatus',
+            key: 'certificateLevel',
+            title: '证书等级',
+            width: 150,
+            dataIndex: 'certificateLevel'
+        },
+        {
+            key: 'certificateIntroduce',
+            title: '资质简介',
+            width: 150,
+            dataIndex: 'certificateIntroduce'
+        },
+        {
+            key: 'startDate',
+            title: '生效日期',
+            width: 150,
+            dataIndex: 'startDate'
+        },
+        {
+            key: 'endDate',
+            title: '失效日期',
+            width: 150,
+            dataIndex: 'endDate'
+        },
+        {
+            key: 'certificateDepartment',
+            title: '发证部门',
+            width: 150,
+            dataIndex: 'certificateDepartment'
+        },
+        {
+            key: 'staffName',
+            title: '姓名',
+            width: 150,
+            dataIndex: 'staffName'
+        },
+        {
+            key: 'certificateStatus',
             title: '状态',
-            dataIndex: 'dataStatus',
+            dataIndex: 'certificateStatus',
             width: 120,
-            render: (dataStatus: number): React.ReactNode => {
-                switch (dataStatus) {
+            render: (certificateStatus: number): React.ReactNode => {
+                switch (certificateStatus) {
                     case 0:
                         return '待入库';
                     case 1:
@@ -93,29 +137,35 @@ export default function DataMngt(): React.ReactNode {
             width: 130,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Link to={`/archivesMngt/dataMngt/detail/${ record.id }`}>详情</Link>
-                    { record.dataStatus === 0 ? <Link to={{pathname: `/archivesMngt/dataMngt/datasetting`, state:{ type: 'edit', data: [record] } }}><Button type="link">编辑</Button></Link> : <Button type="link" disabled>编辑</Button> }
+                    <Link to={`/archivesMngt/certificateMngt/certificateDetail/${ record.id }`}>详情</Link>
+                    { 
+                        record.certificateStatus === 0 
+                        ? <Link to={{pathname: `/archivesMngt/certificateMngt/certificateSetting`, state:{ type: 'edit', data: [record] } }}>
+                            <Button type="link">编辑</Button>
+                        </Link> 
+                        : <Button type="link" disabled>编辑</Button> 
+                    }
                     <Button type="link" onClick={ () => {
                         operation(recordState.LEND, record.id);
-                    } } disabled={ record.dataStatus !== 1 }>借出</Button>
+                    } } disabled={ record.certificateStatus !== 1 }>借出</Button>
                     <Button type="link" onClick={ () => {
                         operation(recordState.GIVE_BACK, record.id);
-                    } } disabled={ !(record.dataStatus === 2) }>归还</Button>
+                    } } disabled={ !(record.certificateStatus === 2) }>归还</Button>
                     <Button type="link" onClick={ () => {
                         operation(recordState.LOST, record.id);
-                    } } disabled={ !(record.dataStatus === 1 || record.dataStatus === 2) }>遗失</Button>
+                    } } disabled={ !(record.certificateStatus === 1 || record.certificateStatus === 2) }>遗失</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.delete(`/tower-system/dataRecord`, [record.id]).then(res => {
+                            RequestUtil.delete(`/tower-system/certificateRecord`, [record.id]).then(res => {
                                 setRefresh(!refresh); 
                             });
                         } }
                         okText="确认"
                         cancelText="取消"
-                        disabled={ record.dataStatus !== 0 }
+                        disabled={record.certificateStatus !== 0}
                     >
-                        <Button type="link" disabled={ record.dataStatus !== 0 }>删除</Button>
+                        <Button type="link" disabled={record.certificateStatus !== 0}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -130,7 +180,7 @@ export default function DataMngt(): React.ReactNode {
 
     const batchDel = () => {
         if(selectedRows.length > 0) {
-            RequestUtil.delete(`/tower-system/dataRecord`, selectedKeys).then(res => {
+            RequestUtil.delete(`/tower-system/certificateRecord`, selectedKeys).then(res => {
                 message.success('批量删除成功');
                 setSelectedKeys([]);
                 setSelectedRows([]);
@@ -141,7 +191,7 @@ export default function DataMngt(): React.ReactNode {
         }
     }
 
-    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: IData[]): void => {
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: ICertificate[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
     }
@@ -154,9 +204,9 @@ export default function DataMngt(): React.ReactNode {
                     ...value,
                     lendOrLostTime: value.lendOrLostTime.format('YYYY-MM-DD'),
                     id: recordId,
-                    dataStatus: tip === recordState.LEND ? 2 : tip === recordState.GIVE_BACK ? 4 : 3
+                    certificateStatus: tip === recordState.LEND ? 2 : tip === recordState.GIVE_BACK ? 4 : 3
                 }
-                RequestUtil.put(`/tower-system/dataRecord`, { ...value }).then(res => {
+                RequestUtil.put(`/tower-system/certificateRecord`, { ...value }).then(res => {
                     message.success('操作成功');
                     setVisible(false);
                     form.resetFields();
@@ -194,12 +244,12 @@ export default function DataMngt(): React.ReactNode {
     });
 
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
-    const [ selectedRows, setSelectedRows ] = useState<IData[]>([]);
+    const [ selectedRows, setSelectedRows ] = useState<ICertificate[]>([]);
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ form ] = Form.useForm();
     const [ tip, setTip ] = useState<number>(1);
     const [ recordId, setRecordId ] = useState<string>('');
-
+    
     const { loading, data } = useRequest<IDatabaseTree[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IDatabaseTree[]>(`/tower-system/dataPlace`);
         resole(data)
@@ -208,42 +258,47 @@ export default function DataMngt(): React.ReactNode {
 
     return <>
         <Page
-            path="/tower-system/dataRecord"
+            path="/tower-system/certificateRecord"
             columns={ columns }
             headTabs={ [] }
-            exportPath={`/tower-system/dataRecord`}
-            extraOperation={ <Space direction="horizontal" size="small">
-                 <Upload 
-                    action={ () => {
-                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                        return baseUrl+'/tower-system/dataRecord/import'
-                    } } 
-                    headers={
-                        {
-                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                            'Tenant-Id': AuthUtil.getTenantId(),
-                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+            exportPath={`/tower-system/certificateRecord`}
+            extraOperation={ 
+                <Space direction="horizontal" size="small">
+                    <Upload 
+                        action={ () => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl+'/tower-system/certificateRecord/import'
+                        } } 
+                        headers={
+                            {
+                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
                         }
+                        showUploadList={ false }
+                        onChange={ (info) => {
+                            if(info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            }
+                            if(info.file.response && info.file.response?.success){
+                                message.success('导入成功！');
+                                setRefresh(!refresh);
+                            } 
+                        } }
+                    >
+                        <Button type="primary">导入</Button>
+                    </Upload>
+                    {/* <Button type="primary" onClick={ () => downloadTemplate('', '证件管理导入模板') } ghost>下载导入模板</Button> */}
+                    <Link to={{pathname: `/archivesMngt/certificateMngt/certificateNew`, state:{ type: 'new' } }}><Button type="primary" ghost>录入</Button></Link>
+                    { 
+                        selectedRows.length > 0 && selectedRows.map(items => items.certificateStatus).indexOf(1) === -1 && selectedRows.map(items => items.certificateStatus).indexOf(2) === -1 && selectedRows.map(items => items.certificateStatus).indexOf(3) === -1 
+                        ? <Link to={{pathname: `/archivesMngt/certificateMngt/certificateSetting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> 
+                        : <Button type="primary" disabled ghost>编辑</Button>
                     }
-                    showUploadList={ false }
-                    onChange={ (info) => {
-                        if(info.file.response && !info.file.response?.success) {
-                            message.warning(info.file.response?.msg)
-                        }
-                        if(info.file.response && info.file.response?.success){
-                            message.success('导入成功！');
-                            setRefresh(!refresh);
-                        } 
-                    } }
-                >
-                    <Button type="primary">导入</Button>
-                </Upload>
-                {/* <Button type="primary" onClick={ () => downloadTemplate('', '资料管理导入模板') } ghost>下载导入模板</Button> */}
-                <Link to={{pathname: `/archivesMngt/dataMngt/dataNew`, state:{ type: 'new' } }}><Button type="primary" ghost>录入</Button></Link>
-                { selectedRows.length > 0 && selectedRows.map(items => items.dataStatus).indexOf(1) === -1 && selectedRows.map(items => items.dataStatus).indexOf(2) === -1 && selectedRows.map(items => items.dataStatus).indexOf(3) === -1 ? <Link to={{pathname: `/archivesMngt/dataMngt/datasetting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button>}
-                { selectedRows.length > 0 && selectedRows.map(items => items.dataStatus).indexOf(1) === -1 && selectedRows.map(items => items.dataStatus).indexOf(2) === -1 && selectedRows.map(items => items.dataStatus).indexOf(3) === -1 ? <Button type="primary" onClick={ batchDel } ghost>删除</Button> : <Button type="primary" disabled ghost>删除</Button>}
-                
-            </Space> }
+                    <Button type="primary" onClick={ batchDel } ghost>删除</Button>
+                </Space>
+            }
             refresh={ refresh }
             tableProps={{
                 rowSelection: {
@@ -260,9 +315,9 @@ export default function DataMngt(): React.ReactNode {
                     </Form.Item>
                 },
                 {
-                    name: 'dataStatus',
+                    name: 'certificateStatus',
                     label: '在库状态',
-                    children: <Form.Item name="dataStatus" initialValue="">
+                    children: <Form.Item name="certificateStatus" initialValue="">
                         <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="4">全部</Select.Option>
                             <Select.Option value={0} key="0">待入库</Select.Option>
@@ -275,7 +330,7 @@ export default function DataMngt(): React.ReactNode {
                 {
                     name: 'fuzzyQuery',
                     label: '模糊查询项',
-                    children: <Input maxLength={50} placeholder="编号/名称"/>
+                    children: <Input maxLength={50} placeholder="编号/名称/等级/姓名"/>
                 }
             ] }
             filterValue={ filterValue }

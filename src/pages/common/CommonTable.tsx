@@ -4,6 +4,7 @@ import { Resizable, ResizeCallbackData } from "react-resizable"
 import styles from "./CommonTable.module.less"
 import "./CommonTable.module.less"
 import moment from "moment"
+import layoutStyles from '../../layout/Layout.module.less'
 type ColumnsItemsType = "text" | "string" | "number" | "select" | "date" | undefined
 
 export function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
@@ -138,6 +139,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
                     cell: ResizableTitle
                 }
             })}
+            className={`${styles.opration} ${ layoutStyles.opration }`}
             onRow={() => ({ className: styles.tableRow })}
             dataSource={dataSource}
             {...props}

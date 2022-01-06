@@ -1,4 +1,4 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
+import React, { useState, useRef, forwardRef, useImperativeHandle, useEffect } from "react"
 import { Button, Form, message, Spin, Modal, InputNumber, Row, Col, Input, Select } from 'antd'
 import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
 import { BasicInformation, editCargoDetails, SelectedArea, Selected, freightInfo, handlingChargesInfo } from "./receivingListData.json"
@@ -6,14 +6,16 @@ import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { materialStandardTypeOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
 import { changeTwoDecimal_f } from "../../../utils/KeepDecimals";
+import { number } from "echarts"
 interface ChooseModalProps {
     id: string,
-    initChooseList: any[]
+    initChooseList: any[],
+    numberStatus: number
 }
 /**
  * 纸质单号，原材料税款合计，车辆牌照
  */
-const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
+const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModalProps, ref) => {
     const [chooseList, setChooseList] = useState<any[]>(initChooseList)
     const [selectList, setSelectList] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
@@ -37,7 +39,7 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
         label: item.name
     }))
 
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { run, loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
             setSelectList(result?.materialContractDetailVos.map((item: any) => ({
@@ -54,9 +56,11 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
         } catch (error) {
             reject(error)
         }
-    }), {
-        // refreshDeps: [id]
-    })
+    }), {})
+    
+    useEffect(() => {
+        run()
+    }, [numberStatus])
 
     const resetFields = () => {
         setCurrentId("")
@@ -344,6 +348,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [visible, setVisible] = useState<boolean>(false)
     const [cargoData, setCargoData] = useState<any[]>([])
     const [contractId, setContractId] = useState<string>("")
+    let [number, setNumber] = useState<number>(0);
     const [columns, setColumns] = useState<object[]>(BasicInformation.map(item => {
         if (["contractNumber", "supplierName"].includes(item.dataIndex)) {
             return ({ ...item, disabled: type === "edit" })
@@ -553,9 +558,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             onCancel={() => {
                 modalRef.current?.resetFields()
                 setVisible(false)
+                setNumber(++number)
             }}
             onOk={handleModalOk}>
-            <ChooseModal id={contractId} ref={modalRef} initChooseList={cargoData} />
+            <ChooseModal id={contractId} ref={modalRef} initChooseList={cargoData} numberStatus={number} />
         </Modal>
         <DetailTitle title="收货单基础信息" />
         <BaseInfo form={form} onChange={handleBaseInfoChange} columns={columns} dataSource={{}} edit />

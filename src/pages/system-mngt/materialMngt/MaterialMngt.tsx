@@ -203,7 +203,7 @@ export default function MaterialMngt(): React.ReactNode {
                 {/* <Button type="primary" ghost>模板下载</Button>
                 <Button type="primary" ghost>导入</Button> */}
                 <Button type="primary" onClick={() => { setVisible(true); setTitle('新增'); }} ghost>新增</Button>
-                <Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>}
             searchFormItems={[
                 {

@@ -5,6 +5,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './DrawTower.module.less';
 import { Link } from 'react-router-dom';
 import DeliverablesListing from './DeliverablesListing';
+import { patternTypeOptions } from '../../configuration/DictionaryOptions';
 
 export default function DrawTowerMngt(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
@@ -16,6 +17,7 @@ export default function DrawTowerMngt(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
+            fixed: "left" as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
@@ -124,12 +126,13 @@ export default function DrawTowerMngt(): React.ReactNode {
         searchFormItems={ [
             {
                 name: 'pattern',
-                label: '类型',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value={ "" } key="4">全部</Select.Option>
-                    <Select.Option value={ 1 } key="1">新放</Select.Option>
-                    <Select.Option value={ 2 } key="2">重新出卡</Select.Option>
-                    <Select.Option value={ 3 } key="3">套用</Select.Option>
+                label: '模式',
+                children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={ index } value={ id }>
+                            { name }
+                        </Select.Option>
+                    }) }
                 </Select>
             },
             {

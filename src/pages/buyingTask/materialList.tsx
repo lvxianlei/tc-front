@@ -23,7 +23,7 @@ export default function MaterialList() {
             },
             ...materialList1,
         ]}
-        extraOperation={<div><Link to=""><Button type="primary">导出</Button></Link> <Link to="/buyingTask/materialList"><Button style={{ marginLeft: "900px" }} onClick={() => { history.goBack() }}>返回上一级</Button></Link></div>}
+        extraOperation={<div><Link to=""><Button type="primary">导出</Button></Link> <Link to="/buyingTask/materialList"><Button style={{ marginLeft: "900px" }} onClick={() => { history.goBack() }}>返回</Button></Link></div>}
         //头部时间
         searchFormItems={[
             {

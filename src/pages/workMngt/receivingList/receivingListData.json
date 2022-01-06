@@ -214,13 +214,7 @@
         {
             "title": "纸质单号",
             "dataIndex": "paperNumber",
-            "type": "string",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入纸质单号"
-                }
-            ]
+            "type": "string"
         },
         {
             "title": "联系人",

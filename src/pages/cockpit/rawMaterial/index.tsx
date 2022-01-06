@@ -1,11 +1,13 @@
 //原材料看板
 import React, { useState } from 'react'
 import { Button, Select, DatePicker, Input, Modal } from 'antd'
-import { Link, useHistory, } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { materialPrice } from "./rawMaterial.json"
 import { Page } from '../../common'
 import HistoryPrice from './HistoryPrice'
 import DataSource from './DataSource'
+import RequestUtil from '../../../utils/RequestUtil'
+import useRequest from '@ahooksjs/use-request'
 import { materialStandardOptions } from '../../../configuration/DictionaryOptions'
 
 export default function ViewRawMaterial(): React.ReactNode {
@@ -26,6 +28,15 @@ export default function ViewRawMaterial(): React.ReactNode {
         }
         return value
     }
+    // 原材料类型
+    const { data: materialCategory } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/materialCategory/category`)
+            resove(result.map((item: any) => ({ label: item.materialCategoryName, value: item.materialCategoryId })));
+        } catch (error) {
+            reject(error)
+        }
+    }))
 
     return (<>
         <Modal
@@ -34,7 +45,7 @@ export default function ViewRawMaterial(): React.ReactNode {
             destroyOnClose
             width={1011}
             footer={[
-                <Button key="close" type="primary" ghost onClick={() => {
+                <Button key="close" onClick={() => {
                     setDetailId("")
                     setPriceVisible(false)
                 }}>关闭</Button>
@@ -51,7 +62,7 @@ export default function ViewRawMaterial(): React.ReactNode {
             visible={dataVisible}
             destroyOnClose
             footer={[
-                <Button key="close" type="primary" ghost onClick={() => {
+                <Button key="close" onClick={() => {
                     setDetailId("")
                     setDataVisible(false)
                 }}>关闭</Button>
@@ -64,9 +75,11 @@ export default function ViewRawMaterial(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-supply/materialPrice"
+            exportPath={`/tower-supply/materialPrice`}
             columns={[
                 {
                     "title": "序号",
+                    "fixed": "left",
                     "dataIndex": "index",
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
@@ -78,12 +91,12 @@ export default function ViewRawMaterial(): React.ReactNode {
                     fixed: 'right',
                     width: 100,
                     render: (_: any, record: any): React.ReactNode => (<>
-                        <Button type="link" onClick={() => {
+                        <Button type="link" className="btn-operation-link" onClick={() => {
                             setDetailId(record.id)
                             setMaterialName(record.materialName)
                             setPriceVisible(true)
                         }}>历史价格</Button>
-                        <Button type="link" onClick={() => {
+                        <Button type="link" className="btn-operation-link"onClick={() => {
                             setDetailId(record.id)
                             setDataVisible(true)
                         }}>数据源</Button>
@@ -91,7 +104,6 @@ export default function ViewRawMaterial(): React.ReactNode {
                 }
             ]}
             extraOperation={<>
-                <Button type="primary" ghost >导出</Button>
                 <Button type="primary" ghost><Link to={`/cockpit/rawMaterial/price`}>价格维护</Link></Button>
             </>}
             onFilterSubmit={onFilterSubmit}
@@ -104,14 +116,14 @@ export default function ViewRawMaterial(): React.ReactNode {
                 {
                     name: 'materialCategoryId',
                     label: '原材料类型',
-                    children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
-                        {/* {projectType.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)} */}
+                    children: <Select style={{ width: "150px" }} placeholder="请选择原材料类型">
+                        {materialCategory?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {
                     name: 'materialStandard',
                     label: '原材料标准',
-                    children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
+                    children: <Select style={{ width: "150px" }} placeholder="请选择原材料标准">
                         {invoiceTypeEnum?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                     </Select>
                 },

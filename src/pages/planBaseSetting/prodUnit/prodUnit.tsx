@@ -21,7 +21,6 @@ const ProdUnit = (): React.ReactNode => {
         {
             title: '操作',
             dataIndex: 'operation',
-            align: 'center',
             render: (text, item: any, index) => {
                 return (
                     <div className='operation'>
@@ -89,14 +88,10 @@ const ProdUnit = (): React.ReactNode => {
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={
-                    <div>
-                        <Button
-                            type="primary"
-                            ghost
-                            onClick={() => { setIsModal(true) }}
-                            style={{ marginLeft: 10, }}
-                        >添加</Button>
-                    </div>
+                    <Button
+                        type="primary"
+                        onClick={() => { setIsModal(true) }}
+                    >添加</Button>
                 }
                 searchFormItems={[
                     {

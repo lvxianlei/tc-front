@@ -31,7 +31,7 @@
                     },
                     {
                         "label": "系统管理",
-                        "icon": "system",
+                        "icon": "xitongguanliTY_xitongguanli",
                         "path": "/sys",
                         "appName": "COMM",
                         "authority": "dictionary_type_list",
@@ -45,12 +45,17 @@
                                 "label": "字典管理",
                                 "path": "/sys/dxnry",
                                 "authority": "dxnry"
+                            },
+                            {
+                                "label": "成本评估配置",
+                                "path": "/sys/costconfig",
+                                "authority": "costconfig"
                             }
                         ]
                     },
                     {
                         "label": "权限管理",
-                        "icon": "rules",
+                        "icon": "quanxianguanliTY_quanxianguanli",
                         "path": "/auth",
                         "appName": "COMM",
                         "authority": "auth_section",
@@ -67,25 +72,30 @@
                             }
                         ]
                     },
-                    {
-                        "label": "放样外协服务",
-                        "icon": "lofting",
-                        "path": "/outsource",
-                        "appName": "RD",
-                        "authority": "entrust_page",
-                        "items": [
-                            {
-                                "label": "委托列表",
-                                "path": "/outsource/entrust",
-                                "authority": "entrust_page_list"
-                            },
-                            {
-                                "label": "已完成塔型",
-                                "path": "/outsource/towershape",
-                                "authority": "entrust_product_category_complete"
-                            }
-                        ]
-                    },
+                    // {
+                    //     "label": "放样外协服务",
+                    //     "icon": "lofting",
+                    //     "path": "/outsource",
+                    //     "appName": "RD",
+                    //     "authority": "entrust_page",
+                    //     "items": [
+                    //         {
+                    //             "label": "委托列表",
+                    //             "path": "/outsource/entrust",
+                    //             "authority": "entrust_page_list"
+                    //         },
+                    //         {
+                    //             "label": "已完成委托",
+                    //             "path": "/outsource/Final",
+                    //             "authority": "entrust_page_list"
+                    //         },
+                    //         {
+                    //             "label": "已完成塔型",
+                    //             "path": "/outsource/towershape",
+                    //             "authority": "entrust_product_category_complete"
+                    //         }
+                    //     ]
+                    // },
                     {
                         "label": "招标信息",
                         "icon": "zhaobiao2",
@@ -136,7 +146,7 @@
                     },
                     {
                         "label": "开票申请管理",
-                        "icon": "examine",
+                        "icon": "caiwuzhongxin_kaipiaoshenqing",
                         "path": "/invoicing",
                         "appName": "FC",
                         "authority": "approvalm_invoicing",
@@ -150,7 +160,7 @@
                     },
                     {
                         "label": "应收账款",
-                        "icon": "examine",
+                        "icon": "a-caiwuzhongxin_yingshouzhangkuan2",
                         "path": "/receivables",
                         "appName": "FC",
                         "authority": "approvalm_invoicing",
@@ -192,7 +202,7 @@
                     },
                     {
                         "label": "工作台",
-                        "icon": "technology",
+                        "icon": "gongying-gongzuotai_gongzuotai",
                         "path": "/workBench",
                         "appName": "SW",
                         "authority": "workbench",
@@ -206,7 +216,7 @@
                     },
                     {
                         "label": "驾驶舱",
-                        "icon": "technology",
+                        "icon": "gongying-jiashicang_jiashichang",
                         "path": "/cockpit",
                         "appName": "RD",
                         "authority": "cockpit",
@@ -225,7 +235,7 @@
                     },
                     {
                         "label": "驾驶舱",
-                        "icon": "technology",
+                        "icon": "gongying-jiashicang_jiashichang",
                         "path": "/cockpit",
                         "appName": "SW",
                         "authority": "cockpit",
@@ -254,7 +264,7 @@
                     },
                     {
                         "label": "工程报价任务",
-                        "icon": "technology",
+                        "icon": "gongying-gongchengbaojiarenwugongchengbaojiarenwu",
                         "path": "/enquiryTask",
                         "appName": "SW",
                         "authority": "enquiryTask",
@@ -268,7 +278,7 @@
                     },
                     {
                         "label": "合作企业管理",
-                        "icon": "technology",
+                        "icon": "hezuoqiyeguanliTY_hezuoqiyeguanli",
                         "path": "/cooperative",
                         "appName": "COMM",
                         "authority": "supplier_mngt",
@@ -287,7 +297,7 @@
                     },
                     {
                         "label": "合同管理",
-                        "icon": "technology",
+                        "icon": "gongying-hetongguanli_hetongguanli",
                         "path": "/contract-mngt",
                         "appName": "SW",
                         "authority": "contract_mngt",
@@ -306,7 +316,7 @@
                     },
                     {
                         "label": "库存管理",
-                        "icon": "technology",
+                        "icon": "gongying-kucunguanli_kucunguanli",
                         "path": "/stock",
                         "appName": "SW",
                         "authority": "inventory_management",
@@ -335,7 +345,7 @@
                     },
                     {
                         "label": "财务管理",
-                        "icon": "technology",
+                        "icon": "gongying-caiwuguanli_caiwuguanli1",
                         "path": "/financial",
                         "appName": "SW",
                         "authority": "financial_management",
@@ -354,7 +364,7 @@
                     },
                     {
                         "label": "评估任务",
-                        "icon": "technology",
+                        "icon": "RD_pinggurenwu",
                         "path": "/assessmentTask",
                         "appName": "RD",
                         "authority": "rd_assess_task_management",
@@ -368,7 +378,7 @@
                     },
                     {
                         "label": "确认任务",
-                        "icon": "technology",
+                        "icon": "RD_querenrenwu1",
                         "path": "/confirmTask",
                         "appName": "RD",
                         "authority": "rd_draw",
@@ -382,7 +392,7 @@
                     },
                     {
                         "label": "放样任务",
-                        "icon": "technology",
+                        "icon": "RD_fangyangrenwu",
                         "path": "/setOutTask",
                         "appName": "RD",
                         "authority": "rd_lofting_task",
@@ -396,7 +406,7 @@
                     },
                     {
                         "label": "采购任务",
-                        "icon": "technology",
+                        "icon": "gongying-caigourenwu_caigourenwu",
                         "path": "/buyingTask",
                         "appName": "SW",
                         "authority": "procurement_task",
@@ -410,7 +420,7 @@
                     },
                     {
                         "label": "工作管理",
-                        "icon": "technology",
+                        "icon": "RD_gongzuoguanli-gongzuobaogao",
                         "path": "/workMngt",
                         "appName": "RD",
                         "authority": "work_management",
@@ -464,7 +474,7 @@
                     },
                     {
                         "label": "工作管理",
-                        "icon": "technology",
+                        "icon": "gongying-gongzuoguanli_gongzuoguanli",
                         "path": "/workMngt",
                         "appName": "SW",
                         "authority": "work_management",
@@ -527,7 +537,7 @@
                     },
                     {
                         "label": "放样塔型",
-                        "icon": "technology",
+                        "icon": "RD-tuzhitaxing",
                         "path": "/setOutTower",
                         "appName": "RD",
                         "authority": "rd_product_category",
@@ -541,7 +551,7 @@
                     },
                     {
                         "label": "问题单",
-                        "icon": "technology",
+                        "icon": "RD_wentidanwentidan",
                         "path": "/question",
                         "appName": "RD",
                         "authority": "rd_issue",
@@ -555,7 +565,7 @@
                     },
                     {
                         "label": "车间工作管理",
-                        "icon": "technology",
+                        "icon": "shengchan_chejiangongzuochejiangongzuo",
                         "path": "/workshopManagement",
                         "appName": "MC",
                         "authority": "workshop_work_management",
@@ -569,7 +579,7 @@
                     },
                     {
                         "label": "原材料领料",
-                        "icon": "technology",
+                        "icon": "shengchan_yuancailiaolingliaoyuanchailiaolingliao",
                         "path": "/materialPicking",
                         "appName": "MC",
                         "authority": "workshop_work_management",
@@ -583,7 +593,7 @@
                     },
                     {
                         "label": "计划排产",
-                        "icon": "technology",
+                        "icon": "zhujihuapaichan-jihuapaichan_jihuapaichan",
                         "path": "/planProd",
                         "appName": "PS",
                         "authority": "approvalm",
@@ -597,7 +607,7 @@
                     },
                     {
                         "label": "车间加工计划",
-                        "icon": "technology",
+                        "icon": "shengchan_chejianjiagongjihuachejianjiagongjihua",
                         "path": "/shopFloorPlan",
                         "authority": "approvalm",
                         "appName": "MC",
@@ -611,49 +621,49 @@
                     },
                     {
                         "label": "镀锌车间",
-                        "icon": "technology",
+                        "icon": "shengchan_duxinchejianduixinchejian",
                         "path": "/galvanizingWorkshop",
-                        "authority": "galvanizing_workshop",
+                        "authority": "approvalm",
                         "appName": "MC",
                         "items": [
                             {
                                 "label": "日计划列表",
                                 "path": "/galvanizingWorkshop/dailySchedule",
-                                "authority": "galvanizing_workshop_daily_plan_list"
+                                "authority": "galvanized_daily_plan_list_management"
                             },
                             {
                                 "label": "过磅单列表",
                                 "path": "/galvanizingWorkshop/weighingList",
-                                "authority": "galvanizing_workshop_weighing_list"
+                                "authority": "weighing_list_management"
                             }
                         ]
                     },
                     {
                         "label": "包装车间",
-                        "icon": "technology",
+                        "icon": "shengchan_baozhuangchejianbaozhuangchejian",
                         "path": "/packagingWorkshop",
                         "appName": "MC",
-                        "authority": "packaging_workshop",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "包装计划列表",
                                 "path": "/packagingWorkshop/processingTask",
-                                "authority": "packaging_workshop_machining_task_panel"
+                                "authority": "package_workshop_list_management"
                             },
                             {
                                 "label": "成品入库",
                                 "path": "/packagingWorkshop/warehousing",
-                                "authority": "packaging_workshop_finished_goods_warehousing_list"
+                                "authority": "package_workshop_finished_product_management"
                             },
                             {
                                 "label": "成品出库任务",
                                 "path": "/packagingWorkshop/deliveryPlan",
-                                "authority": "packaging_workshop_finished_goods_delivery_plan"
+                                "authority": "package_workshop_ex_warehouse_management"
                             },
                             {
                                 "label": "成品库存",
                                 "path": "/packagingWorkshop/stock",
-                                "authority": "packaging_workshop_finished_product_inventory"
+                                "authority": "package_workshop_package_warehouse_management"
                             }
                         ]
                     },
@@ -673,7 +683,7 @@
                     },
                     {
                         "label": "配置管理",
-                        "icon": "technology",
+                        "icon": "gongying-peizhiguanli_peizhiguanli1",
                         "path": "/config",
                         "appName": "SW",
                         "authority": "configuration_management",
@@ -687,7 +697,7 @@
                     },
                     {
                         "label": "基础设置",
-                        "icon": "technology",
+                        "icon": "jichuguanliTY_jichuguanli",
                         "path": "/baseSetting",
                         "appName": "COMM",
                         "authority": "basic_settings",
@@ -731,7 +741,7 @@
                     },
                     {
                         "label": "公告管理",
-                        "icon": "technology",
+                        "icon": "gonggaoguanliTY_gonggaoguanli",
                         "path": "/announcement",
                         "appName": "COMM",
                         "authority": "announcement_management",
@@ -745,7 +755,7 @@
                     },
                     {
                         "label": "档案管理",
-                        "icon": "technology",
+                        "icon": "danganguanliTY_danganguanli",
                         "path": "/archivesMngt",
                         "appName": "COMM",
                         "authority": "file_management",
@@ -764,7 +774,7 @@
                     },
                     {
                         "label": "部门管理",
-                        "icon": "technology",
+                        "icon": "bumenguanliTY_bumenguanli",
                         "path": "/dept",
                         "appName": "COMM",
                         "authority": "department_management",
@@ -788,7 +798,7 @@
                     },
                     {
                         "label": "基础数据",
-                        "icon": "technology",
+                        "icon": "jichushujuTY_jichushuju",
                         "path": "/basicData",
                         "appName": "COMM",
                         "authority": "basic_data",
@@ -802,7 +812,7 @@
                     },
                     {
                         "label": "系统日志",
-                        "icon": "technology",
+                        "icon": "xitongrizhiTY_xitongrizhi",
                         "path": "/systemLog",
                         "appName": "COMM",
                         "authority": "system_log",
@@ -821,7 +831,7 @@
                     },
                     {
                         "label": "请款申请管理",
-                        "icon": "customer",
+                        "icon": "caiwuzhongxin_qingkuanshenqing",
                         "path": "/fundApply",
                         "appName": "FC",
                         "authority": "payment_application_management",
@@ -840,7 +850,7 @@
                     },
                     {
                         "label": "回款信息管理",
-                        "icon": "customer",
+                        "icon": "caiwuzhongxin_huikuanxinxi",
                         "path": "/collection",
                         "appName": "FC",
                         "authority": "collection_information_management",
@@ -854,7 +864,7 @@
                     },
                     {
                         "label": "保函申请管理",
-                        "icon": "customer",
+                        "icon": "caiwuzhongxin_baohanshenqing",
                         "path": "/application",
                         "appName": "FC",
                         "authority": "guarantee_application_management",
@@ -868,7 +878,7 @@
                     },
                     {
                         "label": "员工关系",
-                        "icon": "customer",
+                        "icon": "a-renzi_renliziyuan2",
                         "appName": "HR",
                         "path": "/employeeRelation",
                         "authority": "approvalm",
@@ -917,7 +927,7 @@
                     },
                     {
                         "label": "社保福利",
-                        "icon": "customer",
+                        "icon": "renzi_shebaofuli",
                         "appName": "HR",
                         "path": "/socialSecurity",
                         "authority": "approvalm",
@@ -936,7 +946,7 @@
                     },
                     {
                         "label": "车间计划基础配置",
-                        "icon": "customer",
+                        "icon": "zhujihuapaichan-chejianjihuajichupeizhi_chejianjihuajichupeizhi",
                         "appName": "PS",
                         "path": "/workshopPlanBasic",
                         "authority": "approvalm",
@@ -955,7 +965,7 @@
                     },
                     {
                         "label": "主生产计划",
-                        "icon": "customer",
+                        "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
                         "appName": "PS",
                         "path": "/planBaseSetting",
                         "authority": "approvalm",

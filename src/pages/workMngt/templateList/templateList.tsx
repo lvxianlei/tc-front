@@ -1,11 +1,10 @@
 import React, { useState, } from "react"
-import { Input, DatePicker, Select, Form, } from 'antd'
+import { Input, DatePicker, Select, Form, Spin, } from 'antd'
 import { Page } from '../../common'
-import { useHistory, useLocation } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
 export default function TemplateList() {
-    const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({})
     const location = useLocation<{ state?: number, userId?: string }>();
     const columns: any[] = [
@@ -13,7 +12,6 @@ export default function TemplateList() {
             title: '序号',
             dataIndex: 'index',
             fixed: true,
-            align: 'center',
             render: (text: any, item: any, index: number) => {
                 return <span>{index + 1}</span>
             }
@@ -21,62 +19,45 @@ export default function TemplateList() {
         {
             title: '放样任务编号',
             dataIndex: 'taskNum',
-            align: 'center',
         },
         {
             title: '上传图纸类型',
             dataIndex: 'uploadDrawTypeName',
-            align: 'center',
         },
         {
             title: '内部合同编号',
             dataIndex: 'internalNumber',
-            align: 'center',
         },
         {
             title: '计划号',
             dataIndex: 'planNumber',
-            align: 'center',
         },
         {
             title: '塔型',
             dataIndex: 'productCategoryName',
-            align: 'center',
         },
         {
             title: '计划交付时间',
             dataIndex: 'deliverTime',
-            align: 'center',
         },
         {
             title: '图纸负责人',
             dataIndex: 'drawLeaderName',
-            align: 'center',
         },
         {
             title: '上传状态',
             dataIndex: 'uploadStatusName',
-            align: 'center',
         },
         {
             title: '最新状态变更时间',
             dataIndex: 'updateStatusTime',
-            align: 'center',
         },
         {
             title: '操作',
             dataIndex: 'operation',
-            align: 'center',
-            render: (text: string, item: { id: string, productCategoryId: string, },) => {
+            render: (text: string, record: Record<string, any>): React.ReactNode => {
                 return (
-                    <div className='operation'>
-                        <span
-                            style={{ cursor: 'pointer', color: '#FF8C00' }}
-                            onClick={() => {
-                                history.push(`/workMngt/templateList/${item.id}/${item.productCategoryId}`)
-                            }}
-                        >查看</span>
-                    </div>
+                    <Link to={`/workMngt/templateList/${record.id}/${record.productCategoryId}`}>查看</Link>
                 )
             }
         },
@@ -98,7 +79,7 @@ export default function TemplateList() {
     const checkUser: any = data || [];
 
     return (
-        <>
+        <Spin spinning={ loading }>
             <Page
                 path="/tower-science/loftingTemplate"
                 filterValue={filterValue}
@@ -154,6 +135,6 @@ export default function TemplateList() {
                     }
                 ]}
             />
-        </>
+        </Spin>
     )
 }

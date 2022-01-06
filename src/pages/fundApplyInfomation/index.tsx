@@ -43,7 +43,6 @@
                 wrapRole2DataNode(role.children);
             }
          });
-         console.log(roles, "eoless")
          return roles;
      }
      // 查询按钮
@@ -53,7 +52,6 @@
              value.endPayApplyTime = `${formatDate[1]} 23:59:59`
              value.startPayApplyTime = `${formatDate[0]} 00:00:00`
          }
-         console.log(departData, "departData")
          value.payStatus=payStatus;
          return value
      }
@@ -202,17 +200,17 @@
                                         <>
                                         {/* 等于2为已付款 */}
                                         {record.payStatus != 2 ?
-                                            <Button type="link" onClick={() => { 
+                                            <Button type="link" className="btn-operation-link" onClick={() => { 
                                                 setAddVisible(true);
                                                 setPayApplyId(record.id);
                                                 setAmountPayable(record.payMoney);
                                              } }>新增付款记录</Button>
                                         :""}
-                                            <Button type="link"  onClick={() => {viewShow(record)}}>详情</Button>
+                                            <Button type="link" className="btn-operation-link" onClick={() => {viewShow(record)}}>详情</Button>
                                         </>
                                     )
                                 }
-                                return <Button type="link"onClick={() => { viewShow(record) }}>详情</Button>
+                                return <Button type="link" className="btn-operation-link" onClick={() => { viewShow(record) }}>详情</Button>
                             }
                          }
                  }]}
@@ -239,18 +237,18 @@
                                         {
                                             number.map((item: any, index: number) => {
                                                 if (index === 0) {
-                                                return <Table.Summary.Cell index={1}>合计：</Table.Summary.Cell>
+                                                return <Table.Summary.Cell index={index} key={index}>合计：</Table.Summary.Cell>
                                                 } else
                                                 if (index === 8) {
-                                                return <Table.Summary.Cell index={1}>{changeTwoDecimal_f(sumMoney + "")}</Table.Summary.Cell>
+                                                return <Table.Summary.Cell index={index} key={index}>{changeTwoDecimal_f(sumMoney + "")}</Table.Summary.Cell>
                                                 } else
                                                 if (index === 9) {
-                                                    return <Table.Summary.Cell index={1}>{changeTwoDecimal_f(subMomeny + "")}</Table.Summary.Cell>
+                                                    return <Table.Summary.Cell index={index} key={index}>{changeTwoDecimal_f(subMomeny + "")}</Table.Summary.Cell>
                                                 } else
                                                 if (index === 10) {
-                                                    return <Table.Summary.Cell index={1}>{changeTwoDecimal_f(payMoney + "")}</Table.Summary.Cell>
+                                                    return <Table.Summary.Cell index={index} key={index}>{changeTwoDecimal_f(payMoney + "")}</Table.Summary.Cell>
                                                 } else
-                                                return <Table.Summary.Cell index={2}></Table.Summary.Cell>
+                                                return <Table.Summary.Cell index={index} key={index}></Table.Summary.Cell>
                                             })
                                         }
                                     </Table.Summary.Row>

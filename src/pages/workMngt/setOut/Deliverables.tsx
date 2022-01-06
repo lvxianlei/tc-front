@@ -46,7 +46,8 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
                 title: '序号', 
                 dataIndex: 'index', 
                 width: 50, 
-                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
+                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) 
+            },
             {
                 key: 'name',
                 title: '交付物名称',
@@ -122,7 +123,7 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
                 onCancel={ () => this.modalCancel() }
             >
                 <DetailContent>
-                    <p style={{ paddingBottom: "5px" }}>交付物清单-{ this.props.name }</p>
+                    <p style={{ paddingBottom: "0 12px", fontWeight: "bold", fontSize: '14PX' }}>交付物清单-{ this.props.name }</p>
                     <CommonTable columns={ tableColumns } dataSource={ data } pagination={ false }/>
                 </DetailContent>
             </Modal>

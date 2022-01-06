@@ -93,12 +93,6 @@ const columns = [
         dataIndex: 'totalWeight'
     },
     {
-        key: 'ncName',
-        title: 'NC程序名称',
-        width: 200,
-        dataIndex: 'ncName'
-    },
-    {
         key: 'description',
         title: '备注',
         width: 200,
@@ -189,6 +183,12 @@ const columns = [
         )
     },
     {
+        key: 'type',
+        title: '类型',
+        width: 200,
+        dataIndex: 'type'
+    },
+    {
         key: 'surfaceArea',
         title: '表面积',
         width: 200,
@@ -226,7 +226,7 @@ export default function TowerLoftingDetails(): React.ReactNode {
         requestData={ { productSegmentGroupId: params.productSegmentId } }
         extraOperation={ 
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                <Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space> 
         }
         searchFormItems={ [] }

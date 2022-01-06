@@ -46,8 +46,9 @@ export default function Invoicing() {
                 first,
                 second
             } = value.createUserDeptId;
-            value.createUserDeptId = first
+            // value.createUserDeptId = first
             value.createUserId = second
+            delete value.createUserDeptId
         }
         return value
     }
@@ -97,6 +98,7 @@ export default function Invoicing() {
         />
         <Page
             path="/tower-storage/receiveStock"
+            exportPath={"/tower-storage/receiveStock"}
             columns={[{
                 title: "序号",
                 dataIndex: "index",
@@ -111,25 +113,26 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Link to={`/workMngt/receiving/detail/${record.id}`}>明细</Link>
+                        <Link className="btn-operation-link" to={`/workMngt/receiving/detail/${record.id}`}>明细</Link>
                         <Button
                             type="link"
+                            className="btn-operation-link" 
                             disabled={record.receiveStatus === 1}
                             onClick={() => {
                                 setDetailId(record.id)
                                 setType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                        <Button type="link" onClick={() => {
+                        <Button type="link" className="btn-operation-link" onClick={() => {
                             setVisibleSee(true);
                             setDetailId(record.id);
                         }}>详情</Button>
-                        <Button type="link" disabled={record.lists && record.lists.length !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
+                        <Button type="link" className="btn-operation-link" disabled={record.lists && record.lists.length !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
                 }
             }]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
+                {/* <Button type="primary" ghost>导出</Button> */}
                 <Button type="primary" ghost onClick={() => {
                     setType("new")
                     setVisible(true)

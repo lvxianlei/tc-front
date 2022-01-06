@@ -18,6 +18,7 @@ export interface ITowerLoftingAssignRouteProps extends RouteComponentProps<Tower
     readonly type?: string;  //detail为展示，此时需传detailData
     readonly detailData?: IAppointed;
     readonly rowId?: string;
+    readonly patternName?: string;
 }
 
 export interface TowerLoftingAssignState {
@@ -27,9 +28,9 @@ export interface TowerLoftingAssignState {
     readonly repeatModal: boolean;
     readonly repeatNum?: number;
     readonly selectKey?: number;
-    user?: any[];
-    checkUser?: any[];
-    departmentData?: SelectDataNode[];
+    readonly user?: any[];
+    readonly checkUser?: any[];
+    readonly departmentData?: SelectDataNode[];
 }
 
 interface IAppointed {
@@ -176,8 +177,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
 
     public renderTreeNodes = (data:any) => data.map((item:any) => {
         if (item.children) {
-            item.disabled = true;
-            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } className={ styles.node } >
                 { this.renderTreeNodes(item.children) }
             </TreeNode>);
         }
@@ -204,14 +204,13 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 onCancel={ () => this.modalCancel() }
             >
                 <DetailContent className={ styles.modalHeight }>
-                    <p>指派信息</p>
                     <Form ref={ this.form } className={ styles.descripForm }>
                         <Descriptions title="" bordered size="small" colon={ false } column={ 3 }>
                             <Descriptions.Item label="塔型">
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式">
-                                { this.state.appointed?.patternName }
+                                { this.props.patternName || this.state.appointed?.patternName }
                             </Descriptions.Item>
                             { this.props.type === 'detail' ?
                                 <>

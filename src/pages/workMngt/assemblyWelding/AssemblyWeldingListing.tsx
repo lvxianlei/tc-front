@@ -6,7 +6,7 @@
 
 import React from 'react'
 import { Button, message, Modal, Popconfirm, Space, Spin, TablePaginationConfig, Upload } from 'antd';
-import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -213,7 +213,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                                 message.warning(info.file.response?.msg)
                             }
                             if(info.file.response && info.file.response?.success){
-                                if(info.file.response){
+                                if(Object.keys(info.file.response?.data).length > 0){
                                     setUrl(info.file.response?.data);
                                     setUrlVisible(true);
                                 }else{
@@ -225,7 +225,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                     >
                         <Button type="primary" ghost>导入</Button>
                     </Upload></> : null }
-                    <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
+                    <Button type="ghost" onClick={ () => history.goBack() }>返回</Button>
                 </Space>
                 <CommonTable 
                     dataSource={ detailData?.records } 
@@ -248,7 +248,21 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <CommonTable dataSource={ paragraphData } columns={ paragraphColumns } pagination={ false }/>
             </DetailContent>
         </Spin>
-        { visible ? <AssemblyWeldingNew id={ params.id } segmentId={ record.id } record={ record } productCategoryId={ params.productCategoryId } name={ name } updateList={ () => history.go(0) } visible={ visible } modalCancel={ () => setVisible(false) } segmentNameList={segmentNameList}/> : null}
+        { 
+            visible ? 
+            <AssemblyWeldingNew 
+                id={ params.id } 
+                segmentId={ record.id } 
+                record={ record } 
+                productCategoryId={ params.productCategoryId } 
+                name={ name } 
+                updateList={ () => history.go(0) } 
+                visible={ visible } 
+                modalCancel={ () => setVisible(false) } 
+                segmentNameList={segmentNameList}
+            /> 
+            : null
+        }
         <Modal 
             visible={urlVisible} 
             onOk={()=>{

@@ -72,41 +72,43 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
 
     const handleChange = (id: string, value: number, name: string) => {
-        console.log(id,materials)
-        setMaterials(materials.map((item: any) => item.materialCode + item.length === id ? 
-        ({
-            ...item,
-            [name]: value
-        }) : item))
+        console.log(id, materials)
+        setMaterials(materials.map((item: any) => item.materialCode + item.length === id ?
+            ({
+                ...item,
+                [name]: value
+            }) : item))
     }
 
     return <Spin spinning={loading}>
         <DetailTitle title="询比价基本信息" />
         <BaseInfo form={form} col={1} columns={supplier.map((item: any) => {
-            if(item.dataIndex === 'supplier') {
-                return ({ ...item, search: item.search.map((res: any) => {
-                    if(res.dataIndex === 'supplierType') {
-                        return ({
-                            ...res,
-                            enum: qualityAssuranceEnum
-                        })
-                    }
-                    return res
-                })})
+            if (item.dataIndex === 'supplier') {
+                return ({
+                    ...item, search: item.search.map((res: any) => {
+                        if (res.dataIndex === 'qualityAssurance') {
+                            return ({
+                                ...res,
+                                enum: qualityAssuranceEnum
+                            })
+                        }
+                        return res
+                    })
+                })
             }
             return item
         })} dataSource={{}} edit />
         <DetailTitle title="询价原材料" />
-        <CommonTable  columns={addPriceHead.map((item: any) => {
+        <CommonTable columns={addPriceHead.map((item: any) => {
             if (item.dataIndex === "taxOffer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode + records.length, value, "taxOffer")} /> })
+                return ({ ...item, render: (value: number, records: any) => <div style={{ padding: "2px 0" }}><InputNumber style={{ height: 28 }} min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode + records.length, value, "taxOffer")} /></div> })
             }
             if (item.dataIndex === "offer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode + records.length, value, "offer")} /> })
+                return ({ ...item, render: (value: number, records: any) => <div style={{ padding: "2px 0" }}><InputNumber style={{ height: 28 }} min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode + records.length, value, "offer")} /></div> })
             }
             return item
-        })} 
-        dataSource={materials} />
+        })}
+            dataSource={materials} />
         <Attachment dataSource={data?.inquiryQuotationAttachInfoVos || []} ref={attachRef} edit />
     </Spin>
 })

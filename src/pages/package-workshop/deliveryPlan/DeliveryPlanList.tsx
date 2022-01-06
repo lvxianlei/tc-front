@@ -127,7 +127,7 @@ export default function DeliveryPlanList(): React.ReactNode {
             {
                 name: 'status',
                 label: '出库状态',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
+                children: <Select style={{ width: '120px' }} placeholder="请选择" defaultValue={""}>
                     <Select.Option value={ "" } key="">全部</Select.Option>
                     <Select.Option value={ 1 } key="1">未出库</Select.Option>
                     <Select.Option value={ 2 } key="2">部分出库</Select.Option>
@@ -142,7 +142,7 @@ export default function DeliveryPlanList(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入发货通知单编号/工程名称/计划号进行查询"/>
+                children: <Input placeholder="请输入发货通知单编号/工程名称/计划号进行查询" style={{width: '300px'}}/>
             }
         ] }
         filterValue={ filterValue }

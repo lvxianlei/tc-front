@@ -1,11 +1,6 @@
 {
     "baseInfo": [
         {
-            "title": "生产批次",
-            "dataIndex": "productionBatch",
-            "type":"string"
-        },
-        {
             "title": "采购员",
             "dataIndex": "purchasePersonName",
             "type":"string"
@@ -47,26 +42,7 @@
         },
         {
             "title": "状态",
-            "dataIndex": "shortageStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "待处理",
-                    "value": 1
-                },
-                {
-                    "label": "已处理",
-                    "value": 2
-                },
-                {
-                    "label": "已完成",
-                    "value": 3
-                },
-                {
-                    "label": "已取消",
-                    "value": 4
-                }
-            ]
+            "dataIndex": "shortageStatusName"
         }                     
     ],
     "operationInformation":[

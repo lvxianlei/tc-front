@@ -17,7 +17,7 @@
         "authority": "",
         "title": "研发中心",
         "description": "包含提料、放样等",
-        "path": "/notice/RD",
+        "path": "/workBench/workBenchMngt",
         "appName": "RD"
     },
     {
@@ -67,7 +67,7 @@
     {
         "authority": "",
         "title": "财务中心",
-        "description": "人资管理相关功能",
+        "description": "财务管理相关功能",
         "path": "/notice/FC",
         "appName": "FC"
     },

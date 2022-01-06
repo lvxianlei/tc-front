@@ -26,7 +26,7 @@ export default class AuthorizationFilter implements IFilter {
         if (props.location.pathname !== '/login' && props.location.pathname !== '/driverSide/taskDetail' ) {
             accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
             if (accessable) {
-                const [, authorities] = await Promise.all([
+                const [, authorities] = await Promise.all<any>([
                     RequestUtil.get<any>('/sinzetech-user/user/info'),
                     RequestUtil.get<AuthorityBasic[]>('/sinzetech-system/role/componentList')
                 ]);

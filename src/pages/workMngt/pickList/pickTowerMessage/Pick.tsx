@@ -15,7 +15,12 @@ interface Column extends ColumnType<object> {
 }
 export default function Lofting(): React.ReactNode {
     const history = useHistory();
-    const params = useParams<{ id: string, productSegmentId: string, status: string, materialLeader: string}>();
+    const params = useParams<{ 
+        id: string, 
+        productSegmentId: string, 
+        status: string, 
+        materialLeader: string
+    }>();
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ tipVisible, setTipVisible ] = useState<boolean>(false);
@@ -41,9 +46,21 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'id',
             width: 50,
             fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<><span>{ index + 1 }</span><Form.Item name={['data',index, "id"]} initialValue={ _ } style={{ display: "none" }}>
-                    <Input size="small" onChange={ () => rowChange(index) }/>
-                </Form.Item></>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>
+                    <span>{ index + 1 }</span>
+                    <Form.Item 
+                        name={['data',index, "id"]} 
+                        initialValue={ _ } 
+                        style={{ display: "none" }}
+                    >
+                        <Input 
+                            size="small" 
+                            onChange={ () => rowChange(index) }
+                        />
+                    </Form.Item>
+                </>
+            )
         },
         {
             key: 'segmentName',
@@ -52,7 +69,10 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "segmentId"]} initialValue={ record.segmentId }>
+                <Form.Item 
+                    name={['data',index, "segmentId"]} 
+                    initialValue={ record.segmentId }
+                >
                     <Select onChange={ () => rowChange(index) }>
                         { paragraphList.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
@@ -68,7 +88,10 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             dataIndex: 'patternName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "pattern"]} initialValue={ record.pattern }>
+                <Form.Item 
+                    name={['data',index, "pattern"]} 
+                    initialValue={ record.pattern }
+                >
                    <Select onChange={ () => rowChange(index) }>
                         { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={ index } value={ id  }>
@@ -86,7 +109,10 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "code"]} initialValue={ _ }>
+                <Form.Item 
+                    name={['data',index, "code"]} 
+                    initialValue={ _ }
+                >
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
@@ -98,7 +124,10 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "materialName"]} initialValue={ _ }>
+                <Form.Item 
+                    name={['data',index, "materialName"]} 
+                    initialValue={ _ }
+                >
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
@@ -110,7 +139,10 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "structureTexture"]} initialValue={ _ }>
+                <Form.Item 
+                    name={['data',index, "structureTexture"]} 
+                    initialValue={ _ }
+                >
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
@@ -122,7 +154,10 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "structureSpec"]} initialValue={ _ }>
+                <Form.Item 
+                    name={['data',index, "structureSpec"]} 
+                    initialValue={ _ }
+                >
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
@@ -134,8 +169,16 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             editable: true,
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "length"]} initialValue={ _ }>
-                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
+                <Form.Item 
+                    name={['data',index, "length"]} 
+                    initialValue={ _ }
+                >
+                    <InputNumber 
+                        size="small" 
+                        precision={2} 
+                        min={0} 
+                        onChange={ () => rowChange(index) }
+                    />
                 </Form.Item>
             ) 
         },
@@ -146,8 +189,16 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             editable: true,
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "basicsWeight"]} initialValue={ _===-1?0:_}>
-                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
+                <Form.Item 
+                    name={['data',index, "basicsWeight"]} 
+                    initialValue={ _===-1?0:_}
+                >
+                    <InputNumber 
+                        size="small" 
+                        precision={2} 
+                        min={0} 
+                        onChange={ () => rowChange(index) }
+                    />
                 </Form.Item>
             ) 
         },
@@ -158,8 +209,16 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             editable: true,
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "basicsPartNum"]} initialValue={_===-1?0:_}>
-                    <InputNumber size="small" precision={0}  min={0} onChange={ () => rowChange(index) }/>
+                <Form.Item 
+                    name={['data',index, "basicsPartNum"]} 
+                    initialValue={_===-1?0:_}
+                >
+                    <InputNumber 
+                        size="small" 
+                        precision={0}  
+                        min={0} 
+                        onChange={ () => rowChange(index) }
+                    />
                 </Form.Item>
             ) 
         },
@@ -190,8 +249,17 @@ export default function Lofting(): React.ReactNode {
             width: 230,
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "description"]} initialValue={ _ }>
-                    <TextArea size="small" rows={1} showCount maxLength={300} onChange={ () => rowChange(index) }/>
+                <Form.Item 
+                    name={['data',index, "description"]} 
+                    initialValue={ _ }
+                >
+                    <TextArea 
+                        size="small" 
+                        rows={1} 
+                        showCount 
+                        maxLength={300} 
+                        onChange={ () => rowChange(index) }
+                    />
                 </Form.Item>
             ) 
         }
@@ -220,7 +288,7 @@ export default function Lofting(): React.ReactNode {
                     return {
                         ...col,
                         render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <p>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</p>
+                            <p className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  ''}>{parseFloat(`${(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}`).toFixed(2)}</p>
                         )
                     }
                 }else if(col.dataIndex==='length'){
@@ -234,7 +302,7 @@ export default function Lofting(): React.ReactNode {
                     return {
                         ...col,
                         render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <p >{_===-1?0:_}</p>
+                            <p className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  ''}>{_===-1?0:_}</p>
                         )
                     }
                 }
@@ -265,7 +333,11 @@ export default function Lofting(): React.ReactNode {
         setSelectedRows(selectedRows)
     }
     return <>
-        <Form layout="inline" style={{margin:'20px'}} onFinish={onFilterSubmit}>
+        <Form 
+            layout="inline" 
+            style={{margin:'20px'}} 
+            onFinish={ onFilterSubmit }
+        >
             <Form.Item label='材料名称' name='materialName'>
                 <Input/>
             </Form.Item>
@@ -282,7 +354,10 @@ export default function Lofting(): React.ReactNode {
                 <Button htmlType="reset">重置</Button>
             </Form.Item>
         </Form>
-        <Form ref={ formRef } className={ styles.descripForm }>
+        <Form 
+            ref={ formRef } 
+            className={ styles.descripForm }
+        >
             <Modal 
                 visible={visible} 
                 onOk={()=>{
@@ -306,7 +381,7 @@ export default function Lofting(): React.ReactNode {
                     fixed: 'right' as FixedType,
                     width: 100,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                        <div className={ styles.operationBtn }>
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ record.id }`).then(()=>{
@@ -319,10 +394,13 @@ export default function Lofting(): React.ReactNode {
                             >
                                 <Button type="link" disabled={editorLock==='锁定'}>删除</Button>
                             </Popconfirm>
-                        </Space>
+                        </div>
                     )
                 }] }
-                requestData={{segmentGroupId:params.productSegmentId,...filterValue}}
+                requestData={{
+                    segmentGroupId: params.productSegmentId,
+                    ...filterValue
+                }}
                 headTabs={ [] }
                 filterValue={ filterValue }
                 refresh={ refresh }
@@ -423,17 +501,23 @@ export default function Lofting(): React.ReactNode {
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
                         <Popconfirm
                             title="确认删除?"
-                            onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ selectedKeys.join(',') }`).then(()=>{
-                                message.success('删除成功！');
-                                setRefresh(!refresh);
-                            })}
+                            onConfirm={ async () => {
+                                if(!(selectedKeys.length > 100)){
+                                    await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ selectedKeys.join(',') }`).then(()=>{
+                                        message.success('删除成功！');
+                                        setRefresh(!refresh);   
+                                    })
+                                }else{
+                                    message.error('当前选择数量过多，请重新选择！')
+                                }
+                            }}
                             okText="提交"
                             cancelText="取消"
                             disabled={!(selectedKeys.length>0)}
                         >
                             <Button type="primary" ghost  disabled={!(selectedKeys.length>0)}>删除</Button>
                         </Popconfirm>
-                        <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回上一级</Button>
+                        <Button type="ghost" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回</Button>
                     </Space>
                 }
                 searchFormItems={[]}
@@ -488,9 +572,11 @@ export default function Lofting(): React.ReactNode {
     }>
         <Form form={form}>
             <Button onClick={()=>{
-                tableDataSource.push([])
-                setTableDataSource([...tableDataSource])
-                console.log(tableDataSource)
+                const value = form.getFieldsValue(true).dataV||[];
+                value.push({})
+                setTableDataSource([...value])
+                console.log(value)
+                form.setFieldsValue({ dataV: [...value]})
             }} type='primary' ghost>添加一行</Button>
             <Table
                 columns={[

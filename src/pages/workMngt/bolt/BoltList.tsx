@@ -23,6 +23,7 @@ export default function BoltList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
+            fixed: "left" as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
@@ -108,7 +109,7 @@ export default function BoltList(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 200,
+            width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {
@@ -129,12 +130,9 @@ export default function BoltList(): React.ReactNode {
     const location = useLocation<{ state?: number, userId?: string, weldingOperator?: string }>();
     const userId = AuthUtil.getUserId();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         setDepartment(departmentData);
-        resole(data?.records);
     }), {})
-    const checkUser: any = data || [];
     const [user, setUser] = useState<any[]|undefined>([]);
     const [checkPerson, setCheckPerson] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
@@ -142,6 +140,7 @@ export default function BoltList(): React.ReactNode {
     const [drawTaskId, setDrawTaskId] = useState<string>('');
     const [form] = Form.useForm();
     const [ refresh, setRefresh ] = useState(false);
+    const [ checkUser, setCheckUser ] = useState([]);
     const handleAssignModalOk = async () => {
         try {
             const submitData = await form.validateFields();
@@ -177,9 +176,8 @@ export default function BoltList(): React.ReactNode {
     const renderTreeNodes = (data:any) =>
     data.map((item:any) => {
         if (item.children) {
-            item.disabled = true;
             return (
-            <TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node}>
+            <TreeNode key={item.id} title={item.title} value={item.id}  className={styles.node}>
                 {renderTreeNodes(item.children)}
             </TreeNode>
             );
@@ -273,21 +271,35 @@ export default function BoltList(): React.ReactNode {
                 {
                     name: 'personnel',
                     label: '人员',
-                    children: <Form.Item name="personnel" initialValue={location.state?.userId || ''}>
-                        <Select placeholder="请选择" style={{ width: "150px" }}>
-                            <Select.Option value="" key="6">全部</Select.Option>
-                            { checkUser && checkUser.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                            }) }
-                        </Select>
-                    </Form.Item>
+                    children: <Row>
+                        <Col>
+                            <Form.Item name="dept">
+                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value:any)=>{
+                                    const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+                                    setCheckUser(userData.records)  
+                                }}>
+                                    {renderTreeNodes(wrapRole2DataNode( department ))}
+                                </TreeSelect>
+                            </Form.Item>
+                        </Col>
+                        <Col>
+                            <Form.Item name="personnel">
+                                <Select placeholder="请选择" style={{ width: "150px" }}>
+                                    <Select.Option value="" key="6">全部</Select.Option>
+                                    { checkUser && checkUser.map((item: any) => {
+                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                    }) }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
                 },
                 {
                     name: 'priority',
                     label: '优先级',
                     children: <Select style={{ width: '120px' }} placeholder="请选择">
-                        <Select.Option value="" key="">全部</Select.Option>
-                        <Select.Option value="" key="0">紧急</Select.Option>
+                        <Select.Option value="" key="9">全部</Select.Option>
+                        <Select.Option value="0" key="0">紧急</Select.Option>
                         <Select.Option value="1" key="1">高</Select.Option>
                         <Select.Option value="2" key="2">中</Select.Option>
                         <Select.Option value="3" key="3">低</Select.Option>

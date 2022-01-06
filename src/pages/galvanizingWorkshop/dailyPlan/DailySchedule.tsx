@@ -108,16 +108,26 @@ export default function DailySchedule(): React.ReactNode {
                     <Radio.Button value={3}>已指派</Radio.Button>
                     <Radio.Button value={4}>已完成</Radio.Button>
                 </Radio.Group>
-                <span className={styles.statistical}>统计<span className={styles.statistical}>下达总重量：{data?.issueTotalWeight}吨</span><span className={styles.statistical}>角钢总重量：{data?.angleTotalWeight}吨</span><span className={styles.statistical}>连板总重量：{data?.plateTotalWeight}吨</span></span>
-                {confirmStatus === 1 ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
-                    RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, selectedKeys).then(res => {
-                        message.success("确认成功");
-                        setRefresh(!refresh);
-                    });
-                }}>批量确认</Button> : confirmStatus === 2 ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
-                    setVisible(true);
-                }}>派工</Button> : null}
-                </>}
+                <span className={styles.statistical}>统计
+                    <span className={styles.statistical}>下达总重量：{data?.issueTotalWeight}吨</span>
+                    <span className={styles.statistical}>角钢总重量：{data?.angleTotalWeight}吨</span>
+                    <span className={styles.statistical}>连板总重量：{data?.plateTotalWeight}吨</span>
+                </span>
+                {
+                    confirmStatus === 1 
+                    ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
+                        RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, selectedKeys).then(res => {
+                            message.success("确认成功");
+                            setRefresh(!refresh);
+                        });
+                    }}>批量确认</Button> 
+                    : confirmStatus === 2 
+                    ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
+                        setVisible(true);
+                    }}>派工</Button> 
+                    : null
+                }
+            </>}
             refresh={refresh}
             tableProps={{
                 rowSelection: {
@@ -133,7 +143,7 @@ export default function DailySchedule(): React.ReactNode {
                 },
                 {
                     name: 'time',
-                    label: '送齐时间',
+                    label: '结束时间',
                     children: <DatePicker.RangePicker />
                 }
             ]}

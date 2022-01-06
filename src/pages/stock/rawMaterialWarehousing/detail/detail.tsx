@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Button, Modal, Input, DatePicker, Select, message, Table } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface'
 import RequestUtil from '../../../../utils/RequestUtil';
+import ExportList from '../../../../components/export/list';
 import '../../StockPublicStyle.less';
 import './detail.less';
-
+import useRequest from '@ahooksjs/use-request';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 export default function RawMaterialStock(): React.ReactNode {
@@ -38,6 +39,9 @@ export default function RawMaterialStock(): React.ReactNode {
     const [batchNumber, setBatchNumber] = useState(""); // 批号
     const [warrantyNumber, setWarrantyNumber] = useState(""); // 质保书号
     const [rollingNumber, setRollingNumber] = useState(""); // 轧制批号	
+    const [isExport, setIsExportStoreList] = useState(false)
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
     const columns = [
         {
             title: '序号',
@@ -162,6 +166,22 @@ export default function RawMaterialStock(): React.ReactNode {
             )
         }
     ]
+    const { data: statisticsData, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detailStatistics`, {
+                current: current,
+                size: pageSize,
+                fuzzyQuery: keyword,
+                startStatusUpdateTime: dateString[0] ? dateString[0] + " 00:00:00" : '',
+                endStatusUpdateTime: dateString[1] ? dateString[1] + " 23:59:59" : '',
+                receiveStockId: params.id,
+                receiveStatus: status,
+            })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
     //获取列表数据
     const loadData = async () => {
         const data: any = await RequestUtil.get(`/tower-storage/receiveStock/detail`, {
@@ -173,12 +193,8 @@ export default function RawMaterialStock(): React.ReactNode {
             receiveStockId: params.id,
             receiveStatus: status,
         });
-        setListdata(data.receiveStockDetailPage.records)
-        setReceiveWeight(data.receiveStockMessage.receiveWeight)
-        setReceivePrice(data.receiveStockMessage.receivePrice)
-        setWaitWeight(data.receiveStockMessage.waitWeight)
-        setwaitPrice(data.receiveStockMessage.waitPrice)
-        setTotal(data.receiveStockDetailPage.total)
+        setListdata(data.records)
+        setTotal(data.total)
     }
     // 重置
     const reset = () => {
@@ -231,6 +247,9 @@ export default function RawMaterialStock(): React.ReactNode {
         setLocatorId('');
         setReservoirId('');
         setFurnaceBatchNo('');
+        setBatchNumber('');
+        setWarrantyNumber('');
+        setRollingNumber('');
     }
     // submit收货弹框提交
     const receivingSubmit = async () => {
@@ -302,7 +321,9 @@ export default function RawMaterialStock(): React.ReactNode {
     //进入页面刷新
     useEffect(() => {
         loadData()
+        run()
     }, [current, pageSize, status, dateString])
+
     return (
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
@@ -355,7 +376,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
                         <Input
-                            placeholder="材料名称/标准/规格/材质"
+                            placeholder="炉批号/收货批次/批号/质保书号/轧制批号"
                             value={keyword}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
@@ -383,7 +404,9 @@ export default function RawMaterialStock(): React.ReactNode {
             <div className="func_public_Stock">
                 <Button
                     type="primary"
-                    className='func_btn'
+                    className='func_btn' onClick={() => {
+                        setIsExportStoreList(true)
+                    }}
                 >导出</Button>
                 <Button
                     type="primary"
@@ -392,20 +415,20 @@ export default function RawMaterialStock(): React.ReactNode {
                 >申请质检</Button>
                 <Button
                     className='func_btn'
-                    type="primary"
-                    ghost
+                    type="ghost"
                     onClick={() => {
                         history.go(-1)
                     }}
-                >返回上一级</Button>
+                >返回</Button>
             </div>
             <div className="tip_public_Stock">
-                <div>已收货：重量(吨)合计：{receiveWeight}, 已收货：价税合计(元)合计：{receivePrice} ,  待收货：重量(吨)合计：{waitWeight}待收货：价税合计(元)合计：{waitPrice}</div>
+                <div>已收货：重量(吨)合计：{statisticsData?.receiveWeight}, 已收货：价税合计(元)合计：{statisticsData?.receivePrice} ,  待收货：重量(吨)合计：{statisticsData?.waitWeight}待收货：价税合计(元)合计：{statisticsData?.waitPrice}</div>
             </div>
             <div className="page_public_Stock">
                 <Table
                     columns={columns}
                     dataSource={Listdata}
+                    rowKey="id"
                     size='small'
                     rowClassName={(item, index) => {
                         return index % 2 ? 'aaa' : ''
@@ -425,7 +448,6 @@ export default function RawMaterialStock(): React.ReactNode {
                         pageSizeOptions: ['10', '20', '50', '100'],
                         showSizeChanger: true,
                         onChange: (page, pageSize) => {
-                            console.log(page, pageSize)
                             setCurrent(page);
                             setPageSize(Number(pageSize));
                         }
@@ -502,6 +524,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                         Warehouse.map((item, index) => {
                                             return (
                                                 <Select.Option
+                                                    key={index}
                                                     value={item.id}
                                                 >
                                                     {item.name}
@@ -525,6 +548,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                         Location.map((item, index) => {
                                             return (
                                                 <Select.Option
+                                                    key={index}
                                                     value={item.id}
                                                 >
                                                     {item.name}
@@ -580,6 +604,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                         ReservoirArea.map((item, index) => {
                                             return (
                                                 <Select.Option
+                                                    key={index}
                                                     value={item.id}
                                                 >
                                                     {item.name}
@@ -619,6 +644,28 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
             </Modal>
+            {isExport ? <ExportList
+                history={history}
+                location={location}
+                match={match}
+                columnsKey={() => {
+                    let keys = [...columns]
+                    keys.pop()
+                    return keys
+                }}
+                current={current || 1}
+                size={pageSize || 10}
+                total={total || 0}
+                url={`/tower-storage/receiveStock/detail`}
+                serchObj={{
+                    fuzzyQuery: keyword,
+                    startStatusUpdateTime: dateString[0] ? dateString[0] + " 00:00:00" : '',
+                    endStatusUpdateTime: dateString[1] ? dateString[1] + " 23:59:59" : '',
+                    receiveStockId: params.id,
+                    receiveStatus: status,
+                }}
+                closeExportList={() => { setIsExportStoreList(false) }}
+            /> : null}
         </div>
     )
 }

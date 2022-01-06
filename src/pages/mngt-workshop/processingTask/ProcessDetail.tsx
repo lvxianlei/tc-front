@@ -68,7 +68,7 @@ export default function ProcessDetail(): React.ReactNode {
                             id:params.id,
                             staffList: userDataSource.map((item:any)=>{
                                 return {
-                                    userId: item.id,
+                                    userId: item.userId,
                                     userName: item.name
                                 }
                             })
@@ -87,7 +87,7 @@ export default function ProcessDetail(): React.ReactNode {
   
                     temp.push(selectedRows[0]);
                     setUserDataSource(temp);
-                    } } buttonTitle="添加员工" selectKey={[...userDataSource]}/>
+                    } } buttonTitle="添加员工" selectKey={[...userDataSource]} saleOrderId={detailData?.dispatchVO?.teamId}/>
                 <Table 
                     columns={[
                         { title: '姓名', dataIndex: 'name', key:'name' },

@@ -19,8 +19,9 @@
         },
         {
             "title": "产品类型",
-            "dataIndex": "productType",
-            "type": "string"
+            "dataIndex": "productTypeId",
+            "type": "select",
+            "enum": []
         },
         {
             "title": "电压等级",
@@ -213,19 +214,6 @@
             "type": "string"
         },
         {
-            "title": "合同交货日期",
-            "dataIndex": "contractDevTime",
-            "disabled": true,
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择合同交货日期..."
-                }
-            ]
-        },
-        {
             "title": "开票日期",
             "dataIndex": "ticketTime",
             "type": "date",
@@ -309,6 +297,10 @@
                 {
                     "value": 4,
                     "label": "海关出口报关单"
+                },
+                {
+                    "value": 5,
+                    "label": "计划重量"
                 }
             ],
             "rules": [
@@ -592,7 +584,7 @@
         },
         {
             "title": "生产名称(实际)",
-            "dataIndex": "devName"
+            "dataIndex": "productionName"
         },
         {
             "title": "规格型号",
@@ -622,7 +614,8 @@
     "editInvoicingHead": [
         {
             "title": "发票号码",
-            "dataIndex": "ticketNumber"
+            "dataIndex": "ticketNumber",
+            "type": "text"
         },
         {
             "title": "发票类型",
@@ -661,7 +654,12 @@
         },
         {
             "title": "税率(%)",
-            "dataIndex": "taxRate"
+            "dataIndex": "taxRate",
+            "width": 100,
+            "type": "number",
+            "step": 1,
+            "min": 0,
+            "max": 100
         },
         {
             "title": "税额(元)",

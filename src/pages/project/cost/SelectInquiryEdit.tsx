@@ -111,19 +111,19 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
 
     return <Modal {...props} width={1011} title={auditEnum[props.type]} confirmLoading={loading} onCancel={handleCancel} onOk={handleOk} destroyOnClose>
         {props.type === "selectA" && <>
-            <DetailTitle title="询价类型：供应询价" />
-            <BaseInfo form={baseForm} columns={supplyBaseInfo} dataSource={data || {}} edit />
+            <DetailTitle title="询价类型：供应询价" style={{padding: "0 0 8px 0"}} />
+            <BaseInfo form={baseForm} columns={supplyBaseInfo} dataSource={data || {}} edit  col={2}/>
             <Attachment title="附件" maxCount={10} ref={attchsRef} edit dataSource={attachInfo} />
         </>}
         {props.type === "selectB" && <>
-            <DetailTitle title="询价类型：物流询价" />
-            <BaseInfo form={baseForm} columns={logisticBaseInfo} dataSource={data || {}} edit />
+            <DetailTitle title="询价类型：物流询价" style={{padding: "0 0 8px 0"}}/>
+            <BaseInfo form={baseForm} columns={logisticBaseInfo} dataSource={data || {}} edit col={2}/>
             <EditTable form={askForm} haveNewButton={false} haveOpration={false} columns={askLogistics} dataSource={[]} />
             <Attachment title="附件" maxCount={10} ref={attchsRef} edit dataSource={attachInfo} />
         </>}
         {props.type === "selectC" && <>
-            <DetailTitle title="询价类型：工艺询价" />
-            <BaseInfo form={baseForm} columns={workmanshipBaseInfo} dataSource={data || {}} edit />
+            <DetailTitle title="询价类型：工艺询价" style={{padding: "0 0 8px 0"}}/>
+            <BaseInfo form={baseForm} columns={workmanshipBaseInfo} dataSource={data || {}} edit  col={2}/>
             <Attachment title="附件" maxCount={10} ref={attchsRef} edit dataSource={attachInfo} />
         </>}
     </Modal>

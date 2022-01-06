@@ -57,19 +57,19 @@
         },
         {
             "key": "issueWeight",
-            "title": "下达重量",
+            "title": "下达重量（kg）",
             "width": 150,
             "dataIndex": "issueWeight"
         },
         {
             "key": "angleWeight",
-            "title": "角钢重量",
+            "title": "角钢重量（kg）",
             "width": 150,
             "dataIndex": "angleWeight"
         },
         {
             "key": "plateWeight",
-            "title": "连板重量",
+            "title": "连板重量（kg）",
             "width": 150,
             "dataIndex": "plateWeight"
         },
@@ -125,7 +125,7 @@
         },
         {
             "key": "weight",
-            "title": "重量",
+            "title": "重量（kg）",
             "width": 150,
             "dataIndex": "weight"
         },

@@ -23,19 +23,11 @@ const tableColumns = [
             },
             {
                 value: 2,
-                label: "待指派"
+                label: "进行中"
             },
             {
                 value: 3,
-                label: "已指派"
-            },
-            {
-                value: 4,
                 label: "已完成"
-            },
-            {
-                value: 5,
-                label: "已提交"
             }
         ]
              return <>{value!==-1 && renderEnum.find((item: any) => item.value === value).label}</>

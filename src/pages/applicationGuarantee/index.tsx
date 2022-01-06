@@ -120,6 +120,7 @@ export default function ApplicationColunm(): React.ReactNode {
                         key: 'index',
                         title: '序号',
                         dataIndex: 'index',
+                        fixed: "left",
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
@@ -152,12 +153,15 @@ export default function ApplicationColunm(): React.ReactNode {
                         render: (_: any, record: any) => {
                             return (
                                 <>
-                                    <Button type="link" onClick={() => getUser(record.id)}>查看</Button>
-                                    {acceptStatus === 1 && <Button type="link" onClick={() => {
+                                    <Button type="link" className="btn-operation-link" onClick={() => {
+                                        getUser(record.id)
+                                        setId(record.id);
+                                    }}>查看</Button>
+                                    {acceptStatus === 1 && <Button type="link" className="btn-operation-link" onClick={() => {
                                         setVisible(true);
                                         setId(record.id);
                                     }}>填写保函信息</Button>}
-                                    {acceptStatus === 2 && <Button type="link" onClick={() => {
+                                    {acceptStatus === 2 && <Button className="btn-operation-link" type="link" onClick={() => {
                                         setVisibleRecovery(true);
                                         setId(record.id);
                                         setRequiredReturnTime(record.requiredReturnTime)
@@ -253,6 +257,7 @@ export default function ApplicationColunm(): React.ReactNode {
             <SeeGuarantee
                 visible={visibleSee}
                 userData={userData}
+                id={id}
                 acceptStatus={acceptStatus}
                 onCancel={() => setVisibleSee(false)}
                 onOk={() => setVisibleSee(false)}

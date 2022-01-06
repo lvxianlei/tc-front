@@ -11,12 +11,14 @@ export default function Overview(): React.ReactNode {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [chooseId, setChooseId] = useState<string>("")
+    const [ filterValue, setFilterValue ] = useState({purchaseTaskId: params.id});
     const onFilterSubmit = (value: any) => {
         if (value.startBatcheStatusUpdateTime) {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startBatcheStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endBatcheStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
+        setFilterValue(Object.assign({}, { ...value, purchaseTaskId: params.id }))
         return ({ ...value, purchaseTaskId: params.id })
     }
 
@@ -53,6 +55,7 @@ export default function Overview(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-supply/purchaseTaskTower"
+            exportPath={`/tower-supply/purchaseTaskTower`}
             columns={[
                 ...SeeList,
                 {
@@ -63,21 +66,20 @@ export default function Overview(): React.ReactNode {
                         <Button type="link" disabled={![1, 3].includes(records.batcheTaskStatus)} >
                             <Link to={`/workMngt/buyBurdening/component/${records.id}/${records.batcheTaskStatus}`}>明细</Link>
                         </Button>
-                        <Button type="link" disabled={![3].includes(records.batcheTaskStatus)}
+                        <Button type="link" style={{marginLeft: 12}} disabled={![3].includes(records.batcheTaskStatus)}
                             onClick={() => {
                                 setChooseId(records.id)
                                 setVisible(true)
                             }} >配料方案</Button>
-                        <Button type="link" onClick={() => handleCreateComponent(records.id)
-                        } >临时造数据</Button>
+                        {/* <Button type="link" onClick={() => handleCreateComponent(records.id)
+                        } >临时造数据</Button> */}
                     </>)
                 }
             ]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </>}
-            filterValue={{ purchaseTaskId: params.id }}
+            filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

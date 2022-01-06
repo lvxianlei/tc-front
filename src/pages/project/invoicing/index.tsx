@@ -5,6 +5,7 @@ import { Page } from '../../common'
 import { invoicingListHead } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { contractPlanStatusOptions } from "../../../configuration/DictionaryOptions"
 export default function Invoicing() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState({});
@@ -47,7 +48,26 @@ export default function Invoicing() {
         path="/tower-market/invoicing"
         filterValue={filterValue}
         columns={[
-            ...invoicingListHead,
+            {
+                key: 'index',
+                title: '序号',
+                dataIndex: 'index',
+                fixed: "left",
+                width: 50,
+                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            },
+            ...invoicingListHead.map((item: any) => {
+                if (item.dataIndex === "contractType") {
+                    return ({
+                        ...item,
+                        enum: contractPlanStatusOptions?.map(item => ({
+                            value: item.id,
+                            label: item.name
+                        }))
+                    })
+                }
+                return item
+            }),
             {
                 title: "操作",
                 dataIndex: "opration",
@@ -55,9 +75,9 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" size="small" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
-                        <Button type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
-                        <Button type="link" size="small" disabled={record.state !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
+                        <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}} onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</span>
+                        <Button className="btn-operation-link" type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
+                        <Button className="btn-operation-link" type="link" size="small" disabled={record.state !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
                 }
             }]}
@@ -78,13 +98,11 @@ export default function Invoicing() {
             },
             {
                 name: 'contractType',
-                label: '开票时合同状态',
+                label: '合同下计划状态',
                 children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">不下计划</Select.Option>
-                    <Select.Option value="2">未下计划</Select.Option>
-                    <Select.Option value="3">未下完计划</Select.Option>
-                    <Select.Option value="4">未发完货</Select.Option>
-                    <Select.Option value="5">已发完货</Select.Option>
+                    {
+                        contractPlanStatusOptions?.map(item => <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>)
+                    }
                 </Select>
             },
             {

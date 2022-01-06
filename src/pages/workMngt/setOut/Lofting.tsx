@@ -339,13 +339,13 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            key: 'slottedForm',
+            key: 'type',
             title: '类型',
             width: 200,
-            dataIndex: 'slottedForm',
+            dataIndex: 'type',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "slottedForm"]} initialValue={ _ }>
+                <Form.Item name={['data',index, "type"]} initialValue={ _ }>
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
@@ -461,7 +461,7 @@ export default function Lofting(): React.ReactNode {
             <Form.Item label='段名' name='segmentName'>
                 <Input maxLength={ 50 }/>
             </Form.Item>
-            <Form.Item label='查询' name='structureTexture'>
+            <Form.Item label='查询' name='code'>
                 <Input placeholder="请输入构件编号查询" maxLength={ 50 }/>
             </Form.Item>
             <Form.Item>
@@ -565,11 +565,15 @@ export default function Lofting(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => { 
-                            if(selectedKeys.length > 0) {
-                                RequestUtil.delete(`/tower-science/productStructure?productStructureIdList=${selectedKeys.join(',')}`).then(res => {
-                                    message.success('删除成功');
-                                    history.go(0);
-                                }) 
+                            if(selectedKeys.length > 0) { 
+                                if(selectedKeys.length > 100) {
+                                    message.warning('删除项不可大于100')
+                                } else {
+                                    RequestUtil.delete(`/tower-science/productStructure?productStructureIdList=${selectedKeys.join(',')}`).then(res => {
+                                        message.success('删除成功');
+                                        history.go(0);
+                                    }) 
+                                }
                             } else {
                                 message.warning('请选择要删除的数据')
                             }
@@ -579,7 +583,7 @@ export default function Lofting(): React.ReactNode {
                     >
                         <Button type="primary" ghost>删除</Button>
                     </Popconfirm>
-                    <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                    <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </Space> }
                 searchFormItems={[]}
             />

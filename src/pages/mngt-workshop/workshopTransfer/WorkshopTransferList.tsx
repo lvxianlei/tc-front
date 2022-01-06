@@ -15,7 +15,9 @@ export default function WorkshopTransferList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{ index + 1 }</span>
+            )
         },
         {
             key: 'name',
@@ -42,7 +44,14 @@ export default function WorkshopTransferList(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={()=>{ history.push(`/workshopManagement/workshopTransfer/componentDetail/${ record.id }` )}}>详情</Button>
+                    <Button 
+                        type='link' 
+                        onClick={()=>{ 
+                            history.push(`/workshopManagement/workshopTransfer/componentDetail/${ record.id }` )
+                        }}
+                    >
+                        详情
+                    </Button>
                 </Space>
             )
         },

@@ -89,10 +89,10 @@ export default function PickTowerMessage(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 230,
+            width: 200,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small"  className={styles.operationBtn}>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>提料</Button>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
@@ -139,9 +139,8 @@ export default function PickTowerMessage(): React.ReactNode {
     const renderTreeNodes = (data:any) =>
     data.map((item:any) => {
         if (item.children) {
-            item.disabled = true;
             return (
-            <TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node}>
+            <TreeNode key={item.id} title={item.title} value={item.id}  className={styles.node}>
                 {renderTreeNodes(item.children)}
             </TreeNode>
             );
@@ -267,7 +266,7 @@ export default function PickTowerMessage(): React.ReactNode {
                         <Button type="primary" ghost>提交</Button>
                     </Popconfirm>:null}
                     { (params.status==='1'||params.status==='2')&& params.materialLeader===AuthUtil.getUserId() ? <TowerPickAssign title="塔型提料指派" id={ params.id } update={ onRefresh } /> : null }
-                    <Button type="primary" onClick={()=>history.push('/workMngt/pickList')} ghost>返回上一级</Button>
+                    <Button type="ghost" onClick={()=>history.push('/workMngt/pickList')}>返回</Button>
                     </Space>
                 }
                 searchFormItems={[

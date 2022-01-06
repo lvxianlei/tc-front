@@ -13,8 +13,8 @@ const tableColumns = [
     { title: '加工班组', dataIndex: 'name', key: 'name'},
     { title: '段', dataIndex: 'segmentName', key: 'segmentName', },
     { title: '件号', dataIndex: 'code', key: 'code' },
-    { title: '材料', dataIndex: 'structureTexture', key: 'structureTexture' },
-    { title: '材质', dataIndex: 'description', key: 'description' },
+    { title: '材料', dataIndex: 'materialName', key: 'materialName' },
+    { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
     { title: '长度(mm)', dataIndex: 'length', key: 'length' },
     { title: '单件孔数', dataIndex: 'holesNum', key: 'holesNum' },
@@ -147,7 +147,7 @@ export default function Dispatch(): React.ReactNode {
                         </Col>
                     </Row>
                 </Form>
-                <Space>
+                <Space style={{padding:'0px 0px 24px 0px'}}>
                 <Button type='primary' onClick={async ()=>{
                     await form.validateFields()
                     let value = form.getFieldsValue(true);
@@ -170,6 +170,13 @@ export default function Dispatch(): React.ReactNode {
                     setSelectedRowKeys(tableDataSource.map((item:any)=>{return item.id}))
                     setShow(true);
                 }}>查询</Button>
+                {params.id!=='new'&& <Button type='primary' onClick={()=>{
+                    setShow(false)
+                    // setEquipment({});
+                    // setTeam({})
+                    // form.resetFields();
+                    // formRef.resetFields();
+                }}>编辑</Button>}
                 <Button type='primary' ghost onClick={()=>{
                     setShow(false)
                     setEquipment({});

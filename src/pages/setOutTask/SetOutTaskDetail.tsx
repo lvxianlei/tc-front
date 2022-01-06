@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, Row, Col, Input, message, Image } from 'antd';
+import { Spin, Button, Space, Modal, Row, Col, Input, message } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
@@ -76,12 +76,16 @@ const productColumns = [
     { 
         key: 'loftingAbortTime', 
         title: '放样截止时间', 
-        dataIndex: 'loftingAbortTime' 
+        dataIndex: 'loftingAbortTime',
+        "type": "date",
+        "format": "YYYY-MM-DD" 
     },
     { 
         key: 'materialAbortTime', 
         title: '提料截止时间', 
-        dataIndex: 'materialAbortTime' 
+        dataIndex: 'materialAbortTime',
+        "type": "date",
+        "format": "YYYY-MM-DD"
     },
     {
         key: 'totalWeight', 
@@ -117,10 +121,6 @@ export default function SetOutTaskDetail(): React.ReactNode {
     const detailData: any = data;
     const [ visible, setVisible ] = useState(false);
     const [ rejectReason, setRejectReason ] = useState("");
-    const [ pictureVisible, setPictureVisible ] = useState<boolean>(false);
-    const [ pictureUrl, setPictureUrl ] = useState('');
-    const handlePictureModalCancel = () => { setPictureVisible(false) }
-
 
     if (loading) {
         return <Spin spinning={loading}>
@@ -186,9 +186,6 @@ export default function SetOutTaskDetail(): React.ReactNode {
                 <Col span={ 4 }>拒绝原因<span style={{ color: 'red' }}>*</span></Col>
                 <Col span={ 19 } offset={ 1 }><Input placeholder="请输入" value={ rejectReason } onChange={ (e) => setRejectReason(e.target.value) }/></Col>
             </Row>
-        </Modal>
-        <Modal visible={ pictureVisible } onCancel={ handlePictureModalCancel } footer={ false }>
-            <Image src={ pictureUrl } preview={ false } />
         </Modal>
     </>
 }

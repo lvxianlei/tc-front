@@ -142,7 +142,7 @@
             "title": "关联采购计划",
             "dataIndex": "purchasePlan",
             "type": "popTable",
-            "path": "/tower-supply/materialPurchasePlan",
+            "path": "/tower-supply/materialPurchasePlan?planStatus=1",
             "width": 1011,
             "value": "purchasePlanCode",
             "dependencies": true,
@@ -338,27 +338,6 @@
     ],
     "freight": [
         {
-            "title": "运输承担",
-            "dataIndex": "transportBear",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "供方"
-                },
-                {
-                    "value": 2,
-                    "label": "需方"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择运输承担..."
-                }
-            ]
-        },
-        {
             "title": "运输公司",
             "dataIndex": "transportCompanyId",
             "type": "string",
@@ -370,7 +349,7 @@
             ]
         },
         {
-            "title": "含税价格（吨/元）",
+            "title": "含税价格（元/吨）",
             "dataIndex": "transportTaxPrice",
             "rules": [
                 {
@@ -380,32 +359,11 @@
             ]
         },
         {
-            "title": "不含税价格（吨/元）",
+            "title": "不含税价格（元/吨）",
             "dataIndex": "transportPrice"
         }
     ],
     "stevedoring": [
-        {
-            "title": "卸车承担",
-            "dataIndex": "unloadBear",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "供方"
-                },
-                {
-                    "value": 2,
-                    "label": "需方"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择卸车承担..."
-                }
-            ]
-        },
         {
             "title": "装卸公司",
             "dataIndex": "unloadCompanyId",
@@ -418,7 +376,7 @@
             ]
         },
         {
-            "title": "含税价格（吨/元）",
+            "title": "含税价格（元/吨）",
             "dataIndex": "unloadTaxPrice",
             "rules": [
                 {
@@ -428,7 +386,7 @@
             ]
         },
         {
-            "title": "不含税价格（吨/元）",
+            "title": "不含税价格（元/吨）",
             "dataIndex": "unloadPrice"
         }
     ],
@@ -440,7 +398,7 @@
         },
         {
             "title": "关联采购计划",
-            "dataIndex": "comparisonPriceNumber"
+            "dataIndex": "purchasePlanNumber"
         },
         {
             "title": "供应商",
@@ -497,12 +455,12 @@
             "type": "string"
         },
         {
-            "title": "含税价格（吨/元）",
+            "title": "含税价格（元/吨）",
             "dataIndex": "transportTaxPrice",
             "type": "string"
         },
         {
-            "title": "不含税价格（吨/元）",
+            "title": "不含税价格（元/吨）",
             "dataIndex": "transportPrice",
             "type": "string"
         }
@@ -529,12 +487,12 @@
             "type": "string"
         },
         {
-            "title": "含税价格（吨/元）",
+            "title": "含税价格（元/吨）",
             "dataIndex": "unloadTaxPrice",
             "type": "string"
         },
         {
-            "title": "不含税价格（吨/元）",
+            "title": "不含税价格（元/吨）",
             "dataIndex": "unloadPrice",
             "type": "string"
         }

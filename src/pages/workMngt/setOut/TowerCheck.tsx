@@ -12,7 +12,6 @@ import styles from './SetOut.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import QuestionnaireModal, { IRecord } from './QuestionnaireModal';
 import RequestUtil from '../../../utils/RequestUtil';
-import { downloadTemplate } from './downloadTemplate';
 
 
 const columns = [
@@ -209,6 +208,12 @@ const columns = [
         )
     },
     {
+        key: 'type',
+        title: '类型',
+        width: 200,
+        dataIndex: 'type'
+    },
+    {
         key: 'surfaceArea',
         title: '表面积',
         editable: true,
@@ -290,7 +295,6 @@ export default function TowerCheck(): React.ReactNode {
             headTabs={ [] }
             refresh={ refresh }
             extraOperation={ <Space direction="horizontal" size="small">
-                {/* <Button type="primary" ghost>导出</Button> */}
                 <Popconfirm
                     title="确认完成校核?"
                     onConfirm={ () => { 
@@ -303,7 +307,7 @@ export default function TowerCheck(): React.ReactNode {
                 >
                     <Button type="primary" ghost>完成校核</Button>
                 </Popconfirm>
-                <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
+                <Button type="ghost" onClick={ () => history.goBack() } >返回</Button>
             </Space> }
             searchFormItems={ [
                 {

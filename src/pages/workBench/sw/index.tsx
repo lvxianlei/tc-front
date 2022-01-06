@@ -8,13 +8,15 @@ import useRequest from '@ahooksjs/use-request'
 import { Spin, Table } from 'antd'
 import Line from '../rd/Line'
 import ApplicationContext from '../../../configuration/ApplicationContext'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 export default function SWWorkBench(): React.ReactNode {
+    const history = useHistory()
     const authorities = ApplicationContext.get().authorities
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         const data: { [key: string]: any } = await RequestUtil.get(`/tower-supply/workbench/getWorkbenchData`);
         resole(data)
     }))
+
     return <Spin spinning={loading}>
         <div className={styles.all}>
             <div className={styles.left}>
@@ -22,7 +24,7 @@ export default function SWWorkBench(): React.ReactNode {
                     <DetailTitle title={item.title}></DetailTitle>
                     {item.workbenchItemVos?.filter((itemVos: any) => authorities?.includes(itemVos.authority)).map((workbenchItem: any, index: number) => {
                         return <div key={index} className={item.col !== 2 ? styles.content : styles.content2}>
-                            <Link to={workbenchItem.path}>
+                            <div style={{ cursor: "pointer" }} onClick={() => history.push(workbenchItem.path)}>
                                 <p><CheckCircleOutlined />{workbenchItem.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
                                 <p className={styles.total}>{data?.[item.dataIndex]?.[workbenchItem.dataIndex] || 0}</p>
                                 <div className={styles.draw}>
@@ -37,7 +39,7 @@ export default function SWWorkBench(): React.ReactNode {
                                             Math.ceil(Math.random() * 100)
                                         ]} />
                                 </div>
-                            </Link>
+                            </div>
                         </div>
                     })}
                 </div>)}

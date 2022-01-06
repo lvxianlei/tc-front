@@ -35,6 +35,7 @@ export interface PopTableData {
     dependencies?: boolean
     selectType?: "checkbox" | "radio"
     value?: string
+    getCheckboxProps?: (records: any) => ({ [key: string]: any })
     [key: string]: any
 }
 
@@ -103,7 +104,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
     return <>
-        {(searchs.length > 0 || data.search) && <Form form={form} onFinish={async () => {
+        {(searchs.length > 0 || data.search) && <Form style={{ marginBottom: 16 }} form={form} onFinish={async () => {
             setPagenation({ ...pagenation, current: 1, pageSize: 10 })
             await run()
         }}>
@@ -118,8 +119,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 </Col>)}
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" size="small" style={{ marginLeft: 12 }}>搜索</Button>
-                        <Button type="default" size="small" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
+                        <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>查询</Button>
+                        <Button type="default" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
                     </Form.Item>
                 </Col>
             </Row>
@@ -130,6 +131,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
                 onChange: onSelectChange,
+                getCheckboxProps: data?.getCheckboxProps
             }}
             rowKey={(record: any) => record.id}
             size="small"
@@ -209,7 +211,7 @@ const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
     return <Select
         {...props}
         disabled={data.disabled}
-        style={{ width: "100%", minWidth: 100 }}
+        style={{ width: "100%", minWidth: 80 }}
         {...componentProps}
     >
         {data.enum?.map((item: SelectOption, index: number) => (<Select.Option key={`select_option_${index}_${item.value}`} value={item.value} >{item.label}</Select.Option>))}

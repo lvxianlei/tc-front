@@ -104,7 +104,7 @@ export default function ContractMngt() {
             <Modal destroyOnClose title="操作信息" width={1011}
                 visible={oprationVisible}
                 onCancel={() => setOprationVisible(false)}
-                footer={[<Button type="primary" ghost key="close" onClick={() => setOprationVisible(false)}>关闭</Button>]}>
+                footer={[<Button key="close" onClick={() => setOprationVisible(false)}>关闭</Button>]}>
                 <OprationInfo id={detailId} />
             </Modal>
             <Modal destroyOnClose title="取消" visible={cancelVisible} onOk={handleCancel} onCancel={() => {
@@ -118,6 +118,7 @@ export default function ContractMngt() {
             </Modal>
             <Page
                 path="/tower-supply/comparisonPrice"
+                exportPath={"/tower-supply/comparisonPrice"}
                 columns={[
                     {
                         "title": "序号",
@@ -130,28 +131,26 @@ export default function ContractMngt() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        render: (_: any, records: any) => <Space direction="horizontal" size="small">
-                            <Link to={`/contract-mngt/enquiryCompare/enquiry/${records.id}`}>询价信息</Link>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => {
+                        render: (_: any, records: any) => <>
+                            <Link className="btn-operation-link" to={`/contract-mngt/enquiryCompare/enquiry/${records.id}`}>询价信息</Link>
+                            <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setCancelVisible(true)
                             }}>取消</Button>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => handleDelete(records.id)}>删除</Button>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => {
+                            <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => handleDelete(records.id)}>删除</Button>
+                            <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                            <Button type="link" onClick={() => {
-                                // setDetailId(records.id)
-                                // setOprationVisible(true)
-                                message.warning("功能加急开发中...")
+                            <Button type="link" className="btn-operation-link" onClick={() => {
+                                setDetailId(records.id)
+                                setOprationVisible(true)
                             }}>操作信息</Button>
-                        </Space>
+                        </>
                     }
                 ]}
                 extraOperation={<>
-                    <Button type="primary" ghost>导出</Button>
                     <Button type="primary" ghost onClick={() => {
                         setOprationType("new")
                         setVisible(true)

@@ -139,10 +139,10 @@ export default function QuitProceduresList(): React.ReactNode {
             width: 230,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/view/${record.id}`)}} type='link'>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/operation/${record.id}`)}} type='link' disabled={record.isProcessingCompleted}>办理离职</Button>
-                </Space>
+                <>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/view/${record.id}`)}} type='link' className='btn-operation-link'>查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quitProcedures/operation/${record.id}`)}} type='link' className='btn-operation-link' disabled={record.isProcessingCompleted}>办理离职</Button>
+                </>
             )
         }
     ];
@@ -164,18 +164,19 @@ export default function QuitProceduresList(): React.ReactNode {
                 path={`/tower-hr/employeeDeparture/handlePage`}
                 columns={columns}
                 refresh={refresh}
+                requestData={{ isTransactProcedure: 'false' }}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 searchFormItems={[
                     {
                         name: 'employeeName',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入员工姓名进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入员工姓名进行查询" maxLength={200} style={{width:'200px'}}/>
                     },
                     {
                         name: 'isTransactProcedure',
                         label: '是否办理离职手续',
-                        children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                        children: <Select placeholder="请选择" style={{ width: "150px" }} defaultValue={'false'}>
                             <Select.Option value={''} key="">全部</Select.Option>
                             <Select.Option value={'true'} key="0">是</Select.Option>
                             <Select.Option value={'false'} key="1">否</Select.Option>

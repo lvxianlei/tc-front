@@ -3,6 +3,7 @@ import { Input, Select } from 'antd';
 import { Page } from '../common';
 import moment from 'moment';
 import { patternTypeOptions } from '../../configuration/DictionaryOptions';
+import { FixedType } from 'rc-table/lib/interface';
 
 export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负责人直接返回名称，无需增加-Name字段   30号：加Name
     const [filterValue, setFilterValue] = useState({});
@@ -12,7 +13,8 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            fixed: "left" as FixedType,
+            render: (_a: any, _b: any, index: number) => {return index + 1}
         },
         {
             key: 'taskNum',
@@ -290,7 +292,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
                 label: '模式',
                 children:  <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
                         { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={ index } value={ id + ',' + name }>
+                            return <Select.Option key={ index } value={ id  }>
                                 { name }
                             </Select.Option>
                         }) }

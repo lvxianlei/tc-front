@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Space } from 'antd';
 import React from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -19,16 +19,7 @@ export default function BoltCheck(): React.ReactNode {
         {
             title: '塔位号',
             width: 150,
-            dataIndex: 'gantahao',
-            render: (text: any, item: { productNumVOList: { id: string, productNumber: string }[] }): React.ReactNode => {
-                return (
-                    <span>
-                        {
-                            item.productNumVOList?.map((item: any) => `${item.productNumber}，`)
-                        }
-                    </span>
-                )
-            }
+            dataIndex: 'productNames'
         },
         {
             title: '呼高m',
@@ -81,13 +72,13 @@ export default function BoltCheck(): React.ReactNode {
         <div>
             <Page
                 path={`/tower-science/boltRecord/basicHeight/${params.id}`}
+                exportPath={`/tower-science/boltRecord/basicHeight/${params.id}`}
                 columns={columns}
                 extraOperation={
-                    <div>
-                        <Button type="primary" ghost>导出</Button>
-                        <Button type="primary" ghost onClick={() => { successCheck() }} style={{ marginLeft: 10, }}>完成核验</Button>
-                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
-                    </div>
+                    <Space size="small">
+                        <Button type="primary" ghost onClick={() => { successCheck() }}>完成核验</Button>
+                        <Button type="ghost" onClick={() => { history.go(-1) }}>返回</Button>
+                    </Space>
                 }
                 headTabs={[]}
                 searchFormItems={[]}

@@ -1,11 +1,12 @@
 import React, { useState, useRef } from 'react'
-import { Button, Select, Input, Modal, message } from 'antd'
-import { useHistory, } from 'react-router-dom'
+import { Button, Select, Input, Modal, message, Upload } from 'antd'
+import { useHistory } from 'react-router-dom'
 import { priceMaintain } from "./rawMaterial.json"
 import { Page } from '../../common'
 import Edit from "./Edit"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
+import AuthUtil from '../../../utils/AuthUtil';
 import { materialStandardOptions } from '../../../configuration/DictionaryOptions'
 
 export default function Overview(): React.ReactNode {
@@ -90,10 +91,12 @@ export default function Overview(): React.ReactNode {
             </Modal>
             <Page
                 path="/tower-supply/materialPrice"
+                exportPath={`/tower-supply/materialPrice`}
                 columns={[
                     {
                         "title": "序号",
                         "dataIndex": "index",
+                        "fixed": "left",
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...priceMaintain.map((item: any) => {
@@ -110,7 +113,7 @@ export default function Overview(): React.ReactNode {
                         width: 100,
                         render: (_: any, record: any): React.ReactNode => {
                             return <>
-                                <Button type="link" onClick={() => {
+                                <Button type="link" style={{marginRight: 12}} onClick={() => {
                                     setOprationType("edit")
                                     setEditId(record.id)
                                     setVisible(true)
@@ -121,13 +124,37 @@ export default function Overview(): React.ReactNode {
                     }
                 ]}
                 extraOperation={<>
-                    <Button type="primary" ghost>导出</Button>
-                    <Button type="primary" ghost>导入</Button>
+                    <Upload 
+                        accept=".xls,.xlsx"
+                        action={ () => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl+'/tower-supply/materialPrice/import'
+                        } } 
+                        headers={
+                            {
+                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
+                        }
+                        showUploadList={ false }
+                        onChange={ (info) => {
+                            if(info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            }else if(info.file.response && info.file.response?.success){
+                                message.success('导入成功！');
+                                history.go(0);
+                            }
+                            
+                        } }
+                    >
+                        <Button type="primary" ghost>导入</Button>
+                    </Upload>
                     <Button type="primary" onClick={() => {
                         setOprationType("new")
                         setVisible(true)
                     }} ghost>添加</Button>
-                    <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                    <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </>}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
@@ -145,11 +172,6 @@ export default function Overview(): React.ReactNode {
                             <Select.Option value="">全部</Select.Option>
                             {invoiceTypeEnum?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
-                    },
-                    {
-                        name: 'materialName',
-                        label: '原材料名称',
-                        children: <Input placeholder="原材料名称" />
                     },
                     {
                         name: 'fuzzyQuery',

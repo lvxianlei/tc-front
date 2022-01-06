@@ -57,8 +57,8 @@ export default function Drawing(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.startRefundTime) {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startRefundTime = formatDate[0]
-            value.endRefundTime = formatDate[1]
+            value.startRefundTime = formatDate[0] + " 00:00:00"
+            value.endRefundTime = formatDate[1] + " 23:59:59"
         }
         setFilterValue(value)
         return value
@@ -121,6 +121,7 @@ export default function Drawing(): React.ReactNode {
                 setDetailedId("")
                 setConenctData({})
                 setConnectVisible(false)
+                history.go(0)
             }}
             onCancel={() => {
                 setDetailedId("")
@@ -163,17 +164,17 @@ export default function Drawing(): React.ReactNode {
                 dataIndex: "opration",
                 fixed: "right",
                 render: (_: undefined, record: any) => <>
-                    <Button
-                        type="link"
-                        size="small"
+                    <span
+                        style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}}
                         onClick={() => {
                             setDetailedId(record.id)
                             setDetailVisible(true)
-                        }}>查看</Button>
+                        }}>查看</span>
                     <Button
                         type="link"
                         size="small"
                         disabled={![0, 3].includes(record.auditStatus)}
+                        className="btn-operation-link"
                         onClick={() => {
                             setType("edit")
                             setDetailedId(record.id)
@@ -182,21 +183,23 @@ export default function Drawing(): React.ReactNode {
                     <Button
                         type="link"
                         size="small"
-                        disabled={([null, "-1", -1, 0, 4].includes(record.auditStatus)) || record.contractId}
+                        disabled={(![null, "-1", -1, 4].includes(record.auditStatus)) || record.contractId}
+                         className="btn-operation-link"
                         onClick={() => {
                             setDetailedId(record.id)
                             setConnectVisible(true)
-
                         }}>关联合同</Button>
                     <Button
                         type="link"
                         size="small"
                         disabled={![0, 3].includes(record.auditStatus)}
                         onClick={() => handleDelete(record.id)}
+                         className="btn-operation-link"
                     >删除</Button>
                     <Button
                         type="link"
                         size="small"
+                        className="btn-operation-link"
                         disabled={record.auditStatus !== 1}
                         onClick={() => handleCancel(record.id)}
                     >撤回</Button>

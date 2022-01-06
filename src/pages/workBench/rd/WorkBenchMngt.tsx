@@ -3,7 +3,7 @@ import { WithTranslation } from 'react-i18next';
 import { RouteComponentProps, useHistory } from 'react-router';
 import styles from './WorkBench.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
-import { DetailTitle } from '../../common';
+import { DetailContent, DetailTitle } from '../../common';
 import Line from './Line';
 import { CheckCircleOutlined, RightOutlined, SoundOutlined } from '@ant-design/icons';
 import useRequest from '@ahooksjs/use-request';
@@ -34,8 +34,8 @@ interface IList {
 
 export default function WorkBenchMngt(): React.ReactNode {
 	const userId = AuthUtil.getUserId();
-    const authorities = ApplicationContext.get().authorities;
-	const workBenchList = [ 
+	const authorities = ApplicationContext.get().authorities;
+	const workBenchList = [
 		{
 			title: '评估任务',
 			child: [
@@ -259,9 +259,9 @@ export default function WorkBenchMngt(): React.ReactNode {
 					authority: 'welding_to_be_welding'
 				}
 			]
-		},  {
+		}, {
 			title: '螺栓列表',
-			child: [ 
+			child: [
 				{
 					title: '待指派',
 					dataIndex: 'boltToBeAssigned',
@@ -269,7 +269,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					state: 2,
 					weldingUserId: userId,
 					authority: 'bolt_to_be_assigned'
-				}, 
+				},
 				{
 					title: '待制作',
 					dataIndex: 'boltToBeMade',
@@ -317,8 +317,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 	]
 
 	const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-		const data = await RequestUtil.get(`/tower-science/workbench`);
-		resole(data)
+		// const data = await RequestUtil.get(`/tower-science/workbench`);
+		resole([])
 	}), {})
 	const detailData: any = data;
 	const history = useHistory();
@@ -330,44 +330,59 @@ export default function WorkBenchMngt(): React.ReactNode {
 
 	const getChildContent = (res: IList, ind: number, data: Record<string, any>) => {
 		return <div key={ind} className={res.col !== 2 ? styles.border : styles.border2}>
-			<DetailTitle title={res.title}></DetailTitle>
+			<DetailTitle title={res.title} />
 			<div>{
 				res?.child && res?.child.map((item: IList, index: number) => {
 					const dataIndex: string | undefined = item.dataIndex;
-					if(authorities?.indexOf(item?.authority || '') === -1) {
+					if (authorities?.indexOf(item?.authority || '') === -1) {
 						return null
 					} else {
 						return <div className={res.col !== 2 ? styles.content : styles.content2} key={ind + '_' + index}>
-							<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: { state: item?.state, type: item?.type, userId: item?.userId, createUserId: item?.createUserId, weldingUserId: item?.weldingUserId} }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
+							<p onClick={() => {
+								if (item.path) {
+									history.push({
+										pathname: item.path,
+										state: {
+											state: item?.state,
+											type: item?.type,
+											userId: item?.userId,
+											createUserId: item?.createUserId,
+											weldingUserId: item?.weldingUserId
+										}
+									})
+								}
+							}}>
+								<CheckCircleOutlined style={{ paddingRight: "8px" }} />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span>
+							</p>
 							<p className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</p>
-							 <div className={styles.draw}>
-								<Line 
-									keyIndex={dataIndex + '_' + index} 
+							<div className={styles.draw}>
+								<Line
+									keyIndex={dataIndex + '_' + index}
 									valueList={[
-										Math.ceil(Math.random() * 80), 
-										Math.ceil(Math.random() * 100), 
-										Math.ceil(Math.random() * 150), 
+										Math.ceil(Math.random() * 80),
 										Math.ceil(Math.random() * 100),
-										Math.ceil(Math.random() * 90), 
-										Math.ceil(Math.random() * 100), 
+										Math.ceil(Math.random() * 150),
+										Math.ceil(Math.random() * 100),
+										Math.ceil(Math.random() * 90),
+										Math.ceil(Math.random() * 100),
 										Math.ceil(Math.random() * 100)
-									]} 
+									]}
 								/>
 							</div>
-						</div>	
+						</div>
 					}
 				})
 			}</div>
 		</div>
 	}
 
-	return <div className={styles.all}>
+	return <div className={styles.workBench}>
 		<div className={styles.left}>
 			{
 				detailData ? workBenchList.map((res: IList, ind: number) => {
 					return <>{getChildContent(res, ind, detailData)}</>
 				})
-				: null
+					: null
 			}
 		</div>
 		<div className={styles.right}>

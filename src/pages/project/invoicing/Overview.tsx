@@ -43,9 +43,10 @@ export default function Edit() {
         }
     }
 
-    return <DetailContent title={[
-        <Button type="primary" key="ab" onClick={handleApproval} loading={approvalLoading}>发起审批</Button>
-    ]} operation={[<Button key="cancel" onClick={() => history.go(-1)}>返回</Button>]}>
+    return <DetailContent operation={[
+        <Button type="primary" key="ab" onClick={handleApproval} loading={approvalLoading}>发起审批</Button>,
+        <Button key="cancel" onClick={() => history.go(-1)} style={{ marginLeft: 12 }}>返回</Button>
+    ]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseInfoHead.map((item: any) => {
@@ -56,6 +57,12 @@ export default function Edit() {
                             value: product.id,
                             label: product.name
                         }))
+                    })
+                }
+                if (item.dataIndex === "voltage") {
+                    return ({
+                        ...item,
+                        type: "string"
                     })
                 }
                 return item

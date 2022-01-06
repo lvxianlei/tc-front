@@ -1,4 +1,3 @@
-
 /**
  * @author zyc
  * @copyright © 2021 
@@ -85,6 +84,7 @@ export default function ProcessMngt(): React.ReactNode {
             key: 'id',
             title: '序号',
             dataIndex: 'id',
+            fixed: "left" as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<>
                 <span>{ index + 1 }</span>
                 <Form.Item name={['deptProcessesDetailList',index, "id"]} style={{ display: "none" }}>

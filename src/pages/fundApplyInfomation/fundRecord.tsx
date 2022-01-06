@@ -178,7 +178,7 @@ import OtherDetail from '../questionMngt/OtherDetail';
                         width: 100,
                         render: (_: any, record: any) => {
                         if(!record.Sunmry){
-                            return <Button type="link" 
+                            return <Button className="btn-operation-link" type="link" 
                             onClick={() => {viewShow(record)}}>详情</Button>
                         }
                         }
@@ -203,12 +203,12 @@ import OtherDetail from '../questionMngt/OtherDetail';
                                         {
                                             number.map((item: any, index: number) => {
                                                 if (index === 0) {
-                                                return <Table.Summary.Cell index={1}>合计：</Table.Summary.Cell>
+                                                return <Table.Summary.Cell index={index} key={index}>合计：</Table.Summary.Cell>
                                                 } else
                                                 if (index === 8) {
-                                                return  <Table.Summary.Cell index={1}>{momeny}</Table.Summary.Cell>
+                                                return  <Table.Summary.Cell index={index} key={index}>{momeny}</Table.Summary.Cell>
                                                 } else
-                                                return <Table.Summary.Cell index={2}></Table.Summary.Cell>
+                                                return <Table.Summary.Cell index={index} key={index}></Table.Summary.Cell>
                                             })
                                         }
                                     </Table.Summary.Row>

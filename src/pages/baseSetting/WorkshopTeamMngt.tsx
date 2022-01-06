@@ -10,10 +10,9 @@ import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Co
 import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import WorkshopUserSelectionComponent from '../../components/WorkshopUserModal';
+import WorkshopUserModal from '../../components/UserSelectedModal';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
-import styles from './WorkshopEquipmentMngt.module.less';
 import { DataType } from '../../components/AbstractSelectableModal';
 import { IDetail, ITeamUserList } from './IBaseSetting';
 
@@ -23,9 +22,10 @@ export default function WorkshopTeamMngt(): React.ReactNode {
         {
             key: 'index',
             title: '序号',
+            fixed: "left" as FixedType,
             dataIndex: 'index',
             width: 100,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'name',
@@ -59,15 +59,15 @@ export default function WorkshopTeamMngt(): React.ReactNode {
             width: 150,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={ () => edit(record.id) } >编辑</Button>
+                    <Button type="link" onClick={() => edit(record.id)} >编辑</Button>
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ () => {
+                        onConfirm={() => {
                             RequestUtil.delete(`/tower-production/team`, { id: record.id }).then(res => {
                                 message.success('删除成功');
                                 setRefresh(!refresh);
                             });
-                        } }
+                        }}
                         okText="确认"
                         cancelText="取消"
                     >
@@ -97,7 +97,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ () => delRow(index) }
+                        onConfirm={() => delRow(index)}
                         okText="确认"
                         cancelText="取消"
                     >
@@ -111,7 +111,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     const save = () => {
         form.validateFields().then(res => {
             let value = form.getFieldsValue(true);
-            if(userList.length > 0) {
+            if (userList.length > 0) {
                 value = {
                     ...value,
                     id: detail.id,
@@ -134,7 +134,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     }
 
     const edit = async (id: string) => {
-        const data = await RequestUtil.get<IDetail>(`/tower-production/team?id=${ id }`);
+        const data = await RequestUtil.get<IDetail>(`/tower-production/team?id=${id}`);
         setDetail(data);
         form.setFieldsValue({ ...data });
         setUserList(data?.teamUserVOList || [])
@@ -162,13 +162,13 @@ export default function WorkshopTeamMngt(): React.ReactNode {
         setUserList([...userList]);
     }
 
-    const [ refresh, setRefresh ] = useState(false);
-    const [ visible, setVisible ] = useState(false);
-    const [ form ] = Form.useForm();
-    const [ userList, setUserList ] = useState<ITeamUserList[]>([]);
-    const [ title, setTitle ] = useState('新增');
-    const [ detail, setDetail ] = useState<IDetail>({});
-    const [ loading, setLoading ] = useState(true);
+    const [refresh, setRefresh] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [form] = Form.useForm();
+    const [userList, setUserList] = useState<ITeamUserList[]>([]);
+    const [title, setTitle] = useState('新增');
+    const [detail, setDetail] = useState<IDetail>({});
+    const [loading, setLoading] = useState(true);
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get<SelectDataNode[]>(`/tower-aps/productionUnit?size=1000`);
         resole(data?.records);
@@ -178,66 +178,72 @@ export default function WorkshopTeamMngt(): React.ReactNode {
         <>
             <Page
                 path="/tower-production/team/page"
-                columns={ columns }
-                headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle('新增');
-                setLoading(false); } } ghost>新增</Button> }
-                refresh={ refresh }
-                searchFormItems={ [
+                columns={columns}
+                headTabs={[]}
+                extraOperation={<Button type="primary" onClick={() => {
+                    setVisible(true); setTitle('新增');
+                    setLoading(false);
+                }} ghost>新增</Button>}
+                refresh={refresh}
+                searchFormItems={[
                     {
                         name: 'name',
                         label: '',
-                        children: <Input placeholder="请输入班组名称进行查询"/>
+                        children: <Input placeholder="请输入班组名称进行查询" />
                     }
-                ] }
+                ]}
                 onFilterSubmit={(values: Record<string, any>) => { return values; }}
             />
-            <Modal visible={ visible } width="40%" title={ title + "班组" } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
+            <Modal visible={visible} width="50%" title={title + "班组"} okText="保存" cancelText="取消" onOk={save} onCancel={cancel}>
                 <Spin spinning={loading}>
-                    <Form form={ form } labelCol={{ span: 6 }}>
+                    <Form form={form} labelCol={{ span: 6 }}>
                         <Row>
-                            <Col span={ 12 }>
-                                <Form.Item name="productUnitId" initialValue={ detail.productUnitId } label="所属生产单元" rules={[{
-                                        "required": true,
-                                        "message": "请选择所属生产单元"
-                                    }]}>
+                            <Col span={12}>
+                                <Form.Item name="productUnitId" initialValue={detail.productUnitId} label="所属生产单元" rules={[{
+                                    "required": true,
+                                    "message": "请选择所属生产单元"
+                                }]}>
                                     <Select placeholder="请选择">
-                                        { productUnitData?.map((item: any) => {
-                                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                                        }) }
+                                        {productUnitData?.map((item: any) => {
+                                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                        })}
                                     </Select>
                                 </Form.Item>
                             </Col>
-                            <Col span={ 12 }>
-                                <Form.Item name="name" label="班组名称" initialValue={ detail.name } rules={[{
-                                        "required": true,
-                                        "message": "请输入班组名称"
-                                    },
-                                    {
-                                        pattern: /^[^\s]*$/,
-                                        message: '禁止输入空格',
-                                    }]}>
-                                    <Input maxLength={ 50 }/>
+                            <Col span={12}>
+                                <Form.Item name="name" label="班组名称" initialValue={detail.name} rules={[{
+                                    "required": true,
+                                    "message": "请输入班组名称"
+                                },
+                                {
+                                    pattern: /^[^\s]*$/,
+                                    message: '禁止输入空格',
+                                }]}>
+                                    <Input maxLength={50} />
                                 </Form.Item>
                             </Col>
                         </Row>
                     </Form>
-                    <p><span style={{ color: 'red' }}>*</span>班组成员</p>
-                    <WorkshopUserSelectionComponent rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={ (selectedRows: object[] | any) => {
-                        selectedRows = selectedRows.map((item: DataType) => {
-                            return {
-                                userId: item.id,
-                                name: item.name,
-                                position: item.stationName || '1',
-                                teamId: detail.id
-                            }
-                        })
-                        const res = new Map();
-                        const rows = [...userList, ...selectedRows]
-                        let newRows = rows.filter((item: DataType) => !res.has(item.userId) && res.set(item.userId, 1));
-                        setUserList(newRows);
-                    } }/>
-                    <CommonTable columns={ tableColumns } dataSource={ userList } pagination={ false } />
+                    <p><span style={{ color: 'red', paddingRight: '5px' }}>*</span>班组成员</p>
+                    <WorkshopUserModal
+                        rowSelectionType="checkbox"
+                        buttonTitle="添加员工"
+                        selectKey={userList.map(res => { return res.userId })}
+                        onSelect={(selectedRows: object[] | any) => {
+                            selectedRows = selectedRows.map((item: DataType) => {
+                                return {
+                                    userId: item.id,
+                                    name: item.name,
+                                    position: item.stationName || '1',
+                                    teamId: detail.id
+                                }
+                            })
+                            const res = new Map();
+                            const rows = [...userList, ...selectedRows]
+                            let newRows = rows.filter((item: DataType) => !res.has(item.userId) && res.set(item.userId, 1));
+                            setUserList(newRows);
+                        }} />
+                    <CommonTable columns={tableColumns} dataSource={userList} pagination={false} />
                 </Spin>
             </Modal>
         </>

@@ -5,6 +5,7 @@ import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 import { patternTypeOptions } from '../../configuration/DictionaryOptions';
+import styles from './setOut.module.less';
 
 export default function SetOutTowerMngt(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
@@ -17,6 +18,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
+            fixed: "left" as FixedType,
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
@@ -92,10 +94,10 @@ export default function SetOutTowerMngt(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 250,
+            width: 230,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerDetail/${record.id}`)}}>塔型信息</Button>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerMember/${record.id}/${record.steelAngleCount+record.steelPlateCount}`)}}>塔型构件</Button>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/assemblyWeld/${record.id}`)}}>组焊清单</Button>
@@ -202,7 +204,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
                     label: '类型',
                     children:   <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
                         { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={ index } value={ id + ',' + name }>
+                            return <Select.Option key={ index } value={ id }>
                                 { name }
                             </Select.Option>
                         }) }

@@ -36,8 +36,8 @@ export default function PlanList(): React.ReactNode {
                     dataIndex: 'operation',
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>
-                            <Button type="link" size="small"><Link to={`/socialSecurity/archives/detail/${record.id}`}>查看</Link></Button>
-                            <Button type="link" size="small"><Link to={`/socialSecurity/archives/edit/${record.id}`}>编辑</Link></Button>
+                            <Button type="link" className="btn-operation-link" size="small"><Link to={`/socialSecurity/archives/detail/${record.id}`}>查看</Link></Button>
+                            <Button type="link" className="btn-operation-link" size="small"><Link to={`/socialSecurity/archives/edit/${record.id}`}>编辑</Link></Button>
                         </>
                     )
                 }

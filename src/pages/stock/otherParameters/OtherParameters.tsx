@@ -93,7 +93,7 @@ export default function SetOutTaskList(): React.ReactNode {
             columns={ columns }
             headTabs={ [] }
             refresh={ refresh }
-            extraOperation={<Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>}
+            extraOperation={<Button type="ghost" onClick={() => history.goBack()}>返回</Button>}
             searchFormItems={ [] }
         />
         <Modal visible={ visible } title="编辑" onCancel={ close } onOk={ save }>

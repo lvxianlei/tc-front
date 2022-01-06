@@ -68,10 +68,10 @@ export default function ConfirmList(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 150,
+            width: 100,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Button type='link' onClick={() => { history.push(`/workMngt/confirmList/confirmMessage/${record.id}`) }} disabled={AuthUtil.getUserId() !== record.confirmId}>确认信息</Button>
                     <Button type='link' onClick={() => { history.push(`/workMngt/confirmList/confirmDetail/${record.id}/${record.status}`) }} disabled={record.status < 3 || AuthUtil.getUserId() !== record.confirmId}>确认明细</Button>
                 </Space>
@@ -81,9 +81,8 @@ export default function ConfirmList(): React.ReactNode {
     const renderTreeNodes = (data: any) =>
         data.map((item: any) => {
             if (item.children) {
-                item.disabled = true;
                 return (
-                    <TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node}>
+                    <TreeNode key={item.id} title={item.title} value={item.id} className={styles.node}>
                         {renderTreeNodes(item.children)}
                     </TreeNode>
                 );
@@ -149,7 +148,7 @@ export default function ConfirmList(): React.ReactNode {
                     </Form.Item>
                 },
                 {
-                    name: 'fuzzyQueryItem',
+                    name: 'fuzzyMsg',
                     label: '模糊查询项',
                     children: <Input placeholder="请输入任务编号/合同名称进行查询" maxLength={200} />
                 },

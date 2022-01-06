@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { IntgSelect, Page } from '../../common'
 import { baseInfoList } from './differentListData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -23,6 +23,10 @@ export default function Invoicing() {
             const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
             value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
+        }
+        if (value.handler) {
+            value.handlerDept = value.handler.first
+            value.handler = value.handler.second
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -46,6 +50,7 @@ export default function Invoicing() {
 
     return <Page
         path="/tower-supply/componentDiff"
+        exportPath={"/tower-supply/componentDiff"}
         columns={[
             { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
             ...baseInfoList,
@@ -60,7 +65,7 @@ export default function Invoicing() {
                 }
             }]}
         filterValue={filterValue}
-        extraOperation={<Button type="primary" ghost>导出</Button>}
+        // extraOperation={<Button type="primary" ghost>导出</Button>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
@@ -79,13 +84,7 @@ export default function Invoicing() {
             {
                 name: 'handler',
                 label: '处理人',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">不下计划</Select.Option>
-                    <Select.Option value="2">未下计划</Select.Option>
-                    <Select.Option value="3">未下完计划</Select.Option>
-                    <Select.Option value="4">未发完货</Select.Option>
-                    <Select.Option value="5">已发完货</Select.Option>
-                </Select>
+                children: <IntgSelect width={200} />
             },
             {
                 name: 'fuzzyQuery',

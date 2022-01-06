@@ -53,8 +53,11 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const { data: equipmentList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100`);
-            resole(result?.records)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100&operatingStatus=0`);
+            const resultData: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100&operatingStatus=1`);
+            const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/equipment?workCenterInfoId=${ id }`);
+            const data = [...result?.records, ...resultData?.records]?.filter((item: any) => !list.some((ele: any) => ele === item.id));
+            resole(data)
         } catch (error) {
             reject(error)
         }
@@ -81,20 +84,20 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields();
-            if(form.getFieldsValue(true).workCenterRelations) {
+            if(form.getFieldsValue(true).workCenterRelations && form.getFieldsValue(true).workCenterRelations.length > 0) {
                 const data = await form.validateFields();
                 await saveRun({
                     ...baseData,
                     workStartTime: baseData.time[0].format('HH:mm'),
                     workEndTime: baseData.time[1].format('HH:mm'),
-                    workCenterRelations: [...data.workCenterRelations],
+                    workCenterRelations: [...data?.workCenterRelations],
                     equipmentId: baseData.equipmentId.join(',')
                 })
+                resolve(true);
             } else {
-               message.warning("请添加产能矩阵")
+               message.warning("请添加产能矩阵");
+               reject(false);
             }
-            
-            resolve(true)
         } catch (error) {
             reject(false)
         }
@@ -184,7 +187,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         "pattern": /^[^\s]*$/,
                         "message": '禁止输入空格',
                     }]}>
-                    <Select placeholder="请选择" style={{ width: '200px' }}>
+                    <Select placeholder="请选择" style={{ width: '200px' }} size="small">
                         { processList?.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                         }) }
@@ -201,7 +204,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["workCenterRelations", index, "materialName"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请选择材料" }]}>
-                    <Select placeholder="请选择"  style={{ width: '200px' }} onChange={(e: string) => materialChange(e, index)}>
+                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} onChange={(e: string) => materialChange(e, index)}>
                         { materialList?.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.materialName }>{ item.materialName }</Select.Option>
                         }) }
@@ -218,7 +221,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["workCenterRelations", index, "specificationName"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请选择规格" }]}>
-                    <Select placeholder="请选择" style={{ width: '200px' }} key={index} onChange={(e: string) => materialChange(e, index)}>
+                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} key={index} onChange={(e: string) => materialChange(e, index)}>
                         { specifications[index]?.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.structureSpec }>{ item.structureSpec }</Select.Option>
                         }) }
@@ -235,7 +238,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["workCenterRelations", index, "materialTextureName"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请选择材质" }]}>
-                    <Select style={{ width: '200px' }}>
+                    <Select style={{ width: '200px' }} size="small">
                         { materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>) }
                     </Select>
                 </Form.Item>
@@ -250,7 +253,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 <Form.Item name={ ["workCenterRelations", index, "workHour"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入标准工时" }]}>
-                    <InputNumber step={1} min={ 0 } maxLength={ 10 } precision={ 0 } key={ index } />
+                    <InputNumber step={1} min={ 0 } max={ 3600 } precision={ 0 } size="small" key={ index } />
                 </Form.Item>
             )  
         },
@@ -289,23 +292,22 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const delRow = (index?: number) => {
         let workCenterListValues = form.getFieldsValue(true).workCenterRelations || []; 
         workCenterListValues.splice(index, 1);
-        console.log(workCenterListValues)
         setWorkCenterRelationsList([...workCenterListValues]);
         form.setFieldsValue({ workCenterRelations: [...workCenterListValues] })
     }
 
     return <Spin spinning={loading}>
-        <DetailTitle title="基本信息" />
+        <DetailTitle title="基本信息" style={{ padding:'0 0 8px' }}/>
         <BaseInfo form={baseForm} columns={baseColumns.map((item: any) => {
             if (item.dataIndex === "time") {
                 return ({ ...item, type: 'date', 
-                    render:  (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time"><TimePicker.RangePicker style={{width: '100%'}} format="HH:mm" /></Form.Item>) 
+                    render:  (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time" style={{width: '100%'}}><TimePicker.RangePicker style={{width: '100%'}} format="HH:mm" /></Form.Item>) 
                 })
             }
             if(item.dataIndex === "equipmentId") {
                 return ({ ...item, type: 'select', 
                     render:  (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name="equipmentId">
+                        <Form.Item name="equipmentId" style={{width: '100%'}}>
                             <Select mode="multiple">
                                 { equipmentList?.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.deviceName }</Select.Option>

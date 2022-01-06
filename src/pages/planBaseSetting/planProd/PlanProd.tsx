@@ -1,11 +1,11 @@
 import React from 'react';
 import { gantt } from 'dhtmlx-gantt';
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
-import { Button, DatePicker, Form, Input, Popconfirm, Select } from 'antd';
-import { IResponseData } from '../../common/Page';
+import { Button, DatePicker, Form, Input, Select } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
+import './planProd.css';
 import moment from 'moment';
 export interface IRouteProps extends RouteComponentProps<any>, WithTranslation {}
 export interface WithSectionModalProps {}
@@ -72,7 +72,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
             )
             
         }},
-          {label:'交货日期',name: "deliveryTime", align: "center", template: function (task:any) {
+          {label:'交货日期',name: "deliveryTime", align: "center", width:150,template: function (task:any) {
             return (
               `
               <span title="交货日期:${task.deliveryTime?task.deliveryTime:'-'}" >${task.deliveryTime?task.deliveryTime:'-'}</span>
@@ -164,7 +164,7 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         const tasks = {
           data: tasksNew.length>0?tasksNew:[]
         }
-        //一行存在多个task
+        // 一行存在多个task
         // const tasks = {
         //   data: [
         //     {id: 11, text: "Project #1", type: "project", progress: 0, open: true, start_date: "02-04-2018 00:00", duration: 13, parent: 0},
@@ -179,6 +179,17 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
         //     {id: 21, text: "Stage #1", start_date: "03-04-2018 00:00", duration: 4, parent: "15", progress: 0, open: true},
         //     {id: 22, text: "Stage #2", start_date: "08-04-2018 00:00", duration: 3, parent: "15", progress: 0, open: true},
         //   ],
+        //   links:[
+        //     {id:"15",source:"13",target:"17",type:"1"},
+        //     {id:"16",source:"17",target:"18",type:"0"},
+        //     {id:"17",source:"18",target:"19",type:"0"},
+        //     {id:"18",source:"19",target:"20",type:"0"},
+        //     {id:"21",source:"15",target:"23",type:"0"},
+        //     {id:"22",source:"21",target:"22",type:"0"},
+        //     {id:"23",source:"14",target:"15",type:"0"},
+        //     {id:"24",source:"22",target:"23",type:"0"},
+        //     {id:"25",source:"12",target:"20",type:"0"}
+        //   ]
         // }
         
         this.setState({

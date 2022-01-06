@@ -96,7 +96,7 @@
             "type": "popTable",
             "path": "/tower-aps/workPlan/material",
             "width": 1011,
-            "value": "planNumber",
+            "value": "workPlanNumber",
             "dependencies": true,
             "readOnly": true,
             "columns": [
@@ -122,7 +122,8 @@
                     "type": "date",
                     "format": "YYYY-MM-DD"
                 }
-            ]
+            ],
+            "required": true
         },
         {
             "title": "塔型",
@@ -138,6 +139,7 @@
             "value": "name",
             "dependencies": true,
             "readOnly": true,
+            "required": true,
             "columns": [
                 {
                     "title": "编号",
@@ -179,6 +181,7 @@
             "path": "/tower-production/team/page",
             "value": "name",
             "readOnly": true,
+            "required": true,
             "dependencies": true,
             "columns": [
                 {
@@ -207,6 +210,7 @@
             "path": "/tower-production/team/teamUsers",
             "value": "name",
             "readOnly": true,
+            "required": true,
             "dependencies": true,
             "disabled": true,
             "columns": [
@@ -224,6 +228,194 @@
             "title": "申请日期",
             "dataIndex": "applyTime",
             "disabled": true
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "settingDetail": [
+        {
+            "title": "领料单编号",
+            "dataIndex": "pickingNumber",
+            "disabled": true
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "projectName",
+            "disabled": true
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "salePlanNumber",
+            "disabled": true
+        },
+        {
+            "title": "加工计划编号",
+            "dataIndex": "workPlanNumber",
+            "type": "popTable",
+            "path": "/tower-aps/workPlan/material",
+            "width": 1011,
+            "value": "workPlanNumber",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "加工计划编号",
+                    "dataIndex": "workPlanNumber"
+                },
+                {
+                    "title": "工程名称",
+                    "dataIndex": "orderProjectName"
+                },
+                {
+                    "title": "计划号",
+                    "dataIndex": "planNumber"
+                },
+                {
+                    "title": "塔型",
+                    "dataIndex": "productCategoryName"
+                },
+                {
+                    "title": "计划完成日期",
+                    "dataIndex": "endTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
+                }
+            ],
+            "required": true
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "disabled": true
+        },
+        {
+            "title": "领料仓库",
+            "dataIndex": "pickingWareHouse",
+            "type": "popTable",
+            "path": "tower-storage/warehouse",
+            "width": 1011,
+            "value": "name",
+            "dependencies": true,
+            "readOnly": true,
+            "required": true,
+            "columns": [
+                {
+                    "title": "编号",
+                    "dataIndex": "warehouseNumber"
+                },
+                {
+                    "title": "仓库名称",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "分类",
+                    "dataIndex": "warehouseCategoryName"
+                },
+                {
+                    "title": "负责人",
+                    "dataIndex": "personName"
+                },
+                {
+                    "title": "保管员",
+                    "dataIndex": "staffName"
+                },
+                {
+                    "title": "车间",
+                    "dataIndex": "shopName"
+                }
+            ]
+        },
+        {
+            "title": "领料生产单元",
+            "dataIndex": "pickingUnit",
+            "type": "popTable",
+            "disabled": true
+        },
+        {
+            "title": "领料班组",
+            "dataIndex": "pickingTeam",
+            "type": "popTable",
+            "width": 1011,
+            "path": "/tower-production/team/page",
+            "value": "name",
+            "readOnly": true,
+            "required": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "班组名称",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "所属车间",
+                    "dataIndex": "workshopDeptName"
+                },
+                {
+                    "title": "工序",
+                    "dataIndex": "deptProcessesName"
+                },
+                {
+                    "title": "设备所属产线",
+                    "dataIndex": "productionLinesName"
+                }
+            ]
+        },
+        {
+            "title": "领料人",
+            "dataIndex": "pickingUserName",
+            "type": "popTable",
+            "width": 1011,
+            "path": "/tower-production/team/teamUsers",
+            "value": "name",
+            "readOnly": true,
+            "required": true,
+            "dependencies": true,
+            "disabled": true,
+            "columns": [
+                {
+                    "title": "姓名",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "职位",
+                    "dataIndex": "position"
+                }
+            ]
+        },
+        {
+            "title": "申请日期",
+            "dataIndex": "applyTime",
+            "disabled": true
+        },
+        {
+            "title": "状态",
+            "dataIndex": "state",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "已创建"
+                },
+                {
+                    "value": 2,
+                    "label": "已撤回"
+                },
+                {
+                    "value": 3,
+                    "label": "未放料"
+                },
+                {
+                    "value": 4,
+                    "label": "部分放料"
+                },
+                {
+                    "value": 5,
+                    "label": "已放料"
+                }
+            ]
         },
         {
             "title": "备注",
@@ -341,6 +533,40 @@
         {
             "title": "申请数量",
             "dataIndex": "applyQuantity"
+        }
+    ],
+    "materialInfoDetail": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length"
+        },
+        {
+            "title": "申请数量",
+            "dataIndex": "applyQuantity"
+        },
+        {
+            "title": "未出库数量",
+            "dataIndex": "notIssuedQuantity"
+        },
+        {
+            "title": "已出库数量",
+            "dataIndex": "checkoutQuantity"
+        },
+        {
+            "title": "缺料数量",
+            "dataIndex": "materialShortageQuantity"
         }
     ]
 }

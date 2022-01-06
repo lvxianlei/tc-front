@@ -99,6 +99,7 @@ export default function CollectionInfomation(): React.ReactNode {
                         key: 'index',
                         title: '序号',
                         dataIndex: 'index',
+                        fixed: "left",
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
@@ -129,7 +130,7 @@ export default function CollectionInfomation(): React.ReactNode {
                         render: (_: any, record: any) => {
                             return (
                                 <>
-                                    <Button type="link" onClick={() => getUser(record.id)}>查看</Button>
+                                    <Button type="link" className="btn-operation-link" onClick={() => getUser(record.id)}>查看</Button>
                                     {record.confirmStatus === 1 && (
                                        <Popconfirm
                                             title="您确定删除该条回款信息?"
@@ -141,7 +142,7 @@ export default function CollectionInfomation(): React.ReactNode {
                                             okText="确认"
                                             cancelText="取消"
                                         >
-                                            <Button type="link">删除</Button>
+                                            <Button className="btn-operation-link" type="link">删除</Button>
                                         </Popconfirm>
                                     )}
                                 </>

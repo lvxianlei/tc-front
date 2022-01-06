@@ -1,7 +1,7 @@
 //供应商管理
 import React, { Key, useRef, useState } from 'react'
 import { Input, Select, Button, Modal, message } from 'antd'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import { supplierMngt } from "./supplier.json"
 import ApplicationContext from "../../../configuration/ApplicationContext"
@@ -12,6 +12,7 @@ import useRequest from '@ahooksjs/use-request'
 import { qualityAssuranceOptions, supplierTypeOptions, supplyProductsOptions } from '../../../configuration/DictionaryOptions'
 export default function SupplierMngt(): React.ReactNode {
     const history = useHistory()
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
     const [editVisible, setEditVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
     const [overviewVisible, setOverviewVisible] = useState<boolean>(false)
@@ -36,6 +37,7 @@ export default function SupplierMngt(): React.ReactNode {
             value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.statusUpdateTime
         }
+        setFilterValue(value)
         return value
     }
     const handleDelete = async (id: string) => {
@@ -83,6 +85,8 @@ export default function SupplierMngt(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-supply/supplier"
+            exportPath={`/tower-supply/supplier`}
+            filterValue={filterValue}
             columns={[
                 {
                     title: "序号",
@@ -105,12 +109,12 @@ export default function SupplierMngt(): React.ReactNode {
                     dataIndex: "opration",
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" onClick={() => {
+                            <Button type="link" style={{marginRight: 12}} onClick={() => {
                                 setOprationType("edit")
                                 setDetailId(record.id)
                                 setEditVisible(true)
                             }}>编辑</Button>
-                            <Button type="link" onClick={() => {
+                            <Button type="link" style={{marginRight: 12}} onClick={() => {
                                 setDetailId(record.id)
                                 setOverviewVisible(true)
                             }}>详情</Button>
@@ -120,7 +124,6 @@ export default function SupplierMngt(): React.ReactNode {
                 }
             ]}
             extraOperation={<>
-                <Button type="primary">导出</Button>
                 <Button
                     type="primary"
                     ghost
@@ -143,7 +146,7 @@ export default function SupplierMngt(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'supplyProducts',
+                    name: 'materialCategoryId',
                     label: '供货产品',
                     children: <Select style={{ width: "150px" }} defaultValue="请选择">
                         {

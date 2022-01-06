@@ -71,6 +71,7 @@ export default function Invoicing() {
         <>
             <Page
                 path="/tower-supply/materialPurchasePlan"
+                exportPath={`/tower-supply/materialPurchasePlan`}
                 columns={[
                     {
                         title: "序号",
@@ -86,10 +87,10 @@ export default function Invoicing() {
                         width: 100,
                         render: (_: any, record: any) => {
                             return <>
-                                <Link to={`/workMngt/planList/relationTower/${record.id}`}>关联塔型</Link>
-                                <Link to={`/workMngt/planList/purchaseList/${record.id}`}><Button type="link">采购清单</Button></Link>
-                                <Button type="link" disabled={record.purchasePlanStatus === 3} onClick={() => handleDelete(record.id)}>取消计划</Button>
-                                <Button type="link"  onClick={() => {
+                                <Link className="btn-operation-link" to={`/workMngt/planList/relationTower/${record.id}`}>关联塔型</Link>
+                                <Link className="btn-operation-link" to={`/workMngt/planList/purchaseList/${record.id}`}>采购清单</Link>
+                                <Button type="link" className="btn-operation-link" disabled={record.purchasePlanStatus === 3} onClick={() => handleDelete(record.id)}>取消计划</Button>
+                                <Button type="link" className="btn-operation-link"  onClick={() => {
                                     setId(record.id);
                                     setVisible(true);
                                 }}>编辑计划</Button>
@@ -97,7 +98,6 @@ export default function Invoicing() {
                         }
                     }]}
                 extraOperation={<>
-                    <Button type="primary" ghost>导出</Button>
                     <Button type="primary" ghost onClick={() => message.warning("预留按钮,暂无功能...")}>创建采购计划</Button>
                 </>}
                 onFilterSubmit={onFilterSubmit}

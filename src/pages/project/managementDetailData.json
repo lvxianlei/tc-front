@@ -1267,6 +1267,10 @@
             "dataIndex": "taskNumber"
         },
         {
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
             "title": "订单编号",
             "dataIndex": "saleOrderNumber"
         },
@@ -1450,7 +1454,7 @@
         },
         {
             "title": "销售类型",
-            "dataIndex": "saleType"
+            "dataIndex": "saleTypeName"
         },
         {
             "title": "业主单位",
@@ -1528,7 +1532,7 @@
             "dataIndex": "monomerWeight"
         },
         {
-            "title": " 其他单重（kg）",
+            "title": " 其他重量（kg）",
             "dataIndex": "otherWeight"
         },
         {

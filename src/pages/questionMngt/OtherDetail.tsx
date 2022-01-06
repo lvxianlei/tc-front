@@ -46,7 +46,7 @@ const towerColumns = [
     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
     { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
     { title: '长度', dataIndex: 'length', key: 'length' },
-    { title: '宽度', dataIndex: 'width', key: 'width' },
+    // { title: '宽度', dataIndex: 'width', key: 'width' },
     { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)  },
     { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
     { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight',render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
@@ -188,9 +188,9 @@ export default function OtherDetail(): React.ReactNode {
                 <DetailTitle title="问题信息" />
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
                 <DetailTitle title="源数据" />
-                {params.type==='WTD-TL'?<CommonTable columns={towerColumns} dataSource={[detailData?.drawProductStructure]} />:null}
-                {params.type==='WTD-FY'?<CommonTable columns={setOutColumns} dataSource={[detailData?.productStructureVO]} />:null}
-                {params.type==='WTD-LS'?<CommonTable columns={boltColumns} dataSource={[detailData?.productBoltRecordVO]} />:null}
+                {params.type==='WTD-TL'?<CommonTable columns={towerColumns} dataSource={[detailData?.drawProductStructure]} pagination={false}/>:null}
+                {params.type==='WTD-FY'?<CommonTable columns={setOutColumns} dataSource={[detailData?.productStructureVO]} pagination={false}/>:null}
+                {params.type==='WTD-LS'?<CommonTable columns={boltColumns} dataSource={[detailData?.productBoltRecordVO]} pagination={false}/>:null}
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} pagination={false}/>
             </DetailContent>

@@ -7,7 +7,6 @@ import './bolt.less';
 export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) => void; id: string | null, item: any }) {
     const [contentObj, setContentObj] = useState<any>({})
     const params = useParams<{ id: string, boltId: string }>();
-    console.log(contentObj,'00000000000')
     /**
      * 螺栓信息添加
      */

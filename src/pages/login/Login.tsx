@@ -146,7 +146,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                         {
                                             this.state.captcha.image
                                                 ?
-                                                <img src={this.state.captcha.image} />
+                                                <img src={this.state.captcha.image} className={style.captcha} />
                                                 :
                                                 null
                                         }

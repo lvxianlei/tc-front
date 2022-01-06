@@ -1,4 +1,4 @@
-import { FormItemProps, Input, Select, Space, TableColumnType, TablePaginationConfig } from 'antd';
+import { FormItemProps, Input, Space, TableColumnType, TablePaginationConfig } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';

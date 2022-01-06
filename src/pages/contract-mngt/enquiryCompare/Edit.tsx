@@ -38,7 +38,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
             purchaserId: values.purchaserId?.second,
             purchaserDeptId: values.purchaserId?.first
         })}>
-            <Row>
+            <Row gutter={[8, 8]}>
                 <Col><Form.Item label="采购类型" name="purchaseType">
                     <Select style={{ width: 200 }}>
                         <Select.Option value="1">外部</Select.Option>
@@ -83,7 +83,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [form] = Form.useForm();
-    const [ purchasePlanId, setPurchasePlanId ] = useState('');
+    const [purchasePlanId, setPurchasePlanId] = useState('');
     const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${id}`)
@@ -105,7 +105,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const postData = type === "new" ? { ...data, purchasePlanId: purchasePlanId} : ({ ...data, id, purchasePlanId: purchasePlanId })
+            const postData = type === "new" ? { ...data, purchasePlanId: purchasePlanId } : ({ ...data, id, purchasePlanId: purchasePlanId })
             const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/comparisonPrice`, postData)
             resole(result)
         } catch (error) {
@@ -125,9 +125,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         ...item,
                         id: '',
                         materialTexture: item.source === 1 ? item.materialTextureId : item.materialTexture,
-                        materialTextureId: item.source === 1 ? '' :item.materialTextureId,
+                        materialTextureId: item.source === 1 ? '' : item.materialTextureId,
                         materialStandard: item.source === 1 ? item.materialStandardName : item.materialStandard,
-                        materialStandardName: item.source === 1 ? item.materialStandard :item.materialStandardName,
+                        materialStandardName: item.source === 1 ? item.materialStandard : item.materialStandardName,
                     }
                     // delete item.id
                 })
@@ -257,6 +257,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         ]} />
         <CommonTable
             haveIndex
+            style={{padding: "0",}}
             columns={[
                 ...materialColumnsSaveOrUpdate.map((item: any) => {
                     if (item.dataIndex === "num") {
@@ -280,15 +281,15 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "materialStandard") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <Select style={{ width: '150px' }} value={ materialList[key].materialStandard && materialList[key].materialStandard + ',' +  materialList[key].materialStandardName } onChange={(e: string) => {
+                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <Select style={{ width: '150px' }} value={materialList[key].materialStandard && materialList[key].materialStandard + ',' + materialList[key].materialStandardName} onChange={(e: string) => {
                                 const newData = materialList.map((item: any, index: number) => {
-                                    if(index === key) {
+                                    if (index === key) {
                                         return {
                                             ...item,
                                             materialStandard: e.split(',')[0],
                                             materialStandardName: e.split(',')[1]
                                         }
-                                    } 
+                                    }
                                     return item
                                 })
                                 setMaterialList(newData)
@@ -300,15 +301,15 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "materialTextureId") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <Select style={{ width: '150px' }} value={ materialList[key].materialTextureId && materialList[key].materialTextureId + ',' +  materialList[key].materialTexture } onChange={(e: string) => {
+                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <Select style={{ width: '150px' }} value={materialList[key].materialTextureId && materialList[key].materialTextureId + ',' + materialList[key].materialTexture} onChange={(e: string) => {
                                 const newData = materialList.map((item: any, index: number) => {
-                                    if(index === key) {
+                                    if (index === key) {
                                         return {
                                             ...item,
                                             materialTextureId: e.split(',')[0],
                                             materialTexture: e.split(',')[1]
                                         }
-                                    } 
+                                    }
                                     return item
                                 })
                                 setMaterialList(newData)

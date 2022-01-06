@@ -7,6 +7,7 @@ import { downloadTemplate } from '../setOut/downloadTemplate';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import styles from './pick.module.less';
 
 export default function PickList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
@@ -25,6 +26,7 @@ export default function PickList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
+            fixed: "left" as FixedType,
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
@@ -97,14 +99,14 @@ export default function PickList(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 230,
+            width: 200,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space size="small" className={styles.operationBtn}>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickMessage/${record.id}`)}}>提料信息</Button>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}/${record.status}/${record.materialLeader}`)}} disabled={record.status!==1&&record.status!==2}>塔型信息</Button>
-                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}`)}} disabled={record.status!==3}>杆塔配段</Button>
-                    <Button type='link' onClick={() =>{setTaskId(record.id); setVisible(true)}} disabled={record.status<3} >交付物</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}/${record.status}`)}} disabled={record.status < 3}>杆塔配段</Button>
+                    <Button type='link' onClick={() =>{setTaskId(record.id); setVisible(true)}} disabled={record.status<4} >交付物</Button>
                 </Space>
             )
         }

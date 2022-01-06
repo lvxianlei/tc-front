@@ -107,7 +107,7 @@ export default function PickCheckList(): React.ReactNode {
                         > 
                             <Button type='primary' ghost >完成校核</Button>
                         </Popconfirm>
-                        <Button type='primary' ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回上一级</Button>
+                        <Button type='ghost' onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回</Button>
                     </Space>
                 }
                 searchFormItems={[
@@ -122,7 +122,7 @@ export default function PickCheckList(): React.ReactNode {
                         children: <Input  maxLength={200} />
                     },
                     {
-                        name: 'partName',
+                        name: 'segmentName',
                         label: '段号',
                         children: <Input  maxLength={200} />
                     },

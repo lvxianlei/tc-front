@@ -22,7 +22,7 @@ const ProdLink = (): React.ReactNode => {
         {
             title: '操作',
             dataIndex: 'operation',
-            align: 'center',
+            align: 'left',
             render: (text, item: any, index) => {
                 return (
                     <div className='operation'>
@@ -164,14 +164,10 @@ const ProdLink = (): React.ReactNode => {
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={
-                    <div>
-                        <Button
-                            type="primary"
-                            ghost
-                            onClick={() => { setIsModal(true) }}
-                            style={{ marginLeft: 10, }}
-                        >新增</Button>
-                    </div>
+                    <Button
+                        type="primary"
+                        onClick={() => { setIsModal(true) }}
+                    >新增</Button>
                 }
                 searchFormItems={[
                     {

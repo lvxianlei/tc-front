@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Form, Popconfirm, message } from 'antd';
+import { Space, Input, Button, Modal, Form, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -37,19 +37,22 @@ export default function ProcessMngt(): React.ReactNode {
                         setTitle("编辑");
                         form.setFieldsValue({name: record.name, id: record.id});
                     } }>编辑</Button>
-                    <Popconfirm
-                        title="确认删除?"
-                        onConfirm={ () => {
-                            RequestUtil.delete(`/tower-aps/product/process/${ record.id }`).then(res => {
-                                message.success('删除成功');
-                                setRefresh(!refresh);
-                            });
-                        } }
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <Button type="link">删除</Button>
-                    </Popconfirm>
+                    <Button type="link" onClick={() => {
+                         Modal.confirm({
+                            title: "确定删除本条消息吗",
+                            onOk: async () => new Promise(async (resove, reject) => {
+                                try {
+                                    RequestUtil.delete(`/tower-aps/product/process/${ record.id }`).then(res => {
+                                        message.success('删除成功');
+                                        setRefresh(!refresh);
+                                    });
+                                    resove(true)
+                                } catch (error) {
+                                    reject(error)
+                                }
+                            })
+                        })
+                    }}>删除</Button>
                 </Space>
             )
         }
@@ -78,7 +81,7 @@ export default function ProcessMngt(): React.ReactNode {
                 path="/tower-aps/product/process"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} } ghost>新增</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} }>新增</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {

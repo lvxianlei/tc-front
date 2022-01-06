@@ -118,7 +118,7 @@ const Warehouse = () => {
                             onClick={() => {
                                 history.go(-1)
                             }}
-                        >返回上一级</Button>
+                        >返回</Button>
                     </div>
                 </div>
                 <Table

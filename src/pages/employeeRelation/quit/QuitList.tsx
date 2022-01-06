@@ -132,10 +132,10 @@ export default function QuitList(): React.ReactNode {
             width: 230,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/quit/view/${record.id}`)}} type='link'>查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/quit/edit/${record.id}`)}} type='link' disabled={record.status===2||record.status===3}>编辑</Button>
-                </Space>
+                <>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quit/view/${record.id}`)}} type='link' className='btn-operation-link'>查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/quit/edit/${record.id}`)}} type='link' className='btn-operation-link' disabled={record.status===2||record.status===3}>编辑</Button>
+                </>
             )
         }
     ];
@@ -167,7 +167,7 @@ export default function QuitList(): React.ReactNode {
                     {
                         name: 'employeeName',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入员工姓名进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入员工姓名进行查询" maxLength={200} style={{width:'200px'}}/>
                     },
                     {
                         name: 'departureType',

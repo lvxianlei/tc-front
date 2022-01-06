@@ -56,7 +56,7 @@ export default function Delivery(): React.ReactNode {
                     <Button type='primary' onClick={() => {
                         if(selectedRows.length>0){
                             if(tableUserDataSource.length>0){
-                                RequestUtil.post(`tower-production/productionLines/ex`,{
+                                RequestUtil.put(`tower-production/packageWorkshop/confirmOutWarehouse`,{
                                     id:params.id,
                                     teamId: selectedUser.id,
                                     teamName: selectedUser.name,
@@ -95,6 +95,7 @@ export default function Delivery(): React.ReactNode {
                                         form.setFieldsValue({
                                             teamName: selectedRows[0].name
                                         })
+                                        setShow(false)
                                     } } buttonType="link" buttonTitle="+选择班组" />}
                                 />
                             </Form.Item>
@@ -116,10 +117,12 @@ export default function Delivery(): React.ReactNode {
                             </Form.Item>
                         </Form>
                         {show&&<><DetailTitle title="杆塔信息" />
-                        <Table
+                        <CommonTable
                             dataSource={[...tableDataSource]}
                             columns={tableColumns}
                             rowKey='id'
+                            pagination={false}
+                            size='small'
                             rowSelection={{
                                 type: 'checkbox',
                                 onChange: (selectedKeys: React.Key[], selectedRows: any) => {
@@ -128,9 +131,9 @@ export default function Delivery(): React.ReactNode {
                                 }
                             }}
                         />
-                        <DetailTitle title="发包人员" operation={[<WorkshopUserModal onSelect={onUserSelect} saleOrderId={''} selectKey={tableUserDataSource} />]} />
-                        <Table columns={[
-                            { title: '姓名', dataIndex: 'name', key: 'name' },
+                        <DetailTitle title="发包人员" operation={[<WorkshopUserModal onSelect={onUserSelect} selectKey={tableUserDataSource}  saleOrderId={selectedUser?.id}/>]}/>
+                        <CommonTable columns={[
+                            { title: '姓名', dataIndex: 'name', key: 'name', width:'50%'},
                             {
                                 title: '操作', dataIndex: 'operation', key: 'operation', render: (_: any, record: any, index: number) => (<>
                                     <Button type="link" onClick={() => {
@@ -141,10 +144,11 @@ export default function Delivery(): React.ReactNode {
                                     }}>删除</Button>
                                 </>)
                             }
-                        ]} dataSource={[...tableUserDataSource]} pagination={false} rowKey={'id'}/></>}
+                        ]} dataSource={[...tableUserDataSource]} pagination={false} rowKey={'id'} size='small'/></>}
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={`已出库`} key={2}>
-                        <CommonTable columns={[...tableColumns, { title: '发包人员', dataIndex: 'packageUserNames', key: 'packageUserNames' }]} dataSource={tableDataSource} pagination={false} />
+                        <DetailTitle title="杆塔信息" />
+                        <CommonTable columns={[...tableColumns, { title: '发包人员', dataIndex: 'userNames', key: 'userNames' }]} dataSource={tableDataSource} pagination={false} />
                     </Tabs.TabPane>
                 </Tabs>
             </DetailContent>

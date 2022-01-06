@@ -16,7 +16,9 @@ export default function WarehousingList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{ index + 1 }</span>
+            )
         },
         {
             key: 'warehouseNumber',
@@ -62,7 +64,7 @@ export default function WarehousingList(): React.ReactNode {
         },
         {
             key: 'packingWarehouseRealTime',
-            title: '包装日期',
+            title: '入库日期',
             width: 200,
             dataIndex: 'packingWarehouseRealTime',
             render:(packingWarehouseRealTime:string)=>{
@@ -83,7 +85,16 @@ export default function WarehousingList(): React.ReactNode {
             width: 80,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/warehousing/detail/${ record.id }` )}}>查看</Button>
+                    <Button 
+                        type='link' 
+                        onClick={
+                            ()=>{ 
+                                history.push(`/packagingWorkshop/warehousing/detail/${ record.id }` )
+                            }
+                        }
+                    >
+                        查看
+                    </Button>
                 </Space>
             )
         }
@@ -97,15 +108,25 @@ export default function WarehousingList(): React.ReactNode {
         refresh={ refresh }
         searchFormItems={ [
             {
-                name: 'productType',
+                name: 'productTypeName',
                 label: '产品类型',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id}>
-                                {name}
-                            </Select.Option>
-                    })}
-                </Select>
+                children:   <Select 
+                                style={{ width: '120px' }} 
+                                placeholder="请选择" 
+                                defaultValue={""}
+                            >
+                                <Select.Option 
+                                    value={ "" } 
+                                    key=""
+                                >
+                                    全部
+                                </Select.Option>
+                                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                        return <Select.Option key={index} value={name}>
+                                            {name}
+                                        </Select.Option>
+                                })}
+                            </Select>
             },
             {
                 name: 'time',
@@ -115,7 +136,7 @@ export default function WarehousingList(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入内部合同编号/工程名称/计划号/订单号进行查询"/>
+                children: <Input placeholder="请输入内部合同编号/工程名称/计划号/订单号进行查询" style={{width: '300px'}}/>
             }
         ] }
         filterValue={ filterValue }

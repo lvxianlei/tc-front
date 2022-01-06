@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Popconfirm, Form } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Form, Modal, message } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOutTask.module.less';
@@ -18,6 +18,7 @@ export default function SetOutTaskList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
+            fixed: 'left' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
@@ -84,7 +85,9 @@ export default function SetOutTaskList(): React.ReactNode {
             key: 'plannedDeliveryTime',
             title: '计划交付时间',
             width: 200,
-            dataIndex: 'plannedDeliveryTime'
+            dataIndex: 'plannedDeliveryTime',
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             key: 'operation',
@@ -93,7 +96,7 @@ export default function SetOutTaskList(): React.ReactNode {
             fixed: 'right' as FixedType,
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                <Space direction="horizontal" size="small">
                     <Link to={ `/setOutTask/setOutTaskDetail/${ record.id }` }>任务详情</Link>
                     {
                         record.status === 3 || record.status === 4 || record.status === 5 ? 
@@ -101,20 +104,25 @@ export default function SetOutTaskList(): React.ReactNode {
                         : 
                         <Button type="link" disabled>交付物</Button>
                     }
+                    
                     {
                         record.status === 4 ? 
-                        <Popconfirm
-                            title="确认提交?"
-                            onConfirm={ () => {
-                                RequestUtil.post(`/tower-science/loftingTask/submit`, { id: record.id }).then(res => {
-                                    setRefresh(!refresh);
-                                });
-                            } }
-                            okText="提交"
-                            cancelText="取消"
-                        >
-                            <Button type="link">提交任务</Button>
-                        </Popconfirm>
+                        <Button type="link" onClick={ () => {
+                            Modal.confirm({
+                                title: "确认提交?",
+                                onOk: async () => new Promise(async (resove, reject) => {
+                                    try {
+                                        RequestUtil.post(`/tower-science/loftingTask/submit`, { id: record.id }).then(res => {
+                                            message.success("提交成功");
+                                            setRefresh(!refresh);
+                                        });
+                                        resove(true)
+                                    } catch (error) {
+                                        reject(error)
+                                    }
+                                })
+                            })
+                        }}>提交任务</Button>
                         : 
                         <Button type="link" disabled>提交任务</Button>
                     }

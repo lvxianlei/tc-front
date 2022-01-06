@@ -20,6 +20,7 @@ interface MaterialData {
     materialTexture: string
     length: number | string
     applyQuantity: number
+    materialShortageQuantity: number
     onlyId: string
     ids: string[]
 }
@@ -40,6 +41,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPicking/${id}`)
             setMaterialPickingInfoDTOS(result?.materialPickingInfoVOS.map((item: any) => ({
                 ...item,
+                ids: item.ids.split(","),
                 onlyId: `${item.materialName}${item.materialTexture}${item.spec}${item.length}`
             })))
             setChooseMaterialParmas({
@@ -138,10 +140,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     }
 
     const materialsUseMaterialPickingInfoDTOS = () => {
-        let materialPickingInfos: MaterialData[] = materialPickingInfoDTOS
+        let materialPickingInfos: MaterialData[] = []
         materials.forEach((mItem: any) => {
-            if (materialPickingInfoDTOS.map(item => item.onlyId).includes(mItem.onlyId)) {
-                materialPickingInfos = materialPickingInfoDTOS.map(pitem => {
+            if (materialPickingInfos.map(item => item.onlyId).includes(mItem.onlyId)) {
+                materialPickingInfos = materialPickingInfos.map(pitem => {
                     if (pitem.onlyId === mItem.onlyId) {
                         return ({
                             ...pitem,
@@ -156,6 +158,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     onlyId: mItem.onlyId,
                     materialName: mItem.materialName,
                     materialTexture: mItem.materialTexture,
+                    materialShortageQuantity: mItem.materialShortageQuantity,
                     spec: mItem.spec,
                     length: mItem.length,
                     applyQuantity: 1,
@@ -167,7 +170,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     }
 
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
-    
+
     return <Spin spinning={loading}>
         <Modal
             title="选择原材料"
@@ -184,7 +187,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     ...chooseMaterial as any,
                     path: `${chooseMaterial.path}?planNumber=${chooseMaterialParmas.planNumber}&product=${chooseMaterialParmas.product}&productCategoryName=${chooseMaterialParmas.productCategoryName}`
                 }}
-                value={{ value: "", id: "", records: materialPickingInfoDTOS.reduce((total: any[], item: any) => total.concat(item.ids), []) }}
+                value={{
+                    value: "", id: "",
+                    records: materialPickingInfoDTOS.reduce((total: any[], item: any) => total.concat(item.ids.map((id: any) => ({ id }))), [])
+                }}
                 onChange={(records: any) => setMaterials((records.map((item: any) => ({
                     ...item,
                     spec: item.structureSpec,

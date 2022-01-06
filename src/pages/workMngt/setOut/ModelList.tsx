@@ -94,14 +94,14 @@ export default function ModelList(): React.ReactNode {
     return <>
         <Page
             path={ `/tower-science/productSegment/modelList` }
-            exportPath={`/tower-science/productStructure/list`}
+            exportPath={`/tower-science/productSegment/modelList`}
             columns={ columns }
             headTabs={ [] }
             refresh={ refresh }
             requestData={{ productCategoryId: params.id }}
             extraOperation={ <Space direction="horizontal" size="small">
                 { location.state.status === 1 || location.state.status === 2 ? <UploadModal id={ params.id } path="/tower-science/productSegment/segmentModelUpload" updateList={ () => setRefresh(!refresh) } /> : null}
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space> }
             searchFormItems={ [] }
         />

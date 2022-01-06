@@ -1,4 +1,3 @@
-
 export interface ILineList {
     readonly createTime?: string;
     readonly createUserName?: string;
@@ -23,4 +22,5 @@ export interface ITeamUserList {
     readonly position?: string;
     readonly teamId?: string;
     readonly userId?: string;
+    readonly id?: string;
 }

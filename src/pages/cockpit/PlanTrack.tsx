@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Input, Select } from 'antd';
 import { Page } from '../common';
 import moment from 'moment';
+import { FixedType } from 'rc-table/lib/interface';
 
 export default function PlanTrack(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
@@ -11,7 +12,8 @@ export default function PlanTrack(): React.ReactNode {
             title: '序号',
             width: 50,
             dataIndex: 'index',
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            fixed: "left" as FixedType,
+            render: (_a: any, _b: any, index: number) => {return index + 1}
         },
         {
             key: 'businessUserName',
@@ -155,11 +157,12 @@ export default function PlanTrack(): React.ReactNode {
                 label: '塔型放样状态',
                 children:   <Select style={{width:'100px'}}>
                                 <Select.Option value={''} key ={''}>全部</Select.Option>
-                                <Select.Option value={1} key={1}>待指派</Select.Option>
-                                <Select.Option value={2} key={2}>放样中</Select.Option>
-                                <Select.Option value={3} key={3}>组焊中</Select.Option>
-                                <Select.Option value={4} key={4}>配段中</Select.Option>
-                                <Select.Option value={5} key={5}>已完成</Select.Option>
+                                <Select.Option value={0} key={0}>已拒绝</Select.Option>
+                                <Select.Option value={1} key={1}>待确认</Select.Option>
+                                <Select.Option value={2} key={2}>待指派</Select.Option>
+                                <Select.Option value={3} key={3}>待完成</Select.Option>
+                                <Select.Option value={4} key={4}>已完成</Select.Option>
+                                <Select.Option value={5} key={5}>已提交</Select.Option>
                             </Select>
             },
             {

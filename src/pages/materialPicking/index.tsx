@@ -21,6 +21,20 @@ export default function Invoicing() {
     const [detailId, setDetailId] = useState<string>("")
     const history = useHistory()
     const [filterValue, setFilterValue] = useState({});
+
+    const { data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        try {
+            const work: any = await RequestUtil.get(`/tower-aps/productionUnit?size=1000&current=1`)
+            resole(work?.records.map((item: any) => ({
+                value: item.id,
+                label: item.name
+            })) || [])
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        }
+    }))
+
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPicking/${id}`)
@@ -42,8 +56,8 @@ export default function Invoicing() {
     const onFilterSubmit = (value: any) => {
         if (value.applyTimeStart) {
             const formatDate = value.applyTimeStart.map((item: any) => item.format("YYYY-MM-DD"))
-            value.applyTimeStart = formatDate[0]
-            value.applyTimeEnd = formatDate[1]
+            value.applyTimeStart = formatDate[0] + " 00:00:00"
+            value.applyTimeEnd = formatDate[1] + " 23:59:59"
         }
         setFilterValue(value)
         return value
@@ -143,6 +157,7 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 size="small"
+                                style={{ marginRight: 12 }}
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setDetailVisible(true)
@@ -150,6 +165,7 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 size="small"
+                                style={{ marginRight: 12 }}
                                 disabled={![1, 2].includes(record.state)}
                                 onClick={() => {
                                     setDetailId(record.id)
@@ -159,6 +175,7 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 size="small"
+                                style={{ marginRight: 12 }}
                                 disabled={![1, 2].includes(record.state)}
                                 onClick={() => handleDelete(record.id)}>删除</Button>
                             <Button
@@ -184,8 +201,7 @@ export default function Invoicing() {
                     name: 'pickingUnitId',
                     label: '领料生产单元',
                     children: <Select style={{ width: 200 }}>
-                        <Select.Option value="2">发票未开全</Select.Option>
-                        <Select.Option value="3">发票已开全</Select.Option>
+                        {data?.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {

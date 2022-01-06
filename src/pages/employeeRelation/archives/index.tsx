@@ -10,8 +10,8 @@ export default function ArchivesList(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-            value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+            value.inductionStartDate = formatDate[0];
+            value.inductionEndDate = formatDate[1];
             delete value.statusUpdateTime
         }
         if (value.postName) {
@@ -38,8 +38,8 @@ export default function ArchivesList(): React.ReactNode {
                     dataIndex: 'operation',
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>
-                            <Button type="link" size="small"><Link to={`/employeeRelation/archives/detail/${record.id}`}>查看</Link></Button>
-                            <Button disabled={record?.employeeStatus === 2} type="link" size="small"><Link to={`/employeeRelation/archives/edit/${record.id}`}>编辑</Link></Button>
+                            <Button type="link" className='btn-operation-link' size="small"><Link to={`/employeeRelation/archives/detail/${record.id}`}>查看</Link></Button>
+                            <Button disabled={record?.employeeStatus === 2} className='btn-operation-link' type="link" size="small"><Link to={`/employeeRelation/archives/edit/${record.id}`}>编辑</Link></Button>
                         </>
                     )
                 }
@@ -51,7 +51,11 @@ export default function ArchivesList(): React.ReactNode {
                 {
                     name: 'keyword',
                     label: '模糊查询项',
-                    children: <Input placeholder="请输入员工姓名/电话/身份证号" maxLength={200} />
+                    children: <Input
+                        placeholder="请输入员工姓名/电话/身份证号"
+                        maxLength={200}
+                        style={{ width: 200 }}
+                    />
                 },
                 {
                     name: 'employeeNature',

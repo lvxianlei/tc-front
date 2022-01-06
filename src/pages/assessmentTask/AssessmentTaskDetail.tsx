@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, Row, Col, Input, message, Image } from 'antd';
+import { Spin, Button, Space, Modal, Row, Col, Input, message } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './AssessmentTask.module.less';
 import Attachment, { FileProps } from '../common/Attachment';
+import { FixedType } from 'rc-table/lib/interface';
 
 interface IDetail {
     readonly id?: string;
@@ -35,6 +36,7 @@ const tableColumns = [
         key: 'index',
         title: '序号',
         dataIndex: 'index',
+        fixed: "left" as FixedType,
         width: 50,
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
     },
@@ -135,7 +137,7 @@ export default function AssessmentTaskDetail(): React.ReactNode {
     return <>
         <DetailContent operation={[
             <Space direction="horizontal" size="small" className={styles.bottomBtn}>
-                <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
+                <Button onClick={() => history.goBack()}>关闭</Button>
                 {
                     detailData.status === 1 ?
                         <><Button type="primary" onClick={() => {
@@ -153,7 +155,7 @@ export default function AssessmentTaskDetail(): React.ReactNode {
         ]}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseColumns} dataSource={detailData} col={2} />
-            <Attachment dataSource={ detailData.fileVOList } />
+            <Attachment dataSource={detailData.fileVOList} />
             <DetailTitle title="操作信息" />
             <CommonTable columns={tableColumns} dataSource={detailData.statusRecordList} pagination={false} />
         </DetailContent>

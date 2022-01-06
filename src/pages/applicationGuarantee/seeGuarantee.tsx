@@ -1,13 +1,13 @@
 /**
  * 查看保函申请
  */
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Modal, Form, Button } from 'antd';
-import { BaseInfo, DetailTitle, CommonTable, Attachment, AttachmentRef } from '../common';
-import { seeBaseForm, guaranteeForm, recoveryForm, seeApprovalRecord } from './applicationColunm.json';
+import { BaseInfo, DetailTitle, Attachment, AttachmentRef, OperationRecord } from '../common';
+import { seeBaseForm, guaranteeForm, recoveryForm } from './applicationColunm.json';
 import { OverViewProps } from './application';
 export default function SeeGuarantee(props: OverViewProps): JSX.Element {
-    const [addCollectionForm] = Form.useForm(); 
+    const [addCollectionForm] = Form.useForm();
     const fillGuarantee = useRef<AttachmentRef>();
     return (
         <Modal
@@ -17,9 +17,9 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
             maskClosable={false}
             width={1100}
             footer={[
-            <Button key="back" onClick={props?.onCancel}>
-                关闭
-            </Button>
+                <Button key="back" onClick={props?.onCancel}>
+                    关闭
+                </Button>
             ]}
         >
             {
@@ -29,7 +29,7 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                         <BaseInfo
                             form={addCollectionForm}
                             dataSource={props?.userData?.guaranteeInitVO || {}}
-                            col={ 2 }
+                            col={2}
                             columns={[...seeBaseForm]}
                         />
                     </>
@@ -37,7 +37,7 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
             }
             <Attachment
                 title={"保函申请相关附件"}
-                dataSource={ props?.userData?.applyAttachListVO || [] }
+                dataSource={props?.userData?.applyAttachListVO || []}
                 ref={fillGuarantee}
             />
             {
@@ -47,8 +47,8 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                         <BaseInfo
                             form={addCollectionForm}
                             dataSource={props?.userData?.guaranteeVO || {}}
-                            col={ 2 }
-                            columns={ guaranteeForm}
+                            col={2}
+                            columns={guaranteeForm}
                         />
                     </>
                 )
@@ -59,7 +59,7 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                     <BaseInfo
                         form={addCollectionForm}
                         dataSource={props?.userData?.guaranteeRecoveryVO || {}}
-                        col={ 2 }
+                        col={2}
                         columns={[...recoveryForm]}
                     />
                 </>
@@ -69,28 +69,14 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                     <>
                         <Attachment
                             title={"保函相关附件"}
-                            dataSource={ props?.userData?.attachInfoVOList || [] }
+                            dataSource={props?.userData?.attachInfoVOList || []}
                             ref={fillGuarantee}
                         />
                     </>
                 )
             }
             {
-                props?.userData?.approveRecordVO && (
-                    <>
-                        <DetailTitle title="审批记录" />
-                        <CommonTable columns={[
-                            {
-                                key: 'index',
-                                title: '序号',
-                                dataIndex: 'index',
-                                width: 50,
-                                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                            },
-                            ...seeApprovalRecord
-                        ]} dataSource={props?.userData?.approveRecordVO  || []} />
-                    </>
-                )
+                props?.userData?.approveRecordVO && (<OperationRecord serviceId={props.id as string} serviceName={"tower-finance"} title="审批记录" />)
             }
         </Modal>
     )

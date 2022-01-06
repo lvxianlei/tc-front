@@ -12,7 +12,7 @@ import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../compon
 import { ITabItem } from '../../components/ITabableComponent'
 import RequestUtil from '../../utils/RequestUtil'
 import { IClient } from '../IClient'
-import '../../components/AbstractMngtComponent.module.less'
+// import '../../components/AbstractMngtComponent.module.less'
 import ExportList from '../../components/export/list'
 export interface PageProps extends RouteComponentProps, WithTranslation {
     path: string
@@ -28,6 +28,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     readonly exportPath?: string; //导出接口
     sourceKey?: string,
     isSunmryLine?: (result: IResponseData) => void;//添加计算行
+    exportObject?: { [key: string]: any }, // 导出可能会包含的id等
 }
 
 export interface IResponseData {
@@ -67,10 +68,11 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
      * @returns 
      */
     public getHierarchy = (resData: IResponseData) => {
-        const dataKey:string[] = this.props.sourceKey?.split(".").filter((item: any) => item !== this.props.sourceKey?.split(".")[this.props.sourceKey?.split(".").length - 1]) || [];
-        const result =  this.props.sourceKey ? dataKey.reduce((acc: any, key: any) => {
-            return acc && key in acc ? acc[key] : null;},
-        (resData as any)) : resData.records || resData;
+        const dataKey: string[] = this.props.sourceKey?.split(".").filter((item: any) => item !== this.props.sourceKey?.split(".")[this.props.sourceKey?.split(".").length - 1]) || [];
+        const result = this.props.sourceKey ? dataKey.reduce((acc: any, key: any) => {
+            return acc && key in acc ? acc[key] : null;
+        },
+            (resData as any)) : resData.records || resData;
         return result;
     }
 
@@ -92,7 +94,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                 tableDataSource: this.props.sourceKey ? sourceDataKey.reduce((acc, key) => {
                     return acc && key in acc ? acc[key] : null;
                 },
-                (resData as any)) : resData.records || resData,
+                    (resData as any)) : resData.records || resData,
                 tablePagination: {
                     ...this.state.tablePagination,
                     current: this.props.sourceKey ? result.current : resData.current,
@@ -137,7 +139,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
             showSizeChanger: false
         }
         const postValue: any = this.props.onFilterSubmit && this.props.onFilterSubmit(values)
-        this.fetchTableData(postValue, tablePagination);
+        this.fetchTableData({ ...postValue, ...this.props.filterValue }, tablePagination);
     }
 
     public getTabItems(): ITabItem[] {
@@ -148,21 +150,28 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     protected renderExtraOperationContent(): React.ReactNode {
         return (
             <>
-                <Space direction="horizontal" size="middle">
-                    {this.props.exportPath ? <Button type="primary" ghost onClick={() => {
-                        this.setState({
-                            isExport: true
-                        })
-                    }}>导出</Button> : null}
-                    {typeof this.props.extraOperation === "function" ? this.props.extraOperation(this.state.resData) : this.props.extraOperation}
-                </Space>
+                {
+                    (this.props.extraOperation || this.props.exportPath) && (
+                        <Space direction="horizontal" size="middle" style={{ width: "100%", marginBottom: "12px" }}>
+                            {this.props.exportPath && <Button type="primary" ghost onClick={() => {
+                                this.setState({
+                                    isExport: true
+                                })
+                            }}>导出</Button>}
+                            {typeof this.props.extraOperation === "function" ? this.props.extraOperation(this.state.resData) : this.props.extraOperation}
+                        </Space>
+                    )
+                }
+
                 {this.state.isExport ? <ExportList
                     history={this.props.history}
                     location={this.props.location}
                     match={this.props.match}
                     columnsKey={() => {
                         let keys = [...this.getTableColumns()]
-                        keys.pop()
+                        if (!keys[keys.length - 1].isExport) {
+                            keys.pop()
+                        }
                         return keys
                     }}
                     current={this.state.tablePagination?.current || 1}
@@ -171,7 +180,8 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                     url={this.props.exportPath}
                     serchObj={{
                         ...JSON.parse(JSON.stringify(this.props.filterValue || {})),
-                        ...JSON.parse(JSON.stringify(this.props?.requestData || {}))
+                        ...JSON.parse(JSON.stringify(this.props?.requestData || {})),
+                        ...JSON.parse(JSON.stringify(this.props?.exportObject || {}))
                     }}
                     closeExportList={() => {
                         this.setState({

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Button, Space, Modal, Input, Form, FormInstance } from 'antd';
 import { DetailContent, Attachment, AttachmentRef } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';

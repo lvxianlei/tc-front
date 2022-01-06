@@ -27,7 +27,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
     const [ title, setTitle ] = useState('创建');
     const [ visible, setVisible ] = useState(false);
     const [ form ] = Form.useForm();
-    const [ detail, setDetail ] = useState({});
+    const [ detail, setDetail ] = useState<any>({});
 
     const columns = [
         {
@@ -266,7 +266,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                     </Descriptions.Item>
                     <Descriptions.Item label="备注">
                         <Form.Item name="description">
-                            <Input placeholder="请输入" bordered={false} disabled={ title === '详情' }/>
+                            <Input.TextArea placeholder="请输入" bordered={false} disabled={ title === '详情' } maxLength={100} showCount/>
                         </Form.Item>
                     </Descriptions.Item>
                 </Descriptions>
@@ -302,7 +302,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
             </Form>
             { title === '详情' ? 
                 <><DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={[]} pagination={false} /></>
+                <CommonTable columns={tableColumns} dataSource={detail?.operationLog?.records} pagination={false} /></>
             : null }
         </Modal>
     </>

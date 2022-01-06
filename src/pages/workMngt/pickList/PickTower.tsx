@@ -26,7 +26,7 @@ export default function PickTower(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [matchLeader, setMatchLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string,status: string }>()
     const history = useHistory();
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState({});
@@ -139,10 +139,10 @@ export default function PickTower(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 230,
+            width: 100,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small"  className={styles.operationBtn}>
                     <Button type='link' onClick={async () => {
                         setVisible(true);
                             let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}`)
@@ -158,8 +158,8 @@ export default function PickTower(): React.ReactNode {
                             })
                             form.setFieldsValue({detailData:detailData});
                             
-                    }} disabled={record.materialStatus!==2||AuthUtil.getUserId()!==record.materialUser}>配段</Button>
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==3}>杆塔提料明细</Button>
+                    }} disabled={record.materialStatus!==2||AuthUtil.getUserId()!==record.materialUser|| params.status!=='3'}>配段</Button>
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==3}>杆塔提料明细</Button>
                 </Space>
             )
         }
@@ -183,9 +183,8 @@ export default function PickTower(): React.ReactNode {
     const renderTreeNodes = (data:any) =>
     data.map((item:any) => {
         if (item.children) {
-            item.disabled = true;
             return (
-            <TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node}>
+            <TreeNode key={item.id} title={item.title} value={item.id} className={styles.node}>
                 {renderTreeNodes(item.children)}
             </TreeNode>
             );
@@ -257,7 +256,7 @@ export default function PickTower(): React.ReactNode {
                         </Form.List> 
                     </Row>
                 </Form>:null}
-                <Space style={{position:'relative',left:'80%'}}>
+                <Space style={{position:'relative',left:'75%'}}>
                     <Button type="primary" ghost onClick={()=>handleModalCancel()}>取消</Button>
                     <Button type="primary" onClick={()=>handleModalSave()}>保存</Button>
                     <Button type="primary" onClick={()=>handleModalOk()}>保存并提交</Button>
@@ -273,7 +272,7 @@ export default function PickTower(): React.ReactNode {
                 exportPath="/tower-science/product/material"
                 extraOperation={
                     <Space>
-                        <Button type="primary" onClick={()=>history.push('/workMngt/pickList')}>返回上一级</Button>
+                        <Button type="ghost" onClick={()=>history.push('/workMngt/pickList')}>返回</Button>
                     </Space>
                 }
                 searchFormItems={[
@@ -288,7 +287,7 @@ export default function PickTower(): React.ReactNode {
                         children: <Select style={{width:'100px'}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待开始</Select.Option>
-                            <Select.Option value={2} key={2}>配段中</Select.Option>
+                            <Select.Option value={2} key={2}>待配段</Select.Option>
                             <Select.Option value={3} key={3}>已完成</Select.Option>
                         </Select>
                     },

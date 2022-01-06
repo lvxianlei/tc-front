@@ -37,6 +37,10 @@
             "format": "YYYY-MM-DD"
         },
         {
+            "dataIndex": "idNumber",
+            "title": "身份证号"
+        },
+        {
             "dataIndex": "contractType",
             "title": "合同类型",
             "type": "select",

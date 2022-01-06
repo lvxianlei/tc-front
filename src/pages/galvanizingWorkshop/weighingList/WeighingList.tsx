@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Popconfirm, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-// import styles from './DailySchedule.module.less';
 import { Link } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import { weighingListColumns } from "../galvanizingWorkshop.json";

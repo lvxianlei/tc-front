@@ -3,7 +3,7 @@ import { Input, DatePicker, Select, Button } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
 import { IntgSelect, Page } from '../../common'
-import AuthUtil from "../../../utils/AuthUtil"
+import AuthUtil from "../../../utils/AuthUtil";
 export default function EnquiryList(): React.ReactNode {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<object>(history.location.state as object);
@@ -25,6 +25,7 @@ export default function EnquiryList(): React.ReactNode {
     return <>
         <Page
             path="/tower-supply/materialPurchaseTask/inquirer"
+            exportPath={`/tower-supply/materialPurchaseTask/inquirer`}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...baseInfo,
@@ -33,10 +34,9 @@ export default function EnquiryList(): React.ReactNode {
                     width: 100,
                     dataIndex: 'operation',
                     //disabled={![1, 3].includes(records.batcheTaskStatus)}
-                    render: (_: any, records: any) => <Button type="link" disabled={userId !== records.batcherId} ><Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link></Button>
+                    render: (_: any, records: any) => <Button className="btn-operation-link" type="link" disabled={userId !== records.batcherId} ><Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link></Button>
                 }
             ]}
-            extraOperation={<Button type="primary" ghost>导出</Button>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

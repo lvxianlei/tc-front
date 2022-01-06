@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch, useLocation } from 'react-router-dom';
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { Page } from '../../common';
 import { IClient } from '../../IClient';
 import RequestUtil from '../../../utils/RequestUtil';
 import ApplicationContext from "../../../configuration/ApplicationContext"
+import ExportList from '../../../components/export/list';
 import '../StockPublicStyle.less';
 import { materialStandardTypeOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory(),
         [current, setCurrent] = useState(1),
-        [total, setTotal] = useState(100),
+        [total, setTotal] = useState(0),
         [pageSize, setPageSize] = useState<number>(10),
         [warehouseId, setWarehouseId] = useState(''),//仓库
         [materialTexture, setMaterialTexture] = useState(''),//材质
@@ -27,6 +28,9 @@ export default function RawMaterialStock(): React.ReactNode {
         [warehouseList, setWarehouseList] = useState<any>([]),//筛选仓库数据
         [weight, setWeight] = useState<number | string>(0),//合计重量
         [quantity, setQuantity] = useState<number | string>(0);//合计数量
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     // console.log((ApplicationContext.get().dictionaryOption as any)["111"],'ssss')
     const columns = [
         {
@@ -132,11 +136,19 @@ export default function RawMaterialStock(): React.ReactNode {
             spec,
         });
         console.log(data, 'res')
-        setListdata(data.materialStockPage.records);
+        setListdata(data.records);
+        // setWeight(data.weight)
+        // setQuantity(data.quantity);
+        // console.log(data.total)
+        setTotal(data.total);
+    }
+    const getMaterialStockStatics = async () => {
+        const data: any = await RequestUtil.get(`/tower-storage/materialStock/getMaterialStockStatics`);
+        setListdata(data.records);
         setWeight(data.weight)
         setQuantity(data.quantity);
-        console.log(data.total)
-        setTotal(data.materialStockPage.total);
+        // console.log(data.total)
+        // setTotal(data.materialStockPage.total);
     }
     // 获取仓库/库区/库位
     const getWarehousing = async (id?: any, type?: any) => {
@@ -166,6 +178,8 @@ export default function RawMaterialStock(): React.ReactNode {
     //进入页面刷新
     useEffect(() => {
         loadData()
+        // 统计相关数据
+        getMaterialStockStatics();
     }, [current, pageSize, spec, warehouseId, materialTexture, productName, standard, classify, lengthMax])
     return (
         <div id="RawMaterialStock">
@@ -354,7 +368,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Button
                             className="btn"
                             type="primary"
-                            onClick={() => { loadData() }}
+                            onClick={() => { loadData(); getMaterialStockStatics() }}
                         >查询</Button>
                         <Button
                             className="btn"
@@ -367,6 +381,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Button
                     type="primary"
                     className='func_btn'
+                    onClick={()=>{setIsExportStoreList(true)}}
                 >导出</Button>
             </div>
             <div className="tip_public_Stock">
@@ -403,6 +418,31 @@ export default function RawMaterialStock(): React.ReactNode {
                     }}
                 />
             </div>
+            {isExport?<ExportList
+                history={history}
+                location={location}
+                match={match}
+                columnsKey={() => {
+                    let keys = [...columns]
+                    keys.pop()
+                    return keys
+                }}
+                current={current}
+                size={pageSize}
+                total={total}
+                url={`/tower-storage/materialStock`}
+                serchObj={{
+                    warehouseId: warehouseId || "",
+                    materialTexture: materialTexture || "",
+                    productName: productName || "",
+                    standard: standard || "",
+                    classify: classify || "",
+                    lengthMin: lengthMin || "",
+                    lengthMax: lengthMax || "",
+                    spec: spec || ""
+                }}
+                closeExportList={() => { setIsExportStoreList(false) }}
+            />:null}
         </div>
     )
 }

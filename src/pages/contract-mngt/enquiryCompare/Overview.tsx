@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react"
 import { Col, message, Row, Select } from "antd"
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory, useParams, useRouteMatch, useLocation } from "react-router-dom"
 import { Button, Modal, Spin } from "antd"
 import { CommonTable, DetailTitle, DetailContent, Attachment } from "../../common"
 import { materialColumns } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import ExportList from '../../../components/export/list';
 import AddPrice from "./AddPrice"
 
 function AttchFiles({ id }: { id: string }): JSX.Element {
@@ -37,8 +38,11 @@ export default function Overview(): JSX.Element {
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [detailId, setDetailId] = useState<string>("")
     const [materialLists, setMaterialList] = useState<any[]>([])
-    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
-    const [ selectedRows, setSelectedRows ] = useState<[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<[]>([]);
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${params.id}`)
@@ -74,10 +78,12 @@ export default function Overview(): JSX.Element {
             okText: "提交/完成",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
+                    console.log(materialLists, "materialLists")
                     await finishPriceRun({
                         comparisonPriceDetailDtos: materialLists.map((item: any) => ({
                             ...item,
-                            winBidSupplierId: item.winBidSupplierId === -1 ? null : item.winBidSupplierId
+                            winBidSupplierId: item.winBidSupplierId === -1 ? null : item.winBidSupplierId,
+                            winBidSupplierName: (item.supplierOptionsVos && item.supplierOptionsVos.length > 0 && item.winBidSupplierId) ? item.supplierOptionsVos[0].supplierName : ""
                         }))
                     })
                     resove(true)
@@ -141,13 +147,13 @@ export default function Overview(): JSX.Element {
             }}>
             <AttchFiles id={detailId} />
         </Modal>
-        <Modal 
+        <Modal
             destroyOnClose
             title="中标"
             visible={supplierVisible}
             footer={[<Button type="primary" key="confirm" onClick={() => {
                 const list = materialLists.map(res => {
-                    if(selectedKeys.indexOf(res.id) === -1) {
+                    if (selectedKeys.indexOf(res.id) === -1) {
                         return res
                     } else {
                         return {
@@ -155,7 +161,9 @@ export default function Overview(): JSX.Element {
                             winBidSupplierId: supplier
                         }
                     }
-                }) 
+                })
+                setSelectedKeys([]);
+                setSelectedRows([]);
                 setSupplierVisible(false)
                 setSupplier("")
                 setMaterialList(list);
@@ -164,24 +172,30 @@ export default function Overview(): JSX.Element {
                 setSupplier("")
                 setSupplierVisible(false)
             }}>
-                <Row>
-                    <Col offset={1} span={5}>中标供应商</Col>
-                    <Col offset={1} span={17}>
-                        <Select
-                            disabled={data?.comparisonStatus !== 1}
-                            onChange={(value: string) => {
-                                setSupplier(value)
-                            }}
-                            style={{ width: '100%' }}>
-                            {data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData.map((item: any) => <Select.Option
-                                value={item.supplierId}
-                                key={item.id}>{item.supplierName}</Select.Option>)}
-                        </Select>
-                    </Col>
-                </Row>
+            <Row>
+                <Col offset={1} span={5}>中标供应商</Col>
+                <Col offset={1} span={17}>
+                    <Select
+                        disabled={data?.comparisonStatus !== 1}
+                        onChange={(value: string) => {
+                            setSupplier(value)
+                        }}
+                        style={{ width: '100%' }}>
+                        {data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData.map((item: any) => <Select.Option
+                            value={item.supplierId}
+                            key={item.id}>{item.supplierName}</Select.Option>)}
+                    </Select>
+                </Col>
+            </Row>
         </Modal>
         <DetailContent title={[
-            <Button type="primary" ghost key="export" style={{ marginRight: 16 }}>导出</Button>,
+            <Button
+                type="primary"
+                ghost
+                key="export"
+                style={{ marginRight: 16 }}
+                onClick={()=>{setIsExportStoreList(true)}}
+            >导出</Button>,
             <Button
                 type="primary"
                 ghost key="finish"
@@ -202,15 +216,20 @@ export default function Overview(): JSX.Element {
             <Button
                 type="primary"
                 style={{ marginRight: 16 }}
-                ghost 
+                ghost
                 key="select"
                 onClick={() => {
-                    setSupplierVisible(true)
+                    if (selectedKeys.length > 0) {
+                        setSupplierVisible(true)
+                    } else {
+                        message.warning('请选择要批量中标的数据');
+                    }
+
                 }}>批量中标选择</Button>
         ]} operation={[
-            <Button type="primary" ghost key="goback" onClick={() => history.goBack()}>返回</Button>
+            <Button key="back" onClick={() => history.goBack()}>返回</Button>
         ]}>
-            <DetailTitle title="询价产品信息" />
+            <DetailTitle title="询价产品信息" style={{marginTop: "24px"}}/>
             <CommonTable haveIndex columns={[...materialColumns, {
                 title: "中标供应商",
                 dataIndex: "winBidSupplierId",
@@ -224,10 +243,10 @@ export default function Overview(): JSX.Element {
                         key={item.id}>{item.supplierName}</Select.Option>)}
                 </Select>)
             }]}
-            rowSelection={{
-                selectedRowKeys: selectedKeys,
-                onChange: SelectChange,
-            }} dataSource={materialLists} />
+                rowSelection={{
+                    selectedRowKeys: selectedKeys,
+                    onChange: SelectChange,
+                }} dataSource={materialLists} />
             <DetailTitle title="询价报价信息" />
             <CommonTable
                 haveIndex
@@ -238,7 +257,7 @@ export default function Overview(): JSX.Element {
                                 ...item,
                                 render: (value: string, records: any) => {
                                     if (records.material.includes(item.dataIndex)) {
-                                        return <span style={{ backgroundColor: "red" }}>{value}</span>
+                                        return <span style={{ backgroundColor: "rgba(2, 89, 161, .48)" }}>{value}</span>
                                     }
                                     return <span>{value}</span>
                                 }
@@ -251,16 +270,30 @@ export default function Overview(): JSX.Element {
                         fixed: "right",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
-                            <Button disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
+                            <Button
+                                style={{
+                                    padding: 0,
+                                    marginRight: 12
+                                }}
+                                disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                            <Button type="link" onClick={() => {
+                            <Button
+                                style={{
+                                    padding: 0,
+                                    marginRight: 12
+                                }}
+                                type="link" onClick={() => {
                                 setDetailId(records.id)
                                 setAttchVisible(true)
                             }}>附件</Button>
-                            <Button disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
+                            <Button
+                                style={{
+                                    padding: 0
+                                }}
+                                disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
                                 Modal.confirm({
                                     title: "删除",
                                     content: "确定删除吗？",
@@ -277,5 +310,25 @@ export default function Overview(): JSX.Element {
                 dataSource={data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData || []}
             />
         </DetailContent>
+        {isExport?<ExportList
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => {
+                let keys = [...materialColumns, {
+                    title: "中标供应商",
+                    dataIndex: "winBidSupplierName",
+                }]
+                return keys
+            }}
+            current={1}
+            size={materialLists.length}
+            total={materialLists.length}
+            url={`/tower-supply/comparisonPrice/exportComparisonPriceDetails`}
+            serchObj={{
+                comparisonPriceId: params.id
+            }}
+            closeExportList={() => { setIsExportStoreList(false) }}
+        />:null}
     </Spin>
 }

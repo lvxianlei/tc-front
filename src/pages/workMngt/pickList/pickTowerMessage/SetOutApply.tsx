@@ -23,7 +23,9 @@ export default function LoftingTowerApplication(): React.ReactNode {
             title: '序号', 
             dataIndex: 'index', 
             key: 'index', 
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
+            render: (_a: any, _b: any, index: number): React.ReactNode => (
+                <span>{index + 1}</span>
+            ) 
         },
         { 
             title: '塔型', 
@@ -52,7 +54,9 @@ export default function LoftingTowerApplication(): React.ReactNode {
             title: '序号', 
             dataIndex: 'index', 
             key: 'index', 
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
+            render: (_a: any, _b: any, index: number): React.ReactNode => (
+                <span>{index + 1}</span>
+            ) 
         },
         { 
             title: '段号', 
@@ -84,11 +88,16 @@ export default function LoftingTowerApplication(): React.ReactNode {
             dataIndex: 'operation', 
             key:'operation', 
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Button type='link' onClick={ () => {
-                RequestUtil.post(`/tower-science/productStructure/reuse?productSegmentId=${paragraph}&passivityProductSegment=${record.id}`).then(() => {
-                    message.success('套用成功'); 
-                }).then(()=>{
-                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
-                });
+                if(paragraph){
+                    RequestUtil.post(`/tower-science/productStructure/reuse?productSegmentId=${paragraph}&passivityProductSegment=${record.id}`).then(() => {
+                        message.success('套用成功'); 
+                    }).then(()=>{
+                        history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
+                    });
+                }else{
+                    message.error('未选择段落，不可选择套用！')
+                }
+                
             } }>选择套用</Button>)
         }
     ]
@@ -96,7 +105,12 @@ export default function LoftingTowerApplication(): React.ReactNode {
     const [ form ] = useForm();
     const history = useHistory();
     const [ paragraphData, setParagraphData ] = useState([] as undefined | any);
-    const params = useParams<{ id: string, productSegmentId: string, status: string, materialLeader: string }>();
+    const params = useParams<{ 
+        id: string, 
+        productSegmentId: string, 
+        status: string, 
+        materialLeader: string 
+    }>();
     const page = {
         current: 1,
         pageSize: 10
@@ -169,15 +183,28 @@ export default function LoftingTowerApplication(): React.ReactNode {
                     }}
                 />
                 <span style={{marginRight:'10px'}}>套用至段落</span>
-                <Select placeholder="请选择" onChange={ (e: string) => {
-                    setParagraph(e);
-                } } style={{width:'120px'}}>
+                <Select 
+                    placeholder="请选择" 
+                    onChange={ (e: string) => {
+                        setParagraph(e);
+                    } } 
+                    style={{width:'120px'}}
+                >
                     { paragraphList.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
+                        return <Select.Option 
+                                    key={ item.id } 
+                                    value={ item.id }
+                                >
+                                    { item.segmentName }
+                                </Select.Option>
                     }) }
                 </Select>
                 <p className={ styles.title }>段落信息</p>
-                <CommonTable dataSource={ paragraphData } columns={ paragraphColumns } pagination={ false }/>
+                <CommonTable 
+                    dataSource={ paragraphData } 
+                    columns={ paragraphColumns } 
+                    pagination={ false }
+                />
             </DetailContent>
         </Spin>
     </>

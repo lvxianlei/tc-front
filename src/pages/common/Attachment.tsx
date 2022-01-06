@@ -89,7 +89,7 @@ export default forwardRef(function ({
         pushUrl: "http://www."
     })
     const [uploadOSSUrlList, setUploadOSSUrlList] = useState<any>([])
-    const [picUrl, setPicUrl] = useState<string>()
+    const [picInfo, setPicInfo] = useState<{ [key: string]: any }>({ url: "", title: "" })
     const { run: saveFile } = useRequest<URLProps>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: URLProps = await RequestUtil.post(`/sinzetech-resource/oss/endpoint/get-upload-url`, data)
@@ -99,9 +99,18 @@ export default forwardRef(function ({
         }
     }), { manual: true })
 
+    const { run: uploadRun } = useRequest<URLProps>((action: string, data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: URLProps = await RequestUtil.putFile(action, data)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     useEffect(() => setAttachs(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || []), [JSON.stringify(dataSource)])
 
-    useEffect(() => setUploadOSSUrlList([...uploadOSSUrlList]), [JSON.stringify(uploadOSSUrlList)])
+    useEffect(() => setUploadOSSUrlList([...uploadOSSUrlList]), [JSON.stringify([...uploadOSSUrlList])])
 
     const deleteAttachData = useCallback((uid: string) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== uid : item.id !== uid)), [setAttachs, attchs])
 
@@ -129,9 +138,11 @@ export default forwardRef(function ({
         } catch (error) {
             reject(false)
         }
+        return false
     }), [attchs, setAttachs, setUploadOSSUrlInfo])
 
     const uploadChange = useCallback((event: any) => {
+        console.log(event)
         if (event.file.status === "done") {
             if (event.file.xhr.status === 200) {
                 setAttachs(attchs.map(item => {
@@ -173,10 +184,9 @@ export default forwardRef(function ({
                         downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
                     }])
                 }
-
             }
         }
-    }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo])
+    }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo, uploadOSSUrlList])
 
     const getDataSource = useCallback(() => attchs, [attchs])
 
@@ -186,14 +196,17 @@ export default forwardRef(function ({
 
     const handlePreview = useCallback((record: FileProps) => {
         if (["png", "jpeg", "jpg", "gif"].includes(record?.fileSuffix || "")) {
-            setPicUrl(record.downloadUrl)
+            setPicInfo({
+                url: record.downloadUrl,
+                title: record.originalName
+            })
             setVisible(true)
         } else if (["pdf"].includes(record?.fileSuffix || "")) {
             window.open(record.downloadUrl)
         } else {
             message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf预览...")
         }
-    }, [setPicUrl, setVisible])
+    }, [setPicInfo, setVisible])
 
     const handleCancel = useCallback(() => setVisible(false), [setVisible])
 
@@ -207,16 +220,21 @@ export default forwardRef(function ({
         }
         return <>
             {!edit && <Button size="small" type="link" onClick={() => handlePreview(records)}>预览</Button>}
-            <Button size="small" type="link" onClick={() => downLoadFile(records.downloadUrl)}>下载</Button>
+            <Button size="small" type="link" onClick={() => downLoadFile(records.downloadUrl, records.originalName)}>下载</Button>
             {edit && <Button size="small" type="link" onClick={() => deleteAttachData(records.uid)}>删除</Button>}
         </>
     }, [attchs])
-
     return <>
-        <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
-            <Image src={picUrl} preview={false} />
+        <Modal
+            title={`${picInfo.title}`}
+            width={1011}
+            visible={visible}
+            onCancel={handleCancel}
+            footer={false}>
+            <Image src={picInfo.url} preview={false} />
         </Modal>
         {isTable && <DetailTitle
+            style={{marginTop: "24px"}}
             title={title}
             {...edit ? {
                 operation: [
@@ -233,6 +251,13 @@ export default forwardRef(function ({
                         }}
                         method="put"
                         showUploadList={false}
+                        customRequest={async (options: any) => {
+                            const file: any = options.file
+                            const result: any = await uploadRun(options.action, options.file)
+                            file.status = "done"
+                            file.xhr = { status: 200, response: result }
+                            uploadChange({ file })
+                        }}
                         beforeUpload={handleBeforeUpload}
                         onChange={uploadChange}
                     >
@@ -252,22 +277,36 @@ export default forwardRef(function ({
                 expires: new URL(uploadOSSUrlInfo?.pushUrl).searchParams.get("Expires") || ""
             }}
             method="put"
-            beforeUpload={handleBeforeUpload}
             showUploadList={false}
+            customRequest={async (options: any) => {
+                const file: any = options.file
+                const result: any = await uploadRun(options.action, options.file)
+                file.status = "done"
+                file.xhr = { status: 200, response: result }
+                uploadChange({ file })
+            }}
+            beforeUpload={handleBeforeUpload}
             onChange={uploadChange}
         >
             {children}
-        </Upload>}
-        {isTable && <div>
-            <Row style={{ backgroundColor: "#fafafa", height: 32, lineHeight: "32px" }}>
-                <Col span={12} style={{ padding: 8 }}>文件名称</Col>
-                <Col span={12} style={{ padding: 8 }}>操作</Col>
+        </Upload>
+        }
+        {isTable && <div style={{border: "1px solid #eee",margin: "0px 0px 24px 0px"}}>
+            <Row style={{ backgroundColor: "#fafafa", padding: 8, }}>
+                <Col span={12}>文件名称</Col>
+                <Col span={12} style={{paddingLeft: 16, boxSizing: "border-box"}}>操作</Col>
             </Row>
             {!attchs.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
             {attchs.map((item, index: number) => <Spin key={item.uid} spinning={item.loading} size="small">
-                <Row style={{ height: 28, lineHeight: "28px", backgroundColor: index % 2 === 0 ? "#fff" : "#f8f8f8" }} >
-                    <Col span={12} style={{ padding: "0 8px" }}>{item.originalName}</Col>
-                    <Col span={12} style={{ padding: "0 8px" }}>{operationRender(item)}</Col>
+                <Row style={{ backgroundColor: index % 2 === 0 ? "#fff" : "#f8f8f8" }} >
+                    <Col span={12} style={{
+                        padding: "8px 8px",
+                        width: "100%",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        overflow: "hidden"
+                    }}>{item.originalName}</Col>
+                    <Col span={12} style={{ padding: "8px 8px" }}>{operationRender(item)}</Col>
                 </Row>
             </Spin>)}
         </div>}

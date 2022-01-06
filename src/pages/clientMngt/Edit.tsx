@@ -7,12 +7,11 @@ import RequestUtil from "../../utils/RequestUtil"
 import { setting, invoice } from "./clientMegt.json"
 import { clientTypeOptions, bankTypeOptions } from "../../configuration/DictionaryOptions"
 interface EditProps {
-    type: "new" | "edit",
     id: string
 }
 export default function Edit(): JSX.Element {
     const history = useHistory()
-    const { type, id } = useParams<EditProps>()
+    const { id } = useParams<EditProps>()
     const [baseForm] = Form.useForm()
     const [invoiceForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -22,11 +21,11 @@ export default function Edit(): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new", refreshDeps: [id] })
+    }), { manual: id === "new", refreshDeps: [id] })
 
     const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-customer/customer`, { ...postData, id: data?.id })
+            const result: { [key: string]: any } = await RequestUtil[id === "new" ? "post" : "put"](`/tower-customer/customer`, { ...postData, id: data?.id })
             resole(result)
         } catch (error) {
             reject(error)
@@ -55,7 +54,7 @@ export default function Edit(): JSX.Element {
             style={{ marginRight: 16 }}
             loading={saveLoading}
             onClick={onSubmit}>保存</Button>,
-        <Button key="cancel" type="primary" style={{ marginRight: 16 }} onClick={() => history.goBack()}>取消</Button>,
+        <Button key="cancel" style={{ marginRight: 16 }} onClick={() => history.goBack()}>取消</Button>,
     ]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />

@@ -143,19 +143,20 @@ export default function Invoice() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" disabled={![1].includes(record.invoiceStatus)} onClick={() => {
+                            <Button type="link" className="btn-operation-link" disabled={![1].includes(record.invoiceStatus)} onClick={() => {
                                 setType("edit")
                                 setDetailedId(record.id)
                                 setVisible(true)
                             }}>编辑</Button>
                             <Button
                                 type="link"
+                                className="btn-operation-link" 
                                 onClick={() => {
                                     setDetailVisible(true)
                                     setDetailedId(record.id)
                                 }}>详情</Button>
-                            <Button type="link" disabled={![1].includes(record.invoiceStatus)} onClick={() => handleCancel(record.id)}>作废</Button>
-                            <Button type="link" disabled={record.invoiceStatus !== 1} onClick={() => handleDelete(record.id)}>删除</Button>
+                            <Button type="link" className="btn-operation-link" disabled={![1].includes(record.invoiceStatus)} onClick={() => handleCancel(record.id)}>作废</Button>
+                            <Button type="link" className="btn-operation-link" disabled={record.invoiceStatus !== 1} onClick={() => handleDelete(record.id)}>删除</Button>
                         </>
                     }
                 }]}

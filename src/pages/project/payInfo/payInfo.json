@@ -7,23 +7,23 @@
             "enum": [
                 {
                     "label": "标书费",
-                    "value": 0
+                    "value": 1153
                 },
                 {
                     "label": "投标服务费",
-                    "value": 1
+                    "value": 1155
                 },
                 {
                     "label": "投标保证金",
-                    "value": 2
+                    "value": 1151
                 },
                 {
                     "label": "中标服务费",
-                    "value": 3
+                    "value": 1152
                 },
                 {
                     "label": "杂费",
-                    "value": 4
+                    "value": 1154
                 }
             ]
         },

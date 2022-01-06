@@ -29,7 +29,7 @@ class ManagementContractNew extends ContractNew {
         {
           title: "基础信息",
           itemCol: {
-            span: 8,
+            span: 6,
           },
           itemProps: [
             {
@@ -195,6 +195,7 @@ class ManagementContractNew extends ContractNew {
               children: (
                 <>
                   <Input
+                    disabled={true}
                     value={contract?.customerInfoDto?.customerCompany}
                     suffix={
                       <ClientSelectionComponent
@@ -243,6 +244,7 @@ class ManagementContractNew extends ContractNew {
                 <>
                   <Input
                     value={contract?.signCustomerName}
+                    disabled={true}
                     suffix={
                       <ClientSelectionComponent
                         onSelect={this.onCustomerNameSelect}
@@ -256,12 +258,12 @@ class ManagementContractNew extends ContractNew {
             },
             {
               label: "付款方式",
-              name: "customerPhone",
-              initialValue: contract?.customerInfoVo?.customerPhone,
+              name: "payType",
+              initialValue: contract?.payType,
               children: (
                 <>
                   <Select
-                    value={contract?.customerInfoVo?.customerPhone}
+                    value={contract?.payType}
                   >
                     <Select.Option value="1">转账</Select.Option>
                     <Select.Option value="2">现金</Select.Option>
@@ -286,6 +288,7 @@ class ManagementContractNew extends ContractNew {
                 <>
                   <Input
                     value={contract?.payCompanyName}
+                    disabled={true}
                     suffix={
                       <ClientSelectionComponent
                         onSelect={this.onPayCompanyNameSelect}
@@ -437,13 +440,14 @@ class ManagementContractNew extends ContractNew {
               rules: [
                 {
                   required: true,
-                  message: "请选择结算单位",
+                  message: "请选择业务经理",
                 },
               ],
               children: (
                 <>
                   <Input
                     value={contract?.salesman}
+                    disabled={true}
                     suffix={
                       <ServiceManagerComponent
                         onSelect={this.onServiceManager}
@@ -604,7 +608,7 @@ class ManagementContractNew extends ContractNew {
         {
           title: "基础信息",
           itemCol: {
-            span: 8,
+            span: 6,
           },
           itemProps: [
             {
@@ -771,6 +775,7 @@ class ManagementContractNew extends ContractNew {
                 <>
                   <Input
                     value={contract?.customerInfoDto?.customerCompany}
+                    disabled={true}
                     suffix={
                       <ClientSelectionComponent
                         onSelect={this.onCustomerCompanySelect}
@@ -818,6 +823,7 @@ class ManagementContractNew extends ContractNew {
                 <>
                   <Input
                     value={contract?.signCustomerName}
+                    disabled={true}
                     suffix={
                       <ClientSelectionComponent
                         onSelect={this.onCustomerNameSelect}
@@ -832,11 +838,11 @@ class ManagementContractNew extends ContractNew {
             {
               label: "付款方式",
               name: "customerPhone",
-              initialValue: contract?.customerInfoVo?.customerPhone,
+              initialValue: contract?.payType,
               children: (
                 <>
                   <Select
-                    value={contract?.customerInfoVo?.customerPhone}
+                    value={contract?.payType}
                   >
                     <Select.Option value="1">转账</Select.Option>
                     <Select.Option value="2">现金</Select.Option>
@@ -861,6 +867,7 @@ class ManagementContractNew extends ContractNew {
                 <>
                   <Input
                     value={contract?.payCompanyName}
+                    disabled={true}
                     suffix={
                       <ClientSelectionComponent
                         onSelect={this.onPayCompanyNameSelect}
@@ -1007,13 +1014,14 @@ class ManagementContractNew extends ContractNew {
               rules: [
                 {
                   required: true,
-                  message: "请选择结算单位",
+                  message: "请选择业务经理",
                 },
               ],
               children: (
                 <>
                   <Input
                     value={contract?.salesman}
+                    disabled={true}
                     suffix={
                       <ServiceManagerComponent
                         onSelect={this.onServiceManager}

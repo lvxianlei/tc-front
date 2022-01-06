@@ -20,7 +20,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/${id}`)
             baseInfo.setFieldsValue({ ...result, supplyProducts: result.supplyProducts.split(",") })
-            supplierForm.setFieldsValue({ ...result, bankDepositId: result.bankDepositId + ',' + result.bankDepositName})
+            supplierForm.setFieldsValue({ ...result, bankDepositId: result.bankDepositId + ',' + result.bankDepositName })
             resole(result)
         } catch (error) {
             reject(false)
@@ -55,52 +55,57 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
     return <Spin spinning={loading}>
         <DetailTitle title="供应商基础信息" />
-        <BaseInfo form={baseInfo} columns={editColums.map((item: any) => {
-            switch (item.dataIndex) {
-                case "supplierType":
-                    return ({
-                        ...item,
-                        type: "select",
-                        enum: supplierTypeEnum
-                    })
-                case "supplyProducts":
-                    return ({
-                        ...item,
-                        type: "select",
-                        mode: "tags",
-                        enum: supplyProductsEnum,
-                        maxTagCount: 'responsive'
-                    })
-                case "qualityAssurance":
-                    return ({
-                        ...item,
-                        type: "select",
-                        enum: qualityAssuranceEnum
-                    })
-                default:
-                    return item
-            }
-        })} dataSource={{}} edit />
+        <BaseInfo
+            form={baseInfo}
+            col={3}
+            columns={editColums.map((item: any) => {
+                switch (item.dataIndex) {
+                    case "supplierType":
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: supplierTypeEnum
+                        })
+                    case "supplyProducts":
+                        return ({
+                            ...item,
+                            type: "select",
+                            mode: "multiple",
+                            enum: supplyProductsEnum,
+                            maxTagCount: 'responsive'
+                        })
+                    case "qualityAssurance":
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: qualityAssuranceEnum
+                        })
+                    default:
+                        return item
+                }
+            })}
+            dataSource={{}}
+            edit />
         <DetailTitle title="供应商账户信息" />
         <BaseInfo col={2} form={supplierForm} columns={supplierFormHead.map((item: any) => {
             switch (item.dataIndex) {
                 case "bankDepositId":
-                    return ({ ...item, render: (data: any, props: any) => {
-                        return <Form.Item name="bankDepositId">
-                            <Select placeholder="请选择">
-                                { bankTypeOptions && bankTypeOptions.map(({ id, name }, index) => {
-                                    return <Select.Option key={index} value={id + ',' +name}>
-                                        {name}
-                                    </Select.Option>
-                                }) }
-                            </Select>
-                        </Form.Item>
-                    } })
+                    return ({
+                        ...item, render: (data: any, props: any) => {
+                            return <Form.Item name="bankDepositId">
+                                <Select placeholder="请选择">
+                                    {bankTypeOptions && bankTypeOptions.map(({ id, name }, index) => {
+                                        return <Select.Option key={index} value={id + ',' + name}>
+                                            {name}
+                                        </Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        }
+                    })
                 default:
                     return item
             }
         })} dataSource={{}} edit />
-        <DetailTitle title="操作信息" />
-        <CommonTable columns={oprationInfo} dataSource={[]} />
     </Spin>
 })

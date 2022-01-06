@@ -3,8 +3,8 @@
  * @copyright © 2021
  * @description 选择班组
  */
-import { Button, FormItemProps, Input, Modal, Select, Space, TableColumnType } from 'antd';
-import { TablePaginationConfig } from 'antd/lib/table';
+import { Button, FormItemProps, Input, Modal, Space, TableColumnType } from 'antd';
+import { TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
@@ -46,6 +46,13 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
         };
     }
 
+    public getTableProps(): TableProps<object> {
+        return {
+            ...super.getTableProps(),
+            scroll: { x: 400 }
+        }
+    }
+
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-production/team/page', {
             ...filterValues,
@@ -66,8 +73,8 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
 
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
-            name: 'selectName',
-            children: <Input placeholder="请输入班组名称/车间名称/产线进行查询" />
+            name: 'name',
+            children: <Input placeholder="请输入班组名称进行查询" />
         }];
     }
     
@@ -101,22 +108,12 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
             key: 'name',
             title: '班组名称',
             dataIndex: 'name',
-            width: '25%',
+            width: 200
         }, {
-            key: 'workshopDeptName',
-            title: '所属车间',
-            dataIndex: 'workshopDeptName',
-            width: '25%',
-        }, {
-            key: 'deptProcessesName',
-            title: '工序',
-            dataIndex: 'deptProcessesName',
-            width: '25%',
-        }, {
-            key: 'productionLinesName',
-            title: '设备所属产线',
-            dataIndex: 'productionLinesName',
-            width: '25%',
+            key: 'productUnitName',
+            title: '所属生产单元',
+            dataIndex: 'productUnitName',
+            width: 200
         }];
     }
 
@@ -149,7 +146,7 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
                         }
                     }
                     onCancel={this.handleCancel}
-                    width="80%"
+                    width="40%"
                 >
                     <Space direction="vertical" className={styles.modalTable}>
                         {this.renderTableContent()}

@@ -169,11 +169,12 @@ export default function ReinstateList(): React.ReactNode {
             width: 230,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/employeeRelation/reinstate/View/${record.id}`)}} type='link' >查看</Button>
-                    <Button onClick={()=>{history.push(`/employeeRelation/reinstate/Edit/${record.id}/${record.status}`)}} type='link' disabled={record.status===2||record.status===3}>编辑</Button>
+                <>
+                    <Button onClick={()=>{history.push(`/employeeRelation/reinstate/View/${record.id}`)}} type='link' className='btn-operation-link'>查看</Button>
+                    <Button onClick={()=>{history.push(`/employeeRelation/reinstate/Edit/${record.id}/${record.status}`)}} type='link' className='btn-operation-link' disabled={record.status===2||record.status===3}>编辑</Button>
                     <Popconfirm
                         title="确认复职后，员工将信息将更新到员工档案中？"
+                        className='btn-operation-link'
                         onConfirm={ ()=>{RequestUtil.post(`/tower-hr/employeeReinstatement/confirm`,{id: record.id}).then(()=>{
                             message.success('复职成功！')
                         }).then(()=>{
@@ -183,10 +184,11 @@ export default function ReinstateList(): React.ReactNode {
                         cancelText="取消"
                         disabled={record.status!==3}
                     >
-                        <Button type="link"  disabled={record.status!==3}>确认复职</Button> 
+                        <Button type="link" className='btn-operation-link' style={{padding: "0"}} disabled={record.status!==3}>确认复职</Button> 
                     </Popconfirm>
                     <Popconfirm
                         title="确认删除？"
+                        className='btn-operation-link'
                         onConfirm={ ()=>{RequestUtil.delete(`/tower-hr/employeeReinstatement?id=${record.id}`).then(()=>{
                             message.success('删除成功！')
                         }).then(()=>{
@@ -196,9 +198,9 @@ export default function ReinstateList(): React.ReactNode {
                         cancelText="取消"
                         disabled={record.status!==1}
                     >
-                        <Button type="link" disabled={record.status!==1}>删除</Button> 
+                        <Button type="link" className='btn-operation-link' style={{padding: "0"}} disabled={record.status!==1}>删除</Button> 
                     </Popconfirm>
-                </Space>
+                </>
             )
         }
     ];
@@ -230,7 +232,7 @@ export default function ReinstateList(): React.ReactNode {
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入员工姓名/电话/身份证号进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入员工姓名/电话/身份证号进行查询" maxLength={200} style={{width:'300px'}}/>
                     },
                     {
                         name: 'reinstatementNature',

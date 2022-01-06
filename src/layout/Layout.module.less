@@ -1,5 +1,9 @@
 .width100 {
     width: 100% !important;
+    :global(.ant-card-body) {
+        padding: 0px 16px 16px 16px !important;
+        box-sizing: border-box;
+    }
 }
 
 .height100 {
@@ -24,5 +28,10 @@
     .btn {
         color: #FFFFFF;
         padding-right: 5px;
+    }
+}
+.opration {
+    :global(.ant-btn) {
+        padding: 0;
     }
 }

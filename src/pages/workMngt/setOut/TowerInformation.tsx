@@ -55,8 +55,7 @@ export default function TowerInformation(): React.ReactNode {
 
     const renderTreeNodes = (data:any) => data.map((item:any) => {
         if (item.children) {
-            item.disabled = true;
-            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id }  className={ styles.node } >
                 { renderTreeNodes(item.children) }
             </TreeNode>);
         }
@@ -114,19 +113,18 @@ export default function TowerInformation(): React.ReactNode {
             
         },
         {
-            key: 'trialAssemble',
+            key: 'trialAssembleName',
             title: '试组装',
-            dataIndex: 'trialAssemble',
+            dataIndex: 'trialAssembleName',
             width: 80,
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
-                    case 1:
-                        return '是';
-                    case 0:
-                        return '否';
-                }
-            }
-            
+            // render: (pattern: number): React.ReactNode => {
+            //     switch (pattern) {
+            //         case 1:
+            //             return '是';
+            //         case 0:
+            //             return '否';
+            //     }
+            // }
         },
         {
             key: 'loftingUserName',
@@ -173,19 +171,23 @@ export default function TowerInformation(): React.ReactNode {
                     { userId === record.loftingUser ?
                         <>{ 
                             record.status === 1 ? 
-                            <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/lofting/${ record.id }` }>放样</Link> : <Button type="link" disabled>放样</Button> 
+                            <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/lofting/${ record.id }` }>放样</Link> 
+                            : <Button type="link" disabled>放样</Button> 
                         }</>
                         : null
                     }
                     { userId === record.checkUser ? 
                         <>{
                             record.status === 2 ? 
-                            <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerCheck/${ record.id }` }>校核</Link> : <Button type="link" disabled>校核</Button>
+                            <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerCheck/${ record.id }` }>校核</Link> 
+                            : <Button type="link" disabled>校核</Button>
                         }</>
                         : null
                     }
                     {
-                        record.status === 3 ? <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>明细</Link> : <Button type="link" disabled>明细</Button>
+                        record.status === 3 ? 
+                        <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>明细</Link> 
+                        : <Button type="link" disabled>明细</Button>
                     }
                     {
                         record.status === 1 ? 
@@ -198,9 +200,18 @@ export default function TowerInformation(): React.ReactNode {
                             cancelText="取消"
                         >
                             <Button type="link">删除</Button>
-                        </Popconfirm> : <Button type="link" disabled>删除</Button>
+                        </Popconfirm> 
+                        : <Button type="link" disabled>删除</Button>
                     }
-                    <TowerLoftingAssign type={record.status === 1 ? 'edit' : 'detail'} title="指派信息" detailData={ {...record, loftingUser: record.loftingUser + '-' + record.loftingUserName, checkUser: record.checkUser + '-' + record.checkUserName } } id={ params.id } update={ onRefresh } rowId={ record.id }/>
+                    <TowerLoftingAssign 
+                        type={record.status === 1 ? 'edit' : 'detail'} 
+                        title="指派信息" 
+                        detailData={ {...record, loftingUser: record.loftingUser + '-' + record.loftingUserName, checkUser: record.checkUser + '-' + record.checkUserName } } 
+                        id={ params.id } 
+                        patternName={ record.pattern } 
+                        update={ onRefresh } 
+                        rowId={ record.id }
+                    />
                     <Button type="link" onClick={async () => {
                         const data: ISectionData[] = await RequestUtil.get(`/tower-science/productSegment/segmentList`, { productSegmentGroupId: record.id });
                         setSectionData(data);
@@ -267,26 +278,31 @@ export default function TowerInformation(): React.ReactNode {
                 <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/processCardList`, state: { status: location.state?.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                 <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram`, state: { status: location.state?.status } }}><Button type="primary" ghost>NC程序</Button></Link>
                 {
-                    userId === location.state?.loftingLeader ? <>
-                    <Popconfirm
-                        title="确认提交?"
-                        onConfirm={ () => {
-                            RequestUtil.post(`/tower-science/productCategory/submit`, { productCategoryId: params.id }).then(res => {
-                                message.success('提交成功');
-                                history.goBack();
-                            });
-                        } }
-                        okText="提交"
-                        cancelText="取消"
-                        disabled={ !(location.state?.status < 3) }
-                    >
-                        <Button type="primary" disabled={ !(location.state?.status < 3) } ghost>提交</Button>
-                    </Popconfirm>
-                    { location.state?.status < 3 ? <TowerLoftingAssign title="塔型放样指派" id={ params.id } update={ onRefresh } type="edit" /> : <Button type="primary" disabled ghost>塔型放样指派</Button> }
+                    userId === location.state?.loftingLeader ? 
+                    <>
+                        <Popconfirm
+                            title="确认提交?"
+                            onConfirm={ () => {
+                                RequestUtil.post(`/tower-science/productCategory/submit`, { productCategoryId: params.id }).then(res => {
+                                    message.success('提交成功');
+                                    history.goBack();
+                                });
+                            } }
+                            okText="提交"
+                            cancelText="取消"
+                            disabled={ !(location.state?.status < 3) }
+                        >
+                            <Button type="primary" disabled={ !(location.state?.status < 3) } ghost>提交</Button>
+                        </Popconfirm>
+                        { 
+                            location.state?.status < 3 ? 
+                            <TowerLoftingAssign title="塔型放样指派" id={ params.id } update={ onRefresh } type="edit" /> 
+                            : <Button type="primary" disabled ghost>塔型放样指派</Button> 
+                        }
                     </>
                     : null
                 }
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space> }
             searchFormItems={ [
                 {
@@ -369,7 +385,7 @@ export default function TowerInformation(): React.ReactNode {
             }
         </Space> }>
             <Form form={ form }>
-                <Table columns={ sectionColumns } showHeader={ false } pagination={ false } dataSource={ sectionData } />
+                <Table columns={ sectionColumns } pagination={ false } dataSource={ sectionData } />
             </Form>
         </Modal>
     </>

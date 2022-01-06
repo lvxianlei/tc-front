@@ -117,8 +117,8 @@ export default function IngredientsModal(props: any) {
     // 相当于编辑获取配料方案
     const { run: purchaseListRun, data: purchaseList } = useRequest<{ [key: string]: any }>((purchaseTaskTowerId: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/${purchaseTaskTowerId}`);
-            setSchemeData(result?.schemeData || []);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/programme/${purchaseTaskTowerId}`);
+            setSchemeData(result || []);
             resole(result)
         } catch (error) {
             reject(error)
@@ -446,6 +446,28 @@ export default function IngredientsModal(props: any) {
         purchaseBatchingScheme({}, result, detail, false, record.length ? (record.length / 1000 + "") : "");
     }
 
+    // 自动配料
+    const { run: handleAutomatic, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/produceIngredients/scheme/auto`, {
+                purchaseTowerId: props.id
+            })
+            console.log(result, "resuklt")
+            if (!result?.schemeData || result?.schemeData.length < 1) {
+                message.error("暂无合适的配料方案");
+                return false;
+            } else {
+                // 清空备选方案
+                setPreparation([]);
+                // 设置配料方案数据
+                setSchemeData(result?.schemeData || []);
+            }
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     return (
         <Modal
             title={'配料'}
@@ -462,11 +484,9 @@ export default function IngredientsModal(props: any) {
                 props.onCancel();
             }}
             footer={[
-                // <Button type="primary" onClick={() => {
-                //     message.warning("该功能暂未开发！")
-                // }}>
-                //     自动配料
-                // </Button>,
+                <Button type="primary" onClick={() => handleAutomatic()}>
+                    自动配料
+                </Button>,
                 <Button key="submit" type="primary" onClick={() => handleOkuseState()}>
                     手动配料
                 </Button>,
@@ -566,7 +586,7 @@ export default function IngredientsModal(props: any) {
                             pagination={false}
                             scroll={{ y: 400 }}
                         />
-                        <DetailTitle title="采购配料信息" />
+                        <DetailTitle title="采购配料信息" style={{margin: "10px 0 10px 0"}}/>
                         <Table
                             size="small"
                             columns={[

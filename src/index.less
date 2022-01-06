@@ -197,3 +197,47 @@
         }
     }
 }
+
+/**
+    全局修改modal提示的title字体大小
+*/
+.ant-modal-content {
+    .ant-modal-confirm-title {
+        font-size: 16px !important;
+        font-weight: bold;
+    }
+}
+
+/**
+    全局添加table边框（如若表格有滚动，需限制两侧固定）
+**/
+.ant-table table {
+    border: 1px solid #eee;
+}
+
+// radio组选中的字体加粗
+.ant-radio-button-wrapper-checked:not([class*=' ant-radio-button-wrapper-disabled']).ant-radio-button-wrapper:first-child {
+    font-weight: bold;
+}
+
+// modal的title字体
+.ant-modal-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+// 修改全局操作按钮的样式，新加class类名
+.btn-operation-link {
+    margin-right: 12px;
+    padding: 0px !important;
+}
+
+// modal的padding
+.ant-modal-body {
+    padding: 16px 24px 16px 24px !important;
+    box-sizing: border-box;
+}
+
+.ant-table-pagination.ant-pagination {
+    margin: 16px 0px 0px 0px !important;
+}

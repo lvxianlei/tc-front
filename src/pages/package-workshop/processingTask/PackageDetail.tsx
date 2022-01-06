@@ -24,12 +24,36 @@ export default function PackageDetail(): React.ReactNode {
     }), {})
     const detailData: any = data;
     const tableColumns = [
-        { title: '捆号', dataIndex: 'balesCode', key: 'balesCode' },
-        { title: '件号', dataIndex: 'pieceCode', key: 'pieceCode', },
-        { title: '材料规格', dataIndex: 'materialSpec', key: 'materialSpec' },
-        { title: '长度', dataIndex: 'length', key: 'length' },
-        { title: '数量', dataIndex: 'num', key: 'num' },
-        { title: '备注', dataIndex: 'description', key: 'description' }
+        { 
+            title: '捆号', 
+            dataIndex: 'balesCode', 
+            key: 'balesCode' 
+        },
+        { 
+            title: '件号', 
+            dataIndex: 'pieceCode', 
+            key: 'pieceCode', 
+        },
+        { 
+            title: '材料规格', 
+            dataIndex: 'materialSpec', 
+            key: 'materialSpec' 
+        },
+        { 
+            title: '长度', 
+            dataIndex: 'length', 
+            key: 'length' 
+        },
+        { 
+            title: '数量', 
+            dataIndex: 'num', 
+            key: 'num' 
+        },
+        { 
+            title: '备注', 
+            dataIndex: 'description', 
+            key: 'description' 
+        }
     ]
     return <>
         <Spin spinning={loading}>

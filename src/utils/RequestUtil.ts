@@ -14,6 +14,13 @@ interface IResponse<T> {
     readonly msg: string;
 }
 
+export function jsonStringifyReplace(key: string, value: any) {
+    if (typeof value === 'undefined') {
+        return null
+    }
+    return value
+}
+
 /**
  * @abstract
  * @description Request util
@@ -41,7 +48,7 @@ export default abstract class RequestUtil {
      * @param [init] 
      * @returns request 
      */
-    private static request<T>(path: string, init?: RequestInit, cancel?: (abort: AbortController) => void): Promise<T> {
+    private static request<T>(path: string, init?: RequestInit, cancel?: (abort: AbortController) => void, changePath: boolean = true): Promise<T> {
         return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
             let headers: HeadersInit = {
                 'Content-Type': 'application/json',
@@ -56,7 +63,7 @@ export default abstract class RequestUtil {
             const controller = new AbortController();
             const { signal } = controller;
             cancel && cancel(controller)
-            fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
+            fetch(changePath ? this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || '') : path, {
                 mode: 'cors',
                 ...(init || {}),
                 headers: {
@@ -85,6 +92,7 @@ export default abstract class RequestUtil {
                         if (!path.includes("sinzetech-auth/oauth")) {
                             setTimeout(this.backToLogin, 10);
                         } else {
+                            message.warning("登录已过期！请重新登录...")
                             console.log("token过期。。。。")
                         }
                     } else {
@@ -94,7 +102,9 @@ export default abstract class RequestUtil {
                 })
                 .catch((e: Error) => {
                     NProgress.done();
-                    if (e.name === 'AbortError') {
+                    if (e.message === "Unexpected end of JSON input" || e.message === "JSON.parse: unexpected end of data at line 1 column 1 of the JSON data") {
+                        resolve({} as any)
+                    } else if (e.name === 'AbortError') {
                         // console.log('abort');
                     } else {
                         message.error(e.message);
@@ -137,7 +147,7 @@ export default abstract class RequestUtil {
         NProgress.inc();
         return this.request(path, {
             method: 'POST',
-            body: (headers as any || {})['Content-Type'] === 'application/x-www-form-urlencoded' ? stringify(params) : JSON.stringify(params),
+            body: (headers as any || {})['Content-Type'] === 'application/x-www-form-urlencoded' ? stringify(params) : JSON.stringify(params, jsonStringifyReplace),
             headers: headers
         });
     }
@@ -155,9 +165,29 @@ export default abstract class RequestUtil {
         NProgress.inc();
         return this.request(path, {
             method: 'PUT',
-            body: JSON.stringify(params),
+            body: JSON.stringify(params, jsonStringifyReplace),
             headers: headers
         });
+    }
+
+    /**
+     * @static
+     * @description Puts request util
+     * @template T 
+     * @param path 
+     * @param [params] 
+     * @param [headers] 
+     * @returns put 
+     */
+    public static putFile<T>(path: string, params: Record<string, any> = {}): Promise<T> {
+        NProgress.inc();
+        return this.request(path, {
+            method: 'PUT',
+            body: params as any,
+            headers: {
+                "Content-Type": "application/octet-stream"
+            }
+        }, () => { }, false);
     }
 
     /**
@@ -173,7 +203,7 @@ export default abstract class RequestUtil {
         NProgress.inc();
         return this.request(path, {
             method: 'DELETE',
-            body: JSON.stringify(params),
+            body: JSON.stringify(params, jsonStringifyReplace),
             headers: headers
         });
     }

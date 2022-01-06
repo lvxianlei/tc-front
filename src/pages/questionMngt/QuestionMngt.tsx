@@ -4,6 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { Page } from '../common'
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
+import styles from './question.module.less';
 
 export default function QuestionMngt(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
@@ -30,7 +31,7 @@ export default function QuestionMngt(): React.ReactNode {
         },
         {
             key: 'statusName',
-            title: '问题单编号',
+            title: '问题单状态',
             width: 100,
             dataIndex: 'statusName'
         },
@@ -129,7 +130,7 @@ export default function QuestionMngt(): React.ReactNode {
             width: 80,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Button type='link' onClick={()=>history.push({pathname:`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`,state: {recipient:record.recipient,createUser: record.createUser}})}>查看详情</Button>
                     {/* {
                         record.type==='WTD-TL'||record.type==='WTD-FY'||record.type==='WTD-LS'? <Button type='link' onClick={()=>history.push({pathname:`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`,state: record.recipient})}>查看详情</Button>:
@@ -173,8 +174,8 @@ export default function QuestionMngt(): React.ReactNode {
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待修改</Select.Option>
                             <Select.Option value={2} key={2}>已修改</Select.Option>
-                            <Select.Option value={3} key={3}>已拒绝</Select.Option>
-                            <Select.Option value={4} key={4}>已删除</Select.Option>
+                            <Select.Option value={0} key={0}>已拒绝</Select.Option>
+                            <Select.Option value={3} key={3}>已删除</Select.Option>
                         </Select>
                     </Form.Item>
                 },
