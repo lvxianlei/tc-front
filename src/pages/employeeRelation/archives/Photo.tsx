@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, message, Spin, Upload } from 'antd'
 import ImgCrop from 'antd-img-crop'
 import AuthUtil from '../../../utils/AuthUtil'
@@ -21,7 +21,9 @@ export default function Photo({ id, url }: PhotoProps) {
     }
     return isJpgOrPng && isLt2M;
   }
-
+  useEffect(() => {
+    setImageUrl(url)
+  }, [url])
   const handleChange = (info: any) => {
     if (info.file.status === 'uploading') {
       setLoading(true)

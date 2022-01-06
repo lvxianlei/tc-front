@@ -655,7 +655,7 @@
         },
         {
             "title": "企业类型",
-            "dataIndex": "businessType",
+            "dataIndex": "businessTypeName",
             "type": "select"
         },
         {
@@ -698,7 +698,7 @@
         },
         {
             "title": "请款机构",
-            "dataIndex": "pleasePayOrganization",
+            "dataIndex": "pleasePayOrganizationName",
             "type": "select"
         },
         {
