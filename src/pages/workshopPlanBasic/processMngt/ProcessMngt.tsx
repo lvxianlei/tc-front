@@ -39,7 +39,7 @@ export default function ProcessMngt(): React.ReactNode {
                     } }>编辑</Button>
                     <Button type="link" onClick={() => {
                          Modal.confirm({
-                            title: "确定删除本条消息吗",
+                            title: "确认删除？",
                             onOk: async () => new Promise(async (resove, reject) => {
                                 try {
                                     RequestUtil.delete(`/tower-aps/product/process/${ record.id }`).then(res => {
