@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Modal, Form, Button, message } from 'antd';
 import useRequest from '@ahooksjs/use-request'
-import { BaseInfo, DetailTitle, CommonTable } from '../../common';
-import { baseInfo, operationInformation } from './DetailOverView.json';
+import { BaseInfo, DetailTitle, OperationRecord } from '../../common';
+import { baseInfo } from './DetailOverView.json';
 import { OverViewProps } from './DetailOverViewInface';
 import RequestUtil from '../../../utils/RequestUtil';
 export default function DetailOverView(props: OverViewProps): JSX.Element {
@@ -13,11 +13,11 @@ export default function DetailOverView(props: OverViewProps): JSX.Element {
     }
     // 接受
     const hanlePromise = () => {
-        props.id ? 
-         runProduceIngredients(props.id)
-        : (
-            message.error("该条数据有误，请联系管理员！")
-        )
+        props.id ?
+            runProduceIngredients(props.id)
+            : (
+                message.error("该条数据有误，请联系管理员！")
+            )
     }
     // 获取详情数据
     const { run: getDetail, data: detailData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -65,11 +65,10 @@ export default function DetailOverView(props: OverViewProps): JSX.Element {
             <BaseInfo
                 form={addCollectionForm}
                 dataSource={detailData || {}}
-                col={ 2 }
+                col={2}
                 columns={baseInfo}
             />
-            <DetailTitle title="操作信息" />
-            <CommonTable haveIndex columns={operationInformation} dataSource={detailData?.operationLogVos || []} pagination={ false }/>
+            <OperationRecord title="操作信息" serviceId={props.id as string} serviceName="tower-supply" />
         </Modal>
     )
 }
