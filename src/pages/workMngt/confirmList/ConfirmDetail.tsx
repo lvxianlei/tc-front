@@ -284,7 +284,7 @@ export default function ConfirmDetail(): React.ReactNode {
                   value: id,
               }
             })
-            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label}</>
+            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
           }
       },
       { 
@@ -307,7 +307,7 @@ export default function ConfirmDetail(): React.ReactNode {
                   value: id,
               }
             })
-            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label}</>
+            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
           } 
       },
       { 
@@ -341,7 +341,7 @@ export default function ConfirmDetail(): React.ReactNode {
                   value: id,
               }
             })
-            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label}</>
+            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
           } 
       },
       { 
@@ -542,15 +542,19 @@ export default function ConfirmDetail(): React.ReactNode {
     const params = useParams<{ id: string, status: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
-        resole(data);
-        setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index,
-          legConfigurationA:item.legConfigurationA? item.legConfigurationA: 0,
-          legConfigurationB:item.legConfigurationB? item.legConfigurationB: 0,
-          legConfigurationC:item.legConfigurationC? item.legConfigurationC: 0,
-          legConfigurationD:item.legConfigurationD? item.legConfigurationD: 0,
-          otherWeight:item.otherWeight? item.otherWeight: 0,
-          totalWeight: item.totalWeight? item.totalWeight: 0,
-        }}));
+        setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{
+          return{ 
+            ...item, 
+            key: index.toString(),
+            index: index,
+            legConfigurationA:item.legConfigurationA? item.legConfigurationA: 0,
+            legConfigurationB:item.legConfigurationB? item.legConfigurationB: 0,
+            legConfigurationC:item.legConfigurationC? item.legConfigurationC: 0,
+            legConfigurationD:item.legConfigurationD? item.legConfigurationD: 0,
+            otherWeight:item.otherWeight? item.otherWeight: 0,
+            totalWeight: item.totalWeight? item.totalWeight: 0,
+          }
+        }));
         setAttachInfo([...data.fileVOList]);
         setDescription(data?.description);
         let totalNumber = '0';
@@ -558,6 +562,7 @@ export default function ConfirmDetail(): React.ReactNode {
           totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
         })
         setWeight(totalNumber);
+        resole(data);
     }), {})
     const detailData: any = data;
     const formItemLayout = {
