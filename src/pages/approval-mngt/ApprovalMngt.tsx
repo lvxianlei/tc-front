@@ -176,8 +176,8 @@ export default function Information(): React.ReactNode {
         })
         if (result) {
             message.success("成功创建申请...")
-            // setBidingVisible(false)
-            // history.go(0)
+            setBidingVisible(false)
+            history.go(0)
         } else {
             const result = await run({
                 path: "/tower-market/OutFactory/submitAudit", data: {
@@ -189,8 +189,8 @@ export default function Information(): React.ReactNode {
             })
             if (result) {
                 message.success("成功创建申请...")
-                // setBidingVisible(false)
-                // history.go(0)
+                setBidingVisible(false)
+                history.go(0)
             } else {
                 message.error(`创建申请失败！原因：${result}`)
             }
@@ -442,9 +442,10 @@ export default function Information(): React.ReactNode {
                 {
                     title: '操作',
                     dataIndex: 'operation',
+                    fixed: "right",
                     render: (_: undefined, record: any): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <span style={{color: "#FF8C00", cursor: "pointer"}} onClick={() => handleSeeClick(record.processName, record.id)}>查看</span>
+                            <span style={{ color: "#FF8C00", cursor: "pointer" }} onClick={() => handleSeeClick(record.processName, record.id)}>查看</span>
                         </Space>
                     )
                 }]}

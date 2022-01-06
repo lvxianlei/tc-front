@@ -20,7 +20,7 @@ export default function WeighingList(): React.ReactNode {
                 "width": 50,
                 render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
             },
-            ...weighingListColumns, 
+            ...weighingListColumns,
             {
                 key: 'operation',
                 title: '操作',
@@ -29,11 +29,11 @@ export default function WeighingList(): React.ReactNode {
                 width: 150,
                 render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                     <Space direction="horizontal" size="small">
-                        <Link to={`/galvanizingWorkshop/weighingList/weighingSetting/${ record.id }`}><Button type="link">编辑</Button></Link>
+                        <Link to={`/galvanizingWorkshop/weighingList/weighingSetting/${record.id}`}><Button type="link">编辑</Button></Link>
                         <Popconfirm
                             title="确认删除?"
                             onConfirm={() => {
-                                RequestUtil.delete(`/tower-production/weighing/${ record.id }`).then(res => {
+                                RequestUtil.delete(`/tower-production/weighing/${record.id}`).then(res => {
                                     message.success('删除成功');
                                     setRefresh(!refresh);
                                 });
