@@ -438,7 +438,6 @@ export default function RawMaterialStock(): React.ReactNode {
     const weight: any = searchParams.get('weight')
     //获取列表数据
     const getLoadData = async () => {
-        console.log('请求数据')
         const data: any = await RequestUtil.get(`/tower-storage/outStock/detail`, {
             current,
             size: pageSize,
@@ -530,10 +529,10 @@ export default function RawMaterialStock(): React.ReactNode {
     }
     // 出库保存
     const IssueSave = async () => {
-        let obj: any = {};
         let ary: any = [];
         await OutLibraryListdata.map((item, index) => {
             if (item.outboundQuantity) {
+                let obj: any = {};
                 obj.quantity = item.outboundQuantity
                 obj.id = item.id
                 ary.push(obj)
@@ -544,7 +543,6 @@ export default function RawMaterialStock(): React.ReactNode {
             id: OutboundId,
             materialStockList: ary
         });
-        console.log(data)
         if (data) {
             message.success('操作成功')
             setIsOutLibraryModal(false)
@@ -776,7 +774,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Button
                     type="primary"
                     className='func_btn'
-                    onClick={()=>{setIsExportStoreList(true)}}
+                    onClick={() => { setIsExportStoreList(true) }}
                 >导出</Button>
                 <Button
                     className='func_btn'
@@ -950,7 +948,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
             </Modal>
-            {isExport?<ExportList
+            {isExport ? <ExportList
                 history={history}
                 location={location}
                 match={match}
@@ -975,7 +973,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
                 }}
                 closeExportList={() => { setIsExportStoreList(false) }}
-            />:null}
+            /> : null}
         </div>
     )
 }

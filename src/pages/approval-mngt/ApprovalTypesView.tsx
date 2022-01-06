@@ -4,7 +4,7 @@ import { CommonTable, BaseInfo, DetailContent, DetailTitle, Attachment } from ".
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import {
-    bondBaseInfo, enclosure, drawH, drawingCofirm,
+    bondBaseInfoView, drawH, drawingCofirm,
     baseInfo, auditIdRecord, outFactoryHead, applicationdetails
 } from "./approvalHeadData.json"
 import "./wrapperChecked.less";
@@ -33,50 +33,50 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
     const radioOnchange = (value: radioTypes) => setRadioValue(value)
     const detailType: any = {
         "履约保证金申请": <DetailContent>
-            <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{marginBottom: 16}}>
+            <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{ marginBottom: 16 }}>
                 <Radio.Button value="base">基本信息</Radio.Button>
                 <Radio.Button value="records">审批记录</Radio.Button>
             </Radio.Group>
             {radioValue === "base" && <BaseInfo columns={[
-                ...bondBaseInfo,
-                { title: "审批时间", dataIndex: "updateTime", type: "date", format: "YYYY-MM-DD" }]} dataSource={data?.performanceBond || {}} col={ 2 }/>}
+                ...bondBaseInfoView,
+                { title: "审批时间", dataIndex: "updateTime", type: "date", format: "YYYY-MM-DD" }]} dataSource={data?.performanceBond || {}} col={2} />}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records || []} />}
         </DetailContent>,
         "图纸交接申请": <DetailContent>
-            <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{marginBottom: 16}}>
+            <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{ marginBottom: 16 }}>
                 <Radio.Button value="base">基本信息</Radio.Button>
                 <Radio.Button value="records">审批记录</Radio.Button>
             </Radio.Group>
-            {radioValue === "base" && <BaseInfo columns={drawH} dataSource={(data as any) || {}} col={ 2 } />}
+            {radioValue === "base" && <BaseInfo columns={drawH} dataSource={(data as any) || {}} col={2} />}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records} />}
         </DetailContent>,
         "图纸交接确认申请": <DetailContent>
-            <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{marginBottom: 16}}>
+            <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{ marginBottom: 16 }}>
                 <Radio.Button value="base">基本信息</Radio.Button>
                 <Radio.Button value="records">审批记录</Radio.Button>
                 <Radio.Button value="attachVos">附件信息</Radio.Button>
             </Radio.Group>
-            {radioValue === "base" && <BaseInfo columns={drawingCofirm} dataSource={(data as any) || {}} col={ 2 }/>}
+            {radioValue === "base" && <BaseInfo columns={drawingCofirm} dataSource={(data as any) || {}} col={2} />}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records} />}
             {radioValue === "attachVos" && <Attachment title={false} dataSource={data?.fileSources} />}
         </DetailContent>,
         "招标评审申请": <DetailContent>
-            <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{marginBottom: 16}}>
+            <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{ marginBottom: 16 }}>
                 <Radio.Button value="base">基本信息</Radio.Button>
                 <Radio.Button value="records">审批记录</Radio.Button>
                 <Radio.Button value="attachVos">附件信息</Radio.Button>
             </Radio.Group>
-            {radioValue === "base" && <BaseInfo columns={baseInfo} dataSource={(data?.biddingEvaluation) || {}} col={ 2 }/>}
+            {radioValue === "base" && <BaseInfo columns={baseInfo} dataSource={(data?.biddingEvaluation) || {}} col={2} />}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records || []} />}
             {radioValue === "attachVos" && <Attachment title={false} dataSource={data?.attachVos} />}
         </DetailContent>,
         "出厂价申请": <DetailContent>
-            <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{marginBottom: 16}}>
+            <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{ marginBottom: 16 }}>
                 <Radio.Button value="base">基本信息</Radio.Button>
                 <Radio.Button value="records">审批记录</Radio.Button>
             </Radio.Group>
             {radioValue === "base" && <>
-                <BaseInfo columns={outFactoryHead} dataSource={data || {}} col={ 2 }/>
+                <BaseInfo columns={outFactoryHead} dataSource={data || {}} col={2} />
                 <DetailTitle title="申请明细" />
                 <CommonTable columns={applicationdetails} dataSource={data?.auditOutInfoVOList || []} />
             </>}

@@ -46,7 +46,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 onlyId: `${item.materialName}${item.materialTexture}${item.spec}${item.length}`
             })))
             setChooseMaterialParmas({
-                planNumber: result?.planNumber,
+                planNumber: result?.salePlanNumber,
                 product: result?.productNumbers,
                 productCategoryName: result?.productCategoryName
             })
@@ -171,6 +171,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         setMaterialPickingInfoDTOS(materialPickingInfos)
     }
 
+    const handleRemove = (id: string) => {
+        setMaterialPickingInfoDTOS(materialPickingInfoDTOS.filter((item: any) => item.id !== id))
+    }
+
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
 
     return <Spin spinning={loading}>
@@ -223,7 +227,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     title: "操作",
                     dataIndex: "opration",
                     render: (_: undefined, records: any) => <>
-                        <Button type="link" size="small">删除</Button>
+                        <Button type="link" size="small" onClick={() => handleRemove(records.id)}>删除</Button>
                     </>
                 },
                 ...materialInfo]}
