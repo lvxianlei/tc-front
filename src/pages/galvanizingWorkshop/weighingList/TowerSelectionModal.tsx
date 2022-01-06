@@ -71,7 +71,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
             children: <Input style={{ width: '400px' }} placeholder="请输入塔型名称/计划号/内部合同编号/工程名称进行查询" />
         }];
     }
-    
+
     /**
      * @description 取消操作 
      * @param event 
@@ -96,14 +96,15 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
     /**
      * @description modal内表格 
      */
-     protected renderTableContent(): React.ReactNode {
+    protected renderTableContent(): React.ReactNode {
         return (
             <Table
                 {...this.getTableProps()}
                 rowSelection={{
-                type: "checkbox",
-                selectedRowKeys: this.state.selectedRowKeys,
-                onChange: this.onSelectChange}}
+                    type: "checkbox",
+                    selectedRowKeys: this.state.selectedRowKeys,
+                    onChange: this.onSelectChange
+                }}
                 pagination={false}
                 scroll={{ x: 1200 }}
                 className={styles.modalTable}
@@ -146,7 +147,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
     public render(): React.ReactNode {
         return (
             <>
-                <Button type="primary" onClick={()=>{
+                <Button type="primary" onClick={() => {
                     this.getTable({});
                     this.setState({
                         isModalVisible: true
@@ -175,7 +176,7 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
                     width="80%"
                 >
                     <Space direction="vertical" className={styles.modalTable}>
-                        { this.renderFilterContent() }
+                        {this.renderFilterContent()}
                         {this.renderTableContent()}
                     </Space>
                 </Modal>
