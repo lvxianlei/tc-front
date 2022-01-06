@@ -4,6 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { Page } from '../common'
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
+import styles from './question.module.less';
 
 export default function QuestionMngt(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
@@ -129,7 +130,7 @@ export default function QuestionMngt(): React.ReactNode {
             width: 80,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Button type='link' onClick={()=>history.push({pathname:`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`,state: {recipient:record.recipient,createUser: record.createUser}})}>查看详情</Button>
                     {/* {
                         record.type==='WTD-TL'||record.type==='WTD-FY'||record.type==='WTD-LS'? <Button type='link' onClick={()=>history.push({pathname:`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`,state: record.recipient})}>查看详情</Button>:

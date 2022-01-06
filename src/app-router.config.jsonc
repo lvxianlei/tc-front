@@ -690,7 +690,7 @@
       "path": "/cockpit/rawMaterial/price",
       "module": "./pages/cockpit/rawMaterial/Overview",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_cockpit_raw_material_anban_price_maintenance"
     },
     { // 驾驶舱-收货单看板
       "name": "收货单看板",
@@ -711,7 +711,7 @@
       "path": "/cockpit/contract/:id",
       "module": "./pages/cockpit/contract/Overview",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_cockpit_contract_kanban_details"
     },
     { //询价任务
       "name": "工程报价任务",
@@ -753,7 +753,7 @@
       "path": "/contract-mngt/enquiryCompare/enquiry/:id",
       "module": "./pages/contract-mngt/enquiryCompare/Overview",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_contract_management_price_inquiry_and_comparison_information"
     },
     { // 库存管理-原材料库存
       "name": "原材料库存",
@@ -774,7 +774,7 @@
       "path": "/stock/rawMaterialWarehousing/detail/:id",
       "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_inventory_management_raw_material_warehousing_details"
     },
     { // 库存管理-原材料出库
       "name": "原材料出库",
@@ -788,7 +788,7 @@
       "path": "/stock/rawMaterialExWarehouse/detail/:id",
       "module": "./pages/stock/rawMaterialExWarehouse/detail/detail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_approInventory_management_raw_material_delivery_detail_valm"
     },
     { // 库存管理-余料入库
       "name": "余料入库",
@@ -809,28 +809,28 @@
       "path": "/stock/warehouse",
       "module": "./pages/stock/warehouse/warehouse",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_configuration_management_warehouse_management"
     },
     { // 配置管理-安全库存配置
       "name": "安全库存配置",
       "path": "/stock/securitySetting",
       "module": "./pages/stock/securitySetting/securitySetting",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_configuration_management_safety_stock_configuration"
     },
     { // 配置管理-角钢配料策略
       "name": "角钢配料策略",
       "path": "/stock/angleSteel",
       "module": "./pages/stock/angleSteel/index",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_configuration_management_angle_steel_batching_strategy"
     },
     { // 配置管理-其他参数配置
       "name": "其他参数配置",
       "path": "/stock/otherParameters",
       "module": "./pages/stock/otherParameters/OtherParameters",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_configuration_management_other_parameter_configuration"
     },
     { // 确认任务
       "name": "确认任务",
@@ -1005,14 +1005,14 @@
       "path": "/workMngt/planList/purchaseList/:id",
       "module": "./pages/workMngt/planList/Overview",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_work_management_plan_list_purchase_list"
     },
     { // 工作管理-计划列表-关联塔型
       "name": "关联塔型",
       "path": "/workMngt/planList/relationTower/:id",
       "module": "./pages/workMngt/planList/RelationList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_work_management_plan_list_associated_tower"
     },
     { // 工作管理-生产配料
       "name": "生产配料",
@@ -1026,7 +1026,7 @@
       "path": "/workMngt/production/detailed/:id/:materialTaskCode/:productCategoryName/:loftingState",
       "module": "./pages/workMngt/production/Overview",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_work_management_production_ingredients_component_details"
     },
     { // 工作管理-收货列表
       "name": "收货列表",
@@ -1040,14 +1040,14 @@
       "path": "/workMngt/receiving/detail/:id",
       "module": "./pages/workMngt/receivingList/Overview",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_work_management_receiving_list_details"
     },
     { // 工作管理-收获列表-编辑
       "name": "收货列表编辑",
       "path": "/workMngt/receiving/edit/:id",
       "module": "./pages/workMngt/receivingList/Edit",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_work_management_receiving_list_edits"
     },
     { // 工作管理-差异列表
       "name": "差异列表",
@@ -1056,12 +1056,12 @@
       "exact": true,
       "authority": "work_management_difference_list"
     },
-    { // 工作管理-差异列表
+    { // 工作管理-差异列表-详情
       "name": "差异列表",
       "path": "/workMngt/differentList/detail/:id",
       "module": "./pages/workMngt/differentList/Overview",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_work_management_difference_list_details"
     },
     { // 工作管理-缺料列表
       "name": "缺料列表",
@@ -1527,14 +1527,14 @@
       "path": "/workshopManagement/processingTask/dispatch/:id",
       "module": "./pages/mngt-workshop/processingTask/Dispatch",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "mc_workshop_work_management_dispatch"
     },
     { // 车间工作管理-加工任务详情
       "name": "加工任务详情",
       "path": "/workshopManagement/processingTask/detail/:id/:status",
       "module": "./pages/mngt-workshop/processingTask/ProcessDetail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "mc_workshop_work_management_machining_task_details"
     },
     { // 车间工作管理-试装计划任务列表
       "name": "试装计划任务列表",
@@ -1548,7 +1548,7 @@
       "path": "/workshopManagement/trialAssemblyTask/componentDetail/:id",
       "module": "./pages/mngt-workshop/ComponentDetails",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "mc_workshop_work_management_trial_assembly_plan_task_list_details"
     },
     { // 车间工作管理-车间转运接收列表
       "name": "车间转运接收列表",
@@ -1562,14 +1562,14 @@
       "path": "/workshopManagement/workshopTransfer/componentDetail/:id",
       "module": "./pages/mngt-workshop/ComponentDetails",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "mc_workshop_work_management_workshop_transfer_receiving_list_details"
     },
-    { // 车间工作管理-车间转运接收列表-构件明细
+    { // 原材料领料-原材料领料单
       "name": "原材料领料单",
       "path": "/materialPicking/picking",
       "module": "./pages/materialPicking/index",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_raw_material_requisition_list"
     },
     { // 计划排产
       "name": "计划排产",
@@ -2032,7 +2032,7 @@
       "path": "/invoicing/detail/:invoicingId",
       "module": "./pages/invoicing/Overview",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "sw_approvalm_invoicing_list_search"
     },
     { // 合同回款统计
       "name": "合同回款统计",
@@ -2046,14 +2046,14 @@
       "path": "/invoicing/taskInfo/:invoicingId",
       "module": "./pages/invoicing/TaskInfo",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "fc_view_task_information"
     },
     { // 填写开票申请信息
       "name": "填写开票信息",
       "path": "/invoicing/edit/:invoicingId",
       "module": "./pages/invoicing/Edit",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "fc_approvalm_invoicing_list_edit"
     },
     { // 人资-员工关系-招聘入职
       "name": "招聘入职",

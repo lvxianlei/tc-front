@@ -121,21 +121,20 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
             requestType: 'zip'
         }]
 
-        return <>
+        return <div>
             <Button type="link" onClick={ () => this.modalShow() }>交付物</Button>
             <Modal
                 visible={ this.state.visible } 
                 width="40%" 
                 title="交付物" 
+                className={ styles.deliverables }
                 footer={ <Button type="ghost" onClick={() => this.modalCancel() }>关闭</Button> } 
                 onCancel={ () => this.modalCancel() }
             >
-                <DetailContent>
-                    <p style={{ paddingBottom: "0 12px", fontWeight: "bold", fontSize: '14PX' }}>交付物清单</p>
-                    <CommonTable columns={ tableColumns } dataSource={ data } pagination={ false }/>
-                </DetailContent>
+                <p className={styles.title}>交付物清单</p>
+                <CommonTable columns={ tableColumns } dataSource={ data } pagination={ false }/>
             </Modal>
-        </>
+        </div>
     }
 }
 

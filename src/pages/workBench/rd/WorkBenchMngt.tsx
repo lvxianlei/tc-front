@@ -317,8 +317,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 	]
 
 	const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-		const data = await RequestUtil.get(`/tower-science/workbench`);
-		resole(data)
+		// const data = await RequestUtil.get(`/tower-science/workbench`);
+		resole([])
 	}), {})
 	const detailData: any = data;
 	const history = useHistory();
@@ -376,7 +376,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		</div>
 	}
 
-	return <DetailContent>
+	return <div className={styles.workBench}>
 		<div className={styles.left}>
 			{
 				detailData ? workBenchList.map((res: IList, ind: number) => {
@@ -413,5 +413,5 @@ export default function WorkBenchMngt(): React.ReactNode {
 				}]} />
 			</div>
 		</div>
-	</DetailContent>
+	</div>
 }

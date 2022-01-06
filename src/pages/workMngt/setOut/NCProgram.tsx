@@ -72,7 +72,7 @@ export default function NCProgram(): React.ReactNode {
                         message.success('删除成功');
                         history.go(0);
                     })}
-                    okText="提交"
+                    okText="确认"
                     cancelText="取消"
                     disabled={!record.ncName}
                 >
@@ -127,6 +127,8 @@ export default function NCProgram(): React.ReactNode {
                                 history.go(0);
                                 getData();
                             }
+                        }).catch(error => {
+                            history.go(0);
                         })
                     }}><Button type="primary" ghost>批量上传</Button></Attachment>
                     : null

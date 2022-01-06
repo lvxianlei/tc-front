@@ -11,6 +11,7 @@ import AuthUtil from '../../utils/AuthUtil'
 import RequestUtil from '../../utils/RequestUtil'
 import { ITenant } from '../system-mngt/ITenant'
 import style from './Login.module.less'
+import Cookies from 'js-cookie'
 interface ILoginProps { }
 interface ILoginRouteProps extends RouteComponentProps<ILoginProps> { }
 
@@ -89,6 +90,8 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                 message: result.error_description
             })
         } else {
+            Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })
+            Cookies.set('DHWY_TOKEN', access_token, { domain: 'localhost' })
             AuthUtil.setSinzetechAuth(access_token, refresh_token)
             AuthUtil.setUserId(user_id)
             AuthUtil.setTenantName(tenant_name)
