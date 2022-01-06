@@ -20,7 +20,9 @@ export interface IFormItemGroup extends ISection {
     readonly itemCol?: ColProps;
 }
 
-export interface IAbstractFillableComponentState { }
+export interface IAbstractFillableComponentState {
+    readonly height?: number;
+}
 
 /**
  * Abstract fillable form component.
@@ -143,7 +145,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @returns extra operation area 
      */
     protected renderExtraOperationArea(): React.ReactNode {
-        return <Button type="primary" htmlType="button" style={{marginRight: 16, position: "absolute", top: 20}} onClick={this.onSubmitAndContinue}>保存并继续新增</Button>;
+        return <Button type="primary" htmlType="button" style={{ marginRight: 16, position: "absolute", top: 20 }} onClick={this.onSubmitAndContinue}>保存并继续新增</Button>;
     }
 
     /**
@@ -151,7 +153,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @returns extra operation area 
      */
     protected cancelOperationButton(): React.ReactNode {
-        return <Button type="ghost" htmlType="reset" style={{marginRight: 16, position: "absolute", top: 20, left: 94}} onClick={this.onCancel}>取消</Button>;
+        return <Button type="ghost" htmlType="reset" style={{ marginRight: 16, position: "absolute", top: 20, left: 94 }} onClick={this.onCancel}>取消</Button>;
     }
 
     /**
@@ -159,7 +161,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @returns primary operation button
      */
     protected getPrimaryOperationButton(): React.ReactNode {
-        return <Button type="primary" htmlType="submit" style={{marginRight: 16, position: "absolute", top: 20}}>保存</Button>;
+        return <Button type="primary" htmlType="submit" style={{ marginRight: 16, position: "absolute", top: 20 }}>保存</Button>;
     }
     /**
      * @protected
@@ -174,7 +176,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                 {
                     items.map<React.ReactNode>((group: IFormItemGroup): React.ReactNode => (
                         <React.Fragment key={group.title}>
-                            <div className={styles.titleWrapper} style={{marginBottom: 12}}>{group.title}</div>
+                            <div className={styles.titleWrapper} style={{ marginBottom: 12 }}>{group.title}</div>
                             {
                                 group.itemCol
                                     ?
@@ -205,12 +207,12 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      */
     public render(): React.ReactNode {
         const formItemGroups: IFormItemGroup[][] = this.getFormItemGroups();
-        const height = document.documentElement.clientHeight - 140;
+        const height = this.state.height ? this.state.height : document.documentElement.clientHeight - 140;
         return (
             <Card className={styles.cardWrapper}>
                 <Form {...this.getFormProps()} ref={this.form}>
                     <Space size="large" direction="vertical" className={`${layoutStyles.width100} ${styles.space}`}>
-                        <div style={{height: height, "overflowY": "auto", overflowX: "hidden"}}>
+                        <div style={{ height: height, "overflowY": "auto", overflowX: "hidden" }}>
                             <Space size="middle" direction="horizontal" className={`${layoutStyles.width100} ${styles.hspace}`}>
                                 {
                                     formItemGroups.map<React.ReactNode>((items: IFormItemGroup[], itemIndex: number): React.ReactNode => this.renderFormItems(items, itemIndex))
@@ -227,9 +229,9 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                         </div>
                         <div className={styles.btnOperationContainer}>
                             {/* <Space direction="horizontal" size="large"> */}
-                                {this.getPrimaryOperationButton()}
-                                {this.renderExtraOperationArea()}
-                                {this.cancelOperationButton()}
+                            {this.getPrimaryOperationButton()}
+                            {this.renderExtraOperationArea()}
+                            {this.cancelOperationButton()}
                             {/* </Space> */}
                         </div>
                     </Space>

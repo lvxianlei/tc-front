@@ -35,19 +35,19 @@ export default function ProcessMngt(): React.ReactNode {
             width: 300,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={ () => {
+                    <Button type="link" onClick={() => {
                         setVisible(true);
                         setType('edit');
                         setDetailedId(record.id);
-                    } }>编辑</Button>
+                    }}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ () => {
-                            RequestUtil.delete(`/tower-aps/work/center/info/${ record.id }`).then(res => {
+                        onConfirm={() => {
+                            RequestUtil.delete(`/tower-aps/work/center/info/${record.id}`).then(res => {
                                 message.success('删除成功');
                                 setRefresh(!refresh);
                             });
-                        } }
+                        }}
                         okText="确认"
                         cancelText="取消"
                     >
@@ -70,10 +70,10 @@ export default function ProcessMngt(): React.ReactNode {
         }
     })
 
-    const [ refresh, setRefresh ] = useState(false);
-    const [ visible, setVisible ] = useState(false);
-    const [ filterValue, setFilterValue ] = useState({});
-    const [ type, setType ] = useState<'new' | 'edit'>('new');
+    const [refresh, setRefresh] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [filterValue, setFilterValue] = useState({});
+    const [type, setType] = useState<'new' | 'edit'>('new');
     const editRef = useRef<EditRefProps>();
     const [detailedId, setDetailedId] = useState<string>('');
     return (
@@ -94,22 +94,22 @@ export default function ProcessMngt(): React.ReactNode {
             </Modal>
             <Page
                 path="/tower-aps/work/center/info"
-                columns={ columns }
-                headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setType('new');} }>新增</Button> }
-                refresh={ refresh }
-                searchFormItems={ [
+                columns={columns}
+                headTabs={[]}
+                extraOperation={<Button type="primary" onClick={() => { setVisible(true); setType('new'); }}>新增</Button>}
+                refresh={refresh}
+                searchFormItems={[
                     {
                         name: 'workCenterName',
                         label: '',
-                        children: <Input placeholder="工作中心名称"/>
+                        children: <Input placeholder="工作中心名称" />
                     }
-                ] }
-                filterValue={ filterValue }
-                onFilterSubmit = { (values: Record<string, any>) => {
+                ]}
+                filterValue={filterValue}
+                onFilterSubmit={(values: Record<string, any>) => {
                     setFilterValue(values);
                     return values;
-                } }
+                }}
             />
         </>
     )

@@ -1,210 +1,101 @@
-import React, { useState, useEffect } from 'react';
-import { Space, Button, Modal, Input, DatePicker, Select, message, Table } from 'antd';
-import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom';
-import { FixedType } from 'rc-table/lib/interface'
-import RequestUtil from '../../../../utils/RequestUtil';
-import ExportList from '../../../../components/export/list';
-import '../../StockPublicStyle.less';
-import './detail.less';
-import useRequest from '@ahooksjs/use-request';
-const { RangePicker } = DatePicker;
-const { TextArea } = Input;
-export default function RawMaterialStock(): React.ReactNode {
+/***
+ * 新修改的原材料入库详情
+ * 原文件地址当前目录：OriginalDocument.tsx
+ * 时间：2022/01/06
+ */
+ import React, { useState, useEffect, useRef } from 'react';
+ import { Input, Select, DatePicker, Button, Modal, message } from 'antd';
+ import { FixedType } from 'rc-table/lib/interface'
+ import { Page } from '../../../common';
+ import RequestUtil from '../../../../utils/RequestUtil';
+ import useRequest from '@ahooksjs/use-request';
+ import { useParams, useHistory } from 'react-router-dom';
+ import { baseColumn } from "./detail.json";
+
+ const { TextArea } = Input;
+ interface EditRefProps {
+    id?: string
+    onSubmit: () => void
+    resetFields: () => void
+}
+ export default function RawMaterialWarehousing(): React.ReactNode {
     const params = useParams<{ id: string }>();
-    const history = useHistory(),
-        [current, setCurrent] = useState(1),
-        [total, setTotal] = useState(100),
-        [pageSize, setPageSize] = useState<number>(10),
-        [isRejectionModal, setRejectionModal] = useState<boolean>(false),//拒收弹框
-        [isReceivingModal, setisReceivingModal] = useState<boolean>(false),//收货弹框
-        [status, setStatus] = useState(''),//采购状态
-        [dateValue, setDateValue] = useState<any>([]),//时间
-        [dateString, setDateString] = useState<any>([]),//时间字符串格式
-        [keyword, setKeyword] = useState<any>('');//关键字搜索
-    const [Listdata, setListdata] = useState<any>([]);//数据
+    const history = useHistory();
+    const [ListID, setListID] = useState('');//入库弹框展试 使用id
+    const [isRejectionModal, setRejectionModal] = useState<boolean>(false),//拒收弹框
+        [isReceivingModal, setisReceivingModal] = useState<boolean>(false);//收货弹框
+    const [receiveBatchNumber, setReceiveBatchNumber] = useState<any>('');//收货批次
+    const [Warehouse, setWarehouse] = useState<any[]>([]);//入库仓库数据
+    const [ReservoirArea, setReservoirArea] = useState<any[]>([]);//入库库区数据
+    const [Location, setLocation] = useState<any[]>([]);//入库库位数据
     const [rejectionText, setRejectionText] = useState<any>('');//拒收原因
     const [warehouseId, setWarehouseId] = useState('');//收货弹框选择仓库
     const [locatorId, setLocatorId] = useState('');//收货弹框选择库位
     const [reservoirId, setReservoirId] = useState('');//收货弹框选择库位
     const [furnaceBatchNo, setFurnaceBatchNo] = useState('');//收货弹框输入炉批号
-    const [Warehouse, setWarehouse] = useState<any[]>([]);//入库仓库数据
-    const [ReservoirArea, setReservoirArea] = useState<any[]>([]);//入库库区数据
-    const [Location, setLocation] = useState<any[]>([]);//入库库位数据
-    const [receiveBatchNumber, setReceiveBatchNumber] = useState<any>('');//收货批次
-    const [ListID, setListID] = useState('');//入库弹框展试 使用id
-    const [receiveWeight, setReceiveWeight] = useState('');//展示条 已收货合计重量
-    const [receivePrice, setReceivePrice] = useState('');//展示条 已收货合计价格
-    const [waitWeight, setWaitWeight] = useState('');//展示条 待收货：重量
-    const [waitPrice, setwaitPrice] = useState('');//展示条 待收货：价格
     const [batchNumber, setBatchNumber] = useState(""); // 批号
     const [warrantyNumber, setWarrantyNumber] = useState(""); // 质保书号
     const [rollingNumber, setRollingNumber] = useState(""); // 轧制批号	
-    const [isExport, setIsExportStoreList] = useState(false)
-    const match = useRouteMatch()
-    const location = useLocation<{ state: {} }>();
-    const columns = [
-        {
-            title: '序号',
-            dataIndex: 'key',
-            width: 50,
-            render: (text: any, item: any, index: any) => <span>{index + 1}</span>
-        },
-        {
-            title: '材质名称',
-            dataIndex: 'productName',
-            width: 120,
-        }, {
-            title: '标准',
-            dataIndex: 'standardName',
-            width: 120,
-        }, {
-            title: '规格',
-            dataIndex: 'spec',
-            width: 120,
-        }, {
-            title: '材质',
-            dataIndex: 'materialTexture',
-            width: 120,
-        }, {
-            title: '长度',
-            dataIndex: 'length',
-            width: 120,
-        }, {
-            title: '宽度',
-            dataIndex: 'width',
-            width: 120,
-        }, {
-            title: '数量',
-            dataIndex: 'quantity',
-            width: 120,
-        }, {
-            title: '合同单价(元/吨)',
-            dataIndex: 'contractUnitPrice',
-            width: 120,
-        }, {
-            title: '价税合计(元)',
-            dataIndex: 'price',
-            width: 120,
-        }, {
-            title: '重量(吨)',
-            dataIndex: 'weight',
-            width: 120,
-        }, {
-            title: '采购状态',
-            dataIndex: 'receiveStatus',
-            width: 120,
-            render: (text: any, item: any, index: any) => {
-                // 0待收货1 已收货2已拒绝
-                return <span>{item.receiveStatus == 0 ? '待收货' : item.receiveStatus == 1 ? '已收货' : '已拒绝'}</span>
-            },
-        }, {
-            title: '最新状态变更时间',
-            dataIndex: 'updateTime',
-            width: 120,
-        }, {
-            title: '操作人',
-            dataIndex: 'operatorMan',
-            width: 120,
-        }, {
-            title: '炉批号',
-            dataIndex: 'furnaceBatchNumber',
-            width: 120,
-        },
-        {
-            title: '批号',
-            dataIndex: 'batchNumber',
-            width: 120,
-        },
-        {
-            title: '质保书号',
-            dataIndex: 'warrantyNumber',
-            width: 120,
-        },
-        {
-            title: '轧制批号',
-            dataIndex: 'rollingNumber',
-            width: 120,
-        },
-        {
-            title: '仓库',
-            dataIndex: 'warehouse',
-            width: 120,
-        }, {
-            title: '库区',
-            dataIndex: 'reservoirArea',
-            width: 120,
-        }, {
-            title: '库位',
-            dataIndex: 'location',
-            width: 120,
-        }, {
-            title: '收货批次',
-            dataIndex: 'receiveBatchNumber',
-            width: 120,
-        }, {
-            title: '备注',
-            dataIndex: 'remark',
-            width: 120,
-        },
-        {
-            title: '拒收原因',
-            dataIndex: 'refuseDes',
-            width: 120,
-        },
-        {
-            title: '操作',
-            dataIndex: 'key',
-            width: 240,
-            fixed: 'right' as FixedType,
-            render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <span>质检单</span>
-                    <span>质保单</span>
-                    {record.receiveStatus == 0 ? <Button type='link' onClick={() => { ReceivingBtn(record) }}>收货</Button> : null}
-                    {record.receiveStatus == 0 ? <Button type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button> : null}
-                </Space>
-            )
-        }
-    ]
+    const [ filterValue, setFilterValue ] = useState<any>({
+        fuzzyQuery: "",
+        receiveStatus: "",
+        startStatusUpdateTime: "",
+        endStatusUpdateTime: "",
+        receiveStockId: params.id,
+    });
+
     const { data: statisticsData, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detailStatistics`, {
-                current: current,
-                size: pageSize,
-                fuzzyQuery: keyword,
-                startStatusUpdateTime: dateString[0] ? dateString[0] + " 00:00:00" : '',
-                endStatusUpdateTime: dateString[1] ? dateString[1] + " 23:59:59" : '',
+                fuzzyQuery: filterValue.fuzzyQuery || "",
+                startStatusUpdateTime: filterValue.startStatusUpdateTime || '',
+                endStatusUpdateTime: filterValue.endStatusUpdateTime || '',
                 receiveStockId: params.id,
-                receiveStatus: status,
+                receiveStatus: filterValue.receiveStatus || "",
             })
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: true })
-    //获取列表数据
-    const loadData = async () => {
-        const data: any = await RequestUtil.get(`/tower-storage/receiveStock/detail`, {
-            current: current,
-            size: pageSize,
-            fuzzyQuery: keyword,
-            startStatusUpdateTime: dateString[0] ? dateString[0] + " 00:00:00" : '',
-            endStatusUpdateTime: dateString[1] ? dateString[1] + " 23:59:59" : '',
+    }), {  })
+
+     // 查询按钮
+     const onFilterSubmit = (value: any) => {
+        const result = {
+            fuzzyQuery: value.fuzzyQuery || "",
+            receiveStatus: value.receiveStatus || "",
+            startStatusUpdateTime: "",
+            endStatusUpdateTime: "",
             receiveStockId: params.id,
-            receiveStatus: status,
-        });
-        setListdata(data.records)
-        setTotal(data.total)
+        }
+         if (value.startRefundTime) {
+            const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
+            result.startStatusUpdateTime = `${formatDate[0]} 00:00:00`
+            result.endStatusUpdateTime = `${formatDate[1]} 23:59:59`
+            delete value.startRefundTime
+        }
+        setFilterValue(result)
+        return result
+     }
+    // 拒收点击
+    const OutReceivingBtn = async (record: any) => {
+        await setListID(record.id)
+        setRejectionModal(true)
     }
-    // 重置
-    const reset = () => {
-        setCurrent(1);
-        setPageSize(10);
-        setStatus('');
-        setDateValue([]);
-        setDateString([]);
-        setKeyword('')
+    // 收货点击
+    const ReceivingBtn = async (record: any) => {
+        setReceiveBatchNumber(record.receiveBatchNumber)
+        setListID(record.id)
+        await getWarehousing('', 0);
+        setisReceivingModal(true)
     }
+
+    // 拒收弹框取消
+    const onRejectionCancel = () => {
+        setRejectionModal(false);
+        setRejectionText('');
+    }
+
     // submit拒收弹框提交
     const rejectionSubmit = async () => {
         if (!rejectionText) {
@@ -220,26 +111,9 @@ export default function RawMaterialStock(): React.ReactNode {
         if (data) {
             message.success('拒收成功')
             setRejectionModal(false)
-            loadData()
         }
     }
-    // 拒收弹框取消
-    const onRejectionCancel = () => {
-        setRejectionModal(false);
-        setRejectionText('');
-    }
-    // 拒收点击
-    const OutReceivingBtn = async (record: any) => {
-        await setListID(record.id)
-        setRejectionModal(true)
-    }
-    // 收货点击
-    const ReceivingBtn = async (record: any) => {
-        setReceiveBatchNumber(record.receiveBatchNumber)
-        setListID(record.id)
-        await getWarehousing('', 0);
-        setisReceivingModal(true)
-    }
+
     // 收货弹框取消
     const onReceivingCancel = () => {
         setisReceivingModal(false);
@@ -251,6 +125,7 @@ export default function RawMaterialStock(): React.ReactNode {
         setWarrantyNumber('');
         setRollingNumber('');
     }
+
     // submit收货弹框提交
     const receivingSubmit = async () => {
         //收货
@@ -295,11 +170,11 @@ export default function RawMaterialStock(): React.ReactNode {
         }]);
         if (data) {
             onReceivingCancel()
-            loadData()
         }
     }
-    // 获取仓库/库区/库位
-    const getWarehousing = async (id?: any, type?: any) => {
+
+     // 获取仓库/库区/库位
+     const getWarehousing = async (id?: any, type?: any) => {
         const data: any = await RequestUtil.get(`/tower-storage/warehouse/tree`, {
             id,
             type,
@@ -318,143 +193,70 @@ export default function RawMaterialStock(): React.ReactNode {
                 break;
         }
     }
-    //进入页面刷新
-    useEffect(() => {
-        loadData()
-        run()
-    }, [current, pageSize, status, dateString])
-
-    return (
-        <div id="RawMaterialStock">
-            <div className="Search_public_Stock">
-                <div className="search_item">
-                    <span className="tip">最新状态变更时间：</span>
-                    <div className='selectOrInput'>
-                        <RangePicker
-                            value={dateValue}
-                            onChange={(date, dateString) => {
-                                console.log(date, dateString)
-                                setDateValue(date)
-                                setDateString(dateString)
-                            }}
-                        ></RangePicker>
-                    </div>
-                </div>
-                <div className="search_item">
-                    <span className="tip">采购状态： </span>
-                    <div className='selectOrInput'>
-                        <Select
-                            className="select"
-                            style={{ width: "100px" }}
-                            value={status ? status : ''}
-                            onChange={(val) => { setStatus(val) }}
-                        >
-                            <Select.Option
-                                value=""
-                            >
-                                全部
-                            </Select.Option>
-                            <Select.Option
-                                value="0"
-                            >
-                                待收货
-                            </Select.Option>
-                            <Select.Option
-                                value="1"
-                            >
-                                已收货
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                已拒绝
-                            </Select.Option>
-                        </Select>
-                    </div>
-                </div>
-                <div className="search_item">
-                    <span className="tip">关键字：</span>
-                    <div className='selectOrInput'>
-                        <Input
-                            placeholder="炉批号/收货批次/批号/质保书号/轧制批号"
-                            value={keyword}
-                            onChange={(e) => {
-                                setKeyword(e.target.value)
-                            }}
-                        >
-                        </Input>
-                    </div>
-                </div>
-                <div className="search_item">
-                    <div className='search_Reset'>
-                        <Button
-                            className="btn"
-                            type="primary"
-                            onClick={() => { loadData() }}
-                        >查询</Button>
-                        <Button
-                            className="btn"
-                            type="primary"
-                            ghost
-                            onClick={reset}
-                        >重置</Button>
-                    </div>
-                </div>
-            </div>
-            <div className="func_public_Stock">
-                <Button
-                    type="primary"
-                    className='func_btn' onClick={() => {
-                        setIsExportStoreList(true)
-                    }}
-                >导出</Button>
-                <Button
-                    type="primary"
-                    ghost
-                    className='func_btn'
-                >申请质检</Button>
-                <Button
-                    className='func_btn'
-                    type="ghost"
-                    onClick={() => {
-                        history.go(-1)
-                    }}
-                >返回</Button>
-            </div>
-            <div className="tip_public_Stock">
-                <div>已收货：重量(吨)合计：{statisticsData?.receiveWeight}, 已收货：价税合计(元)合计：{statisticsData?.receivePrice} ,  待收货：重量(吨)合计：{statisticsData?.waitWeight}待收货：价税合计(元)合计：{statisticsData?.waitPrice}</div>
-            </div>
-            <div className="page_public_Stock">
-                <Table
-                    columns={columns}
-                    dataSource={Listdata}
-                    rowKey="id"
-                    size='small'
-                    rowClassName={(item, index) => {
-                        return index % 2 ? 'aaa' : ''
-                    }}
-                    scroll={
-                        {
-                            y: 400
-                        }
+     return (
+         <>
+             <Page
+                 path="/tower-storage/receiveStock/detail"
+                 exportPath={"/tower-storage/receiveStock/detail"}
+                 columns={[
+                     {
+                         key: 'index',
+                         title: '序号',
+                         dataIndex: 'index',
+                         fixed: "left",
+                         width: 50,
+                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                     },
+                     ...baseColumn,
+                     {
+                        title: '操作',
+                        dataIndex: 'key',
+                        width: 240,
+                        fixed: 'right' as FixedType,
+                        render: (_: undefined, record: any): React.ReactNode => (
+                            <>
+                                {/* <span>质检单</span>
+                                <span>质保单</span> */}
+                                {record.receiveStatus == 0 ? <Button type='link' onClick={() => { ReceivingBtn(record) }}>收货</Button> : null}
+                                {record.receiveStatus == 0 ? <Button type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button> : null}
+                            </>
+                        )
                     }
-                    pagination={{
-                        size: 'small',
-                        defaultPageSize: 5,
-                        showQuickJumper: true,
-                        current: current,
-                        total: total,
-                        pageSize: pageSize,
-                        pageSizeOptions: ['10', '20', '50', '100'],
-                        showSizeChanger: true,
-                        onChange: (page, pageSize) => {
-                            setCurrent(page);
-                            setPageSize(Number(pageSize));
-                        }
-                    }}
-                />
-            </div>
-            {/* 拒收弹框 */}
+                ]}
+                extraOperation={() =>
+                    <>
+                        <Button type="primary" ghost onClick={() => message.error("暂未开发此功能")} >申请质检</Button>
+                        <Button type="ghost" onClick={() => history.go(-1)}>返回</Button>
+                        <div>已收货：重量(吨)合计：{statisticsData?.receiveWeight}, 已收货：价税合计(元)合计：{statisticsData?.receivePrice} ,  待收货：重量(吨)合计：{statisticsData?.waitWeight}待收货：价税合计(元)合计：{statisticsData?.waitPrice}</div>
+                    </>
+                }
+                 onFilterSubmit={onFilterSubmit}
+                 filterValue={ filterValue }
+                 searchFormItems={[
+                    {
+                        name: 'startRefundTime',
+                        label: '最新状态变更时间',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
+                    {
+                        name: 'receiveStatus',
+                        label: '状态',
+                        children: (
+                            <Select placeholder="请选择标准" style={{ width: "140px" }}>
+                                    <Select.Option value="0">待收货</Select.Option>
+                                    <Select.Option value="1">已收货</Select.Option>
+                                    <Select.Option value="2">已拒绝</Select.Option>
+                            </Select>
+                        )
+                    },
+                    {
+                        name: 'fuzzyQuery',
+                        label: "关键字",
+                        children: <Input placeholder="请输入炉批号/收货批次/批号/质保书号/轧制批号进行查询" style={{ width: 300 }} />
+                    }
+                 ]}
+             />
+             {/* 拒收弹框 */}
             <Modal
                 visible={isRejectionModal}
                 // title="拒收原因*"
@@ -644,28 +446,6 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
             </Modal>
-            {isExport ? <ExportList
-                history={history}
-                location={location}
-                match={match}
-                columnsKey={() => {
-                    let keys = [...columns]
-                    keys.pop()
-                    return keys
-                }}
-                current={current || 1}
-                size={pageSize || 10}
-                total={total || 0}
-                url={`/tower-storage/receiveStock/detail`}
-                serchObj={{
-                    fuzzyQuery: keyword,
-                    startStatusUpdateTime: dateString[0] ? dateString[0] + " 00:00:00" : '',
-                    endStatusUpdateTime: dateString[1] ? dateString[1] + " 23:59:59" : '',
-                    receiveStockId: params.id,
-                    receiveStatus: status,
-                }}
-                closeExportList={() => { setIsExportStoreList(false) }}
-            /> : null}
-        </div>
-    )
-}
+         </>
+     )
+ }

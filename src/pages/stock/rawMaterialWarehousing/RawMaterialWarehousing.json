@@ -1,0 +1,70 @@
+{
+    "baseColumn": [
+        {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber",
+            "width": 120
+        },
+        {
+            "title": "纸质单号",
+            "dataIndex": "paperNumber",
+            "width": 120
+        },
+        {
+            "title": "车牌号",
+            "dataIndex": "carNumber",
+            "width": 120
+        },
+        {
+            "title": "状态",
+            "dataIndex": "receiveStatusName",
+            "width": 120
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "width": 120
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName",
+            "width": 120
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "contactsUser",
+            "width": 120
+        },
+        {
+            "title": "联系电话",
+            "dataIndex": "contactsPhone",
+            "width": 120
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "contractNumber",
+            "width": 120
+        },
+        {
+            "title": "约定到货时间",
+            "dataIndex": "receiveTime",
+            "width": 120
+        },
+        {
+            "title": "重量(吨)",
+            "dataIndex": "weight",
+            "width": 120
+        },
+        {
+            "title": "价税合计(元)",
+            "dataIndex": "price",
+            "width": 120
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "width": 120
+        }
+    ]
+}
