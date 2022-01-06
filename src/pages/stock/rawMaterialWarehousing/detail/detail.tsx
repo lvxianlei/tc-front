@@ -194,6 +194,7 @@ export default function RawMaterialStock(): React.ReactNode {
             receiveStatus: status,
         });
         setListdata(data.records)
+        setTotal(data.total)
     }
     // 重置
     const reset = () => {

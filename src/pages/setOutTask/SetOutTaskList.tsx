@@ -96,7 +96,7 @@ export default function SetOutTaskList(): React.ReactNode {
             fixed: 'right' as FixedType,
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                <Space direction="horizontal" size="small">
                     <Link to={ `/setOutTask/setOutTaskDetail/${ record.id }` }>任务详情</Link>
                     {
                         record.status === 3 || record.status === 4 || record.status === 5 ? 
