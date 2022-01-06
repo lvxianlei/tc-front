@@ -231,7 +231,7 @@ export default function RawMaterialStock(): React.ReactNode {
         }, {
             title: '入库时间',
             dataIndex: 'receiveStockTime',
-            width: 120,
+            width: 160,
         }, {
             title: '炉批号',
             dataIndex: 'furnaceBatch',
@@ -852,6 +852,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Table
                             columns={WarehousingColumns}
                             dataSource={WarehousingListdata}
+                            scroll={{x: 1200}}
                             size='small'
                             rowClassName={(item, index) => {
                                 return index % 2 ? 'aaa' : ''
