@@ -1569,7 +1569,7 @@
       "path": "/materialPicking/picking",
       "module": "./pages/materialPicking/index",
       "exact": true,
-      "authority": "mc_raw_material_requisition_list"
+      "authority": "sw_raw_material_requisition_list"
     },
     { // 计划排产
       "name": "计划排产",
