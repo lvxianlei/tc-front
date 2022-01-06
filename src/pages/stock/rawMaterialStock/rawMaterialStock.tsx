@@ -33,7 +33,7 @@ export default function RawMaterialStock(): React.ReactNode {
     const [isExport, setIsExportStoreList] = useState(false)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const [warehouseList, askPrice]: { [key: string]: string | number }[] = await Promise.all([
+            const [warehouseList, askPrice] = await Promise.all<any>([
                 RequestUtil.get(`/tower-storage/warehouse/tree?type=0`),
                 RequestUtil.get(`/tower-storage/materialStock/getMaterialStockStatics`)])
             resole({ warehouseList, ...askPrice })
