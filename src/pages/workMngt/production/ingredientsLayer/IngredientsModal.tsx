@@ -504,6 +504,10 @@ export default function IngredientsModal(props: any) {
                     保存并提交
                 </Button>,
                 <Button key="back" onClick={() => {
+                    // 清空备选方案以及配料方案
+                    setPreparation([]);
+                    // 清空表单
+                    serarchForm.resetFields();
                     props.onCancel();
                 }}>
                    取消
