@@ -26,7 +26,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
     }
 
     public state: AssignState = {
-        visible: true,
+        visible: false,
         height: 150
     }
 
