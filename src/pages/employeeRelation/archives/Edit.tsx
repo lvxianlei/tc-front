@@ -57,6 +57,7 @@ export default function Edit() {
             (currentType === "baseInfo" && result?.isDisability) && setBaseInfoColumns([...baseInfo, ...disabilityCols])
             resole(currentType === "baseInfo" ? {
                 ...result,
+                isDisability: !!result.isDisability,
                 postType: result?.postType?.split(",")
             } : result)
         } catch (error) {

@@ -209,6 +209,7 @@
             "width": 1011,
             "path": "/tower-production/team/teamUsers",
             "value": "name",
+            "rowKey": "userId",
             "readOnly": true,
             "required": true,
             "dependencies": true,

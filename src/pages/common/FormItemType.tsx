@@ -133,7 +133,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 onChange: onSelectChange,
                 getCheckboxProps: data?.getCheckboxProps
             }}
-            rowKey={(record: any) => record.id}
+            rowKey={data.rowKey || ((record: any) => record.id)}
             size="small"
             loading={loading}
             dataSource={popTableData?.records || popTableData || []}
