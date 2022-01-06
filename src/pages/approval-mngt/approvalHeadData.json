@@ -200,7 +200,7 @@
     ],
     "bondBaseInfo": [
         {
-            "title": "项目工程",
+            "title": "项目名称",
             "dataIndex": "projectId",
             "type": "popTable",
             "path": "/tower-market/projectInfo",
@@ -226,11 +226,6 @@
                     "message": "请选择项目工程..."
                 }
             ]
-        },
-        {
-            "title": "项目名称",
-            "dataIndex": "projectName",
-            "disabled": true
         },
         {
             "title": "项目编码",
@@ -347,34 +342,6 @@
     ],
     "bondBaseInfoView": [
         {
-            "title": "项目工程",
-            "dataIndex": "projectId",
-            "type": "popTable",
-            "path": "/tower-market/projectInfo",
-            "width": 1011,
-            "value": "projectName",
-            "dependencies": true,
-            "readOnly": true,
-            "columns": [
-                {
-                    "title": "项目名称",
-                    "dataIndex": "projectName",
-                    "search": true
-                },
-                {
-                    "title": "项目编码",
-                    "dataIndex": "projectNumber",
-                    "search": true
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择项目工程..."
-                }
-            ]
-        },
-        {
             "title": "项目名称",
             "dataIndex": "projectName",
             "disabled": true
@@ -463,7 +430,7 @@
         },
         {
             "title": "支付类别",
-            "dataIndex": "paymentCategory",
+            "dataIndex": "paymentCategoryName",
             "rules": [
                 {
                     "required": true,
@@ -489,7 +456,7 @@
         },
         {
             "title": "币种",
-            "dataIndex": "currencyType"
+            "dataIndex": "currencyTypeName"
         }
     ],
     "auditIdRecord": [
