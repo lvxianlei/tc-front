@@ -782,7 +782,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 return (
                     <>
                         <Form.Item name="planType" style={{margin: 0}} initialValue={contract?.planType || 0}>
-                            <Radio.Group style={{position: "relative", left: "-67px", top: "7px"}} onChange={(e: RadioChangeEvent) => {
+                            <Radio.Group style={{position: "relative", top: "7px"}} onChange={(e: RadioChangeEvent) => {
                                 this.setState({
                                     contract: {
                                         ...(contract || {}),
