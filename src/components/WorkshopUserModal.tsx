@@ -72,9 +72,10 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         };
     }
 
-    public getTableProps() {
+    public getTableProps(): TableProps<object> {
         return {
             ...super.getTableProps(),
+            pagination: false,
             rowSelection: {
                 type: this.props.rowSelectionType || 'radio',
                 selectedRowKeys: this.state.selectedRowKeys,
