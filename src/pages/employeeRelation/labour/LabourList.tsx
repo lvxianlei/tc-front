@@ -163,11 +163,6 @@ export default function LabourList(): React.ReactNode {
                 filterValue={ filterValue }
                 searchFormItems={[
                     {
-                        name: 'keyword',
-                        label: '模糊查询项',
-                        children: <Input placeholder="请输入合同号/员工姓名/身份证号进行查询" maxLength={200} style={{width:'300px'}}/>
-                    },
-                    {
                         name: 'contractType',
                         label: '合同类型',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
@@ -187,6 +182,11 @@ export default function LabourList(): React.ReactNode {
                             <Select.Option value={1} key="1">有效</Select.Option>
                             <Select.Option value={2} key="2">无效</Select.Option>
                         </Select>
+                    },
+                    {
+                        name: 'keyword',
+                        label: '模糊查询项',
+                        children: <Input placeholder="请输入合同号/员工姓名/身份证号进行查询" maxLength={200} style={{width:'300px'}}/>
                     },
                 ]}
             />

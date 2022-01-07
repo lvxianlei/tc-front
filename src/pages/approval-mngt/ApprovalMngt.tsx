@@ -454,10 +454,6 @@ export default function Information(): React.ReactNode {
             extraOperation={<Button type="primary" onClick={handleNewAudit}>新增审批</Button>}
             searchFormItems={[
                 {
-                    name: 'omnipotentQuery',
-                    children: <Input placeholder="项目名称/项目编码/审批编号/关联合同/制单人" style={{ width: "300px" }} maxLength={200} />
-                },
-                {
                     name: 'processTypeId',
                     label: '审批类型',
                     children: <Select style={{ width: "200px" }}>
@@ -477,7 +473,11 @@ export default function Information(): React.ReactNode {
                         <Select.Option value={1} key="audit-1">已通过</Select.Option>
                         <Select.Option value={2} key="audit-2">已驳回</Select.Option>
                     </Select>
-                }
+                },
+                {
+                    name: 'omnipotentQuery',
+                    children: <Input placeholder="项目名称/项目编码/审批编号/关联合同/制单人" style={{ width: "300px" }} maxLength={200} />
+                },
             ]}
         />
     </>

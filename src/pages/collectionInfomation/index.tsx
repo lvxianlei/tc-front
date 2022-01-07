@@ -197,10 +197,6 @@ export default function CollectionInfomation(): React.ReactNode {
                 filterValue={{ confirmStatus }}
                 searchFormItems={[
                     {
-                        name: 'payCompany',
-                        children: <Input placeholder="请输入来款单位进行查询" style={{ width: 300 }} />
-                    },
-                    {
                         name: 'returnType',
                         label: '回款类型',
                         children: (
@@ -217,7 +213,11 @@ export default function CollectionInfomation(): React.ReactNode {
                         name: 'startRefundTime',
                         label: '来款日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                    }
+                    },
+                    {
+                        name: 'payCompany',
+                        children: <Input placeholder="请输入来款单位进行查询" style={{ width: 300 }} />
+                    },
                 ]}
             />
             {/* 新增 */}

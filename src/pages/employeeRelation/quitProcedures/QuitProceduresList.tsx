@@ -169,11 +169,6 @@ export default function QuitProceduresList(): React.ReactNode {
                 filterValue={ filterValue }
                 searchFormItems={[
                     {
-                        name: 'employeeName',
-                        label: '模糊查询项',
-                        children: <Input placeholder="请输入员工姓名进行查询" maxLength={200} style={{width:'200px'}}/>
-                    },
-                    {
                         name: 'isTransactProcedure',
                         label: '是否办理离职手续',
                         children: <Select placeholder="请选择" style={{ width: "150px" }} defaultValue={'false'}>
@@ -186,6 +181,11 @@ export default function QuitProceduresList(): React.ReactNode {
                         name: 'statusUpdateTime',
                         label: '离职日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    },
+                    {
+                        name: 'employeeName',
+                        label: '模糊查询项',
+                        children: <Input placeholder="请输入员工姓名进行查询" maxLength={200} style={{width:'200px'}}/>
                     },
                 ]}
             />
