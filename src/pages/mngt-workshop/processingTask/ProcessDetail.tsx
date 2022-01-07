@@ -29,7 +29,11 @@ export default function ProcessDetail(): React.ReactNode {
     const [tableDataSource,setTableDataSource] = useState<any>([]);
     const [userDataSource,setUserDataSource] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-aps/machining/detail/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-aps/machining/detail/${params.id}`)
+        const userData: any = data && await RequestUtil.get(`/tower-production/team/listTeamUser`, {
+            teamId: data?.dispatchVO?.teamId,
+        });
+        setUserDataSource([...userData]);
         resole(data)
     }), {})
     const detailData: any = data;
@@ -61,7 +65,7 @@ export default function ProcessDetail(): React.ReactNode {
                 width="40%" 
                 title="采集确认-选择员工"
                 footer={ <Space>
-                    <Button type="primary" ghost  onClick={() => setVisible(false) }>取消</Button>
+                    {/* <Button type="primary" ghost  onClick={() => setVisible(false) }>取消</Button> */}
                     <Button type="primary" onClick={async () => {
                         console.log(userDataSource)
                         await RequestUtil.put(`/tower-aps/machining/collection`,{
