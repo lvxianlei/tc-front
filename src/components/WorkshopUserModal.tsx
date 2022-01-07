@@ -76,6 +76,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         return {
             ...super.getTableProps(),
             pagination: false,
+            size:'small',
             rowSelection: {
                 type: this.props.rowSelectionType || 'radio',
                 selectedRowKeys: this.state.selectedRowKeys,
