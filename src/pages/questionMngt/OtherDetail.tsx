@@ -9,48 +9,132 @@ import TextArea from 'antd/lib/input/TextArea';
 import AuthUtil from '../../utils/AuthUtil';
 
 const tableColumns = [
-    { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '操作部门', dataIndex: 'createDeptName', key: 'createDeptName', },
-    { title: '操作人', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
-    { title: '任务状态', dataIndex: 'status', key: 'status',  render: (value: number, record: object): React.ReactNode => {
-        const renderEnum: any = [
+    { 
+        title: '序号', 
+        dataIndex: 'index', 
+        key: 'index', 
+        render: (_a: any, _b: any, index: number): React.ReactNode => (
+            <span>{index + 1}</span>
+        ) 
+    },
+    { 
+        title: '操作部门', 
+        dataIndex: 'createDeptName', 
+        key: 'createDeptName', 
+    },
+    { 
+        title: '操作人', 
+        dataIndex: 'createUserName', 
+        key: 'createUserName' 
+    },
+    { 
+        title: '操作时间', 
+        dataIndex: 'createTime', 
+        key: 'createTime' 
+    },
+    { 
+        title: '任务状态', 
+        dataIndex: 'status', 
+        key: 'status',  
+        render: (value: number, record: object): React.ReactNode => {
+            const renderEnum: any = [
+                {
+                    value: 0,
+                    label: "已拒绝"
+                },
+                {
+                    value: 1,
+                    label: "待修改"
+                },
+                {
+                    value: 2,
+                    label: "已修改"
+                },
+                {
+                    value: 3,
+                    label: "已删除"
+                },
+            ]
+        return <>
             {
-                value: 0,
-                label: "已拒绝"
-            },
-            {
-                value: 1,
-                label: "待修改"
-            },
-            {
-                value: 2,
-                label: "已修改"
-            },
-            {
-                value: 3,
-                label: "已删除"
-            },
-        ]
-        return <>{renderEnum.find((item: any) => item.value === value).label}</>
+                renderEnum.find((item: any) => item.value === value).label
+            }
+        </>
     }},
-    { title: '备注', dataIndex: 'description', key: 'description' }
+    { 
+        title: '备注', 
+        dataIndex: 'description', 
+        key: 'description' 
+    }
 ]
 
 const towerColumns = [
     // { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '段名', dataIndex: 'segmentName', key: 'segmentName', },
-    { title: '构件编号', dataIndex: 'code', key: 'code' },
-    { title: '材料名称', dataIndex: 'materialName', key: 'materialName' },
-    { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
-    { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
-    { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
-    { title: '长度', dataIndex: 'length', key: 'length' },
+    { 
+        title: '段名', 
+        dataIndex: 'segmentName', 
+        key: 'segmentName', 
+    },
+    { 
+        title: '构件编号', 
+        dataIndex: 'code', 
+        key: 'code' 
+    },
+    { 
+        title: '材料名称', 
+        dataIndex: 'materialName', 
+        key: 'materialName' 
+    },
+    { 
+        title: '材质', 
+        dataIndex: 'structureTexture', 
+        key: 'structureTexture' 
+    },
+    { 
+        title: '规格', 
+        dataIndex: 'structureSpec', 
+        key: 'structureSpec' 
+    },
+    { 
+        title: '单段件数', 
+        dataIndex: 'basicsPartNum', 
+        key: 'basicsPartNum' 
+    },
+    { 
+        title: '长度', 
+        dataIndex: 'length', 
+        key: 'length' 
+    },
     // { title: '宽度', dataIndex: 'width', key: 'width' },
-    { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)  },
-    { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
-    { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight',render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
-    { title: '备注', dataIndex: 'description', key: 'description' }
+    { 
+        title: '理算重量（kg）', 
+        dataIndex: 'basicsTheoryWeight', 
+        key: 'basicsTheoryWeight' ,
+        render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        )  
+    },
+    { 
+        title: '单件重量（kg）',
+        dataIndex: 'basicsWeight', 
+        key: 'basicsWeight' ,
+        render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        )
+    },
+    { 
+        title: '小计重量（kg）', 
+        dataIndex: 'totalWeight', 
+        key: 'totalWeight',
+        render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        ) 
+    },
+    { 
+        title: '备注', 
+        dataIndex: 'description', 
+        key: 'description' 
+    }
 ]
 
 const setOutColumns = [
