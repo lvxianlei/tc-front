@@ -118,7 +118,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         const selectKeys: [] = this.props.selectKey;
         let newData: any = resData;
         selectKeys?.forEach((item: any) => {
-            newData = newData.filter((res:any) => res.id !== item.id);
+            newData = newData.filter((res:any) => res.userId !== item.userId);
         })
         this.setState({
             ...filterValues,
