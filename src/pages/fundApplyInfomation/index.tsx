@@ -97,10 +97,6 @@
                  refresh={ refresh }
                  searchFormItems={[
                      {
-                         name: 'fuzzyQuery',
-                         children: <Input placeholder="请输入请款单号/收款方进行查询" style={{ width: 200 }} />
-                     },
-                     {
                          name: 'costType',
                          label: '费用类型',
                          children: <Form.Item name="costType">
@@ -130,7 +126,11 @@
                          name: 'endPayApplyTime',
                          label: '请款日期：',
                          children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: "200px" }} />
-                     }
+                     },
+                     {
+                         name: 'fuzzyQuery',
+                         children: <Input placeholder="请输入请款单号/收款方进行查询" style={{ width: 200 }} />
+                     },
                  ]}
                  sourceKey="payApplyListVOIPage.records"
                  extraOperation={(data: any) => <>

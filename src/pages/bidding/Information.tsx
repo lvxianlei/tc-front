@@ -158,10 +158,6 @@ export default function Information(): React.ReactNode {
         filterValue={filterValue}
         searchFormItems={[
             {
-                name: 'fuzzyQuery',
-                children: <Input placeholder="项目名称/项目编码/审批编号/关联合同/制单人" style={{ width: 200 }} />
-            },
-            {
                 name: 'startBidBuyEndTime',
                 label: '购买截至日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 150 }} />
@@ -191,7 +187,11 @@ export default function Information(): React.ReactNode {
                 children: <Select mode="multiple" style={{ minWidth: 100 }}>
                     {dictionaryOptions?.map((item: any, index: number) => <Select.Option key={index} value={item.name}>{item.name}</Select.Option>)}
                 </Select>
-            }
+            },
+            {
+                name: 'fuzzyQuery',
+                children: <Input placeholder="项目名称/项目编码/审批编号/关联合同/制单人" style={{ width: 200 }} />
+            },
         ]}
     />
 }

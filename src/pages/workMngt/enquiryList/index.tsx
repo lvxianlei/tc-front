@@ -99,11 +99,6 @@ export default function EnquiryList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'fuzzyQuery',
-                    label: '查询',
-                    children: <Input placeholder="任务编号/项目名称/客户名称/项目负责人" style={{ width: 260 }} />
-                },
-                {
                     name: 'startStatusUpdateTime',
                     label: '最新状态变更时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
@@ -126,7 +121,12 @@ export default function EnquiryList(): React.ReactNode {
                     name: 'inquirerId',
                     label: '工程报价员',
                     children: <IntgSelect width={200} />
-                }
+                },
+                {
+                    name: 'fuzzyQuery',
+                    label: '查询',
+                    children: <Input placeholder="任务编号/项目名称/客户名称/项目负责人" style={{ width: 260 }} />
+                },
             ]}
         />
     </>

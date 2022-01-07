@@ -185,10 +185,6 @@ export default function ApplicationColunm(): React.ReactNode {
                 filterValue={{ acceptStatus }}
                 searchFormItems={[
                     {
-                        name: 'fuzzyQuery',
-                        children: <Input placeholder="请输入项目名称/受益人名称/申请人进行查询" style={{ width: 300 }} />
-                    },
-                    {
                         name: 'startRefundTime',
                         label: '申请日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
@@ -202,7 +198,11 @@ export default function ApplicationColunm(): React.ReactNode {
                         name: 'guaranteeTime',
                         label: '保函交回日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
-                    }
+                    },
+                    {
+                        name: 'fuzzyQuery',
+                        children: <Input placeholder="请输入项目名称/受益人名称/申请人进行查询" style={{ width: 300 }} />
+                    },
                 ]}
             />
             {/* 填写保函信息 */}
