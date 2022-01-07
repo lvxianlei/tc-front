@@ -54,7 +54,6 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
                 customerInfoDto: contract.customerInfoVo,
             }
         })
-
         this.getForm()?.setFieldsValue({
             contractNumber: contract.contractNumber,
             purchaseOrderNumber: contract.purchaseOrderNumber, // 修复采购订单编辑回显有问题
@@ -72,8 +71,9 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             takeOverTime: contract.takeOverTime && moment(contract.takeOverTime).format("YYYY-MM-DD"),
             chargeType: contract.chargeType === -1 ? '' : contract.chargeType,
             salesman: contract.salesman,
-            region: Array.isArray(contract?.region) ? contract?.region : [contract?.region],
-            country: contract.country,
+            // region: Array.isArray(contract?.region) ? contract?.region : [contract?.region],
+            region: this.state.contractAdd.address || "",
+            country: contract.country || this.state.contractAdd.country,
             contractAmount: contract.contractAmount,
             currencyType: contract.currencyType,
             description: contract.description,

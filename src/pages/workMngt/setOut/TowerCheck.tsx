@@ -22,8 +22,8 @@ const columns = [
         width: 50,
         editable: false,
         fixed: 'left' as FixedType,
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => { 
-            return <span>{ index + 1 }</span>
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => {
+            return <span>{index + 1}</span>
         }
     },
     {
@@ -193,8 +193,8 @@ const columns = [
         editable: true,
         width: 200,
         dataIndex: 'sides',
-        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-            <span>{ _ === -1  ? undefined : _ }</span>
+        render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{_ === -1 ? undefined : _}</span>
         )
     },
     {
@@ -203,8 +203,8 @@ const columns = [
         editable: true,
         width: 200,
         dataIndex: 'perimeter',
-        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-            <span>{ _ === -1  ? undefined : _ }</span>
+        render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{_ === -1 ? undefined : _}</span>
         )
     },
     {
@@ -219,8 +219,8 @@ const columns = [
         editable: true,
         width: 200,
         dataIndex: 'surfaceArea',
-        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-            <span>{ _ === -1  ? undefined : _ }</span>
+        render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{_ === -1 ? undefined : _}</span>
         )
     },
     {
@@ -236,8 +236,8 @@ const columns = [
         editable: true,
         width: 200,
         dataIndex: 'weldingEdge',
-        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-            <span>{ _ === -1  ? undefined : _ }</span>
+        render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{_ === -1 ? undefined : _}</span>
         )
     }
 ]
@@ -245,15 +245,16 @@ const columns = [
 export default function TowerCheck(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string }>();
-    const [ visible, setVisible ] = useState(false);
-    const [ record, setRecord ] = useState({});
-    const [ title, setTitle ] = useState('提交问题单');
-    const [ refresh, setRefresh ] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [record, setRecord] = useState({});
+    const [title, setTitle] = useState('提交问题单');
+    const [refresh, setRefresh] = useState(false);
+    const [loading1, setLoading1] = useState(false);
 
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
-        const data: IRecord = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${ record.id }&problemField=${ col.dataIndex }`);
-        if(tip === 'red') {
+        const data: IRecord = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${record.id}&problemField=${col.dataIndex}`);
+        if (tip === 'red') {
             setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
             setTitle('查看问题单');
         } else {
@@ -265,66 +266,69 @@ export default function TowerCheck(): React.ReactNode {
         const red: number = record.redColumn.indexOf(dataIndex);
         const green: number = record.greenColumn.indexOf(dataIndex);
         const yellow: number = record.yellowColumn.indexOf(dataIndex);
-        if(red !== -1) {
+        if (red !== -1) {
             return 'red';
-        } else if(green !== -1) {
+        } else if (green !== -1) {
             return 'green';
-        } else if(yellow !== -1) {
+        } else if (yellow !== -1) {
             return 'yellow';
         } else {
             return 'normal'
         }
     }
-    
+
     const columnsSetting = columns.map(col => {
         return {
             ...col,
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                col.dataIndex === 'index' ? index + 1 
-                : !col.editable ? _ 
-                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : '' }>{ _ }</p>
-            )  
-        }     
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                col.dataIndex === 'index' ? index + 1
+                    : !col.editable ? _
+                        : <p onDoubleClick={(e) => { questionnaire(_, record, col, checkColor(record, col.dataIndex)) }} className={checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : ''}>{_}</p>
+            )
+        }
     })
-    
-    return<> 
+
+    return <>
         <Page
             path="/tower-science/productStructure/list"
-            columns={ columnsSetting }
+            columns={columnsSetting}
             requestData={{ productSegmentGroupId: params.productSegmentId }}
-            headTabs={ [] }
-            refresh={ refresh }
-            extraOperation={ <Space direction="horizontal" size="small">
+            headTabs={[]}
+            refresh={refresh}
+            extraOperation={<Space direction="horizontal" size="small">
                 <Popconfirm
                     title="确认完成校核?"
-                    onConfirm={ () => { 
-                        RequestUtil.post<{}>(`/tower-science/productSegment/completed/check?productSegmentGroupId=${ params.productSegmentId }`).then(res => {
+                    onConfirm={() => {
+                        setLoading1(true);
+                        RequestUtil.post<{}>(`/tower-science/productSegment/completed/check?productSegmentGroupId=${params.productSegmentId}`).then(res => {
                             history.goBack();
-                        }) 
-                    } }
+                        }).catch(error => {
+                            setLoading1(false);
+                        })
+                    }}
                     okText="确认"
                     cancelText="取消"
                 >
-                    <Button type="primary" ghost>完成校核</Button>
+                    <Button type="primary" loading={loading1} ghost>完成校核</Button>
                 </Popconfirm>
-                <Button type="ghost" onClick={ () => history.goBack() } >返回</Button>
-            </Space> }
-            searchFormItems={ [
+                <Button type="ghost" onClick={() => history.goBack()} >返回</Button>
+            </Space>}
+            searchFormItems={[
                 {
                     name: 'materialName',
                     label: '材料名称',
-                    children: <Input placeholder="请输入"/>
+                    children: <Input placeholder="请输入" />
                 },
                 {
                     name: 'structureTexture',
                     label: '材质',
-                    children: <Input placeholder="请输入"/>
+                    children: <Input placeholder="请输入" />
                 }
-            ] }
-            onFilterSubmit = { (values: Record<string, any>) => {
+            ]}
+            onFilterSubmit={(values: Record<string, any>) => {
                 return values;
-            } }
+            }}
         />
-        <QuestionnaireModal visible={ visible } record={ record } title={ title } modalCancel={ () => { setVisible(false); setRefresh(!refresh); } } update={ () => setRefresh(!refresh) }/>
+        <QuestionnaireModal visible={visible} record={record} title={title} modalCancel={() => { setVisible(false); setRefresh(!refresh); }} update={() => setRefresh(!refresh)} />
     </>
 }
