@@ -47,11 +47,6 @@ export default function TransferList(): React.ReactNode {
             }
             searchFormItems={[
                 {
-                    name: 'employeeName',
-                    label: '',
-                    children: <Input placeholder="请输入员工姓名" maxLength={200} />
-                },
-                {
                     name: 'transferType',
                     label: '调派类型',
                     children: <Select placeholder="请选择" style={{ width: "150px" }}>
@@ -67,6 +62,11 @@ export default function TransferList(): React.ReactNode {
                     name: 'transferDateStart',
                     label: '调动日期',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'employeeName',
+                    label: '',
+                    children: <Input placeholder="请输入员工姓名" maxLength={200} />
                 },
             ]}
         />

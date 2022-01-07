@@ -111,6 +111,8 @@
         if (data) {
             message.success('拒收成功')
             setRejectionModal(false)
+            // 刷新页面
+            history.go(0);
         }
     }
 
@@ -170,6 +172,8 @@
         }]);
         if (data) {
             onReceivingCancel()
+            // 刷新页面
+            history.go(0);
         }
     }
 
@@ -217,8 +221,8 @@
                             <>
                                 {/* <span>质检单</span>
                                 <span>质保单</span> */}
-                                {record.receiveStatus == 0 ? <Button type='link' onClick={() => { ReceivingBtn(record) }}>收货</Button> : null}
-                                {record.receiveStatus == 0 ? <Button type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button> : null}
+                                {record.receiveStatus == 0 ? <Button className='btn-operation-link' type='link' onClick={() => { ReceivingBtn(record) }}>收货</Button> : null}
+                                {record.receiveStatus == 0 ? <Button className='btn-operation-link' type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button> : null}
                             </>
                         )
                     }

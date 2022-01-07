@@ -165,11 +165,6 @@ export default function QuitList(): React.ReactNode {
                 }
                 searchFormItems={[
                     {
-                        name: 'employeeName',
-                        label: '模糊查询项',
-                        children: <Input placeholder="请输入员工姓名进行查询" maxLength={200} style={{width:'200px'}}/>
-                    },
-                    {
                         name: 'departureType',
                         label: '离职类型',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
@@ -184,6 +179,11 @@ export default function QuitList(): React.ReactNode {
                         name: 'statusUpdateTime',
                         label: '离职日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    },
+                    {
+                        name: 'employeeName',
+                        label: '模糊查询项',
+                        children: <Input placeholder="请输入员工姓名进行查询" maxLength={200} style={{width:'200px'}}/>
                     },
                 ]}
             />

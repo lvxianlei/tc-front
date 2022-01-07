@@ -63,10 +63,6 @@ export default function Payment() {
         filterValue={filterValue}
         searchFormItems={[
             {
-                name: 'fuzzyQuery',
-                children: <Input placeholder="请款单号/项目编号/项目名称/票面单位/业务经理" style={{ width: 300 }} />
-            },
-            {
                 name: 'payType',
                 label: '付款类型',
                 children: <Select style={{ width: 100 }}>
@@ -97,7 +93,11 @@ export default function Payment() {
                 name: 'startApplicantTime',
                 label: '申请时间',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-            }
+            },
+            {
+                name: 'fuzzyQuery',
+                children: <Input placeholder="请款单号/项目编号/项目名称/票面单位/业务经理" style={{ width: 300 }} />
+            },
         ]}
     />
 }
