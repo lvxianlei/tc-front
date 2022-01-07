@@ -117,7 +117,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
     useEffect(() => {
         form && form.setFieldsValue(formatData(columns, dataSource))
     }, [JSON.stringify(dataSource), form])
-
+    console.log(classStyle, "sdssdsdsd")
     if (edit) {
         return <Form
             onValuesChange={(changedFields, allFields) => onChange(changedFields, allFields, dataSource)}
@@ -170,7 +170,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             </Row>
         </Form >
     }
-    return <Descriptions bordered column={col} size="small" className="bottom">
+    return <Descriptions bordered column={col} size="small" className={`bottom ${classStyle}`}>
         {columns.map((item: any, index: number) => <Descriptions.Item
             contentStyle={{ ...item.contentStyle, width: `${100 / (col * 2)}%` }}
             labelStyle={{ ...item.labelStyle, width: `${100 / (col * 4)}%` }}
