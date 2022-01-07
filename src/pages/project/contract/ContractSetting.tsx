@@ -26,7 +26,7 @@ class ManagementContractSetting extends ContractSetting {
 
   public getFormItemGroups(): IFormItemGroup[][] {
     const contract = this.state.contract as ProjectContractInfo | undefined;
-    return this.state.region === "其他-国外" ? [
+    return this.state.contractAdd?.address === "其他-国外" ? [
       [
         {
           title: "基础信息",
@@ -364,51 +364,52 @@ class ManagementContractSetting extends ContractSetting {
             {
               label: "所属区域",
               name: "region",
-              initialValue: contract?.region,
-              rules: [
-                {
-                  required: true,
-                  message: "请选择所属区域",
-                },
-                {
-                  validator: (
-                    rule: RuleObject,
-                    value: StoreValue,
-                    callback: (error?: string) => void
-                  ) => {
-                    if (value.length >= 1) {
-                      callback();
-                    } else {
-                      callback("所属区域需选择到省级");
-                    }
-                  },
-                },
-              ],
+              initialValue: this.state.contractAdd.address || "",
+              // rules: [
+              //   {
+              //     required: true,
+              //     message: "请选择所属区域",
+              //   },
+              //   {
+              //     validator: (
+              //       rule: RuleObject,
+              //       value: StoreValue,
+              //       callback: (error?: string) => void
+              //     ) => {
+              //       if (value.length >= 1) {
+              //         callback();
+              //       } else {
+              //         callback("所属区域需选择到省级");
+              //       }
+              //     },
+              //   },
+              // ],
               children: (
-                <Select
-                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
-                  disabled={
-                    this.getForm()?.getFieldValue("countryCode") === 1 ||
-                    contract?.countryCode === 1
-                  }
-                  onChange={this.regionChange.bind(this)}
-                >
-                  {this.state.regionInfoData?.map((opt: any) => {
-                    return (
-                      <Select.Option key={opt.code} value={opt.code}>
-                        {opt.name}
-                      </Select.Option>
-                    );
-                  })}
-                  <Select.Option value="其他-国外">其他-国外</Select.Option>
-                </Select>
+                <Input value={this.state.contractAdd.address || ""} disabled/>
+                // <Select
+                //   getPopupContainer={(triggerNode) => triggerNode.parentNode}
+                //   disabled={
+                //     this.getForm()?.getFieldValue("countryCode") === 1 ||
+                //     contract?.countryCode === 1
+                //   }
+                //   onChange={this.regionChange.bind(this)}
+                // >
+                //   {this.state.regionInfoData?.map((opt: any) => {
+                //     return (
+                //       <Select.Option key={opt.code} value={opt.code}>
+                //         {opt.name}
+                //       </Select.Option>
+                //     );
+                //   })}
+                //   <Select.Option value="其他-国外">其他-国外</Select.Option>
+                // </Select>
               ),
             },
             {
               label: "国家",
               name: "country",
-              initialValue: contract?.country,
-              children: (<Input value={contract?.country} />),
+              initialValue: this.state.contractAdd.country || "",
+              children: (<Input value={this.state.contractAdd.country || ""} disabled />),
             },
             {
               label: "币种",
@@ -936,44 +937,26 @@ class ManagementContractSetting extends ContractSetting {
             {
               label: "所属区域",
               name: "region",
-              initialValue: contract?.region,
-              rules: [
-                {
-                  required: true,
-                  message: "请选择所属区域",
-                },
-                {
-                  validator: (
-                    rule: RuleObject,
-                    value: StoreValue,
-                    callback: (error?: string) => void
-                  ) => {
-                    if (value.length >= 1) {
-                      callback();
-                    } else {
-                      callback("所属区域需选择到省级");
-                    }
-                  },
-                },
-              ],
+              initialValue: this.state.contractAdd.address || "",
               children: (
-                <Select
-                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
-                  disabled={
-                    this.getForm()?.getFieldValue("countryCode") === 1 ||
-                    contract?.countryCode === 1
-                  }
-                  onChange={this.regionChange.bind(this)}
-                >
-                  {this.state.regionInfoData?.map((opt: any) => {
-                    return (
-                      <Select.Option key={opt.code} value={opt.code}>
-                        {opt.name}
-                      </Select.Option>
-                    );
-                  })}
-                  <Select.Option value="其他-国外">其他-国外</Select.Option>
-                </Select>
+                <Input value={this.state.contractAdd.address || ""} disabled/>
+                // <Select
+                //   getPopupContainer={(triggerNode) => triggerNode.parentNode}
+                //   disabled={
+                //     this.getForm()?.getFieldValue("countryCode") === 1 ||
+                //     contract?.countryCode === 1
+                //   }
+                //   onChange={this.regionChange.bind(this)}
+                // >
+                //   {this.state.regionInfoData?.map((opt: any) => {
+                //     return (
+                //       <Select.Option key={opt.code} value={opt.code}>
+                //         {opt.name}
+                //       </Select.Option>
+                //     );
+                //   })}
+                //   <Select.Option value="其他-国外">其他-国外</Select.Option>
+                // </Select>
               ),
             },
             {
