@@ -110,7 +110,7 @@ export default function PickTowerMessage(): React.ReactNode {
                         form.setFieldsValue({
                             detailData: data
                         })
-                        if(record.status > 1){
+                        if(record.status > 2){
                             setEdit(true);
                         }else{
                             setEdit(false);
