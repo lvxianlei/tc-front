@@ -83,7 +83,7 @@ export default forwardRef(function Overview({ id }: OverviewProps, ref) {
             </Form>
         </Modal>
         <DetailTitle title="基础信息" />
-        <BaseInfo columns={overviewBaseInfo} dataSource={data || {}} col={2} />
+        <BaseInfo columns={overviewBaseInfo} dataSource={data || {}} col={2} classStyle={"overall-form-class-padding0"}/>
         <Attachment title="相关附件" dataSource={data?.projectAttachList} />
         <OperationRecord serviceId={id} serviceName="tower-supply" />
     </Spin>
