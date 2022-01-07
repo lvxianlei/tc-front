@@ -5,13 +5,17 @@ import styles from './ShopFloorPlan.module.less';
 import RequestUtil from '../../utils/RequestUtil';
 import { ISchedulingList } from './IShopFloorPlan';
 import { detailColumns } from "./shopFloorPlan.json";
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
+import ExportList from '../../components/export/list';
 
 export default function Detail(): React.ReactNode {
     const [ form ] = Form.useForm();
     const params = useParams<{ id: string }>();
     const history = useHistory();
+    const [isExport, setIsExport] = useState(false);
+    const match = useRouteMatch();
+    const location = useLocation();
 
     const { loading, data: detailList, run } = useRequest<ISchedulingList[]>((filterValue) => new Promise(async (resole, reject) => {
         try {
@@ -86,11 +90,29 @@ export default function Detail(): React.ReactNode {
         </Form>
         <Spin spinning={loading}>
             <Space className={ styles.bottom } direction="horizontal">
+                <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>
             <CommonTable 
+                pagination={false}
                 dataSource={detailList || []} 
                 columns={[...detailColumns]}/>
         </Spin>
+        {isExport ? <ExportList
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => {
+                let keys = [...detailColumns]
+                keys.pop()
+                return keys
+            }}
+            current={1}
+            size={10}
+            total={0}
+            url={`/tower-aps/workPlan/productionSchedule`}
+            serchObj={{ workPlanId: params.id }}
+            closeExportList={() => setIsExport(false)}
+        /> : null}
     </DetailContent>
 }
