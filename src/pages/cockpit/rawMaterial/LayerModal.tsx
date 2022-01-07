@@ -117,7 +117,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             setPagenation({ ...pagenation, current: 1, pageSize: 10 })
             await run()
         }}>
-            <Row gutter={[8, 8]}>
+            <Row gutter={[8, 8]} style={{marginBottom: 16}}>
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
                     <div style={{display: "flex", flexWrap: "nowrap"}}>
                         <Form.Item name="materialType" label="类别">
@@ -135,6 +135,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                                 }
                             </Select>
                         </Form.Item>
+                        &nbsp;&nbsp;
                         <Form.Item name="materialCategory" label="类型">
                             <Select style={{ width: 120 }} placeholder="请选择类型">
                                 {
@@ -144,6 +145,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                                 }
                             </Select>
                         </Form.Item>
+                        &nbsp;&nbsp;
                         <Form.Item name="fuzzyQuery" label="查询">
                             <Input placeholder="请输入编号/品名/规格" />
                         </Form.Item>
@@ -151,7 +153,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 </Col>
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" size="small" style={{ marginLeft: 12 }}>搜索</Button>
+                        <Button type="primary" htmlType="submit" size="small" style={{ marginLeft: 12 }}>查询</Button>
                         <Button type="default" size="small" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
                     </Form.Item>
                 </Col>
