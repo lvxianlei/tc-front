@@ -200,7 +200,7 @@
     ],
     "bondBaseInfo": [
         {
-            "title": "项目工程",
+            "title": "项目名称",
             "dataIndex": "projectId",
             "type": "popTable",
             "path": "/tower-market/projectInfo",
@@ -226,11 +226,6 @@
                     "message": "请选择项目工程..."
                 }
             ]
-        },
-        {
-            "title": "项目名称",
-            "dataIndex": "projectName",
-            "disabled": true
         },
         {
             "title": "项目编码",
@@ -343,6 +338,125 @@
         {
             "title": "币种",
             "dataIndex": "currencyType"
+        }
+    ],
+    "bondBaseInfoView": [
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "disabled": true
+        },
+        {
+            "title": "项目编码",
+            "dataIndex": "projectNumber",
+            "disabled": true
+        },
+        {
+            "title": "请款人",
+            "dataIndex": "requestFundsUser",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入请款人..."
+                }
+            ]
+        },
+        {
+            "title": "支付类型",
+            "dataIndex": "paymentType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "履约保证金"
+                },
+                {
+                    "value": 2,
+                    "label": "购买标书"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入支付类型..."
+                }
+            ]
+        },
+        {
+            "title": "收款单位",
+            "dataIndex": "payee",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入收款单位..."
+                }
+            ]
+        },
+        {
+            "title": "付款日期",
+            "dataIndex": "paymentTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入付款日期..."
+                }
+            ]
+        },
+        {
+            "title": "发票开具单位",
+            "dataIndex": "invoiceIssuingUnit"
+        },
+        {
+            "title": "账号",
+            "dataIndex": "account",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入账号..."
+                }
+            ]
+        },
+        {
+            "title": "开户银行",
+            "dataIndex": "bank",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入开户银行..."
+                }
+            ]
+        },
+        {
+            "title": "支付类别",
+            "dataIndex": "paymentCategoryName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入支付类别..."
+                }
+            ]
+        },
+        {
+            "title": "申请金额",
+            "dataIndex": "applyAmount",
+            "type": "number",
+            "min": 0,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入申请金额..."
+                }
+            ]
+        },
+        {
+            "title": "申请金额(大写)",
+            "dataIndex": "applyAmountName"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currencyTypeName"
         }
     ],
     "auditIdRecord": [

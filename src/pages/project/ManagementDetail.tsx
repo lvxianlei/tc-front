@@ -400,7 +400,7 @@ export default function ManagementDetail(): React.ReactNode {
                 optionType="button"
             /></Row>
             <CommonTable
-                rowKey="productCategoryName"
+                // rowKey="productCategoryName"
                 columns={productGroupFlag === "productAssistStatisticsVos" ? productAssistStatistics : productAssist}
                 dataSource={productGroupData[productGroupFlag]}
             />
