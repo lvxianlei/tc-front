@@ -19,6 +19,7 @@ interface MaterialData {
     spec: string
     materialTexture: string
     length: number | string
+    weight: number | string
     applyQuantity: number
     materialShortageQuantity: number
     onlyId: string
@@ -45,7 +46,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 onlyId: `${item.materialName}${item.materialTexture}${item.spec}${item.length}`
             })))
             setChooseMaterialParmas({
-                planNumber: result?.planNumber,
+                planNumber: result?.salePlanNumber,
                 product: result?.productNumbers,
                 productCategoryName: result?.productCategoryName
             })
@@ -161,12 +162,17 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     materialShortageQuantity: mItem.materialShortageQuantity,
                     spec: mItem.spec,
                     length: mItem.length,
+                    weight: mItem.weight,
                     applyQuantity: 1,
                     ids: [mItem.id]
                 })
             }
         })
         setMaterialPickingInfoDTOS(materialPickingInfos)
+    }
+
+    const handleRemove = (id: string) => {
+        setMaterialPickingInfoDTOS(materialPickingInfoDTOS.filter((item: any) => item.id !== id))
     }
 
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
@@ -221,7 +227,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     title: "操作",
                     dataIndex: "opration",
                     render: (_: undefined, records: any) => <>
-                        <Button type="link" size="small">删除</Button>
+                        <Button type="link" size="small" onClick={() => handleRemove(records.id)}>删除</Button>
                     </>
                 },
                 ...materialInfo]}
