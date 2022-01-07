@@ -223,7 +223,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     "required": true,
                     "message": "请选择规格"
                 }]}>
-                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} key={index} onChange={(e: string) => materialChange(e, index)}>
+                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} key={index}>
                         {specifications[index]?.map((item: any) => {
                             return <Select.Option key={item.id} value={item.structureSpec}>{item.structureSpec}</Select.Option>
                         })}
