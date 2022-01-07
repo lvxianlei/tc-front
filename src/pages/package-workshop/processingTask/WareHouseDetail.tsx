@@ -7,7 +7,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import WorkshopUserSelectionComponent from '../../../components/WorkshopUserModal';
 import moment from 'moment';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
-
+import styles from './wareHouse.module.less';
 
 
 export default function ProcessDetail(): React.ReactNode {
@@ -92,24 +92,39 @@ export default function ProcessDetail(): React.ReactNode {
         { 
             title: '捆号/包号', 
             dataIndex: 'balesCode', 
-            key: 'balesCode'
+            key: 'balesCode',
+            render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                <Form.Item name={['dataV',index, "balesCode"]}  >
+                    {_a}
+                </Form.Item>
+            )
         },
         { 
             title: '包类型', 
             dataIndex: 'packageType', 
-            key: 'packageType' 
+            key: 'packageType',
+            render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                <Form.Item  name={['dataV',index, "packageType"]}  >
+                    {_a}
+                </Form.Item>
+            ) 
         },
         { 
             title: '重量（kg）', 
             dataIndex: 'weightCount', 
-            key: 'weightCount' 
+            key: 'weightCount',
+            render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                <Form.Item name={['dataV',index, "weightCount"]}  >
+                   {_a}
+                </Form.Item>
+            ) 
         },
         { 
             title: '包长度', 
             dataIndex: 'balesLength', 
             key: 'balesLength', 
             render:(_a: any, _b: any, index: number): React.ReactNode =>(
-                <Form.Item name={['dataV',index, "balesLength"]} initialValue={ _a } >
+                <Form.Item name={['dataV',index, "balesLength"]}  >
                     <InputNumber style={{width:'100%'}} precision={0} min={0}/>
                 </Form.Item>
             ) 
@@ -119,7 +134,7 @@ export default function ProcessDetail(): React.ReactNode {
             dataIndex: 'balesWidth', 
             key: 'balesWidth', 
             render:(_a: any, _b: any, index: number): React.ReactNode =>(
-                <Form.Item name={['dataV',index, "balesWidth"]} initialValue={ _a } >
+                <Form.Item name={['dataV',index, "balesWidth"]}  >
                     <InputNumber style={{width:'100%'}} precision={0} min={0}/>
                 </Form.Item>
             ) 
@@ -127,14 +142,19 @@ export default function ProcessDetail(): React.ReactNode {
         { 
             title: '入库数', 
             dataIndex: 'num', 
-            key: 'num'
+            key: 'num', 
+            render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                <Form.Item name={['dataV',index, "num"]}  >
+                  {_a}
+                </Form.Item>
+            )
         },
         { 
             title: '库位', 
             dataIndex: 'warehousePosition', 
             key: 'warehousePosition', 
             render:(_a: any, _b: any, index: number): React.ReactNode =>(
-                <Form.Item name={['dataV',index, "warehousePosition"]} initialValue={ _a } rules={[{required:true, message:'请选择'}]}>
+                <Form.Item name={['dataV',index, "warehousePosition"]} rules={[{required:true, message:'请选择'}]}>
                     <Select>
                         {balesWarehouse && balesWarehouse.map(({ id, position }:any, index:any) => {
                             return <Select.Option key={index} value={position}>
@@ -335,6 +355,8 @@ export default function ProcessDetail(): React.ReactNode {
                     //       }, // 点击行
                     //     };
                     // }}
+                    style={{paddingBottom:'24px'}}
+                    // size='small'
                     pagination={false}
                 />
                 <DetailTitle title="包信息" />
@@ -343,6 +365,7 @@ export default function ProcessDetail(): React.ReactNode {
                         columns={packageColumns}
                         dataSource={[...packageDataSource]} 
                         pagination={false}
+                        className={styles.node}
                     />
                 </Form>
             </DetailContent>
