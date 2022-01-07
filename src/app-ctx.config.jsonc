@@ -886,42 +886,42 @@
                             {
                                 "label": "招聘入职",
                                 "path": "/employeeRelation/recruit",
-                                "authority": "employee_information_list"
+                                "authority": "hr_employee_information_management"
                             },
                             {
                                 "label": "员工档案",
                                 "path": "/employeeRelation/archives",
-                                "authority": "employee_archives_list"
+                                "authority": "hr_employee_archives_management"
                             },
                             {
                                 "label": "劳动合同",
                                 "path": "/employeeRelation/labour",
-                                "authority": "employee_labor_contract_list"
+                                "authority": "hr_employee_labor_contract_management"
                             },
                             {
                                 "label": "转正考核",
                                 "path": "/employeeRelation/full",
-                                "authority": "positive_check_list"
+                                "authority": "hr_employee_labor_contract_management"
                             },
                             {
                                 "label": "员工调动",
                                 "path": "/employeeRelation/transfer",
-                                "authority": "hr_employee_transfer_page"
+                                "authority": "hr_employee_transfer_management"
                             },
                             {
                                 "label": "员工离职",
                                 "path": "/employeeRelation/quit",
-                                "authority": "hr_employee_departurenc_page"
+                                "authority": "hr_employee_departurenc_management"
                             },
                             {
                                 "label": "办理离职",
                                 "path": "/employeeRelation/quitProcedures",
-                                "authority": "hr_employee_departurenc_handlePage"
+                                "authority": "hr_handle_departurenc_management"
                             },
                             {
                                 "label": "员工复职",
                                 "path": "/employeeRelation/reinstate",
-                                "authority": "hr_employee_reinstatement_page"
+                                "authority": "hr_employee_reinstatement_management"
                             }
                         ]
                     },
@@ -935,12 +935,12 @@
                             {
                                 "label": "保险方案",
                                 "path": "/socialSecurity/plan",
-                                "authority": "hr_insurance_plan_page"
+                                "authority": "hr_insurance_plan_management"
                             },
                             {
                                 "label": "员工保险档案",
                                 "path": "/socialSecurity/archives",
-                                "authority": "hr_insurance_archives_page"
+                                "authority": "hr_insurance_archives_management"
                             }
                         ]
                     },
