@@ -55,7 +55,7 @@ export default function Detail(): React.ReactNode {
         })}>
             <Row>
                 <Col className={ styles.right }>
-                    <Form.Item label="" name="fuzzy" >
+                    <Form.Item label="" name="fuzzyMsg" >
                         <Input style={{ width: '300px' }} placeholder="请输入加工计划编号/计划号/塔型进行查询" />
                     </Form.Item>
                 </Col>
