@@ -158,14 +158,14 @@ export default function DailySchedule(): React.ReactNode {
                     children: <Input style={{ width: '300px' }} placeholder="请输入塔型/零件号进行查询" />
                 },
                 {
-                    name: 'productionLinesName',
+                    name: 'productionUnitId',
                     label: '生产单元',
                     children: <Select placeholder="请选择" style={{ width: "150px" }}>  
                         <Select.Option value="" key="">全部</Select.Option>
                         { unit && unit.map((item: any) => {
                             return <Select.Option 
                                         key={ item.id } 
-                                        value={ item.name }
+                                        value={ item.id }
                                     >
                                         { item.name }
                                     </Select.Option>
@@ -173,14 +173,14 @@ export default function DailySchedule(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'workCenterName',
+                    name: 'workCenterId',
                     label: '工作中心',
                     children: <Select placeholder="请选择" style={{ width: "150px" }}>  
                         <Select.Option value="" key="">全部</Select.Option>
                         { work && work.map((item: any) => {
                             return <Select.Option 
                                         key={ item.id } 
-                                        value={ item.workCenterName }
+                                        value={ item.id }
                                     >
                                         { item.workCenterName }
                                     </Select.Option>
