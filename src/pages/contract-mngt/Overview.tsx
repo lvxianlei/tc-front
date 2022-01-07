@@ -44,25 +44,25 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
                     return item
             }
         })} dataSource={data || {}} col={2} />
-        <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700' }}>运费信息
-            <p style={{ fontSize: '18px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>
-                <span>运费：含税金额合计（元）：<span style={{ color: '#FF8C00' }}>{data?.transportBearVo?.transportTaxTotalAmount}</span>
+        <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700', margin: 0 }}>运费信息
+            <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>
+                <span style={{fontWeight: 400}}>运费：含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{data?.transportBearVo?.transportTaxTotalAmount}</span>
                     不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{data?.transportBearVo?.transportTotalAmount}</span>
                 </span>
             </p>
         </p>
         <BaseInfo col={2} columns={freightOverview} dataSource={data?.transportBearVo || {}} />
-        <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700' }}>装卸费信息
-            <p style={{ fontSize: '18px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>
-                <span>装卸费：含税金额合计（元）：<span style={{ color: '#FF8C00' }}>{data?.unloadBearVo?.unloadTaxTotalAmount}</span>
+        <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700', margin: 0 }}>装卸费信息
+            <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>
+                <span style={{fontWeight: 400}}>装卸费：含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{data?.unloadBearVo?.unloadTaxTotalAmount}</span>
                     不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{data?.unloadBearVo?.unloadTotalAmount}</span>
                 </span>
             </p>
         </p>
         <BaseInfo col={2} columns={stevedoringOverview} dataSource={data?.unloadBearVo || {}} />
-        <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700' }}>原材料信息
-            <p style={{ fontSize: '18px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>
-                <span>重量合计（吨）：<span style={{ color: '#FF8C00' }}>{data?.totalWeight}</span> 含税金额合计（元）：<span style={{ color: '#FF8C00' }}>{data?.totalTaxAmount}</span>
+        <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700', margin: 0 }}>原材料信息
+            <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>
+                <span style={{fontWeight: 400}}>重量合计（吨）：<span style={{ color: '#FF8C00' }}>{data?.totalWeight}</span> 含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{data?.totalTaxAmount}</span>
                     不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{data?.totalAmount}</span>
                 </span>
             </p>
