@@ -112,7 +112,8 @@ export default function Dispatch(): React.ReactNode {
                                         workCenterName: selectedRows[0].workCenterName,
                                         productUnitName: selectedRows[0].unitName
                                     });
-                                } } buttonType="link" buttonTitle="+选择工作中心"  disabled={show}/> } disabled={show}/>
+                                    setShow(false)
+                                } } buttonType="link" buttonTitle="+选择工作中心" /> }/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -129,7 +130,9 @@ export default function Dispatch(): React.ReactNode {
                                     "message": "请选择任务时间范围"
                                 }
                             ]}>
-                                <DatePicker.RangePicker  style={{width:'100%'}} disabled={show}/>
+                                <DatePicker.RangePicker  style={{width:'100%'}} onChange={()=>{
+                                    setShow(false)
+                                }}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -139,7 +142,9 @@ export default function Dispatch(): React.ReactNode {
                                     "message": "请选择是否显示未派工明细"
                                 }
                             ]}>
-                                <Select style={{width:'100%'}} disabled={show}>
+                                <Select style={{width:'100%'}}  onChange={()=>{
+                                    setShow(false)
+                                }}>
                                     <Select.Option value={1} key={1}>是</Select.Option>
                                     <Select.Option value={0} key={0}>否</Select.Option>
                                 </Select>
@@ -170,13 +175,6 @@ export default function Dispatch(): React.ReactNode {
                     setSelectedRowKeys(tableDataSource.map((item:any)=>{return item.id}))
                     setShow(true);
                 }}>查询</Button>
-                {params.id!=='new'&& <Button type='primary' onClick={()=>{
-                    setShow(false)
-                    // setEquipment({});
-                    // setTeam({})
-                    // form.resetFields();
-                    // formRef.resetFields();
-                }}>编辑</Button>}
                 <Button type='primary' ghost onClick={()=>{
                     setShow(false)
                     setEquipment({});

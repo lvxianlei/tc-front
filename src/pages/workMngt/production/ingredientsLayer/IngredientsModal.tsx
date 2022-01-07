@@ -461,6 +461,8 @@ export default function IngredientsModal(props: any) {
                 setPreparation([]);
                 // 设置配料方案数据
                 setSchemeData(result?.schemeData || []);
+                // 更新数据
+                setNumbers(numbers += 1);
             }
             resole(result)
         } catch (error) {
