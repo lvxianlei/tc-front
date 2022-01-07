@@ -145,6 +145,7 @@ export default function FullList(): React.ReactNode {
         }
     ];
     const onFilterSubmit = (value: any) => {
+        value.positiveStatus = value.positiveStatus?value.positiveStatus:1 
         setFilterValue(value)
         return value
     }
