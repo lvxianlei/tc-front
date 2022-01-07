@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import WorkshopStockUserSelectionComponent from '../../../components/WorkshopStockUserModal';
+import WorkshopUserSelectionComponent from '../../../components/WorkshopUserModal';
 import moment from 'moment';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import styles from './wareHouse.module.less';
@@ -385,11 +385,11 @@ export default function ProcessDetail(): React.ReactNode {
                 </Space> } 
                 onCancel={ () => setVisible(false) }
             >
-                <WorkshopStockUserSelectionComponent onSelect={ (selectedRows: object[] | any) => {
+                <WorkshopUserSelectionComponent onSelect={ (selectedRows: object[] | any) => {
                     let temp = [...userDataSource];    
                     temp.push(selectedRows[0]);
                     setUserDataSource(temp);
-                    } } buttonTitle="添加员工" selectKey={[...userDataSource]} saleOrderId={detailData?.teamId}/>
+                    } } buttonTitle="添加员工" selectKey={[...userDataSource]}  saleOrderId={detailData?.teamId}/>
                 <Table 
                     columns={[
                         { title: '姓名', dataIndex: 'name', key:'name' },
