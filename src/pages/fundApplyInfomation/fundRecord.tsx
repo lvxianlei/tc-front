@@ -103,10 +103,6 @@ import OtherDetail from '../questionMngt/OtherDetail';
                  onFilterSubmit={onFilterSubmit}
                  searchFormItems={[
                      {
-                         name: 'fuzzyQuery',
-                         children: <Input placeholder="请输入请款单号/收款方进行查询" style={{ width: 200 }} />
-                     },
-                     {
                          name: 'payType',
                          label: '付款方式',
                          children: <Form.Item name="payType">
@@ -136,7 +132,11 @@ import OtherDetail from '../questionMngt/OtherDetail';
                          name: 'endPayApplyTime',
                          label: '付款日期：',
                          children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: "200px" }} />
-                     }
+                     },
+                     {
+                         name: 'fuzzyQuery',
+                         children: <Input placeholder="请输入请款单号/收款方进行查询" style={{ width: 200 }} />
+                     },
                  ]}
                  sourceKey="paymentDetailListVOIPage.records"
                  extraOperation={(data: any) => <>

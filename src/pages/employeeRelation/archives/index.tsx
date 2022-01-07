@@ -49,15 +49,6 @@ export default function ArchivesList(): React.ReactNode {
             requestData={{ productCategory: params.id }}
             searchFormItems={[
                 {
-                    name: 'keyword',
-                    label: '模糊查询项',
-                    children: <Input
-                        placeholder="请输入员工姓名/电话/身份证号"
-                        maxLength={200}
-                        style={{ width: 200 }}
-                    />
-                },
-                {
                     name: 'employeeNature',
                     label: '员工性质',
                     children: <Select style={{ width: 150 }}>
@@ -80,6 +71,15 @@ export default function ArchivesList(): React.ReactNode {
                     name: 'statusUpdateTime',
                     label: '入职日期',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'keyword',
+                    label: '模糊查询项',
+                    children: <Input
+                        placeholder="请输入员工姓名/电话/身份证号"
+                        maxLength={200}
+                        style={{ width: 200 }}
+                    />
                 },
             ]}
         />
