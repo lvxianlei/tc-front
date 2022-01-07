@@ -6,6 +6,9 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import { PopTableContent } from "./enquiryCompare/ComparesModal"
 import { deliverywayOptions, materialStandardOptions, materialTextureOptions, transportationTypeOptions } from "../../configuration/DictionaryOptions"
+
+// 新加运费信息
+import { FreightInformation, HandlingChargesInformation } from "./Edit.json";
 interface EditProps {
     id: string
     type: "new" | "edit"
@@ -26,6 +29,53 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [freightCol, setFreightCol] = useState(4)
     const [stevedoringCol, setStevedoringCol] = useState(4)
     const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({ getDataSource: () => [], resetFields: () => { } })
+
+    // 运费的数组
+    const [ newFreightInformation, setNewFreightInformation] = useState<any>(FreightInformation); // 运费信息
+    // 装卸费
+    const [ newHandlingChargesInformation, setNewHandlingChargesInformation] = useState<any>(HandlingChargesInformation); // 装卸费信息
+    let oneFreight = [{
+        "title": "运输承担",
+        "dataIndex": "transportBear",
+        "type": "select",
+        "enum": [
+            {
+                "value": 1,
+                "label": "供方"
+            },
+            {
+                "value": 2,
+                "label": "需方"
+            }
+        ],
+        "rules": [
+            {
+                "required": true,
+                "message": "请选择运输承担..."
+            }
+        ]
+    }]
+    let oneStevedoring = [{
+        "title": "卸车承担",
+        "dataIndex": "unloadBear",
+        "type": "select",
+        "enum": [
+            {
+                "value": 1,
+                "label": "供方"
+            },
+            {
+                "value": 2,
+                "label": "需方"
+            }
+        ],
+        "rules": [
+            {
+                "required": true,
+                "message": "请选择卸车承担..."
+            }
+        ]
+    }]
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
@@ -36,21 +86,46 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 purchasePlan: { id: result.purchasePlanId, value: result.purchasePlanNumber }
             })
             if (result?.transportBearVo?.transportBear == 1) {
-                setNewFreight([]);
+                // setNewFreight([]);
+                setNewFreightInformation(oneFreight.slice(0))
                 setFreightCol(1);
             } else {
-                setNewFreight(freight)
-                setFreightCol(4);
+                // setNewFreight(freight)
+                // 需方
+                setNewFreightInformation(
+                    FreightInformation.map((item: any) => {
+                        if (item.dataIndex === "transportCompanyId") {
+                            return ({
+                                ...item,
+                                enum: companyList
+                            })
+                        }
+                        return item
+                    })
+                );
+                setFreightCol(2);
             }
             freightForm.setFieldsValue({
                 ...result.transportBearVo,
                 transportCompanyId: result.transportBearVo.transportCompanyId + ',' + result.transportBearVo.transportCompany
             })
             if (result?.unloadBearVo?.unloadBear == 1) {
-                setNewStevedoring([]);
+                // setNewStevedoring([]);
+                setNewHandlingChargesInformation(oneStevedoring.slice(0))
                 setStevedoringCol(1);
             } else {
-                setNewStevedoring(stevedoring);
+                // setNewStevedoring(stevedoring);
+                setNewHandlingChargesInformation(
+                    HandlingChargesInformation.map((item: any) => {
+                        if (item.dataIndex === "transportCompanyId") {
+                            return ({
+                                ...item,
+                                enum: companyList
+                            })
+                        }
+                        return item
+                    })
+                );
                 setStevedoringCol(4);
             }
             stevedoringForm.setFieldsValue({
@@ -78,10 +153,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const { data: stevedoreCompanyList } = useRequest<any>(() => new Promise(async (resove, reject) => {
         try {
             const data: any = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
-            const list = data?.records?.map((item: { stevedoreCompanyName: string }) => {
+            const list = data?.records?.map((item: { stevedoreCompanyName: string, id: string }) => {
                 return {
                     ...item,
-                    name: item.stevedoreCompanyName
+                    name: item.stevedoreCompanyName,
+                    value: item?.id + ',' + item?.stevedoreCompanyName,
+                    label: item?.stevedoreCompanyName
                 }
             })
             resove(list)
@@ -93,10 +170,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const { data: companyList } = useRequest<any>(() => new Promise(async (resove, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-logistic/carrier?size=100`);
-            const list = result?.records?.map((item: { companyName: string }) => {
+            const list = result?.records?.map((item: { companyName: string, id: string }) => {
                 return {
                     ...item,
-                    name: item.companyName
+                    name: item.companyName,
+                    value: item?.id + ',' + item?.companyName,
+                    label: item?.companyName
                 }
             })
             resove(list)
@@ -289,6 +368,67 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setMaterialList(list);
     }
 
+    // 运费信息
+    const handleBaseInfoChangeFreight = (changeFiled: any) => {
+        if (changeFiled.transportBear) {
+            // 确定是运输承担改变
+            if (changeFiled.transportBear === 1) {
+                // 供方
+                setNewFreightInformation(oneFreight.slice(0))
+            } else {
+                // 需方
+                setNewFreightInformation(
+                    FreightInformation.map((item: any) => {
+                        if (item.dataIndex === "transportCompanyId") {
+                            return ({
+                                ...item,
+                                enum: companyList
+                            })
+                        }
+                        return item
+                    })
+                );
+            }
+            // 并且置空
+            freightForm.setFieldsValue({
+                transportBear: changeFiled.transportBear,
+                transportCompanyId: '',
+                transportTaxPrice: '',
+                transportPrice: ''
+            })
+        }
+    }
+
+    // 装卸费信息
+    const handleBaseInfoChangeStevedoring = (changeFiled: any) => {
+        if (changeFiled.unloadBear) {
+            // 确定是运输承担改变
+            if (changeFiled.unloadBear === 1) {
+                // 供方
+                setNewHandlingChargesInformation(oneStevedoring.slice(0))
+            } else {
+                // 需方
+                setNewHandlingChargesInformation(
+                    HandlingChargesInformation.map((item: any) => {
+                        if (item.dataIndex === "transportCompanyId") {
+                            return ({
+                                ...item,
+                                enum: companyList
+                            })
+                        }
+                        return item
+                    })
+                );
+            }
+            // 并且置空
+            stevedoringForm.setFieldsValue({
+                unloadBear: changeFiled.unloadBear,
+                unloadCompanyId: '',
+                unloadTaxPrice: '',
+                unloadPrice: ''
+            })
+        }
+    }
     return <Spin spinning={loading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
             onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
@@ -325,6 +465,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         <BaseInfo
             form={baseForm}
             col={2}
+            classStyle={"overall-form-class"}
             onChange={handleBaseInfoChange}
             columns={contractBaseInfo.map((item: any) => {
                 switch (item.dataIndex) {
@@ -347,7 +488,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })}
             dataSource={{}} edit />
         <DetailTitle title="运费信息" />
-        <BaseInfo col={2} form={freightForm} columns={
+        {/* <BaseInfo col={2} form={freightForm} columns={
             [{
                 "title": "运输承担",
                 "dataIndex": "transportBear",
@@ -409,9 +550,39 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     })
                 }
                 return item
-            })} dataSource={{}} edit />
+            })} dataSource={{}} edit /> */}
+        <BaseInfo 
+          form={freightForm} col={2} classStyle={"overall-form-class"}
+          onChange={handleBaseInfoChangeFreight}
+          columns={
+              newFreightInformation.map((item: any) => {
+                  if (item.dataIndex === "transportCompanyId") {
+                      return ({
+                          ...item,
+                          enum: companyList
+                      })
+                  }
+                  return item
+              })
+          }
+          dataSource={{}} edit />
         <DetailTitle title="装卸费信息" />
-        <BaseInfo col={2} form={stevedoringForm} columns={[
+        <BaseInfo 
+          form={stevedoringForm}  col={2} classStyle={"overall-form-class"}
+          onChange={handleBaseInfoChangeStevedoring}
+          columns={
+            newHandlingChargesInformation.map((item: any) => {
+                  if (item.dataIndex === "unloadCompanyId") {
+                      return ({
+                          ...item,
+                          enum: stevedoreCompanyList
+                      })
+                  }
+                  return item
+              })
+          }
+          dataSource={{}} edit />
+        {/* <BaseInfo col={2} form={stevedoringForm} columns={[
             {
                 "title": "卸车承担",
                 "dataIndex": "unloadBear",
@@ -473,7 +644,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     })
                 }
                 return item
-            })} dataSource={{}} edit />
+            })} dataSource={{}} edit /> */}
         <DetailTitle
             title="原材料信息"
             operation={[<Button
@@ -491,6 +662,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         <Row></Row>
         <CommonTable
             rowKey={(records: any) => `${records.materialName}${records.spec}${records.length}`}
+            style={{padding: "0",}}
             columns={[
                 ...material.map((item: any) => {
                     if (["num", "taxPrice", "price"].includes(item.dataIndex)) {
