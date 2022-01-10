@@ -103,10 +103,10 @@ export default function CostDetail() {
                     columns={costBase.map((item: any) => ["projectLeader", "biddingPerson"].includes(item.dataIndex) ? ({ title: item.title, dataIndex: item.dataIndex }) : item)}
                     dataSource={data?.askInfo?.askInfoVo || {}} />
                 {/* <DetailTitle title="产品类型成本评估" /> */}
-                <div style={{ marginTop: 24, fontSize: 16, color: "#181818", fontWeight: "bold", marginBottom: 8 }}>产品类型成本评估</div>
+                <div style={{ fontSize: 16, color: "#181818", fontWeight: "bold", marginBottom: 8 }}>产品类型成本评估</div>
                 {data?.askInfo?.productArr.map((item: any, index: number) => <div key={index}>
                     {/* <DetailTitle title={`${item.voltage}kv$`} padding={index === 0 ? true : false} /> */}
-                    <div style={{ marginTop: index === 0 ? 0 : 24, fontSize: 16, color: "#181818", fontWeight: "bold", marginBottom: 8 }}>
+                    <div style={{ fontSize: 16, color: "#181818", fontWeight: "bold", marginBottom: 8 }}>
                         <span style={{ color: "#FF8C00", fontSize: 18 }}>{item.voltage}kv&nbsp;&nbsp;</span>
                         {item.productName}
                     </div>
