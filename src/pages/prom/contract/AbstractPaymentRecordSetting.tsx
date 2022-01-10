@@ -247,7 +247,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                     required: true,
                     message: '请选择来款时间'
                 }],
-                children: <DatePicker showTime format="YYYY-MM-DD" />
+                children: <DatePicker showTime />
             }, {
                 label: '来款方式',
                 name: 'refundMode',
