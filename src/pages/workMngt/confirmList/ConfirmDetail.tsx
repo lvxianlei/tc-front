@@ -537,7 +537,7 @@ export default function ConfirmDetail(): React.ReactNode {
             }).then(()=>{
               message.success('保存成功！');
             })
-            tableDataSource.push({...submitData, id: data?.id});
+            tableDataSource.push({...submitData, id: data});
             form.resetFields();
             setVisible(false);
         } catch (error) {
