@@ -1433,12 +1433,12 @@
         },
         {
             "title": "结算要求",
-            "dataIndex": "peculiarDescription",
+            "dataIndex": "payAsk",
             "type": "textarea"
         },
         {
             "title": "备注",
-            "dataIndex": "description",
+            "dataIndex": "peculiarDescription",
             "type": "textarea"
         }
     ],

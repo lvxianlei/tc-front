@@ -9,7 +9,7 @@ import AuthUtil from "../../../utils/AuthUtil"
 export default function Invoicing() {
     const history = useHistory()
     const userId = AuthUtil.getUserId()
-    const purChasePlanRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
+    const purChasePlanRef = useRef<{ onSubmit: () => void, confirmLoading: boolean }>({ onSubmit: () => { }, confirmLoading: false })
     const [visible, setVisible] = useState<boolean>(false)
     const [generateVisible, setGenerateVisible] = useState<boolean>(false)
     const [generateIds, setGenerateIds] = useState<string[]>([])
@@ -29,7 +29,7 @@ export default function Invoicing() {
 
     const handlePurChasePlan = () => new Promise(async (resove, reject) => {
         try {
-            const result = await purChasePlanRef.current?.onSubmit()
+            await purChasePlanRef.current?.onSubmit()
             message.success("成功生成采购计划...")
             resove(true)
             history.go(0)
@@ -42,7 +42,13 @@ export default function Invoicing() {
             footer={<Button type="primary" onClick={() => setVisible(false)}>确认</Button>} onCancel={() => setVisible(false)}>
             <Overview id={chooseId} />
         </Modal>
-        <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>
+        <Modal
+            title="生成采购计划"
+            visible={generateVisible}
+            width={1011}
+            onOk={handlePurChasePlan}
+            confirmLoading={purChasePlanRef.current?.confirmLoading}
+            onCancel={() => setGenerateVisible(false)}>
             <PurchasePlan ids={generateIds} ref={purChasePlanRef} />
         </Modal>
         <Page
