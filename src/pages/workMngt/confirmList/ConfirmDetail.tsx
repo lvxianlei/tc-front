@@ -524,19 +524,20 @@ export default function ConfirmDetail(): React.ReactNode {
             submitData.key = tableDataSource && tableDataSource.length.toString();
             submitData.otherWeight = submitData.otherWeight?submitData.otherWeight:0;
             submitData.index = tableDataSource.length;
-            tableDataSource.push(submitData);
+           
             setTableDataSource(tableDataSource);
             let number = '0';
             tableDataSource.forEach((item:any)=>{
                 number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(2)
             })
             setWeight(number);
-            RequestUtil.post(`/tower-science/drawProductDetail/save`,{
+            const data:any = await RequestUtil.post(`/tower-science/drawProductDetail/save`,{
               ...submitData,
               drawTaskId: params.id
             }).then(()=>{
-              message.success('保存成功！')
+              message.success('保存成功！');
             })
+            tableDataSource.push({...submitData, id: data?.id});
             form.resetFields();
             setVisible(false);
         } catch (error) {
