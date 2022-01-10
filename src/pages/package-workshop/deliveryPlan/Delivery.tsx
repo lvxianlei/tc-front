@@ -144,35 +144,63 @@ export default function Delivery(): React.ReactNode {
                                 }}>重置</Button>
                             </Form.Item>
                         </Form>
-                        {show&&<><DetailTitle title="杆塔信息" />
-                        <CommonTable
-                            dataSource={[...tableDataSource]}
-                            columns={tableColumns}
-                            rowKey='id'
-                            pagination={false}
-                            size='small'
-                            rowSelection={{
-                                type: 'checkbox',
-                                onChange: (selectedKeys: React.Key[], selectedRows: any) => {
-                                    setSelectKeys(selectedKeys);
-                                    setSelectRows(selectedRows);
-                                }
-                            }}
-                        />
-                        <DetailTitle title="发包人员" operation={[<WorkshopUserModal onSelect={onUserSelect} selectKey={tableUserDataSource}  saleOrderId={selectedUser?.id}/>]}/>
-                        <CommonTable columns={[
-                            { title: '姓名', dataIndex: 'name', key: 'name', width:'50%'},
-                            {
-                                title: '操作', dataIndex: 'operation', key: 'operation', render: (_: any, record: any, index: number) => (<>
-                                    <Button type="link" onClick={() => {
-                                        tableUserDataSource.splice(index, 1);
-                                        console.log(tableUserDataSource)
-                                        setTableUserDataSource([...tableUserDataSource]);
-                                        console.log(tableUserDataSource)
-                                    }}>删除</Button>
-                                </>)
-                            }
-                        ]} dataSource={[...tableUserDataSource]} pagination={false} rowKey={'id'} size='small'/></>}
+                        {show&&<>
+                            <DetailTitle title="杆塔信息" />
+                            <CommonTable
+                                dataSource={[...tableDataSource]}
+                                columns={tableColumns}
+                                rowKey='id'
+                                pagination={false}
+                                size='small'
+                                rowSelection={{
+                                    type: 'checkbox',
+                                    onChange: (selectedKeys: React.Key[], selectedRows: any) => {
+                                        setSelectKeys(selectedKeys);
+                                        setSelectRows(selectedRows);
+                                    }
+                                }}
+                            />
+                            <DetailTitle 
+                                title="发包人员" 
+                                operation={[
+                                    <WorkshopUserModal 
+                                        onSelect={onUserSelect} 
+                                        selectKey={tableUserDataSource}  
+                                        saleOrderId={selectedUser?.id}
+                                    />
+                                ]}
+                            />
+                            <CommonTable 
+                                columns={[
+                                    { 
+                                        title: '姓名', 
+                                        dataIndex: 'name', 
+                                        key: 'name', 
+                                        width:'50%'
+                                    },
+                                    {
+                                        title: '操作', 
+                                        dataIndex: 'operation', 
+                                        key: 'operation', 
+                                        render: (_: any, record: any, index: number) => (
+                                            <>
+                                                <Button type="link" onClick={() => {
+                                                    tableUserDataSource.splice(index, 1);
+                                                    console.log(tableUserDataSource)
+                                                    setTableUserDataSource([...tableUserDataSource]);
+                                                    console.log(tableUserDataSource)
+                                                }}>删除</Button>
+                                            </>
+                                        )
+                                    }
+                                ]} 
+                                dataSource={[...tableUserDataSource]} 
+                                pagination={false} 
+                                rowKey={'id'} 
+                                size='small'
+                                />
+                            </>
+                        }
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={`已出库`} key={2}>
                         <DetailTitle title="杆塔信息" />

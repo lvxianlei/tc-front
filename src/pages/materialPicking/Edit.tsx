@@ -171,8 +171,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         setMaterialPickingInfoDTOS(materialPickingInfos)
     }
 
-    const handleRemove = (id: string) => {
-        setMaterialPickingInfoDTOS(materialPickingInfoDTOS.filter((item: any) => item.id !== id))
+    const handleRemove = (onlyId: string) => {
+        setMaterialPickingInfoDTOS(materialPickingInfoDTOS.filter((item: any) => item.onlyId !== onlyId))
     }
 
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
@@ -227,7 +227,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     title: "操作",
                     dataIndex: "opration",
                     render: (_: undefined, records: any) => <>
-                        <Button type="link" size="small" onClick={() => handleRemove(records.id)}>删除</Button>
+                        <Button type="link" size="small" onClick={() => handleRemove(records.onlyId)}>删除</Button>
                     </>
                 },
                 ...materialInfo]}

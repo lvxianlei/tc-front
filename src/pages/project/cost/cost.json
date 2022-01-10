@@ -139,7 +139,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "remark"
+            "dataIndex": "replyMessage"
         }
     ],
     "logisticProductType": [
