@@ -219,6 +219,9 @@ export default function ConfirmDetail(): React.ReactNode {
           totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
         })
         setWeight(totalNumber);
+        RequestUtil.post(`/tower-science/drawProductDetail`,newData[index]).then(()=>{
+          message.success('保存成功！')
+        })
       } catch (errInfo) {
         console.log('Validate Failed:', errInfo);
       }
@@ -528,6 +531,12 @@ export default function ConfirmDetail(): React.ReactNode {
                 number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(2)
             })
             setWeight(number);
+            RequestUtil.post(`/tower-science/drawProductDetail`,{
+              ...submitData,
+              drawTaskId: params.id
+            }).then(()=>{
+              message.success('保存成功！')
+            })
             form.resetFields();
             setVisible(false);
         } catch (error) {
@@ -619,7 +628,7 @@ export default function ConfirmDetail(): React.ReactNode {
             resolve(a.length)
           }
           else{
-            resolve(false)
+            resolve(1)
           }
       }).catch(error => {
           Promise.reject(error)
