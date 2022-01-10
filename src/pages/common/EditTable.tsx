@@ -140,9 +140,8 @@ export default function EditableTable({
                                                         return item
                                                     }) || []}
                                                 >
-                                                    {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={name} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={coItem} />}
+                                                    {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={name} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={{...coItem, width: "calc(100% - 12px)"}}/>}
                                                 </Form.Item>
-                                                {/* {coItem.title} */}
                                             </Col>)
                                             )}
                                         </Row>
