@@ -10,24 +10,88 @@ import AuthUtil from '../../../utils/AuthUtil';
 import moment from 'moment';
 
 const tableColumns = [
-    { title: '加工班组', dataIndex: 'name', key: 'name'},
-    { title: '段', dataIndex: 'segmentName', key: 'segmentName', },
-    { title: '件号', dataIndex: 'code', key: 'code' },
-    { title: '材料', dataIndex: 'materialName', key: 'materialName' },
-    { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
-    { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
-    { title: '长度(mm)', dataIndex: 'length', key: 'length' },
-    { title: '单件孔数', dataIndex: 'holesNum', key: 'holesNum' },
-    { title: '数量', dataIndex: 'processingNum', key: 'processingNum' },
-    { title: '重量(kg)', dataIndex: 'basicsWeight', key: 'basicsWeight' },
-    { title: '电焊', dataIndex: 'electricWelding', key: 'electricWelding' },
-    { title: '备注', dataIndex: 'description', key: 'description' },
+    { 
+        title: '加工班组', 
+        dataIndex: 'name', 
+        key: 'name'
+    },
+    { 
+        title: '段', 
+        dataIndex: 'segmentName', 
+        key: 'segmentName', 
+    },
+    { 
+        title: '件号', 
+        dataIndex: 'code', 
+        key: 'code' 
+    },
+    { 
+        title: '材料', 
+        dataIndex: 'materialName', 
+        key: 'materialName' 
+    },
+    { 
+        title: '材质', 
+        dataIndex: 'structureTexture', 
+        key: 'structureTexture' 
+    },
+    { 
+        title: '规格', 
+        dataIndex: 'structureSpec', 
+        key: 'structureSpec' 
+    },
+    { 
+        title: '长度(mm)', 
+        dataIndex: 'length', 
+        key: 'length' 
+    },
+    { 
+        title: '单件孔数', 
+        dataIndex: 'holesNum', 
+        key: 'holesNum' 
+    },
+    { 
+        title: '数量', 
+        dataIndex: 'processingNum', 
+        key: 'processingNum' 
+    },
+    { 
+        title: '重量(kg)',
+        dataIndex: 'basicsWeight', 
+        key: 'basicsWeight' 
+    },
+    { 
+        title: '电焊', 
+        dataIndex: 'electricWelding', 
+        key: 'electricWelding' 
+    },
+    { 
+        title: '备注', 
+        dataIndex: 'description', 
+        key: 'description' 
+    },
     // { title: '冲引孔', dataIndex: 'punchHole', key: 'punchHole' },
     // { title: '是否弧边', dataIndex: 'arcEdge', key: 'arcEdge' },
-    { title: '类型', dataIndex: 'type', key: 'type' },
-    { title: '个孔径孔数', dataIndex: 'apertureNumber', key: 'apertureNumber' },
-    { title: '钻孔孔径孔数', dataIndex: 'drillApertureNumber', key: 'drillApertureNumber' },
-    { title: '扩孔孔径孔数', dataIndex: 'reamingApertureNumber', key: 'reamingApertureNumber' },
+    { 
+        title: '类型', 
+        dataIndex: 'type', 
+        key: 'type' 
+    },
+    { 
+        title: '个孔径孔数', 
+        dataIndex: 'apertureNumber', 
+        key: 'apertureNumber' 
+    },
+    { 
+        title: '钻孔孔径孔数', 
+        dataIndex: 'drillApertureNumber', 
+        key: 'drillApertureNumber' 
+    },
+    { 
+        title: '扩孔孔径孔数', 
+        dataIndex: 'reamingApertureNumber', 
+        key: 'reamingApertureNumber' 
+    },
 ]
 
 export default function Dispatch(): React.ReactNode {
