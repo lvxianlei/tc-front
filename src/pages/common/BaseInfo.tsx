@@ -25,6 +25,7 @@ interface BaseInfoProps {
     col?: number
     form?: FormInstance<any>
     onChange?: (changedFields: any, allFields: any, dataSource: { [key: string]: any }) => void
+    classStyle?: string
 }
 
 function formatDataType(dataItem: any, dataSource: any): string {
@@ -113,12 +114,10 @@ const generatePlaceholder = (columnItems: any): string => {
     }
     return placeholder
 }
-export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { } }: BaseInfoProps): JSX.Element {
-
+export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { }, classStyle = "" }: BaseInfoProps): JSX.Element {
     useEffect(() => {
         form && form.setFieldsValue(formatData(columns, dataSource))
     }, [JSON.stringify(dataSource), form])
-
     if (edit) {
         return <Form
             onValuesChange={(changedFields, allFields) => onChange(changedFields, allFields, dataSource)}
@@ -127,7 +126,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             labelAlign="right"
             layout="inline"
             labelCol={{ style: { width: '100px', whiteSpace: "break-spaces" } }}
-            className="bottom"
+            className={`bottom ${classStyle}`}
         >
             <Row wrap={true}>
                 {columns.map((item: any, index: number) => <Col
@@ -171,7 +170,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             </Row>
         </Form >
     }
-    return <Descriptions bordered column={col} size="small" className="bottom">
+    return <Descriptions bordered column={col} size="small" className={`bottom ${classStyle}`}>
         {columns.map((item: any, index: number) => <Descriptions.Item
             contentStyle={{ ...item.contentStyle, width: `${100 / (col * 2)}%` }}
             labelStyle={{ ...item.labelStyle, width: `${100 / (col * 4)}%` }}

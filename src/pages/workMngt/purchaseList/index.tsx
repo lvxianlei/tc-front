@@ -120,7 +120,7 @@ export default function Invoicing() {
                     },
                     getCheckboxProps: (record: any) => {
                         return ({
-                            disabled: !([1].includes(record.purchaseTaskStatus) && [-1, null].includes(record.purchasePlanId) && record.purchaserId === userId)
+                            disabled: !([1].includes(record.purchaseTaskStatus) && [-1, null].includes(record.purchasePlanId))
                         })
                     }
                 }

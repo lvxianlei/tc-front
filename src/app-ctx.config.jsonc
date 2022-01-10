@@ -203,13 +203,13 @@
                     {
                         "label": "工作台",
                         "icon": "gongying-gongzuotai_gongzuotai",
-                        "path": "/workBench",
+                        "path": "/supply",
                         "appName": "SW",
                         "authority": "workbench",
                         "items": [
                             {
                                 "label": "供应工作台",
-                                "path": "/workBench/sw",
+                                "path": "/supply/sw",
                                 "authority": "workbench_supply"
                             }
                         ]
@@ -236,28 +236,28 @@
                     {
                         "label": "驾驶舱",
                         "icon": "gongying-jiashicang_jiashichang",
-                        "path": "/cockpit",
+                        "path": "/bulletin",
                         "appName": "SW",
                         "authority": "cockpit",
                         "items": [
                             {
                                 "label": "库存看板",
-                                "path": "/cockpit/viewPanel",
+                                "path": "/bulletin/viewPanel",
                                 "authority": "cockpit_inventory_kanban"
                             },
                             {
                                 "label": "原材料看板",
-                                "path": "/cockpit/rawMaterial",
+                                "path": "/bulletin/rawMaterial",
                                 "authority": "cockpit_raw_material_kanban"
                             },
                             {
                                 "label": "收货单看板",
-                                "path": "/cockpit/receiveTask",
+                                "path": "/bulletin/receiveTask",
                                 "authority": "cockpit_receipt_kanban"
                             },
                             {
                                 "label": "合同看板",
-                                "path": "/cockpit/contract",
+                                "path": "/bulletin/contract",
                                 "authority": "cockpit_contract_kanban"
                             }
                         ]
@@ -475,48 +475,48 @@
                     {
                         "label": "工作管理",
                         "icon": "gongying-gongzuoguanli_gongzuoguanli",
-                        "path": "/workMngt",
+                        "path": "/ingredients",
                         "appName": "SW",
                         "authority": "work_management",
                         "items": [
                             {
                                 "label": "工程报价列表",
-                                "path": "/workMngt/enquiry",
+                                "path": "/ingredients/enquiry",
                                 "authority": "work_management_inquiry_list"
                             },
                             {
                                 "label": "采购配料",
-                                "path": "/workMngt/buyBurdening",
+                                "path": "/ingredients/buyBurdening",
                                 "authority": "work_management_purchase_ingredients"
                             },
                             {
                                 "label": "采购列表",
-                                "path": "/workMngt/purchaseList",
+                                "path": "/ingredients/purchaseList",
                                 "authority": "work_management_purchase_list"
                             },
                             {
                                 "label": "计划列表",
-                                "path": "/workMngt/planList",
+                                "path": "/ingredients/planList",
                                 "authority": "work_management_plan_list"
                             },
                             {
                                 "label": "生产配料",
-                                "path": "/workMngt/production",
+                                "path": "/ingredients/production",
                                 "authority": "work_management_production_ingredients"
                             },
                             {
                                 "label": "收货列表",
-                                "path": "/workMngt/receiving",
+                                "path": "/ingredients/receiving",
                                 "authority": "work_management_receiving_list"
                             },
                             {
                                 "label": "差异列表",
-                                "path": "/workMngt/differentList",
+                                "path": "/ingredients/differentList",
                                 "authority": "work_management_difference_list"
                             },
                             {
                                 "label": "缺料列表",
-                                "path": "/workMngt/shortageList",
+                                "path": "/ingredients/shortageList",
                                 "authority": "work_management_shortage_list"
                             }
                         ]
@@ -886,42 +886,42 @@
                             {
                                 "label": "招聘入职",
                                 "path": "/employeeRelation/recruit",
-                                "authority": "employee_information_list"
+                                "authority": "hr_employee_information_management"
                             },
                             {
                                 "label": "员工档案",
                                 "path": "/employeeRelation/archives",
-                                "authority": "employee_archives_list"
+                                "authority": "hr_employee_archives_management"
                             },
                             {
                                 "label": "劳动合同",
                                 "path": "/employeeRelation/labour",
-                                "authority": "employee_labor_contract_list"
+                                "authority": "hr_employee_labor_contract_management"
                             },
                             {
                                 "label": "转正考核",
                                 "path": "/employeeRelation/full",
-                                "authority": "positive_check_list"
+                                "authority": "hr_employee_labor_contract_management"
                             },
                             {
                                 "label": "员工调动",
                                 "path": "/employeeRelation/transfer",
-                                "authority": "hr_employee_transfer_page"
+                                "authority": "hr_employee_transfer_management"
                             },
                             {
                                 "label": "员工离职",
                                 "path": "/employeeRelation/quit",
-                                "authority": "hr_employee_departurenc_page"
+                                "authority": "hr_employee_departurenc_management"
                             },
                             {
                                 "label": "办理离职",
                                 "path": "/employeeRelation/quitProcedures",
-                                "authority": "hr_employee_departurenc_handlePage"
+                                "authority": "hr_handle_departurenc_management"
                             },
                             {
                                 "label": "员工复职",
                                 "path": "/employeeRelation/reinstate",
-                                "authority": "hr_employee_reinstatement_page"
+                                "authority": "hr_employee_reinstatement_management"
                             }
                         ]
                     },
@@ -935,12 +935,12 @@
                             {
                                 "label": "保险方案",
                                 "path": "/socialSecurity/plan",
-                                "authority": "hr_insurance_plan_page"
+                                "authority": "hr_insurance_plan_management"
                             },
                             {
                                 "label": "员工保险档案",
                                 "path": "/socialSecurity/archives",
-                                "authority": "hr_insurance_archives_page"
+                                "authority": "hr_insurance_archives_management"
                             }
                         ]
                     },

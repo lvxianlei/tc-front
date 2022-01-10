@@ -8,7 +8,7 @@ import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGr
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
-export interface AssignProps {}
+export interface AssignProps { }
 export interface IAssignRouteProps extends RouteComponentProps<AssignProps>, WithTranslation {
     readonly id: number | string;
     readonly updataList: () => void;
@@ -26,8 +26,8 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
     }
 
     public state: AssignState = {
-        visible: true,
-        height: 150
+        visible: false,
+        height: 200
     }
 
     private async modalShow(): Promise<void> {
@@ -49,7 +49,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                 }).then(res => {
                     this.onCancel();
                     this.props.updataList();
-                } );
+                });
             })
         }
     }
@@ -72,8 +72,8 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
     protected getFormProps(): FormProps {
         return {
             ...super.getFormProps(),
-            labelCol:{ 
-                span: 8 
+            labelCol: {
+                span: 8
             },
             wrapperCol: {
                 offset: 1
@@ -85,7 +85,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
      * onDepartmentChange
      */
     public onDepartmentChange = async (value: Record<string, any>) => {
-        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
+        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         this.getForm()?.setFieldsValue({ 'assessUser': '' })
         this.setState({
             assessUserOptions: userData.records
@@ -103,14 +103,14 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
         return roles;
     }
 
-    public renderTreeNodes = (data:any) => data.map((item:any) => {
+    public renderTreeNodes = (data: any) => data.map((item: any) => {
         if (item.children) {
             item.disabled = true;
-            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
-                { this.renderTreeNodes(item.children) }
+            return (<TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node} >
+                {this.renderTreeNodes(item.children)}
             </TreeNode>);
         }
-        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id }/>;
+        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
     });
 
     /**
@@ -118,7 +118,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
      * @description Gets form item groups
      * @returns form item groups 
      */
-     public getFormItemGroups(): IFormItemGroup[][] {
+    public getFormItemGroups(): IFormItemGroup[][] {
         return [[{
             title: '',
             itemCol: {
@@ -131,8 +131,8 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                     required: true,
                     message: '请选择部门'
                 }],
-                children: <TreeSelect placeholder="请选择" onChange={ (value: any) => { this.onDepartmentChange(value) } } className={ styles.width200 }>
-                    { this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
+                children: <TreeSelect placeholder="请选择" onChange={(value: any) => { this.onDepartmentChange(value) }} style={{ width: '100%' }}>
+                    {this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData))}
                 </TreeSelect>
             }, {
                 label: '人员',
@@ -143,9 +143,9 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                 }],
                 children: (
                     <Select placeholder="请选择">
-                        { this.state.assessUserOptions && this.state.assessUserOptions.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                        }) }
+                        {this.state.assessUserOptions && this.state.assessUserOptions.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                        })}
                     </Select>
                 )
             }, {
@@ -155,7 +155,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                     required: true,
                     message: '请选择计划交付时间'
                 }],
-                children: <DatePicker showTime className={ styles.width100 }/>
+                children: <DatePicker showTime className={styles.width100} />
             }]
         }]];
     }
@@ -166,16 +166,16 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
      */
     public render(): React.ReactNode {
         return <>
-            <Button type="link" onClick={ () => this.modalShow() }>指派</Button>
-            <Modal 
-                visible={ this.state.visible } 
-                width="40%" 
-                title="指派" 
-                onCancel={ () => this.onCancel() }
-                onOk={ () => this.onSubmit() }
+            <Button type="link" onClick={() => this.modalShow()}>指派</Button>
+            <Modal
+                visible={this.state.visible}
+                width="50%"
+                title="指派"
+                onCancel={() => this.onCancel()}
+                onOk={() => this.onSubmit()}
                 okText="提交"
             >
-                { super.render() }
+                {super.render()}
             </Modal>
         </>
     }

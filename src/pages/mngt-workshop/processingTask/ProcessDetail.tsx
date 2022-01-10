@@ -8,17 +8,37 @@ import RequestUtil from '../../../utils/RequestUtil';
 import WorkshopUserSelectionComponent, { IUser } from '../../../components/WorkshopUserModal';
 
 const tableColumns = [
-    { title: '工作中心', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '班组', dataIndex: 'teamName', key: 'teamName'},
-    { title: '实际完成时间', dataIndex: 'description', key: 'description' },
-    { title: '状态', dataIndex: 'description', key: 'description', render: (status: number): React.ReactNode => {
-        switch (status) {
-            case 1:
-                return '已完成';
-            case 0:
-                return '未完成';
+    { 
+        title: '工作中心', 
+        dataIndex: 'index', 
+        key: 'index', 
+        render: (_a: any, _b: any, index: number): React.ReactNode => (
+            <span>{index + 1}</span>
+        ) 
+    },
+    { 
+        title: '班组', 
+        dataIndex: 'teamName', 
+        key: 'teamName'
+    },
+    { 
+        title: '实际完成时间', 
+        dataIndex: 'description', 
+        key: 'description' 
+    },
+    { 
+        title: '状态', 
+        dataIndex: 'description', 
+        key: 'description', 
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 1:
+                    return '已完成';
+                case 0:
+                    return '未完成';
+            }
         }
-    } }
+    }
 ]
 
 export default function ProcessDetail(): React.ReactNode {
@@ -29,7 +49,11 @@ export default function ProcessDetail(): React.ReactNode {
     const [tableDataSource,setTableDataSource] = useState<any>([]);
     const [userDataSource,setUserDataSource] = useState<any>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-aps/machining/detail/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-aps/machining/detail/${params.id}`)
+        const userData: any = data && await RequestUtil.get(`/tower-production/team/listTeamUser`, {
+            teamId: data?.dispatchVO?.teamId,
+        });
+        setUserDataSource([...userData]);
         resole(data)
     }), {})
     const detailData: any = data;
@@ -61,7 +85,7 @@ export default function ProcessDetail(): React.ReactNode {
                 width="40%" 
                 title="采集确认-选择员工"
                 footer={ <Space>
-                    <Button type="primary" ghost  onClick={() => setVisible(false) }>取消</Button>
+                    {/* <Button type="primary" ghost  onClick={() => setVisible(false) }>取消</Button> */}
                     <Button type="primary" onClick={async () => {
                         console.log(userDataSource)
                         await RequestUtil.put(`/tower-aps/machining/collection`,{

@@ -219,9 +219,9 @@ export default forwardRef(function ({
             })
         }
         return <>
-            {!edit && <Button size="small" type="link" onClick={() => handlePreview(records)}>预览</Button>}
-            <Button size="small" type="link" onClick={() => downLoadFile(records.downloadUrl, records.originalName)}>下载</Button>
-            {edit && <Button size="small" type="link" onClick={() => deleteAttachData(records.uid)}>删除</Button>}
+            {!edit && <Button className='btn-operation-link' style={{marginLeft: "8px"}} type="link" onClick={() => handlePreview(records)}>预览</Button>}
+            <Button className='btn-operation-link' style={{marginLeft: !edit ? "0px" : "8px"}} type="link" onClick={() => downLoadFile(records.downloadUrl, records.originalName)}>下载</Button>
+            {edit && <Button className='btn-operation-link' type="link" onClick={() => deleteAttachData(records.uid)}>删除</Button>}
         </>
     }, [attchs])
     return <>
