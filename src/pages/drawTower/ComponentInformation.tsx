@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
+import styles from './DrawTower.module.less';
 
 interface IResponseData {
     readonly id: number;
@@ -14,16 +15,17 @@ interface IResponseData {
 }
 
 const tableColumns = [
-    { 
-        key: 'index', 
-        title: '序号', 
-        dataIndex: 'index', 
-        width: 50, 
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
+    {
+        key: 'index',
+        title: '序号',
+        dataIndex: 'index',
+        width: 50,
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+    },
     {
         key: 'segmentName',
         title: '段号',
-        dataIndex: 'segmentName', 
+        dataIndex: 'segmentName',
     },
     {
         key: 'code',
@@ -85,8 +87,8 @@ const tableColumns = [
         width: 200,
         editable: false,
         dataIndex: 'basicsPartNum',
-        render: (_: number): React.ReactNode => ( 
-            <span>{ _ === -1 ? undefined : _ }</span>
+        render: (_: number): React.ReactNode => (
+            <span>{_ === -1 ? undefined : _}</span>
         )
     },
     {
@@ -113,14 +115,14 @@ const tableColumns = [
 export default function ComponentInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, structureCount: string }>();
-    const [ detailData, setDetailData ] = useState<IResponseData | undefined>(undefined);
+    const [detailData, setDetailData] = useState<IResponseData | undefined>(undefined);
     const page = {
         current: 1,
         pageSize: 10
     };
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<IResponseData>(`/tower-science/drawProductStructure/productCategory/${ params.id }`, { ...pagination });
+        const data = await RequestUtil.get<IResponseData>(`/tower-science/drawProductStructure/productCategory/${params.id}`, { ...pagination });
         setDetailData(data);
         resole(data);
     });
@@ -133,18 +135,18 @@ export default function ComponentInformation(): React.ReactNode {
         </Spin>
     }
 
-    return <DetailContent operation={ [
+    return <DetailContent operation={[
         <Space direction="horizontal" size="small" >
             <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
         </Space>
-    ] }>
-        <p>件号数：{ params.structureCount }</p>
-        <CommonTable 
-            columns={ tableColumns } 
-            dataSource={ detailData?.records } 
-            onChange={ (pagination: TablePaginationConfig) => { 
+    ]}>
+        <p className={styles.count}>件号数：{params.structureCount}</p>
+        <CommonTable
+            columns={tableColumns}
+            dataSource={detailData?.records}
+            onChange={(pagination: TablePaginationConfig) => {
                 getTableDataSource(pagination);
-            } }
+            }}
             pagination={{
                 current: detailData?.current || 0,
                 pageSize: detailData?.size || 0,
