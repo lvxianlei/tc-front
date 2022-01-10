@@ -53,7 +53,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
                     <Input />
                 </Form.Item></Col>
                 <Col><Form.Item>
-                    <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>搜索</Button>
+                    <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>查询</Button>
                     <Button type="default" onClick={() => form.resetFields()} htmlType="button"
                         style={{ marginLeft: 12 }}>重置</Button>
                 </Form.Item></Col>

@@ -23,14 +23,14 @@ export default function Overview({ id }: OverviewProps) {
     }), { refreshDeps: [id] })
 
     return <Spin spinning={loading}>
-        <DetailTitle title="票据信息" />
+        <DetailTitle title="票据信息"/>
         <BaseInfo columns={billinformation.map((item: any) => {
             if (item.dataIndex === "invoiceType") {
                 return ({ ...item, type: "select", enum: invoiceTypeEnum })
             }
             return item
-        })} col={2} dataSource={data || {}} />
-        <Attachment dataSource={data?.invoiceAttachInfoVos || []} />
+        })} col={2} dataSource={data || {}} classStyle={"overall-form-class-padding0"}/>
+        <Attachment dataSource={data?.invoiceAttachInfoVos || []}/>
         <OperationRecord serviceId={id} serviceName="tower-supply" operateTypeEnum="OPERATION" />
     </Spin>
 }

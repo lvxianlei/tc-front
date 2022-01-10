@@ -71,10 +71,6 @@ export default function Management(): React.ReactNode {
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
-                name: 'fuzzyQuery',
-                children: <Input placeholder="项目名称/项目编码/项目负责人/批次号" style={{ width: 260 }} />
-            },
-            {
                 name: 'contractNumber',
                 label: '内部合同编号',
                 children: <Input placeholder="内部合同编号" style={{ width: 210 }} />
@@ -109,7 +105,11 @@ export default function Management(): React.ReactNode {
                     <Select.Option value={3}>合同执行</Select.Option>
                     <Select.Option value={4}>项目结束</Select.Option>
                 </Select>
-            }
+            },
+            {
+                name: 'fuzzyQuery',
+                children: <Input placeholder="项目名称/项目编码/项目负责人/批次号" style={{ width: 260 }} />
+            },
         ]}
     />
 }

@@ -29,7 +29,7 @@ export default function WeighingNew(): React.ReactNode {
         if (params.id) {
             data = await RequestUtil.get<IWeighingList>(`/tower-production/weighing/detail/${params.id}`);
             setRelationProducts(data?.relationProducts || [])
-            form.setFieldsValue({ ...data })
+            form.setFieldsValue({ ...data, weighingDate: moment(data?.weighingDate) })
         }
         resole(data)
     }), {})

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, DatePicker, Button, Form, Modal, Row, Col, Radio, message } from 'antd';
+import { Input, DatePicker, Button, Form, Modal, Row, Col, Radio, message, Space } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './DailySchedule.module.less';
@@ -12,7 +12,7 @@ export default function DailySchedule(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
-    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [visible, setVisible] = useState(false);
     const [detail, setDetail] = useState<IDailySchedule>({});
     const [form] = Form.useForm();
@@ -25,7 +25,7 @@ export default function DailySchedule(): React.ReactNode {
     }
 
     const submit = () => {
-        if(form) {
+        if (form) {
             form.validateFields().then(res => {
                 const values = form.getFieldsValue(true);
                 RequestUtil.post(`/tower-production/galvanized/daily/plan/dispatching`, { ...values, id: selectedKeys.join(',') }).then(res => {
@@ -51,57 +51,65 @@ export default function DailySchedule(): React.ReactNode {
             path="/tower-production/galvanized/daily/plan"
             sourceKey="galvanizedDailyPlanVOS.records"
             columns={
-                confirmStatus === 1 || confirmStatus === 2 || confirmStatus === 3 ? 
-                [{
-                    "key": "index",
-                    "title": "序号",
-                    "dataIndex": "index",
-                    "width": 50,
-                    render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                }, ...columns, {
-                    "key": "operation",
-                    "title": "操作",
-                    "dataIndex": "operation",
-                    fixed: "right" as FixedType,
-                    "width": 150,
-                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        confirmStatus === 1 ? <Button type="link" onClick={() => {
-                            RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, [record.id]).then(res => {
-                                message.success("确认成功");
-                                setRefresh(!refresh);
-                                setSelectedKeys([]);
-                            });
-                        }}>确认</Button> : 
-                        confirmStatus === 2 ? <Button type="link" onClick={() => {
-                            setVisible(true);
-                            setSelectedKeys([record.id]);
-                        }}>派工</Button> : 
-                        confirmStatus === 3 ? <>
-                            { new Date(Date.parse(record?.galvanizedStartTime.replace(/-/g,"/"))) > new Date() ? <Button type="link" onClick={async () => {
-                                const data: IDailySchedule = await RequestUtil.get(`/tower-production/galvanized/daily/plan/detail/${record.id}`);
-                                form.setFieldsValue({ ...data });
-                                setDetail(data);
-                                setSelectedKeys([record.id]);
-                                setVisible(true);
-                            }}>重新派工</Button> : null}
-                            <Button type="link" onClick={() => {
-                                RequestUtil.get(`/tower-production/galvanized/daily/plan/complete/${record.id}`).then(res => {
-                                    message.success("完成！");
-                                    setRefresh(!refresh);
-                                });
-                            }}>完成</Button>
-                        </> : null
-                    )
-                }] : [{
-                    "key": "index",
-                    "title": "序号",
-                    "dataIndex": "index",
-                    "width": 50,
-                    render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                }, ...columns]}
+                confirmStatus === 1 || confirmStatus === 2 || confirmStatus === 3 ?
+                    [{
+                        "key": "index",
+                        "title": "序号",
+                        "dataIndex": "index",
+                        "width": 50,
+                        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                    }, ...columns, {
+                        "key": "operation",
+                        "title": "操作",
+                        "dataIndex": "operation",
+                        fixed: "right" as FixedType,
+                        "width": 150,
+                        render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                            <Space>
+                                {
+                                    confirmStatus === 1 ? <Button type="link" onClick={() => {
+                                        RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, [record.id]).then(res => {
+                                            message.success("确认成功");
+                                            setRefresh(!refresh);
+                                            setSelectedKeys([]);
+                                        });
+                                    }}>确认</Button> :
+                                        confirmStatus === 2 ? <Button type="link" onClick={() => {
+                                            setVisible(true);
+                                            setSelectedKeys([record.id]);
+                                        }}>派工</Button> :
+                                            confirmStatus === 3 ? <>
+                                                {
+                                                    new Date(Date.parse(record?.galvanizedStartTime.replace(/-/g, "/"))) > new Date() ? <Button type="link" onClick={async () => {
+                                                        const data: IDailySchedule = await RequestUtil.get(`/tower-production/galvanized/daily/plan/detail/${record.id}`);
+                                                        form.setFieldsValue({ ...data });
+                                                        setDetail(data);
+                                                        setSelectedKeys([record.id]);
+                                                        setVisible(true);
+                                                    }}>重新派工</Button>
+                                                        : null
+                                                }
+                                                <Button type="link" onClick={() => {
+                                                    RequestUtil.get(`/tower-production/galvanized/daily/plan/complete/${record.id}`).then(res => {
+                                                        message.success("完成！");
+                                                        setRefresh(!refresh);
+                                                    });
+                                                }}>完成</Button>
+                                            </>
+                                                : null
+                                }
+                            </Space>
+                        )
+                    }] : [{
+                        "key": "index",
+                        "title": "序号",
+                        "dataIndex": "index",
+                        "width": 50,
+                        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                    }, ...columns]}
             headTabs={[]}
             requestData={{ status: confirmStatus }}
-            extraOperation={(data: any) =><>
+            extraOperation={(data: any) => <>
                 <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
                     <Radio.Button value={1}>未确认</Radio.Button>
                     <Radio.Button value={2}>未指派</Radio.Button>
@@ -114,18 +122,18 @@ export default function DailySchedule(): React.ReactNode {
                     <span className={styles.statistical}>连板总重量：{data?.plateTotalWeight}吨</span>
                 </span>
                 {
-                    confirmStatus === 1 
-                    ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
-                        RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, selectedKeys).then(res => {
-                            message.success("确认成功");
-                            setRefresh(!refresh);
-                        });
-                    }}>批量确认</Button> 
-                    : confirmStatus === 2 
-                    ? <Button type="primary" disabled={ selectedKeys.length <= 0 } onClick={() => {
-                        setVisible(true);
-                    }}>派工</Button> 
-                    : null
+                    confirmStatus === 1
+                        ? <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => {
+                            RequestUtil.post(`/tower-production/galvanized/daily/plan/confirm`, selectedKeys).then(res => {
+                                message.success("确认成功");
+                                setRefresh(!refresh);
+                            });
+                        }}>批量确认</Button>
+                        : confirmStatus === 2
+                            ? <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => {
+                                setVisible(true);
+                            }}>派工</Button>
+                            : null
                 }
             </>}
             refresh={refresh}
