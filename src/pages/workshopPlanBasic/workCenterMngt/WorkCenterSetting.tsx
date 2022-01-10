@@ -223,7 +223,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     "required": true,
                     "message": "请选择规格"
                 }]}>
-                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} key={index}>
+                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} key={index} onDropdownVisibleChange={
+                        (open) => {
+                            if(open && form.getFieldsValue(true)?.workCenterRelations[index]?.materialName) {
+                                materialChange(form.getFieldsValue(true)?.workCenterRelations[index]?.materialName, index);
+                            }
+                        }
+                    }>
                         {specifications[index]?.map((item: any) => {
                             return <Select.Option key={item.id} value={item.structureSpec}>{item.structureSpec}</Select.Option>
                         })}
