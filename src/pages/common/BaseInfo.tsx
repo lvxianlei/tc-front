@@ -117,7 +117,6 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
     useEffect(() => {
         form && form.setFieldsValue(formatData(columns, dataSource))
     }, [JSON.stringify(dataSource), form])
-    console.log(classStyle, "sdssdsdsd")
     if (edit) {
         return <Form
             onValuesChange={(changedFields, allFields) => onChange(changedFields, allFields, dataSource)}
