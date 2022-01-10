@@ -8,9 +8,9 @@ import DeliverablesListing from './DeliverablesListing';
 import { patternTypeOptions } from '../../configuration/DictionaryOptions';
 
 export default function DrawTowerMngt(): React.ReactNode {
-    const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [ filterValue, setFilterValue ] = useState({});
-    
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState({});
+
     const columns = [
         {
             key: 'index',
@@ -18,7 +18,7 @@ export default function DrawTowerMngt(): React.ReactNode {
             dataIndex: 'index',
             width: 50,
             fixed: "left" as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'name',
@@ -61,8 +61,8 @@ export default function DrawTowerMngt(): React.ReactNode {
             title: '件号数',
             width: 200,
             dataIndex: 'structureCount',
-            render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
+            render: (_: number): React.ReactNode => (
+                <span>{_ === -1 ? undefined : _}</span>
             )
         },
         {
@@ -70,8 +70,8 @@ export default function DrawTowerMngt(): React.ReactNode {
             title: '角钢件号数',
             width: 200,
             dataIndex: 'steelAngleCount',
-            render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
+            render: (_: number): React.ReactNode => (
+                <span>{_ === -1 ? undefined : _}</span>
             )
         },
         {
@@ -79,9 +79,9 @@ export default function DrawTowerMngt(): React.ReactNode {
             title: '钢板件号数',
             width: 200,
             dataIndex: 'steelPlateCount',
-            render: (_: number): React.ReactNode => ( 
-                <span>{ _ === -1 ? undefined : _ }</span>
-            )  
+            render: (_: number): React.ReactNode => (
+                <span>{_ === -1 ? undefined : _}</span>
+            )
         },
         {
             key: 'createTime',
@@ -106,12 +106,12 @@ export default function DrawTowerMngt(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 200,
+            width: 150,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Link to={ `/drawTower/drawTowerMngt/towerInformation/${ record.id }` }>塔型信息</Link>
-                    <Link to={ `/drawTower/drawTowerMngt/componentInformation/${ record.id }/${ record.structureCount === -1 ? 0 : record.structureCount }` }>塔型构件</Link>
-                    <DeliverablesListing id={ record.id } />
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                    <Link to={`/drawTower/drawTowerMngt/towerInformation/${record.id}`}>塔型信息</Link>
+                    <Link to={`/drawTower/drawTowerMngt/componentInformation/${record.id}/${record.structureCount === -1 ? 0 : record.structureCount}`}>塔型构件</Link>
+                    <DeliverablesListing id={record.id} />
                 </Space>
             )
         }
@@ -120,19 +120,19 @@ export default function DrawTowerMngt(): React.ReactNode {
     return <Page
         path="/tower-science/productCategory/draw/page"
         exportPath={`/tower-science/productCategory/draw/page`}
-        columns={ columns }
-        headTabs={ [] }
-        refresh={ refresh }
-        searchFormItems={ [
+        columns={columns}
+        headTabs={[]}
+        refresh={refresh}
+        searchFormItems={[
             {
                 name: 'pattern',
                 label: '模式',
                 children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                    { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                        return <Select.Option key={ index } value={ id }>
-                            { name }
+                    {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={id}>
+                            {name}
                         </Select.Option>
-                    }) }
+                    })}
                 </Select>
             },
             {
@@ -143,18 +143,18 @@ export default function DrawTowerMngt(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="塔型/塔型钢印号/计划号/订单编号/内部合同编号"/>
+                children: <Input placeholder="塔型/塔型钢印号/计划号/订单编号/内部合同编号" />
             }
-        ] }
-        filterValue={ filterValue }
-        onFilterSubmit = { (values: Record<string, any>) => {
-            if(values.time) {
+        ]}
+        filterValue={filterValue}
+        onFilterSubmit={(values: Record<string, any>) => {
+            if (values.time) {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
                 values.creationTimeStart = formatDate[0] + ' 00:00:00';
                 values.creationTimeEnd = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
             return values;
-        } }
+        }}
     />
 }
