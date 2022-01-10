@@ -11,35 +11,22 @@ const tableColumns = [
     { title: '操作部门', dataIndex: 'createDeptName', key: 'createDeptName', },
     { title: '操作人', dataIndex: 'createUserName', key: 'createUserName' },
     { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
-    { title: '任务状态', dataIndex: 'currentStatus', key: 'currentStatus', render: (value: number, record: object): React.ReactNode => {
-        const renderEnum: any = [
-            {
-                value: 0,
-                label: "已拒绝"
-            },
-            {
-                value: 1,
-                label: "待确认"
-            },
-            {
-                value: 2,
-                label: "待指派"
-            },
-            {
-                value: 3,
-                label: "待完成"
-            },
-            {
-                value: 4,
-                label: "已完成"
-            },
-            {
-                value: 5,
-                label: "已提交"
-            }
-        ]
-             return <>{value!==-1?renderEnum.find((item: any) => item.value === value).label:''}</>
-    }}
+    { title: '任务状态', dataIndex: 'currentStatus', key: 'currentStatus', render: (status: number): React.ReactNode => {
+        switch (status) {
+            case 0:
+                return '已拒绝';
+            case 1:
+                return '待指派';
+            case 2:
+                return '提料中';
+            case 3:
+                return '配段中';
+            case 4:
+                return '已完成';
+            case 5:
+                return '已提交';
+        }
+    } }
 ]
 
 export default function PickDetail(): React.ReactNode {
