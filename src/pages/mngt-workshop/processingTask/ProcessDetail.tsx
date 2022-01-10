@@ -8,17 +8,37 @@ import RequestUtil from '../../../utils/RequestUtil';
 import WorkshopUserSelectionComponent, { IUser } from '../../../components/WorkshopUserModal';
 
 const tableColumns = [
-    { title: '工作中心', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '班组', dataIndex: 'teamName', key: 'teamName'},
-    { title: '实际完成时间', dataIndex: 'description', key: 'description' },
-    { title: '状态', dataIndex: 'description', key: 'description', render: (status: number): React.ReactNode => {
-        switch (status) {
-            case 1:
-                return '已完成';
-            case 0:
-                return '未完成';
+    { 
+        title: '工作中心', 
+        dataIndex: 'index', 
+        key: 'index', 
+        render: (_a: any, _b: any, index: number): React.ReactNode => (
+            <span>{index + 1}</span>
+        ) 
+    },
+    { 
+        title: '班组', 
+        dataIndex: 'teamName', 
+        key: 'teamName'
+    },
+    { 
+        title: '实际完成时间', 
+        dataIndex: 'description', 
+        key: 'description' 
+    },
+    { 
+        title: '状态', 
+        dataIndex: 'description', 
+        key: 'description', 
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 1:
+                    return '已完成';
+                case 0:
+                    return '未完成';
+            }
         }
-    } }
+    }
 ]
 
 export default function ProcessDetail(): React.ReactNode {
