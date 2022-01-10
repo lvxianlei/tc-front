@@ -88,8 +88,8 @@ export default function AutomaticScheduling(): React.ReactNode {
     return <div id="plan"><DetailContent key="scheduling">
         <Form form={form} onFinish={async (values) => await run({
             ...values,
-            startTime: values.time && moment(values?.time[0]),
-            endTime: values.time && moment(values?.time[1])
+            startTime: values.time && values?.time[0].format('YYYY-MM-DD') + ' 00:00:00',
+            endTime: values.time && values?.time[1].format('YYYY-MM-DD') + ' 23:59:59'
         })}>
             <Row>
                 <Col className={styles.right}>
