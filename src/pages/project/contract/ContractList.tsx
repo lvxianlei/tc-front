@@ -1,25 +1,22 @@
 /***
  * 合同列表
  */
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { 
     Button,
     Popconfirm,
-    Upload,
     Space,
     message
 } from 'antd';
 import { useHistory, useParams, Link } from 'react-router-dom';
 import { Page } from '../../common';
 import { IContract } from "../../IContract";
-import AuthUtil from "../../../utils/AuthUtil"
 import RequestUtil from "../../../utils/RequestUtil";
 import { IResponseData } from "../../common/Page";
 
 export default function ContractList(): JSX.Element {
     const history = useHistory();
     const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [id, setId] = useState<string>();
     const params = useParams<{ id: string }>();
     const [ filterValue, setFilterValue ] = useState({projectId: params.id});
     const onFilterSubmit = (value: any) => {
@@ -195,7 +192,7 @@ export default function ContractList(): JSX.Element {
                                 添加回款记录
                                 </Link>
                             </Button>
-                            <Upload
+                            {/* <Upload
                                 key="sub"
                                 name="file"
                                 multiple={true}
@@ -208,7 +205,7 @@ export default function ContractList(): JSX.Element {
                                 data={{ contractId: (record as any).id }}
                                 showUploadList={false}
                                 onChange={uploadChange}
-                            ><Button key="enclosure" type="link">导入杆塔信息</Button></Upload>
+                            ><Button key="enclosure" type="link">导入杆塔信息</Button></Upload> */}
                             </Space>
                         ),
                       },

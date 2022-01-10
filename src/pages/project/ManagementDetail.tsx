@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
 import { useHistory, useParams, Link, useRouteMatch, useLocation } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle, Attachment } from '../common'
@@ -12,8 +12,6 @@ import {
 } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import ManagementContract from './contract/Contract'
-import ManagementOrder from './order/SaleOrder'
 import { changeTwoDecimal_f } from '../../utils/KeepDecimals';
 import { bidTypeOptions, winBidTypeOptions } from '../../configuration/DictionaryOptions'
 
@@ -144,6 +142,10 @@ export default function ManagementDetail(): React.ReactNode {
         })
     }
 
+    useEffect(() => {
+        setSalesPlanStatus("")
+    }, [params.tab])
+
     const deleteSaleOrderItem = (id: string) => {
         Modal.confirm({
             title: "删除",
@@ -188,7 +190,7 @@ export default function ManagementDetail(): React.ReactNode {
                 type="primary" onClick={() => history.push(`/project/management/edit/base/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息" style={{padding: "0 0 8px 0",}} />
+            <DetailTitle title="基本信息" style={{ padding: "0 0 8px 0", }} />
             <BaseInfo columns={baseInfoData.map((item: any) => {
                 if (["projectLeader", "biddingPerson"].includes(item.dataIndex)) {
                     return ({ title: item.title, dataIndex: item.dataIndex })
@@ -219,7 +221,7 @@ export default function ManagementDetail(): React.ReactNode {
                     onClick={() => history.push(`/project/management/edit/bidDoc/${params.id}`)} >编辑</Button>,
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
-            <DetailTitle title="标书制作记录表"  style={{padding: "0 0 8px 0",}} />
+            <DetailTitle title="标书制作记录表" style={{ padding: "0 0 8px 0", }} />
             <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
                 ...item,
                 type: "select",
@@ -240,7 +242,7 @@ export default function ManagementDetail(): React.ReactNode {
                 onClick={() => history.push(`/project/management/edit/bidResult/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息"  style={{padding: "0 0 8px 0",}} />
+            <DetailTitle title="基本信息" style={{ padding: "0 0 8px 0", }} />
             <BaseInfo columns={[
                 {
                     title: '年份',
@@ -306,7 +308,7 @@ export default function ManagementDetail(): React.ReactNode {
             <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/frameAgreement/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
-            <DetailTitle title="基本信息"  style={{padding: "0 0 8px 0",}} />
+            <DetailTitle title="基本信息" style={{ padding: "0 0 8px 0", }} />
             <BaseInfo columns={frameAgreementColumns.map((item: any) => item.dataIndex === "bidType" ? ({
                 ...item,
                 enum: frangmentBidType?.map((fitem: any) => ({
@@ -343,32 +345,22 @@ export default function ManagementDetail(): React.ReactNode {
             ]} dataSource={data || {}} />
         </DetailContent>,
         tab_contract: <>
-            <>
-                {/* <Tabs defaultActiveKey="合同" >
-                    <Tabs.TabPane tab="合同" key="合同">
-                        <ManagementContract />
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="订单" key="订单">
-                        <ManagementOrder />
-                    </Tabs.TabPane>
-                </Tabs> */}
-                <div style={{ padding: "24px 0 10px 24px", boxSizing: "border-box" }}>
-                    <Radio.Group defaultValue={"contract"} onChange={operationChange}>
-                        <Radio.Button value={"contract"} key={`contract`}>合同</Radio.Button>
-                        <Radio.Button value={"order"} key={"order"}>订单</Radio.Button>
-                    </Radio.Group>
-                </div>
-                <Spin spinning={contractLoading}>
-                    {
-                        contractStatus === "contract" ?
-                            // <ManagementContract />
-                            <ContractList />
-                            : 
-                                // <ManagementOrder />
-                                <SaleOrderList />
-                    }
-                </Spin>
-            </>
+            <div style={{ padding: "24px 0 10px 24px", boxSizing: "border-box" }}>
+                <Radio.Group defaultValue={"contract"} onChange={operationChange}>
+                    <Radio.Button value={"contract"} key={`contract`}>合同</Radio.Button>
+                    <Radio.Button value={"order"} key={"order"}>订单</Radio.Button>
+                </Radio.Group>
+            </div>
+            <Spin spinning={contractLoading}>
+                {
+                    contractStatus === "contract" ?
+                        // <ManagementContract />
+                        <ContractList />
+                        :
+                        // <ManagementOrder />
+                        <SaleOrderList />
+                }
+            </Spin>
         </>,
         tab_productGroup: <DetailContent title={[
             <Button key="new" type="primary" onClick={() => history.push(`/project/management/new/productGroup/${params.id}`)} style={{ marginBottom: 16 }}>新增</Button>
@@ -382,9 +374,9 @@ export default function ManagementDetail(): React.ReactNode {
                         ellipsis: false,
                         width: 250,
                         render: (_: any, record: any) => <>
-                            <Button type="link" style={{marginRight: 12}} size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
-                            <Button type="link" style={{marginRight: 12}} size="small" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
-                            <Button type="link" style={{marginRight: 12}} size="small" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
+                            <Button type="link" style={{ marginRight: 12 }} size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
+                            <Button type="link" style={{ marginRight: 12 }} size="small" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
+                            <Button type="link" style={{ marginRight: 12 }} size="small" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
                             <Button type="link" size="small" disabled={`${record.status}` !== "0"} onClick={() => deleteProductGroupItem(record.id)} >删除</Button>
                         </>
                     }]}
@@ -407,10 +399,12 @@ export default function ManagementDetail(): React.ReactNode {
         </DetailContent>,
         tab_salesPlan: <DetailContent>
             <Row>
-                <Radio.Group defaultValue="" onChange={(event) => {
-                    setSalesPlanStatus(event.target.value)
-                    run({ taskReviewStatus: event.target.value })
-                }} >
+                <Radio.Group
+                    defaultValue=""
+                    onChange={(event) => {
+                        setSalesPlanStatus(event.target.value)
+                        run({ taskReviewStatus: event.target.value })
+                    }} >
                     <Radio.Button value="">全部</Radio.Button>
                     <Radio.Button value="0" >审批中</Radio.Button>
                     <Radio.Button value="2" >已驳回</Radio.Button>

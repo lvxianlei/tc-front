@@ -71,6 +71,10 @@ export default function Edit() {
             const baseInfoData = await baseInfo.validateFields()
             const invoicData = await invoiceForm.validateFields()
             const billingData = await billingForm.validateFields()
+            if (billingData.submit.length === 0) {
+                message.warning("至少有一条开票明细...")
+                return
+            }
             const saveData = {
                 ...baseInfoData,
                 contractCode: baseInfoData.contractCode || data?.contractCode,

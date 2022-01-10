@@ -42,7 +42,7 @@
             "width": 100,
             "dataIndex": "statusUpdateTime",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD HH:mm"
         },
         {
             "title": "工程报价员",

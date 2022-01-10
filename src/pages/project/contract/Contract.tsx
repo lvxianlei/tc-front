@@ -178,7 +178,7 @@ class ManagementContract extends PromContract {
                 添加回款记录
               </Link>
             </Button>
-            <Upload
+            {/* <Upload
               key="sub"
               name="file"
               multiple={true}
@@ -191,7 +191,7 @@ class ManagementContract extends PromContract {
               data={{ contractId: (record as any).id }}
               showUploadList={false}
               onChange={this.uploadChange}
-            ><Button key="enclosure" type="link">导入杆塔信息</Button></Upload>
+            ><Button key="enclosure" type="link">导入杆塔信息</Button></Upload> */}
           </Space>
         ),
       },

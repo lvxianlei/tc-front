@@ -673,14 +673,14 @@
     },
     { // 驾驶舱-库存看板
       "name": "库存看板",
-      "path": "/cockpit/viewPanel",
+      "path": "/bulletin/viewPanel",
       "module": "./pages/stock/viewPanel/viewPanel",
       "exact": true,
       "authority": "cockpit_inventory_kanban"
     },
     { // 驾驶舱-原材料看板
       "name": "原材料看板",
-      "path": "/cockpit/rawMaterial",
+      "path": "/bulletin/rawMaterial",
       "module": "./pages/cockpit/rawMaterial/index",
       "exact": true,
       "authority": "cockpit_raw_material_kanban"
@@ -694,14 +694,14 @@
     },
     { // 驾驶舱-收货单看板
       "name": "收货单看板",
-      "path": "/cockpit/receiveTask",
+      "path": "/bulletin/receiveTask",
       "module": "./pages/cockpit/receiveTask/index",
       "exact": true,
       "authority": "cockpit_receipt_kanban"
     },
     { // 驾驶舱-合同看板
       "name": "合同看板",
-      "path": "/cockpit/contract",
+      "path": "/bulletin/contract",
       "module": "./pages/cockpit/contract/index",
       "exact": true,
       "authority": "cockpit_contract_kanban"
@@ -988,84 +988,84 @@
     },
     { // 工作管理-采购列表
       "name": "采购列表",
-      "path": "/workMngt/purchaseList",
+      "path": "/ingredients/purchaseList",
       "module": "./pages/workMngt/purchaseList/index",
       "exact": true,
       "authority": "work_management_purchase_list"
     },
     { // 工作管理-计划列表
       "name": "计划列表",
-      "path": "/workMngt/planList",
+      "path": "/ingredients/planList",
       "module": "./pages/workMngt/planList/index",
       "exact": true,
       "authority": "work_management_plan_list"
     },
     { // 工作管理-计划列表-采购清单
       "name": "采购清单",
-      "path": "/workMngt/planList/purchaseList/:id",
+      "path": "/ingredients/planList/purchaseList/:id",
       "module": "./pages/workMngt/planList/Overview",
       "exact": true,
       "authority": "sw_work_management_plan_list_purchase_list"
     },
     { // 工作管理-计划列表-关联塔型
       "name": "关联塔型",
-      "path": "/workMngt/planList/relationTower/:id",
+      "path": "/ingredients/planList/relationTower/:id",
       "module": "./pages/workMngt/planList/RelationList",
       "exact": true,
       "authority": "sw_work_management_plan_list_associated_tower"
     },
     { // 工作管理-生产配料
       "name": "生产配料",
-      "path": "/workMngt/production",
+      "path": "/ingredients/production",
       "module": "./pages/workMngt/production/index",
       "exact": true,
       "authority": "work_management_production_ingredients"
     },
     { // 工作管理-生产配料-构件明细
       "name": "构件明细",
-      "path": "/workMngt/production/detailed/:id/:materialTaskCode/:productCategoryName/:loftingState",
+      "path": "/ingredients/production/detailed/:id/:materialTaskCode/:productCategoryName/:loftingState",
       "module": "./pages/workMngt/production/Overview",
       "exact": true,
       "authority": "sw_work_management_production_ingredients_component_details"
     },
     { // 工作管理-收货列表
       "name": "收货列表",
-      "path": "/workMngt/receiving",
+      "path": "/ingredients/receiving",
       "module": "./pages/workMngt/receivingList/index",
       "exact": true,
       "authority": "work_management_receiving_list"
     },
     { // 工作管理-收获列表-详情
       "name": "收货列表明细",
-      "path": "/workMngt/receiving/detail/:id",
+      "path": "/ingredients/receiving/detail/:id",
       "module": "./pages/workMngt/receivingList/Overview",
       "exact": true,
       "authority": "sw_work_management_receiving_list_details"
     },
     { // 工作管理-收获列表-编辑
       "name": "收货列表编辑",
-      "path": "/workMngt/receiving/edit/:id",
+      "path": "/ingredients/receiving/edit/:id",
       "module": "./pages/workMngt/receivingList/Edit",
       "exact": true,
       "authority": "sw_work_management_receiving_list_edits"
     },
     { // 工作管理-差异列表
       "name": "差异列表",
-      "path": "/workMngt/differentList",
+      "path": "/ingredients/differentList",
       "module": "./pages/workMngt/differentList/index",
       "exact": true,
       "authority": "work_management_difference_list"
     },
     { // 工作管理-差异列表-详情
       "name": "差异列表",
-      "path": "/workMngt/differentList/detail/:id",
+      "path": "/ingredients/differentList/detail/:id",
       "module": "./pages/workMngt/differentList/Overview",
       "exact": true,
       "authority": "sw_work_management_difference_list_details"
     },
     { // 工作管理-缺料列表
       "name": "缺料列表",
-      "path": "/workMngt/shortageList",
+      "path": "/ingredients/shortageList",
       "module": "./pages/workMngt/shortageList/index",
       "exact": true,
       "authority": "work_management_shortage_list"
@@ -1352,21 +1352,21 @@
     },
     { // 工作管理-询价列表
       "name": "工程报价列表",
-      "path": "/workMngt/enquiry",
+      "path": "/ingredients/enquiry",
       "module": "./pages/workMngt/enquiryList/index",
       "exact": true,
       "authority": "work_management_inquiry_list"
     },
     { // 工作管理-采购配料
       "name": "采购配料",
-      "path": "/workMngt/buyBurdening",
+      "path": "/ingredients/buyBurdening",
       "module": "./pages/workMngt/buyBurdening/index",
       "exact": true,
       "authority": "work_management_purchase_ingredients"
     },
     { // 工作管理-采购配料
       "name": "采购配料详情",
-      "path": "/workMngt/buyBurdening/detail/:id",
+      "path": "/ingredients/buyBurdening/detail/:id",
       "module": "./pages/workMngt/buyBurdening/Overview",
       "exact": true,
       "authority": "buy_burdening_overview"
@@ -1493,7 +1493,7 @@
     },
     { // 工作台-供应
       "name": "供应工作台",
-      "path": "/workBench/sw",
+      "path": "/supply/sw",
       "module": "./pages/workBench/sw/index",
       "exact": true,
       // "authority": "rd_workbench"

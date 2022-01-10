@@ -32,9 +32,10 @@ function formatDataType(dataItem: any, dataSource: any): string {
     const value = dataSource[dataItem.dataIndex]
     const types: any = {
         number: (value && value !== -1) ? value : 0,
-        select: ((value || value === 0) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
+        select: ((value || value === 0 || value === false) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
         string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
+        text: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         phone: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         textarea: value || "-",
         popTable: value || "-"
@@ -117,7 +118,6 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
     useEffect(() => {
         form && form.setFieldsValue(formatData(columns, dataSource))
     }, [JSON.stringify(dataSource), form])
-    console.log(classStyle, "sdssdsdsd")
     if (edit) {
         return <Form
             onValuesChange={(changedFields, allFields) => onChange(changedFields, allFields, dataSource)}
