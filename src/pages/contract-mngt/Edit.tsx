@@ -465,7 +465,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         <BaseInfo
             form={baseForm}
             col={2}
-            classStyle={"overall-form-class"}
+            classStyle={"overall-form-class-padding0"}
             onChange={handleBaseInfoChange}
             columns={contractBaseInfo.map((item: any) => {
                 switch (item.dataIndex) {
@@ -552,7 +552,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return item
             })} dataSource={{}} edit /> */}
         <BaseInfo 
-          form={freightForm} col={2} classStyle={"overall-form-class"}
+          form={freightForm} col={2} classStyle={"overall-form-class-padding0"}
           onChange={handleBaseInfoChangeFreight}
           columns={
               newFreightInformation.map((item: any) => {
@@ -568,7 +568,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
           dataSource={{}} edit />
         <DetailTitle title="装卸费信息" />
         <BaseInfo 
-          form={stevedoringForm}  col={2} classStyle={"overall-form-class"}
+          form={stevedoringForm}  col={2} classStyle={"overall-form-class-padding0"}
           onChange={handleBaseInfoChangeStevedoring}
           columns={
             newHandlingChargesInformation.map((item: any) => {
