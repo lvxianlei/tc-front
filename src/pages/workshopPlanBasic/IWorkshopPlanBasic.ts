@@ -12,8 +12,11 @@ export interface IDetailData {
 
 
 export interface IWorkCenterMngt {
-    readonly sort?: string;
-    readonly name?: string;
+    readonly processId?: string;
+    readonly materialName?: string;
+    readonly specificationName?: string;
+    readonly materialTextureName?: string;
+    readonly workHour?: string;
     readonly id?: string;
 }
 
