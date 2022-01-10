@@ -24,7 +24,7 @@
         "authority": "",
         "title": "供应中心",
         "description": "包含配料、采购合同、采购计划、收货单等",
-        "path": "/workBench/sw",
+        "path": "/supply/sw",
         "appName": "SW"
     },
     {

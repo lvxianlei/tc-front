@@ -60,7 +60,7 @@ export default function Invoicing() {
                 fixed: "right",
                 width: 100,
                 render: (_: any, record: any) => {
-                    return <Link to={`/workMngt/differentList/detail/${record.id}`}>查看</Link>
+                    return <Link to={`/ingredients/differentList/detail/${record.id}`}>查看</Link>
 
                 }
             }]}
