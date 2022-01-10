@@ -178,6 +178,7 @@ export default function ConfirmDetail(): React.ReactNode {
     const onDelete = (key: React.Key)=>{
       const newData:any = [...tableDataSource];
       const index = newData.findIndex((item:any) => key === item.key);
+      console.log(newData[index])
       if (index > -1 && newData[index].id) {
         RequestUtil.delete(`/tower-science/drawProductDetail?id=${newData[index].id}`)
         newData.splice(index, 1);
@@ -524,20 +525,18 @@ export default function ConfirmDetail(): React.ReactNode {
             submitData.key = tableDataSource && tableDataSource.length.toString();
             submitData.otherWeight = submitData.otherWeight?submitData.otherWeight:0;
             submitData.index = tableDataSource.length;
-           
-            setTableDataSource(tableDataSource);
+            const id:any = await RequestUtil.post(`/tower-science/drawProductDetail/save`,{
+              ...submitData,
+              drawTaskId: params.id
+            })
+            submitData['id'] = id;
+            tableDataSource.push(submitData);
             let number = '0';
             tableDataSource.forEach((item:any)=>{
                 number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(2)
             })
             setWeight(number);
-            const data:any = await RequestUtil.post(`/tower-science/drawProductDetail/save`,{
-              ...submitData,
-              drawTaskId: params.id
-            }).then(()=>{
-              message.success('保存成功！');
-            })
-            tableDataSource.push({...submitData, id: data});
+            setTableDataSource(tableDataSource);
             form.resetFields();
             setVisible(false);
         } catch (error) {
