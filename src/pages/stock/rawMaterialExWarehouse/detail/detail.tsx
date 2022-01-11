@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
-import { Link, useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom';
+import { Space, Button, Modal, Input, DatePicker, Select, message, Table } from 'antd';
+import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../../utils/RequestUtil';
 import AuthUtil from '../../../../utils/AuthUtil';
@@ -33,14 +33,14 @@ export default function RawMaterialStock(): React.ReactNode {
     const [ExWarehousingListdata, setExWarehousingListdata] = useState<any[]>([{}]);//详情-出库信息列表数据
     const [OutLibraryListdata, setOutLibraryListdata] = useState<any[]>([{}]);//出库-原材料信息列表数据
     const [ApplyListdata, setApplyListdata] = useState<any[]>([{}]);//出库-缺料申请-信息列表数据
-    const [totalWeight, setTotalWeight] = useState<any>(0);//总重量
+    // const [totalWeight, setTotalWeight] = useState<any>(0);//总重量
     const [MaterialShortageTotalWeight, setMaterialShortageTotalWeight] = useState<number>(0);//缺料总重量
     const [isDetailModal, setIsDetailModal] = useState<boolean>(false);//详情弹框显示
     const [isOutLibraryModal, setIsOutLibraryModal] = useState<boolean>(false);//出库弹框显示
     const [isApplyModal, setIsApplyModal] = useState<boolean>(false);//出库弹框显示
     const [requirement, setRequirement] = useState<number | string>('');//出库-弹框需求量
     const [OutboundId, setOutboundId] = useState<number | string>('');//出库-弹框-需要的列表id
-    const [tempApplyData, setTempApplyData] = useState<number | string>('');//出库-弹框-缺料申请需要的列表数据
+    // const [tempApplyData, setTempApplyData] = useState<number | string>('');//出库-弹框-缺料申请需要的列表数据
     const [departmentList, setDepartmentList] = useState<any[]>([]);//部门数据
     const [userList, setuserList] = useState<any[]>([]);//申请人数据数据
     const match = useRouteMatch()
@@ -502,7 +502,6 @@ export default function RawMaterialStock(): React.ReactNode {
         setRequirement(record.quantity);
         setOutboundId(record.id);
         setApplyListdata([record]);
-        console.log(record)
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
             materialTexture: record.materialTexture,//材质
             productName: record.productName,//品名
@@ -530,14 +529,20 @@ export default function RawMaterialStock(): React.ReactNode {
     // 出库保存
     const IssueSave = async () => {
         let ary: any = [];
+        let count: number = 0;
         await OutLibraryListdata.map((item, index) => {
             if (item.outboundQuantity) {
                 let obj: any = {};
                 obj.quantity = item.outboundQuantity
                 obj.id = item.id
+                count += item.outboundQuantity
                 ary.push(obj)
             }
         })
+        if (count > requirement) {
+            message.error("出库数量不能大于需求量...")
+            return
+        }
         if (ary.length == 0) return message.error('所有数据无出库数量')
         const data: any = await RequestUtil.post(`/tower-storage/outStock`, {
             id: OutboundId,
@@ -552,7 +557,6 @@ export default function RawMaterialStock(): React.ReactNode {
     }
     // 点击出库-缺料申请-按钮
     const MaterialShortageApplication = async () => {
-        console.log(ApplyListdata, 'ApplyListdata')
         if (OutLibraryListdata.length != 0) {
             message.error('库存未用完')
             return
@@ -852,7 +856,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Table
                             columns={WarehousingColumns}
                             dataSource={WarehousingListdata}
-                            scroll={{x: 1200}}
+                            scroll={{ x: 1200 }}
                             size='small'
                             rowClassName={(item, index) => {
                                 return index % 2 ? 'aaa' : ''
