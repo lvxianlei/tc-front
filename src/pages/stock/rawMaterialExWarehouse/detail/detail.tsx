@@ -535,7 +535,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 let obj: any = {};
                 obj.quantity = item.outboundQuantity
                 obj.id = item.id
-                count += item.outboundQuantity
+                count += item.outboundQuantity || 0
                 ary.push(obj)
             }
         })

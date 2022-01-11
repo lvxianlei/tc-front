@@ -72,6 +72,7 @@ export default function AssessmentTaskList(): React.ReactNode {
             key: 'bidEndTime',
             title: '投标截止时间',
             dataIndex: 'bidEndTime',
+            format: 'YYYY-MM-DD',
             width: 200
         },
         {
