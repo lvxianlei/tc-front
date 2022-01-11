@@ -111,6 +111,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         var newArr = allMaterialList.filter((item: any, index: any, self: any) => {
             return e === item.materialName
         })
+        const workCenterRelations = form.getFieldsValue(true)?.workCenterRelations;
+        workCenterRelations[index] = {
+            ...workCenterRelations[index],
+            specificationName: ''
+        }
+        form.setFieldsValue({ workCenterRelations: workCenterRelations })
         setSpecifications({
             ...specifications,
             [index]: newArr
