@@ -21,6 +21,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [materialList, setMaterialList] = useState<any[]>([])
     const [supplierId, setSupplierId] = useState<string>("")
+    const [purchasePlanId, setPurchasePlanId] = useState<string>("")
     const [baseForm] = Form.useForm()
     const [freightForm] = Form.useForm()
     const [stevedoringForm] = Form.useForm()
@@ -144,6 +145,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     materialTextureId: name,
                 }
             }) || [])
+            setSupplierId(result.supplierId);
+            setPurchasePlanId(result.comparisonPriceId);
             resove(result)
         } catch (error) {
             reject(error)
@@ -308,6 +311,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })
         }
         if (fields.comparisonPriceNumber) {
+            setPurchasePlanId(fields.comparisonPriceNumber.id);
             const meterialList: any[] = await getComparisonPrice(fields.comparisonPriceNumber.id)
             setMaterialList(meterialList.map((item: any) => {
                 const num = parseFloat(item.num || "1")
@@ -457,7 +461,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         taxPrice: item.taxPrice || 1.00,
                         price: item.price || 1.00,
                         taxTotalAmount: item.taxTotalAmount || 1.00,
-                        totalAmount: item.totalAmount || 1.00
+                        totalAmount: item.totalAmount || 1.00,
+                        weight: Number(item?.proportion || 1) * Number(item.length || 1)
                     }))
                     )} />
         </Modal>
@@ -481,7 +486,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                             </Form.Item>
                         })
                     case "comparisonPriceNumber":
-                        return ({ ...item, path: `${item.path}?supplierId=${supplierId}&comparisonStatus=2` })
+                        return ({ ...item, path: `${item.path}?supplierId=${supplierId}&comparisonStatus=2&purchasePlanId=${purchasePlanId}` })
                     default:
                         return item
                 }
