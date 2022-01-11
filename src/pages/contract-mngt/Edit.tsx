@@ -364,7 +364,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? (item.proportion * item.thickness * item.width * value).toFixed(3) : item.weightAlgorithm === '1' ? (item.proportion * value).toFixed(3) : null
+                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value)/1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value)/1000).toFixed(3) : null
                 })
             }
             return item
@@ -462,7 +462,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         price: item.price || 1.00,
                         taxTotalAmount: item.taxTotalAmount || 1.00,
                         totalAmount: item.totalAmount || 1.00,
-                        weight: Number(item?.proportion || 1) * Number(item.length || 1)
+                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1))/1000).toFixed(3)
                     }))
                     )} />
         </Modal>
