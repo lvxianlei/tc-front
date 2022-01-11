@@ -178,6 +178,7 @@ export default function ConfirmDetail(): React.ReactNode {
     const onDelete = (key: React.Key)=>{
       const newData:any = [...tableDataSource];
       const index = newData.findIndex((item:any) => key === item.key);
+      console.log(newData[index])
       if (index > -1 && newData[index].id) {
         RequestUtil.delete(`/tower-science/drawProductDetail?id=${newData[index].id}`)
         newData.splice(index, 1);
@@ -219,6 +220,9 @@ export default function ConfirmDetail(): React.ReactNode {
           totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
         })
         setWeight(totalNumber);
+        RequestUtil.post(`/tower-science/drawProductDetail/save`,newData[index]).then(()=>{
+          message.success('保存成功！')
+        })
       } catch (errInfo) {
         console.log('Validate Failed:', errInfo);
       }
@@ -521,13 +525,18 @@ export default function ConfirmDetail(): React.ReactNode {
             submitData.key = tableDataSource && tableDataSource.length.toString();
             submitData.otherWeight = submitData.otherWeight?submitData.otherWeight:0;
             submitData.index = tableDataSource.length;
+            const id:any = await RequestUtil.post(`/tower-science/drawProductDetail/save`,{
+              ...submitData,
+              drawTaskId: params.id
+            })
+            submitData['id'] = id;
             tableDataSource.push(submitData);
-            setTableDataSource(tableDataSource);
             let number = '0';
             tableDataSource.forEach((item:any)=>{
                 number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(2)
             })
             setWeight(number);
+            setTableDataSource(tableDataSource);
             form.resetFields();
             setVisible(false);
         } catch (error) {
@@ -619,7 +628,7 @@ export default function ConfirmDetail(): React.ReactNode {
             resolve(a.length)
           }
           else{
-            resolve(false)
+            resolve(1)
           }
       }).catch(error => {
           Promise.reject(error)
