@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Modal, Form, Image, message, Popconfirm, Upload } from 'antd';
-import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -81,13 +80,13 @@ export default function SampleDraw(): React.ReactNode {
             // fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    {params.status==='2'?<Popconfirm
+                    {params.status === '2' ? <Popconfirm
                         title="要删除该条数据吗？"
                         okText="确认"
                         cancelText="取消"
-                        onConfirm={async () =>  await RequestUtil.delete(`/tower-science/smallSample/sampleDelete/${record.id}`).then(()=>{
+                        onConfirm={async () => await RequestUtil.delete(`/tower-science/smallSample/sampleDelete/${record.id}`).then(() => {
                             message.success('删除成功！');
-                        }).then(async ()=>{
+                        }).then(async () => {
                             const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
                             setHeaderName(data);
                             setRefresh(!refresh)
@@ -96,9 +95,9 @@ export default function SampleDraw(): React.ReactNode {
                         <Button type="link" disabled={!record.smallSample}>
                             删除
                         </Button>
-                    </Popconfirm>:null}
+                    </Popconfirm> : null}
                     <Button type='link' onClick={async () => {
-                        const url:any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
+                        const url: any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
                         setUrl(url?.downloadUrl);
                         setVisible(true)
                     }}>查看</Button>
@@ -107,12 +106,12 @@ export default function SampleDraw(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false); setUrl('');};
+    const handleModalCancel = () => { setVisible(false); setUrl(''); };
     const onFilterSubmit = (value: any) => {
         if (value.upLoadTime) {
             const formatDate = value.upLoadTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.uploadTimeStart = formatDate[0]+ ' 00:00:00';
-            value.uploadTimeEnd = formatDate[1]+ ' 23:59:59';
+            value.uploadTimeStart = formatDate[0] + ' 00:00:00';
+            value.uploadTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.upLoadTime
         }
         setFilterValue(value)
@@ -132,15 +131,17 @@ export default function SampleDraw(): React.ReactNode {
                 const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`)
                 setHeaderName(data);
                 // }).then(()=>{
-                    setRefresh(!refresh);
+                setRefresh(!refresh);
                 // })
             }
+        } else if (event.file.status === "error") {
+            message.error('上传失败');
         }
     }
     return (
         <>
-            <Modal visible={visible} title="图片" footer={false}  onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
-                <Image 
+            <Modal visible={visible} title="图片" footer={false} onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
+                <Image
                     src={url}
                     preview={false}
                 />
@@ -151,14 +152,14 @@ export default function SampleDraw(): React.ReactNode {
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
-                requestData={{productCategoryId:params.id}}
+                requestData={{ productCategoryId: params.id }}
                 extraOperation={
                     <Space>
                         {/* <Button type="primary">导出</Button> */}
-                        <Button type="primary" onClick={()=>{
-                            downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {} , true)
+                        <Button type="primary" onClick={() => {
+                            downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {}, true)
                         }}>导出</Button>
-                        {params.status==='2'?<Upload
+                        {params.status === '2' ? <Upload
                             accept=".zip,.rar,.7z"
                             multiple={true}
                             action={`${process.env.REQUEST_API_PATH_PREFIX}/tower-science/smallSample/sampleUploadByZip/${params.id}`}
@@ -170,24 +171,24 @@ export default function SampleDraw(): React.ReactNode {
                             // data={ { productCategoryId:params.id } }
                             onChange={uploadChange}
                             showUploadList={false}
-                        ><Button type="primary" >导入</Button></Upload>:null}
-                        <Button type="primary" onClick={()=>{
-                        history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
+                        ><Button type="primary" >导入</Button></Upload> : null}
+                        <Button type="primary" onClick={() => {
+                            history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
                         }}>下载样图</Button>
-                        {params.status==='2'?<Popconfirm
+                        {params.status === '2' ? <Popconfirm
                             title="确认完成小样图?"
-                            onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(()=>{
+                            onConfirm={async () => await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(() => {
                                 message.success('提交成功！');
-                            }).then(()=>{
+                            }).then(() => {
                                 history.push('/workMngt/sampleDrawList');
                             })}
                             okText="确认"
                             cancelText="取消"
-                        >   
+                        >
                             <Button type="primary">完成小样图</Button>
-                        </Popconfirm>:null}
+                        </Popconfirm> : null}
                         <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                        <span>小样图数：{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount+headerName?.noSmallSampleCount}</span>
+                        <span>小样图数：{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount + headerName?.noSmallSampleCount}</span>
                     </Space>
                 }
                 searchFormItems={[
