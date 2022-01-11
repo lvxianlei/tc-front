@@ -296,7 +296,8 @@ export default function ApplyPayment() {
                         <Select.Option value="">全部</Select.Option>
                         <Select.Option value="1">已创建</Select.Option>
                         <Select.Option value="2">待付款</Select.Option>
-                        <Select.Option value="3">已付款</Select.Option>
+                        <Select.Option value="3">部分付款</Select.Option>
+                        <Select.Option value="4">已付款</Select.Option>
                     </Select>
                 },
                 {
