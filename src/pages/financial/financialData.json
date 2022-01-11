@@ -660,7 +660,7 @@
         {
             "title": "企业类型",
             "dataIndex": "businessTypeName",
-            "type": "select"
+            "type": "string"
         },
         {
             "title": "所属企业",
@@ -703,7 +703,7 @@
         {
             "title": "请款机构",
             "dataIndex": "pleasePayOrganizationName",
-            "type": "select"
+            "type": "string"
         },
         {
             "title": "银行账号",
