@@ -73,10 +73,10 @@ export default function TowerDetail(): React.ReactNode {
     const handleModalCancel = () =>{ setVisible(false); setTableData([]) }
     return <>
         <Modal title='构件详情'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
-            <Space>
-                <span>单段件号数：{tableDataTop.singleNumberCount}</span>
-                <span>单段件数：{tableDataTop.singleCount}</span>
-                <span>单段重量：{tableDataTop.singleWeight}kg</span>
+            <Space style={{paddingBottom:'12px'}}>
+                <span>单段件号数：<span style={{color: '#FF8C00'}}>{tableDataTop.singleNumberCount}</span></span>
+                <span>单段件数：<span style={{color: '#FF8C00'}}>{tableDataTop.singleCount}</span></span>
+                <span>单段重量：<span style={{color: '#FF8C00'}}>{tableDataTop.singleWeight}kg</span></span>
             </Space>
             <CommonTable columns={componentColumns} dataSource={tableData} pagination={false}/>
         </Modal>

@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Popconfirm, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions, Modal, Select } from 'antd';
+import { Space, Button, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions, Modal, Select } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
@@ -44,6 +44,7 @@ export interface IPackingList {
     readonly id?: string;
     readonly description?: string;
     readonly packageType?: string;
+    readonly structureNum?: number;
 }
 
 export default function PackingListNew(): React.ReactNode {
@@ -57,6 +58,10 @@ export default function PackingListNew(): React.ReactNode {
     const [ packageType, setPackageType ] = useState<string>();
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ userList, setUserList ] = useState([]);
+    const [ removeVisible, setRemoveVisible ] = useState<boolean>(false);
+    const [ removeNum, setRemoveNum ] = useState(0);
+    const [ removeList, setRemoveList ] = useState({});
+    const [ removeIndex, setRemoveIndex ] = useState<any>();
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if(!location.state) {
@@ -222,16 +227,16 @@ export default function PackingListNew(): React.ReactNode {
             title: '数量',
             width: 150,
             dataIndex: 'num',
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <InputNumber
-                    key={ record.structureId } 
-                    bordered={false} 
-                    defaultValue={ record.num } 
-                    min={ 1 }
-                    max={ record.structureCount }
-                    onChange={ (e) => numChange(e, record.structureCount, index) }
-                />
-            )
+            // render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <InputNumber
+            //         key={ record.structureId } 
+            //         bordered={false} 
+            //         defaultValue={ record.num } 
+            //         min={ 1 }
+            //         max={ record.structureCount }
+            //         onChange={ (e) => numChange(e, record.structureCount, index) }
+            //     />
+            // )
         },
         {
             key: 'description',
@@ -246,27 +251,46 @@ export default function PackingListNew(): React.ReactNode {
             fixed: 'right' as FixedType,
             width: 100,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Popconfirm
-                    title="确认移除?"
-                    onConfirm={ () => remove(record, index) }
-                    okText="确认"
-                    cancelText="取消"
-                >
-                    <Button type="link">移除</Button>
-                </Popconfirm>
+                <Button type='link' onClick={ () => {setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(record.num)} }>移除</Button>
+                // <Popconfirm
+                //     title="确认移除?"
+                //     onConfirm={ () => remove(record, index) }
+                //     okText="确认"
+                //     cancelText="取消"
+                // >
+                //     <Button type="link">移除</Button>
+                // </Popconfirm>
             )
         }
     ]
 
-    const remove = async (value: Record<string, any>, index: number) => {
-        packagingData.splice(index, 1)
-        setPackagingData([...packagingData]); 
-        if(value.id) {
-            const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value.id }`);
-            setStayDistrict([ ...stayDistrict, newValue ]);
+    const remove = async (value: Record<string, any>, index: number, num: number) => {
+        if(num === value.num) {
+            packagingData.splice(index, 1)
+            setPackagingData([...packagingData]); 
+            if(value.id) {
+                const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value.id }`);
+                setStayDistrict([ ...stayDistrict, newValue ]);
+            } else {
+                setStayDistrict([ ...stayDistrict, value ]);
+            }
         } else {
-            setStayDistrict([ ...stayDistrict, value ]);
+            packagingData[index] = {
+                ...value,
+                num: value.num - num
+            }
+            setPackagingData([...packagingData]); 
+            if(value.id) {
+                const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value.id }`);
+                setStayDistrict([ ...stayDistrict, { ...newValue, structureNum: num} ]);
+            } else {
+                setStayDistrict([ ...stayDistrict, { ...value, structureNum: num} ]);
+            }
         }
+        setRemoveVisible(false);
+        setRemoveIndex(undefined);
+        setRemoveNum(0);
+        setRemoveList({});
     }
     
     const packaging = (record: IBundle, index: number) => {
@@ -284,7 +308,22 @@ export default function PackingListNew(): React.ReactNode {
             topId: record.id,
             id: ''
         }
-        setPackagingData([ data, ...packagingData ]);
+        let list: IBundle[] = [];
+        if(packagingData?.length > 0) {
+            packagingData.forEach((res: IBundle, index: number) => {
+                if(res.structureId === record.id || res.structureId === record.topId) {
+                    list[index] = {
+                        ...res,
+                        num: Number(res.num) + Number(record.structureNum)
+                    }
+                } else {
+                    list = [data, ...packagingData]
+                }
+            })
+        } else {
+            list=[data]
+        }
+        setPackagingData(list);
         stayDistrict.splice(index, 1);
         setStayDistrict(stayDistrict);
     }
@@ -342,6 +381,12 @@ export default function PackingListNew(): React.ReactNode {
     }
 
     return <> 
+        <Modal visible={ removeVisible } title="移除" okText="确认" onCancel={() => {setRemoveNum(0); setRemoveVisible(false);}} onOk={ () => remove(removeList,removeIndex, removeNum)}>
+            <Row>
+                <Col>数量</Col>
+                <Col><Input value={removeNum} onChange={(e) => setRemoveNum(Number(e.target.value))}/></Col>
+            </Row>
+        </Modal>
         <DetailContent operation={ [
             <Space direction="horizontal" size="small" >
                 <Button type="primary" onClick={ () => {
