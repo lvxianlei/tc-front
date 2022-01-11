@@ -97,7 +97,7 @@ class MaterialMngt extends AbstractMngtComponent<IMaterialRouteProps, IMaterialM
             dataIndex: 'weightAlgorithm',
             align: "center",
             render: (text, record, index) => {
-                return text ? text === '0' ? <span>比重*体积（钢板类）</span> : <span>比重*长度（角板类）</span> : <div></div>
+                return text ? text === '0' ? <span>比重*体积（钢板类）</span> : <span>比重*长度（角钢类）</span> : <div></div>
             }
         }, {
             key: 'standardName',

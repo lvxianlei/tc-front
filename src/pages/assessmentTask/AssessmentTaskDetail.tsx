@@ -99,7 +99,8 @@ const baseColumns = [
     {
         "dataIndex": "bidEndTime",
         "title": "投标截止时间",
-        "type": "date"
+        "type": "date",
+        "format": 'YYYY-MM-DD'
     },
     {
         "dataIndex": "applicantUserName",
