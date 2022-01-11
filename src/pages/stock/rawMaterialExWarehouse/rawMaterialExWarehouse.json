@@ -1,0 +1,30 @@
+{
+    "baseColumn": [
+        {
+            "title": "领料编号",
+            "dataIndex": "pickingNumber",
+            "width": 120
+        },
+        {
+            "title": "生产批次",
+            "dataIndex": "productionBatch",
+            "width": 120
+        },
+        {
+            "title": "状态",
+            "dataIndex": "stockStatusName",
+            "width": 120
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "width": 120
+        },
+        {
+            "title": "申请人",
+            "dataIndex": "applyStaffName",
+            "width": 120
+        }
+    ]
+}
