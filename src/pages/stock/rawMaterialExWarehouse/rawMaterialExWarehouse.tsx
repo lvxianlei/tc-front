@@ -1,300 +1,104 @@
-import React, { useState, useEffect } from 'react';
-import { Space, Button, Input, DatePicker, Select, Table } from 'antd';
-import { Link, useHistory, useRouteMatch, useLocation } from 'react-router-dom';
-import { FixedType } from 'rc-table/lib/interface';
-import RequestUtil from '../../../utils/RequestUtil';
-import AuthUtil from '../../../utils/AuthUtil';
-import ExportList from '../../../components/export/list';
-import '../StockPublicStyle.less';
-const { RangePicker } = DatePicker;
+/***
+ * 新修改的原材料出库
+ * 原文件地址当前目录：OriginalDocument.tsx
+ * 时间：2022/01/11
+ */
+import React, { useState } from 'react';
+import { Input, Select, DatePicker } from 'antd';
+import { FixedType } from 'rc-table/lib/interface'
+import { Page, IntgSelect } from '../../common';
+import { Link } from 'react-router-dom';
+import { baseColumn } from "./rawMaterialExWarehouse.json";
+export default function RawMaterialWarehousing(): React.ReactNode {
+    const [ filterValue, setFilterValue ] = useState<any>({
+        selectName: "",
+        status: "",
+        updateTimeStart: "",
+        updateTimeEnd: "",
+        departmentId: "",
+        applyStaffId: ""
+    });
 
-export default function RawMaterialStock(): React.ReactNode {
-    const history = useHistory()
-    const [current, setCurrent] = useState(1);
-    const [total, setTotal] = useState(0);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [dateValue, setDateValue] = useState<any>([]);//时间
-    const [dateString, setDateString] = useState<any>([]);//时间字符串格式
-    const [keyword, setKeyword] = useState<any>('');//关键字搜索
-    const [status, setStatus] = useState(`${(history.location.state as any)?.status || ""}`);//状态
-    const [departmentId, setDepartmentId] = useState('');//部门
-    const [applyStaffId, setPersonnelId] = useState('');//人员
-    const [Listdata, setListdata] = useState<any[]>([]);//列表数据
-    const [departmentList, setDepartmentList] = useState<any[]>([]);//部门数据
-    const [userList, setuserList] = useState<any[]>([]);//申请人数据数据
-    const match = useRouteMatch()
-    const location = useLocation<{ state: {} }>();
-    const [isExport, setIsExportStoreList] = useState(false)
-    const columns = [
-        {
-            title: '序号',
-            dataIndex: 'id',
-            width: 50,
-            render: (text: any, item: any, index: any) => <span>{index + 1}</span>
-        },
-        {
-            title: '领料编号',
-            dataIndex: 'pickingNumber',
-            width: 120,
-        }, {
-            title: '生产批次',
-            dataIndex: 'productionBatch',
-            width: 120,
-        }, {
-            title: '状态',
-            dataIndex: 'stockStatusName',
-            width: 120,
-            // render: (text: any, item: any, index: any) => {
-            //     return <span>{text == 0 ? '待完成' : '已完成'}</span>
-            // }
-        }, {
-            title: '最新状态变更时间',
-            dataIndex: 'updateTime',
-            width: 120,
-        }, {
-            title: '申请人',
-            dataIndex: 'applyStaffName',
-            width: 120,
-        },
-        {
-            title: '操作',
-            dataIndex: 'key',
-            width: 40,
-            fixed: 'right' as FixedType,
-            render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Link to={`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.weight}`}>明细</Link>
-                </Space>
-            )
-        }
-    ]
-    //获取列表数据
-    const loadData = async () => {
-        console.log('请求数据')
-        const data: any = await RequestUtil.get(`/tower-storage/outStock`, {
-            current,
-            size: pageSize,
-            applyStaffId,
-            departmentId,
-            status,
-            updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
-            updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
-            selectName: keyword,
-        });
-        setListdata(data.records);
-        setTotal(data.total);
+    // 查询按钮
+    const onFilterSubmit = (value: any) => {
+    const result = {
+        selectName: value.selectName || "",
+        status: value.status || "",
+        updateTimeStart: "",
+        updateTimeEnd: "",
+        departmentId: "",
+        applyStaffId: ""
     }
-    //获取部门数据
-    const getDepartment = async () => {
-        const data: any = await RequestUtil.get(`/sinzetech-user/department`, {
-            tenantId: AuthUtil.getTenantId(),
-        });
-        setDepartmentList(data)
+    if (value.startRefundTime) {
+        const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
+        result.updateTimeStart = `${formatDate[0]} 00:00:00`
+        result.updateTimeEnd = `${formatDate[1]} 23:59:59`
+        delete value.startRefundTime
     }
-    //获取部门部门中的人
-    const getUser = async (department: any) => {
-        const data: any = await RequestUtil.get(`/sinzetech-user/user`, {
-            departmentId: department,
-        });
-        setuserList(data.records)
+    if (value.batcherId) {
+        value.departmentId = value.batcherId.first
+        value.applyStaffId = value.batcherId.second
     }
-    // 重置
-    const reset = () => {
-        setCurrent(1);
-        setPageSize(10);
-        setStatus('');
-        setDateValue([]);
-        setDateString([]);
-        setKeyword('');
-        setDepartmentId('');
-        setPersonnelId('');
-        setuserList([]);
+    setFilterValue(result)
+    return result
     }
-    useEffect(() => {
-        getDepartment()
-    }, [])
-    //进入页面刷新
-    useEffect(() => {
-        loadData()
-    }, [current, pageSize, applyStaffId, status, dateString])
     return (
-        <div id="RawMaterialStock">
-            <div className="Search_public_Stock">
-                <div className="search_item">
-                    <span className="tip">最新状态变更时间：</span>
-                    <div className='selectOrInput'>
-                        <RangePicker
-                            value={dateValue}
-                            onChange={(date, dateString) => {
-                                console.log(date, dateString)
-                                setDateValue(date)
-                                setDateString(dateString)
-                            }}
-                        ></RangePicker>
-                    </div>
-                </div>
-                <div className="search_item">
-                    <span className="tip">状态：</span>
-                    <div className='selectOrInput'>
-                        <Select
-                            className="select"
-                            style={{ width: "100px" }}
-                            value={status ? status : ''}
-                            onChange={(val) => { setStatus(val) }}
-                        >
-                            <Select.Option
-                                value=""
-                            >
-                                全部
-                            </Select.Option>
-                            <Select.Option
-                                value="0"
-                            >
-                                待完成
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                已完成
-                            </Select.Option>
+        <>
+            <Page
+                path="/tower-storage/outStock"
+                exportPath={"/tower-storage/outStock"}
+                columns={[
+                    {
+                        key: 'index',
+                        title: '序号',
+                        dataIndex: 'index',
+                        fixed: "left",
+                        width: 50,
+                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                    },
+                    ...baseColumn,
+                    {
+                    title: '操作',
+                    dataIndex: 'key',
+                    width: 40,
+                    fixed: 'right' as FixedType,
+                    render: (_: undefined, record: any): React.ReactNode => (
+                        <>
+                            <Link to={`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.weight}`}>明细</Link>
+                        </>
+                    )
+                }
+            ]}
+                onFilterSubmit={onFilterSubmit}
+                filterValue={ filterValue }
+                searchFormItems={[
+                {
+                    name: 'startRefundTime',
+                    label: '最新状态变更时间',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                },
+                {
+                    name: 'status',
+                    label: '状态',
+                    children: (
+                        <Select placeholder="请选择标准" style={{ width: "140px" }}>
+                                <Select.Option value="0">待完成</Select.Option>
+                                <Select.Option value="1">已完成</Select.Option>
                         </Select>
-                    </div>
-                </div>
-                <div className="search_item">
-                    <span className="tip">出库人：</span>
-                    <div className='selectOrInput'>
-                        <Select
-                            className="select"
-                            style={{ width: "100px" }}
-                            value={departmentId ? departmentId : ''}
-                            onChange={(val) => { setDepartmentId(val); setPersonnelId(''); setuserList([]); getUser(val) }}
-                        >
-                            <Select.Option
-                                value=""
-                            >
-                                全部
-                            </Select.Option>
-                            {
-                                departmentList.map((item, index) => {
-                                    return (
-                                        <Select.Option key={index} value={item.id}>{item.name}</Select.Option>
-                                    )
-                                })
-                            }
-                        </Select>-
-                        <Select
-                            className="select"
-                            style={{ width: "100px" }}
-                            value={applyStaffId ? applyStaffId : ''}
-                            onChange={(val) => { setPersonnelId(val) }}
-                        >
-                            <Select.Option
-                                value=""
-                            >
-                                全部
-                            </Select.Option>
-                            {
-                                userList.map((item, index) => {
-                                    return (
-                                        <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
-                                    )
-                                })
-                            }
-                        </Select>
-                    </div>
-                </div>
-                <div className="search_item">
-                    <span className="tip">关键字：</span>
-                    <div className='selectOrInput'>
-                        <Input
-                            placeholder="领料编号/生产批次"
-                            value={keyword}
-                            onChange={(e) => {
-                                setKeyword(e.target.value)
-                            }}
-                            onPressEnter={() => {
-                                loadData()
-                            }}
-                        >
-                        </Input>
-                    </div>
-                </div>
-                <div className="search_item">
-                    <div className='search_Reset'>
-                        <Button
-                            className="btn"
-                            type="primary"
-                            onClick={() => { loadData() }}
-                        >查询</Button>
-                        <Button
-                            className="btn"
-                            type="primary"
-                            ghost
-                            onClick={reset}
-                        >重置</Button>
-                    </div>
-                </div>
-            </div>
-            <div className="func_public_Stock">
-                <Button
-                    type="primary"
-                    className='func_btn'
-                    onClick={()=>{setIsExportStoreList(true)}}
-                >导出</Button>
-            </div>
-            <div className="page_public_Stock">
-                <Table
-                    columns={columns}
-                    dataSource={Listdata}
-                    size='small'
-                    rowClassName={(item, index) => {
-                        return index % 2 ? 'aaa' : ''
-                    }}
-                    scroll={
-                        {
-                            y: 400
-                        }
-                    }
-                    pagination={{
-                        size: 'small',
-                        defaultPageSize: 5,
-                        showQuickJumper: true,
-                        current: current,
-                        total: total,
-                        pageSize: pageSize,
-                        pageSizeOptions: ['10', '20', '50', '100'],
-                        showSizeChanger: true,
-                        onChange: (page, pageSize) => {
-                            console.log(page, pageSize)
-                            setCurrent(page);
-                            setPageSize(Number(pageSize));
-                        }
-                    }}
-                />
-            </div>
-            {isExport?<ExportList
-                history={history}
-                location={location}
-                match={match}
-                columnsKey={() => {
-                    let keys = [...columns]
-                    keys.pop()
-                    return keys
-                }}
-                current={current}
-                size={pageSize}
-                total={total}
-                url={`/tower-storage/outStock`}
-                serchObj={{
-                    applyStaffId,
-                    departmentId,
-                    status,
-                    updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
-                    updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
-                    selectName: keyword,
-                }}
-                closeExportList={() => { setIsExportStoreList(false) }}
-            />:null}
-        </div>
+                    )
+                },
+                {
+                    name: 'batcherId',
+                    label: '出库人',
+                    children: <IntgSelect width={200} />
+                },
+                {
+                    name: 'selectName',
+                    label: "关键字",
+                    children: <Input placeholder="请输入领料编号/生产批次进行查询" style={{ width: 300 }} />
+                }
+                ]}
+            />
+        </>
     )
 }
