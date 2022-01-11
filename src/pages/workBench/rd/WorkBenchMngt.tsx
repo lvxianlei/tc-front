@@ -318,7 +318,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 
 	const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
 		const data = await RequestUtil.get(`/tower-science/workbench`);
-		resole([])
+		resole(data)
 	}), {})
 	const detailData: any = data;
 	const history = useHistory();
