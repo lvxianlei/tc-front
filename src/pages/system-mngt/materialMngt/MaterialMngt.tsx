@@ -72,7 +72,7 @@ export default function MaterialMngt(): React.ReactNode {
                     case '0':
                         return '比重*体积（钢板类）';
                     case '1':
-                        return '比重*长度（角板类）';
+                        return '比重*长度（角钢类）';
                     default:
                         return '-'
                 }
@@ -335,7 +335,7 @@ export default function MaterialMngt(): React.ReactNode {
                                 比重*体积（钢板类）
                             </Select.Option>
                             <Select.Option value='1' id='1' >
-                                比重*长度（角板类）
+                                比重*长度（角钢类）
                             </Select.Option>
                         </Select>
                     </Form.Item></Col>
