@@ -145,14 +145,14 @@ export default function DailySchedule(): React.ReactNode {
             }}
             searchFormItems={[
                 {
-                    name: 'fuzzyMsg',
-                    label: '',
-                    children: <Input style={{ width: '300px' }} placeholder="请输入订单工程名称/计划号/塔型进行查询" />
-                },
-                {
                     name: 'time',
                     label: '结束时间',
                     children: <DatePicker.RangePicker />
+                },
+                {
+                    name: 'fuzzyMsg',
+                    label: "模糊查询项",
+                    children: <Input style={{ width: '300px' }} placeholder="请输入订单工程名称/计划号/塔型进行查询" />
                 }
             ]}
             filterValue={filterValue}

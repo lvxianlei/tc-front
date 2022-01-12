@@ -60,6 +60,7 @@ export default function Invoicing() {
             },
             {
                 name: 'fuzzyQuery',
+                label: "模糊查询项",
                 children: <Input placeholder="工程名称/票面单位/业务经理" style={{ width: 300 }} />
             },
         ]}

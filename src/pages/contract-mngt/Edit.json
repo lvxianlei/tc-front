@@ -1,5 +1,5 @@
 {
-    "FreightInformation": [
+    "freightInformation": [
         {
             "title": "运输承担",
             "dataIndex": "transportBear",

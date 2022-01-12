@@ -1,7 +1,7 @@
 //合同看板
 import React from 'react'
 import { Button, Select, DatePicker, Input } from 'antd'
-import { Link,  } from 'react-router-dom'
+import { Link, } from 'react-router-dom'
 import { Page } from '../../common'
 import { contract } from "./contract.json"
 
@@ -57,7 +57,7 @@ export default function ViewContract(): React.ReactNode {
             },
             {
                 name: 'fuzzyQuery',
-                label: '查询',
+                label: "模糊查询项",
                 children: <Input style={{ width: "120px" }} placeholder="供应商/合同编号" />
             }
         ]}

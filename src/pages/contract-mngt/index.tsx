@@ -125,17 +125,17 @@ export default function ContractMngt(): JSX.Element {
                         dataIndex: "opration",
                         fixed: "right",
                         render: (_: any, records: any) => <>
-                            <Button type="link" className="btn-operation-link"disabled={records.isReceiptRef === 1}
+                            <Button type="link" className="btn-operation-link" disabled={records.isReceiptRef === 1}
                                 onClick={() => {
                                     setOprationType("edit")
                                     setDetailId(records.id)
                                     setEditVisible(true)
                                 }}>编辑</Button>
-                            <Button type="link" className="btn-operation-link"onClick={() => {
+                            <Button type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setOverviewVisible(true)
                             }}>详情</Button>
-                            <Button type="link" className="btn-operation-link"disabled={records.isReceiptRef === 1}
+                            <Button type="link" className="btn-operation-link" disabled={records.isReceiptRef === 1}
                                 onClick={() => handleDelete(records.id)}>删除</Button>
                         </>
                     }
@@ -170,7 +170,7 @@ export default function ContractMngt(): JSX.Element {
                     },
                     {
                         name: 'fuzzyQuery',
-                        label: '查询',
+                        label: "模糊查询项",
                         children: <Input style={{ width: "230px" }} placeholder="合同编号/关联采购计划/供应商" />
                     }
                 ]}

@@ -79,7 +79,7 @@ export default function TemplateList() {
     const checkUser: any = data || [];
 
     return (
-        <Spin spinning={ loading }>
+        <Spin spinning={loading}>
             <Page
                 path="/tower-science/loftingTemplate"
                 filterValue={filterValue}
@@ -130,7 +130,7 @@ export default function TemplateList() {
                     },
                     {
                         name: 'fuzzyMsg',
-                        label: '查询',
+                        label: "模糊查询项",
                         children: <Input placeholder="放样任务编号/内部合同编号/计划号/塔型" style={{ width: 300 }} />
                     }
                 ]}

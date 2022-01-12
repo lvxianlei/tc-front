@@ -88,10 +88,9 @@ export default function Invoicing() {
             },
             {
                 name: 'fuzzyQuery',
-                label: '查看',
+                label: "模糊查询项",
                 children: <Input placeholder="差异编号/内部合同编号/生产批次/塔型" style={{ width: 300 }} />
             }
-
         ]}
     />
 }

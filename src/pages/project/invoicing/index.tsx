@@ -75,7 +75,7 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}} onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</span>
+                        <span style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }} onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</span>
                         <Button className="btn-operation-link" type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
                         <Button className="btn-operation-link" type="link" size="small" disabled={record.state !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
@@ -108,6 +108,7 @@ export default function Invoicing() {
             },
             {
                 name: 'fuzzyQuery',
+                label: "模糊查询项",
                 children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
             },
         ]}

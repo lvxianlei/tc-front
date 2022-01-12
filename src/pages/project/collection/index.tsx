@@ -68,8 +68,9 @@ export default function Collection() {
             },
             {
                 name: 'fuzzyQuery',
+                label: "模糊查询项",
                 children: <Input placeholder="编号/来款单位名称" style={{ width: 300 }} />
-            },
+            }
         ]}
     />
 }

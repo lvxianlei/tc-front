@@ -109,12 +109,12 @@ export default function SupplierMngt(): React.ReactNode {
                     dataIndex: "opration",
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" style={{marginRight: 12}} onClick={() => {
+                            <Button type="link" style={{ marginRight: 12 }} onClick={() => {
                                 setOprationType("edit")
                                 setDetailId(record.id)
                                 setEditVisible(true)
                             }}>编辑</Button>
-                            <Button type="link" style={{marginRight: 12}} onClick={() => {
+                            <Button type="link" style={{ marginRight: 12 }} onClick={() => {
                                 setDetailId(record.id)
                                 setOverviewVisible(true)
                             }}>详情</Button>
@@ -169,9 +169,9 @@ export default function SupplierMngt(): React.ReactNode {
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input style={{ width: 280 }} placeholder="供应商编号/供应商名称/联系人/联系电话" maxLength={200} />
-                },
+                }
             ]}
         />
     </>

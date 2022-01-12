@@ -114,6 +114,7 @@ export default function Overview() {
                 },
                 {
                     name: 'fuzzyQuery',
+                    label: "模糊查询项",
                     children: <Input placeholder="材质/规格/长度" style={{ width: 300 }} />
                 }
             ]}

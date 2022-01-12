@@ -318,7 +318,6 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                 searchFormItems={ [
                     {
                         name: 'fuzzyMsg',
-                        label: '',
                         children: <Input placeholder="输入仓库名称/仓库类型进行查询"/>
                     }
                 ] }

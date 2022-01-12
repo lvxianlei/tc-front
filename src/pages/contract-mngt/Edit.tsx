@@ -1,14 +1,14 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
 import { Button, Row, Modal, Spin, Form, InputNumber, message, Select } from "antd"
 import { BaseInfo, DetailTitle, Attachment, CommonTable, IntgSelect } from "../common"
-import { contractBaseInfo, material, addMaterial, freight, stevedoring } from "./contract.json"
+import { contractBaseInfo, material, addMaterial } from "./contract.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import { PopTableContent } from "./enquiryCompare/ComparesModal"
 import { deliverywayOptions, materialStandardOptions, materialTextureOptions, transportationTypeOptions } from "../../configuration/DictionaryOptions"
 
 // 新加运费信息
-import { FreightInformation, HandlingChargesInformation } from "./Edit.json";
+import { freightInformation, HandlingChargesInformation } from "./Edit.json";
 interface EditProps {
     id: string
     type: "new" | "edit"
@@ -25,17 +25,13 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [baseForm] = Form.useForm()
     const [freightForm] = Form.useForm()
     const [stevedoringForm] = Form.useForm()
-    const [newFreight, setNewFreight] = useState<any>(freight);
-    const [newStevedoring, setNewStevedoring] = useState<any>(stevedoring);
-    const [freightCol, setFreightCol] = useState(4)
-    const [stevedoringCol, setStevedoringCol] = useState(4)
     const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({ getDataSource: () => [], resetFields: () => { } })
 
     // 运费的数组
-    const [ newFreightInformation, setNewFreightInformation] = useState<any>(FreightInformation); // 运费信息
+    const [newfreightInformation, setNewfreightInformation] = useState<any>(freightInformation); // 运费信息
     // 装卸费
-    const [ newHandlingChargesInformation, setNewHandlingChargesInformation] = useState<any>(HandlingChargesInformation); // 装卸费信息
-    let oneFreight = [{
+    const [newHandlingChargesInformation, setNewHandlingChargesInformation] = useState<any>(HandlingChargesInformation); // 装卸费信息
+    const oneFreight = [{
         "title": "运输承担",
         "dataIndex": "transportBear",
         "type": "select",
@@ -56,7 +52,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             }
         ]
     }]
-    let oneStevedoring = [{
+    const oneStevedoring = [{
         "title": "卸车承担",
         "dataIndex": "unloadBear",
         "type": "select",
@@ -87,14 +83,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 purchasePlan: { id: result.purchasePlanId, value: result.purchasePlanNumber }
             })
             if (result?.transportBearVo?.transportBear == 1) {
-                // setNewFreight([]);
-                setNewFreightInformation(oneFreight.slice(0))
-                setFreightCol(1);
+                setNewfreightInformation(oneFreight.slice(0))
             } else {
-                // setNewFreight(freight)
                 // 需方
-                setNewFreightInformation(
-                    FreightInformation.map((item: any) => {
+                setNewfreightInformation(
+                    freightInformation.map((item: any) => {
                         if (item.dataIndex === "transportCompanyId") {
                             return ({
                                 ...item,
@@ -104,18 +97,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         return item
                     })
                 );
-                setFreightCol(2);
             }
             freightForm.setFieldsValue({
                 ...result.transportBearVo,
                 transportCompanyId: result.transportBearVo.transportCompanyId + ',' + result.transportBearVo.transportCompany
             })
             if (result?.unloadBearVo?.unloadBear == 1) {
-                // setNewStevedoring([]);
                 setNewHandlingChargesInformation(oneStevedoring.slice(0))
-                setStevedoringCol(1);
             } else {
-                // setNewStevedoring(stevedoring);
                 setNewHandlingChargesInformation(
                     HandlingChargesInformation.map((item: any) => {
                         if (item.dataIndex === "transportCompanyId") {
@@ -127,15 +116,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         return item
                     })
                 );
-                setStevedoringCol(4);
             }
             stevedoringForm.setFieldsValue({
                 ...result.unloadBearVo,
                 unloadCompanyId: result.unloadBearVo.unloadCompanyId + ',' + result.unloadBearVo.unloadCompany
             })
-            // comparisonForm.setFieldsValue({
-            //     comparisonPrice: { id: result.comparisonPriceId, value: result.comparisonPriceNumber }
-            // })
             setMaterialList(result?.materialContractDetailVos.map((res: any) => {
                 const id = res.materialTextureId;
                 const name = res.materialTexture;
@@ -364,7 +349,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value)/1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value)/1000).toFixed(3) : null
+                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null
                 })
             }
             return item
@@ -378,11 +363,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             // 确定是运输承担改变
             if (changeFiled.transportBear === 1) {
                 // 供方
-                setNewFreightInformation(oneFreight.slice(0))
+                setNewfreightInformation(oneFreight.slice(0))
             } else {
                 // 需方
-                setNewFreightInformation(
-                    FreightInformation.map((item: any) => {
+                setNewfreightInformation(
+                    freightInformation.map((item: any) => {
                         if (item.dataIndex === "transportCompanyId") {
                             return ({
                                 ...item,
@@ -462,7 +447,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         price: item.price || 1.00,
                         taxTotalAmount: item.taxTotalAmount || 1.00,
                         totalAmount: item.totalAmount || 1.00,
-                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1))/1000).toFixed(3)
+                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3)
                     }))
                     )} />
         </Modal>
@@ -493,163 +478,37 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })}
             dataSource={{}} edit />
         <DetailTitle title="运费信息" />
-        {/* <BaseInfo col={2} form={freightForm} columns={
-            [{
-                "title": "运输承担",
-                "dataIndex": "transportBear",
-                "type": "select",
-                "enum": [
-                    {
-                        "value": 1,
-                        "label": "供方"
-                    },
-                    {
-                        "value": 2,
-                        "label": "需方"
+        <BaseInfo
+            form={freightForm} col={2} classStyle={"overall-form-class-padding0"}
+            onChange={handleBaseInfoChangeFreight}
+            columns={
+                newfreightInformation.map((item: any) => {
+                    if (item.dataIndex === "transportCompanyId") {
+                        return ({
+                            ...item,
+                            enum: companyList
+                        })
                     }
-                ],
-                "rules": [
-                    {
-                        "required": true,
-                        "message": "请选择运输承担..."
-                    }
-                ]
-            }, ...newFreight].map((item: any) => {
-                if (item.dataIndex === "transportCompanyId") {
-                    return ({
-                        ...item, render: (data: any, props: any) => {
-                            return <Form.Item name="transportCompanyId">
-                                <Select style={{ width: "100%" }}>
-                                    {companyList && companyList.map((item: any) => {
-                                        return <Select.Option key={item.id + ',' + item.name} value={item.id + ',' + item.name}>{item.name}</Select.Option>
-                                    })}
-                                </Select>
-                            </Form.Item>
-                        }
-                    })
-                }
-                if (item.dataIndex === 'transportBear') {
-                    return ({
-                        ...item, render: (data: any, props: any) => {
-                            return <Form.Item name="transportBear">
-                                <Select style={{ width: '100%' }} placeholder="请选择运输承担" onChange={(e: number) => {
-                                    if (e == 1) {
-                                        setNewFreight([]);
-                                        setFreightCol(1);
-                                        freightForm.setFieldsValue({
-                                            transportBear: e,
-                                            transportCompanyId: '',
-                                            transportTaxPrice: '',
-                                            transportPrice: ''
-                                        })
-                                    } else {
-                                        setNewFreight(freight)
-                                        setFreightCol(4);
-                                    }
-                                }}>
-                                    <Select.Option value={1}>供方</Select.Option>
-                                    <Select.Option value={2}>需方</Select.Option>
-                                </Select>
-                            </Form.Item>
-                        }
-                    })
-                }
-                return item
-            })} dataSource={{}} edit /> */}
-        <BaseInfo 
-          form={freightForm} col={2} classStyle={"overall-form-class-padding0"}
-          onChange={handleBaseInfoChangeFreight}
-          columns={
-              newFreightInformation.map((item: any) => {
-                  if (item.dataIndex === "transportCompanyId") {
-                      return ({
-                          ...item,
-                          enum: companyList
-                      })
-                  }
-                  return item
-              })
-          }
-          dataSource={{}} edit />
+                    return item
+                })
+            }
+            dataSource={{}} edit />
         <DetailTitle title="装卸费信息" />
-        <BaseInfo 
-          form={stevedoringForm}  col={2} classStyle={"overall-form-class-padding0"}
-          onChange={handleBaseInfoChangeStevedoring}
-          columns={
-            newHandlingChargesInformation.map((item: any) => {
-                  if (item.dataIndex === "unloadCompanyId") {
-                      return ({
-                          ...item,
-                          enum: stevedoreCompanyList
-                      })
-                  }
-                  return item
-              })
-          }
-          dataSource={{}} edit />
-        {/* <BaseInfo col={2} form={stevedoringForm} columns={[
-            {
-                "title": "卸车承担",
-                "dataIndex": "unloadBear",
-                "type": "select",
-                "enum": [
-                    {
-                        "value": 1,
-                        "label": "供方"
-                    },
-                    {
-                        "value": 2,
-                        "label": "需方"
+        <BaseInfo
+            form={stevedoringForm} col={2} classStyle={"overall-form-class-padding0"}
+            onChange={handleBaseInfoChangeStevedoring}
+            columns={
+                newHandlingChargesInformation.map((item: any) => {
+                    if (item.dataIndex === "unloadCompanyId") {
+                        return ({
+                            ...item,
+                            enum: stevedoreCompanyList
+                        })
                     }
-                ],
-                "rules": [
-                    {
-                        "required": true,
-                        "message": "请选择卸车承担..."
-                    }
-                ]
-            }, ...newStevedoring].map((item: any) => {
-                if (item.dataIndex === "unloadCompanyId") {
-                    return ({
-                        ...item, render: (data: any, props: any) => {
-                            return <Form.Item name="unloadCompanyId">
-                                <Select style={{ width: "100%" }}>
-                                    {stevedoreCompanyList && stevedoreCompanyList.map((item: any) => {
-                                        return <Select.Option key={item.id + ',' + item.name} value={item.id + ',' + item.name}>{item.name}</Select.Option>
-                                    })}
-                                </Select>
-                            </Form.Item>
-                        }
-                    })
-                }
-                if (item.dataIndex === 'unloadBear') {
-                    return ({
-                        ...item, render: (data: any, props: any) => {
-                            return <Form.Item name="unloadBear">
-                                <Select style={{ width: '100%' }} placeholder="请选择卸车承担" onChange={(e: number) => {
-                                    if (e == 1) {
-                                        setNewStevedoring([]);
-                                        setStevedoringCol(1);
-                                        stevedoringForm.setFieldsValue({
-                                            unloadBear: e,
-                                            unloadCompanyId: '',
-                                            unloadTaxPrice: '',
-                                            unloadPrice: ''
-                                        })
-                                    } else {
-                                        setNewStevedoring(stevedoring);
-                                        setStevedoringCol(4);
-                                    }
-                                }}>
-                                    <Select.Option value={1}>供方</Select.Option>
-                                    <Select.Option value={2}>需方</Select.Option>
-                                </Select>
-                            </Form.Item>
-                        }
-                    })
-                }
-                return item
-            })} dataSource={{}} edit /> */}
+                    return item
+                })
+            }
+            dataSource={{}} edit />
         <DetailTitle
             title="原材料信息"
             operation={[<Button
@@ -667,7 +526,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         <Row></Row>
         <CommonTable
             rowKey={(records: any) => `${records.materialName}${records.spec}${records.length}`}
-            style={{padding: "0",}}
+            style={{ padding: "0" }}
             columns={[
                 ...material.map((item: any) => {
                     if (["num", "taxPrice", "price"].includes(item.dataIndex)) {
