@@ -194,10 +194,6 @@ export default function Invoicing() {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'fuzzyQuery',
-                    children: <Input placeholder="工程名称/销售计划号/塔型/加工计划编号/领料人" style={{ width: 300 }} />
-                },
-                {
                     name: 'pickingUnitId',
                     label: '领料生产单元',
                     children: <Select style={{ width: 200 }}>
@@ -219,6 +215,11 @@ export default function Invoicing() {
                     name: 'applyTimeStart',
                     label: '申请日期',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'fuzzyQuery',
+                    label: "模糊查询项",
+                    children: <Input placeholder="工程名称/销售计划号/塔型/加工计划编号/领料人" style={{ width: 300 }} />
                 }
             ]}
         />

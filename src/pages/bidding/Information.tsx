@@ -116,8 +116,8 @@ export default function Information(): React.ReactNode {
             key: 'sourceWebsite',
             title: '原始地址',
             dataIndex: 'sourceWebsite',
-            render:(_:any, record: any) => {
-                return <span style={{color: "#FF8C00", cursor: "pointer"}} onClick={() => handleAddress(record)}>{record.sourceWebsite || ""}</span>
+            render: (_: any, record: any) => {
+                return <span style={{ color: "#FF8C00", cursor: "pointer" }} onClick={() => handleAddress(record)}>{record.sourceWebsite || ""}</span>
             }
         },
         {
@@ -190,8 +190,9 @@ export default function Information(): React.ReactNode {
             },
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="项目名称/项目编码/审批编号/关联合同/制单人" style={{ width: 200 }} />
-            },
+                label: "模糊查询项",
+                children: <Input placeholder="项目名称/项目编码/审批编号/关联合同/制单人" style={{ width: 280 }} />
+            }
         ]}
     />
 }

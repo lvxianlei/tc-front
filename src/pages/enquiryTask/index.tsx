@@ -197,9 +197,9 @@ export default function EnquiryTask(): React.ReactNode {
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input placeholder="工程报价任务编号/项目名称/客户名称/项目负责人" style={{ width: "280px" }} />
-                },
+                }
             ]}
         />
     </>

@@ -10,11 +10,11 @@ import { IUser, EditRefProps, IResponseData, IAnnouncement } from './IUser';
 import AddUserModal from './AddUserModal';
 
 export default function RoleMngtList(): React.ReactNode {
-    const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [ visible, setVisible ] = useState<boolean>(false);
-    const [ id, setId ] = useState<string>("");
-    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
-    const [ selectedRows, setSelectedRows ] = useState<IAnnouncement[]>([]);
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const [visible, setVisible] = useState<boolean>(false);
+    const [id, setId] = useState<string>("");
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<IAnnouncement[]>([]);
     const addRef = useRef<EditRefProps>();
 
     const UserMngtListHead = [
@@ -53,7 +53,7 @@ export default function RoleMngtList(): React.ReactNode {
         return value
     }
 
-    const onChangeStatus = async(items: IUser[]) => {
+    const onChangeStatus = async (items: IUser[]) => {
         const resData: IResponseData = await RequestUtil.put<IResponseData>(`/sinzetech-user/user/status?status=${items.map<number>((item: IUser): number => item?.status === 1 ? 0 : 1)[0]}&userIds=${items.map<number>((item: IUser): number => item?.id as number)}`);
         setRefresh(!refresh);
     }
@@ -65,7 +65,7 @@ export default function RoleMngtList(): React.ReactNode {
 
     // 批量检查是否关联员工
     const batchDel = () => {
-        if(selectedRows.length > 0) {
+        if (selectedRows.length > 0) {
             checkAccount(selectedRows.map<string>((item: IAnnouncement): string => item?.account || '').join(','), "", true)
         } else {
             message.warning('请先选择需要删除的数据');
@@ -74,29 +74,29 @@ export default function RoleMngtList(): React.ReactNode {
 
     // 批量删除
     const batchAllDel = () => {
-        RequestUtil.delete(`/sinzetech-user/user?ids=${ selectedRows.map<string>((item: IAnnouncement): string => item?.id || '').join(',') }`).then(res => {
+        RequestUtil.delete(`/sinzetech-user/user?ids=${selectedRows.map<string>((item: IAnnouncement): string => item?.id || '').join(',')}`).then(res => {
             message.success('批量删除成功');
             setSelectedKeys([]);
             setSelectedRows([]);
             setRefresh(!refresh);
-        });  
+        });
     }
     // 重置密码
-    const handleResetPassWord = async(items: IUser[]) => {
-        const resData: IResponseData = await RequestUtil.put<IResponseData>('/sinzetech-user/user/resetPassword?userIds='+ items.map<number>((item: IUser): number => item?.id as number));
+    const handleResetPassWord = async (items: IUser[]) => {
+        const resData: IResponseData = await RequestUtil.put<IResponseData>('/sinzetech-user/user/resetPassword?userIds=' + items.map<number>((item: IUser): number => item?.id as number));
         message.success("重置密码成功！")
         setRefresh(!refresh);
     }
 
     // 检查用户是否关联员工
-    const checkAccount = async(account: string, id: string, flag: boolean) => {
+    const checkAccount = async (account: string, id: string, flag: boolean) => {
         // flag true为批量删除 false 单个删除
         const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/employee/checkAccount?accounts=${account}`);
         flag ? batchAllDel() : hanleDeteUser(id);
     }
 
     // 删除用户
-    const hanleDeteUser = async(id: string) => {
+    const hanleDeteUser = async (id: string) => {
         const resData: IResponseData = await RequestUtil.delete(`/sinzetech-user/user?ids=${id}`);
         message.success("删除用户成功！")
         setRefresh(!refresh);
@@ -117,43 +117,43 @@ export default function RoleMngtList(): React.ReactNode {
 
     return (
         <>
-        <Page
-            path="/sinzetech-user/user"
-            columns={[
-                ...UserMngtListHead,
-                {
-                    title: "操作",
-                    dataIndex: "opration",
-                    width: 100,
-                    fixed: "right",
-                    render: (_: any, record: any) => {
-                        return (
-                            <>
-                                <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}} onClick={() => {
-                                    setId(record.id);
-                                    setVisible(true)
-                                }}>编辑</span>
-                                <Popconfirm
-                                    title="您确定重置密码吗?"
-                                    onConfirm={() => {
-                                        handleResetPassWord([record as IUser])
-                                    }}
-                                    okText="确认"
-                                    cancelText="取消"
-                                ><Button type="link" style={{padding: 0, marginRight: 12}}>重置密码</Button></Popconfirm>
-                                <Popconfirm
-                                    title="您确定删除该用户吗?"
-                                    onConfirm={() => {
-                                        checkAccount(record.account, record.id, false)
-                                    }}
-                                    okText="确认"
-                                    cancelText="取消"
-                                ><Button type="link" style={{padding: 0}}>删除</Button></Popconfirm>
-                            </>
-                        )
-                    }
-                }]}
-                refresh={ refresh }
+            <Page
+                path="/sinzetech-user/user"
+                columns={[
+                    ...UserMngtListHead,
+                    {
+                        title: "操作",
+                        dataIndex: "opration",
+                        width: 100,
+                        fixed: "right",
+                        render: (_: any, record: any) => {
+                            return (
+                                <>
+                                    <span style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }} onClick={() => {
+                                        setId(record.id);
+                                        setVisible(true)
+                                    }}>编辑</span>
+                                    <Popconfirm
+                                        title="您确定重置密码吗?"
+                                        onConfirm={() => {
+                                            handleResetPassWord([record as IUser])
+                                        }}
+                                        okText="确认"
+                                        cancelText="取消"
+                                    ><Button type="link" style={{ padding: 0, marginRight: 12 }}>重置密码</Button></Popconfirm>
+                                    <Popconfirm
+                                        title="您确定删除该用户吗?"
+                                        onConfirm={() => {
+                                            checkAccount(record.account, record.id, false)
+                                        }}
+                                        okText="确认"
+                                        cancelText="取消"
+                                    ><Button type="link" style={{ padding: 0 }}>删除</Button></Popconfirm>
+                                </>
+                            )
+                        }
+                    }]}
+                refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 //  filterValue={{ acceptStatus }}
                 tableProps={{
@@ -167,21 +167,21 @@ export default function RoleMngtList(): React.ReactNode {
                         {/* <Button type="primary" style={{marginRight: 10}}>导入</Button>
                         <Button style={{marginRight: 10}}>下载导入模板</Button>
                         <Button style={{marginRight: 10}}>导出</Button> */}
-                        <Button type="primary" style={{marginRight: 10}} onClick={() => {
+                        <Button type="primary" style={{ marginRight: 10 }} onClick={() => {
                             setVisible(true);
                             setId("");
                         }}>新增</Button>
                         {
-                            selectedKeys.length > 0 && selectedRows.map(items => items.state).indexOf(1) === -1 ? 
-                                    <Popconfirm
-                                        title="确认删除?"
-                                        onConfirm={ batchDel }
-                                        okText="确认"
-                                        cancelText="取消"
-                                    >
-                                        <Button type="primary" icon={<DeleteOutlined />} ghost>删除</Button> 
-                                    </Popconfirm>
-                            : <Button type="primary" icon={<DeleteOutlined />} disabled ghost>删除</Button>
+                            selectedKeys.length > 0 && selectedRows.map(items => items.state).indexOf(1) === -1 ?
+                                <Popconfirm
+                                    title="确认删除?"
+                                    onConfirm={batchDel}
+                                    okText="确认"
+                                    cancelText="取消"
+                                >
+                                    <Button type="primary" icon={<DeleteOutlined />} ghost>删除</Button>
+                                </Popconfirm>
+                                : <Button type="primary" icon={<DeleteOutlined />} disabled ghost>删除</Button>
                         }
                     </Space>
                 }
@@ -191,31 +191,31 @@ export default function RoleMngtList(): React.ReactNode {
                         children: <Input placeholder="请输入账号" style={{ width: 300 }} />
                     }
                 ]}
-        />
-        <Modal
-            title={`${id ? '修改': '新增'}用户`}
-            visible={visible}
-            width={1000}
-            maskClosable={false}
-            destroyOnClose={true}
-            onCancel={() => {
-                setVisible(false)
-                addRef.current?.resetFields();
-            }}
-                footer={[
-                <Button key="submit" type="primary" onClick={() => handleOkuseState()}>
-                    提交
-                </Button>,
-                <Button key="back" onClick={() => {
+            />
+            <Modal
+                title={`${id ? '修改' : '新增'}用户`}
+                visible={visible}
+                width={1000}
+                maskClosable={false}
+                destroyOnClose={true}
+                onCancel={() => {
                     setVisible(false)
                     addRef.current?.resetFields();
-                }}>
-                    取消
-                </Button>
+                }}
+                footer={[
+                    <Button key="submit" type="primary" onClick={() => handleOkuseState()}>
+                        提交
+                    </Button>,
+                    <Button key="back" onClick={() => {
+                        setVisible(false)
+                        addRef.current?.resetFields();
+                    }}>
+                        取消
+                    </Button>
                 ]}
-        >
-            <AddUserModal ref={addRef} id={id} />
-        </Modal>
+            >
+                <AddUserModal ref={addRef} id={id} />
+            </Modal>
         </>
     )
 }

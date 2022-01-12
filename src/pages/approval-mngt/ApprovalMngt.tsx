@@ -476,6 +476,7 @@ export default function Information(): React.ReactNode {
                 },
                 {
                     name: 'omnipotentQuery',
+                    label: "模糊查询项",
                     children: <Input placeholder="项目名称/项目编码/审批编号/关联合同/制单人" style={{ width: "300px" }} maxLength={200} />
                 },
             ]}

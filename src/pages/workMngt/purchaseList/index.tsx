@@ -107,7 +107,7 @@ export default function Invoicing() {
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input placeholder="原材料任务编号/采购计划编号/塔型" style={{ width: 300 }} />
                 }
             ]}

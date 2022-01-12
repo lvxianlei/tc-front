@@ -181,7 +181,7 @@ export default function ContractMngt() {
                     },
                     {
                         name: 'fuzzyQuery',
-                        label: '查询',
+                        label: "模糊查询项",
                         children: <Input style={{ width: "150px" }} placeholder="询比价编号/用途" />
                     }
                 ]}

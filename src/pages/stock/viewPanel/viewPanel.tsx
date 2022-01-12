@@ -3,20 +3,20 @@
  * 原文件：当前目录下OriginalDocument.tsx
  * 时间：2022/01/05
  */
- import React, { useState, useEffect } from 'react';
- import { Input, Select } from 'antd';
- import { Page } from '../../common';
- import { materialStandardTypeOptions } from '../../../configuration/DictionaryOptions';
- import RequestUtil from '../../../utils/RequestUtil';
- 
- export default function ViewPanel(): React.ReactNode {
-     const [ filterValue, setFilterValue ] = useState<any>({
+import React, { useState, useEffect } from 'react';
+import { Input, Select } from 'antd';
+import { Page } from '../../common';
+import { materialStandardTypeOptions } from '../../../configuration/DictionaryOptions';
+import RequestUtil from '../../../utils/RequestUtil';
+
+export default function ViewPanel(): React.ReactNode {
+    const [filterValue, setFilterValue] = useState<any>({
         condition: "",
         fuzzyQuery: "",
         materialTexture: "",
         standard: ""
-     });
-     let [selects, setSelects] = useState<any>({
+    });
+    let [selects, setSelects] = useState<any>({
         materialNames: [],
         materialTextures: [],
         specs: [],
@@ -104,37 +104,37 @@
         getSelectDetail()
     }, []);
 
-     // 查询按钮
-     const onFilterSubmit = (value: any) => {
+    // 查询按钮
+    const onFilterSubmit = (value: any) => {
         const result = {
             condition: value.condition || "",
             fuzzyQuery: value.fuzzyQuery || "",
             materialTexture: value.materialTexture || "",
             standard: value.standard || ""
-         }
-         setFilterValue(result)
+        }
+        setFilterValue(result)
         return result
-     }
- 
-     return (
-         <>
-             <Page
-                 path="/tower-storage/safetyStock/board"
-                 exportPath={"/tower-storage/safetyStock/board"}
-                 columns={[
-                     {
-                         key: 'index',
-                         title: '序号',
-                         dataIndex: 'index',
-                         fixed: "left",
-                         width: 50,
-                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                     },
-                     ...columns
+    }
+
+    return (
+        <>
+            <Page
+                path="/tower-storage/safetyStock/board"
+                exportPath={"/tower-storage/safetyStock/board"}
+                columns={[
+                    {
+                        key: 'index',
+                        title: '序号',
+                        dataIndex: 'index',
+                        fixed: "left",
+                        width: 50,
+                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                    },
+                    ...columns
                 ]}
-                 onFilterSubmit={onFilterSubmit}
-                 filterValue={ filterValue }
-                 searchFormItems={[
+                onFilterSubmit={onFilterSubmit}
+                filterValue={filterValue}
+                searchFormItems={[
                     {
                         name: 'materialTexture',
                         label: '材质',
@@ -175,12 +175,12 @@
                         )
                     },
                     {
+                        label: "模糊查询项",
                         name: 'fuzzyQuery',
-                        label: "品名/规格",
-                        children: <Input placeholder="请输入品名/规进行查询" style={{ width: 300 }} />
+                        children: <Input placeholder="品名/规进行查询" style={{ width: 300 }} />
                     }
-                 ]}
-             />
-         </>
-     )
- }
+                ]}
+            />
+        </>
+    )
+}
