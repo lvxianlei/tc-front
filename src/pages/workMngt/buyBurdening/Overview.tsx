@@ -11,7 +11,7 @@ export default function Overview(): React.ReactNode {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [chooseId, setChooseId] = useState<string>("")
-    const [ filterValue, setFilterValue ] = useState({purchaseTaskId: params.id});
+    const [filterValue, setFilterValue] = useState({ purchaseTaskId: params.id });
     const onFilterSubmit = (value: any) => {
         if (value.startBatcheStatusUpdateTime) {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -66,7 +66,7 @@ export default function Overview(): React.ReactNode {
                         <Button type="link" disabled={![1, 3].includes(records.batcheTaskStatus)} >
                             <Link to={`/workMngt/buyBurdening/component/${records.id}/${records.batcheTaskStatus}`}>明细</Link>
                         </Button>
-                        <Button type="link" style={{marginLeft: 12}} disabled={![3].includes(records.batcheTaskStatus)}
+                        <Button type="link" style={{ marginLeft: 12 }} disabled={![3].includes(records.batcheTaskStatus)}
                             onClick={() => {
                                 setChooseId(records.id)
                                 setVisible(true)
@@ -99,7 +99,7 @@ export default function Overview(): React.ReactNode {
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input placeholder="塔型/方案编号" maxLength={200} />
                 }
             ]}

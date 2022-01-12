@@ -6,8 +6,8 @@ import { Link, useHistory } from 'react-router-dom';
 import moment from 'moment';
 
 export default function DeliveryPlanList(): React.ReactNode {
-    const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [ filterValue, setFilterValue ] = useState({});
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState({});
     const history = useHistory();
     const columns = [
         {
@@ -16,7 +16,7 @@ export default function DeliveryPlanList(): React.ReactNode {
             dataIndex: 'index',
             width: 50,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{ index + 1 }</span>
+                <span>{index + 1}</span>
             )
         },
         {
@@ -52,8 +52,8 @@ export default function DeliveryPlanList(): React.ReactNode {
             title: '发运日期',
             width: 150,
             dataIndex: 'departPlanTime',
-            render:(departPlanTime:string)=>{
-                return departPlanTime?moment(departPlanTime).format('YYYY-MM-DD'):'-'
+            render: (departPlanTime: string) => {
+                return departPlanTime ? moment(departPlanTime).format('YYYY-MM-DD') : '-'
             }
         },
         {
@@ -112,23 +112,23 @@ export default function DeliveryPlanList(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button 
-                        type='link' 
+                    <Button
+                        type='link'
                         onClick={
-                            ()=>{ 
-                                history.push(`/packagingWorkshop/deliveryPlan/detail/${ record.id }` )
+                            () => {
+                                history.push(`/packagingWorkshop/deliveryPlan/detail/${record.id}`)
                             }
                         }
                     >
-                            查看
+                        查看
                     </Button>
-                    <Button 
-                        type='link' 
+                    <Button
+                        type='link'
                         onClick={
-                            ()=>{ 
-                                history.push(`/packagingWorkshop/deliveryPlan/delivery/${ record.id }` )
+                            () => {
+                                history.push(`/packagingWorkshop/deliveryPlan/delivery/${record.id}`)
                             }
-                        } 
+                        }
                         disabled={record.status === 3}
                     >
                         成品出库
@@ -140,19 +140,19 @@ export default function DeliveryPlanList(): React.ReactNode {
 
     return <Page
         path="/tower-production/packageWorkshop/exWarehouse"
-        columns={ columns }
-        headTabs={ [] }
+        columns={columns}
+        headTabs={[]}
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
-        refresh={ refresh }
-        searchFormItems={ [
+        refresh={refresh}
+        searchFormItems={[
             {
                 name: 'status',
                 label: '出库状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择" defaultValue={""}>
-                    <Select.Option value={ "" } key="">全部</Select.Option>
-                    <Select.Option value={ 1 } key="1">未出库</Select.Option>
-                    <Select.Option value={ 2 } key="2">部分出库</Select.Option>
-                    <Select.Option value={ 3 } key="3">已出库</Select.Option>
+                    <Select.Option value={""} key="">全部</Select.Option>
+                    <Select.Option value={1} key="1">未出库</Select.Option>
+                    <Select.Option value={2} key="2">部分出库</Select.Option>
+                    <Select.Option value={3} key="3">已出库</Select.Option>
                 </Select>
             },
             {
@@ -163,12 +163,12 @@ export default function DeliveryPlanList(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入发货通知单编号/工程名称/计划号进行查询" style={{width: '300px'}}/>
+                children: <Input placeholder="请输入发货通知单编号/工程名称/计划号进行查询" style={{ width: '300px' }} />
             }
-        ] }
-        filterValue={ filterValue }
-        onFilterSubmit = { (values: Record<string, any>) => {
-            if(values.time) {
+        ]}
+        filterValue={filterValue}
+        onFilterSubmit={(values: Record<string, any>) => {
+            if (values.time) {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
                 values.shippingTimeStart = formatDate[0] + ' 00:00:00';
                 values.shippingTimeEnd = formatDate[1] + ' 23:59:59';
@@ -176,6 +176,6 @@ export default function DeliveryPlanList(): React.ReactNode {
             }
             setFilterValue(values);
             return values;
-        } }
+        }}
     />
 }

@@ -228,21 +228,21 @@ export default function ApplyPayment() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <a  className="btn-operation-link" onClick={() => {
+                            <a className="btn-operation-link" onClick={() => {
                                 setDetailId(record.id)
                                 setDetailVisible(true)
                             }}>详情</a>
                             <Button
                                 type="link"
-                                 className="btn-operation-link"
+                                className="btn-operation-link"
                                 disabled={![0, 3].includes(record.applyStatus)}
                                 onClick={() => {
                                     setType("edit")
                                     setDetailId(record.id)
                                     setVisible(true)
                                 }}>编辑</Button>
-                            <Button type="link"  className="btn-operation-link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
-                            <Button type="link"  className="btn-operation-link" disabled={![1].includes(record.applyStatus)}
+                            <Button type="link" className="btn-operation-link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
+                            <Button type="link" className="btn-operation-link" disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
                             {/* <Button
                                 type="link"
@@ -319,7 +319,7 @@ export default function ApplyPayment() {
                     </Select>
                 },
                 {
-                    label: '查询',
+                    label: "模糊查询项",
                     name: 'fuzzyQuery',
                     children: <Input placeholder="请款编号/关联到货单/关联票据/供应商" style={{ width: 300 }} />
                 }

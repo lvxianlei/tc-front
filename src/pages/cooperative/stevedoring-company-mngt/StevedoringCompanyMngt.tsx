@@ -204,7 +204,6 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
             searchFormItems={[
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
                     children: <Input maxLength={50} placeholder="编号/名称/联系人/联系电话" />
                 }
             ]}

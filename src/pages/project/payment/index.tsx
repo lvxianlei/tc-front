@@ -96,8 +96,9 @@ export default function Payment() {
             },
             {
                 name: 'fuzzyQuery',
+                label: "模糊查询项",
                 children: <Input placeholder="请款单号/项目编号/项目名称/票面单位/业务经理" style={{ width: 300 }} />
-            },
+            }
         ]}
     />
 }
