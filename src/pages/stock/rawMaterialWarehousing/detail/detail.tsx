@@ -255,7 +255,7 @@
                     },
                     {
                         name: 'fuzzyQuery',
-                        label: "关键字",
+                        label: "模糊查询项",
                         children: <Input placeholder="请输入炉批号/收货批次/批号/质保书号/轧制批号进行查询" style={{ width: 300 }} />
                     }
                  ]}

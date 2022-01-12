@@ -59,7 +59,7 @@ export default function MaterialMngt(): React.ReactNode {
             width: 200,
             dataIndex: 'proportion',
             render: (text: number, record: any, index: any) => {
-                return text == -1 ? <span>-</span> : <span>{ text }</span>
+                return text == -1 ? <span>-</span> : <span>{text}</span>
             }
         },
         {
@@ -76,7 +76,7 @@ export default function MaterialMngt(): React.ReactNode {
                     default:
                         return '-'
                 }
-            }  
+            }
         },
         {
             key: 'description',
@@ -92,8 +92,8 @@ export default function MaterialMngt(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={ async () => {
-                        const data = await RequestUtil.get<IMaterial[]>(`/tower-system/material/detail/${ record.id }`);
+                    <Button type="link" onClick={async () => {
+                        const data = await RequestUtil.get<IMaterial[]>(`/tower-system/material/detail/${record.id}`);
                         setVisible(true);
                         const list = materialType.filter((res: IMaterialType) => res.id === data[0].materialType);
                         setMaterialList(list[0]?.children);
@@ -108,7 +108,7 @@ export default function MaterialMngt(): React.ReactNode {
                         setDetailData(newData);
                         form.setFieldsValue({ ...newData });
                         setTitle('编辑');
-                    } }>编辑</Button>
+                    }}>编辑</Button>
                     <Popconfirm title="要删除该数据吗？" placement="topRight" onConfirm={() => {
                         RequestUtil.delete(`/tower-system/material?id=${record.id}`).then(res => {
                             setRefresh(!refresh);
@@ -132,7 +132,7 @@ export default function MaterialMngt(): React.ReactNode {
     }
 
     const save = () => {
-        if(form) {
+        if (form) {
             form.validateFields().then(res => {
                 let values = form.getFieldsValue(true);
                 values = {
@@ -143,7 +143,7 @@ export default function MaterialMngt(): React.ReactNode {
                     materialCategoryName: values.materialCategory.split(',')[1],
                     materialCode: code + values.materialCode
                 }
-                if(title === '新增') {
+                if (title === '新增') {
                     RequestUtil.post('/tower-system/material', [values]).then(res => {
                         close();
                         setRefresh(!refresh);
@@ -178,14 +178,14 @@ export default function MaterialMngt(): React.ReactNode {
         })
     }
 
-    const [ materialList, setMaterialList ] = useState([]);
-    const [ visible, setVisible ] = useState(false);
-    const [ title, setTitle ] = useState('新增');
-    const [ detailData, setDetailData ] = useState<IMaterial>({});
-    const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [ form ] = Form.useForm();
+    const [materialList, setMaterialList] = useState([]);
+    const [visible, setVisible] = useState(false);
+    const [title, setTitle] = useState('新增');
+    const [detailData, setDetailData] = useState<IMaterial>({});
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const [form] = Form.useForm();
     const history = useHistory();
-    const [ code, setCode ] = useState('');
+    const [code, setCode] = useState('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: IMaterialType[] = await RequestUtil.get<IMaterialType[]>(`/tower-system/materialCategory`);
         resole(data);
@@ -210,14 +210,14 @@ export default function MaterialMngt(): React.ReactNode {
                     name: 'materialType',
                     label: '类别',
                     children: <Form.Item name="materialType" initialValue="">
-                        <Select placeholder="请选择" style={{ width: "150px" }} onChange={ (e) => {
+                        <Select placeholder="请选择" style={{ width: "150px" }} onChange={(e) => {
                             const list = materialType.filter((res: IMaterialType) => res.id === e);
                             setMaterialList(list[0]?.children);
-                        } }>
+                        }}>
                             <Select.Option value="" key="6">全部</Select.Option>
-                            { materialType && materialType.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                            }) }
+                            {materialType && materialType.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                            })}
                         </Select>
                     </Form.Item>
                 },
@@ -227,15 +227,15 @@ export default function MaterialMngt(): React.ReactNode {
                     children: <Form.Item name="materialCategory" initialValue="">
                         <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value="" key="6">全部</Select.Option>
-                            { materialList && materialList.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                            }) }
+                            {materialList && materialList.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                            })}
                         </Select>
                     </Form.Item>
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input placeholder="品名/规格" />
                 }
             ]}
@@ -243,49 +243,49 @@ export default function MaterialMngt(): React.ReactNode {
                 return values;
             }}
         />
-        <Modal title={ title } visible={ visible } width="40%" okText="保存" onCancel={ close } onOk={ save }>
-            <Form form={ form } labelCol={{ span: 6 }}>
+        <Modal title={title} visible={visible} width="40%" okText="保存" onCancel={close} onOk={save}>
+            <Form form={form} labelCol={{ span: 6 }}>
                 <Row>
-                    <Col span={ 11 } offset={ 1 }><Form.Item label="类别" name="materialType" rules={[{
+                    <Col span={11} offset={1}><Form.Item label="类别" name="materialType" rules={[{
                         required: true,
                         message: '请选择类别'
                     }]}>
-                        <Select placeholder="请选择" style={{ width: "100%" }} onChange={ (e: string) => {
+                        <Select placeholder="请选择" style={{ width: "100%" }} onChange={(e: string) => {
                             const list = materialType.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
                             setMaterialList(list[0].children);
                             form.setFieldsValue({ materialCategory: '' });
                             setCode('');
-                        } }>
-                            { materialType && materialType.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
-                            }) }
+                        }}>
+                            {materialType && materialType.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id + ',' + item.name}>{item.name}</Select.Option>
+                            })}
                         </Select>
                     </Form.Item></Col>
-                    <Col span={ 11 } offset={ 1 }><Form.Item label="类型" name="materialCategory" rules={[{
+                    <Col span={11} offset={1}><Form.Item label="类型" name="materialCategory" rules={[{
                         required: true,
                         message: '请选择类型'
                     }]}>
-                        <Select placeholder="请选择" style={{ width: "100%" }} onChange={(e: string) => { 
+                        <Select placeholder="请选择" style={{ width: "100%" }} onChange={(e: string) => {
                             const list: any = materialList.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
                             setCode(list[0].code);
                         }}>
-                            { materialList && materialList.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
-                            }) }
+                            {materialList && materialList.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id + ',' + item.name}>{item.name}</Select.Option>
+                            })}
                         </Select>
                     </Form.Item></Col>
                 </Row>
                 <Row>
-                    <Col span={ 11 } offset={ 1 }><Form.Item label="品名" name="materialName" rules={[{
+                    <Col span={11} offset={1}><Form.Item label="品名" name="materialName" rules={[{
                         required: true,
                         message: '请输入品名'
                     }, {
                         pattern: /^[^\s]*$/,
                         message: '禁止输入空格',
                     }]}>
-                        <Input maxLength={ 20 }/>
+                        <Input maxLength={20} />
                     </Form.Item></Col>
-                    <Col span={ 11 } offset={ 1 }><Form.Item label="编号" name="materialCode" rules={[{
+                    <Col span={11} offset={1}><Form.Item label="编号" name="materialCode" rules={[{
                         required: true,
                         message: '请输入编号'
                     }, {
@@ -305,11 +305,11 @@ export default function MaterialMngt(): React.ReactNode {
                             })
                         }
                     }]}>
-                        <Input addonBefore={ code } maxLength={ 3 }/>
+                        <Input addonBefore={code} maxLength={3} />
                     </Form.Item></Col>
                 </Row>
                 <Row>
-                    <Col span={ 11 } offset={ 1 }><Form.Item label="规格" name="structureSpec" rules={[{
+                    <Col span={11} offset={1}><Form.Item label="规格" name="structureSpec" rules={[{
                         required: true,
                         message: '请输入编号'
                     }, {
@@ -319,14 +319,14 @@ export default function MaterialMngt(): React.ReactNode {
                         pattern: /^[^\u4e00-\u9fa5]*$/,
                         message: '仅可输入数字/字母/特殊字符',
                     }]}>
-                        <Input maxLength={ 20 }/>
+                        <Input maxLength={20} />
                     </Form.Item></Col>
-                    <Col span={ 11 } offset={ 1 }><Form.Item label="比重" name="proportion">
-                        <InputNumber min={ 0 } step="0.0001" precision={ 4 } max={ 99.9999 } style={{ width: '100%' }}/>
+                    <Col span={11} offset={1}><Form.Item label="比重" name="proportion">
+                        <InputNumber min={0} step="0.0001" precision={4} max={99.9999} style={{ width: '100%' }} />
                     </Form.Item></Col>
                 </Row>
                 <Row>
-                    <Col span={ 11 } offset={ 1 }><Form.Item label="比重算法" name="weightAlgorithm">
+                    <Col span={11} offset={1}><Form.Item label="比重算法" name="weightAlgorithm">
                         <Select style={{ width: '100%' }}>
                             <Select.Option value='' id=''>
                                 暂无
@@ -339,8 +339,8 @@ export default function MaterialMngt(): React.ReactNode {
                             </Select.Option>
                         </Select>
                     </Form.Item></Col>
-                    <Col span={ 11 } offset={ 1 }><Form.Item label="备注" name="description">
-                        <Input.TextArea maxLength={ 300 }/>
+                    <Col span={11} offset={1}><Form.Item label="备注" name="description">
+                        <Input.TextArea maxLength={300} />
                     </Form.Item></Col>
                 </Row>
             </Form>

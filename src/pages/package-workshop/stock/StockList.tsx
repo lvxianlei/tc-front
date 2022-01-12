@@ -125,7 +125,6 @@ export default function StockList(): React.ReactNode {
         searchFormItems={ [
             {
                 name: 'fuzzyMsg',
-                label: '模糊查询项',
                 children: <Input placeholder="请输入内部合同编号/工程名称/计划号进行查询" style={{width: '300px'}}/>
             }
         ] }

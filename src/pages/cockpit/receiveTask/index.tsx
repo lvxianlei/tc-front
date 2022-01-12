@@ -133,7 +133,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input style={{ width: 350 }} placeholder="供应商/收货单编号/关联申请编号/关联票据编号/企业名称" />
                 }
             ]}

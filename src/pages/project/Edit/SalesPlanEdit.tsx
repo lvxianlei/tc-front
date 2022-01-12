@@ -124,7 +124,6 @@ export default function SalesPlanEdit() {
             })
             setSaleOrderId(changedFields.saleOrderNumber.records[0].id)
             setContractId(changedFields.saleOrderNumber.records[0].contractId)
-            // setProductDetails([])
         }
     }
 
