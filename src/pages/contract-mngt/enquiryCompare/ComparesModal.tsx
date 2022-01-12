@@ -65,8 +65,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
     })
     const [form] = Form.useForm()
     const searchs = data.columns.filter((item: any) => item.search);
-    const [ materialType, setMaterialType ] = useState<IMaterialType[]>([]);
-    const [ materialList, setMaterialList ] = useState<IMaterialType[]>([]);
+    const [materialType, setMaterialType] = useState<IMaterialType[]>([]);
+    const [materialList, setMaterialList] = useState<IMaterialType[]>([]);
     const { loading, data: popTableData, run } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         try {
             const params = await form.getFieldsValue()
@@ -114,14 +114,14 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             <Row gutter={[8, 8]}>
                 <Col>
                     <Form.Item name="materialType" label="类别" initialValue="">
-                        <Select placeholder="请选择" style={{ width: "150px" }} onChange={ (e) => {
+                        <Select placeholder="请选择" style={{ width: "150px" }} onChange={(e) => {
                             const list = materialType.filter((res: IMaterialType) => res.id === e);
                             setMaterialList(list[0].children || []);
-                        } }>
+                        }}>
                             <Select.Option value="" key="6">全部</Select.Option>
-                            { materialType && materialType.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                            }) }
+                            {materialType && materialType.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                            })}
                         </Select>
                     </Form.Item>
                 </Col>
@@ -129,9 +129,9 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                     <Form.Item name="materialCategory" label="类型" initialValue="">
                         <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value="" key="6">全部</Select.Option>
-                            { materialList && materialList.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                            }) }
+                            {materialList && materialList.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                            })}
                         </Select>
                     </Form.Item>
                 </Col>
@@ -142,13 +142,14 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 </Col>
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" size="small" style={{ marginLeft: 12 }}>搜索</Button>
-                        <Button type="default" size="small" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
+                        <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>搜索</Button>
+                        <Button type="default" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
                     </Form.Item>
                 </Col>
             </Row>
         </Form>}
         <CommonTable
+            style={{ margin: 0, padding: 0 }}
             columns={columns}
             rowSelection={{
                 selectedRowKeys: select,

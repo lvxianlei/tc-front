@@ -115,11 +115,14 @@ const generatePlaceholder = (columnItems: any): string => {
     return placeholder
 }
 export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { }, classStyle = "" }: BaseInfoProps): JSX.Element {
+
     useEffect(() => {
         form && form.setFieldsValue(formatData(columns, dataSource))
     }, [JSON.stringify(dataSource), form])
+
     if (edit) {
         return <Form
+            style={{ width: "100%" }}
             onValuesChange={(changedFields, allFields) => onChange(changedFields, allFields, dataSource)}
             form={form}
             initialValues={formatData(columns, dataSource)}
@@ -128,7 +131,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             labelCol={{ style: { width: '100px', whiteSpace: "break-spaces" } }}
             className={`bottom ${classStyle}`}
         >
-            <Row wrap={true}>
+            <Row wrap={true} style={{ width: "100%" }}>
                 {columns.map((item: any, index: number) => <Col
                     key={`form_item_${index}`}
                     {...{
@@ -142,7 +145,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                             span: item.type === "textarea" ? 24 : 12
                         },
                         lg: {
-                            span: item.type === "textarea" ? 24 : 8
+                            span: item.type === "textarea" ? 24 : (24 / col)
                         },
                         xl: {
                             span: item.type === "textarea" ? 24 : (24 / col)
