@@ -1,4 +1,3 @@
-
 /**
  * @author zyc
  * @copyright © 2022 
@@ -6,11 +5,13 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Space, Input, Button, Modal, Popconfirm, message, Select, DatePicker } from 'antd';
+import { Input, Button, Modal, message, Select, DatePicker } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import RequestUtil from '../../../utils/RequestUtil';
 import TechnicalIssue from './TechnicalIssue';
+import { productTypeOptions } from '../../../configuration/DictionaryOptions';
+import { IPlanSchedule } from './IPlanSchedule';
+
 
 export interface TechnicalIssuePropsRefProps {
     onSubmit: () => void
@@ -20,111 +21,111 @@ export interface TechnicalIssuePropsRefProps {
 export default function PlanScheduleMngt(): React.ReactNode {
     const columns = [
         {
-            key: 'code',
+            key: 'planNumber',
             title: '计划号',
             width: 150,
-            dataIndex: 'code'
+            dataIndex: 'planNumber'
         },
         {
-            key: 'workCenterName',
+            key: 'productCategoryName',
             title: '塔型',
-            dataIndex: 'workCenterName',
+            dataIndex: 'productCategoryName',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'productTypeName',
             title: '产品类型',
-            dataIndex: 'workCenterName',
+            dataIndex: 'productTypeName',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'customerCompany',
             title: '客户',
-            dataIndex: 'workCenterName',
+            dataIndex: 'customerCompany',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'lineName',
             title: '线路名称',
-            dataIndex: 'workCenterName',
+            dataIndex: 'lineName',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'productNum',
             title: '基数',
-            dataIndex: 'workCenterName',
+            dataIndex: 'productNum',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'businessManagerName',
             title: '业务经理',
-            dataIndex: 'workCenterName',
+            dataIndex: 'businessManagerName',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'deliveryTime',
             title: '客户交货日期',
-            dataIndex: 'workCenterName',
+            dataIndex: 'deliveryTime',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'weight',
             title: '合同重量（t）',
-            dataIndex: 'workCenterName',
+            dataIndex: 'weight',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'planDeliveryTime',
             title: '计划交货日期',
-            dataIndex: 'workCenterName',
+            dataIndex: 'planDeliveryTime',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'voltageGradeName',
             title: '电压等级（kv）',
-            dataIndex: 'workCenterName',
+            dataIndex: 'voltageGradeName',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'approvalTime',
             title: '审批日期',
-            dataIndex: 'workCenterName',
+            dataIndex: 'approvalTime',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'status',
             title: '状态',
-            dataIndex: 'workCenterName',
+            dataIndex: 'status',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'description',
             title: '备注',
-            dataIndex: 'workCenterName',
+            dataIndex: 'description',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'loftIssueTime',
             title: '放样下发时间',
-            dataIndex: 'workCenterName',
+            dataIndex: 'loftIssueTime',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'issueUserName',
             title: '放样下发人',
-            dataIndex: 'workCenterName',
+            dataIndex: 'issueUserName',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'loftCompleteTime',
             title: '放样计划完成时间',
-            dataIndex: 'workCenterName',
+            dataIndex: 'loftCompleteTime',
             width: 120
         },
         {
-            key: 'workCenterName',
+            key: 'loftRealCompleteTime',
             title: '放样实际完成时间',
-            dataIndex: 'workCenterName',
+            dataIndex: 'loftRealCompleteTime',
             width: 120
         }
     ]
@@ -141,17 +142,21 @@ export default function PlanScheduleMngt(): React.ReactNode {
         }
     })
 
-    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any): void => {
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: IPlanSchedule[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
+    }
+
+    const issued = () => {
+        setVisible(true);
     }
 
     const [refresh, setRefresh] = useState(false);
     const [visible, setVisible] = useState(false);
     const [filterValue, setFilterValue] = useState({});
     const editRef = useRef<TechnicalIssuePropsRefProps>();
-    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
-    const [ selectedRows, setSelectedRows ] = useState<[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<IPlanSchedule[]>([]);
     return (
         <>
             <Modal
@@ -163,14 +168,15 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 onCancel={() => {
                     editRef.current?.resetFields()
                     setVisible(false);
+                    setRefresh(!refresh);
                 }}>
-                <TechnicalIssue record={{}} ref={editRef} />
+                <TechnicalIssue record={selectedRows} ref={editRef} />
             </Modal>
             <Page
-                path=""
+                path="/tower-aps/productionPlan/page"
                 columns={columns}
                 headTabs={[]}
-                extraOperation={<Button type="primary" onClick={() => { setVisible(true);  }}>技术下达</Button>}
+                extraOperation={<Button type="primary" onClick={issued}>技术下达</Button>}
                 refresh={refresh}
                 tableProps={{
                     rowSelection: {
@@ -180,18 +186,24 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 }}
                 searchFormItems={[
                     {
-                        name: 'workCenterName',
+                        name: 'productType',
                         label: '产品类型',
-                        children: <Input placeholder="计划号/塔型/业务经理/客户" />
+                        children: <Select getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                            {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={index} value={id}>
+                                    {name}
+                                </Select.Option>
+                            })}
+                        </Select>
                     },
                     {
-                        name: 'workCenterName',
+                        name: 'status',
                         label: '状态',
-                        children: <Select placeholder="请选择" defaultValue={ 1 } style={{ width: "150px" }}>
-                            <Select.Option value={ 1 } key="1">未下发</Select.Option>
-                            <Select.Option value={ 2 } key="2">放样已下发</Select.Option>
-                            <Select.Option value={ 3 } key="3">放样已确认</Select.Option>
-                            <Select.Option value={ 4 } key="4">放样已完成</Select.Option>
+                        children: <Select placeholder="请选择" defaultValue={1} style={{ width: "150px" }}>
+                            <Select.Option value={1} key="1">未下发</Select.Option>
+                            <Select.Option value={2} key="2">放样已下发</Select.Option>
+                            <Select.Option value={3} key="3">放样已确认</Select.Option>
+                            <Select.Option value={4} key="4">放样已完成</Select.Option>
                         </Select>
                     },
                     {
@@ -200,7 +212,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'workCenterName',
+                        name: 'fuzzyMsg',
                         label: '模糊查询项',
                         children: <Input placeholder="计划号/塔型/业务经理/客户" />
                     }
@@ -208,8 +220,8 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 filterValue={filterValue}
                 onFilterSubmit={(values: Record<string, any>) => {
                     const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
-                    values.startTime = formatDate[0]+ ' 00:00:00';
-                    values.endTime = formatDate[1]+ ' 23:59:59';
+                    values.startTime = formatDate[0] + ' 00:00:00';
+                    values.endTime = formatDate[1] + ' 23:59:59';
                     setFilterValue(values);
                     return values;
                 }}
