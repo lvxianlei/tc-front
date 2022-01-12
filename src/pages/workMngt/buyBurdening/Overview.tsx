@@ -64,7 +64,7 @@ export default function Overview(): React.ReactNode {
                     dataIndex: 'operation',
                     render: (_: any, records: any) => (<>
                         <Button type="link" disabled={![1, 3].includes(records.batcheTaskStatus)} >
-                            <Link to={`/workMngt/buyBurdening/component/${records.id}/${records.batcheTaskStatus}`}>明细</Link>
+                            <Link to={`/ingredients/buyBurdening/component/${records.id}/${records.batcheTaskStatus}`}>明细</Link>
                         </Button>
                         <Button type="link" style={{ marginLeft: 12 }} disabled={![3].includes(records.batcheTaskStatus)}
                             onClick={() => {
