@@ -11,13 +11,12 @@
  import useRequest from '@ahooksjs/use-request';
  import { useParams, useHistory } from 'react-router-dom';
  import { baseColumn } from "./detail.json";
+ 
+ import '../../StockPublicStyle.less';
+ import './detail.less';
 
  const { TextArea } = Input;
- interface EditRefProps {
-    id?: string
-    onSubmit: () => void
-    resetFields: () => void
-}
+
  export default function RawMaterialWarehousing(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const history = useHistory();
