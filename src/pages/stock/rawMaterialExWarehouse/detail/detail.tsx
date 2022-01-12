@@ -425,6 +425,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             message.success('申请成功')
             setIsApplyModal(false)
             setIsOutLibraryModal(false)
+            history.go(0)
         }
     }
     return (
