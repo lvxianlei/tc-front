@@ -181,11 +181,6 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 searchFormItems={[
                     {
                         name: 'workCenterName',
-                        label: '模糊查询项',
-                        children: <Input placeholder="计划号/塔型/业务经理/客户" />
-                    },
-                    {
-                        name: 'workCenterName',
                         label: '产品类型',
                         children: <Input placeholder="计划号/塔型/业务经理/客户" />
                     },
@@ -203,6 +198,11 @@ export default function PlanScheduleMngt(): React.ReactNode {
                         name: 'time',
                         label: '客户交货日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    },
+                    {
+                        name: 'workCenterName',
+                        label: '模糊查询项',
+                        children: <Input placeholder="计划号/塔型/业务经理/客户" />
                     }
                 ]}
                 filterValue={filterValue}
