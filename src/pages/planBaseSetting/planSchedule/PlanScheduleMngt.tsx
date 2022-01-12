@@ -54,7 +54,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
             key: 'productNum',
             title: '基数',
             dataIndex: 'productNum',
-            width: 120
+            width: 50
         },
         {
             key: 'businessManagerName',
@@ -93,10 +93,29 @@ export default function PlanScheduleMngt(): React.ReactNode {
             width: 120
         },
         {
-            key: 'status',
+            key: 'loftingStatus',
             title: '状态',
-            dataIndex: 'status',
-            width: 120
+            dataIndex: 'loftingStatus',
+            width: 120,
+            type: 'select',
+            enum: [
+                {
+                    "value": 1,
+                    "label": "未下发"
+                },
+                {
+                    "value": 2,
+                    "label": "放样已下发"
+                },
+                {
+                    "value": 3,
+                    "label": "放样已确认"
+                },
+                {
+                    "value": 4,
+                    "label": "放样已完成"
+                }
+            ]
         },
         {
             key: 'description',
@@ -111,9 +130,9 @@ export default function PlanScheduleMngt(): React.ReactNode {
             width: 120
         },
         {
-            key: 'issueUserName',
+            key: 'loftingIssueUserName',
             title: '放样下发人',
-            dataIndex: 'issueUserName',
+            dataIndex: 'loftingIssueUserName',
             width: 120
         },
         {
@@ -148,7 +167,11 @@ export default function PlanScheduleMngt(): React.ReactNode {
     }
 
     const issued = () => {
-        setVisible(true);
+        if(selectedKeys && selectedKeys.length > 0) {
+            setVisible(true);
+        } else {
+            message.warning('请选择要下达的塔型');
+        }
     }
 
     const [refresh, setRefresh] = useState(false);
@@ -214,7 +237,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="计划号/塔型/业务经理/客户" />
+                        children: <Input style={{ width: "200px" }} placeholder="计划号/塔型/业务经理/客户" />
                     }
                 ]}
                 filterValue={filterValue}
