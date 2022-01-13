@@ -1373,7 +1373,7 @@
     },
     { // 工作管理-采购配料
       "name": "配料明细",
-      "path": "/workMngt/buyBurdening/component/:id/:status",
+      "path": "/ingredients/buyBurdening/component/:id/:status",
       "module": "./pages/workMngt/buyBurdening/Detail",
       "exact": true,
       "authority": "buy_burdening_detail"
