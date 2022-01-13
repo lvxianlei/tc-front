@@ -318,7 +318,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             if (item.dataIndex === "time") {
                 return ({
                     ...item, type: 'date',
-                    render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time" style={{ width: '100%' }}><TimePicker.RangePicker style={{ width: '100%' }} format="HH:mm" /></Form.Item>)
+                    render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time" style={{ width: '100%' }}><TimePicker.RangePicker style={{ width: '100%' }} format="HH" /></Form.Item>)
                 })
             }
             if (item.dataIndex === "equipmentId") {
