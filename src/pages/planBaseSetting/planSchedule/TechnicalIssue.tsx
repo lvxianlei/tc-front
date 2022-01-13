@@ -20,14 +20,14 @@ interface TechnicalIssueProps {
 
 
 const SortableItem = SortableElement((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableRowElement> & React.HTMLAttributes<HTMLTableRowElement>) => <tr {...props} />);
-const SortableCon =  SortableContainer((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableSectionElement> & React.HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props} />);
+const SortableCon = SortableContainer((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableSectionElement> & React.HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props} />);
 
 export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProps, ref) {
     const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
     const [form] = Form.useForm();
-    const [dataSource,setDataSource] = useState(record.map((item: IPlanSchedule, index: number) => {
+    const [dataSource, setDataSource] = useState(record.map((item: IPlanSchedule, index: number) => {
         return {
-            ...item, 
+            ...item,
             index: index
         }
     }))
@@ -44,7 +44,7 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(`/tower-aps/planUnitLink/issue?unitId=${ postData.unitId }&ids=${ postData.ids }`)
+            const result = await RequestUtil.post(`/tower-aps/planUnitLink/issue?unitId=${postData.unitId}&ids=${postData.ids}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -53,12 +53,12 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-                const data = await form.validateFields();
-                await saveRun({
-                    unitId: data?.unitId,
-                    ids: dataSource.map((item: IPlanSchedule) => { return item.id }).join(',')
-                })
-                resolve(true);
+            const data = await form.validateFields();
+            await saveRun({
+                unitId: data?.unitId,
+                ids: dataSource.map((item: IPlanSchedule) => { return item.id }).join(',')
+            })
+            resolve(true);
         } catch (error) {
             reject(false)
         }
@@ -119,43 +119,43 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
 
     const onSortEnd = (props: { oldIndex: number; newIndex: number; }) => {
         if (props.oldIndex !== props.newIndex) {
-            const newData = arrayMove(dataSource,props.oldIndex, props.newIndex).filter(el => !!el);
+            const newData = arrayMove(dataSource, props.oldIndex, props.newIndex).filter(el => !!el);
             setDataSource(newData)
         }
-      };
+    };
 
 
     const DraggableContainer = (props: any) => (
         <SortableCon
-          useDragHandle
-          disableAutoscroll
-          helperClass="row-dragging"
-          onSortEnd={onSortEnd}
-          {...props}
+            useDragHandle
+            disableAutoscroll
+            helperClass="row-dragging"
+            onSortEnd={onSortEnd}
+            {...props}
         />
-      );
-    
-      const  DraggableBodyRow = ({ ...restProps }) => {
+    );
+
+    const DraggableBodyRow = ({ ...restProps }) => {
         const index = dataSource.findIndex((x: any) => x.index === restProps['data-row-key']);
         return <SortableItem index={index} {...restProps} />;
-      };
+    };
 
     return <Spin spinning={loading}>
         <BaseInfo form={form} columns={baseColumns.map((item: any) => {
             if (item.dataIndex === "unitId") {
                 return ({
-                    ...item, 
+                    ...item,
                     type: 'select',
                     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                    <Form.Item name="unitId" style={{ width: '100%' }}>
-                        <Select getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                            {data && data.map(({ id, name }, index) => {
-                                return <Select.Option key={index} value={id}>
-                                    {name}
-                                </Select.Option>
-                            })}
-                        </Select>
-                    </Form.Item>)
+                        <Form.Item name="unitId" style={{ width: '100%' }}>
+                            <Select getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                                {data && data.map(({ id, name }, index) => {
+                                    return <Select.Option key={index} value={id}>
+                                        {name}
+                                    </Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>)
                 })
             }
             return item
@@ -168,11 +168,11 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
             columns={tableColumns}
             components={{
                 body: {
-                  wrapper: DraggableContainer,
-                  row: DraggableBodyRow,
+                    wrapper: DraggableContainer,
+                    row: DraggableBodyRow,
                 },
-              }}
-            />
+            }}
+        />
     </Spin>
 })
 

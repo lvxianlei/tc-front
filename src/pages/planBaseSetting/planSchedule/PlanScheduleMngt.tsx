@@ -167,7 +167,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
     }
 
     const issued = () => {
-        if(selectedKeys && selectedKeys.length > 0) {
+        if (selectedKeys && selectedKeys.length > 0) {
             setVisible(true);
         } else {
             message.warning('请选择要下达的塔型');
