@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, TimePicker, Select } from 'antd'
+import { Spin, Form, Select, Divider } from 'antd'
 import { BaseInfo, CommonTable } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -25,6 +25,7 @@ const SortableCon = SortableContainer((props: JSX.IntrinsicAttributes & React.Cl
 export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProps, ref) {
     const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
     const [form] = Form.useForm();
+    const [linkList, setLinkList] = useState([])
     const [dataSource, setDataSource] = useState(record.map((item: IPlanSchedule, index: number) => {
         return {
             ...item,
@@ -76,6 +77,17 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
                 {
                     "required": true,
                     "message": "请选择生产单元"
+                }
+            ]
+        },
+        {
+            "title": "生产环节",
+            "dataIndex": "linkId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择生产环节"
                 }
             ]
         }
@@ -140,6 +152,11 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
         return <SortableItem index={index} {...restProps} />;
     };
 
+    const unitChange = async (value: string) => {
+        console.log(value)
+        const result = await RequestUtil.post(`/tower-aps/productionLink/link/{unitId}`)
+    }
+
     return <Spin spinning={loading}>
         <BaseInfo form={form} columns={baseColumns.map((item: any) => {
             if (item.dataIndex === "unitId") {
@@ -148,8 +165,24 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
                     type: 'select',
                     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name="unitId" style={{ width: '100%' }}>
-                            <Select getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                            <Select getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e: string) => unitChange(e)} style={{ width: "150px" }}>
                                 {data && data.map(({ id, name }, index) => {
+                                    return <Select.Option key={index} value={id}>
+                                        {name}
+                                    </Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>)
+                })
+            }
+            if (item.dataIndex === "linkId") {
+                return ({
+                    ...item,
+                    type: 'select',
+                    render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name="linkId" style={{ width: '100%' }}>
+                            <Select getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                                {linkList && linkList.map(({ id, name }, index) => {
                                     return <Select.Option key={index} value={id}>
                                         {name}
                                     </Select.Option>
@@ -160,6 +193,7 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
             }
             return item
         })} col={2} dataSource={{}} edit />
+        <Divider>请拖拽列表排序，列表排序为任务完成的顺序</Divider>
         <CommonTable
             scroll={{ x: '700' }}
             rowKey="index"

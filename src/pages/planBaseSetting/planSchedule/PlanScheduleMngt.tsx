@@ -24,13 +24,15 @@ export default function PlanScheduleMngt(): React.ReactNode {
             key: 'planNumber',
             title: '计划号',
             width: 150,
-            dataIndex: 'planNumber'
+            dataIndex: 'planNumber',
+            fixed: 'left' as FixedType
         },
         {
             key: 'productCategoryName',
             title: '塔型',
             dataIndex: 'productCategoryName',
-            width: 120
+            width: 120,
+            fixed: 'left' as FixedType
         },
         {
             key: 'productTypeName',
@@ -232,7 +234,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                     {
                         name: 'time',
                         label: '客户交货日期',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                        children: <DatePicker.RangePicker />
                     },
                     {
                         name: 'fuzzyMsg',
@@ -242,9 +244,11 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 ]}
                 filterValue={filterValue}
                 onFilterSubmit={(values: Record<string, any>) => {
-                    const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
-                    values.startTime = formatDate[0] + ' 00:00:00';
-                    values.endTime = formatDate[1] + ' 23:59:59';
+                    if (values.time) {
+                        const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
+                        values.startTime = formatDate[0] + ' 00:00:00';
+                        values.endTime = formatDate[1] + ' 23:59:59';
+                    }
                     setFilterValue(values);
                     return values;
                 }}
