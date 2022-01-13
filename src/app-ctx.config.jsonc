@@ -451,9 +451,9 @@
                                 "authority": "rd_loft_task_list"
                             },
                             {
-                                "label": "螺栓列表",
-                                "path": "/workMngt/boltList",
-                                "authority": "rd_bolt_management"
+                                "label": "组焊列表",
+                                "path": "/workMngt/assemblyWeldingList",
+                                "authority": "rd_welding"
                             },
                             {
                                 "label": "小样图列表",
@@ -461,9 +461,9 @@
                                 "authority": "rd_small_sample_management"
                             },
                             {
-                                "label": "组焊列表",
-                                "path": "/workMngt/assemblyWeldingList",
-                                "authority": "rd_welding"
+                                "label": "螺栓列表",
+                                "path": "/workMngt/boltList",
+                                "authority": "rd_bolt_management"
                             },
                             {
                                 "label": "样板列表",
