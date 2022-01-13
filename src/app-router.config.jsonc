@@ -391,28 +391,28 @@
     { // 招标信息
       "name": "招标信息",
       "path": "/bidding/information",
-      "module": "./pages/bidding/Information",
+      "module": "./pages/bidding/index",
       "exact": true,
       "authority": "bidding_info"
     },
     { // 招标信息详情
       "name": "招标信息详情",
       "path": "/bidding/information/detail/:id",
-      "module": "./pages/bidding/InformationDetail",
+      "module": "./pages/bidding/Detail",
       "exact": true,
       "authority": "bidding_detail"
     },
     { // 招标信息新增
       "name": "新增招标信息",
       "path": "/bidding/information/edit/new",
-      "module": "./pages/bidding/InformationEdit",
+      "module": "./pages/bidding/Edit",
       "exact": true,
       "authority": "bidding_detail"
     },
     { // 招标信息编辑
       "name": "编辑招标信息",
       "path": "/bidding/information/edit/:id",
-      "module": "./pages/bidding/InformationEdit",
+      "module": "./pages/bidding/Edit",
       "exact": true,
       "authority": "bidding_edit"
     },
