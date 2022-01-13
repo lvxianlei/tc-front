@@ -156,11 +156,14 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         const resData: any = await RequestUtil.get(`/tower-market/projectInfo/${(this.props.match.params as any).projectId}`);
         this.setState({
             biddingBatch: resData?.bidBatch,
-            contractAdd: resData
+            contractAdd: {
+                ...resData,
+                address: `${resData.bigRegion}-${resData.address}`
+            }
         })
         this.getForm()?.setFieldsValue({
             bidBatch: resData?.bidBatch,
-            region: resData?.address || "",
+            region: `${resData.bigRegion}-${resData.address}` || "",
             country: resData?.country || "",
         })
     }
