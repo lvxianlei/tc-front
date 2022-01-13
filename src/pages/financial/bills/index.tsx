@@ -125,6 +125,7 @@ export default function Invoice() {
         </Modal>
         <Page
             path="/tower-supply/invoice"
+            exportPath={"/tower-supply/invoice"}
             filterValue={filterValue}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
@@ -161,7 +162,6 @@ export default function Invoice() {
                     }
                 }]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => {
                     setType("new")
                     setVisible(true)
