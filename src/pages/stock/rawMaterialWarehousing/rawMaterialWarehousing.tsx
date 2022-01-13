@@ -98,9 +98,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     },
                     {
                         name: 'receiveStatus',
-                        label: '状态',
+                        label: '采购状态',
                         children: (
-                            <Select placeholder="请选择标准" style={{ width: "140px" }}>
+                            <Select placeholder="请选择采购状态" style={{ width: "140px" }}>
                                 <Select.Option value="0">待收货</Select.Option>
                                 <Select.Option value="1">已收货</Select.Option>
                                 <Select.Option value="2">已拒绝</Select.Option>
