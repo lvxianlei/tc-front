@@ -17,18 +17,7 @@
         },
         {
             "title": "收货单状态",
-            "dataIndex": "receiveStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "待完成",
-                    "value": 0
-                },
-                {
-                    "label": "已完成",
-                    "value": 1
-                }
-            ]
+            "dataIndex": "receiveStatusName"
         },
         {
             "title": "供应商",
