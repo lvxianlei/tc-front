@@ -32,17 +32,20 @@ const columns = [
         ]
     },
     {
-        title: '中标包号',
-        dataIndex: "packageNum", disabled: "true"
+        title: '中标包名称',
+        dataIndex: "packageNum",
+        disabled: "true"
     },
     {
         title: '中标价(元)',
-        dataIndex: "bidMoney", disabled: "true"
+        dataIndex: "bidMoney",
+        disabled: "true"
     },
     {
         title: '中标重量(吨)',
         dataIndex: "bidWeight",
-        type: "number", disabled: "true"
+        type: "number",
+        disabled: "true"
     },
     {
         title: '是否中标',
@@ -66,6 +69,12 @@ const columns = [
         disable: true
     },
     {
+        title: '中标单价(元)', // sc1.1.2迭代 需后台确认字段
+        dataIndex: "bidWeight",
+        type: "number",
+        disabled: "true"
+    },
+    {
         title: '备注',
         dataIndex: 'description'
     },
@@ -76,6 +85,8 @@ export default function BidResultEdit(): JSX.Element {
     const params = useParams<{ id: string, tab: string }>()
     const [bidOpenRecordVos, setBidOpenRecordVos] = useState<any[]>([{ round: 1, roundName: "第 1 轮", fixed: true, bidOpenRecordVos: [] }])
     const [baseInfoForm] = Form.useForm()
+
+    const map:Map<string,number> = new Map();
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -125,6 +136,30 @@ export default function BidResultEdit(): JSX.Element {
                     reject(error)
                 }
             })))
+            console.log(_tabsData, "_tabsData")
+            // 验证中标比例
+            for (let i = 0; i < _tabsData.length; i += 1) {
+                if (_tabsData[i].formData) {
+                    for (let p = 0; p < _tabsData[i].formData.length; p += 1) {
+                        if (map.has(_tabsData[i].formData[p].packageCode)) {
+                            // 如果里面存在
+                            const result = map.get(_tabsData[i].formData[p].packageCode);
+                            map.set(_tabsData[i].formData[p].packageCode, result + (_tabsData[i].formData[p].test || 0));
+                        } else {
+                            map.set(_tabsData[i].formData[p].packageCode, (_tabsData[i].formData[p].test || 0));
+                        }
+                    }
+                }
+            }
+            console.log(map, "ma0===============================>>>")
+            map.forEach((value: any) => {
+                console.log(value, "vale")
+                if (value !== 100) {
+                   message.error("相同包名称的中标比例必须等于100！");
+                   throw new Error("相同包名称的中标比例必须等于100")
+                }
+            })
+            console.log("还会走嘛")
             const postTabsData = _tabsData.reduce((total: any, nextItem: any) => {
                 const nextTabItem = nextItem.formData ? nextItem.formData.map((formItem: any) => ({
                     ...formItem,
@@ -217,7 +252,7 @@ export default function BidResultEdit(): JSX.Element {
                                 columns={bidInfoColumns}
                                 dataSource={data}
                                 opration={[<UploadXLS key="xlxs" readEnd={async (_data) => {
-                                    const vilidateCols = ["包号", "投标人名称", "分标编号", "货物类别", "项目单位", "总价（元）", "重量（吨）"]
+                                    const vilidateCols = ["包号", "投标人名称", "分标编号", "货物类别", "项目单位", "总价（元）", "重量（吨）", "中标比例（%）"]
                                     if (_data.length <= 0) {
                                         message.error("文件不能为空...")
                                         return

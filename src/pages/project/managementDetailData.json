@@ -343,7 +343,7 @@
             "dataIndex": "vgrade"
         },
         {
-            "title": "包号",
+            "title": "包名称",
             "dataIndex": "packageCode"
         },
         {
@@ -396,6 +396,19 @@
                 {
                     "required": true,
                     "message": "请输入重量（吨）..."
+                }
+            ]
+        },
+        {
+            "title": "中标比例（%）",
+            "dataIndex": "test",
+            "type": "number",
+            "decimal": "3",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入中标比例..."
                 }
             ]
         }
