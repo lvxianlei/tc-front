@@ -51,7 +51,9 @@ export default function ManagementDetail(): React.ReactNode {
         productAssistDetailVos: [],
         productAssistStatisticsVos: []
     })
-    const [salesPlanStatus, setSalesPlanStatus] = useState<string>("")
+    const [salesPlanStatus, setSalesPlanStatus] = useState<string>("");
+    // 招标结果的开标信息统计数据
+    const [billingInformationData, setBillingInformationData] = useState<any[]>([]);
     const { loading, data, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         if (params.tab === "contract") {
             resole({})
@@ -70,8 +72,17 @@ export default function ManagementDetail(): React.ReactNode {
             resole({})
             return
         }
+        // 获取招标结果开票信息统计
+        if (params.tab === "bidResult") {
+            const result: any = await RequestUtil.get(`/bidBase/statistics/${params.id}`)
+            if (result && result.length > 0) {
+                resole(result);
+                setBillingInformationData(result || [])
+            }
+        }
         const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`)
         resole(result)
+
     }), { refreshDeps: [params.tab] })
     const { loading: projectGroupLoading, data: projectGroupData, run: projectGroupRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
         try {

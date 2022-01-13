@@ -70,7 +70,7 @@ const columns = [
     },
     {
         title: '中标单价(元)', // sc1.1.2迭代 需后台确认字段
-        dataIndex: "bidWeight",
+        dataIndex: "bidUnitPrice",
         type: "number",
         disabled: "true"
     },
@@ -145,9 +145,9 @@ export default function BidResultEdit(): JSX.Element {
                         if (map.has(_tabsData[i].formData[p].packageCode)) {
                             // 如果里面存在
                             const result = map.get(_tabsData[i].formData[p].packageCode);
-                            map.set(_tabsData[i].formData[p].packageCode, result + (_tabsData[i].formData[p].test || 0));
+                            map.set(_tabsData[i].formData[p].packageCode, result + (_tabsData[i].formData[p].bidPro || 0));
                         } else {
-                            map.set(_tabsData[i].formData[p].packageCode, (_tabsData[i].formData[p].test || 0));
+                            map.set(_tabsData[i].formData[p].packageCode, (_tabsData[i].formData[p].bidPro || 0));
                         }
                     }
                 }

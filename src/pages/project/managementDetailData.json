@@ -401,7 +401,7 @@
         },
         {
             "title": "中标比例（%）",
-            "dataIndex": "test",
+            "dataIndex": "bidPro",
             "type": "number",
             "decimal": "3",
             "required": true,
@@ -1738,23 +1738,23 @@
         },
         {
             "title": "中标总价(元)",
-            "dataIndex": "packageCode"
+            "dataIndex": "bidMoney"
         },
         {
             "title": "最高单价(元/吨)",
-            "dataIndex": "projectCompany"
+            "dataIndex": "maxUnitPrice"
         },
         {
             "title": "最高总价(元)",
-            "dataIndex": "bidName"
+            "dataIndex": "maxMoney"
         },
         {
             "title": "最低单价(元/吨)",
-            "dataIndex": "unitPrice"
+            "dataIndex": "minUnitPrice"
         },
         {
             "title": "最低总价(元)",
-            "dataIndex": "money"
+            "dataIndex": "minMoney"
         },
         {
             "title": "重量（吨）",
