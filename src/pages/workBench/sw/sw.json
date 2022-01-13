@@ -102,7 +102,7 @@
                     "title": "待完成",
                     "dataIndex": "toBeCompleteNum",
                     "path": {
-                        "pathname": "/workMngt/buyBurdening",
+                        "pathname": "/ingredients/buyBurdening",
                         "state": {
                             "batcheTaskStatus": 1
                         }
@@ -121,7 +121,7 @@
                     "title": "待完成",
                     "dataIndex": "pendingNum",
                     "path": {
-                        "pathname": "/workMngt/production",
+                        "pathname": "/ingredients/production",
                         "state": {
                             "loftingState": 1
                         }
@@ -140,7 +140,7 @@
                     "title": "待完成",
                     "dataIndex": "toBeCompleteNum",
                     "path": {
-                        "pathname": "/workMngt/purchaseList",
+                        "pathname": "/ingredients/purchaseList",
                         "state": {
                             "purchaseTaskStatus": 1
                         }
@@ -159,7 +159,7 @@
                     "title": "待完成",
                     "dataIndex": "pendingNum",
                     "path": {
-                        "pathname": "/workMngt/planList",
+                        "pathname": "/ingredients/planList",
                         "state": {
                             "planStatus": 1
                         }
@@ -178,7 +178,7 @@
                     "title": "待处理",
                     "dataIndex": "pendingNum",
                     "path": {
-                        "pathname": "/workMngt/differentList",
+                        "pathname": "/ingredients/differentList",
                         "state": {
                             "diffStatus": 1
                         }
@@ -197,7 +197,7 @@
                     "title": "待处理",
                     "dataIndex": "pendingNum",
                     "path": {
-                        "pathname": "/workMngt/shortageList",
+                        "pathname": "/ingredients/shortageList",
                         "state": {
                             "shortageStatus": 1
                         }

@@ -55,7 +55,6 @@ export default function Edit() {
             reject(error)
         }
     }))
-
     return (
         <>
             <DetailContent title={[
@@ -93,8 +92,8 @@ export default function Edit() {
                     return keys
                 }}
                 current={purchasePlanData?.current || 1}
-                size={purchasePlanData?.size || 10}
-                total={purchasePlanData?.total || 0}
+                size={dataTable?.records.length || 10}
+                total={dataTable?.records.length || 0}
                 url={`/tower-supply/materialPurchasePlan/list/${params.id}`}
                 serchObj={{}}
                 closeExportList={() => { setIsExportStoreList(false) }}
