@@ -18,21 +18,90 @@ export default function PickCheckList(): React.ReactNode {
 
    
     const columns = [
-        { title: '序号', dataIndex: 'index', key: 'index', editable: true, render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-        { title: '段号', dataIndex: 'segmentName', key: 'segmentName', editable: false},
-        { title: '模式', dataIndex: 'patternName', key: 'patternName', editable: false},
-        { title: '构件编号', dataIndex: 'code', key: 'code',editable: true },
-        { title: '材料名称', dataIndex: 'materialName', key: 'materialName', editable: true },
-        { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture', editable: true },
-        { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', editable: true },
-        { title: '长度（mm）', dataIndex: 'length', key: 'length', editable: true },
-        { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum', editable: true },
-        { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight', editable: false },
-        { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight', editable: true },
-        { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight', editable: false,  render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-            <span>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</span>
-        )},
-        { title: '备注', dataIndex: 'description', key: 'description', editable: true }
+        { 
+            title: '序号', 
+            dataIndex: 'index', 
+            key: 'index', 
+            editable: true, 
+            render: (_a: any, _b: any, index: number): React.ReactNode => (
+                <span>{index + 1}</span>
+            ) 
+        },
+        { 
+            title: '段号', 
+            dataIndex: 'segmentName', 
+            key: 'segmentName', 
+            editable: false
+        },
+        { 
+            title: '模式', 
+            dataIndex: 'patternName', 
+            key: 'patternName', 
+            editable: false
+        },
+        {
+            title: '构件编号', 
+            dataIndex: 'code', 
+            key: 'code',
+            editable: true 
+        },
+        { 
+            title: '材料名称', 
+            dataIndex: 'materialName', 
+            key: 'materialName', 
+            editable: true 
+        },
+        { 
+            title: '材质', 
+            dataIndex: 'structureTexture', 
+            key: 'structureTexture',
+            editable: true 
+        },
+        { 
+            title: '规格', 
+            dataIndex: 'structureSpec', 
+            key: 'structureSpec', 
+            editable: true 
+        },
+        { 
+            title: '长度（mm）', 
+            dataIndex: 'length', 
+            key: 'length', 
+            editable: true 
+        },
+        { 
+            title: '单段件数', 
+            dataIndex: 'basicsPartNum', 
+            key: 'basicsPartNum', 
+            editable: true 
+        },
+        { 
+            title: '理算重量（kg）', 
+            dataIndex: 'basicsTheoryWeight', 
+            key: 'basicsTheoryWeight', 
+            editable: false 
+        },
+        { 
+            title: '单件重量（kg）', 
+            dataIndex: 'basicsWeight', 
+            key: 'basicsWeight', 
+            editable: true 
+        },
+        { 
+            title: '小计重量（kg）', 
+            dataIndex: 'totalWeight', 
+            key: 'totalWeight', 
+            editable: false,  
+            render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</span>
+            )
+        },
+        { 
+            title: '备注', 
+            dataIndex: 'description', 
+            key: 'description', 
+            editable: true 
+        }
     ];
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
