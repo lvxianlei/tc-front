@@ -3,11 +3,12 @@
  * 原文件地址当前目录：OriginalDocument.tsx
  * 时间：2022/01/11
  */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { Input, Select, DatePicker, Button, Modal, message, Table } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { Page, IntgSelect } from '../../../common';
 import { useHistory, useParams } from 'react-router-dom';
+import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../../utils/RequestUtil';
 import { materialStandardTypeOptions, materialTextureOptions } from '../../../../configuration/DictionaryOptions';
 import { baseColumn } from "./detail.json";
@@ -303,6 +304,18 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         id: params.id,
     });
 
+    // 获取统计的数据
+    const { run: getUser, data: weightData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/detail/statistics`, {
+                ...filterValue
+            })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { })
+
     // 查询按钮
     const onFilterSubmit = (value: any) => {
     const result = {
@@ -434,11 +447,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 path="/tower-storage/outStock/detail"
                 exportPath={"/tower-storage/outStock/detail"}
                 exportObject={{id: params.id}}
-                sourceKey='outStockDetailPage.records'
+                // sourceKey='outStockDetailPage.records'
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{marginLeft:"20px"}}>
-                            总重量： { data?.weightCount || "0.00" } 吨， 缺料总重量：{data?.excessWeight || "0.00"} 吨
+                            总重量： { weightData?.weightCount || "0.00" } 吨， 缺料总重量：{weightData?.excessWeight || "0.00"} 吨
                         </span>
                     </>
                 }}
