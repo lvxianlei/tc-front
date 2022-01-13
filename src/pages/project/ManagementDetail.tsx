@@ -8,7 +8,8 @@ import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
     baseInfoData, productGroupColumns, bidDocColumns, paths,
     frameAgreementColumns, cargoVOListColumns, materialListColumns, taskNotice,
-    bidInfoColumns, productAssist
+    bidInfoColumns, productAssist,
+    billingInformationStatistics, // 开票信息统计
 } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
@@ -303,6 +304,10 @@ export default function ManagementDetail(): React.ReactNode {
                     <CommonTable columns={bidInfoColumns} dataSource={[]} />
                 </Tabs.TabPane>}
             </Tabs>
+            <DetailTitle title="开标信息统计" operation={[
+                <Button type="primary" ghost>导出</Button>
+            ]}/>
+            <CommonTable columns={billingInformationStatistics} dataSource={[]} />
         </DetailContent>,
         tab_frameAgreement: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/frameAgreement/${params.id}`)}>编辑</Button>,

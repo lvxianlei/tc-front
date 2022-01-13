@@ -117,6 +117,7 @@ export default function BidResultEdit(): JSX.Element {
 
     const handleSubmit = async () => {
         try {
+            map.clear();
             const tabsData = (ref.current as any).getData()
             const baseInfoData = await baseInfoForm.validateFields();
             const _tabsData = await Promise.all(tabsData.map((item: any) => new Promise(async (resove, reject) => {
@@ -152,14 +153,14 @@ export default function BidResultEdit(): JSX.Element {
                 }
             }
             console.log(map, "ma0===============================>>>")
+            let flag = false;
             map.forEach((value: any) => {
-                console.log(value, "vale")
-                if (value !== 100) {
-                   message.error("相同包名称的中标比例必须等于100！");
-                   throw new Error("相同包名称的中标比例必须等于100")
-                }
+                if (value !== 100) flag = true;
             })
-            console.log("还会走嘛")
+            if (flag) {
+                message.error("相同包名称的中标比例必须等于100！");
+                return false;
+            }
             const postTabsData = _tabsData.reduce((total: any, nextItem: any) => {
                 const nextTabItem = nextItem.formData ? nextItem.formData.map((formItem: any) => ({
                     ...formItem,

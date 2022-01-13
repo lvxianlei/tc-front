@@ -1722,5 +1722,43 @@
         "productGroup": "/tower-market/productGroup",
         "salesPlan": "/tower-market/taskNotice",
         "payInfo": "/tower-market/payApply/getPayInfo"
-    }
+    },
+    "billingInformationStatistics": [
+        {
+            "title": "包名称 ",
+            "dataIndex": "packageCode"
+        },
+        {
+            "title": "分标编号",
+            "dataIndex": "bidCode"
+        },
+        {
+            "title": "中标单价(元/吨)",
+            "dataIndex": "bidUnitPrice"
+        },
+        {
+            "title": "中标总价(元)",
+            "dataIndex": "packageCode"
+        },
+        {
+            "title": "最高单价(元/吨)",
+            "dataIndex": "projectCompany"
+        },
+        {
+            "title": "最高总价(元)",
+            "dataIndex": "bidName"
+        },
+        {
+            "title": "最低单价(元/吨)",
+            "dataIndex": "unitPrice"
+        },
+        {
+            "title": "最低总价(元)",
+            "dataIndex": "money"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight"
+        }
+    ]
 }
