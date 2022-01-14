@@ -93,9 +93,9 @@ const productColumns = [
         dataIndex: 'totalWeight',
     },
     { 
-        key: 'description', 
+        key: 'productDescription', 
         title: '备注', 
-        dataIndex: 'description' 
+        dataIndex: 'productDescription' 
     }
 ]
 export default function SetOutTaskDetail(): React.ReactNode {
