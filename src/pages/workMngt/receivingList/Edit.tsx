@@ -57,7 +57,7 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
             reject(error)
         }
     }), {})
-    
+
     useEffect(() => {
         run()
     }, [numberStatus])
@@ -249,56 +249,56 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
             }]} dataSource={chooseList} />
         {/* <DetailTitle title="待选区" /> */}
         <div>
-            <p style={{paddingLeft: "14px", boxSizing: "border-box", fontSize: "16px"}}>待选区</p>
-            <Form form={serarchForm} style={{paddingLeft: "14px"}}>
+            <p style={{ paddingLeft: "14px", boxSizing: "border-box", fontSize: "16px" }}>待选区</p>
+            <Form form={serarchForm} style={{ paddingLeft: "14px" }}>
                 <Row>
                     <Col span={4}>
                         <Form.Item
                             name="materialStandardName"
                             label="标准">
-                                <Select style={{ width: 120 }} placeholder="请选择">
-                                    {
-                                        standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
-                                            return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
-                                        })
-                                    }
-                                </Select>
+                            <Select style={{ width: 120 }} placeholder="请选择">
+                                {
+                                    standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
+                                        return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
+                                    })
+                                }
+                            </Select>
                         </Form.Item>
                     </Col>
                     <Col span={4}>
                         <Form.Item
                             name="materialTexture"
                             label="材质">
-                                <Select style={{ width: 120 }} placeholder="请选择">
-                                    {
-                                        materialEnum && materialEnum.length > 0 && materialEnum.map((item: any, index: number) => {
-                                            return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
-                                        })
-                                    }
-                                </Select>
+                            <Select style={{ width: 120 }} placeholder="请选择">
+                                {
+                                    materialEnum && materialEnum.length > 0 && materialEnum.map((item: any, index: number) => {
+                                        return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
+                                    })
+                                }
+                            </Select>
                         </Form.Item>
                     </Col>
                     <Col span={4}>
                         <Form.Item
                             name="length1"
                             label="长度">
-                               <InputNumber min={1} step={1} />
+                            <InputNumber min={1} step={1} />
                         </Form.Item>
                     </Col>
                     <Col span={3}>
                         <Form.Item
                             name="length2">
-                                <InputNumber min={1} step={1} />
+                            <InputNumber min={1} step={1} />
                         </Form.Item>
                     </Col>
                     <Col span={3}>
                         <Form.Item
                             name="spec"
                             label="规格">
-                                <Input placeholder="请输入规格" />
+                            <Input placeholder="请输入规格" />
                         </Form.Item>
                     </Col>&nbsp;&nbsp;
-                    
+
                     <Col span={4}>
                         <Form.Item>
                             <Button type="primary" onClick={handleSearch}>搜索</Button>&nbsp;&nbsp;
@@ -397,9 +397,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         console.log(dataSource, 'dataSource')
         // 选择完货物明细，
         let transportPriceCount = "0",
-                unloadPriceCount = "0",
-                weightAll = 0,
-                priceAll = 0;
+            unloadPriceCount = "0",
+            weightAll = 0,
+            priceAll = 0;
         if (dataSource.length > 0) {
             for (let i = 0; i < dataSource.length; i += 1) {
                 weightAll = weightAll += (((dataSource[i].weight) * 1 <= 0 ? 0 : dataSource[i].weight) * 1);
@@ -408,7 +408,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             // 运费价税合计 = 总重量 * 单价
             transportPriceCount = weightAll * ((freightInformation as any).transportTaxPrice * 1) + "";
             // 装卸费合计 = 总重量 * 单价
-            unloadPriceCount = (weightAll * ((handlingCharges as any).unloadTaxPrice * 1) ) + "";
+            unloadPriceCount = (weightAll * ((handlingCharges as any).unloadTaxPrice * 1)) + "";
         }
         setFreightInformation({
             ...freightInformation,
@@ -438,18 +438,18 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     })
                 }
             }
-            
+
             setContractId(result?.contractId)
             setCargoData(v || [])
             // 编辑回显
             setFreightInformation({
-                transportBear:  result?.transportBear === 1 ? "需方" : '供方', // 运输承担
+                transportBear: result?.transportBear, // 运输承担
                 transportCompany: result?.transportCompany, // 运输公司
                 transportTaxPrice: result?.transportTaxPrice, // 合同单价
                 transportPriceCount: result?.transportPriceCount, // 运费价税合计（元）
             })
             setHandlingCharges({
-                unloadBear: result?.unloadBear === 1 ? "需方" : '供方',
+                unloadBear: result?.unloadBear,
                 unloadCompany: result?.unloadCompany,
                 unloadTaxPrice: result?.unloadTaxPrice,
                 unloadPriceCount: result?.unloadPriceCount
@@ -477,8 +477,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 ...baseFormData,
                 ...freightInformation,
                 ...handlingCharges,
-                transportBear: freightInformation?.transportBear === "需方" ? 2 : 1,
-                unloadBear: handlingCharges.unloadBear === "需方" ? 2 : 1,
+                transportBear: freightInformation?.transportBear,
+                unloadBear: handlingCharges.unloadBear,
                 supplierId: baseFormData.supplierName.id,
                 supplierName: baseFormData.supplierName.value,
                 contractId: baseFormData.contractNumber.id,
@@ -518,13 +518,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 unloadPriceCount = (weightAll * (fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0")) + "";
             }
             setFreightInformation({
-                transportBear:  fields.contractNumber.records[0].transportBear === 1 ? "需方" : '供方', // 运输承担
+                transportBear: fields.contractNumber.records[0].transportBear, // 运输承担
                 transportCompany: fields.contractNumber.records[0].transportCompany ? fields.contractNumber.records[0].transportCompany : "", // 运输公司
                 transportTaxPrice: fields.contractNumber.records[0].transportTaxPrice ? fields.contractNumber.records[0].transportTaxPrice : "0", // 合同单价
                 transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
             })
             setHandlingCharges({
-                unloadBear: fields.contractNumber.records[0].unloadBear === 1 ? "需方" : '供方',
+                unloadBear: fields.contractNumber.records[0].unloadBear,
                 unloadCompany: fields.contractNumber.records[0].unloadCompany ? fields.contractNumber.records[0].unloadCompany : "",
                 unloadTaxPrice: fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0",
                 unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
@@ -537,7 +537,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     console.log(item.path, "path")
                     return ({
                         ...item,
-                        path:`/tower-supply/materialContract?contractStatus=1&supplierId=${fields.supplierName.id}`
+                        path: `/tower-supply/materialContract?contractStatus=1&supplierId=${fields.supplierName.id}`
                     })
                 }
                 return item
@@ -564,11 +564,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             <ChooseModal id={contractId} ref={modalRef} initChooseList={cargoData} numberStatus={number} />
         </Modal>
         <DetailTitle title="收货单基础信息" />
-        <BaseInfo form={form} onChange={handleBaseInfoChange} columns={columns} dataSource={{}} edit />
+        <BaseInfo col={2} form={form} onChange={handleBaseInfoChange} columns={columns} dataSource={{}} edit />
         <DetailTitle title="运费信息" />
-        <BaseInfo columns={freightInfo} dataSource={(freightInformation as any)} />
+        <BaseInfo col={2} columns={freightInfo} dataSource={(freightInformation as any)} />
         <DetailTitle title="装卸费信息" />
-        <BaseInfo columns={handlingChargesInfo} dataSource={(handlingCharges as any)} />
+        <BaseInfo col={2} columns={handlingChargesInfo} dataSource={(handlingCharges as any)} />
         <DetailTitle title="货物明细" operation={[<Button
             type="primary" key="choose" ghost
             onClick={() => {
