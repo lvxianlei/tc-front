@@ -7,7 +7,7 @@ import { baseInfoData, cargoVOListColumns } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
-
+import { voltageGradeOptions } from "../../../configuration/DictionaryOptions"
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
@@ -125,7 +125,16 @@ export default function BaseInfoEdit(): JSX.Element {
                             }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
-                <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
+                <EditTable form={cargoVOListForm} columns={cargoVOListColumns.map(item => {
+                    if (item.dataIndex === "projectVoltageLevel") {
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: voltageGradeOptions?.map(item => ({ value: item.id, label: item.name }))
+                        })
+                    }
+                    return item
+                })} dataSource={data?.cargoVOList} />
                 <Attachment title="附件信息" maxCount={10} ref={attchsRef} edit dataSource={data?.attachVos} />
             </Spin>
         </DetailContent>
