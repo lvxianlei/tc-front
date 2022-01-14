@@ -4,15 +4,14 @@
  * @description 计划排产-任务下达
  */
 
-import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, Select, Divider } from 'antd'
-import { BaseInfo, CommonTable } from '../../common'
-import RequestUtil from '../../../utils/RequestUtil'
-import useRequest from '@ahooksjs/use-request'
-import styles from './PlanScheduleMngt.module.less';
+import React, { useImperativeHandle, forwardRef, useState } from "react";
+import { Spin, Form, Select, Divider } from 'antd';
+import { BaseInfo, CommonTable } from '../../common';
+import RequestUtil from '../../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
 import { MenuOutlined } from '@ant-design/icons';
 import { arrayMove, SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
-import { IPlanSchedule, IUnit } from "./IPlanSchedule"
+import { ILink, IPlanSchedule, IUnit } from "./IPlanSchedule";
 
 interface TechnicalIssueProps {
     record: IPlanSchedule[]
@@ -25,7 +24,7 @@ const SortableCon = SortableContainer((props: JSX.IntrinsicAttributes & React.Cl
 export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProps, ref) {
     const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
     const [form] = Form.useForm();
-    const [linkList, setLinkList] = useState([])
+    const [linkList, setLinkList] = useState<ILink[]>([])
     const [dataSource, setDataSource] = useState(record.map((item: IPlanSchedule, index: number) => {
         return {
             ...item,
@@ -45,7 +44,7 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(`/tower-aps/planUnitLink/issue?unitId=${postData.unitId}&ids=${postData.ids}`)
+            const result = await RequestUtil.post(`/tower-aps/planUnitLink/lofting/issue?unitId=${postData.unitId}&ids=${postData.ids}&linkId=${postData.linkId}`);
             resole(result)
         } catch (error) {
             reject(error)
@@ -57,6 +56,7 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
             const data = await form.validateFields();
             await saveRun({
                 unitId: data?.unitId,
+                linkId: data?.linkId,
                 ids: dataSource.map((item: IPlanSchedule) => { return item.id }).join(',')
             })
             resolve(true);
@@ -153,8 +153,8 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
     };
 
     const unitChange = async (value: string) => {
-        console.log(value)
-        const result = await RequestUtil.post(`/tower-aps/productionLink/link/{unitId}`)
+        const result: ILink[] = await RequestUtil.get(`/tower-aps/productionLink/link/${value}`);
+        setLinkList(result || [])
     }
 
     return <Spin spinning={loading}>

@@ -29,3 +29,8 @@ export interface IUnit {
     readonly name?: string;
     readonly productUnitCode?: string;
 }
+
+export interface ILink {
+    readonly id: string;
+    readonly name?: string;
+}

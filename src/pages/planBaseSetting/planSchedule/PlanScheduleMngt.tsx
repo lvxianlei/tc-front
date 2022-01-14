@@ -5,13 +5,12 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Input, Button, Modal, message, Select, DatePicker } from 'antd';
+import { Input, Button, Modal, message, Select, DatePicker, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import TechnicalIssue from './TechnicalIssue';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IPlanSchedule } from './IPlanSchedule';
-import moment from 'moment';
 
 
 export interface TechnicalIssuePropsRefProps {
@@ -82,7 +81,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
             title: '计划交货日期',
             dataIndex: 'planDeliveryTime',
             width: 120,
-            format:'YYYY-MM-DD'
+            format: 'YYYY-MM-DD'
         },
         {
             key: 'voltageGradeName',
@@ -104,19 +103,19 @@ export default function PlanScheduleMngt(): React.ReactNode {
             type: 'select',
             enum: [
                 {
-                    "value": 1,
+                    "value": 0,
                     "label": "未下发"
                 },
                 {
-                    "value": 2,
+                    "value": 1,
                     "label": "放样已下发"
                 },
                 {
-                    "value": 3,
+                    "value": 2,
                     "label": "放样已确认"
                 },
                 {
-                    "value": 4,
+                    "value": 3,
                     "label": "放样已完成"
                 }
             ]
@@ -155,8 +154,10 @@ export default function PlanScheduleMngt(): React.ReactNode {
 
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
-            await editRef.current?.onSubmit()
-            message.success(`下达成功`)
+            await editRef.current?.onSubmit();
+            message.success(`下达成功`);
+            setSelectedKeys([]);
+            setSelectedRows([]);
             setVisible(false);
             resove(true);
             setRefresh(!refresh);
@@ -167,7 +168,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: IPlanSchedule[]): void => {
         setSelectedKeys(selectedRowKeys);
-        setSelectedRows(selectedRows)
+        setSelectedRows(selectedRows);
     }
 
     const issued = () => {
@@ -195,6 +196,8 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 onCancel={() => {
                     editRef.current?.resetFields()
                     setVisible(false);
+                    setSelectedKeys([]);
+                    setSelectedRows([]);
                     setRefresh(!refresh);
                 }}>
                 <TechnicalIssue record={selectedRows} ref={editRef} />
@@ -226,12 +229,14 @@ export default function PlanScheduleMngt(): React.ReactNode {
                     {
                         name: 'status',
                         label: '状态',
-                        children: <Select placeholder="请选择" defaultValue={1} style={{ width: "150px" }}>
-                            <Select.Option value={1} key="1">未下发</Select.Option>
-                            <Select.Option value={2} key="2">放样已下发</Select.Option>
-                            <Select.Option value={3} key="3">放样已确认</Select.Option>
-                            <Select.Option value={4} key="4">放样已完成</Select.Option>
-                        </Select>
+                        children: <Form.Item name="status" initialValue={1}>
+                            <Select placeholder="请选择" style={{ width: "150px" }}>
+                                <Select.Option value={0} key="0">未下发</Select.Option>
+                                <Select.Option value={1} key="1">放样已下发</Select.Option>
+                                <Select.Option value={2} key="2">放样已确认</Select.Option>
+                                <Select.Option value={3} key="3">放样已完成</Select.Option>
+                            </Select>
+                        </Form.Item>
                     },
                     {
                         name: 'time',
