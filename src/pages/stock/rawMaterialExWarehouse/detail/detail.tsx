@@ -300,7 +300,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         },
     ];//出库弹框-缺料申请原材料信息表头
 
-    const [ filterValue, setFilterValue ] = useState<any>({
+    const [filterValue, setFilterValue] = useState<any>({
         id: params.id,
     });
 
@@ -314,33 +314,33 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         } catch (error) {
             reject(error)
         }
-    }), { })
+    }), {})
 
     // 查询按钮
     const onFilterSubmit = (value: any) => {
-    const result = {
-        selectName: value.selectName || "",
-        status: value.status || "",
-        updateTimeStart: "",
-        updateTimeEnd: "",
-        departmentId: "",
-        outStockStaffId: "",
-        id: params.id,
-        materialTexture: value.materialTexture || "",
-        standard: value.standard || ""
-    }
-    if (value.startRefundTime) {
-        const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
-        result.updateTimeStart = `${formatDate[0]} 00:00:00`
-        result.updateTimeEnd = `${formatDate[1]} 23:59:59`
-        delete value.startRefundTime
-    }
-    if (value.batcherId) {
-        value.departmentId = value.batcherId.first
-        value.outStockStaffId = value.batcherId.second
-    }
-    setFilterValue(result)
-    return result
+        const result = {
+            selectName: value.selectName || "",
+            status: value.status || "",
+            updateTimeStart: "",
+            updateTimeEnd: "",
+            departmentId: "",
+            outStockStaffId: "",
+            id: params.id,
+            materialTexture: value.materialTexture || "",
+            standard: value.standard || ""
+        }
+        if (value.startRefundTime) {
+            const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
+            result.updateTimeStart = `${formatDate[0]} 00:00:00`
+            result.updateTimeEnd = `${formatDate[1]} 23:59:59`
+            delete value.startRefundTime
+        }
+        if (value.batcherId) {
+            value.departmentId = value.batcherId.first
+            value.outStockStaffId = value.batcherId.second
+        }
+        setFilterValue(result)
+        return result
     }
 
     // 点击出库显示弹框内容
@@ -405,12 +405,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const IssueSave = async () => {
         let ary: any = [];
         let count: number = 0;
-        await OutLibraryListdata.map((item, index) => {
+        OutLibraryListdata.map((item, index) => {
             if (item.outboundQuantity) {
                 let obj: any = {};
                 obj.quantity = item.outboundQuantity
                 obj.id = item.id
-                count += item.outboundQuantity || 0
+                count += parseFloat(item.outboundQuantity || 0)
                 ary.push(obj)
             }
         })
@@ -446,12 +446,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             <Page
                 path="/tower-storage/outStock/detail"
                 exportPath={"/tower-storage/outStock/detail"}
-                exportObject={{id: params.id}}
+                exportObject={{ id: params.id }}
                 // sourceKey='outStockDetailPage.records'
                 extraOperation={(data: any) => {
                     return <>
-                        <span style={{marginLeft:"20px"}}>
-                            总重量： { weightData?.weightCount || "0.00" } 吨， 缺料总重量：{weightData?.excessWeight || "0.00"} 吨
+                        <span style={{ marginLeft: "20px" }}>
+                            总重量： {weightData?.weightCount || "0.00"} 吨， 缺料总重量：{weightData?.excessWeight || "0.00"} 吨
                         </span>
                     </>
                 }}
@@ -479,60 +479,60 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     }
                 ]}
                 onFilterSubmit={onFilterSubmit}
-                filterValue={ filterValue }
+                filterValue={filterValue}
                 searchFormItems={[
-                {
-                    name: 'startRefundTime',
-                    label: '最新状态变更时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
-                },
-                {
-                    name: 'status',
-                    label: '状态',
-                    children: (
-                        <Select placeholder="请选择标准" style={{ width: "140px" }}>
+                    {
+                        name: 'startRefundTime',
+                        label: '最新状态变更时间',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
+                    {
+                        name: 'status',
+                        label: '状态',
+                        children: (
+                            <Select placeholder="请选择标准" style={{ width: "140px" }}>
                                 <Select.Option value="0">待出库</Select.Option>
                                 <Select.Option value="1">缺料中</Select.Option>
                                 <Select.Option value="2">已出库</Select.Option>
-                        </Select>
-                    )
-                },
-                {
-                    name: 'batcherId',
-                    label: '出库人',
-                    children: <IntgSelect width={200} />
-                },
-                {
-                    name: 'materialTexture',
-                    label: '材质',
-                    children: (
-                        <Select placeholder="请选择材质" style={{ width: "140px" }}>
-                            {
-                            materialEnum && materialEnum.length > 0 && materialEnum.map((item: any, index: number) => {
-                                return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
-                            })
-                        }
-                        </Select>
-                    )
-                },
-                {
-                    name: 'standard',
-                    label: '标准',
-                    children: (
-                        <Select placeholder="请选择标准" style={{ width: "140px" }}>
-                            {
-                            standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
-                                return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
-                            })
-                        }
-                        </Select>
-                    )
-                },
-                {
-                    name: 'selectName',
-                    label: "关键字",
-                    children: <Input placeholder="请输入品名/炉批号/内部合同号/杆塔号/批号、质保书号、轧制批号进行查询" style={{ width: 300 }} />
-                }
+                            </Select>
+                        )
+                    },
+                    {
+                        name: 'batcherId',
+                        label: '出库人',
+                        children: <IntgSelect width={200} />
+                    },
+                    {
+                        name: 'materialTexture',
+                        label: '材质',
+                        children: (
+                            <Select placeholder="请选择材质" style={{ width: "140px" }}>
+                                {
+                                    materialEnum && materialEnum.length > 0 && materialEnum.map((item: any, index: number) => {
+                                        return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
+                                    })
+                                }
+                            </Select>
+                        )
+                    },
+                    {
+                        name: 'standard',
+                        label: '标准',
+                        children: (
+                            <Select placeholder="请选择标准" style={{ width: "140px" }}>
+                                {
+                                    standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
+                                        return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
+                                    })
+                                }
+                            </Select>
+                        )
+                    },
+                    {
+                        name: 'selectName',
+                        label: "关键字",
+                        children: <Input placeholder="请输入品名/炉批号/内部合同号/杆塔号/批号、质保书号、轧制批号进行查询" style={{ width: 300 }} />
+                    }
                 ]}
             />
             {/* 详情弹框 */}
