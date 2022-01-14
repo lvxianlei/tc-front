@@ -229,14 +229,12 @@ export default function PlanScheduleMngt(): React.ReactNode {
                     {
                         name: 'status',
                         label: '状态',
-                        children: <Form.Item name="status" initialValue={1}>
-                            <Select placeholder="请选择" style={{ width: "150px" }}>
-                                <Select.Option value={0} key="0">未下发</Select.Option>
-                                <Select.Option value={1} key="1">放样已下发</Select.Option>
-                                <Select.Option value={2} key="2">放样已确认</Select.Option>
-                                <Select.Option value={3} key="3">放样已完成</Select.Option>
-                            </Select>
-                        </Form.Item>
+                        children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                            <Select.Option value={0} key="0">未下发</Select.Option>
+                            <Select.Option value={1} key="1">放样已下发</Select.Option>
+                            <Select.Option value={2} key="2">放样已确认</Select.Option>
+                            <Select.Option value={3} key="3">放样已完成</Select.Option>
+                        </Select>
                     },
                     {
                         name: 'time',
