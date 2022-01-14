@@ -1613,8 +1613,8 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { // 计划排产-计划排产
-      "name": "计划排产",
+    { // 计划排产-技术下发
+      "name": "技术下发",
       "path": "/planSchedule/planScheduleMngt",
       "module": "./pages/planBaseSetting/planSchedule/PlanScheduleMngt",
       "exact": true,
