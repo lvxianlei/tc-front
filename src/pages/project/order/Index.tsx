@@ -14,10 +14,9 @@
  import { ITableDataItem } from "../../prom/order/SaleOrder";
  import ConfirmableButton from "../../../components/ConfirmableButton";
  import AuthorityComponent from "../../../components/AuthorityComponent";
- export default function SaleOrderList(): JSX.Element {
+ export default function SaleOrder(): JSX.Element {
      const history = useHistory();
      const [ refresh, setRefresh ] = useState<boolean>(false);
-     const [id, setId] = useState<string>();
      const params = useParams<{ id: string }>();
      const [ filterValue, setFilterValue ] = useState({projectId: params.id});
      const onFilterSubmit = (value: any) => {
@@ -153,7 +152,7 @@
                 filterValue={filterValue}
                 extraOperation={(data: any) => <>
                     <Button type="primary" onClick={() => {
-                        history.push(`/project/order/new/${params.id}`);
+                        history.push(`/project/order/new/${params.id}/new`);
                     }}>新增订单</Button>
                 </>}
                 columns={[
@@ -188,7 +187,6 @@
                                         const resData: IResponseData = await RequestUtil.delete(
                                         `/tower-market/saleOrder?id=${id}`
                                         );
-                                    //   this.fetchTableData({});
                                         setRefresh(true);
                                     }}
                                 >

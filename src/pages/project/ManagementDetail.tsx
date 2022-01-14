@@ -17,7 +17,7 @@ import { bidTypeOptions, winBidTypeOptions } from '../../configuration/Dictionar
 
 // 合同列表
 import ContractList from "./contract/ContractList";
-import SaleOrderList from "./order/SaleOrderList";
+import SaleOrder from './order/Index'
 
 import ExportList from '../../components/export/list';
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
@@ -354,11 +354,9 @@ export default function ManagementDetail(): React.ReactNode {
             <Spin spinning={contractLoading}>
                 {
                     contractStatus === "contract" ?
-                        // <ManagementContract />
                         <ContractList />
                         :
-                        // <ManagementOrder />
-                        <SaleOrderList />
+                        <SaleOrder />
                 }
             </Spin>
         </>,
