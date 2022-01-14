@@ -8,19 +8,74 @@ import { useState } from 'react';
 import ExportList from '../../../../components/export/list';
 
 const towerColumns = [
-    { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '段号', dataIndex: 'segmentName', key: 'segmentName', },
-    { title: '模式', dataIndex: 'patternName', key: 'patternName'},
-    { title: '构件编号', dataIndex: 'code', key: 'code' },
-    { title: '材料名称', dataIndex: 'materialName', key: 'materialName' },
-    { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
-    { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
-    { title: '长度（mm）', dataIndex: 'length', key: 'length' },
-    { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
-    { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight' },
-    { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight' },
-    { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight' },
-    { title: '备注', dataIndex: 'description', key: 'description' }
+    { 
+        title: '序号', 
+        dataIndex: 'index', 
+        key: 'index', 
+        render: (_a: any, _b: any, index: number): React.ReactNode => (
+            <span>{index + 1}</span>
+        ) 
+    },
+    { 
+        title: '段号', 
+        dataIndex: 'segmentName', 
+        key: 'segmentName', 
+    },
+    { 
+        title: '模式', 
+        dataIndex: 'patternName', 
+        key: 'patternName'
+    },
+    { 
+        title: '构件编号', 
+        dataIndex: 'code', 
+        key: 'code' 
+    },
+    { 
+        title: '材料名称', 
+        dataIndex: 'materialName', 
+        key: 'materialName' 
+    },
+    { 
+        title: '材质', 
+        dataIndex: 'structureTexture', 
+        key: 'structureTexture' 
+    },
+    { 
+        title: '规格', 
+        dataIndex: 'structureSpec', 
+        key: 'structureSpec' 
+    },
+    { 
+        title: '长度（mm）', 
+        dataIndex: 'length', 
+        key: 'length' 
+    },
+    { 
+        title: '单段件数', 
+        dataIndex: 'basicsPartNum', 
+        key: 'basicsPartNum' 
+    },
+    { 
+        title: '理算重量（kg）', 
+        dataIndex: 'basicsTheoryWeight', 
+        key: 'basicsTheoryWeight' 
+    },
+    { 
+        title: '单件重量（kg）', 
+        dataIndex: 'basicsWeight', 
+        key: 'basicsWeight' 
+    },
+    { 
+        title: '小计重量（kg）',
+        dataIndex: 'totalWeight', 
+        key: 'totalWeight' 
+    },
+    { 
+        title: '备注', 
+        dataIndex: 'description', 
+        key: 'description' 
+    }
 ]
 
 export default function PickTowerDetail(): React.ReactNode {

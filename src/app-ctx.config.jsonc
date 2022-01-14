@@ -602,6 +602,11 @@
                                 "label": "计划排产",
                                 "path": "/planProd/planMgmt",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "技术下发",
+                                "path": "/planSchedule/planScheduleMngt",
+                                "authority": "approvalm"
                             }
                         ]
                     },
