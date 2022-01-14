@@ -11,6 +11,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import TechnicalIssue from './TechnicalIssue';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IPlanSchedule } from './IPlanSchedule';
+import moment from 'moment';
 
 
 export interface TechnicalIssuePropsRefProps {
@@ -80,7 +81,8 @@ export default function PlanScheduleMngt(): React.ReactNode {
             key: 'planDeliveryTime',
             title: '计划交货日期',
             dataIndex: 'planDeliveryTime',
-            width: 120
+            width: 120,
+            format:'YYYY-MM-DD'
         },
         {
             key: 'voltageGradeName',
@@ -126,9 +128,9 @@ export default function PlanScheduleMngt(): React.ReactNode {
             width: 120
         },
         {
-            key: 'loftIssueTime',
+            key: 'loftingIssueTime',
             title: '放样下发时间',
-            dataIndex: 'loftIssueTime',
+            dataIndex: 'loftingIssueTime',
             width: 120
         },
         {
@@ -138,15 +140,15 @@ export default function PlanScheduleMngt(): React.ReactNode {
             width: 120
         },
         {
-            key: 'loftCompleteTime',
+            key: 'loftingCompleteTime',
             title: '放样计划完成时间',
-            dataIndex: 'loftCompleteTime',
+            dataIndex: 'loftingCompleteTime',
             width: 120
         },
         {
-            key: 'loftRealCompleteTime',
+            key: 'loftingCompleteRealTime',
             title: '放样实际完成时间',
-            dataIndex: 'loftRealCompleteTime',
+            dataIndex: 'loftingCompleteRealTime',
             width: 120
         }
     ]
@@ -198,7 +200,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 <TechnicalIssue record={selectedRows} ref={editRef} />
             </Modal>
             <Page
-                path="/tower-aps/productionPlan/page"
+                path="/tower-aps/productionPlan"
                 columns={columns}
                 headTabs={[]}
                 extraOperation={<Button type="primary" onClick={issued}>技术下达</Button>}
