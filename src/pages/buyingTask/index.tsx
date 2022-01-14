@@ -1,12 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button, DatePicker, Select, Input, message } from 'antd';
-import { Attachment, BaseInfo, CommonTable, DetailContent, DetailTitle, IntgSelect, OperationRecord, Page } from '../common'
-import { buyingTask, operatingInformation, setting, spec, productInfo } from "./buyingTask.json"
+import { Attachment, BaseInfo, DetailTitle, IntgSelect, OperationRecord, Page } from '../common'
+import { buyingTask, setting, spec, productInfo } from "./buyingTask.json"
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
 import TaskAssign from './TaskAssign';
 import useRequest from '@ahooksjs/use-request';
-import { downLoadFile } from '../../utils';
 interface TaskAssignRef {
     onSubmit: () => void
     resetFields: () => void
