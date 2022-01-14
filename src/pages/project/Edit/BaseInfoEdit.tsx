@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin } from "antd"
-import { DetailContent, BaseInfo, EditTable, DetailTitle, Attachment, AttachmentRef } from '../../common'
+import { DetailContent, BaseInfo, EditTable, DetailTitle, Attachment, AttachmentRef, EditableTable } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { baseInfoData, cargoVOListColumns } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -69,7 +69,7 @@ export default function BaseInfoEdit(): JSX.Element {
                 address,
                 bigRegion,
                 fileIds: attchsRef.current?.getDataSource().map(item => item.id),
-                cargoDTOList: cargoVOListData.submit,
+                cargoDTOList: Object.values(cargoVOListData),
                 projectLeaderId: baseInfoData.projectLeader?.id,
                 projectLeader: baseInfoData.projectLeader?.value,
                 biddingPerson: baseInfoData.biddingPerson?.value,
@@ -125,7 +125,7 @@ export default function BaseInfoEdit(): JSX.Element {
                             }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
-                <EditTable form={cargoVOListForm} columns={cargoVOListColumns.map(item => {
+                <EditableTable form={cargoVOListForm} columns={cargoVOListColumns.map(item => {
                     if (item.dataIndex === "projectVoltageLevel") {
                         return ({
                             ...item,
