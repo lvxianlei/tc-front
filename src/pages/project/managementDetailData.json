@@ -697,7 +697,7 @@
             "dataIndex": "number"
         },
         {
-            "title": "订单编号",
+            "title": "销售订单编号",
             "dataIndex": "saleOrderNumber"
         },
         {
@@ -1098,7 +1098,7 @@
     ],
     "newProductGroup": [
         {
-            "title": "订单",
+            "title": "销售订单编号",
             "dataIndex": "saleOrderNumber",
             "type": "popTable",
             "path": "/tower-market/saleOrder",
@@ -1108,17 +1108,17 @@
             "rules": [
                 {
                     "required": true,
-                    "message": "请选择订单"
+                    "message": "请选择销售订单编号"
                 },
                 {
                     "type": "string",
                     "min": 1,
-                    "message": "请选择订单"
+                    "message": "请选择销售订单编号"
                 }
             ],
             "columns": [
                 {
-                    "title": "订单编号",
+                    "title": "销售订单编号",
                     "dataIndex": "saleOrderNumber",
                     "search": true
                 },
@@ -1284,7 +1284,7 @@
             "dataIndex": "planNumber"
         },
         {
-            "title": "订单编号",
+            "title": "销售订单编号",
             "dataIndex": "saleOrderNumber"
         },
         {
@@ -1331,7 +1331,7 @@
     ],
     "taskNoticeEditBaseInfo": [
         {
-            "title": "关联订单",
+            "title": "销售订单编号",
             "dataIndex": "saleOrderNumber",
             "type": "popTable",
             "path": "/tower-market/saleOrder",
@@ -1341,12 +1341,12 @@
             "rules": [
                 {
                     "required": true,
-                    "message": "请选择关联订单..."
+                    "message": "请选择销售订单编号..."
                 }
             ],
             "columns": [
                 {
-                    "title": "订单编号",
+                    "title": "销售订单编号",
                     "dataIndex": "saleOrderNumber",
                     "search": true
                 },
