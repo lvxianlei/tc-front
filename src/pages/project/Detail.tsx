@@ -64,7 +64,7 @@ export default function ManagementDetail(): React.ReactNode {
             resole(result)
             return
         }
-        if (["base", "bidDoc", "bidResult", "cost", "payInfo",""].includes(params.tab as string)) {
+        if (["base", "bidDoc", "bidResult", "cost", "payInfo", ""].includes(params.tab as string)) {
             // const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}`, { projectId: params.id, ...postData })
             resole({})
             return
