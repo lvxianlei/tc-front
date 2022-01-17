@@ -209,7 +209,7 @@ export default function ApplyPayment() {
         </Modal>
         <Page
             path="/tower-supply/applyPayment"
-            exportPath={"/tower-supply/applyPayment"}
+            exportPath={"/tower-supply/applyPayment/export"}
             sourceKey="page.records"
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
