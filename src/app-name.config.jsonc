@@ -45,7 +45,7 @@
         "authority": "",
         "icon": "logistic",
         "title": "生产设备",
-        "description": "设备、车辆报维修等相关功能",
+        "description": "生产设备管理功能",
         "path": "http://tc-prod-center-test.dhwy.cn/home",
         "corsWeb": true,
         "appName": "MC2"
