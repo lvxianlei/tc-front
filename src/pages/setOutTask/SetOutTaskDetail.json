@@ -21,12 +21,6 @@
             "title": "合同签订单位"
         },
         {
-            "dataIndex": "orderDeliveryTime",
-            "title": "订单交货日期",
-            "type": "date",
-            "format": "YYYY-MM-DD"
-        },
-        {
             "dataIndex": "customerDeliveryTime",
             "title": "客户交货日期",
             "type": "date",
