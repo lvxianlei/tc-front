@@ -234,11 +234,26 @@ export default function ManagementDetail(): React.ReactNode {
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
             <DetailTitle title="标书制作记录表" style={{ padding: "0 0 8px 0", }} />
-            <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
-                ...item,
-                type: "select",
-                enum: bidType?.map((bid: any) => ({ value: bid.id, label: bid.name }))
-            }) : item)} dataSource={data || {}} col={4} />
+            <BaseInfo 
+                columns={bidDocColumns.map((item: any) => {
+                    if (item.dataIndex === "bidType") {
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: bidType?.map((bid: any) => ({ value: bid.id, label: bid.name }))
+                        })
+                    }
+                    if (item.dataIndex === "deliver") {
+                        // 标书投递方式 需后台提供字典值
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: bidType?.map((bid: any) => ({ value: bid.id, label: bid.name }))
+                        })
+                    }
+                    return item
+                })}
+                dataSource={data || {}} col={4} />
             <DetailTitle title="填写记录" />
             <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', width: 50, render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
