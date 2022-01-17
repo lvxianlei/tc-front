@@ -115,7 +115,7 @@ export default function ConfirmDetail(): React.ReactNode {
         dataIndex!=="basicHeight" && formRef.setFieldsValue({
             totalWeight:number + value
         })
-      }} min={0} precision={2} max={dataIndex!=='basicHeight'&&dataIndex!=='otherWeight'? 9999.99 :dataIndex ==='basicHeight'?99.99: 999999.99}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
+      }} min={0} precision={2} max={dataIndex!=='basicHeight'&&dataIndex!=='otherWeight'? 99999.99 :dataIndex ==='basicHeight'?99.99: 999999.99}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
         return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
       })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={dataIndex==='description'?400:10} rows={1}/>:<Input />;
       if(dataIndex === 'name'){
@@ -1010,7 +1010,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     monomerWeight:dataA+dataB+dataC+dataD+value,
                                     totalWeight:data+dataA+dataB+dataC+dataD+value
                                 })
-                            }} max={9999.99}/>
+                            }} max={99999.99}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -1025,7 +1025,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     monomerWeight:dataA+dataB+dataC+dataD+value,
                                     totalWeight:data+dataA+dataB+dataC+dataD+value
                                 })
-                            }} max={9999.99}/>
+                            }} max={99999.99}/>
                         </Form.Item>
                       </Col>
                     </Row>
@@ -1042,7 +1042,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     monomerWeight:dataA+dataB+dataC+dataD+value,
                                     totalWeight:data+dataA+dataB+dataC+dataD+value
                                 })
-                            }} max={9999.99}/>
+                            }} max={99999.99}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -1057,7 +1057,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     monomerWeight:dataA+dataB+dataC+dataD+value,
                                     totalWeight:data+dataA+dataB+dataC+dataD+value
                                 })
-                            }} max={9999.99}/>
+                            }} max={99999.99}/>
                         </Form.Item>
                       </Col>
                     </Row>
