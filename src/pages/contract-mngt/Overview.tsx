@@ -27,6 +27,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
+            result["operatorName"] = `${result.operatorDeptName}-${result.operatorName}`
             resole(result)
         } catch (error) {
             reject(error)

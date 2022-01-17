@@ -35,22 +35,7 @@
         },
         {
             "title": "企业类型",
-            "dataIndex": "businessType",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "供应商",
-                    "value": 1
-                },
-                {
-                    "label": "装卸公司",
-                    "value": 2
-                },
-                {
-                    "label": "运输公司",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "businessTypeName"
         },
         {
             "title": "企业名称",
@@ -59,31 +44,12 @@
         },
         {
             "title": "发票类型",
-            "dataIndex": "invoiceType",
+            "dataIndex": "invoiceTypeName",
             "type": "string"
         },
         {
             "title": "状态",
-            "dataIndex": "invoiceStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "已收票",
-                    "value": 1
-                },
-                {
-                    "label": "待付款",
-                    "value": 2
-                },
-                {
-                    "label": "已付款",
-                    "value": 3
-                },
-                {
-                    "label": "已作废",
-                    "value": 4
-                }
-            ]
+            "dataIndex": "invoiceStatusName"
         },
         {
             "title": "最新状态变更时间",
