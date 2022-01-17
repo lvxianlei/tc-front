@@ -322,6 +322,10 @@
             "format": "YYYY-MM-DD"
         },
         {
+            "title": "加工场地",
+            "dataIndex": "processingSite"
+        },
+        {
             "title": "审批状态",
             "dataIndex": "taskReviewStatus",
             "type": "select",
@@ -416,16 +420,34 @@
             "disabled": true
         },
         {
-            "title": "订单交货日期",
-            "dataIndex": "orderDeliveryTime",
+            "title": "客户交货日期",
+            "dataIndex": "deliveryTime",
             "disabled": true,
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
-            "title": "备注",
-            "dataIndex": "description",
-            "type": "textarea"
+            "title": "优先级",
+            "dataIndex": "priority",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "紧急"
+                },
+                {
+                    "value": 2,
+                    "label": "高"
+                },
+                {
+                    "value": 3,
+                    "label": "中"
+                },
+                {
+                    "value": 4,
+                    "label": "低"
+                }
+            ]
         }
     ],
     "taskNoticeEditSpec": [
@@ -464,7 +486,8 @@
         {
             "title": "备注",
             "dataIndex": "peculiarDescription",
-            "type": "textarea"
+            "type": "textarea",
+            "maxLength": 400
         }
     ],
     "contract": [

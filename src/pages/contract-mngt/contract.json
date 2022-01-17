@@ -38,41 +38,19 @@
         },
         {
             "title": "交（提）货方式",
-            "dataIndex": "deliveryMethod"
+            "dataIndex": "deliveryMethodName"
         },
         {
             "title": "运输方式",
-            "dataIndex": "transportMethod"
+            "dataIndex": "transportMethodName"
         },
         {
             "title": "运输承担",
-            "dataIndex": "transportBear",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "供方"
-                },
-                {
-                    "value": 2,
-                    "label": "需方"
-                }
-            ]
+            "dataIndex": "transportBearName"
         },
         {
             "title": "卸车承担",
-            "dataIndex": "unloadBear",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "供方"
-                },
-                {
-                    "value": 2,
-                    "label": "需方"
-                }
-            ]
+            "dataIndex": "unloadBearName"
         },
         {
             "title": "备注",
@@ -91,6 +69,56 @@
         {
             "title": "材质",
             "dataIndex": "materialTextureId"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num"
+        },
+        {
+            "title": "含税单价",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "含税金额（元）合计",
+            "dataIndex": "taxTotalAmount"
+        },
+        {
+            "title": "不含税单价",
+            "dataIndex": "price"
+        },
+        {
+            "title": "不含税单价（元）合计",
+            "dataIndex": "totalAmount"
+        }
+    ],
+    "materialOverview": [
+        {
+            "title": "材料名称",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
         },
         {
             "title": "规格",
