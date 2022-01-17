@@ -65,7 +65,13 @@ class ManagementContractNew extends ContractNew {
               label: "内部合同编号",
               name: "internalNumber",
               initialValue: contract?.internalNumber,
-              children: <Input placeholder="内部合同编号自动生成" disabled />,
+              rules: [
+                {
+                  required: true,
+                  message: "请输入内部合同编号"
+                },
+              ],
+              children: <Input placeholder="请输入内部合同编号" maxLength={30}/>,
             },
             {
               label: "合同/工程名称",
@@ -626,7 +632,13 @@ class ManagementContractNew extends ContractNew {
               label: "内部合同编号",
               name: "internalNumber",
               initialValue: contract?.internalNumber,
-              children: <Input placeholder="内部合同编号自动生成" disabled />,
+              rules: [
+                {
+                  required: true,
+                  message: "请输入内部合同编号"
+                },
+              ],
+              children: <Input placeholder="请输入内部合同编号" maxLength={30} />,
             },
             {
               label: "合同/工程名称",
