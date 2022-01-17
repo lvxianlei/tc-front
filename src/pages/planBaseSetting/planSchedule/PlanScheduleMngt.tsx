@@ -211,17 +211,17 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 tableProps={{
                     rowSelection: {
                         selectedRowKeys: selectedKeys,
-                        onChange: SelectChange, 
+                        onChange: SelectChange,
                         getCheckboxProps: (record: Record<string, any>) => ({
                             disabled: record.loftingStatus !== 0
-                        })  
+                        })
                     }
                 }}
                 searchFormItems={[
                     {
                         name: 'productType',
                         label: '产品类型',
-                        children: <Select getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                        children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
                             {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                 return <Select.Option key={index} value={id}>
                                     {name}
