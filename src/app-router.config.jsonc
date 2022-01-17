@@ -517,15 +517,15 @@
     },
     {
       "name": "新增订单",
-      "path": "/project/order/new/:projectId",
-      "module": "./pages/project/order/SaleOrderNew",
+      "path": "/project/order/new/:projectId/:id",
+      "module": "./pages/project/order/Edit",
       "exact": true,
       "authority": "sale_order"
     },
     {
       "name": "编辑订单",
       "path": "/project/order/setting/:projectId/:id",
-      "module": "./pages/project/order/SaleOrderSetting",
+      "module": "./pages/project/order/Edit",
       "exact": true,
       "authority": "sale_order"
     },
