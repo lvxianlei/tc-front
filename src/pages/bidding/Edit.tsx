@@ -54,7 +54,7 @@ export default function InfomationNew(): JSX.Element {
         const postData = {
             ...detailData,
             ...baseInfoResult,
-            bidPackageInfoDTOList: Object.values(bidPackageInfoDTOList),
+            bidPackageInfoDTOList: bidPackageInfoDTOList.submit,
             fileIds: attachRef.current?.getDataSource().map(item => item.id)
         }
         delete postData.bidPackageInfoVOS
