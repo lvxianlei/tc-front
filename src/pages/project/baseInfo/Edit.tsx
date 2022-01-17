@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin } from "antd"
 import { DetailContent, BaseInfo, EditTable, DetailTitle, Attachment, AttachmentRef, EditableTable } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { baseInfoData, cargoVOListColumns } from '../managementDetailData.json'
+import { baseInfoData, cargoVOListColumns } from './baseInfo.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
@@ -124,7 +124,7 @@ export default function BaseInfoEdit(): JSX.Element {
                                 enum: addressList
                             }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
-                <DetailTitle title="物资清单" />
+                <DetailTitle title="初始物资清单" />
                 <EditableTable form={cargoVOListForm} columns={cargoVOListColumns.map(item => {
                     if (item.dataIndex === "projectVoltageLevel") {
                         return ({
@@ -135,6 +135,23 @@ export default function BaseInfoEdit(): JSX.Element {
                     }
                     return item
                 })} dataSource={data?.cargoVOList} />
+                <DetailTitle title="整理后物资清单" />
+                <EditableTable
+                    opration={[
+                        <Button key="import" type="primary">导入</Button>,
+                        <Button key="download" type="link">下载模板</Button>
+                    ]}
+                    form={cargoVOListForm}
+                    columns={cargoVOListColumns.map(item => {
+                        if (item.dataIndex === "projectVoltageLevel") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: voltageGradeOptions?.map(item => ({ value: item.id, label: item.name }))
+                            })
+                        }
+                        return item
+                    })} dataSource={data?.cargoVOList} />
                 <Attachment title="附件信息" maxCount={10} ref={attchsRef} edit dataSource={data?.attachVos} />
             </Spin>
         </DetailContent>

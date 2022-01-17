@@ -130,5 +130,119 @@
             "title": "说明",
             "type": "textarea"
         }
+    ],
+    "biddingStatusChange": [
+        {
+            "type": "popTable",
+            "title": "选择项目负责人",
+            "dataIndex": "projectLeader",
+            "width": 1101,
+            "path": "/sinzetech-user/user",
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
+        },
+        {
+            "type": "popTable",
+            "title": "选择应标包名称",
+            "dataIndex": "bigPackageIds",
+            "value": "packageName",
+            "width": 1101,
+            "selectType": "checkbox",
+            "path": "/sinzetech-user/user",
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "分标编号",
+                    "dataIndex": "partBidNumber",
+                    "type": "text",
+                    "maxLength": 50
+                },
+                {
+                    "title": "货物类别",
+                    "dataIndex": "goodsType",
+                    "type": "text",
+                    "maxLength": 50
+                },
+                {
+                    "title": "包名称",
+                    "dataIndex": "packageName"
+                },
+                {
+                    "title": "包号",
+                    "dataIndex": "packageNumber",
+                    "type": "text",
+                    "maxLength": 50
+                }
+            ]
+        }
+    ],
+    "bidPageInfo": [
+        {
+            "title": "分标编号",
+            "dataIndex": "partBidNumber",
+            "type": "text",
+            "maxLength": 50
+        },
+        {
+            "title": "货物类别",
+            "dataIndex": "goodsType",
+            "type": "text",
+            "maxLength": 50
+        },
+        {
+            "title": "包名称",
+            "dataIndex": "packageName"
+        },
+        {
+            "title": "包号",
+            "dataIndex": "packageNumber",
+            "type": "text",
+            "maxLength": 50
+        },
+        {
+            "title": "工程电压等级",
+            "dataIndex": "projectVoltageLevel"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "amount",
+            "type": "number"
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit"
+        },
+        {
+            "title": "首批交货日期",
+            "dataIndex": "deliveryDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "交货地点",
+            "dataIndex": "deliveryPlace"
+        },
+        {
+            "title": "物资描述",
+            "dataIndex": "goodsExplain"
+        }
     ]
 }

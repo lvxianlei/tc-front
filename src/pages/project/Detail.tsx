@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
+import { Button, Row, Radio, Spin, Modal, message } from 'antd'
 import { useHistory, useParams, Link, useRouteMatch, useLocation } from 'react-router-dom'
-import { BaseInfo, DetailContent, CommonTable, DetailTitle, Attachment } from '../common'
+import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
 import CostDetail from './cost'
 import PayInfo from './payInfo'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
-    baseInfoData, productGroupColumns, bidDocColumns, paths,
-    frameAgreementColumns, cargoVOListColumns, materialListColumns, taskNotice,
-    bidInfoColumns, productAssist,
-    billingInformationStatistics, // 开票信息统计
+    productGroupColumns, paths, taskNotice,
+    productAssist,
 } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import { changeTwoDecimal_f } from '../../utils/KeepDecimals';
-import { bidTypeOptions, winBidTypeOptions } from '../../configuration/DictionaryOptions'
-
+import Base from "./baseInfo/Overview"
+import BidDoc from "./bidDoc/Overview"
+import BidResult from "./bidResult/Overview"
+import FrameAgreement from './frameAgreement/Overview'
 // 合同列表
 import ContractList from "./contract/ContractList";
 import SaleOrder from './order/Index'
@@ -39,8 +38,6 @@ const productAssistStatistics = [
 export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, tab?: TabTypes }>()
-    const bidType = bidTypeOptions
-    const frangmentBidType = winBidTypeOptions
     const [productGroupFlag, setProductGroupFlag] = useState<"productAssistDetailVos" | "productAssistStatisticsVos">("productAssistDetailVos")
     const [isExport, setIsExportStoreList] = useState(false)
     const match = useRouteMatch()
@@ -53,7 +50,7 @@ export default function ManagementDetail(): React.ReactNode {
     })
     const [salesPlanStatus, setSalesPlanStatus] = useState<string>("");
     // 招标结果的开标信息统计数据
-    const [billingInformationData, setBillingInformationData] = useState<any[]>([]);
+
     const { loading, data, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         if (params.tab === "contract") {
             resole({})
@@ -67,18 +64,10 @@ export default function ManagementDetail(): React.ReactNode {
             resole(result)
             return
         }
-        if (["cost", "payInfo"].includes(params.tab as string)) {
+        if (["base", "bidDoc", "bidResult", "cost", "payInfo",""].includes(params.tab as string)) {
             // const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}`, { projectId: params.id, ...postData })
             resole({})
             return
-        }
-        // 获取招标结果开票信息统计
-        if (params.tab === "bidResult") {
-            const result: any = await RequestUtil.get(`/bidBase/statistics/${params.id}`)
-            if (result && result.length > 0) {
-                resole(result);
-                setBillingInformationData(result || [])
-            }
         }
         const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`)
         resole(result)
@@ -197,169 +186,11 @@ export default function ManagementDetail(): React.ReactNode {
     }
 
     const tabItems: { [key: string]: JSX.Element | React.ReactNode } = {
-        tab_base: <DetailContent operation={[
-            <Button key="edit" style={{ marginRight: '16px' }}
-                type="primary" onClick={() => history.push(`/project/management/edit/base/${params.id}`)}>编辑</Button>,
-            <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
-        ]}>
-            <DetailTitle title="基本信息" style={{ padding: "0 0 8px 0", }} />
-            <BaseInfo columns={baseInfoData.map((item: any) => {
-                if (["projectLeader", "biddingPerson"].includes(item.dataIndex)) {
-                    return ({ title: item.title, dataIndex: item.dataIndex })
-                }
-                if (item.dataIndex === "address") {
-                    return ({
-                        ...item,
-                        render: (record: any) => `${["null", null].includes(record.bigRegion) ? "" : record.bigRegion}-${["null", null].includes(record.address) ? "" : record.address}`
-                    })
-                }
-                return item
-            }).filter((item: any) => !(item.dataIndex === "country" && data?.address !== "其他-国外"))} dataSource={data || {}} />
-            <DetailTitle title="物资清单" />
-            <CommonTable columns={[
-                {
-                    title: '序号',
-                    dataIndex: 'index',
-                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                },
-                ...cargoVOListColumns
-            ]} dataSource={data?.cargoVOList} />
-            <Attachment dataSource={data?.attachVos || []} />
-        </DetailContent>,
+        tab_base: <Base id={params.id} />,
         tab_cost: <CostDetail />,
-        tab_bidDoc: <DetailContent
-            operation={[
-                <Button key="edit" type="primary" style={{ marginRight: 16 }}
-                    onClick={() => history.push(`/project/management/edit/bidDoc/${params.id}`)} >编辑</Button>,
-                <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
-            ]}>
-            <DetailTitle title="标书制作记录表" style={{ padding: "0 0 8px 0", }} />
-            <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
-                ...item,
-                type: "select",
-                enum: bidType?.map((bid: any) => ({ value: bid.id, label: bid.name }))
-            }) : item)} dataSource={data || {}} col={4} />
-            <DetailTitle title="填写记录" />
-            <CommonTable columns={[
-                { title: '序号', dataIndex: 'index', width: 50, render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-                { title: '部门', width: 100, dataIndex: 'branch' },
-                { title: '填写人', width: 100, dataIndex: 'createUserName' },
-                { title: '职位', width: 100, dataIndex: 'position' },
-                { title: '填写时间', width: 150, dataIndex: 'createTime' },
-                { title: '说明', dataIndex: 'description' }
-            ]} dataSource={data?.bidBizRecordVos} />
-        </DetailContent>,
-        tab_bidResult: <DetailContent operation={[
-            <Button key="goEdit" type="primary" style={{ marginRight: 16 }}
-                onClick={() => history.push(`/project/management/edit/bidResult/${params.id}`)}>编辑</Button>,
-            <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
-        ]}>
-            <DetailTitle title="基本信息" style={{ padding: "0 0 8px 0", }} />
-            <BaseInfo columns={[
-                {
-                    title: '年份',
-                    dataIndex: 'date',
-                    type: "date",
-                    format: "YYYY",
-                    picker: "year"
-                },
-                {
-                    title: '批次',
-                    dataIndex: 'batch',
-                    type: "number"
-                },
-                {
-                    title: '是否中标',
-                    dataIndex: "isBid",
-                    type: "select",
-                    enum: [
-                        {
-                            value: -1,
-                            label: "未公布"
-                        },
-                        {
-                            value: 0,
-                            label: "是"
-                        },
-                        {
-                            value: 1,
-                            label: "否"
-                        }
-                    ]
-                },
-                {
-                    title: '中标包号',
-                    dataIndex: "packageNum"
-                },
-                {
-                    title: '中标价(元)',
-                    dataIndex: "bidMoney"
-                },
-                {
-                    title: '中标重量(吨)',
-                    dataIndex: "bidWeight"
-                },
-                {
-                    title: '说明',
-                    dataIndex: 'description'
-                }
-            ]} dataSource={data || {}} col={2} />
-            <DetailTitle title="开标信息" />
-            <Tabs>
-                {data?.bidOpenRecordListVos?.length > 0 && data?.bidOpenRecordListVos.map((item: any, index: number) => <Tabs.TabPane key={index}
-                    tab={item.roundName}>
-                    <CommonTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
-                </Tabs.TabPane>)
-                }
-                {(!(data?.bidOpenRecordListVos?.length > 0) || (data?.bidOpenRecordListVos?.length > 0 && data?.bidOpenRecordListVos[data?.bidOpenRecordListVos.length - 1].round !== 1)) && <Tabs.TabPane tab="第 1 轮">
-                    <CommonTable columns={bidInfoColumns} dataSource={[]} />
-                </Tabs.TabPane>}
-            </Tabs>
-            <DetailTitle title="开标信息统计" operation={[
-                <Button type="primary" ghost>导出</Button>
-            ]}/>
-            <CommonTable columns={billingInformationStatistics} dataSource={[]} />
-        </DetailContent>,
-        tab_frameAgreement: <DetailContent operation={[
-            <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/frameAgreement/${params.id}`)}>编辑</Button>,
-            <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
-        ]}>
-            <DetailTitle title="基本信息" style={{ padding: "0 0 8px 0", }} />
-            <BaseInfo columns={frameAgreementColumns.map((item: any) => item.dataIndex === "bidType" ? ({
-                ...item,
-                enum: frangmentBidType?.map((fitem: any) => ({
-                    value: fitem.id, label: fitem.name
-                }))
-            }) : item)}
-                dataSource={
-                    {
-                        ...data,
-                        implementWeight: data?.implementWeight ? changeTwoDecimal_f(data?.implementWeight) : "0.00000000",
-                        implementMoney: data?.implementMoney ? changeTwoDecimal_f(data?.implementMoney) : "0.00",
-                        implementWeightPro: data?.implementWeightPro ? data?.implementWeightPro : "0.00",
-                        implementMoneyPro: data?.implementMoneyPro ? data?.implementMoneyPro : "0.00",
-                    }
-                    || {
-                        implementWeight: "0.00000000",
-                        implementMoney: "0.00",
-                        implementWeightPro: "0.00",
-                        implementMoneyPro: "0.00"
-                    }
-                }
-            />
-            <DetailTitle title="合同物资清单" />
-            <CommonTable columns={[
-                { title: '序号', dataIndex: 'index', width: 50, key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-                ...materialListColumns
-            ]} dataSource={data?.contractCargoVos} />
-            <DetailTitle title="系统信息" />
-            <BaseInfo columns={[
-                { title: "最后编辑人", dataIndex: 'updateUserLast' },
-                { title: "最后编辑时间", dataIndex: 'updateTimeLast', type: "date" },
-                { title: "创建人", dataIndex: 'createUserName' },
-                { title: "创建时间", dataIndex: 'createTime', type: "date" }
-            ]} dataSource={data || {}} />
-        </DetailContent>,
+        tab_bidDoc: <BidDoc id={params.id} />,
+        tab_bidResult: <BidResult id={params.id} />,
+        tab_frameAgreement: <FrameAgreement id={params.id} />,
         tab_contract: <>
             <div style={{ padding: "24px 0 10px 24px", boxSizing: "border-box" }}>
                 <Radio.Group defaultValue={"contract"} onChange={operationChange}>

@@ -3,82 +3,10 @@ import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin, Modal } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, EditTable, formatData } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { bidInfoColumns } from '../managementDetailData.json'
-import { EditTableHasForm, TabsCanEdit, UploadXLS } from "../bidResult"
+import { bidInfoColumns, setting } from './bidResult.json'
+import { EditTableHasForm, TabsCanEdit, UploadXLS } from "./EditTabs"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
-const columns = [
-    {
-        title: '年份',
-        dataIndex: 'date',
-        type: "date",
-        format: "YYYY",
-        picker: "year",
-        rules: [
-            {
-                required: true,
-                message: "请输入年份..."
-            }
-        ]
-    },
-    {
-        title: '批次',
-        dataIndex: 'batch',
-        rules: [
-            {
-                required: true,
-                message: "请输入批次..."
-            }
-        ]
-    },
-    {
-        title: '中标包名称',
-        dataIndex: "packageNum",
-        disabled: "true"
-    },
-    {
-        title: '中标价(元)',
-        dataIndex: "bidMoney",
-        disabled: "true"
-    },
-    {
-        title: '中标重量(吨)',
-        dataIndex: "bidWeight",
-        type: "number",
-        disabled: "true"
-    },
-    {
-        title: '是否中标',
-        dataIndex: "isBid",
-        type: "select",
-        disabled: "true",
-        enum: [
-            {
-                value: -1,
-                label: "未公布"
-            },
-            {
-                value: 0,
-                label: "是"
-            },
-            {
-                value: 1,
-                label: "否"
-            }
-        ],
-        disable: true
-    },
-    {
-        title: '中标单价(元)', // sc1.1.2迭代 需后台确认字段
-        dataIndex: "bidUnitPrice",
-        type: "number",
-        disabled: "true"
-    },
-    {
-        title: '备注',
-        dataIndex: 'description'
-    },
-]
 export default function BidResultEdit(): JSX.Element {
     const history = useHistory()
     const ref = useRef()
@@ -86,12 +14,12 @@ export default function BidResultEdit(): JSX.Element {
     const [bidOpenRecordVos, setBidOpenRecordVos] = useState<any[]>([{ round: 1, roundName: "第 1 轮", fixed: true, bidOpenRecordVos: [] }])
     const [baseInfoForm] = Form.useForm()
 
-    const map:Map<string,number> = new Map();
+    const map: Map<string, number> = new Map();
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${params.id}`)
-            baseInfoForm.setFieldsValue(formatData(columns, result))
+            baseInfoForm.setFieldsValue(formatData(setting, result))
             if (result.bidOpenRecordListVos?.length > 0) {
                 const resultBid = result.bidOpenRecordListVos
                 if (resultBid[resultBid.length - 1].round !== 1) {
@@ -120,7 +48,7 @@ export default function BidResultEdit(): JSX.Element {
             map.clear();
             const tabsData = (ref.current as any).getData()
             const baseInfoData = await baseInfoForm.validateFields();
-            const _tabsData = await Promise.all(tabsData.map((item: any) => new Promise(async (resove, reject) => {
+            const _tabsData = await Promise.all<any>(tabsData.map((item: any) => new Promise(async (resove, reject) => {
                 const { refFun, title: roundName, key: round } = item
                 try {
                     if (refFun?.getForm()) {
@@ -137,7 +65,6 @@ export default function BidResultEdit(): JSX.Element {
                     reject(error)
                 }
             })))
-            console.log(_tabsData, "_tabsData")
             // 验证中标比例
             for (let i = 0; i < _tabsData.length; i += 1) {
                 if (_tabsData[i].formData) {
@@ -152,7 +79,6 @@ export default function BidResultEdit(): JSX.Element {
                     }
                 }
             }
-            console.log(map, "ma0===============================>>>")
             let flag = false;
             map.forEach((value: any) => {
                 if (value !== 100) flag = true;
@@ -225,7 +151,7 @@ export default function BidResultEdit(): JSX.Element {
         ]}>
             <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
-                <BaseInfo form={baseInfoForm} edit columns={columns} dataSource={data || {}} />
+                <BaseInfo form={baseInfoForm} edit columns={setting} dataSource={data || {}} />
                 <DetailTitle title="开标信息" operation={[<Button key="new"
                     type="primary"
                     onClick={() => setBidOpenRecordVos([

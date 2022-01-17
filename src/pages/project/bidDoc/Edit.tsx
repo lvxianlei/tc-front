@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router-dom"
 import { Spin, Button, Form, message } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { bidDocColumns } from '../managementDetailData.json'
+import { bidDocColumns } from './bidDoc.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
@@ -37,7 +37,6 @@ export default function BaseInfoEdit(): JSX.Element {
     const handleSubmit = async () => {
         try {
             const baseInfoData = await baseInfoForm.validateFields()
-            console.log(baseInfoData)
             const result = await saveRun({
                 ...data,
                 ...baseInfoData,
@@ -73,7 +72,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     enum: bidType
                 }) : ({ ...item }))} dataSource={data || {}} col={4} edit />
                 <DetailTitle title="填写记录" />
-                <CommonTable columns={[
+                <CommonTable rowKey="createTime" columns={[
                     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
                     { title: '部门', dataIndex: 'branch' },
                     { title: '填写人', dataIndex: 'createUserName' },
