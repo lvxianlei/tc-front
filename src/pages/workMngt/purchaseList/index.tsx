@@ -14,6 +14,7 @@ export default function Invoicing() {
     const [generateVisible, setGenerateVisible] = useState<boolean>(false)
     const [generateIds, setGenerateIds] = useState<string[]>([])
     const [chooseId, setChooseId] = useState<string>("")
+    const [filterValue, setFilterValue] = useState<object>({});
     const onFilterSubmit = (value: any) => {
         if (value.startPurchaseStatusUpdateTime) {
             const formatDate = value.startPurchaseStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -24,6 +25,7 @@ export default function Invoicing() {
             value.purchaserDeptId = value.purchaserId.first
             value.purchaserId = value.purchaserId.second
         }
+        setFilterValue(value)
         return value
     }
 
@@ -83,6 +85,7 @@ export default function Invoicing() {
                     }
                 }}>生成采购计划</Button>
             </>}
+            filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

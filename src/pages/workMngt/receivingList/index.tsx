@@ -13,7 +13,8 @@ export default function Invoicing() {
     const [visible, setVisible] = useState<boolean>(false)
     const [visibleSee, setVisibleSee] = useState<boolean>(false);
     const [type, setType] = useState<"new" | "edit">("new")
-    const [detailId, setDetailId] = useState<string>("")
+    const [detailId, setDetailId] = useState<string>("");
+    const [filterValue, setFilterValue] = useState<object>({});
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
     const [materialData, setMaterialData] = useState<{ [key: string]: any }>({});
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -50,6 +51,7 @@ export default function Invoicing() {
             value.createUserId = second
             delete value.createUserDeptId
         }
+        setFilterValue(value)
         return value
     }
     const handleModalOk = () => new Promise(async (resove, reject) => {
@@ -131,6 +133,7 @@ export default function Invoicing() {
                     </>
                 }
             }]}
+            filterValue={filterValue}
             extraOperation={<>
                 {/* <Button type="primary" ghost>导出</Button> */}
                 <Button type="primary" ghost onClick={() => {
