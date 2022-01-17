@@ -44,6 +44,15 @@
     {
         "authority": "",
         "icon": "logistic",
+        "title": "生产设备",
+        "description": "设备、车辆报维修等相关功能",
+        "path": "http://tc-prod-center-test.dhwy.cn/home",
+        "corsWeb": true,
+        "appName": "MC2"
+    },
+    {
+        "authority": "",
+        "icon": "logistic",
         "title": "物流中心",
         "description": "配车、发货等相关功能",
         "path": "http://tc-logistic-test.dhwy.cn/home",
