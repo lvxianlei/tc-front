@@ -631,28 +631,28 @@
     { // 审批管理
       "name": "审批管理",
       "path": "/approvalm/management",
-      "module": "./pages/approval-mngt/ApprovalMngt",
+      "module": "./pages/approval-mngt/index",
       "exact": true,
       "authority": "approval_management_list"
     },
     { // 审批管理详情
       "name": "审批管理详情",
       "path": "/approvalm/management/detail/:id",
-      "module": "./pages/approval-mngt/ApprovalMngtDetail",
+      "module": "./pages/approval-mngt/Overview",
       "exact": true,
       "authority": "approvalm_detail"
     },
     { // 审批管理新建
       "name": "审批管理详情",
       "path": "/approvalm/management/edit/new/:type",
-      "module": "./pages/approval-mngt/ApprovalMngtEdit",
+      "module": "./pages/approval-mngt/Edit",
       "exact": true,
       "authority": "approvalm_edit"
     },
     { // 审批管理详情
       "name": "审批管理详情",
       "path": "/approvalm/management/edit/:id",
-      "module": "./pages/approval-mngt/ApprovalMngtEdit",
+      "module": "./pages/approval-mngt/Edit",
       "exact": true,
       "authority": "approvalm_edit"
     },

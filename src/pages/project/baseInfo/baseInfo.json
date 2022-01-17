@@ -321,5 +321,103 @@
             "type": "text",
             "maxLength": 200
         }
+    ],
+    "portedCargoColumns": [
+        {
+            "title": "包名称",
+            "dataIndex": "packageName"
+        },
+        {
+            "title": "分包编号",
+            "dataIndex": "packageNumber"
+        },
+        {
+            "title": "项目单位",
+            "dataIndex": "biddingPerson"
+        },
+        {
+            "title": "需求单位",
+            "dataIndex": "demandCompany"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "工程电压等级",
+            "dataIndex": "projectVoltageLevel"
+        },
+        {
+            "title": "货物名称",
+            "dataIndex": "goodsName"
+        },
+        {
+            "title": "物资名称",
+            "dataIndex": "cargoName"
+        },
+        {
+            "title": "物资描述",
+            "dataIndex": "goodsExplain"
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit"
+        },
+        {
+            "title": "数量（吨）",
+            "dataIndex": "amount"
+        },
+        {
+            "title": "首批交货日期",
+            "dataIndex": "deliveryDate"
+        },
+        {
+            "title": "最后一批交货日期",
+            "dataIndex": "lastDeliveryDate"
+        },
+        {
+            "title": "交货地点",
+            "dataIndex": "deliveryPlace"
+        },
+        {
+            "title": "交货方式",
+            "dataIndex": "deliveryType"
+        },
+        {
+            "title": "技术规范编码",
+            "dataIndex": "technicalNormCode",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "网省采购申请号",
+            "dataIndex": "purchaseRequisitionNo",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "总部采购申请号",
+            "dataIndex": "headPurchaseRequisitionNo",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "扩展描述",
+            "dataIndex": "extendedDescription",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "扩展编码",
+            "dataIndex": "extendedCode",
+            "type": "text",
+            "maxLength": 200
+        }
     ]
 }

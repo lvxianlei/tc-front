@@ -64,7 +64,7 @@ export default function Payment() {
         searchFormItems={[
             {
                 name: 'payType',
-                label: '付款类型',
+                label: '请款类型',
                 children: <Select style={{ width: 100 }}>
                     <Select.Option value="0">请款</Select.Option>
                     <Select.Option value="1">报销</Select.Option>
@@ -72,7 +72,7 @@ export default function Payment() {
             },
             {
                 name: 'payStatus',
-                label: '付款状态',
+                label: '请款状态',
                 children: <Select style={{ width: 100 }}>
                     <Select.Option value="0">待付款</Select.Option>
                     <Select.Option value="1">已付款</Select.Option>

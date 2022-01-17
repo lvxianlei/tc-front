@@ -1,8 +1,8 @@
 import React from "react"
 import { Button, Spin } from 'antd'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
-import { baseInfoData, cargoVOListColumns } from "./baseInfo.json"
+import { baseInfoData, cargoVOListColumns, portedCargoColumns } from "./baseInfo.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 
@@ -42,14 +42,9 @@ export default function Overview({ id }: OverviewProps) {
                 return item
             }).filter((item: any) => !(item.dataIndex === "country" && data?.address !== "其他-国外"))} dataSource={data || {}} />
             <DetailTitle title="物资清单" />
-            <CommonTable columns={[
-                {
-                    title: '序号',
-                    dataIndex: 'index',
-                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                },
-                ...cargoVOListColumns
-            ]} dataSource={data?.cargoVOList} />
+            <CommonTable haveIndex columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
+            <DetailTitle title="整理后物资清单" />
+            <CommonTable haveIndex columns={portedCargoColumns} dataSource={data?.cargoVOList} />
             <Attachment dataSource={data?.attachVos || []} />
         </Spin>
     </DetailContent>

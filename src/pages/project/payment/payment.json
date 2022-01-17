@@ -1,7 +1,7 @@
 {
     "paymentListHead": [
         {
-            "title": "付款单号",
+            "title": "请款单号",
             "dataIndex": "payNumber"
         },
         {

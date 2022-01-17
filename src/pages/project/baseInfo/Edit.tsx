@@ -1,12 +1,12 @@
 import React, { useState, useRef } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin } from "antd"
-import { DetailContent, BaseInfo, EditTable, DetailTitle, Attachment, AttachmentRef, EditableTable } from '../../common'
+import { DetailContent, BaseInfo, EditTable, DetailTitle, Attachment, AttachmentRef, EditableTable, CommonTable } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { baseInfoData, cargoVOListColumns } from './baseInfo.json'
+import { baseInfoData, cargoVOListColumns, portedCargoColumns } from './baseInfo.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
-import { TabTypes } from "../ManagementDetail"
+import { TabTypes } from "../Detail"
 import { voltageGradeOptions } from "../../../configuration/DictionaryOptions"
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
@@ -14,6 +14,7 @@ export default function BaseInfoEdit(): JSX.Element {
     const [address, setAddress] = useState<string>("")
     const [baseInfoForm] = Form.useForm()
     const [cargoVOListForm] = Form.useForm()
+    const [portedCargoForm] = Form.useForm()
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
 
     const { loading: addressLoading, data: addressList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -61,6 +62,7 @@ export default function BaseInfoEdit(): JSX.Element {
         try {
             const baseInfoData = await baseInfoForm.validateFields()
             const cargoVOListData = await cargoVOListForm.validateFields()
+            const portedCargoData = await portedCargoForm.validateFields()
             const projectLeaderType = typeof baseInfoData.projectLeader === "string" ? true : false
             const [bigRegion, address] = baseInfoData.address !== "其他-国外" ? baseInfoData.address.split("-") : ["", "其他-国外"]
             const result = await run({
@@ -69,7 +71,8 @@ export default function BaseInfoEdit(): JSX.Element {
                 address,
                 bigRegion,
                 fileIds: attchsRef.current?.getDataSource().map(item => item.id),
-                cargoDTOList: Object.values(cargoVOListData),
+                cargoDTOList: cargoVOListData.submit,
+                portedCargoDTOList: portedCargoData.submit,
                 projectLeaderId: baseInfoData.projectLeader?.id,
                 projectLeader: baseInfoData.projectLeader?.value,
                 biddingPerson: baseInfoData.biddingPerson?.value,
@@ -125,7 +128,7 @@ export default function BaseInfoEdit(): JSX.Element {
                             }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
                 <DetailTitle title="初始物资清单" />
-                <EditableTable form={cargoVOListForm} columns={cargoVOListColumns.map(item => {
+                {params.id === "new" && <EditTable form={cargoVOListForm} columns={cargoVOListColumns.map(item => {
                     if (item.dataIndex === "projectVoltageLevel") {
                         return ({
                             ...item,
@@ -134,15 +137,16 @@ export default function BaseInfoEdit(): JSX.Element {
                         })
                     }
                     return item
-                })} dataSource={data?.cargoVOList} />
-                <DetailTitle title="整理后物资清单" />
-                <EditableTable
+                })} dataSource={data?.cargoVOList} />}
+                {params.id !== "new" && params.id && <CommonTable haveIndex columns={cargoVOListColumns} dataSource={data?.cargoVOList} />}
+                <DetailTitle title="整理后物资清单" style={{ paddingTop: "24px" }} />
+                <EditTable
                     opration={[
                         <Button key="import" type="primary">导入</Button>,
                         <Button key="download" type="link">下载模板</Button>
                     ]}
-                    form={cargoVOListForm}
-                    columns={cargoVOListColumns.map(item => {
+                    form={portedCargoForm}
+                    columns={portedCargoColumns.map(item => {
                         if (item.dataIndex === "projectVoltageLevel") {
                             return ({
                                 ...item,

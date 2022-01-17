@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Spin, Form, message, Modal } from 'antd'
 import { EditTable, EditableTable, DetailTitle, BaseInfo, DetailContent, Attachment, AttachmentRef } from '../common'
-import { baseInfoData, biddingStatusChange, bidPageInfo } from './biddingHeadData.json'
+import { baseInfoData, biddingStatusChange, bidPageInfo } from './bidding.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
 
@@ -169,7 +169,6 @@ export default function InfomationNew(): JSX.Element {
         <Modal zIndex={15} visible={visible} title="应标" okText="确定" onOk={handleModalOk} onCancel={handleModalCancel} >
             <BaseInfo edit form={form} columns={biddingStatusChange} dataSource={{}} col={1} />
         </Modal>
-
         <DetailTitle title="基础信息" />
         <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={filterBaseInfoData(baseInfoData)} dataSource={detailData} edit />
         <DetailTitle title="物资清单" />
