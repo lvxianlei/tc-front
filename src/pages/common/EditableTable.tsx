@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import type { ProColumns } from '@ant-design/pro-table'
-import { EditableProTable } from '@ant-design/pro-table'
-import type { ActionType } from '@ant-design/pro-table'
-import { Pagination, FormInstance, message, Row, Button, Form } from "antd"
-import style from "./EditTable.module.less"
+import { VariableSizeGrid } from "react-window";
+import ResizeObserver from 'rc-resize-observer';
+import { FormInstance, message, Row, Button, Form, Table } from "antd"
+import CommonTable from "./CommonTable"
 import FormItemType from './FormItemType'
 interface EditableTableProps {
     columns: any[]
@@ -15,22 +14,21 @@ interface EditableTableProps {
     form?: FormInstance
     opration?: React.ReactNode[]
     onChange?: (data: any[], allFields: any[]) => void
+    scroll?: { x: number, y: number }
 }
 
-interface PagenationState {
-    current: number
-    pageSize: number
-    total: number
-}
 
-const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean) => {
+
+const formatColunmsB = (columns: any[], haveOpration: boolean, haveIndex: boolean) => {
     let newColumns = columns.map(item => ({
         title: item.title,
         dataIndex: item.dataIndex,
-        formItemProps: {
-            rules: item.rules || []
-        },
-        renderFormItem: () => <FormItemType data={item} type={item.type} />,
+        // render: (value: any, record: any) => <Form.Item
+        //     style={{ margin: 0 }}
+        //     rules={item.rules}
+        //     name={[record.id, item.dataindex]}>
+        //     <FormItemType data={item} type={item.type} />
+        // </Form.Item>,
         ...item
     }))
     haveOpration && newColumns.push({
@@ -38,7 +36,9 @@ const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean
         fixed: "right",
         width: 50,
         dataIndex: "opration",
-        valueType: "option"
+        render: (_: undefined, record: any) => {
+            return <Button style={{ paddingLeft: 0 }} size="small" type="link">删除</Button>
+        }
     })
     haveIndex && newColumns.unshift({
         title: '序号',
@@ -51,7 +51,12 @@ const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean
     return newColumns
 }
 
-export default function EditableTable({
+function VirtualList() {
+    console.log("================")
+    return <div>aaaaaaaaaa</div>
+}
+
+export default function Edit({
     columns,
     dataSource = [],
     onChange,
@@ -61,29 +66,52 @@ export default function EditableTable({
     haveOpration = true,
     haveIndex = true,
     opration,
+    scroll,
     ...props }: EditableTableProps): JSX.Element {
-    const actionRef = useRef<ActionType>()
-    // const [form] = Form.useForm<FormInstance>()
-    // const [{ current, pageSize, total }, setPagenaton] = useState<PagenationState>({ current: 1, pageSize: 1000, total: dataSource.length })
+    const [tableWidth, setTableWidth] = useState<number>(0)
     const [editableDataSource, setEditableDatasource] = useState<any[]>(dataSource)
-    // const [currentDatasource, setCurrentDatasource] = useState<any[]>(editableDataSource.slice((current - 1) * pageSize, current * pageSize))
-    const [eidtableColumns, setEditableColumns] = useState<any[]>(formatColunms(columns, haveOpration, haveIndex))
+    const [eidtableColumns, setEditableColumns] = useState<any[]>(formatColunmsB(columns, haveOpration, haveIndex))
+    const widthColumnCount = columns.filter(({ width }) => !width).length;
+    const mergedColumns = columns.map((column) => {
+        if (column.width) {
+            return column;
+        }
+        return { ...column, width: Math.floor(tableWidth / widthColumnCount) };
+    });
+    const gridRef = useRef<any>();
+    const [connectObject] = useState(() => {
+        const obj = {};
+        Object.defineProperty(obj, 'scrollLeft', {
+            get: () => null,
+            set: (scrollLeft) => {
+                if (gridRef.current) {
+                    gridRef.current?.scrollTo({
+                        scrollLeft
+                    })
+                }
+            }
+        })
+        return obj
+    })
+
+    const resetVirtualGrid = () => {
+        gridRef.current?.resetAfterIndices({
+            columnIndex: 0,
+            shouldForceUpdate: true,
+        })
+    }
+
+    useEffect(() => resetVirtualGrid, [tableWidth]);
 
     const handleChange = useCallback((data: any[]) => {
-        // setCurrentDatasource(dataSource)
         onChange && onChange(data, editableDataSource)
     }, [dataSource, onChange, JSON.stringify(editableDataSource)])
 
     useEffect(() => {
-        setEditableColumns(formatColunms(columns, haveOpration, haveIndex))
+        setEditableColumns(formatColunmsB(columns, haveOpration, haveIndex))
     }, [JSON.stringify(columns)])
 
-    // useEffect(() => {
-    // setPagenaton({ current, pageSize, total: editableDataSource.length })
-    // setCurrentDatasource(editableDataSource.slice((current - 1) * pageSize, current * pageSize))
-    // }, [current, pageSize, total, editableDataSource.length])
-
-    return <nav>
+    return <Form form={form}>
         <Row>{haveNewButton && <Button
             onClick={async () => {
                 try {
@@ -99,59 +127,16 @@ export default function EditableTable({
         }
             {opration}
         </Row>
-        <EditableProTable<any>
-            rowKey="id"
-            size="small"
-            actionRef={actionRef}
-            maxLength={5}
-            className={style.editableTable}
-            recordCreatorProps={false}
-            columns={eidtableColumns}
-            // value={currentDatasource}
-            value={editableDataSource}
-            onChange={handleChange}
-            editable={{
-                form,
-                type: "multiple",
-                editableKeys: editableDataSource.map(item => item.id),
-                onDelete: key => new Promise(() => {
-                    const newEditableDatasource: any[] = editableDataSource.filter((item: any) => item.id !== key)
-                    setEditableDatasource(newEditableDatasource)
-                    // setCurrentDatasource(newEditableDatasource.slice((current - 1) * pageSize, current * pageSize))
-                }),
-                onValuesChange: (recordKey, recordList) => {
-                    recordKey && setEditableDatasource(editableDataSource.map((item: any) => {
-                        if (recordList.map(item => item.id).includes(item.id)) {
-                            return recordList.find(fItem => fItem.id === item.id)
-                        } else {
-                            return item
-                        }
-                    }))
-                },
-                // onChange: () => setCurrentDatasource(editableDataSource.slice((current - 1) * pageSize, current * pageSize)),
-                actionRender: (row, config, dom) => [dom.delete],
-            }}
-            {...props}
-        />
-        {/* <Pagination
-            current={current}
-            total={total}
-            showTotal={(total, range) => `第${range[0]}-${range[1]}条/ 共${total}条`}
-            pageSize={pageSize}
-            size="small"
-            showSizeChanger
-            onChange={async (page: number, size: number | undefined) => {
-                if (size !== pageSize) {
-                    setPagenaton({ current, total: editableDataSource.length, pageSize: size || pageSize })
-                    return
-                }
-                try {
-                    form && await form.validateFields()
-                    setPagenaton({ current: page, total: editableDataSource.length, pageSize: size || pageSize })
-                } catch (error) {
-                    message.warning("本页数据校验通过后，才能切换分页...")
-                }
-            }}
-        /> */}
-    </nav>
+        <ResizeObserver onResize={({ width }) => setTableWidth(width)}>
+            <Table
+                columns={eidtableColumns}
+                dataSource={editableDataSource}
+                pagination={false}
+                onChange={() => handleChange(editableDataSource)}
+                components={{
+                    body: VirtualList,
+                }}
+            />
+        </ResizeObserver>
+    </Form>
 }
