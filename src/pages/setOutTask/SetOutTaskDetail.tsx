@@ -93,17 +93,10 @@ const productColumns = [
         title: '总重量（kg）',
         dataIndex: 'totalWeight',
     },
-<<<<<<< HEAD
-    { 
-        key: 'productDescription', 
-        title: '备注', 
-        dataIndex: 'productDescription' 
-=======
     {
         key: 'productDescription',
         title: '备注',
         dataIndex: 'productDescription'
->>>>>>> develop
     }
 ]
 export default function SetOutTaskDetail(): React.ReactNode {
