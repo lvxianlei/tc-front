@@ -129,6 +129,56 @@
             "dataIndex": "totalAmount"
         }
     ],
+    "materialOverview": [
+        {
+            "title": "材料名称",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num"
+        },
+        {
+            "title": "含税单价",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "含税金额（元）合计",
+            "dataIndex": "taxTotalAmount"
+        },
+        {
+            "title": "不含税单价",
+            "dataIndex": "price"
+        },
+        {
+            "title": "不含税单价（元）合计",
+            "dataIndex": "totalAmount"
+        }
+    ],
     "contractBaseInfo": [
         {
             "title": "合同编号",
