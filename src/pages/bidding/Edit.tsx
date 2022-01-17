@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Spin, Form, message, Modal } from 'antd'
-import { EditTable, DetailTitle, BaseInfo, DetailContent, Attachment, AttachmentRef } from '../common'
+import { EditTable, EditableTable, DetailTitle, BaseInfo, DetailContent, Attachment, AttachmentRef } from '../common'
 import { PopTable } from "../common/FormItemType"
 import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -19,7 +19,6 @@ const columns = [
         "type": "text",
         "maxLength": 50
     },
-
     {
         "title": "工程电压等级",
         "dataIndex": "projectVoltageLevel"
@@ -83,7 +82,7 @@ export default function InfomationNew(): JSX.Element {
         const postData = {
             ...detailData,
             ...baseInfoResult,
-            bidPackageInfoDTOList: bidPackageInfoDTOList.submit,
+            bidPackageInfoDTOList: Object.values(bidPackageInfoDTOList),
             fileIds: attachRef.current?.getDataSource().map(item => item.id)
         }
         delete postData.bidPackageInfoVOS
@@ -230,7 +229,7 @@ export default function InfomationNew(): JSX.Element {
         <DetailTitle title="基础信息" />
         <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={filterBaseInfoData(baseInfoData)} dataSource={detailData} edit />
         <DetailTitle title="物资清单" />
-        <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
+        <EditableTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
         <Attachment title="附件" ref={attachRef} dataSource={data?.attachVos} edit />
     </DetailContent>
 }

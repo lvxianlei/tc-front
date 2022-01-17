@@ -8,40 +8,68 @@ import RequestUtil from '../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 
 const tableColumns = [
-    { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '操作部门', dataIndex: 'createDeptName', key: 'createDeptName', },
-    { title: '操作人', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
-    { title: '任务状态', dataIndex: 'currentStatus', key: 'currentStatus', render: (value: number, record: object): React.ReactNode => {
-        const renderEnum: any = [
-            {
-                value: 0,
-                label: "已拒绝"
-            },
-            {
-                value: 1,
-                label: "待确认"
-            },
-            {
-                value: 2,
-                label: "待指派"
-            },
-            {
-                value: 3,
-                label: "待完成"
-            },
-            {
-                value: 4,
-                label: "已完成"
-            },
-            {
-                value: 5,
-                label: "已提交"
-            }
-        ]
+    { 
+        title: '序号', 
+        dataIndex: 'index', 
+        key: 'index', 
+        render: (_a: any, _b: any, index: number): React.ReactNode => (
+            <span>{index + 1}</span>
+        ) 
+    },
+    { 
+        title: '操作部门', 
+        dataIndex: 'createDeptName', 
+        key: 'createDeptName', 
+    },
+    { 
+        title: '操作人', 
+        dataIndex: 'createUserName', 
+        key: 'createUserName' 
+    },
+    { 
+        title: '操作时间', 
+        dataIndex: 'createTime', 
+        key: 'createTime' 
+    },
+    { 
+        title: '任务状态', 
+        dataIndex: 'currentStatus', 
+        key: 'currentStatus', 
+        render: (value: number, record: object): React.ReactNode => {
+            const renderEnum: any = [
+                {
+                    value: 0,
+                    label: "已拒绝"
+                },
+                {
+                    value: 1,
+                    label: "待确认"
+                },
+                {
+                    value: 2,
+                    label: "待指派"
+                },
+                {
+                    value: 3,
+                    label: "待完成"
+                },
+                {
+                    value: 4,
+                    label: "已完成"
+                },
+                {
+                    value: 5,
+                    label: "已提交"
+                }
+            ]
              return <>{value!==-1?renderEnum.find((item: any) => item.value === value).label:''}</>
-    }},
-    { title: '备注', dataIndex: 'description', key: 'description' }
+        }
+    },
+    { 
+        title: '备注', 
+        dataIndex: 'description', 
+        key: 'description' 
+    }
 ]
 
 export default function ConfirmTaskDetail(): React.ReactNode {

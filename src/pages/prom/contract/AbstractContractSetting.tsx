@@ -158,12 +158,12 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             biddingBatch: resData?.bidBatch,
             contractAdd: {
                 ...resData,
-                address: `${resData.bigRegion}-${resData.address}`
+                address: resData.address === "其他-国外" ? resData.address : `${resData.bigRegion}-${resData.address}`
             }
         })
         this.getForm()?.setFieldsValue({
             bidBatch: resData?.bidBatch,
-            region: `${resData.bigRegion}-${resData.address}` || "",
+            region: resData.address === "其他-国外" ? resData.address : `${resData.bigRegion}-${resData.address}`,
             country: resData?.country || "",
         })
     }

@@ -508,7 +508,17 @@
         {
             "title": "运输承担",
             "dataIndex": "transportBear",
-            "type": "string"
+            "type": "select",
+            "enum": [
+                {
+                    "label": "供方",
+                    "value": 1
+                },
+                {
+                    "label": "需方",
+                    "value": 2
+                }
+            ]
         },
         {
             "title": "运输公司",
@@ -530,7 +540,17 @@
         {
             "title": "卸车承担",
             "dataIndex": "unloadBear",
-            "type": "string"
+            "type": "select",
+            "enum": [
+                {
+                    "label": "供方",
+                    "value": 1
+                },
+                {
+                    "label": "需方",
+                    "value": 2
+                }
+            ]
         },
         {
             "title": "装卸公司",
