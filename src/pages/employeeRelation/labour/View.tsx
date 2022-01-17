@@ -18,9 +18,20 @@ export default function View(): React.ReactNode {
     }), {})
     const detailData: any = data;
     const tableColumns = [
-        { title: '合同编号', dataIndex: 'contractNumber', key: 'contractNumber' },
-        { title: '合同公司', dataIndex: 'signedCompanyName', key: 'signedCompanyName' },
-        { title: '合同类型', dataIndex: 'contractType', key: 'contractType', 
+        { 
+            title: '合同编号', 
+            dataIndex: 'contractNumber', 
+            key: 'contractNumber' 
+        },
+        { 
+            title: '合同公司', 
+            dataIndex: 'signedCompanyName', 
+            key: 'signedCompanyName' 
+        },
+        { 
+            title: '合同类型', 
+            dataIndex: 'contractType', 
+            key: 'contractType', 
             render: (contractType: number): React.ReactNode => {
                 switch (contractType) {
                     case 1:
@@ -36,18 +47,31 @@ export default function View(): React.ReactNode {
                 }
             } 
         },
-        { title: '合同开始时间', dataIndex: 'contractStartDate', key: 'contractStartDate',
-        render:(contractStartDate: string)=>{
-            return contractStartDate?moment(contractStartDate).format('YYYY-MM-DD'):'-'
-        } },
-        { title: '合同结束时间', dataIndex: 'contractEndDate', key: 'contractEndDate',
-        render:(contractEndDate: string)=>{
-            return contractEndDate?moment(contractEndDate).format('YYYY-MM-DD'):'-'
-        }},
-        { title: '操作', dataIndex: 'operation', key: 'operation',render: (_: any, record: any, index: number): React.ReactNode => (
-            <Button type='link' onClick={()=>{
-                history.push(`/employeeRelation/labour/view/${params.id}/${record.id}`)
-            }}>详情</Button>) 
+        { 
+            title: '合同开始时间', 
+            dataIndex: 'contractStartDate', 
+            key: 'contractStartDate',
+            render:(contractStartDate: string)=>{
+                return contractStartDate?moment(contractStartDate).format('YYYY-MM-DD'):'-'
+            } 
+        },
+        { 
+            title: '合同结束时间', 
+            dataIndex: 'contractEndDate', 
+            key: 'contractEndDate',
+            render:(contractEndDate: string)=>{
+                return contractEndDate?moment(contractEndDate).format('YYYY-MM-DD'):'-'
+            }
+        },
+        { 
+            title: '操作', 
+            dataIndex: 'operation', 
+            key: 'operation',
+            render: (_: any, record: any, index: number): React.ReactNode => (
+                <Button type='link' onClick={()=>{
+                    history.push(`/employeeRelation/labour/view/${params.id}/${record.id}`)
+                }}>详情</Button>
+            ) 
         }
     ]
     return <>
