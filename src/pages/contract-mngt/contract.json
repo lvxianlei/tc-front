@@ -38,41 +38,19 @@
         },
         {
             "title": "交（提）货方式",
-            "dataIndex": "deliveryMethod"
+            "dataIndex": "deliveryMethodName"
         },
         {
             "title": "运输方式",
-            "dataIndex": "transportMethod"
+            "dataIndex": "transportMethodName"
         },
         {
             "title": "运输承担",
-            "dataIndex": "transportBear",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "供方"
-                },
-                {
-                    "value": 2,
-                    "label": "需方"
-                }
-            ]
+            "dataIndex": "transportBearName"
         },
         {
             "title": "卸车承担",
-            "dataIndex": "unloadBear",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "供方"
-                },
-                {
-                    "value": 2,
-                    "label": "需方"
-                }
-            ]
+            "dataIndex": "unloadBearName"
         },
         {
             "title": "备注",

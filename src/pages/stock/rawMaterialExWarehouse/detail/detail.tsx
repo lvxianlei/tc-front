@@ -145,7 +145,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 120,
         }, {
             title: '出库时间',
-            dataIndex: 'updateTime',
+            dataIndex: 'outStockTime',
             width: 120,
         },
     ];//详情-出库表头
