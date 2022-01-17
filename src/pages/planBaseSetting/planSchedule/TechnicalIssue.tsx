@@ -193,7 +193,7 @@ export default forwardRef(function TechnicalIssue({ record }: TechnicalIssueProp
             }
             return item
         })} col={2} dataSource={{}} edit />
-        <Divider>请拖拽列表排序，列表排序为任务完成的顺序</Divider>
+        <Divider style={{ marginTop: '0' }}>请拖拽列表排序，列表排序为任务完成的顺序</Divider>
         <CommonTable
             scroll={{ x: '700' }}
             rowKey="index"
