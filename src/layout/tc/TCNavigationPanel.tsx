@@ -90,7 +90,6 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
         }
         const selectedDarkMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, location.pathname);
         const selectedSubMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(this.state.selectedDarkMenuItem?.items || [], location.pathname);
-        console.log(selectedSubMenuItem, "selectedSubMenuItem")
         this.setState({
             selectedDarkMenuItem: v,
             selectedSubMenuItem: selectedDarkMenuItem?.path ? [selectedDarkMenuItem.path] : [],
