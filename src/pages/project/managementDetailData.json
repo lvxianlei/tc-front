@@ -316,6 +316,12 @@
             "dataIndex": "materialDemand"
         },
         {
+            "title": "客户交货日期",
+            "dataIndex": "deliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
             "title": "计划交货日期",
             "dataIndex": "planDeliveryTime",
             "type": "date",
@@ -446,6 +452,12 @@
                 {
                     "value": 4,
                     "label": "低"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入优先级..."
                 }
             ]
         }

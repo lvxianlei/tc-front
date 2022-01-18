@@ -79,6 +79,7 @@ export default function SalesPlanEdit() {
                 message.warning("请选择杆塔明细...")
                 return
             }
+            console.log(baseInfoData, "bassds", moment(baseInfoData.deliveryTime).format("YYYY-MM-DD"))
             const submitData = {
                 ...data,
                 ...baseInfoData,
@@ -86,6 +87,7 @@ export default function SalesPlanEdit() {
                 projectId: match.params.projectId,
                 contractId,
                 saleOrderId,
+                deliveryTime: `${moment(baseInfoData.deliveryTime).format("YYYY-MM-DD")} 00:00:00`,
                 saleOrder: baseInfoData.saleOrderNumber.saleOrderId || "",
                 productInfoList: submitProductDetailsData,
                 saleOrderNumber: baseInfoData.saleOrderNumber.value || baseInfoData.saleOrderNumber

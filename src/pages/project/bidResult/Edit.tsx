@@ -5,6 +5,7 @@ import { DetailContent, BaseInfo, DetailTitle, EditTable, formatData } from "../
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns, setting } from './bidResult.json'
 import { EditTableHasForm, TabsCanEdit, UploadXLS } from "./EditTabs"
+import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 export default function BidResultEdit(): JSX.Element {
@@ -81,8 +82,9 @@ export default function BidResultEdit(): JSX.Element {
             }
             let flag = false;
             map.forEach((value: any) => {
-                if (value !== 100) flag = true;
+                if (+value !== 100) flag = true;
             })
+            console.log(map, "================>>>>>>>>>>>>>>>")
             if (flag) {
                 message.error("相同包名称的中标比例必须等于100！");
                 return false;
@@ -178,38 +180,45 @@ export default function BidResultEdit(): JSX.Element {
                             <EditTableHasForm
                                 columns={bidInfoColumns}
                                 dataSource={data}
-                                opration={[<UploadXLS key="xlxs" readEnd={async (_data) => {
-                                    const vilidateCols = ["包号", "投标人名称", "分标编号", "货物类别", "项目单位", "总价（元）", "重量（吨）", "中标比例（%）"]
-                                    if (_data.length <= 0) {
-                                        message.error("文件不能为空...")
-                                        return
-                                    }
-                                    if (Object.keys(_data[0]).length <= 0) {
-                                        message.error("文件不符合上传规则...")
-                                        return
-                                    }
-                                    const rowItem: string[] = Object.keys(_data[0])
-                                    const vilidateRow: number = rowItem.filter(item => vilidateCols.includes(item)).length
-                                    if (vilidateRow !== vilidateCols.length) {
-                                        message.error("文件不符合上传规则...")
-                                        return
-                                    }
-                                    const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
-                                    const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
-                                    const uploadData = filterUploadData.map((item: any, index) => {
-                                        let rowData: any = { uid: resultData.length + index }
-                                        Object.keys(item).forEach((columnItem: string) => {
-                                            const columnDataIndex = bidInfoColumns.find(bidItem => bidItem.title === columnItem)
-                                            if (columnDataIndex) {
-                                                rowData[columnDataIndex.dataIndex] = generateFormatEditData(columnDataIndex, item[columnItem])
-                                            }
+                                opration={[
+                                    <Button
+                                        type="primary"
+                                        onClick={() => downloadTemplate('/tower-market/bidBase/export', '开标信息导入模板')}
+                                        style={{marginRight: 16}}
+                                    >下载导入模板</Button>,
+                                    <UploadXLS key="xlxs" readEnd={async (_data) => {
+                                        const vilidateCols = ["包名称", "投标人名称", "分标编号", "货物类别", "项目单位", "总价（元）", "重量（吨）", "中标比例（%）"]
+                                        if (_data.length <= 0) {
+                                            message.error("文件不能为空...")
+                                            return
+                                        }
+                                        if (Object.keys(_data[0]).length <= 0) {
+                                            message.error("文件不符合上传规则...")
+                                            return
+                                        }
+                                        const rowItem: string[] = Object.keys(_data[0])
+                                        const vilidateRow: number = rowItem.filter(item => vilidateCols.includes(item)).length
+                                        if (vilidateRow !== vilidateCols.length) {
+                                            message.error("文件不符合上传规则...")
+                                            return
+                                        }
+                                        const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
+                                        const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
+                                        const uploadData = filterUploadData.map((item: any, index) => {
+                                            let rowData: any = { uid: resultData.length + index }
+                                            Object.keys(item).forEach((columnItem: string) => {
+                                                const columnDataIndex = bidInfoColumns.find(bidItem => bidItem.title === columnItem)
+                                                if (columnDataIndex) {
+                                                    rowData[columnDataIndex.dataIndex] = generateFormatEditData(columnDataIndex, item[columnItem])
+                                                }
+                                            })
+                                            return rowData
                                         })
-                                        return rowData
-                                    })
-                                    const editForm = tempRef?.ref[item.key].getForm()
-                                    const values = await editForm.getFieldsValue().submit
-                                    editForm.setFieldsValue({ submit: values.concat(uploadData) })
-                                }} />]}
+                                        const editForm = tempRef?.ref[item.key].getForm()
+                                        const values = await editForm.getFieldsValue().submit
+                                        editForm.setFieldsValue({ submit: values.concat(uploadData) })
+                                    }} />
+                            ]}
                                 ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
                             />
                         );

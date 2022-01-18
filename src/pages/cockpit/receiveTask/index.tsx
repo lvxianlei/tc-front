@@ -7,25 +7,6 @@ import { receiveColumns } from "./receiveTask.json"
 import PrepareOverview from "../../financial/prepares/Overview"
 import BillOverview from "../../financial/bills/Overview"
 
-/**
- * 拿掉
- *  {
-        "title": "供应商",
-        "dataIndex": "supplierName"
-    },
-    {
-        "title": "运费(元)",
-        "dataIndex": "freight",
-        "type": "number"
-    },
-    {
-        "title": "货款运费合计(元)",
-        "dataIndex": "price",
-        "type": "number"
-    },
-    新增 企业类型以及企业名称 （需跟后台确认字段）
-    查询条件：企业类型下拉框数据需后台提供
- */
 export default function ViewReceivingNote(): React.ReactNode {
     const history = useHistory()
     const [prepareVisible, setPrepareVisible] = useState<boolean>(false)
@@ -105,7 +86,6 @@ export default function ViewReceivingNote(): React.ReactNode {
                 })
             ]}
             extraOperation={(data: any) => <>
-                <Button type="primary">导出</Button>
                 <span style={{ fontSize: "20px", color: "orange", marginLeft: "40px" }}>累计欠票金额：{data?.receiveStockMessage?.arrearsMoney || "0"}      累计欠费金额：{data?.receiveStockMessage?.owingTicketMoney || "0"}</span>
             </>}
             filterValue={ filterValue }

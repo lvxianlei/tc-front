@@ -459,7 +459,7 @@
       "authority": "project"
     },
     { // 回款申请
-      "name": "回款申请",
+      "name": "回款确认",
       "path": "/project/collection",
       "module": "./pages/project/collection/index",
       "exact": true,
@@ -687,7 +687,7 @@
     },
     { // 驾驶舱-原材料看板-价格维护
       "name": "价格维护",
-      "path": "/cockpit/rawMaterial/price",
+      "path": "/bulletin/rawMaterial/price",
       "module": "./pages/cockpit/rawMaterial/Overview",
       "exact": true,
       "authority": "sw_cockpit_raw_material_anban_price_maintenance"

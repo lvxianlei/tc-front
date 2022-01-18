@@ -50,7 +50,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 )
             }]}
             extraOperation={
-                <div className="page-count-active">数量合计：{data?.quantity} 重量合计：{data?.weight}</div>
+                <div>数量合计：<span style={{marginRight: 12, color: "#FF8C00"}}>{data?.quantity}</span> 重量合计：<span style={{marginRight: 12, color: "#FF8C00"}}>{data?.weight}</span></div>
             }
             filterValue={filterValue}
             onFilterSubmit={(value: any) => {

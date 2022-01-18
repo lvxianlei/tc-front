@@ -6,13 +6,13 @@
             "disabled": true
         },
         {
-            "title": "关联合同",
+            "title": "内部合同编号",
             "dataIndex": "contractNumber",
             "type": "popTable",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入关联合同..."
+                    "message": "请输入内部合同编号..."
                 }
             ],
             "path": "/tower-market/contract",
