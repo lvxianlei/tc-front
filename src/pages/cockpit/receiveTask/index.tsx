@@ -31,12 +31,14 @@ export default function ViewReceivingNote(): React.ReactNode {
     const [prepareVisible, setPrepareVisible] = useState<boolean>(false)
     const [billVisible, setBillVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
+    const [ filterValue, setFilterValue ] = useState({});
     const onFilterSubmit = (value: any) => {
         if (value.startCompleteTime) {
             const formatDate = value.startCompleteTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startCompleteTime = formatDate[0] + " 00:00:00"
             value.endCompleteTime = formatDate[1] + " 23:59:59"
         }
+        setFilterValue(value);
         return value
     }
 
@@ -67,6 +69,7 @@ export default function ViewReceivingNote(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-storage/receiveStockBoard"
+            exportPath={`/tower-storage/receiveStockBoard`}
             columns={[
                 {
                     key: 'index',
@@ -105,6 +108,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                 <Button type="primary">导出</Button>
                 <span style={{ fontSize: "20px", color: "orange", marginLeft: "40px" }}>累计欠票金额：{data?.receiveStockMessage?.arrearsMoney || "0"}      累计欠费金额：{data?.receiveStockMessage?.owingTicketMoney || "0"}</span>
             </>}
+            filterValue={ filterValue }
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
