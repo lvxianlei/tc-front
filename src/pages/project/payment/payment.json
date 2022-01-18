@@ -17,7 +17,11 @@
             "dataIndex": "projectLeader"
         },
         {
-            "title": "付款状态",
+            "title": "请款类型",
+            "dataIndex": "costTypeName"
+        },
+        {
+            "title": "请款状态",
             "dataIndex": "payStatus",
             "type": "select",
             "enum": [

@@ -184,7 +184,7 @@
             "type": "select",
             "enum": [
                 {
-                    "label": "已创建",
+                    "label": "草稿",
                     "value": 0
                 },
                 {
@@ -661,6 +661,65 @@
         {
             "title": "意见",
             "dataIndex": "opinion"
+        }
+    ],
+    "batchCreateColumns": [
+        {
+            "title": "内部合同编号",
+            "dataIndex": "contractCode",
+            "type": "popTable",
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "contractNumber",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择内部合同编号"
+                }
+            ]
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName",
+            "disabled": true
+        },
+        {
+            "title": "合同单位",
+            "dataIndex": "contractCompany",
+            "disabled": true
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "business",
+            "disabled": true
         }
     ]
 }
