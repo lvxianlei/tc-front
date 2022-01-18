@@ -423,88 +423,88 @@ export default function IngredientsModal(props: any) {
             ]}
         >
             <Spin spinning={loading}>
-                <Row>
+                <div className='wrapperBox'>
                     {/* 左右布局 */}
-                    <Col span={12}>
-                    <DetailTitle title="配料策略" />
-                    {/* 配料策略 */}
-                    <Form form={serarchForm} style={{paddingLeft: "14px", display: "flex", flexWrap: "nowrap"}}>
-                            <Form.Item
-                                name="num1"
-                                label="开数"
-                                initialValue={policyDetailed && policyDetailed[0]}
-                            >
-                                    <Select style={{ width: 120 }} placeholder="请选择">
-                                        {policyDetailed && policyDetailed.map((item: any, index: number) => {
-                                            return <Select.Option value={item} key={index}>{item}</Select.Option>
-                                        })}
-                                    </Select>
-                            </Form.Item>&nbsp;
-                            <Form.Item
-                                name="num3"
-                                initialValue={batchingLength && batchingLength[0]}
-                                label="米数"
-                            >
-                                    <Select style={{ width: 80 }} placeholder="请选择">
-                                        {batchingLength && batchingLength.map((item: any, index: number) => {
-                                            return <Select.Option value={item} key={index}>{item}</Select.Option>
-                                        })}
-                                    </Select>
-                            </Form.Item>
-                            <Form.Item
-                                initialValue={batchingLength && batchingLength[batchingLength.length - 1]}
-                                name="num4">
-                                    <Select style={{ width: 80 }} placeholder="请选择">
-                                        {batchingLength && batchingLength.map((item: any, index: number) => {
-                                            return <Select.Option value={item} key={index}>{item}</Select.Option>
-                                        })}
-                                    </Select>
-                            </Form.Item>&nbsp;
-                            <Form.Item
-                                name="num5"
-                                initialValue={90}
-                                label="利用率"
-                            >
-                                    {/* <Select style={{ width: 80 }} placeholder="请选择">
-                                        {utilizationRate && utilizationRate.map((item: any, index: number) => {
-                                            return <Select.Option value={item} key={index}>{item}</Select.Option>
-                                        })}
-                                    </Select> */}
-                                    <InputNumber step={1} min={ 1 } maxLength={ 100 } precision={ 0 } style={{ width: 80 }} />
-                            </Form.Item>
-                        </Form>
-                    <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
-                        <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类</span>
-                        <span style={{color: "#FF8C00"}}>未分配/全部：{construNumber}/{(userData as any) && (userData as any).totalNum || 0}</span>
-                    </div>
-                    <Table
-                            size="small"
-                            rowSelection={{
-                            type: selectionType,
-                            ...rowSelection,
-                            }}
-                            columns={ConstructionClassification}
-                            dataSource={constructionClassification}
-                            pagination={false}
-                            scroll={{ y: 400 }}
-                        />
+                    <div className='wrapper left'>
+                        <DetailTitle title="配料策略" />
+                        {/* 配料策略 */}
+                        <Form form={serarchForm} style={{paddingLeft: "14px", display: "flex", flexWrap: "nowrap"}}>
+                                <Form.Item
+                                    name="num1"
+                                    label="开数"
+                                    initialValue={policyDetailed && policyDetailed[0]}
+                                >
+                                        <Select style={{ width: 120 }} placeholder="请选择">
+                                            {policyDetailed && policyDetailed.map((item: any, index: number) => {
+                                                return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                            })}
+                                        </Select>
+                                </Form.Item>&nbsp;
+                                <Form.Item
+                                    name="num3"
+                                    initialValue={batchingLength && batchingLength[0]}
+                                    label="米数"
+                                >
+                                        <Select style={{ width: 80 }} placeholder="请选择">
+                                            {batchingLength && batchingLength.map((item: any, index: number) => {
+                                                return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                            })}
+                                        </Select>
+                                </Form.Item>
+                                <Form.Item
+                                    initialValue={batchingLength && batchingLength[batchingLength.length - 1]}
+                                    name="num4">
+                                        <Select style={{ width: 80 }} placeholder="请选择">
+                                            {batchingLength && batchingLength.map((item: any, index: number) => {
+                                                return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                            })}
+                                        </Select>
+                                </Form.Item>&nbsp;
+                                <Form.Item
+                                    name="num5"
+                                    initialValue={90}
+                                    label="利用率"
+                                >
+                                        {/* <Select style={{ width: 80 }} placeholder="请选择">
+                                            {utilizationRate && utilizationRate.map((item: any, index: number) => {
+                                                return <Select.Option value={item} key={index}>{item}</Select.Option>
+                                            })}
+                                        </Select> */}
+                                        <InputNumber step={1} min={ 1 } maxLength={ 100 } precision={ 0 } style={{ width: 80 }} />
+                                </Form.Item>
+                            </Form>
                         <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
-                        <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类明细</span>
-                        <span style={{color: "#FF8C00"}}>已配： {construNumberDetail} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum || 0}</span>
+                            <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类</span>
+                            <span style={{color: "#FF8C00"}}>未分配/全部：{construNumber}/{(userData as any) && (userData as any).totalNum || 0}</span>
+                        </div>
+                        <Table
+                                size="small"
+                                rowSelection={{
+                                type: selectionType,
+                                ...rowSelection,
+                                }}
+                                columns={ConstructionClassification}
+                                dataSource={constructionClassification}
+                                pagination={false}
+                                scroll={{ y: 400 }}
+                            />
+                            <div style={{display: "flex", flexWrap: "nowrap",paddingLeft: "14px", boxSizing: "border-box", lineHeight: "14px", marginBottom: 20, marginTop: 20}}>
+                            <span style={{fontSize: "16px", marginRight: "4px"}}>构件分类明细</span>
+                            <span style={{color: "#FF8C00"}}>已配： {construNumberDetail} 全部： {(sortDetailList as any) && (sortDetailList as any).totalNum || 0}</span>
+                        </div>
+                        <Table
+                                size="small"
+                                rowSelection={{
+                                type: "checkbox",
+                                ...rowSelectionCheck,
+                                }}
+                                columns={ConstructionClassificationDetail}
+                                dataSource={constructionClassificationDetail}
+                                pagination={false}
+                                scroll={{ y: 400 }}
+                            />
                     </div>
-                    <Table
-                            size="small"
-                            rowSelection={{
-                            type: "checkbox",
-                            ...rowSelectionCheck,
-                            }}
-                            columns={ConstructionClassificationDetail}
-                            dataSource={constructionClassificationDetail}
-                            pagination={false}
-                            scroll={{ y: 400 }}
-                        />
-                    </Col>
-                    <Col span={12}>
+                    <div className='wrapper'>
                         <DetailTitle title="配料方案" />
                         <CommonTable
                             columns={[
@@ -583,8 +583,8 @@ export default function IngredientsModal(props: any) {
                                 }
                             ]} dataSource={preparation} pagination={false} scroll={{ y: 400 }} className="prepartion"
                         />
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </Spin>
         </Modal>
     )
