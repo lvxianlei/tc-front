@@ -5,7 +5,7 @@ import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
 import { bidDocColumns } from "./bidDoc.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { bidTypeOptions } from '../../../configuration/DictionaryOptions'
+import { bidTypeOptions, tenderDeliveryMethodOptions } from '../../../configuration/DictionaryOptions'
 interface OverviewProps {
     id: string
 }
@@ -30,11 +30,27 @@ export default function Overview({ id }: OverviewProps) {
         ]}>
         <Spin spinning={loading}>
             <DetailTitle title="标书制作记录表" style={{ padding: "0 0 8px 0", }} />
-            <BaseInfo columns={bidDocColumns.map((item: any) => item.dataIndex === "bidType" ? ({
-                ...item,
-                type: "select",
-                enum: bidTypeOptions?.map((bid: any) => ({ value: bid.id, label: bid.name }))
-            }) : item)} dataSource={data || {}} col={4} />
+            <BaseInfo
+                    columns={bidDocColumns.map((item: any) => {
+                        if (item.dataIndex === "bidType") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: bidTypeOptions?.map((bid: any) => ({ value: bid.id, label: bid.name }))
+                            })
+                        }
+                        if (item.dataIndex === "deliverId") {
+                            // 标书投递方式 需后台提供字典值
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: tenderDeliveryMethodOptions?.map((bid: any) => ({ value: bid.id, label: bid.name }))
+                            })
+                        }
+                        return item
+                    })}
+                    dataSource={data || {}} col={4}
+                />
             <DetailTitle title="填写记录" />
             <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', width: 50, render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },

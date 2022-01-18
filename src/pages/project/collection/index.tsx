@@ -25,8 +25,9 @@ export default function Collection() {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startRefundTime = formatDate[0]
             value.endRefundTime = formatDate[1]
-        }
-        setFilterValue({ confirmStatus })
+        } 
+        value.confirmStatus = confirmStatus;
+        setFilterValue(value);
         return value
     }
 

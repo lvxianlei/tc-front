@@ -270,23 +270,23 @@ export default function ManagementDetail(): React.ReactNode {
                 fixed: "right",
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" size="small" onClick={() => history.push(`/project/management/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
+                        <Button type="link" size="small" className='btn-operation-link' onClick={() => history.push(`/project/management/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
                         {record.taskReviewStatus === 0 && <>
-                            <Button type="link" size="small" onClick={async () => {
+                            <Button type="link" size="small" className='btn-operation-link' onClick={async () => {
                                 const result = await noticeAdoptRun(record.id)
                                 result && message.success("审批通过成功...")
                                 history.go(0)
                             }}>审批通过</Button>
-                            <Button type="link" size="small" onClick={async () => {
+                            <Button type="link" size="small" className='btn-operation-link' onClick={async () => {
                                 const result = await noticeRejectRun(record.id)
                                 result && message.success("审批已驳回...")
                                 history.go(0)
                             }}>驳回</Button>
                         </>}
                         {[2, -1].includes(record.taskReviewStatus) && <>
-                            <Button type="link" size="small"><Link to={`/project/management/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link></Button>
-                            <Button type="link" size="small" onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>
-                            <Button type="link" size="small" loading={noticeLoading} onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
+                            <Button type="link" size="small" className='btn-operation-link'><Link to={`/project/management/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link></Button>
+                            <Button type="link" size="small" className='btn-operation-link' onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>
+                            <Button type="link" size="small" className='btn-operation-link' loading={noticeLoading} onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
                         </>}
                     </>
                 }

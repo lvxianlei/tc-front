@@ -459,7 +459,7 @@
       "authority": "project"
     },
     { // 回款申请
-      "name": "回款申请",
+      "name": "回款确认",
       "path": "/project/collection",
       "module": "./pages/project/collection/index",
       "exact": true,

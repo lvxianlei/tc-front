@@ -78,6 +78,17 @@
             "format": "YYYY-MM-DD"
         },
         {
+            "title": "标书投递方式",
+            "dataIndex": "deliverId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择标书投递方式..."
+                }
+            ]
+        },
+        {
             "title": "制作人员",
             "dataIndex": "mackUser",
             "type": "popTable",
