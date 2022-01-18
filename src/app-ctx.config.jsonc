@@ -619,7 +619,7 @@
                         "items": [
                             {
                                 "label": "车间加工计划",
-                                "path": "/shopFloorPlan",
+                                "path": "/shopFloorPlan/shopFloorPlanList",
                                 "authority": "approvalm"
                             }
                         ]
