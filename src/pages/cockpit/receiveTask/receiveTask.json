@@ -20,7 +20,7 @@
         },
         {
             "title": "收货完成时间",
-            "dataIndex": "receivingTime"
+            "dataIndex": "receiveTime"
         },
         {
             "title": "重量合计(吨)",
