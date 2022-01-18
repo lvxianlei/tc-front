@@ -107,7 +107,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                 }
             ]}
             extraOperation={<>
-                <Button type="primary" ghost><Link to={`/cockpit/rawMaterial/price`}>价格维护</Link></Button>
+                <Button type="primary" ghost><Link to={`/bulletin/rawMaterial/price`}>价格维护</Link></Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

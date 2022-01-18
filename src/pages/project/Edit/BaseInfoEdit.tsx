@@ -69,7 +69,7 @@ export default function BaseInfoEdit(): JSX.Element {
                 address,
                 bigRegion,
                 fileIds: attchsRef.current?.getDataSource().map(item => item.id),
-                cargoDTOList: Object.values(cargoVOListData),
+                cargoDTOList: cargoVOListData.submit,
                 projectLeaderId: baseInfoData.projectLeader?.id,
                 projectLeader: baseInfoData.projectLeader?.value,
                 biddingPerson: baseInfoData.biddingPerson?.value,
@@ -125,7 +125,7 @@ export default function BaseInfoEdit(): JSX.Element {
                             }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
-                <EditableTable form={cargoVOListForm} columns={cargoVOListColumns.map(item => {
+                <EditTable form={cargoVOListForm} columns={cargoVOListColumns.map(item => {
                     if (item.dataIndex === "projectVoltageLevel") {
                         return ({
                             ...item,
