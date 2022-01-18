@@ -1,22 +1,25 @@
 //合同看板
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Select, DatePicker, Input } from 'antd'
 import { Link, } from 'react-router-dom'
 import { Page } from '../../common'
 import { contract } from "./contract.json"
 
 export default function ViewContract(): React.ReactNode {
+    const [ filterValue, setFilterValue ] = useState({});
     const onFilterSubmit = (value: any) => {
         if (value.signStartTime) {
             const formatDate = value.signStartTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.signStartTime = formatDate[0]
-            value.signEndTime = formatDate[1]
+            value.signStartTime = formatDate[0] + " 00:00:00"
+            value.signEndTime = formatDate[1] + " 23:59:59"
         }
+        setFilterValue(value);
         return value
     }
 
     return (<Page
         path="/tower-supply/materialContract/getMaterialContractBoardPage"
+        exportPath={`/tower-supply/materialContract/getMaterialContractBoardPage`}
         columns={[
             {
                 key: 'index',
@@ -38,7 +41,8 @@ export default function ViewContract(): React.ReactNode {
                 dataIndex: 'operation',
                 render: (_: any, records: any) => <Link to={`/cockpit/contract/${records.id}`}>明细</Link>
             }]}
-        extraOperation={<Button type="primary">导出</Button>}
+        // extraOperation={<Button type="primary">导出</Button>}
+        filterValue={ filterValue }
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
