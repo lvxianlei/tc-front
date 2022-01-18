@@ -20,12 +20,14 @@ export default function ViewRawMaterial(): React.ReactNode {
     const [materialName, setMaterialName] = useState<string>("")
     const [priceVisible, setPriceVisible] = useState<boolean>(false)
     const [dataVisible, setDataVisible] = useState<boolean>(false)
+    const [ filterValue, setFilterValue ] = useState({});
     const onFilterSubmit = (value: any) => {
         if (value.startUpdateTime) {
             const formatDate = value.startUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startUpdateTime = formatDate[0] + " 00:00:00"
             value.endUpdateTime = formatDate[1] + " 23:59:59"
         }
+        setFilterValue(value);
         return value
     }
     // 原材料类型
@@ -76,6 +78,7 @@ export default function ViewRawMaterial(): React.ReactNode {
         <Page
             path="/tower-supply/materialPrice"
             exportPath={`/tower-supply/materialPrice`}
+            filterValue={ filterValue }
             columns={[
                 {
                     "title": "序号",
@@ -104,7 +107,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                 }
             ]}
             extraOperation={<>
-                <Button type="primary" ghost><Link to={`/cockpit/rawMaterial/price`}>价格维护</Link></Button>
+                <Button type="primary" ghost><Link to={`/bulletin/rawMaterial/price`}>价格维护</Link></Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

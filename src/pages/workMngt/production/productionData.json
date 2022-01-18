@@ -37,22 +37,7 @@
         },
         {
             "title": "配料状态",
-            "dataIndex": "loftingState",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "待完成",
-                    "value": 1
-                },
-                {
-                    "label": "已完成",
-                    "value": 2
-                },
-                {
-                    "label": "待确认",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "loftingStateName"
         },
         {
             "title": "最新状态变更时间",

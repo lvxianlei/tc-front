@@ -619,7 +619,7 @@
                         "items": [
                             {
                                 "label": "车间加工计划",
-                                "path": "/shopFloorPlan",
+                                "path": "/shopFloorPlan/shopFloorPlanList",
                                 "authority": "approvalm"
                             }
                         ]
@@ -818,18 +818,18 @@
                     {
                         "label": "系统日志",
                         "icon": "xitongrizhiTY_xitongrizhi",
-                        "path": "/systemLog",
+                        "path": "/journal",
                         "appName": "COMM",
                         "authority": "system_log",
                         "items": [
                             {
                                 "label": "操作日志",
-                                "path": "/systemLog/operationLog",
+                                "path": "/journal/operationLog",
                                 "authority": "approvalm"
                             },
                             {
                                 "label": "登录日志",
-                                "path": "/systemLog/login",
+                                "path": "/journal/login",
                                 "authority": "system_log_login_log"
                             }
                         ]
