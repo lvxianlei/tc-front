@@ -4,13 +4,14 @@
  * @description 计划排产
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Input, Button, Modal, message, Select, DatePicker, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import TechnicalIssue from './TechnicalIssue';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IPlanSchedule } from './IPlanSchedule';
+import { gantt } from 'dhtmlx-gantt';
 
 
 export interface TechnicalIssuePropsRefProps {
@@ -151,6 +152,10 @@ export default function PlanScheduleMngt(): React.ReactNode {
             width: 120
         }
     ]
+
+    useEffect(() => {
+        gantt.clearAll();
+    })
 
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
