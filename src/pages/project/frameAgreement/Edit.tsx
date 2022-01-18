@@ -6,7 +6,7 @@ import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { frameAgreementColumns, materialListColumns } from './frame.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
-import { TabTypes } from "../ManagementDetail"
+import { TabTypes } from "../Detail"
 import { changeTwoDecimal_f } from '../../../utils/KeepDecimals';
 import { winBidTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function FrameAgreementEdit(): JSX.Element {

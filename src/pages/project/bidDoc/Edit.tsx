@@ -6,7 +6,7 @@ import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidDocColumns } from './bidDoc.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
-import { TabTypes } from "../ManagementDetail"
+import { TabTypes } from "../Detail"
 import { bidTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
