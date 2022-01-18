@@ -342,7 +342,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "remark",
+            "dataIndex": "description",
             "type": "textarea"
         }
     ],

@@ -1,8 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { VariableSizeGrid } from "react-window";
-import ResizeObserver from 'rc-resize-observer';
+import React, { useCallback, useEffect, useState } from 'react'
+import AliTable from './AliTable'
 import { FormInstance, message, Row, Button, Form, Table } from "antd"
-import CommonTable from "./CommonTable"
 import FormItemType from './FormItemType'
 interface EditableTableProps {
     columns: any[]
@@ -17,24 +15,38 @@ interface EditableTableProps {
     scroll?: { x: number, y: number }
 }
 
-
-
-const formatColunmsB = (columns: any[], haveOpration: boolean, haveIndex: boolean) => {
-    let newColumns = columns.map(item => ({
-        title: item.title,
-        dataIndex: item.dataIndex,
-        // render: (value: any, record: any) => <Form.Item
-        //     style={{ margin: 0 }}
-        //     rules={item.rules}
-        //     name={[record.id, item.dataindex]}>
-        //     <FormItemType data={item} type={item.type} />
-        // </Form.Item>,
-        ...item
-    }))
+const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean) => {
+    const newColumns = columns.map(item => {
+        if (item.type === "popTable") {
+            return ({
+                title: item.title,
+                dataIndex: item.dataIndex,
+                render: (value: any, record: any) => <Form.Item
+                    style={{ margin: 0 }}
+                    rules={item.rules}
+                    name={[record.id, item.dataindex]}>
+                    <FormItemType data={item} type={item.type} />
+                </Form.Item>
+            })
+        }
+        return ({
+            title: item.title,
+            dataIndex: item.dataIndex,
+            render: (value: any, record: any) => {
+                return <Form.Item
+                    style={{ margin: 0 }}
+                    rules={item.rules}
+                    name={[record.id, item.dataindex]}>
+                    <FormItemType data={item} type={item.type} />
+                </Form.Item>
+            },
+            ...item
+        })
+    })
     haveOpration && newColumns.push({
         title: "操作",
         fixed: "right",
-        width: 50,
+        width: "80px",
         dataIndex: "opration",
         render: (_: undefined, record: any) => {
             return <Button style={{ paddingLeft: 0 }} size="small" type="link">删除</Button>
@@ -42,7 +54,7 @@ const formatColunmsB = (columns: any[], haveOpration: boolean, haveIndex: boolea
     })
     haveIndex && newColumns.unshift({
         title: '序号',
-        width: 50,
+        width: "60px",
         fixed: "left",
         dataIndex: 'index',
         editable: false,
@@ -51,9 +63,9 @@ const formatColunmsB = (columns: any[], haveOpration: boolean, haveIndex: boolea
     return newColumns
 }
 
-function VirtualList() {
-    console.log("================")
-    return <div>aaaaaaaaaa</div>
+function VirtualList(props: any) {
+    console.log(props)
+    return <div key={props.id}>aaaaaaaaaa</div>
 }
 
 export default function Edit({
@@ -68,47 +80,15 @@ export default function Edit({
     opration,
     scroll,
     ...props }: EditableTableProps): JSX.Element {
-    const [tableWidth, setTableWidth] = useState<number>(0)
     const [editableDataSource, setEditableDatasource] = useState<any[]>(dataSource)
-    const [eidtableColumns, setEditableColumns] = useState<any[]>(formatColunmsB(columns, haveOpration, haveIndex))
-    const widthColumnCount = columns.filter(({ width }) => !width).length;
-    const mergedColumns = columns.map((column) => {
-        if (column.width) {
-            return column;
-        }
-        return { ...column, width: Math.floor(tableWidth / widthColumnCount) };
-    });
-    const gridRef = useRef<any>();
-    const [connectObject] = useState(() => {
-        const obj = {};
-        Object.defineProperty(obj, 'scrollLeft', {
-            get: () => null,
-            set: (scrollLeft) => {
-                if (gridRef.current) {
-                    gridRef.current?.scrollTo({
-                        scrollLeft
-                    })
-                }
-            }
-        })
-        return obj
-    })
-
-    const resetVirtualGrid = () => {
-        gridRef.current?.resetAfterIndices({
-            columnIndex: 0,
-            shouldForceUpdate: true,
-        })
-    }
-
-    useEffect(() => resetVirtualGrid, [tableWidth]);
+    const [eidtableColumns, setEditableColumns] = useState<any[]>(formatColunms(columns, haveOpration, haveIndex))
 
     const handleChange = useCallback((data: any[]) => {
         onChange && onChange(data, editableDataSource)
     }, [dataSource, onChange, JSON.stringify(editableDataSource)])
 
     useEffect(() => {
-        setEditableColumns(formatColunmsB(columns, haveOpration, haveIndex))
+        setEditableColumns(formatColunms(columns, haveOpration, haveIndex))
     }, [JSON.stringify(columns)])
 
     return <Form form={form}>
@@ -127,16 +107,10 @@ export default function Edit({
         }
             {opration}
         </Row>
-        <ResizeObserver onResize={({ width }) => setTableWidth(width)}>
-            <Table
-                columns={eidtableColumns}
-                dataSource={editableDataSource}
-                pagination={false}
-                onChange={() => handleChange(editableDataSource)}
-                components={{
-                    body: VirtualList,
-                }}
-            />
-        </ResizeObserver>
+        <AliTable
+            size="small"
+            columns={eidtableColumns}
+            dataSource={editableDataSource}
+        />
     </Form>
 }

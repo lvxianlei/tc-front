@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useRef } from "react"
 import { Button, Form, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, EditTable, formatData, Attachment, AttachmentRef } from '../../common'
@@ -66,7 +66,7 @@ export default function Edit() {
         }
     }), { manual: true })
 
-    const handleSave = async () => {
+    const handleSave = async (saveType: 1 | 2) => {
         try {
             const baseInfoData = await baseInfo.validateFields()
             const invoicData = await invoiceForm.validateFields()
@@ -80,6 +80,7 @@ export default function Edit() {
                 contractCode: baseInfoData.contractCode || data?.contractCode,
                 invoicingDetailDtos: billingData.submit,
                 fileIds: attchRef.current?.getDataSource().map(item => item.id),
+                saveType,
                 invoicingInfoDto: {
                     ...invoicData,
                     id: data?.invoicingInfoVo.id || "",
@@ -167,7 +168,12 @@ export default function Edit() {
             type="primary" key="save"
             style={{ marginRight: 16 }}
             loading={saveLoading || creteLoading}
-            onClick={handleSave}>保存</Button>,
+            onClick={() => handleSave(1)}>保存</Button>,
+        <Button
+            type="primary" key="saveOrSubmit"
+            style={{ marginRight: 16 }}
+            loading={saveLoading || creteLoading}
+            onClick={() => handleSave(2)}>保存并发起审批</Button>,
         <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
     ]}>
         <Spin spinning={loading}>
