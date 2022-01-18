@@ -1987,14 +1987,14 @@
     },
     { // 系统日志-操作日志
       "name": "操作日志",
-      "path": "/systemLog/operationLog",
+      "path": "/journal/operationLog",
       "module": "./pages/system-log/OperationLog",
       "exact": true,
       "authority": "approvalm"
     },
     { // 系统日志-登录日志
       "name": "登录日志",
-      "path": "/systemLog/login",
+      "path": "/journal/login",
       "module": "./pages/system-log/Login",
       "exact": true,
       "authority": "system_log_login_log"
