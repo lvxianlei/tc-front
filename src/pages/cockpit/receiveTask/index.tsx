@@ -50,7 +50,7 @@ export default function ViewReceivingNote(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-storage/receiveStockBoard"
-            exportPath={`/tower-storage/receiveStockBoard`}
+            exportPath={`/tower-storage/receiveStockBoard/export`}
             columns={[
                 {
                     key: 'index',

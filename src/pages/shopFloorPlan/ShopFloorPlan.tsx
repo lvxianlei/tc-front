@@ -101,7 +101,7 @@ export default function ShopFloorPlan(): React.ReactNode {
                 <Radio.Button value={2}>加工中</Radio.Button>
                 <Radio.Button value={3}>已完成</Radio.Button>
             </Radio.Group>
-            {confirmStatus === 1 ? <Link to={`/shopFloorPlan/automaticScheduling/${selectedKeys.join(',')}`}><Button disabled={selectedKeys.length <= 0} type="primary">确认并预排产</Button></Link> : null}
+            {confirmStatus === 1 ? <Link to={`/shopFloorPlan/shopFloorPlanList/automaticScheduling/${selectedKeys.join(',')}`}><Button disabled={selectedKeys.length <= 0} type="primary">确认并预排产</Button></Link> : null}
             <CommonTable
                 dataSource={[...pageList || []]}
                 columns={confirmStatus === 1 ? columns :
@@ -112,7 +112,7 @@ export default function ShopFloorPlan(): React.ReactNode {
                         fixed: "right" as FixedType,
                         "width": 150,
                         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                            <Link to={`/shopFloorPlan/shopFloorDetail/${record.id}`}>详情</Link>
+                            <Link to={`/shopFloorPlan/shopFloorPlanList/shopFloorDetail/${record.id}`}>详情</Link>
                         )
                     }]
                 }

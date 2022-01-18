@@ -127,8 +127,8 @@ export default function BaseInfoEdit(): JSX.Element {
                                 enum: addressList
                             }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
-                <DetailTitle title="初始物资清单" />
-                {params.id === "new" && <EditTable form={cargoVOListForm} columns={cargoVOListColumns.map(item => {
+                <DetailTitle title="物资清单" />
+                <EditTable form={cargoVOListForm} columns={cargoVOListColumns.map(item => {
                     if (item.dataIndex === "projectVoltageLevel") {
                         return ({
                             ...item,
@@ -137,7 +137,7 @@ export default function BaseInfoEdit(): JSX.Element {
                         })
                     }
                     return item
-                })} dataSource={data?.cargoVOList} />}
+                })} dataSource={data?.cargoVOList} />
                 {params.id !== "new" && params.id && <CommonTable haveIndex columns={cargoVOListColumns} dataSource={data?.cargoVOList} />}
                 <DetailTitle title="整理后物资清单" style={{ paddingTop: "24px" }} />
                 <EditTable

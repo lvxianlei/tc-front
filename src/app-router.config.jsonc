@@ -1727,21 +1727,21 @@
     },
     { // 车间加工计划
       "name": "车间加工计划",
-      "path": "/shopFloorPlan",
+      "path": "/shopFloorPlan/shopFloorPlanList",
       "module": "./pages/shopFloorPlan/ShopFloorPlan",
       "exact": true,
       "authority": "approvalm"
     },
     { // 车间加工计划-详情
       "name": "详情",
-      "path": "/shopFloorPlan/shopFloorDetail/:id",
+      "path": "/shopFloorPlan/shopFloorPlanList/shopFloorDetail/:id",
       "module": "./pages/shopFloorPlan/Detail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 车间加工计划-自动排产
       "name": "自动排产",
-      "path": "/shopFloorPlan/automaticScheduling/:id",
+      "path": "/shopFloorPlan/shopFloorPlanList/automaticScheduling/:id",
       "module": "./pages/shopFloorPlan/AutomaticScheduling",
       "exact": true,
       "authority": "approvalm"
@@ -1987,14 +1987,14 @@
     },
     { // 系统日志-操作日志
       "name": "操作日志",
-      "path": "/systemLog/operationLog",
+      "path": "/journal/operationLog",
       "module": "./pages/system-log/OperationLog",
       "exact": true,
       "authority": "approvalm"
     },
     { // 系统日志-登录日志
       "name": "登录日志",
-      "path": "/systemLog/login",
+      "path": "/journal/login",
       "module": "./pages/system-log/Login",
       "exact": true,
       "authority": "system_log_login_log"
