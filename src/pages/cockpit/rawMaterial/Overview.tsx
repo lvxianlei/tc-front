@@ -14,12 +14,14 @@ export default function Overview(): React.ReactNode {
     const [editId, setEditId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [visible, setVisible] = useState<boolean>(false)
+    const [ filterValue, setFilterValue ] = useState({});
     const editRef = useRef<{ onSubmit: () => void, loading: boolean }>({ onSubmit: () => { }, loading: false })
     const invoiceTypeEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
     const onFilterSubmit = (value: any) => {
+        setFilterValue(value);
         return value
     }
     const { data: priceSourceEnum } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
@@ -157,6 +159,7 @@ export default function Overview(): React.ReactNode {
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </>}
                 onFilterSubmit={onFilterSubmit}
+                filterValue={ filterValue }
                 searchFormItems={[
                     {
                         name: 'materialCategoryId',

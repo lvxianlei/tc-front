@@ -83,8 +83,10 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
         const { location } = props;
         const result = this.getParentId(props?.menu, `/${props?.location?.pathname.split("/")[1]}/${props?.location?.pathname.split("/")[2]}`),
             v = [];
-        for (let i = 0; i < result.length; i += 1) {
-            v.push(result[i].path)
+        if (result && result.length > 0) {
+            for (let i = 0; i < result.length; i += 1) {
+                v.push(result[i].path)
+            }
         }
         const selectedDarkMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, location.pathname);
         const selectedSubMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(this.state.selectedDarkMenuItem?.items || [], location.pathname);
