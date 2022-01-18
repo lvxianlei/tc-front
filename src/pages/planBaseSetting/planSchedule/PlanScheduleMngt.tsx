@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Input, Button, Modal, message, Select, DatePicker, Form } from 'antd';
+import { Input, Button, Modal, message, Select, DatePicker, Form, Tooltip } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import TechnicalIssue from './TechnicalIssue';
@@ -34,6 +34,31 @@ export default function PlanScheduleMngt(): React.ReactNode {
             dataIndex: 'productCategoryName',
             width: 120,
             fixed: 'left' as FixedType
+        },
+        {
+            key: 'loftingStatus',
+            title: '状态',
+            dataIndex: 'loftingStatus',
+            width: 120,
+            type: 'select',
+            enum: [
+                {
+                    "value": 0,
+                    "label": "未下发"
+                },
+                {
+                    "value": 1,
+                    "label": "放样已下发"
+                },
+                {
+                    "value": 2,
+                    "label": "放样已确认"
+                },
+                {
+                    "value": 3,
+                    "label": "放样已完成"
+                }
+            ]
         },
         {
             key: 'productTypeName',
@@ -97,35 +122,15 @@ export default function PlanScheduleMngt(): React.ReactNode {
             width: 120
         },
         {
-            key: 'loftingStatus',
-            title: '状态',
-            dataIndex: 'loftingStatus',
-            width: 120,
-            type: 'select',
-            enum: [
-                {
-                    "value": 0,
-                    "label": "未下发"
-                },
-                {
-                    "value": 1,
-                    "label": "放样已下发"
-                },
-                {
-                    "value": 2,
-                    "label": "放样已确认"
-                },
-                {
-                    "value": 3,
-                    "label": "放样已完成"
-                }
-            ]
-        },
-        {
             key: 'description',
             title: '备注',
             dataIndex: 'description',
-            width: 120
+            width: 200,
+            render: (_: any) => (
+                <Tooltip placement="topLeft" title={_}>
+                    {_?.slice(0, 15)}...
+                </Tooltip>
+            )
         },
         {
             key: 'loftingIssueTime',
