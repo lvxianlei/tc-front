@@ -81,12 +81,31 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
      */
     componentWillReceiveProps(props: any) {
         const { location } = props;
+        const result = this.getParentId(props?.menu, `/${props?.location?.pathname.split("/")[1]}/${props?.location?.pathname.split("/")[2]}`),
+            v = [];
+        for (let i = 0; i < result.length; i += 1) {
+            v.push(result[i].path)
+        }
         const selectedDarkMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, location.pathname);
         const selectedSubMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(this.state.selectedDarkMenuItem?.items || [], location.pathname);
+        console.log(selectedSubMenuItem, "selectedSubMenuItem")
         this.setState({
-            selectedDarkMenuItem: location?.pathname ? [location?.pathname] : [],
+            selectedDarkMenuItem: v,
             selectedSubMenuItem: selectedDarkMenuItem?.path ? [selectedDarkMenuItem.path] : [],
         })
+    }
+    getParentId(list: any, path: string): any {
+        for (let i in list) {
+            if (list[i].path == path) {
+                return [list[i]];
+            }
+            if (list[i].items) {
+                let node = this.getParentId(list[i].items, path);
+                if (node !== undefined) {
+                    return node.concat(list[i]);
+                }
+            }
+        }
     }
     hanleLink(options: any) {
         this.setState({
