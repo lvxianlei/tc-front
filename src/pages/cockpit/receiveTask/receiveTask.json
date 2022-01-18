@@ -2,13 +2,7 @@
     "receiveColumns": [
         {
             "title": "企业类型",
-            "dataIndex": "companyType",
-            "type": "select",
-            "enum": [
-                { "value": 1, "label": "供应商" },
-                { "value": 2, "label": "运输" },
-                { "value": 3, "label": "装卸" }
-            ]
+            "dataIndex": "companyTypeName"
         },
         {
             "title": "企业名称",
@@ -42,7 +36,7 @@
         },
         {
             "title": "付款状态",
-            "dataIndex": "invoiceStatus"
+            "dataIndex": "invoiceStatusName"
         }
     ]
 }
