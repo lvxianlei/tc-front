@@ -17,11 +17,34 @@ export default function RecruitView(): React.ReactNode {
     }), {})
     const detailData: any = data;
     const tableColumns = [
-        { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-        { title: '审批人', dataIndex: 'approverName', key: 'approverName' },
-        { title: '审批时间', dataIndex: 'approveDate', key: 'approveDate' },
-        { title: '审批结果', dataIndex: 'approveResult', key: 'approveResult' },
-        { title: '审批意见', dataIndex: 'approveOpinion', key: 'approveOpinion'}
+        { 
+            title: '序号', 
+            dataIndex: 'index', 
+            key: 'index', 
+            render: (_a: any, _b: any, index: number): React.ReactNode => (
+                <span>{index + 1}</span>
+            ) 
+        },
+        { 
+            title: '审批人', 
+            dataIndex: 'approverName', 
+            key: 'approverName' 
+        },
+        { 
+            title: '审批时间', 
+            dataIndex: 'approveDate', 
+            key: 'approveDate' 
+        },
+        { 
+            title: '审批结果', 
+            dataIndex: 'approveResult', 
+            key: 'approveResult' 
+        },
+        { 
+            title: '审批意见', 
+            dataIndex: 'approveOpinion', 
+            key: 'approveOpinion'
+        }
     ]
     return <>
         <Spin spinning={loading}>
