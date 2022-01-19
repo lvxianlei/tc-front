@@ -53,8 +53,8 @@ export default function Invoicing() {
             width={1101}
             visible={visible}
             confirmLoading={!!modalRef.current?.loading}
-            onOk={() => {
-                modalRef.current?.onSubmit()
+            onOk={async () => {
+                await modalRef.current?.onSubmit()
                 message.success("批量创建成功....")
                 setVisible(false)
                 history.go(0)
