@@ -12,7 +12,6 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             return ({
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
-                onHeaderCell: () => ({ isResizable: data.isResizable }),
                 render: (text: string) => <>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</>,
                 ...data
             })
@@ -20,7 +19,6 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             return ({
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
-                onHeaderCell: () => ({ isResizable: data.isResizable }),
                 render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : text}</>,
                 ...data
             })
@@ -28,7 +26,6 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             return ({
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
-                onHeaderCell: () => ({ isResizable: data.isResizable }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : 0}</>,
                 ...data
             })
@@ -36,7 +33,6 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             return ({
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
-                onHeaderCell: () => ({ isResizable: data.isResizable }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
                 ...data
             })
@@ -44,7 +40,6 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             return ({
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
-                onHeaderCell: () => ({ isResizable: data.isResizable }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
                 ...data
             })
