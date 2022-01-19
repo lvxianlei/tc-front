@@ -8,7 +8,6 @@ import PrepareOverview from "../../financial/prepares/Overview"
 import BillOverview from "../../financial/bills/Overview"
 
 export default function ViewReceivingNote(): React.ReactNode {
-    const history = useHistory()
     const [prepareVisible, setPrepareVisible] = useState<boolean>(false)
     const [billVisible, setBillVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
@@ -63,7 +62,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                 ...receiveColumns.map((item: any) => {
                     switch (item.dataIndex) {
                         case "receiveNumber":
-                            return ({ ...item, render: (value: any, records: any) => <Link to={`/ingredients/receiving/detail/${records.id}`}>{value}</Link> })
+                            return ({ ...item, render: (value: any, records: any) => <Link to={`/ingredients/receiving/detail/${records.receiveStockId}`}>{value}</Link> })
                         case "pleasePayNumber":
                             return ({
                                 ...item,
