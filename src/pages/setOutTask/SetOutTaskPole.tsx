@@ -12,7 +12,7 @@ const columns = [
         dataIndex: 'index',
         width: 50,
         fixed: 'left' as FixedType,
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
     },
     {
         key: 'productNumber',
@@ -111,15 +111,15 @@ export default function SetOutTaskPole(): React.ReactNode {
     const params = useParams<{ id: string }>();
     return <Page
         path="/tower-science/product/page"
-        requestData={{ loftingTaskId: params.id  }}
-        columns={ columns }
-        headTabs={ [] }
+        requestData={{ loftingTaskId: params.id }}
+        columns={columns}
+        headTabs={[]}
         exportPath={`/tower-science/product/page`}
-        extraOperation={ 
-            <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
+        extraOperation={
+            <Space direction="horizontal" size="small" className={styles.bottomBtn}>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-            </Space> 
+            </Space>
         }
-        searchFormItems={ [] }
+        searchFormItems={[]}
     />
 }

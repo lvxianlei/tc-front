@@ -8,10 +8,10 @@ import Deliverables from './Deliverables';
 import RequestUtil from '../../utils/RequestUtil';
 
 export default function SetOutTaskList(): React.ReactNode {
-    const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [ filterValue, setFilterValue ] = useState({});
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state?: number }>();
-    
+
     const columns = [
         {
             key: 'index',
@@ -19,7 +19,7 @@ export default function SetOutTaskList(): React.ReactNode {
             dataIndex: 'index',
             width: 50,
             fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'taskNum',
@@ -45,7 +45,7 @@ export default function SetOutTaskList(): React.ReactNode {
             width: 150,
             dataIndex: 'productCategoryProportion',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Link to={ `/setOutTask/setOutTaskTower/${ record.id }` }>{ _ }</Link>
+                <Link to={`/setOutTask/setOutTaskList/setOutTaskTower/${record.id}`}>{_}</Link>
             )
         },
         {
@@ -54,7 +54,7 @@ export default function SetOutTaskList(): React.ReactNode {
             dataIndex: 'productProportion',
             width: 200,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Link to={ `/setOutTask/setOutTaskPole/${ record.id }` }>{ _ }</Link>
+                <Link to={`/setOutTask/setOutTaskList/setOutTaskPole/${record.id}`}>{_}</Link>
             )
         },
         {
@@ -97,34 +97,34 @@ export default function SetOutTaskList(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={ `/setOutTask/setOutTaskDetail/${ record.id }` }>任务详情</Link>
+                    <Link to={`/setOutTask/setOutTaskList/setOutTaskDetail/${record.id}`}>任务详情</Link>
                     {
-                        record.status === 3 || record.status === 4 || record.status === 5 ? 
-                        <Deliverables id={ record.id }/>
-                        : 
-                        <Button type="link" disabled>交付物</Button>
+                        record.status === 3 || record.status === 4 || record.status === 5 ?
+                            <Deliverables id={record.id} />
+                            :
+                            <Button type="link" disabled>交付物</Button>
                     }
-                    
+
                     {
-                        record.status === 4 ? 
-                        <Button type="link" onClick={ () => {
-                            Modal.confirm({
-                                title: "确认提交?",
-                                onOk: async () => new Promise(async (resove, reject) => {
-                                    try {
-                                        RequestUtil.post(`/tower-science/loftingTask/submit`, { id: record.id }).then(res => {
-                                            message.success("提交成功");
-                                            setRefresh(!refresh);
-                                        });
-                                        resove(true)
-                                    } catch (error) {
-                                        reject(error)
-                                    }
+                        record.status === 4 ?
+                            <Button type="link" onClick={() => {
+                                Modal.confirm({
+                                    title: "确认提交?",
+                                    onOk: async () => new Promise(async (resove, reject) => {
+                                        try {
+                                            RequestUtil.post(`/tower-science/loftingTask/submit`, { id: record.id }).then(res => {
+                                                message.success("提交成功");
+                                                setRefresh(!refresh);
+                                            });
+                                            resove(true)
+                                        } catch (error) {
+                                            reject(error)
+                                        }
+                                    })
                                 })
-                            })
-                        }}>提交任务</Button>
-                        : 
-                        <Button type="link" disabled>提交任务</Button>
+                            }}>提交任务</Button>
+                            :
+                            <Button type="link" disabled>提交任务</Button>
                     }
                 </Space>
             )
@@ -133,12 +133,12 @@ export default function SetOutTaskList(): React.ReactNode {
 
     return <Page
         path="/tower-science/loftingTask/taskPage"
-        columns={ columns }
-        headTabs={ [] }
-        requestData={ { status: location.state?.state } }
+        columns={columns}
+        headTabs={[]}
+        requestData={{ status: location.state?.state }}
         exportPath={`/tower-science/loftingTask/taskPage`}
-        refresh={ refresh }
-        searchFormItems={ [
+        refresh={refresh}
+        searchFormItems={[
             {
                 name: 'updateStatusTime',
                 label: '最新状态变更时间',
@@ -147,33 +147,33 @@ export default function SetOutTaskList(): React.ReactNode {
             {
                 name: 'status',
                 label: '任务状态',
-                children: <Form.Item name="status" initialValue={ location.state?.state }>
+                children: <Form.Item name="status" initialValue={location.state?.state}>
                     <Select style={{ width: '120px' }} placeholder="请选择">
-                        <Select.Option value={ "" } key="6">全部</Select.Option>
-                        <Select.Option value={ 0 } key="0">已拒绝</Select.Option>
-                        <Select.Option value={ 1 } key="1">待确认</Select.Option>
-                        <Select.Option value={ 2 } key="2">待指派</Select.Option>
-                        <Select.Option value={ 3 } key="3">待完成</Select.Option>
-                        <Select.Option value={ 4 } key="4">已完成</Select.Option>
-                        <Select.Option value={ 5 } key="5">已提交</Select.Option>
+                        <Select.Option value={""} key="6">全部</Select.Option>
+                        <Select.Option value={0} key="0">已拒绝</Select.Option>
+                        <Select.Option value={1} key="1">待确认</Select.Option>
+                        <Select.Option value={2} key="2">待指派</Select.Option>
+                        <Select.Option value={3} key="3">待完成</Select.Option>
+                        <Select.Option value={4} key="4">已完成</Select.Option>
+                        <Select.Option value={5} key="5">已提交</Select.Option>
                     </Select>
                 </Form.Item>
             },
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号"/>
+                children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号" />
             }
-        ] }
-        filterValue={ filterValue }
-        onFilterSubmit = { (values: Record<string, any>) => {
-            if(values.updateStatusTime) {
+        ]}
+        filterValue={filterValue}
+        onFilterSubmit={(values: Record<string, any>) => {
+            if (values.updateStatusTime) {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
             return values;
-        } }
+        }}
     />
 }

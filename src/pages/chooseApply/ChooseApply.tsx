@@ -8,6 +8,7 @@ import general from "../../../public/general.png";
 import logistic from "../../../public/logistic.png";
 import marketing from "../../../public/marketing.png";
 import production from "../../../public/production.png";
+import production2 from "../../../public/production2.png";
 import qualityInspection from "../../../public/qualityInspection.png";
 import sales from "../../../public/sales.png";
 import supply from "../../../public/supply.png";
@@ -16,7 +17,7 @@ import fc from "../../../public/fc.png";
 import { useHistory } from "react-router";
 import AuthUtil from "../../utils/AuthUtil";
 import apps from "../../app-name.config.jsonc"
-type AppType = "SC" | "SW" | "FC" | "RD" | "TMS" | "HR" | "COMM" | "ASM" | "QMS" | "MC" | "PS"
+type AppType = "SC" | "SW" | "FC" | "RD" | "TMS" | "HR" | "COMM" | "ASM" | "QMS" | "MC" | "MC2" | "PS"
 interface IApplyType {
     readonly authority?: string;
     readonly icon?: string;
@@ -37,6 +38,7 @@ const icons: { [key in AppType]: any } = {
     "ASM": sales,
     "QMS": qualityInspection,
     "MC": production,
+    "MC2": production2,
     "PS": plan
 }
 export default function ChooseApply(): React.ReactNode {

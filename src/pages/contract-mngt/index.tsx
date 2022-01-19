@@ -18,6 +18,7 @@ export default function ContractMngt(): JSX.Element {
     const [overviewVisible, setOverviewVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
+    const [filterValue, setFilterValue] = useState<object>({});
     const editRef = useRef<{ onSubmit: () => void, resetFields: () => void }>({ onSubmit: () => { }, resetFields: () => { } })
 
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -63,6 +64,7 @@ export default function ContractMngt(): JSX.Element {
         if (value.operatorId) {
             value.operatorId = value.operatorId?.second
         }
+        setFilterValue(value)
         return value
     }
     return (
@@ -101,6 +103,7 @@ export default function ContractMngt(): JSX.Element {
                 path="/tower-supply/materialContract"
                 exportPath={`/tower-supply/materialContract`}
                 onFilterSubmit={onFilterSubmit}
+                filterValue={filterValue}
                 columns={[
                     {
                         title: "序号",

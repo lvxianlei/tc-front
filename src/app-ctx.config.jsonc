@@ -285,12 +285,12 @@
                         "items": [
                             {
                                 "label": "供应商管理",
-                                "path": "/cooperative/supplier-mngt/index",
+                                "path": "/cooperative/supplier-mngt",
                                 "authority": "supplier_mngt_list"
                             },
                             {
                                 "label": "装卸公司管理",
-                                "path": "/cooperative/stevedoring-company-mngt/stevedoringCompany",
+                                "path": "/cooperative/stevedoring-company-mngt",
                                 "authority": "supplier_mngt_list"
                             }
                         ]
@@ -371,7 +371,7 @@
                         "items": [
                             {
                                 "label": "评估任务",
-                                "path": "/assessmentTask",
+                                "path": "/assessmentTask/assessmentTaskList",
                                 "authority": "rd_assess_task_management"
                             }
                         ]
@@ -399,7 +399,7 @@
                         "items": [
                             {
                                 "label": "放样任务",
-                                "path": "/setOutTask",
+                                "path": "/setOutTask/setOutTaskList",
                                 "authority": "rd_lofting_task"
                             }
                         ]
@@ -602,6 +602,11 @@
                                 "label": "计划排产",
                                 "path": "/planProd/planMgmt",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "技术下发",
+                                "path": "/planSchedule/planScheduleMngt",
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -614,7 +619,7 @@
                         "items": [
                             {
                                 "label": "车间加工计划",
-                                "path": "/shopFloorPlan",
+                                "path": "/shopFloorPlan/shopFloorPlanList",
                                 "authority": "approvalm"
                             }
                         ]
@@ -748,7 +753,7 @@
                         "items": [
                             {
                                 "label": "公告管理",
-                                "path": "/announcement",
+                                "path": "/announcement/list",
                                 "authority": "announcement_management_list"
                             }
                         ]
@@ -813,18 +818,18 @@
                     {
                         "label": "系统日志",
                         "icon": "xitongrizhiTY_xitongrizhi",
-                        "path": "/systemLog",
+                        "path": "/journal",
                         "appName": "COMM",
                         "authority": "system_log",
                         "items": [
                             {
                                 "label": "操作日志",
-                                "path": "/systemLog/operationLog",
+                                "path": "/journal/operationLog",
                                 "authority": "approvalm"
                             },
                             {
                                 "label": "登录日志",
-                                "path": "/systemLog/login",
+                                "path": "/journal/login",
                                 "authority": "system_log_login_log"
                             }
                         ]

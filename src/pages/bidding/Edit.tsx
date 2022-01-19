@@ -19,7 +19,6 @@ const columns = [
         "type": "text",
         "maxLength": 50
     },
-
     {
         "title": "工程电压等级",
         "dataIndex": "projectVoltageLevel"
