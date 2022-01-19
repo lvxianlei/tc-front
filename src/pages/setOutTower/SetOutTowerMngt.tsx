@@ -201,7 +201,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
             searchFormItems={[
                 {
                     name: 'pattern',
-                    label: '类型',
+                    label: '模式',
                     children:   <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
                         { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={ index } value={ id }>
