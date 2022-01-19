@@ -5,9 +5,9 @@ import { DetailContent, BaseInfo, DetailTitle, EditTable, formatData } from "../
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns, setting } from './bidResult.json'
 import { EditTableHasForm, TabsCanEdit, UploadXLS } from "./EditTabs"
-import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
+import { exportDown } from "../../../utils/Export";
 export default function BidResultEdit(): JSX.Element {
     const history = useHistory()
     const ref = useRef()
@@ -183,11 +183,13 @@ export default function BidResultEdit(): JSX.Element {
                                 opration={[
                                     <Button
                                         type="primary"
-                                        onClick={() => downloadTemplate('/tower-market/bidBase/export', '开标信息导入模板')}
+                                        onClick={() => {
+                                            exportDown("/tower-market/bidBase/export", "POST", {}, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "开标信息导入模板")
+                                        }}
                                         style={{marginRight: 16}}
                                     >下载导入模板</Button>,
                                     <UploadXLS key="xlxs" readEnd={async (_data) => {
-                                        const vilidateCols = ["包名称", "投标人名称", "分标编号", "货物类别", "项目单位", "总价（元）", "重量（吨）", "中标比例（%）"]
+                                        const vilidateCols = ["包名称", "投标人名称", "分标编号", "货物类别", "项目单位", "总价（元）", "重量（吨）", "电压等级"]
                                         if (_data.length <= 0) {
                                             message.error("文件不能为空...")
                                             return

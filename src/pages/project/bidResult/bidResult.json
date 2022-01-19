@@ -143,7 +143,7 @@
             ]
         },
         {
-            "title": "中标包号",
+            "title": "中标包名称",
             "dataIndex": "packageNum"
         },
         {
@@ -155,7 +155,11 @@
             "dataIndex": "bidWeight"
         },
         {
-            "title": "说明",
+            "title": "中标单价(元)",
+            "dataIndex": "bidUnitPrice"
+        },
+        {
+            "title": "备注",
             "dataIndex": "description"
         }
     ],
