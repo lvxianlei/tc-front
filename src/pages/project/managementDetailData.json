@@ -3,7 +3,6 @@
         {
             "title": "项目名称",
             "dataIndex": "projectName",
-            "isResizable": true,
             "width": 120
         },
         {

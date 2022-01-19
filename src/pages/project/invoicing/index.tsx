@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
@@ -9,6 +9,7 @@ import { contractPlanStatusOptions } from "../../../configuration/DictionaryOpti
 import BatchCreate from "./BatchCreate"
 export default function Invoicing() {
     const history = useHistory()
+    const modalRef = useRef<{ onSubmit: () => void, loading: boolean }>()
     const [visible, setVisible] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -51,8 +52,15 @@ export default function Invoicing() {
             title="批量创建"
             width={1101}
             visible={visible}
+            confirmLoading={!!modalRef.current?.loading}
+            onOk={() => {
+                modalRef.current?.onSubmit()
+                message.success("批量创建成功....")
+                setVisible(false)
+                history.go(0)
+            }}
             onCancel={() => setVisible(false)}>
-            <BatchCreate />
+            <BatchCreate ref={modalRef} />
         </Modal>
         <Page
             path="/tower-market/invoicing"

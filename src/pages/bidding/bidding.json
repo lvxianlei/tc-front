@@ -3,8 +3,7 @@
         {
             "title": "项目名称",
             "width": 120,
-            "dataIndex": "projectName",
-            "isResizable": true
+            "dataIndex": "projectName"
         },
         {
             "title": "是否应标",
