@@ -14,7 +14,7 @@ const componentColumns = [
     { title: '构件编号', dataIndex: 'code', key: 'code' },
     { title: '材料', dataIndex: 'materialName', key: 'materialName' },
     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
-    { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_?_:'-'}</span>) },
+    { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', render: (_: string, _b: any, index: number): React.ReactNode => (<span>{_?_:'-'}</span>) },
     { title: '宽度（mm）', dataIndex: 'width', key: 'width', render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
     { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness',render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
     { title: '长度（mm）', dataIndex: 'length', key: 'length' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
