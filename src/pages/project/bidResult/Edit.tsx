@@ -72,8 +72,8 @@ export default function BidResultEdit(): JSX.Element {
                     for (let p = 0; p < _tabsData[i].formData.length; p += 1) {
                         if (map.has(_tabsData[i].formData[p].packageCode)) {
                             // 如果里面存在
-                            const result = map.get(_tabsData[i].formData[p].packageCode);
-                            map.set(_tabsData[i].formData[p].packageCode, result + (_tabsData[i].formData[p].bidPro || 0));
+                            const result: any = map.get(_tabsData[i].formData[p].packageCode);
+                            map.set(_tabsData[i].formData[p].packageCode, +result + (+_tabsData[i].formData[p].bidPro || 0));
                         } else {
                             map.set(_tabsData[i].formData[p].packageCode, (_tabsData[i].formData[p].bidPro || 0));
                         }
