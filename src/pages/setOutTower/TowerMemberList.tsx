@@ -30,7 +30,7 @@ export default function TowerMemberInfo(): React.ReactNode {
         { title: '构件编号', dataIndex: 'code', key: 'code' },
         { title: '材料', dataIndex: 'materialName', key: 'materialName' },
         { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
-        { title: '规格', dataIndex: 'specName', key: 'specName', },
+        { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', },
         { title: '宽度（mm）', dataIndex: 'width', key: 'width', render: (_: any, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
         { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness' , render: (_: any, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
         { title: '长度（mm）', dataIndex: 'length', key: 'length' , render: (_: any, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
