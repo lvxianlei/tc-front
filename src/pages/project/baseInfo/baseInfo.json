@@ -369,11 +369,15 @@
         },
         {
             "title": "首批交货日期",
-            "dataIndex": "deliveryDate"
+            "dataIndex": "deliveryDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "最后一批交货日期",
-            "dataIndex": "lastDeliveryDate"
+            "dataIndex": "lastDeliveryDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "交货地点",

@@ -66,7 +66,7 @@ export default function BaseInfoEdit(): JSX.Element {
             const baseInfoData = await baseInfoForm.validateFields()
             const cargoVOListData = await cargoVOListForm.validateFields()
             const portedCargoData = await portedCargoForm.validateFields()
-            const projectLeaderType = typeof baseInfoData.projectLeader === "string" ? true : false
+            // const projectLeaderType = typeof baseInfoData.projectLeader === "string" ? true : false
             const [bigRegion, address] = baseInfoData.address !== "其他-国外" ? baseInfoData.address.split("-") : ["", "其他-国外"]
             const result = await run({
                 ...baseInfoData,

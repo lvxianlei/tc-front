@@ -44,7 +44,7 @@ export default function Overview({ id }: OverviewProps) {
             <DetailTitle title="物资清单" />
             <CommonTable haveIndex columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
             <DetailTitle title="整理后物资清单" />
-            <CommonTable haveIndex columns={portedCargoColumns} dataSource={data?.cargoVOList} />
+            <CommonTable haveIndex columns={portedCargoColumns} dataSource={data?.portedCargoVOList} />
             <Attachment dataSource={data?.attachVos || []} />
         </Spin>
     </DetailContent>
