@@ -76,6 +76,7 @@ export const UploadXLS = (props: {
           )
           readEnd && readEnd(xlsxList)
         })
+        return false
       }}
       showUploadList={false}
       onChange={() => false}

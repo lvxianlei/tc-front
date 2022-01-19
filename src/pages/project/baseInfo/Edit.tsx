@@ -7,7 +7,10 @@ import { baseInfoData, cargoVOListColumns, portedCargoColumns } from './baseInfo
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../Detail"
+import { UploadXLS } from "../bidResult/EditTabs"
 import { voltageGradeOptions } from "../../../configuration/DictionaryOptions"
+import { downLoadFile } from "../../../utils"
+
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
@@ -96,6 +99,19 @@ export default function BaseInfoEdit(): JSX.Element {
             }
         }
     }
+
+    const generateFormatEditData = (column: any, data: any) => {
+        let value: any = ""
+        switch (column.type) {
+            case "select":
+                value = column.enum.find((enumItem: any) => enumItem.label === data).value
+                break
+            default:
+                value = data
+        }
+        return value
+    }
+
     return <>
         {params.id !== "new" && <ManagementDetailTabsTitle />}
         <DetailContent operation={[
@@ -128,22 +144,64 @@ export default function BaseInfoEdit(): JSX.Element {
                             }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
-                <EditTable form={cargoVOListForm} columns={cargoVOListColumns.map(item => {
-                    if (item.dataIndex === "projectVoltageLevel") {
-                        return ({
-                            ...item,
-                            type: "select",
-                            enum: voltageGradeOptions?.map(item => ({ value: item.id, label: item.name }))
-                        })
-                    }
-                    return item
-                })} dataSource={data?.cargoVOList} />
-                {params.id !== "new" && params.id && <CommonTable haveIndex columns={cargoVOListColumns} dataSource={data?.cargoVOList} />}
+                {(params.id !== "new" && params.id) ? <CommonTable
+                    haveIndex
+                    columns={cargoVOListColumns}
+                    dataSource={data?.cargoVOList}
+                /> : <EditTable
+                    form={cargoVOListForm}
+                    columns={cargoVOListColumns.map(item => {
+                        if (item.dataIndex === "projectVoltageLevel") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: voltageGradeOptions?.map(item => ({ value: item.id, label: item.name }))
+                            })
+                        }
+                        return item
+                    })}
+                    dataSource={data?.cargoVOList} />}
                 <DetailTitle title="整理后物资清单" style={{ paddingTop: "24px" }} />
                 <EditTable
                     opration={[
-                        <Button key="import" type="primary">导入</Button>,
-                        <Button key="download" type="link">下载模板</Button>
+                        <UploadXLS key="xlxs" readEnd={async (_data) => {
+                            const vilidateCols = [
+                                "包名称", "分包编号", "项目单位", "需求单位", "项目名称",
+                                "工程电压等级", "货物名称", "物资名称", "物资描述", "单位",
+                                "数量（吨）", "首批交货日期", "最后一批交货日期", "交货地点",
+                                "交货方式", "技术规范编码", "网省采购申请号", "总部采购申请号",
+                                "物料编码", "扩展描述", "扩展编码"]
+                            if (_data.length <= 0) {
+                                message.error("文件不能为空...")
+                                return
+                            }
+                            if (Object.keys(_data[0]).length <= 0) {
+                                message.error("文件不符合上传规则...")
+                                return
+                            }
+                            const rowItem: string[] = Object.keys(_data[0])
+                            const vilidateRow: number = rowItem.filter(item => vilidateCols.includes(item)).length
+                            if (vilidateRow !== vilidateCols.length) {
+                                message.error("文件不符合上传规则...")
+                                return
+                            }
+                            const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
+                            const uploadData = filterUploadData.map((item: any, index) => {
+                                let rowData: any = { uid: _data.length + index }
+                                Object.keys(item).forEach((columnItem: string) => {
+                                    const columnDataIndex = portedCargoColumns.find(bidItem => bidItem.title === columnItem)
+                                    if (columnDataIndex) {
+                                        rowData[columnDataIndex.dataIndex] = generateFormatEditData(columnDataIndex, item[columnItem])
+                                    }
+                                })
+                                return rowData
+                            })
+                            const values = await portedCargoForm.getFieldsValue().submit || []
+                            portedCargoForm.setFieldsValue({ submit: values.concat(uploadData) })
+                        }} />,
+                        <Button key="download" type="link" onClick={() => {
+                            downLoadFile("")
+                        }}>下载模板</Button>
                     ]}
                     form={portedCargoForm}
                     columns={portedCargoColumns.map(item => {
