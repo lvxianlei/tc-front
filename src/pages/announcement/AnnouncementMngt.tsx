@@ -21,8 +21,8 @@ export interface IAnnouncement {
 }
 
 export default function AnnouncementMngt(): React.ReactNode {
-    const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [ filterValue, setFilterValue ] = useState({});
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState({});
 
     const columns = [
         {
@@ -31,7 +31,7 @@ export default function AnnouncementMngt(): React.ReactNode {
             width: 150,
             dataIndex: 'title',
             render: (_: string, record: Record<string, any>): React.ReactNode => (
-                <Link to={`/announcement/detail/${ record.id }`}>{_}</Link>
+                <Link to={`/announcement/list/detail/${record.id}`}>{_}</Link>
             )
         },
         {
@@ -69,27 +69,27 @@ export default function AnnouncementMngt(): React.ReactNode {
             fixed: 'right' as FixedType,
             width: 130,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    { record.state === 0 ? <Link to={{pathname: `/announcement/edit/${ record.id }`, state:{ type: 'edit' } }}>编辑</Link> : <Button type="link" disabled>编辑</Button> }
-                    <Button type="link" disabled={ !(record.state === 1) || selectedKeys.length > 0 } onClick={() => {
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                    {record.state === 0 ? <Link to={{ pathname: `/announcement/list/edit/${record.id}`, state: { type: 'edit' } }}>编辑</Link> : <Button type="link" disabled>编辑</Button>}
+                    <Button type="link" disabled={!(record.state === 1) || selectedKeys.length > 0} onClick={() => {
                         RequestUtil.post(`/tower-system/notice/withdraw`, {
                             noticeIds: [record.id]
                         }).then(res => {
-                            setRefresh(!refresh); 
+                            setRefresh(!refresh);
                         });
                     }}>撤回</Button>
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ () => {
-                            RequestUtil.delete(`/tower-system/notice?ids=${ record.id }`).then(res => {
-                                setRefresh(!refresh); 
+                        onConfirm={() => {
+                            RequestUtil.delete(`/tower-system/notice?ids=${record.id}`).then(res => {
+                                setRefresh(!refresh);
                             });
-                        } }
+                        }}
                         okText="确认"
                         cancelText="取消"
-                        disabled={ record.state === 1 }
+                        disabled={record.state === 1}
                     >
-                        <Button type="link" disabled={ record.state === 1 }>删除</Button>
+                        <Button type="link" disabled={record.state === 1}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -97,20 +97,20 @@ export default function AnnouncementMngt(): React.ReactNode {
     ]
 
     const batchDel = () => {
-        if(selectedRows.length > 0) {
-            RequestUtil.delete(`/tower-system/notice?ids=${ selectedRows.map<string>((item: IAnnouncement): string => item?.id || '').join(',') }`).then(res => {
+        if (selectedRows.length > 0) {
+            RequestUtil.delete(`/tower-system/notice?ids=${selectedRows.map<string>((item: IAnnouncement): string => item?.id || '').join(',')}`).then(res => {
                 message.success('批量删除成功');
                 setSelectedKeys([]);
                 setSelectedRows([]);
                 setRefresh(!refresh);
-            });   
+            });
         } else {
             message.warning('请先选择需要删除的数据');
         }
     }
 
     const batchWithdraw = () => {
-        if(selectedRows.length > 0) {
+        if (selectedRows.length > 0) {
             RequestUtil.post(`/tower-system/notice/withdraw`, {
                 noticeIds: selectedRows.map<string>((item: IAnnouncement): string => item?.id || '')
             }).then(res => {
@@ -118,7 +118,7 @@ export default function AnnouncementMngt(): React.ReactNode {
                 setSelectedKeys([]);
                 setSelectedRows([]);
                 setRefresh(!refresh);
-            });   
+            });
         } else {
             message.warning('请先选择需要撤回的数据');
         }
@@ -129,37 +129,37 @@ export default function AnnouncementMngt(): React.ReactNode {
         setSelectedRows(selectedRows)
     }
 
-    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
-    const [ selectedRows, setSelectedRows ] = useState<IAnnouncement[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<IAnnouncement[]>([]);
 
     return <Page
         path="/tower-system/notice"
-        columns={ columns }
-        headTabs={ [] }
-        extraOperation={ 
+        columns={columns}
+        headTabs={[]}
+        extraOperation={
             <Space direction="horizontal" size="small">
-                <Link to={{pathname: `/announcement/new`, state:{ type: 'new' } }}><Button type="primary">新发布</Button></Link>
-                { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(0) === -1 && selectedRows.map(items => items.state).indexOf(2) === -1 ? <Button type="primary" onClick={ batchWithdraw } ghost>撤回</Button> : <Button type="primary" disabled ghost>撤回</Button>}
-                { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(1) === -1 ? 
+                <Link to={{ pathname: `/announcement/list/new`, state: { type: 'new' } }}><Button type="primary">新发布</Button></Link>
+                {selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(0) === -1 && selectedRows.map(items => items.state).indexOf(2) === -1 ? <Button type="primary" onClick={batchWithdraw} ghost>撤回</Button> : <Button type="primary" disabled ghost>撤回</Button>}
+                {selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(1) === -1 ?
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ batchDel }
+                        onConfirm={batchDel}
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="primary" ghost>删除</Button> 
+                        <Button type="primary" ghost>删除</Button>
                     </Popconfirm>
-            : <Button type="primary" disabled ghost>删除</Button> }
-            </Space> 
+                    : <Button type="primary" disabled ghost>删除</Button>}
+            </Space>
         }
-        refresh={ refresh }
+        refresh={refresh}
         tableProps={{
             rowSelection: {
                 selectedRowKeys: selectedKeys,
                 onChange: SelectChange
             }
         }}
-        searchFormItems={ [
+        searchFormItems={[
             {
                 name: 'state',
                 label: '状态',
@@ -175,13 +175,13 @@ export default function AnnouncementMngt(): React.ReactNode {
             {
                 name: 'msg',
                 label: '模糊查询项',
-                children: <Input maxLength={50} placeholder="请输入标题/内容查询"/>
+                children: <Input maxLength={50} placeholder="请输入标题/内容查询" />
             }
-        ] }
-        filterValue={ filterValue }
-        onFilterSubmit = { (values: Record<string, any>) => {
+        ]}
+        filterValue={filterValue}
+        onFilterSubmit={(values: Record<string, any>) => {
             setFilterValue(values);
             return values;
-        } }
+        }}
     />
 }

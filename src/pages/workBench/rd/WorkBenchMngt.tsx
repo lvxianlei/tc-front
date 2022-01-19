@@ -42,19 +42,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 				{
 					title: '待确认',
 					dataIndex: 'assessToBeConfirmed',
-					path: '/assessmentTask',
+					path: '/assessmentTask/assessmentTaskList',
 					state: 1,
 					authority: 'assess_to_be_confirmed'
 				}, {
 					title: '待指派',
 					dataIndex: 'assessToBeAssigned',
-					path: '/assessmentTask',
+					path: '/assessmentTask/assessmentTaskList',
 					state: 2,
 					authority: 'assess_to_be_assigned'
 				}, {
 					title: '待提交',
 					dataIndex: 'assessToBeSubmitted',
-					path: '/assessmentTask',
+					path: '/assessmentTask/assessmentTaskList',
 					state: 4,
 					authority: 'assess_to_be_submitted'
 				}
@@ -90,7 +90,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 				{
 					title: '待确认',
 					dataIndex: 'loftingToBeConfirmed',
-					path: '/setOutTask',
+					path: '/setOutTask/setOutTaskList',
 					state: 1,
 					authority: 'lofting_to_be_confirmed'
 				}, {
@@ -102,7 +102,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 				}, {
 					title: '待提交',
 					dataIndex: 'loftingToBeSubmitted',
-					path: '/setOutTask',
+					path: '/setOutTask/setOutTaskList',
 					state: 4,
 					authority: 'lofting_to_be_submitted'
 				}
