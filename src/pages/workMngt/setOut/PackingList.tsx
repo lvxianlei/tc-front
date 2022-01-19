@@ -104,10 +104,10 @@ export default function PackingList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'balesCode',
+            key: 'pieceCode',
             title: '件号',
             width: 150,
-            dataIndex: 'balesCode'
+            dataIndex: 'pieceCode'
         },
         {
             key: 'materialSpec',
