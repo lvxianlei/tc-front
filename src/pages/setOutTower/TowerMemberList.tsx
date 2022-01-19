@@ -50,7 +50,7 @@ export default function TowerMemberInfo(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Button type="link" onClick={async ()=>{
                         const url:any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
-                        setUrl(url?.filePath);
+                        setUrl(url?.downloadUrl);
                         setVisible(true)
                     }}>查看</Button>
                 </Space>
