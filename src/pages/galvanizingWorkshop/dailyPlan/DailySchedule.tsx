@@ -80,7 +80,7 @@ export default function DailySchedule(): React.ReactNode {
                                         }}>派工</Button> :
                                             confirmStatus === 3 ? <>
                                                 {
-                                                    new Date(Date.parse(record?.galvanizedStartTime.replace(/-/g, "/"))) > new Date() ? <Button type="link" onClick={async () => {
+                                                    new Date(Date.parse(record?.galvanizedStartTime?.replace(/-/g, "/"))) > new Date() ? <Button type="link" onClick={async () => {
                                                         const data: IDailySchedule = await RequestUtil.get(`/tower-production/galvanized/daily/plan/detail/${record.id}`);
                                                         form.setFieldsValue({ ...data });
                                                         setDetail(data);
