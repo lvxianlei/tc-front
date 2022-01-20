@@ -79,7 +79,6 @@ export default function SalesPlanEdit() {
                 message.warning("请选择杆塔明细...")
                 return
             }
-            console.log(baseInfoData, "bassds", moment(baseInfoData.deliveryTime).format("YYYY-MM-DD"))
             const submitData = {
                 ...data,
                 ...baseInfoData,

@@ -24,7 +24,13 @@ interface Parmas {
  *          .doc: application/vnd.openxmlformats-officedocument.presentationml.presentation
  * @returns 
  */
-export function exportDown(path: string, methods: string = "POST", parmas:Parmas = {}, type: string, fileName: string = "模板" ) {
+export function exportDown(
+    path: string,
+    methods: string = "POST",
+    parmas:Parmas = {},
+    type: string = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    fileName: string = "模板"
+) {
     return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`${path}`.replace(/^\/*/, '')}`, {
         mode: 'cors',
         method: 'POST',
@@ -43,7 +49,6 @@ export function exportDown(path: string, methods: string = "POST", parmas:Parmas
         let downloadElement = document.createElement('a');
         // 创建下载的链接
         let href = window.URL.createObjectURL(blob);
-        console.log(href, "href")
         downloadElement.href = href;
         // 下载后文件名
         downloadElement.download = fileName;

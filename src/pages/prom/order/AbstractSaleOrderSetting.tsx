@@ -237,7 +237,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const price: number = saleOrderValue.price;
         let amount: number | undefined = 0;
         amount = orderWeight * price;
-        console.log(amount, doNumber(amount, 4))
         this.getForm()?.setFieldsValue({ amount: doNumber(amount, 4) });
     }
 
@@ -273,7 +272,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
     public amountBlur = (): void => {
         const saleOrderValue: any = this.getForm()?.getFieldsValue(true);
-        console.log(saleOrderValue, "saleOrderValue")
         const taxAmount: number = saleOrderValue.taxAmount * 1;
         const orderWeight: number = saleOrderValue.orderWeight * 1;
         if (orderWeight > 0) {
