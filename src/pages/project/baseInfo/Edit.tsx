@@ -148,7 +148,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     haveIndex
                     columns={cargoVOListColumns}
                     dataSource={data?.cargoVOList}
-                /> : <EditableTable
+                /> : <EditTable
                     form={cargoVOListForm}
                     columns={cargoVOListColumns.map(item => {
                         if (item.dataIndex === "projectVoltageLevel") {
@@ -164,47 +164,58 @@ export default function BaseInfoEdit(): JSX.Element {
                 <DetailTitle title="整理后物资清单" style={{ paddingTop: "24px" }} />
                 <EditTable
                     opration={[
-                        <UploadXLS key="xlxs" readEnd={async (_data) => {
-                            const vilidateCols = [
-                                "包名称", "分包编号", "项目单位", "需求单位", "项目名称",
-                                "工程电压等级", "货物名称", "物资名称", "物资描述", "单位",
-                                "数量（吨）", "首批交货日期", "最后一批交货日期", "交货地点",
-                                "交货方式", "技术规范编码", "网省采购申请号", "总部采购申请号",
-                                "物料编码", "扩展描述", "扩展编码"]
-                            if (_data.length <= 0) {
-                                message.error("文件不能为空...")
-                                return
-                            }
-                            if (Object.keys(_data[0]).length <= 0) {
-                                message.error("文件不符合上传规则...")
-                                return
-                            }
-                            const rowItem: string[] = Object.keys(_data[0])
-                            const vilidateRow: number = rowItem.filter(item => vilidateCols.includes(item)).length
-                            if (vilidateRow !== vilidateCols.length) {
-                                message.error("文件不符合上传规则...")
-                                return
-                            }
-                            const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
-                            const uploadData = filterUploadData.map((item: any, index) => {
-                                let rowData: any = { uid: _data.length + index }
-                                Object.keys(item).forEach((columnItem: string) => {
-                                    const columnDataIndex = portedCargoColumns.find(bidItem => bidItem.title === columnItem)
-                                    if (columnDataIndex) {
-                                        rowData[columnDataIndex.dataIndex] = generateFormatEditData(columnDataIndex, item[columnItem])
-                                    }
+                        <UploadXLS key="xlxs"
+                            title={<>
+                                文件导入要求：<br />
+                                1、仅Excel文件导入（xls，xlsx均可）。<br />
+                                2、列名必须包括包名称、 分包编号、项目单位、需求单位、 项目名称、
+                                工程电压等级、货物名称、物资名称、物资描述、单位、
+                                数量（吨）、首批交货日期、最后一批交货日期、交货地点、
+                                交货方式、技术规范编码、网省采购申请号、总部采购申请号、
+                                物料编码、扩展描述、扩展编码
+                            </>}
+                            readEnd={async (_data) => {
+                                const vilidateCols = [
+                                    "包名称", "分包编号", "项目单位", "需求单位", "项目名称",
+                                    "工程电压等级", "货物名称", "物资名称", "物资描述", "单位",
+                                    "数量（吨）", "首批交货日期", "最后一批交货日期", "交货地点",
+                                    "交货方式", "技术规范编码", "网省采购申请号", "总部采购申请号",
+                                    "物料编码", "扩展描述", "扩展编码"]
+                                if (_data.length <= 0) {
+                                    message.error("文件不能为空...")
+                                    return
+                                }
+                                if (Object.keys(_data[0]).length <= 0) {
+                                    message.error("文件不符合上传规则...")
+                                    return
+                                }
+                                const rowItem: string[] = Object.keys(_data[0])
+                                const vilidateRow: number = rowItem.filter(item => vilidateCols.includes(item)).length
+                                if (vilidateRow !== vilidateCols.length) {
+                                    message.error("文件不符合上传规则...")
+                                    return
+                                }
+                                const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
+                                const uploadData = filterUploadData.map((item: any, index) => {
+                                    let rowData: any = { uid: _data.length + index }
+                                    Object.keys(item).forEach((columnItem: string) => {
+                                        const columnDataIndex = portedCargoColumns.find(bidItem => bidItem.title === columnItem)
+                                        if (columnDataIndex) {
+                                            rowData[columnDataIndex.dataIndex] = generateFormatEditData(columnDataIndex, item[columnItem])
+                                        }
+                                    })
+                                    return rowData
                                 })
-                                return rowData
-                            })
-                            const values = await portedCargoForm.getFieldsValue().submit || []
-                            portedCargoForm.setFieldsValue({ submit: values.concat(uploadData) })
-                        }} />,
+                                const values = await portedCargoForm.getFieldsValue().submit || []
+                                portedCargoForm.setFieldsValue({ submit: values.concat(uploadData) })
+                            }} />,
                         <Button key="download" type="link" onClick={() => {
-                            downLoadFile("")
+                            
                         }}>下载模板</Button>
                     ]}
                     form={portedCargoForm}
-                    columns={portedCargoColumns} dataSource={data?.portedCargoVOList} />
+                    columns={portedCargoColumns}
+                    dataSource={data?.portedCargoVOList} />
                 <Attachment title="附件信息" maxCount={10} ref={attchsRef} edit dataSource={data?.attachVos} />
             </Spin>
         </DetailContent>
