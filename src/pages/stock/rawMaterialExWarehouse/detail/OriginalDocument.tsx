@@ -502,7 +502,6 @@ export default function RawMaterialStock(): React.ReactNode {
         setRequirement(record.quantity);
         setOutboundId(record.id);
         setApplyListdata([record]);
-        console.log(record)
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
             materialTexture: record.materialTexture,//材质
             productName: record.productName,//品名
@@ -552,7 +551,6 @@ export default function RawMaterialStock(): React.ReactNode {
     }
     // 点击出库-缺料申请-按钮
     const MaterialShortageApplication = async () => {
-        console.log(ApplyListdata, 'ApplyListdata')
         if (OutLibraryListdata.length != 0) {
             message.error('库存未用完')
             return
@@ -628,7 +626,6 @@ export default function RawMaterialStock(): React.ReactNode {
                         <RangePicker
                             value={dateValue}
                             onChange={(date, dateString) => {
-                                console.log(date, dateString)
                                 setDateValue(date)
                                 setDateString(dateString)
                             }}
@@ -810,7 +807,6 @@ export default function RawMaterialStock(): React.ReactNode {
                         pageSizeOptions: ['10', '20', '50', '100'],
                         showSizeChanger: true,
                         onChange: (page, pageSize) => {
-                            console.log(page, pageSize)
                             setCurrent(page);
                             setPageSize(Number(pageSize));
                         }

@@ -262,7 +262,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      */
     public onServiceManager = (selectedRows: DataType[]): void => {
         const contract: IContractInfo | undefined = this.state.contract;
-        console.log(selectedRows, "dssdsdsdd")
         if (selectedRows && selectedRows.length > 0) {
             this.setState(({
                 contract: {
