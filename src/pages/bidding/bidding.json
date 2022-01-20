@@ -207,43 +207,40 @@
             "type": "textarea"
         }
     ],
-    "biddingStatusChange": [
+    "isBidding": [
         {
-            "type": "popTable",
-            "title": "选择项目负责人",
-            "dataIndex": "projectLeader",
-            "width": 1101,
-            "path": "/sinzetech-user/user",
-            "dependencies": true,
-            "columns": [
+            "title": "是否应标",
+            "dataIndex": "biddingStatus",
+            "type": "select",
+            "required": true,
+            "enum": [
                 {
-                    "title": "登录账号",
-                    "dataIndex": "account"
+                    "value": 1,
+                    "label": "是"
                 },
                 {
-                    "title": "用户姓名",
-                    "dataIndex": "name",
-                    "search": true
-                },
-                {
-                    "title": "所属角色",
-                    "dataIndex": "userRoleNames"
-                },
-                {
-                    "title": "所属机构",
-                    "dataIndex": "departmentName"
+                    "value": 2,
+                    "label": "否"
                 }
             ]
         }
     ],
+    "noBidding": [
+        {
+            "title": "原因",
+            "dataIndex": "reason",
+            "type": "textarea"
+        }
+    ],
     "detaiBidStatus": [
         {
-            "type": "popTable",
             "title": "选择项目负责人",
-            "dataIndex": "projectLeader",
+            "dataIndex": "projectLeaderId",
+            "type": "popTable",
             "width": 1101,
             "path": "/sinzetech-user/user",
             "dependencies": true,
+            "required": true,
             "columns": [
                 {
                     "title": "登录账号",
@@ -271,7 +268,8 @@
             "value": "packageName",
             "width": 1101,
             "selectType": "checkbox",
-            "path": "/bidInfo/packageList",
+            "required": true,
+            "path": "/tower-market/bidInfo/packageList",
             "dependencies": true,
             "columns": [
                 {
@@ -308,7 +306,12 @@
         },
         {
             "title": "包名称",
-            "dataIndex": "packageName"
+            "dataIndex": "packageName",
+            "rules": [
+                {
+                    "required": true
+                }
+            ]
         },
         {
             "title": "分包编号",

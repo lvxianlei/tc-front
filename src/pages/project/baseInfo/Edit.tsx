@@ -148,7 +148,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     haveIndex
                     columns={cargoVOListColumns}
                     dataSource={data?.cargoVOList}
-                /> : <EditTable
+                /> : <EditableTable
                     form={cargoVOListForm}
                     columns={cargoVOListColumns.map(item => {
                         if (item.dataIndex === "projectVoltageLevel") {
@@ -204,16 +204,7 @@ export default function BaseInfoEdit(): JSX.Element {
                         }}>下载模板</Button>
                     ]}
                     form={portedCargoForm}
-                    columns={portedCargoColumns.map(item => {
-                        if (item.dataIndex === "projectVoltageLevel") {
-                            return ({
-                                ...item,
-                                type: "select",
-                                enum: voltageGradeOptions?.map(item => ({ value: item.id, label: item.name }))
-                            })
-                        }
-                        return item
-                    })} dataSource={data?.cargoVOList} />
+                    columns={portedCargoColumns} dataSource={data?.portedCargoVOList} />
                 <Attachment title="附件信息" maxCount={10} ref={attchsRef} edit dataSource={data?.attachVos} />
             </Spin>
         </DetailContent>

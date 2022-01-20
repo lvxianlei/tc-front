@@ -20,23 +20,23 @@ const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean
         if (item.type === "popTable") {
             return ({
                 title: item.title,
-                dataIndex: item.dataIndex,
-                render: (value: any, record: any) => <Form.Item
+                code: item.dataIndex,
+                render: (value: any, record: any, index: number) => <Form.Item
                     style={{ margin: 0 }}
                     rules={item.rules}
-                    name={[record.id, item.dataindex]}>
+                    name={['submit', index, item.dataIndex]}>
                     <FormItemType data={item} type={item.type} />
                 </Form.Item>
             })
         }
         return ({
             title: item.title,
-            dataIndex: item.dataIndex,
-            render: (value: any, record: any) => {
+            code: item.dataIndex,
+            render: (value: any, record: any, index: number) => {
                 return <Form.Item
                     style={{ margin: 0 }}
                     rules={item.rules}
-                    name={[record.id, item.dataindex]}>
+                    name={['submit', index, item.dataIndex]}>
                     <FormItemType data={item} type={item.type} />
                 </Form.Item>
             },
@@ -45,9 +45,9 @@ const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean
     })
     haveOpration && newColumns.push({
         title: "操作",
-        fixed: "right",
+        lock: true,
         width: "80px",
-        dataIndex: "opration",
+        code: "opration",
         render: (_: undefined, record: any) => {
             return <Button style={{ paddingLeft: 0 }} size="small" type="link">删除</Button>
         }
@@ -57,18 +57,13 @@ const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean
         width: "60px",
         fixed: "left",
         dataIndex: 'index',
-        editable: false,
         render: (_: any, $: any, index: number): React.ReactNode => index + 1
     })
     return newColumns
 }
 
-function VirtualList(props: any) {
-    console.log(props)
-    return <div key={props.id}>aaaaaaaaaa</div>
-}
 
-export default function Edit({
+export default function EditableTable({
     columns,
     dataSource = [],
     onChange,
@@ -83,15 +78,14 @@ export default function Edit({
     const [editableDataSource, setEditableDatasource] = useState<any[]>(dataSource)
     const [eidtableColumns, setEditableColumns] = useState<any[]>(formatColunms(columns, haveOpration, haveIndex))
 
-    const handleChange = useCallback((data: any[]) => {
-        onChange && onChange(data, editableDataSource)
-    }, [dataSource, onChange, JSON.stringify(editableDataSource)])
-
     useEffect(() => {
         setEditableColumns(formatColunms(columns, haveOpration, haveIndex))
     }, [JSON.stringify(columns)])
 
-    return <Form form={form}>
+    return <Form
+        form={form}
+        onValuesChange={onChange}
+    >
         <Row>{haveNewButton && <Button
             onClick={async () => {
                 try {
@@ -109,8 +103,14 @@ export default function Edit({
         </Row>
         <AliTable
             size="small"
+            primaryKey="id"
+            style={{ overflow: 'auto', maxHeight: 400 }}
+            defaultColumnWidth={150}
             columns={eidtableColumns}
             dataSource={editableDataSource}
+            useVirtual={{
+                vertical: true
+            }}
         />
     </Form>
 }

@@ -3,7 +3,7 @@ import { Spin, Form, Button, Modal, Select, Input, message, Row, Radio } from 'a
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../common'
 import { PopTable } from "../common/FormItemType"
-import { baseInfoData, detaiBidStatus, bidPageInfo, bidPageInfoCount } from './bidding.json'
+import { baseInfoData, detaiBidStatus, isBidding, noBidding, bidPageInfo, bidPageInfoCount } from './bidding.json'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 
@@ -14,6 +14,7 @@ export default function InformationDetail(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false)
     const [isBid, setIsBid] = useState("0")
     const [viewBidList, setViewBidList] = useState<"detail" | "count">("detail")
+    const [bidStatusColumns, setBidStatusColumns] = useState<any[]>(isBidding)
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
@@ -51,7 +52,11 @@ export default function InformationDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
-            await run({ ...submitData })
+            await run({
+                ...submitData,
+                projectLeaderId: submitData.projectLeaderId?.id,
+                bigPackageIds: submitData.bigPackageIds?.records.map((item: any) => item.id)
+            })
             setVisible(false)
             history.go(0)
         } catch (error) {
@@ -63,6 +68,17 @@ export default function InformationDetail(): React.ReactNode {
     const handleChange = (fields: any, allFields: any) => {
         if (Object.keys(fields)[0] === "biddingStatus") {
             setIsBid(fields.biddingStatus)
+            if (fields.biddingStatus === 2) {
+                setBidStatusColumns([...isBidding, ...noBidding])
+            } else {
+                setBidStatusColumns([...isBidding,
+                ...detaiBidStatus.map((item: any) => {
+                    if (item.dataIndex === "bigPackageIds") {
+                        return ({ ...item, path: `${item.path}?bidInfoId=${params.id}` })
+                    }
+                    return item
+                })])
+            }
         }
     }
     const handleDelete = () => {
@@ -86,8 +102,7 @@ export default function InformationDetail(): React.ReactNode {
             onOk={handleModalOk}
             confirmLoading={bidResStatus}
             onCancel={handleModalCancel} >
-            <BaseInfo form={form} columns={detaiBidStatus} dataSource={{}} col={1} onChange={handleChange} />
-
+            <BaseInfo form={form} edit columns={bidStatusColumns} dataSource={{}} col={1} onChange={handleChange} />
         </Modal>
         <DetailContent
             operation={[

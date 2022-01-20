@@ -18,6 +18,9 @@ const StyledBaseTable = (styled(BaseTable)`
   --header-bgcolor: #fafafa;
   --header-hover-bgcolor: #f5f5f5;
   --header-highlight-bgcolor: #f5f5f5;
+  .art-horizontal-scroll-container{
+    z-index: 3
+  }
   &.dark {
     --lock-shadow: black 0 0px 6px 2px;
     --border-color: #303030;
@@ -66,22 +69,22 @@ const StyledBaseTable = (styled(BaseTable)`
 const AntdEmptyContent = React.memo(() => <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />)
 
 function AntdLoadingContentWrapper({ children, visible }: LoadingContentWrapperProps) {
-    return (
-        <div
-            className="ant-loading-content-wrapper"
-            style={{ opacity: visible ? 0.6 : undefined }}
-        >
-            {children}
-        </div>
-    )
+  return (
+    <div
+      className="ant-loading-content-wrapper"
+      style={{ opacity: visible ? 0.6 : undefined }}
+    >
+      {children}
+    </div>
+  )
 }
 
 function AntdLoading() {
-    return <Spin style={{ display: 'block' }} />
+  return <Spin style={{ display: 'block' }} />
 }
 
 interface AntdTableProps extends BaseTableProps {
-    size?: "default" | "middle" | "small"
+  size?: "default" | "middle" | "small"
 }
 
 /**改造为 Ant Design 风格的基础表格组件.
@@ -90,14 +93,14 @@ interface AntdTableProps extends BaseTableProps {
  *  `className="dark"` 暗色主题
  * */
 export default ({ size = "default", ...props }: AntdTableProps) => {
-    return <StyledBaseTable
-        {...props}
-        className={`${size} ${props.className}`}
-        components={{
-            EmptyContent: AntdEmptyContent,
-            LoadingContentWrapper: AntdLoadingContentWrapper,
-            LoadingIcon: AntdLoading,
-            ...props.components,
-        }}
-    />
+  return <StyledBaseTable
+    {...props}
+    className={`${size} ${props.className}`}
+    components={{
+      EmptyContent: AntdEmptyContent,
+      LoadingContentWrapper: AntdLoadingContentWrapper,
+      LoadingIcon: AntdLoading,
+      ...props.components,
+    }}
+  />
 }
