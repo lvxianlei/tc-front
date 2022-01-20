@@ -11,7 +11,7 @@ export default function EnquiryList(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, status: string }>()
     const [visible, setVisible] = useState<boolean>(false)
-    const [ filterValue, setFilterValue ] = useState({ purchaseTaskTowerId: params.id });
+    const [filterValue, setFilterValue] = useState({ purchaseTaskTowerId: params.id });
     const ref = useRef<{ data: any }>()
     const { run } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -118,7 +118,7 @@ export default function EnquiryList(): React.ReactNode {
             searchFormItems={[
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input placeholder="件号/材质/规格" maxLength={200} />
                 }
             ]}

@@ -31,7 +31,7 @@ export default function PackingList(): React.ReactNode {
             dataIndex: 'index',
             width: 50,
             fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'balesCode',
@@ -76,13 +76,13 @@ export default function PackingList(): React.ReactNode {
             fixed: 'right' as FixedType,
             width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListSetting/${ record.id }` }>
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                    <Link to={`/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListSetting/${record.id}`}>
                         <Button type="link" disabled={location?.state?.status === 4}>编辑</Button>
                     </Link>
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ () => { RequestUtil.delete(`/tower-science/packageStructure?id=${ record.id }`).then(res => history.go(0)) } }
+                        onConfirm={() => { RequestUtil.delete(`/tower-science/packageStructure?id=${record.id}`).then(res => history.go(0)) }}
                         okText="确认"
                         cancelText="取消"
                         disabled={location?.state?.status === 4}
@@ -101,13 +101,13 @@ export default function PackingList(): React.ReactNode {
             dataIndex: 'index',
             width: 50,
             fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'balesCode',
+            key: 'pieceCode',
             title: '件号',
             width: 150,
-            dataIndex: 'balesCode'
+            dataIndex: 'pieceCode'
         },
         {
             key: 'materialSpec',
@@ -138,9 +138,10 @@ export default function PackingList(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, productId: string }>();
     const match = useRouteMatch();
-    const [ isExport, setIsExport ] = useState(false);
-    const [ bundleData, setBundleData ] = useState<IBundle[]>([]);
+    const [isExport, setIsExport] = useState(false);
+    const [bundleData, setBundleData] = useState<IBundle[]>([]);
     const location = useLocation<{ status: number }>();
+    const [loading1, setLoading1] = useState(false);
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get(`/tower-science/packageStructure/${params.productId}`)
@@ -155,37 +156,44 @@ export default function PackingList(): React.ReactNode {
     }
 
     const getBundleData = async (id: string) => {
-        const resData: IPackingList = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${ id }`);
+        const resData: IPackingList = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${id}`);
         setBundleData([...(resData.packageRecordVOList || [])]);
     }
-    
+
     return <>
-        <Space direction="horizontal" size="small" className={ styles?.topcontent }><span>塔型：{ detailData?.productCategoryName }</span> <span>杆号：{ detailData?.productNumber }</span><span>
-            捆数: { detailData?.packageStructureCount }</span>
+        <Space direction="horizontal" size="small" className={styles?.topcontent}>
+            <span>塔型：{detailData?.productCategoryName}</span>
+            <span>杆号：{detailData?.productNumber}</span>
+            <span>捆数: {detailData?.packageStructureCount}</span>
         </Space>
-        <Space direction="horizontal" size="small" className={ `${ styles.padding16 } ${ styles.btnRight }` }>
-            <Button type="primary" onClick={ () => setIsExport(true) } ghost>导出</Button>
+        <Space direction="horizontal" size="small" className={`${styles.padding16} ${styles.btnRight}`}>
+            <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
             {
-                location?.state?.status === 4 ? 
-                null : <>
-                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.       productId }/packingListNew`, state: { productCategoryName: detailData?.productCategoryName, productNumber: detailData?.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
-                    <Popconfirm
-                        title="确认完成?"
-                        onConfirm={ () => RequestUtil.post(`/tower-science/packageStructure/submit?productId=${ params.productId }`).then(res => history.goBack()) }
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <Button type="primary">完成</Button>
-                    </Popconfirm>
-                </>
+                location?.state?.status === 4 ?
+                    null : <>
+                        <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListNew`, state: { productCategoryName: detailData?.productCategoryName, productNumber: detailData?.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
+                        <Popconfirm
+                            title="确认完成?"
+                            onConfirm={() => {
+                                setLoading1(true);
+                                RequestUtil.post(`/tower-science/packageStructure/submit?productId=${params.productId}`).then(res => history.goBack()).catch(error => {
+                                    setLoading1(false);
+                                })
+                            }}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button loading={loading1} type="primary">完成</Button>
+                        </Popconfirm>
+                    </>
             }
-            <Button type="ghost" onClick={ () => history.goBack() }>返回</Button>
+            <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>
         <DetailContent>
-            <CommonTable columns={ columns } style={{ marginBottom: '50px' }} dataSource={ detailData?.packageStructureVOList } pagination={ false } onRow={ (record: Record<string, any>, index: number) => ({
+            <CommonTable columns={columns} style={{ marginBottom: '50px' }} dataSource={detailData?.packageStructureVOList} pagination={false} onRow={(record: Record<string, any>, index: number) => ({
                 onClick: async () => { getBundleData(record.id); }
-            })}/>
-            <CommonTable dataSource={ [...bundleData] } columns={ bundleColumns } pagination={ false }/>
+            })} />
+            <CommonTable dataSource={[...bundleData]} columns={bundleColumns} pagination={false} />
         </DetailContent>
         {isExport ? <ExportList
             history={history}
@@ -200,7 +208,7 @@ export default function PackingList(): React.ReactNode {
             size={detailData?.size || 10}
             total={detailData?.total || 0}
             url={`/tower-science/packageStructure/exportByProductId`}
-            serchObj={{productId: params.productId}}
+            serchObj={{ productId: params.productId }}
             closeExportList={() => setIsExport(false)}
         /> : null}
     </>

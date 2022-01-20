@@ -34,7 +34,7 @@ export default function EnquiryList(): React.ReactNode {
                     width: 100,
                     dataIndex: 'operation',
                     //disabled={![1, 3].includes(records.batcheTaskStatus)}
-                    render: (_: any, records: any) => <Button className="btn-operation-link" type="link" disabled={userId !== records.batcherId} ><Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link></Button>
+                    render: (_: any, records: any) => <Button className="btn-operation-link" type="link" disabled={userId !== records.batcherId} ><Link to={`/ingredients/buyBurdening/detail/${records.id}`}>查看</Link></Button>
                 }
             ]}
             filterValue={filterValue}
@@ -62,9 +62,9 @@ export default function EnquiryList(): React.ReactNode {
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input placeholder="任务编号/内部合同号" maxLength={200} />
-                },
+                }
             ]}
         />
     </>

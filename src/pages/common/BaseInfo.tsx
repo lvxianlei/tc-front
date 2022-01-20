@@ -25,15 +25,17 @@ interface BaseInfoProps {
     col?: number
     form?: FormInstance<any>
     onChange?: (changedFields: any, allFields: any, dataSource: { [key: string]: any }) => void
+    classStyle?: string
 }
 
 function formatDataType(dataItem: any, dataSource: any): string {
     const value = dataSource[dataItem.dataIndex]
     const types: any = {
         number: (value && value !== -1) ? value : 0,
-        select: ((value || value === 0) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
+        select: ((value || value === 0 || value === false) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
         string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
+        text: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         phone: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         textarea: value || "-",
         popTable: value || "-"
@@ -112,7 +114,7 @@ const generatePlaceholder = (columnItems: any): string => {
     }
     return placeholder
 }
-export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { } }: BaseInfoProps): JSX.Element {
+export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { }, classStyle = "" }: BaseInfoProps): JSX.Element {
 
     useEffect(() => {
         form && form.setFieldsValue(formatData(columns, dataSource))
@@ -120,15 +122,16 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
 
     if (edit) {
         return <Form
+            style={{ width: "100%" }}
             onValuesChange={(changedFields, allFields) => onChange(changedFields, allFields, dataSource)}
             form={form}
             initialValues={formatData(columns, dataSource)}
             labelAlign="right"
             layout="inline"
             labelCol={{ style: { width: '100px', whiteSpace: "break-spaces" } }}
-            className="bottom"
+            className={`bottom ${classStyle}`}
         >
-            <Row wrap={true}>
+            <Row wrap={true} style={{ width: "100%" }}>
                 {columns.map((item: any, index: number) => <Col
                     key={`form_item_${index}`}
                     {...{
@@ -142,7 +145,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                             span: item.type === "textarea" ? 24 : 12
                         },
                         lg: {
-                            span: item.type === "textarea" ? 24 : 8
+                            span: item.type === "textarea" ? 24 : (24 / col)
                         },
                         xl: {
                             span: item.type === "textarea" ? 24 : (24 / col)
@@ -170,7 +173,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             </Row>
         </Form >
     }
-    return <Descriptions bordered column={col} size="small" className="bottom">
+    return <Descriptions bordered column={col} size="small" className={`bottom ${classStyle}`}>
         {columns.map((item: any, index: number) => <Descriptions.Item
             contentStyle={{ ...item.contentStyle, width: `${100 / (col * 2)}%` }}
             labelStyle={{ ...item.labelStyle, width: `${100 / (col * 4)}%` }}

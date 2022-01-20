@@ -54,7 +54,7 @@ export default function Payment() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}} onClick={() => history.push(`/project/payment/detail/${record.id}`)}>查看</span>
+                        <span style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }} onClick={() => history.push(`/project/payment/detail/${record.id}`)}>查看</span>
                         <Button className="btn-operation-link" type="link" size="small" disabled={![4, 6].includes(record.applyStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
                 }
@@ -62,10 +62,6 @@ export default function Payment() {
         onFilterSubmit={onFilterSubmit}
         filterValue={filterValue}
         searchFormItems={[
-            {
-                name: 'fuzzyQuery',
-                children: <Input placeholder="请款单号/项目编号/项目名称/票面单位/业务经理" style={{ width: 300 }} />
-            },
             {
                 name: 'payType',
                 label: '付款类型',
@@ -97,6 +93,11 @@ export default function Payment() {
                 name: 'startApplicantTime',
                 label: '申请时间',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+            },
+            {
+                name: 'fuzzyQuery',
+                label: "模糊查询项",
+                children: <Input placeholder="请款单号/项目编号/项目名称/票面单位/业务经理" style={{ width: 300 }} />
             }
         ]}
     />

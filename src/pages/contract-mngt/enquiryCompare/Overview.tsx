@@ -218,6 +218,7 @@ export default function Overview(): JSX.Element {
                 style={{ marginRight: 16 }}
                 ghost
                 key="select"
+                disabled={data?.comparisonStatus !== 1}
                 onClick={() => {
                     if (selectedKeys.length > 0) {
                         setSupplierVisible(true)

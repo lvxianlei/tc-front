@@ -14,12 +14,14 @@ export default function Overview(): React.ReactNode {
     const [editId, setEditId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [visible, setVisible] = useState<boolean>(false)
+    const [ filterValue, setFilterValue ] = useState({});
     const editRef = useRef<{ onSubmit: () => void, loading: boolean }>({ onSubmit: () => { }, loading: false })
     const invoiceTypeEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
     const onFilterSubmit = (value: any) => {
+        setFilterValue(value);
         return value
     }
     const { data: priceSourceEnum } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
@@ -27,7 +29,7 @@ export default function Overview(): React.ReactNode {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/list`)
             resove(result.map((item: any) => ({ label: item.supplierName, value: item.id })));
 
-            
+
         } catch (error) {
             reject(error)
         }
@@ -113,7 +115,7 @@ export default function Overview(): React.ReactNode {
                         width: 100,
                         render: (_: any, record: any): React.ReactNode => {
                             return <>
-                                <Button type="link" style={{marginRight: 12}} onClick={() => {
+                                <Button type="link" style={{ marginRight: 12 }} onClick={() => {
                                     setOprationType("edit")
                                     setEditId(record.id)
                                     setVisible(true)
@@ -124,29 +126,29 @@ export default function Overview(): React.ReactNode {
                     }
                 ]}
                 extraOperation={<>
-                    <Upload 
+                    <Upload
                         accept=".xls,.xlsx"
-                        action={ () => {
+                        action={() => {
                             const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                            return baseUrl+'/tower-supply/materialPrice/import'
-                        } } 
+                            return baseUrl + '/tower-supply/materialPrice/import'
+                        }}
                         headers={
                             {
-                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
                                 'Tenant-Id': AuthUtil.getTenantId(),
                                 'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                             }
                         }
-                        showUploadList={ false }
-                        onChange={ (info) => {
-                            if(info.file.response && !info.file.response?.success) {
+                        showUploadList={false}
+                        onChange={(info) => {
+                            if (info.file.response && !info.file.response?.success) {
                                 message.warning(info.file.response?.msg)
-                            }else if(info.file.response && info.file.response?.success){
+                            } else if (info.file.response && info.file.response?.success) {
                                 message.success('导入成功！');
                                 history.go(0);
                             }
-                            
-                        } }
+
+                        }}
                     >
                         <Button type="primary" ghost>导入</Button>
                     </Upload>
@@ -157,6 +159,7 @@ export default function Overview(): React.ReactNode {
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </>}
                 onFilterSubmit={onFilterSubmit}
+                filterValue={ filterValue }
                 searchFormItems={[
                     {
                         name: 'materialCategoryId',
@@ -175,9 +178,9 @@ export default function Overview(): React.ReactNode {
                     },
                     {
                         name: 'fuzzyQuery',
-                        label: '查询',
+                        label: "模糊查询项",
                         children: <Input placeholder="原材料名称/规格" />
-                    },
+                    }
                 ]}
             />
         </>

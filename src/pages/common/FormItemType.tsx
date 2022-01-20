@@ -4,7 +4,7 @@ import CommonTable from "./CommonTable"
 import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import moment, { Moment } from 'moment'
+import moment from 'moment'
 import { stringify } from 'query-string';
 export type FormItemTypesType = "text" | "number" | "phone" | "select" | "date" | "textarea" | "popForm" | "rangePicker" | undefined
 
@@ -133,7 +133,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 onChange: onSelectChange,
                 getCheckboxProps: data?.getCheckboxProps
             }}
-            rowKey={(record: any) => record.id}
+            rowKey={data.rowKey || ((record: any) => record.id)}
             size="small"
             loading={loading}
             dataSource={popTableData?.records || popTableData || []}
@@ -162,7 +162,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const handleOk = () => {
         const depFalseValue = popContent.id || popContent.value
         const changeValue = data.dependencies ? popContent : depFalseValue;
-        (props as any).onChange(changeValue)
+        depFalseValue && (props as any).onChange(changeValue)
         setValue(popContent)
         setVisible(false)
     }
@@ -176,6 +176,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     }
 
     const handleCancel = () => {
+        setPopContent({ value: (props as any).value, id: "", records: [] })
         setVisible(false)
     }
 

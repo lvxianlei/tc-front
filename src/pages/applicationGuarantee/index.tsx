@@ -19,11 +19,11 @@ import { EditRefProps } from './application';
 
 export default function ApplicationColunm(): React.ReactNode {
     const history = useHistory();
-    const [ refresh, setRefresh ] = useState<boolean>(false);
+    const [refresh, setRefresh] = useState<boolean>(false);
     const [acceptStatus, setAcceptStatus] = useState<number>(1);
-    const [ visible, setVisible ] = useState<boolean>(false);
+    const [visible, setVisible] = useState<boolean>(false);
     const [visibleRecovery, setVisibleRecovery] = useState<boolean>(false);
-    const [ visibleSee, setVisibleSee ] = useState<boolean>(false);
+    const [visibleSee, setVisibleSee] = useState<boolean>(false);
     const [id, setId] = useState<string>();
     const [requiredReturnTime, setRequiredReturnTime] = useState<string>("");
     const addRef = useRef<EditRefProps>();
@@ -62,7 +62,7 @@ export default function ApplicationColunm(): React.ReactNode {
         value["acceptStatus"] = acceptStatus;
         return value
     }
-    
+
     // tab切换
     const operationChange = (event: any) => {
         setAcceptStatus(parseFloat(`${event.target.value}`));
@@ -95,20 +95,20 @@ export default function ApplicationColunm(): React.ReactNode {
         }
     })
 
-    const changeTwoDecimal_f = (x: string) => {  
-    　　var f_x = parseFloat(x);  
-    　　if (isNaN(f_x)) return 0; 
-    　　var f_x = Math.round(100 * Number(x))/100;  
-    　　var s_x = f_x.toString();  
-    　　var pos_decimal = s_x.indexOf('.');  
-    　　if (pos_decimal < 0)  {  
-    　　　　pos_decimal = s_x.length;  
-    　　    s_x += '.';  
-    　　}  
-    　　while (s_x.length <= pos_decimal + 2) {  
-    　　　　s_x += '0';  
-    　　}  
-    　　return s_x;  
+    const changeTwoDecimal_f = (x: string) => {
+        var f_x = parseFloat(x);
+        if (isNaN(f_x)) return 0;
+        var f_x = Math.round(100 * Number(x)) / 100;
+        var s_x = f_x.toString();
+        var pos_decimal = s_x.indexOf('.');
+        if (pos_decimal < 0) {
+            pos_decimal = s_x.length;
+            s_x += '.';
+        }
+        while (s_x.length <= pos_decimal + 2) {
+            s_x += '0';
+        }
+        return s_x;
     }
 
     return (
@@ -131,7 +131,7 @@ export default function ApplicationColunm(): React.ReactNode {
                                 dataIndex: item.dataIndex,
                                 width: 50,
                                 render: (_: any, record: any): React.ReactNode => (
-                                    <span style={{color: (acceptStatus === 2 && moment(record.requiredReturnTime).diff(moment(moment(new Date()).format("YYYY-MM-DD")), 'days') < 0) ? 'red' : ''}}>{record.requiredReturnTime ? record.requiredReturnTime : ''}</span>
+                                    <span style={{ color: (acceptStatus === 2 && moment(record.requiredReturnTime).diff(moment(moment(new Date()).format("YYYY-MM-DD")), 'days') < 0) ? 'red' : '' }}>{record.requiredReturnTime ? record.requiredReturnTime : ''}</span>
                                 )
                             })
                         }
@@ -171,23 +171,19 @@ export default function ApplicationColunm(): React.ReactNode {
                             )
                         }
                     }]}
-                refresh={ refresh }
+                refresh={refresh}
                 extraOperation={
                     <>
-                    <Radio.Group defaultValue={acceptStatus} onChange={operationChange}>
-                        {
-                            approvalStatus.map((item: any, index: number) => <Radio.Button value={item.value} key={`${index}_${item.value}`}>{item.label}</Radio.Button>)
-                        }
-                    </Radio.Group>
+                        <Radio.Group defaultValue={acceptStatus} onChange={operationChange}>
+                            {
+                                approvalStatus.map((item: any, index: number) => <Radio.Button value={item.value} key={`${index}_${item.value}`}>{item.label}</Radio.Button>)
+                            }
+                        </Radio.Group>
                     </>
                 }
                 onFilterSubmit={onFilterSubmit}
                 filterValue={{ acceptStatus }}
                 searchFormItems={[
-                    {
-                        name: 'fuzzyQuery',
-                        children: <Input placeholder="请输入项目名称/受益人名称/申请人进行查询" style={{ width: 300 }} />
-                    },
                     {
                         name: 'startRefundTime',
                         label: '申请日期',
@@ -202,6 +198,11 @@ export default function ApplicationColunm(): React.ReactNode {
                         name: 'guaranteeTime',
                         label: '保函交回日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
+                    {
+                        name: 'fuzzyQuery',
+                        label: "模糊查询项",
+                        children: <Input placeholder="请输入项目名称/受益人名称/申请人进行查询" style={{ width: 300 }} />
                     }
                 ]}
             />
@@ -215,17 +216,17 @@ export default function ApplicationColunm(): React.ReactNode {
                     addRef.current?.resetFields();
                     setVisible(false);
                 }}
-                  footer={[
+                footer={[
                     <Button key="submit" type="primary" onClick={() => handleOk()}>
-                      提交
+                        提交
                     </Button>,
                     <Button key="back" onClick={() => {
                         addRef.current?.resetFields();
                         setVisible(false);
                     }}>
-                      取消
+                        取消
                     </Button>
-                  ]}
+                ]}
             >
                 <FillGuaranteeInformation ref={addRef} id={id} />
             </Modal>
@@ -239,17 +240,17 @@ export default function ApplicationColunm(): React.ReactNode {
                     setVisibleRecovery(false)
                     addRecoveryRef.current?.resetFields();
                 }}
-                  footer={[
+                footer={[
                     <Button key="submit" type="primary" onClick={() => handleOkuseState()}>
-                      提交
+                        提交
                     </Button>,
                     <Button key="back" onClick={() => {
                         setVisibleRecovery(false)
                         addRecoveryRef.current?.resetFields();
                     }}>
-                      取消
+                        取消
                     </Button>
-                  ]}
+                ]}
             >
                 <RecoveryGuaranteeLayer ref={addRecoveryRef} id={id} requiredReturnTime={requiredReturnTime} />
             </Modal>

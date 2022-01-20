@@ -52,14 +52,14 @@ export default function WeighingList(): React.ReactNode {
         refresh={refresh}
         searchFormItems={[
             {
-                name: 'fuzzyMsg',
-                label: '',
-                children: <Input style={{ width: '300px' }} placeholder="请输入塔型/抱杆号进行查询" />
-            },
-            {
                 name: 'time',
                 label: '过磅日期',
                 children: <DatePicker.RangePicker />
+            },
+            {
+                name: 'fuzzyMsg',
+                label: "模糊查询项",
+                children: <Input style={{ width: '300px' }} placeholder="请输入塔型/抱杆号进行查询" />
             }
         ]}
         filterValue={filterValue}

@@ -461,6 +461,8 @@ export default function IngredientsModal(props: any) {
                 setPreparation([]);
                 // 设置配料方案数据
                 setSchemeData(result?.schemeData || []);
+                // 更新数据
+                setNumbers(numbers += 1);
             }
             resole(result)
         } catch (error) {
@@ -515,9 +517,9 @@ export default function IngredientsModal(props: any) {
             ]}
         >
             <Spin spinning={loading}>
-                <Row>
+                <div className='wrapperBox'>
                     {/* 左右布局 */}
-                    <Col span={12}>
+                    <div className='wrapper left'>
                         <DetailTitle title="配料策略" />
                         {/* 配料策略 */}
                         <Form form={serarchForm} style={{paddingLeft: "14px", display: "flex", flexWrap: "nowrap"}}>
@@ -613,8 +615,8 @@ export default function IngredientsModal(props: any) {
                             pagination={false}
                             scroll={{ y: 400 }}
                         />
-                    </Col>
-                    <Col span={12}>
+                    </div>
+                    <div className='wrapper'>
                         <DetailTitle title="配料方案" />
                         <CommonTable
                             onRow={(records: any) => {
@@ -716,8 +718,8 @@ export default function IngredientsModal(props: any) {
                                 }
                             ]} dataSource={preparation} pagination={false} scroll={{ y: 600 }} className="prepartion"
                         />
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </Spin>
         </Modal>
     )

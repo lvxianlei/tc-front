@@ -125,6 +125,7 @@ export default function Invoice() {
         </Modal>
         <Page
             path="/tower-supply/invoice"
+            exportPath={"/tower-supply/invoice"}
             filterValue={filterValue}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
@@ -150,7 +151,7 @@ export default function Invoice() {
                             }}>编辑</Button>
                             <Button
                                 type="link"
-                                className="btn-operation-link" 
+                                className="btn-operation-link"
                                 onClick={() => {
                                     setDetailVisible(true)
                                     setDetailedId(record.id)
@@ -161,7 +162,6 @@ export default function Invoice() {
                     }
                 }]}
             extraOperation={<>
-                <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => {
                     setType("new")
                     setVisible(true)
@@ -205,7 +205,7 @@ export default function Invoice() {
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input placeholder="票据编号/请款编号/发票号/企业名称" style={{ width: 230 }} />
                 }
             ]}

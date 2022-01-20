@@ -11,9 +11,10 @@ import Detail from './Detail';
 export default function Invoicing() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
-    const [ visibleSee, setVisibleSee ] = useState<boolean>(false);
+    const [visibleSee, setVisibleSee] = useState<boolean>(false);
     const [type, setType] = useState<"new" | "edit">("new")
-    const [detailId, setDetailId] = useState<string>("")
+    const [detailId, setDetailId] = useState<string>("");
+    const [filterValue, setFilterValue] = useState<object>({});
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
     const [materialData, setMaterialData] = useState<{ [key: string]: any }>({});
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -50,6 +51,7 @@ export default function Invoicing() {
             value.createUserId = second
             delete value.createUserDeptId
         }
+        setFilterValue(value)
         return value
     }
     const handleModalOk = () => new Promise(async (resove, reject) => {
@@ -113,10 +115,10 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Link className="btn-operation-link" to={`/workMngt/receiving/detail/${record.id}`}>明细</Link>
+                        <Link className="btn-operation-link" to={`/ingredients/receiving/detail/${record.id}`}>明细</Link>
                         <Button
                             type="link"
-                            className="btn-operation-link" 
+                            className="btn-operation-link"
                             disabled={record.receiveStatus === 1}
                             onClick={() => {
                                 setDetailId(record.id)
@@ -131,6 +133,7 @@ export default function Invoicing() {
                     </>
                 }
             }]}
+            filterValue={filterValue}
             extraOperation={<>
                 {/* <Button type="primary" ghost>导出</Button> */}
                 <Button type="primary" ghost onClick={() => {
@@ -172,9 +175,9 @@ export default function Invoicing() {
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input placeholder="供应商/联系人/收货单号/联系电话/纸质单号/车牌号" style={{ width: 300 }} />
-                },
+                }
             ]}
         />
     </>

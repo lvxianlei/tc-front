@@ -46,10 +46,6 @@ export default function Invoicing() {
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
-                name: 'fuzzyQuery',
-                children: <Input placeholder="工程名称/票面单位/业务经理" style={{ width: 300 }} />
-            },
-            {
                 name: 'taskType',
                 label: '任务状态',
                 children: <Select style={{ width: 200 }}>
@@ -61,7 +57,12 @@ export default function Invoicing() {
                 name: 'startLaunchTime',
                 label: '申请时间',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-            }
+            },
+            {
+                name: 'fuzzyQuery',
+                label: "模糊查询项",
+                children: <Input placeholder="工程名称/票面单位/业务经理" style={{ width: 300 }} />
+            },
         ]}
     />
 }

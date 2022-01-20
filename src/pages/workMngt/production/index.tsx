@@ -19,6 +19,7 @@ export default function Invoicing() {
     const [ingredientsvisible, setIngredientsvisible] = useState<boolean>(false);
     const [detailOver, setDetailOver] = useState<boolean>(false);
     const [loftingState, setLoftingState] = useState<number>(0);
+    const [filterValue, setFilterValue] = useState<object>(history.location.state as object);
     const { loading, run: saveRun } = useRequest<any[]>((id: string, productCategoryName: string) => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-supply/initData/ingredients?materialTaskCode=${id}&productCategoryName=${productCategoryName}`)
@@ -56,6 +57,7 @@ export default function Invoicing() {
             value.loftingDeptId = value.loftingId.first
             value.loftingId = value.loftingId.second
         }
+        setFilterValue(value)
         return value
     }
     const handleGenerateOk = async () => {
@@ -131,7 +133,7 @@ export default function Invoicing() {
                                 className="btn-operation-link" 
                                 disabled={userId !== record.batcherId || record.loftingState === 3}
                             >
-                                <Link to={`/workMngt/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}`}>明细</Link>
+                                <Link to={`/ingredients/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}`}>明细</Link>
                             </Button>
                             <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 2}
                                 onClick={() => {
@@ -155,6 +157,7 @@ export default function Invoicing() {
             //     <Button type="primary" ghost>导出</Button>
             //     {/* <Button type="primary" loading={loading} ghost onClick={() => setGenerteVisible(true)}>临时生成生产数据</Button> */}
             // </>}
+            filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
 
@@ -180,7 +183,7 @@ export default function Invoicing() {
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input placeholder="方案编号/任务编号/生产批次/塔型" style={{ width: 300 }} />
                 }
             ]}

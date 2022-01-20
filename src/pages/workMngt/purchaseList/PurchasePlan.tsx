@@ -26,7 +26,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         }
     }), { refreshDeps: [JSON.stringify(ids)] })
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+    const { loading: confirmLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan`, { ...data })
             resole(result)
@@ -42,6 +42,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             setDataSource(result.slice(0));
         }
     }, [number])
+
     const handleSubmit = () => new Promise(async (resole, reject) => {
         try {
             await saveRun({
@@ -55,7 +56,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         }
     })
 
-    useImperativeHandle(ref, () => ({ onSubmit: handleSubmit }))
+    useImperativeHandle(ref, () => ({ onSubmit: handleSubmit, confirmLoading }), [handleSubmit, confirmLoading])
 
     return <Spin spinning={loading}>
         <Row gutter={10}>

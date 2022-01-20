@@ -110,7 +110,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         if (fields.relatednotes) {
             let pleasePayAmount = 0
             fields.relatednotes.records.forEach((item: any) => {
-                pleasePayAmount = Number(pleasePayAmount + parseFloat(item.invoiceAmount || "0").toFixed(2))
+                pleasePayAmount = parseFloat(pleasePayAmount + parseFloat(item.invoiceAmount || "0").toFixed(2))
             })
             baseForm.setFieldsValue({
                 pleasePayAmount,

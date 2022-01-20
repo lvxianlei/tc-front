@@ -73,11 +73,13 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                     <Radio.Button value="base">咨询结果</Radio.Button>
                     <Radio.Button value="records">咨询信息</Radio.Button>
                 </Radio.Group>
-                <DetailTitle title="询价类型：供应询价" style={{padding: "0 0 8px 0"}}/>
+                <DetailTitle title="询价类型：供应询价" style={{ padding: "0 0 8px 0" }} />
                 {radioValue === "base" && <>
-                    <BaseInfo columns={supplyAskInfo} dataSource={data || {}}  col={2}/>
+                    <BaseInfo columns={supplyAskInfo} dataSource={data || {}} col={2} />
                     <DetailTitle title="国网批次招标投标原材料报价" />
                     <CommonTable columns={materialPriceHead} dataSource={data?.materialPriceVOS || []} />
+                    <DetailTitle title="补充信息" />
+                    <Row>{data?.replyMessage || ""}</Row>
                     <Attachment dataSource={data?.replyAttachVos || []} />
                 </>}
                 {radioValue === "records" && <>
@@ -91,18 +93,18 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                     <Radio.Button value="base">咨询结果</Radio.Button>
                     <Radio.Button value="records">咨询信息</Radio.Button>
                 </Radio.Group>
-                <DetailTitle title="询价类型：物流询价" style={{padding: "0 0 8px 0"}}/>
+                <DetailTitle title="询价类型：物流询价" style={{ padding: "0 0 8px 0" }} />
                 {radioValue === "base" && <>
-                    <BaseInfo columns={logisticAskInfo} dataSource={data || {}}  col={2}/>
+                    <BaseInfo columns={logisticAskInfo} dataSource={data || {}} col={2} />
                     <DetailTitle title="产品类型信息" />
                     <CommonTable columns={logisticProductType.map((item: any) => item.dataIndex === "productType" ? ({
                         ...item,
                         render: (_a: any, record: any) => `${record.voltage}kv${record.productName}`
                     }) : item)} dataSource={data?.askLogisticsVOS || []} />
-                    <Attachment title="咨询附件" dataSource={data?.attachVos || []} />
+                    <Attachment title="咨询附件" dataSource={data?.replyAttachVos || []} />
                 </>}
                 {radioValue === "records" && <>
-                    <BaseInfo columns={logisticBaseInfo} dataSource={data || {}}  col={2}/>
+                    <BaseInfo columns={logisticBaseInfo} dataSource={data || {}} col={2} />
                     <DetailTitle title="产品类型信息" />
                     <CommonTable columns={logisticProductReverdType.map((item: any) => item.dataIndex === "productType" ? ({
                         ...item,
@@ -114,12 +116,12 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
             </>}
 
             {props.type === "selectC" && <>
-                <Radio.Group defaultValue={radioValue} style={{marginBottom: 12}} onChange={(event: any) => radioOnchange(event.target.value)}>
+                <Radio.Group defaultValue={radioValue} style={{ marginBottom: 12 }} onChange={(event: any) => radioOnchange(event.target.value)}>
                     <Radio.Button value="base">咨询结果</Radio.Button>
                     <Radio.Button value="records">咨询信息</Radio.Button>
                 </Radio.Group>
                 {radioValue === "base" && <>
-                    <BaseInfo columns={workmanshipReverd} dataSource={data || {}}  col={2}/>
+                    <BaseInfo columns={workmanshipReverd} dataSource={data || {}} col={2} />
                     <Attachment title="附件" dataSource={data?.replyAttachVos || []} />
                 </>}
                 {radioValue === "records" && <>

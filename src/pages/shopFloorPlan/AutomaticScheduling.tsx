@@ -7,53 +7,38 @@ import { ISchedulingList } from './IShopFloorPlan';
 import { detailColumns } from "./shopFloorPlan.json";
 import { useHistory, useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
-import moment from 'moment';
+
+let prompt: any = false
 
 export default function AutomaticScheduling(): React.ReactNode {
     const [form] = Form.useForm();
     const params = useParams<{ id: string }>();
     const history = useHistory();
     const [loading, setLoading] = useState(true);
-    let timer: any = {};
-    let prompt: any = {};
 
-    useEffect(() => {
-        return () => {
-            clearTimeout(timer);
-            clearTimeout(prompt);
-        };
-    })
+    const { run: checkRun, data: result, cancel } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: boolean = await RequestUtil.get(`/tower-aps/aps/check?ids=${params.id}`);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true, pollingInterval: 4000 })
+
     const { data } = useRequest(() => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(`/tower-aps/aps?ids=${params.id}`);
+            const data = await RequestUtil.post(`/tower-aps/aps?ids=${params.id}`);
+            prompt = setTimeout(() => {
+                setLoading(false);
+                cancel();
+                message.error("当前没有适用的工作中心");
+            }, 10000)
             checkRun();
-            resole(result)
+            resole(data)
         } catch (error) {
             reject(error)
         }
     }))
-
-    const { run: checkRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/aps/check?ids=${params.id}`);
-            if (result) {
-                run();
-                clearTimeout(timer);
-                clearTimeout(prompt);
-                setLoading(false);
-            } else {
-                timer = setTimeout(() => checkRun(), 4000)
-                prompt = setTimeout(() => {
-                    message.warning('当前没有适用的工作中心');
-                    clearTimeout(timer);
-                    setLoading(false);
-                }, 10000)
-            }
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
 
     const { data: schedulingList, run } = useRequest<ISchedulingList[]>((filterValue) => new Promise(async (resole, reject) => {
         try {
@@ -66,6 +51,14 @@ export default function AutomaticScheduling(): React.ReactNode {
             reject(error)
         }
     }), { manual: true })
+
+    useEffect(() => {
+        result && cancel();
+        result && run();
+        result && clearTimeout(prompt);
+        result && setLoading(false);
+        !loading && cancel();
+    }, [result, loading])
 
     const { data: productUnitData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -88,8 +81,8 @@ export default function AutomaticScheduling(): React.ReactNode {
     return <div id="plan"><DetailContent key="scheduling">
         <Form form={form} onFinish={async (values) => await run({
             ...values,
-            startTime: values.time && moment(values?.time[0]),
-            endTime: values.time && moment(values?.time[1])
+            startTime: values.time && values?.time[0].format('YYYY-MM-DD') + ' 00:00:00',
+            endTime: values.time && values?.time[1].format('YYYY-MM-DD') + ' 23:59:59'
         })}>
             <Row>
                 <Col className={styles.right}>

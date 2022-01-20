@@ -75,7 +75,7 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <span style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}} onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</span>
+                        <span style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }} onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</span>
                         <Button className="btn-operation-link" type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
                         <Button className="btn-operation-link" type="link" size="small" disabled={record.state !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
@@ -84,10 +84,6 @@ export default function Invoicing() {
         extraOperation={<Link to="/project/invoicing/edit/new"><Button type="primary">新增开票申请</Button></Link>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
-            {
-                name: 'fuzzyQuery',
-                children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
-            },
             {
                 name: 'isOpen',
                 label: '是否已全开',
@@ -109,7 +105,12 @@ export default function Invoicing() {
                 name: 'startLaunchTime',
                 label: '申请日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-            }
+            },
+            {
+                name: 'fuzzyQuery',
+                label: "模糊查询项",
+                children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
+            },
         ]}
     />
 }

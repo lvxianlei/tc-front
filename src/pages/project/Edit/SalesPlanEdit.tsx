@@ -57,7 +57,8 @@ export default function SalesPlanEdit() {
 
     const { loading: modalLoading, data: modalData, run: modalRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductBySaleOrderId?saleOrderId=${id}`)
+            const paramsData = match.params.type === "new" ? { saleOrderId: id } : { saleOrderId: id, taskNoticeId: match.params.id }
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductBySaleOrderId`, paramsData)
             resole(result)
         } catch (error) {
             reject(error)
@@ -144,6 +145,7 @@ export default function SalesPlanEdit() {
             ...selectRows,
             ...productDetails.filter((pro: any) => !select.includes(pro.id))]
         newProductDetails.forEach(item => {
+            item.deliveryTime && delete item.deliveryTime
             if (productDetailsData[item.id]) {
                 newProductDetailsData[item.id] = { ...item, ...productDetailsData[item.id] }
             } else {
@@ -181,7 +183,6 @@ export default function SalesPlanEdit() {
         })
         setProductDetails(productDetailsResult)
         productDetailsForm.setFieldsValue(productDetailsData)
-        console.log(productDetailsForm.getFieldsValue())
         setSelect(productDetailsResult.map(item => item.id))
         setSelectRows(productDetailsResult)
     }
@@ -255,9 +256,10 @@ export default function SalesPlanEdit() {
                                 ...item,
                                 render: (value: string, record: any) => <Form.Item
                                     name={[record.id, item.dataIndex]}
+                                    initialValue={value}
                                     rules={item.rules}
                                 >
-                                    <FormItemType value={value} type={item.type} data={item} />
+                                    <FormItemType type={item.type} data={item} />
                                 </Form.Item>
                             })
                         }

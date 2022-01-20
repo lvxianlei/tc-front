@@ -39,6 +39,7 @@ export interface IAbstractContractSettingState extends IAbstractFillableComponen
     readonly isVisible: boolean;
     readonly attchRef: AttachmentRef;
     readonly biddingBatch?: string;
+    readonly contractAdd?: any
 }
 
 export interface ITabItem {
@@ -142,6 +143,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         isVisible: false,
         region: "",
         biddingBatch: "",
+        contractAdd: {}, // 项目带过来的数据
     } as S;
 
     public async componentDidMount() {
@@ -153,10 +155,16 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public getRegionInfoContract = async () => {
         const resData: any = await RequestUtil.get(`/tower-market/projectInfo/${(this.props.match.params as any).projectId}`);
         this.setState({
-            biddingBatch: resData?.bidBatch
+            biddingBatch: resData?.bidBatch,
+            contractAdd: {
+                ...resData,
+                address: resData.address === "其他-国外" ? resData.address : `${resData.bigRegion}-${resData.address}`
+            }
         })
         this.getForm()?.setFieldsValue({
-            bidBatch: resData?.bidBatch
+            bidBatch: resData?.bidBatch,
+            region: resData.address === "其他-国外" ? resData.address : `${resData.bigRegion}-${resData.address}`,
+            country: resData?.country || "",
         })
     }
 

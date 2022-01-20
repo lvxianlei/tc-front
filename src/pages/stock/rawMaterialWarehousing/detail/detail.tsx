@@ -11,13 +11,12 @@
  import useRequest from '@ahooksjs/use-request';
  import { useParams, useHistory } from 'react-router-dom';
  import { baseColumn } from "./detail.json";
+ 
+ import '../../StockPublicStyle.less';
+ import './detail.less';
 
  const { TextArea } = Input;
- interface EditRefProps {
-    id?: string
-    onSubmit: () => void
-    resetFields: () => void
-}
+
  export default function RawMaterialWarehousing(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const history = useHistory();
@@ -111,6 +110,8 @@
         if (data) {
             message.success('拒收成功')
             setRejectionModal(false)
+            // 刷新页面
+            history.go(0);
         }
     }
 
@@ -170,6 +171,8 @@
         }]);
         if (data) {
             onReceivingCancel()
+            // 刷新页面
+            history.go(0);
         }
     }
 
@@ -211,14 +214,14 @@
                      {
                         title: '操作',
                         dataIndex: 'key',
-                        width: 240,
+                        width: 80,
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
                                 {/* <span>质检单</span>
                                 <span>质保单</span> */}
-                                {record.receiveStatus == 0 ? <Button type='link' onClick={() => { ReceivingBtn(record) }}>收货</Button> : null}
-                                {record.receiveStatus == 0 ? <Button type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button> : null}
+                                <Button className='btn-operation-link' type='link' disabled={record.receiveStatus !== 0} onClick={() => { ReceivingBtn(record) }}>收货</Button>
+                                <Button className='btn-operation-link' disabled={record.receiveStatus !== 0} type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button>
                             </>
                         )
                     }
@@ -227,7 +230,7 @@
                     <>
                         <Button type="primary" ghost onClick={() => message.error("暂未开发此功能")} >申请质检</Button>
                         <Button type="ghost" onClick={() => history.go(-1)}>返回</Button>
-                        <div>已收货：重量(吨)合计：{statisticsData?.receiveWeight}, 已收货：价税合计(元)合计：{statisticsData?.receivePrice} ,  待收货：重量(吨)合计：{statisticsData?.waitWeight}待收货：价税合计(元)合计：{statisticsData?.waitPrice}</div>
+                        <div>已收货：重量(吨)合计：<span style={{marginRight: 12, color: "#FF8C00"}}>{statisticsData?.receiveWeight}</span>已收货：价税合计(元)合计：<span style={{marginRight: 12, color: "#FF8C00"}}>{statisticsData?.receivePrice}</span> 待收货：重量(吨)合计：<span style={{marginRight: 12, color: "#FF8C00"}}>{statisticsData?.waitWeight}</span>待收货：价税合计(元)合计：<span style={{marginRight: 12, color: "#FF8C00"}}>{statisticsData?.waitPrice}</span></div>
                     </>
                 }
                  onFilterSubmit={onFilterSubmit}
@@ -240,9 +243,9 @@
                     },
                     {
                         name: 'receiveStatus',
-                        label: '状态',
+                        label: '采购状态',
                         children: (
-                            <Select placeholder="请选择标准" style={{ width: "140px" }}>
+                            <Select placeholder="请选择采购状态" style={{ width: "140px" }}>
                                     <Select.Option value="0">待收货</Select.Option>
                                     <Select.Option value="1">已收货</Select.Option>
                                     <Select.Option value="2">已拒绝</Select.Option>
@@ -251,7 +254,7 @@
                     },
                     {
                         name: 'fuzzyQuery',
-                        label: "关键字",
+                        label: "模糊查询项",
                         children: <Input placeholder="请输入炉批号/收货批次/批号/质保书号/轧制批号进行查询" style={{ width: 300 }} />
                     }
                  ]}

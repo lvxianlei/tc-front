@@ -35,22 +35,7 @@
         },
         {
             "title": "企业类型",
-            "dataIndex": "businessType",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "供应商",
-                    "value": 1
-                },
-                {
-                    "label": "装卸公司",
-                    "value": 2
-                },
-                {
-                    "label": "运输公司",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "businessTypeName"
         },
         {
             "title": "企业名称",
@@ -59,31 +44,12 @@
         },
         {
             "title": "发票类型",
-            "dataIndex": "invoiceType",
+            "dataIndex": "invoiceTypeName",
             "type": "string"
         },
         {
             "title": "状态",
-            "dataIndex": "invoiceStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "已收票",
-                    "value": 1
-                },
-                {
-                    "label": "待付款",
-                    "value": 2
-                },
-                {
-                    "label": "已付款",
-                    "value": 3
-                },
-                {
-                    "label": "已作废",
-                    "value": 4
-                }
-            ]
+            "dataIndex": "invoiceStatusName"
         },
         {
             "title": "最新状态变更时间",
@@ -409,49 +375,11 @@
         },
         {
             "title": "请款状态",
-            "dataIndex": "pleasePayStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "已创建",
-                    "value": 1
-                },
-                {
-                    "label": "待付款",
-                    "value": 2
-                },
-                {
-                    "label": "已付款",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "pleasePayStatusName"
         },
         {
             "title": "审批状态",
-            "dataIndex": "applyStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "未发起",
-                    "value": 0
-                },
-                {
-                    "label": "待审批",
-                    "value": 1
-                },
-                {
-                    "label": "已拒绝",
-                    "value": 2
-                },
-                {
-                    "label": "已撤回",
-                    "value": 3
-                },
-                {
-                    "label": "已通过",
-                    "value": 4
-                }
-            ]
+            "dataIndex": "applyStatusName"
         },
         {
             "title": "最新状态变更时间",
@@ -459,22 +387,7 @@
         },
         {
             "title": "企业类型",
-            "dataIndex": "businessType",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "供应商",
-                    "value": 1
-                },
-                {
-                    "label": "装卸公司",
-                    "value": 2
-                },
-                {
-                    "label": "运输公司",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "businessName"
         },
         {
             "title": "企业名称",
@@ -487,12 +400,12 @@
         },
         {
             "title": "请款类别",
-            "dataIndex": "pleasePayType",
+            "dataIndex": "pleasePayTypeName",
             "type": "select"
         },
         {
             "title": "付款方式",
-            "dataIndex": "paymentMethod",
+            "dataIndex": "paymentMethodName",
             "type": "string"
         }
     ],
@@ -656,7 +569,7 @@
         {
             "title": "企业类型",
             "dataIndex": "businessTypeName",
-            "type": "select"
+            "type": "string"
         },
         {
             "title": "所属企业",
@@ -699,7 +612,7 @@
         {
             "title": "请款机构",
             "dataIndex": "pleasePayOrganizationName",
-            "type": "select"
+            "type": "string"
         },
         {
             "title": "银行账号",

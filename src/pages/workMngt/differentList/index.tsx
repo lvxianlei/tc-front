@@ -60,7 +60,7 @@ export default function Invoicing() {
                 fixed: "right",
                 width: 100,
                 render: (_: any, record: any) => {
-                    return <Link to={`/workMngt/differentList/detail/${record.id}`}>查看</Link>
+                    return <Link to={`/ingredients/differentList/detail/${record.id}`}>查看</Link>
 
                 }
             }]}
@@ -88,10 +88,9 @@ export default function Invoicing() {
             },
             {
                 name: 'fuzzyQuery',
-                label: '查看',
+                label: "模糊查询项",
                 children: <Input placeholder="差异编号/内部合同编号/生产批次/塔型" style={{ width: 300 }} />
             }
-
         ]}
     />
 }

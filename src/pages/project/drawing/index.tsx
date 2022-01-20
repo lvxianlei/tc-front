@@ -165,7 +165,7 @@ export default function Drawing(): React.ReactNode {
                 fixed: "right",
                 render: (_: undefined, record: any) => <>
                     <span
-                        style={{color: "#FF8C00", cursor: "pointer", marginRight: 12}}
+                        style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }}
                         onClick={() => {
                             setDetailedId(record.id)
                             setDetailVisible(true)
@@ -184,7 +184,7 @@ export default function Drawing(): React.ReactNode {
                         type="link"
                         size="small"
                         disabled={(![null, "-1", -1, 4].includes(record.auditStatus)) || record.contractId}
-                         className="btn-operation-link"
+                        className="btn-operation-link"
                         onClick={() => {
                             setDetailedId(record.id)
                             setConnectVisible(true)
@@ -194,7 +194,7 @@ export default function Drawing(): React.ReactNode {
                         size="small"
                         disabled={![0, 3].includes(record.auditStatus)}
                         onClick={() => handleDelete(record.id)}
-                         className="btn-operation-link"
+                        className="btn-operation-link"
                     >删除</Button>
                     <Button
                         type="link"
@@ -216,13 +216,6 @@ export default function Drawing(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'fuzzyQuery',
-                    children: <Input
-                        placeholder="工程名称/业务经理/合同名称/内部合同编号"
-                        style={{ width: 260 }}
-                    />
-                },
-                {
                     name: 'startRefundTime',
                     label: '制单日期',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
@@ -237,7 +230,15 @@ export default function Drawing(): React.ReactNode {
                         <Select.Option value={3}>已拒绝</Select.Option>
                         <Select.Option value={4}>已完成</Select.Option>
                     </Select>
-                }
+                },
+                {
+                    name: 'fuzzyQuery',
+                    label: "模糊查询项",
+                    children: <Input
+                        placeholder="工程名称/业务经理/合同名称/内部合同编号"
+                        style={{ width: 260 }}
+                    />
+                },
             ]}
         />
     </>

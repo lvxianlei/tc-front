@@ -115,7 +115,7 @@ export default function ConfirmDetail(): React.ReactNode {
         dataIndex!=="basicHeight" && formRef.setFieldsValue({
             totalWeight:number + value
         })
-      }} min={0} precision={2}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
+      }} min={0} precision={2} max={dataIndex!=='basicHeight'&&dataIndex!=='otherWeight'? 99999.99 :dataIndex ==='basicHeight'?99.99: 999999.99}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
         return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
       })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={dataIndex==='description'?400:10} rows={1}/>:<Input />;
       if(dataIndex === 'name'){
@@ -178,6 +178,7 @@ export default function ConfirmDetail(): React.ReactNode {
     const onDelete = (key: React.Key)=>{
       const newData:any = [...tableDataSource];
       const index = newData.findIndex((item:any) => key === item.key);
+      console.log(newData[index])
       if (index > -1 && newData[index].id) {
         RequestUtil.delete(`/tower-science/drawProductDetail?id=${newData[index].id}`)
         newData.splice(index, 1);
@@ -219,6 +220,9 @@ export default function ConfirmDetail(): React.ReactNode {
           totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
         })
         setWeight(totalNumber);
+        RequestUtil.post(`/tower-science/drawProductDetail/save`,newData[index]).then(()=>{
+          message.success('保存成功！')
+        })
       } catch (errInfo) {
         console.log('Validate Failed:', errInfo);
       }
@@ -521,13 +525,18 @@ export default function ConfirmDetail(): React.ReactNode {
             submitData.key = tableDataSource && tableDataSource.length.toString();
             submitData.otherWeight = submitData.otherWeight?submitData.otherWeight:0;
             submitData.index = tableDataSource.length;
+            const id:any = await RequestUtil.post(`/tower-science/drawProductDetail/save`,{
+              ...submitData,
+              drawTaskId: params.id
+            })
+            submitData['id'] = id;
             tableDataSource.push(submitData);
-            setTableDataSource(tableDataSource);
             let number = '0';
             tableDataSource.forEach((item:any)=>{
                 number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(2)
             })
             setWeight(number);
+            setTableDataSource(tableDataSource);
             form.resetFields();
             setVisible(false);
         } catch (error) {
@@ -619,7 +628,7 @@ export default function ConfirmDetail(): React.ReactNode {
             resolve(a.length)
           }
           else{
-            resolve(false)
+            resolve(1)
           }
       }).catch(error => {
           Promise.reject(error)
@@ -1001,7 +1010,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     monomerWeight:dataA+dataB+dataC+dataD+value,
                                     totalWeight:data+dataA+dataB+dataC+dataD+value
                                 })
-                            }} max={999.99}/>
+                            }} max={99999.99}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -1016,7 +1025,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     monomerWeight:dataA+dataB+dataC+dataD+value,
                                     totalWeight:data+dataA+dataB+dataC+dataD+value
                                 })
-                            }} max={999.99}/>
+                            }} max={99999.99}/>
                         </Form.Item>
                       </Col>
                     </Row>
@@ -1033,7 +1042,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     monomerWeight:dataA+dataB+dataC+dataD+value,
                                     totalWeight:data+dataA+dataB+dataC+dataD+value
                                 })
-                            }} max={999.99}/>
+                            }} max={99999.99}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -1048,7 +1057,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     monomerWeight:dataA+dataB+dataC+dataD+value,
                                     totalWeight:data+dataA+dataB+dataC+dataD+value
                                 })
-                            }} max={999.99}/>
+                            }} max={99999.99}/>
                         </Form.Item>
                       </Col>
                     </Row>
@@ -1068,7 +1077,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     monomerWeight:dataA+dataB+dataC+dataD+value,
                                     totalWeight:data+dataA+dataB+dataC+dataD+value
                                 })
-                            }} max={999.99}/>
+                            }} max={999999.99}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -1076,7 +1085,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入单重（kg）"
                         }]} initialValue={0}>
-                            <InputNumber precision={2} style={{width:'100%'}} disabled  max={999.99}/>
+                            <InputNumber precision={2} style={{width:'100%'}} disabled  max={9999999.99}/>
                         </Form.Item>
                       </Col>
                     </Row>
@@ -1088,7 +1097,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                 form.setFieldsValue({
                                     totalWeight:data+value
                                 })
-                            }} max={999.99}/>
+                            }} max={999999.99}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>

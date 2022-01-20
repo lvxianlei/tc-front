@@ -209,6 +209,7 @@ export default function ApplyPayment() {
         </Modal>
         <Page
             path="/tower-supply/applyPayment"
+            exportPath={"/tower-supply/applyPayment/export"}
             sourceKey="page.records"
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
@@ -228,21 +229,21 @@ export default function ApplyPayment() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <a  className="btn-operation-link" onClick={() => {
+                            <a className="btn-operation-link" onClick={() => {
                                 setDetailId(record.id)
                                 setDetailVisible(true)
                             }}>详情</a>
                             <Button
                                 type="link"
-                                 className="btn-operation-link"
+                                className="btn-operation-link"
                                 disabled={![0, 3].includes(record.applyStatus)}
                                 onClick={() => {
                                     setType("edit")
                                     setDetailId(record.id)
                                     setVisible(true)
                                 }}>编辑</Button>
-                            <Button type="link"  className="btn-operation-link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
-                            <Button type="link"  className="btn-operation-link" disabled={![1].includes(record.applyStatus)}
+                            <Button type="link" className="btn-operation-link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
+                            <Button type="link" className="btn-operation-link" disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
                             {/* <Button
                                 type="link"
@@ -262,7 +263,6 @@ export default function ApplyPayment() {
                     }
                 }]}
             extraOperation={(data: any) => <>
-                <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => {
                     setType("new")
                     setVisible(true)
@@ -296,7 +296,8 @@ export default function ApplyPayment() {
                         <Select.Option value="">全部</Select.Option>
                         <Select.Option value="1">已创建</Select.Option>
                         <Select.Option value="2">待付款</Select.Option>
-                        <Select.Option value="3">已付款</Select.Option>
+                        <Select.Option value="3">部分付款</Select.Option>
+                        <Select.Option value="4">已付款</Select.Option>
                     </Select>
                 },
                 {
@@ -318,7 +319,7 @@ export default function ApplyPayment() {
                     </Select>
                 },
                 {
-                    label: '查询',
+                    label: "模糊查询项",
                     name: 'fuzzyQuery',
                     children: <Input placeholder="请款编号/关联到货单/关联票据/供应商" style={{ width: 300 }} />
                 }

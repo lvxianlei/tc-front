@@ -145,6 +145,7 @@ export default function FullList(): React.ReactNode {
         }
     ];
     const onFilterSubmit = (value: any) => {
+        value.positiveStatus = value.positiveStatus?value.positiveStatus===3?'':value.positiveStatus:1 
         setFilterValue(value)
         return value
     }
@@ -160,11 +161,6 @@ export default function FullList(): React.ReactNode {
                 filterValue={ filterValue }
                 searchFormItems={[
                     {
-                        name: 'employeeName',
-                        label: '模糊查询项',
-                        children: <Input placeholder="请输入员工名称进行查询" maxLength={200} style={{width:'200px'}}/>
-                    },
-                    {
                         name: 'checkResult',
                         label: '考核结果',
                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
@@ -178,10 +174,15 @@ export default function FullList(): React.ReactNode {
                         name: 'positiveStatus',
                         label: '转正状态',
                         children: <Select placeholder="请选择" style={{ width: "150px" }} defaultValue={1}>
-                            <Select.Option value={''} key="">全部</Select.Option>
+                            <Select.Option value={3} key="3">全部</Select.Option>
                             <Select.Option value={1} key="1">待转正</Select.Option>
                             <Select.Option value={2} key="2">已转正</Select.Option>
                         </Select>
+                    },
+                    {
+                        name: 'employeeName',
+                        label: '模糊查询项',
+                        children: <Input placeholder="请输入员工名称进行查询" maxLength={200} style={{width:'200px'}}/>
                     },
                 ]}
             />

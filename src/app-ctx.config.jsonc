@@ -203,13 +203,13 @@
                     {
                         "label": "工作台",
                         "icon": "gongying-gongzuotai_gongzuotai",
-                        "path": "/workBench",
+                        "path": "/supply",
                         "appName": "SW",
                         "authority": "workbench",
                         "items": [
                             {
                                 "label": "供应工作台",
-                                "path": "/workBench/sw",
+                                "path": "/supply/sw",
                                 "authority": "workbench_supply"
                             }
                         ]
@@ -236,28 +236,28 @@
                     {
                         "label": "驾驶舱",
                         "icon": "gongying-jiashicang_jiashichang",
-                        "path": "/cockpit",
+                        "path": "/bulletin",
                         "appName": "SW",
                         "authority": "cockpit",
                         "items": [
                             {
                                 "label": "库存看板",
-                                "path": "/cockpit/viewPanel",
+                                "path": "/bulletin/viewPanel",
                                 "authority": "cockpit_inventory_kanban"
                             },
                             {
                                 "label": "原材料看板",
-                                "path": "/cockpit/rawMaterial",
+                                "path": "/bulletin/rawMaterial",
                                 "authority": "cockpit_raw_material_kanban"
                             },
                             {
                                 "label": "收货单看板",
-                                "path": "/cockpit/receiveTask",
+                                "path": "/bulletin/receiveTask",
                                 "authority": "cockpit_receipt_kanban"
                             },
                             {
                                 "label": "合同看板",
-                                "path": "/cockpit/contract",
+                                "path": "/bulletin/contract",
                                 "authority": "cockpit_contract_kanban"
                             }
                         ]
@@ -285,12 +285,12 @@
                         "items": [
                             {
                                 "label": "供应商管理",
-                                "path": "/cooperative/supplier-mngt/index",
+                                "path": "/cooperative/supplier-mngt",
                                 "authority": "supplier_mngt_list"
                             },
                             {
                                 "label": "装卸公司管理",
-                                "path": "/cooperative/stevedoring-company-mngt/stevedoringCompany",
+                                "path": "/cooperative/stevedoring-company-mngt",
                                 "authority": "supplier_mngt_list"
                             }
                         ]
@@ -371,7 +371,7 @@
                         "items": [
                             {
                                 "label": "评估任务",
-                                "path": "/assessmentTask",
+                                "path": "/assessmentTask/assessmentTaskList",
                                 "authority": "rd_assess_task_management"
                             }
                         ]
@@ -399,7 +399,7 @@
                         "items": [
                             {
                                 "label": "放样任务",
-                                "path": "/setOutTask",
+                                "path": "/setOutTask/setOutTaskList",
                                 "authority": "rd_lofting_task"
                             }
                         ]
@@ -451,9 +451,9 @@
                                 "authority": "rd_loft_task_list"
                             },
                             {
-                                "label": "螺栓列表",
-                                "path": "/workMngt/boltList",
-                                "authority": "rd_bolt_management"
+                                "label": "组焊列表",
+                                "path": "/workMngt/assemblyWeldingList",
+                                "authority": "rd_welding"
                             },
                             {
                                 "label": "小样图列表",
@@ -461,9 +461,9 @@
                                 "authority": "rd_small_sample_management"
                             },
                             {
-                                "label": "组焊列表",
-                                "path": "/workMngt/assemblyWeldingList",
-                                "authority": "rd_welding"
+                                "label": "螺栓列表",
+                                "path": "/workMngt/boltList",
+                                "authority": "rd_bolt_management"
                             },
                             {
                                 "label": "样板列表",
@@ -475,48 +475,48 @@
                     {
                         "label": "工作管理",
                         "icon": "gongying-gongzuoguanli_gongzuoguanli",
-                        "path": "/workMngt",
+                        "path": "/ingredients",
                         "appName": "SW",
                         "authority": "work_management",
                         "items": [
                             {
                                 "label": "工程报价列表",
-                                "path": "/workMngt/enquiry",
+                                "path": "/ingredients/enquiry",
                                 "authority": "work_management_inquiry_list"
                             },
                             {
                                 "label": "采购配料",
-                                "path": "/workMngt/buyBurdening",
+                                "path": "/ingredients/buyBurdening",
                                 "authority": "work_management_purchase_ingredients"
                             },
                             {
                                 "label": "采购列表",
-                                "path": "/workMngt/purchaseList",
+                                "path": "/ingredients/purchaseList",
                                 "authority": "work_management_purchase_list"
                             },
                             {
                                 "label": "计划列表",
-                                "path": "/workMngt/planList",
+                                "path": "/ingredients/planList",
                                 "authority": "work_management_plan_list"
                             },
                             {
                                 "label": "生产配料",
-                                "path": "/workMngt/production",
+                                "path": "/ingredients/production",
                                 "authority": "work_management_production_ingredients"
                             },
                             {
                                 "label": "收货列表",
-                                "path": "/workMngt/receiving",
+                                "path": "/ingredients/receiving",
                                 "authority": "work_management_receiving_list"
                             },
                             {
                                 "label": "差异列表",
-                                "path": "/workMngt/differentList",
+                                "path": "/ingredients/differentList",
                                 "authority": "work_management_difference_list"
                             },
                             {
                                 "label": "缺料列表",
-                                "path": "/workMngt/shortageList",
+                                "path": "/ingredients/shortageList",
                                 "authority": "work_management_shortage_list"
                             }
                         ]
@@ -602,6 +602,11 @@
                                 "label": "计划排产",
                                 "path": "/planProd/planMgmt",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "技术下发",
+                                "path": "/planSchedule/planScheduleMngt",
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -614,7 +619,7 @@
                         "items": [
                             {
                                 "label": "车间加工计划",
-                                "path": "/shopFloorPlan",
+                                "path": "/shopFloorPlan/shopFloorPlanList",
                                 "authority": "approvalm"
                             }
                         ]
@@ -748,7 +753,7 @@
                         "items": [
                             {
                                 "label": "公告管理",
-                                "path": "/announcement",
+                                "path": "/announcement/list",
                                 "authority": "announcement_management_list"
                             }
                         ]
@@ -813,18 +818,18 @@
                     {
                         "label": "系统日志",
                         "icon": "xitongrizhiTY_xitongrizhi",
-                        "path": "/systemLog",
+                        "path": "/journal",
                         "appName": "COMM",
                         "authority": "system_log",
                         "items": [
                             {
                                 "label": "操作日志",
-                                "path": "/systemLog/operationLog",
+                                "path": "/journal/operationLog",
                                 "authority": "approvalm"
                             },
                             {
                                 "label": "登录日志",
-                                "path": "/systemLog/login",
+                                "path": "/journal/login",
                                 "authority": "system_log_login_log"
                             }
                         ]
@@ -886,42 +891,42 @@
                             {
                                 "label": "招聘入职",
                                 "path": "/employeeRelation/recruit",
-                                "authority": "employee_information_list"
+                                "authority": "hr_employee_information_management"
                             },
                             {
                                 "label": "员工档案",
                                 "path": "/employeeRelation/archives",
-                                "authority": "employee_archives_list"
+                                "authority": "hr_employee_archives_management"
                             },
                             {
                                 "label": "劳动合同",
                                 "path": "/employeeRelation/labour",
-                                "authority": "employee_labor_contract_list"
+                                "authority": "hr_employee_labor_contract_management"
                             },
                             {
                                 "label": "转正考核",
                                 "path": "/employeeRelation/full",
-                                "authority": "positive_check_list"
+                                "authority": "hr_employee_labor_contract_management"
                             },
                             {
                                 "label": "员工调动",
                                 "path": "/employeeRelation/transfer",
-                                "authority": "hr_employee_transfer_page"
+                                "authority": "hr_employee_transfer_management"
                             },
                             {
                                 "label": "员工离职",
                                 "path": "/employeeRelation/quit",
-                                "authority": "hr_employee_departurenc_page"
+                                "authority": "hr_employee_departurenc_management"
                             },
                             {
                                 "label": "办理离职",
                                 "path": "/employeeRelation/quitProcedures",
-                                "authority": "hr_employee_departurenc_handlePage"
+                                "authority": "hr_handle_departurenc_management"
                             },
                             {
                                 "label": "员工复职",
                                 "path": "/employeeRelation/reinstate",
-                                "authority": "hr_employee_reinstatement_page"
+                                "authority": "hr_employee_reinstatement_management"
                             }
                         ]
                     },
@@ -935,12 +940,12 @@
                             {
                                 "label": "保险方案",
                                 "path": "/socialSecurity/plan",
-                                "authority": "hr_insurance_plan_page"
+                                "authority": "hr_insurance_plan_management"
                             },
                             {
                                 "label": "员工保险档案",
                                 "path": "/socialSecurity/archives",
-                                "authority": "hr_insurance_archives_page"
+                                "authority": "hr_insurance_archives_management"
                             }
                         ]
                     },

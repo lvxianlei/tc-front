@@ -72,9 +72,11 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         };
     }
 
-    public getTableProps() {
+    public getTableProps(): TableProps<object> {
         return {
             ...super.getTableProps(),
+            pagination: false,
+            size:'small',
             rowSelection: {
                 type: this.props.rowSelectionType || 'radio',
                 selectedRowKeys: this.state.selectedRowKeys,
@@ -118,7 +120,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         const selectKeys: [] = this.props.selectKey;
         let newData: any = resData;
         selectKeys?.forEach((item: any) => {
-            newData = newData.filter((res:any) => res.id !== item.id);
+            newData = newData.filter((res:any) => res.userId !== item.userId);
         })
         this.setState({
             ...filterValues,

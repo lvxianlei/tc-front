@@ -87,7 +87,7 @@ export const UploadXLS = (props: {
       title={<>
         文件导入要求：<br />
         1、仅Excel文件导入（xls，xlsx均可）。<br />
-        2、列名必须包括包号、投标人名称、分标编号、货物类别、项目单位、总价、重量
+        2、列名必须包括包号、投标人名称、分标编号、货物类别、项目单位、总价（元）、 重量（吨）"
       </>}><InfoCircleOutlined style={{ fontSize: 20, lineHeight: "32px" }} /></Tooltip>}
   </>)
 }

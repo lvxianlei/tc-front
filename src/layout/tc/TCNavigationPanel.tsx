@@ -21,7 +21,8 @@ export interface ITCNavigationPanelRouteProps extends RouteComponentProps<ITCNav
     readonly menu: IMenuItem[]
 }
 export interface ITCNavigationPanelState {
-    readonly selectedDarkMenuItem: IMenuItem | undefined;
+    readonly selectedDarkMenuItem: any | undefined;
+    readonly selectedSubMenuItem: any | undefined;
 }
 
 /**
@@ -36,8 +37,11 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
      */
     constructor(props: ITCNavigationPanelRouteProps) {
         super(props);
+        const selectedDarkMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, props?.location.pathname);
+        // const selectedSubMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(selectedDarkMenuItem?.items || [], props?.location.pathname);
         this.state = {
-            selectedDarkMenuItem: ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, props.location.pathname)
+            selectedDarkMenuItem: [props.location.pathname] || [],
+            selectedSubMenuItem: selectedDarkMenuItem?.path ? [selectedDarkMenuItem.path] : []
         };
         setTimeout(() => {
             EventBus.addListener('get/authorities', this.flushRender, this);
@@ -75,14 +79,53 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
      * @description Renders TCNavigationPanel
      * @returns render 
      */
-    public render(): React.ReactNode {
-        const { location } = this.props;
+    componentWillReceiveProps(props: any) {
+        const { location } = props;
+        const result = this.getParentId(props?.menu, `/${props?.location?.pathname.split("/")[1]}/${props?.location?.pathname.split("/")[2]}`),
+            v = [];
+        if (result && result.length > 0) {
+            for (let i = 0; i < result.length; i += 1) {
+                v.push(result[i].path)
+            }
+        }
         const selectedDarkMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, location.pathname);
-        const selectedSubMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(selectedDarkMenuItem?.items || [], location.pathname);
+        const selectedSubMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(this.state.selectedDarkMenuItem?.items || [], location.pathname);
+        this.setState({
+            selectedDarkMenuItem: v,
+            selectedSubMenuItem: selectedDarkMenuItem?.path ? [selectedDarkMenuItem.path] : [],
+        })
+    }
+    getParentId(list: any, path: string): any {
+        for (let i in list) {
+            if (list[i].path == path) {
+                return [list[i]];
+            }
+            if (list[i].items) {
+                let node = this.getParentId(list[i].items, path);
+                if (node !== undefined) {
+                    return node.concat(list[i]);
+                }
+            }
+        }
+    }
+    hanleLink(options: any) {
+        this.setState({
+            selectedDarkMenuItem: [options.path],
+        })
+    }
+    public render(): React.ReactNode {
         return (
             <Menu mode="inline" theme={this.getMenuTheme()} className={styles.menu}
-                defaultSelectedKeys={[selectedSubMenuItem?.path || selectedDarkMenuItem?.path || '']}
-                defaultOpenKeys={[selectedDarkMenuItem?.path || '']}>
+                // defaultSelectedKeys={[this.state.selectedDarkMenuItem?.path || '']}
+                // defaultOpenKeys={[this.state.selectedSubMenuItem?.path || this.state.selectedDarkMenuItem?.path || '']}
+                openKeys={this.state.selectedSubMenuItem}
+                selectedKeys={this.state.selectedDarkMenuItem}
+                onOpenChange={(openKeys: React.Key[]) => {
+                    this.setState({
+                        selectedSubMenuItem: (openKeys as any)
+                    })
+                }} 
+            >
                 {
                     this.getMenuItemForAppName().map<React.ReactNode>((item: IMenuItem): React.ReactNode => (
                         hasAuthority(item.authority)
@@ -95,7 +138,7 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
                                             item.items.map<React.ReactNode>((subItem: IMenuItem): React.ReactNode => (
                                                 hasAuthority(subItem.authority)
                                                     ?
-                                                    <Menu.Item key={subItem.path} style={{ paddingLeft: "58px", fontWeight: 500 }}>
+                                                    <Menu.Item key={subItem.path} style={{ paddingLeft: "58px", fontWeight: 500 }} onClick={() => this.hanleLink(subItem)}>
                                                         <Link to={subItem.path}>{subItem.label}</Link>
                                                     </Menu.Item>
                                                     :
@@ -104,7 +147,7 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
                                         }
                                     </Menu.SubMenu>
                                     :
-                                    <Menu.Item className={styles.subMenu} key={item.path} icon={<i className={`iconfont icon-${item.icon}`}></i>}>
+                                    <Menu.Item  onClick={() => this.hanleLink(item)} className={styles.subMenu} key={item.path} icon={<i className={`iconfont icon-${item.icon}`}></i>}>
                                         <Link to={item.path}>{item.label}</Link>
                                     </Menu.Item>
                             )

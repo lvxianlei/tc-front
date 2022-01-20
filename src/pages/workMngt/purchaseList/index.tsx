@@ -9,11 +9,12 @@ import AuthUtil from "../../../utils/AuthUtil"
 export default function Invoicing() {
     const history = useHistory()
     const userId = AuthUtil.getUserId()
-    const purChasePlanRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
+    const purChasePlanRef = useRef<{ onSubmit: () => void, confirmLoading: boolean }>({ onSubmit: () => { }, confirmLoading: false })
     const [visible, setVisible] = useState<boolean>(false)
     const [generateVisible, setGenerateVisible] = useState<boolean>(false)
     const [generateIds, setGenerateIds] = useState<string[]>([])
     const [chooseId, setChooseId] = useState<string>("")
+    const [filterValue, setFilterValue] = useState<object>({});
     const onFilterSubmit = (value: any) => {
         if (value.startPurchaseStatusUpdateTime) {
             const formatDate = value.startPurchaseStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -24,12 +25,13 @@ export default function Invoicing() {
             value.purchaserDeptId = value.purchaserId.first
             value.purchaserId = value.purchaserId.second
         }
+        setFilterValue(value)
         return value
     }
 
     const handlePurChasePlan = () => new Promise(async (resove, reject) => {
         try {
-            const result = await purChasePlanRef.current?.onSubmit()
+            await purChasePlanRef.current?.onSubmit()
             message.success("成功生成采购计划...")
             resove(true)
             history.go(0)
@@ -42,7 +44,13 @@ export default function Invoicing() {
             footer={<Button type="primary" onClick={() => setVisible(false)}>确认</Button>} onCancel={() => setVisible(false)}>
             <Overview id={chooseId} />
         </Modal>
-        <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>
+        <Modal
+            title="生成采购计划"
+            visible={generateVisible}
+            width={1011}
+            onOk={handlePurChasePlan}
+            confirmLoading={purChasePlanRef.current?.confirmLoading}
+            onCancel={() => setGenerateVisible(false)}>
             <PurchasePlan ids={generateIds} ref={purChasePlanRef} />
         </Modal>
         <Page
@@ -77,6 +85,7 @@ export default function Invoicing() {
                     }
                 }}>生成采购计划</Button>
             </>}
+            filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
@@ -101,7 +110,7 @@ export default function Invoicing() {
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input placeholder="原材料任务编号/采购计划编号/塔型" style={{ width: 300 }} />
                 }
             ]}
@@ -114,7 +123,7 @@ export default function Invoicing() {
                     },
                     getCheckboxProps: (record: any) => {
                         return ({
-                            disabled: !([1].includes(record.purchaseTaskStatus) && [-1, null].includes(record.purchasePlanId) && record.purchaserId === userId)
+                            disabled: !([1].includes(record.purchaseTaskStatus) && [-1, null].includes(record.purchasePlanId))
                         })
                     }
                 }

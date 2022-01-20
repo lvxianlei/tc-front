@@ -111,6 +111,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         var newArr = allMaterialList.filter((item: any, index: any, self: any) => {
             return e === item.materialName
         })
+        const workCenterRelations = form.getFieldsValue(true)?.workCenterRelations;
+        workCenterRelations[index] = {
+            ...workCenterRelations[index],
+            specificationName: ''
+        }
+        form.setFieldsValue({ workCenterRelations: workCenterRelations })
         setSpecifications({
             ...specifications,
             [index]: newArr
@@ -223,7 +229,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     "required": true,
                     "message": "请选择规格"
                 }]}>
-                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} key={index} onChange={(e: string) => materialChange(e, index)}>
+                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} key={index} onDropdownVisibleChange={
+                        (open) => {
+                            if(open && form.getFieldsValue(true)?.workCenterRelations[index]?.materialName) {
+                                materialChange(form.getFieldsValue(true)?.workCenterRelations[index]?.materialName, index);
+                            }
+                        }
+                    }>
                         {specifications[index]?.map((item: any) => {
                             return <Select.Option key={item.id} value={item.structureSpec}>{item.structureSpec}</Select.Option>
                         })}
@@ -306,7 +318,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             if (item.dataIndex === "time") {
                 return ({
                     ...item, type: 'date',
-                    render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time" style={{ width: '100%' }}><TimePicker.RangePicker style={{ width: '100%' }} format="HH:mm" /></Form.Item>)
+                    render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time" style={{ width: '100%' }}><TimePicker.RangePicker style={{ width: '100%' }} format="HH" /></Form.Item>)
                 })
             }
             if (item.dataIndex === "equipmentId") {

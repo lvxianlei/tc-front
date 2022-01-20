@@ -9,94 +9,347 @@ import TextArea from 'antd/lib/input/TextArea';
 import AuthUtil from '../../utils/AuthUtil';
 
 const tableColumns = [
-    { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '操作部门', dataIndex: 'createDeptName', key: 'createDeptName', },
-    { title: '操作人', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
-    { title: '任务状态', dataIndex: 'status', key: 'status',  render: (value: number, record: object): React.ReactNode => {
-        const renderEnum: any = [
+    { 
+        title: '序号', 
+        dataIndex: 'index', 
+        key: 'index', 
+        render: (_a: any, _b: any, index: number): React.ReactNode => (
+            <span>{index + 1}</span>
+        ) 
+    },
+    { 
+        title: '操作部门', 
+        dataIndex: 'createDeptName', 
+        key: 'createDeptName', 
+    },
+    { 
+        title: '操作人', 
+        dataIndex: 'createUserName', 
+        key: 'createUserName' 
+    },
+    { 
+        title: '操作时间', 
+        dataIndex: 'createTime', 
+        key: 'createTime' 
+    },
+    { 
+        title: '任务状态', 
+        dataIndex: 'status', 
+        key: 'status',  
+        render: (value: number, record: object): React.ReactNode => {
+            const renderEnum: any = [
+                {
+                    value: 0,
+                    label: "已拒绝"
+                },
+                {
+                    value: 1,
+                    label: "待修改"
+                },
+                {
+                    value: 2,
+                    label: "已修改"
+                },
+                {
+                    value: 3,
+                    label: "已删除"
+                },
+            ]
+        return <>
             {
-                value: 0,
-                label: "已拒绝"
-            },
-            {
-                value: 1,
-                label: "待修改"
-            },
-            {
-                value: 2,
-                label: "已修改"
-            },
-            {
-                value: 3,
-                label: "已删除"
-            },
-        ]
-        return <>{renderEnum.find((item: any) => item.value === value).label}</>
+                renderEnum.find((item: any) => item.value === value).label
+            }
+        </>
     }},
-    { title: '备注', dataIndex: 'description', key: 'description' }
+    { 
+        title: '备注', 
+        dataIndex: 'description', 
+        key: 'description' 
+    }
 ]
 
 const towerColumns = [
     // { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '段名', dataIndex: 'segmentName', key: 'segmentName', },
-    { title: '构件编号', dataIndex: 'code', key: 'code' },
-    { title: '材料名称', dataIndex: 'materialName', key: 'materialName' },
-    { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
-    { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
-    { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
-    { title: '长度', dataIndex: 'length', key: 'length' },
+    { 
+        title: '段名', 
+        dataIndex: 'segmentName', 
+        key: 'segmentName', 
+    },
+    { 
+        title: '构件编号', 
+        dataIndex: 'code', 
+        key: 'code' 
+    },
+    { 
+        title: '材料名称', 
+        dataIndex: 'materialName', 
+        key: 'materialName' 
+    },
+    { 
+        title: '材质', 
+        dataIndex: 'structureTexture', 
+        key: 'structureTexture' 
+    },
+    { 
+        title: '规格', 
+        dataIndex: 'structureSpec', 
+        key: 'structureSpec' 
+    },
+    { 
+        title: '单段件数', 
+        dataIndex: 'basicsPartNum', 
+        key: 'basicsPartNum' 
+    },
+    { 
+        title: '长度', 
+        dataIndex: 'length', 
+        key: 'length' 
+    },
     // { title: '宽度', dataIndex: 'width', key: 'width' },
-    { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)  },
-    { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
-    { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight',render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
-    { title: '备注', dataIndex: 'description', key: 'description' }
+    { 
+        title: '理算重量（kg）', 
+        dataIndex: 'basicsTheoryWeight', 
+        key: 'basicsTheoryWeight' ,
+        render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        )  
+    },
+    { 
+        title: '单件重量（kg）',
+        dataIndex: 'basicsWeight', 
+        key: 'basicsWeight' ,
+        render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        )
+    },
+    { 
+        title: '小计重量（kg）', 
+        dataIndex: 'totalWeight', 
+        key: 'totalWeight',
+        render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        ) 
+    },
+    { 
+        title: '备注', 
+        dataIndex: 'description', 
+        key: 'description' 
+    }
 ]
 
 const setOutColumns = [
     // { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '段名', dataIndex: 'segmentName', key: 'segmentName', },
-    { title: '构件编号', dataIndex: 'code', key: 'code' },
-    { title: '材料名称', dataIndex: 'materialName', key: 'materialName' },
-    { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
-    { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
-    { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness' },
-    { title: '长度（mm）', dataIndex: 'length', key: 'length' },
-    { title: '宽度（mm）', dataIndex: 'width', key: 'width' },
-    { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
-    { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
-    { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
-    { title: '单件孔数', dataIndex: 'holesNum', key: 'holesNum' },
-    { title: '备注', dataIndex: 'description', key: 'description' },
-    { title: '电焊', dataIndex: 'electricWelding', key: 'electricWelding' },
-    { title: '火曲', dataIndex: 'bend', key: 'bend' },
-    { title: '切角', dataIndex: 'chamfer', key: 'chamfer' },
-    { title: '铲背', dataIndex: 'shovelBack', key: 'shovelBack' },
-    { title: '清根', dataIndex: 'rootClear', key: 'rootClear' },
-    { title: '打扁', dataIndex: 'squash', key: 'squash' },
-    { title: '开合角', dataIndex: 'openCloseAngle', key: 'openCloseAngle' },
-    { title: '钻孔', dataIndex: 'perforate', key: 'perforate' },
-    { title: '坡口', dataIndex: 'groove', key: 'groove' },
-    { title: '割相贯线', dataIndex: 'intersectingLine', key: 'intersectingLine' },
-    { title: '开槽形式', dataIndex: 'slottedForm', key: 'slottedForm' },
-    { title: '边数', dataIndex: 'sides', key: 'sides' },
-    { title: '周长', dataIndex: 'perimeter', key: 'perimeter' },
-    { title: '表面积（m²）', dataIndex: 'surfaceArea', key: 'surfaceArea' },
-    { title: '各孔径孔数', dataIndex: 'apertureNumber', key: 'apertureNumber' },
-    { title: '焊接边（mm）', dataIndex: 'weldingEdge', key: 'weldingEdge' },
+    { 
+        title: '段名', 
+        dataIndex: 'segmentName', 
+        key: 'segmentName', 
+    },
+    { 
+        title: '构件编号', 
+        dataIndex: 'code', 
+        key: 'code' 
+    },
+    { 
+        title: '材料名称', 
+        dataIndex: 'materialName', 
+        key: 'materialName' 
+    },
+    { 
+        title: '材质', 
+        dataIndex: 'structureTexture', 
+        key: 'structureTexture' 
+    },
+    { 
+        title: '规格', 
+        dataIndex: 'structureSpec', 
+        key: 'structureSpec' 
+    },
+    { 
+        title: '厚度（mm）', 
+        dataIndex: 'thickness', 
+        key: 'thickness' 
+    },
+    { 
+        title: '长度（mm）', 
+        dataIndex: 'length', 
+        key: 'length' 
+    },
+    { 
+        title: '宽度（mm）', 
+        dataIndex: 'width', 
+        key: 'width' 
+    },
+    { 
+        title: '单段件数',
+        dataIndex: 'basicsPartNum', 
+        key: 'basicsPartNum' 
+    },
+    { 
+        title: '单件重量（kg）', 
+        dataIndex: 'basicsWeight', 
+        key: 'basicsWeight' ,
+        render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        ) 
+    },
+    { 
+        title: '小计重量（kg）', 
+        dataIndex: 'totalWeight', 
+        key: 'totalWeight' ,
+        render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        ) 
+    },
+    { 
+        title: '单件孔数', 
+        dataIndex: 'holesNum', 
+        key: 'holesNum' 
+    },
+    { 
+        title: '备注', 
+        dataIndex: 'description', 
+        key: 'description' 
+    },
+    { 
+        title: '电焊', 
+        dataIndex: 'electricWelding', 
+        key: 'electricWelding' 
+    },
+    { 
+        title: '火曲', 
+        dataIndex: 'bend', 
+        key: 'bend' 
+    },
+    { 
+        title: '切角', 
+        dataIndex: 'chamfer', 
+        key: 'chamfer' 
+    },
+    {
+        title: '铲背', 
+        dataIndex: 'shovelBack', 
+        key: 'shovelBack' 
+    },
+    { 
+        title: '清根', 
+        dataIndex: 'rootClear', 
+        key: 'rootClear' 
+    },
+    { 
+        title: '打扁', 
+        dataIndex: 'squash', 
+        key: 'squash' 
+    },
+    { 
+        title: '开合角', 
+        dataIndex: 'openCloseAngle', 
+        key: 'openCloseAngle' 
+    },
+    { 
+        title: '钻孔', 
+        dataIndex: 'perforate', 
+        key: 'perforate' 
+    },
+    { 
+        title: '坡口', 
+        dataIndex: 'groove', 
+        key: 'groove' 
+    },
+    { 
+        title: '割相贯线',
+        dataIndex: 'intersectingLine', 
+        key: 'intersectingLine' 
+    },
+    { 
+        title: '开槽形式', 
+        dataIndex: 'slottedForm', 
+        key: 'slottedForm' 
+    },
+    { 
+        title: '边数', 
+        dataIndex: 'sides', 
+        key: 'sides' 
+    },
+    { 
+        title: '周长', 
+        dataIndex: 'perimeter', 
+        key: 'perimeter' 
+    },
+    { 
+        title: '表面积（m²）', 
+        dataIndex: 'surfaceArea', 
+        key: 'surfaceArea' 
+    },
+    { 
+        title: '各孔径孔数', 
+        dataIndex: 'apertureNumber', 
+        key: 'apertureNumber' 
+    },
+    { 
+        title: '焊接边（mm）', 
+        dataIndex: 'weldingEdge', 
+        key: 'weldingEdge' 
+    },
 ]
 
 const boltColumns = [
     // { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '类型', dataIndex: 'typeName', key: 'typeName'},
-    { title: '名称', dataIndex: 'name', key: 'name' },
-    { title: '等级', dataIndex: 'level', key: 'level' },
-    { title: '规格', dataIndex: 'specs', key: 'specs' },
-    { title: '无扣长（mm）', dataIndex: 'unbuckleLength', key: 'unbuckleLength' },
-    { title: '小计', dataIndex: 'subtotal', key: 'subtotal',render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
-    { title: '合计', dataIndex: 'total', key: 'total',render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
-    { title: '单重（kg）', dataIndex: 'singleWeight', key: 'singleWeight',render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
-    { title: '合计重（kg）', dataIndex: 'totalWeight', key: 'totalWeight',render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
+    { 
+        title: '类型', 
+        dataIndex: 'typeName', 
+        key: 'typeName'
+    },
+    { 
+        title: '名称', 
+        dataIndex: 'name', 
+        key: 'name' 
+    },
+    { 
+        title: '等级', 
+        dataIndex: 'level', 
+        key: 'level' 
+    },
+    { 
+        title: '规格', 
+        dataIndex: 'specs', 
+        key: 'specs' 
+    },
+    { 
+        title: '无扣长（mm）', 
+        dataIndex: 'unbuckleLength', 
+        key: 'unbuckleLength' 
+    },
+    { 
+        title: '小计', 
+        dataIndex: 'subtotal', 
+        key: 'subtotal',render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        ) 
+    },
+    { 
+        title: '合计', 
+        dataIndex: 'total', 
+        key: 'total',
+        render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        ) 
+    },
+    { 
+        title: '单重（kg）', 
+        dataIndex: 'singleWeight', 
+        key: 'singleWeight',
+        render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        ) 
+    },
+    { 
+        title: '合计重（kg）', 
+        dataIndex: 'totalWeight', 
+        key: 'totalWeight',
+        render: (_: number, _b: any, index: number): React.ReactNode => (
+            <span>{_===-1?0:_}</span>
+        ) 
+    },
 ]
 
 export default function OtherDetail(): React.ReactNode {

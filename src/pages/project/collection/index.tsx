@@ -62,13 +62,14 @@ export default function Collection() {
         filterValue={filterValue}
         searchFormItems={[
             {
-                name: 'fuzzyQuery',
-                children: <Input placeholder="编号/来款单位名称" style={{ width: 300 }} />
-            },
-            {
                 name: 'startRefundTime',
                 label: '来款日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+            },
+            {
+                name: 'fuzzyQuery',
+                label: "模糊查询项",
+                children: <Input placeholder="编号/来款单位名称" style={{ width: 300 }} />
             }
         ]}
     />

@@ -14,7 +14,7 @@ const componentColumns = [
     { title: '构件编号', dataIndex: 'code', key: 'code' },
     { title: '材料', dataIndex: 'materialName', key: 'materialName' },
     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
-    { title: '规格', dataIndex: 'specName', key: 'specName', render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
+    { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', render: (_: string, _b: any, index: number): React.ReactNode => (<span>{_?_:'-'}</span>) },
     { title: '宽度（mm）', dataIndex: 'width', key: 'width', render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
     { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness',render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
     { title: '长度（mm）', dataIndex: 'length', key: 'length' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
@@ -73,10 +73,10 @@ export default function TowerDetail(): React.ReactNode {
     const handleModalCancel = () =>{ setVisible(false); setTableData([]) }
     return <>
         <Modal title='构件详情'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
-            <Space>
-                <span>单段件号数：{tableDataTop.singleNumberCount}</span>
-                <span>单段件数：{tableDataTop.singleCount}</span>
-                <span>单段重量：{tableDataTop.singleWeight}kg</span>
+            <Space style={{paddingBottom:'12px'}}>
+                <span>单段件号数：<span style={{color: '#FF8C00'}}>{tableDataTop.singleNumberCount}</span></span>
+                <span>单段件数：<span style={{color: '#FF8C00'}}>{tableDataTop.singleCount}</span></span>
+                <span>单段重量：<span style={{color: '#FF8C00'}}>{tableDataTop.singleWeight}kg</span></span>
             </Space>
             <CommonTable columns={componentColumns} dataSource={tableData} pagination={false}/>
         </Modal>

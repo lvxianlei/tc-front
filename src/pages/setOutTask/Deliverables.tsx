@@ -6,7 +6,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 import styles from './SetOutTask.module.less';
 
-export interface DeliverablesProps {}
+export interface DeliverablesProps { }
 export interface IDeliverablesRouteProps extends RouteComponentProps<DeliverablesProps>, WithTranslation {
     readonly id: number | string;
 }
@@ -37,44 +37,45 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
         })
     }
 
-     /**
-     * @description Renders AbstractDetailComponent
-     * @returns render 
-     */
+    /**
+    * @description Renders AbstractDetailComponent
+    * @returns render 
+    */
     public render(): React.ReactNode {
         const tableColumns = [
-            { 
-                key: 'index', 
-                title: '序号', 
-                dataIndex: 'index', 
-                width: 50, 
-                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
+            {
+                key: 'index',
+                title: '序号',
+                dataIndex: 'index',
+                width: 50,
+                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            },
             {
                 key: 'name',
                 title: '交付物名称',
-                dataIndex: 'name', 
+                dataIndex: 'name',
             },
-            {  
-                key: 'use', 
-                title: '用途', 
-                dataIndex: 'use' 
-            }, 
+            {
+                key: 'use',
+                title: '用途',
+                dataIndex: 'use'
+            },
             {
                 key: 'operation',
                 title: '操作',
                 dataIndex: 'operation',
                 render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    <Button style={{ padding: '0' }} type="link" onClick={ () => { 
-                        if(record.requestType === 'zip') {
-                            downloadTemplate(record.path + this.props.id , record.use, {}, true)
+                    <Button style={{ padding: '0' }} type="link" onClick={() => {
+                        if (record.requestType === 'zip') {
+                            downloadTemplate(record.path + this.props.id, record.use, {}, true)
                         } else {
-                            downloadTemplate(record.path + this.props.id , record.use)
-                        } 
-                    } }>下载</Button>
+                            downloadTemplate(record.path + this.props.id, record.use)
+                        }
+                    }}>下载</Button>
                 )
             }
         ]
-        
+
         const data = [{
             name: '提料塔型构件明细汇总.xls',
             use: '提料塔型构件明细汇总',
@@ -122,17 +123,17 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
         }]
 
         return <div>
-            <Button type="link" onClick={ () => this.modalShow() }>交付物</Button>
+            <Button type="link" onClick={() => this.modalShow()}>交付物</Button>
             <Modal
-                visible={ this.state.visible } 
-                width="40%" 
-                title="交付物" 
-                className={ styles.deliverables }
-                footer={ <Button type="ghost" onClick={() => this.modalCancel() }>关闭</Button> } 
-                onCancel={ () => this.modalCancel() }
+                visible={this.state.visible}
+                width="40%"
+                title="交付物"
+                className={styles.deliverables}
+                footer={<Button type="ghost" onClick={() => this.modalCancel()}>关闭</Button>}
+                onCancel={() => this.modalCancel()}
             >
                 <p className={styles.title}>交付物清单</p>
-                <CommonTable columns={ tableColumns } dataSource={ data } pagination={ false }/>
+                <CommonTable columns={tableColumns} dataSource={data} pagination={false} />
             </Modal>
         </div>
     }

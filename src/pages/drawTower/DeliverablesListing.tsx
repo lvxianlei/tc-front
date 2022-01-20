@@ -4,8 +4,9 @@ import { DetailContent, CommonTable } from '../common';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
+import styles from './DrawTower.module.less';
 
-export interface DeliverablesListingProps {}
+export interface DeliverablesListingProps { }
 export interface IDeliverablesListingRouteProps extends RouteComponentProps<DeliverablesListingProps>, WithTranslation {
     readonly id: number | string;
 }
@@ -16,7 +17,7 @@ export interface DeliverablesListingState {
 }
 
 class DeliverablesListing extends React.Component<IDeliverablesListingRouteProps, DeliverablesListingState> {
-    
+
     public state: DeliverablesListingState = {
         visible: false
     }
@@ -33,41 +34,42 @@ class DeliverablesListing extends React.Component<IDeliverablesListingRouteProps
         })
     }
 
-     /**
-     * @description Renders AbstractDetailComponent
-     * @returns render 
-     */
+    /**
+    * @description Renders AbstractDetailComponent
+    * @returns render 
+    */
     public render(): React.ReactNode {
         const tableColumns = [
-            { 
-                key: 'index', 
-                title: '序号', 
-                dataIndex: 'index', 
-                width: 50, 
-                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
+            {
+                key: 'index',
+                title: '序号',
+                dataIndex: 'index',
+                width: 50,
+                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            },
             {
                 key: 'name',
                 title: '交付物名称',
-                dataIndex: 'name', 
+                dataIndex: 'name',
             },
-            {  
-                key: 'use', 
-                title: '用途', 
-                dataIndex: 'use' 
-            }, 
+            {
+                key: 'use',
+                title: '用途',
+                dataIndex: 'use'
+            },
             {
                 key: 'operation',
                 title: '操作',
                 dataIndex: 'operation',
                 width: 120,
                 render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    <Button type="link" onClick={ () => { 
-                        if(record.requestType === 'zip') {
-                            downloadTemplate(record.path + this.props.id , record.use, {}, true)
+                    <Button type="link" onClick={() => {
+                        if (record.requestType === 'zip') {
+                            downloadTemplate(record.path + this.props.id, record.use, {}, true)
                         } else {
-                            downloadTemplate(record.path + this.props.id , record.use)
-                        } 
-                    } }>下载</Button>
+                            downloadTemplate(record.path + this.props.id, record.use)
+                        }
+                    }}>下载</Button>
                 )
             }
         ]
@@ -84,18 +86,17 @@ class DeliverablesListing extends React.Component<IDeliverablesListingRouteProps
         }]
 
         return <>
-            <Button type="link" onClick={ () => this.modalShow() }>附件</Button>
+            <Button type="link" onClick={() => this.modalShow()}>附件</Button>
             <Modal
-                visible={ this.state.visible } 
-                width="40%" 
-                title="附件清单" 
-                footer={ <Button type="ghost" onClick={() => this.modalCancel() }>关闭</Button> } 
-                onCancel={ () => this.modalCancel() }
+                visible={this.state.visible}
+                width="40%"
+                title="附件清单"
+                className={styles.deliverables}
+                footer={<Button type="ghost" onClick={() => this.modalCancel()}>关闭</Button>}
+                onCancel={() => this.modalCancel()}
             >
-                <DetailContent>
-                    <p style={{ paddingBottom: "0 12px", fontWeight: "bold", fontSize: '14PX' }}>附件清单</p>
-                    <CommonTable columns={ tableColumns } dataSource={ data } pagination={ false }/>
-                </DetailContent>
+                <p className={styles.title}>附件清单</p>
+                <CommonTable columns={tableColumns} dataSource={data} pagination={false} />
             </Modal>
         </>
     }

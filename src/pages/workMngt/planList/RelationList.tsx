@@ -51,7 +51,7 @@ export default function RelationList() {
                 },
                 {
                     name: 'fuzzyQuery',
-                    label: '查询',
+                    label: "模糊查询项",
                     children: <Input placeholder="任务编号/塔型" style={{ width: 300 }} />
                 }
             ]}

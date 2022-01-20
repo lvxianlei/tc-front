@@ -72,6 +72,7 @@ export default function AssessmentTaskList(): React.ReactNode {
             key: 'bidEndTime',
             title: '投标截止时间',
             dataIndex: 'bidEndTime',
+            format: 'YYYY-MM-DD',
             width: 200
         },
         {
@@ -82,16 +83,16 @@ export default function AssessmentTaskList(): React.ReactNode {
             width: 230,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Link to={`/assessmentTask/assessmentTaskDetail/${record.id}`}>任务详情</Link>
+                    <Link to={`/assessmentTask/assessmentTaskList/assessmentTaskDetail/${record.id}`}>任务详情</Link>
                     {
-                        record.status === 2 
-                        ? <Assign id={record.id} updataList={() => { setRefresh(!refresh); }} />
-                        : <Button type="link" disabled>指派</Button>
+                        record.status === 2
+                            ? <Assign id={record.id} updataList={() => { setRefresh(!refresh); }} />
+                            : <Button type="link" disabled>指派</Button>
                     }
                     {
-                        record.status === 4 || record.status === 5 
-                        ? <AssessmentInformation id={record.id} /> 
-                        : <Button type="link" disabled>评估信息</Button>
+                        record.status === 4 || record.status === 5
+                            ? <AssessmentInformation id={record.id} />
+                            : <Button type="link" disabled>评估信息</Button>
                     }
                     <Popconfirm
                         title="确认提交?"
@@ -112,7 +113,7 @@ export default function AssessmentTaskList(): React.ReactNode {
     ]
 
     // const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        // const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+    // const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
         resole(data);
@@ -147,7 +148,7 @@ export default function AssessmentTaskList(): React.ReactNode {
         const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         switch (title) {
             case "startReleaseDepartment":
-                // return setStartRelease(userData.records);
+            // return setStartRelease(userData.records);
         };
     }
 
@@ -194,7 +195,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                                 </Form.Item>
                             </Col> */}
                             <Col>
-                                <Form.Item name="assessUser" initialValue={ location.state?.userId || '' }>
+                                <Form.Item name="assessUser" initialValue={location.state?.userId || ''}>
                                     <Select placeholder="请选择" style={{ width: "150px" }}>
                                         {startRelease && startRelease.map((item: any) => {
                                             return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>

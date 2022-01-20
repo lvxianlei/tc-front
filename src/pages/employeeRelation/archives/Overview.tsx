@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Modal, Spin, Tabs, Image } from 'antd'
+import { Button, Spin, Tabs, Image } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
 import { baseInfo, overviewWorkExperience, family, companyInfo, other, relatives, disabilityCols } from "./archives.json"
@@ -38,6 +38,7 @@ export default function Overview() {
             reject(error)
         }
     }), { refreshDeps: [activeTab] })
+    
     return <Tabs type="card" onChange={(activeKey: string) => setActiveTab(activeKey as TabTypes)}>
         <Tabs.TabPane tab="基本信息" key="baseInfo">
             <DetailContent operation={[
