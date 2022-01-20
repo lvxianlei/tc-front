@@ -181,13 +181,7 @@ export default function BidResultEdit(): JSX.Element {
                                 columns={bidInfoColumns}
                                 dataSource={data}
                                 opration={[
-                                    <Button
-                                        type="primary"
-                                        onClick={() => {
-                                            exportDown("/tower-market/bidBase/export", "POST", {}, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "开标信息导入模板")
-                                        }}
-                                        style={{marginRight: 16}}
-                                    >下载导入模板</Button>,
+
                                     <UploadXLS key="xlxs" readEnd={async (_data) => {
                                         const vilidateCols = ["包名称", "投标人名称", "分标编号", "货物类别", "项目单位", "总价（元）", "重量（吨）", "电压等级"]
                                         if (_data.length <= 0) {
@@ -219,8 +213,15 @@ export default function BidResultEdit(): JSX.Element {
                                         const editForm = tempRef?.ref[item.key].getForm()
                                         const values = await editForm.getFieldsValue().submit
                                         editForm.setFieldsValue({ submit: values.concat(uploadData) })
-                                    }} />
-                            ]}
+                                    }} />,
+                                    <Button
+                                        type="link"
+                                        onClick={() => {
+                                            exportDown("/tower-market/bidBase/export", "POST", {}, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "开标信息导入模板")
+                                        }}
+                                        style={{ marginRight: 16 }}
+                                    >下载导入模板</Button>
+                                ]}
                                 ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
                             />
                         );

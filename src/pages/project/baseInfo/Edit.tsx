@@ -9,7 +9,7 @@ import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../Detail"
 import { UploadXLS } from "../bidResult/EditTabs"
 import { voltageGradeOptions } from "../../../configuration/DictionaryOptions"
-import { downLoadFile } from "../../../utils"
+import { downLoadTemplate } from "../../../utils"
 
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
@@ -209,9 +209,11 @@ export default function BaseInfoEdit(): JSX.Element {
                                 const values = await portedCargoForm.getFieldsValue().submit || []
                                 portedCargoForm.setFieldsValue({ submit: values.concat(uploadData) })
                             }} />,
-                        <Button key="download" type="link" onClick={() => {
-                            
-                        }}>下载模板</Button>
+                        <Button
+                            key="download"
+                            type="link"
+                            onClick={() => downLoadTemplate(portedCargoColumns, "物资清单模板")}
+                        >下载模板</Button>
                     ]}
                     form={portedCargoForm}
                     columns={portedCargoColumns}
