@@ -12,7 +12,8 @@
         },
         {
             "title": "项目编码",
-            "dataIndex": "projectNumber"
+            "dataIndex": "projectNumber",
+            "required": true
         },
         {
             "title": "招标批次",
