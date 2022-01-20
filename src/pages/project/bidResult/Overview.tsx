@@ -6,6 +6,7 @@ import { bidInfoColumns, billingInformationStatistics, overview } from "./bidRes
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import ExportList from '../../../components/export/list';
+import { exportDown } from "../../../utils/Export";
 interface OverviewProps {
     id: string
 }
@@ -27,7 +28,6 @@ export default function Overview({ id }: OverviewProps) {
     }))
 
     const handleChange = (activeKey: any) => {
-        console.log(activeKey, "activeKey", data?.result?.bidOpenRecordListVos)
         setRound(data?.result?.bidOpenRecordListVos[activeKey].round)
     }
 
@@ -41,12 +41,11 @@ export default function Overview({ id }: OverviewProps) {
             <BaseInfo columns={overview} dataSource={data?.result || {}} col={2} />
             <DetailTitle title="开标信息"  operation={[
                 <Button type="primary" ghost onClick={() => {
-                    RequestUtil.get(`/tower-market/bidBase/exportBidOpen`, {
-                        bidBaseId: id,
+                    exportDown("/tower-market/bidBase/exportBidOpen", "POST", {
+                        bidBaseId: data?.result.id,
                         round: round === 0 ? data?.result?.bidOpenRecordListVos[0].round : round
-                    }).then(res => {
-                        console.log(res, "ress")
-                    });
+                    }, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "开标信息")
+                    
                 }}>导出</Button>
             ]}/>
             <Tabs onChange={handleChange}>

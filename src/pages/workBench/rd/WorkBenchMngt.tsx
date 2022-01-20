@@ -3,7 +3,7 @@ import { WithTranslation } from 'react-i18next';
 import { RouteComponentProps, useHistory } from 'react-router';
 import styles from './WorkBench.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
-import { DetailContent, DetailTitle } from '../../common';
+import { DetailTitle } from '../../common';
 import Line from './Line';
 import { CheckCircleOutlined, RightOutlined, SoundOutlined } from '@ant-design/icons';
 import useRequest from '@ahooksjs/use-request';
@@ -42,19 +42,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 				{
 					title: '待确认',
 					dataIndex: 'assessToBeConfirmed',
-					path: '/assessmentTask',
+					path: '/assessmentTask/assessmentTaskList',
 					state: 1,
 					authority: 'assess_to_be_confirmed'
 				}, {
 					title: '待指派',
 					dataIndex: 'assessToBeAssigned',
-					path: '/assessmentTask',
+					path: '/assessmentTask/assessmentTaskList',
 					state: 2,
 					authority: 'assess_to_be_assigned'
 				}, {
 					title: '待提交',
 					dataIndex: 'assessToBeSubmitted',
-					path: '/assessmentTask',
+					path: '/assessmentTask/assessmentTaskList',
 					state: 4,
 					authority: 'assess_to_be_submitted'
 				}
@@ -90,7 +90,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 				{
 					title: '待确认',
 					dataIndex: 'loftingToBeConfirmed',
-					path: '/setOutTask',
+					path: '/setOutTask/setOutTaskList',
 					state: 1,
 					authority: 'lofting_to_be_confirmed'
 				}, {
@@ -102,7 +102,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 				}, {
 					title: '待提交',
 					dataIndex: 'loftingToBeSubmitted',
-					path: '/setOutTask',
+					path: '/setOutTask/setOutTaskList',
 					state: 4,
 					authority: 'lofting_to_be_submitted'
 				}
@@ -172,29 +172,29 @@ export default function WorkBenchMngt(): React.ReactNode {
 			title: '问题单',
 			child: [
 				{
-					title: '我创建的',//问题单-我创建的-提料信息-塔
-					dataIndex: 'segmentAndBoltProblemEstablish',
+					title: '我创建的-提料信息',//问题单-我创建的-提料信息-塔
+					dataIndex: 'problemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-TL',
 					createUserId: userId,
 					authority: 'problem_establish'
 				}, {
-					title: '我创建的', //问题单-我创建的-放样任务-塔
-					dataIndex: 'segmentAndBoltProblemEstablish',
+					title: '我创建的-放样任务', //问题单-我创建的-放样任务-塔
+					dataIndex: 'segmentProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-FY',
 					createUserId: userId,
 					authority: 'segment_problem_establish'
 				}, {
-					title: '我创建的',//问题单-我创建的-放样任务-螺栓
-					dataIndex: 'boltProblemPending',
+					title: '我创建的-螺栓',//问题单-我创建的-放样任务-螺栓
+					dataIndex: 'boltProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-LS',
 					createUserId: userId,
 					authority: 'bolt_problem_establish'
 				}, {
 					title: '待修改',//问题单-待修改
-					dataIndex: 'boltProblemPending',
+					dataIndex: 'problemPending',
 					path: '/question/questionMngt',
 					state: 1,
 					userId: userId,

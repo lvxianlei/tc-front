@@ -722,14 +722,14 @@
     },
     { //供应商管理
       "name": "供应商管理",
-      "path": "/cooperative/supplier-mngt/index",
+      "path": "/cooperative/supplier-mngt",
       "module": "./pages/cooperative/supplier-mngt/index",
       "exact": true,
       "authority": "supplier_mngt_list"
     },
     { //装卸公司管理
       "name": "装卸公司管理",
-      "path": "/cooperative/stevedoring-company-mngt/stevedoringCompany",
+      "path": "/cooperative/stevedoring-company-mngt",
       "module": "./pages/cooperative/stevedoring-company-mngt/StevedoringCompanyMngt",
       "exact": true,
       "authority": "supplier_mngt_list"
@@ -890,14 +890,14 @@
     },
     { // 评估任务
       "name": "评估任务",
-      "path": "/assessmentTask",
+      "path": "/assessmentTask/assessmentTaskList",
       "module": "./pages/assessmentTask/AssessmentTaskList",
       "exact": true,
       "authority": "rd_assess_task_management"
     },
     { // 评估任务详情
       "name": "评估任务详情",
-      "path": "/assessmentTask/assessmentTaskDetail/:id",
+      "path": "/assessmentTask/assessmentTaskList/assessmentTaskDetail/:id",
       "module": "./pages/assessmentTask/AssessmentTaskDetail",
       "exact": true,
       "authority": "rd_assess_task_management"
@@ -1086,28 +1086,28 @@
     },
     { // 放样任务
       "name": "放样任务",
-      "path": "/setOutTask",
+      "path": "/setOutTask/setOutTaskList",
       "module": "./pages/setOutTask/SetOutTaskList",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务详情
       "name": "放样任务详情",
-      "path": "/setOutTask/setOutTaskDetail/:id",
+      "path": "/setOutTask/setOutTaskList/setOutTaskDetail/:id",
       "module": "./pages/setOutTask/SetOutTaskDetail",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务-塔型
       "name": "塔型",
-      "path": "/setOutTask/setOutTaskTower/:id",
+      "path": "/setOutTask/setOutTaskList/setOutTaskTower/:id",
       "module": "./pages/setOutTask/SetOutTaskTower",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务-杆塔
       "name": "杆塔",
-      "path": "/setOutTask/setOutTaskPole/:id",
+      "path": "/setOutTask/setOutTaskList/setOutTaskPole/:id",
       "module": "./pages/setOutTask/SetOutTaskPole",
       "exact": true,
       "authority": "rd_lofting_task"
@@ -1847,28 +1847,28 @@
     },
     { // 公告管理
       "name": "公告管理",
-      "path": "/announcement",
+      "path": "/announcement/list",
       "module": "./pages/announcement/AnnouncementMngt",
       "exact": true,
       "authority": "announcement_management_list"
     },
     { // 公告管理-新发布
       "name": "新发布",
-      "path": "/announcement/new",
+      "path": "/announcement/list/new",
       "module": "./pages/announcement/AnnouncementNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 公告管理-编辑
       "name": "编辑",
-      "path": "/announcement/edit/:id",
+      "path": "/announcement/list/edit/:id",
       "module": "./pages/announcement/AnnouncementNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 公告管理-详情
       "name": "详情",
-      "path": "/announcement/detail/:id",
+      "path": "/announcement/list/detail/:id",
       "module": "./pages/announcement/AnnouncementDetail",
       "exact": true,
       "authority": "approvalm"

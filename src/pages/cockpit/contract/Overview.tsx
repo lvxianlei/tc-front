@@ -29,22 +29,20 @@ export default function Particulars(): React.ReactNode {
     return (<Page
         path="/tower-storage/receiveStock/detail"
         onFilterSubmit={onFilterSubmit}
-        sourceKey={"receiveStockDetailPage.records"}
-        extraOperation={(data) =>
-            {
-                return (
-                    <>
-                        <span style={{marginLeft:"20px", fontSize: 16, color: "#FF8C00", fontWeight: "bold"}}>
-                            已收货：重量(支)合计：{data?.receiveStockMessage?.receiveWeight || 0}&nbsp;
-                            价税合计(元)合计：{data?.receiveStockMessage?.receivePrice || 0}&nbsp;
-                            未收货：重量(支)合计：{data?.receiveStockMessage?.waitWeight || 0}&nbsp;
-                            价税合计(元)合计：{data?.receiveStockMessage?.waitPrice || 0}
-                        </span>
-                        <Button type="primary" ghost>导出</Button>
-                        <Button type="ghost"  onClick={() => history.goBack()}>返回</Button>
-                    </>
-                )
-            }
+        exportPath="/tower-storage/receiveStock/detail"
+        extraOperation={(data) => {
+            return (
+                <>
+                    <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
+                    <span style={{ marginLeft: "20px", fontSize: 16, color: "#FF8C00", fontWeight: "bold" }}>
+                        已收货：重量(支)合计：{data?.receiveStockMessage?.receiveWeight || 0}&nbsp;
+                        价税合计(元)合计：{data?.receiveStockMessage?.receivePrice || 0}&nbsp;
+                        未收货：重量(支)合计：{data?.receiveStockMessage?.waitWeight || 0}&nbsp;
+                        价税合计(元)合计：{data?.receiveStockMessage?.waitPrice || 0}
+                    </span>
+                </>
+            )
+        }
         }
         filterValue={{ contractId: params.id }}
         searchFormItems={[
