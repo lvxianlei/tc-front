@@ -234,7 +234,7 @@
     ],
     "detaiBidStatus": [
         {
-            "title": "选择项目负责人",
+            "title": "项目负责人",
             "dataIndex": "projectLeaderId",
             "type": "popTable",
             "width": 1101,
@@ -263,7 +263,7 @@
         },
         {
             "type": "popTable",
-            "title": "选择应标包名称",
+            "title": "应标包名称",
             "dataIndex": "bigPackageIds",
             "value": "packageName",
             "width": 1101,
@@ -271,6 +271,13 @@
             "required": true,
             "path": "/tower-market/bidInfo/packageList",
             "dependencies": true,
+            "search": [
+                {
+                    "title": "",
+                    "dataIndex": "fuzzyQuery",
+                    "placeholder": "包名称/物资类别"
+                }
+            ],
             "columns": [
                 {
                     "title": "包名称",
@@ -289,7 +296,7 @@
                     "maxLength": 50
                 },
                 {
-                    "title": "货物类别",
+                    "title": "物资类别",
                     "dataIndex": "goodsType",
                     "type": "text",
                     "maxLength": 50
