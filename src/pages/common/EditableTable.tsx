@@ -12,7 +12,6 @@ interface EditableTableProps {
     form?: FormInstance
     opration?: React.ReactNode[]
     onChange?: (data: any[], allFields: any[]) => void
-    scroll?: { x: number, y: number }
 }
 
 const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean) => {
@@ -49,7 +48,7 @@ const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean
         width: "80px",
         code: "opration",
         render: (_: undefined, record: any) => {
-            return <Button style={{ paddingLeft: 0 }} size="small" type="link">删除</Button>
+            return <Button style={{ paddingLeft: 0 }} size="small" type="link" onClick={() => { }}>删除</Button>
         }
     })
     haveIndex && newColumns.unshift({
@@ -64,23 +63,20 @@ const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean
 
 
 export default function EditableTable({
-    columns,
-    dataSource = [],
-    onChange,
-    form,
-    haveNewButton = true,
-    newButtonTitle = "新增一行",
-    haveOpration = true,
-    haveIndex = true,
-    opration,
-    scroll,
-    ...props }: EditableTableProps): JSX.Element {
+    columns, dataSource = [], onChange, form, haveNewButton = true,
+    newButtonTitle = "新增一行", haveOpration = true, haveIndex = true, opration
+}: EditableTableProps): JSX.Element {
     const [editableDataSource, setEditableDatasource] = useState<any[]>(dataSource)
     const [eidtableColumns, setEditableColumns] = useState<any[]>(formatColunms(columns, haveOpration, haveIndex))
 
     useEffect(() => {
         setEditableColumns(formatColunms(columns, haveOpration, haveIndex))
     }, [JSON.stringify(columns)])
+
+    useEffect(() => {
+        setEditableDatasource(dataSource)
+        form && form.setFieldsValue({ submit: dataSource })
+    }, [JSON.stringify(dataSource)])
 
     return <Form
         form={form}
@@ -108,9 +104,7 @@ export default function EditableTable({
             defaultColumnWidth={150}
             columns={eidtableColumns}
             dataSource={editableDataSource}
-            useVirtual={{
-                vertical: true
-            }}
+            useVirtual={{ vertical: true }}
         />
     </Form>
 }
