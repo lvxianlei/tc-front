@@ -25,7 +25,7 @@ export default forwardRef(function BatchCreate(props, ref): JSX.Element {
                     ...item,
                     contractName: currentRowData.contractCode?.records?.[0]?.contractName,
                     contractCompany: currentRowData.contractCode?.records?.[0]?.customerCompany,
-                    business: currentRowData.contractCode?.records?.[0]?.salesman
+                    business: currentRowData.contractCode?.records?.[0]?.salesman,
                 }) : item)
                 form.setFieldsValue({
                     submit: newFields
@@ -39,6 +39,7 @@ export default forwardRef(function BatchCreate(props, ref): JSX.Element {
             const postData = await form.validateFields()
             await saveRun(postData.submit.map((item: any) => ({
                 ...item,
+                contractSignTime: item.contractCode?.records?.[0]?.signContractTime,
                 contractCode: item.contractCode?.id
             })))
         } catch (error) {
