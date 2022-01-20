@@ -39,7 +39,7 @@ export default function Edit({ id }: EditProps): JSX.Element {
             resole(v)
             // 默认掉用第一条
             if (v.length > 0) {
-                getUser(id, v[0].materialName, v[0].structureSpec, v[0].structureTexture)
+                getUser(id, v[0].materialName, v[0].structureSpec, v[0].structureTexture, v[0].length)
                 setTableId(v[0].id);
             }
         } catch (error) {
@@ -48,13 +48,14 @@ export default function Edit({ id }: EditProps): JSX.Element {
     }), { refreshDeps: [id] })
 
     // 方案明细
-    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((produceId: string, materialName: string, structureSpec: string, structureTexture: string) => new Promise(async (resole, reject) => {
+    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((produceId: string, materialName: string, structureSpec: string, structureTexture: string, length: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/getLoftingSchemesByCondition`, {
                 produceId,
                 materialName,
                 structureSpec,
                 structureTexture,
+                length,
             })
             resole(result)
         } catch (error) {
@@ -85,7 +86,7 @@ export default function Edit({ id }: EditProps): JSX.Element {
                 onRow={(record: any) => {
                     return {
                       onClick: async (event: any) => {
-                          getUser(id, record.materialName, record.structureSpec, record.structureTexture);
+                          getUser(id, record.materialName, record.structureSpec, record.structureTexture, record.length);
                           setTableId(record.id);
                       }, // 点击行
                     };
