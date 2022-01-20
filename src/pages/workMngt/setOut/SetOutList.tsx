@@ -112,7 +112,7 @@ export default function SetOutList(): React.ReactNode {
     const [refresh, setRefresh] = useState(false);
     const location = useLocation<{ state?: number, userId?: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        const data: any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
         resole(data?.records);
     }), {})
     const checkUser: any = data || [];
@@ -132,7 +132,7 @@ export default function SetOutList(): React.ReactNode {
             {
                 name: 'status',
                 label: '塔型状态',
-                children: <Form.Item name="status" initialValue={ location.state?.state }>
+                children: <Form.Item name="status" initialValue={location.state?.state}>
                     <Select style={{ width: '120px' }} placeholder="请选择">
                         <Select.Option value="" key="6">全部</Select.Option>
                         <Select.Option value={1} key="1">待指派</Select.Option>
@@ -147,22 +147,22 @@ export default function SetOutList(): React.ReactNode {
                 name: 'pattern',
                 label: '模式',
                 children: <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                    { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                        return <Select.Option key={ index } value={ id }>
-                            { name }
+                    {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={id}>
+                            {name}
                         </Select.Option>
-                    }) }
+                    })}
                 </Select>
             },
             {
                 name: 'loftingLeader',
                 label: '放样负责人',
-                children: <Form.Item name="loftingLeader" initialValue={ location.state?.userId || "" }>
+                children: <Form.Item name="loftingLeader" initialValue={location.state?.userId || ""}>
                     <Select placeholder="请选择" style={{ width: "150px" }}>
                         <Select.Option value="" key="6">全部</Select.Option>
-                        { checkUser && checkUser.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                        }) }
+                        {checkUser && checkUser.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                        })}
                     </Select>
                 </Form.Item>
             },
