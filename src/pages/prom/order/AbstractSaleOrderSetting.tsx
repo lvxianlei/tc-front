@@ -237,7 +237,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const price: number = saleOrderValue.price;
         let amount: number | undefined = 0;
         amount = orderWeight * price;
-        console.log(amount, doNumber(amount, 4))
         this.getForm()?.setFieldsValue({ amount: doNumber(amount, 4) });
     }
 
@@ -258,24 +257,30 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      *      不含税单价 = 含税单价 / （1+税率/100），保留4位小数
      */
     public unitPriceExcludingTax = ():void => {
-        const saleOrderValue:any = this.getForm()?.getFieldsValue(true);
-        const taxPrice: number = saleOrderValue.taxPrice * 1; // 含税单价
-        const taxRate: number = saleOrderValue.taxRate * 1; // 税率
-        let result: number | undefined = 0;
-        result = taxPrice / (1 + taxRate  / 100);
-        this.getForm()?.setFieldsValue({ price: doNumber(result, 4) });
+        // const saleOrderValue:any = this.getForm()?.getFieldsValue(true);
+        // console.log("sddddddddddd", saleOrderValue)
+        // const taxPrice: number = saleOrderValue.taxPrice * 1; // 含税单价
+        // const taxRate: number = saleOrderValue.taxRate * 1; // 税率
+        // let result: number | undefined = 0;
+        // result = taxPrice / (1 + taxRate  / 100);
+        // this.getForm()?.setFieldsValue({ price: doNumber(result, 4) });
     }
 
     /**
-     * @description 订单总重改变时总计金额同步&根据税率计算不含税金额
+     * @description 含税金额改变改变含税单价
+     *  公式：含税单价 = 含税金额/订单重量
      */
     public amountBlur = (): void => {
-        const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
-        const taxAmount: number = saleOrderValue.taxAmount;
-        this.getPrice();
-        this.getForm()?.setFieldsValue({ totalAmount: taxAmount });
-        this.getAmount();
-        this.getPriceAfterChangeAmount();
+        const saleOrderValue: any = this.getForm()?.getFieldsValue(true);
+        const taxAmount: number = saleOrderValue.taxAmount * 1;
+        const orderWeight: number = saleOrderValue.orderWeight * 1;
+        if (orderWeight > 0) {
+            const result = taxAmount / orderWeight;
+            const taxRate: number = saleOrderValue.taxRate * 1; // 税率
+            let result1: number | undefined = 0;
+            result1 = result / (1 + taxRate  / 100);
+            this.getForm()?.setFieldsValue({ taxPrice: doNumber(result, 4), price: doNumber(result, 4) });
+        }
     }
 
     /**
@@ -339,13 +344,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             children: <Input maxLength={50} disabled={true} />,
                         },
                         {
-                            label: "关联合同",
+                            label: "内部合同编号",
                             name: "contractNumber",
                             initialValue: saleOrder?.contractInfoDto?.contractNumber,
                             rules: [
                                 {
                                     required: true,
-                                    message: "请选择关联合同",
+                                    message: "请选择内部合同编号",
                                 },
                             ],
                             children: (
@@ -473,7 +478,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             name: "orderWeight",
                             initialValue: saleOrder?.orderWeight || "0.00000000",
 
-                            children: <InputNumber className={layoutStyles.width100} step="0.00000001" max={99999999.9999} onChange={() => { this.getAmount(); this.getTaxAmount() }} />,
+                            children: <InputNumber className={layoutStyles.width100} step="0.00000001" max={99999999.9999} onChange={() => { this.getAmount(); this.amountBlur(); this.unitPriceExcludingTax()}} />,
                         },
                         {
                             label: "含税金额",
@@ -490,7 +495,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     min="0"
                                     step="0.0001"
                                     stringMode={false}
-                                    disabled={true}
                                     precision={4}
                                     onChange={this.amountBlur}
                                     className={layoutStyles.width100}
@@ -513,7 +517,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     message: "请输入含税单价",
                                 },
                             ],
-                            children: <InputNumber step="0.0001" precision={4} onChange={() => {this.getTaxAmount(); this.unitPriceExcludingTax()}} max={999999999999.99} />,
+                            children: <InputNumber step="0.0001" precision={4} disabled={true} max={999999999999.99} />,
                         },
                         {
                             label: "不含税单价",
@@ -530,7 +534,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                         {
                             label: "税率",
                             name: "taxRate",
-                            initialValue: (saleOrder?.taxRate && saleOrder?.taxRate !== -1) ? saleOrder?.taxRate : 0,
+                            initialValue: (saleOrder?.taxRate && saleOrder?.taxRate !== -1) ? saleOrder?.taxRate : 13,
                             rules: [
                                 {
                                     required: true,

@@ -78,7 +78,6 @@ export default function Overview(): JSX.Element {
             okText: "提交/完成",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    console.log(materialLists, "materialLists")
                     await finishPriceRun({
                         comparisonPriceDetailDtos: materialLists.map((item: any) => ({
                             ...item,

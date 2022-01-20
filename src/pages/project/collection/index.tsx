@@ -1,10 +1,11 @@
 import React, { useState } from "react"
-import { Button, Input, DatePicker, Radio } from 'antd'
+import { Button, Input, DatePicker, Radio, Select } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { collectionListHead } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { collectionTypeeOptions } from '../../../configuration/DictionaryOptions';
 export default function Collection() {
     const [refresh, setRefresh] = useState<boolean>(false);
     const history = useHistory()
@@ -24,8 +25,9 @@ export default function Collection() {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startRefundTime = formatDate[0]
             value.endRefundTime = formatDate[1]
-        }
-        setFilterValue({ confirmStatus })
+        } 
+        value.confirmStatus = confirmStatus;
+        setFilterValue(value);
         return value
     }
 
@@ -37,6 +39,7 @@ export default function Collection() {
 
     return <Page
         path="/tower-market/backMoney"
+        exportPath={"/tower-market/backMoney"}
         columns={[
             ...collectionListHead,
             {
@@ -65,6 +68,19 @@ export default function Collection() {
                 name: 'startRefundTime',
                 label: '来款日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+            },
+            {
+                name: 'returnType',
+                label: '回款类型',
+                children: (
+                    <Select placeholder="请选择回款类型" style={{ width: "140px" }}>
+                        { collectionTypeeOptions && collectionTypeeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                        }) }
+                    </Select>
+                )
             },
             {
                 name: 'fuzzyQuery',

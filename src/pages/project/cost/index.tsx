@@ -6,7 +6,7 @@ import { consultRecords, costBase } from '../managementDetailData.json'
 import SelectAuditType from "./SelectInquiryType"
 import SelectInquiryEdit from "./SelectInquiryEdit"
 import SelectInquiryDetail from "./SelectInquiryDetail"
-import type { TabTypes } from "../ManagementDetail"
+import type { TabTypes } from "../Detail"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export type SelectType = "selectA" | "selectB" | "selectC"

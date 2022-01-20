@@ -1,4 +1,5 @@
 import moment from "moment"
+import { utils as xUtils } from "xlsx"
 export function downLoadFile(path: string, fileName?: string | undefined) {
     const a = document.createElement("a");
     a.setAttribute("href", path);
@@ -7,6 +8,11 @@ export function downLoadFile(path: string, fileName?: string | undefined) {
     let clickEvent = document.createEvent("MouseEvents");
     clickEvent.initEvent("click", true, true);
     a.dispatchEvent(clickEvent);
+}
+
+export function downLoadTemplate(columns: any[]) {
+    const head = columns.map(item => ({ title: item.title }))
+   
 }
 
 export function formatPathToStringName(path: string, basepath?: string): string {

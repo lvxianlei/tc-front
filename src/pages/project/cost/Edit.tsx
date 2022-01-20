@@ -1,9 +1,8 @@
 import React, { useState, useRef, useImperativeHandle, forwardRef } from "react"
 import { Button, Form, message, Spin, Modal, Select } from "antd"
-import { useHistory, useParams, useRouteMatch } from "react-router-dom"
+import { useHistory, useRouteMatch } from "react-router-dom"
 import { BaseInfo, DetailContent, DetailTitle, EditTable } from '../../common'
 import { costBase } from '../managementDetailData.json'
-import type { TabTypes } from "../ManagementDetail"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
