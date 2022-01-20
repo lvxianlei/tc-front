@@ -55,7 +55,6 @@ export default function BaseInfoEdit(): JSX.Element {
             console.log(error)
         }
     }
-    console.log(tenderDeliveryMethodOptions, "tenderDeliveryMethodOptions")
     return <>
         <ManagementDetailTabsTitle />
         <DetailContent

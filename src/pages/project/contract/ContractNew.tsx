@@ -24,7 +24,6 @@ import { ProjectContractInfo } from "../../prom/contract/AbstractContractSetting
 class ManagementContractNew extends ContractNew {
   public getFormItemGroups(): IFormItemGroup[][] {
     const contract = this.state.contract as ProjectContractInfo | undefined;
-    console.log(this.state, "contract")
     return this.state.contractAdd?.address === "其他-国外" ? [
       [
         {
