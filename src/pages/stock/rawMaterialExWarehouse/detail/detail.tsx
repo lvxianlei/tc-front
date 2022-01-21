@@ -335,9 +335,10 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             result.updateTimeEnd = `${formatDate[1]} 23:59:59`
             delete value.startRefundTime
         }
+        console.log(value, "value")
         if (value.batcherId) {
-            value.departmentId = value.batcherId.first
-            value.outStockStaffId = value.batcherId.second
+            result.departmentId = value.batcherId.first
+            result.outStockStaffId = value.batcherId.second
         }
         setFilterValue(result)
         return result
