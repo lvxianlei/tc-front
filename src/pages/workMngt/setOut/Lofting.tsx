@@ -13,13 +13,10 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from './downloadTemplate';
+import { ILofting } from './ISetOut';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
-}
-
-interface ILofting {
-    readonly id?: string;
 }
 
 export default function Lofting(): React.ReactNode {
