@@ -58,10 +58,10 @@ export default function PoleInformation(): React.ReactNode {
             width: 200
         },
         {
-            key: 'loftingDeliverTime',
+            key: 'loftingUpdateStatusTime',
             title: '最新状态变更时间',
             width: 200,
-            dataIndex: 'loftingDeliverTime'
+            dataIndex: 'loftingUpdateStatusTime'
         },
         {
             key: 'operation',

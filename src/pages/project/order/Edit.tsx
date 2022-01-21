@@ -27,7 +27,8 @@ export default function SeeGuarantee(): JSX.Element {
                 signContractTime: result.signContractTime, // 合同签订日期
                 deliveryTime: result.deliveryTime, // 合同要求交货日期
                 currencyType: result.currencyType, // 币种
-                saleType: result.saleType// 销售类型
+                saleType: result.saleType, // 销售类型
+                orderProjectName: result.contractName, // 订单工程名称
             })
             return;
         }
@@ -80,7 +81,6 @@ export default function SeeGuarantee(): JSX.Element {
     }
     const handleSave = async() => {
         const baseData: any = await addCollectionForm.validateFields();
-        console.log(baseData, "basdds")
         const result = {
             projectId: params.projectId,
             ...baseData,

@@ -3,7 +3,7 @@ import { Result, Spin, Modal, Button } from "antd"
 import { useHistory, useParams } from "react-router-dom"
 import { DetailContent, CommonTable } from '../../common'
 import { payInfoListHead } from './payInfo.json'
-import type { TabTypes } from "../ManagementDetail"
+import type { TabTypes } from "../Detail"
 import Overview from "./Overview"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'

@@ -419,7 +419,7 @@
     { // 项目管理
       "name": "项目管理",
       "path": "/project/management",
-      "module": "./pages/project/Management",
+      "module": "./pages/project/index",
       "exact": true,
       "authority": "project_management"
     },
@@ -459,7 +459,7 @@
       "authority": "project"
     },
     { // 回款申请
-      "name": "回款申请",
+      "name": "回款确认",
       "path": "/project/collection",
       "module": "./pages/project/collection/index",
       "exact": true,
@@ -540,14 +540,14 @@
       // 项目编辑
       "name": "新增/编辑项目",
       "path": "/project/management/edit/base/:id",
-      "module": "./pages/project/Edit/BaseInfoEdit",
+      "module": "./pages/project/baseInfo/Edit",
       "exact": true,
       "authority": "project_edit"
     },
     { // 项目管理子项详情
       "name": "项目管理子项详情",
       "path": "/project/management/detail/:tab/:id",
-      "module": "./pages/project/ManagementDetail",
+      "module": "./pages/project/Detail",
       "exact": true,
       "authority": "project_detail"
     },
@@ -568,21 +568,21 @@
     { // 项目管理标书制作编辑
       "name": "标书制作编辑",
       "path": "/project/management/edit/bidDoc/:id",
-      "module": "./pages/project/Edit/BidDocEdit",
+      "module": "./pages/project/bidDoc/Edit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理招标结果编辑
       "name": "招标结果编辑",
       "path": "/project/management/edit/bidResult/:id",
-      "module": "./pages/project/Edit/BidResultEdit",
+      "module": "./pages/project/bidResult/Edit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理框架协议编辑
       "name": "框架协议编辑",
       "path": "/project/management/edit/frameAgreement/:id",
-      "module": "./pages/project/Edit/FrameAgreementEdit",
+      "module": "./pages/project/frameAgreement/Edit",
       "exact": true,
       "authority": "project_detail"
     },
@@ -631,28 +631,28 @@
     { // 审批管理
       "name": "审批管理",
       "path": "/approvalm/management",
-      "module": "./pages/approval-mngt/ApprovalMngt",
+      "module": "./pages/approval-mngt/index",
       "exact": true,
       "authority": "approval_management_list"
     },
     { // 审批管理详情
       "name": "审批管理详情",
       "path": "/approvalm/management/detail/:id",
-      "module": "./pages/approval-mngt/ApprovalMngtDetail",
+      "module": "./pages/approval-mngt/Overview",
       "exact": true,
       "authority": "approvalm_detail"
     },
     { // 审批管理新建
       "name": "审批管理详情",
       "path": "/approvalm/management/edit/new/:type",
-      "module": "./pages/approval-mngt/ApprovalMngtEdit",
+      "module": "./pages/approval-mngt/Edit",
       "exact": true,
       "authority": "approvalm_edit"
     },
     { // 审批管理详情
       "name": "审批管理详情",
       "path": "/approvalm/management/edit/:id",
-      "module": "./pages/approval-mngt/ApprovalMngtEdit",
+      "module": "./pages/approval-mngt/Edit",
       "exact": true,
       "authority": "approvalm_edit"
     },

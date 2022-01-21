@@ -496,7 +496,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, cargoData, onSubmit, resetFields])
 
     const handleBaseInfoChange = (fields: any) => {
-        console.log(fields, "带回来的数据")
         if (fields.contractNumber) {
             setContractId(fields.contractNumber.id);
 
@@ -530,7 +529,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const supplierData = fields.supplierName.records[0]
             setColumns(columns.map((item: any) => {
                 if (item.dataIndex === "contractNumber") {
-                    console.log(item.path, "path")
                     return ({
                         ...item,
                         path: `/tower-supply/materialContract?contractStatus=1&supplierId=${fields.supplierName.id}`

@@ -34,7 +34,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
       rows: [
         [
           {
-            label: "订单编号",
+            label: "销售订单编号",
             value: baseInfo?.saleOrderNumber,
           },
           {

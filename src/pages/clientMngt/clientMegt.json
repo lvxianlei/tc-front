@@ -52,8 +52,8 @@
         {
             "title": "联系电话",
             "dataIndex": "phone",
-            "type": "phone",
-            "required": true
+            "required": true,
+            "maxLength": 30
         },
         {
             "title": "联系地址",

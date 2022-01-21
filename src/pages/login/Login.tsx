@@ -63,6 +63,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
             RequestUtil.get<ICaptcha>('/sinzetech-auth/oauth/captcha'),
             RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${window.location.host}`)
             // RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-test.dhwy.cn`)
+            // RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-dev.dhwy.cn`)
         ])
         this.setState({
             captcha: captcha,

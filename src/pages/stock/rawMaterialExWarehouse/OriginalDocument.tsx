@@ -70,7 +70,6 @@ export default function RawMaterialStock(): React.ReactNode {
     ]
     //获取列表数据
     const loadData = async () => {
-        console.log('请求数据')
         const data: any = await RequestUtil.get(`/tower-storage/outStock`, {
             current,
             size: pageSize,
@@ -126,7 +125,6 @@ export default function RawMaterialStock(): React.ReactNode {
                         <RangePicker
                             value={dateValue}
                             onChange={(date, dateString) => {
-                                console.log(date, dateString)
                                 setDateValue(date)
                                 setDateString(dateString)
                             }}
@@ -265,7 +263,6 @@ export default function RawMaterialStock(): React.ReactNode {
                         pageSizeOptions: ['10', '20', '50', '100'],
                         showSizeChanger: true,
                         onChange: (page, pageSize) => {
-                            console.log(page, pageSize)
                             setCurrent(page);
                             setPageSize(Number(pageSize));
                         }

@@ -61,7 +61,6 @@ export default function Overview() {
                 receiveStatus: filterValue["receiveStatus"] || ""
             })
             resole(result)
-            console.log(result, "resul")
         } catch (error) {
             reject(error)
         }

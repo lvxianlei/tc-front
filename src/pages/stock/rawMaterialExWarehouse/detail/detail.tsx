@@ -395,7 +395,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     }
     // 点击出库-缺料申请-按钮
     const MaterialShortageApplication = async () => {
-        console.log(ApplyListdata, 'ApplyListdata')
         if (OutLibraryListdata.length != 0) {
             message.error('库存未用完')
             return
