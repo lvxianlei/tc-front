@@ -556,7 +556,6 @@
         {
             "title": "请款金额",
             "dataIndex": "pleasePayAmount",
-            "type": "number",
             "disabled": true
         }
     ],

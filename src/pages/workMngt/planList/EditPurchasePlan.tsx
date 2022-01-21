@@ -1,20 +1,20 @@
 /**
  * b编辑采购计划
  */
- import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
- import { Form, Spin, Button, InputNumber } from 'antd';
- import { CommonTable, DetailTitle } from '../../common';
- import useRequest from '@ahooksjs/use-request'
- import RequestUtil from '../../../utils/RequestUtil';
- import { applicationdetails, ingredientsColumn } from './EditPurchasePlan.json';
- import { materialStandardOptions } from "../../../configuration/DictionaryOptions";
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { Form, Spin, Button, InputNumber } from 'antd';
+import { CommonTable, DetailTitle } from '../../common';
+import useRequest from '@ahooksjs/use-request'
+import RequestUtil from '../../../utils/RequestUtil';
+import { applicationdetails, ingredientsColumn } from './EditPurchasePlan.json';
+import { materialStandardOptions } from "../../../configuration/DictionaryOptions";
 
- interface EditProps {
+interface EditProps {
     id?: string
     ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
     requiredReturnTime?: string
 }
- export default forwardRef(function EditPurchasePlan({id}: EditProps, ref) {
+export default forwardRef(function EditPurchasePlan({ id }: EditProps, ref) {
     const [addCollectionForm] = Form.useForm();
 
     // 塔型
@@ -63,7 +63,7 @@
             const result: any = await RequestUtil.get(`/tower-supply/materialPurchasePlan/purchasePlanInfo/detail?purchasePlanId=${id}&ids=${ids}`);
             resolve(result);
             // 删除成功后，把删除的id存储
-            const deIdAll:any = [...deleIds, delId]
+            const deIdAll: any = [...deleIds, delId]
             setDeleIds(deIdAll);
             // 把页面的数据过滤处理
             setTowerType(v);
@@ -81,7 +81,7 @@
                 purchasePlanInfoDetailDTOS: ingredients,
                 towerIds: deleIds.map<string>((item: any): string => item || '').join(',')
             }
-            await run({path: "/tower-supply/materialPurchasePlan/purchasePlanInfo/save", data: v})
+            await run({ path: "/tower-supply/materialPurchasePlan/purchasePlanInfo/save", data: v })
             resolve(true)
         } catch (error) {
             reject(false)
@@ -113,9 +113,9 @@
                         )
                     }
                 }
-            ]} dataSource={towerType } />
+            ]} dataSource={towerType} />
             <DetailTitle title="配料列表" />
-            <CommonTable columns={[
+            <CommonTable pagination={false} columns={[
                 {
                     key: 'index',
                     title: '序号',
@@ -142,12 +142,12 @@
                     dataIndex: 'purchasePlan',
                     width: 120,
                     render: (_: any, record: any, index: number): React.ReactNode => (
-                        <InputNumber 
-                            stringMode={ false }
+                        <InputNumber
+                            stringMode={false}
                             min={0}
                             step={1}
                             defaultValue={record.purchasePlan ? record.purchasePlan : 0}
-                            precision={ 0 }
+                            precision={0}
                             onBlur={(e) => {
                                 const result: any = ingredients;
                                 result[index]["purchasePlan"] = Number(e.target.value);
@@ -159,4 +159,4 @@
             ]} dataSource={ingredients} />
         </Spin>
     )
- })
+})

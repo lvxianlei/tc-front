@@ -125,7 +125,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         title: "序号",
         dataIndex: "index",
         width: 50,
-        className: styles.tableCell,
+        fixed: "left",
         render: (_: any, _a: any, index: number) => <>{index + 1}</>
     }, ...formatColumns] : formatColumns
     return <nav className={styles.componentsTableResizableColumn}>
@@ -139,7 +139,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
                     cell: ResizableTitle
                 }
             })}
-            className={`${styles.opration} ${ layoutStyles.opration }`}
+            className={`${styles.opration} ${layoutStyles.opration}`}
             onRow={() => ({ className: styles.tableRow })}
             dataSource={dataSource}
             {...props}
