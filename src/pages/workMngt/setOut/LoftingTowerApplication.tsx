@@ -13,14 +13,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { useState } from 'react';
 import { useForm } from 'antd/es/form/Form';
 import styles from './SetOut.module.less';
-
-interface IResponseData {
-    readonly id: number;
-    readonly size: number;
-    readonly current: number;
-    readonly total: number;
-    readonly records: [];
-}
+import { IResponseData } from './ISetOut';
 
 export default function LoftingTowerApplication(): React.ReactNode {
 
