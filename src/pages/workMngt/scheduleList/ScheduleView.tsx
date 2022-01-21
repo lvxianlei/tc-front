@@ -11,6 +11,7 @@ import moment from 'moment';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './scheduleList.module.less';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
+import SchedulePlan from './SchedulePlan';
 
 
 const tableColumns = [
@@ -464,6 +465,7 @@ export default function ScheduleView(): React.ReactNode {
                 onCancel={handleModalCancel}
                 footer={
                     edit?null:<>
+                        <SchedulePlan/>
                         <Button onClick={handleModalCancel}>取消</Button>
                         <Button type='primary' onClick={handleModalOk}>保存并提交</Button>
                     </>
@@ -488,6 +490,32 @@ export default function ScheduleView(): React.ReactNode {
                                             { name }
                                         </Select.Option>
                                     }) }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Row>
+                                <Col span={15}>
+                                    <Form.Item name="priority" label="指派方案"> 
+                                        <Select disabled={edit}>
+                                            <Select.Option value={0} key={0}>紧急</Select.Option>
+                                            <Select.Option value={1} key={1}>高</Select.Option>
+                                            <Select.Option value={2} key={2}>中</Select.Option>
+                                            <Select.Option value={3} key={3}>低</Select.Option>
+                                        </Select>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="priority" label="优先级" rules={[{required: true,message:'请选择优先级'}]} > 
+                                <Select disabled={edit}>
+                                    <Select.Option value={0} key={0}>紧急</Select.Option>
+                                    <Select.Option value={1} key={1}>高</Select.Option>
+                                    <Select.Option value={2} key={2}>中</Select.Option>
+                                    <Select.Option value={3} key={3}>低</Select.Option>
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -746,21 +774,11 @@ export default function ScheduleView(): React.ReactNode {
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="priority" label="优先级" rules={[{required: true,message:'请选择优先级'}]} > 
-                                        <Select disabled={edit}>
-                                            <Select.Option value={0} key={0}>紧急</Select.Option>
-                                            <Select.Option value={1} key={1}>高</Select.Option>
-                                            <Select.Option value={2} key={2}>中</Select.Option>
-                                            <Select.Option value={3} key={3}>低</Select.Option>
-                                        </Select>
+                                    <Form.Item name="description" label="备注"  >
+                                        <TextArea rows={1} disabled={edit} showCount maxLength={400} style={{width:'100%'}}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="description" label="备注"  >
-                                <TextArea rows={1} disabled={edit} showCount maxLength={400}/>
-                            </Form.Item>
                         </Col>
                     </Row>
                 </Form>
