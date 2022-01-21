@@ -25,8 +25,6 @@ interface ISectionData {
 
 }
 
-
-
 export default function TowerInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();

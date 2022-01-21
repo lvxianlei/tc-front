@@ -13,7 +13,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import QuestionnaireModal, { IRecord } from './QuestionnaireModal';
 import RequestUtil from '../../../utils/RequestUtil';
 
-
 const columns = [
     {
         key: 'index',
@@ -109,6 +108,13 @@ const columns = [
         editable: true,
         width: 200,
         dataIndex: 'description'
+    },
+    {
+        key: 'a',
+        title: '特殊件号',
+        editable: true,
+        width: 200,
+        dataIndex: 'a'
     },
     {
         key: 'electricWelding',
@@ -266,6 +272,10 @@ export default function TowerCheck(): React.ReactNode {
         const red: number = record.redColumn.indexOf(dataIndex);
         const green: number = record.greenColumn.indexOf(dataIndex);
         const yellow: number = record.yellowColumn.indexOf(dataIndex);
+        const brown: number = record.a;
+        if (brown === 1) {
+            return 'brown';
+        }
         if (red !== -1) {
             return 'red';
         } else if (green !== -1) {
@@ -283,7 +293,7 @@ export default function TowerCheck(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 col.dataIndex === 'index' ? index + 1
                     : !col.editable ? _
-                        : <p onDoubleClick={(e) => { questionnaire(_, record, col, checkColor(record, col.dataIndex)) }} className={checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : ''}>{_}</p>
+                        : <p onDoubleClick={(e) => { questionnaire(_, record, col, checkColor(record, col.dataIndex)) }} className={checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : checkColor(record, col.dataIndex) === 'brown' ? styles.brown : ''}>{_}</p>
             )
         }
     })
