@@ -276,7 +276,7 @@
             "dataIndex": "structureSpec"
         },
         {
-            "title": "原材料长度",
+            "title": "原材料长度(mm)",
             "dataIndex": "length"
         },
         {

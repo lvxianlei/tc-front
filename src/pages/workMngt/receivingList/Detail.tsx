@@ -1,11 +1,11 @@
 /**
  * 详情
  */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button } from 'antd';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil';
-import { BaseInfo, DetailTitle, CommonTable, Attachment, AttachmentRef } from '../../common';
+import { BaseInfo, DetailTitle, CommonTable } from '../../common';
 import { baseInfo, freightInfo, handlingChargesInfo, goodsDetail } from './Detail.json';
 interface OverViewProps {
     visible?: boolean
@@ -15,10 +15,10 @@ interface OverViewProps {
     onOk: () => void
 }
 export default function Detail(props: OverViewProps): JSX.Element {
-    const [addCollectionForm] = Form.useForm(); 
+    const [addCollectionForm] = Form.useForm();
 
     // 收货单基础信息
-    const [ baseInfomation, setBaseInfomation ] = useState({});
+    const [baseInfomation, setBaseInfomation] = useState({});
 
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -29,10 +29,10 @@ export default function Detail(props: OverViewProps): JSX.Element {
             reject(error)
         }
     }), { manual: true })
-    
+
     // 获取详情数据
     useEffect(() => {
-       getUser(props.id)
+        getUser(props.id)
     }, [props.id])
 
     return (
@@ -41,33 +41,33 @@ export default function Detail(props: OverViewProps): JSX.Element {
             visible={props.visible}
             onCancel={props?.onCancel}
             maskClosable={false}
-            width={1300}
+            width={1011}
             destroyOnClose={true}
             footer={[
-            <Button key="back" onClick={props?.onCancel}>
-                关闭
-            </Button>
+                <Button key="back" onClick={props?.onCancel}>
+                    关闭
+                </Button>
             ]}
         >
             <DetailTitle title="收货单基础信息" />
             <BaseInfo
                 form={addCollectionForm}
                 dataSource={baseInfomation}
-                col={ 4 }
+                col={2}
                 columns={[...baseInfo]}
             />
             <DetailTitle title="运费信息" />
             <BaseInfo
                 form={addCollectionForm}
                 dataSource={baseInfomation}
-                col={ 4 }
+                col={2}
                 columns={[...freightInfo]}
             />
             <DetailTitle title="装卸费信息" />
             <BaseInfo
                 form={addCollectionForm}
                 dataSource={baseInfomation}
-                col={ 4 }
+                col={2}
                 columns={[...handlingChargesInfo]}
             />
             <DetailTitle title="货物明细" />
