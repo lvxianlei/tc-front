@@ -35,6 +35,10 @@
     ],
     "materialColumns": [
         {
+            "title": "序号",
+            "dataIndex": "materialSeq"
+        },
+        {
             "title": "物料编码",
             "dataIndex": "materialCode"
         },

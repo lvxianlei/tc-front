@@ -17,7 +17,18 @@
         },
         {
             "title": "收货单状态",
-            "dataIndex": "receiveStatusName"
+            "dataIndex": "receiveStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待完成",
+                    "value": 0
+                },
+                {
+                    "label": "已完成",
+                    "value": 1
+                }
+            ]
         },
         {
             "title": "供应商",
@@ -255,7 +266,8 @@
             "title": "重量（kg）合计",
             "dataIndex": "weight",
             "type": "number",
-            "disabled": true
+            "disabled": true,
+            "step": "0.0001"
         },
         {
             "title": "备注",
