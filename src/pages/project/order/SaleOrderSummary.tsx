@@ -44,8 +44,8 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         ],
         [
           {
-            label: "关联合同",
-            value: baseInfo?.contractInfoVo?.contractNumber,
+            label: "合同名称",
+            value: baseInfo?.contractInfoVo?.contractName,
           },
           {
             label: "订单工程名称",

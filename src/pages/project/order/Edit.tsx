@@ -16,12 +16,13 @@ export default function SeeGuarantee(): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const params = useParams<{ projectId: string, id: string }>();
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
-        if (fields.contractNumber) {
+        if (fields.internalNumber) {
             // 关联合同
-            const result = fields.contractNumber.records[0];
+            const result = fields.internalNumber.records[0];
+            console.log(result, "reslut")
             addCollectionForm.setFieldsValue({
                 purchaseOrderNumber: result.purchaseOrderNumber, // 采购订单号
-                internalNumber: result.internalNumber, // 内部合同编号
+                // internalNumber: result.internalNumber, // 内部合同编号
                 customerCompany: result.customerCompany, // 业主单位
                 signCustomerName: result.signCustomerName, // 合同签订单位
                 signContractTime: result.signContractTime, // 合同签订日期
@@ -29,6 +30,7 @@ export default function SeeGuarantee(): JSX.Element {
                 currencyType: result.currencyType, // 币种
                 saleType: result.saleType, // 销售类型
                 orderProjectName: result.contractName, // 订单工程名称
+                contractName: result.contractName, // 合同名称
             })
             return;
         }
@@ -81,14 +83,15 @@ export default function SeeGuarantee(): JSX.Element {
     }
     const handleSave = async() => {
         const baseData: any = await addCollectionForm.validateFields();
+        console.log(baseData, "bas")
         const result = {
             projectId: params.projectId,
             ...baseData,
             contractInfoDto: {
-                ...baseData?.contractNumber.records[0],
-                contractId: baseData?.contractNumber?.records[0]?.id || baseData?.contractNumber?.records[0]?.contractId
+                ...baseData?.internalNumber.records[0],
+                contractId: baseData?.internalNumber?.records[0]?.id || baseData?.internalNumber?.records[0]?.contractId
             },
-            contractNumber: baseData?.contractNumber.id
+            contractNumber: baseData?.internalNumber.id
         }
         await run({data: params.id === "new" ? result : {...result, id: params.id}})
     }
@@ -140,9 +143,9 @@ export default function SeeGuarantee(): JSX.Element {
                         guaranteeAmount: "0.00",
                         ...orderData?.contractInfoVo,
                         ...orderData,
-                        contractNumber: {
+                        internalNumber: {
                             id: orderData?.contractInfoVo.contractId,
-                            value: orderData?.contractInfoVo.contractNumber,
+                            value: orderData?.contractInfoVo.internalNumber,
                             records: orderData?.contractInfoVo ? [orderData?.contractInfoVo] : []
                         }
                     }}

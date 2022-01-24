@@ -7,7 +7,7 @@
         },
         {
             "title": "内部合同编号",
-            "dataIndex": "contractNumber",
+            "dataIndex": "internalNumber",
             "type": "popTable",
             "rules": [
                 {
@@ -17,7 +17,7 @@
             ],
             "path": "/tower-market/contract",
             "width": 1011,
-            "value": "contractNumber",
+            "value": "internalNumber",
             "dependencies": true,
             "readOnly": true,
             "columns": [
@@ -52,8 +52,8 @@
             ]
         },
         {
-            "title": "内部合同编号",
-            "dataIndex": "internalNumber",
+            "title": "合同名称",
+            "dataIndex": "contractName",
             "disabled": true
         },
         {
