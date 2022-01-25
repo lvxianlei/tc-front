@@ -26,6 +26,16 @@
                     "dataIndex": "contractNumber"
                 },
                 {
+                    "title": "采购订单编号",
+                    "dataIndex": "purchaseOrderNumber",
+                    "search": true
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber",
+                    "search": true
+                },
+                {
                     "title": "合同名称",
                     "dataIndex": "contractName",
                     "search": true
