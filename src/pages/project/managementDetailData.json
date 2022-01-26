@@ -299,7 +299,7 @@
             "dataIndex": "saleOrderNumber"
         },
         {
-            "title": "合同编号",
+            "title": "内部合同编号",
             "dataIndex": "internalNumber"
         },
         {

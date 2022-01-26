@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle } from "react"
-import { Form } from "antd"
+import { Form, message } from "antd"
 import { EditTable } from "../../common"
 import { batchCreateColumns } from "./InvoicingData.json"
 import useRequest from "@ahooksjs/use-request"
@@ -37,16 +37,21 @@ export default forwardRef(function BatchCreate(props, ref): JSX.Element {
     const onSubmit = async () => {
         try {
             const postData = await form.validateFields()
+            if (postData.submit.length <= 0) {
+                message.warning("至少新增一条...")
+                return false
+            }
             await saveRun(postData.submit.map((item: any) => ({
                 ...item,
                 contractSignTime: item.contractCode?.records?.[0]?.signContractTime,
                 contractCode: item.contractCode?.id
             })))
+            return true
         } catch (error) {
             console.log("Error:", error)
         }
     }
 
-    useImperativeHandle(ref, () => ({ onSubmit, loading }), [handleChange, loading])
+    useImperativeHandle(ref, () => ({ onSubmit, loading }), [handleChange, onSubmit, loading])
     return <EditTable form={form} columns={batchCreateColumns} dataSource={[]} onChange={handleChange} />
 })

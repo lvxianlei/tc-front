@@ -587,7 +587,13 @@
             "title": "重量",
             "dataIndex": "weight",
             "type": "number",
-            "required": true
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入重量..."
+                }
+            ]
         },
         {
             "title": "单价(元/吨)",
@@ -599,6 +605,7 @@
             "title": "金额(元)",
             "dataIndex": "moneyCount",
             "type": "number",
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -665,7 +672,7 @@
     ],
     "batchCreateColumns": [
         {
-            "title": "内部合同编号",
+            "title": "内部合同",
             "dataIndex": "contractCode",
             "type": "popTable",
             "path": "/tower-market/contract",
@@ -673,11 +680,26 @@
             "value": "contractNumber",
             "dependencies": true,
             "readOnly": true,
+            "search": [
+                {
+                    "title": "",
+                    "dataIndex": "fuzzyQuery",
+                    "placeholder": "内部合同编号/合同名称/采购订单编号/业主单位",
+                    "width": 300
+                }
+            ],
             "columns": [
                 {
                     "title": "合同编号",
-                    "dataIndex": "contractNumber",
-                    "search": true
+                    "dataIndex": "contractNumber"
+                },
+                {
+                    "title": "采购订单编号",
+                    "dataIndex": "purchaseOrderNumber"
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber"
                 },
                 {
                     "title": "合同名称",
@@ -685,8 +707,7 @@
                 },
                 {
                     "title": "业主单位",
-                    "dataIndex": "customerCompany",
-                    "search": true
+                    "dataIndex": "customerCompany"
                 },
                 {
                     "title": "合同签订单位",

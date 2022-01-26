@@ -124,19 +124,16 @@ export default function Overview() {
                     </Form.Item>
                 }
             ]}
-            // sourceKey="receiveStockDetailPage.records"
-            extraOperation={(data: any) => {
-                return <>
-                    <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} style={{ marginRight: 16, marginLeft: 16 }}>申请质检</Button>
-                    <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                    <span style={{ marginLeft: "20px" }}>
-                        已收货：重量(支)合计：{userData?.receiveWeight === -1 ? 0 : userData?.receiveWeight}
-                        价税合计(元)合计：{userData?.receivePrice === -1 ? 0 : userData?.receivePrice}
-                        待收货：重量(支)合计：{userData?.waitWeight === -1 ? 0 : userData?.waitWeight}
-                        价税合计(元)合计：{userData?.waitPrice === -1 ? 0 : userData?.waitPrice}
-                    </span>
-                </>
-            }}
+            extraOperation={<>
+                <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} >申请质检</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
+                <span style={{ marginLeft: "20px" }}>
+                    已收货：重量(支)合计：<span style={{ color: "#FF8C00" }}>{userData?.receiveWeight === -1 ? 0 : userData?.receiveWeight}</span>
+                    价税合计(元)合计：<span style={{ color: "#FF8C00" }}>{userData?.receivePrice === -1 ? 0 : userData?.receivePrice}</span>
+                    待收货：重量(支)合计：<span style={{ color: "#FF8C00" }}> {userData?.waitWeight === -1 ? 0 : userData?.waitWeight}</span>
+                    价税合计(元)合计：<span style={{ color: "#FF8C00" }}>{userData?.waitPrice === -1 ? 0 : userData?.waitPrice}</span>
+                </span>
+            </>}
             columns={[
                 ...CargoDetails,
                 {

@@ -54,6 +54,7 @@ export default function BidResultEdit(): JSX.Element {
                 try {
                     if (refFun?.getForm()) {
                         const fdata = await refFun?.getForm().validateFields()
+                        console.log(fdata, "data")
                         if (fdata?.submit.length <= 0) {
                             message.error("每轮至少新增一行...")
                             return
@@ -68,16 +69,21 @@ export default function BidResultEdit(): JSX.Element {
             })))
             // 验证中标比例
             for (let i = 0; i < _tabsData.length; i += 1) {
-                if (_tabsData[i].formData) {
+                if (_tabsData[i].formData && _tabsData[i].formData.length > 0) {
                     for (let p = 0; p < _tabsData[i].formData.length; p += 1) {
-                        if (map.has(_tabsData[i].formData[p].packageCode)) {
-                            // 如果里面存在
-                            const result: any = map.get(_tabsData[i].formData[p].packageCode);
-                            map.set(_tabsData[i].formData[p].packageCode, +result + (+_tabsData[i].formData[p].bidPro || 0));
-                        } else {
-                            map.set(_tabsData[i].formData[p].packageCode, (_tabsData[i].formData[p].bidPro || 0));
+                        if (_tabsData[i].formData[p].isBid === 1) {
+                            if (map.has(`${_tabsData[i].formData[p].packageCode}_${_tabsData[i].roundName}`)) {
+                                // 如果里面存在
+                                const result: any = map.get(`${_tabsData[i].formData[p].packageCode}_${_tabsData[i].roundName}`);
+                                map.set(`${_tabsData[i].formData[p].packageCode}_${_tabsData[i].roundName}`, +result + (+_tabsData[i].formData[p].bidPro || 0));
+                            } else {
+                                map.set(`${_tabsData[i].formData[p].packageCode}_${_tabsData[i].roundName}`, (_tabsData[i].formData[p].bidPro || 0));
+                            }
                         }
                     }
+                } else {
+                    message.error("每轮至少新增一行...");
+                    return false;
                 }
             }
             let flag = false;
