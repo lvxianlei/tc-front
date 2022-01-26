@@ -21,7 +21,7 @@ export default function Overview({ id }: OverviewProps) {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${id}`)
             const statistics: any = await RequestUtil.get(`/tower-market/bidBase/statistics/${id}`)
-            resole({ result, statistics })
+            resole({ result, statistics: statistics || [] })
         } catch (error) {
             reject(error)
         }
@@ -30,7 +30,6 @@ export default function Overview({ id }: OverviewProps) {
     const handleChange = (activeKey: any) => {
         setRound(data?.result?.bidOpenRecordListVos[activeKey].round)
     }
-
     return <DetailContent operation={[
         <Button key="goEdit" type="primary" style={{ marginRight: 16 }}
             onClick={() => history.push(`/project/management/edit/bidResult/${id}`)}>编辑</Button>,
