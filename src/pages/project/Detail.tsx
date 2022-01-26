@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Row, Radio, Spin, Modal, message } from 'antd'
 import { useHistory, useParams, Link, useRouteMatch, useLocation } from 'react-router-dom'
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
+import { DetailContent, CommonTable } from '../common'
 import CostDetail from './cost'
 import PayInfo from './payInfo'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
@@ -64,8 +64,7 @@ export default function ManagementDetail(): React.ReactNode {
             resole(result)
             return
         }
-        if (["base", "bidDoc", "bidResult", "cost", "payInfo", ""].includes(params.tab as string)) {
-            // const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}`, { projectId: params.id, ...postData })
+        if (["base", "bidDoc", "bidResult", "cost", "payInfo", "frameAgreement"].includes(params.tab as string)) {
             resole({})
             return
         }
@@ -274,17 +273,17 @@ export default function ManagementDetail(): React.ReactNode {
                                     {
                                         record.taskReviewStatus === 0 ?
                                             "审批中" :
-                                        record.taskReviewStatus === 1 ?
-                                            "审批通过" :
-                                        record.taskReviewStatus === 2 ?
-                                            "审批驳回" : "-"
+                                            record.taskReviewStatus === 1 ?
+                                                "审批通过" :
+                                                record.taskReviewStatus === 2 ?
+                                                    "审批驳回" : "-"
                                     }
                                 </span>
                             }
                         })
                     }
                     return item;
-                }), 
+                }),
                 {
                     title: "操作",
                     dataIndex: "opration",
@@ -311,7 +310,7 @@ export default function ManagementDetail(): React.ReactNode {
                             </>}
                         </>
                     }
-            }]} dataSource={data?.records} />
+                }]} dataSource={data?.records} />
         </DetailContent>,
         tab_payInfo: <PayInfo />
     }
