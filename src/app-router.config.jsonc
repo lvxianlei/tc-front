@@ -313,14 +313,14 @@
     },
     { // 原材料类型管理
       "name": "原材料类型管理",
-      "path": "/sys/materialType",
+      "path": "/config/configList/materialType",
       "module": "./pages/system-mngt/material/MaterialTypeMngt",
       "exact": true,
       "authority": "material_category_management"
     },
     { // 原材料管理
       "name": "原材料管理",
-      "path": "/sys/material",
+      "path": "/config/configList/material",
       "module": "./pages/system-mngt/materialMngt/MaterialMngt",
       "exact": true,
       "authority": "material_management"
@@ -799,35 +799,35 @@
     },
     {
       "name": "配置管理",
-      "path": "/config",
+      "path": "/config/configList",
       "module": "./pages/config/index",
       "exact": true,
       "authority": "configuration_management_lists"
     },
     { // 配置管理-仓库管理
       "name": "仓库管理",
-      "path": "/stock/warehouse",
+      "path": "/config/configList/warehouse",
       "module": "./pages/stock/warehouse/warehouse",
       "exact": true,
       "authority": "sw_configuration_management_warehouse_management"
     },
     { // 配置管理-安全库存配置
       "name": "安全库存配置",
-      "path": "/stock/securitySetting",
+      "path": "/config/configList/securitySetting",
       "module": "./pages/stock/securitySetting/securitySetting",
       "exact": true,
       "authority": "sw_configuration_management_safety_stock_configuration"
     },
     { // 配置管理-角钢配料策略
       "name": "角钢配料策略",
-      "path": "/stock/angleSteel",
+      "path": "/config/configList/angleSteel",
       "module": "./pages/stock/angleSteel/index",
       "exact": true,
       "authority": "sw_configuration_management_angle_steel_batching_strategy"
     },
     { // 配置管理-其他参数配置
       "name": "其他参数配置",
-      "path": "/stock/otherParameters",
+      "path": "/config/configList/otherParameters",
       "module": "./pages/stock/otherParameters/OtherParameters",
       "exact": true,
       "authority": "sw_configuration_management_other_parameter_configuration"
