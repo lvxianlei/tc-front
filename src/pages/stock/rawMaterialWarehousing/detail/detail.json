@@ -2,7 +2,7 @@
     "baseColumn": [
         {
             "title": "材质名称",
-            "dataIndex": "productName",
+            "dataIndex": "materialName",
             "width": 120
         },
         {
@@ -52,7 +52,7 @@
         },
         {
             "title": "采购状态",
-            "dataIndex": "receiveStatusName",
+            "dataIndex": "receiveDetailStatusName",
             "width": 120
         },
         {
