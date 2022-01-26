@@ -324,7 +324,7 @@
         },
         {
             "title": "业务经理",
-            "dataIndex": "currencyTypeName",
+            "dataIndex": "salesman",
             "disabled": true,
             "width": 200
         },

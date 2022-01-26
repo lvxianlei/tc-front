@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Spin, Form, Button, Modal, Select, Input, message, Row, Radio } from 'antd'
+import { Spin, Form, Button, Modal, message, Row, Radio } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../common'
-import { PopTable } from "../common/FormItemType"
 import { baseInfoData, detaiBidStatus, isBidding, noBidding, bidPageInfo, bidPageInfoCount } from './bidding.json'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -123,8 +122,8 @@ export default function InformationDetail(): React.ReactNode {
                     <Radio.Button value="count" key="count">统计</Radio.Button>
                 </Radio.Group>
             </Row>
-            {viewBidList === "detail" && <CommonTable columns={bidPageInfo} dataSource={data?.bidPackageInfoVOS} />}
-            {viewBidList === "count" && <CommonTable rowKey="partBidNumber" columns={bidPageInfoCount} dataSource={data?.bidPackageInfoCensusVOS} />}
+            {viewBidList === "detail" && <CommonTable haveIndex columns={bidPageInfo} dataSource={data?.bidPackageInfoVOS} />}
+            {viewBidList === "count" && <CommonTable haveIndex rowKey="partBidNumber" columns={bidPageInfoCount} dataSource={data?.bidPackageInfoCensusVOS} />}
             <Attachment title="附件" dataSource={data?.attachVos} />
         </DetailContent>
     </>

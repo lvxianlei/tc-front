@@ -56,14 +56,10 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
                     title: "备注",
                     dataIndex: "index",
                     width: 50,
-                    render: (_: any, record: Record<string, any>, index: number) => (<>{
-                        record.attachInfoVos && record.attachInfoVos.length > 0 ?
-                            <Button type="link" onClick={() => {
-                                setVisible(true);
-                                setAttach(record.attachInfoVos);
-                            }}>回执单</Button>
-                            : <Button type="link" disabled>回执单</Button>
-                    }</>)
+                    render: (_: any, record: Record<string, any>, index: number) => <Button type="link" onClick={() => {
+                        setVisible(true);
+                        setAttach(record.attachInfoVos);
+                    }}>回执单</Button>
                 }]} dataSource={data?.applyPaymentRecordVos || []} />
             <OperationRecord title="操作信息" serviceId={id} serviceName="tower-supply" />
         </Spin>

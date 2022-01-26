@@ -316,7 +316,8 @@
             "dataIndex": "packageName",
             "rules": [
                 {
-                    "required": true
+                    "required": true,
+                    "message":"请输入包名称..."
                 }
             ]
         },
