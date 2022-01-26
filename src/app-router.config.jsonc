@@ -439,6 +439,13 @@
     },
     { // 开票申请
       "name": "新增开票申请",
+      "path": "/project/invoicing/new/:id",
+      "module": "./pages/project/invoicing/Edit",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 编辑开票申请
+      "name": "编辑开票申请",
       "path": "/project/invoicing/edit/:id",
       "module": "./pages/project/invoicing/Edit",
       "exact": true,

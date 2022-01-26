@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import AliTable from './AliTable'
-import { FormInstance, message, Row, Button, Form, Table } from "antd"
+import { FormInstance, message, Row, Button, Form } from "antd"
 import FormItemType from './FormItemType'
 interface EditableTableProps {
     columns: any[]
@@ -14,7 +14,7 @@ interface EditableTableProps {
     onChange?: (data: any[], allFields: any[]) => void
 }
 
-const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean) => {
+const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean, onRemove: (id: string) => void) => {
     const newColumns = columns.map(item => {
         if (item.type === "popTable") {
             return ({
@@ -48,7 +48,7 @@ const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean
         width: "80px",
         code: "opration",
         render: (_: undefined, record: any) => {
-            return <Button style={{ paddingLeft: 0 }} size="small" type="link" onClick={() => { }}>删除</Button>
+            return <Button style={{ paddingLeft: 0 }} size="small" type="link" onClick={() => onRemove(record.id)}>删除</Button>
         }
     })
     haveIndex && newColumns.unshift({
@@ -66,18 +66,32 @@ export default function EditableTable({
     columns, dataSource = [], onChange, form, haveNewButton = true,
     newButtonTitle = "新增一行", haveOpration = true, haveIndex = true, opration
 }: EditableTableProps): JSX.Element {
-    const [editableDataSource, setEditableDatasource] = useState<any[]>(dataSource)
-    const [eidtableColumns, setEditableColumns] = useState<any[]>(formatColunms(columns, haveOpration, haveIndex))
+    const [editableDataSource, setEditableDataSource] = useState<any[]>(dataSource.map(item => ({
+        ...item,
+        id: item.id || (Math.random() * 1000000).toFixed(0)
+    })))
+
+    const removeItem = (id: string) => {
+        console.log("id:", id, editableDataSource)
+        const removedDataSource = editableDataSource.filter(item => item.id !== id);
+        setEditableDataSource(removedDataSource)
+        console.log(editableDataSource)
+        form && form.setFieldsValue({ submit: editableDataSource })
+        console.log(form?.getFieldsValue())
+
+    }
+
+    const [eidtableColumns, setEditableColumns] = useState<any[]>(formatColunms(columns, haveOpration, haveIndex, removeItem))
 
     useEffect(() => {
-        setEditableColumns(formatColunms(columns, haveOpration, haveIndex))
+        setEditableColumns(formatColunms(columns, haveOpration, haveIndex, removeItem))
     }, [JSON.stringify(columns)])
 
     useEffect(() => {
-        setEditableDatasource(dataSource)
+        setEditableDataSource(dataSource.map(item => ({ ...item, id: item.id || (Math.random() * 1000000).toFixed(0) })))
         form && form.setFieldsValue({ submit: dataSource })
     }, [JSON.stringify(dataSource)])
-
+    console.log(editableDataSource)
     return <Form
         form={form}
         onValuesChange={onChange}
@@ -85,11 +99,12 @@ export default function EditableTable({
         <Row>{haveNewButton && <Button
             onClick={async () => {
                 try {
-                    form && await form.validateFields()
-                    const id = (Math.random() * 1000000).toFixed(0)
-                    setEditableDatasource([{ id }, ...editableDataSource])
+                    form && await form.validateFields();
+                    const addedEditDataSource = [{ id: (Math.random() * 1000000).toFixed(0) }, ...editableDataSource]
+                    setEditableDataSource(addedEditDataSource)
+                    form && form.setFieldsValue({ submit: addedEditDataSource })
                 } catch (error) {
-                    message.warning("所有数据校验通过才能继续新增")
+                    message.warning("所有数据校验通过才能继续新增...")
                 }
             }}
             type="primary"

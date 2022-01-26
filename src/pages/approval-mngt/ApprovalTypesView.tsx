@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Modal, Spin, Radio } from "antd"
-import { CommonTable, BaseInfo, DetailContent, DetailTitle, Attachment } from "../common"
+import { CommonTable, BaseInfo, DetailContent, DetailTitle, Attachment, OperationRecord } from "../common"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import {
@@ -38,7 +38,7 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
                 <Radio.Button value="records">审批记录</Radio.Button>
             </Radio.Group>
             {radioValue === "base" && <BaseInfo columns={bondBaseInfoView} dataSource={data?.performanceBond || {}} col={2} />}
-            {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records || []} />}
+            {radioValue === "records" && <OperationRecord serviceName="tower-market" serviceId={id} operateTypeEnum="APPROVAL" title="" />}
         </DetailContent>,
         "图纸交接申请": <DetailContent>
             <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{ marginBottom: 16 }}>

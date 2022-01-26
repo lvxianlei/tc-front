@@ -54,10 +54,16 @@ export default function Invoicing() {
             visible={visible}
             confirmLoading={!!modalRef.current?.loading}
             onOk={async () => {
-                await modalRef.current?.onSubmit()
-                message.success("批量创建成功....")
-                setVisible(false)
-                history.go(0)
+                try {
+                    const result = await modalRef.current?.onSubmit()
+                    if (result) {
+                        message.success("批量创建成功....")
+                        setVisible(false)
+                        history.go(0)
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
             }}
             onCancel={() => setVisible(false)}>
             <BatchCreate ref={modalRef} />
@@ -100,7 +106,7 @@ export default function Invoicing() {
                     }
                 }]}
             extraOperation={<>
-                <Link to="/project/invoicing/edit/new"><Button type="primary">新增开票申请</Button></Link>
+                <Link to="/project/invoicing/new/new"><Button type="primary">新增开票申请</Button></Link>
                 <Button type="primary" onClick={() => setVisible(true)}>批量创建</Button>
             </>}
             onFilterSubmit={onFilterSubmit}

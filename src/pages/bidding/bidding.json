@@ -328,7 +328,7 @@
             "maxLength": 50
         },
         {
-            "title": "货物类别",
+            "title": "物资类别",
             "dataIndex": "goodsType",
             "type": "text",
             "maxLength": 50
@@ -413,7 +413,7 @@
             "maxLength": 50
         },
         {
-            "title": "货物类别",
+            "title": "物资类别",
             "dataIndex": "goodsType",
             "type": "text",
             "maxLength": 50

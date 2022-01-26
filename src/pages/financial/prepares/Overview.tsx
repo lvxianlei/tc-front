@@ -46,8 +46,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
                 }
                 return item
             })} dataSource={data || {}} col={2} />
-            <DetailTitle title="审批信息" />
-            <CommonTable columns={[{ title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> }, ...approvalInfo]} dataSource={data?.approveRecordVos || []} />
+            <OperationRecord title="审批信息" operateTypeEnum="APPROVAL" serviceId={id} serviceName="tower-supply" />
             <DetailTitle title="付款信息" />
             <CommonTable columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
