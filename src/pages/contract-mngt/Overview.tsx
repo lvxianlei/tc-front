@@ -4,17 +4,14 @@ import { BaseInfo, DetailTitle, Attachment, CommonTable } from "../common"
 import { contractOverview, materialOverview, freightOverview, stevedoringOverview } from "./contract.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import { deliverywayOptions, materialStandardOptions, transportationTypeOptions } from "../../configuration/DictionaryOptions"
+import { deliverywayOptions, transportationTypeOptions } from "../../configuration/DictionaryOptions"
 
 interface OverviewProps {
     id: string
 }
 
 export default function Overview({ id }: OverviewProps): JSX.Element {
-    const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
-        value: item.id,
-        label: item.name
-    }))
+
     const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
@@ -68,8 +65,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
                 </span>
             </p>
         </p>
-        <Row></Row>
-        <CommonTable columns={materialOverview} dataSource={data?.materialContractDetailVos || []} />
-        <Attachment dataSource={data?.materialContractAttachInfoVos || []} />
+        <CommonTable style={{ paddingBottom: 0 }} columns={materialOverview} dataSource={data?.materialContractDetailVos || []} />
+        <Attachment style={{ margin: 0 }} dataSource={data?.materialContractAttachInfoVos || []} />
     </Spin>
 }

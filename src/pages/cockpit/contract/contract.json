@@ -10,22 +10,11 @@
         },
         {
             "title": "合同状态",
-            "dataIndex": "contractStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "执行中"
-                },
-                {
-                    "value": 2,
-                    "label": "已完成"
-                }
-            ]
+            "dataIndex": "contractStatusName"
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "batcheStatusUpdateTime",
+            "dataIndex": "updateTime",
             "format": "YYYY-MM-DD HH:mm"
         },
         {
@@ -34,7 +23,7 @@
         },
         {
             "title": "完成/总数",
-            "dataIndex": "finish",
+            "dataIndex": "completeSituation",
             "type": "string"
         },
         {
