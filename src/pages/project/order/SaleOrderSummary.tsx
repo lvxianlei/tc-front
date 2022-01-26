@@ -84,27 +84,20 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         ],
         [
           {
-            label: "订单交货日期",
-            value: baseInfo?.orderDeliveryTime,
+            label: "制单人",
+            value: baseInfo?.createUserName,
           },
           {
             label: "备注",
             value: baseInfo?.description,
           },
-        ],
-        [
-          {
-            label: "制单人",
-            value: baseInfo?.createUserName,
-          }
-        ],
+        ]
       ],
     };
   }
   protected getAmountInfoGrid(): IRenderedGrid {
     const baseInfo: ManagementSaleOrderBaseInfo | undefined = this.state
       .baseInfo as ManagementSaleOrderBaseInfo;
-    console.log(baseInfo);
     return {
       labelCol: {
         span: 4,

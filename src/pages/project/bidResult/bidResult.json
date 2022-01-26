@@ -17,11 +17,23 @@
                     "value": 2,
                     "label": "否"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择是否中标..."
+                }
             ]
         },
         {
             "title": "分标编号",
-            "dataIndex": "bidCode"
+            "dataIndex": "bidCode",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入分标编码..."
+                }
+            ]
         },
         {
             "title": "货物类别",
@@ -36,11 +48,23 @@
         },
         {
             "title": "电压等级",
-            "dataIndex": "vgrade"
+            "dataIndex": "vgrade",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入电压等级..."
+                }
+            ]
         },
         {
             "title": "包名称",
-            "dataIndex": "packageCode"
+            "dataIndex": "packageCode",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入包名称..."
+                }
+            ]
         },
         {
             "title": "项目单位",
@@ -67,7 +91,13 @@
         {
             "title": "单价（元）",
             "dataIndex": "unitPrice",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入单价（元）..."
+                }
+            ]
         },
         {
             "title": "总价（元）",

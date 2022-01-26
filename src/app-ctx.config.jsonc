@@ -695,7 +695,7 @@
                         "items": [
                             {
                                 "label": "配置管理列表",
-                                "path": "/config",
+                                "path": "/config/configList",
                                 "authority": "configuration_management_lists"
                             }
                         ]

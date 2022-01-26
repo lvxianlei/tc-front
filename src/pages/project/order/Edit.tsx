@@ -119,7 +119,7 @@ export default function SeeGuarantee(): JSX.Element {
             reject(error)
         }
     }), { manual: params.id === "new" })
-
+    
     return (
         <Spin spinning={loading}>
             <DetailContent operation={[
@@ -152,7 +152,7 @@ export default function SeeGuarantee(): JSX.Element {
                     col={4}
                     columns={[
                         ...baseInfo.map((item: any) => {
-                            if (item.dataIndex === "contractNumber") {
+                            if (item.dataIndex === "internalNumber") {
                                 return ({
                                     ...item,
                                     path: "/tower-market/contract?projectId=" + params.projectId,
