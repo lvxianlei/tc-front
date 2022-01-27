@@ -1,12 +1,13 @@
 import React from "react"
-import { Button, Select, Spin } from 'antd'
-import { useHistory, } from 'react-router-dom'
+import { Button, Result, Image, Spin } from 'antd'
+import { Link, useHistory, } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
 import { frameAgreementColumns, materialListColumns } from "./frame.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { winBidTypeOptions } from '../../../configuration/DictionaryOptions'
 import { changeTwoDecimal_f } from '../../../utils/KeepDecimals';
+import quesheng from "../../../../public/quesheng.png"
 interface OverviewProps {
     id: string
 }
@@ -24,7 +25,12 @@ export default function Overview({ id }: OverviewProps) {
     }))
 
     return <Spin spinning={loading}>
-        <DetailContent operation={[
+        {(!data?.id || [-1, "-1"].includes(data?.id)) && <Result style={{ paddingTop: 200 }}
+            title="去创建框架协议"
+            icon={<Image src={quesheng} />}
+            extra={<Button type="primary" style={{ width: 70 }}><Link to={`/project/management/edit/frameAgreement/${id}`}>创建</Link></Button>}
+        />}
+        {data?.id && data?.id !== -1 && <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/frameAgreement/${id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
@@ -63,6 +69,6 @@ export default function Overview({ id }: OverviewProps) {
                 { title: "创建人", dataIndex: 'createUserName' },
                 { title: "创建时间", dataIndex: 'createTime', type: "date" }
             ]} dataSource={data || {}} />
-        </DetailContent>
+        </DetailContent>}
     </Spin>
 }

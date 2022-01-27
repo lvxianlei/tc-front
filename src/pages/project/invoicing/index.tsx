@@ -52,6 +52,7 @@ export default function Invoicing() {
             title="批量创建"
             width={1101}
             visible={visible}
+            destroyOnClose
             confirmLoading={!!modalRef.current?.loading}
             onOk={async () => {
                 try {
