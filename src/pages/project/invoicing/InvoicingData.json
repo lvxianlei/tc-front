@@ -445,7 +445,7 @@
         },
         {
             "title": "理重",
-            "dataIndex": "logicWeight",
+            "dataIndex": "reasonWeight",
             "type": "number",
             "disabled": true
         },
@@ -672,12 +672,12 @@
     ],
     "batchCreateColumns": [
         {
-            "title": "内部合同",
+            "title": "内部合同编号",
             "dataIndex": "contractCode",
             "type": "popTable",
             "path": "/tower-market/contract",
             "width": 1011,
-            "value": "contractNumber",
+            "value": "internalNumber",
             "dependencies": true,
             "readOnly": true,
             "search": [

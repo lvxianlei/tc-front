@@ -79,7 +79,15 @@ export default function Edit() {
 
     const handleOk = async () => {
         const contractInfos = await contractInfosForm.getFieldsValue()
-        contractInfosForm.setFieldsValue({ submit: [...contractInfos.submit, { ...popContent.records, key: popContent.id }] })
+        contractInfosForm.setFieldsValue({
+            submit: [
+                ...contractInfos.submit,
+                {
+                    ...popContent.records,
+                    key: popContent?.id
+                }
+            ]
+        })
         setVisible(false)
     }
 
@@ -100,8 +108,10 @@ export default function Edit() {
                     noPaymentReceived: parseFloat(item.paymentPlanId.records[0].returnedAmount || "0") - parseFloat(item.paymentPlanId.records[0].paymentReceived || "0")
                 }) : item)
                 contractInfosForm.setFieldsValue({ submit: newFields })
-                setSelectedConstranct(allFields.submit.map((item: any) => item.paymentPlanId.id))
+                setSelectedConstranct(allFields.submit.map((item: any) => item.paymentPlanId?.id))
             }
+        } else {
+            setSelectedConstranct([])
         }
     }
 
