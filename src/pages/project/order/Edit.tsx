@@ -91,7 +91,7 @@ export default function SeeGuarantee(): JSX.Element {
                 ...baseData?.internalNumber.records[0],
                 contractId: baseData?.internalNumber?.records[0]?.id || baseData?.internalNumber?.records[0]?.contractId
             },
-            contractNumber: baseData?.internalNumber.id
+            contractNumber: baseData?.internalNumber?.records[0]?.contractNumber,
         }
         await run({data: params.id === "new" ? result : {...result, id: params.id}})
     }
