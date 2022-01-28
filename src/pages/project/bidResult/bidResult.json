@@ -18,6 +18,7 @@
                     "label": "否"
                 }
             ],
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -28,6 +29,7 @@
         {
             "title": "分标编号",
             "dataIndex": "bidCode",
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -49,6 +51,7 @@
         {
             "title": "电压等级",
             "dataIndex": "vgrade",
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -59,6 +62,7 @@
         {
             "title": "包名称",
             "dataIndex": "packageCode",
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -92,6 +96,7 @@
             "title": "单价（元）",
             "dataIndex": "unitPrice",
             "type": "number",
+            "required": true,
             "rules": [
                 {
                     "required": true,
