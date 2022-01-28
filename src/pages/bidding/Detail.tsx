@@ -96,8 +96,11 @@ export default function InformationDetail(): React.ReactNode {
         })
     }
     return <>
-        <Modal zIndex={15} visible={visible}
-            title="是否应标" okText="确定"
+        <Modal
+            zIndex={15}
+            visible={visible}
+            title="是否应标"
+            okText="确定"
             onOk={handleModalOk}
             confirmLoading={bidResStatus}
             onCancel={handleModalCancel} >

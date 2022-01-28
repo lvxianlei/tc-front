@@ -284,7 +284,7 @@
                     "dataIndex": "packageName"
                 },
                 {
-                    "title": "包号",
+                    "title": "分包编号",
                     "dataIndex": "packageNumber",
                     "type": "text",
                     "maxLength": 50
