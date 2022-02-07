@@ -1,12 +1,15 @@
 import React, { useState, } from "react"
-import { Input, DatePicker, Select, Form, Spin, } from 'antd'
+import { Input, DatePicker, Select, Form, Spin, Button, Space, } from 'antd'
 import { Page } from '../../common'
-import { Link, useLocation } from "react-router-dom"
+import { Link, useHistory, useLocation } from "react-router-dom"
+import { FixedType } from 'rc-table/lib/interface';
 import useRequest from "@ahooksjs/use-request"
+import styles from './template.module.less';
 import RequestUtil from "../../../utils/RequestUtil"
 export default function TemplateList() {
     const [filterValue, setFilterValue] = useState<any>({})
     const location = useLocation<{ state?: number, userId?: string }>();
+    const history = useHistory();
     const columns: any[] = [
         {
             title: '序号',
@@ -21,7 +24,7 @@ export default function TemplateList() {
             dataIndex: 'taskNum',
         },
         {
-            title: '上传图纸类型',
+            title: '工作类型',
             dataIndex: 'uploadDrawTypeName',
         },
         {
@@ -41,11 +44,15 @@ export default function TemplateList() {
             dataIndex: 'deliverTime',
         },
         {
-            title: '图纸负责人',
+            title: '样板负责人',
             dataIndex: 'drawLeaderName',
         },
         {
-            title: '上传状态',
+            title: '页数/数量',
+            dataIndex: 'drawLeaderName',
+        },
+        {
+            title: '完成状态',
             dataIndex: 'uploadStatusName',
         },
         {
@@ -55,9 +62,34 @@ export default function TemplateList() {
         {
             title: '操作',
             dataIndex: 'operation',
+            fixed: 'right' as FixedType,
+            width:'120px',
             render: (text: string, record: Record<string, any>): React.ReactNode => {
                 return (
-                    <Link to={`/workMngt/templateList/${record.id}/${record.productCategoryId}`}>查看</Link>
+                   <Space direction="horizontal" size="small" className={styles.operationBtn}> {record?.uploadDrawTypeName==='组装图纸'?<>
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/${record.id}/${record.productCategoryId}`)}}>编辑</Button>
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/${record.id}/${record.productCategoryId}`)}}>查看</Button>
+                    </>:<>
+                    
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/${record.id}/${record.productCategoryId}`)}}>查看</Button>
+                    <Button type='link' onClick={()=>{
+                        // RequestUtil.post(`/tower-system/notice/withdraw`, {
+                        //     noticeIds: [record.id]
+                        // }).then(res => {
+                            
+                        // });
+                    }}>完成</Button>
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/${record.id}/${record.productCategoryId}`)}}>编辑</Button>
+                    <Button type='link' onClick={()=>{
+                        // RequestUtil.post(`/tower-system/notice/withdraw`, {
+                        //     noticeIds: [record.id]
+                        // }).then(res => {
+                            
+                        // });
+                    }}>删除</Button>
+                    </>}
+                    </Space>
+                   
                 )
             }
         },
@@ -84,6 +116,7 @@ export default function TemplateList() {
                 path="/tower-science/loftingTemplate"
                 filterValue={filterValue}
                 columns={columns}
+                extraOperation={ <Button type='primary'>创建样板任务</Button>}
                 exportPath={`/tower-science/loftingTemplate`}
                 onFilterSubmit={onFilterSubmit}
                 requestData={{ status: location.state?.state, drawLeader: location.state?.userId }}
@@ -100,13 +133,8 @@ export default function TemplateList() {
                         )
                     },
                     {
-                        name: 'updateStatusTimeStart',
-                        label: '日期选择',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                    },
-                    {
                         name: 'status',
-                        label: '上传状态',
+                        label: '状态',
                         children: (<Form.Item name="status" initialValue={location.state?.state || ""}>
                             <Select style={{ width: 200 }} placeholder="请选择">
                                 <Select.Option value="">全部</Select.Option>
@@ -117,8 +145,13 @@ export default function TemplateList() {
                         )
                     },
                     {
+                        name: 'updateStatusTimeStart',
+                        label: '日期选择',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    },
+                    {
                         name: 'drawLeader',
-                        label: '图纸负责人',
+                        label: '样板负责人',
                         children: <Form.Item name="drawLeader" initialValue={location.state?.userId || ""}>
                             <Select placeholder="请选择" style={{ width: "150px" }}>
                                 <Select.Option value="" key="6">全部</Select.Option>

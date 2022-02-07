@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Space, DatePicker, Button, Form, Modal, Row, Col, Select, message, InputNumber, TreeSelect } from 'antd'
+import { Space, DatePicker, Button, Form, Modal, Row, Col, Select, message, InputNumber, TreeSelect, Input } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useParams } from 'react-router-dom'
-import { Page } from '../../common'
+import { DetailTitle, Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import { TreeNode } from 'antd/lib/tree-select';
@@ -23,6 +23,7 @@ export interface IMaterialDetail{
 }
 export default function PickTower(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
+    const [segmentVisible, setSegmentVisible] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
     const [matchLeader, setMatchLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
@@ -67,6 +68,7 @@ export default function PickTower(): React.ReactNode {
     const handleModalSave =  async () => {
         try {
             const data = await form.validateFields();
+            console.log(data)
             const saveTableData = data.detailData.map((item:any,index:number)=>{
                 return{
                     segmentId: item.id,
@@ -215,14 +217,69 @@ export default function PickTower(): React.ReactNode {
         <>
             <Modal title='配段信息'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
                 {detail?.materialDrawProductSegmentList?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList }} autoComplete="off" form={form}>  
+                    <DetailTitle title={'塔腿配段信息'} operation={[<Button type='primary' onClick={()=>{setSegmentVisible(true)}}>快速配段</Button>,<Modal 
+                        visible={segmentVisible}
+                        title='配段信息'
+                        onCancel={()=>{
+                            setSegmentVisible(false);
+                        }}
+                    >
+                        <Row>
+                            <Form.Item name="A" label="配段" rules={[{
+                                required: true,
+                                message:'请填写A'
+                            }]}>
+                                <Input style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Row>
+                    </Modal>]}/>
                     <Row>
-                        <Col span={1}></Col>
+                        <Col span={1}/>
+                        <Col span={5}>
+                            <Form.Item name="A" label="A" rules={[{
+                                required: true,
+                                message:'请填写A'
+                            }]}>
+                                <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={1}/>
+                        <Col span={5}>
+                            <Form.Item name="B" label="B" rules={[{
+                                required: true,
+                                message:'请填写B'
+                            }]}>
+                                <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={1}/>
+                        <Col span={5}>
+                            <Form.Item name="C" label="C" rules={[{
+                                required: true,
+                                message:'请填写C'
+                            }]}>
+                                <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={1}/>
+                        <Col span={5}>
+                            <Form.Item name="D" label="D" rules={[{
+                                required: true,
+                                message:'请填写D'
+                            }]}>
+                                <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <DetailTitle title={'塔身配段信息'} />
+                    <Row>
+                        <Col span={1}/>
                         <Col span={11}>
                             <Form.Item name="productCategoryName" label="塔型">
                                 <span>{detail?.productCategoryName}</span>
                             </Form.Item>
                         </Col>
-                        <Col span={1}></Col>
+                        <Col span={1}/>
                         <Col span={11}>
                             <Form.Item name="productNumber" label="杆塔号">
                                 <span>{detail?.productNumber}</span>
