@@ -44,3 +44,7 @@ export interface ILofting {
     readonly apertureNumber?: string;
     readonly weldingEdge?: string;
 }
+
+export interface PdmModalProps {
+    onSubmit: () => void 
+}
