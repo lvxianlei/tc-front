@@ -69,14 +69,18 @@ export default function SetOutTowerMngt(): React.ReactNode {
             title: '角钢件号数',
             width: 100,
             dataIndex: 'steelAngleCount',
-            render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)
+            render: (_: any, _b: any, index: number): React.ReactNode => (
+                <span>{_?'-':_}</span>
+            ) 
         },
         {
             key: 'steelPlateCount',
             title: '钢板件号数',
             width: 100,
             dataIndex: 'steelPlateCount',
-            render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)
+            render: (_: any, _b: any, index: number): React.ReactNode => (
+                <span>{_?'-':_}</span>
+            ) 
         },
         {
             key: 'updateUserName',
