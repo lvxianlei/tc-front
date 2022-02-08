@@ -1,5 +1,5 @@
 import React, { useRef, useState, } from "react"
-import { Button, message, Modal, Popconfirm, Image, Space, } from 'antd'
+import { Button, message, Modal, Popconfirm, Image, Space, InputNumber, } from 'antd'
 import { Attachment, CommonTable, DetailContent } from '../../common'
 import { useHistory, useParams, } from "react-router-dom"
 import RequestUtil from "../../../utils/RequestUtil"
@@ -44,6 +44,12 @@ export default function TemplateDetail() {
             title: '上传时间',
             dataIndex: 'createTime',
             align: 'center',
+        },
+        {
+            title: '图纸页数',
+            dataIndex: 'createTime',
+            align: 'center',
+            render:(text: number)=>{return <InputNumber min={1} max={9999} defaultValue={text} bordered={false} />}
         },
         {
             title: '上传人',

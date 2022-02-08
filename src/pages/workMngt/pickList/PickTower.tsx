@@ -160,7 +160,7 @@ export default function PickTower(): React.ReactNode {
                             })
                             form.setFieldsValue({detailData:detailData});
                             
-                    }} disabled={record.materialStatus!==2||AuthUtil.getUserId()!==record.materialUser|| params.status!=='3'}>配段</Button>
+                    }} >配段</Button>
                     <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==3}>杆塔提料明细</Button>
                 </Space>
             )
@@ -225,9 +225,14 @@ export default function PickTower(): React.ReactNode {
                         }}
                     >
                         <Row>
-                            <Form.Item name="A" label="配段" rules={[{
-                                required: true,
-                                message:'请填写A'
+                            <Form.Item name="A" label="配段" 
+                            // rules={[{
+                            //     required: true,
+                            //     message:'请填写A'
+                            // }]}
+                            rules={[{
+                                pattern: /^[a-zA-Z0-9-,*]*$/,
+                                message: '仅可输入英文字母/数字/特殊字符',
                             }]}>
                                 <Input style={{width:'100%'}}/>
                             </Form.Item>

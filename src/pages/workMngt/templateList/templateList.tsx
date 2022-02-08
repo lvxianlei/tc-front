@@ -5,7 +5,10 @@ import { Link, useHistory, useLocation } from "react-router-dom"
 import { FixedType } from 'rc-table/lib/interface';
 import useRequest from "@ahooksjs/use-request"
 import styles from './template.module.less';
-import RequestUtil from "../../../utils/RequestUtil"
+import RequestUtil from "../../../utils/RequestUtil";
+import TaskNew from "./taskNew";
+import TaskEdit from "./taskEdit";
+import TaskView from "./taskView";
 export default function TemplateList() {
     const [filterValue, setFilterValue] = useState<any>({})
     const location = useLocation<{ state?: number, userId?: string }>();
@@ -63,15 +66,15 @@ export default function TemplateList() {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width:'120px',
+            width:'100px',
+            align:'left',
             render: (text: string, record: Record<string, any>): React.ReactNode => {
                 return (
-                   <Space direction="horizontal" size="small" className={styles.operationBtn}> {record?.uploadDrawTypeName==='组装图纸'?<>
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/${record.id}/${record.productCategoryId}`)}}>编辑</Button>
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/${record.id}/${record.productCategoryId}`)}}>查看</Button>
-                    </>:<>
+                   <Space direction="horizontal" size="small" className={styles.operationBtn}> {record?.uploadDrawTypeName==='组装图纸'?
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/detail/${record.id}/${record.productCategoryId}`)}}>查看</Button>
+                    :<>
                     
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/${record.id}/${record.productCategoryId}`)}}>查看</Button>
+                    <TaskView record={record}/>
                     <Button type='link' onClick={()=>{
                         // RequestUtil.post(`/tower-system/notice/withdraw`, {
                         //     noticeIds: [record.id]
@@ -79,7 +82,7 @@ export default function TemplateList() {
                             
                         // });
                     }}>完成</Button>
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/${record.id}/${record.productCategoryId}`)}}>编辑</Button>
+                    <TaskEdit record={record}/>
                     <Button type='link' onClick={()=>{
                         // RequestUtil.post(`/tower-system/notice/withdraw`, {
                         //     noticeIds: [record.id]
@@ -116,7 +119,7 @@ export default function TemplateList() {
                 path="/tower-science/loftingTemplate"
                 filterValue={filterValue}
                 columns={columns}
-                extraOperation={ <Button type='primary'>创建样板任务</Button>}
+                extraOperation={ <TaskNew/>}
                 exportPath={`/tower-science/loftingTemplate`}
                 onFilterSubmit={onFilterSubmit}
                 requestData={{ status: location.state?.state, drawLeader: location.state?.userId }}

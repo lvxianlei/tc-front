@@ -1077,9 +1077,16 @@
       "exact": true,
       "authority": "rd_template_record"
     },
+    { // 工作管理-钢板明细
+      "name": "钢板明细",
+      "path": "/workMngt/templateList/steel/:productId",
+      "module": "./pages/workMngt/templateList/steelDetail",
+      "exact": true,
+      "authority": "rd_template_record"
+    },
     { // 工作管理-样板列表
       "name": "样板列表-详情",
-      "path": "/workMngt/templateList/:id/:productCategoryId",
+      "path": "/workMngt/templateList/detail/:id/:productCategoryId",
       "module": "./pages/workMngt/templateList/detail",
       "exact": true,
       "authority": "rd_template_record"
