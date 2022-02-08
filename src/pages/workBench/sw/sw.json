@@ -10,7 +10,7 @@
                     "title": "待指派",
                     "dataIndex": "assignedNum",
                     "path": {
-                        "pathname": "/ingredients/enquiry",
+                        "pathname": "/enquiryTask/index",
                         "state": {
                             "inquiryStatus": 3
                         }
@@ -21,7 +21,7 @@
                     "title": "待确认",
                     "dataIndex": "confirmedNum",
                     "path": {
-                        "pathname": "/ingredients/enquiry",
+                        "pathname": "/enquiryTask/index",
                         "state": {
                             "inquiryStatus": 1
                         }
@@ -32,7 +32,7 @@
                     "title": "待提交",
                     "dataIndex": "boBeSubmitNum",
                     "path": {
-                        "pathname": "/ingredients/enquiry",
+                        "pathname": "/enquiryTask/index",
                         "state": {
                             "inquiryStatus": 2
                         }
