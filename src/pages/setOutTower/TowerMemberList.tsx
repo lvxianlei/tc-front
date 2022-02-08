@@ -63,7 +63,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'width', 
             key: 'width', 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_?'-':_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -71,7 +71,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'thickness', 
             key: 'thickness' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_?'-':_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -79,7 +79,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'length', 
             key: 'length' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_?'-':_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -87,7 +87,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'basicsWeight', 
             key: 'basicsWeight' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_?'-':_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -95,7 +95,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'drawBasicsWeight', 
             key: 'drawBasicsWeight' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_?'-':_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             )  
         },
         { 
@@ -103,7 +103,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'basicsPartNum', 
             key: 'basicsPartNum' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_?'-':_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -111,7 +111,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'basicsPartWeight', 
             key: 'basicsPartWeight', 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_?'-':_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -119,7 +119,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'drawPartWeight', 
             key: 'drawPartWeight' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_?'-':_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
