@@ -470,10 +470,11 @@ export default function Lofting(): React.ReactNode {
     const [selectedRows, setSelectedRows] = useState<ILofting[]>([]);
     const [loading1, setLoading1] = useState(false);
     const editRef = useRef<PdmModalProps>();
-    const [ pdmVisible, setPdmVisible ] = useState<boolean>(false);
+    const [pdmVisible, setPdmVisible] = useState<boolean>(false);
+    const [loading2, setLoading2] = useState(false);
 
     return <>
-        <Modal
+        {/* <Modal
             destroyOnClose
             visible={pdmVisible}
             width="30%"
@@ -485,7 +486,7 @@ export default function Lofting(): React.ReactNode {
                 setRefresh(!refresh);
             }}>
             <PdmModal id={''} ref={editRef} />
-        </Modal>
+        </Modal> */}
         <Form layout="inline" style={{ margin: '20px' }} onFinish={(value: Record<string, any>) => {
             setFilterValue(value)
             setRefresh(!refresh);
@@ -600,7 +601,7 @@ export default function Lofting(): React.ReactNode {
                             }
                         }
                     }}>{editorLock}</Button>
-                    {/* <Button type="primary" loading={loading2} onClick={() => {
+                    <Button type="primary" loading={loading2} onClick={() => {
                         setLoading2(true);
                         RequestUtil.post(`/tower-science/productStructure/pdmSynchronous/${params.productSegmentId}`).then(res => {
                             setLoading2(false);
@@ -609,9 +610,8 @@ export default function Lofting(): React.ReactNode {
                         }).catch(error => {
                             setLoading2(false);
                         })
-                    }} ghost>PDM同步</Button> */}
-                    
-                <Button type="primary" onClick={() => setPdmVisible(true)} ghost>PDM同步</Button>
+                    }} ghost>PDM同步</Button>
+                    {/* <Button type="primary" onClick={() => setPdmVisible(true)} ghost>PDM同步</Button> */}
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => {
