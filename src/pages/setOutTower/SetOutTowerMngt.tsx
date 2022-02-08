@@ -70,7 +70,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
             width: 100,
             dataIndex: 'steelAngleCount',
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_?'-':_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         {
@@ -79,7 +79,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
             width: 100,
             dataIndex: 'steelPlateCount',
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_?'-':_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         {
@@ -102,6 +102,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                    {console.log(record.steelPlateCount===null?'1':'2')}
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerDetail/${record.id}`)}}>塔型信息</Button>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerMember/${record.id}/${record.steelAngleCount+record.steelPlateCount}`)}}>塔型构件</Button>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/assemblyWeld/${record.id}`)}}>组焊清单</Button>
