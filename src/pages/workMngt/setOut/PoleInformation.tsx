@@ -34,6 +34,12 @@ export default function PoleInformation(): React.ReactNode {
             dataIndex: 'productNumber'
         },
         {
+            key: 'productHeight',
+            title: '呼高',
+            width: 150,
+            dataIndex: 'productHeight'
+        },
+        {
             key: 'productCategoryName',
             title: '塔型',
             dataIndex: 'productCategoryName',
@@ -62,6 +68,36 @@ export default function PoleInformation(): React.ReactNode {
             title: '最新状态变更时间',
             width: 200,
             dataIndex: 'loftingDeliverTime'
+        },
+        {
+            key: 'segmentInformation',
+            title: '配段信息',
+            width: 200,
+            dataIndex: 'segmentInformation'
+        },
+        {
+            key: 'legNumberA',
+            title: 'A',
+            width: 120,
+            dataIndex: 'legNumberA'
+        },
+        {
+            key: 'legNumberB',
+            title: 'B',
+            width: 120,
+            dataIndex: 'legNumberB'
+        },
+        {
+            key: 'legNumberC',
+            title: 'C',
+            width: 120,
+            dataIndex: 'legNumberC'
+        },
+        {
+            key: 'legNumberD',
+            title: 'D',
+            width: 120,
+            dataIndex: 'legNumberD'
         },
         {
             key: 'operation',

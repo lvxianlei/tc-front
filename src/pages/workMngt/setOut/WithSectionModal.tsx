@@ -27,6 +27,10 @@ interface IDetailData {
     readonly productCategoryName?: string;
     readonly productId?: string;
     readonly productNumber?: string;
+    readonly legNumberA?: string;
+    readonly legNumberB?: string;
+    readonly legNumberC?: string;
+    readonly legNumberD?: string;
     readonly loftingProductSegmentList?: IProductSegmentList[];
 }
 
@@ -108,18 +112,56 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
             <Button type="link" key={this.props.id} onClick={ () => this.modalShow() } ghost>配段</Button>
             <Modal
                 visible={ this.state.visible } 
-                width="40%" 
+                width="60%" 
                 title="配段"
                 footer={ <Space>
                     <Button type="ghost" onClick={() => this.modalCancel() }>关闭</Button>
-                    <Button type="primary" onClick={() => this.save('/tower-science/productSegment/distribution/save') } ghost>保存</Button>
+                    <Button type="primary" onClick={() => this.save('/tower-science/productSegment/distribution/save') } ghost>编辑/保存</Button>
                     <Button type="primary" onClick={() => this.save('/tower-science/productSegment/distribution/submit') } ghost>保存并提交</Button>
                 </Space> } 
                 onCancel={ () => this.modalCancel() }
             >
                 <DetailContent key={this.props.id}>
-                    <p>配段信息</p>
                     <Form ref={ this.form } className={ styles.descripForm }>
+                    <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>
+                        <span>塔身配段信息</span>
+                        <Button className={ styles.fastBtn } type="primary" ghost>快速配段</Button>
+                        </p>
+                        <Descriptions title="" bordered size="small" colon={ false } column={ 4 }>
+                            <Descriptions.Item key={ 1 } label="A">    
+                                <Form.Item name="legNumberA" initialValue={ detailData?.legNumberA } rules={[{
+                                    pattern: /^[0-9a-zA-Z]*$/,
+                                    message: '仅可输入数字/字母',
+                                }]}>
+                                    <Input placeholder="请输入"/>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item key={ 2 } label="B">    
+                                <Form.Item name="legNumberB" initialValue={ detailData?.legNumberB } rules={[{
+                                    pattern: /^[0-9a-zA-Z]*$/,
+                                    message: '仅可输入数字/字母',
+                                }]}>
+                                    <Input placeholder="请输入"/>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item key={ 3 } label="C">    
+                                <Form.Item name="legNumberC" initialValue={ detailData?.legNumberC } rules={[{
+                                    pattern: /^[0-9a-zA-Z]*$/,
+                                    message: '仅可输入数字/字母',
+                                }]}>
+                                    <Input placeholder="请输入"/>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item key={ 4 } label="D">    
+                                <Form.Item name="legNumberD" initialValue={ detailData?.legNumberD } rules={[{
+                                    pattern: /^[0-9a-zA-Z]*$/,
+                                    message: '仅可输入数字/字母',
+                                }]}>
+                                    <Input placeholder="请输入"/>
+                                </Form.Item>
+                            </Descriptions.Item>
+                        </Descriptions>
+                        <p style={{ padding: "12px 0px", fontWeight: "bold", fontSize: '14PX' }}>塔身配段信息</p>
                         <Descriptions title="" bordered size="small" colon={ false } column={ 2 }>
                             <Descriptions.Item label="塔型">    
                                 <span>{ detailData?.productCategoryName }</span>
