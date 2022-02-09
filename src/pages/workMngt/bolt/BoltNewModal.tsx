@@ -157,6 +157,16 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     <Input type="number" max={ 9999 }/>
                 )
             }, {
+                label: '裕度',
+                name: 'wealth',
+                rules: [{
+                    required: true,
+                    message: '请输入裕度'
+                }],
+                children: (
+                    <Input type="number" max={ 9999 }/>
+                )
+            },  {
                 label: '合计',
                 name: 'total',
                 rules: [{
