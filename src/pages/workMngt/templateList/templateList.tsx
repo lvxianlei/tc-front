@@ -52,7 +52,7 @@ export default function TemplateList() {
         },
         {
             title: '页数/数量',
-            dataIndex: 'drawLeaderName',
+            dataIndex: 'pageNumber',
         },
         {
             title: '完成状态',
@@ -70,7 +70,7 @@ export default function TemplateList() {
             align:'left',
             render: (text: string, record: Record<string, any>): React.ReactNode => {
                 return (
-                   <Space direction="horizontal" size="small" className={styles.operationBtn}> {record?.uploadDrawTypeName==='组装图纸'?
+                   <Space direction="horizontal" size="small" className={styles.operationBtn}> {record?.uploadDrawType!==3?
                     <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/detail/${record.id}/${record.productCategoryId}`)}}>查看</Button>
                     :<>
                     

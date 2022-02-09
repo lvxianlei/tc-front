@@ -130,7 +130,7 @@ export default function SchedulePlan(){
                         <Col span={24}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="materialLeaderDepartment" label="指派方案名称" rules={[{required: true,message:'请选择指派方案名称'}]}>
+                                    <Form.Item name="name" label="指派方案名称" rules={[{required: true,message:'请选择指派方案名称'}]}>
                                         <Input/>
                                     </Form.Item>
                                 </Col>

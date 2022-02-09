@@ -498,7 +498,7 @@ export default function ScheduleView(): React.ReactNode {
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="priority" label="指派方案"> 
+                                    <Form.Item name="name" label="指派方案"> 
                                         <Select disabled={edit}>
                                             <Select.Option value={0} key={0}>紧急</Select.Option>
                                             <Select.Option value={1} key={1}>高</Select.Option>

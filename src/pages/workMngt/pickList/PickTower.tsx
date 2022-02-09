@@ -127,7 +127,7 @@ export default function PickTower(): React.ReactNode {
         },
         {
             key: 'materialStatusName',
-            title: '杆塔配段状态',
+            title: '杆塔提料状态',
             width: 100,
             dataIndex: 'materialStatusName'
         },
@@ -136,6 +136,36 @@ export default function PickTower(): React.ReactNode {
             title: '最新状态变更时间',
             width: 200,
             dataIndex: 'materialUpdateStatusTime'
+        },
+        {
+            key: 'segmentInformation',
+            title: '配段信息',
+            width: 200,
+            dataIndex: 'segmentInformation'
+        },
+        {
+            key: 'legWeightA',
+            title: 'A',
+            width: 200,
+            dataIndex: 'legWeightA'
+        },
+        {
+            key: 'legWeightB',
+            title: 'B',
+            width: 200,
+            dataIndex: 'legWeightB'
+        },
+        {
+            key: 'legWeightC',
+            title: 'C',
+            width: 200,
+            dataIndex: 'legWeightC'
+        },
+        {
+            key: 'legWeightD',
+            title: 'D',
+            width: 200,
+            dataIndex: 'legWeightD'
         },
         {
             key: 'operation',
@@ -241,36 +271,36 @@ export default function PickTower(): React.ReactNode {
                     <Row>
                         <Col span={1}/>
                         <Col span={5}>
-                            <Form.Item name="A" label="A" rules={[{
+                            <Form.Item name="legWeightA" label="A" rules={[{
                                 required: true,
-                                message:'请填写A'
+                                message:'请填写塔腿重A'
                             }]}>
                                 <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
                             </Form.Item>
                         </Col>
                         <Col span={1}/>
                         <Col span={5}>
-                            <Form.Item name="B" label="B" rules={[{
+                            <Form.Item name="legWeightB" label="B" rules={[{
                                 required: true,
-                                message:'请填写B'
+                                message:'请填写塔腿重B'
                             }]}>
                                 <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
                             </Form.Item>
                         </Col>
                         <Col span={1}/>
                         <Col span={5}>
-                            <Form.Item name="C" label="C" rules={[{
+                            <Form.Item name="legWeightC" label="C" rules={[{
                                 required: true,
-                                message:'请填写C'
+                                message:'请填写塔腿重C'
                             }]}>
                                 <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
                             </Form.Item>
                         </Col>
                         <Col span={1}/>
                         <Col span={5}>
-                            <Form.Item name="D" label="D" rules={[{
+                            <Form.Item name="legWeightD" label="D" rules={[{
                                 required: true,
-                                message:'请填写D'
+                                message:'请填写塔腿重D'
                             }]}>
                                 <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
                             </Form.Item>
@@ -345,7 +375,7 @@ export default function PickTower(): React.ReactNode {
                     },
                     {
                         name: 'materialStatus',
-                        label: '杆塔配段状态',
+                        label: '杆塔提料状态',
                         children: <Select style={{width:'100px'}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待开始</Select.Option>
@@ -353,25 +383,25 @@ export default function PickTower(): React.ReactNode {
                             <Select.Option value={3} key={3}>已完成</Select.Option>
                         </Select>
                     },
-                    {
-                        name: 'materialUserDepartment',
-                        label: '配段人',
-                        children:  <TreeSelect style={{width:'200px'}}
-                                        allowClear
-                                        onChange={ onDepartmentChange }
-                                    >
-                                        {renderTreeNodes(wrapRole2DataNode( department ))}
-                                    </TreeSelect>
-                    },
-                    {
-                        name: 'materialUser',
-                        label:'',
-                        children:   <Select style={{width:'100px'}} allowClear>
-                                        { matchLeader && matchLeader.map((item:any)=>{
-                                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                        }) }
-                                    </Select>
-                    },
+                    // {
+                    //     name: 'materialUserDepartment',
+                    //     label: '配段人',
+                    //     children:  <TreeSelect style={{width:'200px'}}
+                    //                     allowClear
+                    //                     onChange={ onDepartmentChange }
+                    //                 >
+                    //                     {renderTreeNodes(wrapRole2DataNode( department ))}
+                    //                 </TreeSelect>
+                    // },
+                    // {
+                    //     name: 'materialUser',
+                    //     label:'',
+                    //     children:   <Select style={{width:'100px'}} allowClear>
+                    //                     { matchLeader && matchLeader.map((item:any)=>{
+                    //                         return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                    //                     }) }
+                    //                 </Select>
+                    // },
                 ]}
             />
         </>
