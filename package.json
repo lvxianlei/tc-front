@@ -5,7 +5,6 @@
   "dependencies": {
     "@ahooksjs/use-request": "^2.8.10",
     "@ant-design/charts": "^1.2.14",
-    "@ant-design/pro-table": "2.52.0",
     "@loadable/component": "^5.14.1",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
@@ -16,9 +15,9 @@
     "@types/nprogress": "^0.2.0",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",
-    "@types/react-resizable": "^1.7.4",
     "@types/react-router-dom": "^5.1.7",
-    "@types/react-window": "^1.8.5",
+    "@types/styled-components": "^5.1.20",
+    "ali-react-table": "^2.6.1",
     "antd": "4.15.4",
     "antd-img-crop": "^3.16.0",
     "babel-loader": "8.1.0",
@@ -42,11 +41,10 @@
     "react-dom": "^17.0.2",
     "react-fast-compare": "^3.2.0",
     "react-i18next": "^11.8.15",
-    "react-resizable": "^3.0.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-sortable-hoc": "^2.0.0",
-    "react-window": "^1.8.6",
+    "styled-components": "^5.3.3",
     "typescript": "^4.2.4",
     "web-vitals": "^1.1.1",
     "webpackbar": "^5.0.2",
@@ -99,7 +97,6 @@
     "mockjs": "^1.1.0",
     "modify-source-webpack-plugin": "^1.1.0-beta.3",
     "react-app-rewired": "^2.1.8",
-    "react-cropper": "^2.1.8",
-    "yapi-to-typescript": "^3.26.0"
+    "react-cropper": "^2.1.8"
   }
 }

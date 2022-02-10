@@ -3,15 +3,14 @@ import { useHistory, useParams } from "react-router-dom"
 import { Spin, Button, Form, message } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { bidDocColumns } from '../managementDetailData.json'
+import { bidDocColumns } from './bidDoc.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
-import { TabTypes } from "../ManagementDetail"
-import { bidTypeOptions } from "../../../configuration/DictionaryOptions"
+import { TabTypes } from "../Detail"
+import { bidTypeOptions, tenderDeliveryMethodOptions } from "../../../configuration/DictionaryOptions"
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
-    const bidType = bidTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }));
     const [baseInfoForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -37,7 +36,6 @@ export default function BaseInfoEdit(): JSX.Element {
     const handleSubmit = async () => {
         try {
             const baseInfoData = await baseInfoForm.validateFields()
-            console.log(baseInfoData)
             const result = await saveRun({
                 ...data,
                 ...baseInfoData,
@@ -57,7 +55,6 @@ export default function BaseInfoEdit(): JSX.Element {
             console.log(error)
         }
     }
-
     return <>
         <ManagementDetailTabsTitle />
         <DetailContent
@@ -67,13 +64,30 @@ export default function BaseInfoEdit(): JSX.Element {
             ]}>
             <Spin spinning={loading}>
                 <DetailTitle title="标书制作记录表" />
-                <BaseInfo form={baseInfoForm} columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
-                    ...item,
-                    type: "select",
-                    enum: bidType
-                }) : ({ ...item }))} dataSource={data || {}} col={4} edit />
+                <BaseInfo
+                    form={baseInfoForm}
+                    columns={bidDocColumns.map((item: any) => {
+                        if (item.dataIndex === "bidType") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: bidTypeOptions?.map((bid: any) => ({ value: bid.id, label: bid.name }))
+                            })
+                        }
+                        if (item.dataIndex === "deliverId") {
+                            // 标书投递方式 需后台提供字典值
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: tenderDeliveryMethodOptions?.map((bid: any) => ({ value: bid.id, label: bid.name }))
+                            })
+                        }
+                        return item
+                    })}
+                    dataSource={data || {}} edit col={4}
+                />
                 <DetailTitle title="填写记录" />
-                <CommonTable columns={[
+                <CommonTable rowKey="createTime" columns={[
                     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
                     { title: '部门', dataIndex: 'branch' },
                     { title: '填写人', dataIndex: 'createUserName' },

@@ -26,7 +26,7 @@
      }
     const columns = [{ 
         key: "saleOrderNumber",
-        title: "订单编号",
+        title: "销售订单编号",
         dataIndex: "saleOrderNumber",
         render: (_: undefined, record: object): React.ReactNode => {
         return (
@@ -127,11 +127,6 @@
         key: "deliveryTime",
         title: "合同交货日期",
         dataIndex: "deliveryTime",
-    },
-    {
-        key: "orderDeliveryTime",
-        title: "订单交货日期",
-        dataIndex: "orderDeliveryTime",
     },
     {
         key: "createUserName",

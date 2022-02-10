@@ -5,8 +5,7 @@ import { BasicInformation, editCargoDetails, SelectedArea, Selected, freightInfo
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { materialStandardTypeOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
-import { changeTwoDecimal_f } from "../../../utils/KeepDecimals";
-import { number } from "echarts"
+import { changeTwoDecimal_f, doNumber } from "../../../utils/KeepDecimals";
 interface ChooseModalProps {
     id: string,
     initChooseList: any[],
@@ -39,7 +38,7 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
         label: item.name
     }))
 
-    const { run, loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
             setSelectList(result?.materialContractDetailVos.map((item: any) => ({
@@ -56,11 +55,7 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
         } catch (error) {
             reject(error)
         }
-    }), {})
-
-    useEffect(() => {
-        run()
-    }, [numberStatus])
+    }), { refreshDeps: [numberStatus] })
 
     const resetFields = () => {
         setCurrentId("")
@@ -374,10 +369,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const handleModalOk = () => {
         let num: string = "0.00"
-        let weight: string = "0.00"
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             num = (parseFloat(num) + parseFloat(item.num || "0.00")).toFixed(2)
-            weight = (parseFloat(weight) + parseFloat(item.weight || "0.00")).toFixed(2)
             const postData = {
                 ...item,
                 materialContractDetailId: item.id || item.materialContractDetailId,
@@ -386,15 +379,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 materialStandardName: item.materialStandardName,
                 num: item.num,
                 contractUnitPrice: item.price,
-                quantity: item.num ? item.num : 0
+                quantity: item.num ? item.num : 0,
+                weight: (item.weight * item.num).toFixed(4)
             }
             delete postData.id
             return postData
         })
         setCargoData(dataSource)
-        form.setFieldsValue({ num: parseFloat(num), weight })
         setVisible(false);
-        console.log(dataSource, 'dataSource')
         // 选择完货物明细，
         let transportPriceCount = "0",
             unloadPriceCount = "0",
@@ -402,8 +394,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             priceAll = 0;
         if (dataSource.length > 0) {
             for (let i = 0; i < dataSource.length; i += 1) {
-                weightAll = weightAll += (((dataSource[i].weight) * 1 <= 0 ? 0 : dataSource[i].weight) * 1);
-                priceAll = dataSource[i].price * 1 + priceAll;
+                weightAll = weightAll + (((dataSource[i].weight) * 1 <= 0 ? 0 : dataSource[i].weight) * 1);
+                priceAll = dataSource[i].taxPrice * 1 + priceAll;
             }
             // 运费价税合计 = 总重量 * 单价
             transportPriceCount = weightAll * ((freightInformation as any).transportTaxPrice * 1) + "";
@@ -418,7 +410,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             ...handlingCharges,
             unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
         })
-        form.setFieldsValue({ price: priceAll })
+        form.setFieldsValue({
+            num: parseFloat(num),
+            weight: weightAll.toFixed(4),
+            price: priceAll
+        })
     }
 
     const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -500,7 +496,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, cargoData, onSubmit, resetFields])
 
     const handleBaseInfoChange = (fields: any) => {
-        console.log(fields, "带回来的数据")
         if (fields.contractNumber) {
             setContractId(fields.contractNumber.id);
 
@@ -534,7 +529,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const supplierData = fields.supplierName.records[0]
             setColumns(columns.map((item: any) => {
                 if (item.dataIndex === "contractNumber") {
-                    console.log(item.path, "path")
                     return ({
                         ...item,
                         path: `/tower-supply/materialContract?contractStatus=1&supplierId=${fields.supplierName.id}`
@@ -555,6 +549,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             width={1011}
             visible={visible}
             title="选择货物明细"
+            destroyOnClose
             onCancel={() => {
                 modalRef.current?.resetFields()
                 setVisible(false)

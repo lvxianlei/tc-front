@@ -43,6 +43,7 @@ export interface IContract {
     readonly takeOverTime?: string;
     readonly contractList?: IResponseList;
     readonly payServiceManager?: string;
+    readonly contractName?: string; // 合同名称
 }
 
 interface IResponseList {

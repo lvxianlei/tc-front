@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useRef } from "react"
 import { Button, Form, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, EditTable, formatData, Attachment, AttachmentRef } from '../../common'
@@ -66,7 +66,7 @@ export default function Edit() {
         }
     }), { manual: true })
 
-    const handleSave = async () => {
+    const handleSave = async (saveType: 1 | 2) => {
         try {
             const baseInfoData = await baseInfo.validateFields()
             const invoicData = await invoiceForm.validateFields()
@@ -80,6 +80,7 @@ export default function Edit() {
                 contractCode: baseInfoData.contractCode || data?.contractCode,
                 invoicingDetailDtos: billingData.submit,
                 fileIds: attchRef.current?.getDataSource().map(item => item.id),
+                saveType,
                 invoicingInfoDto: {
                     ...invoicData,
                     id: data?.invoicingInfoVo.id || "",
@@ -105,7 +106,7 @@ export default function Edit() {
             baseInfo.setFieldsValue({
                 contractCompany: contractValue.signCustomerName,
                 contractSignTime: contractValue.signContractTime,
-                logicWeight: logicWeight.logicWeight,
+                reasonWeight: logicWeight.logicWeight,
                 planCode: logicWeight.planNumbers,
                 planWeight: contractValue.plannedWeight,
                 contractDevTime: contractValue.deliveryTime,
@@ -117,6 +118,7 @@ export default function Edit() {
         }
         if (fields.backProportion) {
             const ticketMoney = baseInfo.getFieldValue("ticketMoney")
+            console.log(ticketMoney)
             baseInfo.setFieldsValue({
                 backMoney: (parseFloat(fields.backProportion) * parseFloat(ticketMoney || "0") * 0.01).toFixed(2)
             })
@@ -126,7 +128,6 @@ export default function Edit() {
     const handleEditTableChange = (fields: any, allFields: any) => {
         if (fields.submit.length - 1 >= 0) {
             const currentRowData = fields.submit[fields.submit.length - 1]
-            const ticketMoney = baseInfo.getFieldValue("ticketMoney") || "0"
             const backProportion = baseInfo.getFieldValue("backProportion") || "0"
             if (currentRowData.weight || currentRowData.moneyCount) {
                 const { weight, moneyCount } = allFields.submit.reduce((result: { weight: string, moneyCount: string }, item: any) => ({
@@ -141,7 +142,7 @@ export default function Edit() {
                 baseInfo.setFieldsValue({
                     ticketWeight: weight,
                     ticketMoney: moneyCount,
-                    backMoney: (parseFloat(backProportion) * parseFloat(ticketMoney || "0") * 0.01).toFixed(2)
+                    backMoney: (parseFloat(backProportion) * parseFloat(moneyCount || "0") * 0.01).toFixed(2)
                 })
             }
         } else {
@@ -167,7 +168,12 @@ export default function Edit() {
             type="primary" key="save"
             style={{ marginRight: 16 }}
             loading={saveLoading || creteLoading}
-            onClick={handleSave}>保存</Button>,
+            onClick={() => handleSave(1)}>保存</Button>,
+        <Button
+            type="primary" key="saveOrSubmit"
+            style={{ marginRight: 16 }}
+            loading={saveLoading || creteLoading}
+            onClick={() => handleSave(2)}>保存并发起审批</Button>,
         <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
     ]}>
         <Spin spinning={loading}>

@@ -339,6 +339,11 @@
         {
             "title": "币种",
             "dataIndex": "currencyType"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "bondBaseInfoView": [
@@ -458,6 +463,17 @@
         {
             "title": "币种",
             "dataIndex": "currencyTypeName"
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "auditIdRecord": [

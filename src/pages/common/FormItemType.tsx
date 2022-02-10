@@ -35,6 +35,7 @@ export interface PopTableData {
     dependencies?: boolean
     selectType?: "checkbox" | "radio"
     value?: string
+    transformData?: (data: any) => any //请求到数据后转换为需要的数据
     getCheckboxProps?: (records: any) => ({ [key: string]: any })
     [key: string]: any
 }
@@ -86,7 +87,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             })
             const paramsOptions = stringify(params)
             const path = data.path.includes("?") ? `${data.path}&${paramsOptions || ''}` : `${data.path}?${paramsOptions || ''}`
-            resolve(await RequestUtil.get<{ data: any }>(path))
+            const result: any = await RequestUtil.get<{ data: any }>(path)
+            resolve(data.transformData ? data.transformData(result) : result)
         } catch (error) {
             reject(error)
         }

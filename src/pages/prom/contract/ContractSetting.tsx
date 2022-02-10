@@ -54,6 +54,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
                 customerInfoDto: contract.customerInfoVo,
             }
         })
+        console.log("=================>>>")
         this.getForm()?.setFieldsValue({
             contractNumber: contract.contractNumber,
             purchaseOrderNumber: contract.purchaseOrderNumber, // 修复采购订单编辑回显有问题

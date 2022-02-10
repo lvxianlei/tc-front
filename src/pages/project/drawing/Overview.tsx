@@ -1,6 +1,6 @@
 import React from "react"
 import { Spin } from 'antd'
-import { DetailTitle, BaseInfo, Attachment } from '../../common'
+import { BaseInfo, Attachment } from '../../common'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { setting } from "./drawing.json"

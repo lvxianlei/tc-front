@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Upload } from "antd"
 import { useHistory } from "react-router-dom"
 import { DetailContent, BaseInfo, CommonTable, DetailTitle } from "../common"
-import { baseInfo } from "./approvalHeadData.json"
+import { baseInfo } from "./approval.json"
 import AuthUtil from "../../utils/AuthUtil"
 export default function ApprovalMngtEdit(): JSX.Element {
     const history = useHistory()
@@ -27,6 +27,6 @@ export default function ApprovalMngtEdit(): JSX.Element {
             ><Button type="primary" ghost>上传附件</Button></Upload>
         ]
         } />
-        < CommonTable columns={baseInfo} />
+        <CommonTable columns={baseInfo} />
     </DetailContent >
 }

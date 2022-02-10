@@ -43,10 +43,6 @@
             "type": "string"
         },
         {
-            "title": "最新状态变更时间",
-            "dataIndex": "purchaseStatusUpdateTime"
-        },
-        {
             "title": "塔型采购状态",
             "dataIndex": "purchaseTaskStatusName"
         },

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Select, Modal, Form, Row, Col, Button, DatePicker } from 'antd'
+import { Input, Modal, Form, Row, Col, Button, DatePicker } from 'antd'
 import { CommonTable } from "../../common"
 import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../../utils/RequestUtil'
@@ -68,7 +68,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         pageSize: 10
     })
     const [form] = Form.useForm()
-    const [ materialList, setMaterialList ] = useState<IMaterialType[]>([]);
+    const [materialList, setMaterialList] = useState<IMaterialType[]>([]);
     const searchs = data.columns.filter((item: any) => item.search);
     const { loading, data: popTableData, run } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         try {

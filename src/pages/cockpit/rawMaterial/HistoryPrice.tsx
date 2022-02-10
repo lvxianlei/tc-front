@@ -27,7 +27,6 @@ export default function HistoryPrice({ id, name }: HistoryPriceProps): JSX.Eleme
     const { loading, data } = useRequest<LineChart>(() => new Promise(async (resove, reject) => {
         try {
             const result: LineChart[] = await RequestUtil.get(`/tower-supply/materialPrice/history/${id}`)
-            console.log(result, 'result')
             // 报价信息
             const materialPriceHistoryListVOS = (result as any)?.materialPriceHistoryListVOS || []
             const materialPriceHistoryWebListVOS = (result as any)?.materialPriceHistoryWebListVOS || []
