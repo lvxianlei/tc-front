@@ -10,7 +10,8 @@ import TaskNew from "./taskNew";
 import TaskEdit from "./taskEdit";
 import TaskView from "./taskView";
 export default function TemplateList() {
-    const [filterValue, setFilterValue] = useState<any>({})
+    const [filterValue, setFilterValue] = useState<any>({});
+    const [refresh, setRefresh ] = useState<boolean>(false);
     const location = useLocation<{ state?: number, userId?: string }>();
     const history = useHistory();
     const columns: any[] = [
@@ -119,7 +120,8 @@ export default function TemplateList() {
                 path="/tower-science/loftingTemplate"
                 filterValue={filterValue}
                 columns={columns}
-                extraOperation={ <TaskNew/>}
+                refresh={refresh}
+                extraOperation={ <TaskNew freshF= {setRefresh} fresh={refresh}/>}
                 exportPath={`/tower-science/loftingTemplate`}
                 onFilterSubmit={onFilterSubmit}
                 requestData={{ status: location.state?.state, drawLeader: location.state?.userId }}
@@ -132,6 +134,7 @@ export default function TemplateList() {
                                 <Select.Option value="">全部</Select.Option>
                                 <Select.Option value="1">组装图纸</Select.Option>
                                 <Select.Option value="2">发货图纸</Select.Option>
+                                <Select.Option value="3">样板打印</Select.Option>
                             </Select>
                         )
                     },

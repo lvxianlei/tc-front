@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Table, InputNumber, Radio } from 'antd'
+import React, { useRef, useState } from 'react'
+import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Table, InputNumber, Radio, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { Attachment, CommonTable, DetailTitle, Page } from '../../common';
+import { Attachment, AttachmentRef, CommonTable, DetailTitle, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import TextArea from 'antd/lib/input/TextArea';
 import useRequest from '@ahooksjs/use-request';
@@ -10,36 +10,45 @@ import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './template.module.less';
+import { productTypeOptions } from '../../../configuration/DictionaryOptions';
+import { SelectValue } from 'antd/lib/select';
+import { idText } from 'typescript';
 
 
 
-export default function TaskNew(){
+export default function TaskNew(props:any){
     const [visible, setVisible] = useState<boolean>(false);
+    const [read, setRead] = useState<boolean>(false);
     const [printVisible, setPrintVisible] = useState<boolean>(false);
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
     const history = useHistory();
+    const attachRef = useRef<AttachmentRef>()
     const [form] = Form.useForm();
     const [radioValue, setRadioValue] = useState<string>('Apple');
     const [formRef] = Form.useForm();
     const [department, setDepartment] = useState<any|undefined>([]);
+    const [planData, setPlanData] = useState<any|undefined>([]);
+    const [specialData, setSpecialData] = useState<any|undefined>([]);
+    const [tower, setTower] = useState<any|undefined>([]);
+    const [printData, setPrintData] = useState<any|undefined>({});
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
-        setDepartment(departmentData);
-        resole(data)
-    }), {})
     
     
     const handleModalOk = async () => {
         try {
             const saveData = await form.validateFields();
             saveData.id = scheduleData.id;
-            saveData.materialLeaderDepartment= Array.isArray(saveData.materialLeaderDepartment)?saveData.materialLeaderDepartment[0]:saveData.materialLeaderDepartment;
-
-
-            await RequestUtil.post('/tower-science/productCategory/assign', saveData).then(()=>{
+            saveData.drawLeaderDepartment= Array.isArray(saveData.drawLeaderDepartment)?saveData.drawLeaderDepartment[0]:saveData.drawLeaderDepartment;
+            saveData.productCategoryId = printData?.productCategoryId;
+            saveData.type = 3;
+            saveData.printSpecifications= printData?.printSpecifications;
+            saveData.printSpecialProcess = printData?.printSpecialProcess;
+            saveData.templateFiles = attachRef.current?.getDataSource();
+            await RequestUtil.post('/tower-science/loftingTemplate', saveData).then(()=>{
                 setVisible(false);
-                form.setFieldsValue({});
+                form.resetFields();
+                formRef.resetFields();
+                props?.freshF(!props?.fresh)
             }).then(()=>{
             })
         
@@ -50,25 +59,77 @@ export default function TaskNew(){
     const handlePrintModalOk = async () => {
         try {
             const saveData = await formRef.validateFields();
-            console.log(saveData)
-            await RequestUtil.post('/tower-science/productCategory/assign', saveData).then(()=>{
-                setVisible(false);
-                form.setFieldsValue({});
-            }).then(()=>{
+            if(saveData?.print?.printSpecifications === '全部'){
+                form.setFieldsValue({
+                    print: '全部,'+ saveData?.printSpecialProcess?.join(',')
+                })
+            }
+            else if(saveData?.print?.printSpecifications === '自定义'){
+                if(!saveData?.print?.before){
+                    message.error('未填写规格，不可保存并提交！')
+                    return
+                }
+                if(!saveData?.print?.after){
+                    message.error('未填写规格，不可保存并提交！')
+                    return
+                }
+                form.setFieldsValue({
+                    print: saveData?.print?.before+'-'+saveData?.print?.after +','+ saveData?.printSpecialProcess?.join(',')
+                })
+            }else{
+                form.setFieldsValue({
+                    print: saveData?.printSpecialProcess?.join(',')
+                })
+            }
+            setPrintData({
+                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:'',
+                printSpecialProcess: saveData?.printSpecialProcess?.join(',')
             })
+            setPrintVisible(false);
         
         } catch (error) {
             console.log(error)
         }
     }
 
-    const handleModalCancel = () => {setVisible(false); form.setFieldsValue({})};
-    const handlePrintModalCancel = () => {setPrintVisible(false); formRef.setFieldsValue({})};
+    const handleModalCancel = () => {setVisible(false); form.resetFields(); formRef.resetFields()};
+    const handlePrintModalCancel = () => {
+        setPrintVisible(false); 
+        const type:any = form.getFieldValue('print');
+        if(type && type.indexOf("全部") != -1 ){
+            setRadioValue('全部')
+            formRef.setFieldsValue({
+                print:{
+                    printSpecifications: '全部'
+                },
+                printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',')  
+            })  
+        }
+        else if(type && type.indexOf("-") != -1 ){
+            setRadioValue('自定义')
+            formRef.setFieldsValue({
+                print:{
+                    printSpecifications: '自定义',
+                    before: type.split('-')[0],
+                    after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
+                },
+                printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',') 
+            })    
+        }else {
+            setRadioValue('')
+            formRef.setFieldsValue({
+                print:{
+                    printSpecifications: ''
+                },
+                printSpecialProcess: type?.split(',')
+            })
+        }
+    };
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
         const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         switch (title) {
-            case "materialLeaderDepartment":
-                form.setFieldsValue({materialLeader:''});
+            case "drawLeaderDepartment":
+                form.setFieldsValue({drawLeader:''});
                 return setMaterialUser(userData.records);
         };
     }
@@ -101,11 +162,7 @@ export default function TaskNew(){
     }
     return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
     });
-    // const plainOptions = ['全部', '自定义'];
-    const plainOptions = [
-        { label: '全部', value: 'Apple' },
-        { label: '自定义', value: 'Pear' },
-      ];
+    const plainOptions = ['全部', '自定义'];
     return (
         <>
             <Modal 
@@ -126,15 +183,87 @@ export default function TaskNew(){
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="materialLeaderDepartment" label="计划号" rules={[{required: true,message:'请选择计划号'}]}>
-                                        <Input/>
+                                    <Form.Item name="planNumber" label="计划号" rules={[{required: true,message:'请选择计划号'}]}>
+                                        <Select style={{width:'100%'}} onChange={async (value)=>{
+                                            const towerData: any = await RequestUtil.get(`/tower-science/loftingTask/list/${value}`);
+                                            setTower(towerData);
+                                        }}>
+                                            {planData && planData.map(({ planNumber}: any, index: string | number | undefined) => {
+                                                return <Select.Option key={index} value={planNumber}>
+                                                    {planNumber}
+                                                </Select.Option>
+                                            })}
+                                        </Select>
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Col>
                         <Col span={11}>
-                            <Form.Item name="materialLeaderDepartment" label="塔型" rules={[{required: true,message:'请选择塔型'}]}>
-                                <Input/>
+                            <Form.Item name="productCategoryId" label="塔型" rules={[{required: true,message:'请选择塔型'}]}>
+                                <Select style={{width:'100%'}} onChange={async (value)=>{
+                                    const formValue = tower.filter((item: { productCategoryId: SelectValue; })=>{return item.productCategoryId === value})
+                                    
+                                    if(formValue[0].drawLeaderDepartment){
+                                        const drawLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${formValue[0].drawLeaderDepartment}&size=1000`);
+                                        setMaterialUser(drawLeaderDepartment.records);
+                                        
+                                    }
+                                    const type:any = '角钢塔';// formValue[0]?.productType
+                                    if(type === '四管塔' || type === '架构塔'){
+                                        setRadioValue('自定义')
+                                        setPrintData({
+                                            productCategoryId: value,
+                                            printSpecifications: '全部'
+                                        })
+                                        form.setFieldsValue({
+                                            print: '全部'
+                                        })
+                                        formRef.setFieldsValue({
+                                            print:{
+                                                printSpecifications: '全部'
+                                            } 
+                                        })  
+                                    }
+                                    if(type === '钢管塔'){
+                                        setRadioValue('自定义')
+                                        form.setFieldsValue({
+                                            print: '1-12'
+                                        })
+                                        setPrintData({
+                                            productCategoryId: value,
+                                            printSpecifications: '1-12'
+                                        })
+                                        formRef.setFieldsValue({
+                                            print:{
+                                                printSpecifications: '自定义',
+                                                before: 1,
+                                                after: 12
+                                            } 
+                                        })    
+                                    }
+                                    if(type === '角钢塔'){
+                                        form.setFieldsValue({
+                                            print: '火曲,钻孔,铆焊'
+                                        })
+                                        setPrintData({
+                                            productCategoryId: value,
+                                            printSpecialProcess: '火曲,钻孔,铆焊'
+                                        })
+                                        formRef.setFieldsValue({
+                                            printSpecialProcess:['火曲','钻孔','铆焊']
+                                        })   
+                                    }
+                                    form.setFieldsValue({
+                                        ...formValue[0]
+                                    })
+                                    setRead(true)
+                                }}>
+                                    {tower && tower.map(({ productCategoryId, productCategoryName}: any, index: string | number | undefined) => {
+                                        return <Select.Option key={index} value={productCategoryId}>
+                                            {productCategoryName}
+                                        </Select.Option>
+                                    })}
+                                </Select>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -142,14 +271,20 @@ export default function TaskNew(){
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="materialLeaderDepartment" label="产品类型" >
-                                        <Input/>
+                                    <Form.Item name="productType" label="产品类型" >
+                                        <Select style={{width:'100%'}} >
+                                            {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                                    return <Select.Option key={index} value={id}>
+                                                        {name}
+                                                    </Select.Option>
+                                            })}
+                                        </Select>
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Col>
                         <Col span={11}>
-                            <Form.Item name="materialLeaderDepartment" label="打印条件" >
+                            <Form.Item name="print" label="打印条件" >
                                 <Input addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={() => {
                                     setPrintVisible(true)
                                 }}>+编辑</Button>}/>
@@ -160,15 +295,15 @@ export default function TaskNew(){
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="materialLeaderDepartment" label="数量" rules={[{required: true,message:'请输入数量'}]}>
+                                    <Form.Item name="pageNumber" label="数量" rules={[{required: true,message:'请输入数量'}]}>
                                         <InputNumber min={1} max={9999} precision={0} style={{width:'100%'}}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Col>
                         <Col span={11}>
-                            <Form.Item name="materialLeaderDepartment" label="钢板明细" >
-                                <Button type='link' onClick={()=>history.push(`/workMngt/templateList/steel/${'id'}`)}>查看</Button>
+                            <Form.Item name="detail" label="钢板明细" >
+                                <Button type='link' onClick={()=>history.push(`/workMngt/templateList/steel/${'id'}`)} disabled={!read}>查看</Button>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -176,16 +311,16 @@ export default function TaskNew(){
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="materialLeaderDepartment" label="接收人" rules={[{required: true,message:'请选择接收人部门'}]}>
+                                    <Form.Item name="drawLeaderDepartment" label="接收人" rules={[{required: true,message:'请选择接收人部门'}]}>
                                         <TreeSelect
-                                            onChange={(value:any)=>{onDepartmentChange(value,'materialLeaderDepartment')}  }
+                                            onChange={(value:any)=>{onDepartmentChange(value,'drawLeaderDepartment')}  }
                                             >
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
-                                <Col span={6}>
-                                    <Form.Item name="materialLeader" label="" rules={[{required: true,message:'请选择接收人'}]} >
+                                <Col span={8}>
+                                    <Form.Item name="drawLeader" label="" rules={[{required: true,message:'请选择接收人'}]} >
                                         <Select >
                                             { materialUser && materialUser.map((item:any)=>{
                                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
@@ -202,7 +337,8 @@ export default function TaskNew(){
                         </Col>
                     </Row>
                 </Form>
-                <Attachment edit/>
+                
+                <Attachment ref={attachRef} edit/>
             </Modal>
             <Modal
                 title='样板打印条件'  
@@ -220,33 +356,58 @@ export default function TaskNew(){
                         <Form.Item label="规格">
                             <Input.Group>
                                 <Form.Item
-                                    name={['address', 'province']}
+                                    name={['print', 'printSpecifications']}
                                     noStyle
-                                    rules={[{ required: true, message: 'Province is required' }]}
                                 >
-                                    <Radio.Group options={plainOptions} onChange={ e => {setRadioValue(e.target.value)}}/>
+                                    <Radio.Group options={plainOptions} onChange={ e => {
+                                        setRadioValue(e.target.value)
+                                        formRef.setFieldsValue({
+                                            print:{
+                                                printSpecifications: e.target.value,
+                                                before: undefined,
+                                                after: undefined
+                                            }
+                                        })
+                                    }}/>
                                 </Form.Item>
-                               {radioValue==='Pear'&& <Form.Item
-                                    name={['address', 'after']}
+                               {radioValue==='自定义'&& <Form.Item
+                                    name={['print', 'before']}
                                     noStyle
                                 >
                                     <InputNumber style={{ width: '25%' }} />
                                 </Form.Item>}
-                                {radioValue==='Pear'&& <Form.Item
-                                    name={['address', 'before']}
+                                {radioValue==='自定义'&& <Form.Item
+                                    name={['print', 'after']}
                                     noStyle
                                 >
                                     <InputNumber style={{ width: '25%' }} />
                                 </Form.Item>}
                             </Input.Group>
                         </Form.Item>
-                        <Form.Item name="materialLeaderDepartment" label="特殊工艺">
-                            <Input/>
+                        <Form.Item name="printSpecialProcess" label="特殊工艺">
+                        <Select
+                            mode="multiple"
+                            style={{ width: '100%' }}
+                        >
+                            {specialData && specialData.map(({ name}: any, index: string | number | undefined) => {
+                                return <Select.Option key={index} value={name}>
+                                    {name}
+                                </Select.Option>
+                            })}
+                        </Select>
                         </Form.Item>
                     
                 </Form>
             </Modal>
-            <Button type='primary' onClick={()=>{
+            <Button type='primary' onClick={async ()=>{
+                 const planData: any = await RequestUtil.get(`/tower-science/loftingTemplate?current=1&size=1000&type=`);
+                 setPlanData(planData?.records.filter((item: { uploadStatus: number; })=>{
+                     return item.uploadStatus === 1
+                 }));
+                 const specialData: any = await RequestUtil.get(`/tower-aps/product/process?current=1&size=1000&type=`);
+                 setSpecialData(specialData?.records);
+                 const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+                 setDepartment(departmentData);
                 setVisible(true)
             }}>创建样板任务</Button>
             

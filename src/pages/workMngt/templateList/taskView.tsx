@@ -16,18 +16,13 @@ import styles from './template.module.less';
 export default function TaskView(props: any){
     const [visible, setVisible] = useState<boolean>(false);
     const [printVisible, setPrintVisible] = useState<boolean>(false);
-    const [scheduleData, setScheduleData] = useState<any|undefined>({});
+    const [specialData, setSpecialData] = useState<any|undefined>({});
     const history = useHistory();
     const [form] = Form.useForm();
     const [radioValue, setRadioValue] = useState<string>('Apple');
     const [formRef] = Form.useForm();
     const [department, setDepartment] = useState<any|undefined>([]);
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
-        setDepartment(departmentData);
-        resole(data)
-    }), {})
     
     const tableColumns = [
         {
@@ -152,35 +147,40 @@ export default function TaskView(props: any){
                     column={ 2 }
                 >
                     <Descriptions.Item label="计划号">
+                        {specialData?.planNumber}
                     </Descriptions.Item>
                     <Descriptions.Item label="塔型">
-                       
+                        {specialData?.productCategoryName}
                     </Descriptions.Item>
                     <Descriptions.Item label="产品类型">
-                       
+                        {specialData?.productType}
                     </Descriptions.Item>
                     <Descriptions.Item label="打印条件">
-                       
+                        {specialData?.printSpecifications&& specialData?.printSpecifications!== null ?specialData?.printSpecifications-specialData?.printSpecialProcess:specialData?.printSpecialProcess}
                     </Descriptions.Item>
                     <Descriptions.Item label="数量">
-                       
+                        {specialData?.pageNumber}
                     </Descriptions.Item>
                     <Descriptions.Item label="钢板明细">
                         <Button type='link' onClick={()=>history.push(`/workMngt/templateList/steel/${'id'}`)}>查看</Button>
                     </Descriptions.Item>
                     <Descriptions.Item label="接收人">
-                       
+                        {specialData?.drawLeaderName}
                     </Descriptions.Item>
                     <Descriptions.Item label="备注">
-                       
+                        {specialData?.description}
                     </Descriptions.Item>
                 </Descriptions>
                 <Attachment />
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns}  pagination={false} />
             </Modal>
-            <Button type='link' onClick={()=>{
+            <Button type='link' onClick={async ()=>{
                 setVisible(true)
+                const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+                setDepartment(departmentData);
+                const sampleData: any = await RequestUtil.get(`/tower-science/loftingTemplate/${props?.record?.id}`);
+                setSpecialData(sampleData);
             }}>查看</Button>
             
         </>
