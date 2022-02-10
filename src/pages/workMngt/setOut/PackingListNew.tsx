@@ -62,6 +62,10 @@ export default function PackingListNew(): React.ReactNode {
     const [ removeNum, setRemoveNum ] = useState(0);
     const [ removeList, setRemoveList ] = useState({});
     const [ removeIndex, setRemoveIndex ] = useState<any>();
+    const [ selectedRowKeys, setSelectedRowKeys ] = useState<string[]>();
+    const [ selectedRow, setSelectedRow ] = useState<IBundle[]>();
+    const [ removeRowKeys, setRemoveRowKeys ] = useState<string[]>();
+    const [ removeRow, setRemoveRow ] = useState<IBundle[]>();
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if(!location.state) {
@@ -374,6 +378,72 @@ export default function PackingListNew(): React.ReactNode {
         setPackagingData([ ...packagingData ])
     }
 
+    const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
+        setSelectedRowKeys(selectedRowKeys);
+        setSelectedRow(selectRows)
+    }
+
+    const onRemoveSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
+        setRemoveRowKeys(selectedRowKeys);
+        setRemoveRow(selectRows)
+    }
+
+    const addTopack = () => {
+        const data: IBundle[] | undefined = selectedRow?.map((res: IBundle) => {
+            return {
+                ...res,
+                description: res.description,
+                length: res.length,
+                pieceCode: res.code,
+                num: res.structureNum,
+                materialSpec: res.structureSpec,
+                productCategoryId: detailData.productCategoryId,
+                productId: detailData.productId,
+                structureId: res.id || res.topId,
+                structureCount: res.structureNum,
+                topId: res.id,
+                id: ''
+            }
+        })
+        console.log(data)
+        let list: IBundle[] = [];
+        if(packagingData?.length > 0) {
+            data?.forEach((record: IBundle) => {
+               packagingData.forEach((res: IBundle, index: number) => {
+                    if(res.structureId === record.id || res.structureId === record.topId) {
+                        list[index] = {
+                            ...res,
+                            num: Number(res.num) + Number(record.structureNum)
+                        }
+                    } else {
+                        list = [...data, ...packagingData]
+                    }
+                }) 
+            })
+            
+        } else {
+            list=[...(data || [])]
+        }
+        setPackagingData(list);
+        data?.forEach((record: IBundle, index: number) => {
+            stayDistrict.splice(index, 1);
+        })
+        setStayDistrict(stayDistrict);
+    }
+
+    const packRemove = () => {
+        removeRow?.forEach(async (value: IBundle, index: number) => {
+            packagingData.splice(index, 1)
+            if(value.id) {
+                const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value.id }`);
+                setStayDistrict([ ...stayDistrict, newValue ]);
+            } else {
+                setStayDistrict([ ...stayDistrict, value ]);
+            }
+        })
+            setPackagingData([...packagingData]); 
+    }
+
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
@@ -463,19 +533,35 @@ export default function PackingListNew(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-            <p className={ styles.title }>待选区
+            <p className={ styles.title }>
+                <span>待选区</span>
                 <span className={ styles.description }>未分配：{ stayDistrict.length }</span>
+                <Button className={styles.fastBtn} type="primary" onClick={addTopack} ghost>添加</Button>
             </p>
             <CommonTable 
                 columns={ chooseColumns } 
                 pagination={ false } 
                 dataSource={ [...stayDistrict] } 
+                rowSelection={{
+                    selectedRowKeys: selectedRowKeys,
+                    type: "checkbox",
+                    onChange: onSelectChange,
+                }}
             />
             <p className={ styles.title }>包装区
                 <span className={ styles.description }>已选择构件数：{ packagingData.length }</span>
                 <span className={ styles.description }>已选择构件总重量：{ eval(packagingData.map(item => { return Number(item.num) * Number(item.basicsWeight) }).join('+')) || 0 }吨</span>
+                <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
             </p>
-            <CommonTable columns={ packingColumns } pagination={ false } dataSource={ packagingData } />
+            <CommonTable 
+            columns={ packingColumns } 
+            pagination={ false } 
+            dataSource={ packagingData } 
+            rowSelection={{
+                selectedRowKeys: removeRowKeys,
+                type: "checkbox",
+                onChange: onRemoveSelectChange,
+            }}/>
         </DetailContent>
         <Modal visible={ visible } title="保存包" onCancel={ () => {
             setVisible(false);
@@ -514,7 +600,15 @@ export default function PackingListNew(): React.ReactNode {
                         <Select.Option value="连板" key="1">连板</Select.Option>
                         <Select.Option value="螺栓" key="2">螺栓</Select.Option>
                     </Select> 
-                </Col>   
+                </Col>  
+                <Col span={ 4 }><span>包属性</span></Col>   
+                <Col span={ 8 }>
+                <Select placeholder="请选择包属性" style={{ width: "100%" }} value={ packageType } onChange={ (e:string) => packageChange(e) }>
+                        <Select.Option value="请选择" key="0">请选择</Select.Option>
+                        <Select.Option value="通用" key="1">通用</Select.Option>
+                        <Select.Option value="专用包" key="2">螺栓</Select.Option>
+                    </Select> 
+                </Col>  
             </Row>  
         </Modal>
     </>

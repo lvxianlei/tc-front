@@ -46,6 +46,12 @@ export default function PackingList(): React.ReactNode {
             dataIndex: 'packageType'
         },
         {
+            key: 'packageType',
+            title: '包属性',
+            width: 150,
+            dataIndex: 'packageType'
+        },
+        {
             key: 'balesCount',
             title: '捆件数',
             dataIndex: 'balesCount',
