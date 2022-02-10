@@ -503,7 +503,56 @@ export default function ScheduleView(): React.ReactNode {
                             <Row>
                                 <Col span={15}>
                                     <Form.Item name="name" label="指派方案"> 
-                                        <Select disabled={edit}>
+                                        <Select disabled={edit} onChange={async (value)=>{
+                                            const resData: any = await RequestUtil.get(`/tower-science/assignPlan/planDetailById/${value}`)
+                                            setScheduleData(resData);
+                                            if(resData.materialLeaderDepartment){
+                                                const materialLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialLeaderDepartment}&size=1000`);
+                                                setMaterialUser(materialLeaderDepartment.records);
+                                            }
+                                            if(resData.materialPartLeaderDepartment){
+                                                const materialPartLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialPartLeaderDepartment}&size=1000`);
+                                                setMaterialPartUser(materialPartLeaderDepartment.records);
+                                            }
+                                            if(resData.smallSampleLeaderDepartment){
+                                                const smallSampleLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.smallSampleLeaderDepartment}&size=1000`);
+                                                setSmallSampleUser(smallSampleLeaderDepartment.records);
+                                            }
+                                            if(resData.drawLeaderDepartment){
+                                                const drawLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.drawLeaderDepartment}&size=1000`);
+                                                setDrawUser(drawLeaderDepartment.records);
+                                            }
+                                            if(resData.loftingLeaderDepartment){
+                                                const loftingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.loftingLeaderDepartment}&size=1000`);
+                                                setLoftingUser(loftingLeaderDepartment.records);
+                                            }
+                                            if(resData.weldingLeaderDepartment){
+                                                const weldingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.weldingLeaderDepartment}&size=1000`);
+                                                setWeldingUser(weldingLeaderDepartment.records);
+                                            }
+                                            if(resData.boltLeaderDepartment){
+                                                const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
+                                                setBoltUser(boltLeaderDepartment.records);
+                                            }
+
+                                            form.setFieldsValue({
+                                                ...resData,
+                                                materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                                                materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                                                boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
+                                                boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
+                                                weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
+                                                weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?resData.weldingLeaderDepartment:'',
+                                                loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
+                                                loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
+                                                drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
+                                                drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
+                                                materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                                                materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                                                smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
+                                                smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
+                                            });
+                                        }}>
                                             { planData && planData.map((item:any)=>{
                                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                                             }) }
