@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Button, Spin, Form, Modal, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData } from '../../common'
+import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData, FormItemType } from '../../common'
 import { promotionalTourism, contractInformation, contract } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -147,8 +147,16 @@ export default function Edit() {
                         if (item.dataIndex === "paymentPlanId") {
                             return ({
                                 ...item,
-                                path: item.path + popContent.id,
-                                getCheckboxProps
+                                render: (key: any) => {
+                                    return <FormItemType
+                                        type={item.type}
+                                        data={{
+                                            ...item,
+                                            path: item.path + contractInfosForm.getFieldsValue().submit[key].id,
+                                            getCheckboxProps
+                                        }}
+                                    />
+                                }
                             })
                         }
                         if (item.dataIndex === "refundAmount") {
