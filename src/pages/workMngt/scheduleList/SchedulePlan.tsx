@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Table } from 'antd'
+import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Table, Popconfirm } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { CommonTable, DetailTitle, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -14,13 +14,14 @@ import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 
 
 
-export default function SchedulePlan(){
+export default function SchedulePlan(props: any){
     const [visible, setVisible] = useState<boolean>(false);
     const [tableVisible, setTableVisible] = useState<boolean>(false);
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
     const history = useHistory();
     const [form] = Form.useForm();
     const [department, setDepartment] = useState<any|undefined>([]);
+    const [tableDataSource, setTableDataSource] = useState<any|undefined>([]);
     const [boltUser, setBoltUser] = useState<any|undefined>([]);
     const [weldingUser, setWeldingUser] = useState<any|undefined>([]);
     const [loftingUser, setLoftingUser] = useState<any|undefined>([]);
@@ -32,6 +33,9 @@ export default function SchedulePlan(){
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         setDepartment(departmentData);
+        const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);
+        setTableDataSource(planData);
+        
         resole(data)
     }), {})
     
@@ -47,11 +51,12 @@ export default function SchedulePlan(){
             saveData.loftingLeaderDepartment=  Array.isArray(saveData.loftingLeaderDepartment)?saveData.loftingLeaderDepartment[0]:saveData.loftingLeaderDepartment;
             saveData.drawLeaderDepartment= Array.isArray(saveData.drawLeaderDepartment)?saveData.drawLeaderDepartment[0]:saveData.drawLeaderDepartment;
             saveData.smallSampleLeaderDepartment= Array.isArray(saveData.smallSampleLeaderDepartment)?saveData.smallSampleLeaderDepartment[0]:saveData.smallSampleLeaderDepartment;
-
-            await RequestUtil.post('/tower-science/productCategory/assign', saveData).then(()=>{
+            console.log(saveData)
+            await RequestUtil.post('/tower-science/tower-science/assignPlan', saveData).then(async ()=>{
                 setVisible(false);
+                const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);
+                setTableDataSource(planData);
                 form.setFieldsValue({});
-            }).then(()=>{
             })
         
         } catch (error) {
@@ -125,7 +130,7 @@ export default function SchedulePlan(){
                     </>
                 }
             >
-                <Form form={form} {...formItemLayout} initialValues={scheduleData||{}}>
+                <Form form={form} {...formItemLayout} >
                     <Row>
                         <Col span={24}>
                             <Row>
@@ -314,14 +319,26 @@ export default function SchedulePlan(){
                 width={700} 
                 visible={tableVisible} 
                 onCancel={()=>{
+                    props?.plan(tableDataSource)
                     setTableVisible(false)
                 }}
+                // okText='保存并提交'
+                // onOk={
+                //     ()=>{
+                //         // console.log(props)
+                //         props?.plan(tableDataSource)
+                //         setTableVisible(false)
+                //     }
+                // }
             >
                 <Button type='primary' onClick={()=>{
+                    form.resetFields()
+                    setScheduleData({})
                     setVisible(true)
+                   
                 }}>添加</Button>
                 <Table
-                    dataSource={[]}
+                    dataSource={tableDataSource}
                     pagination={false}
                     size='small'
                     columns={[
@@ -330,7 +347,75 @@ export default function SchedulePlan(){
                             dataIndex:'name'
                         },{
                             title:'操作',
-                            dataIndex:'operation'
+                            dataIndex:'operation',
+                            render: (_: undefined, record: any): React.ReactNode => (
+                                <Space direction="horizontal" size="small">
+                                    <Button type='link' onClick={async ()=>{
+                                            const resData: any = await RequestUtil.get(`/tower-science/assignPlan/planDetailById/${record.id}`)
+                                            setScheduleData(resData);
+                                            if(resData.materialLeaderDepartment){
+                                                const materialLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialLeaderDepartment}&size=1000`);
+                                                setMaterialUser(materialLeaderDepartment.records);
+                                            }
+                                            if(resData.materialPartLeaderDepartment){
+                                                const materialPartLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialPartLeaderDepartment}&size=1000`);
+                                                setMaterialPartUser(materialPartLeaderDepartment.records);
+                                            }
+                                            if(resData.smallSampleLeaderDepartment){
+                                                const smallSampleLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.smallSampleLeaderDepartment}&size=1000`);
+                                                setSmallSampleUser(smallSampleLeaderDepartment.records);
+                                            }
+                                            if(resData.drawLeaderDepartment){
+                                                const drawLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.drawLeaderDepartment}&size=1000`);
+                                                setDrawUser(drawLeaderDepartment.records);
+                                            }
+                                            if(resData.loftingLeaderDepartment){
+                                                const loftingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.loftingLeaderDepartment}&size=1000`);
+                                                setLoftingUser(loftingLeaderDepartment.records);
+                                            }
+                                            if(resData.weldingLeaderDepartment){
+                                                const weldingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.weldingLeaderDepartment}&size=1000`);
+                                                setWeldingUser(weldingLeaderDepartment.records);
+                                            }
+                                            if(resData.boltLeaderDepartment){
+                                                const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
+                                                setBoltUser(boltLeaderDepartment.records);
+                                            }
+                                            
+                                            form.setFieldsValue({
+                                                ...resData,
+                                                materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                                                materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                                                boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
+                                                boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
+                                                weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
+                                                weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?resData.weldingLeaderDepartment:'',
+                                                loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
+                                                loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
+                                                drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
+                                                drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
+                                                materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                                                materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                                                smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
+                                                smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
+                                            });
+                                            setVisible(true);
+                                    }}>编辑</Button>
+                                    <Popconfirm
+                                        title="确认删除?"
+                                        onConfirm={() => {
+                                            RequestUtil.delete(`/tower-science/assignPlan/${record.id}`).then(async res => {
+                                                const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);
+                                                setTableDataSource(planData);
+                                            });
+                                        }}
+                                        okText="确认"
+                                        cancelText="取消"
+                                    >
+                                        <Button type="link">删除</Button>
+                                    </Popconfirm>
+                                </Space>
+                            )
                         }
                     ]}
                 />

@@ -83,10 +83,14 @@ export default function ScheduleView(): React.ReactNode {
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
     const [materialPartUser, setMaterialPartUser] = useState<any|undefined>([]);
     const [smallSampleUser, setSmallSampleUser] = useState<any|undefined>([]);
+    const [planData, setPlanData] = useState<any|undefined>([]);
     const params = useParams<{ id: string, status: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         setDepartment(departmentData);
+        const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);
+        setPlanData(planData);
+        
         resole(data)
     }), {})
     
@@ -465,7 +469,7 @@ export default function ScheduleView(): React.ReactNode {
                 onCancel={handleModalCancel}
                 footer={
                     edit?null:<>
-                        <SchedulePlan/>
+                        <SchedulePlan plan={setPlanData}/>
                         <Button onClick={handleModalCancel}>取消</Button>
                         <Button type='primary' onClick={handleModalOk}>保存并提交</Button>
                     </>
@@ -500,10 +504,9 @@ export default function ScheduleView(): React.ReactNode {
                                 <Col span={15}>
                                     <Form.Item name="name" label="指派方案"> 
                                         <Select disabled={edit}>
-                                            <Select.Option value={0} key={0}>紧急</Select.Option>
-                                            <Select.Option value={1} key={1}>高</Select.Option>
-                                            <Select.Option value={2} key={2}>中</Select.Option>
-                                            <Select.Option value={3} key={3}>低</Select.Option>
+                                            { planData && planData.map((item:any)=>{
+                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                            }) }
                                         </Select>
                                     </Form.Item>
                                 </Col>
