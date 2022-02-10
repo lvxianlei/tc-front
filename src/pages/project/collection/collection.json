@@ -80,7 +80,7 @@
         },
         {
             "title": "付款方式",
-            "dataIndex": "payType",
+            "dataIndex": "payTypeName",
             "disabled": true
         },
         {
@@ -90,7 +90,7 @@
         },
         {
             "title": "币种",
-            "dataIndex": "currency",
+            "dataIndex": "currencyName",
             "disabled": true
         },
         {
