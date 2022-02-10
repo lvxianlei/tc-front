@@ -68,7 +68,6 @@ export default function BidResultEdit(): JSX.Element {
                 }
             })))
 
-            let flagResult = false;
             // 验证中标比例
             for (let i = 0; i < _tabsData.length; i += 1) {
                 if (_tabsData[i].formData && _tabsData[i].formData.length > 0) {
@@ -84,12 +83,9 @@ export default function BidResultEdit(): JSX.Element {
                         }
                     }
                 } else {
-                    flagResult = true;
+                    message.error("每轮至少新增一行...");
+                    return false;
                 }
-            }
-            if (flagResult) {
-                message.error("每轮至少新增一行...");
-                return false;
             }
             let flag = false;
             map.forEach((value: any) => {
