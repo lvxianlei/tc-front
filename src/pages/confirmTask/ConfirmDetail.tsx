@@ -46,14 +46,14 @@ const towerColumns=[
         title: '产品类型',
         width: 100,
         dataIndex: 'productType',
-        render: (value: number, record: object): React.ReactNode => {
+        render: (value: any, record: object): React.ReactNode => {
             const renderEnum: any = productTypeOptions && productTypeOptions.map(({ id, name }) => {
               return {
                   label:name,
                   value: id,
               }
             })
-            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label}</>
+            return <>{value?renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label:'-'}</>
         }
     },
     {
