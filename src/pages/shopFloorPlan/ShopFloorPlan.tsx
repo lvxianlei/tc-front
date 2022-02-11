@@ -104,7 +104,7 @@ export default function ShopFloorPlan(): React.ReactNode {
             {confirmStatus === 1 ? <Link to={`/shopFloorPlan/shopFloorPlanList/automaticScheduling/${selectedKeys.join(',')}`}><Button disabled={selectedKeys.length <= 0} type="primary">确认并预排产</Button></Link> : null}
             <CommonTable
                 dataSource={[...pageList || []]}
-                columns={confirmStatus === 1 ? columns :
+                columns={
                     [...columns, {
                         "key": "operation",
                         "title": "排产计划",
@@ -112,7 +112,8 @@ export default function ShopFloorPlan(): React.ReactNode {
                         fixed: "right" as FixedType,
                         "width": 150,
                         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                            <Link to={`/shopFloorPlan/shopFloorPlanList/shopFloorDetail/${record.id}`}>详情</Link>
+                            confirmStatus === 1 ? '-' :
+                                <Link to={`/shopFloorPlan/shopFloorPlanList/shopFloorDetail/${record.id}`}>详情</Link>
                         )
                     }]
                 }
