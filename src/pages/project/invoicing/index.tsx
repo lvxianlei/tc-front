@@ -24,8 +24,8 @@ export default function Invoicing() {
     const onFilterSubmit = (value: any) => {
         if (value.startLaunchTime) {
             const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+            value.startLaunchTime = formatDate[0] + " 00:00:00"
+            value.endLaunchTime = formatDate[1] + " 23:59:59"
         }
         setFilterValue(value)
         return value
@@ -52,12 +52,19 @@ export default function Invoicing() {
             title="批量创建"
             width={1101}
             visible={visible}
+            destroyOnClose
             confirmLoading={!!modalRef.current?.loading}
             onOk={async () => {
-                await modalRef.current?.onSubmit()
-                message.success("批量创建成功....")
-                setVisible(false)
-                history.go(0)
+                try {
+                    const result = await modalRef.current?.onSubmit()
+                    if (result) {
+                        message.success("批量创建成功....")
+                        setVisible(false)
+                        history.go(0)
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
             }}
             onCancel={() => setVisible(false)}>
             <BatchCreate ref={modalRef} />
@@ -100,7 +107,7 @@ export default function Invoicing() {
                     }
                 }]}
             extraOperation={<>
-                <Link to="/project/invoicing/edit/new"><Button type="primary">新增开票申请</Button></Link>
+                <Link to="/project/invoicing/new/new"><Button type="primary">新增开票申请</Button></Link>
                 <Button type="primary" onClick={() => setVisible(true)}>批量创建</Button>
             </>}
             onFilterSubmit={onFilterSubmit}

@@ -45,7 +45,6 @@ export default function Overview() {
             value.materialLeaderDept = value.materialLeader.first
             value.materialLeader = value.materialLeader.second
         }
-        setFilterValue({ ...filterValue, ...value })
         return value
     }
 

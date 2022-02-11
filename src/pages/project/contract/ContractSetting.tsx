@@ -313,12 +313,7 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <FormItemType data={{ dataIndex: "signContractTime" }} type="date" format="YYYY-MM-DD"/>
-                // <DatePicker
-                //   format="YYYY-MM-DD"
-                //   onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}
-                //   className={layoutStyles.width100}
-                // />
+                <FormItemType data={{ dataIndex: "signContractTime",format:"YYYY-MM-DD" }} type="date" />
               ),
             },
             {
@@ -897,7 +892,7 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <FormItemType data={{ dataIndex: "signContractTime" }} type="date" />
+                <FormItemType data={{ dataIndex: "signContractTime",format:"YYYY-MM-DD" }} type="date" />
               ),
             },
             {

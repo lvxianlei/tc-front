@@ -129,11 +129,6 @@
         dataIndex: "deliveryTime",
     },
     {
-        key: "orderDeliveryTime",
-        title: "订单交货日期",
-        dataIndex: "orderDeliveryTime",
-    },
-    {
         key: "createUserName",
         title: "制单人",
         dataIndex: "createUserName", // createUserName修改为salesman

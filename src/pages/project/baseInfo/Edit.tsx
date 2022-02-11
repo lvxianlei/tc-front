@@ -79,7 +79,7 @@ export default function BaseInfoEdit(): JSX.Element {
                 projectLeaderId: baseInfoData.projectLeader?.id,
                 projectLeader: baseInfoData.projectLeader?.value,
                 biddingPerson: baseInfoData.biddingPerson?.value,
-                biddingAgency: baseInfoData.biddingAgency?.value
+                biddingAgency: baseInfoData.biddingAgency?.value || baseInfoData.biddingAgency
             })
             if (result) {
                 message.success("保存成功...")

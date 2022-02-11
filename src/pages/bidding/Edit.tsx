@@ -183,7 +183,7 @@ export default function InfomationNew(): JSX.Element {
         <DetailTitle title="基础信息" />
         <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={filterBaseInfoData(baseInfoData)} dataSource={detailData} edit />
         <DetailTitle title="物资清单" />
-        <EditableTable form={bidForm} columns={bidPageInfo} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
+        <EditTable form={bidForm} columns={bidPageInfo} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
         <Attachment title="附件" ref={attachRef} dataSource={data?.attachVos} edit />
     </DetailContent>
 }
