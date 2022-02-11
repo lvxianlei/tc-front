@@ -20,7 +20,8 @@ export default forwardRef(function TryAssemble({ id }: TryAssembleProps, ref) {
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
-            const result: [] = await RequestUtil.get(``);
+            const result: [] = await RequestUtil.get(`/tower-science/productSegmentAssemble/${id}`);
+            form.setFieldsValue({ list: [...result] })
             resole(result || [])
         } catch (error) {
             reject(error)
@@ -30,7 +31,7 @@ export default forwardRef(function TryAssemble({ id }: TryAssembleProps, ref) {
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(``);
+            const result = await RequestUtil.post(`/tower-science/productSegmentAssemble`, postData);
             resole(result)
         } catch (error) {
             reject(error)
@@ -39,11 +40,8 @@ export default forwardRef(function TryAssemble({ id }: TryAssembleProps, ref) {
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const data = await form.validateFields();
-            console.log(data.list)
-            await saveRun({
-                
-            })
+            const data = await form.getFieldsValue(true);
+            await saveRun(data.list)
             resolve(true);
         } catch (error) {
             reject(false)
@@ -70,7 +68,7 @@ export default forwardRef(function TryAssemble({ id }: TryAssembleProps, ref) {
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item key={index} label="试装段数">
-                                    <Form.Item key={index + '_' + id} name={["list", index, "count"]}>
+                                    <Form.Item key={index + '_' + id} name={["list", index, "trialAssembleNum"]}>
                                         <InputNumber style={{ width: "100%" }} min={0} max={99} placeholder="请输入" />
                                     </Form.Item>
                                 </Descriptions.Item>

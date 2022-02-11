@@ -205,13 +205,13 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            key: 'a',
+            key: 'specialCodea',
             title: '特殊件号',
             width: 200,
-            dataIndex: 'a',
+            dataIndex: 'specialCode',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "a"]} initialValue={_}>
+                <Form.Item name={['data', index, "specialCode"]} initialValue={_}>
                     <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )

@@ -110,11 +110,11 @@ const columns = [
         dataIndex: 'description'
     },
     {
-        key: 'a',
+        key: 'specialCode',
         title: '特殊件号',
         editable: true,
         width: 200,
-        dataIndex: 'a'
+        dataIndex: 'specialCode'
     },
     {
         key: 'electricWelding',
