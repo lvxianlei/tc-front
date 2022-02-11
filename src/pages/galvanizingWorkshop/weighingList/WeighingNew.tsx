@@ -4,7 +4,7 @@
 */
 
 import React, { useState } from 'react';
-import { Spin, Button, Space, Form, Input, Descriptions, DatePicker, Select, message, InputNumber } from 'antd';
+import { Spin, Button, Space, Form, Input, Descriptions, DatePicker, Select, message, InputNumber, Row, Col } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -92,7 +92,7 @@ export default function WeighingNew(): React.ReactNode {
         },
         {
             dataIndex: "weight",
-            title: "* 重量（kg）",
+            title: "重量（kg）",
             rules: [{
                 required: true,
                 message: '请输入重量'
@@ -102,7 +102,7 @@ export default function WeighingNew(): React.ReactNode {
         },
         {
             dataIndex: "derrickNo",
-            title: "* 抱杆号",
+            title: "抱杆号",
             rules: [{
                 required: true,
                 message: '请输入抱杆号'
@@ -112,7 +112,7 @@ export default function WeighingNew(): React.ReactNode {
         },
         {
             dataIndex: "weighingTypeId",
-            title: "* 过磅类型",
+            title: "过磅类型",
             rules: [{
                 required: true,
                 message: '请选择过磅类型'
@@ -275,18 +275,18 @@ export default function WeighingNew(): React.ReactNode {
             <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
         </Space>
     ]}>
-        <Form form={form}>
-            <Descriptions title="" bordered size="small" column={2} style={{ padding: '0px 0px 24px 0px' }}>
-                {
-                    specialColums.map((item: Record<string, any>, index: number) => {
-                        return <Descriptions.Item key={index} label={item.title} className={styles.detailItem}>
-                            <Form.Item key={item.dataIndex + '_' + index} name={item.dataIndex} label="" rules={item.rules || []} initialValue={item.initialValue}>
-                                {item.children}
-                            </Form.Item>
-                        </Descriptions.Item>
-                    })
-                }
-            </Descriptions>
+        <Form form={form}><Row gutter={24}>
+            {
+                specialColums.map((item: Record<string, any>, index: number) => {
+                    return <Col span={6}>
+                        <Form.Item key={item.dataIndex + '_' + index} name={item.dataIndex} label={item.title} rules={item.rules || []} initialValue={item.initialValue} style={{ width: "100%" }}>
+                            {item.children}
+                        </Form.Item>
+                    </Col>
+
+
+                })
+            }</Row>
         </Form>
         <DetailTitle title="塔型信息" />
         <TowerSelectionModal selectKey={[...relationProducts].map((res: any) => { return res.dailyPlanId })} onSelect={(selectedRows: object[] | any) => {
