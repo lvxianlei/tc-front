@@ -46,5 +46,5 @@ export interface ILofting {
 }
 
 export interface PdmModalProps {
-    onSubmit: () => void 
+    onSubmit: () => void
 }

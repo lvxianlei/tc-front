@@ -25,7 +25,7 @@ export default function PoleInformation(): React.ReactNode {
             dataIndex: 'index',
             width: 50,
             fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'productNumber',
@@ -106,29 +106,29 @@ export default function PoleInformation(): React.ReactNode {
             fixed: 'right' as FixedType,
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    {   
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                    {
                         userId === record.loftingUser ?
-                            <>{  
-                                record.loftingStatus === 2 && location?.state?.status === 4 ? 
-                                <WithSectionModal key={ record.id } id={ record.id } updateList={ () => setRefresh(!refresh) }/> 
-                                : <Button type="link" disabled>配段</Button> 
+                            <>{
+                                record.loftingStatus === 2 && location?.state?.status === 4 ?
+                                    <WithSectionModal key={record.id} id={record.id} updateList={() => setRefresh(!refresh)} />
+                                    : <Button type="link" disabled>配段</Button>
                             }</>
-                        : null
+                            : null
                     }
-                    { 
-                        record.loftingStatus === 4 ? 
-                        <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/poleLoftingDetails/${ record.id }` }>杆塔放样明细</Link> 
-                        : <Button type="link" disabled>杆塔放样明细</Button>
+                    {
+                        record.loftingStatus === 4 ?
+                            <Link to={`/workMngt/setOutList/poleInformation/${params.id}/poleLoftingDetails/${record.id}`}>杆塔放样明细</Link>
+                            : <Button type="link" disabled>杆塔放样明细</Button>
                     }
                     {
                         userId === record.loftingUser ?
-                        <>{  
-                            record.loftingStatus === 3 || record.loftingStatus === 4 ? 
-                            <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }`, state: { status: record.loftingStatus } }}>包装清单</Link> 
-                            : <Button type="link" disabled>包装清单</Button> 
-                        }</>
-                        : null
+                            <>{
+                                record.loftingStatus === 3 || record.loftingStatus === 4 ?
+                                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record.loftingStatus } }}>包装清单</Link>
+                                    : <Button type="link" disabled>包装清单</Button>
+                            }</>
+                            : null
                     }
                 </Space>
             )
@@ -137,14 +137,14 @@ export default function PoleInformation(): React.ReactNode {
 
     const history = useHistory();
     const params = useParams<{ id: string }>();
-    const [ refresh, setRefresh ] = useState(false);
-    
+    const [refresh, setRefresh] = useState(false);
+
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         resole(data);
     }), {})
     const departmentData: any = data || [];
-    const [ materialUser,setMaterialUser ] = useState([]);
+    const [materialUser, setMaterialUser] = useState([]);
     const location = useLocation<{ loftingLeader: string, status: number }>();
     const userId = AuthUtil.getUserId();
 
@@ -159,17 +159,17 @@ export default function PoleInformation(): React.ReactNode {
         return roles;
     }
 
-    const renderTreeNodes = (data:any) => data.map((item:any) => {
+    const renderTreeNodes = (data: any) => data.map((item: any) => {
         if (item.children) {
-            return (<TreeNode key={ item.id } title={ item.title } value={ item.id }  className={ styles.node } >
-                { renderTreeNodes(item.children) }
+            return (<TreeNode key={item.id} title={item.title} value={item.id} className={styles.node} >
+                {renderTreeNodes(item.children)}
             </TreeNode>);
         }
-        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
+        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
     });
 
     const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
+        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         switch (title) {
             case "materialUser":
                 return setMaterialUser(userData.records);
@@ -181,18 +181,18 @@ export default function PoleInformation(): React.ReactNode {
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
-    
+
     return <Page
         path="/tower-science/product/lofting"
         exportPath={`/tower-science/product/lofting`}
-        columns={ columns }
-        headTabs={ [] }
+        columns={columns}
+        headTabs={[]}
         requestData={{ productCategoryId: params.id }}
-        refresh={ refresh }
-        extraOperation={ <Space direction="horizontal" size="small">
-            <Button type="ghost" onClick={ () => history.goBack() }>返回</Button>
+        refresh={refresh}
+        extraOperation={<Space direction="horizontal" size="small">
+            <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>}
-        searchFormItems={ [
+        searchFormItems={[
             {
                 name: 'newStatusTime',
                 label: '最新状态变更时间',
@@ -202,11 +202,11 @@ export default function PoleInformation(): React.ReactNode {
                 name: 'loftingStatus',
                 label: '杆塔放样状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value={ "" } key="5">全部</Select.Option>
-                    <Select.Option value={ 1 } key="1">待开始</Select.Option>
-                    <Select.Option value={ 2 } key="2">配段中</Select.Option>
-                    <Select.Option value={ 3 } key="3">出单中</Select.Option>
-                    <Select.Option value={ 4 } key="4">已完成 </Select.Option>
+                    <Select.Option value={""} key="5">全部</Select.Option>
+                    <Select.Option value={1} key="1">待开始</Select.Option>
+                    <Select.Option value={2} key="2">配段中</Select.Option>
+                    <Select.Option value={3} key="3">出单中</Select.Option>
+                    <Select.Option value={4} key="4">已完成 </Select.Option>
                 </Select>
             },
             {
@@ -215,30 +215,30 @@ export default function PoleInformation(): React.ReactNode {
                 children: <Row>
                     <Col>
                         <Form.Item name="materialUserDepartment">
-                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'materialUser') } } style={{ width: "150px" }}>
-                                { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                            <TreeSelect placeholder="请选择" onChange={(value: any) => { onDepartmentChange(value, 'materialUser') }} style={{ width: "150px" }}>
+                                {renderTreeNodes(wrapRole2DataNode(departmentData))}
                             </TreeSelect>
                         </Form.Item>
                     </Col>
                     <Col>
                         <Form.Item name="materialUser">
                             <Select placeholder="请选择" style={{ width: "150px" }}>
-                                { materialUser && materialUser.map((item: any) => {
-                                    return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                                }) }
+                                {materialUser && materialUser.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                })}
                             </Select>
                         </Form.Item>
                     </Col>
                 </Row>
             }
-        ] }
-        onFilterSubmit = { (values: Record<string, any>) => {
-            if(values.newStatusTime) {
+        ]}
+        onFilterSubmit={(values: Record<string, any>) => {
+            if (values.newStatusTime) {
                 const formatDate = values.newStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
             return values;
-        } }
+        }}
     />
 }

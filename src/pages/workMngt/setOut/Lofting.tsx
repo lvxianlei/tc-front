@@ -205,7 +205,7 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            key: 'specialCodea',
+            key: 'specialCode',
             title: '特殊件号',
             width: 200,
             dataIndex: 'specialCode',
