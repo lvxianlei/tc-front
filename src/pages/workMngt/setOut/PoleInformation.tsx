@@ -133,10 +133,6 @@ export default function PoleInformation(): React.ReactNode {
                             }</>
                             : null
                     }
-                    <Button type="link" onClick={() => {
-                                setAllotVisible(true);
-                                setProductId(record.id);
-                            }}>调拨</Button>
                     {
                         record.loftingStatus === 3 ?
                             <Button type="link" onClick={() => {

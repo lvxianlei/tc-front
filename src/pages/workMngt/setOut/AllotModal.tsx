@@ -5,7 +5,7 @@
  */
 
  import React, { useImperativeHandle, forwardRef } from "react";
- import { Spin, Form, Descriptions, InputNumber, Checkbox, Input, message } from 'antd';
+ import { Spin, Form, Descriptions, InputNumber, Input } from 'antd';
  import { CommonTable, DetailContent } from '../../common';
  import RequestUtil from '../../../utils/RequestUtil';
  import useRequest from '@ahooksjs/use-request';
@@ -46,7 +46,7 @@ import { StoreValue } from "antd/es/form/interface";
  
      const { run: submitRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
          try {
-             const result = await RequestUtil.post(``);
+             const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/submit`);
              resole(result)
          } catch (error) {
              reject(error)
@@ -55,7 +55,7 @@ import { StoreValue } from "antd/es/form/interface";
 
      const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(``);
+            const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/save`);
             resole(result)
         } catch (error) {
             reject(error)
@@ -64,8 +64,10 @@ import { StoreValue } from "antd/es/form/interface";
  
      const onSubmit = () => new Promise(async (resolve, reject) => {
          try {
+            const baseData = await form.validateFields()
              await submitRun({
- 
+                productId: id,
+                productStructureSaveDTOList: baseData
              })
              resolve(true);
          } catch (error) {
@@ -77,7 +79,8 @@ import { StoreValue } from "antd/es/form/interface";
             const baseData = await form.validateFields()
              console.log(baseData)
             await saveRun({
-
+                productId: id,
+                productStructureSaveDTOList: baseData
             })
             resolve(true);
         } catch (error) {
