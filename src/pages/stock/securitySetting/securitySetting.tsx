@@ -106,7 +106,7 @@ const SecuritySetting = (): React.ReactNode => {
     return (
         <div className='public_page'>
             <div className='public_content'>
-                <div className='func_box'>
+                <div>
                     <div className='func'>
                     </div>
                     <div className='func_right' style={{ marginBottom: 20 }}>
