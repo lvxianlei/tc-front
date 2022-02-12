@@ -46,5 +46,46 @@ export interface ILofting {
 }
 
 export interface PdmModalProps {
-    onSubmit: () => void
+    onSubmit: () => void;
+}
+
+export interface allotModalProps {
+    onSubmit: () => void;
+    onSave: () => void;
+}
+
+export interface IAllot {
+    readonly id?: string;
+    readonly productCategory?: string;
+    readonly productCategoryName?: string;
+    readonly productHeight?: string;
+    readonly productNumber?: string;
+    readonly segmentInformation?: string;
+    readonly specialStatus?: string;
+    readonly loftingProductStructureVOS?: ILoftingProductStructureVOS[];
+}
+
+export interface ILoftingProductStructureVOS {
+    readonly basicsPartNum?: string;
+    readonly basicsWeight?: string;
+    readonly code?: string;
+    readonly codeRelation?: string;
+    readonly description?: string;
+    readonly holesNum?: string;
+    readonly id?: string;
+    readonly length?: string;
+    readonly materialName?: string;
+    readonly productCategoryId?: string;
+    readonly segmentGroupId?: string;
+    readonly segmentId?: string;
+    readonly segmentName?: string;
+    readonly smallSample?: string;
+    readonly specName?: string;
+    readonly structureSpec?: string;
+    readonly structureTexture?: string;
+    readonly thickness?: string;
+    readonly totalWeight?: string;
+    readonly uploadTime?: string;
+    readonly width?: string;
+    
 }

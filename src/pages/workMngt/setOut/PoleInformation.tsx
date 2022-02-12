@@ -4,8 +4,8 @@
  * @description 工作管理-放样列表-杆塔信息
 */
 
-import React, { useState } from 'react';
-import { Space, DatePicker, Select, Button, Row, Col, Form, TreeSelect, Spin } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Space, DatePicker, Select, Button, Row, Col, Form, TreeSelect, Spin, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -16,6 +16,9 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
+import Modal from 'antd/lib/modal/Modal';
+import { allotModalProps } from './ISetOut';
+import AllotModal from './AllotModal';
 
 export default function PoleInformation(): React.ReactNode {
     const columns = [
@@ -130,6 +133,18 @@ export default function PoleInformation(): React.ReactNode {
                             }</>
                             : null
                     }
+                    <Button type="link" onClick={() => {
+                                setAllotVisible(true);
+                                setProductId(record.id);
+                            }}>调拨</Button>
+                    {
+                        record.loftingStatus === 3 ?
+                            <Button type="link" onClick={() => {
+                                setAllotVisible(true);
+                                setProductId(record.id);
+                            }}>调拨</Button>
+                            : <Button type="link" disabled>调拨</Button>
+                    }
                 </Space>
             )
         }
@@ -147,6 +162,9 @@ export default function PoleInformation(): React.ReactNode {
     const [materialUser, setMaterialUser] = useState([]);
     const location = useLocation<{ loftingLeader: string, status: number }>();
     const userId = AuthUtil.getUserId();
+    const [ allotVisible, setAllotVisible ] = useState<boolean>(false);
+    const editRef = useRef<allotModalProps>();
+    const [ productId, setProductId ] = useState<string>('');
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
@@ -176,69 +194,113 @@ export default function PoleInformation(): React.ReactNode {
         };
     }
 
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSave();
+            message.success('调拨保存成功');
+            setAllotVisible(true);
+            setRefresh(!refresh);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const handleModalsubmit = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('调拨提交成功');
+            setAllotVisible(true);
+            setRefresh(!refresh);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
 
-    return <Page
-        path="/tower-science/product/lofting"
-        exportPath={`/tower-science/product/lofting`}
-        columns={columns}
-        headTabs={[]}
-        requestData={{ productCategoryId: params.id }}
-        refresh={refresh}
-        extraOperation={<Space direction="horizontal" size="small">
-            <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-        </Space>}
-        searchFormItems={[
-            {
-                name: 'newStatusTime',
-                label: '最新状态变更时间',
-                children: <DatePicker.RangePicker />
-            },
-            {
-                name: 'loftingStatus',
-                label: '杆塔放样状态',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value={""} key="5">全部</Select.Option>
-                    <Select.Option value={1} key="1">待开始</Select.Option>
-                    <Select.Option value={2} key="2">配段中</Select.Option>
-                    <Select.Option value={3} key="3">出单中</Select.Option>
-                    <Select.Option value={4} key="4">已完成 </Select.Option>
-                </Select>
-            },
-            {
-                name: 'productCategory',
-                label: '配段人',
-                children: <Row>
-                    <Col>
-                        <Form.Item name="materialUserDepartment">
-                            <TreeSelect placeholder="请选择" onChange={(value: any) => { onDepartmentChange(value, 'materialUser') }} style={{ width: "150px" }}>
-                                {renderTreeNodes(wrapRole2DataNode(departmentData))}
-                            </TreeSelect>
-                        </Form.Item>
-                    </Col>
-                    <Col>
-                        <Form.Item name="materialUser">
-                            <Select placeholder="请选择" style={{ width: "150px" }}>
-                                {materialUser && materialUser.map((item: any) => {
-                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
-            }
-        ]}
-        onFilterSubmit={(values: Record<string, any>) => {
-            if (values.newStatusTime) {
-                const formatDate = values.newStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-                values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-            }
-            return values;
-        }}
-    />
+    return <>
+    <Modal
+            destroyOnClose
+            visible={ allotVisible}
+            width="60%"
+            title="调拨"
+            footer={<Space>
+                <Button type="ghost" onClick={() => {
+                setAllotVisible(false);
+            }}>关闭</Button>
+                <Button type="primary" onClick={handleModalOk} ghost>保存</Button>
+                <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button>
+            </Space>}
+            onOk={handleModalOk}
+            onCancel={() => setAllotVisible(false)}
+            className={styles.tryAssemble}
+            >
+            <AllotModal id={productId} ref={editRef} />
+        </Modal>
+        <Page
+            path="/tower-science/product/lofting"
+            exportPath={`/tower-science/product/lofting`}
+            columns={columns}
+            headTabs={[]}
+            requestData={{ productCategoryId: params.id }}
+            refresh={refresh}
+            extraOperation={<Space direction="horizontal" size="small">
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
+            </Space>}
+            searchFormItems={[
+                {
+                    name: 'newStatusTime',
+                    label: '最新状态变更时间',
+                    children: <DatePicker.RangePicker />
+                },
+                {
+                    name: 'loftingStatus',
+                    label: '杆塔放样状态',
+                    children: <Select style={{ width: '120px' }} placeholder="请选择">
+                        <Select.Option value={""} key="5">全部</Select.Option>
+                        <Select.Option value={1} key="1">待开始</Select.Option>
+                        <Select.Option value={2} key="2">配段中</Select.Option>
+                        <Select.Option value={3} key="3">出单中</Select.Option>
+                        <Select.Option value={4} key="4">已完成 </Select.Option>
+                    </Select>
+                },
+                {
+                    name: 'productCategory',
+                    label: '配段人',
+                    children: <Row>
+                        <Col>
+                            <Form.Item name="materialUserDepartment">
+                                <TreeSelect placeholder="请选择" onChange={(value: any) => { onDepartmentChange(value, 'materialUser') }} style={{ width: "150px" }}>
+                                    {renderTreeNodes(wrapRole2DataNode(departmentData))}
+                                </TreeSelect>
+                            </Form.Item>
+                        </Col>
+                        <Col>
+                            <Form.Item name="materialUser">
+                                <Select placeholder="请选择" style={{ width: "150px" }}>
+                                    {materialUser && materialUser.map((item: any) => {
+                                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                }
+            ]}
+            onFilterSubmit={(values: Record<string, any>) => {
+                if (values.newStatusTime) {
+                    const formatDate = values.newStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
+                    values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+                    values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+                }
+                return values;
+            }}
+        />
+    </>
 }
