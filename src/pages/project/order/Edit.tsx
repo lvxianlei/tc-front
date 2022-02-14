@@ -23,7 +23,6 @@ export default function SeeGuarantee(): JSX.Element {
         arg = arg.replace(/\.{2,}/g, ".");
         arg = arg.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
         arg = arg.replace(v, '$1$2.$3');
-        console.log(v, "v")
         return arg
     }
 
@@ -63,7 +62,6 @@ export default function SeeGuarantee(): JSX.Element {
             return;
         }
         if (fields.taxAmount) {
-            console.log("sssss")
             // 含税金额改变
                 // 会影响含税单价，不含税单价，不含税金额
             // 含税单价 = 含税金额/订单重量
