@@ -294,7 +294,7 @@ export default function PickTower(): React.ReactNode {
                             //     message:'请填写A'
                             // }]}
                             rules={[{
-                                pattern: /^[a-zA-Z0-9-,*]*$/,
+                                pattern: /^[a-zA-Z0-9-,*()]*$/,
                                 message: '仅可输入英文字母/数字/特殊字符',
                             }]}>
                                 <Input style={{width:'100%'}}/>

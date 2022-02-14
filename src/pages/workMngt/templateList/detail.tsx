@@ -24,11 +24,13 @@ export default function TemplateDetail() {
     const [imgUrl, setImgUrl] = useState<string>('');
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const [editingKey, setEditingKey] = useState<any>('');
+    const [tableDataSource, setTableDataSource] = useState<any>([]);
     const [formRef] = Form.useForm();
     const isEditing = (record: any) => record.key === editingKey;
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-science/loftingTemplate/record/${params.id}`)
+            setTableDataSource(result)
             resole(result)
         } catch (error) {
             reject(error)
@@ -103,7 +105,10 @@ export default function TemplateDetail() {
             dataIndex: 'pageNumber',
             align: 'pageNumber',
             editable: true,
-            type:'number'
+            type:'number',
+            render:(text: any)=>{
+                return <span>{text===null?'-':text}</span>
+            }
         },
         {
             title: '上传人',
@@ -126,9 +131,15 @@ export default function TemplateDetail() {
                             }}
                         >查看</span>
                         <a href="javascript:;" onClick={() =>{
-                                // RequestUtil.post(`/tower-science/drawProductDetail/save`,newData[index]).then(()=>{
-                                //     message.success('保存成功！')
-                                // })
+                            RequestUtil.post(`/tower-science/loftingTemplate/templateRecord/${item.id}`,{
+                                id: item.id,
+                                pageNumber: formRef.getFieldsValue().pageNumber
+                            }).then(async ()=>{
+                                message.success('保存成功！')
+                                setEditingKey('');
+                                const result: any[] = await RequestUtil.get(`/tower-science/loftingTemplate/record/${params.id}`)
+                                setTableDataSource(result)
+                            })
                         }} >
                             保存
                         </a>
@@ -270,7 +281,7 @@ export default function TemplateDetail() {
                     <Button type="ghost" onClick={() => { history.go(-1) }}>返回</Button>
                 </Space>
                 <Form form={formRef} component={false} >
-                    <CommonTable columns={mergedColumns} dataSource={data} components={{
+                    <CommonTable columns={mergedColumns} dataSource={[...tableDataSource]} components={{
                             body: {
                                 cell: EditableCell,
                             },
