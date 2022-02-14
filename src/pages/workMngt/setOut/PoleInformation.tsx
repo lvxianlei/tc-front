@@ -194,7 +194,7 @@ export default function PoleInformation(): React.ReactNode {
         try {
             await editRef.current?.onSave();
             message.success('调拨保存成功');
-            setAllotVisible(true);
+            setAllotVisible(false);
             setRefresh(!refresh);
             resove(true);
         } catch (error) {
@@ -206,7 +206,7 @@ export default function PoleInformation(): React.ReactNode {
         try {
             await editRef.current?.onSubmit();
             message.success('调拨提交成功');
-            setAllotVisible(true);
+            setAllotVisible(false);
             setRefresh(!refresh);
             resove(true);
         } catch (error) {

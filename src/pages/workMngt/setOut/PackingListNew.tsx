@@ -483,6 +483,7 @@ export default function PackingListNew(): React.ReactNode {
                 }
             })
         })
+        console.log(list,stayDistrict,data)
         setStayDistrict(stayDistrict);
     }
 

@@ -46,7 +46,7 @@ export default forwardRef(function AllotModal({ id }: AllotModalProps, ref) {
 
     const { run: submitRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/submit`);
+            const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/submit`, postData);
             resole(result)
         } catch (error) {
             reject(error)
@@ -67,7 +67,12 @@ export default forwardRef(function AllotModal({ id }: AllotModalProps, ref) {
             const baseData = await form.validateFields()
             await submitRun({
                 productId: id,
-                productStructureSaveDTOList: baseData
+                productCategory: data?.productCategory,
+                productHeight: data?.productHeight,
+                productCategoryName: data?.productCategoryName,
+                productNumber: data?.productNumber,
+                segmentInformation: data?.segmentInformation,
+                productStructureSaveDTOList: form.getFieldsValue(true).loftingProductStructure
             })
             resolve(true);
         } catch (error) {
@@ -84,7 +89,7 @@ export default forwardRef(function AllotModal({ id }: AllotModalProps, ref) {
                 productCategoryName: data?.productCategoryName,
                 productNumber: data?.productNumber,
                 segmentInformation: data?.segmentInformation,
-                productStructureSaveDTO: form.getFieldsValue(true).loftingProductStructure
+                productStructureSaveDTOList: form.getFieldsValue(true).loftingProductStructure
             })
             resolve(true);
         } catch (error) {
