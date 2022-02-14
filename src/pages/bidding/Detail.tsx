@@ -64,7 +64,7 @@ export default function InformationDetail(): React.ReactNode {
     }
 
     const handleModalCancel = () => setVisible(false)
-    const handleChange = (fields: any, allFields: any) => {
+    const handleChange = (fields: any) => {
         if (Object.keys(fields)[0] === "biddingStatus") {
             setIsBid(fields.biddingStatus)
             if (fields.biddingStatus === 2) {

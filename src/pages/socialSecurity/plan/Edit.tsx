@@ -224,7 +224,7 @@ export default function Edit() {
                     dataSource={insuranceData} />
             </Form>
             <DetailTitle title="商业保险" />
-            <Row><Button type="primary" onClick={handleAdd}>新增</Button></Row>
+            <Row style={{ marginBottom: 16 }}><Button type="primary" onClick={handleAdd}>新增</Button></Row>
             <Form form={businessForm}>
                 <CommonTable
                     rowKey="id"

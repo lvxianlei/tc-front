@@ -70,7 +70,7 @@ export default function Invoice() {
 
     const handleCancel = (id: string) => {
         Modal.confirm({
-            title: "删除",
+            title: "作废",
             content: "确定作废此票据吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {

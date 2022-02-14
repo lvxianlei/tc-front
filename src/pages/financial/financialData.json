@@ -387,7 +387,7 @@
         },
         {
             "title": "企业类型",
-            "dataIndex": "businessName"
+            "dataIndex": "businessTypeName"
         },
         {
             "title": "企业名称",
