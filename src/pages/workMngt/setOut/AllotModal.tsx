@@ -31,8 +31,8 @@ export default forwardRef(function AllotModal({ id }: AllotModalProps, ref) {
                     // result?.loftingProductStructureVOS?.filter(item => { return res.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum = Number(items?.basicsPartNum) });
                     return {
                         ...res,
-                        basicsPartNum: '0',
-                        BasicsPartTotalNum: res.basicsPartNum
+                        basicsPartNum: res.basicsPartNum,
+                        BasicsPartTotalNum: res.specialBasicsPartNum
                     }
                 })
             }

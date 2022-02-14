@@ -87,6 +87,7 @@ export interface ILoftingProductStructureVOS {
     readonly totalWeight?: string;
     readonly uploadTime?: string;
     readonly width?: string;
+    readonly specialBasicsPartNum?: string;
 
 }
 
