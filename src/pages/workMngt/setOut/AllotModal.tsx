@@ -27,12 +27,12 @@ export default forwardRef(function AllotModal({ id }: AllotModalProps, ref) {
             result = {
                 ...result,
                 loftingProductStructureVOS: result?.loftingProductStructureVOS?.map((res: ILoftingProductStructureVOS) => {
-                    let BasicsPartTotalNum = 0;
-                    result?.loftingProductStructureVOS?.filter(item => { return res.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum += Number(items?.basicsPartNum) });
+                    // let BasicsPartTotalNum = 0;
+                    // result?.loftingProductStructureVOS?.filter(item => { return res.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum = Number(items?.basicsPartNum) });
                     return {
                         ...res,
                         basicsPartNum: '0',
-                        BasicsPartTotalNum: BasicsPartTotalNum
+                        BasicsPartTotalNum: res.basicsPartNum
                     }
                 })
             }
