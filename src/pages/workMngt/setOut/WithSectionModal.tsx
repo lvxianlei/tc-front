@@ -10,6 +10,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
+import { IDetailData, IProductSegmentList } from './ISetOut';
 
 export interface WithSectionModalProps { }
 export interface IWithSectionModalRouteProps extends RouteComponentProps<WithSectionModalProps>, WithTranslation {
@@ -23,25 +24,7 @@ export interface WithSectionModalState {
     readonly fastVisible: boolean;
 }
 
-interface IDetailData {
-    readonly productCategoryId?: string;
-    readonly productCategoryName?: string;
-    readonly productId?: string;
-    readonly productNumber?: string;
-    readonly legNumberA?: string;
-    readonly legNumberB?: string;
-    readonly legNumberC?: string;
-    readonly legNumberD?: string;
-    readonly loftingProductSegmentList?: IProductSegmentList[];
-}
 
-interface IProductSegmentList {
-    readonly productCategoryId?: string;
-    readonly segmentName?: string;
-    readonly id?: string | number;
-    readonly count?: string;
-    readonly segmentId?: string;
-}
 
 class WithSectionModal extends React.Component<IWithSectionModalRouteProps, WithSectionModalState> {
 

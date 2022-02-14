@@ -131,3 +131,23 @@ export interface IPackingList {
     readonly packageAttributeName?: string;
 }
 
+export interface IDetailData {
+    readonly productCategoryId?: string;
+    readonly productCategoryName?: string;
+    readonly productId?: string;
+    readonly productNumber?: string;
+    readonly legNumberA?: string;
+    readonly legNumberB?: string;
+    readonly legNumberC?: string;
+    readonly legNumberD?: string;
+    readonly loftingProductSegmentList?: IProductSegmentList[];
+}
+
+export interface IProductSegmentList {
+    readonly productCategoryId?: string;
+    readonly segmentName?: string;
+    readonly id?: string | number;
+    readonly count?: string;
+    readonly segmentId?: string;
+}
+
