@@ -7,7 +7,7 @@
         },
         {
             "title": "内部合同编号",
-            "dataIndex": "contractNumber",
+            "dataIndex": "internalNumber",
             "type": "popTable",
             "rules": [
                 {
@@ -17,13 +17,23 @@
             ],
             "path": "/tower-market/contract",
             "width": 1011,
-            "value": "contractNumber",
+            "value": "internalNumber",
             "dependencies": true,
             "readOnly": true,
             "columns": [
                 {
                     "title": "合同编号",
                     "dataIndex": "contractNumber"
+                },
+                {
+                    "title": "采购订单编号",
+                    "dataIndex": "purchaseOrderNumber",
+                    "search": true
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber",
+                    "search": true
                 },
                 {
                     "title": "合同名称",
@@ -52,8 +62,8 @@
             ]
         },
         {
-            "title": "内部合同编号",
-            "dataIndex": "internalNumber",
+            "title": "合同名称",
+            "dataIndex": "contractName",
             "disabled": true
         },
         {

@@ -106,7 +106,7 @@ export default function Edit() {
             baseInfo.setFieldsValue({
                 contractCompany: contractValue.signCustomerName,
                 contractSignTime: contractValue.signContractTime,
-                logicWeight: logicWeight.logicWeight,
+                reasonWeight: logicWeight.logicWeight,
                 planCode: logicWeight.planNumbers,
                 planWeight: contractValue.plannedWeight,
                 contractDevTime: contractValue.deliveryTime,
@@ -118,6 +118,7 @@ export default function Edit() {
         }
         if (fields.backProportion) {
             const ticketMoney = baseInfo.getFieldValue("ticketMoney")
+            console.log(ticketMoney)
             baseInfo.setFieldsValue({
                 backMoney: (parseFloat(fields.backProportion) * parseFloat(ticketMoney || "0") * 0.01).toFixed(2)
             })
@@ -127,7 +128,6 @@ export default function Edit() {
     const handleEditTableChange = (fields: any, allFields: any) => {
         if (fields.submit.length - 1 >= 0) {
             const currentRowData = fields.submit[fields.submit.length - 1]
-            const ticketMoney = baseInfo.getFieldValue("ticketMoney") || "0"
             const backProportion = baseInfo.getFieldValue("backProportion") || "0"
             if (currentRowData.weight || currentRowData.moneyCount) {
                 const { weight, moneyCount } = allFields.submit.reduce((result: { weight: string, moneyCount: string }, item: any) => ({
@@ -142,7 +142,7 @@ export default function Edit() {
                 baseInfo.setFieldsValue({
                     ticketWeight: weight,
                     ticketMoney: moneyCount,
-                    backMoney: (parseFloat(backProportion) * parseFloat(ticketMoney || "0") * 0.01).toFixed(2)
+                    backMoney: (parseFloat(backProportion) * parseFloat(moneyCount || "0") * 0.01).toFixed(2)
                 })
             }
         } else {

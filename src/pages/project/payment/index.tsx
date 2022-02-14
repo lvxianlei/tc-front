@@ -64,7 +64,7 @@ export default function Payment() {
         filterValue={filterValue}
         searchFormItems={[
             {
-                name: 'payType',
+                name: 'costType',
                 label: '请款类型',
                 children: <Select style={{ width: 100 }}>
                     {costTypeOptions?.map(item => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}
