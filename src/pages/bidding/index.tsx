@@ -4,20 +4,6 @@ import { Link } from 'react-router-dom'
 import { Page } from '../common'
 import { base } from "./bidding.json"
 import { sourceOptions } from '../../configuration/DictionaryOptions'
-const biddingStatusEnum = [
-    {
-        value: 0,
-        label: "未决定"
-    },
-    {
-        value: 1,
-        label: "是"
-    },
-    {
-        value: 2,
-        label: "否"
-    }
-]
 
 export default function Information(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({})

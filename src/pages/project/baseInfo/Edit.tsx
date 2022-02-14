@@ -150,16 +150,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     dataSource={data?.cargoVOList}
                 /> : <EditTable
                     form={cargoVOListForm}
-                    columns={cargoVOListColumns.map(item => {
-                        if (item.dataIndex === "projectVoltageLevel") {
-                            return ({
-                                ...item,
-                                type: "select",
-                                enum: voltageGradeOptions?.map(item => ({ value: item.id, label: item.name }))
-                            })
-                        }
-                        return item
-                    })}
+                    columns={cargoVOListColumns}
                     dataSource={data?.cargoVOList} />}
                 <DetailTitle title="整理后物资清单" style={{ paddingTop: "24px" }} />
                 <EditTable

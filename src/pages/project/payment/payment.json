@@ -369,27 +369,46 @@
     "auditIdRecord": [
         {
             "title": "部门",
-            "dataIndex": ""
+            "dataIndex": "department"
         },
         {
             "title": "审批人",
-            "dataIndex": ""
+            "dataIndex": "approver"
         },
         {
             "title": "职位",
-            "dataIndex": ""
+            "dataIndex": "position"
         },
         {
             "title": "审批时间",
-            "dataIndex": ""
+            "dataIndex": "batchTime"
         },
         {
             "title": "审批结果",
-            "dataIndex": ""
+            "dataIndex": "batchResult",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "审批中"
+                },
+                {
+                    "value": 2,
+                    "label": "已同意"
+                },
+                {
+                    "value": 3,
+                    "label": "已驳回"
+                },
+                {
+                    "value": 4,
+                    "label": "已转审"
+                }
+            ]
         },
         {
             "title": "意见",
-            "dataIndex": ""
+            "dataIndex": "opinion"
         }
     ]
 }

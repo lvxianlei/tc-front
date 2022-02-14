@@ -30,7 +30,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 businessId: result.businessId + ',' + result.businessName,
                 receiptVos: {
                     value: result.receiptVos.map((item: any) => item.receiptNumber).join(","),
-                    records: result.receiptVos.map((item: any) => ({ ...item, id: item.receiptId }))
+                    records: result.receiptVos.map((item: any) => ({ ...item, id: item.receiptId, receiveNumber: item.receiptNumber }))
                 }
             })
             businessTypeChange(result.businessType);
