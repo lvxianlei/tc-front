@@ -411,7 +411,7 @@ export default function TaskNew(props:any){
                                         setMaterialUser(drawLeaderDepartment.records);
                                         
                                     }
-                                    const type:any = '角钢塔';// formValue[0]?.productType
+                                    const type:any =  formValue[0]?.productType;
                                     if(type === '四管塔' || type === '架构塔'){
                                         setRadioValue('自定义')
                                         setPrintData({
