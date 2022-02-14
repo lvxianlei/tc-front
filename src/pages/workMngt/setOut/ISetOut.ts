@@ -46,5 +46,88 @@ export interface ILofting {
 }
 
 export interface PdmModalProps {
-    onSubmit: () => void 
+    onSubmit: () => void;
 }
+
+export interface allotModalProps {
+    onSubmit: () => void;
+    onSave: () => void;
+}
+
+export interface IAllot {
+    readonly id?: string;
+    readonly productCategory?: string;
+    readonly productCategoryName?: string;
+    readonly productHeight?: string;
+    readonly productNumber?: string;
+    readonly segmentInformation?: string;
+    readonly specialStatus?: string;
+    readonly loftingProductStructureVOS?: ILoftingProductStructureVOS[];
+}
+
+export interface ILoftingProductStructureVOS {
+    readonly basicsPartNum?: string;
+    readonly basicsWeight?: string;
+    readonly code?: string;
+    readonly codeRelation?: string;
+    readonly description?: string;
+    readonly holesNum?: string;
+    readonly id?: string;
+    readonly length?: string;
+    readonly materialName?: string;
+    readonly productCategoryId?: string;
+    readonly segmentGroupId?: string;
+    readonly segmentId?: string;
+    readonly segmentName?: string;
+    readonly smallSample?: string;
+    readonly specName?: string;
+    readonly structureSpec?: string;
+    readonly structureTexture?: string;
+    readonly thickness?: string;
+    readonly totalWeight?: string;
+    readonly uploadTime?: string;
+    readonly width?: string;
+    
+}
+
+export interface IData {
+    readonly ncCount: string;
+    readonly structureCount: string;
+}
+
+export interface IBundle {
+    readonly id?: string;
+    readonly towerStructureId?: string;
+    readonly productCategoryId?: string;
+    readonly balesCode?: string;
+    readonly productId?: string;
+    readonly num?: number;
+    readonly code?: string;
+    readonly structureSpec?: string;
+    readonly length?: string;
+    readonly description?: string;
+    readonly structureNum?: number;
+    readonly structureCount?: number;
+    readonly materialSpec?: string;
+    readonly structureId?: string;
+    readonly topId?: string;
+    readonly pieceCode?: string;
+    readonly basicsWeight?: number;
+}
+
+export interface IPackingList {
+    readonly balesCode?: string;
+    readonly productCategoryId?: string;
+    readonly productCategoryName?: string;
+    readonly productId?: string;
+    readonly productNumber?: string;
+    readonly packageRecordVOList?: IBundle[];
+    readonly toChooseList?: IBundle[];
+    readonly id?: string;
+    readonly description?: string;
+    readonly packageType?: string;
+    readonly structureNum?: number;
+    readonly topId?: string;
+    readonly packageAttributeName?: string;
+}
+

@@ -153,7 +153,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 <DetailContent key={this.props.id}>
                     <Form ref={this.form} className={styles.descripForm}>
                         <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>
-                            <span>塔身配段信息</span>
+                            <span>塔腿配段信息</span>
                             <Button className={styles.fastBtn} type="primary" onClick={() => {
                                 this.setState({
                                     fastVisible: true
@@ -163,6 +163,9 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                         <Descriptions title="" bordered size="small" colon={false} column={4}>
                             <Descriptions.Item key={1} label="A">
                                 <Form.Item name="legNumberA" initialValue={detailData?.legNumberA} rules={[{
+                                    required: true,
+                                    message: '请输入塔腿A'
+                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
@@ -171,6 +174,9 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                             </Descriptions.Item>
                             <Descriptions.Item key={2} label="B">
                                 <Form.Item name="legNumberB" initialValue={detailData?.legNumberB} rules={[{
+                                    required: true,
+                                    message: '请输入塔腿B'
+                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
@@ -179,6 +185,9 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                             </Descriptions.Item>
                             <Descriptions.Item key={3} label="C">
                                 <Form.Item name="legNumberC" initialValue={detailData?.legNumberC} rules={[{
+                                    required: true,
+                                    message: '请输入塔腿C'
+                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
@@ -187,6 +196,9 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                             </Descriptions.Item>
                             <Descriptions.Item key={4} label="D">
                                 <Form.Item name="legNumberD" initialValue={detailData?.legNumberD} rules={[{
+                                    required: true,
+                                    message: '请输入塔腿D'
+                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
@@ -212,8 +224,11 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                         </Descriptions.Item>
                                         <Descriptions.Item key={index} label="段数">
                                             <Form.Item key={index + '_' + this.props.id} name={["productSegmentListDTOList", index, "count"]} initialValue={items.count} rules={[{
-                                                pattern: /^[0-9-,]*$/,
-                                                message: '仅可输入数字/特殊字符',
+                                                required: true,
+                                                message: '请输入段数 '
+                                            }, {
+                                                pattern: /^[0-9]*$/,
+                                                message: '仅可输入数字',
                                             }]}>
                                                 <Input placeholder="请输入" />
                                             </Form.Item>

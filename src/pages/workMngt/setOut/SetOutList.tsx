@@ -107,7 +107,16 @@ export default function SetOutList(): React.ReactNode {
                     {
                         record.status === 5 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
                     }
-                    <Button type="link" onClick={() => setTryAssembleVisiblee(true)}>试组装信息</Button>
+                    {
+                        record.status === 2 ?
+                            <Button type="link" onClick={() => {
+                                setTryAssembleVisiblee(true);
+                                setProductCategoryId(record.id);
+                            }}>试装信息</Button>
+                            :
+                            <Button type="link" disabled>试装信息</Button>
+                    }
+
                 </Space>
             )
         }
@@ -134,6 +143,7 @@ export default function SetOutList(): React.ReactNode {
     const checkUser: any = data || [];
     const [tryAssembleVisible, setTryAssembleVisiblee] = useState(false);
     const editRef = useRef<TryAssembleProps>();
+    const [productCategoryId, setProductCategoryId] = useState<string>('')
 
     return <Spin spinning={loading}>
         <Modal
@@ -148,7 +158,7 @@ export default function SetOutList(): React.ReactNode {
                 setTryAssembleVisiblee(false);
                 setRefresh(!refresh);
             }}>
-            <TryAssemble id={''} ref={editRef} />
+            <TryAssemble id={productCategoryId} ref={editRef} />
         </Modal>
         <Page
             path="/tower-science/loftingList"

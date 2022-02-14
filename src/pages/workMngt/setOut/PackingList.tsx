@@ -13,15 +13,7 @@ import { Link, useHistory, useLocation, useParams, useRouteMatch } from 'react-r
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import ExportList from '../../../components/export/list';
-import { IBundle, IPackingList } from './PackingListNew';
-
-interface IResponseData {
-    readonly id: number;
-    readonly size: number;
-    readonly current: number;
-    readonly total: number;
-    readonly records: [];
-}
+import { IBundle, IPackingList } from './ISetOut';
 
 export default function PackingList(): React.ReactNode {
     const columns = [

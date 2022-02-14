@@ -110,11 +110,11 @@ const columns = [
         dataIndex: 'description'
     },
     {
-        key: 'a',
+        key: 'specialCode',
         title: '特殊件号',
         editable: true,
         width: 200,
-        dataIndex: 'a'
+        dataIndex: 'specialCode'
     },
     {
         key: 'electricWelding',
@@ -272,8 +272,8 @@ export default function TowerCheck(): React.ReactNode {
         const red: number = record.redColumn.indexOf(dataIndex);
         const green: number = record.greenColumn.indexOf(dataIndex);
         const yellow: number = record.yellowColumn.indexOf(dataIndex);
-        const brown: number = record.a;
-        if (brown === 1) {
+        const brown: string = record.specialCode;
+        if (brown === '1' && dataIndex === 'specialCode') {
             return 'brown';
         }
         if (red !== -1) {

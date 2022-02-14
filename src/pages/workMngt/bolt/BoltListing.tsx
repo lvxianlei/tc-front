@@ -136,7 +136,22 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请输入小计'
                 }]}>
-                    <Input type="number" size="small" onChange={() => rowChange(index)} />
+                    <Input type="number" size="small" onChange={(e) => {
+                        rowChange(index);
+                        const data = form.getFieldsValue(true).data;
+                        const total = Number(e.target.value) + Number(data[index].wealth)
+                        data[index] = {
+                            ...data[index],
+                            total: total
+                        }
+                        if (data[index].singleWeight) {
+                            data[index] = {
+                                ...data[index],
+                                totalWeight: total * data[index].singleWeight
+                            }
+                        }
+                        form?.setFieldsValue({ data: data })
+                    }} />
                 </Form.Item>
             )
         },
@@ -151,7 +166,22 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请输入裕度'
                 }]}>
-                    <Input type="number" max={9999} size="small" onChange={() => rowChange(index)} />
+                    <Input type="number" max={9999} size="small" onChange={(e) => {
+                        rowChange(index);
+                        const data = form.getFieldsValue(true).data;
+                        const total = Number(e.target.value) + Number(data[index].subtotal)
+                        data[index] = {
+                            ...data[index],
+                            total: total
+                        }
+                        if (data[index].singleWeight) {
+                            data[index] = {
+                                ...data[index],
+                                totalWeight: total * data[index].singleWeight
+                            }
+                        }
+                        form?.setFieldsValue({ data: data })
+                    }} />
                 </Form.Item>
             )
         },
@@ -166,17 +196,7 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请输入合计'
                 }]}>
-                    <Input type="number" size="small" onChange={(e) => {
-                        rowChange(index);
-                        const data = form.getFieldsValue(true).data;
-                        if (data[index].singleWeight) {
-                            data[index] = {
-                                ...data[index],
-                                totalWeight: Number(e.target.value) * data[index].singleWeight
-                            }
-                            form?.setFieldsValue({ data: data })
-                        }
-                    }} />
+                    <Input type="number" size="small" onChange={() => rowChange(index)} disabled />
                 </Form.Item>
             )
         },

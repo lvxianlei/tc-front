@@ -6,7 +6,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
 import { boltTypeOptions } from '../../../configuration/DictionaryOptions';
 
-export interface BoltNewModalProps {}
+export interface BoltNewModalProps { }
 export interface IBoltNewModalRouteProps extends RouteComponentProps<BoltNewModalProps>, WithTranslation {
     readonly id: number | string;
     readonly updataList: () => void;
@@ -39,7 +39,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                 }).then(res => {
                     this.onCancel();
                     this.props.updataList();
-                } );
+                });
             })
         }
     }
@@ -62,8 +62,8 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
     protected getFormProps(): FormProps {
         return {
             ...super.getFormProps(),
-            labelCol:{ 
-                span: 8 
+            labelCol: {
+                span: 8
             },
             wrapperCol: {
                 offset: 1
@@ -76,7 +76,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
      * @description Gets form item groups
      * @returns form item groups 
      */
-     public getFormItemGroups(): IFormItemGroup[][] {
+    public getFormItemGroups(): IFormItemGroup[][] {
         return [[{
             title: '',
             itemCol: {
@@ -90,11 +90,11 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请选择类型'
                 }],
                 children: <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder='请选择'>
-                    { boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
+                    {boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
                             {name}
                         </Select.Option>
-                    }) }
+                    })}
                 </Select>
             }, {
                 label: '名称',
@@ -104,7 +104,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请输入名称'
                 }],
                 children: (
-                    <Input maxLength={10}/>
+                    <Input maxLength={10} />
                 )
             }, {
                 label: '规格',
@@ -120,7 +120,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                 label: '无扣长',
                 name: 'unbuckleLength',
                 children: (
-                    <Input type="number" max={9999}/>
+                    <Input type="number" max={9999} />
                 )
             }, {
                 label: '等级',
@@ -130,7 +130,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请输入等级'
                 }],
                 children: (
-                    <Input maxLength={20}/>
+                    <Input maxLength={20} />
                 )
             }, {
                 label: '单重',
@@ -140,11 +140,11 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请输入单重'
                 }],
                 children: (
-                    <Input type="number" min={ 0 } max={ 9999 } onChange={ (e) => {
-                        if(this.getForm()?.getFieldsValue(true).total) {
+                    <Input type="number" min={0} max={9999} onChange={(e) => {
+                        if (this.getForm()?.getFieldsValue(true).total) {
                             this.getForm()?.setFieldsValue({ totalWeight: Number(e.target.value) * this.getForm()?.getFieldsValue(true).total })
                         }
-                    } } />
+                    }} />
                 )
             }, {
                 label: '小计',
@@ -154,7 +154,15 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请输入小计'
                 }],
                 children: (
-                    <Input type="number" max={ 9999 }/>
+                    <Input type="number" max={9999} onChange={(e) => {
+                        const total = Number(e.target.value) + Number(this.getForm()?.getFieldsValue(true).wealth);
+                        this.getForm()?.setFieldsValue({ total: total })
+                        if (this.getForm()?.getFieldsValue(true).singleWeight) {
+
+                            this.getForm()?.setFieldsValue({ totalWeight: total * this.getForm()?.getFieldsValue(true).singleWeight })
+
+                        }
+                    }} />
                 )
             }, {
                 label: '裕度',
@@ -163,10 +171,18 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     required: true,
                     message: '请输入裕度'
                 }],
+                initialValue: 0,
                 children: (
-                    <Input type="number" max={ 9999 }/>
+                    <Input type="number" max={9999} onChange={(e) => {
+
+                        const total = Number(e.target.value) + Number(this.getForm()?.getFieldsValue(true).subtotal);
+                        this.getForm()?.setFieldsValue({ total: total })
+                        if (this.getForm()?.getFieldsValue(true).subtotal && this.getForm()?.getFieldsValue(true).singleWeight) {
+                            this.getForm()?.setFieldsValue({ totalWeight: total * this.getForm()?.getFieldsValue(true).singleWeight })
+                        }
+                    }} />
                 )
-            },  {
+            }, {
                 label: '合计',
                 name: 'total',
                 rules: [{
@@ -174,11 +190,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请输入合计'
                 }],
                 children: (
-                    <Input type="number" min={ 0 } max={ 9999 } onChange={ (e) => {
-                        if(this.getForm()?.getFieldsValue(true).singleWeight) {
-                            this.getForm()?.setFieldsValue({ totalWeight: Number(e.target.value) * this.getForm()?.getFieldsValue(true).singleWeight })
-                        }
-                    } } />
+                    <Input type="number" min={0} max={9999} disabled />
                 )
             }, {
                 label: '总重（kg）',
@@ -194,7 +206,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                 label: '备注',
                 name: 'description',
                 children: (
-                    <Input maxLength={50}/>
+                    <Input maxLength={50} />
                 )
             }]
         }]];
@@ -206,17 +218,17 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
      */
     public render(): React.ReactNode {
         return <>
-            <Button type="primary" onClick={ () => this.modalShow() } ghost>添加</Button>
-            <Modal 
-                visible={ this.state.visible } 
-                width="40%" 
-                title="添加" 
-                onCancel={ () => this.onCancel() }
-                onOk={ () => this.onSubmit() }
+            <Button type="primary" onClick={() => this.modalShow()} ghost>添加</Button>
+            <Modal
+                visible={this.state.visible}
+                width="40%"
+                title="添加"
+                onCancel={() => this.onCancel()}
+                onOk={() => this.onSubmit()}
                 okText="确定"
                 cancelText="关闭"
             >
-                { super.render() }
+                {super.render()}
             </Modal>
         </>
     }
