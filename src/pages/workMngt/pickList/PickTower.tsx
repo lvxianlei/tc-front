@@ -14,7 +14,11 @@ export interface IDetail {
     productCategoryName?: string;
     productId?: string;
     productNumber?: string;
-    materialDrawProductSegmentList?: IMaterialDetail[]
+    materialDrawProductSegmentList?: IMaterialDetail[];
+    legWeightA?: string;
+    legWeightB?: string;
+    legWeightC?: string;
+    legWeightD?: string;
 }
 export interface IMaterialDetail{
     count: string;
@@ -51,12 +55,19 @@ export default function PickTower(): React.ReactNode {
             const submitData={
                 productCategoryId: params.id,
                 productId: productId,
-                productSegmentListDTOList: submitTableData
+                productSegmentListDTOList: submitTableData,
+                legWeightA:data.legWeightA,
+                legWeightB:data.legWeightB,
+                legWeightC:data.legWeightC,
+                legWeightD:data.legWeightD
             }
             RequestUtil.post(`/tower-science/product/material/segment/submit`,submitData).then(()=>{
                 message.success('提交成功！');
                 setVisible(false);
                 setProductId('');
+                form.setFieldsValue({
+                    detailData:[]
+                })
                 form.resetFields()
             }).then(()=>{
                 setRefresh(!refresh);
@@ -68,7 +79,6 @@ export default function PickTower(): React.ReactNode {
     const handleModalSave =  async () => {
         try {
             const data = await form.validateFields();
-            console.log(data)
             const saveTableData = data.detailData.map((item:any,index:number)=>{
                 return{
                     segmentId: item.id,
@@ -79,12 +89,19 @@ export default function PickTower(): React.ReactNode {
             const saveData={
                 productCategoryId: params.id,
                 productId: productId,
-                productSegmentListDTOList: saveTableData
+                productSegmentListDTOList: saveTableData,
+                legWeightA:data.legWeightA,
+                legWeightB:data.legWeightB,
+                legWeightC:data.legWeightC,
+                legWeightD:data.legWeightD
             }
             RequestUtil.post(`/tower-science/product/material/segment/save`,saveData).then(()=>{
                 message.success('保存成功！');
                 setVisible(false);
                 setProductId('');
+                form.setFieldsValue({
+                    detailData:[]
+                })
                 form.resetFields();
             }).then(()=>{
                 setRefresh(!refresh);
@@ -188,7 +205,9 @@ export default function PickTower(): React.ReactNode {
                                 ...data,
                                 materialDrawProductSegmentList:detailData
                             })
-                            form.setFieldsValue({detailData:detailData});
+                            form.setFieldsValue({
+                                detailData:detailData
+                            });
                             
                     }} >配段</Button>
                     <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==3}>杆塔提料明细</Button>
@@ -246,16 +265,30 @@ export default function PickTower(): React.ReactNode {
     return (
         <>
             <Modal title='配段信息'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
-                {detail?.materialDrawProductSegmentList?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList }} autoComplete="off" form={form}>  
-                    <DetailTitle title={'塔腿配段信息'} operation={[<Button type='primary' onClick={()=>{setSegmentVisible(true)}}>快速配段</Button>,<Modal 
+                {detail?.materialDrawProductSegmentList?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList,legWeightA:detail?.legWeightA,legWeightB:detail?.legWeightB,legWeightC:detail?.legWeightC,legWeightD:detail?.legWeightD }} autoComplete="off" form={form}>  
+                    <DetailTitle title={'塔腿配段信息'} operation={[<Button type='primary' onClick={()=>{setSegmentVisible(true)}}>快速配段</Button>,
+                    <Modal 
                         visible={segmentVisible}
                         title='配段信息'
                         onCancel={()=>{
                             setSegmentVisible(false);
                         }}
+                        onOk={async ()=>{
+                            const segment = form.getFieldsValue()
+                            const detailData = await RequestUtil.get(`/tower-science/product/quickMaterial/${productId}/${segment?.segmentList}`)
+                            setSegmentVisible(false);
+                            // message.success('配段成功！');
+                            form.setFieldsValue({
+                                detailData:detailData,
+                                legWeightA:segment?.legWeightA,
+                                legWeightB:segment?.legWeightB,
+                                legWeightC:segment?.legWeightC,
+                                legWeightD:segment?.legWeightD 
+                            });
+                        }}
                     >
                         <Row>
-                            <Form.Item name="A" label="配段" 
+                            <Form.Item name="segmentList" label="配段" 
                             // rules={[{
                             //     required: true,
                             //     message:'请填写A'
