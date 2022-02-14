@@ -360,7 +360,7 @@ export default function TaskView(props: any){
                     </Descriptions.Item>
                     <Descriptions.Item label="钢板明细">
                         <Button type='link' onClick={async ()=>{
-                            const data: any = await RequestUtil.get(`/tower-science/plate/list/${specialData?.productCategoryId}/${specialData?.printSpecifications}/${specialData?.printSpecialProcess}`);
+                            const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${specialData?.productCategoryId}/${specialData?.printSpecifications}/${specialData?.printSpecialProcess}`);
                             setSteelData(data)
                             setSteelVisible(true)
                         }}>查看</Button>
@@ -390,6 +390,8 @@ export default function TaskView(props: any){
                     setSteelVisible(false)
                     setSteelData([])
                 }}
+                width={1500}
+                footer={false}
             >
                 <CommonTable columns={steelColumns} dataSource={steelData || []}/>
             </Modal>

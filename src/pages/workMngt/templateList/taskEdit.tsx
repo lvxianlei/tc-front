@@ -517,7 +517,7 @@ export default function TaskNew(props:any){
                         <Col span={11}>
                             <Form.Item name="detail" label="钢板明细" >
                                 <Button type='link' onClick={async ()=>{
-                                    const data: any = await RequestUtil.get(`/tower-science/plate/list/${printData?.productCategoryId}/${printData?.printSpecifications}/${printData?.printSpecialProcess}`);
+                                    const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${printData?.productCategoryId}/${printData?.printSpecifications}/${printData?.printSpecialProcess}`);
                                     setSteelData(data)
                                     setSteelVisible(true)
                                 }} disabled={!read}>查看</Button>
@@ -671,10 +671,12 @@ export default function TaskNew(props:any){
             <Modal
                 title='钢板明细' 
                 visible={steelVisible} 
+                width={1500}
                 onCancel={()=>{
                     setSteelVisible(false)
                     setSteelData([])
                 }}
+                footer={false}
             >
                 <CommonTable columns={steelColumns} dataSource={steelData || []}/>
             </Modal>
