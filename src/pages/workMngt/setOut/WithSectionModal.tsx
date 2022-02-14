@@ -70,7 +70,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
             visible: true,
             detailData: { ...data }
         })
-        this.getForm()?.setFieldsValue({ productSegmentListDTOList: [...data.loftingProductSegmentList || []] });
+        this.getForm()?.setFieldsValue({ ...data, productSegmentListDTOList: [...data.loftingProductSegmentList || []] });
     }
 
     protected save = (path: string) => {
@@ -80,33 +80,42 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 const loftingProductSegmentList = this.state.detailData?.loftingProductSegmentList;
                 value.productCategoryId = this.state.detailData?.productCategoryId;
                 value.productId = this.state.detailData?.productId;
-                if (value.productSegmentListDTOList) {
-                    value.productSegmentListDTOList = value.productSegmentListDTOList?.map((items: IProductSegmentList, index: number) => {
-                        if (items) {
-                            return {
-                                id: loftingProductSegmentList && loftingProductSegmentList[index].id === -1 ? '' : loftingProductSegmentList && loftingProductSegmentList[index].id,
-                                segmentName: loftingProductSegmentList && loftingProductSegmentList[index].segmentName,
-                                count: items.count,
-                                segmentId: loftingProductSegmentList && loftingProductSegmentList[index].segmentId,
-                            }
-                        } else {
-                            return undefined
+                value.productSegmentListDTOList = value.productSegmentListDTOList?.map((items: IProductSegmentList, index: number) => {
+                    if (items) {
+                        return {
+                            id: loftingProductSegmentList && loftingProductSegmentList[index].id === -1 ? '' : loftingProductSegmentList && loftingProductSegmentList[index].id,
+                            segmentName: loftingProductSegmentList && loftingProductSegmentList[index].segmentName,
+                            count: items.count,
+                            segmentId: loftingProductSegmentList && loftingProductSegmentList[index].segmentId,
                         }
-                    });
-                    value.productSegmentListDTOList = value.productSegmentListDTOList.filter((item: IProductSegmentList) => { return item !== undefined });
-                    RequestUtil.post(path, { ...value }).then(res => {
-                        this.props.updateList();
-                        this.modalCancel();
-                    });
-                } else {
-                    message.warning('暂无段名信息，无法保存')
-                }
+                    } else {
+                        return undefined
+                    }
+                });
+                value.productSegmentListDTOList = value.productSegmentListDTOList.filter((item: IProductSegmentList) => { return item !== undefined });
+                RequestUtil.post(path, { ...value }).then(res => {
+                    this.props.updateList();
+                    this.modalCancel();
+                }).catch(error=>{
+                    this.getForm()?.setFieldsValue({})
+                });
             })
         }
     }
 
-    public handleModalOk = () => {
-        console.log(this.fastForm.current?.getFieldsValue(true))
+    public handleModalOk = async () => {
+        const detailData: IProductSegmentList[] = await RequestUtil.get<IProductSegmentList[]>(`/tower-science/productSegment/quickLofting/${this.props.id}/${this.fastForm.current?.getFieldsValue(true).part}`);
+        this.setState({
+            fastVisible: false,
+            detailData: {
+                ...this.state.detailData,
+                loftingProductSegmentList: [...detailData]
+            }
+        })
+        this.getForm()?.setFieldsValue({
+            ...this.state.detailData,
+            productSegmentListDTOList: [...detailData]
+        })
     }
 
     /**
