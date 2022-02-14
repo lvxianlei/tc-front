@@ -1,12 +1,12 @@
 import React, { useState } from "react"
 import { Modal, Spin, Radio } from "antd"
-import { CommonTable, BaseInfo, DetailContent, DetailTitle, Attachment } from "../common"
+import { CommonTable, BaseInfo, DetailContent, DetailTitle, Attachment, OperationRecord } from "../common"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import {
     bondBaseInfoView, drawH, drawingCofirm,
     baseInfo, auditIdRecord, outFactoryHead, applicationdetails
-} from "./approvalHeadData.json"
+} from "./approval.json"
 import "./wrapperChecked.less";
 const paths: any = {
     "履约保证金申请": "/tower-market/performanceBond/",
@@ -37,10 +37,8 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
                 <Radio.Button value="base">基本信息</Radio.Button>
                 <Radio.Button value="records">审批记录</Radio.Button>
             </Radio.Group>
-            {radioValue === "base" && <BaseInfo columns={[
-                ...bondBaseInfoView,
-                { title: "审批时间", dataIndex: "updateTime", type: "date", format: "YYYY-MM-DD" }]} dataSource={data?.performanceBond || {}} col={2} />}
-            {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records || []} />}
+            {radioValue === "base" && <BaseInfo columns={bondBaseInfoView} dataSource={data?.performanceBond || {}} col={2} />}
+            {radioValue === "records" && <OperationRecord serviceName="tower-market" serviceId={id} operateTypeEnum="APPROVAL" title="" />}
         </DetailContent>,
         "图纸交接申请": <DetailContent>
             <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{ marginBottom: 16 }}>

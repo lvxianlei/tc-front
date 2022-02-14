@@ -139,8 +139,9 @@ export default function BoltList(): React.ReactNode {
     const [assignVisible, setAssignVisible] = useState<boolean>(false);
     const [drawTaskId, setDrawTaskId] = useState<string>('');
     const [form] = Form.useForm();
-    const [refresh, setRefresh] = useState(false);
-    const [checkUser, setCheckUser] = useState([]);
+    const [ refresh, setRefresh ] = useState(false);
+    const [ checkUser, setCheckUser ] = useState([]);
+    const [ filterValue, setFilterValue ] = useState<any>();
     const handleAssignModalOk = async () => {
         try {
             const submitData = await form.validateFields();
@@ -248,6 +249,7 @@ export default function BoltList(): React.ReactNode {
             refresh={refresh}
             exportPath={`/tower-science/boltRecord`}
             requestData={{ boltStatus: location.state?.state, weldingLeader: location.state?.userId }}
+            filterValue={ filterValue }
             searchFormItems={[
                 {
                     name: 'updateTime',
@@ -317,6 +319,7 @@ export default function BoltList(): React.ReactNode {
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                     values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
                 }
+                setFilterValue(values);
                 return values;
             }}
         />

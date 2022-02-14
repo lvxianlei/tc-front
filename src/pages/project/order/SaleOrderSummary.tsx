@@ -34,7 +34,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
       rows: [
         [
           {
-            label: "订单编号",
+            label: "销售订单编号",
             value: baseInfo?.saleOrderNumber,
           },
           {
@@ -44,8 +44,8 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         ],
         [
           {
-            label: "关联合同",
-            value: baseInfo?.contractInfoVo?.contractNumber,
+            label: "合同名称",
+            value: baseInfo?.contractInfoVo?.contractName,
           },
           {
             label: "订单工程名称",
@@ -84,27 +84,20 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         ],
         [
           {
-            label: "订单交货日期",
-            value: baseInfo?.orderDeliveryTime,
+            label: "制单人",
+            value: baseInfo?.createUserName,
           },
           {
             label: "备注",
             value: baseInfo?.description,
           },
-        ],
-        [
-          {
-            label: "制单人",
-            value: baseInfo?.createUserName,
-          }
-        ],
+        ]
       ],
     };
   }
   protected getAmountInfoGrid(): IRenderedGrid {
     const baseInfo: ManagementSaleOrderBaseInfo | undefined = this.state
       .baseInfo as ManagementSaleOrderBaseInfo;
-    console.log(baseInfo);
     return {
       labelCol: {
         span: 4,

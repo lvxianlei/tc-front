@@ -42,7 +42,8 @@ export enum DictionaryEnums {
     COLLECTION_TYPE = 117,
     CONTRACT_PLAN_STATUS = 1217,
     CONTRACT_FORM = 1218,
-    PACKAGE_TYPE = 1220
+    PACKAGE_TYPE = 1220,
+    TENDER_DELIVERY_METHOD = 1219,
 }
 
 let productType: IDict[] | undefined = [];
@@ -84,6 +85,7 @@ let payCategory: IDict[] | undefined = [];
 let collectionType: IDict[] | undefined = [];
 let weighingType: IDict[] | undefined = [];
 let packageType: IDict[] | undefined = [];
+let tenderDeliveryMethod: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -126,6 +128,7 @@ if (dictionary) {
     collectionType = dictionary[DictionaryEnums.COLLECTION_TYPE];
     weighingType = dictionary[DictionaryEnums.WEIGHING_TYPE];
     packageType = dictionary[DictionaryEnums.PACKAGE_TYPE];
+    tenderDeliveryMethod = dictionary[DictionaryEnums.TENDER_DELIVERY_METHOD];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -167,3 +170,4 @@ export const payCategoryOptions = payCategory; //来款性质
 export const collectionTypeeOptions = collectionType; // 回款类型
 export const weighingtypeOptions = weighingType; //过磅类型
 export const packageTypeOptions = packageType; //包类型
+export const tenderDeliveryMethodOptions = tenderDeliveryMethod; // 标书投递方式

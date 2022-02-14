@@ -43,7 +43,7 @@
                     "title": "待完成",
                     "dataIndex": "toBeCompleteNum",
                     "path": {
-                        "pathname": "/enquiryTask/index",
+                        "pathname": "/ingredients/enquiry",
                         "state": {
                             "inquiryStatus": 4
                         }
