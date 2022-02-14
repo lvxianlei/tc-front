@@ -134,7 +134,7 @@ export default function PoleInformation(): React.ReactNode {
                             : null
                     }
                     {
-                        record.loftingStatus === 3 ?
+                        record.loftingStatus === 3 && record.isSpecial === 1 ?
                             <Button type="link" onClick={() => {
                                 setAllotVisible(true);
                                 setProductId(record.id);

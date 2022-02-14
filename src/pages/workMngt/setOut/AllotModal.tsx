@@ -4,31 +4,31 @@
  * @description rd1.2 调拨
  */
 
- import React, { useImperativeHandle, forwardRef } from "react";
- import { Spin, Form, Descriptions, InputNumber, Input } from 'antd';
- import { CommonTable, DetailContent } from '../../common';
- import RequestUtil from '../../../utils/RequestUtil';
- import useRequest from '@ahooksjs/use-request';
- import styles from './TowerLoftingAssign.module.less';
+import React, { useImperativeHandle, forwardRef } from "react";
+import { Spin, Form, Descriptions, InputNumber, Input } from 'antd';
+import { CommonTable, DetailContent } from '../../common';
+import RequestUtil from '../../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
+import styles from './TowerLoftingAssign.module.less';
 import { IAllot, ILoftingProductStructureVOS } from "./ISetOut";
 import { RuleObject } from "antd/es/form";
 import { StoreValue } from "antd/es/form/interface";
- 
- interface AllotModalProps {
-     id: string;
- }
- 
- export default forwardRef(function AllotModal({ id }: AllotModalProps, ref) {
-     const [form] = Form.useForm();
- 
-     const { loading, data } = useRequest<IAllot>(() => new Promise(async (resole, reject) => {
-         try {
-              let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${id}`);
-            result={
+
+interface AllotModalProps {
+    id: string;
+}
+
+export default forwardRef(function AllotModal({ id }: AllotModalProps, ref) {
+    const [form] = Form.useForm();
+
+    const { loading, data } = useRequest<IAllot>(() => new Promise(async (resole, reject) => {
+        try {
+            let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${id}`);
+            result = {
                 ...result,
                 loftingProductStructureVOS: result?.loftingProductStructureVOS?.map((res: ILoftingProductStructureVOS) => {
                     let BasicsPartTotalNum = 0;
-                    result?.loftingProductStructureVOS?.filter(item => {return res.codeRelation === item.codeRelation}).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum += Number(items?.basicsPartNum)});
+                    result?.loftingProductStructureVOS?.filter(item => { return res.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum += Number(items?.basicsPartNum) });
                     return {
                         ...res,
                         basicsPartNum: '0',
@@ -36,49 +36,36 @@ import { StoreValue } from "antd/es/form/interface";
                     }
                 })
             }
-            form.setFieldsValue({...result, loftingProductStructure: result?.loftingProductStructureVOS})
-             resole(result)
-         } catch (error) {
-             reject(error)
-         }
-     }), { refreshDeps: [id] })
- 
- 
-     const { run: submitRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
-         try {
-             const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/submit`);
-             resole(result)
-         } catch (error) {
-             reject(error)
-         }
-     }), { manual: true })
+            form.setFieldsValue({ ...result, loftingProductStructure: result?.loftingProductStructureVOS })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { refreshDeps: [id] })
 
-     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
+
+    const { run: submitRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/save`);
+            const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/submit`);
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
- 
-     const onSubmit = () => new Promise(async (resolve, reject) => {
-         try {
-            const baseData = await form.validateFields()
-             await submitRun({
-                productId: id,
-                productStructureSaveDTOList: baseData
-             })
-             resolve(true);
-         } catch (error) {
-             reject(false)
-         }
-     })
-     const onSave = () => new Promise(async (resolve, reject) => {
+
+    const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
+        try {
+            const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/save`, postData);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await form.validateFields()
-             console.log(baseData)
-            await saveRun({
+            await submitRun({
                 productId: id,
                 productStructureSaveDTOList: baseData
             })
@@ -87,18 +74,35 @@ import { StoreValue } from "antd/es/form/interface";
             reject(false)
         }
     })
- 
-     const resetFields = () => {
-         form.resetFields();
-     }
+    const onSave = () => new Promise(async (resolve, reject) => {
+        try {
+            const baseData = await form.validateFields()
+            await saveRun({
+                productId: id,
+                productCategory: data?.productCategory,
+                productHeight: data?.productHeight,
+                productCategoryName: data?.productCategoryName,
+                productNumber: data?.productNumber,
+                segmentInformation: data?.segmentInformation,
+                productStructureSaveDTO: form.getFieldsValue(true).loftingProductStructure
+            })
+            resolve(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
 
-     const columns = [
+    const resetFields = () => {
+        form.resetFields();
+    }
+
+    const columns = [
         {
             key: 'index',
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'segmentName',
@@ -117,24 +121,26 @@ import { StoreValue } from "antd/es/form/interface";
             title: '数量',
             width: 120,
             dataIndex: 'basicsPartNum',
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['loftingProductStructure', index, 'basicsPartNum']} rules={[{ 
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['loftingProductStructure', index, 'basicsPartNum']} rules={[{
                     "required": true,
                     validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                        if(value !== '') {
+                        if (value !== '') {
                             const data = form.getFieldsValue(true).loftingProductStructure;
-                        let BasicsPartTotalNum = 0;
-                        data?.filter((item: ILoftingProductStructureVOS) => {return record.codeRelation === item.codeRelation}).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum += Number(items?.basicsPartNum)});
-                        if(BasicsPartTotalNum > record.BasicsPartTotalNum) {
-                            callback('关联段号数量和等于单段件数')
-                        } else {
-                            callback()
-                        }
+                            let BasicsPartTotalNum = 0;
+                            data?.filter((item: ILoftingProductStructureVOS) => { return record.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum += Number(items?.basicsPartNum) });
+                            if (BasicsPartTotalNum > record.BasicsPartTotalNum) {
+                                callback('关联段号数量和等于单段件数')
+                            } else {
+                                callback()
+                            }
                         } else {
                             callback('请输入数量')
-                        }}}
+                        }
+                    }
+                }
                 ]}>
-                    <InputNumber min={0} max={record.BasicsPartTotalNum} size="small"/>
+                    <InputNumber min={0} max={record.BasicsPartTotalNum} size="small" />
                 </Form.Item>
             )
         },
@@ -143,9 +149,9 @@ import { StoreValue } from "antd/es/form/interface";
             title: '备注',
             width: 150,
             dataIndex: 'description',
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['loftingProductStructure', index, 'description']}>
-                    <Input size="small"/>
+                    <Input size="small" />
                 </Form.Item>
             )
         },
@@ -156,32 +162,31 @@ import { StoreValue } from "antd/es/form/interface";
             dataIndex: 'BasicsPartTotalNum'
         }
     ]
- 
-     useImperativeHandle(ref, () => ({ onSave,onSubmit, resetFields }), [ref,onSave, onSubmit, resetFields]);
- 
-     return <Spin spinning={loading}>
-         <DetailContent>
-             <Form form={form} className={styles.descripForm}>
-             <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>基础信息</p>
-                 <Descriptions title="" bordered size="small" colon={false} column={3}>
-                     <Descriptions.Item key={1} label="杆塔号">
-                         {data?.productNumber}
-                     </Descriptions.Item>
-                     <Descriptions.Item key={2} label="呼高">
+
+    useImperativeHandle(ref, () => ({ onSave, onSubmit, resetFields }), [ref, onSave, onSubmit, resetFields]);
+
+    return <Spin spinning={loading}>
+        <DetailContent>
+            <Form form={form} className={styles.descripForm}>
+                <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>基础信息</p>
+                <Descriptions title="" bordered size="small" colon={false} column={3}>
+                    <Descriptions.Item key={1} label="杆塔号">
+                        {data?.productNumber}
+                    </Descriptions.Item>
+                    <Descriptions.Item key={2} label="呼高">
                         {data?.productHeight || '-'}
-                     </Descriptions.Item>
-                     <Descriptions.Item key={3} label="配段信息">
+                    </Descriptions.Item>
+                    <Descriptions.Item key={3} label="配段信息">
                         {data?.segmentInformation}
-                     </Descriptions.Item>
-                 </Descriptions>
-                 <p style={{ padding: "12px 0px", fontWeight: "bold", fontSize: '14PX' }}>特殊件号信息</p>
-                 <CommonTable 
-                    columns={ columns } 
-                    pagination={ false } 
-                    dataSource={ data?.loftingProductStructureVOS } />
-             </Form>
-         </DetailContent>
-     </Spin>
- })
- 
- 
+                    </Descriptions.Item>
+                </Descriptions>
+                <p style={{ padding: "12px 0px", fontWeight: "bold", fontSize: '14PX' }}>特殊件号信息</p>
+                <CommonTable
+                    columns={columns}
+                    pagination={false}
+                    dataSource={data?.loftingProductStructureVOS} />
+            </Form>
+        </DetailContent>
+    </Spin>
+})
+
