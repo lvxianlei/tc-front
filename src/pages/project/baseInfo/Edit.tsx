@@ -68,6 +68,10 @@ export default function BaseInfoEdit(): JSX.Element {
             const portedCargoData = await portedCargoForm.validateFields()
             // const projectLeaderType = typeof baseInfoData.projectLeader === "string" ? true : false
             const [bigRegion, address] = baseInfoData.address !== "其他-国外" ? baseInfoData.address.split("-") : ["", "其他-国外"]
+            const biddingAgency = Object.prototype.toString.call(baseInfoData.biddingAgency) === "[object String]" ?
+                baseInfoData.biddingAgency :
+                    baseInfoData.biddingAgency?.value ?
+                        baseInfoData.biddingAgency?.value : ""
             const result = await run({
                 ...baseInfoData,
                 id: data?.id,
@@ -79,7 +83,7 @@ export default function BaseInfoEdit(): JSX.Element {
                 projectLeaderId: baseInfoData.projectLeader?.id,
                 projectLeader: baseInfoData.projectLeader?.value,
                 biddingPerson: baseInfoData.biddingPerson?.value,
-                biddingAgency: baseInfoData.biddingAgency?.value || baseInfoData.biddingAgency
+                biddingAgency
             })
             if (result) {
                 message.success("保存成功...")
