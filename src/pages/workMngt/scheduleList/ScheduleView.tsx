@@ -98,7 +98,6 @@ export default function ScheduleView(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const saveData = await form.validateFields();
-            console.log(saveData)
             saveData.id = scheduleData.id;
             saveData.boltDeliverTime= moment(saveData.boltDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.weldingDeliverTime= moment(saveData.weldingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
@@ -502,9 +501,10 @@ export default function ScheduleView(): React.ReactNode {
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="name" label="指派方案"> 
+                                    <Form.Item name="assignName" label="指派方案"> 
                                         <Select disabled={edit} onChange={async (value)=>{
                                             const resData: any = await RequestUtil.get(`/tower-science/assignPlan/planDetailById/${value}`)
+                                            resData.name = form.getFieldsValue().name
                                             setScheduleData(resData);
                                             if(resData.materialLeaderDepartment){
                                                 const materialLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialLeaderDepartment}&size=1000`);
@@ -534,9 +534,10 @@ export default function ScheduleView(): React.ReactNode {
                                                 const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
                                                 setBoltUser(boltLeaderDepartment.records);
                                             }
-
+                                            // const name = form.getFieldsValue().name;
                                             form.setFieldsValue({
-                                                ...resData,
+                                                // name: name,
+                                                assignName: resData.assignName,
                                                 materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
                                                 materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
                                                 boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
@@ -554,7 +555,7 @@ export default function ScheduleView(): React.ReactNode {
                                             });
                                         }}>
                                             { planData && planData.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.id} value={item.id}>{item.assignName}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>

@@ -135,7 +135,7 @@ export default function SchedulePlan(props: any){
                         <Col span={24}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="name" label="指派方案名称" rules={[{required: true,message:'请选择指派方案名称'}]}>
+                                    <Form.Item name="assignName" label="指派方案名称" rules={[{required: true,message:'请选择指派方案名称'}]}>
                                         <Input/>
                                     </Form.Item>
                                 </Col>
@@ -344,7 +344,7 @@ export default function SchedulePlan(props: any){
                     columns={[
                         {
                             title:'方案名称',
-                            dataIndex:'name'
+                            dataIndex:'assignName'
                         },{
                             title:'操作',
                             dataIndex:'operation',
