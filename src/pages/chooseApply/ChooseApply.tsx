@@ -17,7 +17,7 @@ import fc from "../../../public/fc.png";
 import { useHistory } from "react-router";
 import AuthUtil from "../../utils/AuthUtil";
 import apps from "../../app-name.config.jsonc"
-type AppType = "SC" | "SW" | "FC" | "RD" | "TMS" | "HR" | "COMM" | "ASM" | "QMS" | "MC" | "MC2" | "PS"
+type AppType = "SC" | "SW" | "FC" | "RD" | "TMS" | "HR" | "COMM" | "ASM" | "QMS" | "MC" | "MC2" | "PC"
 interface IApplyType {
     readonly authority?: string;
     readonly icon?: string;
@@ -39,7 +39,7 @@ const icons: { [key in AppType]: any } = {
     "QMS": qualityInspection,
     "MC": production,
     "MC2": production2,
-    "PS": plan
+    "PC": plan
 }
 export default function ChooseApply(): React.ReactNode {
     const history = useHistory()
