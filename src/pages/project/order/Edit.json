@@ -121,15 +121,12 @@
         {
             "title": "订单重量",
             "dataIndex": "orderWeight",
-            "type": "number",
-            "precision": 8,
-            "max": 99999999.9999
+            "type": "text"
         },
         {
             "title": "含税金额",
             "dataIndex": "taxAmount",
-            "type": "number",
-            "precision": 4,
+            "type": "text",
             "rules": [
                 {
                     "required": true,
@@ -147,9 +144,8 @@
         {
             "title": "含税单价",
             "dataIndex": "taxPrice",
-            "type": "number",
-            "disabled": true,
-            "precision": 4
+            "type": "text",
+            "disabled": true
         },
         {
             "title": "不含税单价",
