@@ -431,7 +431,7 @@ export default function RecruitEdit(): React.ReactNode {
                                         const value = form.getFieldsValue().startTime
                                         if (value) {
                                             const newDate = new Date(value)
-                                            const endTime = newDate.setDate(newDate.getDate() + e)
+                                            const endTime = newDate.setDate(newDate.getDate() + e-1)
                                             form.setFieldsValue({
                                                 endTime: moment(endTime)
                                             })
@@ -449,7 +449,7 @@ export default function RecruitEdit(): React.ReactNode {
                                     const value = form.getFieldsValue().minCompletionDays || 0
                                     const newDate = current?.format('YYYY-MM-DD')
                                     var formatDate2 = new Date(`${newDate}`)
-                                    const endTime = formatDate2.setDate(formatDate2.getDate() + value)
+                                    const endTime = formatDate2.setDate(formatDate2.getDate() + value-1)
                                     form.setFieldsValue({
                                         endTime: moment(endTime)
                                     })
