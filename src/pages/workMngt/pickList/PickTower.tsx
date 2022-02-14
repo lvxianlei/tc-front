@@ -66,6 +66,10 @@ export default function PickTower(): React.ReactNode {
                 setVisible(false);
                 setProductId('');
                 form.setFieldsValue({
+                    legWeightA:'',
+                    legWeightB:'',
+                    legWeightC:'',
+                    legWeightD:'',
                     detailData:[]
                 })
                 form.resetFields()
@@ -100,6 +104,10 @@ export default function PickTower(): React.ReactNode {
                 setVisible(false);
                 setProductId('');
                 form.setFieldsValue({
+                    legWeightA:'',
+                    legWeightB:'',
+                    legWeightC:'',
+                    legWeightD:'',
                     detailData:[]
                 })
                 form.resetFields();
@@ -206,6 +214,10 @@ export default function PickTower(): React.ReactNode {
                                 materialDrawProductSegmentList:detailData
                             })
                             form.setFieldsValue({
+                                legWeightA:data?.legWeightA,
+                                legWeightB:data?.legWeightB,
+                                legWeightC:data?.legWeightC,
+                                legWeightD:data?.legWeightD,
                                 detailData:detailData
                             });
                             
