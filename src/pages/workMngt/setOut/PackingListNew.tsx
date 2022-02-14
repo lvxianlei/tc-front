@@ -12,44 +12,10 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styles from './SetOut.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import { isJsxFragment } from 'typescript';
 import { packageTypeOptions } from '../../../configuration/DictionaryOptions';
+import { IBundle, IPackingList } from './ISetOut';
 
-export interface IBundle {
-    readonly id?: string;
-    readonly towerStructureId?: string;
-    readonly productCategoryId?: string;
-    readonly balesCode?: string;
-    readonly productId?: string;
-    readonly num?: number;
-    readonly code?: string;
-    readonly structureSpec?: string;
-    readonly length?: string;
-    readonly description?: string;
-    readonly structureNum?: number;
-    readonly structureCount?: number;
-    readonly materialSpec?: string;
-    readonly structureId?: string;
-    readonly topId?: string;
-    readonly pieceCode?: string;
-    readonly basicsWeight?: number;
-}
 
-export interface IPackingList {
-    readonly balesCode?: string;
-    readonly productCategoryId?: string;
-    readonly productCategoryName?: string;
-    readonly productId?: string;
-    readonly productNumber?: string;
-    readonly packageRecordVOList?: IBundle[];
-    readonly toChooseList?: IBundle[];
-    readonly id?: string;
-    readonly description?: string;
-    readonly packageType?: string;
-    readonly structureNum?: number;
-    readonly topId?: string;
-    readonly packageAttributeName?: string;
-}
 
 export default function PackingListNew(): React.ReactNode {
     const history = useHistory();
@@ -82,9 +48,8 @@ export default function PackingListNew(): React.ReactNode {
             setPackageAttributeName(data?.packageAttributeName)
             resole(data);
         } else {
-            // const BalesCode = await RequestUtil.get<string>(`/tower-science/packageStructure/nextBalesCode/${ params.productId }`);
-            setBalesCode('001');
-            console.log('0041')
+            const BalesCode = await RequestUtil.get<string>(`/tower-science/packageStructure/nextBalesCode/${ params.productId }`);
+            setBalesCode(BalesCode);
             resole({ productCategoryName: location.state.productCategoryName, productNumber:location.state.productNumber });
         }
         const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId });

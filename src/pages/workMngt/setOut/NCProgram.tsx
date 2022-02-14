@@ -13,11 +13,8 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { downloadTemplate } from './downloadTemplate';
 import { AttachmentRef, FileProps } from '../../common/Attachment';
+import { IData } from './ISetOut';
 
-interface IData {
-    readonly ncCount: string;
-    readonly structureCount: string;
-}
 
 export default function NCProgram(): React.ReactNode {
     const columns = [

@@ -89,3 +89,45 @@ export interface ILoftingProductStructureVOS {
     readonly width?: string;
     
 }
+
+export interface IData {
+    readonly ncCount: string;
+    readonly structureCount: string;
+}
+
+export interface IBundle {
+    readonly id?: string;
+    readonly towerStructureId?: string;
+    readonly productCategoryId?: string;
+    readonly balesCode?: string;
+    readonly productId?: string;
+    readonly num?: number;
+    readonly code?: string;
+    readonly structureSpec?: string;
+    readonly length?: string;
+    readonly description?: string;
+    readonly structureNum?: number;
+    readonly structureCount?: number;
+    readonly materialSpec?: string;
+    readonly structureId?: string;
+    readonly topId?: string;
+    readonly pieceCode?: string;
+    readonly basicsWeight?: number;
+}
+
+export interface IPackingList {
+    readonly balesCode?: string;
+    readonly productCategoryId?: string;
+    readonly productCategoryName?: string;
+    readonly productId?: string;
+    readonly productNumber?: string;
+    readonly packageRecordVOList?: IBundle[];
+    readonly toChooseList?: IBundle[];
+    readonly id?: string;
+    readonly description?: string;
+    readonly packageType?: string;
+    readonly structureNum?: number;
+    readonly topId?: string;
+    readonly packageAttributeName?: string;
+}
+
