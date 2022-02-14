@@ -109,14 +109,15 @@ export default function SetOutList(): React.ReactNode {
                     }
                     {
                         record.status === 2 ?
-                            <Button type="link" onClick={() => {
+                            <Button type="link" onClick={async () => {
+                                const result: [] = await RequestUtil.get(`/tower-science/productSegmentAssemble/${record.id}`);
                                 setTryAssembleVisiblee(true);
+                                setTryAssemble(result)
                                 setProductCategoryId(record.id);
                             }}>试装信息</Button>
                             :
                             <Button type="link" disabled>试装信息</Button>
                     }
-
                 </Space>
             )
         }
@@ -143,7 +144,8 @@ export default function SetOutList(): React.ReactNode {
     const checkUser: any = data || [];
     const [tryAssembleVisible, setTryAssembleVisiblee] = useState(false);
     const editRef = useRef<TryAssembleProps>();
-    const [productCategoryId, setProductCategoryId] = useState<string>('')
+    const [productCategoryId, setProductCategoryId] = useState<string>('');
+    const [tryAssemble, setTryAssemble] = useState<[]>([]);
 
     return <Spin spinning={loading}>
         <Modal
@@ -158,7 +160,7 @@ export default function SetOutList(): React.ReactNode {
                 setTryAssembleVisiblee(false);
                 setRefresh(!refresh);
             }}>
-            <TryAssemble id={productCategoryId} ref={editRef} />
+            <TryAssemble id={productCategoryId} deatil={tryAssemble} ref={editRef} />
         </Modal>
         <Page
             path="/tower-science/loftingList"

@@ -158,9 +158,9 @@ export default function PoleInformation(): React.ReactNode {
     const [materialUser, setMaterialUser] = useState([]);
     const location = useLocation<{ loftingLeader: string, status: number }>();
     const userId = AuthUtil.getUserId();
-    const [ allotVisible, setAllotVisible ] = useState<boolean>(false);
+    const [allotVisible, setAllotVisible] = useState<boolean>(false);
     const editRef = useRef<allotModalProps>();
-    const [ productId, setProductId ] = useState<string>('');
+    const [productId, setProductId] = useState<string>('');
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
@@ -221,22 +221,22 @@ export default function PoleInformation(): React.ReactNode {
     }
 
     return <>
-    <Modal
+        <Modal
             destroyOnClose
-            visible={ allotVisible}
+            visible={allotVisible}
             width="60%"
             title="调拨"
             footer={<Space>
                 <Button type="ghost" onClick={() => {
-                setAllotVisible(false);
-            }}>关闭</Button>
+                    setAllotVisible(false);
+                }}>关闭</Button>
                 <Button type="primary" onClick={handleModalOk} ghost>保存</Button>
                 <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button>
             </Space>}
             onOk={handleModalOk}
             onCancel={() => setAllotVisible(false)}
             className={styles.tryAssemble}
-            >
+        >
             <AllotModal id={productId} ref={editRef} />
         </Modal>
         <Page
