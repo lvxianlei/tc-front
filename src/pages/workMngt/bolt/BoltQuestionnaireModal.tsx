@@ -7,7 +7,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { boltTypeOptions } from '../../../configuration/DictionaryOptions';
 
-export interface BoltQuestionnaireModalProps {}
+export interface BoltQuestionnaireModalProps { }
 export interface IBoltQuestionnaireModalRouteProps extends RouteComponentProps<BoltQuestionnaireModalProps>, WithTranslation {
     readonly record: IRecord;
     readonly title: string;
@@ -43,8 +43,8 @@ const columns = [
         dataIndex: 'index',
         width: 100,
         editable: false,
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => { 
-            return <span>{ index + 1 }</span>
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => {
+            return <span>{index + 1}</span>
         }
     },
     {
@@ -113,30 +113,31 @@ const columns = [
 ]
 
 const tableColumns = [
-    { 
-        key: 'index', 
-        title: '序号', 
-        dataIndex: 'index', 
-        width: 50, 
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
+    {
+        key: 'index',
+        title: '序号',
+        dataIndex: 'index',
+        width: 50,
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+    },
     {
         key: 'createDeptName',
         title: '操作部门',
-        dataIndex: 'createDeptName', 
-    },
-    {  
-        key: 'createUserName', 
-        title: '操作人', 
-        dataIndex: 'createUserName' 
-    },
-    { 
-        key: 'createTime', 
-        title: '操作时间', 
-        dataIndex: 'createTime' 
+        dataIndex: 'createDeptName',
     },
     {
-        key: 'status', 
-        title: '问题单状态', 
+        key: 'createUserName',
+        title: '操作人',
+        dataIndex: 'createUserName'
+    },
+    {
+        key: 'createTime',
+        title: '操作时间',
+        dataIndex: 'createTime'
+    },
+    {
+        key: 'status',
+        title: '问题单状态',
         dataIndex: 'status',
         render: (pattern: number): React.ReactNode => {
             switch (pattern) {
@@ -149,35 +150,35 @@ const tableColumns = [
                 case 4:
                     return '已删除';
             }
-        } 
+        }
     },
-    { 
-        key: 'description', 
-        title: '备注', 
-        dataIndex: 'description' 
+    {
+        key: 'description',
+        title: '备注',
+        dataIndex: 'description'
     }
 ]
 
 const columnsSetting = columns.map(col => {
     return {
         ...col,
-        render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            col.dataIndex === 'index' ? index + 1 
-            : !col.editable ? _ 
-            : <p className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : '' }>{  _ === -1 ? "" :  _ }</p>
-        )  
-    }     
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            col.dataIndex === 'index' ? index + 1
+                : !col.editable ? _
+                    : <p className={checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : ''}>{_ === -1 ? "" : _}</p>
+        )
+    }
 })
 
 const checkColor = (record: Record<string, any>, dataIndex: string) => {
     const red: number = record.redColumn.indexOf(dataIndex);
     const green: number = record.greenColumn.indexOf(dataIndex);
     const yellow: number = record.yellowColumn.indexOf(dataIndex);
-    if(red !== -1) {
+    if (red !== -1) {
         return 'red';
-    } else if(green !== -1) {
+    } else if (green !== -1) {
         return 'green';
-    } else if(yellow !== -1) {
+    } else if (yellow !== -1) {
         return 'yellow';
     } else {
         return 'normal'
@@ -187,7 +188,7 @@ const checkColor = (record: Record<string, any>, dataIndex: string) => {
 class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRouteProps, BoltQuestionnaireModalState> {
 
     private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
-    
+
     /**
      * @protected
      * @description Gets form
@@ -209,7 +210,7 @@ class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRout
                 newValue: value.newValue,
                 problemField: record.problemField,
                 problemFieldName: record.problemFieldName,
-                productCategory: this.props.productCategory 
+                productCategory: this.props.productCategory
             }).then(res => {
                 message.success('提交问题成功');
                 this.props.modalCancel();
@@ -218,29 +219,29 @@ class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRout
         })
     }
 
-     /**
-     * @description Renders AbstractDetailComponent
-     * @returns render 
-     */
+    /**
+    * @description Renders AbstractDetailComponent
+    * @returns render 
+    */
     public render(): React.ReactNode {
         const record: IRecord = this.props.record;
         this.getForm()?.setFieldsValue({ description: record.description, newValue: record.newValue });
         return <>
             <Modal
-                className={ styles.boltModal }
-                visible={ this.props.visible } 
-                width="50%" 
-                title={ this.props.title }
-                footer={ 
+                className={styles.boltModal}
+                visible={this.props.visible}
+                width="50%"
+                title={this.props.title}
+                footer={
                     <Space direction="horizontal" size="small">
-                        <Button type="primary" onClick={ () => {  this.props.modalCancel(); } } ghost>关闭</Button>
-                        {  record.status !== 1 ? <Button type="primary" onClick={ () => this.submitQuestion() }>提交问题</Button> : null }
-                    </Space> } 
-                onCancel={ () => this.props.modalCancel() }
+                        <Button type="primary" onClick={() => { this.props.modalCancel(); }} ghost>关闭</Button>
+                        {record.status !== 1 ? <Button type="primary" onClick={() => this.submitQuestion()}>提交问题</Button> : null}
+                    </Space>}
+                onCancel={() => this.props.modalCancel()}
             >
                 <DetailContent>
                     <p>问题信息</p>
-                    <BaseInfo col={ 2 } columns={ [
+                    <BaseInfo col={2} columns={[
                         {
                             "dataIndex": "problemFieldName",
                             "title": "问题字段"
@@ -249,32 +250,32 @@ class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRout
                             "dataIndex": "currentValue",
                             "title": "原字段信息"
                         }]
-                    } dataSource={ {
+                    } dataSource={{
                         problemFieldName: record.problemFieldName,
                         currentValue: record.currentValue
-                    } } />
-                    <Form ref={ this.form } labelCol={{ span: 4 }} className={ styles.topPadding }>
-                        <Form.Item name="description" label="备注" initialValue={ record.description }>
-                            <Input.TextArea maxLength={ 300 } placeholder="请输入备注信息" rows={ 1 } showCount disabled={ record.status === 1 } />
+                    }} />
+                    <Form ref={this.form} labelCol={{ span: 4 }} className={styles.topPadding}>
+                        <Form.Item name="description" label="备注" initialValue={record.description}>
+                            <Input.TextArea maxLength={300} placeholder="请输入备注信息" rows={1} showCount disabled={record.status === 1} />
                         </Form.Item>
                         <Form.Item name="newValue" label="校对后信息"
                             rules={[{
                                 required: true,
                                 message: '请输入校对后信息 '
                             }]}
-                            initialValue={ record.newValue }>
-                            { record.problemFieldName === '类型' ? <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-                                { boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
+                            initialValue={record.newValue}>
+                            {record.problemFieldName === '类型' ? <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                {boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
                                     return <Select.Option key={index} value={name}>
                                         {name}
                                     </Select.Option>
-                                }) }
-                            </Select> : <Input maxLength={ 100 } placeholder="请输入" disabled={ record.status === 1 } /> }
+                                })}
+                            </Select> : <Input maxLength={100} placeholder="请输入" disabled={record.status === 1} />}
                         </Form.Item>
                     </Form>
-                    { record.status === 1 ? <CommonTable columns={ columnsSetting } dataSource={ this.props.record.dataSource } pagination={ false } /> : null}
-                    <p className={ styles.topPadding }>操作信息</p>
-                    <CommonTable columns={ tableColumns } dataSource={ record.issueRecordList } />
+                    {record.status === 1 ? <CommonTable columns={columnsSetting} dataSource={this.props.record.dataSource} pagination={false} /> : null}
+                    <p className={styles.topPadding}>操作信息</p>
+                    <CommonTable columns={tableColumns} dataSource={record.issueRecordList} />
                 </DetailContent>
             </Modal>
         </>

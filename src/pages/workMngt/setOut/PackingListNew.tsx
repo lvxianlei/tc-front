@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-杆塔配段-包装清单-添加
 */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Space, Button, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions, Modal, Select } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -12,40 +12,10 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styles from './SetOut.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import { packageTypeOptions } from '../../../configuration/DictionaryOptions';
+import { IBundle, IPackingList } from './ISetOut';
 
-export interface IBundle {
-    readonly id?: string;
-    readonly towerStructureId?: string;
-    readonly productCategoryId?: string;
-    readonly balesCode?: string;
-    readonly productId?: string;
-    readonly num?: number;
-    readonly code?: string;
-    readonly structureSpec?: string;
-    readonly length?: string;
-    readonly description?: string;
-    readonly structureNum?: number;
-    readonly structureCount?: number;
-    readonly materialSpec?: string;
-    readonly structureId?: string;
-    readonly topId?: string;
-    readonly pieceCode?: string;
-    readonly basicsWeight?: number;
-}
 
-export interface IPackingList {
-    readonly balesCode?: string;
-    readonly productCategoryId?: string;
-    readonly productCategoryName?: string;
-    readonly productId?: string;
-    readonly productNumber?: string;
-    readonly packageRecordVOList?: IBundle[];
-    readonly toChooseList?: IBundle[];
-    readonly id?: string;
-    readonly description?: string;
-    readonly packageType?: string;
-    readonly structureNum?: number;
-}
 
 export default function PackingListNew(): React.ReactNode {
     const history = useHistory();
@@ -56,12 +26,18 @@ export default function PackingListNew(): React.ReactNode {
     const location = useLocation<{productCategoryName: string, productNumber: string}>();
     const [ balesCode, setBalesCode ] = useState<string>();
     const [ packageType, setPackageType ] = useState<string>();
+    const [ packageAttributeName, setPackageAttributeName ] = useState<string>();
+    
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ userList, setUserList ] = useState([]);
     const [ removeVisible, setRemoveVisible ] = useState<boolean>(false);
     const [ removeNum, setRemoveNum ] = useState(0);
     const [ removeList, setRemoveList ] = useState({});
     const [ removeIndex, setRemoveIndex ] = useState<any>();
+    const [ selectedRowKeys, setSelectedRowKeys ] = useState<string[]>();
+    const [ selectedRow, setSelectedRow ] = useState<IBundle[]>();
+    const [ removeRowKeys, setRemoveRowKeys ] = useState<string[]>();
+    const [ removeRow, setRemoveRow ] = useState<IBundle[]>();
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if(!location.state) {
@@ -69,17 +45,22 @@ export default function PackingListNew(): React.ReactNode {
             setPackagingData(data?.packageRecordVOList || []);
             setBalesCode(data?.balesCode || '');
             setPackageType(data?.packageType || '');
+            setPackageAttributeName(data?.packageAttributeName)
             resole(data);
         } else {
+            const BalesCode = await RequestUtil.get<string>(`/tower-science/packageStructure/nextBalesCode/${ params.productId }`);
+            setBalesCode(BalesCode);
             resole({ productCategoryName: location.state.productCategoryName, productNumber:location.state.productNumber });
         }
         const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId });
         const newData = list.filter((item: IBundle) => !packagingData.some((ele: IBundle) => ele.id !== item.id))
-        setStayDistrict(newData);
+        setStayDistrict(newData); 
         const data: any = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
         setUserList(data?.loftingProductSegmentList);
-    });
+    }); 
 
+    useEffect(() => setBalesCode(balesCode), [JSON.stringify(balesCode)])
+    
     const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}), {})
 
     const detailData: IPackingList = data || {};
@@ -270,9 +251,47 @@ export default function PackingListNew(): React.ReactNode {
             setPackagingData([...packagingData]); 
             if(value.id) {
                 const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value.id }`);
-                setStayDistrict([ ...stayDistrict, newValue ]);
+                const newData: IPackingList = { ...newValue, structureNum: num};
+                const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                    return res.topId === newData.topId
+                })
+                if(find === -1) {
+                    
+                    setStayDistrict([ ...stayDistrict, newValue ]);
+    
+                    }else{
+                        setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                            if(index === find) {
+                                return {
+                                    ...res,
+                                    structureNum:  num + Number(res?.structureNum || 0)
+                                }
+                            } else {
+                                return res
+                            }
+                        })]);
+                    }
             } else {
+                const newData: IPackingList = { ...value, structureNum: num};
+            const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                return res.topId === newData.topId
+            })
+            if(find === -1) {
+                
                 setStayDistrict([ ...stayDistrict, value ]);
+
+                }else{
+                    setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                        if(index === find) {
+                            return {
+                                ...res,
+                                structureNum:  num + Number(res?.structureNum || 0)
+                            }
+                        } else {
+                            return res
+                        }
+                    })]);
+                }
             }
         } else {
             packagingData[index] = {
@@ -282,9 +301,46 @@ export default function PackingListNew(): React.ReactNode {
             setPackagingData([...packagingData]); 
             if(value.id) {
                 const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value.id }`);
-                setStayDistrict([ ...stayDistrict, { ...newValue, structureNum: num} ]);
+                const newData: IPackingList = { ...newValue, structureNum: num};
+                const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                    return res.topId === newData.topId
+                })
+                if(find === -1) {
+                    setStayDistrict([ ...stayDistrict, { ...newValue, structureNum: num} ]);
+    
+                    }else{
+                        setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                            if(index === find) {
+                                return {
+                                    ...res,
+                                    structureNum:  num + Number(res?.structureNum || 0)
+                                }
+                            } else {
+                                return res
+                            }
+                        })]);
+                    }
+                
             } else {
-                setStayDistrict([ ...stayDistrict, { ...value, structureNum: num} ]);
+                const newData: IPackingList = { ...value, structureNum: num};
+                const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                    return res.topId === newData.topId
+                })
+                if(find === -1) {
+                setStayDistrict([...stayDistrict,{ ...value, structureNum: num}]);
+
+                }else{
+                    setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                        if(index === find) {
+                            return {
+                                ...res,
+                                structureNum:  num + Number(res?.structureNum || 0)
+                            }
+                        } else {
+                            return res
+                        }
+                    })]);
+                }
             }
         }
         setRemoveVisible(false);
@@ -344,16 +400,6 @@ export default function PackingListNew(): React.ReactNode {
         getTableDataSource({ ...value });
     }
 
-    const balesCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setBalesCode(e.target.value);
-        const data: IBundle[] = packagingData.map((item: IBundle) => {
-            return {
-                ...item,
-                balesCode: e.target.value,
-            }
-        })
-        setPackagingData([...data]);
-    } 
 
     const packageChange = (e: string) => {
         setPackageType(e);
@@ -366,12 +412,122 @@ export default function PackingListNew(): React.ReactNode {
         setPackagingData([...data]);
     } 
 
+    const packageAttributeChange = (e: string) => {
+        setPackageAttributeName(e);
+        const data: IBundle[] = packagingData.map((item: IBundle) => {
+            return {
+                ...item,
+                packageAttributeName: e,
+            }
+        })
+        setPackagingData([...data]);
+    } 
+
     const numChange = (e: number, structureCount: number, index: number) => {
         packagingData[index] = {
             ...packagingData[index],
             num: e
         }
         setPackagingData([ ...packagingData ])
+    }
+
+    const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
+        setSelectedRowKeys(selectedRowKeys);
+        setSelectedRow(selectRows)
+    }
+
+    const onRemoveSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
+        setRemoveRowKeys(selectedRowKeys);
+        setRemoveRow(selectRows)
+    }
+
+    const addTopack = () => {
+        const data: IBundle[] | undefined = selectedRow?.map((res: IBundle) => {
+            return {
+                ...res,
+                description: res.description,
+                length: res.length,
+                pieceCode: res.code,
+                num: res.structureNum,
+                materialSpec: res.structureSpec,
+                productCategoryId: detailData.productCategoryId,
+                productId: detailData.productId,
+                structureId: res.id || res.topId|| res.structureId,
+                structureCount: res.structureNum,
+                topId: res.id|| res.structureId,
+                id: ''
+            }
+        })
+        let list: IBundle[] = [];
+        if(packagingData?.length > 0) {
+            data?.forEach((record: IBundle) => {
+               packagingData.forEach((res: IBundle, index: number) => {
+                    if(res.structureId === record.id || res.structureId === record.topId) {
+                        list[index] = {
+                            ...res,
+                            num: Number(res.num) + Number(record.structureNum)
+                        }
+                    } else {
+                        list = [...data, ...packagingData]
+                    }
+                }) 
+            })
+        } else {
+            list=[...(data || [])]
+        }
+        setPackagingData(list);
+        data?.forEach((record: IBundle, index: number) => {
+            stayDistrict.splice(index, 1);
+        })
+        setStayDistrict(stayDistrict);
+    }
+
+    const packRemove = () => {
+        removeRow?.forEach(async (value: IBundle, index: number) => {
+            packagingData.splice(index, 1)
+            if(value.id) {
+                const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value }`);
+                const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                    return res.topId === newValue.topId
+                })
+                if(find === -1) {
+                    setStayDistrict([ ...stayDistrict, { ...newValue} ]);
+    
+                    }else{
+                        setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                            if(index === find) {
+                                return {
+                                    ...res,
+                                    structureNum: newValue?.structureNum
+                                }
+                            } else {
+                                return res
+                            }
+                        })]);
+                    }
+            } else {
+                const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                    return res.topId === value.topId
+                })
+                if(find === -1) {
+                    
+                setStayDistrict([ ...stayDistrict, value ]);
+    
+                    }else{
+                        setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                            if(index === find) {
+                                return {
+                                    ...res,
+                                    structureNum: value?.structureNum
+                                }
+                            } else {
+                                return res
+                            }
+                        })]);
+                    }
+            }
+        })
+            setPackagingData([...packagingData]); 
     }
 
     if (loading) {
@@ -391,8 +547,8 @@ export default function PackingListNew(): React.ReactNode {
             <Space direction="horizontal" size="small" >
                 <Button type="primary" onClick={ () => {
                     setVisible(true);
-                    setBalesCode(detailData?.balesCode);
                     setPackageType(detailData?.packageType);
+                    setPackageAttributeName(detailData?.packageAttributeName)
                 } }>保存包</Button>
                 <Button type="ghost" onClick={ () => history.goBack() }>关闭</Button>
             </Space>
@@ -463,25 +619,44 @@ export default function PackingListNew(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-            <p className={ styles.title }>待选区
+            <p className={ styles.title }>
+                <span>待选区</span>
                 <span className={ styles.description }>未分配：{ stayDistrict.length }</span>
+                <Button className={styles.fastBtn} type="primary" onClick={addTopack} ghost>添加</Button>
             </p>
             <CommonTable 
                 columns={ chooseColumns } 
                 pagination={ false } 
                 dataSource={ [...stayDistrict] } 
+                rowSelection={{
+                    selectedRowKeys: selectedRowKeys,
+                    type: "checkbox",
+                    onChange: onSelectChange,
+                }}
             />
             <p className={ styles.title }>包装区
                 <span className={ styles.description }>已选择构件数：{ packagingData.length }</span>
                 <span className={ styles.description }>已选择构件总重量：{ eval(packagingData.map(item => { return Number(item.num) * Number(item.basicsWeight) }).join('+')) || 0 }吨</span>
+                <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
             </p>
-            <CommonTable columns={ packingColumns } pagination={ false } dataSource={ packagingData } />
+            <CommonTable 
+            columns={ packingColumns } 
+            pagination={ false } 
+            dataSource={ packagingData } 
+            rowSelection={{
+                selectedRowKeys: removeRowKeys,
+                type: "checkbox",
+                onChange: onRemoveSelectChange,
+            }}/>
         </DetailContent>
-        <Modal visible={ visible } title="保存包" onCancel={ () => {
+        <Modal 
+        visible={ visible } 
+        title="保存包" 
+        onCancel={ () => {
             setVisible(false);
-            setBalesCode('');
             setPackageType('');
-        } } onOk={ () => {
+        } } 
+        onOk={ () => {
             if(packageType && balesCode&&/^[^\s]*$/.test(balesCode)&&/^[0-9a-zA-Z-]*$/.test(balesCode)) {
                 const value = {
                     balesCode: balesCode,
@@ -504,17 +679,25 @@ export default function PackingListNew(): React.ReactNode {
         } }>
             <Row>
                 <Col span={ 4 }><span>捆号</span></Col>   
-                <Col span={ 8 }>
-                    <Input placeholder="请输入捆号" value={ balesCode } onChange={ (e) => balesCodeChange(e) } maxLength={10}/> 
-                </Col> 
+                <Col span={ 8 }>{ balesCode } </Col> 
                 <Col span={ 4 } offset={ 1 }><span>包类型</span></Col>   
                 <Col span={ 7 }>
-                    <Select placeholder="请选择包类型" style={{ width: "100%" }} value={ packageType } onChange={ (e:string) => packageChange(e) }>
-                        <Select.Option value="角钢" key="0">角钢</Select.Option>
-                        <Select.Option value="连板" key="1">连板</Select.Option>
-                        <Select.Option value="螺栓" key="2">螺栓</Select.Option>
+                <Select placeholder="请选择包类型" value={ packageType } style={{ width: "100%" }} onChange={ (e:string) => packageChange(e) }>
+                        { packageTypeOptions && packageTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                        }) }
+                    </Select>
+                </Col>  
+                <Col span={ 4 }><span>包属性</span></Col>   
+                <Col span={ 8 }>
+                <Select placeholder="请选择包属性" style={{ width: "100%" }} value={ packageAttributeName } onChange={ (e:string) => packageAttributeChange(e) }>
+                        <Select.Option value="请选择" key="0">请选择</Select.Option>
+                        <Select.Option value="通用" key="1">通用</Select.Option>
+                        <Select.Option value="专用包" key="2">专用包</Select.Option>
                     </Select> 
-                </Col>   
+                </Col>  
             </Row>  
         </Modal>
     </>
