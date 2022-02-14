@@ -1,6 +1,6 @@
 import React, { useState, } from "react"
-import { Input, DatePicker, Select, Form, Spin, Button, Space, } from 'antd'
-import { Page } from '../../common'
+import { Input, DatePicker, Select, Form, Spin, Button, Space, message, Popconfirm, Modal, } from 'antd'
+import { CommonTable, Page } from '../../common'
 import { Link, useHistory, useLocation } from "react-router-dom"
 import { FixedType } from 'rc-table/lib/interface';
 import useRequest from "@ahooksjs/use-request"
@@ -14,6 +14,7 @@ export default function TemplateList() {
     const [refresh, setRefresh ] = useState<boolean>(false);
     const location = useLocation<{ state?: number, userId?: string }>();
     const history = useHistory();
+   
     const columns: any[] = [
         {
             title: '序号',
@@ -76,21 +77,32 @@ export default function TemplateList() {
                     :<>
                     
                     <TaskView record={record}/>
-                    <Button type='link' onClick={()=>{
-                        // RequestUtil.post(`/tower-system/notice/withdraw`, {
-                        //     noticeIds: [record.id]
-                        // }).then(res => {
-                            
-                        // });
-                    }}>完成</Button>
+                    <Popconfirm
+                        title="确认完成?"
+                        onConfirm={() => {
+                            RequestUtil.get(`/tower-science/loftingTemplate/complete/${record.id}`).then(res => {
+                                setRefresh(!refresh);
+                            });
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="link" >完成</Button>
+                    </Popconfirm>
                     <TaskEdit record={record}/>
-                    <Button type='link' onClick={()=>{
-                        // RequestUtil.post(`/tower-system/notice/withdraw`, {
-                        //     noticeIds: [record.id]
-                        // }).then(res => {
-                            
-                        // });
-                    }}>删除</Button>
+                    <Popconfirm
+                        title="确认删除?"
+                        onConfirm={() => {
+                            RequestUtil.delete(`/tower-science/loftingTemplate/${record.id}`).then(res => {
+                                message.success('删除成功！')
+                                setRefresh(!refresh);
+                            });
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="link" >删除</Button>
+                    </Popconfirm>
                     </>}
                     </Space>
                    
@@ -113,7 +125,7 @@ export default function TemplateList() {
         resole(data?.records);
     }), {})
     const checkUser: any = data || [];
-
+    
     return (
         <Spin spinning={loading}>
             <Page
@@ -174,6 +186,7 @@ export default function TemplateList() {
                     }
                 ]}
             />
+            
         </Spin>
     )
 }

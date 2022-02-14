@@ -20,6 +20,7 @@ export default function TaskNew(props:any){
     const [visible, setVisible] = useState<boolean>(false);
     const [read, setRead] = useState<boolean>(false);
     const [printVisible, setPrintVisible] = useState<boolean>(false);
+    const [steelVisible, setSteelVisible] = useState<boolean>(false);
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
     const history = useHistory();
     const attachRef = useRef<AttachmentRef>()
@@ -32,7 +33,203 @@ export default function TaskNew(props:any){
     const [tower, setTower] = useState<any|undefined>([]);
     const [printData, setPrintData] = useState<any|undefined>({});
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
-    
+    const [steelData, setSteelData] = useState<any|undefined>([]);
+    const steelColumns = [
+        {
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            width: 50,
+            fixed: 'left' as FixedType,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+        },
+        {
+            key: 'segmentName',
+            title: '段名',
+            width: 150,
+            dataIndex: 'segmentName'
+        },
+        {
+            key: 'repeatNum',
+            title: '段重复数',
+            width: 150,
+            dataIndex: 'repeatNum'
+        },
+        {
+            key: 'code',
+            title: '构件编号',
+            dataIndex: 'code',
+            width: 120
+        },
+        {
+            key: 'materialName',
+            title: '材料名称',
+            width: 200,
+            dataIndex: 'materialName'
+        },
+        {
+            key: 'structureTexture',
+            title: '材质',
+            width: 150,
+            dataIndex: 'structureTexture',
+        },
+        {
+            key: 'structureSpec',
+            title: '规格',
+            dataIndex: 'structureSpec',
+            width: 200,
+        },
+        {
+            key: 'width',
+            title: '宽度（mm）',
+            width: 200,
+            dataIndex: 'width'
+        },
+        {
+            key: 'thickness',
+            title: '厚度（mm）',
+            width: 200,
+            dataIndex: 'thickness'
+        },
+        {
+            key: 'length',
+            title: '长度（mm）',
+            width: 200,
+            dataIndex: 'length'
+        },
+        {
+            key: 'basicsPartNum',
+            title: '单段件数',
+            width: 200,
+            dataIndex: 'basicsPartNum'
+        },
+        {
+            key: 'basicsWeight',
+            title: '单件重量（kg）',
+            width: 200,
+            dataIndex: 'basicsWeight'
+        },
+        {
+            key: 'totalWeight',
+            title: '小计重量（kg）',
+            width: 200,
+            dataIndex: 'totalWeight'
+        },
+        {
+            key: 'description',
+            title: '备注',
+            width: 200,
+            dataIndex: 'description'
+        },
+        {
+            key: 'electricWelding',
+            title: '电焊',
+            width: 200,
+            dataIndex: 'electricWelding'
+        },
+        {
+            key: 'bend',
+            title: '火曲',
+            width: 200,
+            dataIndex: 'bend'
+        },
+        {
+            key: 'chamfer',
+            title: '切角',
+            width: 200,
+            dataIndex: 'chamfer'
+        },
+        {
+            key: 'shovelBack',
+            title: '铲背',
+            width: 200,
+            dataIndex: 'shovelBack'
+        },
+        {
+            key: 'rootClear',
+            title: '清根',
+            width: 200,
+            dataIndex: 'rootClear'
+        },
+        {
+            key: 'squash',
+            title: '打扁',
+            width: 200,
+            dataIndex: 'squash'
+        },
+        {
+            key: 'openCloseAngle',
+            title: '开合角',
+            width: 200,
+            dataIndex: 'openCloseAngle'
+        },
+        {
+            key: 'perforate',
+            title: '钻孔',
+            width: 200,
+            dataIndex: 'perforate'
+        },
+        {
+            key: 'groove',
+            title: '坡口',
+            width: 200,
+            dataIndex: 'groove'
+        },
+        {
+            key: 'intersectingLine',
+            title: '割相贯线',
+            width: 200,
+            dataIndex: 'intersectingLine'
+        },
+        {
+            key: 'slottedForm',
+            title: '开槽形式',
+            width: 200,
+            dataIndex: 'slottedForm'
+        },
+        {
+            key: 'sides',
+            title: '边数',
+            width: 200,
+            dataIndex: 'sides',
+            render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{ _ === -1  ? undefined : _ }</span>
+            )
+        },
+        {
+            key: 'perimeter',
+            title: '周长',
+            width: 200,
+            dataIndex: 'perimeter',
+            render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{ _ === -1  ? undefined : _ }</span>
+            )
+        },
+        {
+            key: 'surfaceArea',
+            title: '表面积',
+            width: 200,
+            dataIndex: 'surfaceArea',
+            render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{ _ === -1  ? undefined : _ }</span>
+            )
+        },
+        {
+            key: 'apertureNumber',
+            title: '各孔径孔数',
+            width: 200,
+            dataIndex: 'apertureNumber'
+        },
+        {
+            key: 'weldingEdge',
+            title: '焊接边（mm）',
+            width: 200,
+            dataIndex: 'weldingEdge',
+            render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{ _ === -1  ? undefined : _ }</span>
+            )
+        }
+    ]
     
     const handleModalOk = async () => {
         try {
@@ -82,6 +279,7 @@ export default function TaskNew(props:any){
                 })
             }
             setPrintData({
+                ...printData,
                 printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:'',
                 printSpecialProcess: saveData?.printSpecialProcess?.join(',')
             })
@@ -187,6 +385,11 @@ export default function TaskNew(props:any){
                                         <Select style={{width:'100%'}} onChange={async (value)=>{
                                             const towerData: any = await RequestUtil.get(`/tower-science/loftingTask/list/${value}`);
                                             setTower(towerData);
+                                            setRead(false)
+                                            form.resetFields();
+                                            form.setFieldsValue({
+                                                planNumber:value
+                                            })
                                         }}>
                                             {planData && planData.map(({ planNumber}: any, index: string | number | undefined) => {
                                                 return <Select.Option key={index} value={planNumber}>
@@ -212,6 +415,7 @@ export default function TaskNew(props:any){
                                     if(type === '四管塔' || type === '架构塔'){
                                         setRadioValue('自定义')
                                         setPrintData({
+                                            ...printData,
                                             productCategoryId: value,
                                             printSpecifications: '全部'
                                         })
@@ -230,6 +434,7 @@ export default function TaskNew(props:any){
                                             print: '1-12'
                                         })
                                         setPrintData({
+                                            ...printData,
                                             productCategoryId: value,
                                             printSpecifications: '1-12'
                                         })
@@ -246,6 +451,7 @@ export default function TaskNew(props:any){
                                             print: '火曲,钻孔,铆焊'
                                         })
                                         setPrintData({
+                                            ...printData,
                                             productCategoryId: value,
                                             printSpecialProcess: '火曲,钻孔,铆焊'
                                         })
@@ -272,9 +478,9 @@ export default function TaskNew(props:any){
                             <Row>
                                 <Col span={15}>
                                     <Form.Item name="productType" label="产品类型" >
-                                        <Select style={{width:'100%'}} >
+                                        <Select style={{width:'100%'}}  disabled={true}>
                                             {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                                    return <Select.Option key={index} value={id}>
+                                                    return <Select.Option key={index} value={name}>
                                                         {name}
                                                     </Select.Option>
                                             })}
@@ -285,7 +491,7 @@ export default function TaskNew(props:any){
                         </Col>
                         <Col span={11}>
                             <Form.Item name="print" label="打印条件" >
-                                <Input addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={() => {
+                                <Input disabled={true} addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={() => {
                                     setPrintVisible(true)
                                 }}>+编辑</Button>}/>
                             </Form.Item>
@@ -303,7 +509,11 @@ export default function TaskNew(props:any){
                         </Col>
                         <Col span={11}>
                             <Form.Item name="detail" label="钢板明细" >
-                                <Button type='link' onClick={()=>history.push(`/workMngt/templateList/steel/${'id'}`)} disabled={!read}>查看</Button>
+                                <Button type='link' onClick={async ()=>{
+                                    const data: any = await RequestUtil.get(`/tower-science/plate/list/${printData?.productCategoryId}/${printData?.printSpecifications}/${printData?.printSpecialProcess}`);
+                                    setSteelData(data)
+                                    setSteelVisible(true)
+                                }} disabled={!read}>查看</Button>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -410,7 +620,16 @@ export default function TaskNew(props:any){
                  setDepartment(departmentData);
                 setVisible(true)
             }}>创建样板任务</Button>
-            
+            <Modal
+                title='钢板明细' 
+                visible={steelVisible} 
+                onCancel={()=>{
+                    setSteelVisible(false)
+                    setSteelData([])
+                }}
+            >
+                <CommonTable columns={steelColumns} dataSource={steelData || []}/>
+            </Modal>
         </>
     )
 }
