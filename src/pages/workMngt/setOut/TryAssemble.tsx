@@ -13,16 +13,16 @@ import styles from './TowerLoftingAssign.module.less';
 
 interface TryAssembleProps {
     id: string;
+    deatil: [];
 }
 
-export default forwardRef(function TryAssemble({ id }: TryAssembleProps, ref) {
+export default forwardRef(function TryAssemble({ id, deatil }: TryAssembleProps, ref) {
     const [form] = Form.useForm();
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
-            const result: [] = await RequestUtil.get(`/tower-science/productSegmentAssemble/${id}`);
-            form.setFieldsValue({ list: [...result] })
-            resole(result || [])
+            form.setFieldsValue({ list: [...deatil] })
+            resole(deatil || [])
         } catch (error) {
             reject(error)
         }

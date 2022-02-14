@@ -40,6 +40,7 @@ export default function TowerInformation(): React.ReactNode {
     const [loading1, setLoading1] = useState(false);
     const editRef = useRef<TryAssembleProps>();
     const [tryAssembleVisible, setTryAssembleVisiblee] = useState(false);
+    const [tryAssemble, setTryAssemble] = useState<[]>([]);
 
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
@@ -295,7 +296,7 @@ export default function TowerInformation(): React.ReactNode {
                 setTryAssembleVisiblee(false);
                 setRefresh(!refresh);
             }}>
-            <TryAssemble id={params.id} ref={editRef} />
+            <TryAssemble id={params.id} deatil={tryAssemble} ref={editRef} />
         </Modal>
         <Modal title="段模式" visible={visible} onCancel={() => setVisible(false)} footer={<Space direction="horizontal" size="small" >
             <Button onClick={() => setVisible(false)}>关闭</Button>
@@ -316,7 +317,11 @@ export default function TowerInformation(): React.ReactNode {
             exportPath={`/tower-science/productSegment`}
             requestData={{ productCategoryId: params.id }}
             extraOperation={<Space direction="horizontal" size="small">
-                <Button type="primary" onClick={() => setTryAssembleVisiblee(true)} disabled={!(location.state?.status < 3)} ghost>试组装信息</Button>
+                <Button type="primary" onClick={async () => {
+                    const result: [] = await RequestUtil.get(`/tower-science/productSegmentAssemble/${params.id}`);
+                    setTryAssemble(result)
+                    setTryAssembleVisiblee(true);
+                }} disabled={!(location.state?.status < 3)} ghost>试组装信息</Button>
                 <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList`, state: { status: location.state?.status } }}><Button type="primary" ghost>模型</Button></Link>
                 <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList`, state: { status: location.state?.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                 <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram`, state: { status: location.state?.status } }}><Button type="primary" ghost>NC程序</Button></Link>
