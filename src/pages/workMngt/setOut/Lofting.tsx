@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-塔型信息-放样
 */
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Space, Button, Popconfirm, Input, Form, Upload, message, Modal } from 'antd';
 import { Page } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
@@ -13,13 +13,11 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from './downloadTemplate';
+import { ILofting, PdmModalProps } from './ISetOut';
+import PdmModal from './PdmModal';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
-}
-
-interface ILofting {
-    readonly id?: string;
 }
 
 export default function Lofting(): React.ReactNode {
@@ -202,6 +200,18 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "description"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'specialCode',
+            title: '特殊件号',
+            width: 200,
+            dataIndex: 'specialCode',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "specialCode"]} initialValue={_}>
                     <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
@@ -434,6 +444,18 @@ export default function Lofting(): React.ReactNode {
         setSelectedRows(selectedRows)
     }
 
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('提交成功');
+            setPdmVisible(false);
+            setRefresh(!refresh);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string }>();
     const [editorLock, setEditorLock] = useState('编辑');
@@ -447,9 +469,24 @@ export default function Lofting(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<ILofting[]>([]);
     const [loading1, setLoading1] = useState(false);
+    const editRef = useRef<PdmModalProps>();
+    const [pdmVisible, setPdmVisible] = useState<boolean>(false);
     const [loading2, setLoading2] = useState(false);
 
     return <>
+        {/* <Modal
+            destroyOnClose
+            visible={pdmVisible}
+            width="30%"
+            title="PDM同步"
+            onOk={handleModalOk}
+            className={styles.tryAssemble}
+            onCancel={() => {
+                setPdmVisible(false);
+                setRefresh(!refresh);
+            }}>
+            <PdmModal id={''} ref={editRef} />
+        </Modal> */}
         <Form layout="inline" style={{ margin: '20px' }} onFinish={(value: Record<string, any>) => {
             setFilterValue(value)
             setRefresh(!refresh);
@@ -574,6 +611,7 @@ export default function Lofting(): React.ReactNode {
                             setLoading2(false);
                         })
                     }} ghost>PDM同步</Button>
+                    {/* <Button type="primary" onClick={() => setPdmVisible(true)} ghost>PDM同步</Button> */}
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => {

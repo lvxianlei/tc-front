@@ -97,12 +97,12 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             pattern: renderEnum
         })
         let detailData = this.props.detailData;
-        if(this.props.type === 'message'||this.props.type === 'detail'){
+        // if(this.props.type === 'message'||this.props.type === 'detail'){  //提料指派1.2.0版本 去掉
             detailData = {
                 ...detailData,
                 plannedDeliveryTime: moment(detailData?.plannedDeliveryTime)
             }
-        }
+        // }
        
         this.getForm()?.setFieldsValue({  ...data, ...detailData});
         if(this.props.type==='message'&& data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
