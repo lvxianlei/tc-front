@@ -91,12 +91,12 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
         this.setState({
             fastVisible: false,
             detailData: {
-                ...this.state.detailData,
+                ...this.getForm()?.getFieldsValue(true),
                 loftingProductSegmentList: [...detailData]
             }
         })
         this.getForm()?.setFieldsValue({
-            ...this.state.detailData,
+            ...this.getForm()?.getFieldsValue(true),
             productSegmentListDTOList: [...detailData]
         })
     }
