@@ -193,7 +193,11 @@ export default function PickTowerDetail(): React.ReactNode {
                     <Button type='primary' onClick={async ()=>{
                         const tableDataSource: any[]  = await RequestUtil.post(`/tower-science/drawProductStructure/ocr`,{base64File: cropData, productSegmentId: params.productSegmentId});
                         setTableDataSource(tableDataSource);
+                        form.setFieldsValue({
+                            data: tableDataSource
+                        })
                     }} disabled={!cropData}>识别文字</Button>
+
                 </Space>
                 <div style={{ display: 'flex', width:'100%' }}>
                     {/* <CommonTable dataSource={[...tableDataSource]} columns={towerColumns} pagination={false} rowKey='index'/> */}

@@ -458,6 +458,11 @@ export default function TaskNew(props:any){
                                         formRef.setFieldsValue({
                                             printSpecialProcess:['火曲','钻孔','铆焊']
                                         })   
+                                    }else{
+                                        setPrintData({
+                                            ...printData,
+                                            productCategoryId: value,
+                                        })
                                     }
                                     form.setFieldsValue({
                                         ...formValue[0]
