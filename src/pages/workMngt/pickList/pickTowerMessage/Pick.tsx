@@ -513,7 +513,7 @@ export default function Lofting(): React.ReactNode {
                             }}
                             okText="提交"
                             cancelText="取消"
-                            disabled={!(selectedKeys.length>0)}
+                            disabled={!(selectedKeys.length>0)|| editorLock==='锁定'}
                         >
                             <Button type="primary" ghost  disabled={!(selectedKeys.length>0)}>删除</Button>
                         </Popconfirm>
