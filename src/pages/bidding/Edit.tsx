@@ -19,9 +19,6 @@ export default function InfomationNew(): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
-            data.bidPackageInfoVOS.map((item: any) => {
-                return item.amount = item.amount < 0 ? 0 : 1;
-            });
             bidForm.setFieldsValue({ submit: data.bidPackageInfoVOS })
             setBinddingStatus(data.biddingStatus)
             resole(data)
@@ -183,7 +180,7 @@ export default function InfomationNew(): JSX.Element {
         <DetailTitle title="基础信息" />
         <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={filterBaseInfoData(baseInfoData)} dataSource={detailData} edit />
         <DetailTitle title="物资清单" />
-        <EditTable form={bidForm} columns={bidPageInfo} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
+        <EditableTable form={bidForm} columns={bidPageInfo} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
         <Attachment title="附件" ref={attachRef} dataSource={data?.attachVos} edit />
     </DetailContent>
 }

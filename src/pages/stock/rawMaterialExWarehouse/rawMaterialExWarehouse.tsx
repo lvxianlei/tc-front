@@ -38,8 +38,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             delete value.startRefundTime
         }
         if (value.batcherId) {
-            value.departmentId = value.batcherId.first
-            value.applyStaffId = value.batcherId.second
+            result.departmentId = value.batcherId.first
+            result.applyStaffId = value.batcherId.second
         }
         setFilterValue(result)
         return result

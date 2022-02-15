@@ -3,7 +3,7 @@ import styles from './DetailContent.module.less'
 interface DetailContentProps {
     title?: React.ReactNode
     operation?: React.ReactNode[]
-    style?: React.StyleHTMLAttributes<{ [key: string]: any }>
+    style?: React.CSSProperties
     className?: string
 }
 const DetailContent: React.FC<DetailContentProps> = ({ title, operation, ...props }) => {

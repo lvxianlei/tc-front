@@ -317,7 +317,7 @@
             "rules": [
                 {
                     "required": true,
-                    "message":"请输入包名称..."
+                    "message": "请输入包名称..."
                 }
             ]
         },
@@ -344,7 +344,8 @@
         {
             "title": "数量",
             "dataIndex": "amount",
-            "type": "number"
+            "type": "number",
+            "precision": 4
         },
         {
             "title": "单位",

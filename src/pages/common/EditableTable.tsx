@@ -14,7 +14,7 @@ interface EditableTableProps {
     onChange?: (data: any[], allFields: any[]) => void
 }
 
-const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean, onRemove: (id: string) => void) => {
+const formatColunms = (columns: any[], haveIndex: boolean) => {
     const newColumns = columns.map(item => {
         if (item.type === "popTable") {
             return ({
@@ -42,15 +42,6 @@ const formatColunms = (columns: any[], haveOpration: boolean, haveIndex: boolean
             ...item
         })
     })
-    haveOpration && newColumns.push({
-        title: "操作",
-        lock: true,
-        width: "80px",
-        code: "opration",
-        render: (_: undefined, record: any) => {
-            return <Button style={{ paddingLeft: 0 }} size="small" type="link" onClick={() => onRemove(record.id)}>删除</Button>
-        }
-    })
     haveIndex && newColumns.unshift({
         title: '序号',
         width: "60px",
@@ -71,30 +62,34 @@ export default function EditableTable({
         id: item.id || (Math.random() * 1000000).toFixed(0)
     })))
 
-    const removeItem = (id: string) => {
-        console.log("id:", id, editableDataSource)
-        const removedDataSource = editableDataSource.filter(item => item.id !== id);
-        setEditableDataSource(removedDataSource)
-        console.log(editableDataSource)
-        form && form.setFieldsValue({ submit: editableDataSource })
-        console.log(form?.getFieldsValue())
-
-    }
-
-    const [eidtableColumns, setEditableColumns] = useState<any[]>(formatColunms(columns, haveOpration, haveIndex, removeItem))
+    const [eidtableColumns, setEditableColumns] = useState<any[]>(formatColunms(columns, haveIndex))
 
     useEffect(() => {
-        setEditableColumns(formatColunms(columns, haveOpration, haveIndex, removeItem))
+        setEditableColumns(formatColunms(columns, haveIndex))
     }, [JSON.stringify(columns)])
 
     useEffect(() => {
         setEditableDataSource(dataSource.map(item => ({ ...item, id: item.id || (Math.random() * 1000000).toFixed(0) })))
         form && form.setFieldsValue({ submit: dataSource })
     }, [JSON.stringify(dataSource)])
-    console.log(editableDataSource)
+
+    const removeItem = useCallback((id: string) => {
+        const removedDataSource = editableDataSource.filter(item => item.id !== id);
+        setEditableDataSource(removedDataSource)
+        form && form.setFieldsValue({ submit: removedDataSource })
+    }, [editableDataSource, setEditableDataSource, form])
+
+    const onFormChange = useCallback((changedValues: any, allChangeValues: any) => {
+        const changedDataSource = editableDataSource
+        const currentRowData = { ...editableDataSource[changedValues.submit.length - 1], ...changedValues.submit[changedValues.submit.length - 1] }
+        changedDataSource[changedValues.submit.length - 1] = currentRowData
+        setEditableDataSource(changedDataSource)
+        onChange && onChange(changedValues, allChangeValues)
+    }, [setEditableDataSource, onChange, editableDataSource])
+
     return <Form
         form={form}
-        onValuesChange={onChange}
+        onValuesChange={onFormChange}
     >
         <Row>{haveNewButton && <Button
             onClick={async () => {
@@ -117,7 +112,16 @@ export default function EditableTable({
             primaryKey="id"
             style={{ overflow: 'auto', maxHeight: 400 }}
             defaultColumnWidth={150}
-            columns={eidtableColumns}
+            columns={haveOpration ? [
+                ...eidtableColumns,
+                {
+                    title: "操作",
+                    lock: true,
+                    width: "80px",
+                    code: "opration",
+                    render: (_: undefined, record: any) => <Button style={{ paddingLeft: 0 }} size="small" type="link" onClick={() => removeItem(record.id)}>删除</Button>
+                }
+            ] : eidtableColumns}
             dataSource={editableDataSource}
             useVirtual={{ vertical: true }}
         />
