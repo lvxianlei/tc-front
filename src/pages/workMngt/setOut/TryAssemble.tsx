@@ -56,7 +56,7 @@ export default forwardRef(function TryAssemble({ id, deatil }: TryAssembleProps,
 
     return <Spin spinning={loading}>
         <DetailContent>
-            <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>配段信息</p>
+            <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>试装段数</p>
             <Form form={form} className={styles.descripForm}>
                 <Descriptions title="" bordered size="small" colon={false} column={2}>
                     {
