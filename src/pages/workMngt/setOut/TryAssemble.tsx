@@ -68,7 +68,10 @@ export default forwardRef(function TryAssemble({ id, deatil }: TryAssembleProps,
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item key={index} label="试装段数">
-                                    <Form.Item key={index + '_' + id} name={["list", index, "trialAssembleNum"]}>
+                                    <Form.Item key={index + '_' + id} name={["list", index, "trialAssembleNum"]} rules={[{
+                                        pattern: /^[^\s]*$/,
+                                        message: '禁止输入空格',
+                                    }]}>
                                         <InputNumber style={{ width: "100%" }} min={0} max={99} placeholder="请输入" />
                                     </Form.Item>
                                 </Descriptions.Item>

@@ -225,7 +225,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                                 pattern: /^[0-9]*$/,
                                                 message: '仅可输入数字',
                                             }]}>
-                                                <Input placeholder="请输入" />
+                                                <Input maxLength={2} placeholder="请输入" />
                                             </Form.Item>
                                         </Descriptions.Item>
                                     </>
