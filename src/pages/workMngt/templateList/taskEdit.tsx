@@ -34,6 +34,14 @@ export default function TaskNew(props:any){
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
     const [steelVisible, setSteelVisible] = useState<boolean>(false);
     const [steelData, setSteelData] = useState<any|undefined>([]);
+    const unique = (arr:any, key: any) => {
+        let result:any = {};
+        for (let item of arr) {
+        result[item[key]] = item;
+        }
+        console.log(result);
+        return Object.values(result); // 再转化为数组
+    }
     const steelColumns = [
         {
             key: 'index',
@@ -555,7 +563,7 @@ export default function TaskNew(props:any){
                     </Row>
                 </Form>
                 
-                <Attachment ref={attachRef} edit/>
+                <Attachment ref={attachRef} edit dataSource={printData.templateFiles}/>
             </Modal>
             <Modal
                 title='样板打印条件'  
@@ -619,9 +627,10 @@ export default function TaskNew(props:any){
             <Button type='link' onClick={async ()=>{
                 setVisible(true)
                 const planData: any = await RequestUtil.get(`/tower-science/loftingTemplate?current=1&size=1000&type=`);
-                setPlanData(planData?.records.filter((item: { uploadStatus: number; })=>{
+                const arr:any[] = planData?.records.filter((item: { uploadStatus: number; })=>{
                     return item.uploadStatus === 1
-                }));
+                })
+                setPlanData(unique(arr,'planNumber'));
                 const specialData: any = await RequestUtil.get(`/tower-aps/product/process?current=1&size=1000&type=`);
                 setSpecialData(specialData?.records);
                 const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);

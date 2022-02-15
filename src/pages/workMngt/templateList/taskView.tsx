@@ -372,7 +372,7 @@ export default function TaskView(props: any){
                         {specialData?.description}
                     </Descriptions.Item>
                 </Descriptions>
-                <Attachment />
+                <Attachment  dataSource={specialData?.templateFiles}/>
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns}  pagination={false} />
             </Modal>
