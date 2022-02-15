@@ -125,7 +125,10 @@ export default function NCProgram(): React.ReactNode {
                                 getData();
                             }
                         }).catch(error => {
-                            history.go(0);
+                            setTimeout(() => {
+                                history.go(0);
+                            }, 1500)
+
                         })
                     }}><Button type="primary" ghost>批量上传</Button></Attachment>
                     : null

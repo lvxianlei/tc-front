@@ -573,8 +573,9 @@ export default function Lofting(): React.ReactNode {
                         }
                         okText="确认"
                         cancelText="取消"
+                        disabled={editorLock === '锁定'}
                     >
-                        <Button type="primary" loading={loading1} ghost>完成放样</Button>
+                        <Button type="primary" loading={loading1} disabled={editorLock === '锁定'} ghost>完成放样</Button>
                     </Popconfirm>
                     <Upload
                         action={() => {
@@ -590,6 +591,7 @@ export default function Lofting(): React.ReactNode {
                         }
                         data={{ productSegmentGroupId: params.productSegmentId }}
                         showUploadList={false}
+                        disabled={editorLock === '锁定'}
                         onChange={(info) => {
                             if (info.file.response && !info.file.response?.success) {
                                 message.warning(info.file.response?.msg)
@@ -605,7 +607,7 @@ export default function Lofting(): React.ReactNode {
                             }
                         }}
                     >
-                        <Button type="primary" ghost>导入</Button>
+                        <Button type="primary" disabled={editorLock === '锁定'} ghost>导入</Button>
                     </Upload>
                     <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.productSegmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
                     <Button type="primary" ghost onClick={() => {
@@ -643,7 +645,7 @@ export default function Lofting(): React.ReactNode {
                         }).catch(error => {
                             setLoading2(false);
                         })
-                    }} ghost>PDM同步</Button>
+                    }} disabled={editorLock === '锁定'} ghost>PDM同步</Button>
                     {/* <Button type="primary" onClick={() => setPdmVisible(true)} ghost>PDM同步</Button> */}
                     <Popconfirm
                         title="确认删除?"
@@ -663,8 +665,9 @@ export default function Lofting(): React.ReactNode {
                         }}
                         okText="确认"
                         cancelText="取消"
+                        disabled={editorLock === '锁定'}
                     >
-                        <Button type="primary" ghost>删除</Button>
+                        <Button type="primary" disabled={editorLock === '锁定'} ghost>删除</Button>
                     </Popconfirm>
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </Space>}
