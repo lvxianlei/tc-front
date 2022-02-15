@@ -273,15 +273,14 @@ export default function TowerCheck(): React.ReactNode {
         const green: number = record.greenColumn.indexOf(dataIndex);
         const yellow: number = record.yellowColumn.indexOf(dataIndex);
         const brown: string = record.specialCode;
-        if (brown === '1' && dataIndex === 'specialCode') {
-            return 'brown';
-        }
         if (red !== -1) {
             return 'red';
         } else if (green !== -1) {
             return 'green';
         } else if (yellow !== -1) {
             return 'yellow';
+        } else if (brown === '1' && dataIndex === 'specialCode') {
+            return 'brown';
         } else {
             return 'normal'
         }
