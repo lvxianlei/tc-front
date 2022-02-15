@@ -136,7 +136,7 @@ export default function SchedulePlan(props: any){
                             <Row>
                                 <Col span={15}>
                                     <Form.Item name="assignName" label="指派方案名称" rules={[{required: true,message:'请选择指派方案名称'}]}>
-                                        <Input/>
+                                        <Input maxLength={20}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
