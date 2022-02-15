@@ -156,7 +156,7 @@ export default function DailySchedule(): React.ReactNode {
                     <Radio.Button value={3}>未采集</Radio.Button>
                     <Radio.Button value={4}>已完成</Radio.Button>
                 </Radio.Group>
-                <span className={styles.statistical}>统计：<span className={styles.statistical}>下达总重量：{data?.issueTotalWeight}吨</span><span className={styles.statistical}>角钢总重量：{data?.angleTotalWeight}吨</span><span className={styles.statistical}>连板总重量：{data?.plateTotalWeight}吨</span></span>
+                <span className={styles.statistical}>统计：<span className={styles.statistical}>下达总重量：<span style={{color:'#FF8C00'}}>{data?.issueTotalWeight}</span>吨</span><span className={styles.statistical}>角钢总重量：<span style={{color:'#FF8C00'}}>{data?.angleTotalWeight}</span>吨</span><span className={styles.statistical}>连板总重量：<span style={{color:'#FF8C00'}}>{data?.plateTotalWeight}</span>吨</span></span>
                 {confirmStatus === 1 ? <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => {
                     RequestUtil.post(`/tower-production/packageWorkshop/confirm`, selectedKeys).then(res => {
                         message.success("确认成功");
