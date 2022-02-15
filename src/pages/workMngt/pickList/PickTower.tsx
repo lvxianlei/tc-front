@@ -36,6 +36,7 @@ export default function PickTower(): React.ReactNode {
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState({});
     const [productId, setProductId] = useState('');
+    const [status, setStatus] = useState('');
     const [detail, setDetail] = useState<IDetail>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
@@ -202,25 +203,25 @@ export default function PickTower(): React.ReactNode {
                 <Space direction="horizontal" size="small"  className={styles.operationBtn}>
                     <Button type='link' onClick={async () => {
                         setVisible(true);
-                            let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}`)
-                            const detailData: IMaterialDetail[]|undefined = data&&data.materialDrawProductSegmentList&&data.materialDrawProductSegmentList.map((item:IMaterialDetail)=>{
-                                return {
-                                    ...item,
-                                }
-                            })
-                            setProductId(record.id);
-                            setDetail({
-                                ...data,
-                                materialDrawProductSegmentList:detailData
-                            })
-                            form.setFieldsValue({
-                                legWeightA:data?.legWeightA,
-                                legWeightB:data?.legWeightB,
-                                legWeightC:data?.legWeightC,
-                                legWeightD:data?.legWeightD,
-                                detailData:detailData
-                            });
-                            
+                        let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}`)
+                        const detailData: IMaterialDetail[]|undefined = data&&data.materialDrawProductSegmentList&&data.materialDrawProductSegmentList.map((item:IMaterialDetail)=>{
+                            return {
+                                ...item,
+                            }
+                        })
+                        setProductId(record.id);
+                        setDetail({
+                            ...data,
+                            materialDrawProductSegmentList:detailData
+                        })
+                        form.setFieldsValue({
+                            legWeightA:data?.legWeightA,
+                            legWeightB:data?.legWeightB,
+                            legWeightC:data?.legWeightC,
+                            legWeightD:data?.legWeightD,
+                            detailData:detailData
+                        });
+                        setStatus(record.materialStatusName)
                     }} >配段</Button>
                     <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==3}>杆塔提料明细</Button>
                 </Space>
@@ -278,7 +279,7 @@ export default function PickTower(): React.ReactNode {
         <>
             <Modal title='配段信息'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
                 {detail?.materialDrawProductSegmentList?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList,legWeightA:detail?.legWeightA,legWeightB:detail?.legWeightB,legWeightC:detail?.legWeightC,legWeightD:detail?.legWeightD }} autoComplete="off" form={form}>  
-                    <DetailTitle title={'塔腿配段信息'} operation={[<Button type='primary' onClick={()=>{setSegmentVisible(true)}}>快速配段</Button>,
+                    <DetailTitle title={'塔腿配段信息'} operation={[status!=='已完成'&&<Button type='primary' onClick={()=>{setSegmentVisible(true)}}>快速配段</Button>,
                     <Modal 
                         visible={segmentVisible}
                         title='配段信息'
@@ -383,7 +384,7 @@ export default function PickTower(): React.ReactNode {
                                         <Col span={1}></Col>
                                         <Col span={ 11 }>
                                         <Form.Item  name={[ field.name , 'count']} label='段数' initialValue={[ field.name , 'count']}>
-                                            <InputNumber min={0} precision={0} style={{width:'100%'}}/>
+                                            <InputNumber min={0} precision={0} style={{width:'100%'}} disabled={status==='已完成'}/>
                                         </Form.Item>
                                         </Col>
                                     </>
@@ -393,11 +394,12 @@ export default function PickTower(): React.ReactNode {
                         </Form.List> 
                     </Row>
                 </Form>:null}
-                <Space style={{position:'relative',left:'75%'}}>
+                {status!=='已完成'?<Space style={{position:'relative',left:'75%'}}>
                     <Button type="primary" ghost onClick={()=>handleModalCancel()}>取消</Button>
                     <Button type="primary" onClick={()=>handleModalSave()}>保存</Button>
                     <Button type="primary" onClick={()=>handleModalOk()}>保存并提交</Button>
-                </Space>
+                </Space>:
+                <Button type="primary"style={{position:'relative',left:'95%'}} ghost onClick={()=>handleModalCancel()}>取消</Button>}
             </Modal>
             <Page
                 path="/tower-science/product/material"
