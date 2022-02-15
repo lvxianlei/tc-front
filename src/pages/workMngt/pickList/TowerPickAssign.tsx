@@ -100,7 +100,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
         // if(this.props.type === 'message'||this.props.type === 'detail'){  //提料指派1.2.0版本 去掉
             detailData = {
                 ...detailData,
-                plannedDeliveryTime: moment(detailData?.plannedDeliveryTime)
+                plannedDeliveryTime: moment(data?.plannedDeliveryTime)
             }
         // }
        
@@ -400,7 +400,10 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         required: true,
                                         message: '请选择交付时间'
                                     }]}>
-                                    <DatePicker />
+                                    <DatePicker format={'YYYY-MM-DD HH:mm:ss'} disabledDate={(current)=> {
+                                        const value = this.getForm()?.getFieldsValue().plannedDeliveryTime
+                                            return current && current < moment(value);
+                                        }}/>
                                 </Form.Item>
                             </Descriptions.Item></>
                             }
