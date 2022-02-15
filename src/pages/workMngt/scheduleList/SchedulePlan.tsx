@@ -322,6 +322,7 @@ export default function SchedulePlan(props: any){
                     props?.plan(tableDataSource)
                     setTableVisible(false)
                 }}
+                footer={false}
                 // okText='保存并提交'
                 // onOk={
                 //     ()=>{
@@ -336,7 +337,7 @@ export default function SchedulePlan(props: any){
                     setScheduleData({})
                     setVisible(true)
                    
-                }}>添加</Button>
+                }} style={{marginBottom:'8px'}}>添加</Button>
                 <Table
                     dataSource={tableDataSource}
                     pagination={false}
