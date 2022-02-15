@@ -164,7 +164,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
-                                    <Input placeholder="请输入" />
+                                    <Input placeholder="请输入" maxLength={50} />
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item key={2} label="B">
@@ -175,7 +175,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
-                                    <Input placeholder="请输入" />
+                                    <Input placeholder="请输入" maxLength={50} />
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item key={3} label="C">
@@ -186,7 +186,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
-                                    <Input placeholder="请输入" />
+                                    <Input placeholder="请输入" maxLength={50} />
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item key={4} label="D">
@@ -197,7 +197,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
-                                    <Input placeholder="请输入" />
+                                    <Input placeholder="请输入" maxLength={50} />
                                 </Form.Item>
                             </Descriptions.Item>
                         </Descriptions>
