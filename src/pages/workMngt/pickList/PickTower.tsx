@@ -325,36 +325,48 @@ export default function PickTower(): React.ReactNode {
                         <Col span={5}>
                             <Form.Item name="legWeightA" label="A" rules={[{
                                 required: true,
-                                message:'请填写塔腿重A'
+                                message: '请输入塔腿A'
+                            }, {
+                                pattern: /^[0-9a-zA-Z]*$/,
+                                message: '仅可输入数字/字母',
                             }]}>
-                                <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
+                                <Input style={{width:'100%'}}/>
                             </Form.Item>
                         </Col>
                         <Col span={1}/>
                         <Col span={5}>
                             <Form.Item name="legWeightB" label="B" rules={[{
                                 required: true,
-                                message:'请填写塔腿重B'
+                                message: '请输入塔腿B'
+                            }, {
+                                pattern: /^[0-9a-zA-Z]*$/,
+                                message: '仅可输入数字/字母',
                             }]}>
-                                <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
+                                <Input style={{width:'100%'}}/>
                             </Form.Item>
                         </Col>
                         <Col span={1}/>
                         <Col span={5}>
                             <Form.Item name="legWeightC" label="C" rules={[{
                                 required: true,
-                                message:'请填写塔腿重C'
+                                message: '请输入塔腿C'
+                            }, {
+                                pattern: /^[0-9a-zA-Z]*$/,
+                                message: '仅可输入数字/字母',
                             }]}>
-                                <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
+                                <Input style={{width:'100%'}}/>
                             </Form.Item>
                         </Col>
                         <Col span={1}/>
                         <Col span={5}>
                             <Form.Item name="legWeightD" label="D" rules={[{
                                 required: true,
-                                message:'请填写塔腿重D'
+                                message: '请输入塔腿D'
+                            }, {
+                                pattern: /^[0-9a-zA-Z]*$/,
+                                message: '仅可输入数字/字母',
                             }]}>
-                                <InputNumber min={1} precision={0} max={999} style={{width:'100%'}}/>
+                                <Input style={{width:'100%'}}/>
                             </Form.Item>
                         </Col>
                     </Row>
