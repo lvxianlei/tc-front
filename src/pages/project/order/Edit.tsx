@@ -50,7 +50,7 @@ export default function SeeGuarantee(): JSX.Element {
             // 影响含税单价，不含税单价，不含税金额
             // 不含税金额 = 不含税单价 * 订单重量
             const taxRate = addCollectionForm.getFieldValue("taxRate") * 1; // 税率
-            const taxPrice = addCollectionForm.getFieldValue("taxAmount") / addCollectionForm.getFieldValue("orderWeight"); // 含税单价
+            const taxPrice = addCollectionForm.getFieldValue("orderWeight") > 0 ? addCollectionForm.getFieldValue("taxAmount") / addCollectionForm.getFieldValue("orderWeight") : 0; // 含税单价
             const price = taxPrice / (1 + taxRate  / 100);
             const result =  (+addCollectionForm.getFieldValue("orderWeight") || 0) * price; // 含税金额
             addCollectionForm.setFieldsValue({
@@ -130,12 +130,20 @@ export default function SeeGuarantee(): JSX.Element {
     const { loading, data: orderData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/saleOrder/${params.id}`)
+            addCollectionForm.setFieldsValue({
+                ...result?.contractInfoVo,
+                ...result,
+                internalNumber: {
+                    id: result?.contractInfoVo.contractId,
+                    value: result?.contractInfoVo.internalNumber,
+                    records: result?.contractInfoVo ? [result?.contractInfoVo] : []
+                }
+            })
             resole(result);
         } catch (error) {
             reject(error)
         }
     }), { manual: params.id === "new" })
-    
     return (
         <Spin spinning={loading}>
             <DetailContent operation={[
@@ -156,14 +164,7 @@ export default function SeeGuarantee(): JSX.Element {
                         foreignExchangeAmount: "0",
                         exchangeRate: "0",
                         foreignPrice: "0",
-                        guaranteeAmount: "0",
-                        ...orderData?.contractInfoVo,
-                        ...orderData,
-                        internalNumber: {
-                            id: orderData?.contractInfoVo.contractId,
-                            value: orderData?.contractInfoVo.internalNumber,
-                            records: orderData?.contractInfoVo ? [orderData?.contractInfoVo] : []
-                        }
+                        guaranteeAmount: "0"
                     }}
                     col={4}
                     columns={[

@@ -42,9 +42,7 @@
                 },
                 {
                     "title": "销售类型",
-                    "dataIndex": "saleTypeName",
-                    "type": "select",
-                    "search": true
+                    "dataIndex": "saleTypeName"
                 },
                 {
                     "title": "业主单位",
@@ -121,7 +119,13 @@
         {
             "title": "订单重量",
             "dataIndex": "orderWeight",
-            "type": "text"
+            "type": "text",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入订单重量"
+                }
+            ]
         },
         {
             "title": "含税金额",
