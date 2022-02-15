@@ -319,8 +319,12 @@ export default function TowerInformation(): React.ReactNode {
             extraOperation={<Space direction="horizontal" size="small">
                 <Button type="primary" onClick={async () => {
                     const result: [] = await RequestUtil.get(`/tower-science/productSegmentAssemble/${params.id}`);
-                    setTryAssemble(result)
-                    setTryAssembleVisiblee(true);
+                    if (result.length > 0) {
+                        setTryAssemble(result)
+                        setTryAssembleVisiblee(true);
+                    } else {
+                        message.warning('不存在试组装段信息')
+                    }
                 }} disabled={!(location.state?.status < 3)} ghost>试组装信息</Button>
                 <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList`, state: { status: location.state?.status } }}><Button type="primary" ghost>模型</Button></Link>
                 <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList`, state: { status: location.state?.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
