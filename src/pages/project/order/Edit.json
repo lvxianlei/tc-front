@@ -119,13 +119,7 @@
         {
             "title": "订单重量",
             "dataIndex": "orderWeight",
-            "type": "text",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入订单重量"
-                }
-            ]
+            "type": "text"
         },
         {
             "title": "含税金额",
