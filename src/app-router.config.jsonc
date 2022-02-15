@@ -814,7 +814,7 @@
     { // 配置管理-仓库管理
       "name": "仓库管理",
       "path": "/config/configList/warehouse",
-      "module": "./pages/stock/warehouse/warehouse",
+      "module": "./pages/stock/warehouse/index",
       "exact": true,
       "authority": "sw_configuration_management_warehouse_management"
     },
