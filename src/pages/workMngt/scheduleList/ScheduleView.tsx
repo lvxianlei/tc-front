@@ -99,6 +99,7 @@ export default function ScheduleView(): React.ReactNode {
         try {
             const saveData = await form.validateFields();
             saveData.id = scheduleData.id;
+            saveData.assignPlanId = scheduleData.assignPlanId;
             saveData.boltDeliverTime= moment(saveData.boltDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.weldingDeliverTime= moment(saveData.weldingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.loftingDeliverTime= moment(saveData.loftingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
@@ -505,7 +506,25 @@ export default function ScheduleView(): React.ReactNode {
                                         <Select disabled={edit} onChange={async (value)=>{
                                             const resData: any = await RequestUtil.get(`/tower-science/assignPlan/planDetailById/${value}`)
                                             resData.name = form.getFieldsValue().name
-                                            setScheduleData(resData);
+                                            setScheduleData({
+                                                ...scheduleData,
+                                                assignPlanId: resData.id,
+                                                name:form.getFieldsValue().name,
+                                                materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                                                materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                                                boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
+                                                boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
+                                                weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
+                                                weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?resData.weldingLeaderDepartment:'',
+                                                loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
+                                                loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
+                                                drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
+                                                drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
+                                                materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                                                materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                                                smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
+                                                smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
+                                            });
                                             if(resData.materialLeaderDepartment){
                                                 const materialLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialLeaderDepartment}&size=1000`);
                                                 setMaterialUser(materialLeaderDepartment.records);

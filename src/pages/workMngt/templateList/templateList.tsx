@@ -72,12 +72,12 @@ export default function TemplateList() {
             align:'left',
             render: (text: string, record: Record<string, any>): React.ReactNode => {
                 return (
-                   <Space direction="horizontal" size="small" className={styles.operationBtn}> {record?.uploadDrawType!==3?
+                   <Space direction="horizontal" size="small" className={styles.operationBtn}> {record?.uploadDrawTypeName!=='样板打印'?
                     <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/detail/${record.id}/${record.productCategoryId}`)}}>查看</Button>
                     :<>
                     
                     <TaskView record={record}/>
-                    <Popconfirm
+                    {record.uploadStatusName === '待完成' &&<Popconfirm
                         title="确认完成?"
                         onConfirm={() => {
                             RequestUtil.get(`/tower-science/loftingTemplate/complete/${record.id}`).then(res => {
@@ -88,9 +88,9 @@ export default function TemplateList() {
                         cancelText="取消"
                     >
                         <Button type="link" >完成</Button>
-                    </Popconfirm>
-                    <TaskEdit record={record}/>
-                    <Popconfirm
+                    </Popconfirm>}
+                    {record.uploadStatusName === '待完成' &&<TaskEdit record={record}/>}
+                    {record.uploadStatusName === '待完成' &&<Popconfirm
                         title="确认删除?"
                         onConfirm={() => {
                             RequestUtil.delete(`/tower-science/loftingTemplate/${record.id}`).then(res => {
@@ -102,7 +102,7 @@ export default function TemplateList() {
                         cancelText="取消"
                     >
                         <Button type="link" >删除</Button>
-                    </Popconfirm>
+                    </Popconfirm>}
                     </>}
                     </Space>
                    
