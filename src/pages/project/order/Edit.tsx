@@ -99,7 +99,6 @@ export default function SeeGuarantee(): JSX.Element {
     }
     const handleSave = async() => {
         const baseData: any = await addCollectionForm.validateFields();
-        console.log(baseData, "bas")
         const result = {
             projectId: params.projectId,
             ...baseData,

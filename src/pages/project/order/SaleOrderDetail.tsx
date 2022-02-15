@@ -20,8 +20,7 @@ class ManagementSaleOrderDetail extends SaleOrderDetail {
     ];
   }
   public renderOperationArea(): React.ReactNode | React.ReactNode[] {
-    const projectId = (this.props.match.params as any).id;
-
+    const projectId = (this.props.match.params as any).projectId;
     return [
       <Button key="setting" disabled={(this.state.detail as any)?.isProductGroupRef !== 0}>
         <Link to={`/project/order/setting/${projectId}/${this.props.match.params.id}`}>
