@@ -111,9 +111,14 @@ export default function SetOutList(): React.ReactNode {
                         record.status === 2 ?
                             <Button type="link" onClick={async () => {
                                 const result: [] = await RequestUtil.get(`/tower-science/productSegmentAssemble/${record.id}`);
-                                setTryAssembleVisiblee(true);
-                                setTryAssemble(result)
-                                setProductCategoryId(record.id);
+                                if (result.length > 0) {
+                                    setTryAssembleVisiblee(true);
+                                    setTryAssemble(result)
+                                    setProductCategoryId(record.id);
+                                } else {
+                                    message.warning('不存在试组装段信息')
+                                }
+
                             }}>试装信息</Button>
                             :
                             <Button type="link" disabled>试装信息</Button>
