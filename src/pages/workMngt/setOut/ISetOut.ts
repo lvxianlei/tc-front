@@ -61,7 +61,7 @@ export interface IAllot {
     readonly productHeight?: string;
     readonly productNumber?: string;
     readonly segmentInformation?: string;
-    readonly specialStatus?: string;
+    readonly specialStatus?: number;
     readonly loftingProductStructureVOS?: ILoftingProductStructureVOS[];
 }
 
@@ -87,6 +87,7 @@ export interface ILoftingProductStructureVOS {
     readonly totalWeight?: string;
     readonly uploadTime?: string;
     readonly width?: string;
+    readonly specialBasicsPartNum?: string;
 
 }
 

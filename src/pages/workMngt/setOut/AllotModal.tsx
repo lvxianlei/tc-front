@@ -16,28 +16,28 @@ import { StoreValue } from "antd/es/form/interface";
 
 interface AllotModalProps {
     id: string;
+    allotData: IAllot;
 }
 
-export default forwardRef(function AllotModal({ id }: AllotModalProps, ref) {
+export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps, ref) {
     const [form] = Form.useForm();
 
     const { loading, data } = useRequest<IAllot>(() => new Promise(async (resole, reject) => {
         try {
-            let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${id}`);
-            result = {
-                ...result,
-                loftingProductStructureVOS: result?.loftingProductStructureVOS?.map((res: ILoftingProductStructureVOS) => {
+            allotData = {
+                ...allotData,
+                loftingProductStructureVOS: allotData?.loftingProductStructureVOS?.map((res: ILoftingProductStructureVOS) => {
                     // let BasicsPartTotalNum = 0;
-                    // result?.loftingProductStructureVOS?.filter(item => { return res.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum = Number(items?.basicsPartNum) });
+                    // allotData?.loftingProductStructureVOS?.filter(item => { return res.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum = Number(items?.basicsPartNum) });
                     return {
                         ...res,
-                        basicsPartNum: '0',
-                        BasicsPartTotalNum: res.basicsPartNum
+                        basicsPartNum: res.basicsPartNum,
+                        BasicsPartTotalNum: res.specialBasicsPartNum
                     }
                 })
             }
-            form.setFieldsValue({ ...result, loftingProductStructure: result?.loftingProductStructureVOS })
-            resole(result)
+            form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
+            resole(allotData)
         } catch (error) {
             reject(error)
         }
@@ -145,7 +145,7 @@ export default forwardRef(function AllotModal({ id }: AllotModalProps, ref) {
                     }
                 }
                 ]}>
-                    <InputNumber min={0} max={record.BasicsPartTotalNum} size="small" />
+                    <InputNumber min={0} max={record.BasicsPartTotalNum} disabled={data?.specialStatus === 2} size="small" />
                 </Form.Item>
             )
         },
@@ -156,7 +156,7 @@ export default forwardRef(function AllotModal({ id }: AllotModalProps, ref) {
             dataIndex: 'description',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['loftingProductStructure', index, 'description']}>
-                    <Input size="small" />
+                    <Input disabled={data?.specialStatus === 2} size="small" />
                 </Form.Item>
             )
         },

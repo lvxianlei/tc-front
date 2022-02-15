@@ -17,7 +17,7 @@ import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
 import Modal from 'antd/lib/modal/Modal';
-import { allotModalProps } from './ISetOut';
+import { allotModalProps, IAllot } from './ISetOut';
 import AllotModal from './AllotModal';
 
 export default function PoleInformation(): React.ReactNode {
@@ -135,7 +135,10 @@ export default function PoleInformation(): React.ReactNode {
                     }
                     {
                         record.loftingStatus === 3 && record.isSpecial === 1 ?
-                            <Button type="link" onClick={() => {
+                            <Button type="link" onClick={async () => {
+
+                                let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
+                                setAllotData(result)
                                 setAllotVisible(true);
                                 setProductId(record.id);
                             }}>调拨</Button>
@@ -161,6 +164,7 @@ export default function PoleInformation(): React.ReactNode {
     const [allotVisible, setAllotVisible] = useState<boolean>(false);
     const editRef = useRef<allotModalProps>();
     const [productId, setProductId] = useState<string>('');
+    const [allotData, setAllotData] = useState<IAllot>();
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
@@ -230,14 +234,15 @@ export default function PoleInformation(): React.ReactNode {
                 <Button type="ghost" onClick={() => {
                     setAllotVisible(false);
                 }}>关闭</Button>
-                <Button type="primary" onClick={handleModalOk} ghost>保存</Button>
-                <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button>
+                {
+                    allotData?.specialStatus === 0 || allotData?.specialStatus === 1 ? <><Button type="primary" onClick={handleModalOk} ghost>保存</Button>
+                        <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button></> : null}
             </Space>}
             onOk={handleModalOk}
             onCancel={() => setAllotVisible(false)}
             className={styles.tryAssemble}
         >
-            <AllotModal id={productId} ref={editRef} />
+            <AllotModal id={productId} allotData={allotData || {}} ref={editRef} />
         </Modal>
         <Page
             path="/tower-science/product/lofting"
