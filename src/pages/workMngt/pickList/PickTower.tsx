@@ -134,6 +134,12 @@ export default function PickTower(): React.ReactNode {
             dataIndex: 'productNumber'
         },
         {
+            key: 'productHeight',
+            title: '呼高',
+            width: 100,
+            dataIndex: 'productHeight'
+        },
+        {
             key: 'productCategoryName',
             title: '塔型',
             width: 100,
