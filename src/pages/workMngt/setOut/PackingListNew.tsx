@@ -651,6 +651,7 @@ export default function PackingListNew(): React.ReactNode {
                 columns={packingColumns}
                 pagination={false}
                 dataSource={packagingData}
+                rowKey="structureId"
                 rowSelection={{
                     selectedRowKeys: removeRowKeys,
                     type: "checkbox",
