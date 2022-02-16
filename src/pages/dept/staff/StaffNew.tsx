@@ -5,9 +5,9 @@
 */
 
 import React, { useState } from 'react';
-import { Spin, Button, Space, message, Form, Input, Table, Popconfirm, TreeSelect, Checkbox, Select } from 'antd';
+import { Spin, Button, Space, message, Form, Input, Popconfirm, TreeSelect, Checkbox, Select } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
-import { DetailTitle, DetailContent } from '../../common';
+import { DetailTitle, DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './StaffMngt.module.less';
@@ -110,7 +110,7 @@ export default function StaffNew(): React.ReactNode {
             dataIndex: 'status',
             width: 150,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["list", index, "autoAccount"]} key={index} initialValue={_}>
+                <Form.Item name={["list", index, "status"]} key={index} initialValue={_}>
                     <Checkbox key={record.id} checked={_ === 1} disabled={location.state.type === 'edit' && oldDataList[index].autoAccount === 1} onChange={(e) => {
                         let data = form.getFieldsValue(true).list;
                         data = data.map((item: IStaff, ind: number) => {
@@ -122,7 +122,7 @@ export default function StaffNew(): React.ReactNode {
                         data[index] = {
                             ...data[index],
                             id: dataList[index].id,
-                            autoAccount: e.target.checked ? 1 : 2
+                            status: e.target.checked ? 1 : 2
                         }
                         setDataList([...data]);
                         form.setFieldsValue({ list: [...data] })
@@ -136,7 +136,7 @@ export default function StaffNew(): React.ReactNode {
             width: 150,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={["list", index, "account"]} key={index} initialValue={_}>
-                    {form.getFieldsValue(true)?.list[index].autoAccount === 2 ? <Input maxLength={20} disabled /> : <Input maxLength={20} disabled={location.state.type === 'edit' && oldDataList[index].autoAccount === 1} />}
+                    <Input maxLength={20} disabled={location.state.type === 'edit'} />
                 </Form.Item>
             )
         },
@@ -304,6 +304,7 @@ export default function StaffNew(): React.ReactNode {
                         return {
                             ...items,
                             id: dataList[index].id,
+                            userId: dataList[index].userId,
                             roleId: items.roleIdList && items.roleIdList.join(','),
                             station: items.stationList && items.stationList.join(',')
                         }
@@ -368,7 +369,7 @@ export default function StaffNew(): React.ReactNode {
     ]}>
         <DetailTitle title="员工信息" operation={[location.state.type === 'new' ? <Button type="primary" onClick={addRow}>添加行</Button> : <></>]} />
         <Form form={form}>
-            <Table rowKey="id" scroll={{ x: 1200 }} dataSource={[...dataList]} pagination={false} columns={location.state.type === 'edit' ? tableColumns.splice(0, 11) : tableColumns} className={styles.addModal} />
+            <CommonTable rowKey="id" scroll={{ x: 1200 }} dataSource={[...dataList]} pagination={false} columns={location.state.type === 'edit' ? tableColumns.splice(0, 11) : tableColumns} className={styles.addModal} />
         </Form>
     </DetailContent>
     )
