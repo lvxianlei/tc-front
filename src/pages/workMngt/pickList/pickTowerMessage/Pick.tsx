@@ -502,20 +502,24 @@ export default function Lofting(): React.ReactNode {
                         <Popconfirm
                             title="确认删除?"
                             onConfirm={ async () => {
-                                if(!(selectedKeys.length > 100)){
-                                    await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ selectedKeys.join(',') }`).then(()=>{
-                                        message.success('删除成功！');
-                                        setRefresh(!refresh);   
-                                    })
-                                }else{
-                                    message.error('当前选择数量过多，请重新选择！')
+                                if(selectedKeys.length >0 )
+                                    if(!(selectedKeys.length > 100)){
+                                        await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ selectedKeys.join(',') }`).then(()=>{
+                                            message.success('删除成功！');
+                                            setRefresh(!refresh);   
+                                        })
+                                    }else{
+                                        message.error('当前选择数量过多，请重新选择！')
+                                    }
+                                else {
+                                    message.warning('请选择要删除的数据')
                                 }
                             }}
                             okText="提交"
                             cancelText="取消"
-                            disabled={!(selectedKeys.length>0)|| editorLock==='锁定'}
+                            disabled={ editorLock==='锁定' }
                         >
-                            <Button type="primary" ghost  disabled={!(selectedKeys.length>0)}>删除</Button>
+                            <Button type="primary" ghost  disabled={ editorLock==='锁定' }>删除</Button>
                         </Popconfirm>
                         <Button type="ghost" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回</Button>
                     </Space>

@@ -243,6 +243,10 @@ export default function TaskNew(props:any){
     const handleModalOk = async () => {
         try {
             const saveData = await form.validateFields();
+            if(saveData?.pageNumber===0){
+                message.error('数量为0，不可保存并提交！')
+                return 
+            }
             saveData.id = scheduleData.id;
             saveData.drawLeaderDepartment= Array.isArray(saveData.drawLeaderDepartment)?saveData.drawLeaderDepartment[0]:saveData.drawLeaderDepartment;
             saveData.productCategoryId = printData?.productCategoryId;
@@ -291,6 +295,10 @@ export default function TaskNew(props:any){
                 ...printData,
                 printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:'',
                 printSpecialProcess: saveData?.printSpecialProcess?.join(',')
+            })
+            const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${printData?.productCategoryId}/${saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:''}/${saveData?.printSpecialProcess?.join(',')}`);
+            form.setFieldsValue({
+                pageNumber: data?.length
             })
             setPrintVisible(false);
         
@@ -473,8 +481,10 @@ export default function TaskNew(props:any){
                                             productCategoryId: value,
                                         })
                                     }
+                                    const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${formValue[0]?.productCategoryId}/${printData?.printSpecifications}/${printData?.printSpecialProcess}`);
                                     form.setFieldsValue({
-                                        ...formValue[0]
+                                        ...formValue[0],
+                                        pageNumber: data?.length
                                     })
                                     setRead(true)
                                 }}>
