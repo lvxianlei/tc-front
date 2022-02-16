@@ -56,9 +56,10 @@ export default function CostConfig(): JSX.Element {
             {
                 title: "操作",
                 dataIndex: "opration",
+                fixed: "right",
                 width: 150,
                 render: (_, record: any) => <>
-                    <Button type="link" onClick={() => history.push(`/sys/costconfig/detail/${record.productName}`)}>查看</Button>
+                    <Button className="btn-operation-link" type="link" onClick={() => history.push(`/sys/costconfig/detail/${record.productName}`)}>查看</Button>
                     <Popconfirm onConfirm={() => handleDelete(record.id)} title="确定要删除？">
                         <Button type="link">删除</Button>
                     </Popconfirm>
