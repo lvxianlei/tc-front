@@ -206,6 +206,7 @@ export default function PickTowerDetail(): React.ReactNode {
                         columns={columns}
                         pagination={false}
                         dataSource={[...tableDataSource]}
+                        scroll={{x:1500}}
                     />
                     </Form>
                     <div style={{ boxShadow:'0px 0px 5px 5px #ccc', width:'40%', marginLeft:'10px', textAlign:'center'}}>

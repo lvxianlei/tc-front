@@ -31,6 +31,7 @@ export interface TowerPickAssignState {
     pattern?: any[];
     materialCheckLeader?: any[];
     departmentData?: SelectDataNode[];
+    time: any;
 }
 
 interface IAppointed {
@@ -68,6 +69,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     public state: TowerPickAssignState = {
         visible: false,
         repeatModal: false,
+        time:'',
         user: [],
         materialCheckLeader: [],
         departmentData: [],
@@ -94,7 +96,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             departmentData: departmentData,
             visible: true,
             appointed: data,
-            pattern: renderEnum
+            pattern: renderEnum,
+            time: moment(data?.plannedDeliveryTime)
         })
         let detailData = this.props.detailData;
         // if(this.props.type === 'message'||this.props.type === 'detail'){  //提料指派1.2.0版本 去掉
@@ -103,7 +106,6 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                 plannedDeliveryTime: moment(data?.plannedDeliveryTime)
             }
         // }
-       
         this.getForm()?.setFieldsValue({  ...data, ...detailData});
         if(this.props.type==='message'&& data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
             this.onDepartmentChange(data.materialCheckLeaderDepartment, "校核人");
@@ -401,8 +403,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         message: '请选择交付时间'
                                     }]}>
                                     <DatePicker format={'YYYY-MM-DD HH:mm:ss'} disabledDate={(current)=> {
-                                        const value = this.getForm()?.getFieldsValue().plannedDeliveryTime
-                                            return current && current < moment(value);
+                                            return current && current < moment(this.state.time);
                                         }}/>
                                 </Form.Item>
                             </Descriptions.Item></>
