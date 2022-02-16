@@ -11,7 +11,7 @@ export default function Index(): JSX.Element {
     const [filterValue, setFilterValue] = useState<Object>({})
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-customer/customer?customerId=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/customer?customerId=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -38,7 +38,7 @@ export default function Index(): JSX.Element {
         })
     }
     return <Page
-        path="/tower-customer/customer"
+        path="/tower-market/customer"
         filterValue={filterValue}
         extraOperation={[
             <Button key="new" type="primary"><Link to="/client/mngt/edit/new">新增客户</Link></Button>
