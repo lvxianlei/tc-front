@@ -639,7 +639,7 @@ export default function ScheduleView(): React.ReactNode {
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
-                                    <Form.Item name="materialPartLeader" label="" rules={[{required: true,message:'请选择提料负责人'}]} >
+                                    <Form.Item name="materialPartLeader" label="" rules={[{required: true,message:'请选择提料配段负责人'}]} >
                                         <Select disabled={edit}>
                                             { materialPartUser && materialPartUser.map((item:any)=>{
                                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>

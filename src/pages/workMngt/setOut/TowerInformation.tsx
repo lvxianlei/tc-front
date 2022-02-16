@@ -296,7 +296,7 @@ export default function TowerInformation(): React.ReactNode {
                 setTryAssembleVisiblee(false);
                 setRefresh(!refresh);
             }}>
-            <TryAssemble id={params.id} deatil={tryAssemble} ref={editRef} />
+            <TryAssemble id={params.id} type="edit" deatil={tryAssemble} ref={editRef} />
         </Modal>
         <Modal title="段模式" visible={visible} onCancel={() => setVisible(false)} footer={<Space direction="horizontal" size="small" >
             <Button onClick={() => setVisible(false)}>关闭</Button>
