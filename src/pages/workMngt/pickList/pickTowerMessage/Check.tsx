@@ -93,7 +93,7 @@ export default function PickCheckList(): React.ReactNode {
             key: 'totalWeight', 
             editable: false,  
             render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</span>
+                <span>{((record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)).toFixed(2)}</span>
             )
         },
         { 
