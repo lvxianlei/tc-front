@@ -142,8 +142,13 @@ export default function PackingList(): React.ReactNode {
     const [loading1, setLoading1] = useState(false);
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/packageStructure/${params.productId}`)
-        resole(data)
+        await RequestUtil.get(`/tower-science/packageStructure/${params.productId}`).then(res => {
+            resole(res)
+        }).catch(error => {
+            setTimeout(() => {
+                history.goBack();
+            }, 500)
+        });
     }), {})
     const detailData: any = data;
 
