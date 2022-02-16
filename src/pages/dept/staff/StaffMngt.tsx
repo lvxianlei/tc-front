@@ -95,6 +95,11 @@ export default function StaffMngt(): React.ReactNode {
             dataIndex: 'roleName'
         },
         {
+            title: '状态',
+            width: 200,
+            dataIndex: 'statusName'
+        },
+        {
             key: 'description',
             title: '备注',
             width: 200,
@@ -111,14 +116,14 @@ export default function StaffMngt(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.delete(`/tower-system/employee`, [record.id]).then(res => {
-                                setRefresh(!refresh); 
-                            });
+                            // RequestUtil.delete(`/tower-system/employee`, [record.id]).then(res => {
+                            //     setRefresh(!refresh); 
+                            // });
                         } }
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="link">删除</Button>
+                        <Button type="link">重置密码</Button>
                     </Popconfirm>
                 </Space>
             )
