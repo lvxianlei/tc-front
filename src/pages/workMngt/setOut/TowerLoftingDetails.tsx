@@ -99,6 +99,12 @@ const columns = [
         dataIndex: 'description'
     },
     {
+        key: 'specialCode',
+        title: '特殊件号',
+        width: 200,
+        dataIndex: 'specialCode'
+    },
+    {
         key: 'electricWelding',
         title: '电焊',
         width: 200,

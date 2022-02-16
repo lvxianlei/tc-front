@@ -14,9 +14,10 @@ import styles from './TowerLoftingAssign.module.less';
 interface TryAssembleProps {
     id: string;
     deatil: [];
+    type: string;
 }
 
-export default forwardRef(function TryAssemble({ id, deatil }: TryAssembleProps, ref) {
+export default forwardRef(function TryAssemble({ id, deatil, type }: TryAssembleProps, ref) {
     const [form] = Form.useForm();
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
@@ -26,7 +27,7 @@ export default forwardRef(function TryAssemble({ id, deatil }: TryAssembleProps,
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [id] })
+    }), { refreshDeps: [id, deatil, type] })
 
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
@@ -72,7 +73,7 @@ export default forwardRef(function TryAssemble({ id, deatil }: TryAssembleProps,
                                         pattern: /^[^\s]*$/,
                                         message: '禁止输入空格',
                                     }]}>
-                                        <InputNumber style={{ width: "100%" }} min={0} max={99} placeholder="请输入" />
+                                        <InputNumber style={{ width: "100%" }} min={0} max={99} disabled={type === 'detail'} placeholder="请输入" />
                                     </Form.Item>
                                 </Descriptions.Item>
                             </>
