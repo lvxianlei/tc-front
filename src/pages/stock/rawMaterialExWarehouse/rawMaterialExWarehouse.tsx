@@ -58,17 +58,17 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     },
                     ...baseColumn,
                     {
-                    title: '操作',
-                    dataIndex: 'key',
-                    width: 40,
-                    fixed: 'right' as FixedType,
-                    render: (_: undefined, record: any): React.ReactNode => (
-                        <>
-                            <Link to={`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.weight}`}>明细</Link>
-                        </>
-                    )
-                }
-            ]}
+                        title: '操作',
+                        dataIndex: 'key',
+                        width: 40,
+                        fixed: 'right' as FixedType,
+                        render: (_: undefined, record: any): React.ReactNode => (
+                            <>
+                                <Link to={`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.weight}`}>明细</Link>
+                            </>
+                        )
+                    }
+                ]}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 searchFormItems={[

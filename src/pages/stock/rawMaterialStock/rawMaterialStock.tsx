@@ -87,12 +87,12 @@ export default function RawMaterialStock(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'productName',
+                    name: 'materialName',
                     label: '品名',
                     children: <Input width={100} maxLength={200} placeholder="请输入品名" />
                 },
                 {
-                    name: 'standardId',
+                    name: 'standard',
                     label: '标准',
                     children: <Select style={{ width: "100px" }} defaultValue={""}>
                         <Select.Option value='' key={'aa'}>全部</Select.Option>

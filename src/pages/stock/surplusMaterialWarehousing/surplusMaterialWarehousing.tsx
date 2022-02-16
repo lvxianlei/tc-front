@@ -21,7 +21,7 @@ export default function RawMaterialStock(): React.ReactNode {
     const [dateValue, setDateValue] = useState<any>([]);//时间
     const [dateString, setDateString] = useState<any>([]);//时间字符串格式
     const [keyword, setKeyword] = useState<any>('');//关键字搜索
-    const [status, setStatus] = useState(`${(history.location.state as any)?.receiveStatus || ""}`)//状态
+    const [status, setStatus] = useState(`${(history.location.state as any)?.excessStockStatus || ""}`)//状态
     const [departmentId, setDepartmentId] = useState('');//部门
     const [personnelId, setPersonnelId] = useState('');//人员
     const [Listdata, setListdata] = useState<any[]>([]);//数据列表
@@ -65,10 +65,10 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         }, {
             title: '状态',
-            dataIndex: 'receiveStatus',
+            dataIndex: 'excessStockStatus',
             width: 120,
             render: (text: any, item: any, index: any) => {
-                return <span>{item.receiveStatus == 0 ? '待完成' : '已完成'}</span>
+                return <span>{item.excessStockStatus == 0 ? '待完成' : '已完成'}</span>
             }
         }, {
             title: '最新状态变更时间',
@@ -108,7 +108,7 @@ export default function RawMaterialStock(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     {
-                        record.receiveStatus == 0 ?
+                        record.excessStockStatus == 0 ?
                             <Button type='link' onClick={() => { ReceivingBtn(record) }}>入库</Button> :
                             <Button type='link' onClick={() => { getDetail(record.id) }}>详情</Button>
                     }
@@ -207,7 +207,7 @@ export default function RawMaterialStock(): React.ReactNode {
             updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
             departmentId: departmentId,
             stockUser: personnelId,
-            receiveStatus: status
+            excessStockStatus: status
         });
         setListdata(data.records);
         setTotal(data.total);
@@ -679,7 +679,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
                     departmentId: departmentId,
                     stockUser: personnelId,
-                    receiveStatus: status
+                    excessStockStatus: status
                 }}
                 closeExportList={() => { setIsExportStoreList(false) }}
             />:null}
