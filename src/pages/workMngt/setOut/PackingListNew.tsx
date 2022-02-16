@@ -38,6 +38,7 @@ export default function PackingListNew(): React.ReactNode {
     const [selectedRow, setSelectedRow] = useState<IBundle[]>();
     const [removeRowKeys, setRemoveRowKeys] = useState<string[]>();
     const [removeRow, setRemoveRow] = useState<IBundle[]>();
+    const [selectWeight, setSelectWeight] = useState<number>(0);
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if (!location.state) {
@@ -433,7 +434,8 @@ export default function PackingListNew(): React.ReactNode {
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
         setSelectedRowKeys(selectedRowKeys);
-        setSelectedRow(selectRows)
+        setSelectedRow(selectRows);
+        setSelectWeight(eval((selectRows||[])?.map(item => { return Number(item.structureNum) * Number(item.basicsWeight) }).join('+')) || 0);
     }
 
     const onRemoveSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
@@ -627,6 +629,7 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.title}>
                 <span>待选区</span>
                 <span className={styles.description}>未分配：{stayDistrict.length}</span>
+                <span className={styles.description}>已选择构件总重量：{selectWeight}吨</span>
                 <Button className={styles.fastBtn} type="primary" onClick={addTopack} ghost>添加</Button>
             </p>
             <CommonTable
@@ -699,7 +702,6 @@ export default function PackingListNew(): React.ReactNode {
                 <Col span={4}><span>包属性</span></Col>
                 <Col span={8}>
                     <Select placeholder="请选择包属性" style={{ width: "100%" }} value={packageAttributeName} onChange={(e: string) => packageAttributeChange(e)}>
-                        <Select.Option value="请选择" key="0">请选择</Select.Option>
                         <Select.Option value="通用" key="1">通用</Select.Option>
                         <Select.Option value="专用包" key="2">专用包</Select.Option>
                     </Select>

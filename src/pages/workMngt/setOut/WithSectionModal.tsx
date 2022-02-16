@@ -125,7 +125,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                     <Descriptions title="" bordered size="small" colon={false} column={4}>
                         <Descriptions.Item key={4} label="配段">
                             <Form.Item name="part" rules={[{
-                                pattern: /^[a-zA-Z0-9-,*()]*$/,
+                                pattern: /^[a-zA-Z0-9-,*=()]*$/,
                                 message: '仅可输入英文字母/数字/特殊字符',
                             }]}>
                                 <Input placeholder="请输入" />
