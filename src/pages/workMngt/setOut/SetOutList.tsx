@@ -107,22 +107,17 @@ export default function SetOutList(): React.ReactNode {
                     {
                         record.status === 5 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
                     }
-                    {
-                        record.status === 2 ?
-                            <Button type="link" onClick={async () => {
-                                const result: [] = await RequestUtil.get(`/tower-science/productSegmentAssemble/${record.id}`);
-                                if (result.length > 0) {
-                                    setTryAssembleVisiblee(true);
-                                    setTryAssemble(result)
-                                    setProductCategoryId(record.id);
-                                } else {
-                                    message.warning('不存在试组装段信息')
-                                }
+                    <Button type="link" onClick={async () => {
+                        const result: [] = await RequestUtil.get(`/tower-science/productSegmentAssemble/${record.id}`);
+                        if (result.length > 0) {
+                            setTryAssembleVisiblee(true);
+                            setTryAssemble(result)
+                            setProductCategoryId(record.id);
+                        } else {
+                            message.warning('不存在试组装段信息')
+                        }
 
-                            }}>试装信息</Button>
-                            :
-                            <Button type="link" disabled>试装信息</Button>
-                    }
+                    }}>试装信息</Button>
                 </Space>
             )
         }
@@ -158,14 +153,22 @@ export default function SetOutList(): React.ReactNode {
             visible={tryAssembleVisible}
             width="40%"
             title="试组装信息"
-            onOk={handleModalOk}
+            footer={<Space>
+                <Button key="back" onClick={() => {
+                    editRef.current?.resetFields()
+                    setTryAssembleVisiblee(false);
+                    setRefresh(!refresh);
+                }}>
+                    取消
+                </Button>
+            </Space>}
             className={styles.tryAssemble}
             onCancel={() => {
                 editRef.current?.resetFields()
                 setTryAssembleVisiblee(false);
                 setRefresh(!refresh);
             }}>
-            <TryAssemble id={productCategoryId} deatil={tryAssemble} ref={editRef} />
+            <TryAssemble id={productCategoryId} type="detail" deatil={tryAssemble} ref={editRef} />
         </Modal>
         <Page
             path="/tower-science/loftingList"
