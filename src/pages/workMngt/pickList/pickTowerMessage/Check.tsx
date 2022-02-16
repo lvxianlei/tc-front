@@ -93,7 +93,7 @@ export default function PickCheckList(): React.ReactNode {
             key: 'totalWeight', 
             editable: false,  
             render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</span>
+                <span>{((record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)).toFixed(2)}</span>
             )
         },
         { 
@@ -105,7 +105,10 @@ export default function PickCheckList(): React.ReactNode {
     ];
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
-        if(tip !== 'normal') {
+        if(tip === 'normal'||tip === 'brown'|| tip==='blue') {
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+            setTitle('创建问题单');
+        } else {
             const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/issue/${ record.id }/${col.dataIndex}`);
             if(tip==='red'){ 
                 setTitle('查看问题单') 
@@ -114,10 +117,7 @@ export default function PickCheckList(): React.ReactNode {
                 setTitle('创建问题单');
             }
             setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data,issueRecordList: data.issueRecordList,  });
-            
-        } else {
-            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
-            setTitle('创建问题单');
+           
         }
     }
 
