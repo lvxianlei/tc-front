@@ -665,7 +665,7 @@ export default function PackingListNew(): React.ReactNode {
                 setPackageType('');
             }}
             onOk={() => {
-                if (packageType && balesCode && /^[^\s]*$/.test(balesCode) && /^[0-9a-zA-Z-]*$/.test(balesCode)) {
+                if (packageType && packageAttributeName) {
                     const value = {
                         balesCode: balesCode,
                         id: params.packId,
@@ -683,7 +683,7 @@ export default function PackingListNew(): React.ReactNode {
                         history.goBack();
                     })
                 } else {
-                    message.warning('请输入捆号或包类型');
+                    message.warning('请选择包属性或包类型');
                 }
             }}>
             <Row>
