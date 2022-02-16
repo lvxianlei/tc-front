@@ -249,6 +249,10 @@ export default function TaskNew(props:any){
         try {
             console.log(printData)
             const saveData = await form.validateFields();
+            if(saveData?.pageNumber===0){
+                message.error('数量为0，不可保存并提交！')
+                return 
+            }
             saveData.id = printData.id;
             saveData.drawLeaderDepartment= Array.isArray(saveData.drawLeaderDepartment)?saveData.drawLeaderDepartment[0]:saveData.drawLeaderDepartment;
             saveData.productCategoryId = printData?.productCategoryId;
@@ -298,8 +302,12 @@ export default function TaskNew(props:any){
                 printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:'',
                 printSpecialProcess: saveData?.printSpecialProcess?.join(',')
             })
+            const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${printData?.productCategoryId}/${saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:''}/${saveData?.printSpecialProcess?.join(',')}`);
+            form.setFieldsValue({
+                pageNumber: data?.length
+            })
             setPrintVisible(false);
-        
+            
         } catch (error) {
             console.log(error)
         }
