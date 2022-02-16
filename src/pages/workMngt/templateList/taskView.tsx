@@ -251,9 +251,9 @@ export default function TaskView(props: any){
             dataIndex: 'currentStatus',
             render: (currentStatus: number): React.ReactNode => {
                 switch (currentStatus) {
-                    case 3:
+                    case 1:
                         return '待完成';
-                    case 4:
+                    case 2:
                         return '已完成';
                 }
             }
@@ -356,7 +356,7 @@ export default function TaskView(props: any){
                         {specialData?.printSpecifications!== null ?specialData?.printSpecifications+','+specialData?.printSpecialProcess:specialData?.printSpecialProcess}
                     </Descriptions.Item>
                     <Descriptions.Item label="数量">
-                        {specialData?.pageNumber}
+                        {specialData?.structureNumber}
                     </Descriptions.Item>
                     <Descriptions.Item label="钢板明细">
                         <Button type='link' onClick={async ()=>{
@@ -372,9 +372,9 @@ export default function TaskView(props: any){
                         {specialData?.description}
                     </Descriptions.Item>
                 </Descriptions>
-                <Attachment  dataSource={specialData?.templateFiles}/>
+                <Attachment  dataSource={specialData?.fileVos}/>
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns}  pagination={false} />
+                <CommonTable columns={tableColumns}  pagination={false}  dataSource={specialData?.statusRecordList}/>
             </Modal>
             <Button type='link' onClick={async ()=>{
                 setVisible(true)
