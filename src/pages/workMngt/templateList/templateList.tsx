@@ -76,7 +76,7 @@ export default function TemplateList() {
                     <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/detail/${record.id}/${record.productCategoryId}`)}}>查看</Button>
                     :<>
                     
-                    <TaskView record={record}/>
+                    <TaskView record={record} freshF= {setRefresh} fresh={refresh}/>
                     {record.uploadStatusName === '待完成' &&<Popconfirm
                         title="确认完成?"
                         onConfirm={() => {
@@ -89,7 +89,7 @@ export default function TemplateList() {
                     >
                         <Button type="link" >完成</Button>
                     </Popconfirm>}
-                    {record.uploadStatusName === '待完成' &&<TaskEdit record={record}/>}
+                    {record.uploadStatusName === '待完成' &&<TaskEdit record={record} freshF= {setRefresh} fresh={refresh}/>}
                     {record.uploadStatusName === '待完成' &&<Popconfirm
                         title="确认删除?"
                         onConfirm={() => {

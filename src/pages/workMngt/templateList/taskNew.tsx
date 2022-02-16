@@ -243,7 +243,7 @@ export default function TaskNew(props:any){
     const handleModalOk = async () => {
         try {
             const saveData = await form.validateFields();
-            if(saveData?.pageNumber===0){
+            if(saveData?.structureNumber===0||saveData?.structureNumber==='0'){
                 message.error('数量为0，不可保存并提交！')
                 return 
             }
@@ -253,13 +253,20 @@ export default function TaskNew(props:any){
             saveData.type = 3;
             saveData.printSpecifications= printData?.printSpecifications;
             saveData.printSpecialProcess = printData?.printSpecialProcess;
-            saveData.templateFiles = attachRef.current?.getDataSource();
+            console.log(attachRef.current?.getDataSource())
+            saveData.templateFiles = attachRef.current?.getDataSource().map((item:any)=>{
+                return {
+                    productCategoryId: printData?.productCategoryId,
+                    name: item.originalName,
+                    fileId:item.id,
+                }
+                
+            });
             await RequestUtil.post('/tower-science/loftingTemplate', saveData).then(()=>{
                 setVisible(false);
                 form.resetFields();
                 formRef.resetFields();
                 props?.freshF(!props?.fresh)
-            }).then(()=>{
             })
         
         } catch (error) {
@@ -298,7 +305,7 @@ export default function TaskNew(props:any){
             })
             const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${printData?.productCategoryId}/${saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:''}/${saveData?.printSpecialProcess?.join(',')}`);
             form.setFieldsValue({
-                pageNumber: data?.length
+                structureNumber: data?.length
             })
             setPrintVisible(false);
         
@@ -484,7 +491,7 @@ export default function TaskNew(props:any){
                                     const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${formValue[0]?.productCategoryId}/${printData?.printSpecifications}/${printData?.printSpecialProcess}`);
                                     form.setFieldsValue({
                                         ...formValue[0],
-                                        pageNumber: data?.length
+                                        structureNumber: data?.length
                                     })
                                     setRead(true)
                                 }}>
@@ -525,7 +532,7 @@ export default function TaskNew(props:any){
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="pageNumber" label="数量" rules={[{required: true,message:'请输入数量'}]}>
+                                    <Form.Item name="structureNumber" label="数量" rules={[{required: true,message:'请输入数量'}]}>
                                         <InputNumber min={1} max={9999} precision={0} style={{width:'100%'}}/>
                                     </Form.Item>
                                 </Col>
@@ -572,7 +579,7 @@ export default function TaskNew(props:any){
                     </Row>
                 </Form>
                 
-                <Attachment ref={attachRef} edit/>
+                <Attachment ref={attachRef} edit />
             </Modal>
             <Modal
                 title='样板打印条件'  
