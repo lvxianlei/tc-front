@@ -98,7 +98,7 @@ export default function PickTowerDetail(): React.ReactNode {
             <DetailContent operation={[
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
-                <Button type='primary' onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
+                <Button type='primary' onClick={()=>{setIsExportStoreList(true)}} style={{marginBottom:'12px'}}>导出</Button>
                 {isExport?<ExportList
                     history={history}
                     location={location}

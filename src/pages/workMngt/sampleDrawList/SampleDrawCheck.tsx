@@ -246,7 +246,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                             <Button type="primary">完成校核</Button>
                         </Popconfirm>
                         <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                        <span>小样图数：{headerName?.uploadSmallSampleCount&&headerName?.uploadSmallSampleCount!==-1?headerName?.uploadSmallSampleCount:0}/{(headerName?.uploadSmallSampleCount&&headerName?.uploadSmallSampleCount!==0?headerName?.uploadSmallSampleCount:0)+(headerName?.noSmallSampleCount&&headerName?.noSmallSampleCount!==-1?headerName?.noSmallSampleCount:0)}</span>
+                        <span>小样图数：<span style={{color:'#FF8C00'}}>{headerName?.uploadSmallSampleCount&&headerName?.uploadSmallSampleCount!==-1?headerName?.uploadSmallSampleCount:0}/{(headerName?.uploadSmallSampleCount&&headerName?.uploadSmallSampleCount!==0?headerName?.uploadSmallSampleCount:0)+(headerName?.noSmallSampleCount&&headerName?.noSmallSampleCount!==-1?headerName?.noSmallSampleCount:0)}</span></span>
                     </Space>
                 }
                 tableProps={{
