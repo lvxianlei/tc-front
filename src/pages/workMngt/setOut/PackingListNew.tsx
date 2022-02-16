@@ -493,7 +493,7 @@ export default function PackingListNew(): React.ReactNode {
         removeRow?.forEach(async (value: IBundle, index: number) => {
             packagingData.splice(index, 1)
             if (value.id) {
-                const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${value}`);
+                const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
                 const find: number = stayDistrict.findIndex((res: IPackingList) => {
                     return res.topId === newValue.topId
                 })
