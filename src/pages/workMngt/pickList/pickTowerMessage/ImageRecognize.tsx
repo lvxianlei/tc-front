@@ -32,11 +32,11 @@ export default function PickTowerDetail(): React.ReactNode {
         }
     };
     const columns = [
-        { title: '段组号', dataIndex: 'segmentGroupName', key: 'segmentGroupName', render:(_: any, record: Record<string, any>, index: number): React.ReactNode =>(
-            <Form.Item name={['data',index, "segmentGroupName"]} initialValue={ _ }>
-                <Input disabled />
-            </Form.Item>
-        )},
+        // { title: '段组号', dataIndex: 'segmentGroupName', key: 'segmentGroupName', render:(_: any, record: Record<string, any>, index: number): React.ReactNode =>(
+        //     <Form.Item name={['data',index, "segmentGroupName"]} initialValue={ _ }>
+        //         <Input disabled />
+        //     </Form.Item>
+        // )},
         { title: '段号', dataIndex: 'segmentName', key: 'segmentName',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             <Form.Item name={['data',index, "segmentName"]}>
                 <Input size="small" className={ checkColor(record, 'segmentName') === 'red' ? styles.red : checkColor(record, 'segmentName') === 'green' ? styles.green : checkColor(record, 'segmentName') === 'yellow' ? styles.yellow :  checkColor(record, 'segmentName') === 'blue' ? styles.blue: checkColor(record, 'segmentName') === 'brown' ? styles.brown:'' }/>
