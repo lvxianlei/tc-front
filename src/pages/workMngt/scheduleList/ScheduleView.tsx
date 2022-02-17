@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect } from 'antd'
+import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { CommonTable, DetailTitle, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -71,6 +71,7 @@ export default function ScheduleView(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [load, setLoad] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
     const history = useHistory();
@@ -217,6 +218,9 @@ export default function ScheduleView(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={async ()=>{
+                        
+                        setVisible(true);
+                        setLoad(true)
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
                         setScheduleData(resData);
                         if(resData.materialLeaderDepartment){
@@ -305,9 +309,12 @@ export default function ScheduleView(): React.ReactNode {
                             boltDrawDeliverTime:resData.boltDrawDeliverTime? moment(resData.boltDrawDeliverTime):'',
                             weldingDrawDeliverTime:resData.weldingDrawDeliverTime? moment(resData.weldingDrawDeliverTime):'',
                         });
-                        setVisible(true);
-                    }} disabled={params.status!=='2'||record.materialLeaderName}>指派</Button>
+                        setLoad(false)
+                    }} >指派</Button>
                     <Button type='link' onClick={async ()=>{
+                        setEdit(true);
+                        setVisible(true);
+                        setLoad(true)
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
                         setScheduleData(resData);
                         if(resData.materialLeaderDepartment){
@@ -396,8 +403,8 @@ export default function ScheduleView(): React.ReactNode {
                             boltDrawDeliverTime:resData.boltDrawDeliverTime? moment(resData.boltDrawDeliverTime):'',
                             weldingDrawDeliverTime:resData.weldingDrawDeliverTime? moment(resData.weldingDrawDeliverTime):'',
                         });
-                        setVisible(true);
-                        setEdit(true);
+                        
+                        setLoad(false)
                     }} disabled={!record.materialLeaderName}>详情</Button>
                 </Space>
             )
@@ -475,6 +482,7 @@ export default function ScheduleView(): React.ReactNode {
                     </>
                 }
             >
+                <Spin spinning={load}>
                 <Form form={form} {...formItemLayout} initialValues={scheduleData||{}}>
                     <Row>
                         <Col span={12}>
@@ -504,6 +512,7 @@ export default function ScheduleView(): React.ReactNode {
                                 <Col span={15}>
                                     <Form.Item name="assignName" label="指派方案"> 
                                         <Select disabled={edit} onChange={async (value)=>{
+                                            setLoad(true)
                                             const resData: any = await RequestUtil.get(`/tower-science/assignPlan/planDetailById/${value}`)
                                             resData.name = form.getFieldsValue().name
                                             setScheduleData({
@@ -572,6 +581,7 @@ export default function ScheduleView(): React.ReactNode {
                                                 smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
                                                 smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
                                             });
+                                            setLoad(false)
                                         }}>
                                             { planData && planData.map((item:any)=>{
                                                 return <Select.Option key={item.id} value={item.id}>{item.assignName}</Select.Option>
@@ -854,6 +864,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                     </Row>
                 </Form>
+                </Spin>
                 {edit&&<>
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={scheduleData?.assignLogList} pagination={ false } />

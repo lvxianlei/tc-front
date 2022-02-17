@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Table, Popconfirm } from 'antd'
+import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Table, Popconfirm, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { CommonTable, DetailTitle, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -17,6 +17,7 @@ import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 export default function SchedulePlan(props: any){
     const [visible, setVisible] = useState<boolean>(false);
     const [tableVisible, setTableVisible] = useState<boolean>(false);
+    const [load, setLoad] = useState<boolean>(false);
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
     const history = useHistory();
     const [form] = Form.useForm();
@@ -130,6 +131,7 @@ export default function SchedulePlan(props: any){
                     </>
                 }
             >
+                <Spin spinning={load}>
                 <Form form={form} {...formItemLayout} >
                     <Row>
                         <Col span={24}>
@@ -313,6 +315,7 @@ export default function SchedulePlan(props: any){
                         </Col>
                     </Row>
                 </Form>
+                </Spin>
             </Modal>
             <Modal
                 title='指派方案'  
@@ -352,6 +355,7 @@ export default function SchedulePlan(props: any){
                             render: (_: undefined, record: any): React.ReactNode => (
                                 <Space direction="horizontal" size="small">
                                     <Button type='link' onClick={async ()=>{
+                                            setLoad(true)
                                             const resData: any = await RequestUtil.get(`/tower-science/assignPlan/planDetailById/${record.id}`)
                                             setScheduleData(resData);
                                             if(resData.materialLeaderDepartment){
@@ -400,6 +404,7 @@ export default function SchedulePlan(props: any){
                                                 smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
                                                 smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
                                             });
+                                            setLoad(false)
                                             setVisible(true);
                                     }}>编辑</Button>
                                     <Popconfirm
