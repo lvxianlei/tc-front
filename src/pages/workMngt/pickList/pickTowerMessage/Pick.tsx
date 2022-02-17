@@ -596,22 +596,22 @@ export default function Lofting(): React.ReactNode {
                     )},
                     { title: '构件编号', dataIndex: 'code', key: 'code',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name={['dataV',index, "code"]} initialValue={ _ } rules={[{required:true, message:'请填写构件编号'}]}>
-                            <Input size="small"/>
+                            <Input size="small" maxLength={10}/>
                         </Form.Item>
                     ) },
                     { title: '材料名称', dataIndex: 'materialName', key: 'materialName',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name={['dataV',index, "materialName"]} initialValue={ _ } rules={[{required:true, message:'请输入材料名称'}]}>
-                            <Input size="small" />
+                            <Input size="small" maxLength={10}/>
                         </Form.Item>
                     ) },
                     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name={['dataV',index, "structureTexture"]} initialValue={ _ } rules={[{required:true, message:'请输入材质'}]}>
-                            <Input size="small" />
+                            <Input size="small" maxLength={10}/>
                         </Form.Item>
                     ) },
                     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name={['dataV',index, "structureSpec"]} initialValue={ _ } rules={[{required:true, message:'请输入规格'}]}>
-                            <Input size="small" />
+                            <Input size="small" maxLength={10}/>
                         </Form.Item>
                     ) },
                     { title: '长度（mm）', dataIndex: 'length', key: 'length',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -636,7 +636,7 @@ export default function Lofting(): React.ReactNode {
                     ) },
                     { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name={['dataV',index, "basicsWeight"]} initialValue={ _ } rules={[{required:true, message:'请输入单件重量'}]}>
-                            <InputNumber size="small" precision={2} max={9999.99} onChange={(e:any)=>{
+                            <InputNumber size="small" min={0} precision={2} max={9999.99} onChange={(e:any)=>{
                                 const data = form.getFieldsValue(true).dataV;
                                 if (data[index].basicsPartNum) {
                                     data[index] = {
@@ -651,7 +651,7 @@ export default function Lofting(): React.ReactNode {
                     ) },
                     { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name={['dataV',index, "totalWeight"]}>
-                            <InputNumber size="small" precision={2} max={9999.99} disabled/>
+                            <InputNumber size="small" min={0} precision={2} max={9999.99} disabled/>
                         </Form.Item>
                     ) },
                     { title: '备注', dataIndex: 'description', key: 'description',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (

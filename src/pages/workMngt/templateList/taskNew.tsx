@@ -266,6 +266,7 @@ export default function TaskNew(props:any){
                 setVisible(false);
                 form.resetFields();
                 formRef.resetFields();
+                setSteelData([])
                 props?.freshF(!props?.fresh)
             })
         
@@ -314,7 +315,7 @@ export default function TaskNew(props:any){
         }
     }
 
-    const handleModalCancel = () => {setVisible(false); form.resetFields(); formRef.resetFields()};
+    const handleModalCancel = () => {setVisible(false); form.resetFields(); formRef.resetFields();setSteelData([])};
     const handlePrintModalCancel = () => {
         setPrintVisible(false); 
         const type:any = form.getFieldValue('print');
