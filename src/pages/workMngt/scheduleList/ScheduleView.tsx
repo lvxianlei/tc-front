@@ -411,7 +411,7 @@ export default function ScheduleView(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false); form.resetFields();setEdit(false);};
+    const handleModalCancel = () => {setVisible(false);setEdit(false);};
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
         const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         switch (title) {
@@ -594,10 +594,10 @@ export default function ScheduleView(): React.ReactNode {
                         <Col span={12}>
                             <Form.Item name="priority" label="优先级" rules={[{required: true,message:'请选择优先级'}]} > 
                                 <Select disabled={edit}>
-                                    <Select.Option value={0} key={0}>紧急</Select.Option>
-                                    <Select.Option value={1} key={1}>高</Select.Option>
-                                    <Select.Option value={2} key={2}>中</Select.Option>
-                                    <Select.Option value={3} key={3}>低</Select.Option>
+                                    <Select.Option value={1} key={1}>紧急</Select.Option>
+                                    <Select.Option value={2} key={2}>高</Select.Option>
+                                    <Select.Option value={3} key={3}>中</Select.Option>
+                                    <Select.Option value={4} key={4}>低</Select.Option>
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -900,10 +900,10 @@ export default function ScheduleView(): React.ReactNode {
                         label:'优先级',
                         children:   <Select style={{width:"100px"}}>
                                         <Select.Option value={''} key ={''}>全部</Select.Option>
-                                        <Select.Option value='0' key='0'>紧急</Select.Option>
-                                        <Select.Option value='1' key='1'>高</Select.Option>
-                                        <Select.Option value='2' key='2'>中</Select.Option>
-                                        <Select.Option value='3' key='3'>低</Select.Option>
+                                        <Select.Option value='1' key='1'>紧急</Select.Option>
+                                        <Select.Option value='2' key='2'>高</Select.Option>
+                                        <Select.Option value='3' key='3'>中</Select.Option>
+                                        <Select.Option value='4' key='4'>低</Select.Option>
                                     </Select>
                     },
                     {
