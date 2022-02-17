@@ -105,6 +105,23 @@ export default function TaskView(props: any){
             title: '小计重量（kg）',
             width: 200,
             dataIndex: 'totalWeight'
+        },{
+            key: 'totalWeight',
+            title: '总计重量（kg）',
+            width: 200,
+            dataIndex: 'totalWeight'
+        },
+        {
+            key: 'holesNum',
+            title: '单件孔数',
+            width: 200,
+            dataIndex: 'holesNum'
+        },
+        {
+            key: 'ncName',
+            title: 'NC程序名称',
+            width: 200,
+            dataIndex: 'ncName'
         },
         {
             key: 'description',
@@ -359,8 +376,12 @@ export default function TaskView(props: any){
                         {specialData?.structureNumber}
                     </Descriptions.Item>
                     <Descriptions.Item label="钢板明细">
-                        <Button type='link' onClick={async ()=>{
-                            const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${specialData?.productCategoryId}/${specialData?.printSpecifications}/${specialData?.printSpecialProcess}`);
+                        <Button type='link' onClick={async ()=>{const data: any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                productCategoryId: specialData?.productCategoryId,
+                                printSpecifications: specialData?.printSpecifications,
+                                printSpecialProcess: specialData?.printSpecialProcess,
+                                productType: specialData?.productType
+                            });
                             setSteelData(data)
                             setSteelVisible(true)
                         }}>查看</Button>
@@ -372,7 +393,7 @@ export default function TaskView(props: any){
                         {specialData?.description}
                     </Descriptions.Item>
                 </Descriptions>
-                <Attachment  dataSource={specialData?.fileVos}/>
+                <Attachment  dataSource={specialData?.fileVOList}/>
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns}  pagination={false}  dataSource={specialData?.statusRecordList}/>
             </Modal>

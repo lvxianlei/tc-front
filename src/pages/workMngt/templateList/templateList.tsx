@@ -54,7 +54,7 @@ export default function TemplateList() {
         },
         {
             title: '页数/数量',
-            dataIndex: 'pageNumber',
+            dataIndex: 'structureNumber',
         },
         {
             title: '完成状态',
@@ -140,7 +140,7 @@ export default function TemplateList() {
                 searchFormItems={[
                     {
                         name: 'drawType',
-                        label: '图纸类型',
+                        label: '工作类型',
                         children: (
                             <Select style={{ width: 200 }} placeholder="请选择">
                                 <Select.Option value="">全部</Select.Option>
@@ -156,8 +156,8 @@ export default function TemplateList() {
                         children: (<Form.Item name="status" initialValue={location.state?.state || ""}>
                             <Select style={{ width: 200 }} placeholder="请选择">
                                 <Select.Option value="">全部</Select.Option>
-                                <Select.Option value={1}>待上传</Select.Option>
-                                <Select.Option value={2}>已上传</Select.Option>
+                                <Select.Option value={1}>待完成</Select.Option>
+                                <Select.Option value={2}>已完成</Select.Option>
                             </Select>
                         </Form.Item>
                         )

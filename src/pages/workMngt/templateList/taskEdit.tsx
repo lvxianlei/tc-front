@@ -122,6 +122,23 @@ export default function TaskNew(props:any){
             title: '小计重量（kg）',
             width: 200,
             dataIndex: 'totalWeight'
+        },{
+            key: 'totalWeight',
+            title: '总计重量（kg）',
+            width: 200,
+            dataIndex: 'totalWeight'
+        },
+        {
+            key: 'holesNum',
+            title: '单件孔数',
+            width: 200,
+            dataIndex: 'holesNum'
+        },
+        {
+            key: 'ncName',
+            title: 'NC程序名称',
+            width: 200,
+            dataIndex: 'ncName'
         },
         {
             key: 'description',
@@ -308,10 +325,15 @@ export default function TaskNew(props:any){
             }
             setPrintData({
                 ...printData,
-                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:'',
+                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
                 printSpecialProcess: saveData?.printSpecialProcess?.join(',')
             })
-            const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${printData?.productCategoryId}/${saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:''}/${saveData?.printSpecialProcess?.join(',')}`);
+            const data: any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                productCategoryId: printData?.productCategoryId,
+                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
+                printSpecialProcess: saveData?.printSpecialProcess?.join(','),
+                productType: printData?.productType
+            });
             form.setFieldsValue({
                 structureNumber: data?.length
             })
@@ -542,7 +564,12 @@ export default function TaskNew(props:any){
                         <Col span={11}>
                             <Form.Item name="detail" label="钢板明细" >
                                 <Button type='link' onClick={async ()=>{
-                                    const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${printData?.productCategoryId}/${printData?.printSpecifications}/${printData?.printSpecialProcess}`);
+                                    const data: any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                        productCategoryId: printData?.productCategoryId,
+                                        printSpecifications: printData?.printSpecifications,
+                                        printSpecialProcess: printData?.printSpecialProcess,
+                                        productType: printData?.productType
+                                    });
                                     setSteelData(data)
                                     setSteelVisible(true)
                                 }} disabled={!read}>查看</Button>
@@ -580,7 +607,7 @@ export default function TaskNew(props:any){
                     </Row>
                 </Form>
                 
-                <Attachment ref={attachRef} edit dataSource={printData.fileVos}/>
+                <Attachment ref={attachRef} edit dataSource={printData.fileVOList}/>
             </Modal>
             <Modal
                 title='样板打印条件'  

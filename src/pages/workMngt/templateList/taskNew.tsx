@@ -13,6 +13,7 @@ import styles from './template.module.less';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { SelectValue } from 'antd/lib/select';
 import { idText } from 'typescript';
+import { FileProps } from '../../common/Attachment';
 
 
 
@@ -34,7 +35,7 @@ export default function TaskNew(props:any){
     const [printData, setPrintData] = useState<any|undefined>({});
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
     const [steelData, setSteelData] = useState<any|undefined>([]);
-
+    const [fileData, setFileData] = useState<any|undefined>([]);
     const unique = (arr:any, key: any) => {
         let result:any = {};
         for (let item of arr) {
@@ -123,6 +124,24 @@ export default function TaskNew(props:any){
             title: '小计重量（kg）',
             width: 200,
             dataIndex: 'totalWeight'
+        },
+        {
+            key: 'totalWeight',
+            title: '总计重量（kg）',
+            width: 200,
+            dataIndex: 'totalWeight'
+        },
+        {
+            key: 'holesNum',
+            title: '单件孔数',
+            width: 200,
+            dataIndex: 'holesNum'
+        },
+        {
+            key: 'ncName',
+            title: 'NC程序名称',
+            width: 200,
+            dataIndex: 'ncName'
         },
         {
             key: 'description',
@@ -253,7 +272,6 @@ export default function TaskNew(props:any){
             saveData.type = 3;
             saveData.printSpecifications= printData?.printSpecifications;
             saveData.printSpecialProcess = printData?.printSpecialProcess;
-            console.log(attachRef.current?.getDataSource())
             saveData.templateFiles = attachRef.current?.getDataSource().map((item:any)=>{
                 return {
                     productCategoryId: printData?.productCategoryId,
@@ -266,6 +284,8 @@ export default function TaskNew(props:any){
                 setVisible(false);
                 form.resetFields();
                 formRef.resetFields();
+                setSteelData([])
+                setFileData([])
                 props?.freshF(!props?.fresh)
             })
         
@@ -314,7 +334,7 @@ export default function TaskNew(props:any){
         }
     }
 
-    const handleModalCancel = () => {setVisible(false); form.resetFields(); formRef.resetFields()};
+    const handleModalCancel = () => {setVisible(false); form.resetFields(); formRef.resetFields();setSteelData([]);setFileData([])};
     const handlePrintModalCancel = () => {
         setPrintVisible(false); 
         const type:any = form.getFieldValue('print');
@@ -435,26 +455,41 @@ export default function TaskNew(props:any){
                                         setMaterialUser(drawLeaderDepartment.records);
                                         
                                     }
+                                    let data: any = [];
                                     const type:any =  formValue[0]?.productType;
+                                    if(formValue[0]?.printSpecifications!==null||formValue[0]?.printSpecifications!==null){
+                                        data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                            productCategoryId: formValue[0]?.productCategoryId,
+                                            printSpecifications: formValue[0]?.printSpecifications,
+                                            printSpecialProcess: formValue[0]?.printSpecialProcess,
+                                            productType: formValue[0]?.productType
+                                        });
+                                    }
                                     if(type === '四管塔' || type === '架构塔'){
-                                        setRadioValue('自定义')
+                                        setRadioValue('全部')
                                         setPrintData({
                                             ...printData,
                                             productCategoryId: value,
                                             printSpecifications: '全部'
                                         })
                                         form.setFieldsValue({
+                                            ...formValue[0],
                                             print: '全部'
                                         })
                                         formRef.setFieldsValue({
                                             print:{
                                                 printSpecifications: '全部'
                                             } 
-                                        })  
+                                        })
+                                        data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                            productCategoryId: formValue[0]?.productCategoryId,
+                                            productType: formValue[0]?.productType
+                                        });  
                                     }
                                     if(type === '钢管塔'){
                                         setRadioValue('自定义')
                                         form.setFieldsValue({
+                                            ...formValue[0],
                                             print: '1-12'
                                         })
                                         setPrintData({
@@ -468,10 +503,16 @@ export default function TaskNew(props:any){
                                                 before: 1,
                                                 after: 12
                                             } 
-                                        })    
+                                        })
+                                        data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                            productCategoryId: formValue[0]?.productCategoryId,
+                                            printSpecifications: '1-12',
+                                            productType: formValue[0]?.productType
+                                        });    
                                     }
                                     if(type === '角钢塔'){
                                         form.setFieldsValue({
+                                            ...formValue[0],
                                             print: '火曲,钻孔,铆焊'
                                         })
                                         setPrintData({
@@ -481,14 +522,18 @@ export default function TaskNew(props:any){
                                         })
                                         formRef.setFieldsValue({
                                             printSpecialProcess:['火曲','钻孔','铆焊']
-                                        })   
+                                        })
+                                        data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                            productCategoryId: formValue[0]?.productCategoryId,
+                                            printSpecialProcess: '火曲,钻孔,铆焊',
+                                            productType: formValue[0]?.productType
+                                        });   
                                     }else{
                                         setPrintData({
                                             ...printData,
                                             productCategoryId: value,
                                         })
                                     }
-                                    const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${formValue[0]?.productCategoryId}/${printData?.printSpecifications}/${printData?.printSpecialProcess}`);
                                     form.setFieldsValue({
                                         ...formValue[0],
                                         structureNumber: data?.length
@@ -541,7 +586,12 @@ export default function TaskNew(props:any){
                         <Col span={11}>
                             <Form.Item name="detail" label="钢板明细" >
                                 <Button type='link' onClick={async ()=>{
-                                    const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${printData?.productCategoryId}/${printData?.printSpecifications}/${printData?.printSpecialProcess}`);
+                                    const data: any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                        productCategoryId: printData?.productCategoryId,
+                                        printSpecifications: printData?.printSpecifications,
+                                        printSpecialProcess: printData?.printSpecialProcess,
+                                        productType: printData?.productType
+                                    });
                                     setSteelData(data)
                                     setSteelVisible(true)
                                 }} disabled={!read}>查看</Button>
@@ -579,7 +629,11 @@ export default function TaskNew(props:any){
                     </Row>
                 </Form>
                 
-                <Attachment ref={attachRef} edit />
+                <Attachment ref={attachRef} edit onDoneChange={
+                    (attachs: FileProps[]) => {
+                        setFileData([...fileData, ...attachs]);
+                    }
+                } dataSource={fileData}/>
             </Modal>
             <Modal
                 title='样板打印条件'  
@@ -626,16 +680,16 @@ export default function TaskNew(props:any){
                             </Input.Group>
                         </Form.Item>
                         <Form.Item name="printSpecialProcess" label="特殊工艺">
-                        <Select
-                            mode="multiple"
-                            style={{ width: '100%' }}
-                        >
-                            {specialData && specialData.map(({ name}: any, index: string | number | undefined) => {
-                                return <Select.Option key={index} value={name}>
-                                    {name}
-                                </Select.Option>
-                            })}
-                        </Select>
+                            <Select
+                                mode="multiple"
+                                style={{ width: '100%' }}
+                            >
+                                {specialData && specialData.map(({ name}: any, index: string | number | undefined) => {
+                                    return <Select.Option key={index} value={name}>
+                                        {name}
+                                    </Select.Option>
+                                })}
+                            </Select>
                         </Form.Item>
                     
                 </Form>
