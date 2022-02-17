@@ -2,8 +2,7 @@ import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
-import { paymentList, paymentdetail } from "./payment.json"
-import { auditIdRecord } from "../../approval-mngt/approval.json"
+import { paymentList, paymentdetail, auditIdRecord } from "./payment.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 

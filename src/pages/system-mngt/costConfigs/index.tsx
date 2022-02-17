@@ -49,18 +49,22 @@ export default function CostConfig(): JSX.Element {
         }
     }
 
-    return <DetailContent title={[<DetailTitle key="title" title="成本评估配置" />]}>
-        <Row><Button type="primary" onClick={() => history.push(`/sys/costconfig/edit/new`)}>新增</Button></Row>
-        <CommonTable loading={loading} columns={[{
-            title: "操作",
-            dataIndex: "opration",
-            width: 150,
-            render: (_, record: any) => <>
-                <Button type="link" onClick={() => history.push(`/sys/costconfig/detail/${record.productName}`)}>查看</Button>
-                <Popconfirm onConfirm={() => handleDelete(record.id)} title="确定要删除？">
-                    <Button type="link">删除</Button>
-                </Popconfirm>
-            </>
-        }, ...columns]} dataSource={(data as any) || []} />
+    return <DetailContent>
+        <Row style={{ marginBottom: 12 }}><Button type="primary" onClick={() => history.push(`/sys/costconfig/edit/new`)}>新增</Button></Row>
+        <CommonTable haveIndex loading={loading} columns={[
+            ...columns,
+            {
+                title: "操作",
+                dataIndex: "opration",
+                fixed: "right",
+                width: 150,
+                render: (_, record: any) => <>
+                    <Button className="btn-operation-link" type="link" onClick={() => history.push(`/sys/costconfig/detail/${record.productName}`)}>查看</Button>
+                    <Popconfirm onConfirm={() => handleDelete(record.id)} title="确定要删除？">
+                        <Button type="link">删除</Button>
+                    </Popconfirm>
+                </>
+            }]}
+            dataSource={(data as any) || []} />
     </DetailContent >
 }
