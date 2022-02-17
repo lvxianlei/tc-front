@@ -54,7 +54,7 @@ export default function TemplateList() {
         },
         {
             title: '页数/数量',
-            dataIndex: 'pageNumber',
+            dataIndex: 'structureNumber',
         },
         {
             title: '完成状态',
