@@ -124,6 +124,12 @@ export default function TaskView(props: any){
             dataIndex: 'ncName'
         },
         {
+            key: 'specialCode',
+            title: '特殊件号',
+            width: 200,
+            dataIndex: 'specialCode'
+        },
+        {
             key: 'description',
             title: '备注',
             width: 200,
