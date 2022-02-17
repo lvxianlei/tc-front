@@ -607,7 +607,7 @@ export default function TaskNew(props:any){
                     </Row>
                 </Form>
                 
-                <Attachment ref={attachRef} edit dataSource={printData.fileVos}/>
+                <Attachment ref={attachRef} edit dataSource={printData.fileVOList}/>
             </Modal>
             <Modal
                 title='样板打印条件'  
