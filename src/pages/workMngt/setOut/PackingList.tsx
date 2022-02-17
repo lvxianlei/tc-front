@@ -32,16 +32,16 @@ export default function PackingList(): React.ReactNode {
             dataIndex: 'balesCode'
         },
         {
-            key: 'packageType',
+            key: 'packageTypeName',
             title: '包类型',
             width: 150,
-            dataIndex: 'packageType'
+            dataIndex: 'packageTypeName'
         },
         {
-            key: 'packageType',
+            key: 'packageAttributeName',
             title: '包属性',
             width: 150,
-            dataIndex: 'packageType'
+            dataIndex: 'packageAttributeName'
         },
         {
             key: 'balesCount',
