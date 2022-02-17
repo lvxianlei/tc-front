@@ -154,7 +154,7 @@ export default function PoleInformation(): React.ReactNode {
     const [refresh, setRefresh] = useState(false);
 
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        const data = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         resole(data);
     }), {})
     const departmentData: any = data || [];
@@ -179,15 +179,15 @@ export default function PoleInformation(): React.ReactNode {
 
     const renderTreeNodes = (data: any) => data.map((item: any) => {
         if (item.children) {
-            return (<TreeNode key={item.id} title={item.title} value={item.id} className={styles.node} >
+            return (<TreeNode key={item.id} title={item.name} value={item.id} className={styles.node} >
                 {renderTreeNodes(item.children)}
             </TreeNode>);
         }
-        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+        return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
     });
 
     const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         switch (title) {
             case "materialUser":
                 return setMaterialUser(userData.records);
@@ -286,7 +286,7 @@ export default function PoleInformation(): React.ReactNode {
                             <Form.Item name="materialUser">
                                 <Select placeholder="请选择" style={{ width: "150px" }}>
                                     {materialUser && materialUser.map((item: any) => {
-                                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                     })}
                                 </Select>
                             </Form.Item>
