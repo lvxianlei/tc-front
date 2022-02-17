@@ -403,8 +403,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         message: '请选择交付时间'
                                     }]}>
                                     <DatePicker format={'YYYY-MM-DD HH:mm:ss'} disabledDate={(current)=> {
-                                            return current && current < moment(this.state.time);
-                                        }}/>
+                                        return current && current < moment(this.state.time);
+                                    }} showTime/>
                                 </Form.Item>
                             </Descriptions.Item></>
                             }
