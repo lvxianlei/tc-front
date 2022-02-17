@@ -31,6 +31,7 @@ export interface TowerLoftingAssignState {
     readonly user?: any[];
     readonly checkUser?: any[];
     readonly departmentData?: SelectDataNode[];
+    time: any;
 }
 
 interface IAppointed {
@@ -71,6 +72,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         user: [],
         checkUser: [],
         departmentData: [],
+        time: '',
     }
 
     private modalCancel(): void {
@@ -86,7 +88,8 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         this.setState({
             departmentData: departmentData,
             visible: true,
-            appointed: data
+            appointed: data,
+            time: moment(data?.plannedDeliveryTime)
         })
         if (this.props.type === 'edit') {
             let detailData = this.props.detailData;
@@ -114,7 +117,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 values = {
                     ...values,
                     id: this.props.rowId,
-                    plannedDeliveryTime: values?.plannedDeliveryTime && values?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
+                    plannedDeliveryTime: values?.plannedDeliveryTime && values?.plannedDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
                     productCategoryId: this.state.appointed?.productCategoryId,
                     productCategoryName: this.state.appointed?.productCategoryName,
                     pattern: this.state.appointed?.pattern,
@@ -183,6 +186,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         }
         return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
     });
+
 
     /**
     * @description Renders AbstractDetailComponent
@@ -308,7 +312,9 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                 required: true,
                                                 message: '请选择交付时间'
                                             }]}>
-                                            <DatePicker />
+                                            <DatePicker disabledDate={(current) => {
+                                                return current && current < moment(this.state.time);
+                                            }} showTime />
                                         </Form.Item>
                                     </Descriptions.Item></>
                             }

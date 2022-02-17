@@ -332,6 +332,11 @@ export default function TowerCheck(): React.ReactNode {
                     name: 'structureTexture',
                     label: '材质',
                     children: <Input placeholder="请输入" />
+                },
+                {
+                    name: 'segmentName',
+                    label: '段名',
+                    children: <Input placeholder="请输入" />
                 }
             ]}
             onFilterSubmit={(values: Record<string, any>) => {
