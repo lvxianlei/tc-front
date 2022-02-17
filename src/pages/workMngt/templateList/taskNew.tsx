@@ -455,26 +455,41 @@ export default function TaskNew(props:any){
                                         setMaterialUser(drawLeaderDepartment.records);
                                         
                                     }
+                                    let data: any = [];
                                     const type:any =  formValue[0]?.productType;
+                                    if(formValue[0]?.printSpecifications!==null||formValue[0]?.printSpecifications!==null){
+                                        data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                            productCategoryId: formValue[0]?.productCategoryId,
+                                            printSpecifications: formValue[0]?.printSpecifications,
+                                            printSpecialProcess: formValue[0]?.printSpecialProcess,
+                                            productType: formValue[0]?.productType
+                                        });
+                                    }
                                     if(type === '四管塔' || type === '架构塔'){
-                                        setRadioValue('自定义')
+                                        setRadioValue('全部')
                                         setPrintData({
                                             ...printData,
                                             productCategoryId: value,
                                             printSpecifications: '全部'
                                         })
                                         form.setFieldsValue({
+                                            ...formValue[0],
                                             print: '全部'
                                         })
                                         formRef.setFieldsValue({
                                             print:{
                                                 printSpecifications: '全部'
                                             } 
-                                        })  
+                                        })
+                                        data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                            productCategoryId: formValue[0]?.productCategoryId,
+                                            productType: formValue[0]?.productType
+                                        });  
                                     }
                                     if(type === '钢管塔'){
                                         setRadioValue('自定义')
                                         form.setFieldsValue({
+                                            ...formValue[0],
                                             print: '1-12'
                                         })
                                         setPrintData({
@@ -488,10 +503,16 @@ export default function TaskNew(props:any){
                                                 before: 1,
                                                 after: 12
                                             } 
-                                        })    
+                                        })
+                                        data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                            productCategoryId: formValue[0]?.productCategoryId,
+                                            printSpecifications: '1-12',
+                                            productType: formValue[0]?.productType
+                                        });    
                                     }
                                     if(type === '角钢塔'){
                                         form.setFieldsValue({
+                                            ...formValue[0],
                                             print: '火曲,钻孔,铆焊'
                                         })
                                         setPrintData({
@@ -501,14 +522,18 @@ export default function TaskNew(props:any){
                                         })
                                         formRef.setFieldsValue({
                                             printSpecialProcess:['火曲','钻孔','铆焊']
-                                        })   
+                                        })
+                                        data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                            productCategoryId: formValue[0]?.productCategoryId,
+                                            printSpecialProcess: '火曲,钻孔,铆焊',
+                                            productType: formValue[0]?.productType
+                                        });   
                                     }else{
                                         setPrintData({
                                             ...printData,
                                             productCategoryId: value,
                                         })
                                     }
-                                    const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${formValue[0]?.productCategoryId}/${printData?.printSpecifications}/${printData?.printSpecialProcess}`);
                                     form.setFieldsValue({
                                         ...formValue[0],
                                         structureNumber: data?.length
@@ -561,7 +586,12 @@ export default function TaskNew(props:any){
                         <Col span={11}>
                             <Form.Item name="detail" label="钢板明细" >
                                 <Button type='link' onClick={async ()=>{
-                                    const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${printData?.productCategoryId}/${printData?.printSpecifications}/${printData?.printSpecialProcess}`);
+                                    const data: any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                        productCategoryId: printData?.productCategoryId,
+                                        printSpecifications: printData?.printSpecifications,
+                                        printSpecialProcess: printData?.printSpecialProcess,
+                                        productType: printData?.productType
+                                    });
                                     setSteelData(data)
                                     setSteelVisible(true)
                                 }} disabled={!read}>查看</Button>
