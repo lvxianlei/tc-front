@@ -105,6 +105,23 @@ export default function TaskView(props: any){
             title: '小计重量（kg）',
             width: 200,
             dataIndex: 'totalWeight'
+        },{
+            key: 'totalWeight',
+            title: '总计重量（kg）',
+            width: 200,
+            dataIndex: 'totalWeight'
+        },
+        {
+            key: 'holesNum',
+            title: '单件孔数',
+            width: 200,
+            dataIndex: 'holesNum'
+        },
+        {
+            key: 'ncName',
+            title: 'NC程序名称',
+            width: 200,
+            dataIndex: 'ncName'
         },
         {
             key: 'description',
