@@ -310,7 +310,6 @@ export default function ScheduleView(): React.ReactNode {
                             weldingDrawDeliverTime:resData.weldingDrawDeliverTime? moment(resData.weldingDrawDeliverTime):'',
                         });
                         setLoad(false)
-                    }} >指派</Button>
                     }} disabled={params.status!=='2'||record.materialLeaderName}>指派</Button>
                     <Button type='link' onClick={async ()=>{
                         setEdit(true);
