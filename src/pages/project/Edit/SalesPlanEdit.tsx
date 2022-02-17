@@ -166,7 +166,7 @@ export default function SalesPlanEdit() {
         const productDetailsFormData = productDetailsForm.getFieldsValue()
         const newProductDetails = productDetails.map((item: any) => {
             if (productDetailsFormData[item.id].deliveryTime) {
-                return item
+                return ({ ...item, deliveryTime: productDetailsFormData[item.id].deliveryTime })
             } else {
                 newProductDetailsForm[item.id] = { ...deliveryTime }
                 return ({ ...item, ...deliveryTime })

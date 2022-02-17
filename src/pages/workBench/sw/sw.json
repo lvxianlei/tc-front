@@ -208,7 +208,7 @@
         },
         {
             "title": "原材料入库",
-            "dataIndex": "materialExWarehouseWorkBatchVo",
+            "dataIndex": "materialWarehouseWorkBatchVo",
             "col": 2,
             "path": "库存管理-原材料入库",
             "workbenchItemVos": [
@@ -227,7 +227,7 @@
         },
         {
             "title": "原材料出库",
-            "dataIndex": "materialWarehouseWorkBatchVo",
+            "dataIndex": "materialExWarehouseWorkBatchVo",
             "col": 2,
             "path": "库存管理-原材料出库",
             "workbenchItemVos": [
