@@ -411,7 +411,7 @@ export default function ScheduleView(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false); form.setFieldsValue({});setEdit(false);};
+    const handleModalCancel = () => {setVisible(false); form.resetFields();setEdit(false);};
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
         const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         switch (title) {

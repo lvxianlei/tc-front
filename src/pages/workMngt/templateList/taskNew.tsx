@@ -326,10 +326,15 @@ export default function TaskNew(props:any){
             }
             setPrintData({
                 ...printData,
-                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:'',
+                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
                 printSpecialProcess: saveData?.printSpecialProcess?.join(',')
             })
-            const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${printData?.productCategoryId}/${saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:''}/${saveData?.printSpecialProcess?.join(',')}`);
+            const data:any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                productCategoryId: printData?.productCategoryId,
+                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
+                printSpecialProcess: saveData?.printSpecialProcess?.join(','),
+                productType: printData?.productType
+            });
             form.setFieldsValue({
                 structureNumber: data?.length
             })
