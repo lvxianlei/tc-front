@@ -24,7 +24,8 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
 
     private async modalShow(): Promise<void> {
         this.setState({
-            visible: true
+            visible: true,
+            height: 380
         })
     }
 
