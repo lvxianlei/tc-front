@@ -553,7 +553,7 @@ export default function Lofting(): React.ReactNode {
         setAddVisible(false);
         setTableDataSource([]);
         form.setFieldsValue({ dataV: [] })
-    }} width={1200} onOk={
+    }} width={'90%'} onOk={
         ()=>{
             form.validateFields().then(()=>{
                 const values = form.getFieldsValue(true).dataV.map((item:any)=>{
