@@ -376,8 +376,12 @@ export default function TaskView(props: any){
                         {specialData?.structureNumber}
                     </Descriptions.Item>
                     <Descriptions.Item label="钢板明细">
-                        <Button type='link' onClick={async ()=>{
-                            const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${specialData?.productCategoryId}/${specialData?.printSpecifications}/${specialData?.printSpecialProcess}`);
+                        <Button type='link' onClick={async ()=>{const data: any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                                productCategoryId: specialData?.productCategoryId,
+                                printSpecifications: specialData?.printSpecifications,
+                                printSpecialProcess: specialData?.printSpecialProcess,
+                                productType: specialData?.productType
+                            });
                             setSteelData(data)
                             setSteelVisible(true)
                         }}>查看</Button>
