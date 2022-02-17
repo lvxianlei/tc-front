@@ -156,8 +156,8 @@ export default function TemplateList() {
                         children: (<Form.Item name="status" initialValue={location.state?.state || ""}>
                             <Select style={{ width: 200 }} placeholder="请选择">
                                 <Select.Option value="">全部</Select.Option>
-                                <Select.Option value={1}>待上传</Select.Option>
-                                <Select.Option value={2}>已上传</Select.Option>
+                                <Select.Option value={1}>待完成</Select.Option>
+                                <Select.Option value={2}>已完成</Select.Option>
                             </Select>
                         </Form.Item>
                         )
