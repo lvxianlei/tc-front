@@ -36,6 +36,7 @@ export default function PackingListNew(): React.ReactNode {
     const [removeRowKeys, setRemoveRowKeys] = useState<string[]>([]);
     const [removeRow, setRemoveRow] = useState<IBundle[]>([]);
     const [selectWeight, setSelectWeight] = useState<number>(0);
+    const [maxNum, setMaxNum] = useState<number>(0);
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if (!location.state) {
@@ -220,7 +221,7 @@ export default function PackingListNew(): React.ReactNode {
             fixed: 'right' as FixedType,
             width: 100,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Button type='link' onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(record.num) }}>移除</Button>
+                <Button type='link' onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(record.num); setMaxNum(record.num) }}>移除</Button>
             )
         }
     ]
@@ -335,27 +336,28 @@ export default function PackingListNew(): React.ReactNode {
             productId: detailData.productId,
             structureId: record.id || record.topId,
             structureCount: record.structureNum,
-            topId: record.id,
+            topId: record.id || record.topId,
             id: ''
         }
-        let list: IBundle[] = [];
+        let list: IBundle[] = [...packagingData];
         if (packagingData?.length > 0) {
-            packagingData.forEach((res: IBundle, index: number) => {
-                if (res.structureId === record.id || res.structureId === record.topId) {
+            list.forEach((res: IBundle, index: number) => {
+                if (res.structureId === data.id || res.structureId === data.topId) {
                     list[index] = {
                         ...res,
-                        num: Number(res.num) + Number(record.structureNum)
+                        num: Number(res.num) + Number(data.num)
                     }
+                    // console.log(list[index])
                 } else {
-                    list = [data, ...packagingData]
+                    list = [...list]
                 }
             })
         } else {
             list = [data]
         }
-        setPackagingData(list);
+        setPackagingData([...list]);
         stayDistrict.splice(index, 1);
-        setStayDistrict(stayDistrict);
+        setStayDistrict([...stayDistrict]);
     }
 
     const onFinish = (value: Record<string, any>) => {
@@ -433,17 +435,17 @@ export default function PackingListNew(): React.ReactNode {
                     id: ''
                 }
             })
-            let list: IBundle[] = [];
+            let list: IBundle[] = [...packagingData];
             if (packagingData?.length > 0) {
                 data?.forEach((record: IBundle) => {
-                    packagingData.forEach((res: IBundle, index: number) => {
+                    list.forEach((res: IBundle, index: number) => {
                         if (res.structureId === record.id || res.structureId === record.topId) {
                             list[index] = {
                                 ...res,
                                 num: Number(res.num) + Number(record.structureNum)
                             }
                         } else {
-                            list = [...data, ...packagingData]
+                            list = [...list]
                         }
                     })
                 })
@@ -470,19 +472,25 @@ export default function PackingListNew(): React.ReactNode {
     }
 
     const packRemove = () => {
+        let removeList: IBundle[] = [...stayDistrict];
         if (removeRow.length > 0) {
             removeRow?.forEach(async (value: IBundle, index: number) => {
-                packagingData.splice(index, 1)
+                packagingData.forEach((res: IBundle, index: number) => {
+                    if (value.structureId === res.id || res.structureId === value.topId) {
+                        packagingData.splice(index, 1);
+                    }
+                })
                 if (value.id) {
                     const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
                     const find: number = stayDistrict.findIndex((res: IPackingList) => {
                         return res.topId === newValue.topId
                     })
                     if (find === -1) {
-                        setStayDistrict([...stayDistrict, { ...newValue }]);
+                        removeList = [...removeList, { ...newValue }]
+                        // setStayDistrict([...stayDistrict]);
 
                     } else {
-                        setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                        removeList = [...removeList.map((res: IPackingList, index: number) => {
                             if (index === find) {
                                 return {
                                     ...res,
@@ -491,18 +499,17 @@ export default function PackingListNew(): React.ReactNode {
                             } else {
                                 return res
                             }
-                        })]);
+                        })]
+                        // setStayDistrict();
                     }
                 } else {
                     const find: number = stayDistrict.findIndex((res: IPackingList) => {
                         return res.topId === value.topId
                     })
                     if (find === -1) {
-
-                        setStayDistrict([...stayDistrict, value]);
-
+                        removeList = [...removeList, value]
                     } else {
-                        setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                        removeList = [...removeList.map((res: IPackingList, index: number) => {
                             if (index === find) {
                                 return {
                                     ...res,
@@ -511,10 +518,12 @@ export default function PackingListNew(): React.ReactNode {
                             } else {
                                 return res
                             }
-                        })]);
+                        })]
                     }
                 }
             })
+
+            setStayDistrict([...removeList]);
             setPackagingData([...packagingData]);
             setRemoveRow([]);
             setRemoveRowKeys([]);
@@ -535,7 +544,7 @@ export default function PackingListNew(): React.ReactNode {
         <Modal visible={removeVisible} title="移除" okText="确认" onCancel={() => { setRemoveNum(0); setRemoveVisible(false); }} onOk={() => remove(removeList, removeIndex, removeNum)}>
             <Row>
                 <Col>数量</Col>
-                <Col><Input value={removeNum} onChange={(e) => setRemoveNum(Number(e.target.value))} /></Col>
+                <Col><InputNumber max={maxNum} value={removeNum} onChange={(e) => setRemoveNum(Number(e))} /></Col>
             </Row>
         </Modal>
         <DetailContent operation={[
