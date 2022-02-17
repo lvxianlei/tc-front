@@ -113,7 +113,7 @@ export default function Lofting(): React.ReactNode {
                     name={['data',index, "code"]} 
                     initialValue={ _ }
                 >
-                    <Input size="small" onChange={ () => rowChange(index) }/>
+                    <Input size="small" onChange={ () => rowChange(index) } maxLength={10}/>
                 </Form.Item>
             )
         },
@@ -128,7 +128,7 @@ export default function Lofting(): React.ReactNode {
                     name={['data',index, "materialName"]} 
                     initialValue={ _ }
                 >
-                    <Input size="small" onChange={ () => rowChange(index) }/>
+                    <Input size="small" onChange={ () => rowChange(index) } maxLength={10}/>
                 </Form.Item>
             ) 
         },
@@ -143,7 +143,7 @@ export default function Lofting(): React.ReactNode {
                     name={['data',index, "structureTexture"]} 
                     initialValue={ _ }
                 >
-                    <Input size="small" onChange={ () => rowChange(index) }/>
+                    <Input size="small" onChange={ () => rowChange(index) } maxLength={10}/>
                 </Form.Item>
             ) 
         },
@@ -158,7 +158,7 @@ export default function Lofting(): React.ReactNode {
                     name={['data',index, "structureSpec"]} 
                     initialValue={ _ }
                 >
-                    <Input size="small" onChange={ () => rowChange(index) }/>
+                    <Input size="small" onChange={ () => rowChange(index) } maxLength={10}/>
                 </Form.Item>
             ) 
         },
@@ -175,8 +175,7 @@ export default function Lofting(): React.ReactNode {
                 >
                     <InputNumber 
                         size="small" 
-                        precision={2} 
-                        min={0} 
+                        min={1} precision={0} max={999999}
                         onChange={ () => rowChange(index) }
                     />
                 </Form.Item>
@@ -195,8 +194,7 @@ export default function Lofting(): React.ReactNode {
                 >
                     <InputNumber 
                         size="small" 
-                        precision={2} 
-                        min={0} 
+                        min={0} precision={2} max={9999.99}
                         onChange={ () => rowChange(index) }
                     />
                 </Form.Item>
@@ -216,7 +214,8 @@ export default function Lofting(): React.ReactNode {
                     <InputNumber 
                         size="small" 
                         precision={0}  
-                        min={0} 
+                        min={1}
+                        max={99} 
                         onChange={ () => rowChange(index) }
                     />
                 </Form.Item>
@@ -663,6 +662,9 @@ export default function Lofting(): React.ReactNode {
                         <Button type='link' onClick={()=>{
                             tableDataSource&&tableDataSource.splice(index,1);
                             tableDataSource&&setTableDataSource([...tableDataSource])
+                            form.setFieldsValue({
+                                dataV: [...tableDataSource]
+                            })
                         }}>删除</Button>
                     )}
                 ]}
