@@ -26,11 +26,15 @@ export default function TemplateDetail() {
     const [editingKey, setEditingKey] = useState<any>('');
     const [tableDataSource, setTableDataSource] = useState<any>([]);
     const [formRef] = Form.useForm();
-    const isEditing = (record: any) => record.key === editingKey;
+    const isEditing = (record: any) => record.id === editingKey;
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-science/loftingTemplate/record/${params.id}`)
-            setTableDataSource(result)
+            setTableDataSource(result.map((item: any, index: number)=>{
+                return {
+                    ...item,
+                }
+            }))
             resole(result)
         } catch (error) {
             reject(error)
@@ -73,7 +77,7 @@ export default function TemplateDetail() {
       };
     const edit = (record: Partial<any> & { key: React.Key }) => {
         formRef.setFieldsValue({...record });
-        setEditingKey(record.key);
+        setEditingKey(record.id);
     };
     const columns: any[] = [
         {
@@ -248,8 +252,9 @@ export default function TemplateDetail() {
      */
     const deleteItem = async (templateRecordId: string) => {
         await RequestUtil.delete(`/tower-science/loftingTemplate/delete?templateRecordId=${templateRecordId}`)
-        message.success('操作成功')
-        history.go(0)
+        message.success('删除成功！')
+        // history.go(0)
+        history.push(`/workMngt/templateList/detail/${params.id}/${params.productCategoryId}`)
     }
     return (
         <>
