@@ -125,7 +125,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                 let values = this.getForm()?.getFieldsValue(true);
                 values = {
                     ...values,
-                    plannedDeliveryTime: values?.plannedDeliveryTime && values?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
+                    plannedDeliveryTime: values?.plannedDeliveryTime && values?.plannedDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
                     productCategory: this.state.appointed?.productCategory || this.state.appointed?.productCategoryId,
                     productCategoryName: this.state.appointed?.productCategoryName,
                     pattern: this.state.appointed?.pattern,
@@ -403,8 +403,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         message: '请选择交付时间'
                                     }]}>
                                     <DatePicker format={'YYYY-MM-DD HH:mm:ss'} disabledDate={(current)=> {
-                                            return current && current < moment(this.state.time);
-                                        }}/>
+                                        return current && current < moment(this.state.time);
+                                    }} showTime/>
                                 </Form.Item>
                             </Descriptions.Item></>
                             }
