@@ -452,9 +452,14 @@ export default function TaskNew(props:any){
                                              const towerData: any = await RequestUtil.get(`/tower-science/loftingTask/list/${value}`);
                                              setTower(towerData);
                                              setRead(false)
-                                             form.resetFields();
                                              form.setFieldsValue({
-                                                 planNumber:value
+                                                 planNumber:value,
+                                                 productCategoryId:'',
+                                                 productType:'',
+                                                 print:'',
+                                                 structureNumber:'',
+                                                 drawLeaderDepartment:'',
+                                                 drawLeader:''
                                              })
                                         }}>
                                             {planData && planData.map(({ planNumber}: any, index: string | number | undefined) => {
