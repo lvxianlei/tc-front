@@ -388,8 +388,10 @@ export default function TaskNew(props:any){
             }else{
                 formRef.setFieldsValue({
                     print:{
-                        printSpecifications: '全部'
-                    }
+                        printSpecifications: '全部',
+                        
+                    },
+                    printSpecialProcess:[],
                 }) 
             }
             
@@ -410,8 +412,10 @@ export default function TaskNew(props:any){
                     print:{
                         printSpecifications: '自定义',
                         before: type.split('-')[0],
-                        after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
-                    }
+                        after: type?.substring(type?.indexOf('-')+1, type?.indexOf(',')),
+                       
+                    },
+                    printSpecialProcess:[],
                 })  
             }
               
@@ -497,10 +501,14 @@ export default function TaskNew(props:any){
                                             })
                                             formRef.setFieldsValue({
                                                 print:{
-                                                    printSpecifications:'',
-                                                    printSpecialProcess:[]
-                                                }
+                                                    printSpecifications:''
+                                                },
+                                                printSpecialProcess:[]
                                             });
+                                            setPrintData({
+                                                printSpecifications: '',
+                                                printSpecialProcess:''
+                                            })
                                         }}>
                                             {planData && planData.map(({ planNumber}: any, index: string | number | undefined) => {
                                                 return <Select.Option key={index} value={planNumber}>
@@ -518,8 +526,9 @@ export default function TaskNew(props:any){
                                     formRef.setFieldsValue({
                                         print:{
                                             printSpecifications:'',
-                                            printSpecialProcess:[]
-                                        }
+                                            
+                                        },
+                                        printSpecialProcess:[]
                                     });
                                     const formValue = tower.filter((item: { productCategoryId: SelectValue; })=>{return item.productCategoryId === value})
                                     
