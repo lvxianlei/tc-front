@@ -393,7 +393,7 @@ export default function TaskView(props: any){
                         }}>查看</Button>
                     </Descriptions.Item>
                     <Descriptions.Item label="接收人">
-                        {specialData?.drawLeaderName}
+                        {specialData?.drawLeaderDepartmentName+'-'+specialData?.drawLeaderName}
                     </Descriptions.Item>
                     <Descriptions.Item label="备注">
                         {specialData?.description}
