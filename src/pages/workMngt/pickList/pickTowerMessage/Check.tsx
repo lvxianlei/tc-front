@@ -33,12 +33,12 @@ export default function PickCheckList(): React.ReactNode {
             key: 'segmentName', 
             editable: false
         },
-        { 
-            title: '模式', 
-            dataIndex: 'patternName', 
-            key: 'patternName', 
-            editable: false
-        },
+        // { 
+        //     title: '模式', 
+        //     dataIndex: 'patternName', 
+        //     key: 'patternName', 
+        //     editable: false
+        // },
         {
             title: '构件编号', 
             dataIndex: 'code', 
