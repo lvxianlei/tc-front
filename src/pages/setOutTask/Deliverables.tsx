@@ -36,6 +36,7 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
             visible: true
         })
     }
+        
 
     /**
     * @description Renders AbstractDetailComponent
@@ -114,7 +115,7 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
             name: '螺栓清单汇总.xls',
             use: '螺栓清单汇总',
             path: '/tower-science/boltRecord/downloadSummaryTask?loftTasking=',
-
+        
         }, {
             name: 'NC程序汇总.zip',
             use: 'NC程序汇总',
@@ -132,7 +133,16 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
                 footer={<Button type="ghost" onClick={() => this.modalCancel()}>关闭</Button>}
                 onCancel={() => this.modalCancel()}
             >
-                <p className={styles.title}>交付物清单</p>
+                <p className={styles.title}><span>交付物清单</span><Button type='link' onClick={() => {
+                    data.map(res => {
+                        if (res.requestType === 'zip') {
+                            downloadTemplate(res.path + this.props.id, res.use, {}, true)
+                        } else {
+                            downloadTemplate(res.path + this.props.id, res.use)
+                        }
+                    })
+                }}
+                >全部打包下载</Button></p>
                 <CommonTable columns={tableColumns} dataSource={data} pagination={false} />
             </Modal>
         </div>

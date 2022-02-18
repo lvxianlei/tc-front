@@ -220,7 +220,7 @@ export default function ConfirmDetail(): React.ReactNode {
           totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
         })
         setWeight(totalNumber);
-        RequestUtil.post(`/tower-science/drawProductDetail/save`,newData[index]).then(()=>{
+        RequestUtil.post(`/tower-science/drawProductDetail/save`,{...newData[index],drawTaskId: params.id}).then(()=>{
           message.success('保存成功！')
         })
       } catch (errInfo) {

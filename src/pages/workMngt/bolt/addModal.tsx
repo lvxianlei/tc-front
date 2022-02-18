@@ -67,7 +67,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
     }
     useEffect(() => {
         setContentObj(props.item)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     /**
      * 
