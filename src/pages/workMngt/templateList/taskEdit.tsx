@@ -488,6 +488,7 @@ export default function TaskNew(props:any){
                                              const towerData: any = await RequestUtil.get(`/tower-science/loftingTask/list/${value}`);
                                              setTower(towerData);
                                              setRead(false)
+                                             formRef.resetFields();
                                              form.setFieldsValue({
                                                  planNumber:value,
                                                  productCategoryId:'',

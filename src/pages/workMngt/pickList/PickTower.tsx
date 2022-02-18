@@ -56,7 +56,12 @@ export default function PickTower(): React.ReactNode {
             const submitData={
                 productCategoryId: params.id,
                 productId: productId,
-                productSegmentListDTOList: submitTableData,
+                productSegmentListDTOList: submitTableData.map((item:any)=>{
+                    return {
+                        ...item,
+                        count:item?.count!==null?item?.count:0
+                    }
+                }),
                 legWeightA:data.legWeightA,
                 legWeightB:data.legWeightB,
                 legWeightC:data.legWeightC,
@@ -401,7 +406,7 @@ export default function PickTower(): React.ReactNode {
                                         </Col>
                                         <Col span={1}></Col>
                                         <Col span={ 11 }>
-                                        <Form.Item  name={[ field.name , 'count']} label='段数' initialValue={[ field.name , 'count']}>
+                                        <Form.Item  name={[ field.name , 'count']} label='段数' initialValue={[ field.name , 'count']} >
                                             <InputNumber min={0} precision={0} style={{width:'100%'}} disabled={status==='已完成'}/>
                                         </Form.Item>
                                         </Col>
