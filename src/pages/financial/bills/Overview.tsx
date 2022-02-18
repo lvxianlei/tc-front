@@ -29,7 +29,7 @@ export default function Overview({ id }: OverviewProps) {
                 return ({ ...item, type: "select", enum: invoiceTypeEnum })
             }
             return item
-        })} col={2} dataSource={data || {}} classStyle={"overall-form-class-padding0"}/>
+        })} col={2} dataSource={data || {}} />
         <Attachment dataSource={data?.invoiceAttachInfoVos || []}/>
         <OperationRecord serviceId={id} serviceName="tower-supply" operateTypeEnum="OPERATION" />
     </Spin>
