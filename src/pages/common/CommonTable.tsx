@@ -86,6 +86,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         dataIndex: "index",
         width: 50,
         fixed: "left",
+        onCell: () => ({ className: styles.tableCell }),
         render: (_: any, _a: any, index: number) => <>{index + 1}</>
     }, ...formatColumns] : formatColumns
     return <nav className={styles.componentsTableResizableColumn}>

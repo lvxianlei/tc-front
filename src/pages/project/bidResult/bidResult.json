@@ -38,13 +38,13 @@
             ]
         },
         {
-            "title": "货物类别",
+            "title": "物资资别",
             "dataIndex": "cargoType",
             "required": true,
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入货物类别..."
+                    "message": "请输入物资资别..."
                 }
             ]
         },

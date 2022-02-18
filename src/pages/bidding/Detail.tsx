@@ -64,12 +64,20 @@ export default function InformationDetail(): React.ReactNode {
     }
 
     const handleModalCancel = () => setVisible(false)
-    const handleChange = (fields: any, allFields: any) => {
+    const handleChange = (fields: any) => {
         if (Object.keys(fields)[0] === "biddingStatus") {
             setIsBid(fields.biddingStatus)
             if (fields.biddingStatus === 2) {
+                form.setFieldsValue({
+                    biddingStatus: fields.biddingStatus,
+                    reason: ""
+                })
                 setBidStatusColumns([...isBidding, ...noBidding])
             } else {
+                form.resetFields()
+                form.setFieldsValue({
+                    biddingStatus: fields.biddingStatus
+                })
                 setBidStatusColumns([...isBidding,
                 ...detaiBidStatus.map((item: any) => {
                     if (item.dataIndex === "bigPackageIds") {
