@@ -55,6 +55,7 @@
     return (
         <Spin spinning={loading}>
             <BaseInfo
+                classStyle={"overall-form-class-padding0 height34"}
                 form={addCollectionForm}
                 dataSource={{content: 1}}
                 col={ 1 }

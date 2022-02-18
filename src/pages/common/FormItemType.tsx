@@ -95,20 +95,24 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         }
     }), { refreshDeps: [pagenation.current] })
 
-    const onSelectChange = (record: any, selected: boolean) => {
+    const onSelectChange = (record: any, selected: boolean, selectRows: any[]) => {
         const currentSelect = [...select]
         const currentSelectRows = [...selectRows]
-        if (selected) {
-            currentSelect.push(record.id)
-            currentSelectRows.push(record)
-            onChange && onChange(currentSelectRows)
-            setSelect(currentSelect)
-            setSelectRows(currentSelectRows)
-        } else {
-            setSelect(currentSelect.filter(item => item !== record.id))
-            setSelectRows(currentSelectRows.filter((item: any) => item.id !== record.id))
-            onChange && onChange(currentSelectRows.filter((item: any) => item.id !== record.id))
+        if (data.selectType && data.selectType === "checkbox") {
+            if (selected) {
+                currentSelect.push(record.id)
+                currentSelectRows.push(record)
+                onChange && onChange(currentSelectRows)
+                setSelect(currentSelect)
+                setSelectRows(currentSelectRows)
+            } else {
+                setSelect(currentSelect.filter(item => item !== record.id))
+                setSelectRows(currentSelectRows.filter((item: any) => item.id !== record.id))
+                onChange && onChange(currentSelectRows.filter((item: any) => item.id !== record.id))
+            }
         }
+        onChange && onChange(selectRows)
+        setSelect([record.id])
     }
 
     useEffect(() => {
