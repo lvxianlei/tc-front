@@ -520,7 +520,7 @@ export default function TaskNew(props:any){
                                         
                                     }
                                     const type:any =  formValue[0]?.productType;
-                                    if(type === '四管塔' ||type === '管塔'|| type === '架构塔'|| type === '钢架构'){
+                                    if(type === '四管塔' ||type === '管塔'|| type === '架构'|| type === '架构塔'|| type === '钢架构'){
                                         setRadioValue('自定义')
                                         setPrintData({
                                             ...printData,
@@ -537,7 +537,7 @@ export default function TaskNew(props:any){
                                             } 
                                         })  
                                     }
-                                    if(type === '钢管塔'){
+                                    if(type === '钢管杆'){
                                         setRadioValue('自定义')
                                         form.setFieldsValue({
                                             print: '1-12'
