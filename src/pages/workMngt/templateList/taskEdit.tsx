@@ -314,9 +314,16 @@ export default function TaskNew(props:any){
         try {
             const saveData = await formRef.validateFields();
             if(saveData?.print?.printSpecifications === '全部'){
-                form.setFieldsValue({
-                    print: '全部,'+ saveData?.printSpecialProcess?.join(',')
-                })
+                if(saveData?.printSpecialProcess.length>0){
+                    form.setFieldsValue({
+                        print: '全部,'+ saveData?.printSpecialProcess?.join(',')
+                    })
+                }else{
+                    form.setFieldsValue({
+                        print: '全部'
+                    })
+                }
+                
             }
             else if(saveData?.print?.printSpecifications === '自定义'){
                 if(!saveData?.print?.before){
@@ -327,9 +334,17 @@ export default function TaskNew(props:any){
                     message.error('未填写规格，不可保存并提交！')
                     return
                 }
-                form.setFieldsValue({
-                    print: saveData?.print?.before+'-'+saveData?.print?.after +','+ saveData?.printSpecialProcess?.join(',')
-                })
+                if(saveData?.printSpecialProcess.length>0){
+                    form.setFieldsValue({
+                        print: saveData?.print?.before+'-'+saveData?.print?.after +','+ saveData?.printSpecialProcess?.join(',')
+                    })
+                }
+                else{
+                    form.setFieldsValue({
+                        print: saveData?.print?.before+'-'+saveData?.print?.after
+                    })
+                }
+
             }else{
                 form.setFieldsValue({
                     print: saveData?.printSpecialProcess?.join(',')
@@ -356,29 +371,50 @@ export default function TaskNew(props:any){
         }
     }
 
-    const handleModalCancel = () => {setVisible(false); form.resetFields(); formRef.resetFields()};
+    const handleModalCancel = () => {setRead(false);setVisible(false); form.resetFields(); formRef.resetFields()};
     const handlePrintModalCancel = () => {
         setPrintVisible(false); 
         const type:any = form.getFieldValue('print');
         if(type && type.indexOf("全部") != -1 ){
+            console.log(type.length)
             setRadioValue('全部')
-            formRef.setFieldsValue({
-                print:{
-                    printSpecifications: '全部'
-                },
-                printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',')  
-            })  
+            if(type?.indexOf(',')!= -1){
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '全部'
+                    },
+                    printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',')  
+                })  
+            }else{
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '全部'
+                    }
+                }) 
+            }
+            
         }
         else if(type && type.indexOf("-") != -1 ){
             setRadioValue('自定义')
-            formRef.setFieldsValue({
-                print:{
-                    printSpecifications: '自定义',
-                    before: type.split('-')[0],
-                    after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
-                },
-                printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',') 
-            })    
+            if(type?.indexOf(',')!= -1){
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '自定义',
+                        before: type.split('-')[0],
+                        after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
+                    },
+                    printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',') 
+                })  
+            }else{
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '自定义',
+                        before: type.split('-')[0],
+                        after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
+                    }
+                })  
+            }
+              
         }else {
             setRadioValue('')
             formRef.setFieldsValue({
@@ -487,6 +523,7 @@ export default function TaskNew(props:any){
                                         setRadioValue('自定义')
                                         setPrintData({
                                             ...printData,
+                                            productType: formValue[0]?.productType,
                                             productCategoryId: value,
                                             printSpecifications: '全部'
                                         })
@@ -506,6 +543,7 @@ export default function TaskNew(props:any){
                                         })
                                         setPrintData({
                                             ...printData,
+                                            productType: formValue[0]?.productType,
                                             productCategoryId: value,
                                             printSpecifications: '1-12'
                                         })
@@ -523,6 +561,7 @@ export default function TaskNew(props:any){
                                         })
                                         setPrintData({
                                             ...printData,
+                                            productType: formValue[0]?.productType,
                                             productCategoryId: value,
                                             printSpecialProcess: '火曲,钻孔,铆焊'
                                         })
@@ -551,9 +590,9 @@ export default function TaskNew(props:any){
                                     <Form.Item name="productType" label="产品类型" >
                                         <Select style={{width:'100%'}} disabled>
                                             {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                                    return <Select.Option key={index} value={name}>
-                                                        {name}
-                                                    </Select.Option>
+                                                return <Select.Option key={index} value={name}>
+                                                    {name}
+                                                </Select.Option>
                                             })}
                                         </Select>
                                     </Form.Item>
@@ -677,13 +716,13 @@ export default function TaskNew(props:any){
                                     name={['print', 'before']}
                                     noStyle
                                 >
-                                    <InputNumber style={{ width: '25%' }} />
+                                    <InputNumber style={{ width: '25%' }} min={1}/>
                                 </Form.Item>}
                                 {radioValue==='自定义'&& <Form.Item
                                     name={['print', 'after']}
                                     noStyle
                                 >
-                                    <InputNumber style={{ width: '25%' }} />
+                                    <InputNumber style={{ width: '25%' }} min={1}/>
                                 </Form.Item>}
                             </Input.Group>
                         </Form.Item>
