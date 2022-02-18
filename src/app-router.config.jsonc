@@ -715,7 +715,7 @@
     },
     { // 驾驶舱-合同看板-明细
       "name": "明细",
-      "path": "/cockpit/contract/:id",
+      "path": "/bulletin/contract/overView/:id",
       "module": "./pages/cockpit/contract/Overview",
       "exact": true,
       "authority": "sw_cockpit_contract_kanban_details"
