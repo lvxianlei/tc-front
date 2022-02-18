@@ -193,7 +193,7 @@ export default function EnquiryTask(): React.ReactNode {
                 {
                     name: 'inquirerId',
                     label: '工程报价员',
-                    children: <IntgSelect width={200} />
+                    children: <IntgSelect width={400} />
                 },
                 {
                     name: 'fuzzyQuery',
