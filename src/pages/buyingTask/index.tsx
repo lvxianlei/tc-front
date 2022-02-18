@@ -180,12 +180,12 @@ export default function RawMaterial() {
                     {
                         name: 'batcherId',
                         label: '配料人',
-                        children: <IntgSelect width={200} />
+                        children: <IntgSelect width={400} />
                     },
                     {
                         name: 'purchaserId',
                         label: '采购人',
-                        children: <IntgSelect width={200} />
+                        children: <IntgSelect width={400} />
                     },
                     {
                         name: 'fuzzyQuery',
