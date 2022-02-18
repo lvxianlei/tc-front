@@ -188,7 +188,7 @@ export default function SampleDraw(): React.ReactNode {
                             <Button type="primary">完成小样图</Button>
                         </Popconfirm> : null}
                         <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                        <span>小样图数：{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount + headerName?.noSmallSampleCount}</span>
+                        <span>小样图数：<span style={{color:'#FF8C00'}}>{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount + headerName?.noSmallSampleCount}</span></span>
                     </Space>
                 }
                 searchFormItems={[

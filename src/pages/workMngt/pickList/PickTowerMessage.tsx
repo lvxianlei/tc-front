@@ -97,13 +97,21 @@ export default function PickTowerMessage(): React.ReactNode {
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
                     <TowerPickAssign type={ record.status < 2 ? 'message' : "detail" } title="指派信息" detailData={ record } id={ record.id } update={ onRefresh } />
-                    <Button onClick={()=>{
-                        RequestUtil.delete(`/tower-science/drawProductSegment/${record.id}`).then(()=>{
-                            message.success('删除成功！')
-                        }).then(()=>{
-                            setRefresh(!refresh)
-                        })
-                    }} type='link' disabled={record.status!== 1}>删除</Button>
+                    <Popconfirm
+                        title="确认删除?"
+                        onConfirm={ async () => {
+                            RequestUtil.delete(`/tower-science/drawProductSegment/${record.id}`).then(()=>{
+                                message.success('删除成功！')
+                            }).then(()=>{
+                                setRefresh(!refresh)
+                            })
+                        }}
+                        okText="提交"
+                        cancelText="取消"
+                        disabled={record.status!== 1}
+                    >
+                        <Button type='link' disabled={record.status!== 1}>删除</Button>
+                    </Popconfirm>
                     <Button onClick={async ()=>{
                         const data = await RequestUtil.get(`/tower-science/drawProductSegment/pattern/${record.id}`)
                         setDetail(data);

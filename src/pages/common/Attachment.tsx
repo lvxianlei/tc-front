@@ -237,7 +237,7 @@ export default forwardRef(function ({
             <Image src={picInfo.url} preview={false} />
         </Modal>
         {isTable && <DetailTitle
-            style={{ marginTop: marginTop ? "24px" : "0px" }}
+            // style={{ marginTop: "24px" }}
             title={title}
             {...edit ? {
                 operation: [

@@ -31,6 +31,7 @@ export interface TowerPickAssignState {
     pattern?: any[];
     materialCheckLeader?: any[];
     departmentData?: SelectDataNode[];
+    time: any;
 }
 
 interface IAppointed {
@@ -68,6 +69,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     public state: TowerPickAssignState = {
         visible: false,
         repeatModal: false,
+        time:'',
         user: [],
         materialCheckLeader: [],
         departmentData: [],
@@ -94,16 +96,16 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             departmentData: departmentData,
             visible: true,
             appointed: data,
-            pattern: renderEnum
+            pattern: renderEnum,
+            time: moment(data?.plannedDeliveryTime)
         })
         let detailData = this.props.detailData;
-        if(this.props.type === 'message'||this.props.type === 'detail'){
+        // if(this.props.type === 'message'||this.props.type === 'detail'){  //提料指派1.2.0版本 去掉
             detailData = {
                 ...detailData,
-                plannedDeliveryTime: moment(detailData?.plannedDeliveryTime)
+                plannedDeliveryTime: moment(data?.plannedDeliveryTime)
             }
-        }
-       
+        // }
         this.getForm()?.setFieldsValue({  ...data, ...detailData});
         if(this.props.type==='message'&& data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
             this.onDepartmentChange(data.materialCheckLeaderDepartment, "校核人");
@@ -123,7 +125,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                 let values = this.getForm()?.getFieldsValue(true);
                 values = {
                     ...values,
-                    plannedDeliveryTime: values?.plannedDeliveryTime && values?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
+                    plannedDeliveryTime: values?.plannedDeliveryTime && values?.plannedDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
                     productCategory: this.state.appointed?.productCategory || this.state.appointed?.productCategoryId,
                     productCategoryName: this.state.appointed?.productCategoryName,
                     pattern: this.state.appointed?.pattern,
@@ -400,7 +402,9 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         required: true,
                                         message: '请选择交付时间'
                                     }]}>
-                                    <DatePicker />
+                                    <DatePicker format={'YYYY-MM-DD HH:mm:ss'} disabledDate={(current)=> {
+                                        return current && current < moment(this.state.time);
+                                    }} showTime/>
                                 </Form.Item>
                             </Descriptions.Item></>
                             }

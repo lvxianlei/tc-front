@@ -980,7 +980,7 @@
       "authority": "rd_product_material_list"
     },
     { // 工作管理-提料-杆塔配段-杆塔信息
-      "name": "杆塔配段",
+      "name": "杆塔提料明细",
       "path": "/workMngt/pickList/pickTower/:id/:status/pickTowerDetail/:productId",
       "module": "./pages/workMngt/pickList/PickTowerDetail",
       "exact": true,
@@ -1086,7 +1086,7 @@
     },
     { // 工作管理-样板列表
       "name": "样板列表-详情",
-      "path": "/workMngt/templateList/:id/:productCategoryId",
+      "path": "/workMngt/templateList/detail/:id/:productCategoryId",
       "module": "./pages/workMngt/templateList/detail",
       "exact": true,
       "authority": "rd_template_record"
