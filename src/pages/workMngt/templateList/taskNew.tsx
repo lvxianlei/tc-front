@@ -14,6 +14,7 @@ import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { SelectValue } from 'antd/lib/select';
 import { idText } from 'typescript';
 import { FileProps } from '../../common/Attachment';
+import { Console } from 'console';
 
 
 
@@ -310,9 +311,16 @@ export default function TaskNew(props:any){
         try {
             const saveData = await formRef.validateFields();
             if(saveData?.print?.printSpecifications === '全部'){
-                form.setFieldsValue({
-                    print: '全部,'+ saveData?.printSpecialProcess?.join(',')
-                })
+                if(saveData?.printSpecialProcess.length>0){
+                    form.setFieldsValue({
+                        print: '全部,'+ saveData?.printSpecialProcess?.join(',')
+                    })
+                }else{
+                    form.setFieldsValue({
+                        print: '全部'
+                    })
+                }
+                
             }
             else if(saveData?.print?.printSpecifications === '自定义'){
                 if(!saveData?.print?.before){
@@ -323,9 +331,17 @@ export default function TaskNew(props:any){
                     message.error('未填写规格，不可保存并提交！')
                     return
                 }
-                form.setFieldsValue({
-                    print: saveData?.print?.before+'-'+saveData?.print?.after +','+ saveData?.printSpecialProcess?.join(',')
-                })
+                if(saveData?.printSpecialProcess.length>0){
+                    form.setFieldsValue({
+                        print: saveData?.print?.before+'-'+saveData?.print?.after +','+ saveData?.printSpecialProcess?.join(',')
+                    })
+                }
+                else{
+                    form.setFieldsValue({
+                        print: saveData?.print?.before+'-'+saveData?.print?.after
+                    })
+                }
+
             }else{
                 form.setFieldsValue({
                     print: saveData?.printSpecialProcess?.join(',')
@@ -352,29 +368,50 @@ export default function TaskNew(props:any){
         }
     }
 
-    const handleModalCancel = () => {setVisible(false); form.resetFields(); formRef.resetFields();setSteelData([]);setFileData([])};
+    const handleModalCancel = () => {setRead(false);setVisible(false); form.resetFields(); formRef.resetFields();setSteelData([]);setFileData([])};
     const handlePrintModalCancel = () => {
         setPrintVisible(false); 
         const type:any = form.getFieldValue('print');
         if(type && type.indexOf("全部") != -1 ){
+            console.log(type.length)
             setRadioValue('全部')
-            formRef.setFieldsValue({
-                print:{
-                    printSpecifications: '全部'
-                },
-                printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',')  
-            })  
+            if(type?.indexOf(',')!= -1){
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '全部'
+                    },
+                    printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',')  
+                })  
+            }else{
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '全部'
+                    }
+                }) 
+            }
+            
         }
         else if(type && type.indexOf("-") != -1 ){
             setRadioValue('自定义')
-            formRef.setFieldsValue({
-                print:{
-                    printSpecifications: '自定义',
-                    before: type.split('-')[0],
-                    after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
-                },
-                printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',') 
-            })    
+            if(type?.indexOf(',')!= -1){
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '自定义',
+                        before: type.split('-')[0],
+                        after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
+                    },
+                    printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',') 
+                })  
+            }else{
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '自定义',
+                        before: type.split('-')[0],
+                        after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
+                    }
+                })  
+            }
+              
         }else {
             setRadioValue('')
             formRef.setFieldsValue({
@@ -478,7 +515,7 @@ export default function TaskNew(props:any){
                                     }
                                     let data: any = [];
                                     const type:any =  formValue[0]?.productType;
-                                    if(formValue[0]?.printSpecifications!==null||formValue[0]?.printSpecifications!==null){
+                                    if(formValue[0]?.printSpecifications!==null||formValue[0]?.printSpecialProcess!==null){
                                         data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
                                             productCategoryId: formValue[0]?.productCategoryId,
                                             printSpecifications: formValue[0]?.printSpecifications,
@@ -490,6 +527,7 @@ export default function TaskNew(props:any){
                                         setRadioValue('全部')
                                         setPrintData({
                                             ...printData,
+                                            productType: formValue[0]?.productType,
                                             productCategoryId: value,
                                             printSpecifications: '全部'
                                         })
@@ -515,6 +553,7 @@ export default function TaskNew(props:any){
                                         })
                                         setPrintData({
                                             ...printData,
+                                            productType: formValue[0]?.productType,
                                             productCategoryId: value,
                                             printSpecifications: '1-12'
                                         })
@@ -538,6 +577,7 @@ export default function TaskNew(props:any){
                                         })
                                         setPrintData({
                                             ...printData,
+                                            productType: formValue[0]?.productType,
                                             productCategoryId: value,
                                             printSpecialProcess: '火曲,钻孔,铆焊'
                                         })
@@ -552,6 +592,7 @@ export default function TaskNew(props:any){
                                     }else{
                                         setPrintData({
                                             ...printData,
+                                            productType: formValue[0]?.productType,
                                             productCategoryId: value,
                                         })
                                     }
@@ -607,6 +648,7 @@ export default function TaskNew(props:any){
                         <Col span={11}>
                             <Form.Item name="detail" label="钢板明细" >
                                 <Button type='link' onClick={async ()=>{
+                                    console.log(printData)
                                     const data: any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
                                         productCategoryId: printData?.productCategoryId,
                                         printSpecifications: printData?.printSpecifications,
@@ -677,6 +719,7 @@ export default function TaskNew(props:any){
                                 >
                                     
                                     <Checkbox.Group options={plainOptions}  onChange={ (e:any) => {
+                                        console.log(e)
                                         if( e.length > 1){
                                             setRadioValue(e.filter((item:any)=>{return item !== radioValue })[0])
                                             formRef.setFieldsValue({
