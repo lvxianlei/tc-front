@@ -491,7 +491,8 @@ export default function Lofting(): React.ReactNode {
                                         setEditorLock('编辑');
                                         formRef.resetFields()
                                         setRowChangeList([]);
-                                        setRefresh(!refresh);    
+                                        setRefresh(!refresh); 
+                                        history.go(0)   
                                     });
                                 }else{
                                     setColumns(columnsSetting);
