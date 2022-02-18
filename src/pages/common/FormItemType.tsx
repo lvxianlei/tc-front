@@ -96,7 +96,6 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
     }), { refreshDeps: [pagenation.current] })
 
     const onSelectChange = (record: any, selected: boolean, selectAllRows: any[]) => {
-        console.log(select)
         const currentSelect = [...select]
         const currentSelectRows = [...selectRows]
         if (data.selectType && data.selectType === "checkbox") {
