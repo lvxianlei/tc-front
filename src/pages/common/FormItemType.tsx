@@ -60,6 +60,7 @@ interface PagenationProps {
 export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
     const initValue = value?.records?.map((item: any) => item.id)
     const [select, setSelect] = useState<any[]>(initValue)
+    const [selectRows, setSelectRows] = useState<any[]>(initValue)
     const [columns, setColumns] = useState<any[]>(data.columns)
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,
@@ -94,9 +95,20 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         }
     }), { refreshDeps: [pagenation.current] })
 
-    const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
-        onChange && onChange(selectRows)
-        setSelect(selectedRowKeys)
+    const onSelectChange = (record: any, selected: boolean) => {
+        const currentSelect = [...select]
+        const currentSelectRows = [...selectRows]
+        if (selected) {
+            currentSelect.push(record.id)
+            currentSelectRows.push(record)
+            onChange && onChange(currentSelectRows)
+            setSelect(currentSelect)
+            setSelectRows(currentSelectRows)
+        } else {
+            setSelect(currentSelect.filter(item => item !== record.id))
+            setSelectRows(currentSelectRows.filter((item: any) => item.id !== record.id))
+            onChange && onChange(currentSelectRows.filter((item: any) => item.id !== record.id))
+        }
     }
 
     useEffect(() => {
@@ -132,7 +144,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             rowSelection={{
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
-                onChange: onSelectChange,
+                onSelect: onSelectChange,
                 getCheckboxProps: data?.getCheckboxProps
             }}
             rowKey={data.rowKey || ((record: any) => record.id)}

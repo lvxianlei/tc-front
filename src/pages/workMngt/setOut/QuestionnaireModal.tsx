@@ -150,17 +150,29 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                         <Form.Item name="description" label="备注" initialValue={record.description}>
                             <Input.TextArea maxLength={300} placeholder="请输入备注信息" rows={1} showCount disabled={record.status === 1} />
                         </Form.Item>
-                        <Form.Item name="newValue" label="校对后信息"
-                            rules={[{
-                                required: true,
-                                message: '请输入校对后信息 '
-                            }]}
-                            initialValue={record.newValue}>
-                            <Input maxLength={100} placeholder="请输入" disabled={record.status === 1} />
-                        </Form.Item>
+                        {
+                            record.problemField === 'specialCode' ?
+                                <Form.Item name="newValue" label="校对后信息"
+                                    initialValue={record.newValue}>
+                                    <Input maxLength={100} placeholder="请输入" disabled={record.status === 1} />
+                                </Form.Item>
+                                :
+                                <Form.Item name="newValue" label="校对后信息"
+                                    rules={[{
+                                        required: true,
+                                        message: '请输入校对后信息 '
+                                    }, {
+                                        pattern: /^[^\s]*$/,
+                                        message: '禁止输入空格',
+                                    }]}
+                                    initialValue={record.newValue}>
+                                    <Input maxLength={100} placeholder="请输入" disabled={record.status === 1} />
+                                </Form.Item>
+                        }
+
                     </Form>
                     <p className={styles.topPadding}>操作信息</p>
-                    <CommonTable columns={tableColumns} dataSource={record.issueRecordList} />
+                    <CommonTable columns={tableColumns} dataSource={record.issueRecordList} padination={false} />
                 </DetailContent>
             </Modal>
         </>

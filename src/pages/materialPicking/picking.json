@@ -226,11 +226,6 @@
             ]
         },
         {
-            "title": "申请日期",
-            "dataIndex": "applyTime",
-            "disabled": true
-        },
-        {
             "title": "备注",
             "dataIndex": "description",
             "type": "textarea"

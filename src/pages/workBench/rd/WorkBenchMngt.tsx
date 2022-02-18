@@ -337,21 +337,21 @@ export default function WorkBenchMngt(): React.ReactNode {
 					if (authorities?.indexOf(item?.authority || '') === -1) {
 						return null
 					} else {
-						return <div className={res.col !== 2 ? styles.content : styles.content2} key={ind + '_' + index}>
-							<p onClick={() => {
-								if (item.path) {
-									history.push({
-										pathname: item.path,
-										state: {
-											state: item?.state,
-											type: item?.type,
-											userId: item?.userId,
-											createUserId: item?.createUserId,
-											weldingUserId: item?.weldingUserId
-										}
-									})
-								}
-							}}>
+						return <div className={res.col !== 2 ? styles.content : styles.content2} key={ind + '_' + index} onClick={() => {
+							if (item.path) {
+								history.push({
+									pathname: item.path,
+									state: {
+										state: item?.state,
+										type: item?.type,
+										userId: item?.userId,
+										createUserId: item?.createUserId,
+										weldingUserId: item?.weldingUserId
+									}
+								})
+							}
+						}}>
+							<p>
 								<CheckCircleOutlined style={{ paddingRight: "8px" }} />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span>
 							</p>
 							<p className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</p>

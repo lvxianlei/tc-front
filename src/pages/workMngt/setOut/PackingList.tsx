@@ -13,15 +13,7 @@ import { Link, useHistory, useLocation, useParams, useRouteMatch } from 'react-r
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import ExportList from '../../../components/export/list';
-import { IBundle, IPackingList } from './PackingListNew';
-
-interface IResponseData {
-    readonly id: number;
-    readonly size: number;
-    readonly current: number;
-    readonly total: number;
-    readonly records: [];
-}
+import { IBundle, IPackingList } from './ISetOut';
 
 export default function PackingList(): React.ReactNode {
     const columns = [
@@ -40,10 +32,16 @@ export default function PackingList(): React.ReactNode {
             dataIndex: 'balesCode'
         },
         {
-            key: 'packageType',
+            key: 'packageTypeName',
             title: '包类型',
             width: 150,
-            dataIndex: 'packageType'
+            dataIndex: 'packageTypeName'
+        },
+        {
+            key: 'packageAttributeName',
+            title: '包属性',
+            width: 150,
+            dataIndex: 'packageAttributeName'
         },
         {
             key: 'balesCount',
@@ -144,8 +142,13 @@ export default function PackingList(): React.ReactNode {
     const [loading1, setLoading1] = useState(false);
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/packageStructure/${params.productId}`)
-        resole(data)
+        await RequestUtil.get(`/tower-science/packageStructure/${params.productId}`).then(res => {
+            resole(res)
+        }).catch(error => {
+            setTimeout(() => {
+                history.goBack();
+            }, 500)
+        });
     }), {})
     const detailData: any = data;
 

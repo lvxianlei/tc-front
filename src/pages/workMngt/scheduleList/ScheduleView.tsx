@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect } from 'antd'
+import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { CommonTable, DetailTitle, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -11,6 +11,7 @@ import moment from 'moment';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './scheduleList.module.less';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
+import SchedulePlan from './SchedulePlan';
 
 
 const tableColumns = [
@@ -70,6 +71,7 @@ export default function ScheduleView(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [load, setLoad] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
     const history = useHistory();
@@ -82,10 +84,14 @@ export default function ScheduleView(): React.ReactNode {
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
     const [materialPartUser, setMaterialPartUser] = useState<any|undefined>([]);
     const [smallSampleUser, setSmallSampleUser] = useState<any|undefined>([]);
+    const [planData, setPlanData] = useState<any|undefined>([]);
     const params = useParams<{ id: string, status: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         setDepartment(departmentData);
+        const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);
+        setPlanData(planData);
+        
         resole(data)
     }), {})
     
@@ -93,8 +99,8 @@ export default function ScheduleView(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const saveData = await form.validateFields();
-            console.log(saveData)
             saveData.id = scheduleData.id;
+            saveData.assignPlanId = scheduleData.assignPlanId;
             saveData.boltDeliverTime= moment(saveData.boltDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.weldingDeliverTime= moment(saveData.weldingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.loftingDeliverTime= moment(saveData.loftingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
@@ -212,6 +218,9 @@ export default function ScheduleView(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={async ()=>{
+                        
+                        setVisible(true);
+                        setLoad(true)
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
                         setScheduleData(resData);
                         if(resData.materialLeaderDepartment){
@@ -300,9 +309,12 @@ export default function ScheduleView(): React.ReactNode {
                             boltDrawDeliverTime:resData.boltDrawDeliverTime? moment(resData.boltDrawDeliverTime):'',
                             weldingDrawDeliverTime:resData.weldingDrawDeliverTime? moment(resData.weldingDrawDeliverTime):'',
                         });
-                        setVisible(true);
+                        setLoad(false)
                     }} disabled={params.status!=='2'||record.materialLeaderName}>指派</Button>
                     <Button type='link' onClick={async ()=>{
+                        setEdit(true);
+                        setVisible(true);
+                        setLoad(true)
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
                         setScheduleData(resData);
                         if(resData.materialLeaderDepartment){
@@ -391,15 +403,15 @@ export default function ScheduleView(): React.ReactNode {
                             boltDrawDeliverTime:resData.boltDrawDeliverTime? moment(resData.boltDrawDeliverTime):'',
                             weldingDrawDeliverTime:resData.weldingDrawDeliverTime? moment(resData.weldingDrawDeliverTime):'',
                         });
-                        setVisible(true);
-                        setEdit(true);
+                        
+                        setLoad(false)
                     }} disabled={!record.materialLeaderName}>详情</Button>
                 </Space>
             )
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false); form.setFieldsValue({});setEdit(false);};
+    const handleModalCancel = () => {setVisible(false);setEdit(false);};
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
         const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         switch (title) {
@@ -464,11 +476,13 @@ export default function ScheduleView(): React.ReactNode {
                 onCancel={handleModalCancel}
                 footer={
                     edit?null:<>
+                        <SchedulePlan plan={setPlanData}/>
                         <Button onClick={handleModalCancel}>取消</Button>
                         <Button type='primary' onClick={handleModalOk}>保存并提交</Button>
                     </>
                 }
             >
+                <Spin spinning={load}>
                 <Form form={form} {...formItemLayout} initialValues={scheduleData||{}}>
                     <Row>
                         <Col span={12}>
@@ -488,6 +502,102 @@ export default function ScheduleView(): React.ReactNode {
                                             { name }
                                         </Select.Option>
                                     }) }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Row>
+                                <Col span={15}>
+                                    <Form.Item name="assignName" label="指派方案"> 
+                                        <Select disabled={edit} onChange={async (value)=>{
+                                            setLoad(true)
+                                            const resData: any = await RequestUtil.get(`/tower-science/assignPlan/planDetailById/${value}`)
+                                            resData.name = form.getFieldsValue().name
+                                            setScheduleData({
+                                                ...scheduleData,
+                                                assignPlanId: resData.id,
+                                                name:form.getFieldsValue().name,
+                                                materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                                                materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                                                boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
+                                                boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
+                                                weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
+                                                weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?resData.weldingLeaderDepartment:'',
+                                                loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
+                                                loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
+                                                drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
+                                                drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
+                                                materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                                                materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                                                smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
+                                                smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
+                                            });
+                                            if(resData.materialLeaderDepartment){
+                                                const materialLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialLeaderDepartment}&size=1000`);
+                                                setMaterialUser(materialLeaderDepartment.records);
+                                            }
+                                            if(resData.materialPartLeaderDepartment){
+                                                const materialPartLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialPartLeaderDepartment}&size=1000`);
+                                                setMaterialPartUser(materialPartLeaderDepartment.records);
+                                            }
+                                            if(resData.smallSampleLeaderDepartment){
+                                                const smallSampleLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.smallSampleLeaderDepartment}&size=1000`);
+                                                setSmallSampleUser(smallSampleLeaderDepartment.records);
+                                            }
+                                            if(resData.drawLeaderDepartment){
+                                                const drawLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.drawLeaderDepartment}&size=1000`);
+                                                setDrawUser(drawLeaderDepartment.records);
+                                            }
+                                            if(resData.loftingLeaderDepartment){
+                                                const loftingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.loftingLeaderDepartment}&size=1000`);
+                                                setLoftingUser(loftingLeaderDepartment.records);
+                                            }
+                                            if(resData.weldingLeaderDepartment){
+                                                const weldingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.weldingLeaderDepartment}&size=1000`);
+                                                setWeldingUser(weldingLeaderDepartment.records);
+                                            }
+                                            if(resData.boltLeaderDepartment){
+                                                const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
+                                                setBoltUser(boltLeaderDepartment.records);
+                                            }
+                                            // const name = form.getFieldsValue().name;
+                                            form.setFieldsValue({
+                                                // name: name,
+                                                assignName: resData.assignName,
+                                                materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                                                materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                                                boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
+                                                boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
+                                                weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
+                                                weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?resData.weldingLeaderDepartment:'',
+                                                loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
+                                                loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
+                                                drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
+                                                drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
+                                                materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                                                materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                                                smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
+                                                smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
+                                            });
+                                            setLoad(false)
+                                        }}>
+                                            { planData && planData.map((item:any)=>{
+                                                return <Select.Option key={item.id} value={item.id}>{item.assignName}</Select.Option>
+                                            }) }
+                                        </Select>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="priority" label="优先级" rules={[{required: true,message:'请选择优先级'}]} > 
+                                <Select disabled={edit}>
+                                    <Select.Option value={1} key={1}>紧急</Select.Option>
+                                    <Select.Option value={2} key={2}>高</Select.Option>
+                                    <Select.Option value={3} key={3}>中</Select.Option>
+                                    <Select.Option value={4} key={4}>低</Select.Option>
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -539,7 +649,7 @@ export default function ScheduleView(): React.ReactNode {
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
-                                    <Form.Item name="materialPartLeader" label="" rules={[{required: true,message:'请选择提料负责人'}]} >
+                                    <Form.Item name="materialPartLeader" label="" rules={[{required: true,message:'请选择提料配段负责人'}]} >
                                         <Select disabled={edit}>
                                             { materialPartUser && materialPartUser.map((item:any)=>{
                                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
@@ -746,24 +856,15 @@ export default function ScheduleView(): React.ReactNode {
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="priority" label="优先级" rules={[{required: true,message:'请选择优先级'}]} > 
-                                        <Select disabled={edit}>
-                                            <Select.Option value={0} key={0}>紧急</Select.Option>
-                                            <Select.Option value={1} key={1}>高</Select.Option>
-                                            <Select.Option value={2} key={2}>中</Select.Option>
-                                            <Select.Option value={3} key={3}>低</Select.Option>
-                                        </Select>
+                                    <Form.Item name="description" label="备注"  >
+                                        <TextArea rows={1} disabled={edit} showCount maxLength={400} style={{width:'100%'}}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Col>
-                        <Col span={12}>
-                            <Form.Item name="description" label="备注"  >
-                                <TextArea rows={1} disabled={edit} showCount maxLength={400}/>
-                            </Form.Item>
-                        </Col>
                     </Row>
                 </Form>
+                </Spin>
                 {edit&&<>
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={scheduleData?.assignLogList} pagination={ false } />
@@ -799,10 +900,10 @@ export default function ScheduleView(): React.ReactNode {
                         label:'优先级',
                         children:   <Select style={{width:"100px"}}>
                                         <Select.Option value={''} key ={''}>全部</Select.Option>
-                                        <Select.Option value='0' key='0'>紧急</Select.Option>
-                                        <Select.Option value='1' key='1'>高</Select.Option>
-                                        <Select.Option value='2' key='2'>中</Select.Option>
-                                        <Select.Option value='3' key='3'>低</Select.Option>
+                                        <Select.Option value='1' key='1'>紧急</Select.Option>
+                                        <Select.Option value='2' key='2'>高</Select.Option>
+                                        <Select.Option value='3' key='3'>中</Select.Option>
+                                        <Select.Option value='4' key='4'>低</Select.Option>
                                     </Select>
                     },
                     {
