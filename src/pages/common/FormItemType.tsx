@@ -58,7 +58,7 @@ interface PagenationProps {
 }
 
 export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
-    const initValue = value?.records?.map((item: any) => item.id)
+    const initValue = value?.records?.map((item: any) => item.id) || []
     const [select, setSelect] = useState<any[]>(initValue)
     const [selectRows, setSelectRows] = useState<any[]>(initValue)
     const [columns, setColumns] = useState<any[]>(data.columns)
@@ -95,7 +95,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         }
     }), { refreshDeps: [pagenation.current] })
 
-    const onSelectChange = (record: any, selected: boolean, selectRows: any[]) => {
+    const onSelectChange = (record: any, selected: boolean, selectAllRows: any[]) => {
         const currentSelect = [...select]
         const currentSelectRows = [...selectRows]
         if (data.selectType && data.selectType === "checkbox") {
@@ -111,7 +111,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 onChange && onChange(currentSelectRows.filter((item: any) => item.id !== record.id))
             }
         } else {
-            onChange && onChange(selectRows)
+            onChange && onChange(selectAllRows)
             setSelect([record.id])
         }
     }
