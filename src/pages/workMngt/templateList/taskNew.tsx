@@ -569,7 +569,8 @@ export default function TaskNew(props:any){
                                             productType: formValue[0]?.productType
                                         });  
                                     }
-                                    if(type === '钢管杆'){
+                                    else if(type === '钢管杆'){
+                                        
                                         setRadioValue('自定义')
                                         form.setFieldsValue({
                                             ...formValue[0],
@@ -577,9 +578,10 @@ export default function TaskNew(props:any){
                                         })
                                         setPrintData({
                                             ...printData,
+                                            printSpecifications:'1-12',
                                             productType: formValue[0]?.productType,
                                             productCategoryId: value,
-                                            printSpecifications: '1-12'
+                                            
                                         })
                                         formRef.setFieldsValue({
                                             print:{
@@ -594,7 +596,7 @@ export default function TaskNew(props:any){
                                             productType: formValue[0]?.productType
                                         });    
                                     }
-                                    if(type === '角钢塔'){
+                                    else if(type === '角钢塔'){
                                         form.setFieldsValue({
                                             ...formValue[0],
                                             print: '火曲,钻孔,铆焊'
