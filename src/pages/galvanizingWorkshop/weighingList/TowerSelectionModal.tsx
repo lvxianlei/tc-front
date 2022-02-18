@@ -7,7 +7,7 @@ import { Button, FormItemProps, Input, Modal, Space, TableColumnType } from 'ant
 import Table, { TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
-import styles from '../../../components/AbstractSelectableModal.module.less';
+import styles from './WeighingList.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractFilteredSelectionModal from '../../../components/AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../../components/AbstractSelectableModal';
@@ -175,10 +175,8 @@ export default class TowerSelectionModal extends AbstractFilteredSelectionModal<
                     onCancel={this.handleCancel}
                     width="80%"
                 >
-                    <Space direction="vertical" className={styles.modalTable}>
-                        {this.renderFilterContent()}
-                        {this.renderTableContent()}
-                    </Space>
+                    {this.renderFilterContent()}
+                    {this.renderTableContent()}
                 </Modal>
             </>
         );

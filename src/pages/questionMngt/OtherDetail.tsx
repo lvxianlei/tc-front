@@ -211,6 +211,11 @@ const setOutColumns = [
         key: 'description' 
     },
     { 
+        title: '特殊件号', 
+        dataIndex: 'specialCode', 
+        key: 'specialCode' 
+    },
+    { 
         title: '电焊', 
         dataIndex: 'electricWelding', 
         key: 'electricWelding' 

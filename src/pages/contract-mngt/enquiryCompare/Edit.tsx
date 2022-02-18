@@ -176,7 +176,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             ...item,
             num: item.planPurchaseNum || "0",
             spec: item.structureSpec,
-            width: formatSpec(item.spec).width,
+            // width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
             weight: item.singleWeight || 0,
             source: 1,
