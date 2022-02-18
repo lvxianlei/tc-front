@@ -376,7 +376,7 @@ export default function TaskView(props: any){
                         {specialData?.productType}
                     </Descriptions.Item>
                     <Descriptions.Item label="打印条件">
-                        {specialData?.printSpecifications!== null ?specialData?.printSpecifications+','+specialData?.printSpecialProcess:specialData?.printSpecialProcess}
+                        {specialData?.printSpecifications!== null&&specialData?.printSpecialProcess!==null ?specialData?.printSpecifications+','+specialData?.printSpecialProcess:specialData?.printSpecialProcess!==null ?specialData?.printSpecialProcess:specialData?.printSpecifications!==null ?specialData?.printSpecifications:''}
                     </Descriptions.Item>
                     <Descriptions.Item label="数量">
                         {specialData?.structureNumber}
