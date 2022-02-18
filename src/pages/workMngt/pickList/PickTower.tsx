@@ -99,7 +99,12 @@ export default function PickTower(): React.ReactNode {
             const saveData={
                 productCategoryId: params.id,
                 productId: productId,
-                productSegmentListDTOList: saveTableData,
+                productSegmentListDTOList: saveTableData.map((item:any)=>{
+                    return {
+                        ...item,
+                        count:item?.count!==null?item?.count:0
+                    }
+                }),
                 legWeightA:data.legWeightA,
                 legWeightB:data.legWeightB,
                 legWeightC:data.legWeightC,
