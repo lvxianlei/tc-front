@@ -392,7 +392,8 @@ export default function TaskNew(props:any){
                 formRef.setFieldsValue({
                     print:{
                         printSpecifications: '全部'
-                    }
+                    },
+                    printSpecialProcess:''
                 }) 
             }
             
@@ -414,7 +415,8 @@ export default function TaskNew(props:any){
                         printSpecifications: '自定义',
                         before: type.split('-')[0],
                         after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
-                    }
+                    },
+                    printSpecialProcess:''
                 })  
             }
               
@@ -493,9 +495,9 @@ export default function TaskNew(props:any){
                                              setRead(false)
                                              formRef.setFieldsValue({
                                                 print:{
-                                                    printSpecifications:'',
-                                                    printSpecialProcess:[]
-                                                }
+                                                    printSpecifications:''
+                                                },
+                                                printSpecialProcess:''
                                             });
                                              form.setFieldsValue({
                                                  planNumber:value,
@@ -522,9 +524,9 @@ export default function TaskNew(props:any){
                                 <Select style={{width:'100%'}} onChange={async (value)=>{
                                     formRef.setFieldsValue({
                                         print:{
-                                            printSpecifications:'',
-                                            printSpecialProcess:[]
-                                        }
+                                            printSpecifications:''
+                                        },
+                                        printSpecialProcess:''
                                     });
                                     const formValue = tower.filter((item: { productCategoryId: SelectValue; })=>{return item.productCategoryId === value})
                                     
