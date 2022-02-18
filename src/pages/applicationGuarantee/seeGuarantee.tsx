@@ -28,7 +28,6 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                         <DetailTitle title="基本信息" />
                         <BaseInfo
                             form={addCollectionForm}
-                            classStyle={"overall-form-class-padding0"}
                             dataSource={props?.userData?.guaranteeInitVO || {}}
                             col={2}
                             columns={[...seeBaseForm]}
@@ -59,7 +58,6 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                     <DetailTitle title="保函回收信息" />
                     <BaseInfo
                         form={addCollectionForm}
-                        classStyle={"overall-form-class-padding0"}
                         dataSource={props?.userData?.guaranteeRecoveryVO || {}}
                         col={2}
                         columns={[...recoveryForm]}
