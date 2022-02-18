@@ -278,7 +278,7 @@
     "CargoDetails": [
         {
             "title": "品名",
-            "dataIndex": "productName",
+            "dataIndex": "materialName",
             "type": "string"
         },
         {
@@ -328,7 +328,7 @@
         },
         {
             "title": "采购状态",
-            "dataIndex": "receiveStatusName"
+            "dataIndex": "receiveDetailStatusName"
         },
         {
             "title": "最新状态变更时间",

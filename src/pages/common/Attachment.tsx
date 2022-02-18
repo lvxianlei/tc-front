@@ -81,6 +81,7 @@ export default forwardRef(function ({
     children = <Button key="enclosure" type="primary" ghost>上传</Button>,
     maxCount = 5,
     edit = false,
+    marginTop = true,
     onDoneChange = () => { },
     ...props
 }: AttachmentProps, ref): JSX.Element {
@@ -308,7 +309,7 @@ export default forwardRef(function ({
                         textOverflow: "ellipsis",
                         overflow: "hidden"
                     }}>{item.originalName}</Col>
-                    <Col span={12} style={{ padding: "8px 8px" }}>{operationRender(item)}</Col>
+                    <Col span={12} style={{ padding: "0px 8px" }}>{operationRender(item)}</Col>
                 </Row>
             </Spin>)}
         </div>}
