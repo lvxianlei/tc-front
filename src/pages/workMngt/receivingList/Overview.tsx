@@ -38,7 +38,7 @@ const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, re
     useImperativeHandle(ref, () => ({ onSubmit: saveRun }), [saveRun, attachRef.current.getDataSource])
 
     return <Spin spinning={loading}>
-        <Attachment title={false} dataSource={data} edit ref={attachRef} />
+        <Attachment title={false} dataSource={data} edit ref={attachRef} style={{margin: "0px"}} marginTop={false} />
     </Spin>
 })
 export default function Overview() {

@@ -81,6 +81,7 @@ export default forwardRef(function ({
     children = <Button key="enclosure" type="primary" ghost>上传</Button>,
     maxCount = 5,
     edit = false,
+    marginTop = true,
     onDoneChange = () => { },
     ...props
 }: AttachmentProps, ref): JSX.Element {
@@ -236,7 +237,7 @@ export default forwardRef(function ({
             <Image src={picInfo.url} preview={false} />
         </Modal>
         {isTable && <DetailTitle
-            style={{ marginTop: "24px" }}
+            style={{ marginTop: marginTop ? "24px" : "0px" }}
             title={title}
             {...edit ? {
                 operation: [
