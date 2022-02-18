@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Table, InputNumber, Radio, message } from 'antd'
+import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Table, InputNumber, Radio, message, Checkbox } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { Attachment, AttachmentRef, CommonTable, DetailTitle, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -14,6 +14,7 @@ import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { SelectValue } from 'antd/lib/select';
 import { idText } from 'typescript';
 import { FileProps } from '../../common/Attachment';
+import { Console } from 'console';
 
 
 
@@ -21,6 +22,7 @@ export default function TaskNew(props:any){
     const [visible, setVisible] = useState<boolean>(false);
     const [read, setRead] = useState<boolean>(false);
     const [printVisible, setPrintVisible] = useState<boolean>(false);
+    const [checked, setChecked] = useState<any>(false);
     const [steelVisible, setSteelVisible] = useState<boolean>(false);
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
     const history = useHistory();
@@ -142,6 +144,12 @@ export default function TaskNew(props:any){
             title: 'NC程序名称',
             width: 200,
             dataIndex: 'ncName'
+        },
+        {
+            key: 'specialCode',
+            title: '特殊件号',
+            width: 200,
+            dataIndex: 'specialCode'
         },
         {
             key: 'description',
@@ -272,14 +280,20 @@ export default function TaskNew(props:any){
             saveData.type = 3;
             saveData.printSpecifications= printData?.printSpecifications;
             saveData.printSpecialProcess = printData?.printSpecialProcess;
-            saveData.templateFiles = attachRef.current?.getDataSource().map((item:any)=>{
-                return {
-                    productCategoryId: printData?.productCategoryId,
-                    name: item.originalName,
-                    fileId:item.id,
-                }
-                
-            });
+            if(attachRef.current?.getDataSource()&&attachRef.current?.getDataSource().length<1){
+                message.error('未上传附件，不可保存并提交！')
+                return
+            }else{
+                saveData.templateFiles = attachRef.current?.getDataSource().map((item:any)=>{
+                    return {
+                        productCategoryId: printData?.productCategoryId,
+                        name: item.originalName,
+                        fileId:item.id,
+                    }
+                    
+                });
+            }
+           
             await RequestUtil.post('/tower-science/loftingTemplate', saveData).then(()=>{
                 setVisible(false);
                 form.resetFields();
@@ -297,9 +311,16 @@ export default function TaskNew(props:any){
         try {
             const saveData = await formRef.validateFields();
             if(saveData?.print?.printSpecifications === '全部'){
-                form.setFieldsValue({
-                    print: '全部,'+ saveData?.printSpecialProcess?.join(',')
-                })
+                if(saveData?.printSpecialProcess.length>0){
+                    form.setFieldsValue({
+                        print: '全部,'+ saveData?.printSpecialProcess?.join(',')
+                    })
+                }else{
+                    form.setFieldsValue({
+                        print: '全部'
+                    })
+                }
+                
             }
             else if(saveData?.print?.printSpecifications === '自定义'){
                 if(!saveData?.print?.before){
@@ -310,9 +331,17 @@ export default function TaskNew(props:any){
                     message.error('未填写规格，不可保存并提交！')
                     return
                 }
-                form.setFieldsValue({
-                    print: saveData?.print?.before+'-'+saveData?.print?.after +','+ saveData?.printSpecialProcess?.join(',')
-                })
+                if(saveData?.printSpecialProcess.length>0){
+                    form.setFieldsValue({
+                        print: saveData?.print?.before+'-'+saveData?.print?.after +','+ saveData?.printSpecialProcess?.join(',')
+                    })
+                }
+                else{
+                    form.setFieldsValue({
+                        print: saveData?.print?.before+'-'+saveData?.print?.after
+                    })
+                }
+
             }else{
                 form.setFieldsValue({
                     print: saveData?.printSpecialProcess?.join(',')
@@ -320,10 +349,15 @@ export default function TaskNew(props:any){
             }
             setPrintData({
                 ...printData,
-                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:'',
+                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
                 printSpecialProcess: saveData?.printSpecialProcess?.join(',')
             })
-            const data: any = await RequestUtil.get(`/tower-science/loftingTemplate/plate/list/${printData?.productCategoryId}/${saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before-saveData?.print?.after:''}/${saveData?.printSpecialProcess?.join(',')}`);
+            const data:any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                productCategoryId: printData?.productCategoryId,
+                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
+                printSpecialProcess: saveData?.printSpecialProcess?.join(','),
+                productType: printData?.productType
+            });
             form.setFieldsValue({
                 structureNumber: data?.length
             })
@@ -334,29 +368,50 @@ export default function TaskNew(props:any){
         }
     }
 
-    const handleModalCancel = () => {setVisible(false); form.resetFields(); formRef.resetFields();setSteelData([]);setFileData([])};
+    const handleModalCancel = () => {setRead(false);setVisible(false); form.resetFields(); formRef.resetFields();setSteelData([]);setFileData([])};
     const handlePrintModalCancel = () => {
         setPrintVisible(false); 
         const type:any = form.getFieldValue('print');
         if(type && type.indexOf("全部") != -1 ){
+            console.log(type.length)
             setRadioValue('全部')
-            formRef.setFieldsValue({
-                print:{
-                    printSpecifications: '全部'
-                },
-                printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',')  
-            })  
+            if(type?.indexOf(',')!= -1){
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '全部'
+                    },
+                    printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',')  
+                })  
+            }else{
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '全部'
+                    }
+                }) 
+            }
+            
         }
         else if(type && type.indexOf("-") != -1 ){
             setRadioValue('自定义')
-            formRef.setFieldsValue({
-                print:{
-                    printSpecifications: '自定义',
-                    before: type.split('-')[0],
-                    after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
-                },
-                printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',') 
-            })    
+            if(type?.indexOf(',')!= -1){
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '自定义',
+                        before: type.split('-')[0],
+                        after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
+                    },
+                    printSpecialProcess: type?.substring(type?.indexOf(',')+1, type?.length)?.split(',') 
+                })  
+            }else{
+                formRef.setFieldsValue({
+                    print:{
+                        printSpecifications: '自定义',
+                        before: type.split('-')[0],
+                        after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
+                    }
+                })  
+            }
+              
         }else {
             setRadioValue('')
             formRef.setFieldsValue({
@@ -404,7 +459,10 @@ export default function TaskNew(props:any){
     }
     return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
     });
-    const plainOptions = ['全部', '自定义'];
+    const plainOptions = [
+        { label: '全部', value: '全部',checked: checked },
+        { label: '自定义', value: '自定义',checked: checked },
+    ];
     return (
         <>
             <Modal 
@@ -434,6 +492,7 @@ export default function TaskNew(props:any){
                                             form.setFieldsValue({
                                                 planNumber:value
                                             })
+                                            formRef.resetFields();
                                         }}>
                                             {planData && planData.map(({ planNumber}: any, index: string | number | undefined) => {
                                                 return <Select.Option key={index} value={planNumber}>
@@ -457,7 +516,7 @@ export default function TaskNew(props:any){
                                     }
                                     let data: any = [];
                                     const type:any =  formValue[0]?.productType;
-                                    if(formValue[0]?.printSpecifications!==null||formValue[0]?.printSpecifications!==null){
+                                    if(formValue[0]?.printSpecifications!==null||formValue[0]?.printSpecialProcess!==null){
                                         data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
                                             productCategoryId: formValue[0]?.productCategoryId,
                                             printSpecifications: formValue[0]?.printSpecifications,
@@ -465,10 +524,11 @@ export default function TaskNew(props:any){
                                             productType: formValue[0]?.productType
                                         });
                                     }
-                                    if(type === '四管塔' || type === '架构塔'){
+                                    if(type === '四管塔' ||type === '管塔'|| type === '架构塔'|| type === '钢架构'){
                                         setRadioValue('全部')
                                         setPrintData({
                                             ...printData,
+                                            productType: formValue[0]?.productType,
                                             productCategoryId: value,
                                             printSpecifications: '全部'
                                         })
@@ -494,6 +554,7 @@ export default function TaskNew(props:any){
                                         })
                                         setPrintData({
                                             ...printData,
+                                            productType: formValue[0]?.productType,
                                             productCategoryId: value,
                                             printSpecifications: '1-12'
                                         })
@@ -517,6 +578,7 @@ export default function TaskNew(props:any){
                                         })
                                         setPrintData({
                                             ...printData,
+                                            productType: formValue[0]?.productType,
                                             productCategoryId: value,
                                             printSpecialProcess: '火曲,钻孔,铆焊'
                                         })
@@ -531,6 +593,7 @@ export default function TaskNew(props:any){
                                     }else{
                                         setPrintData({
                                             ...printData,
+                                            productType: formValue[0]?.productType,
                                             productCategoryId: value,
                                         })
                                     }
@@ -586,6 +649,7 @@ export default function TaskNew(props:any){
                         <Col span={11}>
                             <Form.Item name="detail" label="钢板明细" >
                                 <Button type='link' onClick={async ()=>{
+                                    console.log(printData)
                                     const data: any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
                                         productCategoryId: printData?.productCategoryId,
                                         printSpecifications: printData?.printSpecifications,
@@ -631,9 +695,9 @@ export default function TaskNew(props:any){
                 
                 <Attachment ref={attachRef} edit onDoneChange={
                     (attachs: FileProps[]) => {
-                        setFileData([...fileData, ...attachs]);
+                        setFileData([...attachs]);
                     }
-                } dataSource={fileData}/>
+                } dataSource={fileData} maxCount={1}/>
             </Modal>
             <Modal
                 title='样板打印条件'  
@@ -654,28 +718,43 @@ export default function TaskNew(props:any){
                                     name={['print', 'printSpecifications']}
                                     noStyle
                                 >
-                                    <Radio.Group options={plainOptions} onChange={ e => {
-                                        setRadioValue(e.target.value)
-                                        formRef.setFieldsValue({
-                                            print:{
-                                                printSpecifications: e.target.value,
-                                                before: undefined,
-                                                after: undefined
-                                            }
-                                        })
-                                    }}/>
+                                    
+                                    <Checkbox.Group options={plainOptions}  onChange={ (e:any) => {
+                                        console.log(e)
+                                        if( e.length > 1){
+                                            setRadioValue(e.filter((item:any)=>{return item !== radioValue })[0])
+                                            formRef.setFieldsValue({
+                                                print:{
+                                                    printSpecifications: e.filter((item:any)=>{return item !== radioValue })[0],
+                                                    before: undefined,
+                                                    after: undefined
+                                                }
+                                            })
+                                        }
+                                        else{
+                                            setRadioValue(e[0])
+                                            formRef.setFieldsValue({
+                                                print:{
+                                                    printSpecifications: e[0],
+                                                    before: undefined,
+                                                    after: undefined
+                                                }
+                                            })
+                                        }
+                                        
+                                    }} value={[radioValue]}/>
                                 </Form.Item>
                                {radioValue==='自定义'&& <Form.Item
                                     name={['print', 'before']}
                                     noStyle
                                 >
-                                    <InputNumber style={{ width: '25%' }} />
+                                    <InputNumber style={{ width: '25%' }} min={1}/>
                                 </Form.Item>}
                                 {radioValue==='自定义'&& <Form.Item
                                     name={['print', 'after']}
                                     noStyle
                                 >
-                                    <InputNumber style={{ width: '25%' }} />
+                                    <InputNumber style={{ width: '25%' }} min={1} />
                                 </Form.Item>}
                             </Input.Group>
                         </Form.Item>

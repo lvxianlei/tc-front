@@ -307,7 +307,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                         </Form.Item>
                                     </Descriptions.Item>
                                     <Descriptions.Item label="交付时间">
-                                        <Form.Item name="plannedDeliveryTime"
+                                        <Form.Item name="plannedDeliveryTime" initialValue={moment(this.props.detailData?.plannedDeliveryTime)}
                                             rules={[{
                                                 required: true,
                                                 message: '请选择交付时间'

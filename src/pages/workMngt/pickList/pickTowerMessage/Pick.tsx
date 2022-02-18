@@ -29,11 +29,12 @@ export default function Lofting(): React.ReactNode {
     const [ filterValue, setFilterValue ] = useState({});
     const [ editorLock, setEditorLock ] = useState('编辑');
     const [ form ] = Form.useForm();
+    const [ formRef ] = Form.useForm();
     const [ tableDataSource, setTableDataSource ] = useState<any[]>([])
-    const formRef: React.RefObject<FormInstance> = React.createRef<FormInstance>();
-    const getForm = (): FormInstance | null => {
-        return formRef?.current;
-    }
+    // const formRef: React.RefObject<FormInstance> = React.createRef<FormInstance>();
+    // const getForm = (): FormInstance | null => {
+    //     return formRef?.current;
+    // }
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
         const data: [] = await RequestUtil.get(`/tower-science/drawProductSegment/getSegmentBySegmentGroupId`,{segmentGroupId:params.productSegmentId});
         resole(data);
@@ -81,27 +82,27 @@ export default function Lofting(): React.ReactNode {
                 </Form.Item>
             )
         },
-        {
-            key: 'patternName',
-            title: '模式',
-            width: 150,
-            editable: true,
-            dataIndex: 'patternName',
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item 
-                    name={['data',index, "pattern"]} 
-                    initialValue={ record.pattern }
-                >
-                   <Select onChange={ () => rowChange(index) }>
-                        { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={ index } value={ id  }>
-                                { name }
-                            </Select.Option>
-                        }) }
-                    </Select>
-                </Form.Item>
-            )
-        },
+        // {
+        //     key: 'patternName',
+        //     title: '模式',
+        //     width: 150,
+        //     editable: true,
+        //     dataIndex: 'patternName',
+        //     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+        //         <Form.Item 
+        //             name={['data',index, "pattern"]} 
+        //             initialValue={ record.pattern }
+        //         >
+        //            <Select onChange={ () => rowChange(index) }>
+        //                 { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+        //                     return <Select.Option key={ index } value={ id  }>
+        //                         { name }
+        //                     </Select.Option>
+        //                 }) }
+        //             </Select>
+        //         </Form.Item>
+        //     )
+        // },
         {
             key: 'code',
             title: '构件编号',
@@ -354,7 +355,7 @@ export default function Lofting(): React.ReactNode {
             </Form.Item>
         </Form>
         <Form 
-            ref={ formRef } 
+            form={ formRef } 
             className={ styles.descripForm }
         >
             <Modal 
@@ -443,7 +444,7 @@ export default function Lofting(): React.ReactNode {
                                 }
                             } }
                         >
-                            <Button type="primary" ghost>导入</Button>
+                            <Button type="primary" ghost disabled={ editorLock==='锁定' }>导入</Button>
                         </Upload>
                         <Button type="primary" ghost  onClick={()=>{
                             setAddVisible(true)
@@ -470,7 +471,10 @@ export default function Lofting(): React.ReactNode {
                                 setEditorLock('锁定');
                             } else {
                                 const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-                                let values = getForm()?.getFieldsValue(true).data;
+
+                                let values = formRef.getFieldsValue(true).data;
+                                console.log(values)
+                                
                                 if(values.length>0 && newRowChangeList.length>0) {
                                     let changeValues = values.filter((item: any, index: number) => {
                                         return newRowChangeList.indexOf(index) !== -1;
@@ -482,20 +486,24 @@ export default function Lofting(): React.ReactNode {
                                         }
                                     })
                                     RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [ ...changeValues ]).then(res => {
+                                       
                                         setColumns(columnsSetting);
                                         setEditorLock('编辑');
+                                        formRef.resetFields()
                                         setRowChangeList([]);
-                                        setRefresh(!refresh);    
+                                        setRefresh(!refresh); 
+                                        history.go(0)   
                                     });
                                 }else{
                                     setColumns(columnsSetting);
                                     setEditorLock('编辑');
+                                    formRef.resetFields()
                                     setRowChangeList([]);
                                     setRefresh(!refresh); 
                                 }
                                 
                             }
-                            console.log(getForm()?.getFieldsValue(true)) 
+                            console.log(formRef.getFieldsValue(true)) 
                         } }>{ editorLock }</Button>
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
                         <Popconfirm
@@ -553,7 +561,7 @@ export default function Lofting(): React.ReactNode {
         setAddVisible(false);
         setTableDataSource([]);
         form.setFieldsValue({ dataV: [] })
-    }} width={1200} onOk={
+    }} width={'90%'} onOk={
         ()=>{
             form.validateFields().then(()=>{
                 const values = form.getFieldsValue(true).dataV.map((item:any)=>{
