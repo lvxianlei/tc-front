@@ -125,6 +125,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                         }
                     </Space>
                 }
+                className={styles.modal}
                 onCancel={() => this.modalCancel()}
             >
                 <Form onFinish={() => this.onSave()} ref={this.form}>

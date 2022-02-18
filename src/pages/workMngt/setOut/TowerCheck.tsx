@@ -13,7 +13,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import QuestionnaireModal, { IRecord } from './QuestionnaireModal';
 import RequestUtil from '../../../utils/RequestUtil';
 
-
 const columns = [
     {
         key: 'index',
@@ -109,6 +108,13 @@ const columns = [
         editable: true,
         width: 200,
         dataIndex: 'description'
+    },
+    {
+        key: 'specialCode',
+        title: '特殊件号',
+        editable: true,
+        width: 200,
+        dataIndex: 'specialCode'
     },
     {
         key: 'electricWelding',
@@ -266,12 +272,15 @@ export default function TowerCheck(): React.ReactNode {
         const red: number = record.redColumn.indexOf(dataIndex);
         const green: number = record.greenColumn.indexOf(dataIndex);
         const yellow: number = record.yellowColumn.indexOf(dataIndex);
+        const brown: string = record.specialCode;
         if (red !== -1) {
             return 'red';
         } else if (green !== -1) {
             return 'green';
         } else if (yellow !== -1) {
             return 'yellow';
+        } else if (brown === '1' && dataIndex === 'specialCode') {
+            return 'brown';
         } else {
             return 'normal'
         }
@@ -283,7 +292,7 @@ export default function TowerCheck(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 col.dataIndex === 'index' ? index + 1
                     : !col.editable ? _
-                        : <p onDoubleClick={(e) => { questionnaire(_, record, col, checkColor(record, col.dataIndex)) }} className={checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : ''}>{_}</p>
+                        : <p onDoubleClick={(e) => { questionnaire(_, record, col, checkColor(record, col.dataIndex)) }} className={checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : checkColor(record, col.dataIndex) === 'brown' ? styles.brown : ''}>{_}</p>
             )
         }
     })
@@ -322,6 +331,11 @@ export default function TowerCheck(): React.ReactNode {
                 {
                     name: 'structureTexture',
                     label: '材质',
+                    children: <Input placeholder="请输入" />
+                },
+                {
+                    name: 'segmentName',
+                    label: '段名',
                     children: <Input placeholder="请输入" />
                 }
             ]}

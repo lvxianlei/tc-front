@@ -1,12 +1,20 @@
 import React, { useState, } from "react"
-import { Input, DatePicker, Select, Form, Spin, } from 'antd'
-import { Page } from '../../common'
-import { Link, useLocation } from "react-router-dom"
+import { Input, DatePicker, Select, Form, Spin, Button, Space, message, Popconfirm, Modal, } from 'antd'
+import { CommonTable, Page } from '../../common'
+import { Link, useHistory, useLocation } from "react-router-dom"
+import { FixedType } from 'rc-table/lib/interface';
 import useRequest from "@ahooksjs/use-request"
-import RequestUtil from "../../../utils/RequestUtil"
+import styles from './template.module.less';
+import RequestUtil from "../../../utils/RequestUtil";
+import TaskNew from "./taskNew";
+import TaskEdit from "./taskEdit";
+import TaskView from "./taskView";
 export default function TemplateList() {
-    const [filterValue, setFilterValue] = useState<any>({})
+    const [filterValue, setFilterValue] = useState<any>({});
+    const [refresh, setRefresh ] = useState<boolean>(false);
     const location = useLocation<{ state?: number, userId?: string }>();
+    const history = useHistory();
+   
     const columns: any[] = [
         {
             title: '序号',
@@ -21,7 +29,7 @@ export default function TemplateList() {
             dataIndex: 'taskNum',
         },
         {
-            title: '上传图纸类型',
+            title: '工作类型',
             dataIndex: 'uploadDrawTypeName',
         },
         {
@@ -41,11 +49,15 @@ export default function TemplateList() {
             dataIndex: 'deliverTime',
         },
         {
-            title: '图纸负责人',
+            title: '样板负责人',
             dataIndex: 'drawLeaderName',
         },
         {
-            title: '上传状态',
+            title: '页数/数量',
+            dataIndex: 'structureNumber',
+        },
+        {
+            title: '完成状态',
             dataIndex: 'uploadStatusName',
         },
         {
@@ -55,9 +67,45 @@ export default function TemplateList() {
         {
             title: '操作',
             dataIndex: 'operation',
+            fixed: 'right' as FixedType,
+            width:'100px',
+            align:'left',
             render: (text: string, record: Record<string, any>): React.ReactNode => {
                 return (
-                    <Link to={`/workMngt/templateList/${record.id}/${record.productCategoryId}`}>查看</Link>
+                   <Space direction="horizontal" size="small" className={styles.operationBtn}> {record?.uploadDrawTypeName!=='样板打印'?
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/templateList/detail/${record.id}/${record.productCategoryId}`)}}>查看</Button>
+                    :<>
+                    
+                    <TaskView record={record} freshF= {setRefresh} fresh={refresh}/>
+                    {record.uploadStatusName === '待完成' &&<Popconfirm
+                        title="确认完成?"
+                        onConfirm={() => {
+                            RequestUtil.get(`/tower-science/loftingTemplate/complete/${record.id}`).then(res => {
+                                setRefresh(!refresh);
+                            });
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="link" >完成</Button>
+                    </Popconfirm>}
+                    {record.uploadStatusName === '待完成' &&<TaskEdit record={record} freshF= {setRefresh} fresh={refresh}/>}
+                    {record.uploadStatusName === '待完成' &&<Popconfirm
+                        title="确认删除?"
+                        onConfirm={() => {
+                            RequestUtil.delete(`/tower-science/loftingTemplate/${record.id}`).then(res => {
+                                message.success('删除成功！')
+                                setRefresh(!refresh);
+                            });
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="link" >删除</Button>
+                    </Popconfirm>}
+                    </>}
+                    </Space>
+                   
                 )
             }
         },
@@ -77,26 +125,41 @@ export default function TemplateList() {
         resole(data?.records);
     }), {})
     const checkUser: any = data || [];
-
+    
     return (
         <Spin spinning={loading}>
             <Page
                 path="/tower-science/loftingTemplate"
                 filterValue={filterValue}
                 columns={columns}
+                refresh={refresh}
+                extraOperation={ <TaskNew freshF= {setRefresh} fresh={refresh}/>}
                 exportPath={`/tower-science/loftingTemplate`}
                 onFilterSubmit={onFilterSubmit}
                 requestData={{ status: location.state?.state, drawLeader: location.state?.userId }}
                 searchFormItems={[
                     {
                         name: 'drawType',
-                        label: '图纸类型',
+                        label: '工作类型',
                         children: (
                             <Select style={{ width: 200 }} placeholder="请选择">
                                 <Select.Option value="">全部</Select.Option>
                                 <Select.Option value="1">组装图纸</Select.Option>
                                 <Select.Option value="2">发货图纸</Select.Option>
+                                <Select.Option value="3">样板打印</Select.Option>
                             </Select>
+                        )
+                    },
+                    {
+                        name: 'status',
+                        label: '状态',
+                        children: (<Form.Item name="status" initialValue={location.state?.state || ""}>
+                            <Select style={{ width: 200 }} placeholder="请选择">
+                                <Select.Option value="">全部</Select.Option>
+                                <Select.Option value={1}>待完成</Select.Option>
+                                <Select.Option value={2}>已完成</Select.Option>
+                            </Select>
+                        </Form.Item>
                         )
                     },
                     {
@@ -105,20 +168,8 @@ export default function TemplateList() {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'status',
-                        label: '上传状态',
-                        children: (<Form.Item name="status" initialValue={location.state?.state || ""}>
-                            <Select style={{ width: 200 }} placeholder="请选择">
-                                <Select.Option value="">全部</Select.Option>
-                                <Select.Option value={1}>待上传</Select.Option>
-                                <Select.Option value={2}>已上传</Select.Option>
-                            </Select>
-                        </Form.Item>
-                        )
-                    },
-                    {
                         name: 'drawLeader',
-                        label: '图纸负责人',
+                        label: '样板负责人',
                         children: <Form.Item name="drawLeader" initialValue={location.state?.userId || ""}>
                             <Select placeholder="请选择" style={{ width: "150px" }}>
                                 <Select.Option value="" key="6">全部</Select.Option>
@@ -135,6 +186,7 @@ export default function TemplateList() {
                     }
                 ]}
             />
+            
         </Spin>
     )
 }
