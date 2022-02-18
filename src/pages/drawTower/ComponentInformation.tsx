@@ -140,7 +140,7 @@ export default function ComponentInformation(): React.ReactNode {
             <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
         </Space>
     ]}>
-        <p className={styles.count}>件号数：{params.structureCount}</p>
+        <p>件号数：<span className={styles.count}>{params.structureCount}</span></p>
         <CommonTable
             columns={tableColumns}
             dataSource={detailData?.records}
