@@ -84,7 +84,7 @@ export default function Invoicing() {
             {
                 name: 'handler',
                 label: '处理人',
-                children: <IntgSelect width={200} />
+                children: <IntgSelect width={400} />
             },
             {
                 name: 'fuzzyQuery',
