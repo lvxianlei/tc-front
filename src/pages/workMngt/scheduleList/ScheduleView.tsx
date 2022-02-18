@@ -411,7 +411,32 @@ export default function ScheduleView(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false);setEdit(false);};
+    const handleModalCancel = () => {setVisible(false);setEdit(false);form.resetFields([
+        'materialLeader',
+        'materialLeaderDepartment',
+        'boltLeader',
+        'boltLeaderDepartment',
+        'weldingLeader',
+        'weldingLeaderDepartment',
+        'loftingLeader',
+        'loftingLeaderDepartment',
+        'drawLeader',
+        'drawLeaderDepartment',
+        'materialPartLeader',
+        'materialPartLeaderDepartment',
+        'smallSampleLeader',
+        'smallSampleLeaderDepartment',
+        'pattern',
+        // 'boltDeliverTime',
+        // 'weldingDeliverTime',
+        // 'loftingDeliverTime',
+        // 'loftingPartDeliverTime',
+        // 'materialDeliverTime',
+        // 'materialPartDeliverTime',
+        // 'smallSampleDeliverTime',
+        // 'boltDrawDeliverTime',
+        // 'weldingDrawDeliverTime',
+    ]);};
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
         const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         switch (title) {

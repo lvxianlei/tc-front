@@ -93,10 +93,11 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         })
         if (this.props.type === 'edit') {
             let detailData = this.props.detailData;
+            console.log(detailData)
             detailData = {
                 ...detailData,
-                plannedDeliveryTime: detailData?.plannedDeliveryTime ? moment(detailData?.plannedDeliveryTime) : '',
                 ...data,
+                plannedDeliveryTime: detailData?.plannedDeliveryTime ? moment(detailData?.plannedDeliveryTime) : '',
             }
             detailData?.loftingUserDepartment && this.onDepartmentChange(detailData?.loftingUserDepartment || '', '放样');
             detailData?.checkUserDepartment && this.onDepartmentChange(detailData?.checkUserDepartment || '', '校对');
@@ -307,7 +308,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                         </Form.Item>
                                     </Descriptions.Item>
                                     <Descriptions.Item label="交付时间">
-                                        <Form.Item name="plannedDeliveryTime"
+                                        <Form.Item name="plannedDeliveryTime" initialValue={moment(this.props.detailData?.plannedDeliveryTime)}
                                             rules={[{
                                                 required: true,
                                                 message: '请选择交付时间'

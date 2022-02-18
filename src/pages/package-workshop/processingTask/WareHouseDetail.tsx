@@ -104,7 +104,7 @@ export default function ProcessDetail(): React.ReactNode {
             dataIndex: 'packageType', 
             key: 'packageType',
             render:(_a: any, _b: any, index: number): React.ReactNode =>(
-                <Form.Item  name={['dataV',index, "packageType"]}  >
+                <Form.Item  name={['dataV',index, "packageTypeName"]}  >
                     {_a}
                 </Form.Item>
             ) 

@@ -491,7 +491,8 @@ export default function Lofting(): React.ReactNode {
                                         setEditorLock('编辑');
                                         formRef.resetFields()
                                         setRowChangeList([]);
-                                        setRefresh(!refresh);    
+                                        setRefresh(!refresh); 
+                                        history.go(0)   
                                     });
                                 }else{
                                     setColumns(columnsSetting);
@@ -512,7 +513,8 @@ export default function Lofting(): React.ReactNode {
                                     if(!(selectedKeys.length > 100)){
                                         await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ selectedKeys.join(',') }`).then(()=>{
                                             message.success('删除成功！');
-                                            setRefresh(!refresh);   
+                                            setRefresh(!refresh);
+                                            history.go(0)   
                                         })
                                     }else{
                                         message.error('当前选择数量过多，请重新选择！')
