@@ -110,9 +110,10 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 setSelectRows(currentSelectRows.filter((item: any) => item.id !== record.id))
                 onChange && onChange(currentSelectRows.filter((item: any) => item.id !== record.id))
             }
+        } else {
+            onChange && onChange(selectRows)
+            setSelect([record.id])
         }
-        onChange && onChange(selectRows)
-        setSelect([record.id])
     }
 
     useEffect(() => {
