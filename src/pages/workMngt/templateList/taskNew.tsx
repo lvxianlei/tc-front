@@ -492,6 +492,7 @@ export default function TaskNew(props:any){
                                             form.setFieldsValue({
                                                 planNumber:value
                                             })
+                                            formRef.resetFields();
                                         }}>
                                             {planData && planData.map(({ planNumber}: any, index: string | number | undefined) => {
                                                 return <Select.Option key={index} value={planNumber}>
