@@ -309,7 +309,7 @@ export default forwardRef(function ({
                         textOverflow: "ellipsis",
                         overflow: "hidden"
                     }}>{item.originalName}</Col>
-                    <Col span={12} style={{ padding: "8px 8px" }}>{operationRender(item)}</Col>
+                    <Col span={12} style={{ padding: "0px 8px" }}>{operationRender(item)}</Col>
                 </Row>
             </Spin>)}
         </div>}
