@@ -340,7 +340,7 @@ export default function PickTower(): React.ReactNode {
                                 pattern: /^[0-9a-zA-Z]*$/,
                                 message: '仅可输入数字/字母',
                             }]}>
-                                <Input style={{width:'100%'}}/>
+                                <Input style={{width:'100%'}} disabled={status==='已完成'}/>
                             </Form.Item>
                         </Col>
                         <Col span={1}/>
@@ -352,7 +352,7 @@ export default function PickTower(): React.ReactNode {
                                 pattern: /^[0-9a-zA-Z]*$/,
                                 message: '仅可输入数字/字母',
                             }]}>
-                                <Input style={{width:'100%'}}/>
+                                <Input style={{width:'100%'}} disabled={status==='已完成'}/>
                             </Form.Item>
                         </Col>
                         <Col span={1}/>
@@ -364,7 +364,7 @@ export default function PickTower(): React.ReactNode {
                                 pattern: /^[0-9a-zA-Z]*$/,
                                 message: '仅可输入数字/字母',
                             }]}>
-                                <Input style={{width:'100%'}}/>
+                                <Input style={{width:'100%'}} disabled={status==='已完成'}/>
                             </Form.Item>
                         </Col>
                         <Col span={1}/>
@@ -376,7 +376,7 @@ export default function PickTower(): React.ReactNode {
                                 pattern: /^[0-9a-zA-Z]*$/,
                                 message: '仅可输入数字/字母',
                             }]}>
-                                <Input style={{width:'100%'}}/>
+                                <Input style={{width:'100%'}} disabled={status==='已完成'}/>
                             </Form.Item>
                         </Col>
                     </Row>
