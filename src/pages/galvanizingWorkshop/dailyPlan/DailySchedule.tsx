@@ -117,9 +117,9 @@ export default function DailySchedule(): React.ReactNode {
                     <Radio.Button value={4}>已完成</Radio.Button>
                 </Radio.Group>
                 <span className={styles.statistical}>统计
-                    <span className={styles.statistical}>下达总重量：{data?.issueTotalWeight}吨</span>
-                    <span className={styles.statistical}>角钢总重量：{data?.angleTotalWeight}吨</span>
-                    <span className={styles.statistical}>连板总重量：{data?.plateTotalWeight}吨</span>
+                    <span className={styles.statistical}>下达总重量：<span className={styles.statisticalNum}>{data?.issueTotalWeight}</span>吨</span>
+                    <span className={styles.statistical}>角钢总重量：<span className={styles.statisticalNum}>{data?.angleTotalWeight}</span>吨</span>
+                    <span className={styles.statistical}>连板总重量：<span className={styles.statisticalNum}>{data?.plateTotalWeight}</span>吨</span>
                 </span>
                 {
                     confirmStatus === 1

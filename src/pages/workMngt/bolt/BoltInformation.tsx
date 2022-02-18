@@ -12,31 +12,31 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 
 const tableColumns = [
-    { 
-        key: 'index', 
-        title: '序号', 
-        dataIndex: 'index', 
-        width: 50, 
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) 
+    {
+        key: 'index',
+        title: '序号',
+        dataIndex: 'index',
+        width: 50,
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
     },
     {
         key: 'createDeptName',
         title: '操作部门',
-        dataIndex: 'createDeptName', 
-    },
-    {  
-        key: 'createUserName', 
-        title: '操作人', 
-        dataIndex: 'createUserName' 
-    },
-    { 
-        key: 'createTime', 
-        title: '操作时间', 
-        dataIndex: 'createTime' 
+        dataIndex: 'createDeptName',
     },
     {
-        key: 'currentStatus', 
-        title: '任务状态', 
+        key: 'createUserName',
+        title: '操作人',
+        dataIndex: 'createUserName'
+    },
+    {
+        key: 'createTime',
+        title: '操作时间',
+        dataIndex: 'createTime'
+    },
+    {
+        key: 'currentStatus',
+        title: '任务状态',
         dataIndex: 'currentStatus',
         render: (status: number): React.ReactNode => {
             switch (status) {
@@ -107,8 +107,8 @@ const productColumns = [
 export default function AssemblyWeldingInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, loftId: string }>();
-    const [ pictureVisible, setPictureVisible ] = useState<boolean>(false);
-    const [ pictureUrl, setPictureUrl ] = useState('');
+    const [pictureVisible, setPictureVisible] = useState<boolean>(false);
+    const [pictureUrl, setPictureUrl] = useState('');
     const handlePictureModalCancel = () => { setPictureVisible(false) }
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get(`/tower-science/boltRecord/detail`, { loftingTask: params.loftId, productCategory: params.id })
@@ -116,58 +116,59 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
     }), {})
     const detailData: any = data
     if (loading) {
-        return <Spin spinning={ loading }>
+        return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
 
     return <>
-        <DetailContent operation={ [
+        <DetailContent operation={[
             <Space direction="horizontal" size="small" >
-                <Button type="ghost" onClick={ () => history.goBack() }>关闭</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
             </Space>
-        ] }>
+        ]}>
             <DetailTitle title="特殊要求" />
-            <BaseInfo columns={ specialColums } dataSource={ detailData } col={ 2 } />
+            <BaseInfo columns={specialColums} dataSource={detailData} col={2} />
             <DetailTitle title="产品信息" />
-            <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
+            <BaseInfo columns={productColumns} dataSource={detailData} col={2} />
             <DetailTitle title="相关附件" />
             <CommonTable columns={[
-                { 
-                    key: 'fileName', 
-                    title: '附件名称', 
+                {
+                    key: 'fileName',
+                    title: '附件名称',
                     dataIndex: 'fileName',
                     width: 250
                 },
-                { 
-                    key: 'operation', 
-                    title: '操作', 
-                    dataIndex: 'operation', 
+                {
+                    key: 'operation',
+                    title: '操作',
+                    dataIndex: 'operation',
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
+                            <Button type="link" onClick={() => window.open(record.filePath)}>下载</Button>
                             {
-                                record.fileSuffix === 'pdf' 
-                                ? 
-                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
-                                ? 
-                                <Button type='link' onClick={ () => { setPictureUrl(record.id ? record.filePath : record.link); setPictureVisible(true); } }>预览</Button> 
-                                : null 
+                                record.fileSuffix === 'pdf'
+                                    ?
+                                    <Button type="link" onClick={() => window.open(record.filePath)}>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix)
+                                        ?
+                                        <Button type='link' onClick={() => { setPictureUrl(record.id ? record.filePath : record.link); setPictureVisible(true); }}>预览</Button>
+                                        : null
                             }
                             {
-                                record.fileSuffix === 'pdf' ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : null
+                                record.fileSuffix === 'pdf' ? <Button type="link" onClick={() => window.open(record.filePath)}>预览</Button> : null
                             }
                         </Space>
-                ) }
+                    )
+                }
             ]}
-                dataSource={ detailData.fileList }
-                pagination={ false }
+                dataSource={detailData.fileList}
+                pagination={false}
             />
-            <DetailTitle title="操作信息"/>
-            <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
+            <DetailTitle title="操作信息" />
+            <CommonTable columns={tableColumns} dataSource={detailData.statusRecordList} pagination={false} />
         </DetailContent>
-        <Modal visible={ pictureVisible } onCancel={ handlePictureModalCancel } footer={ false }>
-            <Image src={ pictureUrl } preview={ false } />
+        <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
+            <Image src={pictureUrl} preview={false} />
         </Modal>
     </>
 }

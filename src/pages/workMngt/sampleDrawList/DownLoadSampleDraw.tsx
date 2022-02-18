@@ -31,25 +31,25 @@ export default function SampleDrawList(): React.ReactNode {
         {
             key: 'name',
             title: '大样图工艺卡名称',
-            width: 100,
+            width: 300,
             dataIndex: 'name'
         },
         {
             key: 'segmentName',
             title: '段包信息',
-            width: 100,
+            width: 300,
             dataIndex: 'segmentName'
         },
         {
             key: 'createTime',
             title: '上传时间',
-            width: 100,
+            width: 300,
             dataIndex: 'createTime'
         },
         {
             key: 'createUserName',
             title: '上传人',
-            width: 100,
+            width: 300,
             dataIndex: 'createUserName'
         },
         {

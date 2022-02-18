@@ -42,10 +42,10 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
     }
 
     protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
-        return ( <Space direction="horizontal" size="small">
+        return ( <Space direction="horizontal" size="small" style={{ marginBottom: '12px' }}>
                 {/* <Button type="primary">导入</Button> */}
                 <Button type="primary" onClick={this.onNewClick}>新增一级类目</Button>
-                <Button type="ghost" onClick={() => this.props.history.push('/config')}>返回</Button>
+                <Button type="ghost" onClick={() => this.props.history.push('/config/configList')}>返回</Button>
             </Space>
         );
     }
@@ -133,37 +133,32 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
             key: 'code',
             title: '编号',
             dataIndex: 'code',
-            align: "center",
             width: 120,
         }, {
             key: 'name',
             title: '一级类目名称',
             dataIndex: 'name',
-            align: "center",
             width: 200,
         }, {
             key: 'sonName',
             title: '二级类目名称',
             dataIndex: 'sonName',
-            align: "center",
             width: 200,
         }, {
             key: 'ruleFront',
             title: '规格前置符',
             dataIndex: 'ruleFront',
-            align: "center",
             width: 150,
         }, {
             key: 'unit',
             title: '单位',
             dataIndex: 'unit',
-            align: "center",
             width: 150,
         }, {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            align: "center",
+            align: "left",
             render: (_: undefined, record: IMaterialType): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     { record.level === 1 ? <Button type="link" onClick={() => this.showModal({ firstCode: record.code, parentId: record.id }, 2)}>
@@ -254,7 +249,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
      */
     public getTabItems(): ITabItem[] {
         return [{
-            label: '原材料',
+            label: '',
             key: 0
         }];
     }
