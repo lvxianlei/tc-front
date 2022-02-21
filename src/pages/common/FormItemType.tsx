@@ -60,7 +60,7 @@ interface PagenationProps {
 export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
     const initValue = value?.records?.map((item: any) => item.id) || []
     const [select, setSelect] = useState<any[]>(initValue)
-    const [selectRows, setSelectRows] = useState<any[]>(initValue)
+    const [selectRows, setSelectRows] = useState<any[]>(value?.records || [])
     const [columns, setColumns] = useState<any[]>(data.columns)
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,
@@ -106,13 +106,29 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 setSelect(currentSelect)
                 setSelectRows(currentSelectRows)
             } else {
+                onChange && onChange(currentSelectRows.filter((item: any) => item.id !== record.id))
                 setSelect(currentSelect.filter(item => item !== record.id))
                 setSelectRows(currentSelectRows.filter((item: any) => item.id !== record.id))
-                onChange && onChange(currentSelectRows.filter((item: any) => item.id !== record.id))
             }
         } else {
             onChange && onChange(selectAllRows)
             setSelect([record.id])
+        }
+    }
+
+    const onSelectAll = (selected: any[], selectedAllRows: any[], changeRows: any[]) => {
+        let currentSelect = [...select]
+        let currentSelectRows = [...selectRows]
+        if (selected) {
+            currentSelect = currentSelect.concat(changeRows.map(item => item.id))
+            currentSelectRows = currentSelectRows.concat(changeRows)
+            onChange && onChange(currentSelectRows)
+            setSelect(currentSelect)
+            setSelectRows(currentSelectRows)
+        } else {
+            onChange && onChange(selectRows.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item.id)))
+            setSelect(select.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item)))
+            setSelectRows(selectRows.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item.id)))
         }
     }
 
@@ -150,6 +166,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
                 onSelect: onSelectChange,
+                onSelectAll,
                 getCheckboxProps: data?.getCheckboxProps
             }}
             rowKey={data.rowKey || ((record: any) => record.id)}
