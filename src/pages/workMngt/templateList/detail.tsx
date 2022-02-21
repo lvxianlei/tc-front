@@ -253,8 +253,8 @@ export default function TemplateDetail() {
     const deleteItem = async (templateRecordId: string) => {
         await RequestUtil.delete(`/tower-science/loftingTemplate/delete?templateRecordId=${templateRecordId}`)
         message.success('删除成功！')
-        // history.go(0)
-        history.push(`/workMngt/templateList/detail/${params.id}/${params.productCategoryId}`)
+        history.go(0)
+        // history.push(`/workMngt/templateList/detail/${params.id}/${params.productCategoryId}`)
     }
     return (
         <>

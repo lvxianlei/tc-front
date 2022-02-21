@@ -142,7 +142,7 @@ export default function TemplateList() {
                         name: 'drawType',
                         label: '工作类型',
                         children: (
-                            <Select style={{ width: 200 }} placeholder="请选择">
+                            <Select style={{ width: 200 }} placeholder="请选择" defaultValue={""}>
                                 <Select.Option value="">全部</Select.Option>
                                 <Select.Option value="1">组装图纸</Select.Option>
                                 <Select.Option value="2">发货图纸</Select.Option>
