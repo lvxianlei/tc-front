@@ -300,6 +300,7 @@ export default function TaskNew(props:any){
                 formRef.resetFields();
                 setSteelData([])
                 setFileData([])
+                setTower([])
                 props?.freshF(!props?.fresh)
             })
         
@@ -371,7 +372,7 @@ export default function TaskNew(props:any){
         }
     }
 
-    const handleModalCancel = () => {setRead(false);setVisible(false); form.resetFields(); formRef.resetFields();setSteelData([]);setFileData([])};
+    const handleModalCancel = () => {setTower([]);setRead(false);setVisible(false); form.resetFields(); formRef.resetFields();setSteelData([]);setFileData([])};
     const handlePrintModalCancel = () => {
         setPrintVisible(false); 
         const type:any = form.getFieldValue('print');
