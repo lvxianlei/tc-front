@@ -525,9 +525,9 @@ export default function Lofting(): React.ReactNode {
                             }}
                             okText="提交"
                             cancelText="取消"
-                            disabled={ editorLock==='锁定' }
+                            disabled={ editorLock==='锁定'?true: !(selectedKeys.length>0)}
                         >
-                            <Button type="primary" ghost  disabled={ editorLock==='锁定' }>删除</Button>
+                            <Button type="primary" ghost  disabled={ editorLock==='锁定'?true: !(selectedKeys.length>0) }>删除</Button>
                         </Popconfirm>
                         <Button type="ghost" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回</Button>
                     </Space>
