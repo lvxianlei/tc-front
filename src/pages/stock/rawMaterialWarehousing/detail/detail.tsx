@@ -220,8 +220,8 @@
                             <>
                                 {/* <span>质检单</span>
                                 <span>质保单</span> */}
-                                <Button className='btn-operation-link' type='link' disabled={record.receiveStatus !== 0} onClick={() => { ReceivingBtn(record) }}>收货</Button>
-                                <Button className='btn-operation-link' disabled={record.receiveStatus !== 0} type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button>
+                                <Button className='btn-operation-link' type='link' disabled={record.receiveDetailStatus !== 0} onClick={() => { ReceivingBtn(record) }}>收货</Button>
+                                <Button className='btn-operation-link' disabled={record.receiveDetailStatus !== 0} type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button>
                             </>
                         )
                     }
