@@ -134,14 +134,14 @@ export default function PoleInformation(): React.ReactNode {
                             : null
                     }
                     {
-                        record.loftingStatus === 3 && record.isSpecial === 1 ?
+                        record.isSpecial === 1 ? record.loftingStatus === 3 || record.loftingStatus === 4 ?
                             <Button type="link" onClick={async () => {
-
                                 let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
                                 setAllotData(result)
                                 setAllotVisible(true);
                                 setProductId(record.id);
                             }}>调拨</Button>
+                            : <Button type="link" disabled>调拨</Button>
                             : <Button type="link" disabled>调拨</Button>
                     }
                 </Space>
