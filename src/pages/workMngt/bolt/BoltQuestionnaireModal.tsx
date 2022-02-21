@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Space, Modal, Form, FormInstance, Input, message, Select } from 'antd';
+import { Button, Space, Modal, Form, FormInstance, Input, message, Select, InputNumber } from 'antd';
 import { DetailContent, CommonTable, BaseInfo } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './BoltList.module.less';
@@ -258,20 +258,33 @@ class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRout
                         <Form.Item name="description" label="备注" initialValue={record.description}>
                             <Input.TextArea maxLength={300} placeholder="请输入备注信息" rows={1} showCount disabled={record.status === 1} />
                         </Form.Item>
-                        <Form.Item name="newValue" label="校对后信息"
-                            rules={[{
-                                required: true,
-                                message: '请输入校对后信息 '
-                            }]}
-                            initialValue={record.newValue}>
-                            {record.problemFieldName === '类型' ? <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-                                {boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
-                                    return <Select.Option key={index} value={name}>
-                                        {name}
-                                    </Select.Option>
-                                })}
-                            </Select> : <Input maxLength={100} placeholder="请输入" disabled={record.status === 1} />}
-                        </Form.Item>
+                        {
+                            ['wealth'].findIndex((value) => value === record.problemField) !== -1 ?
+                                <Form.Item name="newValue" label="校对后信息"
+                                    rules={[{
+                                        required: true,
+                                        message: '请输入校对后信息'
+                                    }]}
+                                    initialValue={record.newValue}>
+                                    <InputNumber max={9999} style={{ width: '100%' }} placeholder="请输入" disabled={record.status === 1} />
+                                </Form.Item>
+                                :
+                                <Form.Item name="newValue" label="校对后信息"
+                                    rules={[{
+                                        required: true,
+                                        message: '请输入校对后信息'
+                                    }]}
+                                    initialValue={record.newValue}>
+                                    {record.problemFieldName === '类型' ? <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                        {boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
+                                            return <Select.Option key={index} value={name}>
+                                                {name}
+                                            </Select.Option>
+                                        })}
+                                    </Select> : <Input maxLength={100} placeholder="请输入" disabled={record.status === 1} />}
+                                </Form.Item>
+                        }
+
                     </Form>
                     {record.status === 1 ? <CommonTable columns={columnsSetting} dataSource={this.props.record.dataSource} pagination={false} /> : null}
                     <p className={styles.topPadding}>操作信息</p>
