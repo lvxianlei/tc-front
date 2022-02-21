@@ -14,20 +14,9 @@
  import { Link } from 'react-router-dom';
  
  
- export interface DistributedTechRefProps {
-     onSubmit: () => void
-     resetFields: () => void
- }
  
  export default function DistributedTech(): React.ReactNode {
      const columns = [
-         {
-             key: 'planNumber',
-             title: '批次号',
-             width: 150,
-             dataIndex: 'planNumber',
-             fixed: 'left' as FixedType
-         },
          {
              key: 'planNumber',
              title: '计划号',
@@ -43,58 +32,9 @@
              fixed: 'left' as FixedType
          },
          {
-             key: 'loftingStatus',
-             title: '状态',
-             dataIndex: 'loftingStatus',
-             width: 120,
-             type: 'select',
-             enum: [
-                 {
-                     "value": 0,
-                     "label": "未下发"
-                 },
-                 {
-                     "value": 1,
-                     "label": "放样已下发"
-                 },
-                 {
-                     "value": 2,
-                     "label": "放样已确认"
-                 },
-                 {
-                     "value": 3,
-                     "label": "放样已完成"
-                 }
-             ]
-         },
-         {
              key: 'productTypeName',
-             title: '产品类型',
+             title: '杆塔号',
              dataIndex: 'productTypeName',
-             width: 120
-         },
-         {
-             key: 'customerCompany',
-             title: '客户',
-             dataIndex: 'customerCompany',
-             width: 120
-         },
-         {
-             key: 'lineName',
-             title: '线路名称',
-             dataIndex: 'lineName',
-             width: 120
-         },
-         {
-             key: 'productNum',
-             title: '基数',
-             dataIndex: 'productNum',
-             width: 50
-         },
-         {
-             key: 'businessManagerName',
-             title: '业务经理',
-             dataIndex: 'businessManagerName',
              width: 120
          },
          {
@@ -104,64 +44,11 @@
              width: 120
          },
          {
-             key: 'weight',
-             title: '合同重量（t）',
-             dataIndex: 'weight',
-             width: 120
-         },
-         {
              key: 'planDeliveryTime',
              title: '计划交货日期',
              dataIndex: 'planDeliveryTime',
              width: 120,
              format: 'YYYY-MM-DD'
-         },
-         {
-             key: 'voltageGradeName',
-             title: '电压等级（kv）',
-             dataIndex: 'voltageGradeName',
-             width: 120
-         },
-         {
-             key: 'approvalTime',
-             title: '审批日期',
-             dataIndex: 'approvalTime',
-             width: 120
-         },
-         {
-             key: 'description',
-             title: '备注',
-             dataIndex: 'description',
-             width: 200,
-             render: (_: any) => (
-                 <Tooltip placement="topLeft" title={_}>
-                     {_ ? _?.length > 15 ? _?.slice(0, 15) + '...' : _ : '-'}
-                 </Tooltip>
-             )
-         },
-         {
-             key: 'loftingIssueTime',
-             title: '放样下发时间',
-             dataIndex: 'loftingIssueTime',
-             width: 120
-         },
-         {
-             key: 'loftingIssueUserName',
-             title: '放样下发人',
-             dataIndex: 'loftingIssueUserName',
-             width: 120
-         },
-         {
-             key: 'loftingCompleteTime',
-             title: '放样计划完成时间',
-             dataIndex: 'loftingCompleteTime',
-             width: 120
-         },
-         {
-             key: 'loftingCompleteRealTime',
-             title: '放样实际完成时间',
-             dataIndex: 'loftingCompleteRealTime',
-             width: 120
          }
      ]
  
@@ -169,19 +56,6 @@
          gantt.clearAll();
      })
  
-     const handleModalOk = () => new Promise(async (resove, reject) => {
-         try {
-             await editRef.current?.onSubmit();
-             message.success(`下达成功`);
-             setSelectedKeys([]);
-             setSelectedRows([]);
-             setVisible(false);
-             resove(true);
-             setRefresh(!refresh);
-         } catch (error) {
-             reject(false)
-         }
-     })
  
      const SelectChange = (selectedRowKeys: React.Key[], selectedRows: IPlanSchedule[]): void => {
          setSelectedKeys(selectedRowKeys);
@@ -191,7 +65,6 @@
      const [refresh, setRefresh] = useState(false);
      const [visible, setVisible] = useState(false);
      const [filterValue, setFilterValue] = useState({});
-     const editRef = useRef<DistributedTechRefProps>();
      const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
      const [selectedRows, setSelectedRows] = useState<IPlanSchedule[]>([]);
      return (
@@ -215,49 +88,8 @@
                          })
                      }
                  }}
-                 searchFormItems={[
-                     {
-                         name: 'productType',
-                         label: '产品类型',
-                         children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                             {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                 return <Select.Option key={index} value={id}>
-                                     {name}
-                                 </Select.Option>
-                             })}
-                         </Select>
-                     },
-                     {
-                         name: 'status',
-                         label: '状态',
-                         children: <Select placeholder="请选择" style={{ width: "150px" }}>
-                             <Select.Option value={0} key="0">未下发</Select.Option>
-                             <Select.Option value={1} key="1">放样已下发</Select.Option>
-                             <Select.Option value={2} key="2">放样已确认</Select.Option>
-                             <Select.Option value={3} key="3">放样已完成</Select.Option>
-                         </Select>
-                     },
-                     {
-                         name: 'time',
-                         label: '客户交货日期',
-                         children: <DatePicker.RangePicker />
-                     },
-                     {
-                         name: 'fuzzyMsg',
-                         label: '模糊查询项',
-                         children: <Input style={{ width: "200px" }} placeholder="计划号/塔型/业务经理/客户" />
-                     }
-                 ]}
+                 searchFormItems={[]}
                  filterValue={filterValue}
-                 onFilterSubmit={(values: Record<string, any>) => {
-                     if (values.time) {
-                         const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
-                         values.startTime = formatDate[0] + ' 00:00:00';
-                         values.endTime = formatDate[1] + ' 23:59:59';
-                     }
-                     setFilterValue(values);
-                     return values;
-                 }}
              />
          </>
      )

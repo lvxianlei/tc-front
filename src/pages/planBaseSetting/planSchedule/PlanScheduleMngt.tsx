@@ -227,7 +227,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 extraOperation={<Space>
                     <Link to={``}><Button type="primary">计划交货期</Button></Link>
                     <Link to={``}><Button type="primary">拆分批次</Button></Link>
-                    <Link to={``}><Button type="primary">下发技术</Button></Link>
+                    <Link to={`/planSchedule/planScheduleMngt/distributedTech`}><Button type="primary">下发技术</Button></Link>
                 </Space>}
                 refresh={refresh}
                 tableProps={{
