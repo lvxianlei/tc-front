@@ -10,11 +10,11 @@ import { Page } from '../common'
 import { collectionListHead, approvalStatus } from "./collectionColumn.json"
 import RequestUtil from '../../utils/RequestUtil';
 import AuthUtil from '../../utils/AuthUtil';
-import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 import AddModal from './addModal'; // 新增
 import OverView from './overView'; // 查看
 import { EditRefProps, Contract } from './collection';
 import { collectionTypeeOptions } from '../../configuration/DictionaryOptions';
+import { exportDown } from "../../utils/Export";
 
 export default function CollectionInfomation(): React.ReactNode {
     const history = useHistory()
@@ -187,7 +187,9 @@ export default function CollectionInfomation(): React.ReactNode {
                                     >
                                         <Button type="primary" ghost>导入</Button>
                                     </Upload>
-                                    <Button type="link" onClick={() => downloadTemplate('/tower-finance/backMoney/exportBackMoney', '回款信息管理导入模板') }>下载导入模板</Button>
+                                    <Button type="link" onClick={() => {
+                                        exportDown("/tower-finance/backMoney/exportBackMoney", "POST", {}, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "回款信息管理导入模板")
+                                    } }>下载导入模板</Button>
                                 </div>
                            ) 
                         }

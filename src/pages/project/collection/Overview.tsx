@@ -21,7 +21,7 @@ export default function Overview() {
     return <DetailContent operation={[<Button key="cancel" onClick={() => history.go(-1)}>返回</Button>]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={promotionalTourism} dataSource={data || {}} />
+            <BaseInfo columns={data?.returnType === 1172 ? promotionalTourism.filter(item => item.dataIndex !== "payNum") : promotionalTourism} dataSource={data || {}} />
             {data?.returnType === 1172 && <>
                 <DetailTitle title="合同信息" />
                 <CommonTable columns={contractInformationDetail} dataSource={data?.backMoneyVOList || []} />

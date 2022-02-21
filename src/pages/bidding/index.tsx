@@ -2,21 +2,8 @@ import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page } from '../common'
+import { base } from "./bidding.json"
 import { sourceOptions } from '../../configuration/DictionaryOptions'
-const biddingStatusEnum = [
-    {
-        value: 0,
-        label: "未决定"
-    },
-    {
-        value: 1,
-        label: "是"
-    },
-    {
-        value: 2,
-        label: "否"
-    }
-]
 
 export default function Information(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({})
@@ -43,107 +30,7 @@ export default function Information(): React.ReactNode {
         setFilterValue(value)
         return value
     }
-
-    const columns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            fixed: "left",
-            width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'projectName',
-            title: '项目名称',
-            width: 120,
-            dataIndex: 'projectName',
-            isResizable: true,
-            render: (_: undefined, record: any): React.ReactNode => {
-                return <Link to={`/bidding/information/detail/${record.id}`}>{record.projectName}</Link>
-            }
-        },
-        {
-            title: '是否应标',
-            dataIndex: 'biddingStatus',
-            render: (_: any, record: any) => <>{biddingStatusEnum.find(item => item.value === record.biddingStatus)?.label}</>
-        },
-        {
-            key: 'projectNumber',
-            title: '项目编码',
-            width: 120,
-            dataIndex: 'projectNumber'
-        },
-        {
-            key: 'bidBuyEndTime',
-            title: '标书购买截至日期',
-            width: 200,
-            dataIndex: 'bidBuyEndTime'
-        },
-        {
-            key: 'biddingEndTime',
-            title: '投标截至日期',
-            width: 200,
-            dataIndex: 'biddingEndTime'
-        },
-        {
-            key: 'biddingPerson',
-            title: '招标人',
-            dataIndex: 'biddingPerson'
-        },
-        {
-            key: 'biddingAgency',
-            title: '招标代理机构',
-            dataIndex: 'biddingAgency',
-            width: 120
-        },
-        {
-            key: 'biddingAddress',
-            title: '招标地点',
-            dataIndex: 'biddingAddress'
-        },
-        {
-            key: 'releaseDate',
-            title: '发布日期',
-            dataIndex: 'releaseDate'
-        },
-        {
-            key: 'source',
-            title: '来源',
-            dataIndex: 'source'
-        },
-        {
-            key: 'sourceWebsite',
-            title: '原始地址',
-            dataIndex: 'sourceWebsite',
-            render: (_: any, record: any) => {
-                return <span style={{ color: "#FF8C00", cursor: "pointer" }} onClick={() => handleAddress(record)}>{record.sourceWebsite || ""}</span>
-            }
-        },
-        {
-            key: 'bidExplain',
-            title: '说明',
-            dataIndex: 'bidExplain'
-        },
-        {
-            key: 'reason',
-            title: '不应标原因',
-            dataIndex: 'reason'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            fixed: 'right',
-            width: 40,
-            render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Link to={`/bidding/information/detail/${record.id}`}>查看</Link>
-                </Space>
-            )
-        }
-    ]
-
+    
     const handleAddress = (record: any) => {
         if (record.sourceWebsite) {
             window.open(record.sourceWebsite);
@@ -152,7 +39,52 @@ export default function Information(): React.ReactNode {
 
     return <Page
         path="/tower-market/bidInfo"
-        columns={columns as any}
+        columns={[
+            {
+                title: '序号',
+                dataIndex: 'index',
+                fixed: "left",
+                width: 50,
+                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            },
+            ...base.map((item: any) => {
+                switch (item.dataIndex) {
+                    case "projectName":
+                        return ({
+                            ...item,
+                            render: (_: undefined, record: any): React.ReactNode => {
+                                return <Link to={`/bidding/information/detail/${record.id}`}>{record.projectName}</Link>
+                            }
+                        })
+                    case "sourceWebsite":
+                        return ({
+                            ...item,
+                            render: (_: any, record: any) => {
+                                return <span style={
+                                    {
+                                        color: "#FF8C00",
+                                        cursor: "pointer"
+                                    }
+                                } onClick={() => handleAddress(record)
+                                }>{record.sourceWebsite || ""}</span>
+                            }
+                        })
+                    default:
+                        return item
+                }
+            }),
+            {
+                title: '操作',
+                dataIndex: 'operation',
+                fixed: 'right',
+                width: 40,
+                render: (_: undefined, record: any): React.ReactNode => (
+                    <Space direction="horizontal" size="small">
+                        <Link to={`/bidding/information/detail/${record.id}`}>查看</Link>
+                    </Space>
+                )
+            }
+        ]}
         headTabs={[]}
         onFilterSubmit={onFilterSubmit}
         filterValue={filterValue}

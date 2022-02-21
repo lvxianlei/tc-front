@@ -59,10 +59,11 @@ function formatWorkbook(input: { [key: string]: any, __rowNum__: number }[], key
 export const UploadXLS = (props: {
   children?: React.ReactNode,
   readEnd?: (data: { [key: string]: any }[]) => void,
+  title?: React.ReactNode | (() => React.ReactNode),
   xlsKeyNameDic?: [string, string][],
   requireKeys?: string[]
 }) => {
-  const { readEnd, xlsKeyNameDic, requireKeys } = props
+  const { readEnd, xlsKeyNameDic, requireKeys, title } = props
   return (<>
     <Upload
       accept=".xls,.xlsx"
@@ -76,6 +77,7 @@ export const UploadXLS = (props: {
           )
           readEnd && readEnd(xlsxList)
         })
+        return false
       }}
       showUploadList={false}
       onChange={() => false}
@@ -84,11 +86,10 @@ export const UploadXLS = (props: {
     </Upload>
     {props.children || <Tooltip
       placement="top"
-      title={<>
-        文件导入要求：<br />
+      title={title || <>文件导入要求：<br />
         1、仅Excel文件导入（xls，xlsx均可）。<br />
-        2、列名必须包括包号、投标人名称、分标编号、货物类别、项目单位、总价（元）、 重量（吨）"
-      </>}><InfoCircleOutlined style={{ fontSize: 20, lineHeight: "32px" }} /></Tooltip>}
+        2、列名必须包括包号、投标人名称、分标编号、货物类别、项目单位、总价（元）、 重量（吨）</>
+      }><InfoCircleOutlined style={{ fontSize: 20, lineHeight: "32px" }} /></Tooltip>}
   </>)
 }
 

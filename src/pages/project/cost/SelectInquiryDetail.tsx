@@ -15,9 +15,7 @@ import {
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import SelectInquiryEdit from "./SelectInquiryEdit"
-import {
-    useHistory
-} from 'react-router-dom';
+import { useHistory } from 'react-router-dom'
 export type SelectType = "selectA" | "selectB" | "selectC"
 type radioTypes = "base" | "records"
 const auditEnum: any = {

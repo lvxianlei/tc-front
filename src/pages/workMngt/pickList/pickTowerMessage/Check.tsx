@@ -33,12 +33,12 @@ export default function PickCheckList(): React.ReactNode {
             key: 'segmentName', 
             editable: false
         },
-        { 
-            title: '模式', 
-            dataIndex: 'patternName', 
-            key: 'patternName', 
-            editable: false
-        },
+        // { 
+        //     title: '模式', 
+        //     dataIndex: 'patternName', 
+        //     key: 'patternName', 
+        //     editable: false
+        // },
         {
             title: '构件编号', 
             dataIndex: 'code', 
@@ -93,7 +93,7 @@ export default function PickCheckList(): React.ReactNode {
             key: 'totalWeight', 
             editable: false,  
             render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</span>
+                <span>{((record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)).toFixed(2)}</span>
             )
         },
         { 
@@ -105,7 +105,10 @@ export default function PickCheckList(): React.ReactNode {
     ];
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
-        if(tip !== 'normal') {
+        if(tip === 'normal'||tip === 'brown'|| tip==='blue') {
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+            setTitle('创建问题单');
+        } else {
             const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/issue/${ record.id }/${col.dataIndex}`);
             if(tip==='red'){ 
                 setTitle('查看问题单') 
@@ -114,10 +117,7 @@ export default function PickCheckList(): React.ReactNode {
                 setTitle('创建问题单');
             }
             setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data,issueRecordList: data.issueRecordList,  });
-            
-        } else {
-            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
-            setTitle('创建问题单');
+           
         }
     }
 
@@ -125,13 +125,19 @@ export default function PickCheckList(): React.ReactNode {
         const red: number = record.redColumn.indexOf(dataIndex);
         const green: number = record.greenColumn.indexOf(dataIndex);
         const yellow: number = record.yellowColumn.indexOf(dataIndex);
+        const blueColumn: number = record.blueColumn.indexOf(dataIndex);
+        const brownColumn: number = record.brownColumn.indexOf(dataIndex);
         if(red !== -1) {
             return 'red';
         } else if(green !== -1) {
             return 'green';
         } else if(yellow !== -1) {
             return 'yellow';
-        } else {
+        } else if(blueColumn !== -1){
+            return 'blue';
+        } else if(brownColumn !== -1){
+            return 'brown';
+        }else {
             return 'normal'
         }
     }
@@ -142,7 +148,7 @@ export default function PickCheckList(): React.ReactNode {
             render: col.dataIndex==='totalWeight'? col.render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 col.dataIndex === 'index' ? index + 1 
                 : !col.editable ? _ 
-                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : '' }>{ _ }</p>
+                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow :  checkColor(record, col.dataIndex) === 'blue' ? styles.blue: checkColor(record, col.dataIndex) === 'brown' ? styles.brown:'' }>{ _ }</p>
             )  
         }     
     })

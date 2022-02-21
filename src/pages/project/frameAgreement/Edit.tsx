@@ -3,10 +3,10 @@ import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, EditTable } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { frameAgreementColumns, materialListColumns } from '../managementDetailData.json'
+import { frameAgreementColumns, materialListColumns } from './frame.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
-import { TabTypes } from "../ManagementDetail"
+import { TabTypes } from "../Detail"
 import { changeTwoDecimal_f } from '../../../utils/KeepDecimals';
 import { winBidTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function FrameAgreementEdit(): JSX.Element {

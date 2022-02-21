@@ -313,14 +313,14 @@
     },
     { // 原材料类型管理
       "name": "原材料类型管理",
-      "path": "/sys/materialType",
+      "path": "/config/configList/materialType",
       "module": "./pages/system-mngt/material/MaterialTypeMngt",
       "exact": true,
       "authority": "material_category_management"
     },
     { // 原材料管理
       "name": "原材料管理",
-      "path": "/sys/material",
+      "path": "/config/configList/material",
       "module": "./pages/system-mngt/materialMngt/MaterialMngt",
       "exact": true,
       "authority": "material_management"
@@ -419,7 +419,7 @@
     { // 项目管理
       "name": "项目管理",
       "path": "/project/management",
-      "module": "./pages/project/Management",
+      "module": "./pages/project/index",
       "exact": true,
       "authority": "project_management"
     },
@@ -439,6 +439,13 @@
     },
     { // 开票申请
       "name": "新增开票申请",
+      "path": "/project/invoicing/new/:id",
+      "module": "./pages/project/invoicing/Edit",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 编辑开票申请
+      "name": "编辑开票申请",
       "path": "/project/invoicing/edit/:id",
       "module": "./pages/project/invoicing/Edit",
       "exact": true,
@@ -459,7 +466,7 @@
       "authority": "project"
     },
     { // 回款申请
-      "name": "回款申请",
+      "name": "回款确认",
       "path": "/project/collection",
       "module": "./pages/project/collection/index",
       "exact": true,
@@ -540,14 +547,14 @@
       // 项目编辑
       "name": "新增/编辑项目",
       "path": "/project/management/edit/base/:id",
-      "module": "./pages/project/Edit/BaseInfoEdit",
+      "module": "./pages/project/baseInfo/Edit",
       "exact": true,
       "authority": "project_edit"
     },
     { // 项目管理子项详情
       "name": "项目管理子项详情",
       "path": "/project/management/detail/:tab/:id",
-      "module": "./pages/project/ManagementDetail",
+      "module": "./pages/project/Detail",
       "exact": true,
       "authority": "project_detail"
     },
@@ -568,21 +575,21 @@
     { // 项目管理标书制作编辑
       "name": "标书制作编辑",
       "path": "/project/management/edit/bidDoc/:id",
-      "module": "./pages/project/Edit/BidDocEdit",
+      "module": "./pages/project/bidDoc/Edit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理招标结果编辑
       "name": "招标结果编辑",
       "path": "/project/management/edit/bidResult/:id",
-      "module": "./pages/project/Edit/BidResultEdit",
+      "module": "./pages/project/bidResult/Edit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理框架协议编辑
       "name": "框架协议编辑",
       "path": "/project/management/edit/frameAgreement/:id",
-      "module": "./pages/project/Edit/FrameAgreementEdit",
+      "module": "./pages/project/frameAgreement/Edit",
       "exact": true,
       "authority": "project_detail"
     },
@@ -631,28 +638,28 @@
     { // 审批管理
       "name": "审批管理",
       "path": "/approvalm/management",
-      "module": "./pages/approval-mngt/ApprovalMngt",
+      "module": "./pages/approval-mngt/index",
       "exact": true,
       "authority": "approval_management_list"
     },
     { // 审批管理详情
       "name": "审批管理详情",
       "path": "/approvalm/management/detail/:id",
-      "module": "./pages/approval-mngt/ApprovalMngtDetail",
+      "module": "./pages/approval-mngt/Overview",
       "exact": true,
       "authority": "approvalm_detail"
     },
     { // 审批管理新建
       "name": "审批管理详情",
       "path": "/approvalm/management/edit/new/:type",
-      "module": "./pages/approval-mngt/ApprovalMngtEdit",
+      "module": "./pages/approval-mngt/Edit",
       "exact": true,
       "authority": "approvalm_edit"
     },
     { // 审批管理详情
       "name": "审批管理详情",
       "path": "/approvalm/management/edit/:id",
-      "module": "./pages/approval-mngt/ApprovalMngtEdit",
+      "module": "./pages/approval-mngt/Edit",
       "exact": true,
       "authority": "approvalm_edit"
     },
@@ -708,7 +715,7 @@
     },
     { // 驾驶舱-合同看板-明细
       "name": "明细",
-      "path": "/cockpit/contract/:id",
+      "path": "/bulletin/contract/overView/:id",
       "module": "./pages/cockpit/contract/Overview",
       "exact": true,
       "authority": "sw_cockpit_contract_kanban_details"
@@ -799,35 +806,35 @@
     },
     {
       "name": "配置管理",
-      "path": "/config",
+      "path": "/config/configList",
       "module": "./pages/config/index",
       "exact": true,
       "authority": "configuration_management_lists"
     },
     { // 配置管理-仓库管理
       "name": "仓库管理",
-      "path": "/stock/warehouse",
-      "module": "./pages/stock/warehouse/warehouse",
+      "path": "/config/configList/warehouse",
+      "module": "./pages/stock/warehouse/index",
       "exact": true,
       "authority": "sw_configuration_management_warehouse_management"
     },
     { // 配置管理-安全库存配置
       "name": "安全库存配置",
-      "path": "/stock/securitySetting",
+      "path": "/config/configList/securitySetting",
       "module": "./pages/stock/securitySetting/securitySetting",
       "exact": true,
       "authority": "sw_configuration_management_safety_stock_configuration"
     },
     { // 配置管理-角钢配料策略
       "name": "角钢配料策略",
-      "path": "/stock/angleSteel",
+      "path": "/config/configList/angleSteel",
       "module": "./pages/stock/angleSteel/index",
       "exact": true,
       "authority": "sw_configuration_management_angle_steel_batching_strategy"
     },
     { // 配置管理-其他参数配置
       "name": "其他参数配置",
-      "path": "/stock/otherParameters",
+      "path": "/config/configList/otherParameters",
       "module": "./pages/stock/otherParameters/OtherParameters",
       "exact": true,
       "authority": "sw_configuration_management_other_parameter_configuration"
@@ -973,7 +980,7 @@
       "authority": "rd_product_material_list"
     },
     { // 工作管理-提料-杆塔配段-杆塔信息
-      "name": "杆塔配段",
+      "name": "杆塔提料明细",
       "path": "/workMngt/pickList/pickTower/:id/:status/pickTowerDetail/:productId",
       "module": "./pages/workMngt/pickList/PickTowerDetail",
       "exact": true,
@@ -1079,7 +1086,7 @@
     },
     { // 工作管理-样板列表
       "name": "样板列表-详情",
-      "path": "/workMngt/templateList/:id/:productCategoryId",
+      "path": "/workMngt/templateList/detail/:id/:productCategoryId",
       "module": "./pages/workMngt/templateList/detail",
       "exact": true,
       "authority": "rd_template_record"

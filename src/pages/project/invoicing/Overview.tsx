@@ -43,11 +43,12 @@ export default function Edit() {
         }
     }
 
-    return <DetailContent operation={[
-        <Button type="primary" key="ab" onClick={handleApproval} loading={approvalLoading}>发起审批</Button>,
-        <Button key="cancel" onClick={() => history.go(-1)} style={{ marginLeft: 12 }}>返回</Button>
-    ]}>
-        <Spin spinning={loading}>
+    return <Spin spinning={loading}>
+        <DetailContent operation={[
+            <Button type="primary" key="ab" onClick={handleApproval} loading={approvalLoading}>发起审批</Button>,
+            <Button key="cancel" onClick={() => history.go(-1)} style={{ marginLeft: 12 }}>返回</Button>
+        ]}>
+
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseInfoHead.map((item: any) => {
                 if (item.dataIndex === "productTypeId") {
@@ -76,6 +77,6 @@ export default function Edit() {
             <Attachment dataSource={data?.attachInfoVos} />
             <DetailTitle title="审批记录" />
             <CommonTable columns={batchHead} dataSource={data?.invoicingBatchVos || []} />
-        </Spin>
-    </DetailContent>
+        </DetailContent>
+    </Spin>
 }

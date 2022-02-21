@@ -2,8 +2,7 @@
     "invoicingListHead": [
         {
             "title": "开票任务编号",
-            "dataIndex": "ticketTaskNumber",
-            "isResizable": true
+            "dataIndex": "ticketTaskNumber"
         },
         {
             "title": "编号",

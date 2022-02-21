@@ -63,7 +63,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'width', 
             key: 'width', 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_===-1?0:_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -71,7 +71,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'thickness', 
             key: 'thickness' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_===-1?0:_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -79,7 +79,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'length', 
             key: 'length' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_===-1?0:_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -87,7 +87,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'basicsWeight', 
             key: 'basicsWeight' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_===-1?0:_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -95,15 +95,15 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'drawBasicsWeight', 
             key: 'drawBasicsWeight' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_===-1?0:_}</span>
-            ) 
+                <span>{(_===null||!_)?'-':_}</span>
+            )  
         },
         { 
             title: '单段数量', 
             dataIndex: 'basicsPartNum', 
             key: 'basicsPartNum' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_===-1?0:_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -111,7 +111,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'basicsPartWeight', 
             key: 'basicsPartWeight', 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_===-1?0:_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -119,7 +119,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             dataIndex: 'drawPartWeight', 
             key: 'drawPartWeight' , 
             render: (_: any, _b: any, index: number): React.ReactNode => (
-                <span>{_===-1?0:_}</span>
+                <span>{(_===null||!_)?'-':_}</span>
             ) 
         },
         { 
@@ -177,7 +177,7 @@ export default function TowerMemberInfo(): React.ReactNode {
             <Image src={url||''}/>
         </Modal>
         <DetailTitle title="构件信息" />
-        <p>件号数：{ params.number }</p>
+        <p>件号数：<span style={{color:'#FF8C00'}}>{ params.number }</span></p>
         <CommonTable 
             columns={ columns } 
             dataSource={ detailData?.records } 

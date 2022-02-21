@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Button } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { DetailContent, BaseInfo, CommonTable } from '../common'
-import { auditHead, baseInfo } from './approvalHeadData.json'
+import { auditHead, baseInfo } from './approval.json'
 export default function ApprovalMngtDetail(): React.ReactNode {
     const history = useHistory()
     return <DetailContent

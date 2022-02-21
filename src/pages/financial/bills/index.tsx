@@ -70,7 +70,7 @@ export default function Invoice() {
 
     const handleCancel = (id: string) => {
         Modal.confirm({
-            title: "删除",
+            title: "作废",
             content: "确定作废此票据吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
@@ -157,7 +157,7 @@ export default function Invoice() {
                                     setDetailedId(record.id)
                                 }}>详情</Button>
                             <Button type="link" className="btn-operation-link" disabled={![1].includes(record.invoiceStatus)} onClick={() => handleCancel(record.id)}>作废</Button>
-                            <Button type="link" className="btn-operation-link" disabled={record.invoiceStatus !== 1} onClick={() => handleDelete(record.id)}>删除</Button>
+                            <Button type="link" className="btn-operation-link" disabled={![1, 4].includes(record.invoiceStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
                         </>
                     }
                 }]}

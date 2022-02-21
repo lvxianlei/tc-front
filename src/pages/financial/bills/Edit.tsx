@@ -28,7 +28,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             baseForm.setFieldsValue({
                 ...result,
                 businessId: result.businessId + ',' + result.businessName,
-                receiptVos: result.receiptVos.map((item: any) => item.receiptNumber).join(",")
+                receiptVos: {
+                    value: result.receiptVos.map((item: any) => item.receiptNumber).join(","),
+                    records: result.receiptVos.map((item: any) => ({ ...item, id: item.receiptId, receiveNumber: item.receiptNumber }))
+                }
             })
             businessTypeChange(result.businessType);
             resole(result)
@@ -51,8 +54,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const baseData = await baseForm.validateFields()
             await saveRun({
                 ...baseData,
-                // supplierName: baseData.supplierName.value || data?.supplierName,
-                // supplierId: baseData.supplierName.id || data?.supplierId,
                 businessId: baseData.businessId?.split(',')[0],
                 businessName: baseData.businessId?.split(',')[1],
                 receiptDtos: baseData.receiptVos.records?.map((item: any) => ({
@@ -113,11 +114,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             }
             if (item.dataIndex === 'receiptVos') {
                 return ({
-                    ...item, render: (data: any, props: any) => {
-                        return <PopTable data={data} {
-                            ...props
-                        } />
-                    }
+                    ...item,
+                    render: (data: any, props: any) => <PopTable data={data} {...props} />
                 })
             }
             if (item.dataIndex === 'businessType') {

@@ -1,42 +1,14 @@
 import React, { useState, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Spin, Form, message, Modal } from 'antd'
-import { EditTable, DetailTitle, BaseInfo, DetailContent, Attachment, AttachmentRef } from '../common'
-import { PopTable } from "../common/FormItemType"
-import { baseInfoData } from './biddingHeadData.json'
+import { EditTable, EditableTable, DetailTitle, BaseInfo, DetailContent, Attachment, AttachmentRef } from '../common'
+import { baseInfoData, detaiBidStatus, bidPageInfo } from './bidding.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
-const columns = [
-    { title: '分标编号', dataIndex: 'partBidNumber', "type": "text", "maxLength": 50 },
-    { title: '货物类别', dataIndex: 'goodsType', "type": "text", "maxLength": 50 },
-    {
-        "title": "包名称",
-        "dataIndex": "packageName"
-    },
-    {
-        "title": "包号",
-        "dataIndex": "packageNumber",
-        "type": "text",
-        "maxLength": 50
-    },
-    {
-        "title": "工程电压等级",
-        "dataIndex": "projectVoltageLevel"
-    },
-    { title: '数量', dataIndex: 'amount', type: "number" },
-    { title: '单位', dataIndex: 'unit' },
-    { title: '首批交货日期', dataIndex: 'deliveryDate', type: "date", format: "YYYY-MM-DD" },
-    { title: '交货地点', dataIndex: 'deliveryPlace' },
-    {
-        "title": "物资描述",
-        "dataIndex": "goodsExplain"
-    },
-]
 
 export default function InfomationNew(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ id: string }>()
-    // const [attachVosData, setAttachVosData] = useState<any[]>([])
     const attachRef = useRef<AttachmentRef>()
     const [binddingStatus, setBinddingStatus] = useState<number>(0)
     const [visible, setVisible] = useState<boolean>(false)
@@ -47,9 +19,6 @@ export default function InfomationNew(): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
-            data.bidPackageInfoVOS.map((item: any) => {
-                return item.amount = item.amount < 0 ? 0 : 1;
-            });
             bidForm.setFieldsValue({ submit: data.bidPackageInfoVOS })
             setBinddingStatus(data.biddingStatus)
             resole(data)
@@ -146,7 +115,13 @@ export default function InfomationNew(): JSX.Element {
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
-            await bidResultRun({ ...submitData, biddingStatus: 1 })
+
+            await bidResultRun({
+                ...submitData,
+                 biddingStatus: 1,
+                projectLeaderId: submitData.projectLeaderId?.id,
+                bigPackageIds: submitData.bigPackageIds?.records.map((item: any) => item.id)
+            })
             handleSave();
             setVisible(false)
         } catch (error) {
@@ -195,41 +170,17 @@ export default function InfomationNew(): JSX.Element {
         ]}
     >
         <Modal zIndex={15} visible={visible} title="应标" okText="确定" onOk={handleModalOk} onCancel={handleModalCancel} >
-            <Form form={form} onValuesChange={handleChange}>
-                <Form.Item name="projectLeaderId" label="设置项目负责人">
-                    <PopTable onChange={(event: any) => form.setFieldsValue({ projectLeaderId: event.id })} data={{
-                        type: "PopTable",
-                        title: "选择项目负责人",
-                        dataIndex: "projectLeader",
-                        path: "/sinzetech-user/user",
-                        dependencies: true,
-                        columns: [
-                            {
-                                title: '登录账号',
-                                dataIndex: 'account'
-                            },
-                            {
-                                title: '用户姓名',
-                                dataIndex: 'name',
-                                search: true
-                            },
-                            {
-                                title: '所属角色',
-                                dataIndex: 'userRoleNames'
-                            },
-                            {
-                                title: '所属机构',
-                                dataIndex: 'departmentName'
-                            }
-                        ] as any[]
-                    }} /> </Form.Item>
-            </Form>
+            <BaseInfo edit form={form} columns={detaiBidStatus.map((item: any) => {
+                if (item.dataIndex === "bigPackageIds") {
+                    return ({ ...item, path: `${item.path}?bidInfoId=${params.id}` })
+                }
+                return item
+            })} dataSource={{}} col={1} />
         </Modal>
-
         <DetailTitle title="基础信息" />
         <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={filterBaseInfoData(baseInfoData)} dataSource={detailData} edit />
         <DetailTitle title="物资清单" />
-        <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
+        <EditableTable form={bidForm} columns={bidPageInfo} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
         <Attachment title="附件" ref={attachRef} dataSource={data?.attachVos} edit />
     </DetailContent>
 }

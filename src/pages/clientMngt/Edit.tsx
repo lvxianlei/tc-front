@@ -16,7 +16,7 @@ export default function Edit(): JSX.Element {
     const [invoiceForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-customer/customer/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/customer/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -25,7 +25,7 @@ export default function Edit(): JSX.Element {
 
     const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[id === "new" ? "post" : "put"](`/tower-customer/customer`, { ...postData, id: data?.id })
+            const result: { [key: string]: any } = await RequestUtil[id === "new" ? "post" : "put"](`/tower-market/customer`, { ...postData, id: data?.id })
             resole(result)
         } catch (error) {
             reject(error)

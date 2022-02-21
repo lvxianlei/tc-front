@@ -11,7 +11,7 @@ export default function ViewReceivingNote(): React.ReactNode {
     const [prepareVisible, setPrepareVisible] = useState<boolean>(false)
     const [billVisible, setBillVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
-    const [ filterValue, setFilterValue ] = useState({});
+    const [filterValue, setFilterValue] = useState({});
     const onFilterSubmit = (value: any) => {
         if (value.startCompleteTime) {
             const formatDate = value.startCompleteTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -62,22 +62,22 @@ export default function ViewReceivingNote(): React.ReactNode {
                 ...receiveColumns.map((item: any) => {
                     switch (item.dataIndex) {
                         case "receiveNumber":
-                            return ({ ...item, render: (value: any, records: any) => <Link to={`/ingredients/receiving/detail/${records.receiveStockId}`}>{value}</Link> })
+                            return ({ ...item, render: (value: any, records: any) => value ? <Link to={`/ingredients/receiving/detail/${records.receiveStockId}`}>{value}</Link> : "-" })
                         case "pleasePayNumber":
                             return ({
                                 ...item,
-                                render: (value: any, records: any) => <a onClick={() => {
+                                render: (value: any, records: any) => value ? <a onClick={() => {
                                     setDetailId(records.pleasePayId)
                                     setPrepareVisible(true)
-                                }}>{value}</a>
+                                }}>{value}</a> : "-"
                             })
                         case "billNumber":
                             return ({
                                 ...item,
-                                render: (value: any, records: any) => <a onClick={() => {
+                                render: (value: any, records: any) => value ? <a onClick={() => {
                                     setDetailId(records.invoiceId)
                                     setBillVisible(true)
-                                }}>{value}</a>
+                                }}>{value}</a> : "-"
                             })
                         default:
                             return item
@@ -85,9 +85,10 @@ export default function ViewReceivingNote(): React.ReactNode {
                 })
             ]}
             extraOperation={(data: any) => <>
-                <span style={{ fontSize: "20px", color: "orange", marginLeft: "40px" }}>累计欠票金额：{data?.receiveStockMessage?.arrearsMoney || "0"}      累计欠费金额：{data?.receiveStockMessage?.owingTicketMoney || "0"}</span>
+                <span style={{ marginRight: 12 }}>累计欠票金额：<span style={{ color: "#FF8C00" }}>{data?.receiveStockMessage?.arrearsMoney || "0"}</span></span>
+                <span> 累计欠费金额：<span style={{ color: "#FF8C00" }}>{data?.receiveStockMessage?.owingTicketMoney || "0"}</span></span>
             </>}
-            filterValue={ filterValue }
+            filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

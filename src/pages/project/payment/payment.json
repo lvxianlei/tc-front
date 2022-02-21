@@ -1,7 +1,7 @@
 {
     "paymentListHead": [
         {
-            "title": "付款单号",
+            "title": "请款单号",
             "dataIndex": "payNumber"
         },
         {
@@ -17,7 +17,11 @@
             "dataIndex": "projectLeader"
         },
         {
-            "title": "付款状态",
+            "title": "请款类型",
+            "dataIndex": "costTypeName"
+        },
+        {
+            "title": "请款状态",
             "dataIndex": "payStatus",
             "type": "select",
             "enum": [
@@ -365,27 +369,27 @@
     "auditIdRecord": [
         {
             "title": "部门",
-            "dataIndex": ""
+            "dataIndex": "department"
         },
         {
             "title": "审批人",
-            "dataIndex": ""
+            "dataIndex": "approver"
         },
         {
             "title": "职位",
-            "dataIndex": ""
+            "dataIndex": "position"
         },
         {
             "title": "审批时间",
-            "dataIndex": ""
+            "dataIndex": "batchTime"
         },
         {
             "title": "审批结果",
-            "dataIndex": ""
+            "dataIndex": "batchResult"
         },
         {
             "title": "意见",
-            "dataIndex": ""
+            "dataIndex": "opinion"
         }
     ]
 }

@@ -1,0 +1,313 @@
+{
+    "bidInfoColumns": [
+        {
+            "title": "是否中标",
+            "dataIndex": "isBid",
+            "type": "select",
+            "enum": [
+                {
+                    "value": -1,
+                    "label": "未公布"
+                },
+                {
+                    "value": 1,
+                    "label": "是"
+                },
+                {
+                    "value": 2,
+                    "label": "否"
+                }
+            ],
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择是否中标..."
+                }
+            ]
+        },
+        {
+            "title": "分标编号",
+            "dataIndex": "bidCode",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入分标编码..."
+                }
+            ]
+        },
+        {
+            "title": "物资资别",
+            "dataIndex": "cargoType",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入物资资别..."
+                }
+            ]
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "vgrade",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入电压等级..."
+                }
+            ]
+        },
+        {
+            "title": "包名称",
+            "dataIndex": "packageCode",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入包名称..."
+                }
+            ]
+        },
+        {
+            "title": "项目单位",
+            "dataIndex": "projectCompany",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入项目单位..."
+                }
+            ]
+        },
+        {
+            "title": "投标人名称",
+            "dataIndex": "bidName",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入投标人名称..."
+                }
+            ]
+        },
+        {
+            "title": "单价（元）",
+            "dataIndex": "unitPrice",
+            "type": "number",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入单价（元）..."
+                }
+            ]
+        },
+        {
+            "title": "总价（元）",
+            "dataIndex": "money",
+            "type": "number",
+            "required": true,
+            "decimal": "4",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入总价（元）..."
+                }
+            ]
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight",
+            "type": "number",
+            "decimal": "3",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入重量（吨）..."
+                }
+            ]
+        },
+        {
+            "title": "中标比例（%）",
+            "dataIndex": "bidPro",
+            "type": "number",
+            "decimal": "3",
+            "precision": 2,
+            "min": 0,
+            "max": 100,
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入中标比例..."
+                }
+            ]
+        }
+    ],
+    "overview": [
+        {
+            "title": "年份",
+            "dataIndex": "date",
+            "type": "date",
+            "format": "YYYY",
+            "picker": "year"
+        },
+        {
+            "title": "批次",
+            "dataIndex": "batch",
+            "type": "number"
+        },
+        {
+            "title": "是否中标",
+            "dataIndex": "isBid",
+            "type": "select",
+            "enum": [
+                {
+                    "value": -1,
+                    "label": "未公布"
+                },
+                {
+                    "value": 0,
+                    "label": "是"
+                },
+                {
+                    "value": 1,
+                    "label": "否"
+                }
+            ]
+        },
+        {
+            "title": "中标包名称",
+            "dataIndex": "packageNum"
+        },
+        {
+            "title": "中标价(元)",
+            "dataIndex": "bidMoney"
+        },
+        {
+            "title": "中标重量(吨)",
+            "dataIndex": "bidWeight"
+        },
+        {
+            "title": "中标单价(元)",
+            "dataIndex": "bidUnitPrice"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "billingInformationStatistics": [
+        {
+            "title": "包名称 ",
+            "dataIndex": "packageCode"
+        },
+        {
+            "title": "分标编号",
+            "dataIndex": "bidCode"
+        },
+        {
+            "title": "中标单价(元/吨)",
+            "dataIndex": "bidUnitPrice"
+        },
+        {
+            "title": "中标总价(元)",
+            "dataIndex": "bidMoney"
+        },
+        {
+            "title": "最高单价(元/吨)",
+            "dataIndex": "maxUnitPrice"
+        },
+        {
+            "title": "最高总价(元)",
+            "dataIndex": "maxMoney"
+        },
+        {
+            "title": "最低单价(元/吨)",
+            "dataIndex": "minUnitPrice"
+        },
+        {
+            "title": "最低总价(元)",
+            "dataIndex": "minMoney"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight"
+        }
+    ],
+    "setting": [
+        {
+            "title": "年份",
+            "dataIndex": "date",
+            "type": "date",
+            "format": "YYYY",
+            "picker": "year",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入年份..."
+                }
+            ]
+        },
+        {
+            "title": "批次",
+            "dataIndex": "batch",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入批次..."
+                }
+            ]
+        },
+        {
+            "title": "中标包名称",
+            "dataIndex": "packageNum",
+            "disabled": "true"
+        },
+        {
+            "title": "中标价(元)",
+            "dataIndex": "bidMoney",
+            "disabled": "true"
+        },
+        {
+            "title": "中标重量(吨)",
+            "dataIndex": "bidWeight",
+            "type": "number",
+            "disabled": "true"
+        },
+        {
+            "title": "是否中标",
+            "dataIndex": "isBid",
+            "type": "select",
+            "disabled": "true",
+            "enum": [
+                {
+                    "value": -1,
+                    "label": "未公布"
+                },
+                {
+                    "value": 0,
+                    "label": "是"
+                },
+                {
+                    "value": 1,
+                    "label": "否"
+                }
+            ],
+            "disable": true
+        },
+        {
+            "title": "中标单价(元)",
+            "dataIndex": "bidUnitPrice",
+            "type": "number",
+            "disabled": "true"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ]
+}

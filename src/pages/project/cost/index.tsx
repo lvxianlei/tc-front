@@ -1,14 +1,15 @@
 import React, { useState } from "react"
-import { Result, Button, Spin, Modal, message } from "antd"
+import { Result, Button, Spin, Modal, message, Image } from "antd"
 import { Link, useHistory, useParams } from "react-router-dom"
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common'
 import { consultRecords, costBase } from '../managementDetailData.json'
 import SelectAuditType from "./SelectInquiryType"
 import SelectInquiryEdit from "./SelectInquiryEdit"
 import SelectInquiryDetail from "./SelectInquiryDetail"
-import type { TabTypes } from "../ManagementDetail"
+import type { TabTypes } from "../Detail"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import quesheng from "../../../../public/quesheng.png"
 export type SelectType = "selectA" | "selectB" | "selectC"
 
 const auditCode: any = {
@@ -87,11 +88,11 @@ export default function CostDetail() {
                 onOk={handleSelectInquiryTypeOk}
                 onCancel={() => setVisible(false)}
             />
-            {!data?.askInfo?.askInfoVo && <Result style={{ paddingTop: 200 }} title="当前项目还未做成本评估" extra={
-                <nav style={{ fontSize: 20 }}>
-                    点击<Link to={`/project/management/new/cost/${params.id}`}>创建</Link>开始成本评估
-                </nav>
-            } />}
+            {!data?.askInfo?.askInfoVo && <Result style={{ paddingTop: 200 }}
+                title="去创建成本评估"
+                icon={<Image src={quesheng} />}
+                extra={<Button type="primary" style={{ width: 70 }}><Link to={`/project/management/new/cost/${params.id}`}>创建</Link></Button>} />
+            }
             {data?.askInfo?.askInfoVo && <DetailContent operation={[
                 <Button key="push" style={{ marginRight: '12px' }} type="primary" onClick={handleNewAudit}>发起询价任务</Button>,
                 <Button key="edit" style={{ marginRight: '12px' }} type="primary" onClick={() => history.push(`/project/management/edit/cost/${params.id}`)}>编辑</Button>,

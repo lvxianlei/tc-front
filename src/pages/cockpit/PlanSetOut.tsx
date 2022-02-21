@@ -137,10 +137,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'loftingDeliverRealTime'
         },
         {
-            key: 'loftingPartLeaderName',
+            key: 'weldingLeaderName', 
             title: '放样配段负责人',
             width: 100,
-            dataIndex: 'loftingPartLeaderName'
+            dataIndex: 'weldingLeaderName'
         },
         {
             key: 'loftingPartDeliverTime',

@@ -13,11 +13,11 @@ interface EditRefProps {
     resetFields: () => void
 }
 export default function Invoicing() {
-    const [ visible, setVisible ] = useState<boolean>(false);
+    const [visible, setVisible] = useState<boolean>(false);
     const addRef = useRef<EditRefProps>();
     const history = useHistory()
-    const [filterValue, setFilterValue] = useState<any>({})
-    const [ id, setId ] = useState<string>();
+    const [filterValue, setFilterValue] = useState<any>(history.location.state)
+    const [id, setId] = useState<string>();
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan/${id}`)
@@ -67,7 +67,7 @@ export default function Invoicing() {
         }
     })
 
-    return(
+    return (
         <>
             <Page
                 path="/tower-supply/materialPurchasePlan"
@@ -79,7 +79,18 @@ export default function Invoicing() {
                         width: 40,
                         render: (_: any, _a: any, index: number) => <>{index + 1}</>
                     },
-                    ...baseInfoList,
+                    ...baseInfoList.map(item => {
+                        switch (item.dataIndex) {
+                            case "roundSteelTotal":
+                                return ({ ...item, render: (_: any, record: any) => `${record.roundSteelArrival} / ${record.roundSteelTotal}` })
+                            case "angleSteelTotal":
+                                return ({ ...item, render: (_: any, record: any) => `${record.angleSteelArrival} / ${record.angleSteelTotal}` })
+                            case "steelPlateTotal":
+                                return ({ ...item, render: (_: any, record: any) => `${record.steelPlateArrival} / ${record.steelPlateTotal}` })
+                            default:
+                                return item
+                        }
+                    }),
                     {
                         title: "操作",
                         dataIndex: "opration",
@@ -90,7 +101,7 @@ export default function Invoicing() {
                                 <Link className="btn-operation-link" to={`/ingredients/planList/relationTower/${record.id}`}>关联塔型</Link>
                                 <Link className="btn-operation-link" to={`/ingredients/planList/purchaseList/${record.id}`}>采购清单</Link>
                                 <Button type="link" className="btn-operation-link" disabled={record.purchasePlanStatus === 3} onClick={() => handleDelete(record.id)}>取消计划</Button>
-                                <Button type="link" className="btn-operation-link"  onClick={() => {
+                                <Button type="link" className="btn-operation-link" onClick={() => {
                                     setId(record.id);
                                     setVisible(true);
                                 }}>编辑计划</Button>
@@ -143,17 +154,17 @@ export default function Invoicing() {
                     addRef.current?.resetFields();
                     setVisible(false);
                 }}
-                  footer={[
+                footer={[
                     <Button key="back" onClick={() => {
                         addRef.current?.resetFields();
                         setVisible(false);
                     }}>
-                      关闭
+                        关闭
                     </Button>,
                     <Button key="submit" type="primary" onClick={() => handleOk()}>
-                      保存并提交
+                        保存并提交
                     </Button>
-                  ]}
+                ]}
             >
                 <EditPurchasePlan ref={addRef} id={id} />
             </Modal>

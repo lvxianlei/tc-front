@@ -8,6 +8,7 @@ import AuthUtil from "../../../utils/AuthUtil"
 export default function EnquiryList(): React.ReactNode {
     const userId = AuthUtil.getUserId()
     const history = useHistory()
+    const [filterValue] = useState<any>(history.location.state)
     const [visible, setVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
     const [inquiryStatus, setInquiryStatus] = useState<number>(0)
@@ -97,6 +98,7 @@ export default function EnquiryList(): React.ReactNode {
                 }]}
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
+            filterValue={filterValue}
             searchFormItems={[
                 {
                     name: 'startStatusUpdateTime',
@@ -120,7 +122,7 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'inquirerId',
                     label: '工程报价员',
-                    children: <IntgSelect width={200} />
+                    children: <IntgSelect width={400} />
                 },
                 {
                     name: 'fuzzyQuery',

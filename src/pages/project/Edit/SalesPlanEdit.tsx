@@ -1,6 +1,7 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
 import { Button, Form, message, Modal, Spin } from "antd"
+import moment from "moment"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable, FormItemType } from "../../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
@@ -85,6 +86,7 @@ export default function SalesPlanEdit() {
                 projectId: match.params.projectId,
                 contractId,
                 saleOrderId,
+                deliveryTime: `${moment(baseInfoData.deliveryTime).format("YYYY-MM-DD")} 00:00:00`,
                 saleOrder: baseInfoData.saleOrderNumber.saleOrderId || "",
                 productInfoList: submitProductDetailsData,
                 saleOrderNumber: baseInfoData.saleOrderNumber.value || baseInfoData.saleOrderNumber
@@ -164,7 +166,7 @@ export default function SalesPlanEdit() {
         const productDetailsFormData = productDetailsForm.getFieldsValue()
         const newProductDetails = productDetails.map((item: any) => {
             if (productDetailsFormData[item.id].deliveryTime) {
-                return item
+                return ({ ...item, deliveryTime: productDetailsFormData[item.id].deliveryTime })
             } else {
                 newProductDetailsForm[item.id] = { ...deliveryTime }
                 return ({ ...item, ...deliveryTime })
@@ -185,6 +187,44 @@ export default function SalesPlanEdit() {
         productDetailsForm.setFieldsValue(productDetailsData)
         setSelect(productDetailsResult.map(item => item.id))
         setSelectRows(productDetailsResult)
+    }
+
+    /***
+     * 比较时间大小
+     */
+    const comparisonTime = (timer: any) => {
+        let v:any = [];
+        timer.map((d: any) => {
+            let date = new Date(d).getTime();
+            v.push(date);
+        });
+        v.sort((a: any, b: any) => b - a)
+        return moment(v[0]).format("YYYY-MM-DD")
+    }
+
+    // 当杆塔信息数据发生变化触发
+    useEffect(() => {
+        if (productDetails && productDetails.length > 0) {
+            let result: any = [];
+            productDetails.map((item: any) => item.deliveryTime && result.push(item.deliveryTime));
+            if (result.length > 0) {
+                baseInfoForm.setFieldsValue({
+                    deliveryTime: moment(comparisonTime(result))
+                })
+            }
+        }
+        
+    }, [JSON.stringify(productDetails)])
+
+    // 当修改客户交货日期触发
+    const handleChange = (changedFields: any, allFields: any) => {
+        if (changedFields && changedFields.length > 0) {
+            // 修改对应的值
+            const index = allFields.findIndex((item: any) => changedFields[0].name[0] === item.name[0])
+            let result = productDetails;
+            result[index].deliveryTime = changedFields[0].value;
+            setProductDetails(result.slice(0))
+        }
     }
 
     return <DetailContent operation={[
@@ -248,7 +288,7 @@ export default function SalesPlanEdit() {
                 columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)}
                 dataSource={data || {}} edit col={3} />
             <DetailTitle title="杆塔信息" operation={[<Button key="select" type="primary" disabled={!saleOrderId} onClick={handleSelectClick}>选择杆塔明细</Button>]} />
-            <Form form={productDetailsForm}>
+            <Form form={productDetailsForm} onFieldsChange={handleChange}>
                 <CommonTable
                     columns={[...salesAssist.map((item: any) => {
                         if (item.dataIndex === "deliveryTime") {
@@ -259,7 +299,7 @@ export default function SalesPlanEdit() {
                                     initialValue={value}
                                     rules={item.rules}
                                 >
-                                    <FormItemType type={item.type} data={item} />
+                                    <FormItemType type={item.type} data={item}  />
                                 </Form.Item>
                             })
                         }

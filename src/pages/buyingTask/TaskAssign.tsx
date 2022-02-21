@@ -1,30 +1,13 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react"
-import { Form, Select, Row } from 'antd'
+import { Form, Select, Row, Col } from 'antd'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
+import { IntgSelect } from "../common"
 interface OverviewProps {
     id: string
 }
 export default forwardRef(function ({ id }: OverviewProps, ref) {
     const [form] = Form.useForm()
-    const [deptId, setDeptId] = useState<string>("")
-    const { data: deptData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/department`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }))
-
-    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/user?departmentId=${id}&size=1000`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
@@ -47,41 +30,28 @@ export default forwardRef(function ({ id }: OverviewProps, ref) {
     const onSubmit = async () => {
         const data = await form.validateFields()
         console.log(data)
-        await saveRun({ ...data })
+        await saveRun({
+            batcherDeptId: data.batcherDeptId.first,
+            batcherId: data.batcherDeptId.second,
+            purchaserDeptId: data.purchaserDeptId.first,
+            purchaserId: data.purchaserDeptId.second
+        })
     }
 
     return <Form form={form} labelAlign="right" layout="inline">
-        <Row>
-            <Form.Item name="batcherDeptId" label="配料人" rules={[{ required: true, message: "请选择配料部门..." }]}>
-                <Select style={{ width: 200 }} onChange={(value: string) => {
-                    setDeptId(value)
-                    getUser(value)
-                }}>
-                    {deptData?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}
-                </Select>
-            </Form.Item>
-            <Form.Item name="batcherId" rules={[{ required: true, message: "请选择配料人..." }]}>
-                <Select
-                    disabled={!deptId}
-                    style={{ width: 200 }}
-                >{userData?.records?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
-            </Form.Item>
+        <Row style={{ width: "100%" }}>
+            <Col span={20}>
+                <Form.Item name="batcherDeptId" label="配料人" rules={[{ required: true, message: "请选择配料部门..." }]}>
+                    <IntgSelect width={"100%"} />
+                </Form.Item>
+            </Col>
         </Row>
-        <Row>
-            <Form.Item name="purchaserDeptId" label="采购人" rules={[{ required: true, message: "请选择采购部门..." }]}>
-                <Select style={{ width: 200 }} onChange={(value: string) => {
-                    setDeptId(value)
-                    getUser(value)
-                }}>
-                    {deptData?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}
-                </Select>
-            </Form.Item>
-            <Form.Item name="purchaserId" rules={[{ required: true, message: "请选择采购人..." }]}>
-                <Select
-                    disabled={!deptId}
-                    style={{ width: 200 }}
-                >{userData?.records?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
-            </Form.Item>
+        <Row style={{ width: "100%" }}>
+            <Col span={20}>
+                <Form.Item name="purchaserDeptId" label="采购人" rules={[{ required: true, message: "请选择采购部门..." }]}>
+                    <IntgSelect width={"100%"} />
+                </Form.Item>
+            </Col>
         </Row>
     </Form >
 })

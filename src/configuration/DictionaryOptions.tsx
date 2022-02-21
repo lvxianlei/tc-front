@@ -30,7 +30,7 @@ export enum DictionaryEnums {
     SUPPLIER_TYPE = 144,
     QUALITY_ASSURANCE = 145,
     CAR_TYPE = 146,
-    SUPPLY_PRODUCTS = 146,
+    SUPPLY_PRODUCTS = 148,
     EMPLOYEE_TYPE = 149,
     WEIGHING_TYPE = 151,
     INVOICE_TYPE = 1210,
@@ -42,6 +42,8 @@ export enum DictionaryEnums {
     COLLECTION_TYPE = 117,
     CONTRACT_PLAN_STATUS = 1217,
     CONTRACT_FORM = 1218,
+    PACKAGE_TYPE = 1220,
+    TENDER_DELIVERY_METHOD = 1219,
 }
 
 let productType: IDict[] | undefined = [];
@@ -81,7 +83,9 @@ let source: IDict[] | undefined = [];
 let materialStandardType: IDict[] | undefined = [];
 let payCategory: IDict[] | undefined = [];
 let collectionType: IDict[] | undefined = [];
-let weighingtype: IDict[] | undefined = [];
+let weighingType: IDict[] | undefined = [];
+let packageType: IDict[] | undefined = [];
+let tenderDeliveryMethod: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -122,7 +126,9 @@ if (dictionary) {
     payCategory = dictionary[DictionaryEnums.PAY_CATEGORY];
     bidType = dictionary[DictionaryEnums.BID_TYPE];
     collectionType = dictionary[DictionaryEnums.COLLECTION_TYPE];
-    weighingtype = dictionary[DictionaryEnums.WEIGHING_TYPE];
+    weighingType = dictionary[DictionaryEnums.WEIGHING_TYPE];
+    packageType = dictionary[DictionaryEnums.PACKAGE_TYPE];
+    tenderDeliveryMethod = dictionary[DictionaryEnums.TENDER_DELIVERY_METHOD];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -162,4 +168,6 @@ export const sourceOptions = source; //来源
 export const materialStandardTypeOptions = materialStandardType; //原材料标准类型
 export const payCategoryOptions = payCategory; //来款性质
 export const collectionTypeeOptions = collectionType; // 回款类型
-export const weighingtypeOptions = weighingtype; //过磅类型
+export const weighingtypeOptions = weighingType; //过磅类型
+export const packageTypeOptions = packageType; //包类型
+export const tenderDeliveryMethodOptions = tenderDeliveryMethod; // 标书投递方式

@@ -184,7 +184,7 @@
             "type": "select",
             "enum": [
                 {
-                    "label": "已创建",
+                    "label": "草稿",
                     "value": 0
                 },
                 {
@@ -445,7 +445,7 @@
         },
         {
             "title": "理重",
-            "dataIndex": "logicWeight",
+            "dataIndex": "reasonWeight",
             "type": "number",
             "disabled": true
         },
@@ -509,7 +509,7 @@
             "title": "票面单位名称",
             "dataIndex": "name",
             "type": "popTable",
-            "path": "/tower-customer/customer",
+            "path": "/tower-market/customer",
             "readOnly": false,
             "value": "name",
             "width": 1101,
@@ -587,7 +587,13 @@
             "title": "重量",
             "dataIndex": "weight",
             "type": "number",
-            "required": true
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入重量..."
+                }
+            ]
         },
         {
             "title": "单价(元/吨)",
@@ -599,6 +605,7 @@
             "title": "金额(元)",
             "dataIndex": "moneyCount",
             "type": "number",
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -661,6 +668,79 @@
         {
             "title": "意见",
             "dataIndex": "opinion"
+        }
+    ],
+    "batchCreateColumns": [
+        {
+            "title": "内部合同编号",
+            "dataIndex": "contractCode",
+            "type": "popTable",
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "internalNumber",
+            "dependencies": true,
+            "readOnly": true,
+            "search": [
+                {
+                    "title": "",
+                    "dataIndex": "fuzzyQuery",
+                    "placeholder": "内部合同编号/合同名称/采购订单编号/业主单位",
+                    "width": 300
+                }
+            ],
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber"
+                },
+                {
+                    "title": "采购订单编号",
+                    "dataIndex": "purchaseOrderNumber"
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber"
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany"
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择内部合同编号"
+                }
+            ]
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName",
+            "disabled": true
+        },
+        {
+            "title": "合同单位",
+            "dataIndex": "contractCompany",
+            "disabled": true
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "business",
+            "disabled": true
         }
     ]
 }

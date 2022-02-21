@@ -14,7 +14,7 @@
         },
         {
             "title": "原材料任务编号",
-            "dataIndex": "purchasePlanNumber",
+            "dataIndex": "purchaseNumber",
             "width": 100,
             "type": "string"
         },
@@ -83,8 +83,7 @@
         {
             "title": "备注",
             "dataIndex": "remarks",
-            "width": 100,
-            "type": "number"
+            "width": 100
         },
         {
             "title": "生产未领料（支）",

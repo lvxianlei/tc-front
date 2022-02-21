@@ -1,0 +1,206 @@
+{
+    "bidDocColumns": [
+        {
+            "title": "类别",
+            "dataIndex": "bidType",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择类别..."
+                }
+            ]
+        },
+        {
+            "title": "详细类别",
+            "dataIndex": "typeDetail"
+        },
+        {
+            "title": "招标编号",
+            "dataIndex": "bidCode",
+            "disabled": true
+        },
+        {
+            "title": "货物类别",
+            "dataIndex": "cargoType"
+        },
+        {
+            "title": "分配日期",
+            "dataIndex": "assignDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "地区",
+            "dataIndex": "address",
+            "disabled": true
+        },
+        {
+            "title": "商务份数",
+            "dataIndex": "commercialNum",
+            "type": "number"
+        },
+        {
+            "title": "技术份数",
+            "dataIndex": "skillNum",
+            "type": "number"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "disabled": true
+        },
+        {
+            "title": "包号",
+            "dataIndex": "packageCode"
+        },
+        {
+            "title": "电子版完成日期",
+            "dataIndex": "elDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "澄清/补遗日期",
+            "dataIndex": "reDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "纸质打印日期",
+            "dataIndex": "paDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "全部完成日期",
+            "dataIndex": "completeDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "标书投递方式",
+            "dataIndex": "deliverId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择标书投递方式..."
+                }
+            ]
+        },
+        {
+            "title": "制作人员",
+            "dataIndex": "mackUser",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
+        },
+        {
+            "title": "接收人",
+            "dataIndex": "receiveUser"
+        },
+        {
+            "title": "接收日期",
+            "dataIndex": "receiveUserDate",
+            "type": "date"
+        },
+        {
+            "title": "授权代表",
+            "dataIndex": "warrantUser",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
+        },
+        {
+            "title": "检查人",
+            "dataIndex": "checkUser",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
+        },
+        {
+            "title": "开标日期",
+            "dataIndex": "openBidDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "总招标量",
+            "dataIndex": "bidCount",
+            "type": "number"
+        },
+        {
+            "title": "购买数量",
+            "dataIndex": "buyCount",
+            "type": "number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ]
+}

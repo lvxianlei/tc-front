@@ -1,10 +1,10 @@
 import React from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
 import { Button, Form, Spin } from "antd"
-import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../common"
+import { DetailContent, BaseInfo, DetailTitle, CommonTable, OperationRecord } from "../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
-import { taskNoticeEditBaseInfo, taskNoticeEditSpec, salesAssist } from "./managementDetailData.json"
+import { taskNoticeEditBaseInfo, taskNoticeEditSpec, salesAssist, approvalRecord } from "./managementDetailData.json"
 import { materialStandardOptions } from "../../configuration/DictionaryOptions"
 export default function SalesPlanEdit() {
     const history = useHistory()
@@ -33,6 +33,9 @@ export default function SalesPlanEdit() {
             <BaseInfo columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)} dataSource={data || {}} />
             <DetailTitle title="产品信息" />
             <CommonTable columns={salesAssist} scroll={{ x: true }} dataSource={data?.productInfos} />
+            {/* <OperationRecord title="审批记录" serviceId={match.params.id as string} serviceName="tower-supply" /> */}
+            <DetailTitle title="审批记录" />
+            <CommonTable columns={approvalRecord} scroll={{ x: true }} dataSource={data?.approveRecords} />
         </Spin>
     </DetailContent>
 }

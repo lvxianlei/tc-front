@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Space, DatePicker, Button, Form, Modal, Row, Col, Select, message, InputNumber, TreeSelect } from 'antd'
+import { Space, DatePicker, Button, Form, Modal, Row, Col, Select, message, InputNumber, TreeSelect, Input } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useParams } from 'react-router-dom'
-import { Page } from '../../common'
+import { DetailTitle, Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import { TreeNode } from 'antd/lib/tree-select';
@@ -14,7 +14,11 @@ export interface IDetail {
     productCategoryName?: string;
     productId?: string;
     productNumber?: string;
-    materialDrawProductSegmentList?: IMaterialDetail[]
+    materialDrawProductSegmentList?: IMaterialDetail[];
+    legWeightA?: string;
+    legWeightB?: string;
+    legWeightC?: string;
+    legWeightD?: string;
 }
 export interface IMaterialDetail{
     count: string;
@@ -23,6 +27,7 @@ export interface IMaterialDetail{
 }
 export default function PickTower(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
+    const [segmentVisible, setSegmentVisible] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
     const [matchLeader, setMatchLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
@@ -31,6 +36,7 @@ export default function PickTower(): React.ReactNode {
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState({});
     const [productId, setProductId] = useState('');
+    const [status, setStatus] = useState('');
     const [detail, setDetail] = useState<IDetail>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
@@ -50,12 +56,28 @@ export default function PickTower(): React.ReactNode {
             const submitData={
                 productCategoryId: params.id,
                 productId: productId,
-                productSegmentListDTOList: submitTableData
+                productSegmentListDTOList: submitTableData.map((item:any)=>{
+                    return {
+                        ...item,
+                        count:item?.count!==null?item?.count:0
+                    }
+                }),
+                legWeightA:data.legWeightA,
+                legWeightB:data.legWeightB,
+                legWeightC:data.legWeightC,
+                legWeightD:data.legWeightD
             }
             RequestUtil.post(`/tower-science/product/material/segment/submit`,submitData).then(()=>{
                 message.success('提交成功！');
                 setVisible(false);
                 setProductId('');
+                form.setFieldsValue({
+                    legWeightA:'',
+                    legWeightB:'',
+                    legWeightC:'',
+                    legWeightD:'',
+                    detailData:[]
+                })
                 form.resetFields()
             }).then(()=>{
                 setRefresh(!refresh);
@@ -77,12 +99,28 @@ export default function PickTower(): React.ReactNode {
             const saveData={
                 productCategoryId: params.id,
                 productId: productId,
-                productSegmentListDTOList: saveTableData
+                productSegmentListDTOList: saveTableData.map((item:any)=>{
+                    return {
+                        ...item,
+                        count:item?.count!==null?item?.count:0
+                    }
+                }),
+                legWeightA:data.legWeightA,
+                legWeightB:data.legWeightB,
+                legWeightC:data.legWeightC,
+                legWeightD:data.legWeightD
             }
             RequestUtil.post(`/tower-science/product/material/segment/save`,saveData).then(()=>{
                 message.success('保存成功！');
                 setVisible(false);
                 setProductId('');
+                form.setFieldsValue({
+                    legWeightA:'',
+                    legWeightB:'',
+                    legWeightC:'',
+                    legWeightD:'',
+                    detailData:[]
+                })
                 form.resetFields();
             }).then(()=>{
                 setRefresh(!refresh);
@@ -106,6 +144,12 @@ export default function PickTower(): React.ReactNode {
             dataIndex: 'productNumber'
         },
         {
+            key: 'productHeight',
+            title: '呼高',
+            width: 100,
+            dataIndex: 'productHeight'
+        },
+        {
             key: 'productCategoryName',
             title: '塔型',
             width: 100,
@@ -125,7 +169,7 @@ export default function PickTower(): React.ReactNode {
         },
         {
             key: 'materialStatusName',
-            title: '杆塔配段状态',
+            title: '杆塔提料状态',
             width: 100,
             dataIndex: 'materialStatusName'
         },
@@ -134,6 +178,36 @@ export default function PickTower(): React.ReactNode {
             title: '最新状态变更时间',
             width: 200,
             dataIndex: 'materialUpdateStatusTime'
+        },
+        {
+            key: 'segmentInformation',
+            title: '配段信息',
+            width: 200,
+            dataIndex: 'segmentInformation'
+        },
+        {
+            key: 'legWeightA',
+            title: 'A',
+            width: 200,
+            dataIndex: 'legWeightA'
+        },
+        {
+            key: 'legWeightB',
+            title: 'B',
+            width: 200,
+            dataIndex: 'legWeightB'
+        },
+        {
+            key: 'legWeightC',
+            title: 'C',
+            width: 200,
+            dataIndex: 'legWeightC'
+        },
+        {
+            key: 'legWeightD',
+            title: 'D',
+            width: 200,
+            dataIndex: 'legWeightD'
         },
         {
             key: 'operation',
@@ -145,20 +219,26 @@ export default function PickTower(): React.ReactNode {
                 <Space direction="horizontal" size="small"  className={styles.operationBtn}>
                     <Button type='link' onClick={async () => {
                         setVisible(true);
-                            let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}`)
-                            const detailData: IMaterialDetail[]|undefined = data&&data.materialDrawProductSegmentList&&data.materialDrawProductSegmentList.map((item:IMaterialDetail)=>{
-                                return {
-                                    ...item,
-                                }
-                            })
-                            setProductId(record.id);
-                            setDetail({
-                                ...data,
-                                materialDrawProductSegmentList:detailData
-                            })
-                            form.setFieldsValue({detailData:detailData});
-                            
-                    }} disabled={record.materialStatus!==2||AuthUtil.getUserId()!==record.materialUser|| params.status!=='3'}>配段</Button>
+                        let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}`)
+                        const detailData: IMaterialDetail[]|undefined = data&&data.materialDrawProductSegmentList&&data.materialDrawProductSegmentList.map((item:IMaterialDetail)=>{
+                            return {
+                                ...item,
+                            }
+                        })
+                        setProductId(record.id);
+                        setDetail({
+                            ...data,
+                            materialDrawProductSegmentList:detailData
+                        })
+                        form.setFieldsValue({
+                            legWeightA:data?.legWeightA,
+                            legWeightB:data?.legWeightB,
+                            legWeightC:data?.legWeightC,
+                            legWeightD:data?.legWeightD,
+                            detailData:detailData
+                        });
+                        setStatus(record.materialStatusName)
+                    }} >配段</Button>
                     <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==3}>杆塔提料明细</Button>
                 </Space>
             )
@@ -214,15 +294,101 @@ export default function PickTower(): React.ReactNode {
     return (
         <>
             <Modal title='配段信息'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
-                {detail?.materialDrawProductSegmentList?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList }} autoComplete="off" form={form}>  
+                {detail?.materialDrawProductSegmentList?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList,legWeightA:detail?.legWeightA,legWeightB:detail?.legWeightB,legWeightC:detail?.legWeightC,legWeightD:detail?.legWeightD }} autoComplete="off" form={form}>  
+                    <DetailTitle title={'塔腿配段信息'} operation={[status!=='已完成'&&<Button type='primary' onClick={()=>{setSegmentVisible(true)}}>快速配段</Button>,
+                    <Modal 
+                        visible={segmentVisible}
+                        title='配段信息'
+                        onCancel={()=>{
+                            setSegmentVisible(false);
+                        }}
+                        onOk={async ()=>{
+                            const segment = form.getFieldsValue()
+                            const detailData = await RequestUtil.get(`/tower-science/product/quickMaterial/${productId}/${segment?.segmentList}`)
+                            setSegmentVisible(false);
+                            // message.success('配段成功！');
+                            form.setFieldsValue({
+                                detailData:detailData,
+                                legWeightA:segment?.legWeightA,
+                                legWeightB:segment?.legWeightB,
+                                legWeightC:segment?.legWeightC,
+                                legWeightD:segment?.legWeightD 
+                            });
+                        }}
+                    >
+                        <Row>
+                            <Form.Item name="segmentList" label="配段" 
+                            // rules={[{
+                            //     required: true,
+                            //     message:'请填写A'
+                            // }]}
+                            rules={[{
+                                pattern: /^[a-zA-Z0-9-,*()]*$/,
+                                message: '仅可输入英文字母/数字/特殊字符',
+                            }]}>
+                                <Input style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Row>
+                    </Modal>]}/>
                     <Row>
-                        <Col span={1}></Col>
+                        <Col span={1}/>
+                        <Col span={5}>
+                            <Form.Item name="legWeightA" label="A" rules={[{
+                                required: true,
+                                message: '请输入塔腿A'
+                            }, {
+                                pattern: /^[0-9a-zA-Z]*$/,
+                                message: '仅可输入数字/字母',
+                            }]}>
+                                <Input style={{width:'100%'}} disabled={status==='已完成'}/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={1}/>
+                        <Col span={5}>
+                            <Form.Item name="legWeightB" label="B" rules={[{
+                                required: true,
+                                message: '请输入塔腿B'
+                            }, {
+                                pattern: /^[0-9a-zA-Z]*$/,
+                                message: '仅可输入数字/字母',
+                            }]}>
+                                <Input style={{width:'100%'}} disabled={status==='已完成'}/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={1}/>
+                        <Col span={5}>
+                            <Form.Item name="legWeightC" label="C" rules={[{
+                                required: true,
+                                message: '请输入塔腿C'
+                            }, {
+                                pattern: /^[0-9a-zA-Z]*$/,
+                                message: '仅可输入数字/字母',
+                            }]}>
+                                <Input style={{width:'100%'}} disabled={status==='已完成'}/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={1}/>
+                        <Col span={5}>
+                            <Form.Item name="legWeightD" label="D" rules={[{
+                                required: true,
+                                message: '请输入塔腿D'
+                            }, {
+                                pattern: /^[0-9a-zA-Z]*$/,
+                                message: '仅可输入数字/字母',
+                            }]}>
+                                <Input style={{width:'100%'}} disabled={status==='已完成'}/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <DetailTitle title={'塔身配段信息'} />
+                    <Row>
+                        <Col span={1}/>
                         <Col span={11}>
                             <Form.Item name="productCategoryName" label="塔型">
                                 <span>{detail?.productCategoryName}</span>
                             </Form.Item>
                         </Col>
-                        <Col span={1}></Col>
+                        <Col span={1}/>
                         <Col span={11}>
                             <Form.Item name="productNumber" label="杆塔号">
                                 <span>{detail?.productNumber}</span>
@@ -245,8 +411,8 @@ export default function PickTower(): React.ReactNode {
                                         </Col>
                                         <Col span={1}></Col>
                                         <Col span={ 11 }>
-                                        <Form.Item  name={[ field.name , 'count']} label='段数' initialValue={[ field.name , 'count']}>
-                                            <InputNumber min={0} precision={0} style={{width:'100%'}}/>
+                                        <Form.Item  name={[ field.name , 'count']} label='段数' initialValue={[ field.name , 'count']} >
+                                            <InputNumber min={0} precision={0} style={{width:'100%'}} disabled={status==='已完成'}/>
                                         </Form.Item>
                                         </Col>
                                     </>
@@ -256,11 +422,12 @@ export default function PickTower(): React.ReactNode {
                         </Form.List> 
                     </Row>
                 </Form>:null}
-                <Space style={{position:'relative',left:'75%'}}>
-                    <Button type="primary" ghost onClick={()=>handleModalCancel()}>取消</Button>
+                {status!=='已完成'?<Space style={{position:'relative',left:'75%'}}>
+                    <Button onClick={()=>handleModalCancel()}>取消</Button>
                     <Button type="primary" onClick={()=>handleModalSave()}>保存</Button>
                     <Button type="primary" onClick={()=>handleModalOk()}>保存并提交</Button>
-                </Space>
+                </Space>:
+                <Button type="primary"style={{position:'relative',left:'95%'}} ghost onClick={()=>handleModalCancel()}>取消</Button>}
             </Modal>
             <Page
                 path="/tower-science/product/material"
@@ -283,7 +450,7 @@ export default function PickTower(): React.ReactNode {
                     },
                     {
                         name: 'materialStatus',
-                        label: '杆塔配段状态',
+                        label: '杆塔提料状态',
                         children: <Select style={{width:'100px'}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待开始</Select.Option>
@@ -291,25 +458,25 @@ export default function PickTower(): React.ReactNode {
                             <Select.Option value={3} key={3}>已完成</Select.Option>
                         </Select>
                     },
-                    {
-                        name: 'materialUserDepartment',
-                        label: '配段人',
-                        children:  <TreeSelect style={{width:'200px'}}
-                                        allowClear
-                                        onChange={ onDepartmentChange }
-                                    >
-                                        {renderTreeNodes(wrapRole2DataNode( department ))}
-                                    </TreeSelect>
-                    },
-                    {
-                        name: 'materialUser',
-                        label:'',
-                        children:   <Select style={{width:'100px'}} allowClear>
-                                        { matchLeader && matchLeader.map((item:any)=>{
-                                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                        }) }
-                                    </Select>
-                    },
+                    // {
+                    //     name: 'materialUserDepartment',
+                    //     label: '配段人',
+                    //     children:  <TreeSelect style={{width:'200px'}}
+                    //                     allowClear
+                    //                     onChange={ onDepartmentChange }
+                    //                 >
+                    //                     {renderTreeNodes(wrapRole2DataNode( department ))}
+                    //                 </TreeSelect>
+                    // },
+                    // {
+                    //     name: 'materialUser',
+                    //     label:'',
+                    //     children:   <Select style={{width:'100px'}} allowClear>
+                    //                     { matchLeader && matchLeader.map((item:any)=>{
+                    //                         return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                    //                     }) }
+                    //                 </Select>
+                    // },
                 ]}
             />
         </>

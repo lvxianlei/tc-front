@@ -5,6 +5,7 @@ import { Page } from '../../common'
 import { paymentListHead } from "./payment.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { costTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function Payment() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState({})
@@ -63,16 +64,15 @@ export default function Payment() {
         filterValue={filterValue}
         searchFormItems={[
             {
-                name: 'payType',
-                label: '付款类型',
+                name: 'costType',
+                label: '请款类型',
                 children: <Select style={{ width: 100 }}>
-                    <Select.Option value="0">请款</Select.Option>
-                    <Select.Option value="1">报销</Select.Option>
+                    {costTypeOptions?.map(item => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}
                 </Select>
             },
             {
                 name: 'payStatus',
-                label: '付款状态',
+                label: '请款状态',
                 children: <Select style={{ width: 100 }}>
                     <Select.Option value="0">待付款</Select.Option>
                     <Select.Option value="1">已付款</Select.Option>

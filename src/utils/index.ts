@@ -1,4 +1,5 @@
 import moment from "moment"
+import * as XLSX from "xlsx"
 export function downLoadFile(path: string, fileName?: string | undefined) {
     const a = document.createElement("a");
     a.setAttribute("href", path);
@@ -7,6 +8,14 @@ export function downLoadFile(path: string, fileName?: string | undefined) {
     let clickEvent = document.createEvent("MouseEvents");
     clickEvent.initEvent("click", true, true);
     a.dispatchEvent(clickEvent);
+}
+
+export function downLoadTemplate(columns: any[], fileName: string) {
+    const head = columns.map(item => item.title)
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new()
+    const workSheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet([head])
+    XLSX.utils.book_append_sheet(workbook, workSheet)
+    XLSX.writeFile(workbook, `${fileName}.xlsx`, { type: "binary", bookType: "xlsx" })
 }
 
 export function formatPathToStringName(path: string, basepath?: string): string {

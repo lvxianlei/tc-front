@@ -5,8 +5,7 @@ import { Page, BaseInfo, DetailTitle, EditTable, Attachment, AttachmentRef } fro
 import ApprovalTypesView from "./ApprovalTypesView"
 import SelectAuditType from './SelectAuditType'
 import useRequest from '@ahooksjs/use-request'
-import { auditHead } from "./approvalHeadData.json"
-import { bondBaseInfo, drawH, drawingCofirm, baseInfo, outFactoryHead, addanewone } from "./approvalHeadData.json"
+import { bondBaseInfo, drawH, drawingCofirm, baseInfo, outFactoryHead, addanewone, auditHead } from "./approval.json"
 import RequestUtil from '../../utils/RequestUtil'
 import { currencyTypeOptions, paymentCategoryOptions } from '../../configuration/DictionaryOptions'
 const auditEnum: any = {

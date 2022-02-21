@@ -74,20 +74,20 @@ const productColumns = [
         title: '产品类型',
         dataIndex: 'productType'
     },
-    {
-        key: 'loftingAbortTime',
-        title: '放样截止时间',
-        dataIndex: 'loftingAbortTime',
-        "type": "date",
-        "format": "YYYY-MM-DD"
-    },
-    {
-        key: 'materialAbortTime',
-        title: '提料截止时间',
-        dataIndex: 'materialAbortTime',
-        "type": "date",
-        "format": "YYYY-MM-DD"
-    },
+    // {
+    //     key: 'loftingAbortTime',
+    //     title: '放样截止时间',
+    //     dataIndex: 'loftingAbortTime',
+    //     "type": "date",
+    //     "format": "YYYY-MM-DD"
+    // },
+    // {
+    //     key: 'materialAbortTime',
+    //     title: '提料截止时间',
+    //     dataIndex: 'materialAbortTime',
+    //     "type": "date",
+    //     "format": "YYYY-MM-DD"
+    // },
     {
         key: 'totalWeight',
         title: '总重量（kg）',

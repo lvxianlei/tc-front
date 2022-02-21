@@ -58,7 +58,7 @@ export default function Edit() {
     return (
         <>
             <DetailContent title={[
-                <Button key="export" type="primary" ghost onClick={() => { setIsExportStoreList(true) }} style={{marginBottom: 16}}>导出</Button>
+                <Button key="export" type="primary" ghost onClick={() => { setIsExportStoreList(true) }} style={{ marginBottom: 16 }}>导出</Button>
             ]} operation={[<Button key="" type="ghost" onClick={() => history.goBack()}>返回</Button>]}>
                 {/* <Page
                     path={`/tower-supply/materialPurchasePlan/list/${params.id}`}
@@ -78,8 +78,10 @@ export default function Edit() {
                         total: dataTable?.total
                     }}
                 />
-                <div style={{marginBottom: 12}}>
-                    {` 采购类型统计： 圆钢总重（t）：${purchasePlanData?.total?.roundSteelTotal === -1 ? "0" : purchasePlanData?.total?.roundSteelTotal}    角钢总重（t）：${purchasePlanData?.total?.angleSteelTotal === -1 ? "0" : purchasePlanData?.total?.angleSteelTotal}        钢板总重（t）：${purchasePlanData?.total?.steelPlateTotal === -1 ? "0" : purchasePlanData?.total?.steelPlateTotal}`}
+                <div style={{ marginBottom: 12 }}>
+                    采购类型统计： 圆钢总重（t）：<span style={{ color: "#FF8C00" }}>{purchasePlanData?.total?.roundSteelTotal === -1 ? "0" : purchasePlanData?.total?.roundSteelTotal}</span>
+                    <span style={{ margin: "0px 12px" }}>角钢总重（t）：<span style={{ color: "#FF8C00" }}>{purchasePlanData?.total?.angleSteelTotal === -1 ? "0" : purchasePlanData?.total?.angleSteelTotal}</span></span>
+                    钢板总重（t）：<span style={{ color: "#FF8C00" }}>{purchasePlanData?.total?.steelPlateTotal === -1 ? "0" : purchasePlanData?.total?.steelPlateTotal}</span>
                 </div>
                 <CommonTable loading={purchasePlanLoading} columns={PurchaseTypeStatistics} dataSource={purchasePlanData?.data || []} />
             </DetailContent>

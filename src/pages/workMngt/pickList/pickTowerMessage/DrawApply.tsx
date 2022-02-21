@@ -36,8 +36,8 @@ export default function LoftingTowerApplication(): React.ReactNode {
         },
         { 
             title: '任务单号',
-            dataIndex: 'externalTaskNum', 
-            key: 'externalTaskNum' 
+            dataIndex: 'taskNum', 
+            key: 'taskNum' 
             },
         { 
             title: '呼高', 

@@ -74,7 +74,7 @@ export default function EditableTable({
         }
     ] : columns
     columns = haveIndex ? [
-        { title: '序号', dataIndex: 'index', span: 1, editable: false, render: (key: number, index: number): React.ReactNode => (<span style={{marginLeft: 8}}>{index + 1}</span>) },
+        { title: '序号', dataIndex: 'index', span: 1, editable: false, render: (key: number, index: number): React.ReactNode => (<span style={{ marginLeft: 8 }}>{index + 1}</span>) },
         ...columns
     ] : columns
     const handleRemove = (remove: any, key: any) => {
@@ -103,23 +103,23 @@ export default function EditableTable({
                             }} type="primary" style={{ height: 32, margin: "0 16px 16px 0" }}>{newButtonTitle || "新增一行"}</Button>{opration}</Row>}
 
                             <div style={{ overflowX: "auto", border: "1px solid #eee" }}>
-                                <Row className={`${styles.FormHeader}  ${styles.FormRow}`} 
-                                        style={{ backgroundColor: "#f5f5f5" }}>
+                                <Row className={`${styles.FormHeader}  ${styles.FormRow}`}
+                                    style={{ backgroundColor: "#f5f5f5" }}>
                                     {columns.map((item, index) => (<Col
                                         key={`Editable_${index}`}
-                                        className={item.required ? styles.required : ""} span={columns.length > 0 ? 
-                                            Math.floor(24 / columns.length) <= 2 ? 
+                                        className={item.required ? styles.required : ""} span={columns.length > 0 ?
+                                            Math.floor(24 / columns.length) <= 2 ?
                                                 2 :
                                                 Math.floor(24 / columns.length)
-                                        : 2}
+                                            : 2}
                                     >{item.title}</Col>))}
                                 </Row>
                                 <div style={{ height: autoScroll ? "600px" : '', overflow: autoScroll ? 'auto' : '' }}>
                                     {fields.map(({ key, name, fieldKey, ...restField }, index: number) => (
                                         <Row key={`EditableRow_${key}`} className={`${styles.FormHeader} ${styles.FormRow}`}>
-                                            {columns.map((coItem, coIndex) => (<Col key={`EditableCol_${coIndex}`} span={columns.length > 0 ? 
-                                                    Math.floor(24 / columns.length) <= 2 ?
-                                                        2 : Math.floor(24 / columns.length)
+                                            {columns.map((coItem, coIndex) => (<Col key={`EditableCol_${coIndex}`} span={columns.length > 0 ?
+                                                Math.floor(24 / columns.length) <= 2 ?
+                                                    2 : Math.floor(24 / columns.length)
                                                 : 2}>
                                                 <Form.Item
                                                     {...restField}
@@ -136,7 +136,14 @@ export default function EditableTable({
                                                         return item
                                                     }) || []}
                                                 >
-                                                    {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={name} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={{...coItem, width: "calc(100% - 12px)"}}/>}
+                                                    {coItem.editable === false ? <EditableCell
+                                                        columnItem={coItem as EditableCellProps['columnItem']}
+                                                        fieldKey={name}
+                                                        index={index}
+                                                        remove={remove} /> : coItem.render ? coItem.render(fieldKey) : <FormItemType
+                                                            type={coItem.type}
+                                                            data={coItem}
+                                                            render={coItem.render} />}
                                                 </Form.Item>
                                             </Col>)
                                             )}

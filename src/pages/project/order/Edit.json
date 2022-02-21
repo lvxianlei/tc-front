@@ -6,18 +6,18 @@
             "disabled": true
         },
         {
-            "title": "关联合同",
-            "dataIndex": "contractNumber",
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber",
             "type": "popTable",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入关联合同..."
+                    "message": "请输入内部合同编号..."
                 }
             ],
             "path": "/tower-market/contract",
             "width": 1011,
-            "value": "contractNumber",
+            "value": "internalNumber",
             "dependencies": true,
             "readOnly": true,
             "columns": [
@@ -26,15 +26,23 @@
                     "dataIndex": "contractNumber"
                 },
                 {
+                    "title": "采购订单编号",
+                    "dataIndex": "purchaseOrderNumber",
+                    "search": true
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber",
+                    "search": true
+                },
+                {
                     "title": "合同名称",
                     "dataIndex": "contractName",
                     "search": true
                 },
                 {
                     "title": "销售类型",
-                    "dataIndex": "saleTypeName",
-                    "type": "select",
-                    "search": true
+                    "dataIndex": "saleTypeName"
                 },
                 {
                     "title": "业主单位",
@@ -52,8 +60,8 @@
             ]
         },
         {
-            "title": "内部合同编号",
-            "dataIndex": "internalNumber",
+            "title": "合同名称",
+            "dataIndex": "contractName",
             "disabled": true
         },
         {
@@ -111,15 +119,18 @@
         {
             "title": "订单重量",
             "dataIndex": "orderWeight",
-            "type": "number",
-            "precision": 8,
-            "max": 99999999.9999
+            "type": "text",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入订单重量"
+                }
+            ]
         },
         {
             "title": "含税金额",
             "dataIndex": "taxAmount",
-            "type": "number",
-            "precision": 4,
+            "type": "text",
             "rules": [
                 {
                     "required": true,
@@ -137,9 +148,8 @@
         {
             "title": "含税单价",
             "dataIndex": "taxPrice",
-            "type": "number",
-            "disabled": true,
-            "precision": 4
+            "type": "text",
+            "disabled": true
         },
         {
             "title": "不含税单价",

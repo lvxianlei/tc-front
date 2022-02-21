@@ -83,11 +83,11 @@ export default function OperationRecord({
     return <>
         {title && <DetailTitle title={title} />}
         <CommonTable
-            style={{padding: "0",}}
+            style={{ padding: "0" }}
             haveIndex
             loading={loading}
             columns={columns}
-            scroll={false}
+            rowKey={(item: any) => `${item.deptId}-${item.optTime}`}
             pagination={{
                 current: params.current,
                 pageSize: params.size,

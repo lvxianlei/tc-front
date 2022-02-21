@@ -75,18 +75,23 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                             return ({
                                 ...item,
                                 render: (_: any, record: any, index: number) => {
-                                    return <InputNumber value={record.purchasePlanNumber} key={index} onChange={(value: number) => {
-                                        setNumber(++number)
-                                        setValues({
-                                            index,
-                                            value: value ? value : 0
-                                        })
-                                    }} style={{ height: 27 }} />
+                                    return <InputNumber
+                                        value={record.purchasePlanNumber}
+                                        key={index}
+                                        onChange={(value: number) => {
+                                            setNumber(++number)
+                                            setValues({
+                                                index,
+                                                value: value ? value : 0
+                                            })
+                                        }} style={{ height: 27 }} />
                                 }
                             })
                         }
                         return item
-                    })} dataSource={dataSource || []} pagination={false} />
+                    })}
+                    dataSource={dataSource || []}
+                    pagination={false} />
             </Col>
         </Row>
     </Spin>

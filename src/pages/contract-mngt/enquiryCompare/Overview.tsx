@@ -39,7 +39,6 @@ export default function Overview(): JSX.Element {
     const [detailId, setDetailId] = useState<string>("")
     const [materialLists, setMaterialList] = useState<any[]>([])
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
-    const [selectedRows, setSelectedRows] = useState<[]>([]);
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [isExport, setIsExportStoreList] = useState(false)
@@ -78,7 +77,6 @@ export default function Overview(): JSX.Element {
             okText: "提交/完成",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    console.log(materialLists, "materialLists")
                     await finishPriceRun({
                         comparisonPriceDetailDtos: materialLists.map((item: any) => ({
                             ...item,
@@ -115,7 +113,6 @@ export default function Overview(): JSX.Element {
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: []): void => {
         setSelectedKeys(selectedRowKeys);
-        setSelectedRows(selectedRows)
     }
 
 
@@ -163,7 +160,6 @@ export default function Overview(): JSX.Element {
                     }
                 })
                 setSelectedKeys([]);
-                setSelectedRows([]);
                 setSupplierVisible(false)
                 setSupplier("")
                 setMaterialList(list);
@@ -194,7 +190,7 @@ export default function Overview(): JSX.Element {
                 ghost
                 key="export"
                 style={{ marginRight: 16 }}
-                onClick={()=>{setIsExportStoreList(true)}}
+                onClick={() => { setIsExportStoreList(true) }}
             >导出</Button>,
             <Button
                 type="primary"
@@ -230,8 +226,8 @@ export default function Overview(): JSX.Element {
         ]} operation={[
             <Button key="back" onClick={() => history.goBack()}>返回</Button>
         ]}>
-            <DetailTitle title="询价产品信息" style={{marginTop: "24px"}}/>
-            <CommonTable haveIndex columns={[...materialColumns, {
+            <DetailTitle title="询价产品信息" style={{ marginTop: "24px" }} />
+            <CommonTable columns={[...materialColumns, {
                 title: "中标供应商",
                 dataIndex: "winBidSupplierId",
                 render: (value: any, records: any) => (<Select
@@ -277,41 +273,41 @@ export default function Overview(): JSX.Element {
                                     marginRight: 12
                                 }}
                                 disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
-                                setDetailId(records.id)
-                                setOprationType("edit")
-                                setVisible(true)
-                            }}>编辑</Button>
+                                    setDetailId(records.id)
+                                    setOprationType("edit")
+                                    setVisible(true)
+                                }}>编辑</Button>
                             <Button
                                 style={{
                                     padding: 0,
                                     marginRight: 12
                                 }}
                                 type="link" onClick={() => {
-                                setDetailId(records.id)
-                                setAttchVisible(true)
-                            }}>附件</Button>
+                                    setDetailId(records.id)
+                                    setAttchVisible(true)
+                                }}>附件</Button>
                             <Button
                                 style={{
                                     padding: 0
                                 }}
                                 disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
-                                Modal.confirm({
-                                    title: "删除",
-                                    content: "确定删除吗？",
-                                    onOk: async () => {
-                                        await deleteRun(records.id);
-                                        message.success("成功删除！");
-                                        history.go(0);
-                                    }
-                                })
-                            }
-                            }>移除</Button>
+                                    Modal.confirm({
+                                        title: "删除",
+                                        content: "确定删除吗？",
+                                        onOk: async () => {
+                                            await deleteRun(records.id);
+                                            message.success("成功删除！");
+                                            history.go(0);
+                                        }
+                                    })
+                                }
+                                }>移除</Button>
                         </>
                     }]}
                 dataSource={data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData || []}
             />
         </DetailContent>
-        {isExport?<ExportList
+        {isExport ? <ExportList
             history={history}
             location={location}
             match={match}
@@ -330,6 +326,6 @@ export default function Overview(): JSX.Element {
                 comparisonPriceId: params.id
             }}
             closeExportList={() => { setIsExportStoreList(false) }}
-        />:null}
+        /> : null}
     </Spin>
 }

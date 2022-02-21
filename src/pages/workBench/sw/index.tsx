@@ -25,7 +25,7 @@ export default function SWWorkBench(): React.ReactNode {
                     {item.workbenchItemVos?.filter((itemVos: any) => authorities?.includes(itemVos.authority)).map((workbenchItem: any, index: number) => {
                         return <div key={index} className={item.col !== 2 ? styles.content : styles.content2}>
                             <div style={{ cursor: "pointer" }} onClick={() => history.push(workbenchItem.path)}>
-                                <p><CheckCircleOutlined />{workbenchItem.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
+                                <p><CheckCircleOutlined style={{ paddingRight: "8px" }}/>{workbenchItem.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
                                 <p className={styles.total}>{data?.[item.dataIndex]?.[workbenchItem.dataIndex] || 0}</p>
                                 <div className={styles.draw}>
                                     <Line keyIndex={`${ind}${index}`}

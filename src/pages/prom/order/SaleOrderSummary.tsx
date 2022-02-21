@@ -48,6 +48,7 @@ export interface ISaleOrderBaseInfo {
     readonly taxPrice?: number;
     readonly taxRate?: number;
     readonly description?: string;
+    readonly contractNumber?: string;
 }
 
 export interface IContractInfoVo extends IContract {

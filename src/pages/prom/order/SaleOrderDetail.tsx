@@ -61,7 +61,7 @@ export class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRout
         return [{
             span: 8,
             children: (
-                <span>关联合同：{detail?.contractInfoVo?.internalNumber}</span>
+                <span>关联合同：{detail?.contractNumber}</span>
             )
         }, {
             span: 8,

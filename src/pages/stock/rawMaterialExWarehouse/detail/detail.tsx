@@ -335,9 +335,10 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             result.updateTimeEnd = `${formatDate[1]} 23:59:59`
             delete value.startRefundTime
         }
+        console.log(value, "value")
         if (value.batcherId) {
-            value.departmentId = value.batcherId.first
-            value.outStockStaffId = value.batcherId.second
+            result.departmentId = value.batcherId.first
+            result.outStockStaffId = value.batcherId.second
         }
         setFilterValue(result)
         return result
@@ -394,7 +395,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     }
     // 点击出库-缺料申请-按钮
     const MaterialShortageApplication = async () => {
-        console.log(ApplyListdata, 'ApplyListdata')
         if (OutLibraryListdata.length != 0) {
             message.error('库存未用完')
             return
@@ -500,7 +500,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         name: 'batcherId',
                         label: '出库人',
-                        children: <IntgSelect width={200} />
+                        children: <IntgSelect width={400} />
                     },
                     {
                         name: 'materialTexture',

@@ -595,7 +595,7 @@
                         "label": "计划排产",
                         "icon": "zhujihuapaichan-jihuapaichan_jihuapaichan",
                         "path": "/planProd",
-                        "appName": "PS",
+                        "appName": "PC",
                         "authority": "approvalm",
                         "items": [
                             {
@@ -695,7 +695,7 @@
                         "items": [
                             {
                                 "label": "配置管理列表",
-                                "path": "/config",
+                                "path": "/config/configList",
                                 "authority": "configuration_management_lists"
                             }
                         ]
@@ -952,7 +952,7 @@
                     {
                         "label": "车间计划基础配置",
                         "icon": "zhujihuapaichan-chejianjihuajichupeizhi_chejianjihuajichupeizhi",
-                        "appName": "PS",
+                        "appName": "PC",
                         "path": "/workshopPlanBasic",
                         "authority": "approvalm",
                         "items": [
@@ -971,7 +971,7 @@
                     {
                         "label": "主生产计划",
                         "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
-                        "appName": "PS",
+                        "appName": "PC",
                         "path": "/planBaseSetting",
                         "authority": "approvalm",
                         "items": [

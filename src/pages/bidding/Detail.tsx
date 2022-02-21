@@ -1,47 +1,19 @@
 import React, { useState } from 'react'
-import { Spin, Form, Button, Modal, Select, Input, message } from 'antd'
+import { Spin, Form, Button, Modal, message, Row, Radio } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../common'
-import { PopTable } from "../common/FormItemType"
-import { baseInfoData } from './biddingHeadData.json'
+import { baseInfoData, detaiBidStatus, isBidding, noBidding, bidPageInfo, bidPageInfoCount } from './bidding.json'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { downLoadFile } from "../../utils"
-const tableColumns = [
-    { title: '序号', dataIndex: 'index', width: 50, key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    {
-        title: '分标编号',
-        dataIndex: 'partBidNumber',
-        key: 'partBidNumber',
-    },
-    { title: '物资类别', dataIndex: 'goodsType' },
-    {
-        "title": "包名称",
-        "dataIndex": "packageName"
-    },
-    {
-        "title": "包号",
-        "dataIndex": "packageNumber"
-    },
-    {
-        "title": "工程电压等级",
-        "dataIndex": "projectVoltageLevel"
-    },
-    {
-        "title": "物资描述",
-        "dataIndex": "goodsExplain"
-    },
-    { title: '数量', dataIndex: 'amount', type: "number", render: (value: number) => { return value === -1 ? 0 : value } },
-    { title: '单位', dataIndex: 'unit' },
-    { title: '首批交货日期', dataIndex: 'deliveryDate' },
-    { title: '交货地点', dataIndex: 'deliveryPlace' }
-]
+
 export default function InformationDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const [form] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
     const [isBid, setIsBid] = useState("0")
+    const [viewBidList, setViewBidList] = useState<"detail" | "count">("detail")
+    const [bidStatusColumns, setBidStatusColumns] = useState<any[]>(isBidding)
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
@@ -79,7 +51,11 @@ export default function InformationDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
-            await run({ ...submitData })
+            await run({
+                ...submitData,
+                projectLeaderId: submitData.projectLeaderId?.id,
+                bigPackageIds: submitData.bigPackageIds?.records.map((item: any) => item.id)
+            })
             setVisible(false)
             history.go(0)
         } catch (error) {
@@ -88,9 +64,28 @@ export default function InformationDetail(): React.ReactNode {
     }
 
     const handleModalCancel = () => setVisible(false)
-    const handleChange = (fields: any, allFields: any) => {
+    const handleChange = (fields: any) => {
         if (Object.keys(fields)[0] === "biddingStatus") {
             setIsBid(fields.biddingStatus)
+            if (fields.biddingStatus === 2) {
+                form.setFieldsValue({
+                    biddingStatus: fields.biddingStatus,
+                    reason: ""
+                })
+                setBidStatusColumns([...isBidding, ...noBidding])
+            } else {
+                form.resetFields()
+                form.setFieldsValue({
+                    biddingStatus: fields.biddingStatus
+                })
+                setBidStatusColumns([...isBidding,
+                ...detaiBidStatus.map((item: any) => {
+                    if (item.dataIndex === "bigPackageIds") {
+                        return ({ ...item, path: `${item.path}?bidInfoId=${params.id}` })
+                    }
+                    return item
+                })])
+            }
         }
     }
     const handleDelete = () => {
@@ -109,55 +104,15 @@ export default function InformationDetail(): React.ReactNode {
         })
     }
     return <>
-        <Modal zIndex={15} visible={visible}
-            title="是否应标" okText="确定"
+        <Modal
+            zIndex={15}
+            visible={visible}
+            title="是否应标"
+            okText="确定"
             onOk={handleModalOk}
             confirmLoading={bidResStatus}
             onCancel={handleModalCancel} >
-            <Form form={form} onValuesChange={handleChange}>
-                <Form.Item name="biddingStatus" label="是否应标" rules={[{
-                    required: true,
-                    message: '请选择是否应标',
-                }]}>
-                    <Select>
-                        <Select.Option value="1">是</Select.Option>
-                        <Select.Option value="2">否</Select.Option>
-                    </Select>
-                </Form.Item>
-                {isBid === "2" && <Form.Item name="reason" label="原因">
-                    <Input.TextArea />
-                </Form.Item>}
-                {isBid === "1" && <Form.Item name="projectLeaderId" label="设置项目负责人" rules={[{
-                    required: true,
-                    message: '请设置项目负责人...',
-                }]}>
-                    <PopTable onChange={(event: any) => form.setFieldsValue({ projectLeaderId: event.id })} data={{
-                        type: "PopTable",
-                        title: "选择项目负责人",
-                        dataIndex: "projectLeader",
-                        path: "/sinzetech-user/user",
-                        dependencies: true,
-                        columns: [
-                            {
-                                title: '登录账号',
-                                dataIndex: 'account'
-                            },
-                            {
-                                title: '用户姓名',
-                                dataIndex: 'name',
-                                search: true
-                            },
-                            {
-                                title: '所属角色',
-                                dataIndex: 'userRoleNames'
-                            },
-                            {
-                                title: '所属机构',
-                                dataIndex: 'departmentName'
-                            }
-                        ] as any[]
-                    }} /> </Form.Item>}
-            </Form>
+            <BaseInfo form={form} edit columns={bidStatusColumns} dataSource={{}} col={1} onChange={handleChange} />
         </Modal>
         <DetailContent
             operation={[
@@ -172,7 +127,14 @@ export default function InformationDetail(): React.ReactNode {
                 dataSource={data || {}}
                 col={4} />
             <DetailTitle title="物资清单" />
-            <CommonTable columns={tableColumns} dataSource={data?.bidPackageInfoVOS} />
+            <Row>
+                <Radio.Group defaultValue={viewBidList} onChange={(event: any) => setViewBidList(event.target.value)}>
+                    <Radio.Button value="detail" key="detail">明细</Radio.Button>
+                    <Radio.Button value="count" key="count">统计</Radio.Button>
+                </Radio.Group>
+            </Row>
+            {viewBidList === "detail" && <CommonTable haveIndex columns={bidPageInfo} dataSource={data?.bidPackageInfoVOS} />}
+            {viewBidList === "count" && <CommonTable haveIndex rowKey="partBidNumber" columns={bidPageInfoCount} dataSource={data?.bidPackageInfoCensusVOS} />}
             <Attachment title="附件" dataSource={data?.attachVos} />
         </DetailContent>
     </>

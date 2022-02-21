@@ -74,6 +74,13 @@ export default function BoltCheck(): React.ReactNode {
             editable: true
         },
         {
+            key: 'wealth',
+            title: '裕度',
+            width: 120,
+            dataIndex: 'wealth',
+            editable: true
+        },
+        {
             key: 'total',
             title: '合计',
             width: 120,
@@ -93,6 +100,13 @@ export default function BoltCheck(): React.ReactNode {
             width: 120,
             dataIndex: 'totalWeight',
             editable: false
+        },
+        {
+            key: 'description',
+            title: '备注',
+            width: 120,
+            dataIndex: 'description',
+            editable: true
         }
     ]
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {

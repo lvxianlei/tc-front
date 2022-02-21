@@ -46,10 +46,10 @@ const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, re
     useImperativeHandle(ref, () => ({ onSubmit: saveRun }), [saveRun, attachRef.current.getDataSource])
 
     return <Spin spinning={loading}>
-        <Attachment title={false} dataSource={data} edit ref={attachRef} />
+        <Attachment title={false} dataSource={data} edit ref={attachRef} style={{margin: "0px"}} marginTop={false} />
     </Spin>
 })
-export default function Edit() {
+export default function Overview() {
     const receiveRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const history = useHistory()
     const params = useParams<{ id: string }>()
@@ -59,26 +59,20 @@ export default function Edit() {
     const [detailId, setDetailId] = useState<string>("")
     const [saveLoding, setSaveLoading] = useState<boolean>(false)
 
-    useEffect(() => {
-        getUser();
-    }, [JSON.stringify(filterValue)])
-
     // 统计数量
-    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detailStatistics`, {
                 receiveStockId: params.id,
-                // receiveStockId: filterValue["receiveStockId"] || "",
                 startStatusUpdateTime: filterValue["startStatusUpdateTime"] || "",
                 endStatusUpdateTime: filterValue["endStatusUpdateTime"] || "",
                 receiveStatus: filterValue["receiveStatus"] || ""
             })
             resole(result)
-            console.log(result, "resul")
         } catch (error) {
             reject(error)
         }
-    }), {})
+    }), { refreshDeps: [params.id] })
     const handleAttachOk = async () => {
         setSaveLoading(true)
         await receiveRef.current.onSubmit()
@@ -139,19 +133,16 @@ export default function Edit() {
                     </Form.Item>
                 }
             ]}
-            // sourceKey="receiveStockDetailPage.records"
-            extraOperation={(data: any) => {
-                return <>
-                    <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} style={{ marginRight: 16, marginLeft: 16 }}>申请质检</Button>
-                    <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                    <span style={{ marginLeft: "20px" }}>
-                        已收货：重量(支)合计：{userData?.receiveWeight === -1 ? 0 : userData?.receiveWeight}
-                        价税合计(元)合计：{userData?.receivePrice === -1 ? 0 : userData?.receivePrice}
-                        待收货：重量(支)合计：{userData?.waitWeight === -1 ? 0 : userData?.waitWeight}
-                        价税合计(元)合计：{userData?.waitPrice === -1 ? 0 : userData?.waitPrice}
-                    </span>
-                </>
-            }}
+            extraOperation={<>
+                <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} >申请质检</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
+                <span style={{ marginLeft: "20px" }}>
+                    已收货：重量(支)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receiveWeight === -1 ? 0 : userData?.receiveWeight}</span>
+                    价税合计(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receivePrice === -1 ? 0 : userData?.receivePrice}</span>
+                    待收货：重量(支)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}> {userData?.waitWeight === -1 ? 0 : userData?.waitWeight}</span>
+                    价税合计(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.waitPrice === -1 ? 0 : userData?.waitPrice}</span>
+                </span>
+            </>}
             columns={[
                 ...CargoDetails,
                 {

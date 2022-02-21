@@ -9,7 +9,7 @@
             "dataIndex": "typeName"
         },
         {
-            "title": "重要联系人",
+            "title": "首要联系人",
             "dataIndex": "linkman"
         },
         {
@@ -52,8 +52,8 @@
         {
             "title": "联系电话",
             "dataIndex": "phone",
-            "type": "phone",
-            "required": true
+            "required": true,
+            "maxLength": 30
         },
         {
             "title": "联系地址",

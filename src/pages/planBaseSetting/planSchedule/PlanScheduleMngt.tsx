@@ -128,7 +128,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
             width: 200,
             render: (_: any) => (
                 <Tooltip placement="topLeft" title={_}>
-                    {_?.slice(0, 15)}...
+                    {_ ? _?.length > 15 ? _?.slice(0, 15) + '...' : _ : '-'}
                 </Tooltip>
             )
         },

@@ -45,7 +45,6 @@ export default function Overview() {
             value.materialLeaderDept = value.materialLeader.first
             value.materialLeader = value.materialLeader.second
         }
-        setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -110,7 +109,7 @@ export default function Overview() {
                 {
                     name: 'materialLeader',
                     label: '提料人',
-                    children: <IntgSelect width={200} />
+                    children: <IntgSelect width={400} />
                 },
                 {
                     name: 'fuzzyQuery',

@@ -1,0 +1,400 @@
+{
+    "frameAgreementColumns": [
+        {
+            "title": "协议编号",
+            "dataIndex": "frameAgreementCode",
+            "disabled": true
+        },
+        {
+            "title": "协议名称",
+            "dataIndex": "frameAgreementName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入协议名称..."
+                }
+            ]
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "disabled": true
+        },
+        {
+            "title": "预估总重(吨)",
+            "dataIndex": "contractWeight",
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入合同总重..."
+                }
+            ]
+        },
+        {
+            "title": "预估单价(元/吨)",
+            "dataIndex": "contractMoney",
+            "type": "number"
+        },
+        {
+            "title": "预估总价(元)",
+            "dataIndex": "contractMoneyCount",
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入合同总价..."
+                }
+            ]
+        },
+        {
+            "title": "执行重量",
+            "dataIndex": "implementWeight",
+            "disabled": true
+        },
+        {
+            "title": "执行金额",
+            "dataIndex": "implementMoney",
+            "disabled": true
+        },
+        {
+            "title": "执行重量百分比(%)",
+            "dataIndex": "implementWeightPro",
+            "disabled": true
+        },
+        {
+            "title": "执行金额百分比(%)",
+            "dataIndex": "implementMoneyPro",
+            "disabled": true
+        },
+        {
+            "title": "中标类型",
+            "dataIndex": "bidType",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择中标类型..."
+                }
+            ]
+        },
+        {
+            "title": "销售类型",
+            "dataIndex": "saleType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "国内业务"
+                },
+                {
+                    "value": 1,
+                    "label": "国际业务"
+                },
+                {
+                    "value": 2,
+                    "label": "其他"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择销售类型..."
+                }
+            ]
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "ownerCompany",
+            "type": "popTable",
+            "path": "/tower-market/customer",
+            "readOnly": true,
+            "value": "name",
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "typeName"
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择业主单位..."
+                }
+            ]
+        },
+        {
+            "title": "业主联系人",
+            "dataIndex": "ownerUser",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入业主联系人..."
+                }
+            ]
+        },
+        {
+            "title": "业主联系电话",
+            "dataIndex": "ownerPhone",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入业主联系电话..."
+                }
+            ]
+        },
+        {
+            "title": "签订单位",
+            "dataIndex": "signCompany",
+            "type": "popTable",
+            "path": "/tower-market/customer",
+            "readOnly": true,
+            "value": "name",
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "typeName"
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择签订单位..."
+                }
+            ]
+        },
+        {
+            "title": "签订日期",
+            "dataIndex": "signDate",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择签订日期..."
+                }
+            ]
+        },
+        {
+            "title": "签订人",
+            "dataIndex": "signUser",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入签订人..."
+                }
+            ]
+        },
+        {
+            "title": "交货日期",
+            "dataIndex": "deliveryDate",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择交货日期..."
+                }
+            ]
+        },
+        {
+            "title": "有无技术协议",
+            "dataIndex": "isIta",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "无"
+                },
+                {
+                    "value": 1,
+                    "label": "原件"
+                },
+                {
+                    "value": 2,
+                    "label": "复印件"
+                }
+            ]
+        },
+        {
+            "title": "合同接管人",
+            "dataIndex": "takeOverUser"
+        },
+        {
+            "title": "合同接管日期",
+            "dataIndex": "takeOverTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "是否收到原件",
+            "dataIndex": "isReceivedContract",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "否"
+                },
+                {
+                    "value": 1,
+                    "label": "是"
+                }
+            ]
+        },
+        {
+            "title": "所属区域",
+            "dataIndex": "address"
+        },
+        {
+            "title": "销售员",
+            "dataIndex": "saleUser",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入销售员..."
+                }
+            ]
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "materialListColumns": [
+        {
+            "title": "物资名称",
+            "dataIndex": "cargoName",
+            "width": 100,
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写物资名称"
+                }
+            ]
+        },
+        {
+            "title": "规格型号",
+            "dataIndex": "specs",
+            "width": 100
+        },
+        {
+            "title": "计量单位",
+            "dataIndex": "metering",
+            "width": 100,
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写计量单位"
+                }
+            ]
+        },
+        {
+            "title": "数量",
+            "dataIndex": "number",
+            "type": "number",
+            "width": 100,
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写数量"
+                }
+            ]
+        },
+        {
+            "title": "单价(含税)(元)",
+            "dataIndex": "moneyTax",
+            "type": "number",
+            "width": 100,
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写单价(含税)(元)"
+                }
+            ]
+        },
+        {
+            "title": "单价(不含税)(元)",
+            "dataIndex": "money",
+            "width": 150
+        },
+        {
+            "title": "合同总价(含税)(元)",
+            "dataIndex": "contractMoneyTax",
+            "type": "number",
+            "width": 100,
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写合同总价(含税)(元)"
+                }
+            ]
+        },
+        {
+            "title": "合同总价(不含税)(元)",
+            "dataIndex": "contractMoney",
+            "width": 150,
+            "type": "number"
+        },
+        {
+            "title": "增值税率(%)",
+            "dataIndex": "tax",
+            "width": 150,
+            "type": "number",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写增值税率(%)"
+                }
+            ]
+        },
+        {
+            "title": "交货时间",
+            "dataIndex": "date",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "收货人及联系电话",
+            "dataIndex": "phone",
+            "width": 150
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ]
+}

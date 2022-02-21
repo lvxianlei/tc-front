@@ -10,18 +10,7 @@
         },
         {
             "title": "回款类型",
-            "dataIndex": "returnType",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1171,
-                    "label": "投标保证金"
-                },
-                {
-                    "value": 1172,
-                    "label": "合同应收款"
-                }
-            ]
+            "dataIndex": "returnTypeName"
         },
         {
             "title": "来款金额",
@@ -33,7 +22,7 @@
         },
         {
             "title": "币种",
-            "dataIndex": "currency"
+            "dataIndex": "currencyName"
         },
         {
             "title": "汇率",
@@ -45,7 +34,7 @@
         },
         {
             "title": "付款方式",
-            "dataIndex": "payType"
+            "dataIndex": "payTypeName"
         },
         {
             "title": "收款银行",
@@ -62,18 +51,7 @@
         },
         {
             "title": "状态",
-            "dataIndex": "confirmStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "未确认",
-                    "value": 0
-                },
-                {
-                    "label": "已确认",
-                    "value": 1
-                }
-            ]
+            "dataIndex": "confirmStatusName"
         },
         {
             "title": "备注",
@@ -102,7 +80,7 @@
         },
         {
             "title": "付款方式",
-            "dataIndex": "payType",
+            "dataIndex": "payTypeName",
             "disabled": true
         },
         {
@@ -112,7 +90,7 @@
         },
         {
             "title": "币种",
-            "dataIndex": "currency",
+            "dataIndex": "currencyName",
             "disabled": true
         },
         {
@@ -346,7 +324,7 @@
         },
         {
             "title": "业务经理",
-            "dataIndex": "currencyTypeName",
+            "dataIndex": "salesman",
             "disabled": true,
             "width": 200
         },

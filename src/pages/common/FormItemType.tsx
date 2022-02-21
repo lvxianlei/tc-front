@@ -35,6 +35,7 @@ export interface PopTableData {
     dependencies?: boolean
     selectType?: "checkbox" | "radio"
     value?: string
+    transformData?: (data: any) => any //请求到数据后转换为需要的数据
     getCheckboxProps?: (records: any) => ({ [key: string]: any })
     [key: string]: any
 }
@@ -57,8 +58,9 @@ interface PagenationProps {
 }
 
 export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
-    const initValue = value?.records?.map((item: any) => item.id)
+    const initValue = value?.records?.map((item: any) => item.id) || []
     const [select, setSelect] = useState<any[]>(initValue)
+    const [selectRows, setSelectRows] = useState<any[]>(initValue)
     const [columns, setColumns] = useState<any[]>(data.columns)
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,
@@ -86,15 +88,32 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             })
             const paramsOptions = stringify(params)
             const path = data.path.includes("?") ? `${data.path}&${paramsOptions || ''}` : `${data.path}?${paramsOptions || ''}`
-            resolve(await RequestUtil.get<{ data: any }>(path))
+            const result: any = await RequestUtil.get<{ data: any }>(path)
+            resolve(data.transformData ? data.transformData(result) : result)
         } catch (error) {
             reject(error)
         }
     }), { refreshDeps: [pagenation.current] })
 
-    const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
-        onChange && onChange(selectRows)
-        setSelect(selectedRowKeys)
+    const onSelectChange = (record: any, selected: boolean, selectAllRows: any[]) => {
+        const currentSelect = [...select]
+        const currentSelectRows = [...selectRows]
+        if (data.selectType && data.selectType === "checkbox") {
+            if (selected) {
+                currentSelect.push(record.id)
+                currentSelectRows.push(record)
+                onChange && onChange(currentSelectRows)
+                setSelect(currentSelect)
+                setSelectRows(currentSelectRows)
+            } else {
+                setSelect(currentSelect.filter(item => item !== record.id))
+                setSelectRows(currentSelectRows.filter((item: any) => item.id !== record.id))
+                onChange && onChange(currentSelectRows.filter((item: any) => item.id !== record.id))
+            }
+        } else {
+            onChange && onChange(selectAllRows)
+            setSelect([record.id])
+        }
     }
 
     useEffect(() => {
@@ -130,7 +149,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             rowSelection={{
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
-                onChange: onSelectChange,
+                onSelect: onSelectChange,
                 getCheckboxProps: data?.getCheckboxProps
             }}
             rowKey={data.rowKey || ((record: any) => record.id)}

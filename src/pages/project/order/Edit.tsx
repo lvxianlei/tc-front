@@ -15,34 +15,49 @@ export default function SeeGuarantee(): JSX.Element {
     const history = useHistory();
     const [addCollectionForm] = Form.useForm();
     const params = useParams<{ projectId: string, id: string }>();
+
+    const processingNumber = (arg: any, num: number) => {
+        let v = new RegExp(`^(\\-)*(\\d+)\.(\\d{${num}}).*$`);
+        arg = arg.replace(/[^\d.]/g, "");
+        arg = arg.replace(/^\./g, "");
+        arg = arg.replace(/\.{2,}/g, ".");
+        arg = arg.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        arg = arg.replace(v, '$1$2.$3');
+        return arg
+    }
+
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
-        if (fields.contractNumber) {
+        if (fields.internalNumber) {
             // 关联合同
-            const result = fields.contractNumber.records[0];
+            const result = fields.internalNumber.records[0];
+            console.log(result, "reslut")
             addCollectionForm.setFieldsValue({
                 purchaseOrderNumber: result.purchaseOrderNumber, // 采购订单号
-                internalNumber: result.internalNumber, // 内部合同编号
+                // internalNumber: result.internalNumber, // 内部合同编号
                 customerCompany: result.customerCompany, // 业主单位
                 signCustomerName: result.signCustomerName, // 合同签订单位
                 signContractTime: result.signContractTime, // 合同签订日期
                 deliveryTime: result.deliveryTime, // 合同要求交货日期
                 currencyType: result.currencyType, // 币种
-                saleType: result.saleType// 销售类型
+                saleType: result.saleType, // 销售类型
+                orderProjectName: result.contractName, // 订单工程名称
+                contractName: result.contractName, // 合同名称
             })
             return;
         }
         if (fields.orderWeight) {
             // 订单重量改变
-               // 影响含税单价，不含税单价，不含税金额
+            // 影响含税单价，不含税单价，不含税金额
             // 不含税金额 = 不含税单价 * 订单重量
             const taxRate = addCollectionForm.getFieldValue("taxRate") * 1; // 税率
-            const taxPrice = addCollectionForm.getFieldValue("taxAmount") / addCollectionForm.getFieldValue("orderWeight"); // 含税单价
+            const taxPrice = addCollectionForm.getFieldValue("orderWeight") > 0 ? addCollectionForm.getFieldValue("taxAmount") / addCollectionForm.getFieldValue("orderWeight") : 0; // 含税单价
             const price = taxPrice / (1 + taxRate  / 100);
             const result =  (+addCollectionForm.getFieldValue("orderWeight") || 0) * price; // 含税金额
             addCollectionForm.setFieldsValue({
                 amount: doNumber(result, 4),
-                taxPrice: doNumber(taxPrice, 4), // 含税单价
-                price: doNumber(price, 4) // 不含税单价
+                taxPrice: processingNumber(taxPrice + "", 6), // 含税单价
+                price: doNumber(price, 4), // 不含税单价
+                orderWeight: processingNumber(fields.orderWeight, 8)
             })
             return;
         }
@@ -57,11 +72,15 @@ export default function SeeGuarantee(): JSX.Element {
                 const price = result / (1 + taxRate  / 100);
                 const amount =  (+addCollectionForm.getFieldValue("orderWeight") || 0) * price; // 含税金额
                 addCollectionForm.setFieldsValue({
-                    taxPrice: doNumber(result, 4),
+                    taxPrice: processingNumber(result + "", 6),
                     price: doNumber(price, 4),
-                    amount: doNumber(amount, 4)
+                    amount: doNumber(amount, 4),
+                    taxAmount: processingNumber(fields.taxAmount, 4),
                 })
             }
+            addCollectionForm.setFieldsValue({
+                taxAmount: processingNumber(fields.taxAmount, 4),
+            })
             return;
         }
         if (fields.taxRate) {
@@ -80,15 +99,14 @@ export default function SeeGuarantee(): JSX.Element {
     }
     const handleSave = async() => {
         const baseData: any = await addCollectionForm.validateFields();
-        console.log(baseData, "basdds")
         const result = {
             projectId: params.projectId,
             ...baseData,
             contractInfoDto: {
-                ...baseData?.contractNumber.records[0],
-                contractId: baseData?.contractNumber?.records[0]?.id || baseData?.contractNumber?.records[0]?.contractId
+                ...baseData?.internalNumber.records[0],
+                contractId: baseData?.internalNumber?.records[0]?.id || baseData?.internalNumber?.records[0]?.contractId
             },
-            contractNumber: baseData?.contractNumber.id
+            contractNumber: baseData?.internalNumber?.records[0]?.contractNumber,
         }
         await run({data: params.id === "new" ? result : {...result, id: params.id}})
     }
@@ -111,12 +129,20 @@ export default function SeeGuarantee(): JSX.Element {
     const { loading, data: orderData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/saleOrder/${params.id}`)
+            addCollectionForm.setFieldsValue({
+                ...result?.contractInfoVo,
+                ...result,
+                internalNumber: {
+                    id: result?.contractInfoVo.contractId,
+                    value: result?.contractInfoVo.internalNumber,
+                    records: result?.contractInfoVo ? [result?.contractInfoVo] : []
+                }
+            })
             resole(result);
         } catch (error) {
             reject(error)
         }
     }), { manual: params.id === "new" })
-
     return (
         <Spin spinning={loading}>
             <DetailContent operation={[
@@ -128,28 +154,21 @@ export default function SeeGuarantee(): JSX.Element {
                     form={addCollectionForm}
                     onChange={performanceBondChange}
                     dataSource={{
-                        orderWeight: "0.00000000",
-                        taxAmount: "0.0000",
-                        amount: "0.0000",
-                        taxPrice: "0.0000",
-                        price: "0.0000",
+                        orderWeight: "0",
+                        taxAmount: "0",
+                        amount: "0",
+                        taxPrice: "0",
+                        price: "0",
                         taxRate: 13,
-                        foreignExchangeAmount: "0.00",
-                        exchangeRate: "0.0000",
-                        foreignPrice: "0.00",
-                        guaranteeAmount: "0.00",
-                        ...orderData?.contractInfoVo,
-                        ...orderData,
-                        contractNumber: {
-                            id: orderData?.contractInfoVo.contractId,
-                            value: orderData?.contractInfoVo.contractNumber,
-                            records: orderData?.contractInfoVo ? [orderData?.contractInfoVo] : []
-                        }
+                        foreignExchangeAmount: "0",
+                        exchangeRate: "0",
+                        foreignPrice: "0",
+                        guaranteeAmount: "0"
                     }}
                     col={4}
                     columns={[
                         ...baseInfo.map((item: any) => {
-                            if (item.dataIndex === "contractNumber") {
+                            if (item.dataIndex === "internalNumber") {
                                 return ({
                                     ...item,
                                     path: "/tower-market/contract?projectId=" + params.projectId,

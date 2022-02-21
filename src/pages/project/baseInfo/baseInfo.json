@@ -1,0 +1,437 @@
+{
+    "baseInfoData": [
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入项目名称..."
+                }
+            ]
+        },
+        {
+            "title": "项目编码",
+            "dataIndex": "projectNumber",
+            "required": true
+        },
+        {
+            "title": "招标批次",
+            "dataIndex": "bidBatch"
+        },
+        {
+            "title": "项目类型",
+            "dataIndex": "projectType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "公开招标"
+                },
+                {
+                    "value": 1,
+                    "label": "用户工程"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择项目类型..."
+                }
+            ]
+        },
+        {
+            "title": "发布日期",
+            "dataIndex": "releaseDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "标书购买截至日期",
+            "dataIndex": "bidBuyEndTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "投标截至日期",
+            "dataIndex": "biddingEndTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "地区",
+            "dataIndex": "address",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择地区..."
+                }
+            ]
+        },
+        {
+            "title": "国家",
+            "dataIndex": "country",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择国家..."
+                }
+            ]
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "projectLeader",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "value": "name",
+            "readOnly": true,
+            "dependencies": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择业务经理..."
+                }
+            ],
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
+        },
+        {
+            "title": "招标人/客户",
+            "dataIndex": "biddingPerson",
+            "type": "popTable",
+            "path": "/tower-market/customer",
+            "readOnly": false,
+            "value": "name",
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "typeName"
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择招标人..."
+                }
+            ]
+        },
+        {
+            "title": "招标代理机构",
+            "dataIndex": "biddingAgency",
+            "type": "popTable",
+            "path": "/tower-market/customer",
+            "readOnly": false,
+            "value": "name",
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "typeName"
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ]
+        },
+        {
+            "title": "当前项目阶段",
+            "dataIndex": "currentProjectStage",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "准备投标"
+                },
+                {
+                    "value": 1,
+                    "label": "投标"
+                },
+                {
+                    "value": 2,
+                    "label": "合同签订"
+                },
+                {
+                    "value": 3,
+                    "label": "合同执行"
+                },
+                {
+                    "value": 4,
+                    "label": "项目结束"
+                }
+            ]
+        },
+        {
+            "title": "是否签订合同",
+            "dataIndex": "isContract",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "是"
+                },
+                {
+                    "value": 0,
+                    "label": "否"
+                }
+            ]
+        },
+        {
+            "title": "说明",
+            "dataIndex": "bidExplain",
+            "type": "textarea"
+        }
+    ],
+    "cargoVOListColumns": [
+        {
+            "title": "分标编号",
+            "dataIndex": "partBidNumber",
+            "type": "text",
+            "maxLength": 50
+        },
+        {
+            "title": "物资类别",
+            "dataIndex": "goodsType",
+            "type": "text",
+            "maxLength": 50,
+            "dependencies": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入物资类别..."
+                }
+            ]
+        },
+        {
+            "title": "包名称",
+            "dataIndex": "packageName"
+        },
+        {
+            "title": "分包编号",
+            "dataIndex": "packageNumber",
+            "type": "text",
+            "maxLength": 50
+        },
+        {
+            "title": "工程电压等级",
+            "dataIndex": "projectVoltageLevel"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "amount",
+            "type": "number",
+            "step": 1,
+            "min": 0,
+            "max": 9999999999,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入数量"
+                }
+            ]
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit"
+        },
+        {
+            "title": "交货日期",
+            "dataIndex": "deliveryDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "交货地点",
+            "dataIndex": "deliveryPlace",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "技术规范编码",
+            "dataIndex": "technicalNormCode",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "网省采购申请号",
+            "dataIndex": "purchaseRequisitionNo",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "总部采购申请号",
+            "dataIndex": "headPurchaseRequisitionNo",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "扩展描述",
+            "dataIndex": "extendedDescription",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "扩展编码",
+            "dataIndex": "extendedCode",
+            "type": "text",
+            "maxLength": 200
+        }
+    ],
+    "portedCargoColumns": [
+        {
+            "title": "包名称",
+            "dataIndex": "packageName"
+        },
+        {
+            "title": "分包编号",
+            "dataIndex": "packageNumber"
+        },
+        {
+            "title": "项目单位",
+            "dataIndex": "biddingPerson"
+        },
+        {
+            "title": "需求单位",
+            "dataIndex": "demandCompany"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "工程电压等级",
+            "dataIndex": "projectVoltageLevel"
+        },
+        {
+            "title": "货物名称",
+            "dataIndex": "goodsName"
+        },
+        {
+            "title": "物资名称",
+            "dataIndex": "cargoName"
+        },
+        {
+            "title": "物资描述",
+            "dataIndex": "goodsExplain"
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit"
+        },
+        {
+            "title": "数量（吨）",
+            "dataIndex": "amount",
+            "type": "number",
+            "min": 0,
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入数量（吨）..."
+                }
+            ]
+        },
+        {
+            "title": "首批交货日期",
+            "dataIndex": "deliveryDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "最后一批交货日期",
+            "dataIndex": "lastDeliveryDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "交货地点",
+            "dataIndex": "deliveryPlace"
+        },
+        {
+            "title": "交货方式",
+            "dataIndex": "deliveryType"
+        },
+        {
+            "title": "技术规范编码",
+            "dataIndex": "technicalNormCode",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "网省采购申请号",
+            "dataIndex": "purchaseRequisitionNo",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "总部采购申请号",
+            "dataIndex": "headPurchaseRequisitionNo",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "扩展描述",
+            "dataIndex": "extendedDescription",
+            "type": "text",
+            "maxLength": 200
+        },
+        {
+            "title": "扩展编码",
+            "dataIndex": "extendedCode",
+            "type": "text",
+            "maxLength": 200
+        }
+    ]
+}

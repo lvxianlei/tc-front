@@ -188,8 +188,8 @@ export default function QuestionMngt(): React.ReactNode {
                             <Select.Option value={'WTD-TL'} key={'WTD-TL'}>提料</Select.Option>
                             <Select.Option value={'WTD-FY'} key={'WTD-FY'}>放样</Select.Option>
                             <Select.Option value={'WTD-LS'} key={'WTD-LS'}>螺栓</Select.Option>
-                            <Select.Option value={'WTD-ZH'} key={'WTD-ZH'}>组焊</Select.Option>
-                            <Select.Option value={'WTD-YT'} key={'WTD-YT'}>小样图</Select.Option>
+                            {/* <Select.Option value={'WTD-ZH'} key={'WTD-ZH'}>组焊</Select.Option>
+                            <Select.Option value={'WTD-YT'} key={'WTD-YT'}>小样图</Select.Option> */}
                         </Select>
                     </Form.Item>
                 },

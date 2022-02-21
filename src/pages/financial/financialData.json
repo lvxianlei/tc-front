@@ -387,7 +387,7 @@
         },
         {
             "title": "企业类型",
-            "dataIndex": "businessName"
+            "dataIndex": "businessTypeName"
         },
         {
             "title": "企业名称",
@@ -556,7 +556,6 @@
         {
             "title": "请款金额",
             "dataIndex": "pleasePayAmount",
-            "type": "number",
             "disabled": true
         }
     ],

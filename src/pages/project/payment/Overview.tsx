@@ -2,21 +2,13 @@ import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
-import { paymentList, paymentdetail } from "./payment.json"
-import { auditIdRecord } from "../../approval-mngt/approvalHeadData.json"
+import { paymentList, paymentdetail, auditIdRecord } from "./payment.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { costTypeOptions } from "../../../configuration/DictionaryOptions"
 
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
-    const costTypeOption = costTypeOptions?.map((item) => {
-        return {
-            label: item.name,
-            value: item.id
-        }
-    })
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {

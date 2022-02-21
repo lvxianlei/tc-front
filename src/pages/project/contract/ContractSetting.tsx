@@ -66,7 +66,13 @@ class ManagementContractSetting extends ContractSetting {
               label: "内部合同编号",
               name: "internalNumber",
               initialValue: contract?.internalNumber,
-              children: <Input placeholder="内部合同编号自动生成" disabled />,
+              rules: [
+                {
+                  required: true,
+                  message: "请输入内部合同编号"
+                },
+              ],
+              children: <Input placeholder="请输入内部合同编号" maxLength={30} />,
             },
             {
               label: "合同/工程名称",
@@ -307,12 +313,7 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <FormItemType data={{ dataIndex: "signContractTime" }} type="date" format="YYYY-MM-DD"/>
-                // <DatePicker
-                //   format="YYYY-MM-DD"
-                //   onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}
-                //   className={layoutStyles.width100}
-                // />
+                <FormItemType data={{ dataIndex: "signContractTime",format:"YYYY-MM-DD" }} type="date" />
               ),
             },
             {
@@ -640,7 +641,13 @@ class ManagementContractSetting extends ContractSetting {
               label: "内部合同编号",
               name: "internalNumber",
               initialValue: contract?.internalNumber,
-              children: <Input placeholder="内部合同编号自动生成" disabled />,
+              rules: [
+                {
+                  required: true,
+                  message: "请输入内部合同编号"
+                },
+              ],
+              children: <Input placeholder="请输入内部合同编号" maxLength={30} />,
             },
             {
               label: "合同/工程名称",
@@ -885,7 +892,7 @@ class ManagementContractSetting extends ContractSetting {
                 },
               ],
               children: (
-                <FormItemType data={{ dataIndex: "signContractTime" }} type="date" />
+                <FormItemType data={{ dataIndex: "signContractTime",format:"YYYY-MM-DD" }} type="date" />
               ),
             },
             {

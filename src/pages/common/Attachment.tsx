@@ -31,6 +31,7 @@ export interface AttachmentProps {
     children?: JSX.Element
     renderActions?: (records: FileProps, actions: Actions) => ReactNode[]
     onDoneChange?: (params: FileProps[]) => void  //同AttachmentRef 文件上传成功后的回调
+    [key: string]: any
 }
 
 export interface AttachmentRef {
@@ -80,7 +81,9 @@ export default forwardRef(function ({
     children = <Button key="enclosure" type="primary" ghost>上传</Button>,
     maxCount = 5,
     edit = false,
-    onDoneChange = () => { }
+    marginTop = true,
+    onDoneChange = () => { },
+    ...props
 }: AttachmentProps, ref): JSX.Element {
     const inputAccepts = accept ? ({ accept }) : ({})
     const [attchs, setAttachs] = useState<FileProps[]>(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || [])
@@ -219,8 +222,8 @@ export default forwardRef(function ({
             })
         }
         return <>
-            {!edit && <Button className='btn-operation-link' style={{marginLeft: "8px"}} type="link" onClick={() => handlePreview(records)}>预览</Button>}
-            <Button className='btn-operation-link' style={{marginLeft: !edit ? "0px" : "8px"}} type="link" onClick={() => downLoadFile(records.downloadUrl, records.originalName)}>下载</Button>
+            {!edit && <Button className='btn-operation-link' style={{ marginLeft: "8px" }} type="link" onClick={() => handlePreview(records)}>预览</Button>}
+            <Button className='btn-operation-link' style={{ marginLeft: !edit ? "0px" : "8px" }} type="link" onClick={() => downLoadFile(records.downloadUrl, records.originalName)}>下载</Button>
             {edit && <Button className='btn-operation-link' type="link" onClick={() => deleteAttachData(records.uid)}>删除</Button>}
         </>
     }, [attchs])
@@ -234,7 +237,7 @@ export default forwardRef(function ({
             <Image src={picInfo.url} preview={false} />
         </Modal>
         {isTable && <DetailTitle
-            style={{marginTop: "24px"}}
+            // style={{ marginTop: "24px" }}
             title={title}
             {...edit ? {
                 operation: [
@@ -291,10 +294,10 @@ export default forwardRef(function ({
             {children}
         </Upload>
         }
-        {isTable && <div style={{border: "1px solid #eee",margin: "0px 0px 24px 0px"}}>
+        {isTable && <div style={{ border: "1px solid #eee", margin: "0px 0px 24px 0px", ...props?.style }}>
             <Row style={{ backgroundColor: "#fafafa", padding: 8, }}>
                 <Col span={12}>文件名称</Col>
-                <Col span={12} style={{paddingLeft: 16, boxSizing: "border-box"}}>操作</Col>
+                <Col span={12} style={{ paddingLeft: 16, boxSizing: "border-box" }}>操作</Col>
             </Row>
             {!attchs.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
             {attchs.map((item, index: number) => <Spin key={item.uid} spinning={item.loading} size="small">
@@ -306,7 +309,7 @@ export default forwardRef(function ({
                         textOverflow: "ellipsis",
                         overflow: "hidden"
                     }}>{item.originalName}</Col>
-                    <Col span={12} style={{ padding: "8px 8px" }}>{operationRender(item)}</Col>
+                    <Col span={12} style={{ padding: "0px 8px" }}>{operationRender(item)}</Col>
                 </Row>
             </Spin>)}
         </div>}

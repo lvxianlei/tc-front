@@ -83,7 +83,7 @@
             "readOnly": true,
             "columns": [
                 {
-                    "title": "合同内部编号",
+                    "title": "内部合同编号",
                     "dataIndex": "internalNumber",
                     "search": true
                 },
