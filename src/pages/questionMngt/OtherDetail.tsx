@@ -332,6 +332,11 @@ const boltColumns = [
         ) 
     },
     { 
+        title: '裕度', 
+        dataIndex: 'wealth', 
+        key: 'wealth' 
+    },
+    { 
         title: '合计', 
         dataIndex: 'total', 
         key: 'total',
