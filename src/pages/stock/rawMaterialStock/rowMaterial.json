@@ -42,7 +42,7 @@
         },
         {
             "title": "品名",
-            "dataIndex": "productName",
+            "dataIndex": "materialName",
             "width": 120
         },
         {
