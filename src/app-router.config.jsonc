@@ -1699,7 +1699,7 @@
     },
     { // 包装车间-成品库存
       "name": "成品库存",
-      "path": "/packagingWorkshop/stock",
+      "path": "/packagingWorkshop/packageStock",
       "module": "./pages/package-workshop/stock/StockList",
       "exact": true,
       "authority": "package_workshop_package_warehouse_management"
