@@ -242,7 +242,7 @@
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
-                        name: 'receiveStatus',
+                        name: 'receiveDetailStatus',
                         label: '采购状态',
                         children: (
                             <Select placeholder="请选择采购状态" style={{ width: "140px" }}>
