@@ -5,10 +5,9 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Input, Button, Modal, message, Select, DatePicker, Tooltip, Space } from 'antd';
+import { Input, Button, Select, DatePicker, Tooltip, Space } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import TechnicalIssue from './TechnicalIssue';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IPlanSchedule } from './IPlanSchedule';
 import { gantt } from 'dhtmlx-gantt';
@@ -23,10 +22,10 @@ export interface TechnicalIssuePropsRefProps {
 export default function PlanScheduleMngt(): React.ReactNode {
     const columns = [
         {
-            key: 'planNumber',
+            key: 'productionBatchNo',
             title: '批次号',
             width: 150,
-            dataIndex: 'planNumber',
+            dataIndex: 'productionBatchNo',
             fixed: 'left' as FixedType
         },
         {
@@ -198,7 +197,6 @@ export default function PlanScheduleMngt(): React.ReactNode {
     // }
 
     const [refresh, setRefresh] = useState(false);
-    const [visible, setVisible] = useState(false);
     const [filterValue, setFilterValue] = useState({});
     const editRef = useRef<TechnicalIssuePropsRefProps>();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
@@ -225,9 +223,9 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 columns={columns}
                 headTabs={[]}
                 extraOperation={<Space>
-                    <Link to={``}><Button type="primary">计划交货期</Button></Link>
+                    <Link to={`/planSchedule/planScheduleMngt/planDeliveryTime`}><Button type="primary" disabled={selectedKeys.length <= 0}>计划交货期</Button></Link>
                     <Link to={``}><Button type="primary">拆分批次</Button></Link>
-                    <Link to={`/planSchedule/planScheduleMngt/distributedTech`}><Button type="primary">下发技术</Button></Link>
+                    <Link to={`/planSchedule/planScheduleMngt/distributedTech`}><Button type="primary" disabled={selectedKeys.length <= 0}>下发技术</Button></Link>
                 </Space>}
                 refresh={refresh}
                 tableProps={{
