@@ -8,7 +8,7 @@ import AuthUtil from '../../../utils/AuthUtil';
 // import styles from './sample.module.less';
 
 export default function SampleDraw(): React.ReactNode {
-    const params = useParams<{ id: string, status: string }>()
+    const params = useParams<{ id: string }>()
     const history = useHistory();
     const [filterValue, setFilterValue] = useState({});
     const [visible, setVisible] = useState<boolean>(false);
@@ -116,7 +116,7 @@ export default function SampleDraw(): React.ReactNode {
                
             </Modal>
             <Page
-                path="/productionPlan/batchNo"
+                path={`/productionPlan/batchNo/${params.id}`}
                 columns={columns}
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
@@ -133,18 +133,16 @@ export default function SampleDraw(): React.ReactNode {
                         <Button type="primary" onClick={() => {
                             setVisible(true)
                         }}>设置批次</Button>
-                        {params.status === '2' ? <Popconfirm
-                            title="确认完成小样图?"
+                        <Popconfirm
+                            title="是否取消批次?"
                             onConfirm={async () => await RequestUtil.put(`/productionPlan/batchNo?productCategoryId=${params.id}`).then(() => {
-                                message.success('提交成功！');
-                            }).then(() => {
-                                history.push('/workMngt/sampleDrawList');
+                                message.success('取消成功！');
                             })}
                             okText="确认"
                             cancelText="取消"
                         >
                             <Button type="primary">取消批次</Button>
-                        </Popconfirm> : null}
+                        </Popconfirm>
                         <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                     </Space>
                 }

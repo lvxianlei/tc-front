@@ -1627,6 +1627,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 计划排产-拆分批次
+      "name": "拆分批次",
+      "path": "/planSchedule/planScheduleMngt/SplitBatch/:id",
+      "module": "./pages/planBaseSetting/planSchedule/SplitBatch",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 计划排产-下发技术
       "name": "下发技术",
       "path": "/planSchedule/planScheduleMngt/distributedTech",

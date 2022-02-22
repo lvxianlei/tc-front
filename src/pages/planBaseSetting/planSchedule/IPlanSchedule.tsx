@@ -15,6 +15,7 @@ export interface IPlanSchedule {
     readonly planDeliveryTime?: string;
     readonly planNumber?: string;
     readonly productCategory?: string;
+    readonly productCategoryId?: string;
     readonly productCategoryName?: string;
     readonly productNum?: string;
     readonly productType?: string;
