@@ -37,7 +37,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standard",
+            "dataIndex": "standardName",
             "width": 120
         },
         {
