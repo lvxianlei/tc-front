@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Modal, Form, Image, message, Popconfirm, Upload, Select } from 'antd';
+import { Space, Button, Modal, Form, message, Popconfirm, Select } from 'antd';
 import { Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import AuthUtil from '../../../utils/AuthUtil';
-// import styles from './sample.module.less';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string }>()
@@ -17,55 +15,67 @@ export default function SampleDraw(): React.ReactNode {
     // const [selectedRows, setSelectedRows] = useState<IAnnouncement[]>([]);
     const [form] = Form.useForm();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
+        // const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
         resole(data)
     }), {})
     const handleModalOk = async () => {
         try {
-            const submitData = await form.validateFields()
-            console.log(submitData)
+            const splitData = await form.validateFields()
+            const submitData = selectedKeys.map((item: any)=>{
+                return {
+                    id: item,
+                    productionBatch: splitData
+                }
+            })
+            await RequestUtil.post(`/tower-aps/productionPlan/batchNo`,submitData).then(()=>{
+                message.success('提交成功！')
+                setVisible(false)
+                setRefresh(!refresh)
+            }).then(()=>{
+                history.goBack()
+            })
             setVisible(false)
         } catch (error) {
             console.log(error)
         }
     }
     const columns = [
+        // {
+        //     key: 'index',
+        //     title: '序号',
+        //     dataIndex: 'index',
+        //     width: 50,
+        //     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+        // },
         {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'segmentName',
+            key: 'productionBatch',
             title: '批次',
-            width: 50,
-            dataIndex: 'segmentName'
+            width: 200,
+            dataIndex: 'productionBatch'
         },
         {
-            key: 'code',
+            key: 'productionBatchNo',
             title: '批次号',
-            width: 100,
-            dataIndex: 'code'
+            width: 200,
+            dataIndex: 'productionBatchNo'
         },
         {
-            key: 'materialName',
+            key: 'productCategoryName',
             title: '塔型',
-            width: 100,
-            dataIndex: 'materialName'
+            width: 400,
+            dataIndex: 'productCategoryName'
         },
         {
-            key: 'smallSample',
+            key: 'productNumber',
             title: '杆塔号',
-            width: 100,
-            dataIndex: 'smallSample'
+            width: 200,
+            dataIndex: 'productNumber'
         },
         {
-            key: 'uploadTime',
+            key: 'planDeliveryTime',
             title: '客户交货期',
             width: 200,
-            dataIndex: 'uploadTime'
+            dataIndex: 'planDeliveryTime'
         },
     ]
 
@@ -116,7 +126,7 @@ export default function SampleDraw(): React.ReactNode {
                
             </Modal>
             <Page
-                path={`/productionPlan/batchNo/${params.id}`}
+                path={`tower-aps/productionPlan/batchNo/${params.id}`}
                 columns={columns}
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
@@ -132,16 +142,17 @@ export default function SampleDraw(): React.ReactNode {
                     <Space>
                         <Button type="primary" onClick={() => {
                             setVisible(true)
-                        }}>设置批次</Button>
+                        }} disabled={!(selectedKeys.length!==0)}>设置批次</Button>
                         <Popconfirm
                             title="是否取消批次?"
-                            onConfirm={async () => await RequestUtil.put(`/productionPlan/batchNo?productCategoryId=${params.id}`).then(() => {
+                            onConfirm={async () => await RequestUtil.put(`/productionPlan/batchNo`,selectedKeys).then(() => {
                                 message.success('取消成功！');
                             })}
                             okText="确认"
                             cancelText="取消"
+                            disabled={!(selectedKeys.length!==0)}
                         >
-                            <Button type="primary">取消批次</Button>
+                            <Button type="primary" disabled={!(selectedKeys.length!==0)}>取消批次</Button>
                         </Popconfirm>
                         <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                     </Space>

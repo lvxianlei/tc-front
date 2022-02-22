@@ -226,7 +226,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 headTabs={[]}
                 extraOperation={<Space>
                     <Link to={``}><Button type="primary">计划交货期</Button></Link>
-                    <Link to={`/planSchedule/planScheduleMngt/SplitBatch/${selectedRows[0]?.productCategoryId}`}><Button type="primary" disabled={selectedKeys.length!==1}>拆分批次</Button></Link>
+                    <Link to={`/planSchedule/planScheduleMngt/SplitBatch/${selectedKeys[0]}`}><Button type="primary" disabled={selectedKeys.length!==1}>拆分批次</Button></Link>
                     <Link to={`/planSchedule/planScheduleMngt/distributedTech`}><Button type="primary">下发技术</Button></Link>
                 </Space>}
                 refresh={refresh}
