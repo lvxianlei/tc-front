@@ -100,10 +100,10 @@ export default function ViewReceivingNote(): React.ReactNode {
                     name: 'invoiceStatus',
                     label: '付款状态',
                     children: <Select style={{ width: "150px" }} placeholder="请选择付款状态">
-                        <Select.Option value={1}>待收票</Select.Option>
-                        <Select.Option value={2}>已收票</Select.Option>
-                        <Select.Option value={3}>待付款</Select.Option>
-                        <Select.Option value={4}>已付款</Select.Option>
+                        <Select.Option value={1}>已收票</Select.Option>
+                        <Select.Option value={2}>待付款</Select.Option>
+                        <Select.Option value={3}>已付款</Select.Option>
+                        <Select.Option value={4}>待收票</Select.Option>
                     </Select>
                 },
                 {

@@ -87,11 +87,16 @@
         },
         {
             "title": "仓库",
-            "dataIndex": "reservoirArea",
+            "dataIndex": "warehouse",
             "width": 120
         },
         {
             "title": "库区",
+            "dataIndex": "reservoirArea",
+            "width": 120
+        },
+        {
+            "title": "库位",
             "dataIndex": "location",
             "width": 120
         },
