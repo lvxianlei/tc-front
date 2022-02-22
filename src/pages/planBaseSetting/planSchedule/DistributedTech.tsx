@@ -159,7 +159,7 @@ export default function DistributedTech(): React.ReactNode {
                         type: 'select',
                         render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                             <Form.Item name="unitId" style={{ width: '100%' }}>
-                                <Select getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e: string) => unitChange(e)} style={{ width: "150px" }}>
+                                <Select getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e: string) => unitChange(e)} style={{ width: "70%" }}>
                                     {data && data.map(({ id, name }, index) => {
                                         return <Select.Option key={index} value={id}>
                                             {name}
@@ -175,7 +175,7 @@ export default function DistributedTech(): React.ReactNode {
                         type: 'select',
                         render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                             <Form.Item name="linkId" style={{ width: '100%' }}>
-                                <Select getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                                <Select getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "70%" }}>
                                     {linkList && linkList.map(({ id, name }, index) => {
                                         return <Select.Option key={index} value={id}>
                                             {name}
@@ -186,7 +186,7 @@ export default function DistributedTech(): React.ReactNode {
                     })
                 }
                 return item
-            })} col={2} dataSource={{}} edit />
+            })} col={1} dataSource={{}} edit />
             <Divider style={{ marginTop: '0' }}>请拖拽列表排序，列表排序为任务完成的顺序</Divider>
             <CommonTable
                 scroll={{ x: '700' }}
