@@ -24,17 +24,15 @@ export default function SampleDraw(): React.ReactNode {
             const submitData = selectedKeys.map((item: any)=>{
                 return {
                     id: item,
-                    productionBatch: splitData
+                    productionBatch: splitData?.productionBatch
                 }
             })
             await RequestUtil.post(`/tower-aps/productionPlan/batchNo`,submitData).then(()=>{
                 message.success('提交成功！')
                 setVisible(false)
                 setRefresh(!refresh)
-            }).then(()=>{
-                history.goBack()
+                setSelectedKeys([])
             })
-            setVisible(false)
         } catch (error) {
             console.log(error)
         }
@@ -81,12 +79,6 @@ export default function SampleDraw(): React.ReactNode {
 
     const handleModalCancel = () => { setVisible(false);  };
     const onFilterSubmit = (value: any) => {
-        if (value.upLoadTime) {
-            const formatDate = value.upLoadTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.uploadTimeStart = formatDate[0] + ' 00:00:00';
-            value.uploadTimeEnd = formatDate[1] + ' 23:59:59';
-            delete value.upLoadTime
-        }
         setFilterValue(value)
         return value
     }
@@ -96,9 +88,9 @@ export default function SampleDraw(): React.ReactNode {
     }
     return (
         <>
-            <Modal visible={visible} title="设置批次" footer={false} onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
-                <Form>
-                    <Form.Item name='A' rules={[{required:true, message:'请选择批次'}]}>
+            <Modal visible={visible} title="设置批次"  onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
+                <Form form={form}>
+                    <Form.Item name='productionBatch' rules={[{required:true, message:'请选择批次'}]} label='批次'>
                         <Select placeholder="请选择批次">
                             <Select.Option key={1} value={'1'}>{'第一批'}</Select.Option>
                             <Select.Option key={2} value={'2'}>{'第二批'}</Select.Option>
@@ -145,8 +137,10 @@ export default function SampleDraw(): React.ReactNode {
                         }} disabled={!(selectedKeys.length!==0)}>设置批次</Button>
                         <Popconfirm
                             title="是否取消批次?"
-                            onConfirm={async () => await RequestUtil.put(`/productionPlan/batchNo`,selectedKeys).then(() => {
+                            onConfirm={async () => await RequestUtil.put(`/tower-aps/productionPlan/batchNo`,selectedKeys).then(() => {
                                 message.success('取消成功！');
+                                setRefresh(!refresh)
+                                setSelectedKeys([])
                             })}
                             okText="确认"
                             cancelText="取消"
