@@ -509,7 +509,7 @@
             "title": "票面单位名称",
             "dataIndex": "name",
             "type": "popTable",
-            "path": "/tower-customer/customer",
+            "path": "/tower-market/customer",
             "readOnly": false,
             "value": "name",
             "width": 1101,

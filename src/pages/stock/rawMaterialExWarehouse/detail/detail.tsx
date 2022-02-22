@@ -500,7 +500,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         name: 'batcherId',
                         label: '出库人',
-                        children: <IntgSelect width={200} />
+                        children: <IntgSelect width={400} />
                     },
                     {
                         name: 'materialTexture',
@@ -522,7 +522,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             <Select placeholder="请选择标准" style={{ width: "140px" }}>
                                 {
                                     standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
-                                        return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
+                                        return <Select.Option value={item.value} key={index}>{item.label}</Select.Option>
                                     })
                                 }
                             </Select>

@@ -120,6 +120,7 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
     /**
      * @description Gets charging record columns
      * @returns charging record columns 
+     *     record.status === 3 的时候控制排序/启用/操作不展示
      */
     public getChargingRecordColumns(res:IDictDataSourceData): ColumnsType<object> {
         return [{
@@ -130,13 +131,15 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
             dataIndex: 'sort',
             width:'10%',
             className: 'drag-visible',
-            render: () => <DragHandle />,
+            render: (text, record:Record<string,any>) => {
+                return record.status !== 3 && <DragHandle />
+            },
         }, {
             title: '启用',
             width:'10%',
             dataIndex: 'status',
             render: (text, record:Record<string,any>): React.ReactNode => {
-                return  <Checkbox  
+                return record.status !== 3 && <Checkbox  
                             onChange={async (e)=>{
                                 let values = {
                                     id:record.id,
@@ -147,8 +150,6 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
                                     await RequestUtil.put(`/tower-system/dictionary/updateSortOrEnable`,[values]);
                                     this.getDataSourceFromTab(this.state.selectedTab);
                                 }
-                                
-                        
                             }} 
                             defaultChecked={ text === 1 }
                         />;
@@ -157,12 +158,12 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
             title: '操作',
             dataIndex: '',
             width:'10%',
-            render: (text, record) => (
-                <Space size="middle">
+            render: (text, record:Record<string,any>) => {
+                return record.status !== 3 && <Space size="middle">
                     <a onClick={() => this.showModal(record,res)}>编辑</a>
                     <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => this.handleDelete(record)}>删除</ConfirmableButton>
                 </Space>
-              ),
+            }   
         }];
     }
     /**
