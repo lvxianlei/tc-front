@@ -101,9 +101,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         label: '状态',
                         children: (
                             <Select placeholder="请选择状态" style={{ width: "140px" }}>
-                                <Select.Option value="0">待入库</Select.Option>
-                                <Select.Option value="1">已出库</Select.Option>
-                                <Select.Option value="2">已拒绝</Select.Option>
+                                <Select.Option value="">全部</Select.Option>
+                                <Select.Option value="0">待完成</Select.Option>
+                                <Select.Option value="1">已完成</Select.Option>
                             </Select>
                         )
                     },
