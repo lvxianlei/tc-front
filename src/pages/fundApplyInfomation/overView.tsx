@@ -68,7 +68,7 @@ export default forwardRef(function OverView({ payApplyId, ...props }: AddModalPr
             <Attachment title="附件" dataSource={attachInfoVOList || []} />
             {/* <DetailTitle title="审批记录" /> */}
             {/* <DetailTitle title="审批记录" /> */}
-            <OperationRecord title="审批记录" serviceId={payApplyId} serviceName="tower-finance" operateTypeEnum="APPROVAL" />
+            <OperationRecord title="审批记录" serviceId={baseInfo.sourceId} serviceName="tower-finance" operateTypeEnum="APPROVAL" />
             {/* <CommonTable columns={[
                 {
                     key: 'index',
