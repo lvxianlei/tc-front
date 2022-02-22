@@ -667,7 +667,7 @@
                             },
                             {
                                 "label": "成品库存",
-                                "path": "/packagingWorkshop/stock",
+                                "path": "/packagingWorkshop/packageStock",
                                 "authority": "package_workshop_package_warehouse_management"
                             }
                         ]
