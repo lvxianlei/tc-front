@@ -1636,14 +1636,14 @@
     },
     { // 计划排产-下发技术
       "name": "下发技术",
-      "path": "/planSchedule/planScheduleMngt/distributedTech",
+      "path": "/planSchedule/planScheduleMngt/distributedTech/:ids",
       "module": "./pages/planBaseSetting/planSchedule/DistributedTech",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-计划交货期
       "name": "计划交货期",
-      "path": "/planSchedule/planScheduleMngt/planDeliveryTime",
+      "path": "/planSchedule/planScheduleMngt/planDeliveryTime/:ids",
       "module": "./pages/planBaseSetting/planSchedule/PlanDeliveryTime",
       "exact": true,
       "authority": "approvalm"
