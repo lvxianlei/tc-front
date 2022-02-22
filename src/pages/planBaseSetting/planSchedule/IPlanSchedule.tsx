@@ -23,6 +23,8 @@ export interface IPlanSchedule {
     readonly loftingStatus?: string;
     readonly voltageGradeName?: string;
     readonly weight?: string;
+    readonly planId?: string;
+    readonly issueDescription?: string;
 }
 
 export interface IUnit {
