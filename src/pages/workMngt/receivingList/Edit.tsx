@@ -549,7 +549,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             width={1011}
             visible={visible}
             title="选择货物明细"
-            destroyOnClose
+            // destroyOnClose
             onCancel={() => {
                 modalRef.current?.resetFields()
                 setVisible(false)
