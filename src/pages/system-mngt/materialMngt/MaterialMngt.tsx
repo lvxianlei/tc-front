@@ -169,8 +169,8 @@ export default function MaterialMngt(): React.ReactNode {
     const checkBatchSn = (value: string): Promise<void | any> => {
         return new Promise(async (resolve, reject) => {  // 返回一个promise
             const resData = await RequestUtil.get('/tower-system/material/checkMaterialCode', {
-                materialCode: value,
-                id: detailData.id,
+                materialCode: code + value,
+                id: detailData.id
             });
             resolve(resData)
         }).catch(error => {
