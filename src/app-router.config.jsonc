@@ -800,7 +800,7 @@
     { // 库存管理-余料入库
       "name": "余料入库",
       "path": "/stock/surplusMaterialWarehousing",
-      "module": "./pages/stock/surplusMaterialWarehousing/surplusMaterialWarehousing",
+      "module": "./pages/stock/surplusMaterialWarehousing/index",
       "exact": true,
       "authority": "inventory_management_surplus_material_warehousing"
     },
