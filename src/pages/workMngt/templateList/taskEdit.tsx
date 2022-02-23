@@ -431,7 +431,7 @@ export default function TaskNew(props:any){
         }
     };
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
-        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        const userData: any= await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         switch (title) {
             case "drawLeaderDepartment":
                 form.setFieldsValue({drawLeader:''});
@@ -460,12 +460,12 @@ export default function TaskNew(props:any){
     data.map((item:any) => {
     if (item.children) {
         return (
-        <TreeNode key={item.id} title={item.title} value={item.id} className={styles.node}>
+        <TreeNode key={item.id} title={item.name} value={item.id} className={styles.node}>
             {renderTreeNodes(item.children)}
         </TreeNode>
         );
     }
-    return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+    return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
     });
     const plainOptions = ['全部', '自定义'];
     return (
@@ -531,7 +531,7 @@ export default function TaskNew(props:any){
                                     const formValue = tower.filter((item: { productCategoryId: SelectValue; })=>{return item.productCategoryId === value})
                                     
                                     if(formValue[0].drawLeaderDepartment){
-                                        const drawLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${formValue[0].drawLeaderDepartment}&size=1000`);
+                                        const drawLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${formValue[0].drawLeaderDepartment}&size=1000`);
                                         setMaterialUser(drawLeaderDepartment.records);
                                         
                                     }
@@ -666,7 +666,7 @@ export default function TaskNew(props:any){
                                     <Form.Item name="drawLeader" label="" rules={[{required: true,message:'请选择接收人'}]} >
                                         <Select >
                                             { materialUser && materialUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -768,11 +768,11 @@ export default function TaskNew(props:any){
                 setPlanData(unique(planData?.records,'planNumber'));
                 const specialData: any = await RequestUtil.get(`/tower-aps/product/process?current=1&size=1000&type=`);
                 setSpecialData(specialData?.records);
-                const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+                const departmentData: any = await RequestUtil.get(`/tower-system/department`);
                 setDepartment(departmentData);
                 const sampleData: any = await RequestUtil.get(`/tower-science/loftingTemplate/${props?.record?.id}`);
                 if(sampleData?.drawLeaderDepartment){
-                    const drawLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${sampleData?.drawLeaderDepartment}&size=1000`);
+                    const drawLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${sampleData?.drawLeaderDepartment}&size=1000`);
                     setMaterialUser(drawLeaderDepartment?.records);
                 }
                 const towerData: any = await RequestUtil.get(`/tower-science/loftingTask/list/${sampleData?.planNumber}`);
