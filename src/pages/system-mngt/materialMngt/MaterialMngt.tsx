@@ -238,7 +238,7 @@ export default function MaterialMngt(): React.ReactNode {
                 {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
-                    children: <Input placeholder="品名/规格" />
+                    children: <Input placeholder="编号/品名/规格" />
                 }
             ]}
             onFilterSubmit={(values: Record<string, any>) => {
