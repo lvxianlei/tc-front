@@ -71,7 +71,7 @@ export default function IntgSelect({ onChange, width, value = { first: "", secon
                 disabled={!deptId}
             >
                 {userData?.records?.map((item: any) => <Select.Option
-                    value={item.id}
+                    value={item.userId}
                     key={item.id}
                 >
                     {item.name}
