@@ -92,26 +92,126 @@ export default function SampleDraw(): React.ReactNode {
                 <Form form={form}>
                     <Form.Item name='productionBatch' rules={[{required:true, message:'请选择批次'}]} label='批次'>
                         <Select placeholder="请选择批次">
-                            <Select.Option key={1} value={'1'}>{'第一批'}</Select.Option>
-                            <Select.Option key={2} value={'2'}>{'第二批'}</Select.Option>
-                            <Select.Option key={3} value={'3'}>{'第三批'}</Select.Option>
-                            <Select.Option key={4} value={'4'}>{'第四批'}</Select.Option>
-                            <Select.Option key={5} value={'5'}>{'第五批'}</Select.Option>
-                            <Select.Option key={6} value={'6'}>{'第六批'}</Select.Option>
-                            <Select.Option key={7} value={'7'}>{'第七批'}</Select.Option>
-                            <Select.Option key={8} value={'8'}>{'第八批'}</Select.Option>
-                            <Select.Option key={9} value={'9'}>{'第九批'}</Select.Option>
-                            <Select.Option key={10} value={'10'}>{'第十批'}</Select.Option>
-                            <Select.Option key={11} value={'11'}>{'第十一批'}</Select.Option>
-                            <Select.Option key={12} value={'12'}>{'第十二批'}</Select.Option>
-                            <Select.Option key={13} value={'13'}>{'第十三批'}</Select.Option>
-                            <Select.Option key={14} value={'14'}>{'第十四批'}</Select.Option>
-                            <Select.Option key={15} value={'15'}>{'第十五批'}</Select.Option>
-                            <Select.Option key={16} value={'16'}>{'第十六批'}</Select.Option>
-                            <Select.Option key={17} value={'17'}>{'第十七批'}</Select.Option>
-                            <Select.Option key={18} value={'18'}>{'第十八批'}</Select.Option>
-                            <Select.Option key={19} value={'19'}>{'第十九批'}</Select.Option>
-                            <Select.Option key={20} value={'20'}>{'第二十批'}</Select.Option>
+                            <Select.Option 
+                                key={1} 
+                                value={'1'}
+                            >
+                                {'第一批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={2} 
+                                value={'2'}
+                            >
+                                {'第二批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={3} 
+                                value={'3'}
+                            >
+                                {'第三批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={4} 
+                                value={'4'}
+                            >
+                                {'第四批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={5} 
+                                value={'5'}
+                            >
+                                {'第五批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={6} 
+                                value={'6'}
+                            >
+                                {'第六批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={7} 
+                                value={'7'}
+                            >
+                                {'第七批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={8} 
+                                value={'8'}
+                            >
+                                {'第八批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={9} 
+                                value={'9'}
+                            >
+                                {'第九批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={10} 
+                                value={'10'}
+                            >
+                                {'第十批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={11} 
+                                value={'11'}
+                            >
+                                {'第十一批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={12} 
+                                value={'12'}
+                            >
+                                {'第十二批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={13} 
+                                value={'13'}
+                            >
+                                {'第十三批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={14} 
+                                value={'14'}
+                            >
+                                {'第十四批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={15} 
+                                value={'15'}
+                            >
+                                {'第十五批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={16} 
+                                value={'16'}
+                            >
+                                {'第十六批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={17} 
+                                value={'17'}
+                            >
+                                {'第十七批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={18} 
+                                value={'18'}
+                            >
+                                {'第十八批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={19} 
+                                value={'19'}
+                            >
+                                {'第十九批'}
+                            </Select.Option>
+                            <Select.Option 
+                                key={20} 
+                                value={'20'}
+                            >
+                                {'第二十批'}
+                            </Select.Option>
                         </Select>
                     </Form.Item>
                 </Form>
