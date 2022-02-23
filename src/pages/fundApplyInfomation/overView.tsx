@@ -64,21 +64,8 @@ export default forwardRef(function OverView({ payApplyId, ...props }: AddModalPr
                 ]}
                 dataSource={payApplyBillVOList}
             />
-            {/* <DetailTitle title="附件" /> */}
             <Attachment title="附件" dataSource={attachInfoVOList || []} />
-            {/* <DetailTitle title="审批记录" /> */}
-            {/* <DetailTitle title="审批记录" /> */}
             <OperationRecord title="审批记录" serviceId={baseInfo.sourceId} serviceName="tower-finance" operateTypeEnum="APPROVAL" />
-            {/* <CommonTable columns={[
-                {
-                    key: 'index',
-                    title: '序号',
-                    dataIndex: 'index',
-                    width: 50,
-                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                },
-                ...overViewApplyColunms
-            ]} dataSource={approveRecordVOList} /> */}
         </Modal>
     )
 }

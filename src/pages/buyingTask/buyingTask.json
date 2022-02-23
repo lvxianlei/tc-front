@@ -146,10 +146,6 @@
             "dataIndex": "signCustomerName"
         },
         {
-            "title": "订单交货日期",
-            "dataIndex": "orderDeliveryTime"
-        },
-        {
             "title": "客户交货日期",
             "dataIndex": "deliveryTime"
         },
