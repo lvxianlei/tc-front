@@ -66,7 +66,7 @@ export default function Overview() {
                 receiveStockId: params.id,
                 startStatusUpdateTime: filterValue["startStatusUpdateTime"] || "",
                 endStatusUpdateTime: filterValue["endStatusUpdateTime"] || "",
-                receiveStatus: filterValue["receiveStatus"] || ""
+                receiveDetailStatus: filterValue["receiveDetailStatus"] || ""
             })
             resole(result)
         } catch (error) {
@@ -121,9 +121,9 @@ export default function Overview() {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'receiveStatus',
+                    name: 'receiveDetailStatus',
                     label: '采购状态',
-                    children: <Form.Item name="receiveStatus">
+                    children: <Form.Item name="receiveDetailStatus">
                         <Select defaultValue="全部" style={{ width: 150 }}>
                             <Select.Option value="">全部</Select.Option>
                             <Select.Option value={0}>待收货</Select.Option>
