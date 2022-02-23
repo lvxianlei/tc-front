@@ -106,7 +106,7 @@ export default function StaffNew(): React.ReactNode {
             )
         },
         {
-            title: '是否启用',
+            title: '启用账号',
             dataIndex: 'status',
             width: 150,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -131,11 +131,14 @@ export default function StaffNew(): React.ReactNode {
             )
         },
         {
-            title: '账号',
+            title: <span><span style={{ color: 'red' }}>*</span>账号</span>,
             dataIndex: 'account',
             width: 150,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["list", index, "account"]} key={index} initialValue={_}>
+                <Form.Item name={["list", index, "account"]} key={index} initialValue={_} rules={[{
+                    "required": true,
+                    "message": "请输入账号"
+                }]}>
                     <Input maxLength={20} disabled={location.state.type === 'edit'} />
                 </Form.Item>
             )
@@ -175,7 +178,7 @@ export default function StaffNew(): React.ReactNode {
                     "required": true,
                     "message": "请选择员工类型"
                 }]}>
-                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    <Select>
                         {staffTypeOptions && staffTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
@@ -194,7 +197,7 @@ export default function StaffNew(): React.ReactNode {
                     "required": true,
                     "message": "请选择岗位"
                 }]}>
-                    <Select placeholder="选择岗位" getPopupContainer={triggerNode => triggerNode.parentNode} mode="multiple">
+                    <Select placeholder="选择岗位" mode="multiple">
                         {jobsList && jobsList.map(({ id, stationName }, index) => {
                             return <Select.Option key={index} value={id || ''}>
                                 {stationName}
@@ -281,6 +284,7 @@ export default function StaffNew(): React.ReactNode {
             phone: '',
             roleId: undefined,
             station: undefined,
+            status: 1
         }
         setDataList([
             ...dataListValues,
@@ -367,9 +371,14 @@ export default function StaffNew(): React.ReactNode {
             <Button type="ghost" onClick={() => history.goBack()}>取消</Button>
         </Space>
     ]}>
-        <DetailTitle title="员工信息" operation={[location.state.type === 'new' ? <Button type="primary" onClick={addRow}>添加行</Button> : <></>]} />
+        <DetailTitle title="员工信息" operation={location.state.type === 'new' ? [<Button type="primary" key="addRow" onClick={addRow}>添加行</Button>] : []} />
         <Form form={form}>
-            <CommonTable rowKey="id" scroll={{ x: 1200 }} dataSource={[...dataList]} pagination={false} columns={location.state.type === 'edit' ? tableColumns.splice(0, 11) : tableColumns} className={styles.addModal} />
+            <CommonTable
+                rowKey="id"
+                dataSource={[...dataList]}
+                pagination={false}
+                columns={location.state.type === 'edit' ? tableColumns.splice(0, 11) : tableColumns}
+            />
         </Form>
     </DetailContent>
     )
