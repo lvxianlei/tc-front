@@ -10,7 +10,7 @@ import { Page, IntgSelect } from '../../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../../utils/RequestUtil';
-import { materialStandardTypeOptions, materialTextureOptions } from '../../../../configuration/DictionaryOptions';
+import { materialStandardOptions, materialTextureOptions } from '../../../../configuration/DictionaryOptions';
 import { baseColumn } from "./detail.json";
 
 import '../../StockPublicStyle.less';
@@ -18,7 +18,7 @@ import './detail.less';
 
 export default function RawMaterialWarehousing(): React.ReactNode {
     // 标准
-    const standardEnum = materialStandardTypeOptions?.map((item: { id: string, name: string }) => ({
+    const standardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -189,7 +189,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '品名',
-            dataIndex: 'productName',
+            dataIndex: 'materialName',
             width: 100,
         }, {
             title: '材质',
