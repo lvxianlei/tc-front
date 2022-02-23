@@ -112,13 +112,16 @@ export default function DistributedTech(): React.ReactNode {
                 <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => setVisible(true)} style={{ marginBottom: '6px' }}>批量设置交货期</Button>
                 <CommonTable
                     scroll={{ x: '700' }}
-                    rowKey="planId"
+                    rowKey="productId"
                     dataSource={dataSource}
                     pagination={false}
                     columns={columns}
                     rowSelection={{
                         selectedRowKeys: selectedKeys,
-                        onChange: SelectChange
+                        onChange: SelectChange,
+                        getCheckboxProps: (record: Record<string, any>) => ({
+                            disabled: record.planDeliveryTime
+                        })
                     }}
                 />
             </DetailContent>

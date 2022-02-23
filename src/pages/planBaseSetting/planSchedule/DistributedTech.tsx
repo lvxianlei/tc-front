@@ -102,9 +102,9 @@ export default function DistributedTech(): React.ReactNode {
             width: 120
         },
         {
-            key: 'description',
+            key: 'issueDescription',
             title: '下发技术备注',
-            dataIndex: 'description',
+            dataIndex: 'issueDescription',
             width: 180
         }
     ]
@@ -145,22 +145,25 @@ export default function DistributedTech(): React.ReactNode {
     const modalOk = async () => {
         const data = await modalForm.validateFields();
         let list: IPlanSchedule[] = []
-        selectedRows.forEach((res: IPlanSchedule) => {
-            list = dataSource.map((item: IPlanSchedule) => {
-                if (res.planId === item.planId) {
-                    console.log(res.planId, item.planId)
-                    return {
-                        ...item,
-                        issueDescription: data.issueDescription
-                    }
-                } else {
-                    return item
+        // selectedRows.forEach((res: IPlanSchedule) => {
+        list = dataSource.map((item: IPlanSchedule) => {
+            if (selectedRows.findIndex((items: any) => items.planId === item.planId) !== -1) {
+                console.log('444', data.issueDescription)
+                return {
+                    ...item,
+                    issueDescription: data.issueDescription
                 }
-            })
+            } else {
+                console.log('1212', data.issueDescription)
+                return item
+            }
         })
+        // })
+        console.log(selectedRows, list)
         await RequestUtil.post(`/tower-aps/productionPlan/batch/issue/remark`, list.map((res: IPlanSchedule, index: number) => {
             return {
-                ...res,
+                id: res.planId,
+                issueDescription: res.issueDescription,
                 sort: index
             }
         })).then(async res => {
@@ -180,11 +183,7 @@ export default function DistributedTech(): React.ReactNode {
 
     const issue = async () => {
         const data = await form.validateFields();
-        RequestUtil.post(`/tower-aps/planUnitLink/issue`, {
-            unitId: data?.unitId,
-            linkId: data?.linkId,
-            ids: dataSource.map((item: IPlanSchedule) => { return item.id }).join(',')
-        }).then(res => {
+        RequestUtil.post(`/tower-aps/planUnitLink/lofting/issue?unitId=${data?.unitId}&ids=${dataSource.map((item: IPlanSchedule) => { return item.id }).join(',')}&linkId=${data?.linkId}`).then(res => {
             message.success('下发成功');
             history.goBack();
         });
@@ -196,7 +195,8 @@ export default function DistributedTech(): React.ReactNode {
             visible={visible}
             onOk={modalOk}
             onCancel={() => {
-                setVisible(false)
+                setVisible(false);
+                modalForm.resetFields();
             }}
         >
             <Form form={modalForm}>
