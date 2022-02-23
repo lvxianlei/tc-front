@@ -190,7 +190,7 @@ export default function StaffMngt(): React.ReactNode {
             >
                 <Button type="primary">导入</Button>
             </Upload>
-            {/* <Button type="primary" onClick={ () => downloadTemplate('', '员工管理导入模板') } ghost>下载导入模板</Button> */}
+            <Button type="primary" ghost>下载导入模板</Button>
             <Link to={{ pathname: `/dept/staffMngt/new`, state: { type: 'new' } }}><Button type="primary" ghost>新增</Button></Link>
             {selectedRows.length > 0 ? <Link to={{ pathname: `/dept/staffMngt/setting`, state: { type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button>}
             <Popconfirm
@@ -227,7 +227,7 @@ export default function StaffMngt(): React.ReactNode {
             {
                 name: 'fuzzyQuery',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入姓名/工号进行查询" maxLength={50} />
+                children: <Input placeholder="账号/手机号/姓名/工号/邮箱" maxLength={50} style={{ width: 200 }} />
             }
         ]}
         filterValue={filterValue}
