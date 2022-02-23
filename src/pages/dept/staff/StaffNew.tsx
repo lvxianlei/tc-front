@@ -122,7 +122,7 @@ export default function StaffNew(): React.ReactNode {
                         data[index] = {
                             ...data[index],
                             id: dataList[index].id,
-                            status: e.target.checked ? 1 : 2
+                            status: e.target.checked ? 1 : 0
                         }
                         setDataList([...data]);
                         form.setFieldsValue({ list: [...data] })
