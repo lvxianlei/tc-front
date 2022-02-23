@@ -37,7 +37,7 @@
     const [rollingNumber, setRollingNumber] = useState(""); // 轧制批号	
     const [ filterValue, setFilterValue ] = useState<any>({
         fuzzyQuery: "",
-        receiveStatus: "",
+        receiveDetailStatus: "",
         startStatusUpdateTime: "",
         endStatusUpdateTime: "",
         receiveStockId: params.id,
@@ -50,7 +50,7 @@
                 startStatusUpdateTime: filterValue.startStatusUpdateTime || '',
                 endStatusUpdateTime: filterValue.endStatusUpdateTime || '',
                 receiveStockId: params.id,
-                receiveStatus: filterValue.receiveStatus || "",
+                receiveDetailStatus: filterValue.receiveDetailStatus || "",
             })
             resole(result)
         } catch (error) {
@@ -62,7 +62,7 @@
      const onFilterSubmit = (value: any) => {
         const result = {
             fuzzyQuery: value.fuzzyQuery || "",
-            receiveStatus: value.receiveStatus || "",
+            receiveDetailStatus: value.receiveDetailStatus || "",
             startStatusUpdateTime: "",
             endStatusUpdateTime: "",
             receiveStockId: params.id,
@@ -104,7 +104,7 @@
         // 拒收
         const data: any = await RequestUtil.post(`/tower-storage/receiveStock`, {
             id: ListID,
-            receiveStatus: 2,
+            receiveDetailStatus: 2,
             remark: rejectionText
         });
         if (data) {
@@ -161,7 +161,7 @@
         const data: any = await RequestUtil.post(`/tower-storage/receiveStock/batchSaveReceiveStock`, [{
             id: ListID,
             furnaceBatchNumber: furnaceBatchNo,
-            receiveStatus: 1,
+            receiveDetailStatus: 1,
             locatorId: locatorId,
             reservoirId: reservoirId,
             warehouseId: warehouseId,
