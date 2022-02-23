@@ -90,7 +90,7 @@ export default function StaffMngt(): React.ReactNode {
             dataIndex: 'email'
         },
         {
-            title: '关联用户账号',
+            title: '账号',
             width: 100,
             dataIndex: 'account'
         },
