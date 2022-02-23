@@ -84,7 +84,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
 
     private async modalShow(): Promise<void> {
         const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/${this.props.id}`);
-        const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        const departmentData = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         this.setState({
             departmentData: departmentData,
             visible: true,
@@ -145,7 +145,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
      * onDepartmentChange
      */
     public onDepartmentChange = async (value: string, title: string) => {
-        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         let appointed = this.getForm()?.getFieldsValue(true);
         if (title === '校对') {
             this.setState({
@@ -181,11 +181,11 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
 
     public renderTreeNodes = (data: any) => data.map((item: any) => {
         if (item.children) {
-            return (<TreeNode key={item.id} title={item.title} value={item.id} className={styles.node} >
+            return (<TreeNode key={item.id} title={item.name} value={item.id} className={styles.node} >
                 {this.renderTreeNodes(item.children)}
             </TreeNode>);
         }
-        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+        return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
     });
 
 
@@ -280,7 +280,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                             }]} style={{ width: '50%', display: 'inline-block' }}>
                                             <Select placeholder="请选择" style={{ width: '120px' }}>
                                                 {this.state?.user && this.state.user.map((item: any) => {
-                                                    return <Select.Option key={item.id} value={item.id + '-' + item.name}>{item.name}</Select.Option>
+                                                    return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
                                                 })}
                                             </Select>
                                         </Form.Item>
@@ -302,7 +302,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                             }]} style={{ width: '50%', display: 'inline-block' }}>
                                             <Select placeholder="请选择" style={{ width: '120px' }}>
                                                 {this.state?.checkUser && this.state.checkUser.map((item: any) => {
-                                                    return <Select.Option key={item.id} value={item.id + '-' + item.name}>{item.name}</Select.Option>
+                                                    return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
                                                 })}
                                             </Select>
                                         </Form.Item>
