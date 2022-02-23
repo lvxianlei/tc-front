@@ -147,7 +147,9 @@ export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps
                     }
                 }
                 ]}>
-                    <InputNumber min={0} max={record.BasicsPartTotalNum} disabled={data?.specialStatus === 2} size="small" />
+                    <InputNumber min={0} max={record.BasicsPartTotalNum} onBlur={() => {
+                        form.validateFields()
+                    }} disabled={data?.specialStatus === 2} size="small" />
                 </Form.Item>
             )
         },
