@@ -33,9 +33,9 @@ export default function Particulars(): React.ReactNode {
         filterValue={{ contractId: params.id }}
         searchFormItems={[
             {
-                name: 'receiveStatus',
+                name: 'receiveDetailStatus',
                 label: '采购状态',
-                children: <Form.Item name="receiveStatus" initialValue="">
+                children: <Form.Item name="receiveDetailStatus" initialValue="">
                     <Select placeholder="请选择" style={{ width: "150px" }}>
                         <Select.Option value={''} key="3">全部</Select.Option>
                         <Select.Option value={0} key="0">待收货</Select.Option>

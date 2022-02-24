@@ -185,7 +185,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '标准',
-            dataIndex: 'standard',
+            dataIndex: 'standardName',
             width: 100,
         }, {
             title: '品名',
