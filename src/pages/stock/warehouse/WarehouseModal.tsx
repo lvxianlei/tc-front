@@ -331,7 +331,7 @@ const WarehouseModal = (props: Props) => {
                                 {
                                     department.map((item, index) => {
                                         return (
-                                            <Option value={item.id} key={index}>{item.title}</Option>
+                                            <Option value={item.id} key={index}>{item.name}</Option>
                                         )
                                     })
                                 }
@@ -402,7 +402,7 @@ const WarehouseModal = (props: Props) => {
                                         {
                                             department.map((item, index) => {
                                                 return (
-                                                    <Option value={item.id} key={index}>{item.title}</Option>
+                                                    <Option value={item.id} key={index}>{item.name}</Option>
                                                 )
                                             })
                                         }
