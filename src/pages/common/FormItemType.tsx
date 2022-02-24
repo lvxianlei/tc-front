@@ -118,20 +118,20 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             setSelect([recordItemKey])
         }
     }
-
-    const onSelectAll = (selected: any[], selectedAllRows: any[], changeRows: any[]) => {
+    const onSelectAll = (selected: any[], _: any, changeRows: any[]) => {
         let currentSelect = [...select]
         let currentSelectRows = [...selectRows]
+        const changeSelectRows = selectRows.filter((item: any) => !changeRows.map((mItem: any) => typeof data.rowKey === "function" ? mItem[data.rowKey(mItem)] : mItem[data.rowKey || "id"]).includes(typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]))
         if (selected) {
-            currentSelect = currentSelect.concat(changeRows.map(item => item.id))
+            currentSelect = currentSelect.concat(changeRows.map(item => typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]))
             currentSelectRows = currentSelectRows.concat(changeRows)
             onChange && onChange(currentSelectRows)
             setSelect(currentSelect)
             setSelectRows(currentSelectRows)
         } else {
-            onChange && onChange(selectRows.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item.id)))
-            setSelect(select.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item)))
-            setSelectRows(selectRows.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item.id)))
+            onChange && onChange(changeSelectRows)
+            setSelect(select.filter((item: any) => !changeRows.map((mItem: any) => typeof data.rowKey === "function" ? mItem[data.rowKey(mItem)] : mItem[data.rowKey || "id"]).includes(item)))
+            setSelectRows(changeSelectRows)
         }
     }
 
@@ -139,10 +139,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         setColumns(data.columns)
     }, [JSON.stringify(data.columns)])
 
-    const paginationChange = (page: number, pageSize: number) => {
-
-        setPagenation({ ...pagenation, current: page, pageSize })
-    }
+    const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
     return <>
         {(searchs.length > 0 || data.search) && <Form style={{ marginBottom: 16 }} form={form} onFinish={async () => {
