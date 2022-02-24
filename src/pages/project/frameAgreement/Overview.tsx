@@ -27,7 +27,7 @@ export default function Overview({ id }: OverviewProps) {
     return <Spin spinning={loading}>
         {(!data?.id || [-1, "-1"].includes(data?.id)) && <Result style={{ paddingTop: 200 }}
             title="去创建框架协议"
-            icon={<Image src={quesheng} />}
+            icon={<img src={quesheng} />}
             extra={<Button type="primary" style={{ width: 70 }}><Link to={`/project/management/edit/frameAgreement/${id}`}>创建</Link></Button>}
         />}
         {data?.id && data?.id !== -1 && <DetailContent operation={[
