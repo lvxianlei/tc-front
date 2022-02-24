@@ -47,9 +47,9 @@ export default function DistributedTech(): React.ReactNode {
             fixed: 'left' as FixedType
         },
         {
-            key: 'productTypeName',
+            key: 'productNumber',
             title: '杆塔号',
-            dataIndex: 'productTypeName',
+            dataIndex: 'productNumber',
             width: 120
         },
         {
@@ -97,7 +97,8 @@ export default function DistributedTech(): React.ReactNode {
                     visible={visible}
                     onOk={modalOk}
                     onCancel={() => {
-                        setVisible(false)
+                        setVisible(false);
+                        form.resetFields();
                     }}
                 >
                     <Form form={form}>
