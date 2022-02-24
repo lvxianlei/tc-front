@@ -81,37 +81,36 @@ export default function StaffMngt(): React.ReactNode {
             width: 150,
             dataIndex: 'deptName'
         },
-        // {
-        //     title: '工号',
-        //     dataIndex: 'number',
-        //     width: 120
-        // },
-        // {
-        //     title: '员工类型',
-        //     width: 100,
-        //     dataIndex: 'categoryName'
-        // },
-        // {
-        //     title: '岗位',
-        //     width: 150,
-        //     dataIndex: 'stationName'
-        // },
-        // {
-        //     title: '邮箱',
-        //     width: 150,
-        //     dataIndex: 'email'
-        // },
-
+        {
+            title: '工号',
+            dataIndex: 'number',
+            width: 120
+        },
+        {
+            title: '员工类型',
+            width: 100,
+            dataIndex: 'categoryName'
+        },
+        {
+            title: '岗位',
+            width: 150,
+            dataIndex: 'stationName'
+        },
+        {
+            title: '邮箱',
+            width: 150,
+            dataIndex: 'email'
+        },
         {
             title: "状态",
             width: 50,
             dataIndex: 'statusName'
         },
-        // {
-        //     title: '备注',
-        //     width: 200,
-        //     dataIndex: 'description'
-        // },
+        {
+            title: '备注',
+            width: 200,
+            dataIndex: 'description'
+        },
         {
             title: '操作',
             dataIndex: 'operation',

@@ -72,7 +72,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         try {
             const params = await form.getFieldsValue()
             params.current = pagenation.current
-            params.pageSize = pagenation.pageSize
+            params.size = pagenation.pageSize
             Object.keys(params).forEach((item: any) => {
                 const columnItem = searchs.find((sItem: any) => sItem.dataIndex === item)
                 if (columnItem?.type === "date" && params[item]) {
@@ -93,7 +93,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [pagenation.current] })
+    }), { refreshDeps: [pagenation.current, pagenation.pageSize] })
 
     const onSelectChange = (record: any, selected: boolean, selectAllRows: any[]) => {
         const currentSelect = [...select]
@@ -120,7 +120,10 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         setColumns(data.columns)
     }, [JSON.stringify(data.columns)])
 
-    const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
+    const paginationChange = (page: number, pageSize: number) => {
+
+        setPagenation({ ...pagenation, current: page, pageSize })
+    }
 
     return <>
         {(searchs.length > 0 || data.search) && <Form style={{ marginBottom: 16 }} form={form} onFinish={async () => {
@@ -146,6 +149,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         </Form>}
         <CommonTable
             columns={columns}
+            scroll={{ y: 400 }}
             rowSelection={{
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
