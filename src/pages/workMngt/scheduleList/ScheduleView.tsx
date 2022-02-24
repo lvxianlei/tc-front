@@ -643,7 +643,7 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="materialLeader" label="" rules={[{required: true,message:'请选择提料负责人'}]} >
                                         <Select disabled={edit}>
                                             { materialUser && materialUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -677,7 +677,7 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="materialPartLeader" label="" rules={[{required: true,message:'请选择提料配段负责人'}]} >
                                         <Select disabled={edit}>
                                             { materialPartUser && materialPartUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -706,7 +706,7 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="loftingLeader" label="" rules={[{required: true,message:'请选择放样负责人'}]} >
                                         <Select disabled={edit}>
                                             { loftingUser && loftingUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -758,7 +758,7 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="weldingLeader" label="" rules={[{required: true,message:'请选择编程负责人'}]} >
                                         <Select disabled={edit}> 
                                             { weldingUser && weldingUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -796,7 +796,7 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="smallSampleLeader" label="" rules={[{required: true,message:'请选择小样图负责人'}]} >
                                         <Select disabled={edit}>
                                             { smallSampleUser && smallSampleUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -825,7 +825,7 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="boltLeader" label="" rules={[{required: true,message:'请选择螺栓清单负责人'}]} >
                                         <Select disabled={edit}>
                                             { boltUser &&boltUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -855,7 +855,7 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="drawLeader" label="" rules={[{required: true,message:'请选择图纸上传负责人'}]} >
                                         <Select disabled={edit}>
                                             { drawUser && drawUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
