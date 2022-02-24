@@ -58,7 +58,9 @@ interface PagenationProps {
 }
 
 export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
-    const initValue = value?.records?.map((item: any) => item.id) || []
+    const initValue = value?.records?.map((item: any) => {
+        return typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]
+    }) || []
     const [select, setSelect] = useState<any[]>(initValue)
     const [selectRows, setSelectRows] = useState<any[]>(initValue)
     const [columns, setColumns] = useState<any[]>(data.columns)
@@ -98,21 +100,22 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
     const onSelectChange = (record: any, selected: boolean, selectAllRows: any[]) => {
         const currentSelect = [...select]
         const currentSelectRows = [...selectRows]
+        const recordItemKey = typeof data.rowKey === "function" ? record[data.rowKey(record)] : record[data.rowKey || "id"]
         if (data.selectType && data.selectType === "checkbox") {
             if (selected) {
-                currentSelect.push(record.id)
+                currentSelect.push(recordItemKey)
                 currentSelectRows.push(record)
                 onChange && onChange(currentSelectRows)
                 setSelect(currentSelect)
                 setSelectRows(currentSelectRows)
             } else {
-                setSelect(currentSelect.filter(item => item !== record.id))
-                setSelectRows(currentSelectRows.filter((item: any) => item.id !== record.id))
-                onChange && onChange(currentSelectRows.filter((item: any) => item.id !== record.id))
+                setSelect(currentSelect.filter(item => item !== recordItemKey))
+                setSelectRows(currentSelectRows.filter((item: any) => item.id !== recordItemKey))
+                onChange && onChange(currentSelectRows.filter((item: any) => item.id !== recordItemKey))
             }
         } else {
             onChange && onChange(selectAllRows)
-            setSelect([record.id])
+            setSelect([recordItemKey])
         }
     }
 
