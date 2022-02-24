@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, Select } from 'antd'
+import { Spin, Form, Select, TreeSelect } from 'antd'
 import { DetailContent, BaseInfo, formatData } from '../../common'
 import { ApplicationList } from "../financialData.json"
 import RequestUtil from '../../../utils/RequestUtil'
@@ -14,7 +14,14 @@ interface EditProps {
 interface IResponse {
     readonly records?: [];
 }
-
+const wrapRole2DataNode: (data: any) => any[] = (data: any[]) => {
+    return data.map((item: any) => ({
+        title: item.name,
+        value: item.id,
+        disabled: item.type === 2 || item.parentId === '0',
+        children: item.children ? wrapRole2DataNode(item.children) : []
+    }))
+}
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const [baseForm] = Form.useForm()
     const [companyList, setCompanyList] = useState([]);
@@ -24,8 +31,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const { data: deptData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/department`)
-            resole(result.map((item: any) => ({ label: item.name, value: item.id })))
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/department`)
+            resole(wrapRole2DataNode(result))
         } catch (error) {
             reject(error)
         }
@@ -205,7 +212,15 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     case "paymentMethod":
                         return ({ ...item, type: "select", enum: paymentMethodEnum })
                     case "pleasePayOrganization":
-                        return ({ ...item, enum: deptData })
+                        return ({
+                            ...item,
+                            // enum: deptData,
+                            render: (data: any, props: any) => <TreeSelect
+                                {...props}
+                                style={{ width: '100%' }}
+                                treeData={deptData as any}
+                            />
+                        })
                     case 'businessType':
                         return ({
                             ...item, render: (data: any, props: any) => {
