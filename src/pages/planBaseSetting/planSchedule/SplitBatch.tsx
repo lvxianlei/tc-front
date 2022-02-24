@@ -94,121 +94,121 @@ export default function SampleDraw(): React.ReactNode {
                         <Select placeholder="请选择批次">
                             <Select.Option 
                                 key={1} 
-                                value={'1'}
+                                value={'第一批'}
                             >
                                 {'第一批'}
                             </Select.Option>
                             <Select.Option 
                                 key={2} 
-                                value={'2'}
+                                value={'第二批'}
                             >
                                 {'第二批'}
                             </Select.Option>
                             <Select.Option 
                                 key={3} 
-                                value={'3'}
+                                value={'第三批'}
                             >
                                 {'第三批'}
                             </Select.Option>
                             <Select.Option 
                                 key={4} 
-                                value={'4'}
+                                value={'第四批'}
                             >
                                 {'第四批'}
                             </Select.Option>
                             <Select.Option 
                                 key={5} 
-                                value={'5'}
+                                value={'第五批'}
                             >
                                 {'第五批'}
                             </Select.Option>
                             <Select.Option 
                                 key={6} 
-                                value={'6'}
+                                value={'第六批'}
                             >
                                 {'第六批'}
                             </Select.Option>
                             <Select.Option 
                                 key={7} 
-                                value={'7'}
+                                value={'第七批'}
                             >
                                 {'第七批'}
                             </Select.Option>
                             <Select.Option 
                                 key={8} 
-                                value={'8'}
+                                value={'第八批'}
                             >
                                 {'第八批'}
                             </Select.Option>
                             <Select.Option 
                                 key={9} 
-                                value={'9'}
+                                value={'第九批'}
                             >
                                 {'第九批'}
                             </Select.Option>
                             <Select.Option 
                                 key={10} 
-                                value={'10'}
+                                value={'第十批'}
                             >
                                 {'第十批'}
                             </Select.Option>
                             <Select.Option 
                                 key={11} 
-                                value={'11'}
+                                value={'第十一批'}
                             >
                                 {'第十一批'}
                             </Select.Option>
                             <Select.Option 
                                 key={12} 
-                                value={'12'}
+                                value={'第十二批'}
                             >
                                 {'第十二批'}
                             </Select.Option>
                             <Select.Option 
                                 key={13} 
-                                value={'13'}
+                                value={'第十三批'}
                             >
                                 {'第十三批'}
                             </Select.Option>
                             <Select.Option 
                                 key={14} 
-                                value={'14'}
+                                value={'第十四批'}
                             >
                                 {'第十四批'}
                             </Select.Option>
                             <Select.Option 
                                 key={15} 
-                                value={'15'}
+                                value={'第十五批'}
                             >
                                 {'第十五批'}
                             </Select.Option>
                             <Select.Option 
                                 key={16} 
-                                value={'16'}
+                                value={'第十六批'}
                             >
                                 {'第十六批'}
                             </Select.Option>
                             <Select.Option 
                                 key={17} 
-                                value={'17'}
+                                value={'第十七批'}
                             >
                                 {'第十七批'}
                             </Select.Option>
                             <Select.Option 
                                 key={18} 
-                                value={'18'}
+                                value={'第十八批'}
                             >
                                 {'第十八批'}
                             </Select.Option>
                             <Select.Option 
                                 key={19} 
-                                value={'19'}
+                                value={'第十九批'}
                             >
                                 {'第十九批'}
                             </Select.Option>
                             <Select.Option 
                                 key={20} 
-                                value={'20'}
+                                value={'第二十批'}
                             >
                                 {'第二十批'}
                             </Select.Option>
