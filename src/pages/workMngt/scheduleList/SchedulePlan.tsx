@@ -160,7 +160,7 @@ export default function SchedulePlan(props: any){
                                     <Form.Item name="materialLeader" label="" rules={[{required: true,message:'请选择提料负责人'}]} >
                                         <Select >
                                             { materialUser && materialUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
