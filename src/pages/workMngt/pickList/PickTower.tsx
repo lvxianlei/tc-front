@@ -39,8 +39,8 @@ export default function PickTower(): React.ReactNode {
     const [status, setStatus] = useState('');
     const [detail, setDetail] = useState<IDetail>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
-        setDepartment(departmentData);
+        // const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        // setDepartment(departmentData);
         resole(data)
     }), {})
     const handleModalOk = async () => {

@@ -15,21 +15,21 @@ const tableColumns = [
     {
         key: 'createDeptName',
         title: '操作部门',
-        dataIndex: 'createDeptName', 
-    },
-    {  
-        key: 'createUserName', 
-        title: '操作人', 
-        dataIndex: 'createUserName' 
-    },
-    { 
-        key: 'createTime', 
-        title: '操作时间', 
-        dataIndex: 'createTime' 
+        dataIndex: 'createDeptName',
     },
     {
-        key: 'currentStatus', 
-        title: '任务状态', 
+        key: 'createUserName',
+        title: '操作人',
+        dataIndex: 'createUserName'
+    },
+    {
+        key: 'createTime',
+        title: '操作时间',
+        dataIndex: 'createTime'
+    },
+    {
+        key: 'currentStatus',
+        title: '任务状态',
         dataIndex: 'currentStatus',
         render: (status: number): React.ReactNode => {
             switch (status) {
@@ -99,7 +99,7 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/welding/getWeldingTaskById?weldingId=${ params.id }`)
+        const data = await RequestUtil.get(`/tower-science/welding/getWeldingTaskById?weldingId=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -110,18 +110,18 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
     }
 
     return <>
-        <DetailContent operation={ [
+        <DetailContent operation={[
             <Space direction="horizontal" size="small" >
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
             </Space>
-        ] }>
+        ]}>
             <DetailTitle title="特殊要求" />
-            <BaseInfo columns={ specialColums } dataSource={ detailData } col={ 2 } />
+            <BaseInfo columns={specialColums} dataSource={detailData} col={2} />
             <DetailTitle title="产品信息" />
-            <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
-            <Attachment dataSource={ detailData.attachInfoList || [] } />
-            <DetailTitle title="操作信息"/>
-            <CommonTable haveIndex columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
+            <BaseInfo columns={productColumns} dataSource={detailData} col={2} />
+            <Attachment dataSource={detailData.attachInfoList || []} />
+            <DetailTitle title="操作信息" />
+            <CommonTable haveIndex columns={tableColumns} dataSource={detailData.statusRecordList} pagination={false} />
         </DetailContent>
     </>
 }

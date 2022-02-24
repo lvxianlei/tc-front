@@ -17,7 +17,13 @@ export interface IAnnouncement {
     readonly attachInfoDtos?: FileProps[];
     readonly attachInfoVos?: FileProps[];
     readonly attachVos?: FileProps[];
-    readonly staffList?: string[];
+    readonly staffList?: any;
+}
+
+export interface IStaffList {
+    readonly id: string;
+    readonly userId?: string;
+    readonly userName?: string;
 }
 
 export default function AnnouncementMngt(): React.ReactNode {

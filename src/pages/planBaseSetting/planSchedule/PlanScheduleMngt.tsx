@@ -5,13 +5,13 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Input, Button, Modal, message, Select, DatePicker, Form, Tooltip } from 'antd';
+import { Input, Button, Select, DatePicker, Tooltip, Space } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import TechnicalIssue from './TechnicalIssue';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IPlanSchedule } from './IPlanSchedule';
 import { gantt } from 'dhtmlx-gantt';
+import { Link } from 'react-router-dom';
 
 
 export interface TechnicalIssuePropsRefProps {
@@ -21,6 +21,13 @@ export interface TechnicalIssuePropsRefProps {
 
 export default function PlanScheduleMngt(): React.ReactNode {
     const columns = [
+        {
+            key: 'productionBatchNo',
+            title: '批次号',
+            width: 150,
+            dataIndex: 'productionBatchNo',
+            fixed: 'left' as FixedType
+        },
         {
             key: 'planNumber',
             title: '计划号',
@@ -162,61 +169,27 @@ export default function PlanScheduleMngt(): React.ReactNode {
         gantt.clearAll();
     })
 
-    const handleModalOk = () => new Promise(async (resove, reject) => {
-        try {
-            await editRef.current?.onSubmit();
-            message.success(`下达成功`);
-            setSelectedKeys([]);
-            setSelectedRows([]);
-            setVisible(false);
-            resove(true);
-            setRefresh(!refresh);
-        } catch (error) {
-            reject(false)
-        }
-    })
-
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: IPlanSchedule[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
     }
 
-    const issued = () => {
-        if (selectedKeys && selectedKeys.length > 0) {
-            setVisible(true);
-        } else {
-            message.warning('请选择要下达的塔型');
-        }
-    }
-
     const [refresh, setRefresh] = useState(false);
-    const [visible, setVisible] = useState(false);
     const [filterValue, setFilterValue] = useState({});
     const editRef = useRef<TechnicalIssuePropsRefProps>();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<IPlanSchedule[]>([]);
     return (
         <>
-            <Modal
-                destroyOnClose
-                visible={visible}
-                width="40%"
-                title="技术下达"
-                onOk={handleModalOk}
-                onCancel={() => {
-                    editRef.current?.resetFields()
-                    setVisible(false);
-                    setSelectedKeys([]);
-                    setSelectedRows([]);
-                    setRefresh(!refresh);
-                }}>
-                <TechnicalIssue record={selectedRows} ref={editRef} />
-            </Modal>
             <Page
                 path="/tower-aps/productionPlan"
                 columns={columns}
                 headTabs={[]}
-                extraOperation={<Button type="primary" onClick={issued}>技术下达</Button>}
+                extraOperation={<Space>
+                    <Link to={`/planSchedule/planScheduleMngt/planDeliveryTime/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>计划交货期</Button></Link>
+                    <Link to={`/planSchedule/planScheduleMngt/SplitBatch/${selectedKeys[0]}`}><Button type="primary" disabled={selectedKeys.length !== 1}>拆分批次</Button></Link>
+                    <Link to={`/planSchedule/planScheduleMngt/distributedTech/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>下发技术</Button></Link>
+                </Space>}
                 refresh={refresh}
                 tableProps={{
                     rowSelection: {

@@ -5,6 +5,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import styles from './SetOut.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
+import { IRecord } from './ISetOut';
 
 export interface QuestionnaireModalProps { }
 export interface IQuestionnaireModalRouteProps extends RouteComponentProps<QuestionnaireModalProps>, WithTranslation {
@@ -17,20 +18,6 @@ export interface IQuestionnaireModalRouteProps extends RouteComponentProps<Quest
 
 interface QuestionnaireModalState {
     readonly description?: string;
-}
-
-export interface IRecord {
-    readonly id?: string;
-    readonly problemField?: string;
-    readonly originalData?: string;
-    readonly description?: string;
-    readonly newValue?: string;
-    readonly issueRecordList?: [];
-    readonly status?: number;
-    readonly dataIndex?: string;
-    readonly rowId?: string;
-    readonly currentValue?: string;
-    readonly problemFieldName?: string;
 }
 
 const tableColumns = [
@@ -151,7 +138,7 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                             <Input.TextArea maxLength={300} placeholder="请输入备注信息" rows={1} showCount disabled={record.status === 1} />
                         </Form.Item>
                         {
-                            record.problemField === 'specialCode' ?
+                            ['specialCode', 'electricWelding', 'bend', 'chamfer', 'shovelBack', 'rootClear', 'squash', 'openCloseAngle', 'perforate', 'groove', 'intersectingLine', 'slottedForm'].findIndex((value) => value === record.problemField) !== -1 ?
                                 <Form.Item name="newValue" label="校对后信息"
                                     initialValue={record.newValue}>
                                     <Input maxLength={100} placeholder="请输入" disabled={record.status === 1} />

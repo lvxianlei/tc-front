@@ -604,7 +604,7 @@
                                 "authority": "approvalm"
                             },
                             {
-                                "label": "技术下发",
+                                "label": "技术排产",
                                 "path": "/planSchedule/planScheduleMngt",
                                 "authority": "approvalm"
                             }
@@ -667,7 +667,7 @@
                             },
                             {
                                 "label": "成品库存",
-                                "path": "/packagingWorkshop/stock",
+                                "path": "/packagingWorkshop/packageStock",
                                 "authority": "package_workshop_package_warehouse_management"
                             }
                         ]

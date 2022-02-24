@@ -28,102 +28,102 @@ interface IData {
 
 export default function AssemblyWeldingCheck(): React.ReactNode {
     const towerColumns = [
-        { 
-            title: '序号', 
-            dataIndex: 'index', 
-            key: 'index', 
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
+        {
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
+            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
-        { 
-            title: '段号', 
-            dataIndex: 'segmentName', 
+        {
+            title: '段号',
+            dataIndex: 'segmentName',
             key: 'segmentName'
         },
-        { 
-            title: '组件号', 
-            dataIndex: 'componentId', 
-            key: 'componentId' 
+        {
+            title: '组件号',
+            dataIndex: 'componentId',
+            key: 'componentId'
         },
-        { 
+        {
             title: '主件号',
-            dataIndex: 'mainPartId', 
-            key: 'mainPartId' 
+            dataIndex: 'mainPartId',
+            key: 'mainPartId'
         },
-        { 
-            title: '单组重量（kg）', 
-            dataIndex: 'singleGroupWeight', 
-            key: 'singleGroupWeight' 
+        {
+            title: '单组重量（kg）',
+            dataIndex: 'singleGroupWeight',
+            key: 'singleGroupWeight'
         },
-        { 
-            title: '电焊米数（mm）', 
-            dataIndex: 'electricWeldingMeters', 
-            key: 'electricWeldingMeters' 
-        }, 
-        { 
-            title: '操作', 
-            dataIndex: 'operation', 
-            key:'operation', 
+        {
+            title: '电焊米数（mm）',
+            dataIndex: 'electricWeldingMeters',
+            key: 'electricWeldingMeters'
+        },
+        {
+            title: '操作',
+            dataIndex: 'operation',
+            key: 'operation',
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Button type="link" onClick={ () => { 
-                        if(record.verificationStatus === 1) {
-                            history.push(`/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ params.id }/${ params.productCategoryId }/questionnairedetail/${ record.id }`)
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                    <Button type="link" onClick={() => {
+                        if (record.verificationStatus === 1) {
+                            history.push(`/workMngt/assemblyWeldingList/assemblyWeldingCheck/${params.id}/${params.productCategoryId}/questionnairedetail/${record.id}`)
                         } else {
-                            history.push(`/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ params.id }/${ params.productCategoryId }/questionnaire/${ record.id }`)
+                            history.push(`/workMngt/assemblyWeldingList/assemblyWeldingCheck/${params.id}/${params.productCategoryId}/questionnaire/${record.id}`)
                         }
-                     } }>{ record.verificationStatus === 1 ? '查看问题单' : '提交问题单' }</Button>
+                    }}>{record.verificationStatus === 1 ? '查看问题单' : '提交问题单'}</Button>
                 </Space>
             )
         }
     ]
 
     const paragraphColumns = [
-        { 
-            title: '序号', 
-            dataIndex: 'index', 
-            key: 'index', 
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{ index + 1 }</span>) 
+        {
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
+            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
-        { 
-            title: '零件号', 
-            dataIndex: 'code', 
+        {
+            title: '零件号',
+            dataIndex: 'code',
             key: 'code'
         },
-        { 
-            title: '材料', 
-            dataIndex: 'materialName', 
-            key: 'materialName' 
+        {
+            title: '材料',
+            dataIndex: 'materialName',
+            key: 'materialName'
         },
-        { 
+        {
             title: '材质',
-            dataIndex: 'structureTexture', 
-            key: 'structureTexture' 
+            dataIndex: 'structureTexture',
+            key: 'structureTexture'
         },
-        { 
-            title: '规格', 
-            dataIndex: 'structureSpec', 
-            key: 'structureSpec' 
+        {
+            title: '规格',
+            dataIndex: 'structureSpec',
+            key: 'structureSpec'
         },
-        { 
-            title: '长', 
-            dataIndex: 'length', 
-            key: 'length' 
+        {
+            title: '长',
+            dataIndex: 'length',
+            key: 'length'
         },
-        { 
-            title: '宽', 
-            dataIndex: 'width', 
-            key: 'width' 
+        {
+            title: '宽',
+            dataIndex: 'width',
+            key: 'width'
         },
-        { 
-            title: '单组件数', 
-            dataIndex: 'singleNum', 
-            key: 'singleNum' 
-        }, 
+        {
+            title: '单组件数',
+            dataIndex: 'singleNum',
+            key: 'singleNum'
+        },
         {
             title: '备注',
-            dataIndex: 'description', 
-            key: 'description' 
+            dataIndex: 'description',
+            key: 'description'
         }
     ]
 
@@ -132,14 +132,14 @@ export default function AssemblyWeldingCheck(): React.ReactNode {
         current: 1,
         pageSize: 10
     };
-    const [ detailData, setDetailData ] = useState<IResponseData | undefined>(undefined);
+    const [detailData, setDetailData] = useState<IResponseData | undefined>(undefined);
     const params = useParams<{ id: string, productCategoryId: string }>();
-    const [ paragraphData, setParagraphData ] = useState([] as undefined | any);
+    const [paragraphData, setParagraphData] = useState([] as undefined | any);
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getVerificationById`, { weldingId: params.id, ...pagination });
         setDetailData(data);
-        if(data?.records && data?.records[0]) {
+        if (data?.records && data?.records[0]) {
             getParagraphData(data?.records && data?.records[0].id || '')
         }
         resole(data);
@@ -153,25 +153,25 @@ export default function AssemblyWeldingCheck(): React.ReactNode {
     const { loading, data } = useRequest<IResponseData>(() => getTableDataSource(page), {});
 
     return <>
-        <Spin spinning={ loading }>
-            <DetailContent className={ styles.check }>
-                <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                    <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWelding`, { weldingId: params.id }).then(res => {
+        <Spin spinning={loading}>
+            <DetailContent className={styles.check}>
+                <Space direction="horizontal" size="small" className={styles.bottomBtn}>
+                    <Button type="primary" onClick={() => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWelding`, { weldingId: params.id }).then(res => {
                         history.goBack();
-                    }) } >完成校核</Button>
-                    <Button type="ghost" onClick={ () => history.goBack() }>返回</Button>
+                    })} >完成校核</Button>
+                    <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </Space>
-                <CommonTable 
-                    dataSource={ detailData?.records } 
-                    columns={ towerColumns }
-                    onRow={ (record: Record<string, any>, index: number) => ({
+                <CommonTable
+                    dataSource={detailData?.records}
+                    columns={towerColumns}
+                    onRow={(record: Record<string, any>, index: number) => ({
                         onClick: async () => { getParagraphData(record.id); },
                         className: [record.verificationStatus === 1 ? styles.red : record.verificationStatus === 2 ? styles.green : record.verificationStatus === 0 ? styles.yellow : null, styles.tableRow]
                     })
-                }
-                    onChange={ (pagination: TablePaginationConfig) => { 
+                    }
+                    onChange={(pagination: TablePaginationConfig) => {
                         getTableDataSource(pagination);
-                    } }
+                    }}
                     pagination={{
                         current: detailData?.current || 0,
                         pageSize: detailData?.size || 0,
@@ -179,7 +179,7 @@ export default function AssemblyWeldingCheck(): React.ReactNode {
                         showSizeChanger: false
                     }}
                 />
-                <CommonTable dataSource={ paragraphData } columns={ paragraphColumns } pagination={ false }/>
+                <CommonTable dataSource={paragraphData} columns={paragraphColumns} pagination={false} />
             </DetailContent>
         </Spin>
     </>
