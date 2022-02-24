@@ -135,22 +135,6 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         }
     }
 
-    const onSelectAll = (selected: any[], selectedAllRows: any[], changeRows: any[]) => {
-        let currentSelect = [...select]
-        let currentSelectRows = [...selectRows]
-        if (selected) {
-            currentSelect = currentSelect.concat(changeRows.map(item => item.id))
-            currentSelectRows = currentSelectRows.concat(changeRows)
-            onChange && onChange(currentSelectRows)
-            setSelect(currentSelect)
-            setSelectRows(currentSelectRows)
-        } else {
-            onChange && onChange(selectRows.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item.id)))
-            setSelect(select.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item)))
-            setSelectRows(selectRows.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item.id)))
-        }
-    }
-
     useEffect(() => {
         setColumns(data.columns)
     }, [JSON.stringify(data.columns)])
