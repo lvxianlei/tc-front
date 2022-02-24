@@ -104,8 +104,7 @@ export default function DistributedTech(): React.ReactNode {
         {
             key: 'issueDescription',
             title: '下发技术备注',
-            dataIndex: 'issueDescription',
-            width: 180
+            dataIndex: 'issueDescription'
         }
     ]
 
