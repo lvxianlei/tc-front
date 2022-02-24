@@ -112,8 +112,8 @@ export default function ViewReceivingNote(): React.ReactNode {
                     children: <Select style={{ width: "150px" }} placeholder="请选择企业类型">
                         <Select.Option value={""}>全部</Select.Option>
                         <Select.Option value={1}>供应商</Select.Option>
-                        <Select.Option value={2}>运输公司</Select.Option>
-                        <Select.Option value={3}>装卸公司</Select.Option>
+                        <Select.Option value={3}>运输公司</Select.Option>
+                        <Select.Option value={2}>装卸公司</Select.Option>
                     </Select>
                 },
                 {
