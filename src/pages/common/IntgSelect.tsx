@@ -25,6 +25,7 @@ export default function IntgSelect({ onChange, width, value = { first: "", secon
                 return data.map((item: any) => ({
                     title: item.name,
                     value: item.id,
+                    disabled: item.type === 2 || item.parentId === '0',
                     children: item.children ? formatResult(item.children) : []
                 }))
             }
