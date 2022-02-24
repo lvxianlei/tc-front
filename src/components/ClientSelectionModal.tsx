@@ -58,7 +58,7 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
     
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}, flag: boolean = true) {
         const searchValues = flag ? filterValues : {};
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/customer', {
             ...searchValues,
             current: pagination.current || this.state.tablePagination.current,
             size: pagination.pageSize || this.state.tablePagination.pageSize

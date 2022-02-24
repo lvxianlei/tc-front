@@ -310,57 +310,60 @@ export default function TaskNew(props:any){
     const handlePrintModalOk = async () => {
         try {
             const saveData = await formRef.validateFields();
-            if(saveData?.print?.printSpecifications === '全部'){
-                if(saveData?.printSpecialProcess.length>0){
-                    form.setFieldsValue({
-                        print: '全部,'+ saveData?.printSpecialProcess?.join(',')
-                    })
+            if(saveData?.print?.printSpecifications||saveData?.print?.printSpecialProcess){
+                if(saveData?.print?.printSpecifications === '全部'){
+                    if(saveData?.printSpecialProcess&&saveData?.printSpecialProcess?.length>0){
+                        form.setFieldsValue({
+                            print: '全部,'+ saveData?.printSpecialProcess?.join(',')
+                        })
+                    }else{
+                        form.setFieldsValue({
+                            print: '全部'
+                        })
+                    }
+                    
+                }
+                else if(saveData?.print?.printSpecifications === '自定义'){
+                    if(!saveData?.print?.before){
+                        message.error('未填写规格，不可保存并提交！')
+                        return
+                    }
+                    if(!saveData?.print?.after){
+                        message.error('未填写规格，不可保存并提交！')
+                        return
+                    }
+                    if(saveData?.printSpecialProcess&&saveData?.printSpecialProcess?.length>0){
+                        form.setFieldsValue({
+                            print: saveData?.print?.before+'-'+saveData?.print?.after +','+ saveData?.printSpecialProcess?.join(',')
+                        })
+                    }
+                    else{
+                        form.setFieldsValue({
+                            print: saveData?.print?.before+'-'+saveData?.print?.after
+                        })
+                    }
+    
                 }else{
                     form.setFieldsValue({
-                        print: '全部'
+                        print: saveData?.printSpecialProcess?.join(',')
                     })
                 }
-                
-            }
-            else if(saveData?.print?.printSpecifications === '自定义'){
-                if(!saveData?.print?.before){
-                    message.error('未填写规格，不可保存并提交！')
-                    return
-                }
-                if(!saveData?.print?.after){
-                    message.error('未填写规格，不可保存并提交！')
-                    return
-                }
-                if(saveData?.printSpecialProcess.length>0){
-                    form.setFieldsValue({
-                        print: saveData?.print?.before+'-'+saveData?.print?.after +','+ saveData?.printSpecialProcess?.join(',')
-                    })
-                }
-                else{
-                    form.setFieldsValue({
-                        print: saveData?.print?.before+'-'+saveData?.print?.after
-                    })
-                }
-
-            }else{
+                setPrintData({
+                    ...printData,
+                    printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
+                    printSpecialProcess: saveData?.printSpecialProcess?.join(',')
+                })
+                const data:any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
+                    productCategoryId: printData?.productCategoryId,
+                    printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
+                    printSpecialProcess: saveData?.printSpecialProcess?.join(','),
+                    productType: printData?.productType
+                });
                 form.setFieldsValue({
-                    print: saveData?.printSpecialProcess?.join(',')
+                    structureNumber: data?.length
                 })
             }
-            setPrintData({
-                ...printData,
-                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
-                printSpecialProcess: saveData?.printSpecialProcess?.join(',')
-            })
-            const data:any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
-                productCategoryId: printData?.productCategoryId,
-                printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
-                printSpecialProcess: saveData?.printSpecialProcess?.join(','),
-                productType: printData?.productType
-            });
-            form.setFieldsValue({
-                structureNumber: data?.length
-            })
+            
             setPrintVisible(false);
         
         } catch (error) {
@@ -385,8 +388,10 @@ export default function TaskNew(props:any){
             }else{
                 formRef.setFieldsValue({
                     print:{
-                        printSpecifications: '全部'
-                    }
+                        printSpecifications: '全部',
+                        
+                    },
+                    printSpecialProcess:[],
                 }) 
             }
             
@@ -407,8 +412,10 @@ export default function TaskNew(props:any){
                     print:{
                         printSpecifications: '自定义',
                         before: type.split('-')[0],
-                        after: type?.substring(type?.indexOf('-')+1, type?.indexOf(','))
-                    }
+                        after: type?.substring(type?.indexOf('-')+1, type?.indexOf(',')),
+                       
+                    },
+                    printSpecialProcess:[],
                 })  
             }
               
@@ -492,6 +499,16 @@ export default function TaskNew(props:any){
                                             form.setFieldsValue({
                                                 planNumber:value
                                             })
+                                            formRef.setFieldsValue({
+                                                print:{
+                                                    printSpecifications:''
+                                                },
+                                                printSpecialProcess:[]
+                                            });
+                                            setPrintData({
+                                                printSpecifications: '',
+                                                printSpecialProcess:''
+                                            })
                                         }}>
                                             {planData && planData.map(({ planNumber}: any, index: string | number | undefined) => {
                                                 return <Select.Option key={index} value={planNumber}>
@@ -506,6 +523,13 @@ export default function TaskNew(props:any){
                         <Col span={11}>
                             <Form.Item name="productCategoryId" label="塔型" rules={[{required: true,message:'请选择塔型'}]}>
                                 <Select style={{width:'100%'}} onChange={async (value)=>{
+                                    formRef.setFieldsValue({
+                                        print:{
+                                            printSpecifications:'',
+                                            
+                                        },
+                                        printSpecialProcess:[]
+                                    });
                                     const formValue = tower.filter((item: { productCategoryId: SelectValue; })=>{return item.productCategoryId === value})
                                     
                                     if(formValue[0].drawLeaderDepartment){
@@ -523,7 +547,7 @@ export default function TaskNew(props:any){
                                             productType: formValue[0]?.productType
                                         });
                                     }
-                                    if(type === '四管塔' || type === '架构塔'){
+                                    if(type === '四管塔' ||type === '管塔'|| type === '架构'|| type === '架构塔'|| type === '钢架构'){
                                         setRadioValue('全部')
                                         setPrintData({
                                             ...printData,
@@ -545,7 +569,8 @@ export default function TaskNew(props:any){
                                             productType: formValue[0]?.productType
                                         });  
                                     }
-                                    if(type === '钢管塔'){
+                                    else if(type === '钢管杆'){
+                                        
                                         setRadioValue('自定义')
                                         form.setFieldsValue({
                                             ...formValue[0],
@@ -553,9 +578,10 @@ export default function TaskNew(props:any){
                                         })
                                         setPrintData({
                                             ...printData,
+                                            printSpecifications:'1-12',
                                             productType: formValue[0]?.productType,
                                             productCategoryId: value,
-                                            printSpecifications: '1-12'
+                                            
                                         })
                                         formRef.setFieldsValue({
                                             print:{
@@ -570,7 +596,7 @@ export default function TaskNew(props:any){
                                             productType: formValue[0]?.productType
                                         });    
                                     }
-                                    if(type === '角钢塔'){
+                                    else if(type === '角钢塔'){
                                         form.setFieldsValue({
                                             ...formValue[0],
                                             print: '火曲,钻孔,铆焊'
@@ -774,10 +800,10 @@ export default function TaskNew(props:any){
             </Modal>
             <Button type='primary' onClick={async ()=>{
                 const planData: any = await RequestUtil.get(`/tower-science/loftingTemplate?current=1&size=1000&type=`);
-                const arr:any[] = planData?.records.filter((item: { uploadStatus: number; })=>{
-                    return item.uploadStatus === 1
-                })
-                setPlanData(unique(arr,'planNumber'));
+                // const arr:any[] = planData?.records.filter((item: { uploadStatus: number; })=>{
+                //     return item.uploadStatus === 1
+                // })
+                setPlanData(unique(planData?.records,'planNumber'));
                 const specialData: any = await RequestUtil.get(`/tower-aps/product/process?current=1&size=1000&type=`);
                 setSpecialData(specialData?.records);
                 const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);

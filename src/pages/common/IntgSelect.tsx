@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react"
-import { Select } from "antd"
+import { TreeSelect, Select, Spin } from "antd"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 interface IntgSelectProps {
@@ -18,10 +18,18 @@ export default function IntgSelect({ onChange, width, value = { first: "", secon
         value.first && getUser(value.first)
     }, [value.first])
 
-    const { data: deptData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data: deptData } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/department`)
-            resole(result)
+            const result: any[] = await RequestUtil.get(`/tower-system/department`)
+            const formatResult: (data: any) => any[] = (data: any[]) => {
+                return data.map((item: any) => ({
+                    title: item.name,
+                    value: item.id,
+                    disabled: item.type === 2 || item.parentId === '0',
+                    children: item.children ? formatResult(item.children) : []
+                }))
+            }
+            resole(formatResult(result))
         } catch (error) {
             reject(error)
         }
@@ -29,7 +37,7 @@ export default function IntgSelect({ onChange, width, value = { first: "", secon
 
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/user?departmentId=${id}&size=1000`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/employee?dept=${id}&size=1000`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -48,7 +56,28 @@ export default function IntgSelect({ onChange, width, value = { first: "", secon
     }, [setUserId, deptId, onChange])
 
     return <div style={{ width: width || "100%" }}>
-        <Select placeholder="部门" value={deptId || undefined} style={{ width: "50%" }} onChange={handleFirstChange} >{deptData?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
-        <Select placeholder="人员" value={userId || undefined} style={{ width: "50%" }} onChange={handleChange} disabled={!deptId}>{userData?.records?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
+        <Spin spinning={loading}>
+            <TreeSelect
+                placeholder="部门"
+                value={deptId || undefined}
+                style={{ width: "50%" }}
+                onChange={handleFirstChange}
+                treeData={deptData}
+            />
+            <Select
+                placeholder="人员"
+                value={userId || undefined}
+                style={{ width: "50%" }}
+                onChange={handleChange}
+                disabled={!deptId}
+            >
+                {userData?.records?.map((item: any) => <Select.Option
+                    value={item.userId}
+                    key={item.id}
+                >
+                    {item.name}
+                </Select.Option>)}
+            </Select>
+        </Spin>
     </div>
 }

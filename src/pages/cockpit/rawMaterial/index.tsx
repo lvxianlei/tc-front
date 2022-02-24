@@ -117,10 +117,10 @@ export default function ViewRawMaterial(): React.ReactNode {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'materialCategoryId',
+                    name: 'materialCategoryName',
                     label: '原材料类型',
                     children: <Select style={{ width: "150px" }} placeholder="请选择原材料类型">
-                        {materialCategory?.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                        {materialCategory?.map((item: any, index: number) => <Select.Option value={item.label} key={index}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {

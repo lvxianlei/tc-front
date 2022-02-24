@@ -72,6 +72,7 @@ const Warehouse = () => {
             current,
             size,
         })
+        history.go(0)
     }
 
     const cancelModal = () => {

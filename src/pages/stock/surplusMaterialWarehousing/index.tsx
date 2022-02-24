@@ -1,30 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
-import { Link, useHistory, useRouteMatch, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Space, Button, Modal, Input, DatePicker, Select, message, Table } from 'antd';
+import { useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import ConfirmableButton from '../../../components/ConfirmableButton';
-import { Page } from '../../common';
-import { IClient } from '../../IClient';
+import { IntgSelect, Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
-import ApplicationContext from "../../../configuration/ApplicationContext";
-import AuthUtil from '../../../utils/AuthUtil';
-import ExportList from '../../../components/export/list';
 import '../StockPublicStyle.less';
 import './modal.less';
 const { RangePicker } = DatePicker;
 
 export default function RawMaterialStock(): React.ReactNode {
-    const history = useHistory()
-    const [current, setCurrent] = useState(1);
-    const [total, setTotal] = useState(100);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [dateValue, setDateValue] = useState<any>([]);//时间
-    const [dateString, setDateString] = useState<any>([]);//时间字符串格式
-    const [keyword, setKeyword] = useState<any>('');//关键字搜索
-    const [status, setStatus] = useState(`${(history.location.state as any)?.receiveStatus || ""}`)//状态
-    const [departmentId, setDepartmentId] = useState('');//部门
-    const [personnelId, setPersonnelId] = useState('');//人员
-    const [Listdata, setListdata] = useState<any[]>([]);//数据列表
+    const [filterValue, setFilterValue] = useState()
     const [supplierListdata, setSupplierListdata] = useState<any[]>([{}]);//详情-供应商信息列表数据
     const [WarehousingListdata, setWarehousingListdata] = useState<any[]>([{}]);//详情-入库信息列表数据
     const [isEnterLibraryModal, setIsEnterLibraryModal] = useState<boolean>(false);//入库弹框显示
@@ -40,11 +25,21 @@ export default function RawMaterialStock(): React.ReactNode {
     const [Warehouse, setWarehouse] = useState<any[]>([]);//入库仓库数据
     const [ReservoirArea, setReservoirArea] = useState<any[]>([]);//入库库区数据
     const [Location, setLocation] = useState<any[]>([]);//入库库位数据
-    const [departmentList, setDepartmentList] = useState<any[]>([]);//部门数据
-    const [userList, setuserList] = useState<any[]>([]);//申请人数据数据
-    const match = useRouteMatch()
-    const location = useLocation<{ state: {} }>();
-    const [isExport, setIsExportStoreList] = useState(false)
+
+    const onFilterSubmit = (value: any) => {
+        if (value.updateTime) {
+            const formatDate = value.updateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateTimeStart = formatDate[0] + ' 00:00:00';
+            value.updateTimeEnd = formatDate[1] + ' 23:59:59';
+        }
+        if (value.batcherId) {
+            value.batcherDeptId = value.batcherId.first
+            value.batcherId = value.batcherId.second
+        }
+        setFilterValue(value)
+        return value
+    }
+
     const columns = [
         {
             title: '序号',
@@ -65,10 +60,10 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         }, {
             title: '状态',
-            dataIndex: 'receiveStatus',
+            dataIndex: 'excessStockStatus',
             width: 120,
             render: (text: any, item: any, index: any) => {
-                return <span>{item.receiveStatus == 0 ? '待完成' : '已完成'}</span>
+                return <span>{item.excessStockStatus == 0 ? '待完成' : '已完成'}</span>
             }
         }, {
             title: '最新状态变更时间',
@@ -108,7 +103,7 @@ export default function RawMaterialStock(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     {
-                        record.receiveStatus == 0 ?
+                        record.excessStockStatus == 0 ?
                             <Button type='link' onClick={() => { ReceivingBtn(record) }}>入库</Button> :
                             <Button type='link' onClick={() => { getDetail(record.id) }}>详情</Button>
                     }
@@ -196,22 +191,7 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         }
     ];//详情-入库表头
-    //获取列表数据
-    const loadData = async () => {
-        console.log('请求数据')
-        const data: any = await RequestUtil.get(`/tower-storage/receiveStock/excess`, {
-            current,
-            pageSize,
-            selectName: keyword,
-            updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
-            updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
-            departmentId: departmentId,
-            stockUser: personnelId,
-            receiveStatus: status
-        });
-        setListdata(data.records);
-        setTotal(data.total);
-    }
+
     // 获取详情数据
     const getDetail = async (id: any) => {
         const data: any = await RequestUtil.get(`/tower-storage/receiveStock/excess/${id}`);
@@ -257,7 +237,6 @@ export default function RawMaterialStock(): React.ReactNode {
         });
         if (data) {
             onReceivingCancel()
-            loadData()
         }
     }
     // 获取仓库/库区/库位
@@ -280,17 +259,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 break;
         }
     }
-    // 重置
-    const reset = () => {
-        setCurrent(1);
-        setPageSize(10);
-        setStatus('');
-        setDateValue([]);
-        setDateString([]);
-        setKeyword('');
-        setDepartmentId('');
-        setPersonnelId('');
-    }
+
     // 收货弹框取消
     const onReceivingCancel = () => {
         setIsEnterLibraryModal(false);
@@ -307,182 +276,42 @@ export default function RawMaterialStock(): React.ReactNode {
     const onDetailCancel = () => {
         setIsDetailModal(false)
     }
-    //获取部门数据
-    const getDepartment = async () => {
-        const data: any = await RequestUtil.get(`/sinzetech-user/department`, {
-            tenantId: AuthUtil.getTenantId(),
-        });
-        setDepartmentList(data)
-    }
-    //获取部门部门中的人
-    const getUser = async (department: any) => {
-        const data: any = await RequestUtil.get(`/sinzetech-user/user`, {
-            departmentId: department,
-        });
-        setuserList(data.records)
-    }
-    // 入库部门选择
-    const departmentChange = async (val: any) => {
-        console.log(val, 'valvalvalvalval')
-        await setDepartmentId(val);
-        await setPersonnelId('');
-        await setuserList([]);
-        if (val) {
-            await getUser(val);
-        }
-    }
 
-    //进入页面刷新
-    useEffect(() => {
-        getDepartment()
-    }, [])
-    //进入页面刷新
-    useEffect(() => {
-        loadData()
-    }, [current, pageSize, dateString, departmentId, personnelId, status])
     return (
-        <div id="RawMaterialStock">
-            <div className="Search_public_Stock">
-                <div className="search_item">
-                    <span className="tip">最新状态变更时间：</span>
-                    <div className='selectOrInput'>
-                        <RangePicker
-                            value={dateValue}
-                            onChange={(date, dateString) => {
-                                console.log(date, dateString)
-                                setDateValue(date)
-                                setDateString(dateString)
-                            }}
-                        ></RangePicker>
-                    </div>
-                </div>
-                <div className="search_item">
-                    <span className="tip">状态：</span>
-                    <div className='selectOrInput'>
-                        <Select
-                            className="select"
-                            style={{ width: "100px" }}
-                            value={status ? status : ''}
-                            onChange={(val) => { setStatus(val) }}
-                        >
-                            <Select.Option key={'dd'} value=''>全部</Select.Option>
-                            <Select.Option
-                                value="0"
-                            >
-                                待完成
-                            </Select.Option>
-                            <Select.Option
-                                value="1"
-                            >
-                                已完成
-                            </Select.Option>
+        <>
+            <Page
+                path="/tower-storage/receiveStock/excess"
+                searchFormItems={[
+                    {
+                        name: "updateTime",
+                        label: "最新状态变更时间",
+                        children: <RangePicker style={{ width: 220 }} />
+                    },
+                    {
+                        name: "excessStockStatus",
+                        label: "状态",
+                        children: <Select style={{ width: 150 }} defaultValue="">
+                            <Select.Option value="">全部</Select.Option>
+                            <Select.Option value={0}>待完成</Select.Option>
+                            <Select.Option value={1}>已完成</Select.Option>
                         </Select>
-                    </div>
-                </div>
-                <div className="search_item">
-                    <span className="tip">入库人：</span>
-                    <div className='selectOrInput'>
-                        <Select
-                            className="select"
-                            style={{ width: "100px" }}
-                            value={departmentId ? departmentId : ''}
-                            onChange={(val) => { departmentChange(val) }}
-                        >
-                            <Select.Option key={'dd'} value=''>全部</Select.Option>
-                            {
-                                departmentList.map((item, index) => {
-                                    return (
-                                        <Select.Option key={index} value={item.id}>{item.name}</Select.Option>
-                                    )
-                                })
-                            }
-                        </Select>-
-                        <Select
-                            className="select"
-                            style={{ width: "100px" }}
-                            value={personnelId ? personnelId : ''}
-                            onChange={(val) => { setPersonnelId(val) }}
-                        >
-                            <Select.Option key={'ds'} value=''>全部</Select.Option>
-                            {
-                                userList.map((item, index) => {
-                                    return (
-                                        <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
-                                    )
-                                })
-                            }
-                        </Select>
-                    </div>
-                </div>
-                <div className="search_item">
-                    <span className="tip">关键字：</span>
-                    <div className='selectOrInput'>
-                        <Input
-                            placeholder="生产批次/余料入库编号"
-                            value={keyword}
-                            onChange={(e) => {
-                                setKeyword(e.target.value)
-                            }}
-                            onPressEnter={() => {
-                                loadData()
-                            }}
-                        >
-                        </Input>
-                    </div>
-                </div>
-                <div className="search_item">
-                    <div className='search_Reset'>
-                        <Button
-                            className="btn"
-                            type="primary"
-                            onClick={() => { loadData() }}
-                        >查询</Button>
-                        <Button
-                            className="btn"
-                            type="primary"
-                            ghost
-                            onClick={reset}
-                        >重置</Button>
-                    </div>
-                </div>
-            </div>
-            <div className="func_public_Stock">
-                <Button
-                    type="primary"
-                    className='func_btn'
-                    onClick={()=>{setIsExportStoreList(true)}}
-                >导出</Button>
-            </div>
-            <div className="page_public_Stock">
-                <Table
-                    columns={columns}
-                    dataSource={Listdata}
-                    size='small'
-                    rowClassName={(item, index) => {
-                        return index % 2 ? 'aaa' : ''
-                    }}
-                    scroll={
-                        {
-                            y: 400
-                        }
+                    },
+                    {
+                        name: "batcherId",
+                        label: "入库人",
+                        children: <IntgSelect width={400} />
+                    },
+                    {
+                        name: "selectName",
+                        label: "模糊查询",
+                        children: <Input style={{ width: 220 }} placeholder="生产批次/余料入库编号" />
                     }
-                    pagination={{
-                        size: 'small',
-                        defaultPageSize: 5,
-                        showQuickJumper: true,
-                        current: current,
-                        total: total,
-                        pageSize: pageSize,
-                        pageSizeOptions: ['10', '20', '50', '100'],
-                        showSizeChanger: true,
-                        onChange: (page, pageSize) => {
-                            console.log(page, pageSize)
-                            setCurrent(page);
-                            setPageSize(Number(pageSize));
-                        }
-                    }}
-                />
-            </div>
+                ]}
+                filterValue={filterValue}
+                onFilterSubmit={onFilterSubmit}
+                columns={columns}
+                exportPath="/tower-storage/receiveStock/excess"
+            />
             {/* 入库弹框 */}
             <Modal
                 className="enter_library_modal"
@@ -660,29 +489,6 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
             </Modal>
-            {isExport?<ExportList
-                history={history}
-                location={location}
-                match={match}
-                columnsKey={() => {
-                    let keys = [...columns]
-                    keys.pop()
-                    return keys
-                }}
-                current={current}
-                size={pageSize}
-                total={total}
-                url={`/tower-storage/receiveStock/excess`}
-                serchObj={{
-                    selectName: keyword,
-                    updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
-                    updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
-                    departmentId: departmentId,
-                    stockUser: personnelId,
-                    receiveStatus: status
-                }}
-                closeExportList={() => { setIsExportStoreList(false) }}
-            />:null}
-        </div>
+        </>
     )
 }

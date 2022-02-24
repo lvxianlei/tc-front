@@ -17,12 +17,11 @@ export default function SeeGuarantee(): JSX.Element {
     const params = useParams<{ projectId: string, id: string }>();
 
     const processingNumber = (arg: any, num: number) => {
-        let v = new RegExp(`^(\\-)*(\\d+)\.(\\d{${num}}).*$`);
         arg = arg.replace(/[^\d.]/g, "");
         arg = arg.replace(/^\./g, "");
         arg = arg.replace(/\.{2,}/g, ".");
         arg = arg.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-        arg = arg.replace(v, '$1$2.$3');
+        arg = arg.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3');
         return arg
     }
 
