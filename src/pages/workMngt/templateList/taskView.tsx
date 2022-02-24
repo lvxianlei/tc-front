@@ -306,7 +306,7 @@ export default function TaskView(props: any){
     const handleModalCancel = () => {setVisible(false); form.setFieldsValue({})};
     const handlePrintModalCancel = () => {setPrintVisible(false); formRef.setFieldsValue({})};
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
-        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        const userData: any= await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         switch (title) {
             case "materialLeaderDepartment":
                 form.setFieldsValue({materialLeader:''});
@@ -405,7 +405,7 @@ export default function TaskView(props: any){
             </Modal>
             <Button type='link' onClick={async ()=>{
                 setVisible(true)
-                const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+                const departmentData: any = await RequestUtil.get(`/tower-system/department`);
                 setDepartment(departmentData);
                 const sampleData: any = await RequestUtil.get(`/tower-science/loftingTemplate/${props?.record?.id}`);
                 setSpecialData(sampleData);
