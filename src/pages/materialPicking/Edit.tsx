@@ -24,6 +24,7 @@ interface MaterialData {
     applyQuantity: number
     materialShortageQuantity: number
     onlyId: string
+    plannedSurplusLength: string
     ids: string[]
 }
 
@@ -82,6 +83,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 pickingUnitId: baseData.pickingUnit?.id,
                 workPlanNumber: baseData.workPlanNumber?.value,
                 workPlanNumberId: baseData.workPlanNumber?.id,
+                productNumber: baseData.workPlanNumber?.records[0].productNumbers,
                 pickingUserName: baseData.pickingUserName?.value,
                 pickingUserId: baseData.pickingUserName?.id,
                 pickingWareHouse: baseData.pickingWareHouse?.value,
@@ -106,7 +108,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             baseForm.setFieldsValue({
                 projectName: workPlanNumberData.orderProjectName,
                 salePlanNumber: workPlanNumberData.planNumber,
-                productCategoryName: workPlanNumberData.productCategoryName,
+                productCategoryName: workPlanNumberData.productCategoryName
             })
             setChooseMaterialParmas({
                 planNumber: workPlanNumberData.planNumber,
@@ -162,6 +164,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     materialTexture: mItem.materialTexture,
                     materialStandard: mItem.materialStandard,
                     materialShortageQuantity: mItem.materialShortageQuantity,
+                    plannedSurplusLength: mItem.plannedSurplusLength,
                     spec: mItem.spec,
                     length: mItem.length,
                     weight: mItem.weight,
