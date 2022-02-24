@@ -37,6 +37,30 @@ export default function StaffNew(): React.ReactNode {
     const [roleList, setRoleList] = useState<IRole[]>([]);
     const [jobsList, setJobsList] = useState<IJobs[]>([]);
 
+    const { loading } = useRequest(() => new Promise(async (resole, reject) => {
+        const deptData: IMetaDept[] = await RequestUtil.get(`/tower-system/department`);
+        setDepartData(deptData);
+        const roles: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-system/role/tree');
+        setRoleList(roles);
+        const stations: IResponseData = await RequestUtil.get<IResponseData>('/tower-system/station?size=100');
+        setJobsList(stations.records || []);
+        if (location.state.type === 'edit') {
+            let data: IStaff[] = location.state.data;
+            data = data.map((items: IStaff) => {
+                return {
+                    ...items,
+                    stationList: items.station?.split(','),
+                    roleIdList: items.roleId?.split(','),
+                }
+            })
+            setDataList(data);
+            setOldDataList(data);
+        } else {
+            setDataList([]);
+        }
+        resole(true)
+    }), {})
+
     const tableColumns = [
         {
             title: <span><span style={{ color: 'red' }}>*</span>姓名</span>,
@@ -98,9 +122,9 @@ export default function StaffNew(): React.ReactNode {
                 }]}>
                     <TreeSelect
                         style={{ width: '100%' }}
-                        dropdownClassName={styles.deptSelect}
+                        // dropdownClassName={styles.deptSelect}
                         treeData={wrapRole2DataNode(departData)}
-                        placeholder="请选择"
+                        placeholder="请选择部门"
                     />
                 </Form.Item>
             )
@@ -117,11 +141,11 @@ export default function StaffNew(): React.ReactNode {
                             return {
                                 ...item,
                                 id: dataList[ind].id,
+                                userId: dataList[ind].userId
                             }
                         })
                         data[index] = {
                             ...data[index],
-                            id: dataList[index].id,
                             status: e.target.checked ? 1 : 0
                         }
                         setDataList([...data]);
@@ -144,11 +168,14 @@ export default function StaffNew(): React.ReactNode {
             )
         },
         {
-            title: '角色',
+            title: <span><span style={{ color: 'red' }}>*</span>角色</span>,
             dataIndex: 'roleIdList',
             width: 250,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["list", index, "roleIdList"]} key={index} initialValue={_}>
+                <Form.Item name={["list", index, "roleIdList"]} key={index} initialValue={_} rules={[{
+                    "required": true,
+                    "message": "请选择角色"
+                }]}>
                     <TreeSelect showSearch={true} placeholder="请选择所属角色" multiple={true}
                         className={layoutStyles.width100} treeData={wrapRole1DataNode(roleList)} />
                 </Form.Item>
@@ -256,19 +283,26 @@ export default function StaffNew(): React.ReactNode {
         });
         return roles;
     }
-
-    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-        roles && roles.forEach((role: any & SelectDataNode): void => {
-            role.value = role.id;
-            role.title = role.name;
-            role.type === 2 || role.parentId === '0' ? role.disabled = true : role.disabled = false;
-            role.isLeaf = false;
-            if (role.children && role.children.length > 0) {
-                wrapRole2DataNode(role.children);
-            }
-        });
-        return roles;
+    const wrapRole2DataNode: (data: any) => any[] = (data: any[]) => {
+        return data.map((item: any) => ({
+            title: item.name,
+            value: item.id,
+            disabled: item.type === 2 || item.parentId === '0',
+            children: item.children ? wrapRole2DataNode(item.children) : []
+        }))
     }
+    // const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+    //     roles && roles.forEach((role: any & SelectDataNode): void => {
+    //         role.value = role.id;
+    //         role.title = role.name;
+    //         role.type === 2 || role.parentId === '0' ? role.disabled = true : role.disabled = false;
+    //         role.isLeaf = false;
+    //         if (role.children && role.children.length > 0) {
+    //             wrapRole2DataNode(role.children);
+    //         }
+    //     });
+    //     return roles;
+    // }
 
     const addRow = () => {
         const dataListValues = form.getFieldsValue(true).list || [];
@@ -304,6 +338,7 @@ export default function StaffNew(): React.ReactNode {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true).list;
                 if (value.length > 0) {
+                    console.log(dataList, "dataList")
                     value = value.map((items: IStaff, index: number) => {
                         return {
                             ...items,
@@ -329,29 +364,7 @@ export default function StaffNew(): React.ReactNode {
         }
     }
 
-    const { loading } = useRequest(() => new Promise(async (resole, reject) => {
-        const deptData: IMetaDept[] = await RequestUtil.get(`/tower-system/department`);
-        setDepartData(deptData);
-        const roles: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-system/role/tree');
-        setRoleList(roles);
-        const stations: IResponseData = await RequestUtil.get<IResponseData>('/tower-system/station?size=100');
-        setJobsList(stations.records || []);
-        if (location.state.type === 'edit') {
-            let data: IStaff[] = location.state.data;
-            data = data.map((items: IStaff) => {
-                return {
-                    ...items,
-                    stationList: items.station?.split(','),
-                    roleIdList: items.roleId?.split(','),
-                }
-            })
-            setDataList(data);
-            setOldDataList(data);
-        } else {
-            setDataList([]);
-        }
-        resole(true)
-    }), {})
+
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>

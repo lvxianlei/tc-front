@@ -35,6 +35,7 @@ export interface IStaff {
     readonly stationName?: string;
     readonly roleIdList?: string[];
     readonly stationList?: string[];
+    readonly status?: 0 | 1;
 }
 
 export default function StaffMngt(): React.ReactNode {
@@ -55,9 +56,9 @@ export default function StaffMngt(): React.ReactNode {
 
     const columns = [
         {
-            title: '姓名',
+            title: '账号',
             width: 100,
-            dataIndex: 'name'
+            dataIndex: 'account'
         },
         {
             title: '手机号',
@@ -65,50 +66,52 @@ export default function StaffMngt(): React.ReactNode {
             dataIndex: 'phone'
         },
         {
-            title: '部门',
-            width: 150,
-            dataIndex: 'deptName'
-        },
-        {
-            title: '工号',
-            dataIndex: 'number',
-            width: 120
-        },
-        {
-            title: '员工类型',
-            width: 100,
-            dataIndex: 'categoryName'
-        },
-        {
-            title: '岗位',
-            width: 150,
-            dataIndex: 'stationName'
-        },
-        {
-            title: '邮箱',
-            width: 150,
-            dataIndex: 'email'
-        },
-        {
-            title: '账号',
-            width: 100,
-            dataIndex: 'account'
-        },
-        {
             title: '角色',
             width: 150,
             dataIndex: 'roleName'
         },
         {
+            title: '姓名',
+            width: 100,
+            dataIndex: 'name'
+        },
+
+        {
+            title: '部门',
+            width: 150,
+            dataIndex: 'deptName'
+        },
+        // {
+        //     title: '工号',
+        //     dataIndex: 'number',
+        //     width: 120
+        // },
+        // {
+        //     title: '员工类型',
+        //     width: 100,
+        //     dataIndex: 'categoryName'
+        // },
+        // {
+        //     title: '岗位',
+        //     width: 150,
+        //     dataIndex: 'stationName'
+        // },
+        // {
+        //     title: '邮箱',
+        //     width: 150,
+        //     dataIndex: 'email'
+        // },
+
+        {
             title: "状态",
             width: 50,
             dataIndex: 'statusName'
         },
-        {
-            title: '备注',
-            width: 200,
-            dataIndex: 'description'
-        },
+        // {
+        //     title: '备注',
+        //     width: 200,
+        //     dataIndex: 'description'
+        // },
         {
             title: '操作',
             dataIndex: 'operation',
