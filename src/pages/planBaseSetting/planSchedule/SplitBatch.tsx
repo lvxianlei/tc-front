@@ -71,7 +71,7 @@ export default function SampleDraw(): React.ReactNode {
         },
         {
             key: 'planDeliveryTime',
-            title: '客户交货期',
+            title: '计划交货期',
             width: 200,
             dataIndex: 'planDeliveryTime'
         },
