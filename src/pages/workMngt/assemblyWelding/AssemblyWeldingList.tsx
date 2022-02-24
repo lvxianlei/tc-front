@@ -24,7 +24,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
             dataIndex: 'index',
             width: 50,
             fixed: "left" as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'taskNum',
@@ -36,7 +36,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
             key: 'priorityName',
             title: '优先级',
             width: 150,
-            dataIndex: 'priorityName'       
+            dataIndex: 'priorityName'
         },
         {
             key: 'planNumber',
@@ -99,77 +99,77 @@ export default function AssemblyWeldingList(): React.ReactNode {
             fixed: 'right' as FixedType,
             width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Link to={ `/workMngt/assemblyWeldingList/assemblyWeldingInformation/${ record.id }` }>组焊信息</Link>
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                    <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingInformation/${record.id}`}>组焊信息</Link>
                     {
-                        record.weldingLeader === userId ? 
-                        <Link to={ { pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${ record.id }/${ record.productCategoryId }`, state: { status: record.status } } }>组焊清单</Link> 
-                        : <Button type="link" disabled>组焊清单</Button>
-                    } 
-                    <Button type='link' onClick={async () => { 
+                        record.weldingLeader === userId ?
+                            <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}`, state: { status: record.status } }}>组焊清单</Link>
+                            : <Button type="link" disabled>组焊清单</Button>
+                    }
+                    <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
-                        setAssignVisible(true); 
-                    }} disabled={ record.status !== 2 }>指派</Button>
+                        setAssignVisible(true);
+                    }} disabled={record.status !== 2}>指派</Button>
                 </Space>
             )
         }
     ]
 
-    const [ refresh, setRefresh ] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const location = useLocation<{ state?: number, userId?: string, weldingOperator?: string }>();
     const userId = AuthUtil.getUserId();
-    const [ filterValue, setFilterValue ] = useState<Record<string, any>>();
+    const [filterValue, setFilterValue] = useState<Record<string, any>>();
     const { loading } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         setDepartment(departmentData);
     }), {})
-    const [user, setUser] = useState<any[]|undefined>([]);
-    const [department, setDepartment] = useState<any|undefined>([]);
+    const [user, setUser] = useState<any[] | undefined>([]);
+    const [department, setDepartment] = useState<any | undefined>([]);
     const [assignVisible, setAssignVisible] = useState<boolean>(false);
     const [drawTaskId, setDrawTaskId] = useState<string>('');
-    const [ checkUser, setCheckUser ] = useState([]);
+    const [checkUser, setCheckUser] = useState([]);
     const [form] = Form.useForm();
-    
+
     const handleAssignModalOk = async () => {
         try {
             const submitData = await form.validateFields();
             submitData.weldingId = drawTaskId;
-            await RequestUtil.post('/tower-science/welding/assign', submitData).then(()=>{
+            await RequestUtil.post('/tower-science/welding/assign', submitData).then(() => {
                 message.success('指派成功！')
-            }).then(()=>{
+            }).then(() => {
                 setAssignVisible(false);
                 form.resetFields();
-            }).then(()=>{
+            }).then(() => {
                 setRefresh(!refresh);
             })
         } catch (error) {
             console.log(error)
         }
     }
-    const handleAssignModalCancel = () => {setAssignVisible(false);form.resetFields();};
+    const handleAssignModalCancel = () => { setAssignVisible(false); form.resetFields(); };
     const formItemLayout = {
         labelCol: { span: 6 },
         wrapperCol: { span: 16 }
     };
-    const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
-        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
-        switch(title){
+    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
+        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
+        switch (title) {
             case "user":
                 form.setFieldsValue({ 'weldingOperator': '' })
                 return setUser(userData.records);
         }
     }
-    const renderTreeNodes = (data:any) =>
-    data.map((item:any) => {
-        if (item.children) {
-            return (
-            <TreeNode key={item.id} title={item.title} value={item.id}  className={styles.node}>
-                {renderTreeNodes(item.children)}
-            </TreeNode>
-            );
-        }
-        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
-    });
+    const renderTreeNodes = (data: any) =>
+        data.map((item: any) => {
+            if (item.children) {
+                return (
+                    <TreeNode key={item.id} title={item.name} value={item.id} className={styles.node}>
+                        {renderTreeNodes(item.children)}
+                    </TreeNode>
+                );
+            }
+            return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
+        });
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles.forEach((role: any & SelectDataNode): void => {
             role.value = role.id;
@@ -181,24 +181,24 @@ export default function AssemblyWeldingList(): React.ReactNode {
         return roles;
     }
     return <>
-        <Modal visible={ assignVisible } title="指派" okText="提交" onOk={ handleAssignModalOk } onCancel={ handleAssignModalCancel } width={ 800 }>
-            <Form form={ form } { ...formItemLayout }>
+        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel} width={800}>
+            <Form form={form} {...formItemLayout}>
                 <Row>
                     <Col span={12}>
-                        <Form.Item name="dept" label="部门" rules={[{required:true,message:"请选择部门"}]}>
+                        <Form.Item name="dept" label="部门" rules={[{ required: true, message: "请选择部门" }]}>
                             <TreeSelect
-                                onChange={(value:any)=>{onDepartmentChange(value,'user')}  }
+                                onChange={(value: any) => { onDepartmentChange(value, 'user') }}
                             >
-                                {renderTreeNodes(wrapRole2DataNode( department ))}
+                                {renderTreeNodes(wrapRole2DataNode(department))}
                             </TreeSelect>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item name="weldingOperator" label="人员" rules={[{required:true,message:"请选择人员"}]}>
-                            <Select style={{width:'100px'}}>
-                                { user && user.map((item:any)=>{
-                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                }) }
+                        <Form.Item name="weldingOperator" label="人员" rules={[{ required: true, message: "请选择人员" }]}>
+                            <Select style={{ width: '100px' }}>
+                                {user && user.map((item: any) => {
+                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                                })}
                             </Select>
                         </Form.Item>
                     </Col>
@@ -208,12 +208,12 @@ export default function AssemblyWeldingList(): React.ReactNode {
         <Page
             path="/tower-science/welding"
             exportPath={`/tower-science/welding`}
-            columns={ columns }
-            headTabs={ [] }
-            refresh={ refresh }
-            requestData={ { status: location.state?.state, boltLeader: location.state?.userId, boltOperator: location.state?.weldingOperator } }
+            columns={columns}
+            headTabs={[]}
+            refresh={refresh}
+            requestData={{ status: location.state?.state, boltLeader: location.state?.userId, boltOperator: location.state?.weldingOperator }}
             filterValue={filterValue}
-            searchFormItems={ [
+            searchFormItems={[
                 {
                     name: 'updateTime',
                     label: '最新状态变更时间',
@@ -222,7 +222,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 {
                     name: 'status',
                     label: '组焊清单状态',
-                    children: <Form.Item name="status" initialValue={ location.state?.state }>
+                    children: <Form.Item name="status" initialValue={location.state?.state}>
                         <Select style={{ width: '120px' }} placeholder="请选择">
                             <Select.Option value="" key="6">全部</Select.Option>
                             <Select.Option value={1} key="1">待开始</Select.Option>
@@ -238,21 +238,21 @@ export default function AssemblyWeldingList(): React.ReactNode {
                     children: <Row>
                         <Col>
                             <Form.Item name="dept">
-                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value:any)=>{
-                                    const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
-                                    setCheckUser(userData.records)  
+                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value: any) => {
+                                    const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
+                                    setCheckUser(userData.records)
                                 }}>
-                                    {renderTreeNodes(wrapRole2DataNode( department ))}
+                                    {renderTreeNodes(wrapRole2DataNode(department))}
                                 </TreeSelect>
                             </Form.Item>
                         </Col>
                         <Col>
                             <Form.Item name="personnel">
-                                <Select placeholder="请选择" style={{ width: "150px" }}>  
+                                <Select placeholder="请选择" style={{ width: "150px" }}>
                                     <Select.Option value="" key="6">全部</Select.Option>
-                                    { checkUser && checkUser.map((item: any) => {
-                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                                    }) }
+                                    {checkUser && checkUser.map((item: any) => {
+                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                                    })}
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -277,23 +277,23 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号/塔型"/>
+                    children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号/塔型" />
                 }
-            ] }
-            onFilterSubmit = { (values: Record<string, any>) => {
-                if(values.updateTime) {
+            ]}
+            onFilterSubmit={(values: Record<string, any>) => {
+                if (values.updateTime) {
                     const formatDate = values.updateTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                     values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
                 }
-                if(values.plannedTime) {
+                if (values.plannedTime) {
                     const formatDate = values.plannedTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';;
                     values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';;
                 }
                 setFilterValue(values);
                 return values;
-            } }
+            }}
         />
     </>
 }

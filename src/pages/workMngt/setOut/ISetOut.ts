@@ -152,3 +152,16 @@ export interface IProductSegmentList {
     readonly segmentId?: string;
 }
 
+export interface IRecord {
+    readonly id?: string;
+    readonly problemField?: string;
+    readonly originalData?: string;
+    readonly description?: string;
+    readonly newValue?: string;
+    readonly issueRecordList?: [];
+    readonly status?: number;
+    readonly dataIndex?: string;
+    readonly rowId?: string;
+    readonly currentValue?: string;
+    readonly problemFieldName?: string;
+}

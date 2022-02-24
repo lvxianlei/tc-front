@@ -31,7 +31,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
     }
 
     private async modalShow(): Promise<void> {
-        const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        const departmentData = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         this.setState({
             visible: true,
             departmentData: departmentData
@@ -85,7 +85,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
      * onDepartmentChange
      */
     public onDepartmentChange = async (value: Record<string, any>) => {
-        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         this.getForm()?.setFieldsValue({ 'assessUser': '' })
         this.setState({
             assessUserOptions: userData.records
@@ -106,11 +106,11 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
     public renderTreeNodes = (data: any) => data.map((item: any) => {
         if (item.children) {
             item.disabled = true;
-            return (<TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node} >
+            return (<TreeNode key={item.id} title={item.name} value={item.id} className={styles.node} >
                 {this.renderTreeNodes(item.children)}
             </TreeNode>);
         }
-        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+        return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
     });
 
     /**
@@ -144,7 +144,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                 children: (
                     <Select placeholder="请选择">
                         {this.state.assessUserOptions && this.state.assessUserOptions.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                         })}
                     </Select>
                 )

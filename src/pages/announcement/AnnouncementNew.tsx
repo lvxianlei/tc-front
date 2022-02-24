@@ -5,7 +5,7 @@ import { DetailTitle, DetailContent, Attachment, AttachmentRef } from '../common
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './AnnouncementMngt.module.less';
-import { IAnnouncement } from './AnnouncementMngt';
+import { IAnnouncement, IStaffList } from './AnnouncementMngt';
 import SelectUserTransfer from './SelectUserTransfer';
 import { IStaff } from '../dept/staff/StaffMngt';
 
@@ -14,7 +14,7 @@ export default function AnnouncementNew(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>()
     // const [attachInfo, setAttachInfo] = useState<FileProps[]>([]);
     const location = useLocation<{ type: string }>();
-    const [staffList, setStaffList] = useState<string[]>([]);
+    const [staffList, setStaffList] = useState<string[] | IStaffList[]>([]);
     const [detailData, setDetailData] = useState<IAnnouncement>({});
 
     const history = useHistory();
@@ -22,7 +22,7 @@ export default function AnnouncementNew(): React.ReactNode {
     const { loading } = useRequest<IAnnouncement>(() => new Promise(async (resole, reject) => {
         if (location.state.type === 'edit') {
             let data = await RequestUtil.get<IAnnouncement>(`/tower-system/notice/getNoticeById/${params.id}`);
-            setDetailData(data);
+            setDetailData({ ...data, userNames: data.staffList?.map((res: IStaffList) => { return res.userName }).join(',') });
             setStaffList(data.staffList || [])
             resole(data);
         } else {
@@ -105,10 +105,15 @@ export default function AnnouncementNew(): React.ReactNode {
                         form.setFieldsValue({ userNames: userNames, staffList: staffList });
                         setStaffList(staffList);
                         setDetailData({ ...detailData, userNames: userNames, staffList: staffList })
-                    }} />} disabled />
+                    }} staffData={detailData?.staffList?.map((res: IStaffList) => {
+                        return {
+                            name: res.userName,
+                            id: res.userId
+                        }
+                    })} />} disabled />
                 </Form.Item>
             </Form>
-            <Attachment ref={attachRef} dataSource={ detailData.attachInfoVos } edit/>
+            <Attachment ref={attachRef} dataSource={detailData.attachInfoVos} edit />
         </DetailContent>
     </>
 }

@@ -62,7 +62,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         return typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]
     }) || []
     const [select, setSelect] = useState<any[]>(initValue)
-    const [selectRows, setSelectRows] = useState<any[]>(initValue)
+    const [selectRows, setSelectRows] = useState<any[]>(value?.records || [])
     const [columns, setColumns] = useState<any[]>(data.columns)
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,
@@ -132,6 +132,22 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             onChange && onChange(changeSelectRows)
             setSelect(select.filter((item: any) => !changeRows.map((mItem: any) => typeof data.rowKey === "function" ? mItem[data.rowKey(mItem)] : mItem[data.rowKey || "id"]).includes(item)))
             setSelectRows(changeSelectRows)
+        }
+    }
+
+    const onSelectAll = (selected: any[], selectedAllRows: any[], changeRows: any[]) => {
+        let currentSelect = [...select]
+        let currentSelectRows = [...selectRows]
+        if (selected) {
+            currentSelect = currentSelect.concat(changeRows.map(item => item.id))
+            currentSelectRows = currentSelectRows.concat(changeRows)
+            onChange && onChange(currentSelectRows)
+            setSelect(currentSelect)
+            setSelectRows(currentSelectRows)
+        } else {
+            onChange && onChange(selectRows.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item.id)))
+            setSelect(select.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item)))
+            setSelectRows(selectRows.filter((item: any) => !changeRows.map((item: any) => item.id).includes(item.id)))
         }
     }
 
