@@ -15,6 +15,7 @@ export interface IPlanSchedule {
     readonly planDeliveryTime?: string;
     readonly planNumber?: string;
     readonly productCategory?: string;
+    readonly productCategoryId?: string;
     readonly productCategoryName?: string;
     readonly productNum?: string;
     readonly productType?: string;
@@ -22,6 +23,8 @@ export interface IPlanSchedule {
     readonly loftingStatus?: string;
     readonly voltageGradeName?: string;
     readonly weight?: string;
+    readonly planId?: string;
+    readonly issueDescription?: string;
 }
 
 export interface IUnit {

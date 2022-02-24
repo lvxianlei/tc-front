@@ -604,7 +604,7 @@
                                 "authority": "approvalm"
                             },
                             {
-                                "label": "技术下发",
+                                "label": "技术排产",
                                 "path": "/planSchedule/planScheduleMngt",
                                 "authority": "approvalm"
                             }
