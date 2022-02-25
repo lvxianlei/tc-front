@@ -54,9 +54,9 @@ export default function DistributedTech(): React.ReactNode {
             width: 120
         },
         {
-            key: 'deliveryTime',
+            key: 'customerDeliveryTime',
             title: '客户交货日期',
-            dataIndex: 'deliveryTime',
+            dataIndex: 'customerDeliveryTime',
             width: 120
         },
         {
@@ -85,7 +85,7 @@ export default function DistributedTech(): React.ReactNode {
             setVisible(false);
             setSelectedKeys([]);
             setSelectedRows([]);
-            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail`, [...params.ids.split(',')]);
+            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/plan`, [...params.ids.split(',')]);
             setDataSorce(data);
             form.resetFields();
         })

@@ -146,7 +146,7 @@ export default function DistributedTech(): React.ReactNode {
         const data = await modalForm.validateFields();
         let list: IPlanSchedule[] = []
         list = dataSource.map((item: IPlanSchedule) => {
-            if (selectedRows.findIndex((items: any) => items.planId === item.planId) !== -1) {
+            if (selectedRows.findIndex((items: any) => items.id === item.id) !== -1) {
                 return {
                     ...item,
                     issueDescription: data.issueDescription
@@ -157,7 +157,7 @@ export default function DistributedTech(): React.ReactNode {
         })
         await RequestUtil.post(`/tower-aps/productionPlan/batch/issue/remark`, list.map((res: IPlanSchedule, index: number) => {
             return {
-                id: res.planId,
+                id: res.id,
                 issueDescription: res.issueDescription,
                 sort: index
             }
