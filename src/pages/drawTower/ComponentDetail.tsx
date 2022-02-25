@@ -123,13 +123,13 @@ export default function ComponentDetail(): React.ReactNode {
     ]}>
         <p>
             <span>单段件号数：
-                <span style={{ color: '#FF8C00' }}>{params.data.split(',')[0]}</span>
+                <span style={{ color: '#FF8C00', paddingRight: '12px' }}>{params.data.split(',')[0]}</span>
             </span>
             <span>单段件数：
-                <span style={{ color: '#FF8C00' }}>{params.data.split(',')[1]}</span>
+                <span style={{ color: '#FF8C00', paddingRight: '12px'  }}>{params.data.split(',')[1]}</span>
             </span>
             <span>单段重量：
-                <span style={{ color: '#FF8C00' }}>{params.data.split(',')[2]}</span>
+                <span style={{ color: '#FF8C00', paddingRight: '12px'  }}>{params.data.split(',')[2]}</span>
             </span>
         </p>
         <CommonTable columns={tableColumns} dataSource={detailData} pagination={false} />
