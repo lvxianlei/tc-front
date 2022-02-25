@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select } from 'antd';
+import { Space, Input, DatePicker, Modal } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './DrawTower.module.less';
 import { Link } from 'react-router-dom';
 import DeliverablesListing from './DeliverablesListing';
-import { patternTypeOptions } from '../../configuration/DictionaryOptions';
+import WithSection from './WithSection';
 
 export default function DrawTowerMngt(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
+    const [visible,setVisible] = useState(false);
 
     const columns = [
         {
@@ -125,7 +126,19 @@ export default function DrawTowerMngt(): React.ReactNode {
         }
     ]
 
-    return <Page
+    return <>
+    <Modal
+                destroyOnClose
+                visible={visible}
+                width="40%"
+                title="技术下达"
+                onCancel={() => {
+                    setVisible(false);
+                    setRefresh(!refresh);
+                }}>
+                <WithSection dataSource={[]} />
+            </Modal>
+            <Page
         path="/tower-science/productCategory/draw/page"
         exportPath={`/tower-science/productCategory/draw/page`}
         columns={columns}
@@ -165,4 +178,5 @@ export default function DrawTowerMngt(): React.ReactNode {
             return values;
         }}
     />
+    </>
 }
