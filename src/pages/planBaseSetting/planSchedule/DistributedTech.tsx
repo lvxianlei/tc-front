@@ -37,7 +37,7 @@ export default function DistributedTech(): React.ReactNode {
     const { loading, data } = useRequest<IUnit[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: IUnit[] = await RequestUtil.get(`/tower-aps/productionUnit/list`);
-            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail`, [...params.ids.split(',')]);
+            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/issue`, [...params.ids.split(',')]);
             setDataSource(data.map((item: IPlanSchedule, index: number) => {
                 return {
                     ...item,
@@ -166,7 +166,7 @@ export default function DistributedTech(): React.ReactNode {
             setSelectedKeys([]);
             setSelectedRows([]);
             setVisible(false);
-            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail`, [...params.ids.split(',')]);
+            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/issue`, [...params.ids.split(',')]);
             setDataSource(data.map((item: IPlanSchedule, index: number) => {
                 return {
                     ...item,
