@@ -224,10 +224,10 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "electricWelding"]} initialValue={_} rules={[{
-                        pattern: /^[1-2\s]*$/,
-                        message: '仅可输入1/2',
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1}/>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
         },
@@ -241,8 +241,8 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item name={['data', index, "bend"]} initialValue={_} rules={[{
                     pattern: /^[1-2\s]*$/,
                     message: '仅可输入1/2',
-            }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1}/>
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
         },
@@ -256,7 +256,7 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item name={['data', index, "chamfer"]} initialValue={_} rules={[{
                     pattern: /^[1-2\s]*$/,
                     message: '仅可输入1/2',
-            }]}>
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -271,7 +271,7 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item name={['data', index, "shovelBack"]} initialValue={_} rules={[{
                     pattern: /^[1-2\s]*$/,
                     message: '仅可输入1/2',
-            }]}>
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -286,7 +286,7 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item name={['data', index, "rootClear"]} initialValue={_} rules={[{
                     pattern: /^[1-2\s]*$/,
                     message: '仅可输入1/2',
-            }]}>
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -301,7 +301,7 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item name={['data', index, "squash"]} initialValue={_} rules={[{
                     pattern: /^[1-2\s]*$/,
                     message: '仅可输入1/2',
-            }]}>
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -316,7 +316,7 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item name={['data', index, "openCloseAngle"]} initialValue={_} rules={[{
                     pattern: /^[1-2\s]*$/,
                     message: '仅可输入1/2',
-            }]}>
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -331,7 +331,7 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item name={['data', index, "perforate"]} initialValue={_} rules={[{
                     pattern: /^[1-2\s]*$/,
                     message: '仅可输入1/2',
-            }]}>
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -346,7 +346,7 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item name={['data', index, "groove"]} initialValue={_} rules={[{
                     pattern: /^[1-2\s]*$/,
                     message: '仅可输入1/2',
-            }]}>
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -361,7 +361,7 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item name={['data', index, "intersectingLine"]} initialValue={_} rules={[{
                     pattern: /^[1-2\s]*$/,
                     message: '仅可输入1/2',
-            }]}>
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -376,7 +376,7 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item name={['data', index, "slottedForm"]} initialValue={_} rules={[{
                     pattern: /^[1-2\s]*$/,
                     message: '仅可输入1/2',
-            }]}>
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -617,17 +617,24 @@ export default function Lofting(): React.ReactNode {
                         } else {
                             const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
                             let values = form.getFieldsValue(true).data;
-                            let changeValues = values.filter((item: any, index: number) => {
-                                return newRowChangeList.indexOf(index) !== -1;
-                            })
-                            if (changeValues && changeValues.length > 0) {
-                                RequestUtil.post(`/tower-science/productStructure/save`, [...changeValues]).then(res => {
+                            if (values) {
+                                let changeValues = values.filter((item: any, index: number) => {
+                                    return newRowChangeList.indexOf(index) !== -1;
+                                })
+                                if (changeValues && changeValues.length > 0) {
+                                    RequestUtil.post(`/tower-science/productStructure/save`, [...changeValues]).then(res => {
+                                        setColumns(columnsSetting);
+                                        setEditorLock('编辑');
+                                        setRowChangeList([]);
+                                        form.resetFields();
+                                        setRefresh(!refresh);
+                                    });
+                                } else {
                                     setColumns(columnsSetting);
                                     setEditorLock('编辑');
                                     setRowChangeList([]);
                                     form.resetFields();
-                                    setRefresh(!refresh);
-                                });
+                                }
                             } else {
                                 setColumns(columnsSetting);
                                 setEditorLock('编辑');

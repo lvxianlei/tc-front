@@ -107,7 +107,24 @@ export default function StaffNew(): React.ReactNode {
                         }
                     }
                 }]}>
-                    <Input maxLength={50} />
+                    <Input maxLength={50} onChange={(e) => {
+                        let data = form.getFieldsValue(true).list;
+                        data = data.map((item: IStaff, ind: number) => {
+                            return {
+                                ...item,
+                                id: dataList[ind].id,
+                                userId: dataList[ind].userId
+                            }
+                        })
+                        if (!data[index].account) {
+                            data[index] = {
+                                ...data[index],
+                                account: e.target.value
+                            }
+                            setDataList([...data]);
+                            form.setFieldsValue({ list: [...data] })
+                        }
+                    }} />
                 </Form.Item>
             )
         },
@@ -122,7 +139,6 @@ export default function StaffNew(): React.ReactNode {
                 }]}>
                     <TreeSelect
                         style={{ width: '100%' }}
-                        // dropdownClassName={styles.deptSelect}
                         treeData={wrapRole2DataNode(departData)}
                         placeholder="请选择部门"
                     />
@@ -150,7 +166,7 @@ export default function StaffNew(): React.ReactNode {
                         }
                         setDataList([...data]);
                         form.setFieldsValue({ list: [...data] })
-                    }}></Checkbox>
+                    }} />
                 </Form.Item>
             )
         },
@@ -338,7 +354,6 @@ export default function StaffNew(): React.ReactNode {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true).list;
                 if (value.length > 0) {
-                    console.log(dataList, "dataList")
                     value = value.map((items: IStaff, index: number) => {
                         return {
                             ...items,

@@ -448,7 +448,7 @@ export default function Lofting(): React.ReactNode {
                         </Upload>
                         <Button type="primary" ghost  onClick={()=>{
                             setAddVisible(true)
-                        }}>添加</Button>
+                        }} disabled={ editorLock==='锁定' }>添加</Button>
                         <Button type="primary" ghost  onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/drawApply`)}}>图纸塔型套用</Button>
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/setOutApply`)}}>放样塔型套用</Button>
                         <Popconfirm
@@ -475,7 +475,7 @@ export default function Lofting(): React.ReactNode {
                                 let values = formRef.getFieldsValue(true).data;
                                 console.log(values)
                                 
-                                if(values.length>0 && newRowChangeList.length>0) {
+                                if(values && values.length>0 && newRowChangeList.length>0) {
                                     let changeValues = values.filter((item: any, index: number) => {
                                         return newRowChangeList.indexOf(index) !== -1;
                                     }).map((item:any)=>{
@@ -504,7 +504,7 @@ export default function Lofting(): React.ReactNode {
                                 
                             }
                             console.log(formRef.getFieldsValue(true)) 
-                        } }>{ editorLock }</Button>
+                        } } disabled={formRef.getFieldsValue(true).data&&formRef.getFieldsValue(true).data?.length===0}>{ editorLock }</Button>
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
                         <Popconfirm
                             title="确认删除?"
@@ -525,9 +525,9 @@ export default function Lofting(): React.ReactNode {
                             }}
                             okText="提交"
                             cancelText="取消"
-                            disabled={ editorLock==='锁定' }
+                            disabled={ editorLock==='锁定'?true: !(selectedKeys.length>0)}
                         >
-                            <Button type="primary" ghost  disabled={ editorLock==='锁定' }>删除</Button>
+                            <Button type="primary" ghost  disabled={ editorLock==='锁定'?true: !(selectedKeys.length>0) }>删除</Button>
                         </Popconfirm>
                         <Button type="ghost" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回</Button>
                     </Space>

@@ -14,6 +14,7 @@ import { DataNode } from 'antd/lib/tree';
 import { IStaff } from '../dept/staff/StaffMngt';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { RowSelectionType } from 'antd/lib/table/interface';
+import { IStaffList } from './AnnouncementMngt';
 
 interface IResponseData {
     readonly records?: IStaff[];
@@ -27,6 +28,7 @@ export interface SelectUserTransferProps { }
 export interface ISelectUserTransferRouteProps extends RouteComponentProps<SelectUserTransferProps>, WithTranslation {
     readonly save: (selectRows: IStaff[]) => void;
     readonly type?: RowSelectionType;
+    readonly staffData?: IStaffList[];
 }
 
 export interface SelectUserTransferState {
@@ -36,7 +38,7 @@ export interface SelectUserTransferState {
     readonly treeData?: IStaff[];
     readonly selectedRows?: IStaff[];
     readonly selectedRowKeys?: React.Key[];
-    readonly rightData?: IStaff[];
+    readonly rightData?: any[];
     readonly detailData?: IResponseData;
     readonly treeSelectKeys?: React.Key[];
 }
@@ -58,7 +60,9 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
         const data: IDept[] = await RequestUtil.get(`/tower-system/department`);
         this.setState({
             visible: true,
-            deptData: data
+            deptData: data,
+            rightData: this.props.staffData,
+            selectedRowKeys: this.props.staffData?.map(res => { return res.id })
         })
     }
 
@@ -74,7 +78,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
     }
 
     protected getStaffList = async (selectedKeys: React.Key[], pagination?: TablePaginationConfig) => {
-        if(selectedKeys[0] && selectedKeys[0] !== '') {
+        if (selectedKeys[0] && selectedKeys[0] !== '') {
             const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/employee`, { dept: selectedKeys[0], ...pagination })
             this.setState({
                 treeData: data.records,
@@ -92,10 +96,10 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
         }
     }
 
-     /**
-     * @description Renders AbstractDetailComponent
-     * @returns render 
-     */
+    /**
+    * @description Renders AbstractDetailComponent
+    * @returns render 
+    */
     public render(): React.ReactNode {
         return <>
             <Button type="link" onClick={() => this.modalShow()}>选择员工</Button>
@@ -187,7 +191,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                                         rightData.splice(index, 1);
                                         this.setState({
                                             rightData: rightData,
-                                            selectedRowKeys: rightData.map(res =>{return res.id || ''}),
+                                            selectedRowKeys: rightData.map(res => { return res.id || '' }),
                                             selectedRows: rightData
                                         })
                                     }} danger>删除</Button>

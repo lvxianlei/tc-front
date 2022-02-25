@@ -11,7 +11,7 @@ export default function QuestionMngt(): React.ReactNode {
     const location = useLocation<{ state?: number, type?: string, userId?: string, createUserId?: string }>();
     const history = useHistory();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        const data:any = await RequestUtil.get(`/tower-system/employee?size=1000`);
         resole(data?.records);
     }), {})
     const user:any = data||[];
@@ -200,7 +200,7 @@ export default function QuestionMngt(): React.ReactNode {
                             <Select style={{width:'100px'}}>
                                 <Select.Option key={''} value={''}>全部</Select.Option>
                                 {user && user.map((item: any) => {
-                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                 })}
                             </Select>
                     </Form.Item>

@@ -5,8 +5,9 @@ import styles from './ShopFloorPlan.module.less';
 import RequestUtil from '../../utils/RequestUtil';
 import { ISchedulingList } from './IShopFloorPlan';
 import { detailColumns } from "./shopFloorPlan.json";
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
+import ExportList from '../../components/export/list';
 
 let prompt: any = false
 
@@ -15,6 +16,9 @@ export default function AutomaticScheduling(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const history = useHistory();
     const [loading, setLoading] = useState(true);
+    const [isExport, setIsExport] = useState(false);
+    const match = useRouteMatch();
+    const location = useLocation();
 
     const { run: checkRun, data: result, cancel } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
@@ -128,6 +132,7 @@ export default function AutomaticScheduling(): React.ReactNode {
                         history.goBack();
                     })
                 }}>加工任务下发</Button>
+                <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
             </Space>
             <CommonTable
                 dataSource={schedulingList || []}
@@ -144,5 +149,23 @@ export default function AutomaticScheduling(): React.ReactNode {
                     // }
                 ]} />
         </Spin>
+        {isExport ? <ExportList
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => {
+                let keys = [...detailColumns]
+                keys.pop()
+                return keys
+            }}
+            current={1}
+            size={10}
+            total={0}
+            url={`/tower-aps/aps`}
+            serchObj={{
+                workPlanIds: params.id
+            }}
+            closeExportList={() => setIsExport(false)}
+        /> : null}
     </DetailContent></div>
 }
