@@ -243,7 +243,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                     },
                     {
                         name: 'time',
-                        label: '客户交货日期',
+                        label: '计划交货日期',
                         children: <DatePicker.RangePicker />
                     },
                     {
