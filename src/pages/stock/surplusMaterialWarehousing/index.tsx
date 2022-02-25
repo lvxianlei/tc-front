@@ -9,6 +9,7 @@ import './modal.less';
 const { RangePicker } = DatePicker;
 
 export default function RawMaterialStock(): React.ReactNode {
+    const history = useHistory();
     const [filterValue, setFilterValue] = useState()
     const [supplierListdata, setSupplierListdata] = useState<any[]>([{}]);//详情-供应商信息列表数据
     const [WarehousingListdata, setWarehousingListdata] = useState<any[]>([{}]);//详情-入库信息列表数据
@@ -236,7 +237,8 @@ export default function RawMaterialStock(): React.ReactNode {
             locatorId: locatorId
         });
         if (data) {
-            onReceivingCancel()
+            onReceivingCancel();
+            history.go(0);
         }
     }
     // 获取仓库/库区/库位
