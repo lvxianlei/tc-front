@@ -263,7 +263,7 @@
             ]
         },
         {
-            "title": "重量（kg）合计",
+            "title": "重量（吨）合计",
             "dataIndex": "weight",
             "type": "number",
             "disabled": true,
