@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Modal } from 'antd';
+import { Space, Input, DatePicker, Modal, Button } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './DrawTower.module.less';
 import { Link } from 'react-router-dom';
 import DeliverablesListing from './DeliverablesListing';
-import WithSection from './WithSection';
+import WithSection, { IWithSection } from './WithSection';
+import RequestUtil from '../../utils/RequestUtil';
 
 export default function DrawTowerMngt(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const [visible,setVisible] = useState(false);
+    const [dataSource, setDataSource]= useState<IWithSection[]>([]);
 
     const columns = [
         {
@@ -118,9 +120,12 @@ export default function DrawTowerMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/drawTower/drawTowerMngt/towerInformation/${record.id}`}>塔型信息</Link>
-                    {/* <Link to={`/drawTower/drawTowerMngt/componentInformation/${record.id}/${record.structureCount === -1 ? 0 : record.structureCount}`}>塔型构件</Link> */}
                     <DeliverablesListing id={record.id} />
-                    <Link to={``}>配段信息</Link>
+                    <Button type="link" onClick={async () => {
+                        setVisible(true);
+                        const result: IWithSection[] = await RequestUtil.get(``);
+                        setDataSource(result);
+                    }}>配段信息</Button>
                 </Space>
             )
         }
@@ -131,12 +136,14 @@ export default function DrawTowerMngt(): React.ReactNode {
                 destroyOnClose
                 visible={visible}
                 width="40%"
-                title="技术下达"
+                title="配段"
+                footer={<Button onClick={() => {
+                    setVisible(false);
+                }} type='ghost'>关闭</Button>}
                 onCancel={() => {
                     setVisible(false);
-                    setRefresh(!refresh);
                 }}>
-                <WithSection dataSource={[]} />
+                <WithSection dataSource={dataSource} />
             </Modal>
             <Page
         path="/tower-science/productCategory/draw/page"
@@ -145,17 +152,6 @@ export default function DrawTowerMngt(): React.ReactNode {
         headTabs={[]}
         refresh={refresh}
         searchFormItems={[
-            // {
-            //     name: 'pattern',
-            //     label: '模式',
-            //     children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-            //         {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-            //             return <Select.Option key={index} value={id}>
-            //                 {name}
-            //             </Select.Option>
-            //         })}
-            //     </Select>
-            // },
             {
                 name: 'time',
                 label: '时间',

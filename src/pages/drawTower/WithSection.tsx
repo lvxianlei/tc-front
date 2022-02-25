@@ -4,13 +4,9 @@
  * @description 图纸塔型-配段信息
  */
 
- import React, { useImperativeHandle, forwardRef, useState } from "react";
- import { Spin, Form, Select, Divider } from 'antd';
- import { BaseInfo, CommonTable } from '../common';
- import RequestUtil from '../../utils/RequestUtil';
- import useRequest from '@ahooksjs/use-request';
- import { MenuOutlined } from '@ant-design/icons';
- import { arrayMove, SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
+ import React, { forwardRef } from "react";
+ import { CommonTable } from '../common';
+ import { FixedType } from 'rc-table/lib/interface';
  
  interface WithSectionProps {
     dataSource: IWithSection[]
@@ -19,47 +15,61 @@
  export interface IWithSection {
 
  }
- 
- const SortableItem = SortableElement((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableRowElement> & React.HTMLAttributes<HTMLTableRowElement>) => <tr {...props} />);
- const SortableCon = SortableContainer((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableSectionElement> & React.HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props} />);
- 
- export default forwardRef(function WithSection({ dataSource }: WithSectionProps, ref) {
 
+ export default forwardRef(function WithSection({ dataSource }: WithSectionProps) {
  
      const tableColumns = [
          {
-             title: '排序',
+            key: 'index',
+            title: '序号',
+            fixed: "left" as FixedType,
+            dataIndex: 'index',
+            width: 50,
+            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+         },
+         {
+            key: 'sort',
+             title: '杆塔号',
              dataIndex: 'sort',
-             width: 50,
-             className: 'drag-visible',
+             width: 150,
          },
          {
              key: 'planNumber',
-             title: '计划号',
+             title: '呼高',
              dataIndex: 'planNumber',
              width: 150
          },
          {
              key: 'productCategoryName',
-             title: '塔型',
+             title: '配段信息',
              dataIndex: 'productCategoryName',
              width: 150
          },
          {
              key: 'productNum',
-             title: '基数',
+             title: 'A',
              dataIndex: 'productNum',
-             width: 120
+             width: 80
          },
          {
              key: 'description',
-             title: '备注',
+             title: 'B',
              dataIndex: 'description',
-             width: 180
+             width: 80
+         },
+         {
+             key: 'description',
+             title: 'C',
+             dataIndex: 'description',
+             width: 80
+         },
+         {
+             key: 'description',
+             title: 'D',
+             dataIndex: 'description',
+             width: 80
          }
      ]
-
-
  
      return <CommonTable
              scroll={{ x: '700' }}
