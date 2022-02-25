@@ -58,9 +58,11 @@ interface PagenationProps {
 }
 
 export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
-    const initValue = value?.records?.map((item: any) => item.id) || []
+    const initValue = value?.records?.map((item: any) => {
+        return typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]
+    }) || []
     const [select, setSelect] = useState<any[]>(initValue)
-    const [selectRows, setSelectRows] = useState<any[]>(initValue)
+    const [selectRows, setSelectRows] = useState<any[]>(value?.records || [])
     const [columns, setColumns] = useState<any[]>(data.columns)
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,
@@ -72,7 +74,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         try {
             const params = await form.getFieldsValue()
             params.current = pagenation.current
-            params.pageSize = pagenation.pageSize
+            params.size = pagenation.pageSize
             Object.keys(params).forEach((item: any) => {
                 const columnItem = searchs.find((sItem: any) => sItem.dataIndex === item)
                 if (columnItem?.type === "date" && params[item]) {
@@ -93,26 +95,43 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [pagenation.current] })
+    }), { refreshDeps: [pagenation.current, pagenation.pageSize] })
 
     const onSelectChange = (record: any, selected: boolean, selectAllRows: any[]) => {
         const currentSelect = [...select]
         const currentSelectRows = [...selectRows]
+        const recordItemKey = typeof data.rowKey === "function" ? record[data.rowKey(record)] : record[data.rowKey || "id"]
         if (data.selectType && data.selectType === "checkbox") {
             if (selected) {
-                currentSelect.push(record.id)
+                currentSelect.push(recordItemKey)
                 currentSelectRows.push(record)
                 onChange && onChange(currentSelectRows)
                 setSelect(currentSelect)
                 setSelectRows(currentSelectRows)
             } else {
-                setSelect(currentSelect.filter(item => item !== record.id))
-                setSelectRows(currentSelectRows.filter((item: any) => item.id !== record.id))
-                onChange && onChange(currentSelectRows.filter((item: any) => item.id !== record.id))
+                setSelect(currentSelect.filter(item => item !== recordItemKey))
+                setSelectRows(currentSelectRows.filter((item: any) => item.id !== recordItemKey))
+                onChange && onChange(currentSelectRows.filter((item: any) => item.id !== recordItemKey))
             }
         } else {
             onChange && onChange(selectAllRows)
-            setSelect([record.id])
+            setSelect([recordItemKey])
+        }
+    }
+    const onSelectAll = (selected: any[], _: any, changeRows: any[]) => {
+        let currentSelect = [...select]
+        let currentSelectRows = [...selectRows]
+        const changeSelectRows = selectRows.filter((item: any) => !changeRows.map((mItem: any) => typeof data.rowKey === "function" ? mItem[data.rowKey(mItem)] : mItem[data.rowKey || "id"]).includes(typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]))
+        if (selected) {
+            currentSelect = currentSelect.concat(changeRows.map(item => typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]))
+            currentSelectRows = currentSelectRows.concat(changeRows)
+            onChange && onChange(currentSelectRows)
+            setSelect(currentSelect)
+            setSelectRows(currentSelectRows)
+        } else {
+            onChange && onChange(changeSelectRows)
+            setSelect(select.filter((item: any) => !changeRows.map((mItem: any) => typeof data.rowKey === "function" ? mItem[data.rowKey(mItem)] : mItem[data.rowKey || "id"]).includes(item)))
+            setSelectRows(changeSelectRows)
         }
     }
 
@@ -146,10 +165,12 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         </Form>}
         <CommonTable
             columns={columns}
+            scroll={{ y: 400 }}
             rowSelection={{
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
                 onSelect: onSelectChange,
+                onSelectAll,
                 getCheckboxProps: data?.getCheckboxProps
             }}
             rowKey={data.rowKey || ((record: any) => record.id)}
