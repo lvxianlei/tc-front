@@ -31,7 +31,7 @@ export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps
                     // allotData?.loftingProductStructureVOS?.filter(item => { return res.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum = Number(items?.basicsPartNum) });
                     return {
                         ...res,
-                        basicsPartNum: res.basicsPartNum,
+                        basicsPartNum: res.basicsPartNum || '0',
                         BasicsPartTotalNum: res.specialBasicsPartNum
                     }
                 })
@@ -81,17 +81,19 @@ export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps
     })
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
-            const baseData = await form.validateFields()
-            await saveRun({
-                productId: id,
-                productCategory: data?.productCategory,
-                productHeight: data?.productHeight,
-                productCategoryName: data?.productCategoryName,
-                productNumber: data?.productNumber,
-                segmentInformation: data?.segmentInformation,
-                productStructureSaveDTOList: form.getFieldsValue(true).loftingProductStructure
+            form.validateFields().then(async res => {
+
+                await saveRun({
+                    productId: id,
+                    productCategory: data?.productCategory,
+                    productHeight: data?.productHeight,
+                    productCategoryName: data?.productCategoryName,
+                    productNumber: data?.productNumber,
+                    segmentInformation: data?.segmentInformation,
+                    productStructureSaveDTOList: form.getFieldsValue(true).loftingProductStructure
+                })
+                resolve(true);
             })
-            resolve(true);
         } catch (error) {
             reject(false)
         }
@@ -128,9 +130,9 @@ export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps
             dataIndex: 'basicsPartNum',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['loftingProductStructure', index, 'basicsPartNum']} rules={[{
-                    "required": true,
+                    required: true,
                     validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                        if (value !== '') {
+                        if (value !== null && value !== undefined && value !== '') {
                             const data = form.getFieldsValue(true).loftingProductStructure;
                             let BasicsPartTotalNum = 0;
                             data?.filter((item: ILoftingProductStructureVOS) => { return record.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum += Number(items?.basicsPartNum) });
@@ -145,7 +147,9 @@ export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps
                     }
                 }
                 ]}>
-                    <InputNumber min={0} max={record.BasicsPartTotalNum} disabled={data?.specialStatus === 2} size="small" />
+                    <InputNumber min={0} max={record.BasicsPartTotalNum} onBlur={() => {
+                        form.validateFields()
+                    }} disabled={data?.specialStatus === 2} size="small" />
                 </Form.Item>
             )
         },

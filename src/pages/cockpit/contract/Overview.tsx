@@ -4,20 +4,6 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import { particulars } from "./contract.json";
 
-/***
- * 该列表拿掉了
- *  {
-        "title": "状态时间",
-        "dataIndex": "updateTime"
-    },
-    {
-        "title": "操作人",
-        "dataIndex": "operatorMan"
-    }
-
-    新增收货单（收货单字段需跟后台确认）
- */
-
 export default function Particulars(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
@@ -34,11 +20,11 @@ export default function Particulars(): React.ReactNode {
             return (
                 <>
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                    <span style={{ marginLeft: "20px", fontSize: 16, color: "#FF8C00", fontWeight: "bold" }}>
-                        已收货：重量(支)合计：{data?.receiveStockMessage?.receiveWeight || 0}&nbsp;
-                        价税合计(元)合计：{data?.receiveStockMessage?.receivePrice || 0}&nbsp;
-                        未收货：重量(支)合计：{data?.receiveStockMessage?.waitWeight || 0}&nbsp;
-                        价税合计(元)合计：{data?.receiveStockMessage?.waitPrice || 0}
+                    <span style={{ marginLeft: "20px" }}>
+                        已收货：重量(支)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{data?.receiveStockMessage?.receiveWeight || 0}</span>
+                        价税合计(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{data?.receiveStockMessage?.receivePrice || 0}</span>
+                        未收货：重量(支)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{data?.receiveStockMessage?.waitWeight || 0}</span>
+                        价税合计(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{data?.receiveStockMessage?.waitPrice || 0}</span>
                     </span>
                 </>
             )

@@ -183,8 +183,8 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
                             render:(): React.ReactNode => 
                             <div style={{margin:'-20px 0px'}}>
                                 <div className={styles.title}>
-                                    <span>{res.name}</span>
-                                    <Button type='primary'onClick={()=>this.showModal({name:''},res)}>新增</Button>
+                                    <span style={{fontSize:'16px', fontWeight:'bold'}}>{res.name}</span>
+                                    <Button type='primary' onClick={()=>this.showModal({name:''},res)} style={{marginBottom:'8px'}}>新增</Button>
                                 </div>
                                 <Table 
                                     columns={this.getChargingRecordColumns(res)} 

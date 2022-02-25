@@ -93,10 +93,11 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         })
         if (this.props.type === 'edit') {
             let detailData = this.props.detailData;
+            console.log(detailData)
             detailData = {
                 ...detailData,
-                plannedDeliveryTime: detailData?.plannedDeliveryTime ? moment(detailData?.plannedDeliveryTime) : '',
                 ...data,
+                plannedDeliveryTime: detailData?.plannedDeliveryTime ? moment(detailData?.plannedDeliveryTime) : '',
             }
             detailData?.loftingUserDepartment && this.onDepartmentChange(detailData?.loftingUserDepartment || '', '放样');
             detailData?.checkUserDepartment && this.onDepartmentChange(detailData?.checkUserDepartment || '', '校对');

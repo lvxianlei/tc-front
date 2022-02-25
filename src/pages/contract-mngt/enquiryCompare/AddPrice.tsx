@@ -82,7 +82,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
 
     return <Spin spinning={loading}>
         <DetailTitle title="询比价基本信息" />
-        <BaseInfo form={form} col={1} columns={supplier.map((item: any) => {
+        <BaseInfo classStyle={"overall-form-class-padding0"} form={form} col={1} columns={supplier.map((item: any) => {
             if (item.dataIndex === 'supplier') {
                 return ({
                     ...item, search: item.search.map((res: any) => {

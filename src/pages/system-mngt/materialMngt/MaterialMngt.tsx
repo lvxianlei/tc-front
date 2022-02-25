@@ -186,6 +186,7 @@ export default function MaterialMngt(): React.ReactNode {
     const [form] = Form.useForm();
     const history = useHistory();
     const [code, setCode] = useState('');
+    const [filterValue, setFilterValue] = useState({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: IMaterialType[] = await RequestUtil.get<IMaterialType[]>(`/tower-system/materialCategory`);
         resole(data);
@@ -198,6 +199,7 @@ export default function MaterialMngt(): React.ReactNode {
             columns={columns}
             headTabs={[]}
             refresh={refresh}
+            filterValue={filterValue}
             // exportPath={`/tower-system/material`}
             extraOperation={<Space direction="horizontal" size="small">
                 {/* <Button type="primary" ghost>模板下载</Button>
@@ -240,6 +242,7 @@ export default function MaterialMngt(): React.ReactNode {
                 }
             ]}
             onFilterSubmit={(values: Record<string, any>) => {
+                setFilterValue(values)
                 return values;
             }}
         />

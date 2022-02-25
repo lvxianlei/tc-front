@@ -715,7 +715,7 @@
     },
     { // 驾驶舱-合同看板-明细
       "name": "明细",
-      "path": "/cockpit/contract/:id",
+      "path": "/bulletin/contract/overView/:id",
       "module": "./pages/cockpit/contract/Overview",
       "exact": true,
       "authority": "sw_cockpit_contract_kanban_details"
@@ -814,7 +814,7 @@
     { // 配置管理-仓库管理
       "name": "仓库管理",
       "path": "/config/configList/warehouse",
-      "module": "./pages/stock/warehouse/warehouse",
+      "module": "./pages/stock/warehouse/index",
       "exact": true,
       "authority": "sw_configuration_management_warehouse_management"
     },
@@ -1699,7 +1699,7 @@
     },
     { // 包装车间-成品库存
       "name": "成品库存",
-      "path": "/packagingWorkshop/stock",
+      "path": "/packagingWorkshop/packageStock",
       "module": "./pages/package-workshop/stock/StockList",
       "exact": true,
       "authority": "package_workshop_package_warehouse_management"

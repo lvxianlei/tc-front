@@ -21,7 +21,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
 
     return <Spin spinning={loading}>
         <DetailTitle title="基础信息" />
-        <BaseInfo columns={settingDetail} dataSource={data || {}} />
+        <BaseInfo col={2} columns={settingDetail} dataSource={data || {}} />
 
         <DetailTitle title="原材料信息" />
         <CommonTable columns={materialInfoDetail} dataSource={data?.materialPickingInfoVOS || []} />

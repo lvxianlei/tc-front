@@ -116,8 +116,6 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
         <Spin spinning={loading || loadingTree}>
             <Form
                 name="basic"
-                labelCol={{ span: 4 }}
-                wrapperCol={{ span: 20 }}
                 initialValues={{ remember: true }}
                 onFinish={onSubmit}
                 onFinishFailed={resetFields}

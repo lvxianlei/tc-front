@@ -8,7 +8,6 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../Detail"
 import { UploadXLS } from "../bidResult/EditTabs"
-import { voltageGradeOptions } from "../../../configuration/DictionaryOptions"
 import { downLoadTemplate } from "../../../utils"
 
 export default function BaseInfoEdit(): JSX.Element {
@@ -39,7 +38,6 @@ export default function BaseInfoEdit(): JSX.Element {
             if (result && result.cargoVOList && result.cargoVOList.length > 0) {
                 result.cargoVOList.forEach((item: any) => item.amount = item.amount <= 0 ? 0 : item.amount)
             }
-            cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
             setAddress(result.address)
             resole({
                 ...result,
@@ -68,6 +66,10 @@ export default function BaseInfoEdit(): JSX.Element {
             const portedCargoData = await portedCargoForm.validateFields()
             // const projectLeaderType = typeof baseInfoData.projectLeader === "string" ? true : false
             const [bigRegion, address] = baseInfoData.address !== "其他-国外" ? baseInfoData.address.split("-") : ["", "其他-国外"]
+            const biddingAgency = Object.prototype.toString.call(baseInfoData.biddingAgency) === "[object String]" ?
+                baseInfoData.biddingAgency :
+                baseInfoData.biddingAgency?.value ?
+                    baseInfoData.biddingAgency?.value : ""
             const result = await run({
                 ...baseInfoData,
                 id: data?.id,
@@ -79,7 +81,7 @@ export default function BaseInfoEdit(): JSX.Element {
                 projectLeaderId: baseInfoData.projectLeader?.id,
                 projectLeader: baseInfoData.projectLeader?.value,
                 biddingPerson: baseInfoData.biddingPerson?.value,
-                biddingAgency: baseInfoData.biddingAgency?.value || baseInfoData.biddingAgency
+                biddingAgency
             })
             if (result) {
                 message.success("保存成功...")
@@ -148,21 +150,12 @@ export default function BaseInfoEdit(): JSX.Element {
                     haveIndex
                     columns={cargoVOListColumns}
                     dataSource={data?.cargoVOList}
-                /> : <EditTable
+                /> : <EditableTable
                     form={cargoVOListForm}
-                    columns={cargoVOListColumns.map(item => {
-                        if (item.dataIndex === "projectVoltageLevel") {
-                            return ({
-                                ...item,
-                                type: "select",
-                                enum: voltageGradeOptions?.map(item => ({ value: item.id, label: item.name }))
-                            })
-                        }
-                        return item
-                    })}
-                    dataSource={data?.cargoVOList} />}
+                    columns={cargoVOListColumns}
+                    dataSource={data?.cargoVOList || []} />}
                 <DetailTitle title="整理后物资清单" style={{ paddingTop: "24px" }} />
-                <EditTable
+                <EditableTable
                     opration={[
                         <UploadXLS key="xlxs"
                             title={<>
@@ -217,7 +210,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     ]}
                     form={portedCargoForm}
                     columns={portedCargoColumns}
-                    dataSource={data?.portedCargoVOList} />
+                    dataSource={data?.portedCargoVOList || []} />
                 <Attachment title="附件信息" maxCount={10} ref={attchsRef} edit dataSource={data?.attachVos} />
             </Spin>
         </DetailContent>
