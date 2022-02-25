@@ -21,8 +21,9 @@ export interface IAnnouncement {
 }
 
 export interface IStaffList {
-    readonly id: string;
+    readonly id?: string;
     readonly userId?: string;
+    readonly name?: string;
     readonly userName?: string;
 }
 
