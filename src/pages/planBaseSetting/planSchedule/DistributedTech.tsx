@@ -44,8 +44,11 @@ export default function DistributedTech(): React.ReactNode {
                     index: index
                 }
             }))
-            form.setFieldsValue({ unitId: result[0].id })
-            unitChange(result[0].id);
+            if (result.length = 1) {
+
+                form.setFieldsValue({ unitId: result[0].id })
+                unitChange(result[0].id);
+            }
             resole(result)
         } catch (error) {
             reject(error)
