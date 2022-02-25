@@ -465,13 +465,13 @@ export default function Lofting(): React.ReactNode {
                         >
                             <Button type="primary" ghost>完成提料</Button>
                         </Popconfirm>
-                        <Button type="primary" ghost onClick={ () => { 
+                        <Button type="primary" ghost onClick={ async () => { 
                             if(editorLock === '编辑') {
                                 setColumns(columns);
                                 setEditorLock('锁定');
                             } else {
                                 const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-
+                                let value = await formRef.validateFields()
                                 let values = formRef.getFieldsValue(true).data;
                                 console.log(values)
                                 
