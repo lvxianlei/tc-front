@@ -63,23 +63,6 @@ export default function StaffNew(): React.ReactNode {
 
     const tableColumns = [
         {
-            title: <span><span style={{ color: 'red' }}>*</span>姓名</span>,
-            dataIndex: 'name',
-            width: 150,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["list", index, "name"]} key={index} initialValue={_} rules={[{
-                    "required": true,
-                    "message": "请输入姓名"
-                },
-                {
-                    pattern: /^[^\s]*$/,
-                    message: '禁止输入空格',
-                }]}>
-                    <Input maxLength={50} />
-                </Form.Item>
-            )
-        },
-        {
             title: <span><span style={{ color: 'red' }}>*</span>手机号</span>,
             dataIndex: 'phone',
             width: 150,
@@ -107,7 +90,7 @@ export default function StaffNew(): React.ReactNode {
                         }
                     }
                 }]}>
-                    <Input maxLength={50} onChange={(e) => {
+                    <Input maxLength={50} onBlur={(e) => {
                         let data = form.getFieldsValue(true).list;
                         data = data.map((item: IStaff, ind: number) => {
                             return {
@@ -129,26 +112,22 @@ export default function StaffNew(): React.ReactNode {
             )
         },
         {
-            title: <span><span style={{ color: 'red' }}>*</span>部门</span>,
-            dataIndex: 'dept',
-            width: 400,
+            title: <span><span style={{ color: 'red' }}>*</span>账号</span>,
+            dataIndex: 'account',
+            width: 150,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["list", index, "dept"]} key={index} initialValue={_} rules={[{
+                <Form.Item name={["list", index, "account"]} key={index} initialValue={_} rules={[{
                     "required": true,
-                    "message": "请选择部门"
+                    "message": "请输入账号"
                 }]}>
-                    <TreeSelect
-                        style={{ width: '100%' }}
-                        treeData={wrapRole2DataNode(departData)}
-                        placeholder="请选择部门"
-                    />
+                    <Input maxLength={20} disabled={location.state.type === 'edit'} />
                 </Form.Item>
             )
         },
         {
             title: '启用账号',
             dataIndex: 'status',
-            width: 150,
+            width: 50,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={["list", index, "status"]} key={index} initialValue={_}>
                     <Checkbox key={record.id} checked={_ === 1} disabled={location.state.type === 'edit' && oldDataList[index].autoAccount === 1} onChange={(e) => {
@@ -171,19 +150,6 @@ export default function StaffNew(): React.ReactNode {
             )
         },
         {
-            title: <span><span style={{ color: 'red' }}>*</span>账号</span>,
-            dataIndex: 'account',
-            width: 150,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["list", index, "account"]} key={index} initialValue={_} rules={[{
-                    "required": true,
-                    "message": "请输入账号"
-                }]}>
-                    <Input maxLength={20} disabled={location.state.type === 'edit'} />
-                </Form.Item>
-            )
-        },
-        {
             title: <span><span style={{ color: 'red' }}>*</span>角色</span>,
             dataIndex: 'roleIdList',
             width: 250,
@@ -194,6 +160,40 @@ export default function StaffNew(): React.ReactNode {
                 }]}>
                     <TreeSelect showSearch={true} placeholder="请选择所属角色" multiple={true}
                         className={layoutStyles.width100} treeData={wrapRole1DataNode(roleList)} />
+                </Form.Item>
+            )
+        },
+        {
+            title: <span><span style={{ color: 'red' }}>*</span>姓名</span>,
+            dataIndex: 'name',
+            width: 150,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={["list", index, "name"]} key={index} initialValue={_} rules={[{
+                    "required": true,
+                    "message": "请输入姓名"
+                },
+                {
+                    pattern: /^[^\s]*$/,
+                    message: '禁止输入空格',
+                }]}>
+                    <Input maxLength={50} />
+                </Form.Item>
+            )
+        },
+        {
+            title: <span><span style={{ color: 'red' }}>*</span>部门</span>,
+            dataIndex: 'dept',
+            width: 250,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={["list", index, "dept"]} key={index} initialValue={_} rules={[{
+                    "required": true,
+                    "message": "请选择部门"
+                }]}>
+                    <TreeSelect
+                        style={{ width: '100%' }}
+                        treeData={wrapRole2DataNode(departData)}
+                        placeholder="请选择部门"
+                    />
                 </Form.Item>
             )
         },
