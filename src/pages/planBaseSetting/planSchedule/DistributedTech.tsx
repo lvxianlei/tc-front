@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { Button, Select, Form, Space, Spin, Divider, Modal, InputNumber, Input, message } from 'antd';
 import { BaseInfo, CommonTable, DetailContent } from '../../common';
 import { ILink, IPlanSchedule, IUnit } from './IPlanSchedule';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { arrayMove, SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { MenuOutlined } from '@ant-design/icons';
 import useRequest from "@ahooksjs/use-request";
@@ -44,6 +44,7 @@ export default function DistributedTech(): React.ReactNode {
                     index: index
                 }
             }))
+            form.setFieldsValue({ unitId: result[0].id })
             resole(result)
         } catch (error) {
             reject(error)
@@ -144,21 +145,16 @@ export default function DistributedTech(): React.ReactNode {
     const modalOk = async () => {
         const data = await modalForm.validateFields();
         let list: IPlanSchedule[] = []
-        // selectedRows.forEach((res: IPlanSchedule) => {
         list = dataSource.map((item: IPlanSchedule) => {
             if (selectedRows.findIndex((items: any) => items.planId === item.planId) !== -1) {
-                console.log('444', data.issueDescription)
                 return {
                     ...item,
                     issueDescription: data.issueDescription
                 }
             } else {
-                console.log('1212', data.issueDescription)
                 return item
             }
         })
-        // })
-        console.log(selectedRows, list)
         await RequestUtil.post(`/tower-aps/productionPlan/batch/issue/remark`, list.map((res: IPlanSchedule, index: number) => {
             return {
                 id: res.planId,
