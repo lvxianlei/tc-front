@@ -22,21 +22,15 @@ export default function DrawTowerMngt(): React.ReactNode {
         },
         {
             key: 'name',
-            title: '塔型',
+            title: '图纸工程名称',
             width: 150,
             dataIndex: 'name'
         },
         {
-            key: 'steelProductShape',
-            title: '塔型钢印号',
-            dataIndex: 'steelProductShape',
-            width: 120
-        },
-        {
-            key: 'patternName',
-            title: '类型',
+            key: 'internalNumber',
+            title: '内部合同编号',
             width: 200,
-            dataIndex: 'patternName'
+            dataIndex: 'internalNumber'
         },
         {
             key: 'planNumber',
@@ -46,16 +40,35 @@ export default function DrawTowerMngt(): React.ReactNode {
         },
         {
             key: 'saleOrderNumber',
-            title: '订单编号',
+            title: '业主单位',
             dataIndex: 'saleOrderNumber',
             width: 200
         },
         {
-            key: 'internalNumber',
-            title: '内部合同编号',
-            width: 200,
-            dataIndex: 'internalNumber'
+            key: 'name',
+            title: '设计院',
+            width: 150,
+            dataIndex: 'name'
         },
+        {
+            key: 'saleOrderNumber',
+            title: '塔型',
+            dataIndex: 'saleOrderNumber',
+            width: 200
+        },
+        {
+            key: 'steelProductShape',
+            title: '塔型钢印号',
+            dataIndex: 'steelProductShape',
+            width: 120
+        },
+        {
+            key: 'patternName',
+            title: '模式',
+            width: 200,
+            dataIndex: 'patternName'
+        },
+
         {
             key: 'structureCount',
             title: '件号数',
@@ -84,12 +97,6 @@ export default function DrawTowerMngt(): React.ReactNode {
             )
         },
         {
-            key: 'createTime',
-            title: '创建时间',
-            width: 200,
-            dataIndex: 'createTime'
-        },
-        {
             key: 'updateUserName',
             title: '最后更新人',
             width: 200,
@@ -110,8 +117,9 @@ export default function DrawTowerMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/drawTower/drawTowerMngt/towerInformation/${record.id}`}>塔型信息</Link>
-                    <Link to={`/drawTower/drawTowerMngt/componentInformation/${record.id}/${record.structureCount === -1 ? 0 : record.structureCount}`}>塔型构件</Link>
+                    {/* <Link to={`/drawTower/drawTowerMngt/componentInformation/${record.id}/${record.structureCount === -1 ? 0 : record.structureCount}`}>塔型构件</Link> */}
                     <DeliverablesListing id={record.id} />
+                    <Link to={``}>配段信息</Link>
                 </Space>
             )
         }
@@ -124,26 +132,26 @@ export default function DrawTowerMngt(): React.ReactNode {
         headTabs={[]}
         refresh={refresh}
         searchFormItems={[
-            {
-                name: 'pattern',
-                label: '模式',
-                children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                    {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                        return <Select.Option key={index} value={id}>
-                            {name}
-                        </Select.Option>
-                    })}
-                </Select>
-            },
+            // {
+            //     name: 'pattern',
+            //     label: '模式',
+            //     children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+            //         {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+            //             return <Select.Option key={index} value={id}>
+            //                 {name}
+            //             </Select.Option>
+            //         })}
+            //     </Select>
+            // },
             {
                 name: 'time',
-                label: '创建时间',
+                label: '时间',
                 children: <DatePicker.RangePicker />
             },
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="塔型/塔型钢印号/计划号/订单编号/内部合同编号" />
+                children: <Input style={{ width: '500px' }} placeholder="图纸工程名称/内部合同编号/计划号/业主单位/设计院/塔型/塔型钢印号" />
             }
         ]}
         filterValue={filterValue}
