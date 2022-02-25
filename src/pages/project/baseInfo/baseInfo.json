@@ -82,7 +82,7 @@
             "title": "业务经理",
             "dataIndex": "projectLeader",
             "type": "popTable",
-            "path": "/sinzetech-user/user",
+            "path": "/tower-system/employee",
             "value": "name",
             "readOnly": true,
             "dependencies": true,
@@ -104,11 +104,11 @@
                 },
                 {
                     "title": "所属角色",
-                    "dataIndex": "userRoleNames"
+                    "dataIndex": "roleName"
                 },
                 {
                     "title": "所属机构",
-                    "dataIndex": "departmentName"
+                    "dataIndex": "deptName"
                 }
             ]
         },
