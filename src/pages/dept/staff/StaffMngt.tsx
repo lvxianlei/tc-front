@@ -192,7 +192,9 @@ export default function StaffMngt(): React.ReactNode {
             >
                 <Button type="primary">导入</Button>
             </Upload>
-            <Button type="primary" ghost>下载导入模板</Button>
+            <Button type="primary" ghost onClick={() => {
+                window.open(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`${"tower-system/employee/excelTemplate"}`.replace(/^\/*/, '')}`)
+            }}>下载导入模板</Button>
             <Link to={{ pathname: `/dept/staffMngt/new`, state: { type: 'new' } }}><Button type="primary" ghost>新增</Button></Link>
             {selectedRows.length > 0 ? <Link to={{ pathname: `/dept/staffMngt/setting`, state: { type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button>}
         </Space>}
