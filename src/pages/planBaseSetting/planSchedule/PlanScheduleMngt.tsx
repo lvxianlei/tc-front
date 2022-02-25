@@ -12,8 +12,6 @@ import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IPlanSchedule } from './IPlanSchedule';
 import { gantt } from 'dhtmlx-gantt';
 import { Link, useHistory } from 'react-router-dom';
-import { reduceEachLeadingCommentRange } from 'typescript';
-
 
 export interface TechnicalIssuePropsRefProps {
     onSubmit: () => void
@@ -243,7 +241,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                     },
                     {
                         name: 'time',
-                        label: '客户交货日期',
+                        label: '计划交货日期',
                         children: <DatePicker.RangePicker />
                     },
                     {
