@@ -7,12 +7,10 @@ import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 const Warehouse = () => {
     const history = useHistory()
-    const [size, setSize] = useState(10);
-    const [current, setCurrent] = useState(1);
     const [isModal, setIsModal] = useState(false);
     const [id, setId] = useState<string | null>(null);
     const columns: TableColumnProps<object>[] = [
-        {
+        { 
             title: '序号',
             dataIndex: 'index',
             width: 50,
@@ -67,14 +65,6 @@ const Warehouse = () => {
         }
     ]
 
-    const getColumnsData = async () => {
-        const data: any = await RequestUtil.get('/tower-storage/warehouse', {
-            current,
-            size,
-        })
-        history.go(0)
-    }
-
     const cancelModal = () => {
         setIsModal(false)
         setId(null)
@@ -83,7 +73,7 @@ const Warehouse = () => {
     const deleteItem = async (id: string) => {
         await RequestUtil.delete(`/tower-storage/warehouse?id=${id}`)
         message.success('删除成功')
-        getColumnsData()
+        history.go(0)
     }
 
     return (<>
@@ -91,7 +81,6 @@ const Warehouse = () => {
             isModal && <WarehouseModal
                 isModal={isModal} id={id}
                 cancelModal={cancelModal}
-                getColumnsData={getColumnsData}
             />
         }
         <Page
