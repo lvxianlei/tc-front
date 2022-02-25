@@ -62,7 +62,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
             visible: true,
             deptData: data,
             rightData: this.props.staffData,
-            selectedRowKeys: this.props.staffData?.map(res => { return res.id })
+            selectedRowKeys: this.props.staffData?.map(res => { return res?.id || '' })
         })
     }
 
