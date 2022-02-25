@@ -12,6 +12,7 @@ import { IPlanSchedule } from './IPlanSchedule';
 import { useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import moment from 'moment';
 
 export default function DistributedTech(): React.ReactNode {
     const [visible, setVisible] = useState(false);
@@ -19,7 +20,7 @@ export default function DistributedTech(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<IPlanSchedule[]>([]);
     const [form] = Form.useForm();
-    const params = useParams<{ ids: string }>()
+    const params = useParams<{ ids: string }>();
 
     const { loading, data } = useRequest<IPlanSchedule[]>(() => new Promise(async (resole, reject) => {
         try {
@@ -86,6 +87,7 @@ export default function DistributedTech(): React.ReactNode {
             setSelectedRows([]);
             const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail`, [...params.ids.split(',')]);
             setDataSorce(data);
+            form.resetFields();
         })
     }
 
@@ -106,7 +108,9 @@ export default function DistributedTech(): React.ReactNode {
                             required: true,
                             message: '请选择计划交货日期'
                         }]}>
-                            <DatePicker style={{ width: '100%' }} />
+                            <DatePicker disabledDate={(current) => {
+                                return current && current < moment(new Date(new Date().getTime() - 1000 * 60 * 60 * 24));
+                            }} style={{ width: '100%' }} />
                         </Form.Item>
                     </Form>
                 </Modal>
@@ -120,9 +124,9 @@ export default function DistributedTech(): React.ReactNode {
                     rowSelection={{
                         selectedRowKeys: selectedKeys,
                         onChange: SelectChange,
-                        getCheckboxProps: (record: Record<string, any>) => ({
-                            disabled: record.planDeliveryTime
-                        })
+                        // getCheckboxProps: (record: Record<string, any>) => ({
+                        //     disabled: record.planDeliveryTime
+                        // })
                     }}
                 />
             </DetailContent>
