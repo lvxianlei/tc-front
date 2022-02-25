@@ -24,7 +24,7 @@ export default function DistributedTech(): React.ReactNode {
 
     const { loading, data } = useRequest<IPlanSchedule[]>(() => new Promise(async (resole, reject) => {
         try {
-            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail`, [...params.ids.split(',')]);
+            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/plan`, [...params.ids.split(',')]);
             setDataSorce(data)
             resole(data)
         } catch (error) {
