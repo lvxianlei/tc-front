@@ -37,12 +37,12 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standard",
+            "dataIndex": "standardName",
             "width": 120
         },
         {
             "title": "品名",
-            "dataIndex": "productName",
+            "dataIndex": "materialName",
             "width": 120
         },
         {

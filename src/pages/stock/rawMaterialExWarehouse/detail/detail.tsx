@@ -10,7 +10,7 @@ import { Page, IntgSelect } from '../../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../../utils/RequestUtil';
-import { materialStandardTypeOptions, materialTextureOptions } from '../../../../configuration/DictionaryOptions';
+import { materialStandardOptions, materialTextureOptions } from '../../../../configuration/DictionaryOptions';
 import { baseColumn } from "./detail.json";
 
 import '../../StockPublicStyle.less';
@@ -18,7 +18,7 @@ import './detail.less';
 
 export default function RawMaterialWarehousing(): React.ReactNode {
     // 标准
-    const standardEnum = materialStandardTypeOptions?.map((item: { id: string, name: string }) => ({
+    const standardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -73,7 +73,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         },
         {
             title: '标准',
-            dataIndex: 'standard',
+            dataIndex: 'standardName',
             width: 120,
         }, {
             title: '规格',
@@ -185,11 +185,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '标准',
-            dataIndex: 'standard',
+            dataIndex: 'standardName',
             width: 100,
         }, {
             title: '品名',
-            dataIndex: 'productName',
+            dataIndex: 'materialName',
             width: 100,
         }, {
             title: '材质',
@@ -490,7 +490,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         name: 'status',
                         label: '状态',
                         children: (
-                            <Select placeholder="请选择标准" style={{ width: "140px" }}>
+                            <Select placeholder="请选择状态" style={{ width: "140px" }}>
                                 <Select.Option value="0">待出库</Select.Option>
                                 <Select.Option value="1">缺料中</Select.Option>
                                 <Select.Option value="2">已出库</Select.Option>
@@ -500,7 +500,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         name: 'batcherId',
                         label: '出库人',
-                        children: <IntgSelect width={200} />
+                        children: <IntgSelect width={400} />
                     },
                     {
                         name: 'materialTexture',
@@ -522,7 +522,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             <Select placeholder="请选择标准" style={{ width: "140px" }}>
                                 {
                                     standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
-                                        return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
+                                        return <Select.Option value={item.value} key={index}>{item.label}</Select.Option>
                                     })
                                 }
                             </Select>

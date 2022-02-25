@@ -153,14 +153,14 @@ const WarehouseModal = (props: Props) => {
     }
     // 获取部门信息
     const getDepartment = async () => {
-        const data: any = await RequestUtil.get(`/sinzetech-user/department/tree`, {
+        const data: any = await RequestUtil.get(`/tower-system/department`, {
             tenantId: AuthUtil.getTenantId()
         })
         setDepartment(data)
     }
     // 获取部门下用户信息
     const getUserList = async (departmentId: any, index: number | null = null) => {
-        const data: any = await RequestUtil.get(`/sinzetech-user/user`, {
+        const data: any = await RequestUtil.get(`/tower-system/employee`, {
             departmentId,
         })
         if (index === null) {
@@ -331,14 +331,14 @@ const WarehouseModal = (props: Props) => {
                                 {
                                     department.map((item, index) => {
                                         return (
-                                            <Option value={item.id} key={index}>{item.title}</Option>
+                                            <Option value={item.id} key={index}>{item.name}</Option>
                                         )
                                     })
                                 }
                             </Select>
                         </Col>
                         <Col
-                            md={8}
+                            md={16}
                             className='search_item'
                             style={{ marginTop: 0 }}
                         >
@@ -346,7 +346,7 @@ const WarehouseModal = (props: Props) => {
                             <Select
                                 className='input'
                                 value={departmentId ? departmentId : '请选择'}
-                                style={{ width: 120 }}
+                                style={{ width: 260 }}
                                 onChange={(value) => {
                                     setDepartmentId(value)
                                     setUserId(null)
@@ -356,7 +356,7 @@ const WarehouseModal = (props: Props) => {
                                 {
                                     department.map((item, index) => {
                                         return (
-                                            <Option value={item.id} key={index}>{item.title}</Option>
+                                            <Option value={item.id} key={index}>{item.name}</Option>
                                         )
                                     })
                                 }
@@ -402,7 +402,7 @@ const WarehouseModal = (props: Props) => {
                                         {
                                             department.map((item, index) => {
                                                 return (
-                                                    <Option value={item.id} key={index}>{item.title}</Option>
+                                                    <Option value={item.id} key={index}>{item.name}</Option>
                                                 )
                                             })
                                         }

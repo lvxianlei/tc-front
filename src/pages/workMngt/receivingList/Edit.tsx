@@ -1,4 +1,4 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle, useEffect } from "react"
+import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
 import { Button, Form, message, Spin, Modal, InputNumber, Row, Col, Input, Select } from 'antd'
 import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
 import { BasicInformation, editCargoDetails, SelectedArea, Selected, freightInfo, handlingChargesInfo } from "./receivingListData.json"
@@ -549,7 +549,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             width={1011}
             visible={visible}
             title="选择货物明细"
-            destroyOnClose
+            // destroyOnClose
             onCancel={() => {
                 modalRef.current?.resetFields()
                 setVisible(false)

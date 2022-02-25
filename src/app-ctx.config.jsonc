@@ -36,11 +36,11 @@
                         "appName": "COMM",
                         "authority": "dictionary_type_list",
                         "items": [
-                            {
-                                "label": "用户管理",
-                                "path": "/sys/users",
-                                "authority": "users"
-                            },
+                            // {
+                            //     "label": "用户管理",
+                            //     "path": "/sys/users",
+                            //     "authority": "users"
+                            // },
                             {
                                 "label": "字典管理",
                                 "path": "/sys/dxnry",
@@ -64,12 +64,12 @@
                                 "label": "角色管理",
                                 "path": "/auth/roles",
                                 "authority": "auth_section_role"
-                            },
-                            {
-                                "label": "部门管理",
-                                "path": "/auth/dept",
-                                "authority": "auth_section_department"
                             }
+                            // {
+                            //     "label": "部门管理",
+                            //     "path": "/auth/dept",
+                            //     "authority": "auth_section_department"
+                            // }
                         ]
                     },
                     // {
@@ -604,7 +604,7 @@
                                 "authority": "approvalm"
                             },
                             {
-                                "label": "技术下发",
+                                "label": "技术排产",
                                 "path": "/planSchedule/planScheduleMngt",
                                 "authority": "approvalm"
                             }

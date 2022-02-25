@@ -33,9 +33,9 @@ export default function SalesPlanEdit() {
             <BaseInfo columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)} dataSource={data || {}} />
             <DetailTitle title="产品信息" />
             <CommonTable columns={salesAssist} scroll={{ x: true }} dataSource={data?.productInfos} />
-            {/* <OperationRecord title="审批记录" serviceId={match.params.id as string} serviceName="tower-supply" /> */}
-            <DetailTitle title="审批记录" />
-            <CommonTable columns={approvalRecord} scroll={{ x: true }} dataSource={data?.approveRecords} />
+            <OperationRecord title="审批记录" serviceId={match.params.id} serviceName="tower-market" operateTypeEnum="APPROVAL" />
+            {/* <DetailTitle title="审批记录" />
+            <CommonTable columns={approvalRecord} scroll={{ x: true }} dataSource={data?.approveRecords} /> */}
         </Spin>
     </DetailContent>
 }

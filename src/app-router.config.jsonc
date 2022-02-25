@@ -800,7 +800,7 @@
     { // 库存管理-余料入库
       "name": "余料入库",
       "path": "/stock/surplusMaterialWarehousing",
-      "module": "./pages/stock/surplusMaterialWarehousing/surplusMaterialWarehousing",
+      "module": "./pages/stock/surplusMaterialWarehousing/index",
       "exact": true,
       "authority": "inventory_management_surplus_material_warehousing"
     },
@@ -1621,9 +1621,30 @@
       "authority": "approvalm"
     },
     { // 计划排产-技术下发
-      "name": "技术下发",
+      "name": "技术排产",
       "path": "/planSchedule/planScheduleMngt",
       "module": "./pages/planBaseSetting/planSchedule/PlanScheduleMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-拆分批次
+      "name": "拆分批次",
+      "path": "/planSchedule/planScheduleMngt/SplitBatch/:id",
+      "module": "./pages/planBaseSetting/planSchedule/SplitBatch",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-下发技术
+      "name": "下发技术",
+      "path": "/planSchedule/planScheduleMngt/distributedTech/:ids",
+      "module": "./pages/planBaseSetting/planSchedule/DistributedTech",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-计划交货期
+      "name": "计划交货期",
+      "path": "/planSchedule/planScheduleMngt/planDeliveryTime/:ids",
+      "module": "./pages/planBaseSetting/planSchedule/PlanDeliveryTime",
       "exact": true,
       "authority": "approvalm"
     },

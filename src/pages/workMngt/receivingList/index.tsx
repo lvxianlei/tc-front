@@ -171,7 +171,7 @@ export default function Invoicing() {
                 {
                     name: "createUserDeptId",
                     label: "创建人",
-                    children: <IntgSelect width={200} />
+                    children: <IntgSelect width={400} />
                 },
                 {
                     name: 'fuzzyQuery',
