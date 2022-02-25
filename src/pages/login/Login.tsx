@@ -143,6 +143,9 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                             rules={[{
                                                 required: true,
                                                 message: '请输入验证码'
+                                            }, {
+                                                pattern: new RegExp(/^[a-zA-Z0-9]*$/g, 'g'),
+                                                message: '请输入正确的验证码',
                                             }]}
                                         >
                                             <Input placeholder="请输入验证码" size="large" prefix={<SafetyCertificateOutlined />} />
