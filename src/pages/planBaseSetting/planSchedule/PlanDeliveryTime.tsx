@@ -85,7 +85,7 @@ export default function DistributedTech(): React.ReactNode {
             setVisible(false);
             setSelectedKeys([]);
             setSelectedRows([]);
-            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail`, [...params.ids.split(',')]);
+            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/plan`, [...params.ids.split(',')]);
             setDataSorce(data);
             form.resetFields();
         })
