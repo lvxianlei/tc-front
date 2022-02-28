@@ -1119,6 +1119,13 @@
       "exact": true,
       "authority": "rd_lofting_task"
     },
+    { // 提料任务
+      "name": "提料任务",
+      "path": "/materialTask/materialTaskList",
+      "module": "./pages/materialTask/MaterialTaskList",
+      "exact": true,
+      "authority": "rd_lofting_task"
+    },
     { //采购任务-原材料
       "name": "采购任务",
       "path": "/buyingTask/index",
@@ -1487,6 +1494,14 @@
       "name": "塔型构件",
       "path": "/drawTower/drawTowerMngt/componentInformation/:id/:structureCount",
       "module": "./pages/drawTower/ComponentInformation",
+      "exact": true,
+      // "authority": "rd_draw_product_category_management"
+      "authority": "rd_draw_product_category_management"
+    },
+    { // 图纸塔型-配段信息
+      "name": "配段信息",
+      "path": "/drawTower/drawTowerMngt/withSectionInformation/:id",
+      "module": "./pages/drawTower/WithSectionInformation",
       "exact": true,
       // "authority": "rd_draw_product_category_management"
       "authority": "rd_draw_product_category_management"

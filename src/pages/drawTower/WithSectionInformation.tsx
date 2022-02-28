@@ -4,22 +4,20 @@
  * @description 图纸塔型-配段信息
  */
 
- import React, { forwardRef } from "react";
- import { CommonTable } from '../common';
- import { FixedType } from 'rc-table/lib/interface';
- 
- interface WithSectionProps {
-    dataSource: IWithSection[]
- }
- 
- export interface IWithSection {
+import React from 'react';
+import { Spin, Button, Space } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
+import { DetailContent, CommonTable } from '../common';
+import RequestUtil from '../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
+import styles from './DrawTower.module.less';
+import { FixedType } from 'rc-table/lib/interface';
 
- }
 
- export default forwardRef(function WithSection({ dataSource }: WithSectionProps) {
- 
-     const tableColumns = [
-         {
+export default function WithSectionInformation(): React.ReactNode {
+
+    const tableColumns = [
+        {
             key: 'index',
             title: '序号',
             fixed: "left" as FixedType,
@@ -69,15 +67,27 @@
              dataIndex: 'description',
              width: 80
          }
-     ]
- 
-     return <CommonTable
-             scroll={{ x: '700' }}
-             rowKey="index"
-             dataSource={dataSource}
-             pagination={false}
-             columns={tableColumns}
-         />
- })
- 
- 
+    ]
+
+    const history = useHistory();
+    const params = useParams<{ id: string }>();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get(``)
+        resole(data)
+    }), {})
+    const detailData: any = data;
+
+    if (loading) {
+        return <Spin spinning={loading}>
+            <div style={{ width: '100%', height: '300px' }}></div>
+        </Spin>
+    }
+
+    return <DetailContent operation={ [
+        <Space direction="horizontal" size="small" >
+            <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
+        </Space>
+    ] }>
+        <CommonTable columns={ tableColumns } dataSource={ detailData } pagination={ false }/>
+    </DetailContent>
+}

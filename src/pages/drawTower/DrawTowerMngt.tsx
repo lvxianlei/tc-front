@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Modal, Button } from 'antd';
+import { Space, Input, DatePicker } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './DrawTower.module.less';
 import { Link } from 'react-router-dom';
 import DeliverablesListing from './DeliverablesListing';
-import WithSection, { IWithSection } from './WithSection';
-import RequestUtil from '../../utils/RequestUtil';
 
 export default function DrawTowerMngt(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const [visible,setVisible] = useState(false);
-    const [dataSource, setDataSource]= useState<IWithSection[]>([]);
 
     const columns = [
         {
@@ -121,31 +117,14 @@ export default function DrawTowerMngt(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/drawTower/drawTowerMngt/towerInformation/${record.id}`}>塔型信息</Link>
                     <DeliverablesListing id={record.id} />
-                    <Button type="link" onClick={async () => {
-                        setVisible(true);
-                        const result: IWithSection[] = await RequestUtil.get(``);
-                        setDataSource(result);
-                    }}>配段信息</Button>
+                    <Link to={`/drawTower/drawTowerMngt/withSectionInformation/${record.id}`}>配段信息</Link>
+
                 </Space>
             )
         }
     ]
 
-    return <>
-    <Modal
-                destroyOnClose
-                visible={visible}
-                width="40%"
-                title="配段"
-                footer={<Button onClick={() => {
-                    setVisible(false);
-                }} type='ghost'>关闭</Button>}
-                onCancel={() => {
-                    setVisible(false);
-                }}>
-                <WithSection dataSource={dataSource} />
-            </Modal>
-            <Page
+    return <Page
         path="/tower-science/productCategory/draw/page"
         exportPath={`/tower-science/productCategory/draw/page`}
         columns={columns}
@@ -174,5 +153,4 @@ export default function DrawTowerMngt(): React.ReactNode {
             return values;
         }}
     />
-    </>
 }
