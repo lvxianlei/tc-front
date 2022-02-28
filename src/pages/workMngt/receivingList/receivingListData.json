@@ -56,7 +56,7 @@
             "type": "string"
         },
         {
-            "title": "完成时间",
+            "title": "最新状态变更时间",
             "dataIndex": "updateTime",
             "type": "date"
         },
