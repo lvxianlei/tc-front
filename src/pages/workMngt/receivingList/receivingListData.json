@@ -247,7 +247,7 @@
             "disabled": true
         },
         {
-            "title": "原材料税款合计（元）",
+            "title": "原材料价税合计（元）",
             "dataIndex": "price",
             "type": "number",
             "disabled": true
