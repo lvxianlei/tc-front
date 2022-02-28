@@ -5,11 +5,11 @@
  */
 
 import React, { useState } from 'react';
-import { Button, Modal, DatePicker, Form, Spin, message } from 'antd';
+import { Button, Modal, DatePicker, Form, Spin, message, Space } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { IPlanSchedule } from './IPlanSchedule';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
@@ -21,6 +21,7 @@ export default function DistributedTech(): React.ReactNode {
     const [selectedRows, setSelectedRows] = useState<IPlanSchedule[]>([]);
     const [form] = Form.useForm();
     const params = useParams<{ ids: string }>();
+    const history = useHistory();
 
     const { loading, data } = useRequest<IPlanSchedule[]>(() => new Promise(async (resole, reject) => {
         try {
@@ -65,6 +66,23 @@ export default function DistributedTech(): React.ReactNode {
             dataIndex: 'planDeliveryTime',
             width: 120,
             format: 'YYYY-MM-DD'
+        },
+        {
+            key: 'planDeliveryTime',
+            title: '交货期变更原因',
+            dataIndex: 'planDeliveryTime',
+            width: 150,
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            width: 150,
+            fixed: 'right' as FixedType,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Button type='link' onClick={()=>{history.push(``)}}>查看变更记录</Button>
+            )
+            
         }
     ]
 
@@ -93,7 +111,7 @@ export default function DistributedTech(): React.ReactNode {
 
     return (
         <Spin spinning={loading}>
-            <DetailContent>
+            <DetailContent operation={[<Button type="ghost" onClick={() => history.goBack()}>返回</Button>]}>
                 <Modal
                     title="批量设置计划交货期"
                     visible={visible}
@@ -114,7 +132,10 @@ export default function DistributedTech(): React.ReactNode {
                         </Form.Item>
                     </Form>
                 </Modal>
-                <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => setVisible(true)} style={{ marginBottom: '6px' }}>批量设置交货期</Button>
+                <Space>
+                    <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => setVisible(true)} style={{ marginBottom: '6px' }}>批量设置交货期</Button>
+                    <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => setVisible(true)} style={{ marginBottom: '6px' }}>变更计划交货期</Button>
+                </Space>
                 <CommonTable
                     scroll={{ x: '700' }}
                     rowKey="productId"
