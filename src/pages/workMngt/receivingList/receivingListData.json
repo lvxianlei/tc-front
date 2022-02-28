@@ -57,7 +57,7 @@
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "updateTime",
+            "dataIndex": "completionTime",
             "type": "date"
         },
         {
