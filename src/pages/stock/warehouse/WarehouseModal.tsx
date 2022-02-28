@@ -13,7 +13,6 @@ const { Option } = Select;
 interface Props {
     isModal: boolean,
     cancelModal: Function,
-    getColumnsData: Function,
     id: string | null,
 }
 
@@ -240,7 +239,6 @@ const WarehouseModal = (props: Props) => {
                 },
             })
         }
-        props.getColumnsData()
         props.cancelModal()
     }
     return (
