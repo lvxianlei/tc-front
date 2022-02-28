@@ -132,6 +132,26 @@ export default function DistributedTech(): React.ReactNode {
                         </Form.Item>
                     </Form>
                 </Modal>
+                <Modal
+                    title="变更计划交货期"
+                    visible={visible}
+                    onOk={modalOk}
+                    onCancel={() => {
+                        setVisible(false);
+                        form.resetFields();
+                    }}
+                >
+                    <Form form={form}>
+                        <Form.Item label="计划交货日期" name="planDeliveryTime" rules={[{
+                            required: true,
+                            message: '请选择计划交货日期'
+                        }]}>
+                            <DatePicker disabledDate={(current) => {
+                                return current && current < moment(new Date(new Date().getTime() - 1000 * 60 * 60 * 24));
+                            }} style={{ width: '100%' }} />
+                        </Form.Item>
+                    </Form>
+                </Modal>
                 <Space>
                     <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => setVisible(true)} style={{ marginBottom: '6px' }}>批量设置交货期</Button>
                     <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => setVisible(true)} style={{ marginBottom: '6px' }}>变更计划交货期</Button>
