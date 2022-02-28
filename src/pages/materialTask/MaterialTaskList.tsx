@@ -105,9 +105,9 @@ export default function MaterialTaskList(): React.ReactNode {
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit();
-            message.success('提交成功');
-            setVisible(false);
-            setRefresh(!refresh);
+            // message.success('提交成功');
+            // setVisible(false);
+            // setRefresh(!refresh);
             resove(true);
         } catch (error) {
             reject(false)
@@ -127,7 +127,7 @@ export default function MaterialTaskList(): React.ReactNode {
         setVisible(false);
     }}
     >
-        <BatchAssigned id='' type="new"/>
+        <BatchAssigned ref={editRef} id='' type="new"/>
     </Modal>
     <Page
         path=""
@@ -165,8 +165,11 @@ export default function MaterialTaskList(): React.ReactNode {
             tableProps={{
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
-                    onChange: selectChange
-                }
+                    onChange: selectChange,
+                    getCheckboxProps: (record: Record<string, any>) => ({
+                    disabled: record.status === 3
+                })
+                }   
             }}
         filterValue={filterValue}
         onFilterSubmit={(values: Record<string, any>) => {
