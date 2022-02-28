@@ -77,7 +77,7 @@ export default function DistributedTech(): React.ReactNode {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            width: 150,
+            width: 80,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Button type='link' onClick={()=>{history.push(``)}}>查看变更记录</Button>
