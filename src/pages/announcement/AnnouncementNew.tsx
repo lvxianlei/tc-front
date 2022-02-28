@@ -22,8 +22,20 @@ export default function AnnouncementNew(): React.ReactNode {
     const { loading } = useRequest<IAnnouncement>(() => new Promise(async (resole, reject) => {
         if (location.state.type === 'edit') {
             let data = await RequestUtil.get<IAnnouncement>(`/tower-system/notice/getNoticeById/${params.id}`);
-            setDetailData({ ...data, userNames: data.staffList?.map((res: IStaffList) => { return res.userName }).join(',') });
-            setStaffList(data.staffList || [])
+            setDetailData({
+                ...data, userNames: data.staffList?.map((res: IStaffList) => { return res.userName }).join(','), staffList: data.staffList?.map((res: IStaffList) => {
+                    return {
+                        name: res.userName,
+                        id: res.userId
+                    }
+                }) || []
+            });
+            setStaffList(data.staffList?.map((res: IStaffList) => {
+                return {
+                    name: res.userName,
+                    id: res.userId
+                }
+            }) || [])
             resole(data);
         } else {
             resole({});
@@ -101,16 +113,15 @@ export default function AnnouncementNew(): React.ReactNode {
                 }]}>
                     <Input addonBefore={<SelectUserTransfer save={(selectRows: IStaff[]) => {
                         const userNames = selectRows.map(res => { return res.name }).join(',');
-                        const staffList: string[] = selectRows.map((res: IStaff) => { return res.id || '' });
                         form.setFieldsValue({ userNames: userNames, staffList: staffList });
-                        setStaffList(staffList);
-                        setDetailData({ ...detailData, userNames: userNames, staffList: staffList })
-                    }} staffData={detailData?.staffList?.map((res: IStaffList) => {
-                        return {
-                            name: res.userName,
-                            id: res.userId
-                        }
-                    })} />} disabled />
+                        setStaffList(selectRows.map(res => {
+                            return {
+                                id: res?.id,
+                                name: res?.name
+                            }
+                        }));
+                        setDetailData({ ...detailData, userNames: userNames, staffList: selectRows })
+                    }} staffData={detailData?.staffList} />} disabled />
                 </Form.Item>
             </Form>
             <Attachment ref={attachRef} dataSource={detailData.attachInfoVos} edit />
