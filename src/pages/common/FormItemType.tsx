@@ -165,7 +165,6 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         </Form>}
         <CommonTable
             columns={columns}
-            scroll={{ y: 400 }}
             rowSelection={{
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
