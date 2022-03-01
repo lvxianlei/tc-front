@@ -144,7 +144,7 @@ export default function RawMaterialStock(): React.ReactNode {
         },
         {
             title: '标准',
-            dataIndex: 'standard',
+            dataIndex: 'standardName',
             width: 120,
         }, {
             title: '规格',
@@ -203,7 +203,7 @@ export default function RawMaterialStock(): React.ReactNode {
     // 入库按钮
     const ReceivingBtn = async (record: any) => {
         await getWarehousing('', 0)
-        setListFurnaceBatchNo(record.furnaceBatchNo)
+        setListFurnaceBatchNo(record.furnaceBatchNumber)
         setListProductionBatchNumber(record.receiveBatchNumber)
         setListReceivableSurplus(record.excessLength)
         setListID(record.id)
