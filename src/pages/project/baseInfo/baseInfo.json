@@ -84,6 +84,7 @@
             "type": "popTable",
             "path": "/tower-system/employee",
             "value": "name",
+            "rowKey": "userId",
             "readOnly": true,
             "dependencies": true,
             "rules": [

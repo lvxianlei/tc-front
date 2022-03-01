@@ -239,6 +239,7 @@
             "type": "popTable",
             "width": 1101,
             "path": "/tower-system/employee",
+            "rowKey": "userId",
             "dependencies": true,
             "required": true,
             "columns": [
