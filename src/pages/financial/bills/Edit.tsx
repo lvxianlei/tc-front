@@ -116,7 +116,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             if (item.dataIndex === 'receiptVos') {
                 return ({
                     ...item,
-                    render: (data: any, props: any) => <PopTable data={data} {...props} />
+                    disabled: !baseForm.getFieldValue("businessType"),
+                    path: `${item.path}&companyRelationStatus=${baseForm.getFieldValue("businessType")}`
                 })
             }
             if (item.dataIndex === 'businessType') {

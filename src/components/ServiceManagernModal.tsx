@@ -54,7 +54,7 @@
      
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}, flag: boolean = true) {
          const searchValues = flag ? filterValues : {};
-         const resData: IResponseData = await RequestUtil.get<IResponseData>('/sinzetech-user/user', {
+         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-system/employee', {
              ...searchValues,
              current: pagination.current || this.state.tablePagination.current,
              size: pagination.pageSize || this.state.tablePagination.pageSize
