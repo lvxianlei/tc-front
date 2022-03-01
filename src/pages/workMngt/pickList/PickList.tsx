@@ -105,7 +105,7 @@ export default function PickList(): React.ReactNode {
                 <Space size="small" className={styles.operationBtn}>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickMessage/${record.id}`)}}>提料信息</Button>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}/${record.status}/${record.materialLeader}`)}} disabled={record.status!==1&&record.status!==2}>塔型信息</Button>
-                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}/${record.status}`)}} disabled={record.status < 3}>杆塔配段</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}/${record.status}`)}} >杆塔配段</Button>
                     <Button type='link' onClick={() =>{setTaskId(record.id); setVisible(true)}} disabled={record.status<4} >交付物</Button>
                 </Space>
             )
@@ -192,7 +192,7 @@ export default function PickList(): React.ReactNode {
                                 <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>待指派</Select.Option>
                                 <Select.Option value={2} key={2}>提料中</Select.Option>
-                                <Select.Option value={3} key={3}>配段中</Select.Option>
+                                {/* <Select.Option value={3} key={3}>配段中</Select.Option> */}
                                 <Select.Option value={4} key={4}>已完成</Select.Option>
                             </Select>
                         </Form.Item>
