@@ -122,7 +122,7 @@
             "title": "关联收货单",
             "dataIndex": "receiptVos",
             "type": "popTable",
-            "path": "/tower-storage/receiveStock",
+            "path": "/tower-storage/receiveStock?receiveStatus=0",
             "width": 1011,
             "value": "receiveNumber",
             "selectType": "checkbox",
