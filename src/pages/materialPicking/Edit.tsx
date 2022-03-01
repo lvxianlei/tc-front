@@ -84,6 +84,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 workPlanNumber: baseData.workPlanNumber?.value,
                 workPlanNumberId: baseData.workPlanNumber?.id,
                 productNumber: baseData.workPlanNumber?.records[0].productNumbers,
+                internalNumber: baseData.workPlanNumber?.records[0].internalNumber,
                 pickingUserName: baseData.pickingUserName?.value,
                 pickingUserId: baseData.pickingUserName?.id,
                 pickingWareHouse: baseData.pickingWareHouse?.value,

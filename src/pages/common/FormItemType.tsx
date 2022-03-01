@@ -59,7 +59,7 @@ interface PagenationProps {
 
 export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
     const initValue = value?.records?.map((item: any) => {
-        return typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]
+        return typeof item === "string" ? item : typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]
     }) || []
     const [select, setSelect] = useState<any[]>(initValue)
     const [selectRows, setSelectRows] = useState<any[]>(value?.records || [])
@@ -135,9 +135,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         }
     }
 
-    useEffect(() => {
-        setColumns(data.columns)
-    }, [JSON.stringify(data.columns)])
+    useEffect(() => setColumns(data.columns), [JSON.stringify(data.columns)])
 
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
@@ -192,9 +190,11 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: [] })
 
     useEffect(() => setValue(props.value || ({ value: (props as any).value, id: "", records: [] })), [JSON.stringify(props.value || "")])
+
     const handleChange = (event: any) => {
-        const newPopContent = { id: event[0]?.id, value: event[0]?.[data.value || "name" || "id"], records: event }
-        const checkboxContent = { id: event[0]?.id, value: event.map((item: any) => item[data.value || "name" || "id"]).join(","), records: event }
+        const itemContentId = typeof data.rowKey === "function" ? data.rowKey(event[0]) : event[0]?.[data.rowKey || "id"]
+        const newPopContent = { id: itemContentId, value: event[0]?.[data.value || "name" || "id"], records: event }
+        const checkboxContent = { id: itemContentId, value: event.map((item: any) => item[data.value || "name" || "id"]).join(","), records: event }
         setPopContent(data.selectType === "checkbox" ? checkboxContent : newPopContent)
     }
 
@@ -219,14 +219,11 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         setVisible(false)
     }
 
-    const formatValue = () => {
-        let initValue = typeof props.value === "string" ? props.value : value?.value
-        return initValue
-    }
+    const formatValue = () => typeof props.value === "string" ? props.value : value?.value
 
     return <>
         <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onOk={handleOk} onCancel={handleCancel}>
-            <PopTableContent value={props.value} data={data} onChange={handleChange} />
+            <PopTableContent value={data.selectType === "checkbox" ? props.value : { id: props.value?.id, records: props.value?.id ? [props.value?.id] : [] }} data={data} onChange={handleChange} />
         </Modal>
         <Input
             {...props}
