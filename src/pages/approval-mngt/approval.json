@@ -590,6 +590,7 @@
             "dataIndex": "signedUser",
             "type": "popTable",
             "path": "/tower-system/employee",
+            "rowKey": "userId",
             "readOnly": true,
             "dependencies": true,
             "value": "name",
@@ -624,6 +625,7 @@
             "dataIndex": "receiver",
             "type": "popTable",
             "path": "/tower-system/employee",
+            "rowKey": "userId",
             "readOnly": true,
             "value": "name",
             "columns": [

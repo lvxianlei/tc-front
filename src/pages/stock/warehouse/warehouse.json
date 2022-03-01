@@ -1,0 +1,152 @@
+{
+    "pages": [
+        {
+            "title": "编号",
+            "dataIndex": "warehouseNumber"
+        },
+        {
+            "title": "仓库名称",
+            "dataIndex": "name"
+        },
+        {
+            "title": "分类",
+            "dataIndex": "warehouseCategoryName"
+        },
+        {
+            "title": "负责人",
+            "dataIndex": "personName"
+        },
+        {
+            "title": "保管员",
+            "dataIndex": "staffName"
+        },
+        {
+            "title": "车间",
+            "dataIndex": "shopName"
+        }
+    ],
+    "base": [
+        {
+            "title": "仓库编号",
+            "dataIndex": "warehouseNumber",
+            "required": true
+        },
+        {
+            "title": "仓库名称",
+            "dataIndex": "name",
+            "required": true
+        },
+        {
+            "title": "分类",
+            "dataIndex": "warehouseCategoryId",
+            "type": "select",
+            "required": true,
+            "enum": []
+        },
+        {
+            "title": "车间",
+            "dataIndex": "shopId",
+            "required": true
+        },
+        {
+            "title": "负责人",
+            "dataIndex": "person",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "dependencies": true,
+            "value": "name",
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
+            "columns": [
+                {
+                    "title": "部门",
+                    "dataIndex": "deptName"
+                },
+                {
+                    "title": "姓名",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "手机号",
+                    "dataIndex": "phone"
+                },
+                {
+                    "title": "角色",
+                    "dataIndex": "roleName"
+                },
+                {
+                    "title": "工号",
+                    "dataIndex": "number"
+                },
+                {
+                    "title": "邮箱",
+                    "dataIndex": "email"
+                }
+            ],
+            "search": [
+                {
+                    "title": "",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 200,
+                    "placeholder": "账号/手机号/姓名/工号/邮箱"
+                }
+            ]
+        }
+    ],
+    "userColums": {
+        "title": "保管员",
+        "dataIndex": "userId",
+        "required": true,
+        "width": 1101,
+        "readOnly": true,
+        "dependencies": true,
+        "value": "name",
+        "path": "/tower-system/employee",
+        "rowKey": "userId",
+        "columns": [
+            {
+                "title": "部门",
+                "dataIndex": "deptName"
+            },
+            {
+                "title": "姓名",
+                "dataIndex": "name"
+            },
+            {
+                "title": "账号",
+                "dataIndex": "account"
+            },
+            {
+                "title": "手机号",
+                "dataIndex": "phone"
+            },
+            {
+                "title": "角色",
+                "dataIndex": "roleName"
+            },
+            {
+                "title": "工号",
+                "dataIndex": "number"
+            },
+            {
+                "title": "邮箱",
+                "dataIndex": "email"
+            }
+        ],
+        "search": [
+            {
+                "title": "",
+                "dataIndex": "fuzzyQuery",
+                "width": 200,
+                "placeholder": "账号/手机号/姓名/工号/邮箱"
+            }
+        ]
+    },
+    "setting": []
+}
