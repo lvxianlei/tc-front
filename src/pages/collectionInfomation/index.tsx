@@ -21,6 +21,7 @@ export default function CollectionInfomation(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
     const [visible, setVisible] = useState(false);
+    const [filterValue, setFilterValue] = useState<any>({confirmStatus: 1});
     const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
     const [ contractList, setContractList ] = useState<Contract[]>([]);
     const addRef = useRef<EditRefProps>()
@@ -52,6 +53,7 @@ export default function CollectionInfomation(): React.ReactNode {
             delete value.startRefundTime;
         }
         value["confirmStatus"] = confirmStatus;
+        setFilterValue(value);
         return value
     }
     
@@ -196,7 +198,7 @@ export default function CollectionInfomation(): React.ReactNode {
                     </div>
                 }
                 onFilterSubmit={onFilterSubmit}
-                filterValue={{ confirmStatus }}
+                filterValue={ filterValue }
                 searchFormItems={[
                     {
                         name: 'returnType',
