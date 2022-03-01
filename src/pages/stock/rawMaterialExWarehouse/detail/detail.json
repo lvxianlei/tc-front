@@ -73,7 +73,7 @@
         },
         {
             "title": "塔型",
-            "dataIndex": "productCategoryId",
+            "dataIndex": "productCategoryName",
             "width": 120
         },
         {

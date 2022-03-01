@@ -559,7 +559,23 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             <ChooseModal id={contractId} ref={modalRef} initChooseList={cargoData} numberStatus={number} />
         </Modal>
         <DetailTitle title="收货单基础信息" />
-        <BaseInfo col={2} form={form} onChange={handleBaseInfoChange} columns={columns} dataSource={{}} edit />
+        <BaseInfo col={2} form={form} onChange={handleBaseInfoChange} columns={
+            columns.map((item: any) => {
+                if (item.dataIndex === "paperNumber") {
+                    return({
+                        ...item,
+                        maxLength: 20,
+                        rules: [
+                            {
+                                pattern: new RegExp(/^[a-zA-Z0-9]*$/g, 'g'),
+                                message: "请输入正确的纸质单号"
+                            }
+                        ]
+                    })
+                }
+                return item;
+            })
+        } dataSource={{}} edit />
         <DetailTitle title="运费信息" />
         <BaseInfo col={2} columns={freightInfo} dataSource={(freightInformation as any)} />
         <DetailTitle title="装卸费信息" />
