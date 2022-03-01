@@ -12,8 +12,14 @@ import styles from './MaterialTaskList.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
 import BatchAssigned, { EditRefProps } from './BatchAssigned';
+import AssignedInformation from './AssignedInformation';
 
 export interface IMaterialTask {
+    readonly assignedList?: IAssignedList[];
+    readonly id?: string;
+}
+
+export interface IAssignedList {
 
 }
 
@@ -25,6 +31,7 @@ export default function MaterialTaskList(): React.ReactNode {
     const [selectedRows,setSelectedRows]= useState<IMaterialTask[]>([]);
     const [visible, setVisible] =useState<boolean>(false);
     const editRef = useRef<EditRefProps>();
+    const [ informationVisible, setInformationVisible ]=useState<boolean>(false);
 
     const columns = [
         {
@@ -91,7 +98,7 @@ export default function MaterialTaskList(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button>指派信息</Button>
+                    <Button type='link' disabled={record.status === 3} onClick={() => setInformationVisible(true)}>指派信息</Button>
                 </Space>
             )
         }
@@ -128,6 +135,23 @@ export default function MaterialTaskList(): React.ReactNode {
     }}
     >
         <BatchAssigned ref={editRef} id='' type="new"/>
+    </Modal>
+    <Modal
+    title="指派"
+    destroyOnClose
+    visible={informationVisible}
+    width="60%"
+    footer={
+        <Button onClick={() => {
+
+            setInformationVisible(false);
+        }}>关闭</Button>
+    }
+    onCancel={() => {
+        setInformationVisible(false);
+    }}
+    >
+        <AssignedInformation id=''/>
     </Modal>
     <Page
         path=""
