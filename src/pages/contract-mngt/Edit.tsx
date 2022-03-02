@@ -328,12 +328,13 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     num: parseFloat(item.num || "1"),
                     taxPrice: parseFloat(item.taxPrice || "1.00"),
                     price: parseFloat(item.price || "1.00"),
+                    weight: (item.weight && item.weight >= 0) ? parseFloat(item.weight) : parseFloat("0")
                 }
                 allData[dataIndex] = value
                 return ({
                     ...item,
-                    taxTotalAmount: (allData.num * allData.taxPrice).toFixed(2),
-                    totalAmount: (allData.num * allData.price).toFixed(2),
+                    taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),
+                    totalAmount: (allData.num * allData.price * allData.weight).toFixed(2),
                     [dataIndex]: value
                 })
             }
