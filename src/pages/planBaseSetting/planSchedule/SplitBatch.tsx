@@ -30,8 +30,10 @@ export default function SampleDraw(): React.ReactNode {
             await RequestUtil.post(`/tower-aps/productionPlan/batchNo`,submitData).then(()=>{
                 message.success('提交成功！')
                 setVisible(false)
+                form.resetFields()
                 setRefresh(!refresh)
                 setSelectedKeys([])
+                
             })
         } catch (error) {
             console.log(error)
@@ -77,7 +79,7 @@ export default function SampleDraw(): React.ReactNode {
         },
     ]
 
-    const handleModalCancel = () => { setVisible(false);  };
+    const handleModalCancel = () => { setVisible(false); form.resetFields()  };
     const onFilterSubmit = (value: any) => {
         setFilterValue(value)
         return value

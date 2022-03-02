@@ -5,14 +5,13 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Input, Button, Select, DatePicker, Tooltip, Space } from 'antd';
+import { Input, Button, Select, DatePicker, Tooltip, Space, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IPlanSchedule } from './IPlanSchedule';
 import { gantt } from 'dhtmlx-gantt';
-import { Link } from 'react-router-dom';
-
+import { Link, useHistory } from 'react-router-dom';
 
 export interface TechnicalIssuePropsRefProps {
     onSubmit: () => void
@@ -98,9 +97,9 @@ export default function PlanScheduleMngt(): React.ReactNode {
             width: 120
         },
         {
-            key: 'deliveryTime',
+            key: 'customerDeliveryTime',
             title: '客户交货日期',
-            dataIndex: 'deliveryTime',
+            dataIndex: 'customerDeliveryTime',
             width: 120
         },
         {
@@ -179,6 +178,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
     const editRef = useRef<TechnicalIssuePropsRefProps>();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<IPlanSchedule[]>([]);
+    const history = useHistory();
     return (
         <>
             <Page
@@ -186,9 +186,26 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 columns={columns}
                 headTabs={[]}
                 extraOperation={<Space>
-                    <Link to={`/planSchedule/planScheduleMngt/planDeliveryTime/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>计划交货期</Button></Link>
+                    <Link to={`/planSchedule/planScheduleMngt/planDeliveryTime/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>设置/变更计划交货期</Button></Link>
                     <Link to={`/planSchedule/planScheduleMngt/SplitBatch/${selectedKeys[0]}`}><Button type="primary" disabled={selectedKeys.length !== 1}>拆分批次</Button></Link>
-                    <Link to={`/planSchedule/planScheduleMngt/distributedTech/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>下发技术</Button></Link>
+                    <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => {
+                        let tip: boolean[] = [];
+                        selectedRows.forEach(res => {
+                            if (res.planDeliveryTime && res.productionBatchNo) {
+                                tip.push(true)
+                            } else {
+                                tip.push(false)
+                            }
+                        })
+                        if (tip.findIndex(res => res === false) === -1) {
+                            history.push(`/planSchedule/planScheduleMngt/distributedTech/${selectedKeys.join(',')}`);
+                            tip = []
+                        } else {
+                            message.warning('下发技术前，请先设置计划交货期和拆分批次')
+                            tip = []
+                        }
+
+                    }}>下发技术</Button>
                 </Space>}
                 refresh={refresh}
                 tableProps={{
@@ -224,7 +241,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                     },
                     {
                         name: 'time',
-                        label: '客户交货日期',
+                        label: '计划交货日期',
                         children: <DatePicker.RangePicker />
                     },
                     {
