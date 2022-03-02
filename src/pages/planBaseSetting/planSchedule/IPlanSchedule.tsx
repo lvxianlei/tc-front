@@ -27,6 +27,7 @@ export interface IPlanSchedule {
     readonly issueDescription?: string;
     readonly productionBatchNo?: string;
     readonly customerDeliveryTime?: string;
+    readonly reason?: string;
 }
 
 export interface IUnit {
