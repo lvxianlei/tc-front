@@ -1128,8 +1128,8 @@
     },
     { //采购任务-原材料-用料清单
       "name": "用料清单",
-      "path": "/buyingTask/materialList",
-      "module": "./pages/buyingTask/materialList",
+      "path": "/buyingTask/detail/:id",
+      "module": "./pages/buyingTask/Overview",
       "exact": true,
       "authority": "auth_section"
     },
