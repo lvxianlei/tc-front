@@ -22,9 +22,9 @@ export interface IDetail {
     legWeightD?: string;
 }
 export interface IMaterialDetail {
-    count: string;
+    count?: number;
     id?: string;
-    segmentName: string;
+    segmentName?: string;
 }
 export default function PickTower(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
@@ -287,7 +287,7 @@ export default function PickTower(): React.ReactNode {
             <Modal title='配段信息' width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
                 {detail?.materialDrawProductSegmentList ?
                     <Form initialValues={{ detailData: detail.materialDrawProductSegmentList, legWeightA: detail?.legWeightA, legWeightB: detail?.legWeightB, legWeightC: detail?.legWeightC, legWeightD: detail?.legWeightD }} autoComplete="off" form={form}>
-                        <DetailTitle title={'塔腿配段信息'} operation={[status !== '已完成' && <Button type='primary' onClick={() => { setSegmentVisible(true) }}>快速配段</Button>,
+                        {/* <DetailTitle title={'塔腿配段信息'} operation={[status !== '已完成' && <Button type='primary' onClick={() => { setSegmentVisible(true) }}>快速配段</Button>,
                         <Modal
                             visible={segmentVisible}
                             title='配段信息'
@@ -321,7 +321,7 @@ export default function PickTower(): React.ReactNode {
                                     <Input style={{ width: '100%' }} />
                                 </Form.Item>
                             </Row>
-                        </Modal>]} />
+                        </Modal>]} /> */}
                         <Row>
                             <Col span={1} />
                             <Col span={5}>
