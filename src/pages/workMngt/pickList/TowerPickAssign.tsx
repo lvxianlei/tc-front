@@ -300,10 +300,10 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         message: '禁止输入空格',
                                     }, 
                                     {
-                                        pattern: /^[0-9a-zA-Z-,]*$/,
+                                        pattern: /^[0-9a-zA-Z-,全部]*$/,
                                         message: '仅可输入数字/字母/-/,',
                                     }]}>
-                                    <Input placeholder="请输入（1-3，5，ac，w）"/>
+                                    <Input placeholder="请输入（1-3，5，ac，w）" defaultValue={'全部'}/>
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="提料人">
