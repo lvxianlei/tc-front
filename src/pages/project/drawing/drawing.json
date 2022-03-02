@@ -123,7 +123,8 @@
             "dataIndex": "serviceManager",
             "type": "popTable",
             "width": 1011,
-            "path": "/sinzetech-user/user",
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
             "value": "name",
             "readOnly": true,
             "dependencies": true,
@@ -139,11 +140,11 @@
                 },
                 {
                     "title": "所属角色",
-                    "dataIndex": "userRoleNames"
+                    "dataIndex": "roleName"
                 },
                 {
                     "title": "所属机构",
-                    "dataIndex": "departmentName"
+                    "dataIndex": "deptName"
                 }
             ]
         },

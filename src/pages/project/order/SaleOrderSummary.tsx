@@ -123,23 +123,23 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
           },
           {
             label: "含税金额",
-            value: doNumber(baseInfo?.taxAmount, 4),
+            value: baseInfo?.taxAmount,
           },
         ],
         [
           {
             label: "含税单价",
-            value: doNumber(baseInfo?.taxPrice, 4),
+            value: baseInfo?.taxPrice,
           },
           {
             label: "不含税金额",
-            value: doNumber(baseInfo?.amount, 4),
+            value: baseInfo?.amount,
           },
         ],
         [
           {
             label: "不含税单价",
-            value: doNumber(baseInfo?.price, 4),
+            value: baseInfo?.price,
           },
           {
             label: "币种",

@@ -8,6 +8,16 @@ interface IntgSelectProps {
     value?: undefined | { first: string, second: string }
     width?: number | string
 }
+
+export const generateTreeNode: (data: any) => any[] = (data: any[]) => {
+    return data.map((item: any) => ({
+        title: item.name,
+        value: item.id,
+        disabled: item.type === 2 || item.parentId === '0',
+        children: item.children ? generateTreeNode(item.children) : []
+    }))
+}
+
 export default function IntgSelect({ onChange, width, value = { first: "", second: "" } }: IntgSelectProps): JSX.Element {
     const [deptId, setDeptId] = useState<string>(value?.first || "")
     const [userId, setUserId] = useState<string>(value?.second || "")
@@ -21,15 +31,7 @@ export default function IntgSelect({ onChange, width, value = { first: "", secon
     const { loading, data: deptData } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-system/department`)
-            const formatResult: (data: any) => any[] = (data: any[]) => {
-                return data.map((item: any) => ({
-                    title: item.name,
-                    value: item.id,
-                    disabled: item.type === 2 || item.parentId === '0',
-                    children: item.children ? formatResult(item.children) : []
-                }))
-            }
-            resole(formatResult(result))
+            resole(generateTreeNode(result))
         } catch (error) {
             reject(error)
         }
