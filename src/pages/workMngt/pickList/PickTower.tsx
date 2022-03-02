@@ -23,7 +23,7 @@ export interface IDetail {
 }
 export interface IMaterialDetail {
     count: string;
-    id: string;
+    id?: string;
     segmentName: string;
 }
 export default function PickTower(): React.ReactNode {
@@ -158,30 +158,6 @@ export default function PickTower(): React.ReactNode {
             width: 150,
             dataIndex: 'productCategoryName'
         },
-        // {
-        //     key: 'materialDeliverTime',
-        //     title: '计划交付时间',
-        //     width: 100,
-        //     dataIndex: 'materialDeliverTime'
-        // },
-        // {
-        //     key: 'materialUserName',
-        //     title: '配段人',
-        //     width: 100,
-        //     dataIndex: 'materialUserName'
-        // },
-        // {
-        //     key: 'materialStatusName',
-        //     title: '杆塔提料状态',
-        //     width: 100,
-        //     dataIndex: 'materialStatusName'
-        // },
-        // {
-        //     key: 'materialUpdateStatusTime',
-        //     title: '最新状态变更时间',
-        //     width: 200,
-        //     dataIndex: 'materialUpdateStatusTime'
-        // },
         {
             key: 'segmentInformation',
             title: '配段信息',
@@ -241,7 +217,7 @@ export default function PickTower(): React.ReactNode {
                         //     legWeightD: data?.legWeightD,
                         //     detailData: detailData
                         // });
-                        // setStatus(record.materialStatusName)
+                        setStatus(record.materialStatusName)
                     }} >配段</Button>
                     <Button type='link' onClick={() => { history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`) }} disabled={record.materialStatus !== 3}>杆塔提料明细</Button>
                 </Space>
@@ -306,7 +282,7 @@ export default function PickTower(): React.ReactNode {
                     editRef.current?.resetFields();
                     setWithSectionVisible(false);
                 }}>
-                <WithSection id={productId} type='new' />
+                <WithSection id={productId} type={status === '已完成' ? 'detail' : 'new'} />
             </Modal>
             <Modal title='配段信息' width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
                 {detail?.materialDrawProductSegmentList ?

@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, Select, DatePicker, Input, TreeSelect, Row, Col, InputNumber, Button } from 'antd'
+import { Spin, Form, Select, DatePicker, Input, TreeSelect, Row, Col, InputNumber, Button, message } from 'antd'
 import { CommonTable, DetailTitle } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -234,21 +234,78 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
+    // const delSameObjValue = (arr: any, keyName: string, keyValue: string) => {
+    //     let baseArr: IMaterialDetail[] = [], newArr: any = [];
+    //     for (let key in arr) {
+    //         if (baseArr.includes(arr[key][keyName])) {
+    //             newArr[baseArr.indexOf(arr[key][keyName])][keyValue] += arr[key][keyValue];
+    //         } else {
+    //             baseArr.push(arr[key][keyName]);
+    //             newArr.push(arr[key]);
+    //         }
+    //     }
+    //     return newArr;
+    // }
+
+    const fastWithSectoin = () => {
+        const inputString: string = fastForm.getFieldsValue(true).fast;
+        const inputList = inputString.split(',');
+        const list: IMaterialDetail[] = [];
+        inputList.map((res: string) => {
+            const newRes = res.split('*')[0].replace(/\(|\)/g, "");
+            if ((/^[0-9]+-[0-9]+$/).test(newRes)) {
+                const length = Number(newRes.split('-')[0]) - Number(newRes.split('-')[1]);
+                if (length <= 0) {
+                    let num = Number(newRes.split('-')[0])
+                    let t = setInterval(() => {
+                        list.push({
+                            segmentName: (num++).toString(),
+                            count: res.split('*')[1] || '1'
+                        })
+                        if (num > Number(newRes.split('-')[1])) {
+                            clearInterval(t);
+                        }
+                    }, 100)
+                } else {
+                    let num = Number(newRes.split('-')[0])
+                    let t = setInterval(() => {
+                        list.push({
+                            segmentName: (num--).toString(),
+                            count: res.split('*')[1] || '1'
+                        })
+                        if (num < Number(newRes.split('-')[1])) {
+                            clearInterval(t);
+                        }
+                    }, 100)
+                }
+            } else {
+                list.push({
+                    segmentName: newRes,
+                    count: res.split('*')[1] || '1'
+                })
+            }
+        })
+        // console.log(list, delSameObjValue(list, 'count', 'segmentName'))
+    }
+
 
     return <Spin spinning={loading}>
-       {type === 'new' ? <Form form={fastForm}>
+        {type === 'new' ? <Form form={fastForm}>
             <Row>
                 <Col span={14}>
-                    <Form.Item name="fast" label="快速配段">
+                    <Form.Item name="fast" label="快速配段" rules={[{
+                        pattern: /^[a-zA-Z0-9-,*()]*$/,
+                        message: '仅可输入英文字母/数字/特殊字符',
+                    }]}>
                         <Input style={{ width: '100%' }} />
                     </Form.Item>
                 </Col>
                 <Col offset={2} span={4}>
-                    <Button type="primary" ghost>确定</Button>
+                    <Button type="primary" onClick={fastWithSectoin} ghost>确定</Button>
                 </Col>
             </Row>
         </Form>
-        : null}
+            : null}
         <Form form={form}>
             <DetailTitle title="塔腿配段信息" />
             <Row>
@@ -260,7 +317,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={type === 'detail'}/>
+                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
