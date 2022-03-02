@@ -83,7 +83,7 @@ export default function DistributedTech(): React.ReactNode {
             width: 80,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Button type='link' onClick={()=>{history.push(`/planSchedule/planScheduleMngt/planDeliveryTime/${params.ids}/${record.id}`)}}>查看变更记录</Button>
+                <Button type='link' onClick={()=>{history.push(`/planSchedule/planScheduleMngt/planDeliveryTime/${params.ids}/${record.productId}`)}}>查看变更记录</Button>
             )
             
         }
@@ -117,7 +117,8 @@ export default function DistributedTech(): React.ReactNode {
         RequestUtil.put(`/tower-aps/productionPlan/batch/deliveryTime`, value.map((res:any,index:number) => {
             return {
                 id: selectedKeys[index],
-                ...res
+                ...res,
+                newPlanDeliveryTime: res.newPlanDeliveryTime.format('YYYY-MM-DD'),
             }
         })).then(async res => {
             message.success('变更成功！');

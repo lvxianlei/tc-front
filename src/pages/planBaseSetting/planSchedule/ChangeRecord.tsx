@@ -13,22 +13,22 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 const baseColums = [
     {
-        "dataIndex": "title",
+        "dataIndex": "productCategoryName",
         "title": "塔型"
     },
     {
-        "dataIndex": "content",
+        "dataIndex": "productNumber",
         "title": "杆塔"
     }
 ]
 export default function DistributedTech(): React.ReactNode {
-    const [dataSource, setDataSorce] = useState<IPlanSchedule[]>([]);
-    const params = useParams<{ ids: string }>();
+    const [dataSource, setDataSorce] = useState<any>({});
+    const params = useParams<{ ids: string,id: string }>();
     const history = useHistory();
 
     const { loading, data } = useRequest<IPlanSchedule[]>(() => new Promise(async (resole, reject) => {
         try {
-            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/plan`, [...params.ids.split(',')]);
+            const data: any = await RequestUtil.get(`/tower-aps/productionPlan/change/record/${params.id}`);
             setDataSorce(data)
             resole(data)
         } catch (error) {
@@ -38,15 +38,15 @@ export default function DistributedTech(): React.ReactNode {
 
     const columns = [
         {
-            key: 'customerDeliveryTime',
+            key: 'originalDeliveryTime',
             title: '原计划交货日期',
-            dataIndex: 'customerDeliveryTime',
+            dataIndex: 'originalDeliveryTime',
             width: 120
         },
         {
-            key: 'planDeliveryTime',
+            key: 'newDeliveryTime',
             title: '变更后交货日期',
-            dataIndex: 'planDeliveryTime',
+            dataIndex: 'newDeliveryTime',
             width: 120,
             format: 'YYYY-MM-DD'
         },
@@ -57,15 +57,15 @@ export default function DistributedTech(): React.ReactNode {
             width: 150,
         },
         {
-            key: 'reason',
+            key: 'createTime',
             title: '操作时间',
-            dataIndex: 'reason',
+            dataIndex: 'createTime',
             width: 150,
         },
         {
-            key: 'reason',
+            key: 'createUserName',
             title: '操作人',
-            dataIndex: 'reason',
+            dataIndex: 'createUserName',
             width: 150,
         },
     ]
@@ -76,12 +76,12 @@ export default function DistributedTech(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[<Button type="ghost" onClick={() => history.goBack()}>返回</Button>]}>
                 <DetailTitle title='基础信息'/>
-                <BaseInfo columns={baseColums} dataSource={{}}/>
+                <BaseInfo columns={baseColums} dataSource={dataSource}/>
                 <DetailTitle title='计划交货期变更记录'/>
                 <CommonTable
                     scroll={{ x: '700' }}
                     rowKey="id"
-                    dataSource={dataSource}
+                    dataSource={dataSource?.recordVOList}
                     pagination={false}
                     columns={columns}
                 />
