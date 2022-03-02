@@ -114,7 +114,7 @@ export default function DistributedTech(): React.ReactNode {
     const modalChangeOk = async () => {
         const data = await formRef.validateFields();
         const value = formRef.getFieldsValue().list;
-        RequestUtil.post(`/tower-aps/productionPlan/batch/deliveryTime`, value.map((res:any,index:number) => {
+        RequestUtil.put(`/tower-aps/productionPlan/batch/deliveryTime`, value.map((res:any,index:number) => {
             return {
                 id: selectedKeys[index],
                 ...res
@@ -194,7 +194,7 @@ export default function DistributedTech(): React.ReactNode {
                                 dataIndex: 'planDeliveryTime',
                                 width: 120,
                                 render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                    <Form.Item name={ ["list", index, "planDeliveryTime"] } key={ index } rules={[{
+                                    <Form.Item name={ ["list", index, "newPlanDeliveryTime"] } key={ index } rules={[{
                                         required:true,
                                         message:'请选择计划交货日期'
                                     }]}>
@@ -231,7 +231,7 @@ export default function DistributedTech(): React.ReactNode {
                             const value:any = selectedRows.map((res)=>{
                                 return {
                                     ...res,
-                                    planDeliveryTime: res.planDeliveryTime && moment(res.planDeliveryTime)
+                                    newPlanDeliveryTime: res.planDeliveryTime && moment(res.planDeliveryTime)
                                 }
                             })
                             formRef.setFieldsValue({
