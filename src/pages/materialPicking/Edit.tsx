@@ -83,8 +83,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 pickingUnitId: baseData.pickingUnit?.id,
                 workPlanNumber: baseData.workPlanNumber?.value,
                 workPlanNumberId: baseData.workPlanNumber?.id,
-                productNumber: baseData.workPlanNumber?.records[0].productNumbers,
-                internalNumber: baseData.workPlanNumber?.records[0].internalNumber,
+                productNumber: baseData.workPlanNumber?.records?.[0]?.productNumbers,
+                internalNumber: baseData.workPlanNumber?.records?.[0]?.internalNumber,
                 pickingUserName: baseData.pickingUserName?.value,
                 pickingUserId: baseData.pickingUserName?.id,
                 pickingWareHouse: baseData.pickingWareHouse?.value,
@@ -160,15 +160,9 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 })
             } else {
                 materialPickingInfos.push({
-                    onlyId: mItem.onlyId,
-                    materialName: mItem.materialName,
-                    materialTexture: mItem.materialTexture,
-                    materialStandard: mItem.materialStandard,
-                    materialShortageQuantity: mItem.materialShortageQuantity,
-                    plannedSurplusLength: mItem.plannedSurplusLength,
-                    spec: mItem.spec,
-                    length: mItem.length,
-                    weight: mItem.weight,
+                    ...mItem,
+                    spec: mItem.spec || mItem.structureSpec,
+                    materialTexture: mItem.materialTexture || mItem.structureTexture,
                     applyQuantity: 1,
                     ids: [mItem.id]
                 })
@@ -177,9 +171,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         setMaterialPickingInfoDTOS(materialPickingInfos)
     }
 
-    const handleRemove = (onlyId: string) => {
-        setMaterialPickingInfoDTOS(materialPickingInfoDTOS.filter((item: any) => item.onlyId !== onlyId))
-    }
+    const handleRemove = (onlyId: string) => setMaterialPickingInfoDTOS(materialPickingInfoDTOS.filter((item: any) => item.onlyId !== onlyId))
+
 
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
 
@@ -200,15 +193,16 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     path: `${chooseMaterial.path}?planNumber=${chooseMaterialParmas.planNumber}&product=${chooseMaterialParmas.product}&productCategoryName=${chooseMaterialParmas.productCategoryName}`
                 }}
                 value={{
-                    value: "", id: "",
-                    records: materialPickingInfoDTOS.reduce((total: any[], item: any) => total.concat(item.ids.map((id: any) => ({ id }))), [])
+                    value: "",
+                    id: "",
+                    records: materialPickingInfoDTOS.reduce((total: any[], item: any) => total.concat(item.ids.map((id: any) => ({ ...item, id }))), [])
                 }}
-                onChange={(records: any) => setMaterials((records.map((item: any) => ({
-                    ...item,
-                    spec: item.structureSpec,
-                    materialTexture: item.structureTexture,
-                    onlyId: `${item.materialName}${item.structureTexture}${item.structureSpec}${item.length}`
-                }))))}
+                onChange={(records: any) => setMaterials((records.map((item: any) => {
+                    return ({
+                        ...item,
+                        onlyId: `${item.materialName}${item.structureTexture}${item.structureSpec}${item.length}`
+                    })
+                })))}
             />
         </Modal>
         <DetailTitle title="基础信息" />

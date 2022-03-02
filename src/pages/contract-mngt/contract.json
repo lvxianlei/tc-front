@@ -315,10 +315,50 @@
         {
             "title": "经办人",
             "dataIndex": "operator",
-            "rules": [
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "dependencies": true,
+            "value": "name",
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
+            "columns": [
                 {
-                    "required": true,
-                    "message": "请选择经办人..."
+                    "title": "部门",
+                    "dataIndex": "deptName"
+                },
+                {
+                    "title": "姓名",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "手机号",
+                    "dataIndex": "phone"
+                },
+                {
+                    "title": "角色",
+                    "dataIndex": "roleName"
+                },
+                {
+                    "title": "工号",
+                    "dataIndex": "number"
+                },
+                {
+                    "title": "邮箱",
+                    "dataIndex": "email"
+                }
+            ],
+            "search": [
+                {
+                    "title": "",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 200,
+                    "placeholder": "账号/手机号/姓名/工号/邮箱"
                 }
             ]
         },
