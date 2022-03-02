@@ -14,7 +14,7 @@ interface ChooseModalProps {
 /**
  * 纸质单号，原材料税款合计，车辆牌照
  */
-const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModalProps, ref) => {
+const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const [chooseList, setChooseList] = useState<any[]>(initChooseList)
     const [selectList, setSelectList] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
@@ -22,7 +22,6 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
     const [oprationType, setOprationType] = useState<"select" | "remove">("select")
     const [form] = Form.useForm();
     const [serarchForm] = Form.useForm();
-
     // 定义承接待选区的所有数据
     const [waitingArea, setWaitingArea] = useState<any[]>([])
 
@@ -55,13 +54,21 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [numberStatus] })
+    }), { refreshDeps: [id] })
 
     const resetFields = () => {
         setCurrentId("")
-        setChooseList([])
-        setSelectList([])
-        setWaitingArea([])
+        setChooseList(initChooseList)
+        setSelectList(data?.materialContractDetailVos.map((item: any) => ({
+            ...item,
+            quantity: item.surplusNum,
+            id: item.id
+        })).filter((item: any) => item.quantity))
+        setWaitingArea(data?.materialContractDetailVos.map((item: any) => ({
+            ...item,
+            quantity: item.surplusNum,
+            id: item.id
+        })).filter((item: any) => item.quantity))
     }
 
     const handleRemove = async (id: string) => {
@@ -236,11 +243,15 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
             ...SelectedArea, {
                 title: "操作",
                 dataIndex: "opration",
-                render: (_: any, records: any) => <a onClick={() => {
-                    setCurrentId(records.id)
-                    setOprationType("remove")
-                    setVisible(true)
-                }}>移除</a>
+                render: (_: any, records: any) => <Button
+                    size="small"
+                    type="link"
+                    disabled={records.receiveDetailStatus === 1}
+                    onClick={() => {
+                        setCurrentId(records.id)
+                        setOprationType("remove")
+                        setVisible(true)
+                    }}>移除</Button>
             }]} dataSource={chooseList} />
         <DetailTitle title="待选区" />
         <div>
@@ -309,11 +320,15 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
             {
                 title: "操作",
                 dataIndex: "opration",
-                render: (_: any, records: any) => <a onClick={() => {
-                    setCurrentId(records.id)
-                    setOprationType("select")
-                    setVisible(true)
-                }}>选择</a>
+                render: (_: any, records: any) => <Button
+                    type="link"
+                    size="small"
+                    disabled={records.receiveDetailStatus === 1}
+                    onClick={() => {
+                        setCurrentId(records.id)
+                        setOprationType("select")
+                        setVisible(true)
+                    }}>选择</Button>
             }]} dataSource={selectList} />
     </Spin>
 })
@@ -523,6 +538,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 unloadTaxPrice: fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0",
                 unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
             })
+            setCargoData([])
+            modalRef.current?.resetFields()
         }
         if (fields.supplierName) {
             const supplierData = fields.supplierName.records[0]
@@ -561,7 +578,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         <BaseInfo col={2} form={form} onChange={handleBaseInfoChange} columns={
             columns.map((item: any) => {
                 if (item.dataIndex === "paperNumber") {
-                    return({
+                    return ({
                         ...item,
                         maxLength: 20,
                         rules: [
