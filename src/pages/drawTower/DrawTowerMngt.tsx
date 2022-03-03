@@ -20,10 +20,10 @@ export default function DrawTowerMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'name',
+            key: 'projectName',
             title: '图纸工程名称',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'projectName'
         },
         {
             key: 'internalNumber',
@@ -38,21 +38,21 @@ export default function DrawTowerMngt(): React.ReactNode {
             dataIndex: 'planNumber'
         },
         {
-            key: 'saleOrderNumber',
+            key: 'ownerUnit',
             title: '业主单位',
-            dataIndex: 'saleOrderNumber',
+            dataIndex: 'ownerUnit',
             width: 200
         },
         {
-            key: 'name',
+            key: 'designInstitute',
             title: '设计院',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'designInstitute'
         },
         {
-            key: 'saleOrderNumber',
+            key: 'name',
             title: '塔型',
-            dataIndex: 'saleOrderNumber',
+            dataIndex: 'name',
             width: 200
         },
         {
@@ -118,7 +118,6 @@ export default function DrawTowerMngt(): React.ReactNode {
                     <Link to={`/drawTower/drawTowerMngt/towerInformation/${record.id}`}>塔型信息</Link>
                     <DeliverablesListing id={record.id} />
                     <Link to={`/drawTower/drawTowerMngt/withSectionInformation/${record.id}`}>配段信息</Link>
-
                 </Space>
             )
         }
