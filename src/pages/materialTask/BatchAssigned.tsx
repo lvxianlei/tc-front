@@ -5,19 +5,17 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, Select,DatePicker, Input, TreeSelect, Row, Col } from 'antd'
+import { Spin, Form, Select, DatePicker, Input, TreeSelect, Row, Col } from 'antd'
 import { CommonTable, DetailTitle } from '../common'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import styles from './MaterialTaskList.module.less';
-import moment from "moment"
 import { TreeNode } from "antd/lib/tree-select";
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
-import { IMaterialTask } from "./MaterialTaskList"
+import { IAssignedList } from "./MaterialTaskList"
 
 export interface EditProps {
-    type: "new" | "edit",
-    id: string
+    id: string;
 }
 
 export interface EditRefProps {
@@ -25,20 +23,19 @@ export interface EditRefProps {
     resetFields: () => void
 }
 
-
-export default forwardRef(function Edit({ type, id }: EditProps, ref) {
+export default forwardRef(function Edit({ id }: EditProps, ref) {
     const [form] = Form.useForm();
     const [userList, setUserList] = useState<any>();
 
-    const { loading, data } = useRequest<IMaterialTask>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<IAssignedList[]>(() => new Promise(async (resole, reject) => {
         try {
-            const result: IMaterialTask = await RequestUtil.get<IMaterialTask>(`/tower-aps/work/center/info/${id}`)
-            form.setFieldsValue({ assignedList: [...result?.assignedList || []] });
+            const result: IAssignedList[] = await RequestUtil.get<IAssignedList[]>(`/tower-science/materialProductCategory/list?taskIds=${id}`)
+            form.setFieldsValue({ assignedList: [...result || []] });
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new", refreshDeps: [id] })
+    }), { refreshDeps: [id] })
 
     const { data: department } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -51,7 +48,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-aps/work/center/info`, { ...postData, id: data?.id })
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-science/materialProductCategory`, [...postData])
             resole(result)
         } catch (error) {
             reject(error)
@@ -65,12 +62,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const value = assignedList.map((res: any, index: number) => {
                 return {
                     ...res,
-                    user: res.user === 0 ? assignedList[assignedList.findIndex((item: any) => item.user === 0 ) - 1].user : res.user,
-                    specificationName: res.specificationName === 4 ? assignedList[assignedList.findIndex((item: any) => item.specificationName === 4 ) - 1].specificationName : res.specificationName
+                    materialLeader: res.materialLeader === 0 ? assignedList[assignedList.findIndex((item: any) => item.materialLeader === 0) - 1].materialLeader : res.materialLeader,
+                    priority: res.priority === 0 ? assignedList[assignedList.findIndex((item: any) => item.priority === 4) - 1].priority : res.priority,
+                    materialDeliverTime: value.materialDeliverTime.format('YYYY-MM-DD')
                 }
             })
             console.log(value)
-            await saveRun({})
+            await saveRun(value)
             resolve(true);
         } catch (error) {
             reject(false)
@@ -106,110 +104,105 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const tableColumns = [
         {
-            key: 'name',
+            key: 'productCategoryName',
             title: '塔型',
-            dataIndex: 'name',
+            dataIndex: 'productCategoryName',
             width: 120
         },
         {
-            key: 'processId',
+            key: 'patternName',
             title: '模式',
-            dataIndex: 'processId',
+            dataIndex: 'patternName',
             width: 100
         },
         {
-            key: 'user',
+            key: 'materialLeader',
             title: <span>提料负责人<span style={{ color: 'red' }}>*</span></span>,
-            dataIndex: 'user',
+            dataIndex: 'materialLeader',
             width: 220,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Row>
                     <Col span={14}>
-                    <Form.Item name={["assignedList", index, "materialName"]}>
-                        <TreeSelect size="small" placeholder="请选择" onChange={async (value: any) => {
-                           
+                        <Form.Item name={["assignedList", index, "materialLeaderDept"]}>
+                            <TreeSelect size="small" placeholder="请选择" onChange={async (value: any) => {
                                 const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
                                 setUserList({ ...userList, [index]: userData.records });
                                 form.getFieldsValue(true).assignedList[index] = {
                                     ...form.getFieldsValue(true).assignedList[index],
-                                    user: ''
+                                    materialLeader: ''
                                 }
                                 console.log(form.getFieldsValue(true).assignedList)
-                                form.setFieldsValue({assignedList: [...form.getFieldsValue(true).assignedList]})
-                                
-                            
-                        }}>
-                            {renderTreeNodes(wrapRole2DataNode(department))}
-                        </TreeSelect>
-                    </Form.Item>
+                                form.setFieldsValue({ assignedList: [...form.getFieldsValue(true).assignedList] })
+                            }}>
+                                {renderTreeNodes(wrapRole2DataNode(department))}
+                            </TreeSelect>
+                        </Form.Item>
                     </Col>
                     <Col span={10}>
-                    
-                    <Form.Item name={["assignedList", index, "user"]} rules={[{ required: true, message: "请选择人员" }]} initialValue={_ ? _ : index === 0 ? '' : 0}>
-                        <Select size="small" onChange={(e: any) => {
-                            if(e === 0) {
-                                console.log(_)
-                                form.getFieldsValue(true).assignedList[index] = {
-                                    ...form.getFieldsValue(true).assignedList[index],
-                                    materialName: ''
+                        <Form.Item name={["assignedList", index, "materialLeader"]} rules={[{ required: true, message: "请选择人员" }]} initialValue={_ ? _ : index === 0 ? '' : 0}>
+                            <Select size="small" onChange={(e: any) => {
+                                if (e === 0) {
+                                    form.getFieldsValue(true).assignedList[index] = {
+                                        ...form.getFieldsValue(true).assignedList[index],
+                                        materialLeaderDept: ''
+                                    }
+                                    form.setFieldsValue({ assignedList: [...form.getFieldsValue(true).assignedList] });
+                                    setUserList({ ...userList, [index]: [] });
                                 }
-                                form.setFieldsValue({assignedList: [...form.getFieldsValue(true).assignedList]});
-                                setUserList({ ...userList, [index]: [] });
-                            }
-                        }}>
-                            {index !== 0 ? <Select.Option value={0} key={0}>同上</Select.Option> : null}
-                            {userList && userList[index] &&  userList[index].map((item: any) => {
-                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                            })}
-                        </Select>
-                    </Form.Item>
+                            }}>
+                                {index !== 0 ? <Select.Option value={0} key={0}>同上</Select.Option> : null}
+                                {userList && userList[index] && userList[index].map((item: any) => {
+                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
                     </Col>
                 </Row>
             )
         },
         {
-            key: 'specificationName',
+            key: 'priority',
             title: <span>优先级<span style={{ color: 'red' }}>*</span></span>,
-            dataIndex: 'specificationName',
+            dataIndex: 'priority',
             width: 120,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["assignedList", index, "specificationName"]} initialValue={_ ? _ : index === 0 ? '' : 4} rules={[{
+                <Form.Item name={["assignedList", index, "priority"]} initialValue={_ ? _ : index === 0 ? '' : 0} rules={[{
                     "required": true,
                     "message": "请选择优先级"
                 }]}>
                     <Select style={{ width: '100px' }} placeholder="请选择" size="small">
-                        {index !== 0 ? <Select.Option value={4} key={4}>同上</Select.Option> : null}
-                        <Select.Option value={0} key={0}>紧急</Select.Option>
-                        <Select.Option value={1} key={1}>高</Select.Option>
-                        <Select.Option value={2} key={2}>中</Select.Option>
-                        <Select.Option value={3} key={3}>低</Select.Option>
+                        {index !== 0 ? <Select.Option value={0} key={0}>同上</Select.Option> : null}
+                        <Select.Option value={1} key={1}>紧急</Select.Option>
+                        <Select.Option value={2} key={2}>高</Select.Option>
+                        <Select.Option value={3} key={3}>中</Select.Option>
+                        <Select.Option value={4} key={4}>低</Select.Option>
                     </Select>
                 </Form.Item>
             )
         },
         {
-            key: 'materialTextureName',
+            key: 'materialDeliverTime',
             title: <span>计划交付时间<span style={{ color: 'red' }}>*</span></span>,
-            dataIndex: 'materialTextureName',
+            dataIndex: 'materialDeliverTime',
             width: 150,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["assignedList", index, "materialTextureName"]} initialValue={_} 
-                rules={[{
-                    "required": true,
-                    "message": "请选择计划交付时间"
-                }]}
+                <Form.Item name={["assignedList", index, "materialDeliverTime"]} initialValue={_}
+                    rules={[{
+                        "required": true,
+                        "message": "请选择计划交付时间"
+                    }]}
                 >
                     <DatePicker size="small" />
                 </Form.Item>
             )
         },
         {
-            key: 'workHour',
+            key: 'description',
             title: '备注',
-            dataIndex: 'workHour',
+            dataIndex: 'description',
             width: 180,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["assignedList", index, "workHour"]} initialValue={_}>
+                <Form.Item name={["assignedList", index, "description"]} initialValue={_}>
                     <Input maxLength={40} size="small" key={index} />
                 </Form.Item>
             )
@@ -225,7 +218,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             <CommonTable
                 scroll={{ x: 500 }}
                 rowKey="id"
-                dataSource={[{ name: '塔型A', id: '123456', materialName: '', specificationName: '' }, { name: '塔型B', id: '12348452', materialName: '', specificationName: 4 }, { name: '塔型C', id: '789546' }]}
+                dataSource={data}
                 pagination={false}
                 columns={tableColumns}
                 className={styles.addModal} />
