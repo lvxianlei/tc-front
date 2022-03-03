@@ -74,7 +74,7 @@
      public getFilterFormItemProps(): FormItemProps[] {
          return [{
              label: "用户姓名",
-             name: 'name',
+             name: 'fuzzyQuery',
              children: <Input placeholder="请输入用户姓名" />
          }];
      }
