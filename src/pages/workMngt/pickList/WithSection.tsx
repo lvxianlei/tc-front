@@ -102,11 +102,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const fastWithSectoin = () => {
         setFastLoading(true)
         const inputString: string = fastForm.getFieldsValue(true).fast;
-        console.log((/[(,-]+\*[0-9]+/g).test(inputString))
-        console.log((/[(,*-]+\*[0-9]+|[(,*-]+\*[a-zA-Z()-*,]+/g).test(inputString))
-        const inputList = inputString.split(',');
-        let list: IMaterialDetail[] = [];
-        inputList.forEach((res: string) => {
+        if ((/[(,*-]+\*[0-9]+|[(,*-]+\*[a-zA-Z()-*,]+|^[,*)-]*[0-9a-zA-Z]/g).test(inputString)) {
+            message.error('请输入正确格式');
+            setFastLoading(false);
+        } else {
+            const inputList = inputString.split(',');
+            let list: IMaterialDetail[] = [];
+            inputList.forEach((res: string) => {
 
                 const newRes = res.split('*')[0].replace(/\(|\)/g, "");
                 if ((/^[0-9]+-[0-9]+$/).test(newRes)) {
@@ -122,7 +124,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                                 clearInterval(t);
                             }
                         }, 0)
-
                     } else {
                         let num = Number(newRes.split('-')[0])
                         let t = setInterval(() => {
@@ -141,20 +142,15 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         count: Number(res.split('*')[1]) || 1
                     })
                 }
-            
-        })
-                setTimeout(() => {
-                    // console.log(list)
-                    // delSameObjValue(list)
-                    console.log(delSameObjValue([...list]));
-                    setFastLoading(false)
-                }, 1000)
-            // } else {
-            //     message.warning('请输入正确形式！')
-            // }
 
+            })
+            setTimeout(() => {
+                // delSameObjValue(list)
+                console.log(delSameObjValue([...list]));
+                setFastLoading(false)
+            }, 1000)
+        }
     }
-
 
     return <Spin spinning={loading}>
         {type === 'new' ? <Form form={fastForm}>
