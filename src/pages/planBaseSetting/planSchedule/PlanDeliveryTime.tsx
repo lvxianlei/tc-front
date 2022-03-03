@@ -97,7 +97,6 @@ export default function DistributedTech(): React.ReactNode {
             key: 'reason',
             title: '交货期变更原因',
             dataIndex: 'reason',
-            width: 300,
         },
         {
             key: 'operation',
