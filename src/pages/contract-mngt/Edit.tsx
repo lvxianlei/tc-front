@@ -126,8 +126,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 const name = res.materialTexture;
                 return {
                     ...res,
-                    materialTexture: id,
-                    materialTextureId: name,
+                    materialTexture: name,
+                    materialTextureId: id,
                 }
             }) || [])
             setSupplierId(result.supplierId);
@@ -310,8 +310,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     taxPrice,
                     price,
                     width: formatSpec(item.structureSpec).width,
-                    materialTexture: id,
-                    materialTextureId: name,
+                    materialTexture: name,
+                    materialTextureId: id,
                     // length: formatSpec(item.structureSpec).length,
                     weight: item.weight || "1.00",
                     taxTotalAmount: (num * taxPrice).toFixed(2),
@@ -537,19 +537,22 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "materialStandard") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select style={{ width: '150px' }} value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName} onChange={(e: string) => {
-                                const newData = materialList.map((item: any, index: number) => {
-                                    if (index === key) {
-                                        return {
-                                            ...item,
-                                            materialStandard: e.split(',')[0],
-                                            materialStandardName: e.split(',')[1]
+                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select
+                                style={{ width: '150px' }}
+                                value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName}
+                                onChange={(e: string) => {
+                                    const newData = materialList.map((item: any, index: number) => {
+                                        if (index === key) {
+                                            return {
+                                                ...item,
+                                                materialStandard: e.split(',')[0],
+                                                materialStandardName: e.split(',')[1]
+                                            }
                                         }
-                                    }
-                                    return item
-                                })
-                                setMaterialList(newData)
-                            }}>
+                                        return item
+                                    })
+                                    setMaterialList(newData)
+                                }}>
                                 {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         })
@@ -557,19 +560,22 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "materialTextureId") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <Select style={{ width: '150px' }} value={materialList[key]?.materialTextureId && materialList[key]?.materialTextureId + ',' + materialList[key]?.materialTexture} onChange={(e: string) => {
-                                const newData = materialList.map((item: any, index: number) => {
-                                    if (index === key) {
-                                        return {
-                                            ...item,
-                                            materialTextureId: e.split(',')[0],
-                                            materialTexture: e.split(',')[1]
+                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialTexture : <Select
+                                style={{ width: '150px' }}
+                                value={materialList[key]?.materialTextureId && materialList[key]?.materialTextureId + ',' + materialList[key]?.materialTexture}
+                                onChange={(e: string) => {
+                                    const newData = materialList.map((item: any, index: number) => {
+                                        if (index === key) {
+                                            return {
+                                                ...item,
+                                                materialTextureId: e.split(',')[0],
+                                                materialTexture: e.split(',')[1]
+                                            }
                                         }
-                                    }
-                                    return item
-                                })
-                                setMaterialList(newData)
-                            }}>
+                                        return item
+                                    })
+                                    setMaterialList(newData)
+                                }}>
                                 {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         })
