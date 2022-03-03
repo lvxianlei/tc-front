@@ -231,10 +231,12 @@ export default function DistributedTech(): React.ReactNode {
                                 dataIndex: 'reason',
                                 width: 150,
                                 render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                    <Form.Item name={ ["list", index, "reason"] } key={ index } rules={[{
-                                        required:true,
-                                        message:'请填写交货期变更原因'
-                                    }]}>
+                                    <Form.Item name={ ["list", index, "reason"] } key={ index } 
+                                    // rules={[{
+                                    //     required:true,
+                                    //     message:'请填写交货期变更原因'
+                                    // }]}
+                                    >
                                         <Input maxLength={ 50 }/>
                                     </Form.Item>
                                 ) 
