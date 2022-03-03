@@ -10,9 +10,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import styles from './DrawTower.module.less';
 import { FixedType } from 'rc-table/lib/interface';
-
 
 export default function WithSectionInformation(): React.ReactNode {
 
@@ -24,55 +22,55 @@ export default function WithSectionInformation(): React.ReactNode {
             dataIndex: 'index',
             width: 50,
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-         },
-         {
-            key: 'sort',
-             title: '杆塔号',
-             dataIndex: 'sort',
-             width: 150,
-         },
-         {
-             key: 'planNumber',
-             title: '呼高',
-             dataIndex: 'planNumber',
-             width: 150
-         },
-         {
-             key: 'productCategoryName',
-             title: '配段信息',
-             dataIndex: 'productCategoryName',
-             width: 150
-         },
-         {
-             key: 'productNum',
-             title: 'A',
-             dataIndex: 'productNum',
-             width: 80
-         },
-         {
-             key: 'description',
-             title: 'B',
-             dataIndex: 'description',
-             width: 80
-         },
-         {
-             key: 'description',
-             title: 'C',
-             dataIndex: 'description',
-             width: 80
-         },
-         {
-             key: 'description',
-             title: 'D',
-             dataIndex: 'description',
-             width: 80
-         }
+        },
+        {
+            key: 'productNumber',
+            title: '杆塔号',
+            dataIndex: 'productNumber',
+            width: 150,
+        },
+        {
+            key: 'productHeight',
+            title: '呼高',
+            dataIndex: 'productHeight',
+            width: 150
+        },
+        {
+            key: 'paragraphMessage',
+            title: '配段信息',
+            dataIndex: 'paragraphMessage',
+            width: 150
+        },
+        {
+            key: 'legWeightA',
+            title: 'A',
+            dataIndex: 'legWeightA',
+            width: 80
+        },
+        {
+            key: 'legWeightB',
+            title: 'B',
+            dataIndex: 'legWeightB',
+            width: 80
+        },
+        {
+            key: 'legWeightC',
+            title: 'C',
+            dataIndex: 'legWeightC',
+            width: 80
+        },
+        {
+            key: 'legWeightD',
+            title: 'D',
+            dataIndex: 'legWeightD',
+            width: 80
+        }
     ]
 
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(``)
+        const data = await RequestUtil.get(`/tower-science/productCategory/getParagraphMessage/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -83,11 +81,11 @@ export default function WithSectionInformation(): React.ReactNode {
         </Spin>
     }
 
-    return <DetailContent operation={ [
+    return <DetailContent operation={[
         <Space direction="horizontal" size="small" >
             <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
         </Space>
-    ] }>
-        <CommonTable columns={ tableColumns } dataSource={ detailData } pagination={ false }/>
+    ]}>
+        <CommonTable columns={tableColumns} dataSource={detailData} pagination={false} />
     </DetailContent>
 }
