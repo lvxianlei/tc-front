@@ -186,7 +186,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 columns={columns}
                 headTabs={[]}
                 extraOperation={<Space>
-                    <Link to={`/planSchedule/planScheduleMngt/planDeliveryTime/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>计划交货期</Button></Link>
+                    <Link to={`/planSchedule/planScheduleMngt/planDeliveryTime/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>设置/变更计划交货期</Button></Link>
                     <Link to={`/planSchedule/planScheduleMngt/SplitBatch/${selectedKeys[0]}`}><Button type="primary" disabled={selectedKeys.length !== 1}>拆分批次</Button></Link>
                     <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => {
                         let tip: boolean[] = [];

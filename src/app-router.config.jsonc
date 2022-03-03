@@ -1648,6 +1648,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 计划排产-计划交货期
+      "name": "变更记录",
+      "path": "/planSchedule/planScheduleMngt/planDeliveryTime/:ids/:id",
+      "module": "./pages/planBaseSetting/planSchedule/ChangeRecord",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 包装车间-加工任务面板
       "name": "包装计划列表",
       "path": "/packagingWorkshop/processingTask",
