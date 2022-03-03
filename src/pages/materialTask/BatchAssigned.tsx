@@ -139,7 +139,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                         </Form.Item>
                     </Col>
                     <Col span={10}>
-                        <Form.Item name={["assignedList", index, "materialLeader"]} rules={[{ required: true, message: "请选择人员" }]} initialValue={_ ? _ : index === 0 ? '' : 0}>
+                        <Form.Item name={["assignedList", index, "materialLeader"]} rules={[{ required: true, message: "请选择人员" }]} initialValue={_ ? _ : index === 0 ? null : 0}>
                             <Select size="small" onChange={(e: any) => {
                                 if (e === 0) {
                                     form.getFieldsValue(true).assignedList[index] = {
