@@ -105,13 +105,13 @@ export default function ScheduleView(): React.ReactNode {
             saveData.weldingDeliverTime= moment(saveData.weldingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.loftingDeliverTime= moment(saveData.loftingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.loftingPartDeliverTime= moment(saveData.loftingPartDeliverTime).format('YYYY-MM-DD HH:mm:ss');
-            saveData.materialDeliverTime=moment(saveData.materialDeliverTime).format('YYYY-MM-DD HH:mm:ss');
-            saveData.materialPartDeliverTime= moment(saveData.materialPartDeliverTime).format('YYYY-MM-DD HH:mm:ss');
+            // saveData.materialDeliverTime=moment(saveData.materialDeliverTime).format('YYYY-MM-DD HH:mm:ss');
+            // saveData.materialPartDeliverTime= moment(saveData.materialPartDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.smallSampleDeliverTime= moment(saveData.smallSampleDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.boltDrawDeliverTime= moment(saveData.boltDrawDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.weldingDrawDeliverTime= moment(saveData.weldingDrawDeliverTime).format('YYYY-MM-DD HH:mm:ss');
-            saveData.materialLeaderDepartment= Array.isArray(saveData.materialLeaderDepartment)?saveData.materialLeaderDepartment[0]:saveData.materialLeaderDepartment;
-            saveData.materialPartLeaderDepartment= Array.isArray(saveData.materialPartLeaderDepartment)?saveData.materialPartLeaderDepartment[0]:saveData.materialPartLeaderDepartment;
+            // saveData.materialLeaderDepartment= Array.isArray(saveData.materialLeaderDepartment)?saveData.materialLeaderDepartment[0]:saveData.materialLeaderDepartment;
+            // saveData.materialPartLeaderDepartment= Array.isArray(saveData.materialPartLeaderDepartment)?saveData.materialPartLeaderDepartment[0]:saveData.materialPartLeaderDepartment;
             saveData.boltLeaderDepartment= Array.isArray(saveData.boltLeaderDepartment)?saveData.boltLeaderDepartment[0]:saveData.boltLeaderDepartment;
             saveData.weldingLeaderDepartment= Array.isArray(saveData.weldingLeaderDepartment)?saveData.weldingLeaderDepartment[0]:saveData.weldingLeaderDepartment;
             saveData.loftingLeaderDepartment=  Array.isArray(saveData.loftingLeaderDepartment)?saveData.loftingLeaderDepartment[0]:saveData.loftingLeaderDepartment;
@@ -223,14 +223,14 @@ export default function ScheduleView(): React.ReactNode {
                         setLoad(true)
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
                         setScheduleData(resData);
-                        if(resData.materialLeaderDepartment){
-                            const materialLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialLeaderDepartment}&size=1000`);
-                            setMaterialUser(materialLeaderDepartment.records);
-                        }
-                        if(resData.materialPartLeaderDepartment){
-                            const materialPartLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialPartLeaderDepartment}&size=1000`);
-                            setMaterialPartUser(materialPartLeaderDepartment.records);
-                        }
+                        // if(resData.materialLeaderDepartment){
+                        //     const materialLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialLeaderDepartment}&size=1000`);
+                        //     setMaterialUser(materialLeaderDepartment.records);
+                        // }
+                        // if(resData.materialPartLeaderDepartment){
+                        //     const materialPartLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialPartLeaderDepartment}&size=1000`);
+                        //     setMaterialPartUser(materialPartLeaderDepartment.records);
+                        // }
                         if(resData.smallSampleLeaderDepartment){
                             const smallSampleLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.smallSampleLeaderDepartment}&size=1000`);
                             setSmallSampleUser(smallSampleLeaderDepartment.records);
@@ -251,12 +251,12 @@ export default function ScheduleView(): React.ReactNode {
                             const boltLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.boltLeaderDepartment}&size=1000`);
                             setBoltUser(boltLeaderDepartment.records);
                         }
-                        if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
-                            const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
-                            let uom = new Date(resData.materialDeliverTime);
-                            let newDate =new Date(uom.setHours(uom.getHours() + day));
-                            resData.materialPartDeliverTime = newDate
-                        }
+                        // if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
+                        //     const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
+                        //     let uom = new Date(resData.materialDeliverTime);
+                        //     let newDate =new Date(uom.setHours(uom.getHours() + day));
+                        //     resData.materialPartDeliverTime = newDate
+                        // }
                         if(resData?.assignConfigVO?.weldingCompletionTime 
                             && resData?.assignConfigVO?.loftingWithSectionCompletionTime 
                             && resData?.assignConfigVO.smallSampleCompletionTime 
@@ -303,8 +303,8 @@ export default function ScheduleView(): React.ReactNode {
                             weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
                             loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
                             loftingPartDeliverTime: resData.loftingPartDeliverTime?moment(resData.loftingPartDeliverTime):'',
-                            materialDeliverTime:resData.materialDeliverTime?moment(resData.materialDeliverTime):'',
-                            materialPartDeliverTime: resData.materialPartDeliverTime?moment(resData.materialPartDeliverTime):'',
+                            // materialDeliverTime:resData.materialDeliverTime?moment(resData.materialDeliverTime):'',
+                            // materialPartDeliverTime: resData.materialPartDeliverTime?moment(resData.materialPartDeliverTime):'',
                             smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):'',
                             boltDrawDeliverTime:resData.boltDrawDeliverTime? moment(resData.boltDrawDeliverTime):'',
                             weldingDrawDeliverTime:resData.weldingDrawDeliverTime? moment(resData.weldingDrawDeliverTime):'',
@@ -317,14 +317,14 @@ export default function ScheduleView(): React.ReactNode {
                         setLoad(true)
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
                         setScheduleData(resData);
-                        if(resData.materialLeaderDepartment){
-                            const materialLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialLeaderDepartment}&size=1000`);
-                            setMaterialUser(materialLeaderDepartment.records);
-                        }
-                        if(resData.materialPartLeaderDepartment){
-                            const materialPartLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialPartLeaderDepartment}&size=1000`);
-                            setMaterialPartUser(materialPartLeaderDepartment.records);
-                        }
+                        // if(resData.materialLeaderDepartment){
+                        //     const materialLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialLeaderDepartment}&size=1000`);
+                        //     setMaterialUser(materialLeaderDepartment.records);
+                        // }
+                        // if(resData.materialPartLeaderDepartment){
+                        //     const materialPartLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialPartLeaderDepartment}&size=1000`);
+                        //     setMaterialPartUser(materialPartLeaderDepartment.records);
+                        // }
                         if(resData.smallSampleLeaderDepartment){
                             const smallSampleLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.smallSampleLeaderDepartment}&size=1000`);
                             setSmallSampleUser(smallSampleLeaderDepartment.records);
@@ -345,12 +345,12 @@ export default function ScheduleView(): React.ReactNode {
                             const boltLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.boltLeaderDepartment}&size=1000`);
                             setBoltUser(boltLeaderDepartment.records);
                         }
-                        if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
-                            const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
-                            let uom = new Date(resData.materialDeliverTime);
-                            let newDate =new Date(uom.setHours(uom.getHours() + day));
-                            resData.materialPartDeliverTime = newDate
-                        }
+                        // if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
+                        //     const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
+                        //     let uom = new Date(resData.materialDeliverTime);
+                        //     let newDate =new Date(uom.setHours(uom.getHours() + day));
+                        //     resData.materialPartDeliverTime = newDate
+                        // }
                         if(resData?.assignConfigVO?.weldingCompletionTime 
                             && resData?.assignConfigVO?.loftingWithSectionCompletionTime 
                             && resData?.assignConfigVO.smallSampleCompletionTime 
@@ -397,8 +397,8 @@ export default function ScheduleView(): React.ReactNode {
                             weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
                             loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
                             loftingPartDeliverTime: resData.loftingPartDeliverTime?moment(resData.loftingPartDeliverTime):'',
-                            materialDeliverTime:resData.materialDeliverTime?moment(resData.materialDeliverTime):'',
-                            materialPartDeliverTime: resData.materialPartDeliverTime?moment(resData.materialPartDeliverTime):'',
+                            // materialDeliverTime:resData.materialDeliverTime?moment(resData.materialDeliverTime):'',
+                            // materialPartDeliverTime: resData.materialPartDeliverTime?moment(resData.materialPartDeliverTime):'',
                             smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):'',
                             boltDrawDeliverTime:resData.boltDrawDeliverTime? moment(resData.boltDrawDeliverTime):'',
                             weldingDrawDeliverTime:resData.weldingDrawDeliverTime? moment(resData.weldingDrawDeliverTime):'',
@@ -559,14 +559,14 @@ export default function ScheduleView(): React.ReactNode {
                                                 smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
                                                 smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
                                             });
-                                            if(resData.materialLeaderDepartment){
-                                                const materialLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialLeaderDepartment}&size=1000`);
-                                                setMaterialUser(materialLeaderDepartment.records);
-                                            }
-                                            if(resData.materialPartLeaderDepartment){
-                                                const materialPartLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialPartLeaderDepartment}&size=1000`);
-                                                setMaterialPartUser(materialPartLeaderDepartment.records);
-                                            }
+                                            // if(resData.materialLeaderDepartment){
+                                            //     const materialLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialLeaderDepartment}&size=1000`);
+                                            //     setMaterialUser(materialLeaderDepartment.records);
+                                            // }
+                                            // if(resData.materialPartLeaderDepartment){
+                                            //     const materialPartLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialPartLeaderDepartment}&size=1000`);
+                                            //     setMaterialPartUser(materialPartLeaderDepartment.records);
+                                            // }
                                             if(resData.smallSampleLeaderDepartment){
                                                 const smallSampleLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.smallSampleLeaderDepartment}&size=1000`);
                                                 setSmallSampleUser(smallSampleLeaderDepartment.records);

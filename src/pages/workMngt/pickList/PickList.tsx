@@ -172,11 +172,11 @@ export default function PickList(): React.ReactNode {
                 }]} />
             </Modal>
             <Page
-                path="/tower-science/materialTask"
+                path="/tower-science/materialProductCategory"
                 columns={columns}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
-                exportPath="/tower-science/materialTask"
+                exportPath="/tower-science/materialProductCategory"
                 requestData={ { status: location.state?.state, materialLeader: location.state?.userId } }
                 searchFormItems={[
                     {
