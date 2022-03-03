@@ -103,13 +103,13 @@
              title: '用户姓名',
              dataIndex: 'name'
          }, {
-             key: 'userRoleNames',
+             key: 'roleName',
              title: '所属角色',
-             dataIndex: 'userRoleNames'
+             dataIndex: 'roleName'
          }, {
-            key: 'departmentName',
+            key: 'deptName',
             title: '所属机构',
-            dataIndex: 'departmentName'
+            dataIndex: 'deptName'
         }];
      }
  
