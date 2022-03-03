@@ -212,9 +212,9 @@ export default function PlanScheduleMngt(): React.ReactNode {
                     rowSelection: {
                         selectedRowKeys: selectedKeys,
                         onChange: SelectChange,
-                        getCheckboxProps: (record: Record<string, any>) => ({
-                            disabled: record.loftingStatus !== 0
-                        })
+                        // getCheckboxProps: (record: Record<string, any>) => ({
+                        //     disabled: record.loftingStatus !== 0
+                        // })
                     }
                 }}
                 searchFormItems={[
