@@ -12,8 +12,8 @@ import useRequest from '@ahooksjs/use-request'
 import styles from './MaterialTaskList.module.less';
 import { TreeNode } from "antd/lib/tree-select";
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
-import { IAssignedList } from "./MaterialTaskList"
 import moment from "moment"
+import { IAssignedList } from "./IMaterialTask"
 
 export interface EditProps {
     id: string;
@@ -27,19 +27,22 @@ export interface EditRefProps {
 export default forwardRef(function Edit({ id }: EditProps, ref) {
     const [form] = Form.useForm();
     const [userList, setUserList] = useState<any>();
+    const [detailData, setDetailData] = useState<any>();
 
     const { loading, data } = useRequest<IAssignedList[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: IAssignedList[] = await RequestUtil.get<IAssignedList[]>(`/tower-science/materialProductCategory/list?taskIds=${id}`)
-            let newResult = result.map((res, index: number)=> {
+            let newResult = result.map((res: IAssignedList, index: number) => {
+                res?.materialLeaderDept && deptChange(res?.materialLeaderDept, index, 'detail')
                 return {
                     ...res,
                     materialDeliverTime: res.materialDeliverTime && moment(res.materialDeliverTime),
                     materialLeader: res.materialLeader ? res.materialLeader : index === 0 ? null : 0,
-                    priority:res.priority ? res.priority : index === 0 ? null : 0
+                    priority: res.priority ? res.priority : index === 0 ? null : 0
                 }
             })
             form.setFieldsValue({ assignedList: [...newResult || []] });
+            setDetailData(result);
             resole(result)
         } catch (error) {
             reject(error)
@@ -111,6 +114,19 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
         return roles;
     }
 
+    const deptChange = async (value: any, index: number, type: 'change' | 'detail') => {
+        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
+        setUserList({ ...userList, [index]: userData.records });
+        if (type === 'change') {
+            form.getFieldsValue(true).assignedList[index] = {
+                ...form.getFieldsValue(true).assignedList[index],
+                materialLeader: ''
+            }
+        }
+        form.setFieldsValue({ assignedList: [...form.getFieldsValue(true).assignedList] })
+        setDetailData([...form.getFieldsValue(true).assignedList]);
+    }
+
     const tableColumns = [
         {
             key: 'productCategoryName',
@@ -133,15 +149,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                 <Row>
                     <Col span={14}>
                         <Form.Item name={["assignedList", index, "materialLeaderDept"]}>
-                            <TreeSelect size="small" placeholder="请选择" onChange={async (value: any) => {
-                                const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-                                setUserList({ ...userList, [index]: userData.records });
-                                form.getFieldsValue(true).assignedList[index] = {
-                                    ...form.getFieldsValue(true).assignedList[index],
-                                    materialLeader: ''
-                                }
-                                form.setFieldsValue({ assignedList: [...form.getFieldsValue(true).assignedList] })
-                            }}>
+                            <TreeSelect size="small" placeholder="请选择" onChange={(e) => deptChange(e, index, 'change')}>
                                 {renderTreeNodes(wrapRole2DataNode(department))}
                             </TreeSelect>
                         </Form.Item>
@@ -227,7 +235,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
             <CommonTable
                 scroll={{ x: 500 }}
                 rowKey="id"
-                dataSource={[...data|| []]}
+                dataSource={[...detailData || []]}
                 pagination={false}
                 columns={tableColumns}
                 className={styles.addModal} />

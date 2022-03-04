@@ -10,7 +10,7 @@ import { CommonTable, DetailTitle } from '../common'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import styles from './MaterialTaskList.module.less';
-import { IAssignedList } from "./MaterialTaskList"
+import { IAssignedList } from "./IMaterialTask"
 
 export interface EditProps {
     id: string
