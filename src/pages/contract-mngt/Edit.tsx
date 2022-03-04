@@ -250,8 +250,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         price: item.price,
                         taxTotalAmount: item.taxTotalAmount,
                         totalAmount: item.totalAmount,
-                        materialTexture: item.source === 1 ? id : item.materialTexture,
-                        materialTextureId: item.source === 1 ? name : item.materialTextureId,
+                        // materialTexture: item.source === 1 ? id : item.materialTexture,
+                        // materialTextureId: item.source === 1 ? name : item.materialTextureId,
+                        materialTexture: item.materialTexture,
+                        materialTextureId: item.materialTextureId,
                     })
                 })
             }
@@ -434,7 +436,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return item
                 })
             }}
-                onChange={(fields: any[]) =>
+            value={{
+                id: "",
+                records: materialList,
+                value: ""
+            }}
+                onChange={(fields: any[]) => {
                     setPopDataList(fields.map((item: any) => ({
                         ...item,
                         spec: item.structureSpec,
@@ -448,8 +455,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         taxTotalAmount: item.taxTotalAmount || 1.00,
                         totalAmount: item.totalAmount || 1.00,
                         weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3)
-                    }))
-                    )} />
+                    })))
+                    setMaterialList(fields || [])
+                }} />
         </Modal>
         <DetailTitle title="合同基本信息" />
         <BaseInfo
