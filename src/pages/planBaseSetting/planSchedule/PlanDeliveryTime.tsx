@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Button, Modal, DatePicker, Form, Spin, message, Space, Input, Table } from 'antd';
+import { Button, Modal, DatePicker, Form, Spin, message, Space, Input, Table, Tooltip } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { IPlanSchedule } from './IPlanSchedule';
@@ -18,6 +18,7 @@ export default function DistributedTech(): React.ReactNode {
     const [visible, setVisible] = useState(false);
     const [visibleChange, setVisibleChange] = useState(false);
     const [dataSource, setDataSorce] = useState<IPlanSchedule[]>([]);
+    const [changeDataSource, setChangeDataSource] = useState<any[]>([]);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<IPlanSchedule[]>([]);
     const [tableChangeRows, setTableChangeRows] = useState<IPlanSchedule[]>([]);
@@ -68,13 +69,34 @@ export default function DistributedTech(): React.ReactNode {
             title: '计划交货日期',
             dataIndex: 'planDeliveryTime',
             width: 120,
-            format: 'YYYY-MM-DD'
+            format: 'YYYY-MM-DD',
+            render:(text: string, record: any)=>{
+                return <Tooltip title={()=>{
+                    
+                    return  <CommonTable columns={[ {
+                        key: 'originalDeliveryTime',
+                        title: '原计划交货日期',
+                        dataIndex: 'originalDeliveryTime',
+                    },
+                    {
+                        key: 'newDeliveryTime',
+                        title: '变更后交货日期',
+                        dataIndex: 'newDeliveryTime',
+                    }]} pagination={false} scroll={false} dataSource={changeDataSource||[]}/>
+                }} onVisibleChange={async (visible:boolean)=>{
+                    if(visible){
+                        const data: any = await RequestUtil.get(`/tower-aps/productionPlan/change/record/${record.productId}`);
+                        setChangeDataSource(data?.recordVOList)
+                    }else{
+                        setChangeDataSource([])
+                    }
+                }}><span style={{color: '#ff8c00'}}>{text}</span></Tooltip>
+            }
         },
         {
             key: 'reason',
             title: '交货期变更原因',
             dataIndex: 'reason',
-            width: 300,
         },
         {
             key: 'operation',
@@ -209,10 +231,12 @@ export default function DistributedTech(): React.ReactNode {
                                 dataIndex: 'reason',
                                 width: 150,
                                 render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                    <Form.Item name={ ["list", index, "reason"] } key={ index } rules={[{
-                                        required:true,
-                                        message:'请填写交货期变更原因'
-                                    }]}>
+                                    <Form.Item name={ ["list", index, "reason"] } key={ index } 
+                                    // rules={[{
+                                    //     required:true,
+                                    //     message:'请填写交货期变更原因'
+                                    // }]}
+                                    >
                                         <Input maxLength={ 50 }/>
                                     </Form.Item>
                                 ) 
