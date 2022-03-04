@@ -10,10 +10,18 @@ interface EditProps {
     id: string
     type: "new" | "edit"
 }
+interface PagenationProps {
+    current: number
+    pageSize: number
+}
 
 const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref) => {
     const [form] = Form.useForm()
     const [selectRows, setSelectRows] = useState<any[]>([])
+    const [pagenation, setPagenation] = useState<PagenationProps>({
+        current: 1,
+        pageSize: 10
+    })
     const {
         loading,
         data,
@@ -22,15 +30,19 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan`, {
                 ...filterValue,
-                planStatus: 1
+                planStatus: 1,
+                current: pagenation.current,
+                pageSize: pagenation.pageSize
             })
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }))
+    }), {refreshDeps: [pagenation.current]})
 
     useImperativeHandle(ref, () => ({ selectRows }), [JSON.stringify(selectRows)])
+
+    const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
     return <>
         <Form form={form} onFinish={(values) => run({
@@ -65,7 +77,15 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
                 onChange: (_: any, selectedRows: any[]) => {
                     setSelectRows(selectedRows)
                 }
-            }} />
+            }}
+            pagination={{
+                size: "small",
+                pageSize: data?.pageSize,
+                onChange: paginationChange,
+                current: data?.current,
+                total: data?.total
+            }}
+        />
     </>
 })
 
