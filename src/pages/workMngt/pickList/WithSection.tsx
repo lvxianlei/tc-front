@@ -5,8 +5,8 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, Input, Row, Col, InputNumber, Button, message, Table, Descriptions } from 'antd'
-import { CommonTable, DetailTitle } from '../../common'
+import { Spin, Form, Input, Row, Col, Button, message, Descriptions } from 'antd'
+import { DetailTitle } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import styles from './TowerPickAssign.module.less';
@@ -71,18 +71,15 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const productSegmentListDTOList = form.getFieldsValue(true).productSegmentListDTOList;
             const value = productSegmentListDTOList.map((res: any, index: number) => {
                 return {
-                    ...res,
-                    user: res.user === 0 ? productSegmentListDTOList[productSegmentListDTOList.findIndex((item: any) => item.user === 0) - 1].user : res.user,
-                    specificationName: res.specificationName === 4 ? productSegmentListDTOList[productSegmentListDTOList.findIndex((item: any) => item.specificationName === 4) - 1].specificationName : res.specificationName
+                    ...res
                 }
             })
-            console.log(value)
             await saveRun({
                 legNumberA: baseData.legNumberA,
                 legNumberB: baseData.legNumberB,
                 legNumberC: baseData.legNumberC,
                 legNumberD: baseData.legNumberD,
-                productCategoryId: detailData?.productCategoryId,
+                productCategoryId: detailData?.productCategory,
                 productId: detailData?.productId,
                 productSegmentListDTOList: value
             })
@@ -278,45 +275,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     })
                 }
             </Descriptions>
-            {/* <Row>
-                <Col span={1} />
-                <Col span={11}>
-                    <Form.Item name="productCategoryName" label="塔型">
-                        <span>{detailData?.productCategoryName}</span>
-                    </Form.Item>
-                </Col>
-                <Col span={1} />
-                <Col span={11}>
-                    <Form.Item name="productNumber" label="杆塔号">
-                        <span>{detailData?.productNumber}</span>
-                    </Form.Item>
-                </Col>
-            </Row>
-            <Row>
-                <Form.List name="detailData">
-                    {
-                        (fields, { add, remove }) => fields.map(
-                            field => (
-                                <>
-                                    <Col span={1}></Col>
-                                    <Col span={11}>
-                                        <Form.Item name={[field.name, 'segmentName']} label='段号'>
-                                            {console.log(detailData?.materialDrawProductSegmentList, field.name)}
-                                            <span>{detailData?.materialDrawProductSegmentList && detailData?.materialDrawProductSegmentList[field.name].segmentName}</span>
-                                        </Form.Item>
-                                    </Col>
-                                    <Col span={1}></Col>
-                                    <Col span={11}>
-                                        <Form.Item name={[field.name, 'count']} label='段数' initialValue={[field.name, 'count']} >
-                                            <InputNumber min={0} precision={0} style={{ width: '100%' }} disabled={type === 'detail'} />
-                                        </Form.Item>
-                                    </Col>
-                                </>
-                            )
-                        )
-                    }
-                </Form.List>
-            </Row> */}
         </Form>
     </Spin>
 })

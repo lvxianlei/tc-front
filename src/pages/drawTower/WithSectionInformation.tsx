@@ -42,27 +42,27 @@ export default function WithSectionInformation(): React.ReactNode {
             width: 150
         },
         {
-            key: 'legWeightA',
+            key: 'legNumberA',
             title: 'A',
-            dataIndex: 'legWeightA',
+            dataIndex: 'legNumberA',
             width: 80
         },
         {
-            key: 'legWeightB',
+            key: 'legNumberB',
             title: 'B',
-            dataIndex: 'legWeightB',
+            dataIndex: 'legNumberB',
             width: 80
         },
         {
-            key: 'legWeightC',
+            key: 'legNumberC',
             title: 'C',
-            dataIndex: 'legWeightC',
+            dataIndex: 'legNumberC',
             width: 80
         },
         {
-            key: 'legWeightD',
+            key: 'legNumberD',
             title: 'D',
-            dataIndex: 'legWeightD',
+            dataIndex: 'legNumberD',
             width: 80
         }
     ]

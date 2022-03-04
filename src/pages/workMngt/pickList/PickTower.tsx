@@ -1,15 +1,14 @@
 import React, { useRef, useState } from 'react'
-import { Space, DatePicker, Button, Form, Modal, Row, Col, Select, message, InputNumber, Input } from 'antd'
+import { Space, DatePicker, Button, Form, Modal, Select, message } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailTitle, Page } from '../../common'
-import RequestUtil from '../../../utils/RequestUtil';
+import { Page } from '../../common'
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import styles from './pick.module.less';
 import useRequest from '@ahooksjs/use-request';
 import WithSection, { EditRefProps } from './WithSection';
-import { registerCoordinateSystem } from 'echarts';
+import AuthUtil from '../../../utils/AuthUtil';
 export interface IDetail {
     productCategory?: string;
     productCategoryName?: string;
@@ -29,20 +28,15 @@ export interface IMaterialDetail {
     segmentName?: string;
 }
 export default function PickTower(): React.ReactNode {
-    const [visible, setVisible] = useState<boolean>(false);
-    const [segmentVisible, setSegmentVisible] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [matchLeader, setMatchLeader] = useState<any | undefined>([]);
-    const [department, setDepartment] = useState<any | undefined>([]);
     const params = useParams<{ id: string, status: string }>()
     const history = useHistory();
-    const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState({});
     const [productId, setProductId] = useState('');
     const [status, setStatus] = useState('');
-    const [detail, setDetail] = useState<IDetail>({});
     const [withSectionVisible, setWithSectionVisible] = useState<boolean>(false);
     const editRef = useRef<EditRefProps>();
+    const userId = AuthUtil.getUserId();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         // const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         // setDepartment(departmentData);
@@ -59,50 +53,6 @@ export default function PickTower(): React.ReactNode {
             reject(false)
         }
     })
-
-    // const handleModalSave = async () => {
-    //     try {
-    //         const data = await form.validateFields();
-    //         const saveTableData = data.detailData.map((item: any, index: number) => {
-    //             return {
-    //                 segmentId: item.id,
-    //                 ...item,
-    //                 id: item.id === -1 ? '' : item.id,
-    //             }
-    //         });
-    //         const saveData = {
-    //             productCategoryId: params.id,
-    //             productId: productId,
-    //             productSegmentListDTOList: saveTableData.map((item: any) => {
-    //                 return {
-    //                     ...item,
-    //                     count: item?.count !== null ? item?.count : 0
-    //                 }
-    //             }),
-    //             legNumberA: data.legNumberA,
-    //             legNumberB: data.legNumberB,
-    //             legNumberC: data.legNumberC,
-    //             legNumberD: data.legNumberD
-    //         }
-    //         RequestUtil.post(`/tower-science/product/material/segment/save`, saveData).then(() => {
-    //             message.success('保存成功！');
-    //             setVisible(false);
-    //             setProductId('');
-    //             form.setFieldsValue({
-    //                 legNumberA: '',
-    //                 legNumberB: '',
-    //                 legNumberC: '',
-    //                 legNumberD: '',
-    //                 detailData: []
-    //             })
-    //             form.resetFields();
-    //         }).then(() => {
-    //             setRefresh(!refresh);
-    //         })
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
 
     const columns = [
         {
@@ -168,40 +118,17 @@ export default function PickTower(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Button type='link' onClick={async () => {
-                        // setVisible(true);
+                    <Button type='link' disabled={record?.materialLeaderList?.findIndex((res: string) => { return res === userId }) === -1} onClick={async () => {
                         setWithSectionVisible(true);
-                        // let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}`)
-                        // const detailData: IMaterialDetail[] | undefined = data && data.materialDrawProductSegmentList && data.materialDrawProductSegmentList.map((item: IMaterialDetail) => {
-                        //     return {
-                        //         ...item,
-                        //     }
-                        // })
                         setProductId(record.id);
-                        // setDetail({
-                        //     ...data,
-                        //     materialDrawProductSegmentList: detailData
-                        // })
-                        // form.setFieldsValue({
-                        //     legNumberA: data?.legNumberA,
-                        //     legNumberB: data?.legNumberB,
-                        //     legNumberC: data?.legNumberC,
-                        //     legNumberD: data?.legNumberD,
-                        //     detailData: detailData
-                        // });
                         setStatus(record.materialStatusName)
                     }} >配段</Button>
-                    <Button type='link' onClick={() => { history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`) }} disabled={record.materialStatus !== 3}>杆塔提料明细</Button>
+                    <Button type='link' onClick={() => { history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`) }}>杆塔提料明细</Button>
                 </Space>
             )
         }
     ]
 
-    // const handleModalCancel = () => { setVisible(false); setProductId(''); form.resetFields() };
-    // const formItemLayout = {
-    //     labelCol: { span: 4 },
-    //     wrapperCol: { span: 17 }
-    // };
     // const onDepartmentChange = async (value: Record<string, any>) => {
     //     if (value) {
     //         const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
@@ -211,6 +138,7 @@ export default function PickTower(): React.ReactNode {
     //         setMatchLeader([]);
     //     }
     // }
+
     const renderTreeNodes = (data: any) => data.map((item: any) => {
         if (item.children) {
             return (
@@ -221,6 +149,7 @@ export default function PickTower(): React.ReactNode {
         }
         return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
     });
+
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles.forEach((role: any & SelectDataNode): void => {
             role.value = role.id;
@@ -231,6 +160,7 @@ export default function PickTower(): React.ReactNode {
         });
         return roles;
     }
+
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -241,6 +171,7 @@ export default function PickTower(): React.ReactNode {
         setFilterValue(value)
         return value
     }
+
     return (
         <>
             <Modal
@@ -256,142 +187,6 @@ export default function PickTower(): React.ReactNode {
                 }}>
                 <WithSection id={productId} ref={editRef} type={status === '已完成' ? 'detail' : 'new'} />
             </Modal>
-            {/* <Modal title='配段信息' width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
-                {detail?.materialDrawProductSegmentList ?
-                    <Form initialValues={{ detailData: detail.materialDrawProductSegmentList, legNumberA: detail?.legNumberA, legNumberB: detail?.legNumberB, legNumberC: detail?.legNumberC, legNumberD: detail?.legNumberD }} autoComplete="off" form={form}>
-                        <DetailTitle title={'塔腿配段信息'} operation={[status !== '已完成' && <Button type='primary' onClick={() => { setSegmentVisible(true) }}>快速配段</Button>,
-                        <Modal
-                            visible={segmentVisible}
-                            title='配段信息'
-                            onCancel={() => {
-                                setSegmentVisible(false);
-                            }}
-                            onOk={async () => {
-                                const segment = form.getFieldsValue()
-                                const detailData = await RequestUtil.get(`/tower-science/product/quickMaterial/${productId}/${segment?.segmentList}`)
-                                setSegmentVisible(false);
-                                // message.success('配段成功！');
-                                form.setFieldsValue({
-                                    detailData: detailData,
-                                    legNumberA: segment?.legNumberA,
-                                    legNumberB: segment?.legNumberB,
-                                    legNumberC: segment?.legNumberC,
-                                    legNumberD: segment?.legNumberD
-                                });
-                            }}
-                        >
-                            <Row>
-                                <Form.Item name="segmentList" label="配段"
-                                    // rules={[{
-                                    //     required: true,
-                                    //     message:'请填写A'
-                                    // }]}
-                                    rules={[{
-                                        pattern: /^[a-zA-Z0-9-,*()]*$/,
-                                        message: '仅可输入英文字母/数字/特殊字符',
-                                    }]}>
-                                    <Input style={{ width: '100%' }} />
-                                </Form.Item>
-                            </Row>
-                        </Modal>]} />
-                        <Row>
-                            <Col span={1} />
-                            <Col span={5}>
-                                <Form.Item name="legNumberA" label="A" rules={[{
-                                    required: true,
-                                    message: '请输入塔腿A'
-                                }, {
-                                    pattern: /^[0-9a-zA-Z]*$/,
-                                    message: '仅可输入数字/字母',
-                                }]}>
-                                    <Input style={{ width: '100%' }} disabled={status === '已完成'} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={1} />
-                            <Col span={5}>
-                                <Form.Item name="legNumberB" label="B" rules={[{
-                                    required: true,
-                                    message: '请输入塔腿B'
-                                }, {
-                                    pattern: /^[0-9a-zA-Z]*$/,
-                                    message: '仅可输入数字/字母',
-                                }]}>
-                                    <Input style={{ width: '100%' }} disabled={status === '已完成'} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={1} />
-                            <Col span={5}>
-                                <Form.Item name="legNumberC" label="C" rules={[{
-                                    required: true,
-                                    message: '请输入塔腿C'
-                                }, {
-                                    pattern: /^[0-9a-zA-Z]*$/,
-                                    message: '仅可输入数字/字母',
-                                }]}>
-                                    <Input style={{ width: '100%' }} disabled={status === '已完成'} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={1} />
-                            <Col span={5}>
-                                <Form.Item name="legNumberD" label="D" rules={[{
-                                    required: true,
-                                    message: '请输入塔腿D'
-                                }, {
-                                    pattern: /^[0-9a-zA-Z]*$/,
-                                    message: '仅可输入数字/字母',
-                                }]}>
-                                    <Input style={{ width: '100%' }} disabled={status === '已完成'} />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <DetailTitle title={'塔身配段信息'} />
-                        <Row>
-                            <Col span={1} />
-                            <Col span={11}>
-                                <Form.Item name="productCategoryName" label="塔型">
-                                    <span>{detail?.productCategoryName}</span>
-                                </Form.Item>
-                            </Col>
-                            <Col span={1} />
-                            <Col span={11}>
-                                <Form.Item name="productNumber" label="杆塔号">
-                                    <span>{detail?.productNumber}</span>
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Form.List name="detailData">
-                                {
-                                    (fields, { add, remove }) => fields.map(
-                                        field => (
-                                            <>
-                                                <Col span={1}></Col>
-                                                <Col span={11}>
-                                                    <Form.Item name={[field.name, 'segmentName']} label='段号'>
-                                                        <span>{detail.materialDrawProductSegmentList && detail.materialDrawProductSegmentList[field.name].segmentName}</span>
-                                                    </Form.Item>
-                                                </Col>
-                                                <Col span={1}></Col>
-                                                <Col span={11}>
-                                                    <Form.Item name={[field.name, 'count']} label='段数' initialValue={[field.name, 'count']} >
-                                                        <InputNumber min={0} precision={0} style={{ width: '100%' }} disabled={status === '已完成'} />
-                                                    </Form.Item>
-                                                </Col>
-                                            </>
-                                        )
-                                    )
-                                }
-                            </Form.List>
-                        </Row>
-                    </Form>
-                    : null}
-                {status !== '已完成' ? <Space style={{ position: 'relative', left: '75%' }}>
-                    <Button onClick={() => handleModalCancel()}>取消</Button>
-                    <Button type="primary" onClick={() => handleModalSave()}>保存</Button>
-                    <Button type="primary" onClick={() => handleModalOk()}>保存并提交</Button>
-                </Space> :
-                    <Button type="primary" style={{ position: 'relative', left: '95%' }} ghost onClick={() => handleModalCancel()}>取消</Button>}
-            </Modal> */}
             <Page
                 path="/tower-science/materialProduct"
                 columns={columns}
