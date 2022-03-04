@@ -30,6 +30,8 @@ export interface IAssignedList {
     readonly priorityName?: string;
     readonly patternName?: string;
     readonly statusRecordList?: IStatusRecordList[];
+    readonly materialLeader?: string;
+    readonly priority?: string;
 }
 export interface IStatusRecordList {
     readonly createDept?: string;
@@ -121,7 +123,7 @@ export default function MaterialTaskList(): React.ReactNode {
                     <Button type='link' disabled={record.status === 3} onClick={() => {
                         setInformationVisible(true);
                         setId(record.id);
-                        }}>指派信息</Button>
+                    }}>指派信息</Button>
                 </Space>
             )
         }

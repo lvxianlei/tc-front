@@ -13,6 +13,7 @@ import styles from './MaterialTaskList.module.less';
 import { TreeNode } from "antd/lib/tree-select";
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { IAssignedList } from "./MaterialTaskList"
+import moment from "moment"
 
 export interface EditProps {
     id: string;
@@ -30,7 +31,15 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
     const { loading, data } = useRequest<IAssignedList[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: IAssignedList[] = await RequestUtil.get<IAssignedList[]>(`/tower-science/materialProductCategory/list?taskIds=${id}`)
-            form.setFieldsValue({ assignedList: [...result || []] });
+            let newResult = result.map((res, index: number)=> {
+                return {
+                    ...res,
+                    materialDeliverTime: res.materialDeliverTime && moment(res.materialDeliverTime),
+                    materialLeader: res.materialLeader ? res.materialLeader : index === 0 ? null : 0,
+                    priority:res.priority ? res.priority : index === 0 ? null : 0
+                }
+            })
+            form.setFieldsValue({ assignedList: [...newResult || []] });
             resole(result)
         } catch (error) {
             reject(error)
@@ -64,7 +73,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                     ...res,
                     materialLeader: res.materialLeader === 0 ? assignedList[assignedList.findIndex((item: any) => item.materialLeader === 0) - 1].materialLeader : res.materialLeader,
                     priority: res.priority === 0 ? assignedList[assignedList.findIndex((item: any) => item.priority === 4) - 1].priority : res.priority,
-                    materialDeliverTime: value.materialDeliverTime.format('YYYY-MM-DD')
+                    materialDeliverTime: res.materialDeliverTime.format('YYYY-MM-DD')
                 }
             })
             console.log(value)
@@ -131,7 +140,6 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                                     ...form.getFieldsValue(true).assignedList[index],
                                     materialLeader: ''
                                 }
-                                console.log(form.getFieldsValue(true).assignedList)
                                 form.setFieldsValue({ assignedList: [...form.getFieldsValue(true).assignedList] })
                             }}>
                                 {renderTreeNodes(wrapRole2DataNode(department))}
@@ -139,12 +147,13 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                         </Form.Item>
                     </Col>
                     <Col span={10}>
-                        <Form.Item name={["assignedList", index, "materialLeader"]} rules={[{ required: true, message: "请选择人员" }]} initialValue={_ ? _ : index === 0 ? null : 0}>
-                            <Select size="small" onChange={(e: any) => {
+                        <Form.Item name={["assignedList", index, "materialLeader"]} rules={[{ required: true, message: "请选择人员" }]} initialValue={_}>
+                            <Select size="small" placeholder="请选择" onChange={(e: any) => {
                                 if (e === 0) {
                                     form.getFieldsValue(true).assignedList[index] = {
                                         ...form.getFieldsValue(true).assignedList[index],
-                                        materialLeaderDept: ''
+                                        materialLeaderDept: '',
+                                        materialLeader: 0
                                     }
                                     form.setFieldsValue({ assignedList: [...form.getFieldsValue(true).assignedList] });
                                     setUserList({ ...userList, [index]: [] });
@@ -166,7 +175,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
             dataIndex: 'priority',
             width: 120,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["assignedList", index, "priority"]} initialValue={_ ? _ : index === 0 ? '' : 0} rules={[{
+                <Form.Item name={["assignedList", index, "priority"]} initialValue={_} rules={[{
                     "required": true,
                     "message": "请选择优先级"
                 }]}>
@@ -186,7 +195,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
             dataIndex: 'materialDeliverTime',
             width: 150,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["assignedList", index, "materialDeliverTime"]} initialValue={_}
+                <Form.Item name={["assignedList", index, "materialDeliverTime"]}
                     rules={[{
                         "required": true,
                         "message": "请选择计划交付时间"
@@ -218,7 +227,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
             <CommonTable
                 scroll={{ x: 500 }}
                 rowKey="id"
-                dataSource={data}
+                dataSource={[...data|| []]}
                 pagination={false}
                 columns={tableColumns}
                 className={styles.addModal} />

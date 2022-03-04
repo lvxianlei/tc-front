@@ -16,10 +16,12 @@ export interface IDetail {
     productId?: string;
     productNumber?: string;
     materialDrawProductSegmentList?: IMaterialDetail[];
-    legWeightA?: string;
-    legWeightB?: string;
-    legWeightC?: string;
-    legWeightD?: string;
+    legNumberA?: string;
+    legNumberB?: string;
+    legNumberC?: string;
+    legNumberD?: string;
+    readonly materialSegmentList?: IMaterialDetail[];
+    readonly productCategoryId?: string;
 }
 export interface IMaterialDetail {
     count?: number;
@@ -46,92 +48,62 @@ export default function PickTower(): React.ReactNode {
         // setDepartment(departmentData);
         resole(data)
     }), {})
-    const handleModalOk = async () => {
+    const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
-            const data = await form.validateFields()
-            const submitTableData = data.detailData.map((item: any, index: number) => {
-                return {
-                    segmentId: item.id,
-                    ...item,
-                    id: item.id === -1 ? '' : item.id,
-                }
-            });
-            const submitData = {
-                productCategoryId: params.id,
-                productId: productId,
-                productSegmentListDTOList: submitTableData.map((item: any) => {
-                    return {
-                        ...item,
-                        count: item?.count !== null ? item?.count : 0
-                    }
-                }),
-                legWeightA: data.legWeightA,
-                legWeightB: data.legWeightB,
-                legWeightC: data.legWeightC,
-                legWeightD: data.legWeightD
-            }
-            RequestUtil.post(`/tower-science/product/material/segment/submit`, submitData).then(() => {
-                message.success('提交成功！');
-                setVisible(false);
-                setProductId('');
-                form.setFieldsValue({
-                    legWeightA: '',
-                    legWeightB: '',
-                    legWeightC: '',
-                    legWeightD: '',
-                    detailData: []
-                })
-                form.resetFields()
-            }).then(() => {
-                setRefresh(!refresh);
-            })
+            await editRef.current?.onSubmit();
+            message.success('配段成功');
+            setWithSectionVisible(false);
+            setRefresh(!refresh);
+            resove(true);
         } catch (error) {
-            console.log(error)
+            reject(false)
         }
-    }
-    const handleModalSave = async () => {
-        try {
-            const data = await form.validateFields();
-            const saveTableData = data.detailData.map((item: any, index: number) => {
-                return {
-                    segmentId: item.id,
-                    ...item,
-                    id: item.id === -1 ? '' : item.id,
-                }
-            });
-            const saveData = {
-                productCategoryId: params.id,
-                productId: productId,
-                productSegmentListDTOList: saveTableData.map((item: any) => {
-                    return {
-                        ...item,
-                        count: item?.count !== null ? item?.count : 0
-                    }
-                }),
-                legWeightA: data.legWeightA,
-                legWeightB: data.legWeightB,
-                legWeightC: data.legWeightC,
-                legWeightD: data.legWeightD
-            }
-            RequestUtil.post(`/tower-science/product/material/segment/save`, saveData).then(() => {
-                message.success('保存成功！');
-                setVisible(false);
-                setProductId('');
-                form.setFieldsValue({
-                    legWeightA: '',
-                    legWeightB: '',
-                    legWeightC: '',
-                    legWeightD: '',
-                    detailData: []
-                })
-                form.resetFields();
-            }).then(() => {
-                setRefresh(!refresh);
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    })
+
+    // const handleModalSave = async () => {
+    //     try {
+    //         const data = await form.validateFields();
+    //         const saveTableData = data.detailData.map((item: any, index: number) => {
+    //             return {
+    //                 segmentId: item.id,
+    //                 ...item,
+    //                 id: item.id === -1 ? '' : item.id,
+    //             }
+    //         });
+    //         const saveData = {
+    //             productCategoryId: params.id,
+    //             productId: productId,
+    //             productSegmentListDTOList: saveTableData.map((item: any) => {
+    //                 return {
+    //                     ...item,
+    //                     count: item?.count !== null ? item?.count : 0
+    //                 }
+    //             }),
+    //             legNumberA: data.legNumberA,
+    //             legNumberB: data.legNumberB,
+    //             legNumberC: data.legNumberC,
+    //             legNumberD: data.legNumberD
+    //         }
+    //         RequestUtil.post(`/tower-science/product/material/segment/save`, saveData).then(() => {
+    //             message.success('保存成功！');
+    //             setVisible(false);
+    //             setProductId('');
+    //             form.setFieldsValue({
+    //                 legNumberA: '',
+    //                 legNumberB: '',
+    //                 legNumberC: '',
+    //                 legNumberD: '',
+    //                 detailData: []
+    //             })
+    //             form.resetFields();
+    //         }).then(() => {
+    //             setRefresh(!refresh);
+    //         })
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
     const columns = [
         {
             key: 'index',
@@ -165,28 +137,28 @@ export default function PickTower(): React.ReactNode {
             dataIndex: 'segmentInformation'
         },
         {
-            key: 'legWeightA',
+            key: 'legNumberA',
             title: 'A',
             width: 150,
-            dataIndex: 'legWeightA'
+            dataIndex: 'legNumberA'
         },
         {
-            key: 'legWeightB',
+            key: 'legNumberB',
             title: 'B',
             width: 150,
-            dataIndex: 'legWeightB'
+            dataIndex: 'legNumberB'
         },
         {
-            key: 'legWeightC',
+            key: 'legNumberC',
             title: 'C',
             width: 150,
-            dataIndex: 'legWeightC'
+            dataIndex: 'legNumberC'
         },
         {
-            key: 'legWeightD',
+            key: 'legNumberD',
             title: 'D',
             width: 150,
-            dataIndex: 'legWeightD'
+            dataIndex: 'legNumberD'
         },
         {
             key: 'operation',
@@ -211,10 +183,10 @@ export default function PickTower(): React.ReactNode {
                         //     materialDrawProductSegmentList: detailData
                         // })
                         // form.setFieldsValue({
-                        //     legWeightA: data?.legWeightA,
-                        //     legWeightB: data?.legWeightB,
-                        //     legWeightC: data?.legWeightC,
-                        //     legWeightD: data?.legWeightD,
+                        //     legNumberA: data?.legNumberA,
+                        //     legNumberB: data?.legNumberB,
+                        //     legNumberC: data?.legNumberC,
+                        //     legNumberD: data?.legNumberD,
                         //     detailData: detailData
                         // });
                         setStatus(record.materialStatusName)
@@ -225,20 +197,20 @@ export default function PickTower(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => { setVisible(false); setProductId(''); form.resetFields() };
-    const formItemLayout = {
-        labelCol: { span: 4 },
-        wrapperCol: { span: 17 }
-    };
-    const onDepartmentChange = async (value: Record<string, any>) => {
-        if (value) {
-            const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
-            setMatchLeader(userData.records);
-        } else {
+    // const handleModalCancel = () => { setVisible(false); setProductId(''); form.resetFields() };
+    // const formItemLayout = {
+    //     labelCol: { span: 4 },
+    //     wrapperCol: { span: 17 }
+    // };
+    // const onDepartmentChange = async (value: Record<string, any>) => {
+    //     if (value) {
+    //         const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+    //         setMatchLeader(userData.records);
+    //     } else {
 
-            setMatchLeader([]);
-        }
-    }
+    //         setMatchLeader([]);
+    //     }
+    // }
     const renderTreeNodes = (data: any) => data.map((item: any) => {
         if (item.children) {
             return (
@@ -282,12 +254,12 @@ export default function PickTower(): React.ReactNode {
                     editRef.current?.resetFields();
                     setWithSectionVisible(false);
                 }}>
-                <WithSection id={productId} type={status === '已完成' ? 'detail' : 'new'} />
+                <WithSection id={productId} ref={editRef} type={status === '已完成' ? 'detail' : 'new'} />
             </Modal>
-            <Modal title='配段信息' width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
+            {/* <Modal title='配段信息' width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
                 {detail?.materialDrawProductSegmentList ?
-                    <Form initialValues={{ detailData: detail.materialDrawProductSegmentList, legWeightA: detail?.legWeightA, legWeightB: detail?.legWeightB, legWeightC: detail?.legWeightC, legWeightD: detail?.legWeightD }} autoComplete="off" form={form}>
-                        {/* <DetailTitle title={'塔腿配段信息'} operation={[status !== '已完成' && <Button type='primary' onClick={() => { setSegmentVisible(true) }}>快速配段</Button>,
+                    <Form initialValues={{ detailData: detail.materialDrawProductSegmentList, legNumberA: detail?.legNumberA, legNumberB: detail?.legNumberB, legNumberC: detail?.legNumberC, legNumberD: detail?.legNumberD }} autoComplete="off" form={form}>
+                        <DetailTitle title={'塔腿配段信息'} operation={[status !== '已完成' && <Button type='primary' onClick={() => { setSegmentVisible(true) }}>快速配段</Button>,
                         <Modal
                             visible={segmentVisible}
                             title='配段信息'
@@ -301,10 +273,10 @@ export default function PickTower(): React.ReactNode {
                                 // message.success('配段成功！');
                                 form.setFieldsValue({
                                     detailData: detailData,
-                                    legWeightA: segment?.legWeightA,
-                                    legWeightB: segment?.legWeightB,
-                                    legWeightC: segment?.legWeightC,
-                                    legWeightD: segment?.legWeightD
+                                    legNumberA: segment?.legNumberA,
+                                    legNumberB: segment?.legNumberB,
+                                    legNumberC: segment?.legNumberC,
+                                    legNumberD: segment?.legNumberD
                                 });
                             }}
                         >
@@ -321,11 +293,11 @@ export default function PickTower(): React.ReactNode {
                                     <Input style={{ width: '100%' }} />
                                 </Form.Item>
                             </Row>
-                        </Modal>]} /> */}
+                        </Modal>]} />
                         <Row>
                             <Col span={1} />
                             <Col span={5}>
-                                <Form.Item name="legWeightA" label="A" rules={[{
+                                <Form.Item name="legNumberA" label="A" rules={[{
                                     required: true,
                                     message: '请输入塔腿A'
                                 }, {
@@ -337,7 +309,7 @@ export default function PickTower(): React.ReactNode {
                             </Col>
                             <Col span={1} />
                             <Col span={5}>
-                                <Form.Item name="legWeightB" label="B" rules={[{
+                                <Form.Item name="legNumberB" label="B" rules={[{
                                     required: true,
                                     message: '请输入塔腿B'
                                 }, {
@@ -349,7 +321,7 @@ export default function PickTower(): React.ReactNode {
                             </Col>
                             <Col span={1} />
                             <Col span={5}>
-                                <Form.Item name="legWeightC" label="C" rules={[{
+                                <Form.Item name="legNumberC" label="C" rules={[{
                                     required: true,
                                     message: '请输入塔腿C'
                                 }, {
@@ -361,7 +333,7 @@ export default function PickTower(): React.ReactNode {
                             </Col>
                             <Col span={1} />
                             <Col span={5}>
-                                <Form.Item name="legWeightD" label="D" rules={[{
+                                <Form.Item name="legNumberD" label="D" rules={[{
                                     required: true,
                                     message: '请输入塔腿D'
                                 }, {
@@ -419,7 +391,7 @@ export default function PickTower(): React.ReactNode {
                     <Button type="primary" onClick={() => handleModalOk()}>保存并提交</Button>
                 </Space> :
                     <Button type="primary" style={{ position: 'relative', left: '95%' }} ghost onClick={() => handleModalCancel()}>取消</Button>}
-            </Modal>
+            </Modal> */}
             <Page
                 path="/tower-science/materialProduct"
                 columns={columns}

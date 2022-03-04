@@ -5,8 +5,8 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, Input, Row, Col, InputNumber, Button, message } from 'antd'
-import { DetailTitle } from '../../common'
+import { Spin, Form, Input, Row, Col, InputNumber, Button, message, Table, Descriptions } from 'antd'
+import { CommonTable, DetailTitle } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import styles from './TowerPickAssign.module.less';
@@ -25,23 +25,28 @@ export interface EditRefProps {
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const [form] = Form.useForm();
     const [fastForm] = Form.useForm();
-    const [fastLoading, setFastLoading] = useState(false)
+    const [fastLoading, setFastLoading] = useState(false);
+    const [detailData, setDetailData] = useState<IDetail>();
 
     const { loading, data } = useRequest<IDetail>(() => new Promise(async (resole, reject) => {
         try {
-            let result: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${id}`)
+            let result: IDetail = await RequestUtil.get<IDetail>(`/tower-science/materialProduct/${id}`)
             const detailData: IMaterialDetail[] | undefined = result && result.materialDrawProductSegmentList && result.materialDrawProductSegmentList.map((item: IMaterialDetail) => {
                 return {
-                    ...item,
+                    ...item
                 }
             })
             form.setFieldsValue({
-                legWeightA: result?.legWeightA,
-                legWeightB: result?.legWeightB,
-                legWeightC: result?.legWeightC,
-                legWeightD: result?.legWeightD,
-                detailData: detailData
+                legNumberA: result?.legNumberA,
+                legNumberB: result?.legNumberB,
+                legNumberC: result?.legNumberC,
+                legNumberD: result?.legNumberD,
+                productSegmentListDTOList: detailData
             });
+            setDetailData({
+                ...result,
+                materialDrawProductSegmentList: detailData
+            })
             resole({
                 ...result,
                 materialDrawProductSegmentList: detailData
@@ -53,7 +58,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-aps/work/center/info`, { ...postData, id: data })
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-science/materialProduct/material/segment/save`, { ...postData })
             resole(result)
         } catch (error) {
             reject(error)
@@ -63,16 +68,24 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             let baseData = await form.validateFields();
-            const assignedList = form.getFieldsValue(true).assignedList;
-            const value = assignedList.map((res: any, index: number) => {
+            const productSegmentListDTOList = form.getFieldsValue(true).productSegmentListDTOList;
+            const value = productSegmentListDTOList.map((res: any, index: number) => {
                 return {
                     ...res,
-                    user: res.user === 0 ? assignedList[assignedList.findIndex((item: any) => item.user === 0) - 1].user : res.user,
-                    specificationName: res.specificationName === 4 ? assignedList[assignedList.findIndex((item: any) => item.specificationName === 4) - 1].specificationName : res.specificationName
+                    user: res.user === 0 ? productSegmentListDTOList[productSegmentListDTOList.findIndex((item: any) => item.user === 0) - 1].user : res.user,
+                    specificationName: res.specificationName === 4 ? productSegmentListDTOList[productSegmentListDTOList.findIndex((item: any) => item.specificationName === 4) - 1].specificationName : res.specificationName
                 }
             })
             console.log(value)
-            await saveRun({})
+            await saveRun({
+                legNumberA: baseData.legNumberA,
+                legNumberB: baseData.legNumberB,
+                legNumberC: baseData.legNumberC,
+                legNumberD: baseData.legNumberD,
+                productCategoryId: detailData?.productCategoryId,
+                productId: detailData?.productId,
+                productSegmentListDTOList: value
+            })
             resolve(true);
         } catch (error) {
             reject(false)
@@ -102,14 +115,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const fastWithSectoin = () => {
         setFastLoading(true)
         const inputString: string = fastForm.getFieldsValue(true).fast;
-        if ((/[(,*-]+\*[0-9]+|[(,*-]+\*[a-zA-Z()-*,]+|^[,*)-]*[0-9a-zA-Z]/g).test(inputString)) {
+        if ((/[(,*-]+\*[0-9]+|[(,*-]+\*[a-zA-Z()-*,]+|^[*),]+/g).test(inputString)) {
             message.error('请输入正确格式');
             setFastLoading(false);
         } else {
             const inputList = inputString.split(',');
             let list: IMaterialDetail[] = [];
             inputList.forEach((res: string) => {
-
                 const newRes = res.split('*')[0].replace(/\(|\)/g, "");
                 if ((/^[0-9]+-[0-9]+$/).test(newRes)) {
                     const length = Number(newRes.split('-')[0]) - Number(newRes.split('-')[1]);
@@ -145,8 +157,23 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
             })
             setTimeout(() => {
-                // delSameObjValue(list)
-                console.log(delSameObjValue([...list]));
+                const newList = [
+                    ...(data?.materialSegmentList?.map(res => {
+                        return { ...res, count: Number(res.count || 0) }
+                    }) || []),
+                    ...list
+                ];
+                const finalList = delSameObjValue(newList);
+                console.log(finalList)
+                form.setFieldsValue({
+                    ...form.getFieldsValue(true),
+                    productSegmentListDTOList: [...finalList]
+                })
+                setDetailData({
+                    ...detailData,
+                    materialDrawProductSegmentList: [...finalList]
+                })
+                fastForm.resetFields();
                 setFastLoading(false)
             }, 1000)
         }
@@ -173,7 +200,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             <DetailTitle title="塔腿配段信息" />
             <Row>
                 <Col span={5}>
-                    <Form.Item name="legWeightA" label="A" rules={[{
+                    <Form.Item name="legNumberA" label="A" rules={[{
                         required: true,
                         message: '请输入塔腿A'
                     }, {
@@ -185,7 +212,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 </Col>
                 <Col span={1} />
                 <Col span={5}>
-                    <Form.Item name="legWeightB" label="B" rules={[{
+                    <Form.Item name="legNumberB" label="B" rules={[{
                         required: true,
                         message: '请输入塔腿B'
                     }, {
@@ -197,7 +224,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 </Col>
                 <Col span={1} />
                 <Col span={5}>
-                    <Form.Item name="legWeightC" label="C" rules={[{
+                    <Form.Item name="legNumberC" label="C" rules={[{
                         required: true,
                         message: '请输入塔腿C'
                     }, {
@@ -209,7 +236,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 </Col>
                 <Col span={1} />
                 <Col span={5}>
-                    <Form.Item name="legWeightD" label="D" rules={[{
+                    <Form.Item name="legNumberD" label="D" rules={[{
                         required: true,
                         message: '请输入塔腿D'
                     }, {
@@ -221,17 +248,47 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 </Col>
             </Row>
             <DetailTitle title={'塔身配段信息'} />
-            <Row>
+            <Descriptions title="" bordered size="small" colon={false} column={2}>
+                <Descriptions.Item label="塔型">
+                    <span>{detailData?.productCategoryName}</span>
+                </Descriptions.Item>
+                <Descriptions.Item label="杆塔号">
+                    <span>{detailData?.productNumber}</span>
+                </Descriptions.Item>
+                {
+                    [...detailData?.materialDrawProductSegmentList || []]?.map((items: IMaterialDetail, index: number) => {
+                        return <>
+                            <Descriptions.Item key={index + '_' + id} label="段号">
+                                <Form.Item name={["productSegmentListDTOList", index, "segmentName"]}>
+                                    <span>{items.segmentName}</span>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item key={index} label="段数">
+                                <Form.Item key={index + '_' + id} name={["productSegmentListDTOList", index, "count"]} initialValue={items.count} rules={[{
+                                    required: true,
+                                    message: '请输入段数 '
+                                }, {
+                                    pattern: /^[0-9]*$/,
+                                    message: '仅可输入数字',
+                                }]}>
+                                    <Input maxLength={2} placeholder="请输入" />
+                                </Form.Item>
+                            </Descriptions.Item>
+                        </>
+                    })
+                }
+            </Descriptions>
+            {/* <Row>
                 <Col span={1} />
                 <Col span={11}>
                     <Form.Item name="productCategoryName" label="塔型">
-                        <span>{data?.productCategoryName}</span>
+                        <span>{detailData?.productCategoryName}</span>
                     </Form.Item>
                 </Col>
                 <Col span={1} />
                 <Col span={11}>
                     <Form.Item name="productNumber" label="杆塔号">
-                        <span>{data?.productNumber}</span>
+                        <span>{detailData?.productNumber}</span>
                     </Form.Item>
                 </Col>
             </Row>
@@ -244,7 +301,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                                     <Col span={1}></Col>
                                     <Col span={11}>
                                         <Form.Item name={[field.name, 'segmentName']} label='段号'>
-                                            <span>{data?.materialDrawProductSegmentList && data?.materialDrawProductSegmentList[field.name].segmentName}</span>
+                                            {console.log(detailData?.materialDrawProductSegmentList, field.name)}
+                                            <span>{detailData?.materialDrawProductSegmentList && detailData?.materialDrawProductSegmentList[field.name].segmentName}</span>
                                         </Form.Item>
                                     </Col>
                                     <Col span={1}></Col>
@@ -258,7 +316,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         )
                     }
                 </Form.List>
-            </Row>
+            </Row> */}
         </Form>
     </Spin>
 })
