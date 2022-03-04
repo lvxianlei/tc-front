@@ -254,15 +254,23 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return item
                 })
             }}
-                onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
-                    ...item,
-                    spec: item.structureSpec,
-                    source: 2,
-                    materialTexture: item.structureTexture,
-                    standardName: item.standardName,
-                    materialStandard: item.standard,
-                    proportion: item.proportion == -1 ? 0 : item.proportion
-                })))} />
+            value={{
+                id: "",
+                records: materialList,
+                value: ""
+            }}
+                onChange={(fields: any[]) => {
+                    setPopDataList(fields.map((item: any) => ({
+                        ...item,
+                        spec: item.structureSpec,
+                        source: 2,
+                        materialTexture: item.structureTexture,
+                        standardName: item.standardName,
+                        materialStandard: item.standard,
+                        proportion: item.proportion == -1 ? 0 : item.proportion
+                    })))
+                    setMaterialList(fields || [])
+                }} />
         </Modal>
         <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk}
             onCancel={() => setChooseVisible(false)}>
