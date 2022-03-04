@@ -421,13 +421,13 @@ export default function PickTower(): React.ReactNode {
                     <Button type="primary" style={{ position: 'relative', left: '95%' }} ghost onClick={() => handleModalCancel()}>取消</Button>}
             </Modal>
             <Page
-                path="/tower-science/product/material"
+                path="/tower-science/materialProduct"
                 columns={columns}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
                 refresh={refresh}
                 requestData={{ productCategoryId: params.id }}
-                exportPath="/tower-science/product/material"
+                exportPath="/tower-science/materialProduct"
                 extraOperation={
                     <Space>
                         <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
