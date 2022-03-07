@@ -206,16 +206,16 @@ export default function PickTower(): React.ReactNode {
                         label: '最新状态变更时间',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
-                    {
-                        name: 'materialStatus',
-                        label: '杆塔提料状态',
-                        children: <Select style={{ width: '100px' }}>
-                            <Select.Option value={''} key={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>待开始</Select.Option>
-                            <Select.Option value={2} key={2}>待配段</Select.Option>
-                            <Select.Option value={3} key={3}>已完成</Select.Option>
-                        </Select>
-                    },
+                    // {
+                    //     name: 'materialStatus',
+                    //     label: '杆塔提料状态',
+                    //     children: <Select style={{ width: '100px' }}>
+                    //         <Select.Option value={''} key={''}>全部</Select.Option>
+                    //         <Select.Option value={1} key={1}>待开始</Select.Option>
+                    //         <Select.Option value={2} key={2}>待配段</Select.Option>
+                    //         <Select.Option value={3} key={3}>已完成</Select.Option>
+                    //     </Select>
+                    // },
                     // {
                     //     name: 'materialUserDepartment',
                     //     label: '配段人',
