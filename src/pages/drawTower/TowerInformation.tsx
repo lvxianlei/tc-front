@@ -101,7 +101,7 @@ export default function TowerInformation(): React.ReactNode {
         },
         { 
             key: 'singleWeight', 
-            title: '单段重量', 
+            title: '单段重量（kg）', 
             dataIndex: 'singleWeight',
             render: (_: number): React.ReactNode => ( 
                 <span>{ _ === -1 ? undefined : _ }</span>
