@@ -405,6 +405,20 @@
                         ]
                     },
                     {
+                        "label": "提料任务",
+                        "icon": "RD_fangyangrenwu",
+                        "path": "/materialTask",
+                        "appName": "RD",
+                        "authority": "rd_lofting_task",
+                        "items": [
+                            {
+                                "label": "提料任务",
+                                "path": "/materialTask/materialTaskList",
+                                "authority": "rd_lofting_task"
+                            }
+                        ]
+                    },
+                    {
                         "label": "采购任务",
                         "icon": "gongying-caigourenwu_caigourenwu",
                         "path": "/buyingTask",

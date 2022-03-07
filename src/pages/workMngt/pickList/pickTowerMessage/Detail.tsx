@@ -21,11 +21,11 @@ const towerColumns = [
         dataIndex: 'segmentName', 
         key: 'segmentName', 
     },
-    { 
-        title: '模式', 
-        dataIndex: 'patternName', 
-        key: 'patternName'
-    },
+    // { 
+    //     title: '模式', 
+    //     dataIndex: 'patternName', 
+    //     key: 'patternName'
+    // },
     { 
         title: '构件编号', 
         dataIndex: 'code', 
@@ -50,6 +50,16 @@ const towerColumns = [
         title: '长度（mm）', 
         dataIndex: 'length', 
         key: 'length' 
+    },
+    { 
+        title: '宽度（mm）', 
+        dataIndex: 'width', 
+        key: 'width', 
+    },
+    { 
+        title: '厚度（mm）', 
+        dataIndex: 'thickness', 
+        key: 'thickness', 
     },
     { 
         title: '单段件数', 

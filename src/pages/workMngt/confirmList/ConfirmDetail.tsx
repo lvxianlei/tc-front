@@ -249,30 +249,6 @@ export default function ConfirmDetail(): React.ReactNode {
           key: 'lineName', 
       },
       { 
-          title: '* 杆塔号', 
-          dataIndex: 'name', 
-          type:'text',
-          width: 80,
-          editable: true,
-          key: 'name' 
-      },
-      { 
-          title: '* 塔型', 
-          dataIndex: 'productCategory', 
-          type:'text',
-          width: 80,
-          editable: true,
-          key: 'productCategory' 
-      },
-      { 
-          title: '* 塔型钢印号', 
-          dataIndex: 'steelProductShape', 
-          type:'text',
-          width: 100,
-          editable: true,
-          key: 'steelProductShape' 
-      },
-      { 
           title: '* 产品类型', 
           dataIndex: 'productType', 
           type:'select',
@@ -319,6 +295,31 @@ export default function ConfirmDetail(): React.ReactNode {
           } 
       },
       { 
+          title: '* 塔型', 
+          dataIndex: 'productCategory', 
+          type:'text',
+          width: 80,
+          editable: true,
+          key: 'productCategory' 
+      },
+      { 
+          title: '* 塔型钢印号', 
+          dataIndex: 'steelProductShape', 
+          type:'text',
+          width: 100,
+          editable: true,
+          key: 'steelProductShape' 
+      },
+      
+      { 
+        title: '* 杆塔号', 
+        dataIndex: 'name', 
+        type:'text',
+        width: 80,
+        editable: true,
+        key: 'name' 
+      },
+      { 
           title: '* 呼高（m）', 
           dataIndex: 'basicHeight', 
           type:'number',
@@ -352,17 +353,6 @@ export default function ConfirmDetail(): React.ReactNode {
             return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
           } 
       },
-      { 
-        title: '* 本体重量（kg）', 
-        dataIndex: 'bodyWeight', 
-        type:'number',
-        width: 120,
-        editable: true,
-        key: 'bodyWeight',
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }   
-      },//范春森于11月23日去掉，于龙于11月25号加上
       { 
         title: '接腿配置A', 
         dataIndex: 'legConfigurationA', 
@@ -450,6 +440,17 @@ export default function ConfirmDetail(): React.ReactNode {
       //       return parseFloat(value).toFixed(2)
       //     }  
       // },
+      { 
+        title: '* 本体重量（kg）', 
+        dataIndex: 'bodyWeight', 
+        type:'number',
+        width: 120,
+        editable: true,
+        key: 'bodyWeight',
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }   
+      },//范春森于11月23日去掉，于龙于11月25号加上
       { 
         title: '* 单重（kg）', 
         dataIndex: 'monomerWeight', 
