@@ -155,9 +155,13 @@ export default function MaterialTaskList(): React.ReactNode {
             destroyOnClose
             visible={informationVisible}
             width="60%"
-            onOk={assignedOk}
-            okText="保存并提交"
-            cancelText="关闭"
+            footer={[
+                <Button type='ghost' onClick={() => {
+                    setId('');
+                    setInformationVisible(false);
+                }}>关闭</Button>,
+                <>{status === 3 ? null : <Button onClick={assignedOk} type='primary'>保存并提交</Button>}</>
+            ]}
             onCancel={() => {
                 setId('');
                 setInformationVisible(false);
