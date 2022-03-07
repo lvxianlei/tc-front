@@ -84,7 +84,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     }
 
     private async modalShow(): Promise<void> {
-        const data = this.props.type === 'message'||this.props.type === 'detail'? await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`):await RequestUtil.get<IAppointed>(`/tower-science/productSegment/${ this.props.id }`)
+        const data = this.props.type === 'message'||this.props.type === 'detail'? await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`):await RequestUtil.get<IAppointed>(`/tower-science/materialProductCategory/assign/${ this.props.id }`)
         const departmentData = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
             return {
@@ -291,6 +291,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                 : <><Descriptions.Item label="段信息">
                                 <Form.Item 
                                     name="name"
+                                    initialValue={'全部'}
                                     rules={[{
                                         required: true,
                                         message: '请输入段信息'
@@ -298,12 +299,12 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     {
                                         pattern: /^[^\s]*$/,
                                         message: '禁止输入空格',
-                                    }, 
+                                    },
                                     {
-                                        pattern: /^[0-9a-zA-Z-,]*$/,
-                                        message: '仅可输入数字/字母/-/,',
+                                        pattern: /^(全部)$|^([0-9a-zA-Z-,]*)$/,
+                                        message: '仅可输入数字/字母/-/,/全部',
                                     }]}>
-                                    <Input placeholder="请输入（1-3，5，ac，w）"/>
+                                    <Input placeholder="请输入（1-3，5，ac，w，全部）" />
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="提料人">

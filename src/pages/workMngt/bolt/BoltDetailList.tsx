@@ -33,7 +33,7 @@ export default function BoltCheck(): React.ReactNode {
             dataIndex: 'num',
         },
         {
-            title: '总重',
+            title: '总重（kg）',
             width: 150,
             dataIndex: 'totalWeight',
         },

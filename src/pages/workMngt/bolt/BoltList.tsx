@@ -116,12 +116,12 @@ export default function BoltList(): React.ReactNode {
                         record.boltLeader === userId ? <Link to={`/workMngt/boltList/boltListing/${record.id}/${record.boltLeader}/${record.boltStatus}`}>螺栓清单</Link> : <Button type="link" disabled>螺栓清单</Button>
                     }
                     {
-                        record.boltStatus === 4 && record.boltChecker === userId ? <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link> : <Button type="link" disabled>校核</Button>
+                        record.boltStatus === 2 && record.boltChecker === userId ? <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link> : <Button type="link" disabled>校核</Button>
                     }
                     <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
                         setAssignVisible(true);
-                    }} disabled={record.boltStatus !== 2}>指派</Button>
+                    }} disabled={record.boltStatus !== 1}>指派</Button>
                 </Space>
             )
         }
@@ -262,11 +262,9 @@ export default function BoltList(): React.ReactNode {
                     children: <Form.Item name="boltStatus" initialValue={location.state?.state || ''}>
                         <Select style={{ width: '120px' }} placeholder="请选择">
                             <Select.Option value="" key="6">全部</Select.Option>
-                            <Select.Option value={1} key="1">待开始</Select.Option>
-                            <Select.Option value={2} key="2">待指派</Select.Option>
-                            <Select.Option value={3} key="3">进行中</Select.Option>
-                            <Select.Option value={4} key="4">校核中</Select.Option>
-                            <Select.Option value={5} key="5">已完成</Select.Option>
+                            <Select.Option value={1} key="1">待指派</Select.Option>
+                            <Select.Option value={2} key="2">校核中</Select.Option>
+                            <Select.Option value={3} key="3">已完成</Select.Option>
                         </Select>
                     </Form.Item>
                 },
