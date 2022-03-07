@@ -310,7 +310,7 @@ export default function ScheduleView(): React.ReactNode {
                             weldingDrawDeliverTime:resData.weldingDrawDeliverTime? moment(resData.weldingDrawDeliverTime):'',
                         });
                         setLoad(false)
-                    }} disabled={params.status!=='2'||record.materialLeaderName}>指派</Button>
+                    }} disabled={params.status!=='2'||record.loftingLeaderName}>指派</Button>
                     <Button type='link' onClick={async ()=>{
                         setEdit(true);
                         setVisible(true);
@@ -405,7 +405,7 @@ export default function ScheduleView(): React.ReactNode {
                         });
                         
                         setLoad(false)
-                    }} disabled={!record.materialLeaderName}>详情</Button>
+                    }} disabled={!record.loftingLeaderName}>详情</Button>
                 </Space>
             )
         }
