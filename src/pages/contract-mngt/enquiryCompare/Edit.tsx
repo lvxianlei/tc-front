@@ -257,7 +257,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
             onOk={handleAddModalOk} onCancel={() => {
                 const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-                console.log("selec", materialList, newMaterialList, popDataList)
                 setVisible(false)
                 // setMaterialList([])
             }}>
@@ -280,7 +279,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 value: ""
             }}
                 onChange={(fields: any[]) => {
-                    console.log(fields, "fields")
                     setPopDataList(fields.map((item: any) => ({
                         ...item,
                         spec: item.structureSpec,
