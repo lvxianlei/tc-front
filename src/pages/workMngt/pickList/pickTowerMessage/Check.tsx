@@ -70,6 +70,18 @@ export default function PickCheckList(): React.ReactNode {
             editable: true 
         },
         { 
+            title: '宽度（mm）', 
+            dataIndex: 'width', 
+            key: 'width', 
+            editable: true 
+        },
+        { 
+            title: '厚度（mm）', 
+            dataIndex: 'thickness', 
+            key: 'thickness', 
+            editable: true 
+        },
+        { 
             title: '单段件数', 
             dataIndex: 'basicsPartNum', 
             key: 'basicsPartNum', 

@@ -44,18 +44,18 @@ export default function SetOutTaskList(): React.ReactNode {
             title: '塔型完成进度',
             width: 150,
             dataIndex: 'productCategoryProportion',
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Link to={`/setOutTask/setOutTaskList/setOutTaskTower/${record.id}`}>{_}</Link>
-            )
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Link to={`/setOutTask/setOutTaskList/setOutTaskTower/${record.id}`}>{_}</Link>
+            // )
         },
         {
             key: 'productProportion',
             title: '杆塔完成进度',
             dataIndex: 'productProportion',
             width: 200,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Link to={`/setOutTask/setOutTaskList/setOutTaskPole/${record.id}`}>{_}</Link>
-            )
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Link to={`/setOutTask/setOutTaskList/setOutTaskPole/${record.id}`}>{_}</Link>
+            // )
         },
         {
             key: 'weight',
