@@ -310,7 +310,7 @@ export default function ScheduleView(): React.ReactNode {
                             weldingDrawDeliverTime:resData.weldingDrawDeliverTime? moment(resData.weldingDrawDeliverTime):'',
                         });
                         setLoad(false)
-                    }} disabled={params.status!=='2'||record.loftingLeaderName}>指派</Button>
+                    }} disabled={record.loftingStatus===5&&record.boltStatus===4&&record.weldingStatus===4&&record.smallSampleStatus===2&&record.templateLoftingStatus===2}>指派</Button>
                     <Button type='link' onClick={async ()=>{
                         setEdit(true);
                         setVisible(true);
@@ -697,14 +697,14 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="loftingLeaderDepartment" label="放样负责人" rules={[{required: true,message:'请选择放样负责人部门'}]}>
                                         <TreeSelect
                                             onChange={(value:any)=>{onDepartmentChange(value,'loftingLeaderDepartment')}  }
-                                            disabled={edit}>
+                                            disabled={edit||scheduleData?.loftingStatus===5}>
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="loftingLeader" label="" rules={[{required: true,message:'请选择放样负责人'}]} >
-                                        <Select disabled={edit}>
+                                        <Select disabled={edit||scheduleData?.loftingStatus===5}>
                                             { loftingUser && loftingUser.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
@@ -738,7 +738,7 @@ export default function ScheduleView(): React.ReactNode {
                                         weldingDrawDeliverTime: moment(newWeldingDrawTime)
                                     })
                            
-                                }} disabled={edit}/>
+                                }} disabled={edit||scheduleData?.loftingStatus===5}/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -749,14 +749,14 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="weldingLeaderDepartment" label="编程负责人" rules={[{required: true,message:'请选择编程负责人部门'}]}>
                                         <TreeSelect
                                             onChange={(value:any)=>{onDepartmentChange(value,'weldingLeaderDepartment')}  }
-                                            disabled={edit}>
+                                            disabled={edit||scheduleData?.weldingStatus===4}>
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="weldingLeader" label="" rules={[{required: true,message:'请选择编程负责人'}]} >
-                                        <Select disabled={edit}> 
+                                        <Select disabled={edit||scheduleData?.weldingStatus===4}> 
                                             { weldingUser && weldingUser.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
@@ -787,14 +787,14 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="smallSampleLeaderDepartment" label="小样图负责人" rules={[{required: true,message:'请选择小样图负责人部门'}]} >
                                         <TreeSelect
                                             onChange={(value:any)=>{onDepartmentChange(value,'smallSampleLeaderDepartment')}  }
-                                            disabled={edit}>
+                                            disabled={edit||scheduleData?.smallSampleStatus===2}>
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="smallSampleLeader" label="" rules={[{required: true,message:'请选择小样图负责人'}]} >
-                                        <Select disabled={edit}>
+                                        <Select disabled={edit||scheduleData?.smallSampleStatus===2}>
                                             { smallSampleUser && smallSampleUser.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
@@ -816,14 +816,14 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="boltLeaderDepartment" label="螺栓清单负责人" rules={[{required: true,message:'请选择螺栓清单负责人部门'}]} >
                                         <TreeSelect
                                             onChange={(value:any)=>{onDepartmentChange(value,'boltLeaderDepartment')}  }
-                                            disabled={edit}>
+                                            disabled={edit||scheduleData?.boltStatus===4}>
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="boltLeader" label="" rules={[{required: true,message:'请选择螺栓清单负责人'}]} >
-                                        <Select disabled={edit}>
+                                        <Select disabled={edit||scheduleData?.boltStatus===4}>
                                             { boltUser &&boltUser.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
@@ -846,14 +846,14 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="drawLeaderDepartment" label="图纸上传负责人" rules={[{required: true,message:'请选择图纸上传负责人部门'}]} >
                                         <TreeSelect
                                             onChange={(value:any)=>{onDepartmentChange(value,'drawLeaderDepartment')}  }
-                                            disabled={edit}>
+                                            disabled={edit||scheduleData?.templateLoftingStatus===2}>
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="drawLeader" label="" rules={[{required: true,message:'请选择图纸上传负责人'}]} >
-                                        <Select disabled={edit}>
+                                        <Select disabled={edit||scheduleData?.templateLoftingStatus===2}>
                                             { drawUser && drawUser.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
