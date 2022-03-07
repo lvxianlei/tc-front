@@ -34,8 +34,8 @@ export default function RawMaterialStock(): React.ReactNode {
             value.updateTimeEnd = formatDate[1] + ' 23:59:59';
         }
         if (value.batcherId) {
-            value.batcherDeptId = value.batcherId.first
-            value.batcherId = value.batcherId.second
+            value.departmentId = value.batcherId.first
+            value.stockUser = value.batcherId.second
         }
         setFilterValue(value)
         return value
@@ -203,7 +203,7 @@ export default function RawMaterialStock(): React.ReactNode {
     // 入库按钮
     const ReceivingBtn = async (record: any) => {
         await getWarehousing('', 0)
-        setListFurnaceBatchNo(record.furnaceBatchNo)
+        setListFurnaceBatchNo(record.furnaceBatchNumber)
         setListProductionBatchNumber(record.receiveBatchNumber)
         setListReceivableSurplus(record.excessLength)
         setListID(record.id)

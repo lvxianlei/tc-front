@@ -164,11 +164,6 @@ export default function Invoicing() {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'startCompleteTime',
-                    label: '完成时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
-                {
                     name: "createUserDeptId",
                     label: "创建人",
                     children: <IntgSelect width={400} />

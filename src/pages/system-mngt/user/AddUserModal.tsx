@@ -39,7 +39,7 @@ export default forwardRef(function AddUserModal({ id }: EditProps, ref) {
     }), { manual: true })
 
     // 获取树结构
-    const { run: getUser, data: authority = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { data: authority = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-system/role/tree');
             resole(result);
@@ -49,7 +49,7 @@ export default forwardRef(function AddUserModal({ id }: EditProps, ref) {
     }), {})
 
     // 获取部门
-    const { run: getDepartment, data: department = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { data: department = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-user/department/tree');
             resole(result);
@@ -129,7 +129,7 @@ export default forwardRef(function AddUserModal({ id }: EditProps, ref) {
                     label="所属部门"
                     name="departmentId"
                     rules={[{ required: true, message: '请选择所属部门!' }]}
-                    style={{marginBottom: 0}}
+                    style={{ marginBottom: 0 }}
                 >
                     <TreeSelect
                         showSearch={true}

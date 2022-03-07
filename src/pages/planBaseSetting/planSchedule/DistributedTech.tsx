@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { Button, Select, Form, Space, Spin, Divider, Modal, InputNumber, Input, message } from 'antd';
 import { BaseInfo, CommonTable, DetailContent } from '../../common';
 import { ILink, IPlanSchedule, IUnit } from './IPlanSchedule';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { arrayMove, SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { MenuOutlined } from '@ant-design/icons';
 import useRequest from "@ahooksjs/use-request";
@@ -37,13 +37,17 @@ export default function DistributedTech(): React.ReactNode {
     const { loading, data } = useRequest<IUnit[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: IUnit[] = await RequestUtil.get(`/tower-aps/productionUnit/list`);
-            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail`, [...params.ids.split(',')]);
+            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/issue`, [...params.ids.split(',')]);
             setDataSource(data.map((item: IPlanSchedule, index: number) => {
                 return {
                     ...item,
                     index: index
                 }
             }))
+            if (result.length === 1) {
+                form.setFieldsValue({ unitId: result[0].id })
+                unitChange(result[0].id);
+            }
             resole(result)
         } catch (error) {
             reject(error)
@@ -144,24 +148,19 @@ export default function DistributedTech(): React.ReactNode {
     const modalOk = async () => {
         const data = await modalForm.validateFields();
         let list: IPlanSchedule[] = []
-        // selectedRows.forEach((res: IPlanSchedule) => {
         list = dataSource.map((item: IPlanSchedule) => {
-            if (selectedRows.findIndex((items: any) => items.planId === item.planId) !== -1) {
-                console.log('444', data.issueDescription)
+            if (selectedRows.findIndex((items: any) => items.id === item.id) !== -1) {
                 return {
                     ...item,
                     issueDescription: data.issueDescription
                 }
             } else {
-                console.log('1212', data.issueDescription)
                 return item
             }
         })
-        // })
-        console.log(selectedRows, list)
         await RequestUtil.post(`/tower-aps/productionPlan/batch/issue/remark`, list.map((res: IPlanSchedule, index: number) => {
             return {
-                id: res.planId,
+                id: res.id,
                 issueDescription: res.issueDescription,
                 sort: index
             }
@@ -170,7 +169,7 @@ export default function DistributedTech(): React.ReactNode {
             setSelectedKeys([]);
             setSelectedRows([]);
             setVisible(false);
-            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail`, [...params.ids.split(',')]);
+            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/issue`, [...params.ids.split(',')]);
             setDataSource(data.map((item: IPlanSchedule, index: number) => {
                 return {
                     ...item,
