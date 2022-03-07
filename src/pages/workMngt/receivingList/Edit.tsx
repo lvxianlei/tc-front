@@ -14,7 +14,7 @@ interface ChooseModalProps {
 /**
  * 纸质单号，原材料税款合计，车辆牌照
  */
-const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModalProps, ref) => {
+const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const [chooseList, setChooseList] = useState<any[]>(initChooseList)
     const [selectList, setSelectList] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
@@ -22,7 +22,6 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
     const [oprationType, setOprationType] = useState<"select" | "remove">("select")
     const [form] = Form.useForm();
     const [serarchForm] = Form.useForm();
-
     // 定义承接待选区的所有数据
     const [waitingArea, setWaitingArea] = useState<any[]>([])
 
@@ -43,79 +42,87 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
             setSelectList(result?.materialContractDetailVos.map((item: any) => ({
                 ...item,
-                num: item.surplusNum,
-                materialContractDetailId: item.id
-            })).filter((item: any) => item.num))
+                quantity: item.surplusNum,
+                id: item.id
+            })).filter((item: any) => item.quantity))
             setWaitingArea(result?.materialContractDetailVos.map((item: any) => ({
                 ...item,
-                num: item.surplusNum,
-                materialContractDetailId: item.id
-            })).filter((item: any) => item.num))
+                quantity: item.surplusNum,
+                id: item.id
+            })).filter((item: any) => item.quantity))
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [numberStatus] })
+    }), { refreshDeps: [id] })
 
     const resetFields = () => {
         setCurrentId("")
-        setChooseList([])
-        setSelectList([])
-        setWaitingArea([])
+        setChooseList(initChooseList)
+        setSelectList(data?.materialContractDetailVos.map((item: any) => ({
+            ...item,
+            quantity: item.surplusNum,
+            id: item.id
+        })).filter((item: any) => item.quantity))
+        setWaitingArea(data?.materialContractDetailVos.map((item: any) => ({
+            ...item,
+            quantity: item.surplusNum,
+            id: item.id
+        })).filter((item: any) => item.quantity))
     }
 
-    const handleRemove = async (materialContractDetailId: string) => {
+    const handleRemove = async (id: string) => {
         const formData = await form.validateFields()
-        const currentData = chooseList.find((item: any) => item.materialContractDetailId === materialContractDetailId)
-        const currentSelectData = selectList.find((item: any) => item.materialContractDetailId === materialContractDetailId)
-        if ((currentData.num - formData.num) === 0) {
-            setChooseList(chooseList.filter((item: any) => item.materialContractDetailId !== materialContractDetailId))
+        const currentData = chooseList.find((item: any) => item.id === id)
+        const currentSelectData = selectList.find((item: any) => item.id === id)
+        if ((currentData.quantity - formData.quantity) === 0) {
+            setChooseList(chooseList.filter((item: any) => item.id !== id))
             if (currentSelectData) {
-                setSelectList(selectList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-                setWaitingArea(waitingArea.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+                setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
+                setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
             } else {
-                setSelectList([...selectList, { ...currentData, num: formData.num }])
-                setWaitingArea([...waitingArea, { ...currentData, num: formData.num }])
+                setSelectList([...selectList, { ...currentData, quantity: formData.quantity }])
+                setWaitingArea([...waitingArea, { ...currentData, quantity: formData.quantity }])
             }
-        } else if ((currentData.num - formData.num) < 0) {
+        } else if ((currentData.quantity - formData.quantity) < 0) {
             message.error("移除数量不能大于已选数量...")
             return
         } else {
-            setChooseList(chooseList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: item.num - formData.num }) : item))
+            setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, quantity: item.quantity - formData.quantity }) : item))
             if (currentSelectData) {
-                setSelectList(selectList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-                setWaitingArea(waitingArea.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+                setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
+                setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
             } else {
-                setSelectList([...selectList, { ...currentData, num: formData.num }])
-                setWaitingArea([...waitingArea, { ...currentData, num: formData.num }])
+                setSelectList([...selectList, { ...currentData, quantity: formData.quantity }])
+                setWaitingArea([...waitingArea, { ...currentData, quantity: formData.quantity }])
             }
         }
         setVisible(false)
         form.resetFields()
     }
 
-    const handleSelect = async (materialContractDetailId: string) => {
+    const handleSelect = async (id: string) => {
         const formData = await form.validateFields()
-        const currentData = selectList.find((item: any) => item.materialContractDetailId === materialContractDetailId)
-        const currentChooseData = chooseList.find((item: any) => item.materialContractDetailId === materialContractDetailId)
-        if ((currentData.num - formData.num) === 0) {
-            setSelectList(selectList.filter((item: any) => item.materialContractDetailId !== materialContractDetailId))
-            setWaitingArea(waitingArea.filter((item: any) => item.materialContractDetailId !== materialContractDetailId))
+        const currentData = selectList.find((item: any) => item.id === id)
+        const currentChooseData = chooseList.find((item: any) => item.id === id)
+        if ((currentData.quantity - formData.quantity) === 0) {
+            setSelectList(selectList.filter((item: any) => item.id !== id))
+            setWaitingArea(waitingArea.filter((item: any) => item.id !== id))
             if (currentChooseData) {
-                setChooseList(chooseList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+                setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
             } else {
-                setChooseList([...chooseList, { ...currentData, num: formData.num }])
+                setChooseList([...chooseList, { ...currentData, quantity: formData.quantity }])
             }
-        } else if ((currentData.num - formData.num) < 0) {
+        } else if ((currentData.quantity - formData.quantity) < 0) {
             message.error("选择数量不能大于可选数量...")
             return
         } else {
-            setSelectList(selectList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
-            setWaitingArea(waitingArea.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
+            setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) - parseFloat(formData.quantity) }) : item))
+            setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) - parseFloat(formData.quantity) }) : item))
             if (currentChooseData) {
-                setChooseList(chooseList.map((item: any) => item.materialContractDetailId === materialContractDetailId ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+                setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
             } else {
-                setChooseList([...chooseList, { ...currentData, num: formData.num }])
+                setChooseList([...chooseList, { ...currentData, quantity: formData.quantity }])
             }
         }
         setVisible(false)
@@ -226,7 +233,7 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
                             }
                         ]}
                         style={{ width: "100%" }}
-                        name="num"
+                        name="quantity"
                         label="输入数量"><InputNumber min={1} step={1} /></Form.Item></Col>
                 </Row>
             </Form>
@@ -236,15 +243,18 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
             ...SelectedArea, {
                 title: "操作",
                 dataIndex: "opration",
-                render: (_: any, records: any) => <a onClick={() => {
-                    setCurrentId(records.materialContractDetailId)
-                    setOprationType("remove")
-                    setVisible(true)
-                }}>移除</a>
+                render: (_: any, records: any) => <Button
+                    size="small"
+                    type="link"
+                    disabled={records.receiveDetailStatus === 1}
+                    onClick={() => {
+                        setCurrentId(records.id)
+                        setOprationType("remove")
+                        setVisible(true)
+                    }}>移除</Button>
             }]} dataSource={chooseList} />
-        {/* <DetailTitle title="待选区" /> */}
+        <DetailTitle title="待选区" />
         <div>
-            <p style={{ paddingLeft: "14px", boxSizing: "border-box", fontSize: "16px" }}>待选区</p>
             <Form form={serarchForm} style={{ paddingLeft: "14px" }}>
                 <Row>
                     <Col span={4}>
@@ -310,11 +320,15 @@ const ChooseModal = forwardRef(({ id, initChooseList, numberStatus }: ChooseModa
             {
                 title: "操作",
                 dataIndex: "opration",
-                render: (_: any, records: any) => <a onClick={() => {
-                    setCurrentId(records.materialContractDetailId)
-                    setOprationType("select")
-                    setVisible(true)
-                }}>选择</a>
+                render: (_: any, records: any) => <Button
+                    type="link"
+                    size="small"
+                    disabled={records.receiveDetailStatus === 1}
+                    onClick={() => {
+                        setCurrentId(records.id)
+                        setOprationType("select")
+                        setVisible(true)
+                    }}>选择</Button>
             }]} dataSource={selectList} />
     </Spin>
 })
@@ -368,19 +382,19 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     });
 
     const handleModalOk = () => {
-        let num: string = "0.00"
+        let quantity: string = "0.00"
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
-            num = (parseFloat(num) + parseFloat(item.num || "0.00")).toFixed(2)
+            quantity = (parseFloat(quantity) + parseFloat(item.quantity || "0.00")).toFixed(2)
             const postData = {
                 ...item,
-                materialContractDetailId: item.id || item.materialContractDetailId,
+                id: item.id || item.id,
                 productName: item.materialName,
                 standard: item.materialStandard,
                 materialStandardName: item.materialStandardName,
-                num: item.num,
+                num: item.quantity,
                 contractUnitPrice: item.price,
-                quantity: item.num ? item.num : 0,
-                weight: (item.weight * item.num).toFixed(4)
+                quantity: item.quantity ? item.quantity : 0,
+                weight: (item.weight * item.quantity).toFixed(4)
             }
             delete postData.id
             return postData
@@ -411,7 +425,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
         })
         form.setFieldsValue({
-            num: parseFloat(num),
+            quantity: parseFloat(quantity),
             weight: weightAll.toFixed(4),
             price: priceAll
         })
@@ -480,7 +494,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 contractId: baseFormData.contractNumber.id,
                 contractNumber: baseFormData.contractNumber.value,
                 lists: cargoData,
-                quantity: baseFormData.num
+                quantity: baseFormData.quantity
             })
             resole(true)
         } catch (error) {
@@ -524,6 +538,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 unloadTaxPrice: fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0",
                 unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
             })
+            setCargoData([])
+            modalRef.current?.resetFields()
         }
         if (fields.supplierName) {
             const supplierData = fields.supplierName.records[0]
@@ -559,7 +575,23 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             <ChooseModal id={contractId} ref={modalRef} initChooseList={cargoData} numberStatus={number} />
         </Modal>
         <DetailTitle title="收货单基础信息" />
-        <BaseInfo col={2} form={form} onChange={handleBaseInfoChange} columns={columns} dataSource={{}} edit />
+        <BaseInfo col={2} form={form} onChange={handleBaseInfoChange} columns={
+            columns.map((item: any) => {
+                if (item.dataIndex === "paperNumber") {
+                    return ({
+                        ...item,
+                        maxLength: 20,
+                        rules: [
+                            {
+                                pattern: new RegExp(/^[a-zA-Z0-9]*$/g, 'g'),
+                                message: "请输入正确的纸质单号"
+                            }
+                        ]
+                    })
+                }
+                return item;
+            })
+        } dataSource={{}} edit />
         <DetailTitle title="运费信息" />
         <BaseInfo col={2} columns={freightInfo} dataSource={(freightInformation as any)} />
         <DetailTitle title="装卸费信息" />
@@ -573,6 +605,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }
                 setVisible(true)
             }}>选择</Button>]} />
-        <CommonTable haveIndex rowKey="materialContractDetailId" columns={editCargoDetails} dataSource={cargoData} />
+        <CommonTable haveIndex rowKey="id" columns={editCargoDetails} dataSource={cargoData} />
     </Spin>
 })

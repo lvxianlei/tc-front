@@ -78,7 +78,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
             baseForm.setFieldsValue({
                 ...result,
-                operator: { first: result.operatorDeptId, second: result.operatorId },
+                operator: { id: result.operatorId, value: result.operatorName },
                 supplier: { id: result.supplierId, value: result.supplierName },
                 purchasePlan: { id: result.purchasePlanId, value: result.purchasePlanNumber }
             })
@@ -223,8 +223,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const values = {
                 ...baseInfo,
                 fileIds: attchsRef.current.getDataSource().map(item => item.id),
-                operatorDeptId: baseInfo.operator?.first,
-                operatorId: baseInfo.operator?.second,
+                operatorId: baseInfo.operator?.id,
                 supplierId: baseInfo.supplier.id,
                 supplierName: baseInfo.supplier.value,
                 purchasePlanId: baseInfo.purchasePlan?.id || data?.purchasePlanId,
@@ -463,13 +462,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         return ({ ...item, enum: deliveryMethodEnum })
                     case "transportMethod":
                         return ({ ...item, enum: transportMethodEnum })
-                    case "operator":
-                        return ({
-                            ...item,
-                            render: () => <Form.Item label="" name="operator">
-                                <IntgSelect />
-                            </Form.Item>
-                        })
                     case "comparisonPriceNumber":
                         return ({ ...item, path: `${item.path}?supplierId=${supplierId}&comparisonStatus=2&purchasePlanId=${purchasePlanId}` })
                     default:
