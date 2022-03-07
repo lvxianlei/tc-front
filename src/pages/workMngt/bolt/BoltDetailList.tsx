@@ -1,3 +1,8 @@
+/**
+ * @copyright © 2021 
+ * @description 工作管理-螺栓列表-螺栓清单
+ */
+
 import { Button, Col, Input, message, Modal, Popconfirm, Row, Select } from 'antd';
 import React, { useState } from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
@@ -60,13 +65,13 @@ export default function BoltCheck(): React.ReactNode {
                             cancelText="否"
                         >
                             <span
-                                hidden={params.status === '3' && params.boltLeader === userId ? false : true}
+                                hidden={params.status === '2' && params.boltLeader === userId ? false : true}
                                 style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
                             >删除</span>
                         </Popconfirm>
                         <span
                             style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
-                            hidden={params.status === '3' && params.boltLeader === userId ? false : true}
+                            hidden={params.status === '2' && params.boltLeader === userId ? false : true}
                             onClick={() => {
                                 setId(item.id)
                                 setbasicHeight(item.basicHeight)
@@ -178,14 +183,14 @@ export default function BoltCheck(): React.ReactNode {
                             ghost
                             onClick={() => { successCheck() }}
                             style={{ marginLeft: 10, }}
-                            hidden={params.status === '3' && params.boltLeader === userId ? false : true}
+                            hidden={params.status === '2' && params.boltLeader === userId ? false : true}
                         >完成</Button>
                         <Button
                             type="primary"
                             ghost
                             onClick={() => { setVisible(true); getBoltlist() }}
                             style={{ marginLeft: 10, }}
-                            hidden={params.status === '3' && params.boltLeader === userId ? false : true}
+                            hidden={params.status === '2' && params.boltLeader === userId ? false : true}
                         >添加</Button>
                         <Button type="ghost" onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
                     </div>
@@ -239,7 +244,6 @@ export default function BoltCheck(): React.ReactNode {
                                         message.error('塔位号最多99个')
                                         return
                                     }
-                                    console.log(value)
                                     setproductIdList(value)
                                 }}
                             >
