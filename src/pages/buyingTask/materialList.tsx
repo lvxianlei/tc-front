@@ -1,20 +1,18 @@
-// 用料清单
-import React, { Fragment } from "react"
-//page 组件
+
+import React, { useState } from "react"
 import { Page } from "../common"
-//antd
 import { DatePicker, Select, Input, Button } from 'antd'
 import { materialList1 } from "./buyingTask.json"
 import { Link, } from 'react-router-dom'
 import { useHistory } from 'react-router';
-
+const { RangePicker } = DatePicker;
 export default function MaterialList() {
-    const { RangePicker } = DatePicker;
     const history = useHistory();
+    const [filterValue, setFilterValue] = useState({})
     return (<Page
-        // path="/tower-supply/materialPurchaseTask/inquirer"
-        path=""
+        path={`/tower-storage/outStock/detail/material/${"aaa"}`}
         //表格
+        filterValue={filterValue}
         columns={[
             {
                 "title": "序号",

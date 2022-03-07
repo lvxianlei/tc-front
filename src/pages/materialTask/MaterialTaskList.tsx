@@ -11,7 +11,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './MaterialTaskList.module.less';
 import { useLocation } from 'react-router-dom';
 import BatchAssigned, { EditRefProps } from './BatchAssigned';
-import AssignedInformation from './AssignedInformation';
+import AssignedInformation, { RefProps } from './AssignedInformation';
 import { IAssignedList } from './IMaterialTask';
 
 export default function MaterialTaskList(): React.ReactNode {
@@ -21,9 +21,11 @@ export default function MaterialTaskList(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<IAssignedList[]>([]);
     const [visible, setVisible] = useState<boolean>(false);
-    const editRef = useRef<EditRefProps>();
+    const batchEditRef = useRef<EditRefProps>();
+    const editRef = useRef<RefProps>();
     const [informationVisible, setInformationVisible] = useState<boolean>(false);
-    const [id, setId] = useState<string>('')
+    const [id, setId] = useState<string>('');
+    const [status, setStatus] = useState(1);
 
     const columns = [
         {
@@ -93,6 +95,7 @@ export default function MaterialTaskList(): React.ReactNode {
                     <Button type='link' onClick={() => {
                         setInformationVisible(true);
                         setId(record.id);
+                        setStatus(record.status);
                     }}>指派信息</Button>
                 </Space>
             )
@@ -106,12 +109,24 @@ export default function MaterialTaskList(): React.ReactNode {
 
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
-            await editRef.current?.onSubmit();
+            await batchEditRef.current?.onSubmit();
             message.success('指派成功');
             setVisible(false);
             setRefresh(!refresh);
             setSelectedKeys([]);
             setSelectedRows([]);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const assignedOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('指派成功');
+            setInformationVisible(false);
+            setRefresh(!refresh);
             resove(true);
         } catch (error) {
             reject(false)
@@ -127,31 +142,28 @@ export default function MaterialTaskList(): React.ReactNode {
             onOk={handleModalOk}
             okText="保存并提交"
             onCancel={() => {
-                editRef.current?.resetFields();
+                batchEditRef.current?.resetFields();
                 setVisible(false);
                 setSelectedKeys([]);
                 setSelectedRows([]);
             }}
         >
-            <BatchAssigned ref={editRef} id={selectedKeys.join(',')} />
+            <BatchAssigned ref={batchEditRef} id={selectedKeys.join(',')} />
         </Modal>
         <Modal
             title="指派"
             destroyOnClose
             visible={informationVisible}
             width="60%"
-            footer={
-                <Button onClick={() => {
-                    setId('');
-                    setInformationVisible(false);
-                }}>关闭</Button>
-            }
+            onOk={assignedOk}
+            okText="保存并提交"
+            cancelText="关闭"
             onCancel={() => {
                 setId('');
                 setInformationVisible(false);
             }}
         >
-            <AssignedInformation id={id} />
+            <AssignedInformation id={id} status={status} ref={editRef} />
         </Modal>
         <Page
             path="/tower-science/materialTask"
@@ -172,9 +184,9 @@ export default function MaterialTaskList(): React.ReactNode {
                     children: <Form.Item name="status" initialValue={location.state?.state}>
                         <Select style={{ width: '120px' }} placeholder="请选择">
                             <Select.Option value={""} key="4">全部</Select.Option>
-                            <Select.Option value={0} key="0">待指派</Select.Option>
-                            <Select.Option value={1} key="1">待完成</Select.Option>
-                            <Select.Option value={2} key="2">已完成</Select.Option>
+                            <Select.Option value={1} key="1">待指派</Select.Option>
+                            <Select.Option value={2} key="2">待完成</Select.Option>
+                            <Select.Option value={3} key="3">已完成</Select.Option>
                         </Select>
                     </Form.Item>
                 },

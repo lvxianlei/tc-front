@@ -348,7 +348,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandardName",
+            "dataIndex": "standardName",
             "type": "string"
         },
         {
@@ -373,7 +373,7 @@
         },
         {
             "title": "数量",
-            "dataIndex": "num",
+            "dataIndex": "quantity",
             "type": "number"
         },
         {
@@ -426,7 +426,7 @@
         },
         {
             "title": "已选数量",
-            "dataIndex": "num",
+            "dataIndex": "quantity",
             "type": "number"
         }
     ],
@@ -465,7 +465,7 @@
         },
         {
             "title": "可选数量",
-            "dataIndex": "num",
+            "dataIndex": "quantity",
             "type": "number"
         }
     ],
