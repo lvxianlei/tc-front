@@ -35,11 +35,11 @@ export default function Lofting(): React.ReactNode {
     // const getForm = (): FormInstance | null => {
     //     return formRef?.current;
     // }
-    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
-        const data: [] = await RequestUtil.get(`/tower-science/drawProductSegment/getSegmentBySegmentGroupId`,{segmentGroupId:params.productSegmentId});
-        resole(data);
-    }), {})
-    const paragraphList: [] = data || [];
+    // const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
+    //     const data: [] = await RequestUtil.get(`/tower-science/drawProductSegment/getSegmentBySegmentGroupId`,{segmentGroupId:params.productSegmentId});
+    //     resole(data);
+    // }), {})
+    // const paragraphList: [] = data || [];
     const columns = [
         {
             key: 'id',
@@ -71,18 +71,22 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item 
-                    name={['data',index, "segmentId"]} 
-                    initialValue={ record.segmentId }
+                    name={['data',index, "segmentName"]} 
+                    initialValue={ record.segmentName }
                     rules={[{
                         required: true,
-                        message:'请选择段号'
+                        message:'请输入段号'
+                    },{
+                        pattern: /^[0-9a-zA-Z-]*$/,
+                        message: '仅可输入数字/字母/-',
                     }]}
                 >
-                    <Select onChange={ () => rowChange(index) }>
+                    {/* <Select onChange={ () => rowChange(index) }>
                         { paragraphList.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
                         }) }
-                    </Select>
+                    </Select> */}
+                    <Input size="small" onChange={ () => rowChange(index) } maxLength={10}/>
                 </Form.Item>
             )
         },
@@ -675,13 +679,17 @@ export default function Lofting(): React.ReactNode {
             <Table
                 columns={[
                     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-                    { title: '段号', dataIndex: 'segmentId', key: 'segmentId', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-                        <Form.Item name={['dataV',index, "segmentId"]} initialValue={ _a } rules={[{required:true, message:'请选择段号'}]}>
-                            <Select>
+                    { title: '段号', dataIndex: 'segmentName', key: 'segmentName', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                        <Form.Item name={['dataV',index, "segmentName"]} initialValue={ _a } rules={[{required:true, message:'请填写段号'}, {
+                            pattern: /^[0-9a-zA-Z-]*$/,
+                            message: '仅可输入数字/字母/-',
+                        }]}>
+                            {/* <Select>
                                 { paragraphList.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
                                 }) }
-                            </Select>
+                            </Select> */}
+                             <Input size="small" maxLength={10}/>
                         </Form.Item>
                     )},
                     { title: '构件编号', dataIndex: 'code', key: 'code',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
