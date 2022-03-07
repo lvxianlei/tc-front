@@ -78,9 +78,9 @@ export default forwardRef(function Edit({ id, status }: EditProps, ref) {
             width: 120
         },
         {
-            key: 'currentStatus',
+            key: 'action',
             title: '操作',
-            dataIndex: 'currentStatus',
+            dataIndex: 'action',
             width: 150
         },
         {
