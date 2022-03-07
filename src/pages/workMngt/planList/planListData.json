@@ -136,7 +136,7 @@
             "type": "number"
         },
         {
-            "title": "单个重量kg",
+            "title": "单个重量(吨)",
             "dataIndex": "singleWeight",
             "type": "number"
         },
