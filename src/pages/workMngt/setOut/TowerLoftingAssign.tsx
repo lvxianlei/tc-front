@@ -174,6 +174,8 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 this.wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;

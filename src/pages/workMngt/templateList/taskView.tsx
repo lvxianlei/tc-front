@@ -327,6 +327,8 @@ export default function TaskView(props: any){
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
