@@ -197,7 +197,7 @@ export default function MaterialTaskList(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input style={{ width: '400px' }} placeholder="提料任务编号/放样任务编号/计划号/订单编号/内部合同号" />
+                    children: <Input style={{ width: '400px' }} placeholder="提料任务编号/计划号/订单编号/内部合同号" />
                 }
             ]}
             tableProps={{
