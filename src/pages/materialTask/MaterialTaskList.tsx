@@ -185,9 +185,9 @@ export default function MaterialTaskList(): React.ReactNode {
                 {
                     name: 'status',
                     label: '任务状态',
-                    children: <Form.Item name="status" initialValue={location.state?.state}>
+                    children: <Form.Item name="status" initialValue={location.state?.state || 4}>
                         <Select style={{ width: '120px' }} placeholder="请选择">
-                            <Select.Option value={""} key="4">全部</Select.Option>
+                            <Select.Option value={4} key="4">全部</Select.Option>
                             <Select.Option value={1} key="1">待指派</Select.Option>
                             <Select.Option value={2} key="2">待完成</Select.Option>
                             <Select.Option value={3} key="3">已完成</Select.Option>
