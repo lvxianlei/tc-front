@@ -14,7 +14,7 @@ export default function AnnouncementNew(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>()
     // const [attachInfo, setAttachInfo] = useState<FileProps[]>([]);
     const location = useLocation<{ type: string }>();
-    const [staffList, setStaffList] = useState<string[] | IStaffList[]>([]);
+    const [staffList, setStaffList] = useState<IStaffList[]>([]);
     const [detailData, setDetailData] = useState<IAnnouncement>({});
 
     const history = useHistory();
@@ -57,7 +57,7 @@ export default function AnnouncementNew(): React.ReactNode {
                         id: detailData.id,
                         ...value,
                         fileIds: attachRef.current?.getDataSource().map(item => item.id),
-                        staffList: staffList,
+                        staffList: staffList.map((res: IStaffList) => { return res?.id }),
                         state: state
                     }).then(res => {
                         history.goBack();
@@ -67,7 +67,7 @@ export default function AnnouncementNew(): React.ReactNode {
                         id: detailData.id,
                         ...value,
                         fileIds: attachRef.current?.getDataSource().map(item => item.id),
-                        staffList: staffList,
+                        staffList: staffList.map((res: IStaffList) => { return res?.id }),
                         state: state
                     }).then(res => {
                         history.goBack();
