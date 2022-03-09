@@ -31,7 +31,7 @@ export default function PickList(): React.ReactNode {
         },
         {
             key: 'taskNum',
-            title: '放样任务编号',
+            title: '提料任务编号',
             width: 100,
             dataIndex: 'taskNum'
         },
@@ -187,7 +187,7 @@ export default function PickList(): React.ReactNode {
                     {
                         name: 'materialStatus',
                         label: '塔型状态',
-                        children: <Form.Item name="materialStatus" initialValue={ location.state?.state }>
+                        children: <Form.Item name="materialStatus" initialValue={ location.state?.state||'' }>
                             <Select style={{width:'100px'}}>
                                 <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>待指派</Select.Option>
@@ -223,7 +223,7 @@ export default function PickList(): React.ReactNode {
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入提料任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
                     },
                 ]}
             />
