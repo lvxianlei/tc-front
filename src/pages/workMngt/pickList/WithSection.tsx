@@ -181,22 +181,21 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     }
 
     return <Spin spinning={loading}>
-        {type === 'new' ? <Form form={fastForm}>
+        <Form form={fastForm}>
             <Row>
                 <Col span={14}>
                     <Form.Item name="fast" label="快速配段" rules={[{
                         pattern: /^[a-zA-Z0-9-,*()]*$/,
                         message: '仅可输入英文字母/数字/特殊字符',
                     }]}>
-                        <Input style={{ width: '100%' }} />
+                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
                     </Form.Item>
                 </Col>
-                <Col offset={2} span={4}>
-                    <Button type="primary" loading={fastLoading} onClick={fastWithSectoin} ghost>确定</Button>
+                <Col offset={1} span={4}>
+                    <Button type="primary" loading={fastLoading} disabled={type === 'detail'} onClick={fastWithSectoin} ghost>确定</Button>
                 </Col>
             </Row>
         </Form>
-            : null}
         <Form form={form}>
             <DetailTitle title="塔腿配段信息" />
             <Row>
