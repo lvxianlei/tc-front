@@ -101,11 +101,12 @@ const towerColumns = [
         key: 'basicsPartNum' 
     },
     { 
-        title: '长度', 
+        title: '长度（mm）', 
         dataIndex: 'length', 
         key: 'length' 
     },
-    // { title: '宽度', dataIndex: 'width', key: 'width' },
+    { title: '宽度（mm）', dataIndex: 'width', key: 'width' },
+    { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness' },
     { 
         title: '理算重量（kg）', 
         dataIndex: 'basicsTheoryWeight', 
