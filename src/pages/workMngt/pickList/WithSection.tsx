@@ -112,67 +112,71 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const fastWithSectoin = () => {
         setFastLoading(true)
         const inputString: string = fastForm.getFieldsValue(true).fast;
-        if ((/[(,*-]+\*[0-9]+|[(,*-]+\*[a-zA-Z()-*,]+|^[*),]+/g).test(inputString)) {
-            message.error('请输入正确格式');
-            setFastLoading(false);
-        } else {
-            const inputList = inputString.split(',');
-            let list: IMaterialDetail[] = [];
-            inputList.forEach((res: string) => {
-                const newRes = res.split('*')[0].replace(/\(|\)/g, "");
-                if ((/^[0-9]+-[0-9]+$/).test(newRes)) {
-                    const length = Number(newRes.split('-')[0]) - Number(newRes.split('-')[1]);
-                    if (length <= 0) {
-                        let num = Number(newRes.split('-')[0]);
-                        let t = setInterval(() => {
-                            list.push({
-                                segmentName: (num++).toString(),
-                                count: Number(res.split('*')[1]) || 1
-                            })
-                            if (num > Number(newRes.split('-')[1])) {
-                                clearInterval(t);
-                            }
-                        }, 0)
+        if (inputString) {
+            if ((/[(,*-]+\*[0-9]+|[(,*-]+\*[a-zA-Z()-*,]+|^[*),]+/g).test(inputString)) {
+                message.error('请输入正确格式');
+                setFastLoading(false);
+            } else {
+                const inputList = inputString.split(',');
+                let list: IMaterialDetail[] = [];
+                inputList.forEach((res: string) => {
+                    const newRes = res.split('*')[0].replace(/\(|\)/g, "");
+                    if ((/^[0-9]+-[0-9]+$/).test(newRes)) {
+                        const length = Number(newRes.split('-')[0]) - Number(newRes.split('-')[1]);
+                        if (length <= 0) {
+                            let num = Number(newRes.split('-')[0]);
+                            let t = setInterval(() => {
+                                list.push({
+                                    segmentName: (num++).toString(),
+                                    count: Number(res.split('*')[1]) || 1
+                                })
+                                if (num > Number(newRes.split('-')[1])) {
+                                    clearInterval(t);
+                                }
+                            }, 0)
+                        } else {
+                            let num = Number(newRes.split('-')[0])
+                            let t = setInterval(() => {
+                                list.push({
+                                    segmentName: (num--).toString(),
+                                    count: Number(res.split('*')[1]) || 1
+                                })
+                                if (num < Number(newRes.split('-')[1])) {
+                                    clearInterval(t);
+                                }
+                            }, 0)
+                        }
                     } else {
-                        let num = Number(newRes.split('-')[0])
-                        let t = setInterval(() => {
-                            list.push({
-                                segmentName: (num--).toString(),
-                                count: Number(res.split('*')[1]) || 1
-                            })
-                            if (num < Number(newRes.split('-')[1])) {
-                                clearInterval(t);
-                            }
-                        }, 0)
+                        list.push({
+                            segmentName: newRes,
+                            count: Number(res.split('*')[1]) || 1
+                        })
                     }
-                } else {
-                    list.push({
-                        segmentName: newRes,
-                        count: Number(res.split('*')[1]) || 1
-                    })
-                }
 
-            })
-            setTimeout(() => {
-                const newList = [
-                    ...(data?.materialSegmentList?.map(res => {
-                        return { ...res, count: Number(res.count || 0) }
-                    }) || []),
-                    ...list
-                ];
-                const finalList = delSameObjValue(newList);
-                console.log(finalList)
-                form.setFieldsValue({
-                    ...form.getFieldsValue(true),
-                    productSegmentListDTOList: [...finalList]
                 })
-                setDetailData({
-                    ...detailData,
-                    materialDrawProductSegmentList: [...finalList]
-                })
-                fastForm.resetFields();
-                setFastLoading(false)
-            }, 1000)
+                setTimeout(() => {
+                    const newList = [
+                        ...(data?.materialSegmentList?.map(res => {
+                            return { ...res, count: Number(res.count || 0) }
+                        }) || []),
+                        ...list
+                    ];
+                    const finalList = delSameObjValue(newList);
+                    form.setFieldsValue({
+                        ...form.getFieldsValue(true),
+                        productSegmentListDTOList: [...finalList]
+                    })
+                    setDetailData({
+                        ...detailData,
+                        materialDrawProductSegmentList: [...finalList]
+                    })
+                    fastForm.resetFields();
+                    setFastLoading(false)
+                }, 1000)
+            }
+        } else {
+            message.warning('请输入需快速配段的信息')
+            setFastLoading(false)
         }
     }
 
