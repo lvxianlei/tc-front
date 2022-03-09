@@ -57,7 +57,7 @@ export default function DrawTowerMngt(): React.ReactNode {
         },
         {
             key: 'allProductNumber',
-            title: '杆塔下塔型 ',
+            title: '塔型下杆塔',
             dataIndex: 'allProductNumber',
             width: 200
         },
