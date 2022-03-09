@@ -157,7 +157,7 @@ export default function SampleDrawList(): React.ReactNode {
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待完成</Select.Option>
                             {/* <Select.Option value={2} key={2}>进行中</Select.Option> */}
-                            <Select.Option value={3} key={3}>已完成</Select.Option>
+                            <Select.Option value={2} key={2}>已完成</Select.Option>
                         </Select>
                     </Form.Item> 
                 },
