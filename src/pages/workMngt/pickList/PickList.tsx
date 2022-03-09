@@ -104,7 +104,7 @@ export default function PickList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space size="small" className={styles.operationBtn}>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickMessage/${record.id}`)}}>提料信息</Button>
-                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}/${record.materialStatus}/${record.materialLeader}`)}} disabled={record.materialStatus!==1&&record.materialStatus!==2}>塔型信息</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}/${record.materialStatus}/${record.materialLeader}`)}}>塔型信息</Button>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}/1`)}} >杆塔配段</Button>
                     <Button type='link' onClick={() =>{setTaskId(record.id); setVisible(true)}} disabled={record.materialStatus<3} >交付物</Button>
                 </Space>
