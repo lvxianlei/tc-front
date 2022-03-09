@@ -121,7 +121,7 @@ export default function PickTower(): React.ReactNode {
                     <Button type='link' disabled={record?.materialLeaderList?.findIndex((res: string) => { return res === userId }) === -1} onClick={async () => {
                         setWithSectionVisible(true);
                         setProductId(record.id);
-                        setStatus(record.materialStatusName)
+                        setStatus(params.status)
                     }} >配段</Button>
                     <Button type='link' onClick={() => { history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`) }}>杆塔提料明细</Button>
                 </Space>
@@ -187,7 +187,7 @@ export default function PickTower(): React.ReactNode {
                     editRef.current?.resetFields();
                     setWithSectionVisible(false);
                 }}>
-                <WithSection id={productId} ref={editRef} type={status === '已完成' ? 'detail' : 'new'} />
+                <WithSection id={productId} ref={editRef} type={status === '3' ? 'detail' : 'new'} />
             </Modal>
             <Page
                 path="/tower-science/materialProduct"
