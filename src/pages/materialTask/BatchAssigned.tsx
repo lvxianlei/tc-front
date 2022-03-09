@@ -75,11 +75,10 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                 return {
                     ...res,
                     materialLeader: res.materialLeader === 0 ? assignedList[assignedList.findIndex((item: any) => item.materialLeader === 0) - 1].materialLeader : res.materialLeader,
-                    priority: res.priority === 0 ? assignedList[assignedList.findIndex((item: any) => item.priority === 4) - 1].priority : res.priority,
+                    priority: res.priority === 0 ? assignedList[assignedList.findIndex((item: any) => item.priority === 0) - 1].priority : res.priority,
                     materialDeliverTime: res.materialDeliverTime.format('YYYY-MM-DD')
                 }
             })
-            console.log(value)
             await saveRun(value)
             resolve(true);
         } catch (error) {

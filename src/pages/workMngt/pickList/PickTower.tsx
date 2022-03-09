@@ -203,11 +203,11 @@ export default function PickTower(): React.ReactNode {
                     </Space>
                 }
                 searchFormItems={[
-                    {
-                        name: 'statusUpdateTime',
-                        label: '最新状态变更时间',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                    },
+                    // {
+                    //     name: 'statusUpdateTime',
+                    //     label: '最新状态变更时间',
+                    //     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    // },
                     // {
                     //     name: 'materialStatus',
                     //     label: '杆塔提料状态',

@@ -31,7 +31,7 @@ export default function PickList(): React.ReactNode {
         },
         {
             key: 'taskNum',
-            title: '放样任务编号',
+            title: '提料任务编号',
             width: 100,
             dataIndex: 'taskNum'
         },
@@ -104,9 +104,9 @@ export default function PickList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space size="small" className={styles.operationBtn}>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickMessage/${record.id}`)}}>提料信息</Button>
-                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}/${record.materialStatus}/${record.materialLeader}`)}} disabled={record.materialStatus!==1&&record.materialStatus!==2}>塔型信息</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}/${record.materialStatus}/${record.materialLeader}`)}}>塔型信息</Button>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}/1`)}} >杆塔配段</Button>
-                    <Button type='link' onClick={() =>{setTaskId(record.id); setVisible(true)}} disabled={record.materialStatus<4} >交付物</Button>
+                    <Button type='link' onClick={() =>{setTaskId(record.id); setVisible(true)}} disabled={record.materialStatus<3} >交付物</Button>
                 </Space>
             )
         }
@@ -187,13 +187,13 @@ export default function PickList(): React.ReactNode {
                     {
                         name: 'materialStatus',
                         label: '塔型状态',
-                        children: <Form.Item name="materialStatus" initialValue={ location.state?.state }>
+                        children: <Form.Item name="materialStatus" initialValue={ location.state?.state||'' }>
                             <Select style={{width:'100px'}}>
                                 <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>待指派</Select.Option>
                                 <Select.Option value={2} key={2}>提料中</Select.Option>
                                 {/* <Select.Option value={3} key={3}>配段中</Select.Option> */}
-                                <Select.Option value={4} key={4}>已完成</Select.Option>
+                                <Select.Option value={3} key={3}>已完成</Select.Option>
                             </Select>
                         </Form.Item>
                     },
@@ -223,7 +223,7 @@ export default function PickList(): React.ReactNode {
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
+                        children: <Input placeholder="请输入提料任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
                     },
                 ]}
             />
