@@ -22,10 +22,6 @@ export default function TowerInformation(): React.ReactNode {
             "title": "模式"
         },
         {
-            "dataIndex": "taskCode",
-            "title": "任务单编号"
-        },
-        {
             "dataIndex": "saleOrderNumber",
             "title": "订单编号"
         },
