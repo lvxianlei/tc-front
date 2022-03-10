@@ -123,6 +123,7 @@ export default function ContractMngt() {
                             }}>取消</Button>
                             <Popconfirm
                                 title="确定删除吗？"
+                                disabled={records.comparisonStatus !== 1}
                                 onConfirm={async() => {
                                     await deleteRun(records?.id)
                                     message.success("删除成功...")

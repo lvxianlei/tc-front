@@ -175,6 +175,7 @@ export default function Drawing(): React.ReactNode {
                         }}>关联合同</Button>
                     <Popconfirm
                         title="确定删除此任务吗？"
+                        disabled={![0, 3].includes(record.auditStatus)}
                         onConfirm={async() => {
                             await deleteRun(record?.id)
                             message.success("删除成功...")

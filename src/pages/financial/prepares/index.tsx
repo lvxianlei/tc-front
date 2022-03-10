@@ -231,6 +231,7 @@ export default function ApplyPayment() {
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
                             <Popconfirm
                                 title="确定删除此请款申请吗？"
+                                disabled={![0, 3].includes(record.applyStatus)}
                                 onConfirm={async() => {
                                     await deleteRun(record?.id)
                                     message.success("删除成功...")

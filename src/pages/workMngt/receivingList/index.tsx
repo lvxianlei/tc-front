@@ -131,6 +131,7 @@ export default function Invoicing() {
                         }}>详情</Button>
                         <Popconfirm
                             title="确定删除此收货单信息吗？"
+                            disabled={record.lists && record.lists.length !== 0}
                             onConfirm={async() => {
                                 await deleteRun(record?.id)
                                 message.success("删除成功...")
