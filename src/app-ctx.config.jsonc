@@ -153,7 +153,7 @@
                         "items": [
                             {
                                 "label": "开票申请列表",
-                                "path": "/invoicing",
+                                "path": "/invoicing/billList",
                                 "authority": "approvalm_invoicing_list"
                             }
                         ]

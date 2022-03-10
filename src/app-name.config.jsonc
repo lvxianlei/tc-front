@@ -3,14 +3,14 @@
         "authority": "",         //权限
         "title": "营销中心",      //应用展示名称
         "description": "包含客户、合同、订单等",//描述
-        "path": "/notice/SC",     //应用首页
+        "path": "/client/mngt",     //应用首页
         "appName": "SC"           //应用name
     },
     {
         "authority": "",
         "title": "计划中心",
         "description": "包含客户、合同、订单等",
-        "path": "/notice/PC",
+        "path": "/planProd/planMgmt",
         "appName": "PC"
     },
     {
@@ -38,7 +38,7 @@
         "authority": "",
         "title": "生产中心",
         "description": "生产过程管理相关功能",
-        "path": "/notice/MC",
+        "path": "/workshopManagement/processingTask",
         "appName": "MC"
     },
     {
@@ -71,21 +71,21 @@
         "authority": "",
         "title": "人资中心",
         "description": "人资管理相关功能",
-        "path": "/notice/HR",
+        "path": "/employeeRelation/recruit",
         "appName": "HR"
     },
     {
         "authority": "",
         "title": "财务中心",
         "description": "财务管理相关功能",
-        "path": "/notice/FC",
+        "path": "/invoicing/billList",
         "appName": "FC"
     },
     {
         "authority": "",
         "title": "通用中心",
         "description": "必备基础功能",
-        "path": "/notice/COMM",
+        "path": "/sys/dxnry",
         "appName": "COMM"
     }
 ]
