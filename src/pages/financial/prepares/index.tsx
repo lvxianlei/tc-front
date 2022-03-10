@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import Edit from "./Edit"
@@ -122,22 +122,6 @@ export default function ApplyPayment() {
         })
     }
 
-    const handleSuccess = (id: string) => {
-        Modal.confirm({
-            title: "通过申请",
-            content: "确定通过此请款申请吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    resove(await successRun(id))
-                    message.success("通过成功...")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        })
-    }
-
     const handleApprovalRun = (id: string) => {
         Modal.confirm({
             title: "发起请款申请",
@@ -245,20 +229,23 @@ export default function ApplyPayment() {
                             <Button type="link" className="btn-operation-link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
                             <Button type="link" className="btn-operation-link" disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
-                            {/* <Button
-                                type="link"
-                                disabled={![1].includes(record.applyStatus)}
-                                onClick={() => handleSuccess(record.id)}
-                            >通过</Button> */}
-                            <Button type="link" className="btn-operation-link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
-                            {/* <Button
-                                type="link"
-                                onClick={() => {
-                                    setDetailId(record.id)
-                                    setSuccessVisible(true)
+                            <Popconfirm
+                                title="确定删除此请款申请吗？"
+                                onConfirm={async() => {
+                                    await deleteRun(record?.id)
+                                    message.success("删除成功...")
+                                    history.go(0)
                                 }}
-                                disabled={(record.pleasePayStatus === 3 && record.applyStatus === 4) ? true : false}
-                            >完成</Button> */}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button
+                                    type="link"
+                                    size="small"
+                                    className="btn-operation-link"
+                                    disabled={![0, 3].includes(record.applyStatus)}
+                                >删除</Button>
+                            </Popconfirm>
                         </>
                     }
                 }]}
