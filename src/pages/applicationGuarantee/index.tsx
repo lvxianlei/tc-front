@@ -115,8 +115,6 @@ export default function ApplicationColunm(): React.ReactNode {
 
     return (
         <>
-        <span className='iconfont icon-caiwuzhongxin_baohanshenqing'></span>
-        <i className={`font_family iconfont icon-a-TOWERCLOUDLOGO`}></i>
             <Page
                 path="/tower-finance/guarantee"
                 columns={[
