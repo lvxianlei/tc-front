@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react'
 import { useHistory, Link } from "react-router-dom"
 import { IntgSelect, Page } from "../../common"
-import { Select, Input, Button, Modal, DatePicker, message, Form, Space } from 'antd'
+import { Select, Input, Button, Modal, DatePicker, message, Form, Space, Popconfirm } from 'antd'
 import { comparison } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -77,22 +77,6 @@ export default function ContractMngt() {
         }
     })
 
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            title: "删除",
-            content: "确定删除/取消吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    resove(await deleteRun(id))
-                    message.success("删除成功...")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        })
-    }
-
     return (
         <>
             <Modal destroyOnClose title={oprationType === "new" ? "创建" : "编辑"} width={1011} visible={visible} onOk={handleAddOk} onCancel={() => {
@@ -137,7 +121,23 @@ export default function ContractMngt() {
                                 setDetailId(records.id)
                                 setCancelVisible(true)
                             }}>取消</Button>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => handleDelete(records.id)}>删除</Button>
+                            <Popconfirm
+                                title="确定删除吗？"
+                                onConfirm={async() => {
+                                    await deleteRun(records?.id)
+                                    message.success("删除成功...")
+                                    history.go(0)
+                                }}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button
+                                    type="link"
+                                    size="small"
+                                    className="btn-operation-link"
+                                    disabled={records.comparisonStatus !== 1}
+                                >删除</Button>
+                            </Popconfirm>
                             <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
