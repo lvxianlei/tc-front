@@ -21,12 +21,12 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'businessUserName',
             width: 100,
         },
-        {
-            key: 'taskNum',
-            title: '放样任务编号',
-            width: 100,
-            dataIndex: 'taskNum'
-        },
+        // {
+        //     key: 'taskNum',
+        //     title: '放样任务编号',
+        //     width: 100,
+        //     dataIndex: 'taskNum'
+        // },
         {
             key: 'internalNumber',
             title: '内部合同号',
@@ -168,7 +168,7 @@ export default function PlanTrack(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号进行查询" maxLength={200} />
+                children: <Input placeholder="请输入计划号/订单编号/内部合同编号进行查询" maxLength={200} />
             },
         ]}
     />

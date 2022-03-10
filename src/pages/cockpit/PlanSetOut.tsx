@@ -16,12 +16,12 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             fixed: "left" as FixedType,
             render: (_a: any, _b: any, index: number) => {return index + 1}
         },
-        {
-            key: 'taskNum',
-            title: '放样任务编号',
-            width: 100,
-            dataIndex: 'taskNum'
-        },
+        // {
+        //     key: 'taskNum',
+        //     title: '放样任务编号',
+        //     width: 100,
+        //     dataIndex: 'taskNum'
+        // },
         {
             key: 'planNumber',
             title: '计划号',
@@ -301,7 +301,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号进行查询" maxLength={200} />
+                children: <Input placeholder="请输入计划号/订单编号/内部合同编号进行查询" maxLength={200} />
             },
         ]}
     />
