@@ -95,7 +95,6 @@ class DeliverablesListing extends React.Component<IDeliverablesListingRouteProps
                 footer={<Button type="ghost" onClick={() => this.modalCancel()}>关闭</Button>}
                 onCancel={() => this.modalCancel()}
             >
-                <p className={styles.title}>附件清单</p>
                 <CommonTable columns={tableColumns} dataSource={data} pagination={false} />
             </Modal>
         </>
