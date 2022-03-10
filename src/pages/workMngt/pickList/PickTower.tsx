@@ -37,6 +37,8 @@ export default function PickTower(): React.ReactNode {
     const [withSectionVisible, setWithSectionVisible] = useState<boolean>(false);
     const editRef = useRef<EditRefProps>();
     const userId = AuthUtil.getUserId();
+    const [batchNo, setBatchNo] = useState<any>();
+
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         // const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         // setDepartment(departmentData);
@@ -121,7 +123,8 @@ export default function PickTower(): React.ReactNode {
                     <Button type='link' disabled={record?.materialLeaderList?.findIndex((res: string) => { return res === userId }) === -1} onClick={async () => {
                         setWithSectionVisible(true);
                         setProductId(record.id);
-                        setStatus(params.status)
+                        setStatus(params.status);
+                        setBatchNo(record.productionBatch.length > 0 && record.productionBatchNo.length > 0)
                     }} >配段</Button>
                     <Button type='link' onClick={() => { history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`) }}>杆塔提料明细</Button>
                 </Space>
@@ -182,12 +185,19 @@ export default function PickTower(): React.ReactNode {
                 visible={withSectionVisible}
                 width="60%"
                 onOk={handleModalOk}
+                footer={<Space>
+                    {batchNo ? null : <Button type='primary' onClick={handleModalOk}>保存</Button>}
+                    <Button onClick={() => {
+                        editRef.current?.resetFields();
+                        setWithSectionVisible(false);
+                    }}>取消</Button>
+                </Space>}
                 okText="保存"
                 onCancel={() => {
                     editRef.current?.resetFields();
                     setWithSectionVisible(false);
                 }}>
-                <WithSection id={productId} ref={editRef} type={status === '3' ? 'detail' : 'new'} />
+                <WithSection id={productId} ref={editRef} type={status === '3' ? 'detail' : 'new'} batchNo={batchNo} />
             </Modal>
             <Page
                 path="/tower-science/materialProduct"

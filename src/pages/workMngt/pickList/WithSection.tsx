@@ -14,7 +14,8 @@ import { IDetail, IMaterialDetail } from "./PickTower"
 
 export interface EditProps {
     type: "new" | "detail",
-    id: string
+    id: string,
+    batchNo: boolean
 }
 
 export interface EditRefProps {
@@ -22,7 +23,7 @@ export interface EditRefProps {
     resetFields: () => void
 }
 
-export default forwardRef(function Edit({ type, id }: EditProps, ref) {
+export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
     const [form] = Form.useForm();
     const [fastForm] = Form.useForm();
     const [fastLoading, setFastLoading] = useState(false);
@@ -54,7 +55,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [id] })
+    }), { refreshDeps: [type, id, batchNo] })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
@@ -196,7 +197,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 </Col>
             </Row>
         </Form>
-        <Form form={form}>
+        <Form form={form} className={styles.descripForm}>
             <DetailTitle title="塔腿配段信息" />
             <Row>
                 <Col span={5}>
@@ -207,7 +208,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} />
+                        <Input style={{ width: '100%' }} disabled={batchNo} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -219,7 +220,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} />
+                        <Input style={{ width: '100%' }} disabled={batchNo} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -231,7 +232,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} />
+                        <Input style={{ width: '100%' }} disabled={batchNo} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -243,7 +244,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} />
+                        <Input style={{ width: '100%' }} disabled={batchNo} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -271,7 +272,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                                     pattern: /^[0-9]*$/,
                                     message: '仅可输入数字',
                                 }]}>
-                                    <Input maxLength={2} placeholder="请输入" />
+                                    <Input maxLength={2} placeholder="请输入" disabled={batchNo} />
                                 </Form.Item>
                             </Descriptions.Item>
                         </>
