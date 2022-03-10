@@ -483,6 +483,11 @@
                                 "label": "样板列表",
                                 "path": "/workMngt/templateList",
                                 "authority": "rd_template_record"
+                            },
+                            {
+                                "label": "下达列表",
+                                "path": "/workMngt/releaseList",
+                                "authority": "rd_template_record"
                             }
                         ]
                     },

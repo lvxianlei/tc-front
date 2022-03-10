@@ -1364,6 +1364,27 @@
       "exact": true,
       "authority": "rd_small_sample_management"
     },
+    { // 工作管理-下达列表
+      "name": "下达列表",
+      "path": "/workMngt/releaseList",
+      "module": "./pages/workMngt/releaseList/ReleaseList",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
+    { // 工作管理-下达列表-下达明细
+      "name": "下达明细",
+      "path": "/workMngt/releaseList/detail/:id/:status",
+      "module": "./pages/workMngt/releaseList/ReleaseDetail",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
+    { // 工作管理-组焊明细-组焊明细
+      "name": "组焊明细",
+      "path": "/workMngt/releaseList/assemblyWelding/:id/:status",
+      "module": "./pages/workMngt/releaseList/ReleaseAssemblyWeldingDetail",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
     { // 工作管理-询价列表
       "name": "工程报价列表",
       "path": "/ingredients/enquiry",
