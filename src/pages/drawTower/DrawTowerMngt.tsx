@@ -138,7 +138,7 @@ export default function DrawTowerMngt(): React.ReactNode {
         searchFormItems={[
             {
                 name: 'time',
-                label: '时间',
+                label: '最后更新时间',
                 children: <DatePicker.RangePicker />
             },
             {
