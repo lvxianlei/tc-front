@@ -207,7 +207,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
+                        <Input style={{ width: '100%' }} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -219,7 +219,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
+                        <Input style={{ width: '100%' }} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -231,7 +231,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
+                        <Input style={{ width: '100%' }} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -243,7 +243,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
+                        <Input style={{ width: '100%' }} />
                     </Form.Item>
                 </Col>
             </Row>
