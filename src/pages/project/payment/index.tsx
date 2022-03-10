@@ -42,6 +42,7 @@ export default function Payment() {
                         <span style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }} onClick={() => history.push(`/project/payment/detail/${record.id}`)}>查看</span>
                         <Popconfirm
                             title="确定删除此请款申请吗？"
+                            disabled={![4, 6].includes(record.applyStatus)}
                             onConfirm={async() => {
                                 await deleteRun(record?.id)
                                 message.success("删除成功...")
