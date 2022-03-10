@@ -64,10 +64,10 @@ class PlanGantt extends React.Component<IWithSectionModalRouteProps, WithSection
             )
             
         }},
-          {label:'重量',name: "weight", align: "center", template: function (task:any) {
+          {label:'重量（T）',name: "weight", align: "center", template: function (task:any) {
             return (
               `
-              <span title="重量：${task.weight}" >${task.weight}</span>
+              <span title="重量（T）：${task.weight}" >${task.weight}</span>
               `
             )
             
