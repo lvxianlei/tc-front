@@ -160,7 +160,7 @@ export default function PickCheckList(): React.ReactNode {
             render: col.dataIndex==='totalWeight'? col.render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 col.dataIndex === 'index' ? index + 1 
                 : !col.editable ? _ 
-                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow :  checkColor(record, col.dataIndex) === 'blue' ? styles.blue: checkColor(record, col.dataIndex) === 'brown' ? styles.brown:'' }>{ _ }</p>
+                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow :  checkColor(record, col.dataIndex) === 'blue' ? styles.blue: checkColor(record, col.dataIndex) === 'brown' ? styles.brown:'' }>{ _ || '-' }</p>
             )  
         }     
     })
