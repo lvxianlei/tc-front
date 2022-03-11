@@ -102,7 +102,7 @@ export default function DistributedTech(): React.ReactNode {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            // width: 80,
+            width: 100,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Button type='link' onClick={()=>{history.push(`/planSchedule/planScheduleMngt/planDeliveryTime/${params.ids}/${record.productId}`)}}>查看变更记录</Button>
@@ -161,7 +161,7 @@ export default function DistributedTech(): React.ReactNode {
                     title="批量设置计划交货期"
                     visible={visible}
                     onOk={modalOk}
-                    onCancel={() => {
+                    onCancel={async () => {
                         setVisible(false);
                         form.resetFields();
                     }}
@@ -181,8 +181,10 @@ export default function DistributedTech(): React.ReactNode {
                     title="变更计划交货期"
                     visible={visibleChange}
                     onOk={modalChangeOk}
-                    onCancel={() => {
+                    onCancel={async () => {
                         setVisibleChange(false);
+                        const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/plan`, [...params.ids.split(',')]);
+                        setDataSorce(data);
                         formRef.resetFields();
                     }}
                     width={'80%'}

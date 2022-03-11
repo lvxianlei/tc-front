@@ -57,7 +57,7 @@ export default function DrawTowerMngt(): React.ReactNode {
         },
         {
             key: 'allProductNumber',
-            title: '杆塔下塔型 ',
+            title: '塔型下杆塔',
             dataIndex: 'allProductNumber',
             width: 200
         },
@@ -138,7 +138,7 @@ export default function DrawTowerMngt(): React.ReactNode {
         searchFormItems={[
             {
                 name: 'time',
-                label: '时间',
+                label: '最后更新时间',
                 children: <DatePicker.RangePicker />
             },
             {

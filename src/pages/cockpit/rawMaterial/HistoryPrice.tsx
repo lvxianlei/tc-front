@@ -47,9 +47,10 @@ export default function HistoryPrice({ id, name }: HistoryPriceProps): JSX.Eleme
           ...materialPriceHistoryWebListVOS[i],
           name: "网站信息"
         })
-        t.unshift({ ...materialPriceHistoryListVOS[i] })
+        t.unshift({ ...materialPriceHistoryWebListVOS[i] })
       }
       resove(v)
+      console.log(t, "shu")
       setDataSource(t.reverse());
     } catch (error) {
       reject(error)

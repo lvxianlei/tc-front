@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { IntgSelect, Page } from '../../common'
 import { baseInfo } from "./receivingListData.json"
@@ -129,7 +129,24 @@ export default function Invoicing() {
                             setVisibleSee(true);
                             setDetailId(record.id);
                         }}>详情</Button>
-                        <Button type="link" className="btn-operation-link" disabled={record.lists && record.lists.length !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
+                        <Popconfirm
+                            title="确定删除此收货单信息吗？"
+                            disabled={record.lists && record.lists.length !== 0}
+                            onConfirm={async() => {
+                                await deleteRun(record?.id)
+                                message.success("删除成功...")
+                                history.go(0)
+                            }}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button
+                                type="link"
+                                size="small"
+                                className="btn-operation-link"
+                                disabled={record.lists && record.lists.length !== 0}
+                            >删除</Button>
+                        </Popconfirm>
                     </>
                 }
             }]}

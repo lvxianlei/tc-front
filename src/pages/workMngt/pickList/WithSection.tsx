@@ -14,7 +14,8 @@ import { IDetail, IMaterialDetail } from "./PickTower"
 
 export interface EditProps {
     type: "new" | "detail",
-    id: string
+    id: string,
+    batchNo: boolean
 }
 
 export interface EditRefProps {
@@ -22,7 +23,7 @@ export interface EditRefProps {
     resetFields: () => void
 }
 
-export default forwardRef(function Edit({ type, id }: EditProps, ref) {
+export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
     const [form] = Form.useForm();
     const [fastForm] = Form.useForm();
     const [fastLoading, setFastLoading] = useState(false);
@@ -54,7 +55,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [id] })
+    }), { refreshDeps: [type, id, batchNo] })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
@@ -112,88 +113,91 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const fastWithSectoin = () => {
         setFastLoading(true)
         const inputString: string = fastForm.getFieldsValue(true).fast;
-        if ((/[(,*-]+\*[0-9]+|[(,*-]+\*[a-zA-Z()-*,]+|^[*),]+/g).test(inputString)) {
-            message.error('请输入正确格式');
-            setFastLoading(false);
-        } else {
-            const inputList = inputString.split(',');
-            let list: IMaterialDetail[] = [];
-            inputList.forEach((res: string) => {
-                const newRes = res.split('*')[0].replace(/\(|\)/g, "");
-                if ((/^[0-9]+-[0-9]+$/).test(newRes)) {
-                    const length = Number(newRes.split('-')[0]) - Number(newRes.split('-')[1]);
-                    if (length <= 0) {
-                        let num = Number(newRes.split('-')[0]);
-                        let t = setInterval(() => {
-                            list.push({
-                                segmentName: (num++).toString(),
-                                count: Number(res.split('*')[1]) || 1
-                            })
-                            if (num > Number(newRes.split('-')[1])) {
-                                clearInterval(t);
-                            }
-                        }, 0)
+        if (inputString) {
+            if ((/[(,*-]+\*[0-9]+|[(,*-]+\*[a-zA-Z()-*,]+|^[*),]+/g).test(inputString)) {
+                message.error('请输入正确格式');
+                setFastLoading(false);
+            } else {
+                const inputList = inputString.split(',');
+                let list: IMaterialDetail[] = [];
+                inputList.forEach((res: string) => {
+                    const newRes = res.split('*')[0].replace(/\(|\)/g, "");
+                    if ((/^[0-9]+-[0-9]+$/).test(newRes)) {
+                        const length = Number(newRes.split('-')[0]) - Number(newRes.split('-')[1]);
+                        if (length <= 0) {
+                            let num = Number(newRes.split('-')[0]);
+                            let t = setInterval(() => {
+                                list.push({
+                                    segmentName: (num++).toString(),
+                                    count: Number(res.split('*')[1]) || 1
+                                })
+                                if (num > Number(newRes.split('-')[1])) {
+                                    clearInterval(t);
+                                }
+                            }, 0)
+                        } else {
+                            let num = Number(newRes.split('-')[0])
+                            let t = setInterval(() => {
+                                list.push({
+                                    segmentName: (num--).toString(),
+                                    count: Number(res.split('*')[1]) || 1
+                                })
+                                if (num < Number(newRes.split('-')[1])) {
+                                    clearInterval(t);
+                                }
+                            }, 0)
+                        }
                     } else {
-                        let num = Number(newRes.split('-')[0])
-                        let t = setInterval(() => {
-                            list.push({
-                                segmentName: (num--).toString(),
-                                count: Number(res.split('*')[1]) || 1
-                            })
-                            if (num < Number(newRes.split('-')[1])) {
-                                clearInterval(t);
-                            }
-                        }, 0)
+                        list.push({
+                            segmentName: newRes,
+                            count: Number(res.split('*')[1]) || 1
+                        })
                     }
-                } else {
-                    list.push({
-                        segmentName: newRes,
-                        count: Number(res.split('*')[1]) || 1
-                    })
-                }
 
-            })
-            setTimeout(() => {
-                const newList = [
-                    ...(data?.materialSegmentList?.map(res => {
-                        return { ...res, count: Number(res.count || 0) }
-                    }) || []),
-                    ...list
-                ];
-                const finalList = delSameObjValue(newList);
-                console.log(finalList)
-                form.setFieldsValue({
-                    ...form.getFieldsValue(true),
-                    productSegmentListDTOList: [...finalList]
                 })
-                setDetailData({
-                    ...detailData,
-                    materialDrawProductSegmentList: [...finalList]
-                })
-                fastForm.resetFields();
-                setFastLoading(false)
-            }, 1000)
+                setTimeout(() => {
+                    const newList = [
+                        ...(data?.materialSegmentList?.map(res => {
+                            return { ...res, count: Number(res.count || 0) }
+                        }) || []),
+                        ...list
+                    ];
+                    const finalList = delSameObjValue(newList);
+                    form.setFieldsValue({
+                        ...form.getFieldsValue(true),
+                        productSegmentListDTOList: [...finalList]
+                    })
+                    setDetailData({
+                        ...detailData,
+                        materialDrawProductSegmentList: [...finalList]
+                    })
+                    fastForm.resetFields();
+                    setFastLoading(false)
+                }, 1000)
+            }
+        } else {
+            message.warning('请输入需快速配段的信息')
+            setFastLoading(false)
         }
     }
 
     return <Spin spinning={loading}>
-        {type === 'new' ? <Form form={fastForm}>
+        <Form form={fastForm}>
             <Row>
                 <Col span={14}>
                     <Form.Item name="fast" label="快速配段" rules={[{
                         pattern: /^[a-zA-Z0-9-,*()]*$/,
                         message: '仅可输入英文字母/数字/特殊字符',
                     }]}>
-                        <Input style={{ width: '100%' }} />
+                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
                     </Form.Item>
                 </Col>
-                <Col offset={2} span={4}>
-                    <Button type="primary" loading={fastLoading} onClick={fastWithSectoin} ghost>确定</Button>
+                <Col offset={1} span={4}>
+                    <Button type="primary" loading={fastLoading} disabled={type === 'detail'} onClick={fastWithSectoin} ghost>确定</Button>
                 </Col>
             </Row>
         </Form>
-            : null}
-        <Form form={form}>
+        <Form form={form} className={styles.descripForm}>
             <DetailTitle title="塔腿配段信息" />
             <Row>
                 <Col span={5}>
@@ -204,7 +208,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
+                        <Input style={{ width: '100%' }} disabled={type === 'detail' && batchNo} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -216,7 +220,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
+                        <Input style={{ width: '100%' }} disabled={type === 'detail' && batchNo} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -228,7 +232,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
+                        <Input style={{ width: '100%' }} disabled={type === 'detail' && batchNo} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -240,7 +244,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
+                        <Input style={{ width: '100%' }} disabled={type === 'detail' && batchNo} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -268,7 +272,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                                     pattern: /^[0-9]*$/,
                                     message: '仅可输入数字',
                                 }]}>
-                                    <Input maxLength={2} placeholder="请输入" />
+                                    <Input maxLength={2} placeholder="请输入" disabled={type === 'detail' && batchNo} />
                                 </Form.Item>
                             </Descriptions.Item>
                         </>

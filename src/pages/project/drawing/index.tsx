@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page, PopTableContent } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -75,22 +75,6 @@ export default function Drawing(): React.ReactNode {
             reject(false)
         }
     })
-
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            title: "删除",
-            content: "确定删除此任务吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    resove(await deleteRun(id))
-                    message.success("删除成功...")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        })
-    }
 
     const handleCancel = (id: string) => {
         Modal.confirm({
@@ -189,13 +173,24 @@ export default function Drawing(): React.ReactNode {
                             setDetailedId(record.id)
                             setConnectVisible(true)
                         }}>关联合同</Button>
-                    <Button
-                        type="link"
-                        size="small"
+                    <Popconfirm
+                        title="确定删除此任务吗？"
                         disabled={![0, 3].includes(record.auditStatus)}
-                        onClick={() => handleDelete(record.id)}
-                        className="btn-operation-link"
-                    >删除</Button>
+                        onConfirm={async() => {
+                            await deleteRun(record?.id)
+                            message.success("删除成功...")
+                            history.go(0)
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button
+                            type="link"
+                            size="small"
+                            className="btn-operation-link"
+                            disabled={![0, 3].includes(record.auditStatus)}
+                        >删除</Button>
+                    </Popconfirm>
                     <Button
                         type="link"
                         size="small"
