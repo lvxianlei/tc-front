@@ -74,6 +74,11 @@ const productColumns = [
         title: '产品类型',
         dataIndex: 'productType'
     },
+    {
+        key: 'voltageGradeName',
+        title: '电压等级',
+        dataIndex: 'voltageGradeName'
+    },
     // {
     //     key: 'loftingAbortTime',
     //     title: '放样截止时间',

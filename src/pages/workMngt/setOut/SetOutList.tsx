@@ -58,6 +58,12 @@ export default function SetOutList(): React.ReactNode {
             dataIndex: 'num',
         },
         {
+            key: 'voltageGradeName',
+            title: '电压等级',
+            width: 150,
+            dataIndex: 'voltageGradeName',
+        },
+        {
             key: 'plannedDeliveryTime',
             title: '计划交付时间',
             dataIndex: 'plannedDeliveryTime',
@@ -107,7 +113,7 @@ export default function SetOutList(): React.ReactNode {
                     {
                         record.status === 5 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
                     }
-                    <Button type="link" onClick={async () => {
+                    {/* <Button type="link" onClick={async () => {
                         const result: [] = await RequestUtil.get(`/tower-science/productSegmentAssemble/${record.id}`);
                         if (result.length > 0) {
                             setTryAssembleVisiblee(true);
@@ -117,23 +123,23 @@ export default function SetOutList(): React.ReactNode {
                             message.warning('不存在试组装段信息')
                         }
 
-                    }}>试装信息</Button>
+                    }}>试装信息</Button> */}
                 </Space>
             )
         }
     ]
 
-    const handleModalOk = () => new Promise(async (resove, reject) => {
-        try {
-            await editRef.current?.onSubmit();
-            message.success('提交成功');
-            setTryAssembleVisiblee(false);
-            setRefresh(!refresh);
-            resove(true);
-        } catch (error) {
-            reject(false)
-        }
-    })
+    // const handleModalOk = () => new Promise(async (resove, reject) => {
+    //     try {
+    //         await editRef.current?.onSubmit();
+    //         message.success('提交成功');
+    //         setTryAssembleVisiblee(false);
+    //         setRefresh(!refresh);
+    //         resove(true);
+    //     } catch (error) {
+    //         reject(false)
+    //     }
+    // })
 
     const [refresh, setRefresh] = useState(false);
     const location = useLocation<{ state?: number, userId?: string }>();
@@ -142,13 +148,13 @@ export default function SetOutList(): React.ReactNode {
         resole(data?.records);
     }), {})
     const checkUser: any = data || [];
-    const [tryAssembleVisible, setTryAssembleVisiblee] = useState(false);
-    const editRef = useRef<TryAssembleProps>();
-    const [productCategoryId, setProductCategoryId] = useState<string>('');
-    const [tryAssemble, setTryAssemble] = useState<[]>([]);
+    // const [tryAssembleVisible, setTryAssembleVisiblee] = useState(false);
+    // const editRef = useRef<TryAssembleProps>();
+    // const [productCategoryId, setProductCategoryId] = useState<string>('');
+    // const [tryAssemble, setTryAssemble] = useState<[]>([]);
 
     return <Spin spinning={loading}>
-        <Modal
+        {/* <Modal
             destroyOnClose
             visible={tryAssembleVisible}
             width="40%"
@@ -169,7 +175,7 @@ export default function SetOutList(): React.ReactNode {
                 setRefresh(!refresh);
             }}>
             <TryAssemble id={productCategoryId} type="detail" deatil={tryAssemble} ref={editRef} />
-        </Modal>
+        </Modal> */}
         <Page
             path="/tower-science/loftingList"
             exportPath={`/tower-science/loftingList`}
