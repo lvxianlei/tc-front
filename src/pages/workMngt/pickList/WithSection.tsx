@@ -208,7 +208,7 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={batchNo} />
+                        <Input style={{ width: '100%' }} disabled={type === 'detail' && batchNo} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -220,7 +220,7 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={batchNo} />
+                        <Input style={{ width: '100%' }} disabled={type === 'detail' && batchNo} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -232,7 +232,7 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={batchNo} />
+                        <Input style={{ width: '100%' }} disabled={type === 'detail' && batchNo} />
                     </Form.Item>
                 </Col>
                 <Col span={1} />
@@ -244,7 +244,7 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={batchNo} />
+                        <Input style={{ width: '100%' }} disabled={type === 'detail' && batchNo} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -272,7 +272,7 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
                                     pattern: /^[0-9]*$/,
                                     message: '仅可输入数字',
                                 }]}>
-                                    <Input maxLength={2} placeholder="请输入" disabled={batchNo} />
+                                    <Input maxLength={2} placeholder="请输入" disabled={type === 'detail' && batchNo} />
                                 </Form.Item>
                             </Descriptions.Item>
                         </>
