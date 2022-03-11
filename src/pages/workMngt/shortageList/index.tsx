@@ -61,7 +61,12 @@ export default function Invoicing() {
         }
     })
     return <>
-        <Modal title="操作信息" visible={visible} width={1011} onCancel={() => setVisible(false)}>
+        <Modal title="操作信息"
+            visible={visible}
+            width={1011}
+            onCancel={() => setVisible(false)}
+            footer={<Button onClick={() => setVisible(false)}>关闭</Button>}
+        >
             <Overview id={cancelId} />
         </Modal>
         <Modal title="取消" visible={cancelVisible} onOk={handleCancel} onCancel={() => {

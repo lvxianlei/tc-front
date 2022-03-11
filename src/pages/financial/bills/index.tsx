@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { Button, DatePicker, Select, Modal, message, Input } from 'antd'
+import { Button, DatePicker, Select, Modal, message, Input, Popconfirm } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import Edit from "./Edit"
@@ -50,22 +50,6 @@ export default function Invoice() {
         }
         setFilterValue({ ...filterValue, ...value })
         return value
-    }
-
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            title: "删除",
-            content: "确定删除此票据吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    resove(await deleteRun(id))
-                    message.success("删除成功...")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        })
     }
 
     const handleCancel = (id: string) => {
@@ -157,7 +141,24 @@ export default function Invoice() {
                                     setDetailedId(record.id)
                                 }}>详情</Button>
                             <Button type="link" className="btn-operation-link" disabled={![1].includes(record.invoiceStatus)} onClick={() => handleCancel(record.id)}>作废</Button>
-                            <Button type="link" className="btn-operation-link" disabled={![1, 4].includes(record.invoiceStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
+                            <Popconfirm
+                                title="确定删除此票据吗？"
+                                disabled={![1, 4].includes(record.invoiceStatus)}
+                                onConfirm={async() => {
+                                    await deleteRun(record?.id)
+                                    message.success("删除成功...")
+                                    history.go(0)
+                                }}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button
+                                    type="link"
+                                    size="small"
+                                    className="btn-operation-link"
+                                    disabled={![1, 4].includes(record.invoiceStatus)}
+                                >删除</Button>
+                            </Popconfirm>
                         </>
                     }
                 }]}
