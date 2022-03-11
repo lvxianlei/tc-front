@@ -88,6 +88,7 @@ export default function Invoicing() {
                             <Button className="btn-operation-link" type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
                             <Popconfirm
                                 title="确定删除此开票申请吗？"
+                                disabled={record.state !== 0}
                                 onConfirm={async() => {
                                     await deleteRun(record?.id)
                                     message.success("删除成功...")

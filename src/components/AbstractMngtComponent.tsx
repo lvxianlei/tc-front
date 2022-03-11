@@ -247,8 +247,10 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      * @returns table content 
      */
     protected renderTableContent(item: ITabItem): React.ReactNode {
+        const height = document.documentElement.clientHeight - 320;
+        console.log(height, "height")
         return (
-            <CommonTable {...(this.getTableProps(item) as any)} loading={this.state.loading} />
+            <CommonTable scroll={{ y: height }} {...(this.getTableProps(item) as any)} loading={this.state.loading} />
         );
     }
 

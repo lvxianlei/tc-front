@@ -143,6 +143,7 @@ export default function Invoice() {
                             <Button type="link" className="btn-operation-link" disabled={![1].includes(record.invoiceStatus)} onClick={() => handleCancel(record.id)}>作废</Button>
                             <Popconfirm
                                 title="确定删除此票据吗？"
+                                disabled={![1, 4].includes(record.invoiceStatus)}
                                 onConfirm={async() => {
                                     await deleteRun(record?.id)
                                     message.success("删除成功...")
