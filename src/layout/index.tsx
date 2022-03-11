@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useEffect, useState } from "react"
-import { Button, Col, Layout, Menu, Popconfirm, Row } from "antd";
-import styles from './AbstractFrame.module.less';
+import { Breadcrumb, Button, Col, Layout, Menu, Popconfirm, Row } from "antd";
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons"
+import styles from './Layout.module.less';
 import layoutStyles from './Layout.module.less';
 import { Link, Route, useHistory, useLocation } from "react-router-dom";
 import { UserOutlined, BellOutlined } from '@ant-design/icons';
@@ -39,13 +40,19 @@ const Container: React.FC = memo(() => <Layout style={{ backgroundColor: "#fff" 
     </Content>
 </Layout>)
 
+const Hbreadcrumb = memo(() => {
+
+    return <Breadcrumb>
+    </Breadcrumb>
+})
+
 export default function (): JSX.Element {
     const history = useHistory()
     const location = useLocation()
     const authorities = useAuthorities()
     const dictionary = useDictionary()
-    const [selectedSubMenuItem, setSelectedSubMenuItem] = useState<React.Key[]>([])
-    const [selectedDarkMenuItem, setSelectedDarkMenuItem] = useState([])
+    const [selectedSubMenuItem, setSelectedSubMenuItem] = useState<React.Key[]>([location.pathname, `/${location.pathname.split("/")[1]}`])
+    const [selectedDarkMenuItem, setSelectedDarkMenuItem] = useState([location.pathname])
     const logOut = () => {
         AuthUtil.removeTenantId();
         AuthUtil.removeSinzetechAuth();

@@ -111,65 +111,8 @@
                 "items": [
                     {
                         "label": "项目管理",
-                        "icon": "xiangmuguanli",
-                        "path": "/project",
-                        "appName": "SC",
-                        "authority": "project",
-                        "items": [
-                            {
-                                "label": "项目管理",
-                                "path": "/project/management",
-                                "authority": "project_management"
-                            },
-                            {
-                                "label": "开票申请",
-                                "path": "/project/invoicing",
-                                "authority": "project_invoicing_requisition"
-                            },
-                            {
-                                "label": "请款申请",
-                                "path": "/project/payment",
-                                "authority": "project_payment_application"
-                            },
-                            {
-                                "label": "回款确认",
-                                "path": "/project/collection",
-                                "authority": "project_collection_confirmation"
-                            },
-                            {
-                                "label": "图纸确认任务",
-                                "path": "/project/drawing",
-                                "authority": "project_collection_confirmation"
-                            }
-                        ]
-                    },
-                    {
-                        "label": "开票申请管理",
-                        "icon": "caiwuzhongxin_kaipiaoshenqing",
-                        "path": "/invoicing",
-                        "appName": "FC",
-                        "authority": "approvalm_invoicing",
-                        "items": [
-                            {
-                                "label": "开票申请列表",
-                                "path": "/invoicing/billList",
-                                "authority": "approvalm_invoicing_list"
-                            }
-                        ]
-                    },
-                    {
-                        "label": "应收账款",
-                        "icon": "a-caiwuzhongxin_yingshouzhangkuan2",
-                        "path": "/receivables",
-                        "appName": "FC",
-                        "authority": "approvalm_invoicing",
-                        "items": [
-                            {
-                                "label": "合同回款统计",
-                                "path": "/receivables/constract",
-                                "authority": "approvalm_invoicing_list"
-                            }
-                        ]
+                        "path": "/project/management",
+                        "authority": "project_management"
                     },
                     {
                         "label": "开票申请",
