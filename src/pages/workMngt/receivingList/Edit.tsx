@@ -385,6 +385,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         let quantity: string = "0.00"
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             quantity = (parseFloat(quantity) + parseFloat(item.quantity || "0.00")).toFixed(2)
+            console.log(item, "============>>>>")
             const postData = {
                 ...item,
                 id: item.id || item.id,
@@ -394,7 +395,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 num: item.quantity,
                 contractUnitPrice: item.price,
                 quantity: item.quantity ? item.quantity : 0,
-                weight: (item.weight * item.quantity).toFixed(4)
+                weight: (item.weight * item.quantity).toFixed(4),
+                /***
+                 * 计算价税合计 
+                 *      总重 = 单个重量 * 数量
+                 *      价税合计 = 总重 * 数量 * 合同单价
+                 */
+                price: ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2),
             }
             delete postData.id
             return postData
