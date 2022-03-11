@@ -174,6 +174,10 @@ export default function PickTowerDetail(): React.ReactNode {
                                 };
                                 setUrlBase(params.myBase64);
                                 setCropData('');
+                                form.setFieldsValue({
+                                    data: []
+                                })
+                                setTableDataSource([])
                             }
                             return new Promise((resolve, reject) => {
                                 resolve()
@@ -183,6 +187,7 @@ export default function PickTowerDetail(): React.ReactNode {
                     onChange={ (info)=>{
                         if (info.file.status === 'done') {
                             setUrl(info.file.response.data.link)
+                            
                         } else if (info.file.status === 'error') {
                             console.log(info.file, info.fileList);
                         }
