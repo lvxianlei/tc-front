@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { memo, useCallback, useEffect, useState } from "react"
 import { Button, Col, Layout, Menu, Popconfirm, Row } from "antd";
 import styles from './AbstractFrame.module.less';
 import layoutStyles from './Layout.module.less';
@@ -9,13 +9,43 @@ import ctxConfig from "../app-ctx.config.jsonc"
 import ctxRouter from "../app-router.config.jsonc"
 import ChooseApplay from "../pages/chooseApply/ChooseApply"
 import { useAuthorities, useDictionary, hasAuthority } from "../hooks"
+import AsyncPanel from "../AsyncPanel";
+import Logo from "./logo.png"
 const { Header, Sider, Content } = Layout
 const filters = require.context("../filters", true, /.ts$/)
+
+const renderRoute: any = (module: string | undefined, authority: any) => () => (
+    <>
+        {
+            (hasAuthority(authority) || authority === "all") && <AsyncPanel module={module} />
+        }
+    </>
+)
+
+const Container: React.FC = memo(() => <Layout style={{ backgroundColor: "#fff" }}>
+    <Content style={{ height: "100vh" }}>
+        {
+            ctxRouter.routers.map((router: any): React.ReactNode => {
+                return (
+                    router.path && <Route
+                        path={router.path}
+                        key={router.path}
+                        exact={router.exact}
+                        component={renderRoute(router.module, router.authority)}
+                    />
+                )
+            })
+        }
+    </Content>
+</Layout>)
+
 export default function (): JSX.Element {
     const history = useHistory()
     const location = useLocation()
     const authorities = useAuthorities()
     const dictionary = useDictionary()
+    const [selectedSubMenuItem, setSelectedSubMenuItem] = useState<React.Key[]>([])
+    const [selectedDarkMenuItem, setSelectedDarkMenuItem] = useState([])
     const logOut = () => {
         AuthUtil.removeTenantId();
         AuthUtil.removeSinzetechAuth();
@@ -49,9 +79,16 @@ export default function (): JSX.Element {
         return ctxConfig.layout.menu.filter((item: any) => [currentApp, ""].includes(item.appName))
     }
 
-    return <Layout>
+    const handleOpenChange = useCallback((openKeys: React.Key[]) => setSelectedSubMenuItem(openKeys), [setSelectedSubMenuItem, selectedSubMenuItem])
+
+    return <Layout style={{ backgroundColor: "#fff" }}>
         <Header className={styles.header}>
-            <div style={{ position: 'absolute', width: '200px', height: '64px' }} className={layoutStyles.bk} />
+            <h1
+                className={styles.logoStyle}
+                style={{ width: ctxConfig.layout.width }}
+                onClick={() => history.replace("/chooseApply")}>
+                <img className={styles.logo} src={Logo} />
+            </h1>
             <div className={layoutStyles.logout}>
                 <Row>
                     <Col>
@@ -83,12 +120,15 @@ export default function (): JSX.Element {
                         <Sider
                             width={ctxConfig.layout.width}
                             theme="light"
+                            style={{ backgroundColor: ctxConfig.layout.theme }}
                         >
                             <Menu
                                 mode="inline"
                                 theme={ctxConfig.layout.theme || "light"}
-                                className={styles.menu}
-                                style={{ width: ctxConfig.layout.width }}
+                                openKeys={selectedSubMenuItem as any}
+                                selectedKeys={selectedDarkMenuItem}
+                                onOpenChange={handleOpenChange}
+                                style={{ width: ctxConfig.layout.width, backgroundColor: ctxConfig.layout.theme }}
                             >
                                 {
                                     getMenuItemForAppName().filter((item: any) => hasAuthority(item.authority)).map((item: any): React.ReactNode => (
@@ -97,46 +137,35 @@ export default function (): JSX.Element {
                                             <Menu.SubMenu
                                                 key={item.path}
                                                 title={item.label}
+                                                style={{
+                                                    backgroundColor: ctxConfig.layout.theme,
+                                                    margin: 0
+                                                }}
                                                 icon={<i className={`font_family iconfont icon-${item.icon} ${styles.icon}`}></i>}>
                                                 {
                                                     item.items.map((subItem: any): React.ReactNode => (
-                                                        hasAuthority(subItem.authority)
-                                                            ?
-                                                            <Menu.Item key={subItem.path} style={{ paddingLeft: "58px", fontWeight: 500 }} onClick={() => { }}>
-                                                                <Link to={subItem.path}>{subItem.label}</Link>
-                                                            </Menu.Item>
-                                                            :
-                                                            null
+                                                        hasAuthority(subItem.authority) && <Menu.Item
+                                                            key={subItem.path}
+                                                            style={{ paddingLeft: "58px", fontWeight: 500 }}
+                                                            onClick={() => setSelectedDarkMenuItem([subItem.path] as any)}>
+                                                            <Link to={subItem.path}>{subItem.label}</Link>
+                                                        </Menu.Item>
                                                     ))
                                                 }
                                             </Menu.SubMenu>
                                             :
                                             <Menu.Item
-                                                onClick={() => { }}
+                                                onClick={() => setSelectedDarkMenuItem([item.path] as any)}
                                                 className={styles.subMenu}
                                                 key={item.path}
                                                 icon={<i className={`iconfont icon-${item.icon}`}></i>}>
                                                 <Link to={item.path}>{item.label}</Link>
                                             </Menu.Item>
-
                                     ))
                                 }
                             </Menu>
                         </Sider>
-                        <Layout style={{ padding: '0 24px 24px' }}>
-                            <Content style={{ height: "100vh" }}>
-                                {
-                                    ctxRouter.routers.map((router: any): React.ReactNode => (
-                                        router.path && <Route
-                                            path={router.path}
-                                            key={router.path}
-                                            exact={router.exact}
-                                            component={() => <>{JSON.stringify(router)}</>}
-                                        />
-                                    ))
-                                }
-                            </Content>
-                        </Layout>
+                        <Container />
                     </>
             }
         </Layout>

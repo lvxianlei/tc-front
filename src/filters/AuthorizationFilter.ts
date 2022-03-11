@@ -30,7 +30,7 @@ export default class AuthorizationFilter implements IFilter {
                     RequestUtil.get<any>('/sinzetech-user/user/info'),
                     RequestUtil.get<AuthorityBasic[]>('/sinzetech-system/role/componentList')
                 ]);
-                // ApplicationContext.get({ authorities: authorities });
+                ApplicationContext.get({ authorities: authorities });
                 setAuthorities(authorities as string[])
                 EventBus.emit('get/authorities');
             } else {
