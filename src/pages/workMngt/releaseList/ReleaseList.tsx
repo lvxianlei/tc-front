@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select, Popconfirm, message } from 'antd';
+import { Space, Input, DatePicker, Button, Form, Select, Popconfirm, message, Modal } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { Page } from '../../common';
+import { CommonTable, DetailTitle, Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -11,6 +11,8 @@ import useRequest from '@ahooksjs/use-request';
 export default function ReleaseList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [detailrefresh, setDetailRefresh] = useState<boolean>(false);
+    const [visible, setVisible] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state?: number, userId?: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -113,7 +115,9 @@ export default function ReleaseList(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small"  >
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}/${record.smallSampleStatus}`)}}>生产下达</Button>
+                    <Button type="link" onClick={()=>{
+                        setVisible(true)
+                    }}>生产下达</Button>
 
                 </Space>
             )
@@ -285,8 +289,124 @@ export default function ReleaseList(): React.ReactNode {
     }
     return (
         <>
+        <Modal
+            title='生产下达'
+            visible={visible}
+            okText='保存'
+            onOk={
+                () => {
+                    
+                }
+            }
+            onCancel={()=>{
+                setVisible(false)
+            }}
+            width="80%"
+        >
+            <div style={{display:'flex', width:'100%'}}>
+                <div style={{width:'60%'}}>
+                    <DetailTitle title='基础信息'/>
+                    <CommonTable columns={[
+                            {
+                                title: "塔形",
+                                dataIndex: "index",
+                                width: 50,
+                            },
+                            {
+                                title: "钢印号",
+                                dataIndex: "name",
+                                width: 150
+                            },
+                            {
+                                title: "计划号",
+                                dataIndex: "planNumber",
+                                width: 150
+                            },
+                            {
+                                title: "试装",
+                                dataIndex: "planNumber",
+                                width: 150
+                            },
+                            {
+                                title: "电压等级",
+                                dataIndex: "planNumber",
+                                width: 150
+                            },
+                            {
+                                title: "材料标准",
+                                dataIndex: "planNumber",
+                                width: 150
+                            },
+                            {
+                                title: "产品类型",
+                                dataIndex: "planNumber",
+                                width: 150
+                            }
+                        ]}
+                        dataSource={[
+                    ]} pagination={false}/>
+                    <DetailTitle title='批次信息'/>
+                    <CommonTable columns={[
+                            {
+                                title: "序号",
+                                dataIndex: "index",
+                                width: 50,
+                                render: (_a: any, _b: any, index: number) => <>{index + 1}</>
+                            },
+                            {
+                                title: "段号",
+                                dataIndex: "index",
+                                width: 50,
+                            },
+                            {
+                                title: "批次号",
+                                dataIndex: "name",
+                                width: 150
+                            },
+                            {
+                                title: "段数",
+                                dataIndex: "planNumber",
+                                width: 150
+                            },
+                            {
+                                title: "已下达数量",
+                                dataIndex: "planNumber",
+                                width: 150
+                            },
+                            {
+                                title: "下达数量",
+                                dataIndex: "planNumber",
+                                width: 150
+                            }
+                        ]}
+                        dataSource={[
+                    ]} pagination={false}/>
+                    <DetailTitle title='下达信息'/>
+                    <DetailTitle title='试装信息'/>
+                </div>
+                <div style={{width:'40%'}}>
+                <DetailTitle title='批次信息'/>
+                    <CommonTable columns={[
+                            {
+                                title: "批次号",
+                                dataIndex: "index",
+                            },
+                            {
+                                title: "基数",
+                                dataIndex: "name",
+                            },
+                            {
+                                title: "杆塔号",
+                                dataIndex: "planNumber",
+                            }
+                        ]}
+                        dataSource={[
+                    ]} pagination={false}/>
+                </div>
+            </div>
+        </Modal>
         <Page
-            path="/tower-science/smallSample"
+            path="/tower-science/materialTask"
             columns={releaseColumns}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
@@ -344,7 +464,7 @@ export default function ReleaseList(): React.ReactNode {
             columns={detailColumns}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
-            refresh={refresh}
+            refresh={detailrefresh}
             requestData={ {  size: 10  } }
             exportPath="/tower-science/smallSample"
             searchFormItems={[
