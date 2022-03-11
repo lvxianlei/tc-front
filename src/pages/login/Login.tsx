@@ -2,7 +2,7 @@ import React from 'react'
 import { LockOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input, Layout, Space, notification, Carousel } from 'antd'
 import { useHistory } from 'react-router-dom'
-import ApplicationContext from '../../configuration/ApplicationContext'
+import ctxConfig from "../../app-ctx.config.jsonc"
 import layoutStyles from '../../layout/Layout.module.less'
 import AuthUtil from '../../utils/AuthUtil'
 import RequestUtil from '../../utils/RequestUtil'
@@ -30,8 +30,8 @@ export default function Login(): JSX.Element {
     const { data } = useRequest<ILoginState>(() => new Promise(async (resole, reject) => {
         try {
             const captcha: ICaptcha = await RequestUtil.get(`/sinzetech-auth/oauth/captcha`)
-            const tenant: ITenant = await RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${window.location.host}`)
-            // const tenant: ITenant = await RequestUtil.get(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-test.dhwy.cn`)
+            // const tenant: ITenant = await RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${window.location.host}`)
+            const tenant: ITenant = await RequestUtil.get(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-test.dhwy.cn`)
             // const tenant: ITenant = await RequestUtil.get(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-test.dhwy.cn`)
             resole({ captcha, tenant })
         } catch (error) {
@@ -73,7 +73,7 @@ export default function Login(): JSX.Element {
             AuthUtil.setUserId(user_id)
             AuthUtil.setTenantName(tenant_name)
             AuthUtil.setRealName(result.real_name)
-            history.push(ApplicationContext.get().home || '/')
+            history.push(ctxConfig.home || '/')
         }
     }
 

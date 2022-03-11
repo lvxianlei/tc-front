@@ -41,7 +41,7 @@ const icons: { [key in AppType]: any } = {
     "MC2": production2,
     "PC": plan
 }
-export default function ChooseApply(): React.ReactNode {
+export default function ChooseApply(): JSX.Element {
     const history = useHistory()
     return <DetailContent>
         <DetailTitle title="选择应用" />

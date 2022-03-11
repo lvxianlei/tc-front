@@ -143,16 +143,16 @@ module.exports = {
     //   threadPool: happyThreadPool,
     //   verbose: true
     // })),
-    addWebpackPlugin(
-      new ModifySourcePlugin({
-        rules: [
-          {
-            test: /\/ApplicationContext\.tsx$/,
-            modify: (src, filename) => new AppCtxConfigCompiler().compile(src)
-          }
-        ]
-      })
-    ),
+    // addWebpackPlugin(
+    //   new ModifySourcePlugin({
+    //     rules: [
+    //       {
+    //         test: /\/ApplicationContext\.tsx$/,
+    //         modify: (src, filename) => new AppCtxConfigCompiler().compile(src)
+    //       }
+    //     ]
+    //   })
+    // ),
     process.env.REACT_APP_ENV === "development"
       ? addWebpackPlugin(
         new MockWebpackPlugin({
