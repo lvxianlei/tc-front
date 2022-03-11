@@ -186,7 +186,7 @@ export default function PickTower(): React.ReactNode {
                 width="60%"
                 onOk={handleModalOk}
                 footer={<Space>
-                    {batchNo ? null : <Button type='primary' onClick={handleModalOk}>保存</Button>}
+                    {batchNo && status === '3' ? null : <Button type='primary' onClick={handleModalOk}>保存</Button>}
                     <Button onClick={() => {
                         editRef.current?.resetFields();
                         setWithSectionVisible(false);
