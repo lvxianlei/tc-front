@@ -6,10 +6,33 @@
 }
 
 .logoStyle{
+    float: left;
     margin: 0;
     cursor: pointer;
     text-align: center;
     box-sizing: border-box;
+}
+
+.breadcrumb {
+    float: left;
+    line-height: 40px;
+    display: flex;
+    color: #fff;
+    padding-left: 20px;
+    line-height: 40px !important;
+    height: 40px;
+    :global(.ant-breadcrumb-link),
+    :global(a),
+    :global(.ant-breadcrumb-separator) {
+        color: rgba(255, 255, 255, 0.4);
+    }
+    :global(span:last-child span) {
+        color: #fff;
+    }
+}
+
+.ant-breadcrumb-separator{
+    color: #fff;
 }
 
 .logo {

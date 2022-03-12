@@ -12,6 +12,7 @@ import ChooseApplay from "../pages/chooseApply/ChooseApply"
 import { useAuthorities, useDictionary, hasAuthority } from "../hooks"
 import AsyncPanel from "../AsyncPanel";
 import Logo from "./logo.png"
+import { getMenuItemByPath, getRouterItemByPath } from "../utils";
 const { Header, Sider, Content } = Layout
 const filters = require.context("../filters", true, /.ts$/)
 
@@ -23,27 +24,109 @@ const renderRoute: any = (module: string | undefined, authority: any) => () => (
     </>
 )
 
-const Container: React.FC = memo(() => <Layout style={{ backgroundColor: "#fff" }}>
-    <Content style={{ height: "100vh" }}>
+const SiderMenu: React.FC = () => {
+    const location = useLocation()
+    const [selectedSubMenuItem, setSelectedSubMenuItem] = useState<React.Key[]>([location.pathname, `/${location.pathname.split("/")[1]}`])
+    const [selectedDarkMenuItem, setSelectedDarkMenuItem] = useState([location.pathname])
+
+    const getMenuItemForAppName = () => {
+        const currentApp = AuthUtil.getCurrentAppName()
+        return ctxConfig.layout.menu.filter((item: any) => [currentApp, ""].includes(item.appName))
+    }
+
+    const handleOpenChange = useCallback((openKeys: React.Key[]) => setSelectedSubMenuItem(openKeys), [setSelectedSubMenuItem, selectedSubMenuItem])
+
+    return <Menu
+        mode="inline"
+        theme={ctxConfig.layout.theme || "light"}
+        openKeys={selectedSubMenuItem as any}
+        selectedKeys={selectedDarkMenuItem}
+        onOpenChange={handleOpenChange}
+        style={{ width: ctxConfig.layout.width, backgroundColor: ctxConfig.layout.theme }}
+    >
         {
-            ctxRouter.routers.map((router: any): React.ReactNode => {
-                return (
-                    router.path && <Route
-                        path={router.path}
-                        key={router.path}
-                        exact={router.exact}
-                        component={renderRoute(router.module, router.authority)}
-                    />
-                )
-            })
+            getMenuItemForAppName().filter((item: any) => hasAuthority(item.authority)).map((item: any): React.ReactNode => (
+                (item.items && item.items.length)
+                    ?
+                    <Menu.SubMenu
+                        key={item.path}
+                        title={item.label}
+                        style={{
+                            backgroundColor: ctxConfig.layout.theme,
+                            margin: 0
+                        }}
+                        icon={<i className={`font_family iconfont icon-${item.icon} ${styles.icon}`}></i>}>
+                        {
+                            item.items.map((subItem: any): React.ReactNode => (
+                                hasAuthority(subItem.authority) && <Menu.Item
+                                    key={subItem.path}
+                                    style={{ paddingLeft: "58px", fontWeight: 500 }}
+                                    onClick={() => setSelectedDarkMenuItem([subItem.path] as any)}>
+                                    <Link to={subItem.path}>{subItem.label}</Link>
+                                </Menu.Item>
+                            ))
+                        }
+                    </Menu.SubMenu>
+                    :
+                    <Menu.Item
+                        onClick={() => setSelectedDarkMenuItem([item.path] as any)}
+                        className={styles.subMenu}
+                        key={item.path}
+                        icon={<i className={`iconfont icon-${item.icon}`}></i>}>
+                        <Link to={item.path}>{item.label}</Link>
+                    </Menu.Item>
+            ))
         }
-    </Content>
-</Layout>)
+    </Menu>
+}
 
 const Hbreadcrumb = memo(() => {
+    const location = useLocation()
+    const pathSnippets: string[] = location.pathname.split('/').filter((i: string) => i);
+    const selectedMenuItem = getMenuItemByPath(ctxConfig.layout.menu, `/${pathSnippets[0]}`)
+    return <div className={styles.breadcrumb}>
+        <MenuUnfoldOutlined
+            style={{
+                fontSize: "18px",
+                color: "#fff",
+                lineHeight: "40px",
+                verticalAlign: "middle",
+                padding: "0 10px"
+            }} />
+        <Breadcrumb separator="/" className={styles.breadcrumb}>
+            {
+                selectedMenuItem
+                    ?
+                    <Breadcrumb.Item key={selectedMenuItem.path}>
+                        {selectedMenuItem.label}
+                    </Breadcrumb.Item>
+                    :
+                    null
+            }
+            {
+                pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
+                    let path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+                    const routerItem = getRouterItemByPath(path);
+                    return (
+                        routerItem
+                            ?
+                            <Breadcrumb.Item key={path}>
+                                {
+                                    path === location.pathname
+                                        ?
+                                        routerItem.name
+                                        :
+                                        <Link to={path}>{routerItem.name}</Link>
 
-    return <Breadcrumb>
-    </Breadcrumb>
+                                }
+                            </Breadcrumb.Item>
+                            :
+                            null
+                    );
+                })
+            }
+        </Breadcrumb>
+    </div>
 })
 
 export default function (): JSX.Element {
@@ -51,8 +134,7 @@ export default function (): JSX.Element {
     const location = useLocation()
     const authorities = useAuthorities()
     const dictionary = useDictionary()
-    const [selectedSubMenuItem, setSelectedSubMenuItem] = useState<React.Key[]>([location.pathname, `/${location.pathname.split("/")[1]}`])
-    const [selectedDarkMenuItem, setSelectedDarkMenuItem] = useState([location.pathname])
+
     const logOut = () => {
         AuthUtil.removeTenantId();
         AuthUtil.removeSinzetechAuth();
@@ -81,13 +163,6 @@ export default function (): JSX.Element {
         doFiltersAll(history)
     }, [])
 
-    const getMenuItemForAppName = () => {
-        const currentApp = AuthUtil.getCurrentAppName()
-        return ctxConfig.layout.menu.filter((item: any) => [currentApp, ""].includes(item.appName))
-    }
-
-    const handleOpenChange = useCallback((openKeys: React.Key[]) => setSelectedSubMenuItem(openKeys), [setSelectedSubMenuItem, selectedSubMenuItem])
-
     return <Layout style={{ backgroundColor: "#fff" }}>
         <Header className={styles.header}>
             <h1
@@ -96,6 +171,7 @@ export default function (): JSX.Element {
                 onClick={() => history.replace("/chooseApply")}>
                 <img className={styles.logo} src={Logo} />
             </h1>
+            <Hbreadcrumb />
             <div className={layoutStyles.logout}>
                 <Row>
                     <Col>
@@ -129,50 +205,24 @@ export default function (): JSX.Element {
                             theme="light"
                             style={{ backgroundColor: ctxConfig.layout.theme }}
                         >
-                            <Menu
-                                mode="inline"
-                                theme={ctxConfig.layout.theme || "light"}
-                                openKeys={selectedSubMenuItem as any}
-                                selectedKeys={selectedDarkMenuItem}
-                                onOpenChange={handleOpenChange}
-                                style={{ width: ctxConfig.layout.width, backgroundColor: ctxConfig.layout.theme }}
-                            >
-                                {
-                                    getMenuItemForAppName().filter((item: any) => hasAuthority(item.authority)).map((item: any): React.ReactNode => (
-                                        (item.items && item.items.length)
-                                            ?
-                                            <Menu.SubMenu
-                                                key={item.path}
-                                                title={item.label}
-                                                style={{
-                                                    backgroundColor: ctxConfig.layout.theme,
-                                                    margin: 0
-                                                }}
-                                                icon={<i className={`font_family iconfont icon-${item.icon} ${styles.icon}`}></i>}>
-                                                {
-                                                    item.items.map((subItem: any): React.ReactNode => (
-                                                        hasAuthority(subItem.authority) && <Menu.Item
-                                                            key={subItem.path}
-                                                            style={{ paddingLeft: "58px", fontWeight: 500 }}
-                                                            onClick={() => setSelectedDarkMenuItem([subItem.path] as any)}>
-                                                            <Link to={subItem.path}>{subItem.label}</Link>
-                                                        </Menu.Item>
-                                                    ))
-                                                }
-                                            </Menu.SubMenu>
-                                            :
-                                            <Menu.Item
-                                                onClick={() => setSelectedDarkMenuItem([item.path] as any)}
-                                                className={styles.subMenu}
-                                                key={item.path}
-                                                icon={<i className={`iconfont icon-${item.icon}`}></i>}>
-                                                <Link to={item.path}>{item.label}</Link>
-                                            </Menu.Item>
-                                    ))
-                                }
-                            </Menu>
+                            <SiderMenu />
                         </Sider>
-                        <Container />
+                        <Layout style={{ backgroundColor: "#fff" }}>
+                            <Content style={{ height: "100vh" }}>
+                                {
+                                    ctxRouter.routers.map((router: any): React.ReactNode => {
+                                        return (
+                                            router.path && <Route
+                                                path={router.path}
+                                                key={router.path}
+                                                exact={router.exact}
+                                                component={renderRoute(router.module, router.authority)}
+                                            />
+                                        )
+                                    })
+                                }
+                            </Content>
+                        </Layout>
                     </>
             }
         </Layout>
