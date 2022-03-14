@@ -182,11 +182,11 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                     <Form ref={this.form} className={styles.descripForm}>
                         <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>
                             <span>塔腿配段信息</span>
-                            <Button className={styles.fastBtn} type="primary" onClick={() => {
+                            {/* <Button className={styles.fastBtn} type="primary" onClick={() => {
                                 this.setState({
                                     fastVisible: true
                                 })
-                            }} ghost>快速配段</Button>
+                            }} ghost>快速配段</Button> */}
                         </p>
                         <Descriptions title="" bordered size="small" colon={false} column={4}>
                             <Descriptions.Item key={1} label="A">
