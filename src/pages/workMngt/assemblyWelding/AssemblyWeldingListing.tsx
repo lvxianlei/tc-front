@@ -51,6 +51,16 @@ export default function AssemblyWeldingListing(): React.ReactNode {
             key: 'componentId'
         },
         {
+            title: '组焊类型',
+            dataIndex: 'componentId',
+            key: 'componentId'
+        },
+        {
+            title: '单段组数',
+            dataIndex: 'componentId',
+            key: 'componentId'
+        },
+        {
             title: '主件号',
             dataIndex: 'mainPartId',
             key: 'mainPartId'
