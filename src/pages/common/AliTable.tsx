@@ -76,7 +76,7 @@ function AntdLoadingContentWrapper({ children, visible }: LoadingContentWrapperP
   return (
     <div
       className="ant-loading-content-wrapper"
-      style={{ opacity: visible ? 0.6 : undefined }}
+      style={{ opacity: visible ? 1 : undefined }}
     >
       {children}
     </div>
@@ -98,6 +98,7 @@ interface AntdTableProps extends BaseTableProps {
  * */
 export default ({ size = "default", ...props }: AntdTableProps) => {
   return <StyledBaseTable
+    defaultColumnWidth={100}
     {...props}
     className={`${size} ${props.className}`}
     components={{

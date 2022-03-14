@@ -2,27 +2,10 @@
 import React, { useCallback, useState } from "react"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../utils/RequestUtil"
-import CommonTable from "./CommonTable"
-import moment from "moment"
+import CommonTable, { columnsProps } from "./CommonTable"
 import { Button, Col, Form, Pagination, Row } from "antd"
 import styles from "./CommonTable.module.less"
 import { stringify } from "querystring"
-type ColumnsItemsType = "string" | "text" | "date" | "popTable" | "select" | "number"
-
-interface EnumObject {
-    label: string
-    value: string
-}
-
-interface columnsProps {
-    title: string,
-    dataIndex: string,
-    type?: ColumnsItemsType
-    format?: string
-    enum?: EnumObject[]
-    render?: (value: any, records: { [key: string]: any }, index: number) => JSX.Element | React.ReactNode
-    [key: string]: any
-}
 
 interface SearchTableProps {
     path: string
@@ -34,51 +17,6 @@ interface SearchTableProps {
 interface PagenationProps {
     current: number
     pageSize: number
-}
-
-export function generateRender(type: ColumnsItemsType, data: columnsProps) {
-    switch (type) {
-        case "date":
-            return ({
-                name: data.title,
-                code: data.dataIndex,
-                ellipsis: { showTitle: false },
-                render: (text: string) => <>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</>,
-                ...data
-            })
-        case "select":
-            return ({
-                name: data.title,
-                code: data.dataIndex,
-                ellipsis: { showTitle: false },
-                render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum!.find((item: EnumObject) => item.value === text)!.label : text}</>,
-                ...data
-            })
-        case "number":
-            return ({
-                name: data.title,
-                code: data.dataIndex,
-                ellipsis: { showTitle: false },
-                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : 0}</>,
-                ...data
-            })
-        case "string":
-            return ({
-                name: data.title,
-                code: data.dataIndex,
-                ellipsis: { showTitle: false },
-                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
-                ...data
-            })
-        default:
-            return ({
-                name: data.title,
-                code: data.dataIndex,
-                ellipsis: { showTitle: false },
-                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
-                ...data
-            })
-    }
 }
 
 export default function SearchTable({ path, columns, rowKey, onFilterSubmit, searchFormItems, ...props }: SearchTableProps): JSX.Element {
@@ -98,11 +36,11 @@ export default function SearchTable({ path, columns, rowKey, onFilterSubmit, sea
             reject(false)
         }
     }), { refreshDeps: [pagenation.current, pagenation.pageSize] })
-    const paginationChange = useCallback((page: number, pageSize: number) => {
+    const paginationChange = useCallback((page: number, pageSize?: number) => {
         setPagenation({
             ...pagenation,
-            current: 1,
-            pageSize
+            current: page,
+            pageSize: pageSize || pagenation.pageSize
         })
     }, [setPagenation, JSON.stringify(pagenation)])
     return <>
@@ -144,7 +82,7 @@ export default function SearchTable({ path, columns, rowKey, onFilterSubmit, sea
                 total={data?.total}
                 showTotal={(total: number) => `共${total}条记录`}
                 showSizeChanger
-                onShowSizeChange={paginationChange}
+                onChange={paginationChange}
             />
         </footer>
     </>

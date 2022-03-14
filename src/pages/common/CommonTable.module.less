@@ -32,16 +32,21 @@
     white-space: nowrap;
     display: block;
 }
-//显示拖拽样式
-.componentsTableResizableColumn {
-   border: 1px solid #ccc;
+
+.components{
+    border: 1px solid #ccc;
+    border-top: none;
+    box-sizing: border-box;
 }
 
-.opration{
-    padding:0px 0px 24px 0px
+.componentsTable{
+    min-height: 300px;
+    max-height: 100%;
+    overflow-y: auto;
+    padding-bottom: 88px;
 }
 
-.pagenationWarp {
+.pagenationWarp{
     display: flex;
     padding-right: 16px;
     position: absolute;
@@ -49,7 +54,8 @@
     height: 42px;
     bottom: 0;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
     box-shadow: 0px -1px 0px 0px #EEEEEE;
+    background-color: #fff;
     box-sizing: border-box;
 }
