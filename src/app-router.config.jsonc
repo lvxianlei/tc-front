@@ -1371,6 +1371,13 @@
       "exact": true,
       "authority": "rd_small_sample_management"
     },
+    { // 工作管理-下达列表-生产下达
+      "name": "生产下达",
+      "path": "/workMngt/releaseList/release/:id",
+      "module": "./pages/workMngt/releaseList/Release",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
     { // 工作管理-下达列表-下达明细
       "name": "下达明细",
       "path": "/workMngt/releaseList/detail/:id/:status",
