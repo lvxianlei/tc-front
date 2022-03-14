@@ -7,10 +7,19 @@ import { Button, Col, Form, Pagination, Row } from "antd"
 import styles from "./CommonTable.module.less"
 import { stringify } from "querystring"
 
+interface SearchFormItemsProps {
+    name: string
+    label?: string
+    children: React.ReactNode | JSX.Element
+}
+
 interface SearchTableProps {
     path: string
     columns: columnsProps[]
     rowKey?: string | ((row: any) => string)
+    searchFormItems: SearchFormItemsProps[]
+    onFilterSubmit?: <T>(arg: T) => T
+    filterValue?: { [key: string]: any }
     [key: string]: any
 }
 
@@ -19,7 +28,7 @@ interface PagenationProps {
     pageSize: number
 }
 
-export default function SearchTable({ path, columns, rowKey, onFilterSubmit, searchFormItems, ...props }: SearchTableProps): JSX.Element {
+export default function SearchTable({ path, columns, rowKey, onFilterSubmit, searchFormItems = [], filterValue, ...props }: SearchTableProps): JSX.Element {
     const [pagenation, setPagenation] = useState<PagenationProps>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
     const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -28,7 +37,7 @@ export default function SearchTable({ path, columns, rowKey, onFilterSubmit, sea
             const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
             params.current = pagenation.current
             params.size = pagenation.pageSize
-            const paramsOptions = stringify(params)
+            const paramsOptions = filterValue ? stringify(filterValue) + stringify(params) : stringify(params)
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole(result)
@@ -54,7 +63,7 @@ export default function SearchTable({ path, columns, rowKey, onFilterSubmit, sea
                     span={(searchFormItems.length + 1) / 24}
                     key={fItem.dataIndex || fItem.name}><Form.Item
                         name={fItem.dataIndex || fItem.name}
-                        label={fItem.title}
+                        label={fItem.label}
                         style={{ height: 32, fontSize: 12 }}
                     >
                         {fItem.children}
