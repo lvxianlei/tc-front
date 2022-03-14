@@ -163,7 +163,7 @@ export default function (): JSX.Element {
         doFiltersAll(history)
     }, [])
 
-    return <Layout style={{ backgroundColor: "#fff" }}>
+    return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1
                 className={styles.logoStyle}
@@ -196,7 +196,7 @@ export default function (): JSX.Element {
                 </Row>
             </div>
         </Header>
-        <Layout>
+        <Layout style={{ height: "100%" }}>
             {
                 location.pathname === "/chooseApply" ? <ChooseApplay /> :
                     <>
@@ -207,8 +207,8 @@ export default function (): JSX.Element {
                         >
                             <SiderMenu />
                         </Sider>
-                        <Layout style={{ backgroundColor: "#fff" }}>
-                            <Content style={{ height: "100vh" }}>
+                        <Layout style={{ backgroundColor: "#fff", height: "100%", overflow: "hidden", position: "relative" }}>
+                            <Content style={{ height: "100%" }}>
                                 {
                                     ctxRouter.routers.map((router: any): React.ReactNode => {
                                         return (

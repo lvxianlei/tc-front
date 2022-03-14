@@ -4,12 +4,15 @@ import styles from "./CommonTable.module.less"
 import "./CommonTable.module.less"
 import moment from "moment"
 import layoutStyles from '../../layout/Layout.module.less'
+import AliTable from "./AliTable"
 type ColumnsItemsType = "text" | "string" | "number" | "select" | "date" | undefined
 
 export function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
     switch (type) {
         case "date":
             return ({
+                name: data.title,
+                code: data.dataIndex,
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
                 render: (text: string) => <>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</>,
@@ -17,6 +20,8 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             })
         case "select":
             return ({
+                name: data.title,
+                code: data.dataIndex,
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
                 render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : text}</>,
@@ -24,6 +29,8 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             })
         case "number":
             return ({
+                name: data.title,
+                code: data.dataIndex,
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : 0}</>,
@@ -31,6 +38,8 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             })
         case "string":
             return ({
+                name: data.title,
+                code: data.dataIndex,
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
@@ -38,6 +47,8 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             })
         default:
             return ({
+                name: data.title,
+                code: data.dataIndex,
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
                 render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
@@ -92,15 +103,15 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
     }, ...formatColumns] : formatColumns
     // const height = document.documentElement.clientHeight - 320;
     // const scroll = isPage ? { x: true, y: height }: { x: true }
-    
+
     return <nav className={styles.componentsTableResizableColumn}>
-        <Table
+        <AliTable
             size="small"
-            scroll={{x: true}}
-            rowKey={rowKey || "id"}
+            // scroll={{x: true}}
+            // rowKey={rowKey || "id"}
             columns={columnsResult as any}
             className={`${styles.opration} ${layoutStyles.opration}`}
-            onRow={() => ({ className: styles.tableRow })}
+            // onRow={() => ({ className: styles.tableRow })}
             dataSource={dataSource}
             {...props}
         />
