@@ -55,7 +55,7 @@ const SiderMenu: React.FC = () => {
                             backgroundColor: ctxConfig.layout.theme,
                             margin: 0
                         }}
-                        icon={<i className={`font_family iconfont icon-${item.icon} ${styles.icon}`}></i>}>
+                        icon={<i className={`font_family iconfont icon-${item.icon} ${styles.icon}`} style={{position: "relative", top: 1, marginRight: 6}}></i>}>
                         {
                             item.items.map((subItem: any): React.ReactNode => (
                                 hasAuthority(subItem.authority) && <Menu.Item
@@ -72,7 +72,7 @@ const SiderMenu: React.FC = () => {
                         onClick={() => setSelectedDarkMenuItem([item.path] as any)}
                         className={styles.subMenu}
                         key={item.path}
-                        icon={<i className={`iconfont icon-${item.icon}`}></i>}>
+                        icon={<i className={`iconfont icon-${item.icon}`} style={{position: "relative", top: 1, marginRight: 6}}></i>}>
                         <Link to={item.path}>{item.label}</Link>
                     </Menu.Item>
             ))

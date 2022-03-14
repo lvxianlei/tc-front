@@ -48,7 +48,7 @@
         "authority": "",
         "title": "生产中心",
         "description": "生产过程管理相关功能",
-        "iconFont": "icon-shengchanzhongxin21", // iconfont
+        "iconFont": "icon-shengchanzhongxin3", // iconfont
         "color": "#FF8C00", // iconfont的颜色
         "path": "/workshopManagement/processingTask",
         "appName": "MC"
