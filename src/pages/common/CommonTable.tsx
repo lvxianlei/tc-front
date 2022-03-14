@@ -1,110 +1,50 @@
 import React from "react"
-import { TableColumnProps, Typography } from "antd"
+import { Table, TableColumnProps } from "antd"
 import styles from "./CommonTable.module.less"
 import "./CommonTable.module.less"
 import moment from "moment"
-import AliTable from "./AliTable"
-import { useTablePipeline, features } from "ali-react-table"
-const { Paragraph } = Typography
-export type ColumnsItemsType = "string" | "text" | "date" | "popTable" | "select" | "number" | undefined
-export interface columnsProps {
-    title: string,
-    dataIndex: string,
-    type?: ColumnsItemsType
-    format?: string
-    enum?: EnumObject[]
-    render?: (value: any, records: { [key: string]: any }, index: number) => JSX.Element | React.ReactNode
-    [key: string]: any
-}
-interface EnumObject {
-    label: string
-    value: string
-}
+import layoutStyles from '../../layout/Layout.module.less'
+type ColumnsItemsType = "text" | "string" | "number" | "select" | "date" | undefined
 
-export function generateRender(type: ColumnsItemsType, data: columnsProps) {
+export function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
     switch (type) {
         case "date":
             return ({
-                name: data.title,
-                code: data.dataIndex,
-                features: {
-                    fallbackSize: 120,
-                    handleBackground: '#ddd',
-                    handleHoverBackground: '#aaa',
-                    handleActiveBackground: '#89bff7'
-                },
-                render: (text: string) => <Paragraph
-                    ellipsis={{
-                        rows: 1
-                    }}>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</Paragraph>,
+                ellipsis: { showTitle: false },
+                onCell: () => ({ className: styles.tableCell }),
+                render: (text: string) => <>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</>,
                 ...data
             })
         case "select":
             return ({
-                name: data.title,
-                code: data.dataIndex,
-                features: {
-                    fallbackSize: 120,
-                    handleBackground: '#ddd',
-                    handleHoverBackground: '#aaa',
-                    handleActiveBackground: '#89bff7'
-                },
-                render: (text: string | number) => <Paragraph
-                    ellipsis={{
-                        rows: 1
-                    }}
-                >{((text || text === 0) && data.enum) ? data.enum!.find((item: EnumObject) => item.value === text)!.label : text}</Paragraph>,
+                ellipsis: { showTitle: false },
+                onCell: () => ({ className: styles.tableCell }),
+                render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : text}</>,
                 ...data
             })
         case "number":
             return ({
-                name: data.title,
-                code: data.dataIndex,
-                features: {
-                    fallbackSize: 120,
-                    handleBackground: '#ddd',
-                    handleHoverBackground: '#aaa',
-                    handleActiveBackground: '#89bff7'
-                },
-                render: (text: number) => <Paragraph
-                    ellipsis={{
-                        rows: 1
-                    }}>{text && !["-1", -1].includes(text) ? text : 0}</Paragraph>,
+                ellipsis: { showTitle: false },
+                onCell: () => ({ className: styles.tableCell }),
+                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : 0}</>,
                 ...data
             })
         case "string":
             return ({
-                name: data.title,
-                code: data.dataIndex,
-                features: {
-                    fallbackSize: 120,
-                    handleBackground: '#ddd',
-                    handleHoverBackground: '#aaa',
-                    handleActiveBackground: '#89bff7'
-                },
-                render: data.render || ((text: number) => <Paragraph
-                    ellipsis={{
-                        rows: 1
-                    }}>{text && !["-1", -1].includes(text) ? text : "-"}</Paragraph>),
+                ellipsis: { showTitle: false },
+                onCell: () => ({ className: styles.tableCell }),
+                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
                 ...data
             })
         default:
             return ({
-                name: data.title,
-                code: data.dataIndex,
-                features: {
-                    fallbackSize: 120,
-                    handleBackground: '#ddd',
-                    handleHoverBackground: '#aaa',
-                    handleActiveBackground: '#89bff7'
-                },
-                render: data.render || ((text: number) => <Paragraph
-                    ellipsis={{ rows: 1 }}>{text && !["-1", -1].includes(text) ? text : "-"}</Paragraph>),
+                ellipsis: { showTitle: false },
+                onCell: () => ({ className: styles.tableCell }),
+                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
                 ...data
             })
     }
 }
-
 
 interface ColumnsItem {
     title: string
@@ -150,21 +90,18 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         onCell: () => ({ className: styles.tableCell }),
         render: (_: any, _a: any, index: number) => <>{index + 1}</>
     }, ...formatColumns] : formatColumns
+    const height = document.documentElement.clientHeight - 320;
+    const scroll = isPage ? { x: true, y: height } : { x: true }
 
-    const pipeline = useTablePipeline()
-        .input({ dataSource, columns: columnsResult as any })
-        .use(features.columnResize({
-            fallbackSize: 120,
-            handleBackground: '#ececec',
-            handleHoverBackground: '#ccc',
-            handleActiveBackground: '#ccc',
-        }))
-
-    return <nav className={styles.componentsTable}>
-        <AliTable
+    return <nav className={styles.componentsTableResizableColumn}>
+        <Table
             size="small"
-            className={styles.components}
-            {...pipeline.getProps()}
+            scroll={scroll as any}
+            rowKey={rowKey || "id"}
+            columns={columnsResult as any}
+            className={`${styles.opration} ${layoutStyles.opration}`}
+            onRow={() => ({ className: styles.tableRow })}
+            dataSource={dataSource}
             {...props}
         />
     </nav>

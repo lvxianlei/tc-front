@@ -2,7 +2,7 @@
 import React, { useCallback, useState } from "react"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../utils/RequestUtil"
-import CommonTable, { columnsProps } from "./CommonTable"
+import CommonTable, { columnsProps } from "./CommonAliTable"
 import { Button, Col, Form, Pagination, Row } from "antd"
 import styles from "./CommonTable.module.less"
 import { stringify } from "querystring"
