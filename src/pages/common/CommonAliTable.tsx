@@ -43,7 +43,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                     ellipsis={{
                         rows: 1
                     }}
-                >{((text || text === 0) && data.enum) ? data.enum!.find((item: EnumObject) => item.value === text)!.label : text}</Paragraph>,
+                >{((text || text === 0) && data.enum) ? data.enum?.find((item: EnumObject) => item.value === text)?.label : text}</Paragraph>,
                 ...data
             })
         case "number":
@@ -78,32 +78,6 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 ...data
             })
     }
-}
-
-
-interface ColumnsItem {
-    title: string
-    dataIndex: string
-    type?: ColumnsItemsType
-    [key: string]: any
-}
-
-interface SelectOption {
-    value: string | number
-    label: string
-    [key: string]: any
-}
-
-interface SelectData extends ColumnsItem {
-    type: "select"
-    enum?: SelectOption[]
-    path?: string
-    [key: string]: any
-}
-
-interface TextData extends ColumnsItem {
-    type?: "text" | undefined
-    [key: string]: any
 }
 
 interface CommonTableProps {

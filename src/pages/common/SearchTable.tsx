@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../utils/RequestUtil"
 import CommonTable, { columnsProps } from "./CommonAliTable"
-import { Button, Col, Form, Pagination, Row } from "antd"
+import { Button, Col, Form, Pagination, Row, Space } from "antd"
 import styles from "./CommonTable.module.less"
 import { stringify } from "querystring"
 
@@ -19,7 +19,8 @@ interface SearchTableProps {
     rowKey?: string | ((row: any) => string)
     searchFormItems: SearchFormItemsProps[]
     onFilterSubmit?: <T>(arg: T) => T
-    filterValue?: { [key: string]: any }
+    filterValues?: { [key: string]: any }
+    extraOperation?: React.ReactNode | React.ReactNode[]
     [key: string]: any
 }
 
@@ -28,7 +29,15 @@ interface PagenationProps {
     pageSize: number
 }
 
-export default function SearchTable({ path, columns, rowKey, onFilterSubmit, searchFormItems = [], filterValue, ...props }: SearchTableProps): JSX.Element {
+export default function SearchTable({
+    path,
+    columns,
+    rowKey,
+    onFilterSubmit,
+    extraOperation,
+    searchFormItems = [],
+    filterValues,
+    ...props }: SearchTableProps): JSX.Element {
     const [pagenation, setPagenation] = useState<PagenationProps>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
     const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -37,7 +46,7 @@ export default function SearchTable({ path, columns, rowKey, onFilterSubmit, sea
             const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
             params.current = pagenation.current
             params.size = pagenation.pageSize
-            const paramsOptions = filterValue ? stringify(filterValue) + stringify(params) : stringify(params)
+            const paramsOptions = filterValues ? stringify({ ...params, ...filterValues }) : stringify(params)
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole(result)
@@ -77,11 +86,15 @@ export default function SearchTable({ path, columns, rowKey, onFilterSubmit, sea
                 </Col>
             </Row>
         </Form>
+        <Space style={{
+            marginBottom: 12,
+            paddingLeft: 12
+        }} size={12}>{extraOperation}</Space>
         <CommonTable
             columns={columns}
             rowKey={rowKey || ((record: any) => record.id)}
             size="small"
-            loading={loading}
+            isLoading={loading}
             dataSource={data?.records || data || []}
             {...props}
         />
@@ -89,6 +102,7 @@ export default function SearchTable({ path, columns, rowKey, onFilterSubmit, sea
             <Pagination
                 className={styles.pagination}
                 total={data?.total}
+                current={pagenation.current}
                 showTotal={(total: number) => `共${total}条记录`}
                 showSizeChanger
                 onChange={paginationChange}
