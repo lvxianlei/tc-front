@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select, Popconfirm, message, Modal, Row, Col, Spin } from 'antd';
+import { Space, Input, DatePicker, Button, Form, Select, Popconfirm, message, Modal, Row, Col, Spin, InputNumber } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { CommonTable, DetailContent, DetailTitle, Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
+import Checkbox from 'antd/lib/checkbox/Checkbox';
 // import styles from './sample.module.less';
 
 export default function Release(): React.ReactNode {
@@ -27,8 +28,6 @@ export default function Release(): React.ReactNode {
             <DetailContent operation={[
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
-        <div style={{display:'flex', width:'100%'}}>
-                <div style={{width:'60%'}}>
                     <DetailTitle title='基础信息'/>
                     <CommonTable columns={[
                             {
@@ -88,23 +87,38 @@ export default function Release(): React.ReactNode {
                          pagination={false}  dataSource={[
                     ]}/>
                    
-                   <Form form={ form } >
+                   <Form form={ form } labelCol={{span:4}}>
                         <DetailTitle title='下达信息'/>
-                            <Form.Item name="name" label="加工要求">
-                                <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
-                            </Form.Item>
-                            <Form.Item name="name" label="电焊说明">
-                                <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
-                            </Form.Item>
-                            <Form.Item name="name" label="镀锌要求">
-                                <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
-                            </Form.Item>
-                            <Form.Item name="name" label="包装说明">
-                                <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
-                            </Form.Item>
+                            <Row >
+                                <Col span={12}>
+                                    <Form.Item name="name" label="加工要求">
+                                        <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
+                                    </Form.Item>
+                                </Col>
+                            
+                                <Col span={12}>
+                                    <Form.Item name="name" label="电焊说明">
+                                        <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
+                                    </Form.Item>
+                                </Col>
+                            
+                            </Row>
+                            <Row>
+                                <Col span={12}>
+                                    <Form.Item name="name" label="镀锌要求">
+                                        <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
+                                    </Form.Item>
+                                </Col>
+                            
+                                <Col span={12}>
+                                    <Form.Item name="name" label="包装说明">
+                                        <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
                         <DetailTitle title='试装信息'/>
                             <Row>
-                                <Col>
+                                <Col span={12}>
                                 <Form.Item name="name" label="试装类型"  rules={[{
                                         "required": true,
                                         "message": "请选择试装类型"
@@ -116,7 +130,7 @@ export default function Release(): React.ReactNode {
                                     <Input placeholder="请输入" maxLength={ 50 } />
                                 </Form.Item>
                                 </Col>
-                                <Col>
+                                <Col span={12}>
                                 <Form.Item name="name" label="试装段"  rules={[{
                                         "required": true,
                                         "message": "请选择试装段"
@@ -129,16 +143,18 @@ export default function Release(): React.ReactNode {
                                 </Form.Item>
                                 </Col>
                             </Row>
-                            <Form.Item name="name" label="试装说明">
-                                <Input.TextArea placeholder="请输入"  maxLength={ 200 } showCount rows={1} />
-                            </Form.Item>
+                            <Row>
+                                <Col span={12}>
+                                    <Form.Item name="name" label="试装说明">
+                                        <Input.TextArea placeholder="请输入"  maxLength={ 200 } showCount rows={1} />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
                         </Form>
-                    
-                </div>
-                <div style={{width:'40%'}}>
-                <DetailTitle title='批次信息' operation={[ <Button type="primary" onClick={ ()=>{
+                <DetailTitle title='批次信息' operation={[ <Checkbox>显示已全部下达</Checkbox>,<Button type="primary" onClick={ ()=>{
 
-                } }>输入全部</Button>]}/>
+                }} disabled={!(selectedKeys.length>0)}>输入全部</Button>]}/>
+                    <Form>
                     <CommonTable  columns={[
                             {
                                 title: "序号",
@@ -169,7 +185,12 @@ export default function Release(): React.ReactNode {
                             {
                                 title: "下达数量",
                                 dataIndex: "planNumber",
-                                width: 150
+                                width: 150,
+                                render:()=>{
+                                    return  <Form.Item >
+                                        <InputNumber precision={0} min={0} style={{width:'100%'}}/>
+                                    </Form.Item>
+                                }
                             }
                         ]}
                         dataSource={[
@@ -177,8 +198,7 @@ export default function Release(): React.ReactNode {
                         selectedRowKeys: selectedKeys,
                         onChange: SelectChange,
                     }}/>
-                </div>
-            </div>
+                    </Form>
         </DetailContent>
     </Spin>
     )
