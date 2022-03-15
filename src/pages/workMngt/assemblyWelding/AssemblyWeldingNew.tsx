@@ -602,7 +602,7 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                                     <Select placeholder="请选择" style={{ width: '100%' }} onChange={() => {
                                         this.setState({
                                             weldingDetailedStructureList: []
-                                        })
+                                        }) 
                                         this.getComponentList()
                                     }} >
                                         {this.props.segmentNameList.map((item: any) => {

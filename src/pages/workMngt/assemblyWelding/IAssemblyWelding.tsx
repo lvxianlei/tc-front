@@ -2,6 +2,19 @@ export interface ISegmentNameList {
     readonly id?: string;
 }
 
+export interface IResponseData {
+    readonly id: number;
+    readonly size: number;
+    readonly current: number;
+    readonly total: number;
+    readonly records: IData[];
+}
+
+interface IData {
+    readonly id?: string;
+    readonly mainPartId?: string;
+}
+
 export interface IComponentList {
     readonly basicsWeight?: number;
     readonly id?: string;
@@ -13,4 +26,15 @@ export interface IComponentList {
     readonly surplusNum?: number;
     readonly segmentId?: string | number;
     readonly numberRemaining?: number;
+}
+
+export interface IBaseData {
+    readonly segmentName?: string;
+    readonly singleGroupWeight?: number;
+    readonly componentId?: string;
+    readonly electricWeldingMeters?: number;
+    readonly mainPartId?: string;
+    readonly id?: string;
+    readonly type?: string;
+    readonly singleGroupNumber?: number;
 }

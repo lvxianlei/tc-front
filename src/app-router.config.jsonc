@@ -1268,7 +1268,14 @@
     },
     { // 工作管理-组焊列表-组焊清单-添加组焊
       "name": "添加组焊",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/addAssemblyWelding",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/new",
+      "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
+      "exact": true,
+      "authority": "rd_welding"
+    },
+    { // 工作管理-组焊列表-组焊清单-编辑
+      "name": "编辑",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/edit/:segmentId",
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
       "authority": "rd_welding"
