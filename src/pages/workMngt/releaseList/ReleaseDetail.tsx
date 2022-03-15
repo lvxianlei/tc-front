@@ -1,23 +1,14 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select } from 'antd';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Input,  Select } from 'antd';
+import { useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
-import RequestUtil from '../../../utils/RequestUtil';
-import AuthUtil from '../../../utils/AuthUtil';
-import useRequest from '@ahooksjs/use-request';
-// import styles from './sample.module.less';
+import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
 
 export default function ReleaseList(): React.ReactNode {
-    const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state?: number, userId?: string }>();
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/tower-system/employee?size=1000`);
-        resole(data?.records);
-    }), {})
-    const user:any = data||[];
+    const params = useParams<{ id: string }>()
     const columns = [
         {
             key: 'index',
@@ -64,9 +55,9 @@ export default function ReleaseList(): React.ReactNode {
             width: 200,
         },
         {
-            key: 'structureSpec',
+            key: 'materialStandardName',
             title: '标准',
-            dataIndex: 'structureSpec',
+            dataIndex: 'materialStandardName',
             width: 200,
         },
         {
@@ -94,16 +85,16 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'basicsPartNum'
         },
         {
-            key: 'basicsPartNum',
+            key: 'processNum',
             title: '加工数',
             width: 200,
-            dataIndex: 'basicsPartNum'
+            dataIndex: 'processNum'
         },
         {
-            key: 'basicsPartNum',
+            key: 'trialAssembleNum',
             title: '试装数',
             width: 200,
-            dataIndex: 'basicsPartNum'
+            dataIndex: 'trialAssembleNum'
         },
         {
             key: 'basicsWeight',
@@ -124,22 +115,22 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'totalWeight'
         },
         {
-            key: 'totalWeight',
+            key: 'holesNum',
             title: '单件孔数',
             width: 200,
-            dataIndex: 'totalWeight'
+            dataIndex: 'holesNum'
         },
         {
-            key: 'totalWeight',
+            key: 'totalHolesNum',
             title: '总孔数',
             width: 200,
-            dataIndex: 'totalWeight'
+            dataIndex: 'totalHolesNum'
         },
         {
-            key: 'totalWeight',
+            key: 'craftName',
             title: '工艺',
             width: 200,
-            dataIndex: 'totalWeight'
+            dataIndex: 'craftName'
         },
         {
             key: 'description',
@@ -165,42 +156,30 @@ export default function ReleaseList(): React.ReactNode {
     ]
 
     const onFilterSubmit = (value: any) => {
-        if (value.statusUpdateTime) {
-            const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0]+ ' 00:00:00';
-            value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
-            delete value.statusUpdateTime
-        }
-        if (value.planTime) {
-            const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.smallSampleDeliverTimeStart = formatDate[0]+ ' 00:00:00';
-            value.smallSampleDeliverTimeEnd = formatDate[1]+ ' 23:59:59';
-            delete value.planTime
-        }
         setFilterValue(value)
         return value
     }
     return (
         <Page
-            path="/tower-science/smallSample"
+            path="/tower-science/loftingBatch/batchDetail"
             columns={columns}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={ { smallSampleStatus: location.state?.state, smallSampleLeader: location.state?.userId } }
-            exportPath="/tower-science/smallSample"
+            requestData={ { productCategoryId:params.id } }
+            exportPath="/tower-science/loftingBatch/batchDetail"
             searchFormItems={[
                 {
-                    name: 'smallSampleLeader',
+                    name: 'materialName',
                     label:'材料名称',
-                    children:   <Form.Item name="smallSampleLeader" initialValue={ location.state?.userId || '' }>
-                                    <Select style={{width:'100px'}}>
-                                        <Select.Option key={''} value={''}>全部</Select.Option>
-                                            {user && user.map((item: any) => {
-                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                            })}
-                                    </Select>
-                                </Form.Item>
+                    children:   <Select style={{width:"100px"}} defaultValue={''}>
+                                    { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
+                                        <Select.Option value={''} key ={''}>全部</Select.Option>
+                                        return <Select.Option key={ index } value={ name }>
+                                            { name }
+                                        </Select.Option>
+                                    }) }
+                                </Select>
                 },
                 {
                     name: 'fuzzyMsg',

@@ -6,13 +6,13 @@ import { CommonTable, DetailTitle, Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
+import { materialStandardOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 // import styles from './sample.module.less';
 
 export default function ReleaseList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [detailrefresh, setDetailRefresh] = useState<boolean>(false);
-    const [visible, setVisible] = useState<boolean>(false);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state?: number, userId?: string }>();
@@ -34,10 +34,10 @@ export default function ReleaseList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'taskNum',
+            key: 'steelProductShape',
             title: '塔型',
             width: 100,
-            dataIndex: 'taskNum'
+            dataIndex: 'steelProductShape'
         },
         {
             key: 'priorityName',
@@ -52,64 +52,64 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'planNumber'
         },
         {
-            key: 'saleOrderNumber',
+            key: 'batchStatusName',
             title: '下达状态',
             width: 100,
-            dataIndex: 'saleOrderNumber'
+            dataIndex: 'batchStatusName'
         },
         {
-            key: 'internalNumber',
+            key: 'updateStatusTime',
             title: '最新状态变更时间',
             width: 100,
-            dataIndex: 'internalNumber'
+            dataIndex: 'updateStatusTime'
         },
         {
-            key: 'productCategoryName',
+            key: 'trialAssembleName',
             title: '试装',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'trialAssembleName'
         },
         {
-            key: 'smallSampleDeliverTime',
+            key: 'voltageGradeName',
             title: '电压等级',
             width: 200,
-            dataIndex: 'smallSampleDeliverTime'
+            dataIndex: 'voltageGradeName'
         },
         {
-            key: 'smallSampleLeaderName',
+            key: 'materialStandardName',
             title: '材料标准',
             width: 100,
-            dataIndex: 'smallSampleLeaderName'
+            dataIndex: 'materialStandardName'
         },
         { 
-            key: 'smallSampleStatusName',
+            key: 'productTypeName',
             title: '产品类型',
             width: 100,
-            dataIndex: 'smallSampleStatusName'
+            dataIndex: 'productTypeName'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'num',
             title: '总基数',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'num'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'allProductNumber',
             title: '总杆塔号',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'allProductNumber'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'totalNumber',
             title: '总件数',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'totalNumber'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'totalWeight',
             title: '总重量（kg）',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'totalWeight'
         },
         {
             key: 'operation',
@@ -134,112 +134,112 @@ export default function ReleaseList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'taskNum',
+            key: 'issuedNumber',
             title: '下达单号',
             width: 100,
-            dataIndex: 'taskNum'
+            dataIndex: 'issuedNumber'
         },
         {
-            key: 'priorityName',
+            key: 'productCategory',
             title: '塔型',
             width: 100,
-            dataIndex: 'priorityName'
+            dataIndex: 'productCategory'
         },
         {
-            key: 'planNumber',
+            key: 'steelProductShape',
             title: '钢印号',
             width: 100,
-            dataIndex: 'planNumber'
+            dataIndex: 'steelProductShape'
         },
         {
-            key: 'saleOrderNumber',
+            key: 'planNum',
             title: '计划号',
             width: 100,
-            dataIndex: 'saleOrderNumber'
+            dataIndex: 'planNum'
         },
         {
-            key: 'internalNumber',
+            key: 'allSegmentName',
             title: '下达段号',
             width: 100,
-            dataIndex: 'internalNumber'
+            dataIndex: 'allSegmentName'
         },
         {
-            key: 'productCategoryName',
+            key: 'loftingBatchTime',
             title: '下达时间',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'loftingBatchTime'
         },
         {
-            key: 'smallSampleDeliverTime',
+            key: 'createUserName',
             title: '下达人',
             width: 200,
-            dataIndex: 'smallSampleDeliverTime'
+            dataIndex: 'createUserName'
         },
         {
-            key: 'smallSampleLeaderName',
+            key: 'trialAssemble',
             title: '试装类型',
             width: 100,
-            dataIndex: 'smallSampleLeaderName'
+            dataIndex: 'trialAssemble'
         },
         { 
-            key: 'smallSampleStatusName',
+            key: 'trialAssembleSegment',
             title: '试装段',
             width: 100,
-            dataIndex: 'smallSampleStatusName'
+            dataIndex: 'trialAssembleSegment'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'totalPieceNumber',
             title: '总件号数',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'totalPieceNumber'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'totalNumber',
             title: '总件数',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'totalNumber'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'totalWeight',
             title: '总重量（kg）',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'totalWeight'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'angleTotalWeight',
             title: '角钢总重量（kg）',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'angleTotalWeight'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'machiningDemand',
             title: '加工说明',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'machiningDemand'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'weldingDemand',
             title: '电焊说明',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'weldingDemand'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'trialAssembleDemand',
             title: '试装说明',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'trialAssembleDemand'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'galvanizeDemand',
             title: '镀锌要求',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'galvanizeDemand'
         },
         {
-            key: 'smallSampleUpdateStatusTime',
+            key: 'statusName',
             title: '配料状态',
             width: 200,
-            dataIndex: 'smallSampleUpdateStatusTime'
+            dataIndex: 'statusName'
         },
         {
             key: 'operation',
@@ -252,7 +252,7 @@ export default function ReleaseList(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ async () => {
-                            await RequestUtil.put(`/tower-science/smallSample/submit?productCategoryId=${record.id}`).then(()=>{
+                            await RequestUtil.delete(`/tower-science/loftingBatch/${record.id}`).then(()=>{
                                 message.success('删除成功！')
                             }).then(()=>{
                                 setRefresh(!refresh)
@@ -291,13 +291,13 @@ export default function ReleaseList(): React.ReactNode {
     return (
         <>
         <Page
-            path="/tower-science/materialTask"
+            path="/tower-science/loftingList"
             columns={releaseColumns}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
             requestData={ {  size: 10  } }
-            exportPath="/tower-science/smallSample"
+            exportPath="/tower-science/loftingList"
             searchFormItems={[
                 {
                     name: 'statusUpdateTime',
@@ -305,36 +305,50 @@ export default function ReleaseList(): React.ReactNode {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'smallSampleStatus',
+                    name: 'batchStatus',
                     label:'下达状态',
-                    children:  <Form.Item name="smallSampleStatus" initialValue={ location.state?.state }>
-                        <Select style={{width:"100px"}}>
+                    children:  
+                        <Select style={{width:"100px"}} defaultValue={''}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>已下达</Select.Option>
                             <Select.Option value={2} key={2}>部分下达</Select.Option>
                             <Select.Option value={3} key={3}>未下达</Select.Option>
                         </Select>
-                    </Form.Item> 
                 },
                 {
-                    name: 'planTime',
+                    name: 'productType',
                     label: '产品类型',
-                    children:  <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    children:  <Select style={{width:"100px"}} defaultValue={''}>
+                                        {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                                return <Select.Option key={index} value={id}>
+                                                    {name}
+                                                </Select.Option>
+                                            })}
+                                </Select>
                 },
                 {
-                    name: 'planTime',
+                    name: 'voltageGrade',
                     label: '电压等级',
-                    children:  <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    children:  <Select style={{width:"100px"}} defaultValue={''}>
+                                        {voltageGradeOptions &&voltageGradeOptions.map(({ id, name }, index) => {
+                                                    return (
+                                                        <Select.Option key={index} value={id}>
+                                                            {name}
+                                                        </Select.Option>
+                                                    );
+                                                })}
+                                </Select>
                 },
                 {
-                    name: 'priority',
+                    name: 'materialStandard',
                     label:'材料标准',
-                    children:   <Select style={{width:"100px"}}>
-                                    <Select.Option value={''} key ={''}>全部</Select.Option>
-                                    <Select.Option value={0} key={0}>紧急</Select.Option>
-                                    <Select.Option value={1} key={1}>高</Select.Option>
-                                    <Select.Option value={2} key={2}>中</Select.Option>
-                                    <Select.Option value={3} key={3}>低</Select.Option>
+                    children:   <Select style={{width:"100px"}} defaultValue={''}>
+                                   { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
+                                        <Select.Option value={''} key ={''}>全部</Select.Option>
+                                        return <Select.Option key={ index } value={ id }>
+                                            { name }
+                                        </Select.Option>
+                                    }) }
                                 </Select>
                 },
                 {
@@ -345,13 +359,13 @@ export default function ReleaseList(): React.ReactNode {
             ]}
         />
         <Page
-            path="/tower-science/smallSample"
+            path="/tower-science/loftingBatch/batchResult"
             columns={detailColumns}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={detailrefresh}
             requestData={ {  size: 10  } }
-            exportPath="/tower-science/smallSample"
+            exportPath="/tower-science/loftingBatch/batchResult"
             searchFormItems={[
                 {
                     name: 'fuzzyMsg',

@@ -1,23 +1,18 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Form, Select } from 'antd';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { Page } from '../../common';
+import { CommonTable, Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
-// import styles from './sample.module.less';
 
 export default function ReleaseList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const location = useLocation<{ state?: number, userId?: string }>();
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/tower-system/employee?size=1000`);
-        resole(data?.records);
-    }), {})
-    const user:any = data||[];
+    const [segmentDataSource, setSegmentDataSource] = useState<any[]>([]);
+    const params = useParams<{ id: string }>()
     const columns = [
         {
             key: 'index',
@@ -30,32 +25,32 @@ export default function ReleaseList(): React.ReactNode {
         {
             key: 'segmentName',
             title: '段名',
-            width: 150,
+            width: 100,
             dataIndex: 'segmentName'
         },
         {
-            key: 'repeatNum',
+            key: 'mainPartId',
             title: '组件号',
-            width: 150,
-            dataIndex: 'repeatNum'
+            width: 100,
+            dataIndex: 'mainPartId'
         },
         {
-            key: 'code',
+            key: 'processGroupNum',
             title: '加工组数',
-            dataIndex: 'code',
+            dataIndex: 'processGroupNum',
             width: 120
         },
         {
-            key: 'materialName',
-            title: '单组重量',
-            width: 200,
-            dataIndex: 'materialName'
+            key: 'singleGroupWeight',
+            title: '单组重量（kg）',
+            width: 100,
+            dataIndex: 'singleGroupWeight'
         },
         {
-            key: 'structureTexture',
+            key: 'electricWeldingMeters',
             title: '电焊米数（mm）',
-            width: 150,
-            dataIndex: 'structureTexture',
+            width: 100,
+            dataIndex: 'electricWeldingMeters',
         }
     ]
     const detailColumns = [
@@ -68,28 +63,31 @@ export default function ReleaseList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'segmentName',
+            key: 'code',
             title: '零部件号',
             width: 150,
-            dataIndex: 'segmentName'
+            dataIndex: 'code'
         },
         {
-            key: 'repeatNum',
+            key: 'isMainPart',
             title: '是否主件',
             width: 150,
-            dataIndex: 'repeatNum'
-        },
-        {
-            key: 'code',
-            title: '材料',
-            dataIndex: 'code',
-            width: 120
+            dataIndex: 'isMainPart',
+            render:(number:any)=>{
+                return number?[0,'0'].includes(number)?'否':'是':'-'
+            }
         },
         {
             key: 'materialName',
+            title: '材料',
+            dataIndex: 'materialName',
+            width: 120
+        },
+        {
+            key: 'structureTexture',
             title: '材质',
             width: 200,
-            dataIndex: 'materialName'
+            dataIndex: 'structureTexture'
         },
         {
             key: 'structureTexture',
@@ -98,28 +96,28 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'structureTexture',
         },
         {
-            key: 'structureTexture',
+            key: 'length',
             title: '长度（mm）',
             width: 150,
-            dataIndex: 'structureTexture',
+            dataIndex: 'length',
         },
         {
-            key: 'structureTexture',
+            key: 'width',
             title: '宽度（mm）',
             width: 150,
-            dataIndex: 'structureTexture',
+            dataIndex: 'width',
         },
         {
-            key: 'structureTexture',
+            key: 'singleNum',
             title: '单组件数',
             width: 150,
-            dataIndex: 'structureTexture',
+            dataIndex: 'singleNum',
         },
         {
-            key: 'structureTexture',
+            key: 'craftName',
             title: '工艺',
             width: 150,
-            dataIndex: 'structureTexture',
+            dataIndex: 'craftName',
         }
     ]
     const onFilterSubmit = (value: any) => {
@@ -127,23 +125,37 @@ export default function ReleaseList(): React.ReactNode {
         return value
     }
     return (
-        <div>
-        <Page
-            path="/tower-science/smallSample"
-            columns={columns}
-            onFilterSubmit={onFilterSubmit}
-            filterValue={filterValue}
-            refresh={refresh}
-            requestData={ { smallSampleStatus: location.state?.state, smallSampleLeader: location.state?.userId } }
-            exportPath="/tower-science/smallSample"
-            searchFormItems={[
-                {
-                    name: 'fuzzyMsg',
-                    label: '模糊查询项',
-                    children: <Input placeholder="" maxLength={200} />
-                },
-            ]}
-        />
+        <div style={{display:'flex',width:'100%'}} >
+            <div style={{width:'40%'}}>
+                <Page
+                    path="/tower-science/welding/getDetailedById"
+                    columns={columns}
+                    onFilterSubmit={onFilterSubmit}
+                    filterValue={filterValue}
+                    refresh={refresh}
+                    requestData={ {weldingId:params.id } }
+                    exportPath="/tower-science/welding/getDetailedById"
+                    tableProps={{
+                        onRow:(record:any) => ({
+                            onClick: async (event: any) => {
+                                const data:any = await RequestUtil.get(`/tower-science/welding/getStructureById`,{segmentId: record.id});
+                                // setSegmentDataSource([{craftName:1},{craftName:2}]);
+                                setSegmentDataSource([...data]);
+                            }
+                        })
+                    }}
+                    searchFormItems={[
+                        {
+                            name: 'fuzzyMsg',
+                            label: '模糊查询项',
+                            children: <Input placeholder="" maxLength={200} />
+                        },
+                    ]}
+                />
+            </div>
+            <div style={{width:'60%'}}>
+                <CommonTable columns={detailColumns} dataSource={segmentDataSource} pagination={false}/>
+            </div>
         </div>
     )
 }
