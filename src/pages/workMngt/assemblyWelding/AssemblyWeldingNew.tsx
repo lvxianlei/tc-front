@@ -6,8 +6,8 @@ import styles from './AssemblyWelding.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { FixedType } from 'rc-table/lib/interface';
-import { ISegmentNameList } from './AssemblyWeldingListing';
 import { weighingtypeOptions } from '../../../configuration/DictionaryOptions';
+import { ISegmentNameList } from './IAssemblyWelding';
 
 export interface AssemblyWeldingNewProps { }
 export interface IAssemblyWeldingNewRouteProps extends RouteComponentProps<AssemblyWeldingNewProps>, WithTranslation {

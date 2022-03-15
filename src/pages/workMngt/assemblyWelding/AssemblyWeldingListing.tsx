@@ -6,7 +6,7 @@
 
 import React from 'react'
 import { Button, message, Modal, Popconfirm, Space, Spin, TablePaginationConfig, Upload } from 'antd';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -15,6 +15,7 @@ import styles from './AssemblyWelding.module.less';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import AssemblyWeldingNew, { IBaseData } from './AssemblyWeldingNew';
 import AuthUtil from '../../../utils/AuthUtil';
+import { ISegmentNameList } from './IAssemblyWelding';
 
 interface IResponseData {
     readonly id: number;
@@ -25,10 +26,6 @@ interface IResponseData {
 }
 
 interface IData {
-    readonly id?: string;
-}
-
-export interface ISegmentNameList {
     readonly id?: string;
 }
 
@@ -198,6 +195,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                         <Button type="primary" onClick={() => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
                             history.goBack();
                         })} >完成组焊清单</Button>
+                        <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/addAssemblyWelding`}>添加组焊</Link>
                         <Button type="primary" onClick={async () => {
                             setVisible(true);
                             setName('添加组焊');
