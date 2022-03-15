@@ -216,7 +216,8 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected renderFilterContent(item: ITabItem): React.ReactNode {
         return (
-            <Form layout="inline" onFinish={this.onFilterSubmit} onValuesChange={this.onFilterSubmit} ref={this.form}>
+            // onValuesChange={this.onFilterSubmit} 搜索项有修改则会触发请求
+            <Form layout="inline" onFinish={this.onFilterSubmit} ref={this.form}>
                 <Row gutter={[0, 16]}>
                     {
                         this.getFilterFormItemProps(item).map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
