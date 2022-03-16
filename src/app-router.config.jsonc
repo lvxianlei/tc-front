@@ -1394,14 +1394,14 @@
     },
     { // 工作管理-下达列表-下达明细
       "name": "下达明细",
-      "path": "/workMngt/releaseList/detail/:id/:status",
+      "path": "/workMngt/releaseList/detail/:id/:productCategoryId",
       "module": "./pages/workMngt/releaseList/ReleaseDetail",
       "exact": true,
       "authority": "rd_small_sample_management"
     },
     { // 工作管理-组焊明细-组焊明细
       "name": "组焊明细",
-      "path": "/workMngt/releaseList/assemblyWelding/:id/:status",
+      "path": "/workMngt/releaseList/assemblyWelding/:id",
       "module": "./pages/workMngt/releaseList/ReleaseAssemblyWeldingDetail",
       "exact": true,
       "authority": "rd_small_sample_management"
