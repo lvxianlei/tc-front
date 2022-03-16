@@ -69,12 +69,12 @@ export default function SchedulePlan(props: any){
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
         const userData: any= await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         switch (title) {
-            case "materialLeaderDepartment":
-                form.setFieldsValue({materialLeader:''});
-                return setMaterialUser(userData.records);
-            case "materialPartLeaderDepartment":
-                form.setFieldsValue({materialPartLeader:''});
-                return setMaterialPartUser(userData.records);
+            // case "materialLeaderDepartment":
+            //     form.setFieldsValue({materialLeader:''});
+            //     return setMaterialUser(userData.records);
+            // case "materialPartLeaderDepartment":
+            //     form.setFieldsValue({materialPartLeader:''});
+            //     return setMaterialPartUser(userData.records);
             case "smallSampleLeaderDepartment":
                 form.setFieldsValue({smallSampleLeader:''});
                 return setSmallSampleUser(userData.records);
@@ -102,6 +102,8 @@ export default function SchedulePlan(props: any){
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
@@ -144,7 +146,7 @@ export default function SchedulePlan(props: any){
                             </Row>
                         </Col>
                     </Row>
-                    <Row>
+                    {/* <Row>
                         <Col span={24}>
                             <Row>
                                 <Col span={15}>
@@ -167,8 +169,8 @@ export default function SchedulePlan(props: any){
                                 </Col>
                             </Row>
                         </Col>
-                    </Row>
-                    <Row>
+                    </Row> */}
+                    {/* <Row>
                         <Col  span={24}>
                             <Row>
                                 <Col span={15}>
@@ -191,7 +193,7 @@ export default function SchedulePlan(props: any){
                                 </Col>
                             </Row>
                         </Col>
-                    </Row>
+                    </Row> */}
                     <Row>
                         <Col  span={24}>
                             <Row>
@@ -389,8 +391,8 @@ export default function SchedulePlan(props: any){
                                             
                                             form.setFieldsValue({
                                                 ...resData,
-                                                materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
-                                                materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                                                // materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                                                // materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
                                                 boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
                                                 boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
                                                 weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
@@ -399,8 +401,8 @@ export default function SchedulePlan(props: any){
                                                 loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
                                                 drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
                                                 drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
-                                                materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
-                                                materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                                                // materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                                                // materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
                                                 smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
                                                 smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
                                             });

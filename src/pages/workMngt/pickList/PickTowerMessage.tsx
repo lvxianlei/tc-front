@@ -161,6 +161,8 @@ export default function PickTowerMessage(): React.ReactNode {
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
@@ -259,7 +261,7 @@ export default function PickTowerMessage(): React.ReactNode {
                 extraOperation={
                     <Space>
                     {/* <Button type="primary" ghost>导出</Button> */}
-                    { params.materialLeader===AuthUtil.getUserId()?<Popconfirm
+                    { params.materialLeader===AuthUtil.getUserId()&&params.status!=='3'?<Popconfirm
                         title="确认提交?"
                         onConfirm={ async () => {
                             await RequestUtil.post(`/tower-science/drawProductSegment/${params.id}/submit`).then(()=>{

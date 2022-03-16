@@ -51,6 +51,16 @@ const towerColumns = [
         key: 'length' 
     },
     { 
+        title: '宽度（mm）', 
+        dataIndex: 'width', 
+        key: 'width', 
+    },
+    { 
+        title: '厚度（mm）', 
+        dataIndex: 'thickness', 
+        key: 'thickness', 
+    },
+    { 
         title: '单段件数', 
         dataIndex: 'basicsPartNum', 
         key: 'basicsPartNum' 

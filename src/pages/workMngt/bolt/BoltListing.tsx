@@ -1,7 +1,7 @@
 /**
  * @author zyc
  * @copyright © 2021 
- * @description 工作管理-螺栓列表
+ * @description 工作管理-螺栓列表-螺栓清单-螺栓明细
  */
 
 import React, { useEffect, useState } from 'react';
@@ -284,7 +284,7 @@ export default function BoltList(): React.ReactNode {
                             okText="确认"
                             cancelText="取消"
                         >
-                            <Button type="link" hidden={params.status === '3' && params.boltLeader === userId ? false : true}>删除</Button>
+                            <Button type="link" hidden={params.status === '2' && params.boltLeader === userId ? false : true}>删除</Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -325,7 +325,7 @@ export default function BoltList(): React.ReactNode {
                 <Button type="primary" onClick={() => downloadTemplate('/tower-science/boltRecord/exportTemplate', '螺栓导入模板')} ghost>模板下载</Button>
             </Space>
             <Space direction="horizontal" size="small" className={`${styles.topbtn} ${styles.btnRight}`}>
-                <Button type="primary" hidden={params.status === '3' && params.boltLeader === userId ? false : true} ghost onClick={() => {
+                <Button type="primary" hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost onClick={() => {
                     if (editorLock === '编辑') {
                         setColumns(columns);
                         setEditorLock('锁定');
@@ -398,9 +398,9 @@ export default function BoltList(): React.ReactNode {
                         }
                     }}
                 >
-                    <Button type="primary" hidden={params.status === '3' && params.boltLeader === userId ? false : true} ghost>导入</Button>
+                    <Button type="primary" hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost>导入</Button>
                 </Upload>
-                {params.status === '3' && params.boltLeader === userId ? editorLock === '锁定' ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => { getDataSource() }} /> : null}
+                {params.status === '2' && params.boltLeader === userId ? editorLock === '锁定' ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => { getDataSource() }} /> : null}
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>
             <Form form={form}>

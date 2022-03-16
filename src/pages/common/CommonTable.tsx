@@ -1,5 +1,5 @@
 import React from "react"
-import { Table, TableColumnProps } from "antd"
+import { Table, TableColumnProps, Tooltip } from "antd"
 import styles from "./CommonTable.module.less"
 import "./CommonTable.module.less"
 import moment from "moment"
@@ -33,14 +33,14 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             return ({
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
+                render: (text: any) => <span title={text}>{text && !["-1", -1].includes(text) ? text : "-"}</span>,
                 ...data
             })
         default:
             return ({
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
+                render: (text: any) => <span title={text}>{text && !["-1", -1].includes(text) ? text : "-"}</span>,
                 ...data
             })
     }
