@@ -279,7 +279,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
             form.validateFields(['segmentName']).then(async res => {
                 let data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
                     segmentName: form.getFieldsValue(true).segmentName,
-                    productCategoryId: params.productCategoryId
+                    productCategoryId: params.productCategoryId,
+                    segmentId: params.segmentId
                 });
                 if (params.segmentId) {
                     settingData.forEach((items: IComponentList) => {
