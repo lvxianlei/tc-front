@@ -163,12 +163,12 @@ export default function PickList(): React.ReactNode {
                         name:'塔型名称构件明细.excel',
                         downName: "塔型名称构件明细",
                         function:'提料塔型构件明细',
-                        path:`/tower-science/productCategory/material/productCategoryStructure/download/excel?productCategoryId=${taskId}`
+                        path:`/tower-science/materialProductCategory/material/productCategoryStructure/download/excel?productCategoryId=${taskId}`
                     },{
                         name:'杆塔构件明细汇总表.excel',
                         downName: "杆塔构件明细汇总表",
                         function:'提料杆塔构件明细汇总',
-                        path: `/tower-science/productCategory/material/productStructure/download/excel?productCategoryId=${taskId}`
+                        path: `/tower-science/materialProductCategory/material/productStructure/download/excel?productCategoryId=${taskId}`
                 }]} />
             </Modal>
             <Page
