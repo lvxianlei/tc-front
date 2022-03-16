@@ -701,6 +701,34 @@
                         ]
                     },
                     {
+                        "label": "包装计划",
+                        "icon": "technology",
+                        "path": "/packingPlan",
+                        "appName": "MC",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "包装计划列表",
+                                "path": "/packingPlan/packingPlanList",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "成品库管理",
+                        "icon": "technology",
+                        "path": "/shippingDepartmentMngt",
+                        "appName": "MC",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "成品库配置",
+                                "path": "/shippingDepartmentMngt/shippingDepartmentConfig",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "配置管理",
                         "icon": "gongying-peizhiguanli_peizhiguanli1",
                         "path": "/config",
@@ -746,11 +774,11 @@
                                 "path": "/baseSetting/workshopTeamMngt",
                                 "authority": "basic_settings_workshop_team_management"
                             },
-                            {
-                                "label": "成品库配置",
-                                "path": "/baseSetting/shippingDepartmentConfig",
-                                "authority": "basic_settings_finished_product_warehouse_configuration"
-                            },
+                            // {
+                            //     "label": "成品库配置",
+                            //     "path": "/baseSetting/shippingDepartmentConfig",
+                            //     "authority": "basic_settings_finished_product_warehouse_configuration"
+                            // },
                             {
                                 "label": "车辆管理",
                                 "path": "/baseSetting/vehicleMngt",

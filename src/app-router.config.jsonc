@@ -1593,6 +1593,20 @@
       "exact": true,
       "authority": "sw_raw_material_requisition_list"
     },
+    { // 包装计划-包装计划列表
+      "name": "包装计划列表",
+      "path": "/packingPlan/packingPlanList",
+      "module": "./pages/packingPlan/PackingPlanList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 成品库管理-成品库配置
+      "name": "成品库配置",
+      "path": "/shippingDepartmentMngt/shippingDepartmentConfig",
+      "module": "./pages/shippingDepartmentMngt/ShippingDepartmentConfig",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 计划排产
       "name": "计划排产",
       "path": "/planProd/planMgmt",
@@ -1852,13 +1866,13 @@
       "exact": true,
       "authority": "basic_settings_workshop_team_management"
     },
-    { // 基础配置-成品库配置
-      "name": "成品库配置",
-      "path": "/baseSetting/shippingDepartmentConfig",
-      "module": "./pages/baseSetting/ShippingDepartmentConfig",
-      "exact": true,
-      "authority": "basic_settings_finished_product_warehouse_configuration"
-    },
+    // { // 基础配置-成品库配置
+    //   "name": "成品库配置",
+    //   "path": "/baseSetting/shippingDepartmentConfig",
+    //   "module": "./pages/baseSetting/ShippingDepartmentConfig",
+    //   "exact": true,
+    //   "authority": "basic_settings_finished_product_warehouse_configuration"
+    // },
     { // 基础配置-车辆管理
       "name": "车辆管理",
       "path": "/baseSetting/vehicleMngt",
