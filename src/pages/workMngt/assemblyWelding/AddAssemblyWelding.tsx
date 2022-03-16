@@ -341,7 +341,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
         })
         form.setFieldsValue({ 'singleGroupWeight': weight, 'electricWeldingMeters': weldingLength });
         setWeldingDetailedStructureList(Object.keys(newComponentList).length > 0 ? [...newWeldingDetailedStructureList, newComponentList] : [...newWeldingDetailedStructureList]);
-        if (record.basicsPartNumNow === 1) {
+        if (Number(record.basicsPartNumNow) === 1) {
             componentList.splice(index, 1);
             setComponentList([...componentList]);
         } else {

@@ -181,7 +181,7 @@ export default function SetOutList(): React.ReactNode {
             exportPath={`/tower-science/loftingList`}
             columns={columns}
             headTabs={[]}
-            requestData={{ status: location.state?.state, loftingLeader: location.state?.userId }}
+            requestData={{ status: location.state?.state, loftingLeader: location.state?.userId, whether: 0 }}
             refresh={refresh}
             searchFormItems={[
                 {
