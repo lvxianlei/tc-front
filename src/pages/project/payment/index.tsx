@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Button, Input, DatePicker, Select, message, Popconfirm } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import { paymentListHead } from "./payment.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -28,26 +28,10 @@ export default function Payment() {
         return value
     }
 
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            title: "删除",
-            content: "确定删除此付款申请吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    resove(await deleteRun(id))
-                    message.success("删除成功...")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        })
-    }
-
     return <Page
         path="/tower-market/payApply"
         columns={[
-            ...paymentListHead,
+            ...(paymentListHead as any),
             {
                 title: "操作",
                 dataIndex: "opration",
@@ -56,7 +40,24 @@ export default function Payment() {
                 render: (_: any, record: any) => {
                     return <>
                         <span style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }} onClick={() => history.push(`/project/payment/detail/${record.id}`)}>查看</span>
-                        <Button className="btn-operation-link" type="link" size="small" disabled={![4, 6].includes(record.applyStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
+                        <Popconfirm
+                            title="确定删除此请款申请吗？"
+                            disabled={![4, 6].includes(record.applyStatus)}
+                            onConfirm={async () => {
+                                await deleteRun(record?.id)
+                                message.success("删除成功...")
+                                history.go(0)
+                            }}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button
+                                type="link"
+                                size="small"
+                                className="btn-operation-link"
+                                disabled={![4, 6].includes(record.applyStatus)}
+                            >删除</Button>
+                        </Popconfirm>
                     </>
                 }
             }]}

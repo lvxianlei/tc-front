@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page, PopTableContent } from '../../common'
+import { SearchTable as Page, PopTableContent } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { drawing, connectContract } from './drawing.json'
@@ -76,22 +76,6 @@ export default function Drawing(): React.ReactNode {
         }
     })
 
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            title: "删除",
-            content: "确定删除此任务吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    resove(await deleteRun(id))
-                    message.success("删除成功...")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        })
-    }
-
     const handleCancel = (id: string) => {
         Modal.confirm({
             title: "撤销",
@@ -159,52 +143,66 @@ export default function Drawing(): React.ReactNode {
         </Modal>
         <Page
             path="/tower-market/drawingConfirmation"
-            columns={[...drawing, {
-                title: "操作",
-                dataIndex: "opration",
-                fixed: "right",
-                render: (_: undefined, record: any) => <>
-                    <span
-                        style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }}
-                        onClick={() => {
-                            setDetailedId(record.id)
-                            setDetailVisible(true)
-                        }}>查看</span>
-                    <Button
-                        type="link"
-                        size="small"
-                        disabled={![0, 3].includes(record.auditStatus)}
-                        className="btn-operation-link"
-                        onClick={() => {
-                            setType("edit")
-                            setDetailedId(record.id)
-                            setVisible(true)
-                        }}>编辑</Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        disabled={(![null, "-1", -1, 4].includes(record.auditStatus)) || record.contractId}
-                        className="btn-operation-link"
-                        onClick={() => {
-                            setDetailedId(record.id)
-                            setConnectVisible(true)
-                        }}>关联合同</Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        disabled={![0, 3].includes(record.auditStatus)}
-                        onClick={() => handleDelete(record.id)}
-                        className="btn-operation-link"
-                    >删除</Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        className="btn-operation-link"
-                        disabled={record.auditStatus !== 1}
-                        onClick={() => handleCancel(record.id)}
-                    >撤回</Button>
-                </>
-            }]}
+            columns={[
+                ...(drawing as any),
+                {
+                    title: "操作",
+                    dataIndex: "opration",
+                    fixed: "right",
+                    width: 200,
+                    render: (_: undefined, record: any) => <>
+                        <span
+                            style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }}
+                            onClick={() => {
+                                setDetailedId(record.id)
+                                setDetailVisible(true)
+                            }}>查看</span>
+                        <Button
+                            type="link"
+                            size="small"
+                            disabled={![0, 3].includes(record.auditStatus)}
+                            className="btn-operation-link"
+                            onClick={() => {
+                                setType("edit")
+                                setDetailedId(record.id)
+                                setVisible(true)
+                            }}>编辑</Button>
+                        <Button
+                            type="link"
+                            size="small"
+                            disabled={(![null, "-1", -1, 4].includes(record.auditStatus)) || record.contractId}
+                            className="btn-operation-link"
+                            onClick={() => {
+                                setDetailedId(record.id)
+                                setConnectVisible(true)
+                            }}>关联合同</Button>
+                        <Popconfirm
+                            title="确定删除此任务吗？"
+                            disabled={![0, 3].includes(record.auditStatus)}
+                            onConfirm={async () => {
+                                await deleteRun(record?.id)
+                                message.success("删除成功...")
+                                history.go(0)
+                            }}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button
+                                type="link"
+                                size="small"
+                                className="btn-operation-link"
+                                disabled={![0, 3].includes(record.auditStatus)}
+                            >删除</Button>
+                        </Popconfirm>
+                        <Button
+                            type="link"
+                            size="small"
+                            className="btn-operation-link"
+                            disabled={record.auditStatus !== 1}
+                            onClick={() => handleCancel(record.id)}
+                        >撤回</Button>
+                    </>
+                }]}
             filterValue={filterValue}
             extraOperation={<Button
                 type="primary"

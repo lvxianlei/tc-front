@@ -6,7 +6,7 @@ declare module "*.module.less" {
 }
 
 declare module "*.jsonc" {
-    const classes: { [key: string]: string } | any[];
+    const classes: { [key: string]: any };
     export default classes;
 }
 

@@ -56,8 +56,12 @@ interface PagenationProps {
 }
 
 export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
-    const initValue = value?.records?.map((item: any) => item.id)
+    // const initValue = value?.records?.map((item: any) => item.id)
+    const initValue = value?.records?.map((item: any) => {
+        return typeof item === "string" ? item : typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]
+    }) || []
     const [select, setSelect] = useState<any[]>(initValue)
+    const [selectRows, setSelectRows] = useState<any[]>(value?.records || [])
     const [columns, setColumns] = useState<any[]>(data.columns)
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,
@@ -95,9 +99,48 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         }
     }), { refreshDeps: [pagenation.current] })
 
-    const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
-        onChange && onChange(selectRows)
-        setSelect(selectedRowKeys)
+    // const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
+    //     onChange && onChange(selectRows)
+    //     setSelect(selectedRowKeys)
+    // }
+
+    const onSelectChange = (record: any, selected: boolean, selectAllRows: any[]) => {
+        const currentSelect = [...select]
+        const currentSelectRows = [...selectRows]
+        const recordItemKey = typeof data.rowKey === "function" ? record[data.rowKey(record)] : record[data.rowKey || "id"]
+        if (data.selectType && data.selectType === "checkbox") {
+            if (selected) {
+                currentSelect.push(recordItemKey)
+                currentSelectRows.push(record)
+                onChange && onChange(currentSelectRows)
+                setSelect(currentSelect)
+                setSelectRows(currentSelectRows)
+            } else {
+                setSelect(currentSelect.filter(item => item !== recordItemKey))
+                setSelectRows(currentSelectRows.filter((item: any) => item.id !== recordItemKey))
+                onChange && onChange(currentSelectRows.filter((item: any) => item.id !== recordItemKey))
+            }
+        } else {
+            onChange && onChange(selectAllRows)
+            setSelect([recordItemKey])
+        }
+    }
+
+    const onSelectAll = (selected: any[], _: any, changeRows: any[]) => {
+        let currentSelect = [...select]
+        let currentSelectRows = [...selectRows]
+        const changeSelectRows = selectRows.filter((item: any) => !changeRows.map((mItem: any) => typeof data.rowKey === "function" ? mItem[data.rowKey(mItem)] : mItem[data.rowKey || "id"]).includes(typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]))
+        if (selected) {
+            currentSelect = currentSelect.concat(changeRows.map(item => typeof data.rowKey === "function" ? item[data.rowKey(item)] : item[data.rowKey || "id"]))
+            currentSelectRows = currentSelectRows.concat(changeRows)
+            onChange && onChange(currentSelectRows)
+            setSelect(currentSelect)
+            setSelectRows(currentSelectRows)
+        } else {
+            onChange && onChange(changeSelectRows)
+            setSelect(select.filter((item: any) => !changeRows.map((mItem: any) => typeof data.rowKey === "function" ? mItem[data.rowKey(mItem)] : mItem[data.rowKey || "id"]).includes(item)))
+            setSelectRows(changeSelectRows)
+        }
     }
 
     useEffect(() => {
@@ -157,7 +200,10 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             rowSelection={{
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
-                onChange: onSelectChange,
+                // onChange: onSelectChange,
+                onSelect: onSelectChange,
+                onSelectAll,
+                getCheckboxProps: data?.getCheckboxProps
             }}
             rowKey={(record: any) => record.id}
             size="small"
@@ -180,6 +226,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
 
     useEffect(() => setValue(props.value || ({ value: (props as any).value, id: "", records: [] })), [JSON.stringify(props.value || "")])
     const handleChange = (event: any) => {
+        const itemContentId = typeof data.rowKey === "function" ? data.rowKey(event[0]) : event[0]?.[data.rowKey || "id"]
         const newPopContent = { id: event[0]?.id, value: event[0]?.[data.value || "name" || "id"], records: event }
         const checkboxContent = { id: event[0]?.id, value: event.map((item: any) => item[data.value || "name" || "id"]).join(","), records: event }
         setPopContent(data.selectType === "checkbox" ? checkboxContent : newPopContent)
@@ -202,6 +249,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     }
 
     const handleCancel = () => {
+        setPopContent({ value: (props as any).value, id: "", records: [] })
         setVisible(false)
     }
 
@@ -209,7 +257,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         let initValue = typeof props.value === "string" ? props.value : value?.value
         return initValue
     }
-
+    console.log(props, "props")
     return <>
         <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onOk={handleOk} onCancel={handleCancel}>
             <PopTableContent value={props.value} data={data} onChange={handleChange} />

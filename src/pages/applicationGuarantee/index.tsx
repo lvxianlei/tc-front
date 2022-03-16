@@ -20,8 +20,8 @@ import { EditRefProps } from './application';
 export default function ApplicationColunm(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [ clearSearch, setClearSearch ] = useState<boolean>(false);
     const [acceptStatus, setAcceptStatus] = useState<number>(1);
-    const [filterValue, setFilterValue] = useState<any>({acceptStatus: 1});
     const [visible, setVisible] = useState<boolean>(false);
     const [visibleRecovery, setVisibleRecovery] = useState<boolean>(false);
     const [visibleSee, setVisibleSee] = useState<boolean>(false);
@@ -61,14 +61,15 @@ export default function ApplicationColunm(): React.ReactNode {
             delete value.guaranteeTime
         }
         value["acceptStatus"] = acceptStatus;
-        setFilterValue(value);
         return value
     }
 
     // tab切换
     const operationChange = (event: any) => {
+        console.log(event)
         setAcceptStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
+        setClearSearch(!clearSearch);
     }
 
     // 新增回调
@@ -174,6 +175,7 @@ export default function ApplicationColunm(): React.ReactNode {
                         }
                     }]}
                 refresh={refresh}
+                clearSearch={clearSearch}
                 extraOperation={
                     <>
                         <Radio.Group defaultValue={acceptStatus} onChange={operationChange}>
@@ -184,7 +186,7 @@ export default function ApplicationColunm(): React.ReactNode {
                     </>
                 }
                 onFilterSubmit={onFilterSubmit}
-                filterValue={ filterValue }
+                filterValue={{acceptStatus: acceptStatus}}
                 searchFormItems={[
                     {
                         name: 'startRefundTime',

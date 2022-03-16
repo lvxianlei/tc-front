@@ -124,7 +124,7 @@ export default function PickTower(): React.ReactNode {
                         setWithSectionVisible(true);
                         setProductId(record.id);
                         setStatus(params.status);
-                        setBatchNo(record.productionBatch.length > 0 && record.productionBatchNo.length > 0)
+                        setBatchNo(record.productionBatch && record.productionBatchNo && record.productionBatch.length > 0 && record.productionBatchNo.length > 0)
                     }} >配段</Button>
                     <Button type='link' onClick={() => { history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`) }}>杆塔提料明细</Button>
                 </Space>
@@ -186,7 +186,7 @@ export default function PickTower(): React.ReactNode {
                 width="60%"
                 onOk={handleModalOk}
                 footer={<Space>
-                    {batchNo ? null : <Button type='primary' onClick={handleModalOk}>保存</Button>}
+                    {batchNo && status === '3' ? null : <Button type='primary' onClick={handleModalOk}>保存</Button>}
                     <Button onClick={() => {
                         editRef.current?.resetFields();
                         setWithSectionVisible(false);

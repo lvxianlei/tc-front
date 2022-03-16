@@ -446,7 +446,7 @@
     },
     { // 编辑开票申请
       "name": "编辑开票申请",
-      "path": "/project/invoicing/edit/:id",
+      "path": "/project/billList/invoicing/edit/:id",
       "module": "./pages/project/invoicing/Edit",
       "exact": true,
       "authority": "project"
@@ -1135,8 +1135,8 @@
     },
     { //采购任务-原材料-用料清单
       "name": "用料清单",
-      "path": "/buyingTask/materialList",
-      "module": "./pages/buyingTask/materialList",
+      "path": "/buyingTask/detail/:id",
+      "module": "./pages/buyingTask/Overview",
       "exact": true,
       "authority": "auth_section"
     },
@@ -2079,7 +2079,7 @@
     },
     { // 开票申请列表
       "name": "开票申请列表",
-      "path": "/invoicing",
+      "path": "/invoicing/billList",
       "module": "./pages/invoicing/index",
       "exact": true,
       "authority": "approvalm_invoicing_list"
@@ -2100,14 +2100,14 @@
     },
     { // 查看任务信息
       "name": "任务信息",
-      "path": "/invoicing/taskInfo/:invoicingId",
+      "path": "/invoicing/billList/taskInfo/:invoicingId",
       "module": "./pages/invoicing/TaskInfo",
       "exact": true,
       "authority": "fc_view_task_information"
     },
     { // 填写开票申请信息
       "name": "填写开票信息",
-      "path": "/invoicing/edit/:invoicingId",
+      "path": "/invoicing/billList/edit/:invoicingId",
       "module": "./pages/invoicing/Edit",
       "exact": true,
       "authority": "fc_approvalm_invoicing_list_edit"

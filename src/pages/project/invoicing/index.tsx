@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import { invoicingListHead } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -29,22 +29,6 @@ export default function Invoicing() {
         }
         setFilterValue(value)
         return value
-    }
-
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            title: "删除",
-            content: "确定删除此开票申请吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    resove(await deleteRun(id))
-                    message.success("删除成功...")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        })
     }
 
     return <>
@@ -97,12 +81,24 @@ export default function Invoicing() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 100,
+                    width: 130,
                     render: (_: any, record: any) => {
                         return <>
                             <span style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }} onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</span>
                             <Button className="btn-operation-link" type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
-                            <Button className="btn-operation-link" type="link" size="small" disabled={record.state !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
+                            <Popconfirm
+                                title="确定删除此开票申请吗？"
+                                disabled={record.state !== 0}
+                                onConfirm={async () => {
+                                    await deleteRun(record?.id)
+                                    message.success("删除成功...")
+                                    history.go(0)
+                                }}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button type="link" size="small" className="btn-operation-link" disabled={record.state !== 0}>删除</Button>
+                            </Popconfirm>
                         </>
                     }
                 }]}

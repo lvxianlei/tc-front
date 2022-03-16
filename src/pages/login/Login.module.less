@@ -5,33 +5,19 @@
   background-color: #FFF;
   box-shadow: 0 2px 8px 0 rgba(174,186,208,.27);
 }
+
 .logo{
   width:80%;
   height:100%;
   position: relative;
   background-color: #FFF;
-  background-image: url('../../../public/VCG41N896058462.png');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+  overflow: hidden;
 }
-.logo1{
-  width:80%;
-  height:100%;
-  position: relative;
-  background-color: #FFF;
-  background-image: url('../../../public/VCG211101842372.jpg');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+
+.carousel{
+  height: 100%;
 }
-.logo2{
-  width:80%;
-  height:100%;
-  position: relative;
-  background-color: #FFF;
-  background-image: url('../../../public/VCG211169486505.jpg');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}
+
 .content {
   flex-grow: 1;
   position: relative;
@@ -40,6 +26,7 @@
   background-color: #FFF;
   display: flex;
   width: 100%;
+  height: 100%;
   // background-image: url('../../../public/VCG41N896058462.jpg');
   background-position: center bottom;
   background-repeat: no-repeat;
@@ -51,16 +38,9 @@
 .loginArea {
   display: flex;
   align-items: center;
-  // justify-content: space-around;
   flex-direction:column;
   width:40%;
   height: 100%;
-  // margin-left: auto;
-  // margin-right: 125px;
-  // position: absolute;
-  // right: 0%;  
-  // top: 50%;
-  // transform: translate(-0%, 10%);
 }
 
 .loginCard {
@@ -71,10 +51,6 @@
   align-items: center;
   justify-content: center;
   flex-direction:column;
-//   padding: 20px;
-//   :global(.ant-input-prefix .anticon) {
-//     color: @text-color-secondary;
-//   }
 }
 
 .loginLogo {
@@ -83,8 +59,6 @@
   justify-content: center;
   flex-direction:column;
   margin: 20px;
-  // font-size: 72px;
-  // color: #0079FE !important;
 }
 
 .loginTitle {
@@ -97,7 +71,6 @@
 .submitButton{
   width: 100%;
   height: 44px;
-  // background: linear-gradient(136deg, #FFBB32 0%, #EAAB2B 100%);
   background-color: #FFBB32;
   border: 0;
   box-shadow: 0px 4px 15px 0px rgba(234, 171, 43, 0.5);
