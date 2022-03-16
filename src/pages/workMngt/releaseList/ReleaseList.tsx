@@ -296,7 +296,7 @@ export default function ReleaseList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={ {  size: 10  } }
+            requestData={ {  size: 10, whether: 1  } }
             exportPath="/tower-science/loftingList"
             searchFormItems={[
                 {
