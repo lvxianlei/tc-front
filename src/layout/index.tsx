@@ -55,7 +55,7 @@ const SiderMenu: React.FC = () => {
                             backgroundColor: ctxConfig.layout.theme,
                             margin: 0
                         }}
-                        icon={<i className={`font_family iconfont icon-${item.icon} ${styles.icon}`} style={{position: "relative", top: 1, marginRight: 6}}></i>}>
+                        icon={<i className={`font_family iconfont icon-${item.icon} ${styles.icon}`} style={{ position: "relative", top: 1, marginRight: 6 }}></i>}>
                         {
                             item.items.map((subItem: any): React.ReactNode => (
                                 hasAuthority(subItem.authority) && <Menu.Item
@@ -72,7 +72,7 @@ const SiderMenu: React.FC = () => {
                         onClick={() => setSelectedDarkMenuItem([item.path] as any)}
                         className={styles.subMenu}
                         key={item.path}
-                        icon={<i className={`iconfont icon-${item.icon}`} style={{position: "relative", top: 1, marginRight: 6}}></i>}>
+                        icon={<i className={`iconfont icon-${item.icon}`} style={{ position: "relative", top: 1, marginRight: 6 }}></i>}>
                         <Link to={item.path}>{item.label}</Link>
                     </Menu.Item>
             ))
@@ -196,7 +196,7 @@ export default function (): JSX.Element {
                 </Row>
             </div>
         </Header>
-        <Layout style={{ height: "100%" }}>
+        <Layout style={{ height: "100%", backgroundColor: "#fff" }}>
             {
                 location.pathname === "/chooseApply" ? <ChooseApplay /> :
                     <>
@@ -208,7 +208,7 @@ export default function (): JSX.Element {
                             <SiderMenu />
                         </Sider>
                         <Layout style={{ backgroundColor: "#fff", height: "100%", overflow: "hidden", position: "relative" }}>
-                            <Content style={{ height: "100%" }}>
+                            <Content style={{ height: "100%", boxSizing: "border-box", padding: "16px" }}>
                                 {
                                     ctxRouter.routers.map((router: any): React.ReactNode => {
                                         return (
