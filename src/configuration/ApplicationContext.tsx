@@ -7,7 +7,6 @@ import { matchPath, RouteComponentProps } from 'react-router';
 
 import routerConfigJson from '../app-router.config.jsonc';
 import { IFilter } from '../filters/IFilter';
-import IMenuItem from '../layout/tc/IMenuItem';
 import IApplicationContext, { IRouterItem } from './IApplicationContext';
 
 
@@ -26,7 +25,7 @@ export default abstract class ApplicationContext {
     /**
      * @description Menu item stack of application context
      */
-    private static menuItemStack: IMenuItem[] = [];
+    private static menuItemStack: any[] = [];
 
     /**
      * @description Statics application context
@@ -56,7 +55,7 @@ export default abstract class ApplicationContext {
      * @param pathname 
      * @returns menu item by path 
      */
-    public static getMenuItemByPath(menuItems: IMenuItem[], pathname: string): IMenuItem | undefined {
+    public static getMenuItemByPath(menuItems: any[], pathname: string): any | undefined {
         this.traverseRootMenuItemByPath(menuItems, pathname);
         return this.menuItemStack.pop(); 
     }
@@ -69,7 +68,7 @@ export default abstract class ApplicationContext {
      * @param path 
      * @returns  
      */
-    private static traverseRootMenuItemByPath(menuItems: IMenuItem[], path: string) {
+    private static traverseRootMenuItemByPath(menuItems: any[], path: string) {
         for (let item of menuItems) {
             this.menuItemStack.push(item);
             if (new RegExp(item.path).test(path)) { // Hint the item

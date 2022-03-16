@@ -16,20 +16,14 @@ const {
 const DotenvWebpack = require("dotenv-webpack");
 const Dotenv = require("dotenv");
 const AntdDayjsWebpackPlugin = require("antd-dayjs-webpack-plugin");
-const AppCtxConfigCompiler = require("./compiler/AppCtxConfigCompiler");
-const { ModifySourcePlugin } = require("modify-source-webpack-plugin");
 const MockWebpackPlugin = require("mock-webpack-plugin");
 const mockConfig = require("./mock/config");
 const { DefinePlugin } = require("webpack");
 const envConfig = Dotenv.config({
   path: path.join(__dirname, "/env", `.env.${process.env.REACT_APP_ENV}`)
 });
-// const HappyPack = require("happypack");
-// const os = require("os");
-// const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
-const WebpackBar = require("webpackbar");
-// const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
+const WebpackBar = require("webpackbar");
 module.exports = {
   webpack: override(
     function (config) {
@@ -37,7 +31,6 @@ module.exports = {
         ({ constructor }) =>
           constructor && constructor.name === "ModuleScopePlugin"
       );
-
       config.resolve.plugins.splice(scopePluginIndex, 1);
       return config;
     },
@@ -80,24 +73,11 @@ module.exports = {
       "@pages": path.resolve(__dirname, "./src/pages")
     }),
     addWebpackModuleRule({ test: /.jsonc$/, use: "jsonc-loader" }),
-    //   addWebpackModuleRule({
-    //     test: /\.js$/,
-    //     include: path.resolve(__dirname, 'src'),
-    //     use: [
-    //         {
-    //             loader: "happypack/loader?id=happyBabel"
-    //         }
-    //     ]
-    // }),
     fixBabelImports("antd", {
       libraryName: "antd",
       libraryDirectory: "es",
       style: true
     }),
-    // fixBabelImports('@ant-design/charts', {
-    //     libraryName: '@ant-design/charts',
-    //     libraryDirectory: 'es'
-    // }),
     addBabelPresets("@babel/preset-react"),
     addBabelPlugin("@babel/plugin-syntax-dynamic-import"),
     addBabelPlugin("@loadable/babel-plugin"),
@@ -126,31 +106,10 @@ module.exports = {
       })
     ),
     addWebpackPlugin(new WebpackBar()),
-    // addWebpackPlugin(new HardSourceWebpackPlugin()),
     addWebpackPlugin(new AntdDayjsWebpackPlugin()),
     addWebpackPlugin(
       new DefinePlugin({
         "process.env.REACT_APP_ENV": envConfig.parsed.REQUEST_API_PATH_PREFIX
-      })
-    ),
-    // addWebpackPlugin(new HappyPack({
-    //   id: "happyBabel",
-    //   loaders: [
-    //     {
-    //       loader: "babel-loader?cacheDirectory=true"
-    //     }
-    //   ],
-    //   threadPool: happyThreadPool,
-    //   verbose: true
-    // })),
-    addWebpackPlugin(
-      new ModifySourcePlugin({
-        rules: [
-          {
-            test: /\/ApplicationContext\.tsx$/,
-            modify: (src, filename) => new AppCtxConfigCompiler().compile(src)
-          }
-        ]
       })
     ),
     process.env.REACT_APP_ENV === "development"
@@ -181,7 +140,7 @@ module.exports = {
       proxy[`/${dirname}`] = envConfig.parsed.REQUEST_API_REAL_HOST_NAME; // mock server url
     });
     return Object.assign(config || {}, {
-      port: 4000,
+      port: 3000,
       proxy: proxy,
       headers: {
         "Access-Control-Allow-Origin": "*",

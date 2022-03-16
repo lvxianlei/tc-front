@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
+import { Button, Input, DatePicker, Select, message, Popconfirm } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import { paymentListHead } from "./payment.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -31,7 +31,7 @@ export default function Payment() {
     return <Page
         path="/tower-market/payApply"
         columns={[
-            ...paymentListHead,
+            ...(paymentListHead as any),
             {
                 title: "操作",
                 dataIndex: "opration",
@@ -43,7 +43,7 @@ export default function Payment() {
                         <Popconfirm
                             title="确定删除此请款申请吗？"
                             disabled={![4, 6].includes(record.applyStatus)}
-                            onConfirm={async() => {
+                            onConfirm={async () => {
                                 await deleteRun(record?.id)
                                 message.success("删除成功...")
                                 history.go(0)
