@@ -52,10 +52,13 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'planNumber'
         },
         {
-            key: 'batchStatusName',
+            key: 'batchStatus',
             title: '下达状态',
             width: 100,
-            dataIndex: 'batchStatusName'
+            dataIndex: 'batchStatus',
+            render:(text:number)=>{
+                return text===1?'待下达':text===2?'部门下达':text===3?'已下达':'-'
+            }
         },
         {
             key: 'updateStatusTime',
@@ -264,8 +267,8 @@ export default function ReleaseList(): React.ReactNode {
                     >   
                         <Button type="link" disabled={record.smallSampleStatus!==4}>删除</Button>
                     </Popconfirm> 
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/detail/${record.id}/${record.smallSampleStatus}`)}}>下达明细</Button>
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/assemblyWelding/${record.id}/${record.smallSampleStatus}`)}}>组焊明细</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/detail/${record.id}/${record.productCategoryId}`)}}>下达明细</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/assemblyWelding/${record.id}`)}}>组焊明细</Button>
 
                 </Space>
             )
@@ -319,24 +322,24 @@ export default function ReleaseList(): React.ReactNode {
                     name: 'productType',
                     label: '产品类型',
                     children:  <Select style={{width:"100px"}} defaultValue={''}>
-                                        {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                                return <Select.Option key={index} value={id}>
-                                                    {name}
-                                                </Select.Option>
-                                            })}
+                                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                        return <Select.Option key={index} value={id}>
+                                            {name}
+                                        </Select.Option>
+                                    })}
                                 </Select>
                 },
                 {
                     name: 'voltageGrade',
                     label: '电压等级',
                     children:  <Select style={{width:"100px"}} defaultValue={''}>
-                                        {voltageGradeOptions &&voltageGradeOptions.map(({ id, name }, index) => {
-                                                    return (
-                                                        <Select.Option key={index} value={id}>
-                                                            {name}
-                                                        </Select.Option>
-                                                    );
-                                                })}
+                                    {voltageGradeOptions &&voltageGradeOptions.map(({ id, name }, index) => {
+                                        return (
+                                            <Select.Option key={index} value={id}>
+                                                {name}
+                                            </Select.Option>
+                                        );
+                                    })}
                                 </Select>
                 },
                 {

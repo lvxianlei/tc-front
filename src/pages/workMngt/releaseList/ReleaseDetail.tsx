@@ -8,7 +8,7 @@ import { materialStandardOptions } from '../../../configuration/DictionaryOption
 export default function ReleaseList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, productCategoryId: string }>()
     const columns = [
         {
             key: 'index',
@@ -166,7 +166,7 @@ export default function ReleaseList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={ { productCategoryId:params.id } }
+            requestData={ { productCategoryId:params.productCategoryId, id:params.id } }
             exportPath="/tower-science/loftingBatch/batchDetail"
             searchFormItems={[
                 {
