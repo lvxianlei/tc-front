@@ -256,7 +256,7 @@ export default function ReleaseList(): React.ReactNode {
             width: 150,
             dataIndex: 'distributionStatus',
             render:(text:number)=>{
-                return text===0?'未配料':'已配料'
+                return text===1?'未配料':text===2?'已配料':'-'
             }
         },
         {
@@ -265,7 +265,7 @@ export default function ReleaseList(): React.ReactNode {
             width: 150,
             dataIndex: 'status',
             render:(text:number)=>{
-                return text===0?'未分配':'已分配'
+                return text===1?'未分配':text===2?'已分配':'-'
             }
         },
         {
@@ -287,10 +287,10 @@ export default function ReleaseList(): React.ReactNode {
                         } }
                         okText="确认"
                         cancelText="取消"
-                        disabled={record.status===1||record.distributionStatus===1}
+                        disabled={record.status===2||record.distributionStatus===2}
                     >   
                         <Button type="link" 
-                            disabled={record.status===1||record.distributionStatus===1}
+                            disabled={record.status===2||record.distributionStatus===2}
                         >删除</Button>
                     </Popconfirm> 
                     <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/detail/${record.id}/${record.productCategoryId}`)}}>下达明细</Button>
@@ -392,7 +392,10 @@ export default function ReleaseList(): React.ReactNode {
             refresh={detailrefresh}
             requestData={ {  size: 10  } }
             exportPath="/tower-science/loftingBatch/batchResult"
-            extraOperation={<span>总件号数：<span>总件号数：</span>总件数：<span>总件号数：</span>总重量（kg）：<span>总件号数：</span>角钢总重量（kg）：<span>总件号数：</span></span>}
+            sourceKey='loftingBatchResultVOS.records'
+            extraOperation={(data: any) => 
+                <Space>总件号数：<span style={{color:'#FF8C00'}}>{data?.totalPieceNumber}</span>总件数：<span style={{color:'#FF8C00'}}>{data?.totalNumber}</span>总重量（kg）：<span style={{color:'#FF8C00'}}>{data?.totalWeight}</span>角钢总重量（kg）：<span style={{color:'#FF8C00'}}>{data?.angleTotalWeight}</span></Space>
+            }
             searchFormItems={[
                 {
                     name: 'fuzzyMsg',
