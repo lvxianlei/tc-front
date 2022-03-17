@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-杆塔配段-配段
 */
 import React from 'react';
-import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, message } from 'antd';
+import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, message, Row, Col } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
@@ -22,9 +22,8 @@ export interface WithSectionModalState {
     readonly visible: boolean;
     readonly detailData?: IDetailData;
     readonly fastVisible: boolean;
+    readonly fastLoading?: boolean;
 }
-
-
 
 class WithSectionModal extends React.Component<IWithSectionModalRouteProps, WithSectionModalState> {
 
@@ -79,21 +78,40 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 RequestUtil.post(path, { ...value }).then(res => {
                     this.props.updateList();
                     this.modalCancel();
-                }).catch(error=>{
+                }).catch(error => {
                     this.getForm()?.setFieldsValue({})
                 });
             })
         }
     }
 
-    public handleModalOk = async () => {
+    // public handleModalOk = async () => {
+    //     const detailData: IProductSegmentList[] = await RequestUtil.get<IProductSegmentList[]>(`/tower-science/productSegment/quickLofting/${this.props.id}/${this.fastForm.current?.getFieldsValue(true).part}`);
+    //     this.setState({
+    //         fastVisible: false,
+    //         detailData: {
+    //             ...this.getForm()?.getFieldsValue(true),
+    //             loftingProductSegmentList: [...detailData]
+    //         }
+    //     })
+    //     this.getForm()?.setFieldsValue({
+    //         ...this.getForm()?.getFieldsValue(true),
+    //         productSegmentListDTOList: [...detailData]
+    //     })
+    // }
+
+    public fastWithSectoin = async () => {
+        this.setState({
+            fastLoading: true
+        })
         const detailData: IProductSegmentList[] = await RequestUtil.get<IProductSegmentList[]>(`/tower-science/productSegment/quickLofting/${this.props.id}/${this.fastForm.current?.getFieldsValue(true).part}`);
         this.setState({
             fastVisible: false,
             detailData: {
                 ...this.getForm()?.getFieldsValue(true),
                 loftingProductSegmentList: [...detailData]
-            }
+            },
+            fastLoading: false
         })
         this.getForm()?.setFieldsValue({
             ...this.getForm()?.getFieldsValue(true),
@@ -109,7 +127,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
         const detailData: IDetailData | undefined = this.state.detailData;
         return <>
             <Button type="link" key={this.props.id} onClick={() => this.modalShow()} ghost>配段</Button>
-            <Modal
+            {/* <Modal
                 destroyOnClose
                 visible={this.state.fastVisible}
                 width="30%"
@@ -133,7 +151,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                         </Descriptions.Item>
                     </Descriptions>
                 </Form>
-            </Modal>
+            </Modal> */}
             <Modal
                 visible={this.state.visible}
                 width="60%"
@@ -145,15 +163,30 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 </Space>}
                 onCancel={() => this.modalCancel()}
             >
+                <Form ref={this.fastForm}>
+                    <Row>
+                        <Col span={14}>
+                            <Form.Item name="part" label="快速配段" rules={[{
+                                pattern: /^[a-zA-Z0-9-,*()]*$/,
+                                message: '仅可输入英文字母/数字/特殊字符',
+                            }]}>
+                                <Input style={{ width: '100%' }} />
+                            </Form.Item>
+                        </Col>
+                        <Col offset={2} span={4}>
+                            <Button type="primary" loading={this.state.fastLoading} onClick={this.fastWithSectoin} ghost>确定</Button>
+                        </Col>
+                    </Row>
+                </Form>
                 <DetailContent key={this.props.id}>
                     <Form ref={this.form} className={styles.descripForm}>
                         <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>
                             <span>塔腿配段信息</span>
-                            <Button className={styles.fastBtn} type="primary" onClick={() => {
+                            {/* <Button className={styles.fastBtn} type="primary" onClick={() => {
                                 this.setState({
                                     fastVisible: true
                                 })
-                            }} ghost>快速配段</Button>
+                            }} ghost>快速配段</Button> */}
                         </p>
                         <Descriptions title="" bordered size="small" colon={false} column={4}>
                             <Descriptions.Item key={1} label="A">
