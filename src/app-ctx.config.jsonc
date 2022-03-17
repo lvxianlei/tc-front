@@ -391,46 +391,32 @@
                 "items": [
                     {
                         "label": "放样任务",
-                        "icon": "RD_fangyangrenwu",
-                        "path": "/setOutTask",
-                        "appName": "RD",
-                        "authority": "rd_lofting_task",
-                        "items": [
-                            {
-                                "label": "放样任务",
-                                "path": "/setOutTask/setOutTaskList",
-                                "authority": "rd_lofting_task"
-                            }
-                        ]
-                    },
+                        "path": "/setOutTask/setOutTaskList",
+                        "authority": "rd_lofting_task"
+                    }
+                ]
+            },
+            {
+                "label": "提料任务",
+                "icon": "RD_fangyangrenwu",
+                "path": "/materialTask",
+                "appName": "RD",
+                "authority": "rd_lofting_task",
+                "items": [
                     {
                         "label": "提料任务",
-                        "icon": "RD_fangyangrenwu",
-                        "path": "/materialTask",
-                        "appName": "RD",
-                        "authority": "rd_lofting_task",
-                        "items": [
-                            {
-                                "label": "提料任务",
-                                "path": "/materialTask/materialTaskList",
-                                "authority": "rd_lofting_task"
-                            }
-                        ]
-                    },
-                    {
-                        "label": "采购任务",
-                        "icon": "gongying-caigourenwu_caigourenwu",
-                        "path": "/buyingTask",
-                        "appName": "SW",
-                        "authority": "procurement_task",
-                        "items": [
-                            {
-                                "label": "原材料",
-                                "path": "/buyingTask/index",
-                                "authority": "procurement_task_raw_material"
-                            }
-                        ]
-                    },
+                        "path": "/materialTask/materialTaskList",
+                        "authority": "rd_lofting_task"
+                    }
+                ]
+            },
+            {
+                "label": "采购任务",
+                "icon": "gongying-caigourenwu_caigourenwu",
+                "path": "/buyingTask",
+                "appName": "SW",
+                "authority": "procurement_task",
+                "items": [
                     {
                         "label": "工作管理",
                         "icon": "RD_gongzuoguanli-gongzuobaogao",
@@ -491,53 +477,9 @@
                         ]
                     },
                     {
-                        "label": "工作管理",
-                        "icon": "gongying-gongzuoguanli_gongzuoguanli",
-                        "path": "/ingredients",
-                        "appName": "SW",
-                        "authority": "work_management",
-                        "items": [
-                            {
-                                "label": "工程报价列表",
-                                "path": "/ingredients/enquiry",
-                                "authority": "work_management_inquiry_list"
-                            },
-                            {
-                                "label": "采购配料",
-                                "path": "/ingredients/buyBurdening",
-                                "authority": "work_management_purchase_ingredients"
-                            },
-                            {
-                                "label": "采购列表",
-                                "path": "/ingredients/purchaseList",
-                                "authority": "work_management_purchase_list"
-                            },
-                            {
-                                "label": "计划列表",
-                                "path": "/ingredients/planList",
-                                "authority": "work_management_plan_list"
-                            },
-                            {
-                                "label": "生产配料",
-                                "path": "/ingredients/production",
-                                "authority": "work_management_production_ingredients"
-                            },
-                            {
-                                "label": "收货列表",
-                                "path": "/ingredients/receiving",
-                                "authority": "work_management_receiving_list"
-                            },
-                            {
-                                "label": "差异列表",
-                                "path": "/ingredients/differentList",
-                                "authority": "work_management_difference_list"
-                            },
-                            {
-                                "label": "缺料列表",
-                                "path": "/ingredients/shortageList",
-                                "authority": "work_management_shortage_list"
-                            }
-                        ]
+                        "label": "评估列表",
+                        "path": "/workMngt/evaluationList",
+                        "authority": "rd_assessment_task_list"
                     },
                     {
                         "label": "确认列表",
