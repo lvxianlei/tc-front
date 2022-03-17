@@ -34,16 +34,16 @@ export default function ReleaseList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'steelProductShape',
+            key: 'name',
             title: '塔型',
             width: 100,
-            dataIndex: 'steelProductShape'
+            dataIndex: 'name'
         },
         {
-            key: 'priorityName',
+            key: 'steelProductShape',
             title: '钢印号',
             width: 100,
-            dataIndex: 'priorityName'
+            dataIndex: 'steelProductShape'
         },
         {
             key: 'planNumber',
@@ -57,7 +57,7 @@ export default function ReleaseList(): React.ReactNode {
             width: 100,
             dataIndex: 'batchStatus',
             render:(text:number)=>{
-                return text===1?'待下达':text===2?'部门下达':text===3?'已下达':'-'
+                return text===1?'待下达':text===2?'部分下达':text===3?'已下达':'-'
             }
         },
         {
@@ -67,10 +67,13 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'updateStatusTime'
         },
         {
-            key: 'trialAssembleName',
+            key: 'trialAssemble',
             title: '试装',
             width: 100,
-            dataIndex: 'trialAssembleName'
+            dataIndex: 'trialAssemble',
+            render:(text:string)=>{
+                return text==='1'?'是':text==='0'?'否':'-'
+            }
         },
         {
             key: 'voltageGradeName',
@@ -85,10 +88,10 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'materialStandardName'
         },
         { 
-            key: 'productTypeName',
+            key: 'productType',
             title: '产品类型',
             width: 100,
-            dataIndex: 'productTypeName'
+            dataIndex: 'productType'
         },
         {
             key: 'num',
@@ -101,6 +104,12 @@ export default function ReleaseList(): React.ReactNode {
             title: '总杆塔号',
             width: 200,
             dataIndex: 'allProductNumber'
+        },
+        {
+            key: 'totalPieceNumber',
+            title: '总件号数',
+            width: 200,
+            dataIndex: 'totalPieceNumber'
         },
         {
             key: 'totalNumber',
@@ -182,7 +191,10 @@ export default function ReleaseList(): React.ReactNode {
             key: 'trialAssemble',
             title: '试装类型',
             width: 100,
-            dataIndex: 'trialAssemble'
+            dataIndex: 'trialAssemble',
+            render:(text:string)=>{
+                return text==='1'?'是':text==='0'?'否':'-'
+            }
         },
         { 
             key: 'trialAssembleSegment',
@@ -239,10 +251,22 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'galvanizeDemand'
         },
         {
-            key: 'statusName',
+            key: 'distributionStatus',
             title: '配料状态',
-            width: 200,
-            dataIndex: 'statusName'
+            width: 150,
+            dataIndex: 'distributionStatus',
+            render:(text:number)=>{
+                return text===0?'未配料':'已配料'
+            }
+        },
+        {
+            key: 'status',
+            title: '分配状态',
+            width: 150,
+            dataIndex: 'status',
+            render:(text:number)=>{
+                return text===0?'未分配':'已分配'
+            }
         },
         {
             key: 'operation',
@@ -258,17 +282,19 @@ export default function ReleaseList(): React.ReactNode {
                             await RequestUtil.delete(`/tower-science/loftingBatch/${record.id}`).then(()=>{
                                 message.success('删除成功！')
                             }).then(()=>{
-                                setRefresh(!refresh)
+                                setDetailRefresh(!detailrefresh)
                             })
                         } }
                         okText="确认"
                         cancelText="取消"
-                        disabled={record.smallSampleStatus!==4}
+                        disabled={record.status===1||record.distributionStatus===1}
                     >   
-                        <Button type="link" disabled={record.smallSampleStatus!==4}>删除</Button>
+                        <Button type="link" 
+                            disabled={record.status===1||record.distributionStatus===1}
+                        >删除</Button>
                     </Popconfirm> 
                     <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/detail/${record.id}/${record.productCategoryId}`)}}>下达明细</Button>
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/assemblyWelding/${record.id}`)}}>组焊明细</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/assemblyWelding/${record.productCategoryId}`)}}>组焊明细</Button>
 
                 </Space>
             )
@@ -282,12 +308,6 @@ export default function ReleaseList(): React.ReactNode {
             value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.statusUpdateTime
         }
-        if (value.planTime) {
-            const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.smallSampleDeliverTimeStart = formatDate[0]+ ' 00:00:00';
-            value.smallSampleDeliverTimeEnd = formatDate[1]+ ' 23:59:59';
-            delete value.planTime
-        }
         setFilterValue(value)
         return value
     }
@@ -300,7 +320,7 @@ export default function ReleaseList(): React.ReactNode {
             filterValue={filterValue}
             refresh={refresh}
             requestData={ {  size: 10, whether: 1  } }
-            exportPath="/tower-science/loftingList"
+            // exportPath="/tower-science/loftingList"
             searchFormItems={[
                 {
                     name: 'statusUpdateTime',
@@ -322,6 +342,7 @@ export default function ReleaseList(): React.ReactNode {
                     name: 'productType',
                     label: '产品类型',
                     children:  <Select style={{width:"100px"}} defaultValue={''}>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
                                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                         return <Select.Option key={index} value={id}>
                                             {name}
@@ -333,6 +354,7 @@ export default function ReleaseList(): React.ReactNode {
                     name: 'voltageGrade',
                     label: '电压等级',
                     children:  <Select style={{width:"100px"}} defaultValue={''}>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
                                     {voltageGradeOptions &&voltageGradeOptions.map(({ id, name }, index) => {
                                         return (
                                             <Select.Option key={index} value={id}>
@@ -346,6 +368,7 @@ export default function ReleaseList(): React.ReactNode {
                     name: 'materialStandard',
                     label:'材料标准',
                     children:   <Select style={{width:"100px"}} defaultValue={''}>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
                                    { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
                                         <Select.Option value={''} key ={''}>全部</Select.Option>
                                         return <Select.Option key={ index } value={ id }>
@@ -369,6 +392,7 @@ export default function ReleaseList(): React.ReactNode {
             refresh={detailrefresh}
             requestData={ {  size: 10  } }
             exportPath="/tower-science/loftingBatch/batchResult"
+            extraOperation={<span>总件号数：<span>总件号数：</span>总件数：<span>总件号数：</span>总重量（kg）：<span>总件号数：</span>角钢总重量（kg）：<span>总件号数：</span></span>}
             searchFormItems={[
                 {
                     name: 'fuzzyMsg',

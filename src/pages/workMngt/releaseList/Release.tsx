@@ -20,24 +20,24 @@ export default function Release(): React.ReactNode {
     const [ formRef ] = Form.useForm();
     const params = useParams<{ id: string }>()
     const [check, setCheck] = useState<boolean>(true);
+    const [disabled, setDisabled] = useState<boolean>(true);
     const [visible, setVisible] = useState<boolean>(false);
     const [releaseData, setReleaseData] = useState<any|undefined>({});
     const rowChange = (index: number) => {
-        // rowChangeList.push(index);
-        // setRowChangeList([...rowChangeList]);  
         form.setFieldsValue({
             trialAssembleSegment:""
         })
     }
-    const [ rowChangeList, setRowChangeList ] = useState<number[]>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data:any = await RequestUtil.get(`/tower-science/loftingBatch/${params.id}`);
+        const data:any = await RequestUtil.get(`/tower-science/loftingBatch/${params.id}`);
         form.setFieldsValue({
-            // data:releaseData.loftingBatchProductVOList,
-            loftingBatchProductDTOList:[{id:1,segmentName:1,segmentNum:10,issuedNum:null},{id:2,segmentName:2,segmentNum:5,issuedNum:1},{id:3,segmentName:3,segmentNum:5,issuedNum:5}],
+            ...data,
+            loftingBatchProductDTOList:data.loftingBatchProductVOList,
+            // loftingBatchProductDTOList:[{id:1,segmentName:1,segmentNum:10,issuedNum:null},{id:2,segmentName:2,segmentNum:5,issuedNum:1},{id:3,segmentName:3,segmentNum:5,issuedNum:5}],
         })
-        setTableDataSource([{id:1,segmentName:1,segmentNum:10,issuedNum:null},{id:2,segmentName:2,segmentNum:5,issuedNum:1},{id:3,segmentName:3,segmentNum:5,issuedNum:5}])
-        // setReleaseData(data)
+        setDisabled(data?.trialAssemble===1)
+        setTableDataSource(data.loftingBatchProductVOList)
+        setReleaseData(data)
     }), {})
     const SelectChange = (selectedRowKeys: React.Key[]): void => {
         setSelectedKeys(selectedRowKeys);
@@ -57,10 +57,20 @@ export default function Release(): React.ReactNode {
                 onOk={async ()=>{
                     await formRef.validateFields();
                     const value = formRef.getFieldsValue(true).trialAssembleSegments
+                    const warnValue = value.filter((item:any)=>{
+                        return  item.trialAssembleNum>0
+                    })
+                    if(!(warnValue.length>0)){
+                        return message.error(`至少存在一条非0的试装数量数据！`)
+                    }
                     form.setFieldsValue({
-                        trialAssembleSegment: value.map((item:any)=>{
+                        trialAssembleSegment: warnValue.map((item:any)=>{
                             return  item.segmentName+'*'+item.trialAssembleNum
                         }).join(',')
+                    })
+                    setATableDataSource(value)
+                    formRef.setFieldsValue({
+                        trialAssembleSegments: value
                     })
                     setVisible(false)
                 }}
@@ -83,11 +93,24 @@ export default function Release(): React.ReactNode {
                                 title: "试装数量",
                                 dataIndex: "trialAssembleNum",
                                 width: 100,
-                                render:(number: number, render:any, index:number)=>{
-                                    return  <Form.Item name={['trialAssembleSegments',index,'trialAssembleNum']} initialValue={number} rules={[{
-                                        required:true,
-                                        message:'请输入试装数量'
-                                    }]}>
+                                render:(number: number, record:any, index:number)=>{
+                                    return  <Form.Item name={['trialAssembleSegments',index,'trialAssembleNum']} initialValue={number} rules={[
+                                    //     {
+                                    //     required:true,
+                                    //     message:'请输入试装数量'
+                                    // },
+                                    {
+                                            validator: (rule, value, callback) => {
+                                              let maxPrice = record.batchNum; //拿到最大值
+                                              if (value > maxPrice) {
+                                                callback(`不能大于下达数量${maxPrice}`);
+                                              } 
+                                              else{
+                                                callback();
+                                              }
+                                            },
+                                          },
+                                    ]}>
                                         <InputNumber precision={0} min={0} style={{width:'100%'}}/>
                                     </Form.Item>
                                 }
@@ -103,7 +126,40 @@ export default function Release(): React.ReactNode {
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                     <Button type='primary' onClick={async () => {
                         await form.validateFields()
-                        console.log(form.getFieldsValue(true))
+                        const value = form.getFieldsValue(true)
+                        console.log(value)
+                        if(value.trialAssemble===1){
+                            if(!value.trialAssembleSegment) 
+                                return message.error('未填写试装段，不可保存！')
+                        }
+                        const trialValue = formRef.getFieldsValue(true)?.trialAssembleSegments?formRef.getFieldsValue(true)?.trialAssembleSegments.map((item:any)=>{
+                            return {
+                                id: item.id,
+                                productCategoryId:params.id,
+                                segmentId:item.segmentId,
+                                segmentName:item.segmentName,
+                                trialAssembleNum:item.trialAssembleNum,
+                            }
+                        }):[]
+                        console.log(trialValue)
+                        const submitValue ={
+                            galvanizeDemand: value.galvanizeDemand,
+                            machiningDemand: value.machiningDemand,
+                            packDemand: value.packDemand,
+                            planNumber: releaseData?.productCategoryVOList[0].voltageLevel,
+                            productCategoryId: params.id,
+                            trialAssemble: value.trialAssemble,
+                            trialAssembleDemand: value.trialAssembleDemand,
+                            voltageLevel: releaseData?.productCategoryVOList[0].voltageLevel,
+                            weldingDemand: value.weldingDemand,
+                            trialAssembleSegments: trialValue,
+                            loftingBatchProductDTOList: value.loftingBatchProductDTOList
+                        }
+                        console.log(submitValue)
+                        RequestUtil.post(`/tower-science/loftingBatch/save`,submitValue).then(()=>{
+                            message.success('保存成功');
+                            history.push(`/workMngt/releaseList`)
+                        })
                     }}>保存</Button>
                 </Space>
             ]}>
@@ -111,7 +167,7 @@ export default function Release(): React.ReactNode {
                     <CommonTable columns={[
                             {
                                 title: "塔形",
-                                dataIndex: "productCategory",
+                                dataIndex: "name",
                                 width: 50,
                             },
                             {
@@ -141,7 +197,7 @@ export default function Release(): React.ReactNode {
                             },
                             {
                                 title: "产品类型",
-                                dataIndex: "productTypeName",
+                                dataIndex: "productType",
                                 width: 150
                             }
                         ]}
@@ -163,7 +219,7 @@ export default function Release(): React.ReactNode {
                             }
                         ]}
                         pagination={false} 
-                        dataSource={[{ ...releaseData?.loftingBatchDetailVOList}]}
+                        dataSource={ releaseData?.loftingBatchDetailVOList}
                     />
                    
                    <Form form={ form } labelCol={{span:4}}>
@@ -208,8 +264,13 @@ export default function Release(): React.ReactNode {
                                     }]}>
                                    <Select style={{width:"100%"}} onChange={(value)=>{
                                         form.setFieldsValue({
-                                            trialAssembleSegment:''
+                                            trialAssembleSegment:'',
+                                            trialAssembleDemand:''
                                         })
+                                        formRef.setFieldsValue({
+                                            trialAssembleSegments:[]
+                                        })
+                                        setDisabled(value===1)
                                    }}>
                                         <Select.Option value={1} key ={1}>是</Select.Option>
                                         <Select.Option value={0} key={0}>否</Select.Option>
@@ -220,21 +281,19 @@ export default function Release(): React.ReactNode {
                                 <Form.Item name="trialAssembleSegment" label="试装段">
                                     <Input
                                         disabled
-                                        addonAfter={<PlusOutlined onClick={() => {
+                                        addonAfter={<PlusOutlined onClick={async () => {
+                                            await form.validateFields()
                                             form.getFieldsValue(true).trialAssemble===1 && setVisible(true);
-                                            const value = form.getFieldsValue(true)?.loftingBatchProductDTOList.filter((item:any)=>{
-                                                return item.releaseNum&&item.releaseNum!==null
-                                            });
-                                            console.log(value)
-                                            setATableDataSource(value)
-                                            formRef.setFieldsValue({
-                                                trialAssembleSegments: value
-                                            })
-                                            // rowChangeList.push({
-                                            //     ...tableDataSource[index],
-                                            //     ...value[index]
-                                            // });
-                                            // setRowChangeList([...rowChangeList]); 
+                                            if(!form.getFieldsValue(true).trialAssembleSegment){
+                                                const value = form.getFieldsValue(true)?.loftingBatchProductDTOList.filter((item:any,index:number)=>{
+                                                    return item.batchNum&&item.batchNum!==null&&item.batchNum!=='0'&&item.batchNum!==0
+                                                });
+                                                console.log(value)
+                                                setATableDataSource(value)
+                                                formRef.setFieldsValue({
+                                                    trialAssembleSegments: value
+                                                })
+                                            }
                                         } }/>} 
                                     />
                                 </Form.Item>
@@ -243,28 +302,39 @@ export default function Release(): React.ReactNode {
                             <Row>
                                 <Col span={12}>
                                     <Form.Item name="trialAssembleDemand" label="试装说明">
-                                        <Input.TextArea placeholder="请输入"  maxLength={ 200 } showCount rows={1} />
+                                        <Input.TextArea placeholder="请输入"  maxLength={ 200 } showCount rows={1} disabled={!disabled}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Form>
                 <DetailTitle title='批次信息' operation={[ <Checkbox checked={check} onChange={(e: { target: { checked: any; }; })=>{
                     if(e.target.checked){
-                        const value  = releaseData?.loftingBatchProductVOList.map((item:any)=>{
-                            return item.flag===0
+                        const value  = releaseData?.loftingBatchProductVOList.filter((item:any)=>{
+                            return item.status===0||item.status==='0'
                         })
                         form.setFieldsValue({
                             loftingBatchProductDTOList:value,
+                            trialAssembleSegment:''
+                        })
+                        formRef.setFieldsValue({
+                            trialAssembleSegments:[],
                         })
                         setTableDataSource(value)
+                        setSelectedKeys([])
+                        
                     }else{
-                        const value  = releaseData?.loftingBatchProductVOList.map((item:any)=>{
-                            return item.flag===1
+                        const value  = releaseData?.loftingBatchProductVOList.filter((item:any)=>{
+                            return item.status===1||item.status==='1'
                         })
                         form.setFieldsValue({
                             loftingBatchProductDTOList:value,
+                            trialAssembleSegment:''
+                        })
+                        formRef.setFieldsValue({
+                            trialAssembleSegments:[],
                         })
                         setTableDataSource(value)
+                        setSelectedKeys([])
                     }
                     setCheck(e.target.checked)
                     
@@ -273,7 +343,7 @@ export default function Release(): React.ReactNode {
                         if(item.segmentNum-item.issuedNum!==0){
                             return {
                                 ...item,
-                                releaseNum:item.issuedNum?item.segmentNum-item.issuedNum:item.segmentNum
+                                batchNum:item.issuedNum?item.segmentNum-item.issuedNum:item.segmentNum
                             }
                         }else{
                             return {
@@ -284,6 +354,7 @@ export default function Release(): React.ReactNode {
                     })
                     form.setFieldsValue({
                         loftingBatchProductDTOList:value,
+                        trialAssembleSegments: ''
                     })
                     setTableDataSource(value)
                 }} disabled={!(selectedKeys.length>0)}>输入全部</Button>]}/>
@@ -317,10 +388,22 @@ export default function Release(): React.ReactNode {
                                 },
                                 {
                                     title: "下达数量",
-                                    dataIndex: "releaseNum",
+                                    dataIndex: "batchNum",
                                     width: 150,
                                     render:(number: number, record:any, index:number)=>{
-                                        return  <Form.Item name={['loftingBatchProductDTOList',index,'releaseNum']} initialValue={number}>
+                                        return  <Form.Item name={['loftingBatchProductDTOList',index,'batchNum']} initialValue={number||0} rules={[
+                                            {
+                                                validator: (rule, value, callback) => {
+                                                  let maxPrice = record.segmentNum-record.issuedNum; //拿到最大值
+                                                  if (value > maxPrice) {
+                                                    callback(`不能大于${maxPrice}`);
+                                                  } 
+                                                  else{
+                                                    callback();
+                                                  }
+                                                },
+                                              },
+                                        ]}>
                                             <InputNumber precision={0} min={1} style={{width:'100%'}} onChange={()=>rowChange(index)} disabled={record.segmentNum===record.issuedNum}/>
                                         </Form.Item>
                                     }

@@ -24,6 +24,8 @@ export default function ReleaseList(): React.ReactNode {
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/welding/getDetailedById`, { ...pages, weldingId:params.id, fuzzyMsg: data?.fuzzyMsg })
+            const dataSource:any = await RequestUtil.get(`/tower-science/welding/getStructureById`,{segmentId: result?.records[0]?.id});
+            setSegmentDataSource([...dataSource]);
             resole(result?.records)
         } catch (error) {
             reject(error)
@@ -161,6 +163,7 @@ export default function ReleaseList(): React.ReactNode {
               </Form.Item>
             </Form>
         <Button style={{margin:'0px 20px 20px 20px'}} type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
+        <Button style={{margin:'0px 20px 0px 0px'}}  onClick={() => history.goBack()} >返回</Button>
         <div style={{display:'flex',width:'100%'}} >
             <div style={{width:'40%',padding:'0px 20px 20px 20px'}}>
                 {isExport ? <ExportList

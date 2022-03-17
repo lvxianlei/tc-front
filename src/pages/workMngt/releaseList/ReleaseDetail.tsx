@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Input,  Select } from 'antd';
-import { useParams } from 'react-router-dom';
+import { Button, Input,  Select } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
@@ -9,6 +9,7 @@ export default function ReleaseList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const params = useParams<{ id: string, productCategoryId: string }>()
+    const history = useHistory();
     const columns = [
         {
             key: 'index',
@@ -168,6 +169,7 @@ export default function ReleaseList(): React.ReactNode {
             refresh={refresh}
             requestData={ { productCategoryId:params.productCategoryId, id:params.id } }
             exportPath="/tower-science/loftingBatch/batchDetail"
+            extraOperation={<Button style={{margin:'0px 20px 0px 0px'}}  onClick={() => history.goBack()} >返回</Button>}
             searchFormItems={[
                 {
                     name: 'materialName',
