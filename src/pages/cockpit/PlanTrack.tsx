@@ -144,12 +144,12 @@ export default function PlanTrack(): React.ReactNode {
             {
                 name: 'materialStatus',
                 label: '塔型提料状态',
-                children: <Select style={{ width: '100px' }} defaultValue={''}>
-                    <Select.Option value={''} key={''}>全部</Select.Option>
+                children:   <Select style={{width:'100px'}} defaultValue={''}>
+                    <Select.Option value={''} key ={''}>全部</Select.Option>
                     <Select.Option value={1} key={1}>待指派</Select.Option>
                     <Select.Option value={2} key={2}>提料中</Select.Option>
-                    <Select.Option value={3} key={3}>配段中</Select.Option>
-                    <Select.Option value={4} key={4}>已完成</Select.Option>
+                    {/* <Select.Option value={3} key={3}>配段中</Select.Option> */}
+                    <Select.Option value={3} key={3}>已完成</Select.Option>
                 </Select>
             },
             {
