@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-塔型信息
 */
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form, TreeSelect, Modal, Table } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -18,6 +18,8 @@ import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 import { useForm } from 'antd/es/form/Form';
+import TryAssemble from './TryAssemble';
+import { TryAssembleProps } from './ISetOut';
 
 interface ISectionData {
 
@@ -36,9 +38,12 @@ export default function TowerInformation(): React.ReactNode {
     const [form] = useForm();
     const [recordStatus, setRecordStatus] = useState();
     const [loading1, setLoading1] = useState(false);
+    const editRef = useRef<TryAssembleProps>();
+    const [tryAssembleVisible, setTryAssembleVisiblee] = useState(false);
+    const [tryAssemble, setTryAssemble] = useState<[]>([]);
 
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        const data = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         resole(data);
     }), {})
     const departmentData: any = data || [];
@@ -49,6 +54,8 @@ export default function TowerInformation(): React.ReactNode {
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
@@ -56,15 +63,15 @@ export default function TowerInformation(): React.ReactNode {
 
     const renderTreeNodes = (data: any) => data.map((item: any) => {
         if (item.children) {
-            return (<TreeNode key={item.id} title={item.title} value={item.id} className={styles.node} >
+            return (<TreeNode key={item.id} title={item.name} value={item.id} className={styles.node} >
                 {renderTreeNodes(item.children)}
             </TreeNode>);
         }
-        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+        return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
     });
 
     const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         switch (title) {
             case "loftingUserDept":
                 return setLoftingUser(userData.records);
@@ -266,7 +273,44 @@ export default function TowerInformation(): React.ReactNode {
         })
     }
 
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('提交成功');
+            setTryAssembleVisiblee(false);
+            setRefresh(!refresh);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
     return <>
+        <Modal
+            destroyOnClose
+            visible={tryAssembleVisible}
+            width="40%"
+            title="试组装信息"
+            onOk={handleModalOk}
+            className={styles.tryAssemble}
+            onCancel={() => {
+                editRef.current?.resetFields()
+                setTryAssembleVisiblee(false);
+                setRefresh(!refresh);
+            }}>
+            <TryAssemble id={params.id} type="edit" deatil={tryAssemble} ref={editRef} />
+        </Modal>
+        <Modal title="段模式" visible={visible} onCancel={() => setVisible(false)} footer={<Space direction="horizontal" size="small" >
+            <Button onClick={() => setVisible(false)}>关闭</Button>
+            {
+                recordStatus === 3 ?
+                    null : <Button type="primary" onClick={saveSection} ghost>保存</Button>
+            }
+        </Space>}>
+            <Form form={form}>
+                <Table columns={sectionColumns} pagination={false} dataSource={sectionData} />
+            </Form>
+        </Modal>
         <Page
             path={`/tower-science/productSegment`}
             columns={columns}
@@ -275,6 +319,15 @@ export default function TowerInformation(): React.ReactNode {
             exportPath={`/tower-science/productSegment`}
             requestData={{ productCategoryId: params.id }}
             extraOperation={<Space direction="horizontal" size="small">
+                <Button type="primary" onClick={async () => {
+                    const result: [] = await RequestUtil.get(`/tower-science/productSegmentAssemble/${params.id}`);
+                    if (result.length > 0) {
+                        setTryAssemble(result)
+                        setTryAssembleVisiblee(true);
+                    } else {
+                        message.warning('不存在试组装段信息')
+                    }
+                }} disabled={!(location.state?.status < 3)} ghost>试组装信息</Button>
                 <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList`, state: { status: location.state?.status } }}><Button type="primary" ghost>模型</Button></Link>
                 <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList`, state: { status: location.state?.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                 <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram`, state: { status: location.state?.status } }}><Button type="primary" ghost>NC程序</Button></Link>
@@ -296,7 +349,7 @@ export default function TowerInformation(): React.ReactNode {
                                 cancelText="取消"
                                 disabled={!(location.state?.status < 3)}
                             >
-                                <Button type="primary" loading={ loading1 } disabled={!(location.state?.status < 3)} ghost>提交</Button>
+                                <Button type="primary" loading={loading1} disabled={!(location.state?.status < 3)} ghost>提交</Button>
                             </Popconfirm>
                             {
                                 location.state?.status < 3 ?
@@ -339,7 +392,7 @@ export default function TowerInformation(): React.ReactNode {
                             <Form.Item name="personnel">
                                 <Select placeholder="请选择" style={{ width: "150px" }}>
                                     {loftingUser && loftingUser.map((item: any) => {
-                                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                     })}
                                 </Select>
                             </Form.Item>
@@ -381,16 +434,5 @@ export default function TowerInformation(): React.ReactNode {
                 pagination: false
             }}
         />
-        <Modal title="段模式" visible={visible} onCancel={() => setVisible(false)} footer={<Space direction="horizontal" size="small" >
-            <Button onClick={() => setVisible(false)}>关闭</Button>
-            {
-                recordStatus === 3 ?
-                    null : <Button type="primary" onClick={saveSection} ghost>保存</Button>
-            }
-        </Space>}>
-            <Form form={form}>
-                <Table columns={sectionColumns} pagination={false} dataSource={sectionData} />
-            </Form>
-        </Modal>
     </>
 }

@@ -101,11 +101,12 @@ const towerColumns = [
         key: 'basicsPartNum' 
     },
     { 
-        title: '长度', 
+        title: '长度（mm）', 
         dataIndex: 'length', 
         key: 'length' 
     },
-    // { title: '宽度', dataIndex: 'width', key: 'width' },
+    { title: '宽度（mm）', dataIndex: 'width', key: 'width' },
+    { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness' },
     { 
         title: '理算重量（kg）', 
         dataIndex: 'basicsTheoryWeight', 
@@ -209,6 +210,11 @@ const setOutColumns = [
         title: '备注', 
         dataIndex: 'description', 
         key: 'description' 
+    },
+    { 
+        title: '特殊件号', 
+        dataIndex: 'specialCode', 
+        key: 'specialCode' 
     },
     { 
         title: '电焊', 
@@ -327,6 +333,11 @@ const boltColumns = [
         ) 
     },
     { 
+        title: '裕度', 
+        dataIndex: 'wealth', 
+        key: 'wealth' 
+    },
+    { 
         title: '合计', 
         dataIndex: 'total', 
         key: 'total',
@@ -412,7 +423,29 @@ export default function OtherDetail(): React.ReactNode {
                     </Form.Item>
                 </Form>
             </Modal>
-            <DetailContent operation={params.status==='1'&&AuthUtil.getUserId()===location.state.recipient?[
+            <DetailContent operation={params.status==='1'&&AuthUtil.getUserId()===location.state.recipient && AuthUtil.getUserId()===location.state.createUser?[
+                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
+                    await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
+                        message.success('修改成功！')
+                    }).then(()=>{
+                        history.goBack()
+                    })
+                }}>确认修改</Button>,
+                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => {
+                    setVisible(true);
+                }}>拒绝修改</Button>,
+                // <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => {
+                //     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}`)
+                // }}>跳转页面</Button>,
+                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
+                    await RequestUtil.delete(`/tower-science/issue?id=${params.id}`).then(()=>{
+                        message.success('删除成功！')
+                    }).then(()=>{
+                        history.goBack()
+                    })
+                }}>删除</Button>,
+                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+            ]:params.status==='1'&&AuthUtil.getUserId()===location.state.recipient ?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
                         message.success('修改成功！')

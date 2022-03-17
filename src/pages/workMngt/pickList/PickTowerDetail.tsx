@@ -51,6 +51,16 @@ const towerColumns = [
         key: 'length' 
     },
     { 
+        title: '宽度（mm）', 
+        dataIndex: 'width', 
+        key: 'width', 
+    },
+    { 
+        title: '厚度（mm）', 
+        dataIndex: 'thickness', 
+        key: 'thickness', 
+    },
+    { 
         title: '单段件数', 
         dataIndex: 'basicsPartNum', 
         key: 'basicsPartNum' 
@@ -98,7 +108,7 @@ export default function PickTowerDetail(): React.ReactNode {
             <DetailContent operation={[
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
-                <Button type='primary' onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
+                <Button type='primary' onClick={()=>{setIsExportStoreList(true)}} style={{marginBottom:'12px'}}>导出</Button>
                 {isExport?<ExportList
                     history={history}
                     location={location}

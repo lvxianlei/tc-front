@@ -1,96 +1,61 @@
-import React, { useState } from 'react'
-import { Space, DatePicker, Button, Form, Modal, Row, Col, Select, message, InputNumber, TreeSelect } from 'antd'
+import React, { useRef, useState } from 'react'
+import { Space, DatePicker, Button, Form, Modal, Select, message } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
-import RequestUtil from '../../../utils/RequestUtil';
-import AuthUtil from '../../../utils/AuthUtil';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import styles from './pick.module.less';
 import useRequest from '@ahooksjs/use-request';
+import WithSection, { EditRefProps } from './WithSection';
+import AuthUtil from '../../../utils/AuthUtil';
 export interface IDetail {
     productCategory?: string;
     productCategoryName?: string;
     productId?: string;
     productNumber?: string;
-    materialDrawProductSegmentList?: IMaterialDetail[]
+    materialDrawProductSegmentList?: IMaterialDetail[];
+    legNumberA?: string;
+    legNumberB?: string;
+    legNumberC?: string;
+    legNumberD?: string;
+    readonly materialSegmentList?: IMaterialDetail[];
+    readonly productCategoryId?: string;
 }
-export interface IMaterialDetail{
-    count: string;
-    id: string;
-    segmentName: string;
+export interface IMaterialDetail {
+    count?: number;
+    id?: string;
+    segmentName?: string;
 }
 export default function PickTower(): React.ReactNode {
-    const [visible, setVisible] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [matchLeader, setMatchLeader] = useState<any|undefined>([]);
-    const [department, setDepartment] = useState<any|undefined>([]);
-    const params = useParams<{ id: string,status: string }>()
+    const params = useParams<{ id: string, status: string }>()
     const history = useHistory();
-    const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState({});
     const [productId, setProductId] = useState('');
-    const [detail, setDetail] = useState<IDetail>({});
+    const [status, setStatus] = useState('');
+    const [withSectionVisible, setWithSectionVisible] = useState<boolean>(false);
+    const editRef = useRef<EditRefProps>();
+    const userId = AuthUtil.getUserId();
+    const [batchNo, setBatchNo] = useState<any>();
+
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
-        setDepartment(departmentData);
+        // const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        // setDepartment(departmentData);
         resole(data)
     }), {})
-    const handleModalOk = async () => {
+    const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
-            const data = await form.validateFields()
-            const submitTableData = data.detailData.map((item:any,index:number)=>{
-                return{
-                    segmentId: item.id,
-                    ...item,
-                    id: item.id===-1?'':item.id,
-                }
-            });
-            const submitData={
-                productCategoryId: params.id,
-                productId: productId,
-                productSegmentListDTOList: submitTableData
-            }
-            RequestUtil.post(`/tower-science/product/material/segment/submit`,submitData).then(()=>{
-                message.success('提交成功！');
-                setVisible(false);
-                setProductId('');
-                form.resetFields()
-            }).then(()=>{
-                setRefresh(!refresh);
-            })
+            await editRef.current?.onSubmit();
+            message.success('配段成功');
+            setWithSectionVisible(false);
+            setRefresh(!refresh);
+            resove(true);
         } catch (error) {
-            console.log(error)
+            reject(false)
         }
-    }
-    const handleModalSave =  async () => {
-        try {
-            const data = await form.validateFields();
-            const saveTableData = data.detailData.map((item:any,index:number)=>{
-                return{
-                    segmentId: item.id,
-                    ...item,
-                    id: item.id===-1?'':item.id,
-                }
-            });
-            const saveData={
-                productCategoryId: params.id,
-                productId: productId,
-                productSegmentListDTOList: saveTableData
-            }
-            RequestUtil.post(`/tower-science/product/material/segment/save`,saveData).then(()=>{
-                message.success('保存成功！');
-                setVisible(false);
-                setProductId('');
-                form.resetFields();
-            }).then(()=>{
-                setRefresh(!refresh);
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    })
+
     const columns = [
         {
             key: 'index',
@@ -102,38 +67,50 @@ export default function PickTower(): React.ReactNode {
         {
             key: 'productNumber',
             title: '杆塔号',
-            width: 100,
+            width: 150,
             dataIndex: 'productNumber'
+        },
+        {
+            key: 'productHeight',
+            title: '呼高',
+            width: 120,
+            dataIndex: 'productHeight'
         },
         {
             key: 'productCategoryName',
             title: '塔型',
-            width: 100,
+            width: 150,
             dataIndex: 'productCategoryName'
         },
         {
-            key: 'materialDeliverTime',
-            title: '计划交付时间',
-            width: 100,
-            dataIndex: 'materialDeliverTime'
-        },
-        {
-            key: 'materialUserName',
-            title: '配段人',
-            width: 100,
-            dataIndex: 'materialUserName'
-        },
-        {
-            key: 'materialStatusName',
-            title: '杆塔配段状态',
-            width: 100,
-            dataIndex: 'materialStatusName'
-        },
-        {
-            key: 'materialUpdateStatusTime',
-            title: '最新状态变更时间',
+            key: 'segmentInformation',
+            title: '配段信息',
             width: 200,
-            dataIndex: 'materialUpdateStatusTime'
+            dataIndex: 'segmentInformation'
+        },
+        {
+            key: 'legNumberA',
+            title: 'A',
+            width: 150,
+            dataIndex: 'legNumberA'
+        },
+        {
+            key: 'legNumberB',
+            title: 'B',
+            width: 150,
+            dataIndex: 'legNumberB'
+        },
+        {
+            key: 'legNumberC',
+            title: 'C',
+            width: 150,
+            dataIndex: 'legNumberC'
+        },
+        {
+            key: 'legNumberD',
+            title: 'D',
+            width: 150,
+            dataIndex: 'legNumberD'
         },
         {
             key: 'operation',
@@ -142,174 +119,134 @@ export default function PickTower(): React.ReactNode {
             width: 100,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small"  className={styles.operationBtn}>
-                    <Button type='link' onClick={async () => {
-                        setVisible(true);
-                            let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}`)
-                            const detailData: IMaterialDetail[]|undefined = data&&data.materialDrawProductSegmentList&&data.materialDrawProductSegmentList.map((item:IMaterialDetail)=>{
-                                return {
-                                    ...item,
-                                }
-                            })
-                            setProductId(record.id);
-                            setDetail({
-                                ...data,
-                                materialDrawProductSegmentList:detailData
-                            })
-                            form.setFieldsValue({detailData:detailData});
-                            
-                    }} disabled={record.materialStatus!==2||AuthUtil.getUserId()!==record.materialUser|| params.status!=='3'}>配段</Button>
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==3}>杆塔提料明细</Button>
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                    <Button type='link' disabled={record?.materialLeaderList?.findIndex((res: string) => { return res === userId }) === -1} onClick={async () => {
+                        setWithSectionVisible(true);
+                        setProductId(record.id);
+                        setStatus(params.status);
+                        setBatchNo(record.productionBatch && record.productionBatchNo && record.productionBatch.length > 0 && record.productionBatchNo.length > 0)
+                    }} >配段</Button>
+                    <Button type='link' onClick={() => { history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`) }}>杆塔提料明细</Button>
                 </Space>
             )
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false);setProductId('');form.resetFields()};
-    const formItemLayout = {
-        labelCol: { span: 4 },
-        wrapperCol: { span: 17 }
-    };
-    const onDepartmentChange = async (value: Record<string, any>) => {
-        if(value){
-            const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
-            setMatchLeader(userData.records);
-        }else{
-            
-            setMatchLeader([]);
-        }
-       
-    }
-    const renderTreeNodes = (data:any) =>
-    data.map((item:any) => {
+    // const onDepartmentChange = async (value: Record<string, any>) => {
+    //     if (value) {
+    //         const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+    //         setMatchLeader(userData.records);
+    //     } else {
+
+    //         setMatchLeader([]);
+    //     }
+    // }
+
+    const renderTreeNodes = (data: any) => data.map((item: any) => {
         if (item.children) {
             return (
-            <TreeNode key={item.id} title={item.title} value={item.id} className={styles.node}>
-                {renderTreeNodes(item.children)}
-            </TreeNode>
+                <TreeNode key={item.id} title={item.title} value={item.id} className={styles.node}>
+                    {renderTreeNodes(item.children)}
+                </TreeNode>
             );
         }
         return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
     });
+
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles.forEach((role: any & SelectDataNode): void => {
             role.value = role.id;
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
     }
+
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0]+ ' 00:00:00';
-            value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
+            value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+            value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.statusUpdateTime
         }
         setFilterValue(value)
         return value
     }
+
     return (
         <>
-            <Modal title='配段信息'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
-                {detail?.materialDrawProductSegmentList?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList }} autoComplete="off" form={form}>  
-                    <Row>
-                        <Col span={1}></Col>
-                        <Col span={11}>
-                            <Form.Item name="productCategoryName" label="塔型">
-                                <span>{detail?.productCategoryName}</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={1}></Col>
-                        <Col span={11}>
-                            <Form.Item name="productNumber" label="杆塔号">
-                                <span>{detail?.productNumber}</span>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                    
-                        <Form.List name="detailData">
-                            
-                            {
-                                ( fields , { add, remove }) => fields.map(
-                                    field => (
-                                    <>
-                                        <Col span={ 1}></Col>
-                                        <Col span={ 11 }>
-                                        <Form.Item name={[ field.name , 'segmentName']} label='段号'>
-                                            <span>{detail.materialDrawProductSegmentList&&detail.materialDrawProductSegmentList[field.name].segmentName}</span>
-                                        </Form.Item>
-                                        </Col>
-                                        <Col span={1}></Col>
-                                        <Col span={ 11 }>
-                                        <Form.Item  name={[ field.name , 'count']} label='段数' initialValue={[ field.name , 'count']}>
-                                            <InputNumber min={0} precision={0} style={{width:'100%'}}/>
-                                        </Form.Item>
-                                        </Col>
-                                    </>
-                                    )
-                                )
-                            }
-                        </Form.List> 
-                    </Row>
-                </Form>:null}
-                <Space style={{position:'relative',left:'75%'}}>
-                    <Button type="primary" ghost onClick={()=>handleModalCancel()}>取消</Button>
-                    <Button type="primary" onClick={()=>handleModalSave()}>保存</Button>
-                    <Button type="primary" onClick={()=>handleModalOk()}>保存并提交</Button>
-                </Space>
+            <Modal
+                title="配段"
+                destroyOnClose
+                visible={withSectionVisible}
+                width="60%"
+                onOk={handleModalOk}
+                footer={<Space>
+                    {batchNo && status === '3' ? null : <Button type='primary' onClick={handleModalOk}>保存</Button>}
+                    <Button onClick={() => {
+                        editRef.current?.resetFields();
+                        setWithSectionVisible(false);
+                    }}>取消</Button>
+                </Space>}
+                okText="保存"
+                onCancel={() => {
+                    editRef.current?.resetFields();
+                    setWithSectionVisible(false);
+                }}>
+                <WithSection id={productId} ref={editRef} type={status === '3' ? 'detail' : 'new'} batchNo={batchNo} />
             </Modal>
             <Page
-                path="/tower-science/product/material"
+                path="/tower-science/materialProduct"
                 columns={columns}
                 onFilterSubmit={onFilterSubmit}
-                filterValue={ filterValue }
-                refresh={ refresh }
+                filterValue={filterValue}
+                refresh={refresh}
                 requestData={{ productCategoryId: params.id }}
-                exportPath="/tower-science/product/material"
+                exportPath="/tower-science/materialProduct"
                 extraOperation={
                     <Space>
-                        <Button type="ghost" onClick={()=>history.push('/workMngt/pickList')}>返回</Button>
+                        <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
                     </Space>
                 }
                 searchFormItems={[
-                    {
-                        name: 'statusUpdateTime',
-                        label: '最新状态变更时间',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                    },
-                    {
-                        name: 'materialStatus',
-                        label: '杆塔配段状态',
-                        children: <Select style={{width:'100px'}}>
-                            <Select.Option value={''} key ={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>待开始</Select.Option>
-                            <Select.Option value={2} key={2}>待配段</Select.Option>
-                            <Select.Option value={3} key={3}>已完成</Select.Option>
-                        </Select>
-                    },
-                    {
-                        name: 'materialUserDepartment',
-                        label: '配段人',
-                        children:  <TreeSelect style={{width:'200px'}}
-                                        allowClear
-                                        onChange={ onDepartmentChange }
-                                    >
-                                        {renderTreeNodes(wrapRole2DataNode( department ))}
-                                    </TreeSelect>
-                    },
-                    {
-                        name: 'materialUser',
-                        label:'',
-                        children:   <Select style={{width:'100px'}} allowClear>
-                                        { matchLeader && matchLeader.map((item:any)=>{
-                                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                        }) }
-                                    </Select>
-                    },
+                    // {
+                    //     name: 'statusUpdateTime',
+                    //     label: '最新状态变更时间',
+                    //     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    // },
+                    // {
+                    //     name: 'materialStatus',
+                    //     label: '杆塔提料状态',
+                    //     children: <Select style={{ width: '100px' }}>
+                    //         <Select.Option value={''} key={''}>全部</Select.Option>
+                    //         <Select.Option value={1} key={1}>待开始</Select.Option>
+                    //         <Select.Option value={2} key={2}>待配段</Select.Option>
+                    //         <Select.Option value={3} key={3}>已完成</Select.Option>
+                    //     </Select>
+                    // },
+                    // {
+                    //     name: 'materialUserDepartment',
+                    //     label: '配段人',
+                    //     children:  <TreeSelect style={{width:'200px'}}
+                    //                     allowClear
+                    //                     onChange={ onDepartmentChange }
+                    //                 >
+                    //                     {renderTreeNodes(wrapRole2DataNode( department ))}
+                    //                 </TreeSelect>
+                    // },
+                    // {
+                    //     name: 'materialUser',
+                    //     label:'',
+                    //     children:   <Select style={{width:'100px'}} allowClear>
+                    //                     { matchLeader && matchLeader.map((item:any)=>{
+                    //                         return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                    //                     }) }
+                    //                 </Select>
+                    // },
                 ]}
             />
         </>

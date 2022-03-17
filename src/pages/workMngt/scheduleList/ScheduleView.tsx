@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect } from 'antd'
+import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { CommonTable, DetailTitle, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -11,6 +11,7 @@ import moment from 'moment';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './scheduleList.module.less';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
+import SchedulePlan from './SchedulePlan';
 
 
 const tableColumns = [
@@ -70,6 +71,7 @@ export default function ScheduleView(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [load, setLoad] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
     const history = useHistory();
@@ -82,10 +84,14 @@ export default function ScheduleView(): React.ReactNode {
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
     const [materialPartUser, setMaterialPartUser] = useState<any|undefined>([]);
     const [smallSampleUser, setSmallSampleUser] = useState<any|undefined>([]);
+    const [planData, setPlanData] = useState<any|undefined>([]);
     const params = useParams<{ id: string, status: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         setDepartment(departmentData);
+        const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);
+        setPlanData(planData);
+        
         resole(data)
     }), {})
     
@@ -93,19 +99,19 @@ export default function ScheduleView(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const saveData = await form.validateFields();
-            console.log(saveData)
             saveData.id = scheduleData.id;
+            saveData.assignPlanId = scheduleData.assignPlanId;
             saveData.boltDeliverTime= moment(saveData.boltDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.weldingDeliverTime= moment(saveData.weldingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.loftingDeliverTime= moment(saveData.loftingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.loftingPartDeliverTime= moment(saveData.loftingPartDeliverTime).format('YYYY-MM-DD HH:mm:ss');
-            saveData.materialDeliverTime=moment(saveData.materialDeliverTime).format('YYYY-MM-DD HH:mm:ss');
-            saveData.materialPartDeliverTime= moment(saveData.materialPartDeliverTime).format('YYYY-MM-DD HH:mm:ss');
+            // saveData.materialDeliverTime=moment(saveData.materialDeliverTime).format('YYYY-MM-DD HH:mm:ss');
+            // saveData.materialPartDeliverTime= moment(saveData.materialPartDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.smallSampleDeliverTime= moment(saveData.smallSampleDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.boltDrawDeliverTime= moment(saveData.boltDrawDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.weldingDrawDeliverTime= moment(saveData.weldingDrawDeliverTime).format('YYYY-MM-DD HH:mm:ss');
-            saveData.materialLeaderDepartment= Array.isArray(saveData.materialLeaderDepartment)?saveData.materialLeaderDepartment[0]:saveData.materialLeaderDepartment;
-            saveData.materialPartLeaderDepartment= Array.isArray(saveData.materialPartLeaderDepartment)?saveData.materialPartLeaderDepartment[0]:saveData.materialPartLeaderDepartment;
+            // saveData.materialLeaderDepartment= Array.isArray(saveData.materialLeaderDepartment)?saveData.materialLeaderDepartment[0]:saveData.materialLeaderDepartment;
+            // saveData.materialPartLeaderDepartment= Array.isArray(saveData.materialPartLeaderDepartment)?saveData.materialPartLeaderDepartment[0]:saveData.materialPartLeaderDepartment;
             saveData.boltLeaderDepartment= Array.isArray(saveData.boltLeaderDepartment)?saveData.boltLeaderDepartment[0]:saveData.boltLeaderDepartment;
             saveData.weldingLeaderDepartment= Array.isArray(saveData.weldingLeaderDepartment)?saveData.weldingLeaderDepartment[0]:saveData.weldingLeaderDepartment;
             saveData.loftingLeaderDepartment=  Array.isArray(saveData.loftingLeaderDepartment)?saveData.loftingLeaderDepartment[0]:saveData.loftingLeaderDepartment;
@@ -155,18 +161,18 @@ export default function ScheduleView(): React.ReactNode {
             width: 100,
             dataIndex: 'priorityName',
         },
-        {
-            key: 'materialLeaderName',
-            title: '提料负责人',
-            width: 200,
-            dataIndex: 'materialLeaderName'
-        },
-        {
-            key: 'materialPartLeaderName',
-            title: '提料配段负责人',
-            width: 100,
-            dataIndex: 'materialPartLeaderName'
-        },
+        // {
+        //     key: 'materialLeaderName',
+        //     title: '提料负责人',
+        //     width: 200,
+        //     dataIndex: 'materialLeaderName'
+        // },
+        // {
+        //     key: 'materialPartLeaderName',
+        //     title: '提料配段负责人',
+        //     width: 100,
+        //     dataIndex: 'materialPartLeaderName'
+        // },
         {
             key: 'loftingLeaderName',
             title: '放样负责人',
@@ -212,42 +218,45 @@ export default function ScheduleView(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={async ()=>{
+                        
+                        setVisible(true);
+                        setLoad(true)
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
                         setScheduleData(resData);
-                        if(resData.materialLeaderDepartment){
-                            const materialLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialLeaderDepartment}&size=1000`);
-                            setMaterialUser(materialLeaderDepartment.records);
-                        }
-                        if(resData.materialPartLeaderDepartment){
-                            const materialPartLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialPartLeaderDepartment}&size=1000`);
-                            setMaterialPartUser(materialPartLeaderDepartment.records);
-                        }
+                        // if(resData.materialLeaderDepartment){
+                        //     const materialLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialLeaderDepartment}&size=1000`);
+                        //     setMaterialUser(materialLeaderDepartment.records);
+                        // }
+                        // if(resData.materialPartLeaderDepartment){
+                        //     const materialPartLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialPartLeaderDepartment}&size=1000`);
+                        //     setMaterialPartUser(materialPartLeaderDepartment.records);
+                        // }
                         if(resData.smallSampleLeaderDepartment){
-                            const smallSampleLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.smallSampleLeaderDepartment}&size=1000`);
+                            const smallSampleLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.smallSampleLeaderDepartment}&size=1000`);
                             setSmallSampleUser(smallSampleLeaderDepartment.records);
                         }
                         if(resData.drawLeaderDepartment){
-                            const drawLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.drawLeaderDepartment}&size=1000`);
+                            const drawLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.drawLeaderDepartment}&size=1000`);
                             setDrawUser(drawLeaderDepartment.records);
                         }
                         if(resData.loftingLeaderDepartment){
-                            const loftingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.loftingLeaderDepartment}&size=1000`);
+                            const loftingLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.loftingLeaderDepartment}&size=1000`);
                             setLoftingUser(loftingLeaderDepartment.records);
                         }
                         if(resData.weldingLeaderDepartment){
-                            const weldingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.weldingLeaderDepartment}&size=1000`);
+                            const weldingLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.weldingLeaderDepartment}&size=1000`);
                             setWeldingUser(weldingLeaderDepartment.records);
                         }
                         if(resData.boltLeaderDepartment){
-                            const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
+                            const boltLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.boltLeaderDepartment}&size=1000`);
                             setBoltUser(boltLeaderDepartment.records);
                         }
-                        if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
-                            const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
-                            let uom = new Date(resData.materialDeliverTime);
-                            let newDate =new Date(uom.setHours(uom.getHours() + day));
-                            resData.materialPartDeliverTime = newDate
-                        }
+                        // if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
+                        //     const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
+                        //     let uom = new Date(resData.materialDeliverTime);
+                        //     let newDate =new Date(uom.setHours(uom.getHours() + day));
+                        //     resData.materialPartDeliverTime = newDate
+                        // }
                         if(resData?.assignConfigVO?.weldingCompletionTime 
                             && resData?.assignConfigVO?.loftingWithSectionCompletionTime 
                             && resData?.assignConfigVO.smallSampleCompletionTime 
@@ -276,8 +285,8 @@ export default function ScheduleView(): React.ReactNode {
                         }
                         form.setFieldsValue({
                             ...resData,
-                            materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
-                            materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                            // materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                            // materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
                             boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
                             boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
                             weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
@@ -286,59 +295,62 @@ export default function ScheduleView(): React.ReactNode {
                             loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
                             drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
                             drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
-                            materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
-                            materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                            // materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                            // materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
                             smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
                             smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
                             boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
                             weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
                             loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
                             loftingPartDeliverTime: resData.loftingPartDeliverTime?moment(resData.loftingPartDeliverTime):'',
-                            materialDeliverTime:resData.materialDeliverTime?moment(resData.materialDeliverTime):'',
-                            materialPartDeliverTime: resData.materialPartDeliverTime?moment(resData.materialPartDeliverTime):'',
+                            // materialDeliverTime:resData.materialDeliverTime?moment(resData.materialDeliverTime):'',
+                            // materialPartDeliverTime: resData.materialPartDeliverTime?moment(resData.materialPartDeliverTime):'',
                             smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):'',
                             boltDrawDeliverTime:resData.boltDrawDeliverTime? moment(resData.boltDrawDeliverTime):'',
                             weldingDrawDeliverTime:resData.weldingDrawDeliverTime? moment(resData.weldingDrawDeliverTime):'',
                         });
-                        setVisible(true);
-                    }} disabled={params.status!=='2'||record.materialLeaderName}>指派</Button>
+                        setLoad(false)
+                    }} disabled={record.loftingStatus===5&&record.boltStatus===4&&record.weldingStatus===4&&record.smallSampleStatus===2&&record.templateLoftingStatus===2}>指派</Button>
                     <Button type='link' onClick={async ()=>{
+                        setEdit(true);
+                        setVisible(true);
+                        setLoad(true)
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
                         setScheduleData(resData);
-                        if(resData.materialLeaderDepartment){
-                            const materialLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialLeaderDepartment}&size=1000`);
-                            setMaterialUser(materialLeaderDepartment.records);
-                        }
-                        if(resData.materialPartLeaderDepartment){
-                            const materialPartLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialPartLeaderDepartment}&size=1000`);
-                            setMaterialPartUser(materialPartLeaderDepartment.records);
-                        }
+                        // if(resData.materialLeaderDepartment){
+                        //     const materialLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialLeaderDepartment}&size=1000`);
+                        //     setMaterialUser(materialLeaderDepartment.records);
+                        // }
+                        // if(resData.materialPartLeaderDepartment){
+                        //     const materialPartLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialPartLeaderDepartment}&size=1000`);
+                        //     setMaterialPartUser(materialPartLeaderDepartment.records);
+                        // }
                         if(resData.smallSampleLeaderDepartment){
-                            const smallSampleLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.smallSampleLeaderDepartment}&size=1000`);
+                            const smallSampleLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.smallSampleLeaderDepartment}&size=1000`);
                             setSmallSampleUser(smallSampleLeaderDepartment.records);
                         }
                         if(resData.drawLeaderDepartment){
-                            const drawLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.drawLeaderDepartment}&size=1000`);
+                            const drawLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.drawLeaderDepartment}&size=1000`);
                             setDrawUser(drawLeaderDepartment.records);
                         }
                         if(resData.loftingLeaderDepartment){
-                            const loftingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.loftingLeaderDepartment}&size=1000`);
+                            const loftingLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.loftingLeaderDepartment}&size=1000`);
                             setLoftingUser(loftingLeaderDepartment.records);
                         }
                         if(resData.weldingLeaderDepartment){
-                            const weldingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.weldingLeaderDepartment}&size=1000`);
+                            const weldingLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.weldingLeaderDepartment}&size=1000`);
                             setWeldingUser(weldingLeaderDepartment.records);
                         }
                         if(resData.boltLeaderDepartment){
-                            const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
+                            const boltLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.boltLeaderDepartment}&size=1000`);
                             setBoltUser(boltLeaderDepartment.records);
                         }
-                        if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
-                            const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
-                            let uom = new Date(resData.materialDeliverTime);
-                            let newDate =new Date(uom.setHours(uom.getHours() + day));
-                            resData.materialPartDeliverTime = newDate
-                        }
+                        // if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
+                        //     const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
+                        //     let uom = new Date(resData.materialDeliverTime);
+                        //     let newDate =new Date(uom.setHours(uom.getHours() + day));
+                        //     resData.materialPartDeliverTime = newDate
+                        // }
                         if(resData?.assignConfigVO?.weldingCompletionTime 
                             && resData?.assignConfigVO?.loftingWithSectionCompletionTime 
                             && resData?.assignConfigVO.smallSampleCompletionTime 
@@ -367,8 +379,8 @@ export default function ScheduleView(): React.ReactNode {
                         }
                         form.setFieldsValue({
                             ...resData,
-                            materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
-                            materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                            // materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                            // materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
                             boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
                             boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
                             weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
@@ -377,38 +389,63 @@ export default function ScheduleView(): React.ReactNode {
                             loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
                             drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
                             drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
-                            materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
-                            materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                            // materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                            // materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
                             smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
                             smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
                             boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
                             weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
                             loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
                             loftingPartDeliverTime: resData.loftingPartDeliverTime?moment(resData.loftingPartDeliverTime):'',
-                            materialDeliverTime:resData.materialDeliverTime?moment(resData.materialDeliverTime):'',
-                            materialPartDeliverTime: resData.materialPartDeliverTime?moment(resData.materialPartDeliverTime):'',
+                            // materialDeliverTime:resData.materialDeliverTime?moment(resData.materialDeliverTime):'',
+                            // materialPartDeliverTime: resData.materialPartDeliverTime?moment(resData.materialPartDeliverTime):'',
                             smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):'',
                             boltDrawDeliverTime:resData.boltDrawDeliverTime? moment(resData.boltDrawDeliverTime):'',
                             weldingDrawDeliverTime:resData.weldingDrawDeliverTime? moment(resData.weldingDrawDeliverTime):'',
                         });
-                        setVisible(true);
-                        setEdit(true);
-                    }} disabled={!record.materialLeaderName}>详情</Button>
+                        
+                        setLoad(false)
+                    }} disabled={!record.loftingLeaderName}>详情</Button>
                 </Space>
             )
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false); form.setFieldsValue({});setEdit(false);};
+    const handleModalCancel = () => {setVisible(false);setEdit(false);form.resetFields([
+        // 'materialLeader',
+        // 'materialLeaderDepartment',
+        'boltLeader',
+        'boltLeaderDepartment',
+        'weldingLeader',
+        'weldingLeaderDepartment',
+        'loftingLeader',
+        'loftingLeaderDepartment',
+        'drawLeader',
+        'drawLeaderDepartment',
+        // 'materialPartLeader',
+        // 'materialPartLeaderDepartment',
+        'smallSampleLeader',
+        'smallSampleLeaderDepartment',
+        'pattern',
+        // 'boltDeliverTime',
+        // 'weldingDeliverTime',
+        // 'loftingDeliverTime',
+        // 'loftingPartDeliverTime',
+        // 'materialDeliverTime',
+        // 'materialPartDeliverTime',
+        // 'smallSampleDeliverTime',
+        // 'boltDrawDeliverTime',
+        // 'weldingDrawDeliverTime',
+    ]);};
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
-        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        const userData: any= await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         switch (title) {
-            case "materialLeaderDepartment":
-                form.setFieldsValue({materialLeader:''});
-                return setMaterialUser(userData.records);
-            case "materialPartLeaderDepartment":
-                form.setFieldsValue({materialPartLeader:''});
-                return setMaterialPartUser(userData.records);
+            // case "materialLeaderDepartment":
+            //     form.setFieldsValue({materialLeader:''});
+            //     return setMaterialUser(userData.records);
+            // case "materialPartLeaderDepartment":
+            //     form.setFieldsValue({materialPartLeader:''});
+            //     return setMaterialPartUser(userData.records);
             case "smallSampleLeaderDepartment":
                 form.setFieldsValue({smallSampleLeader:''});
                 return setSmallSampleUser(userData.records);
@@ -440,6 +477,8 @@ export default function ScheduleView(): React.ReactNode {
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
@@ -448,12 +487,12 @@ export default function ScheduleView(): React.ReactNode {
     data.map((item:any) => {
     if (item.children) {
         return (
-        <TreeNode key={item.id} title={item.title} value={item.id} className={styles.node}>
+        <TreeNode key={item.id} title={item.name} value={item.id} className={styles.node}>
             {renderTreeNodes(item.children)}
         </TreeNode>
         );
     }
-    return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+    return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
     });
     return (
         <>
@@ -464,11 +503,13 @@ export default function ScheduleView(): React.ReactNode {
                 onCancel={handleModalCancel}
                 footer={
                     edit?null:<>
+                        <SchedulePlan plan={setPlanData}/>
                         <Button onClick={handleModalCancel}>取消</Button>
                         <Button type='primary' onClick={handleModalOk}>保存并提交</Button>
                     </>
                 }
             >
+                <Spin spinning={load}>
                 <Form form={form} {...formItemLayout} initialValues={scheduleData||{}}>
                     <Row>
                         <Col span={12}>
@@ -496,6 +537,102 @@ export default function ScheduleView(): React.ReactNode {
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
+                                    <Form.Item name="assignName" label="指派方案"> 
+                                        <Select disabled={edit} onChange={async (value)=>{
+                                            setLoad(true)
+                                            const resData: any = await RequestUtil.get(`/tower-science/assignPlan/planDetailById/${value}`)
+                                            resData.name = form.getFieldsValue().name
+                                            setScheduleData({
+                                                ...scheduleData,
+                                                assignPlanId: resData.id,
+                                                name:form.getFieldsValue().name,
+                                                // materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                                                // materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                                                boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
+                                                boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
+                                                weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
+                                                weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?resData.weldingLeaderDepartment:'',
+                                                loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
+                                                loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
+                                                drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
+                                                drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
+                                                // materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                                                // materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                                                smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
+                                                smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
+                                            });
+                                            // if(resData.materialLeaderDepartment){
+                                            //     const materialLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialLeaderDepartment}&size=1000`);
+                                            //     setMaterialUser(materialLeaderDepartment.records);
+                                            // }
+                                            // if(resData.materialPartLeaderDepartment){
+                                            //     const materialPartLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialPartLeaderDepartment}&size=1000`);
+                                            //     setMaterialPartUser(materialPartLeaderDepartment.records);
+                                            // }
+                                            if(resData.smallSampleLeaderDepartment){
+                                                const smallSampleLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.smallSampleLeaderDepartment}&size=1000`);
+                                                setSmallSampleUser(smallSampleLeaderDepartment.records);
+                                            }
+                                            if(resData.drawLeaderDepartment){
+                                                const drawLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.drawLeaderDepartment}&size=1000`);
+                                                setDrawUser(drawLeaderDepartment.records);
+                                            }
+                                            if(resData.loftingLeaderDepartment){
+                                                const loftingLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.loftingLeaderDepartment}&size=1000`);
+                                                setLoftingUser(loftingLeaderDepartment.records);
+                                            }
+                                            if(resData.weldingLeaderDepartment){
+                                                const weldingLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.weldingLeaderDepartment}&size=1000`);
+                                                setWeldingUser(weldingLeaderDepartment.records);
+                                            }
+                                            if(resData.boltLeaderDepartment){
+                                                const boltLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.boltLeaderDepartment}&size=1000`);
+                                                setBoltUser(boltLeaderDepartment.records);
+                                            }
+                                            // const name = form.getFieldsValue().name;
+                                            form.setFieldsValue({
+                                                // name: name,
+                                                assignName: resData.assignName,
+                                                // materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                                                // materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                                                boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
+                                                boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
+                                                weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
+                                                weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?resData.weldingLeaderDepartment:'',
+                                                loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
+                                                loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
+                                                drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
+                                                drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
+                                                // materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                                                // materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                                                smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
+                                                smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
+                                            });
+                                            setLoad(false)
+                                        }}>
+                                            { planData && planData.map((item:any)=>{
+                                                return <Select.Option key={item.id} value={item.id}>{item.assignName}</Select.Option>
+                                            }) }
+                                        </Select>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="priority" label="优先级" rules={[{required: true,message:'请选择优先级'}]} > 
+                                <Select disabled={edit}>
+                                    <Select.Option value={1} key={1}>紧急</Select.Option>
+                                    <Select.Option value={2} key={2}>高</Select.Option>
+                                    <Select.Option value={3} key={3}>中</Select.Option>
+                                    <Select.Option value={4} key={4}>低</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    {/* <Row>
+                        <Col span={12}>
+                            <Row>
+                                <Col span={15}>
                                     <Form.Item name="materialLeaderDepartment" label="提料负责人" rules={[{required: true,message:'请选择提料负责人部门'}]}>
                                         <TreeSelect
                                             onChange={(value:any)=>{onDepartmentChange(value,'materialLeaderDepartment')}  }
@@ -508,7 +645,7 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="materialLeader" label="" rules={[{required: true,message:'请选择提料负责人'}]} >
                                         <Select disabled={edit}>
                                             { materialUser && materialUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -525,8 +662,8 @@ export default function ScheduleView(): React.ReactNode {
                                 }} disabled={edit}/>
                             </Form.Item>
                         </Col>
-                    </Row>
-                    <Row>
+                    </Row> */}
+                    {/* <Row>
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
@@ -539,10 +676,10 @@ export default function ScheduleView(): React.ReactNode {
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
-                                    <Form.Item name="materialPartLeader" label="" rules={[{required: true,message:'请选择提料负责人'}]} >
+                                    <Form.Item name="materialPartLeader" label="" rules={[{required: true,message:'请选择提料配段负责人'}]} >
                                         <Select disabled={edit}>
                                             { materialPartUser && materialPartUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -554,7 +691,7 @@ export default function ScheduleView(): React.ReactNode {
                                 <DatePicker  style={{width:'100%'}} disabled format={'YYYY-MM-DD HH:mm:ss'} showTime />
                             </Form.Item>
                         </Col>
-                    </Row>
+                    </Row> */}
                     <Row>
                         <Col span={12}>
                             <Row>
@@ -562,16 +699,16 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="loftingLeaderDepartment" label="放样负责人" rules={[{required: true,message:'请选择放样负责人部门'}]}>
                                         <TreeSelect
                                             onChange={(value:any)=>{onDepartmentChange(value,'loftingLeaderDepartment')}  }
-                                            disabled={edit}>
+                                            disabled={edit||scheduleData?.loftingStatus===5}>
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="loftingLeader" label="" rules={[{required: true,message:'请选择放样负责人'}]} >
-                                        <Select disabled={edit}>
+                                        <Select disabled={edit||scheduleData?.loftingStatus===5}>
                                             { loftingUser && loftingUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -603,7 +740,7 @@ export default function ScheduleView(): React.ReactNode {
                                         weldingDrawDeliverTime: moment(newWeldingDrawTime)
                                     })
                            
-                                }} disabled={edit}/>
+                                }} disabled={edit||scheduleData?.loftingStatus===5}/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -614,16 +751,16 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="weldingLeaderDepartment" label="编程负责人" rules={[{required: true,message:'请选择编程负责人部门'}]}>
                                         <TreeSelect
                                             onChange={(value:any)=>{onDepartmentChange(value,'weldingLeaderDepartment')}  }
-                                            disabled={edit}>
+                                            disabled={edit||scheduleData?.weldingStatus===4}>
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="weldingLeader" label="" rules={[{required: true,message:'请选择编程负责人'}]} >
-                                        <Select disabled={edit}> 
+                                        <Select disabled={edit||scheduleData?.weldingStatus===4}> 
                                             { weldingUser && weldingUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -652,16 +789,16 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="smallSampleLeaderDepartment" label="小样图负责人" rules={[{required: true,message:'请选择小样图负责人部门'}]} >
                                         <TreeSelect
                                             onChange={(value:any)=>{onDepartmentChange(value,'smallSampleLeaderDepartment')}  }
-                                            disabled={edit}>
+                                            disabled={edit||scheduleData?.smallSampleStatus===2}>
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="smallSampleLeader" label="" rules={[{required: true,message:'请选择小样图负责人'}]} >
-                                        <Select disabled={edit}>
+                                        <Select disabled={edit||scheduleData?.smallSampleStatus===2}>
                                             { smallSampleUser && smallSampleUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -681,16 +818,16 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="boltLeaderDepartment" label="螺栓清单负责人" rules={[{required: true,message:'请选择螺栓清单负责人部门'}]} >
                                         <TreeSelect
                                             onChange={(value:any)=>{onDepartmentChange(value,'boltLeaderDepartment')}  }
-                                            disabled={edit}>
+                                            disabled={edit||scheduleData?.boltStatus===4}>
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="boltLeader" label="" rules={[{required: true,message:'请选择螺栓清单负责人'}]} >
-                                        <Select disabled={edit}>
+                                        <Select disabled={edit||scheduleData?.boltStatus===4}>
                                             { boltUser &&boltUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -711,16 +848,16 @@ export default function ScheduleView(): React.ReactNode {
                                     <Form.Item name="drawLeaderDepartment" label="图纸上传负责人" rules={[{required: true,message:'请选择图纸上传负责人部门'}]} >
                                         <TreeSelect
                                             onChange={(value:any)=>{onDepartmentChange(value,'drawLeaderDepartment')}  }
-                                            disabled={edit}>
+                                            disabled={edit||scheduleData?.templateLoftingStatus===2}>
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="drawLeader" label="" rules={[{required: true,message:'请选择图纸上传负责人'}]} >
-                                        <Select disabled={edit}>
+                                        <Select disabled={edit||scheduleData?.templateLoftingStatus===2}>
                                             { drawUser && drawUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -746,24 +883,15 @@ export default function ScheduleView(): React.ReactNode {
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="priority" label="优先级" rules={[{required: true,message:'请选择优先级'}]} > 
-                                        <Select disabled={edit}>
-                                            <Select.Option value={0} key={0}>紧急</Select.Option>
-                                            <Select.Option value={1} key={1}>高</Select.Option>
-                                            <Select.Option value={2} key={2}>中</Select.Option>
-                                            <Select.Option value={3} key={3}>低</Select.Option>
-                                        </Select>
+                                    <Form.Item name="description" label="备注"  >
+                                        <TextArea rows={1} disabled={edit} showCount maxLength={400} style={{width:'100%'}}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Col>
-                        <Col span={12}>
-                            <Form.Item name="description" label="备注"  >
-                                <TextArea rows={1} disabled={edit} showCount maxLength={400}/>
-                            </Form.Item>
-                        </Col>
                     </Row>
                 </Form>
+                </Spin>
                 {edit&&<>
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={scheduleData?.assignLogList} pagination={ false } />
@@ -799,10 +927,10 @@ export default function ScheduleView(): React.ReactNode {
                         label:'优先级',
                         children:   <Select style={{width:"100px"}}>
                                         <Select.Option value={''} key ={''}>全部</Select.Option>
-                                        <Select.Option value='0' key='0'>紧急</Select.Option>
-                                        <Select.Option value='1' key='1'>高</Select.Option>
-                                        <Select.Option value='2' key='2'>中</Select.Option>
-                                        <Select.Option value='3' key='3'>低</Select.Option>
+                                        <Select.Option value='1' key='1'>紧急</Select.Option>
+                                        <Select.Option value='2' key='2'>高</Select.Option>
+                                        <Select.Option value='3' key='3'>中</Select.Option>
+                                        <Select.Option value='4' key='4'>低</Select.Option>
                                     </Select>
                     },
                     {

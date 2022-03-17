@@ -10,15 +10,15 @@ const tableColumns = [
     { title: '塔型', dataIndex: 'productCategoryName', key: 'productCategoryName', },
     { title: '杆塔号', dataIndex: 'productNumber', key: 'productNumber' },
     { title: '呼高', dataIndex: 'productHeight', key: 'productHeight' },
-    { title: '入库重量', dataIndex: 'warehouseWeight', key: 'warehouseWeight'},
+    { title: '入库重量（kg）', dataIndex: 'warehouseWeight', key: 'warehouseWeight'},
     { title: '总基数', dataIndex: 'number', key: 'number'},
     { title: '入库基数', dataIndex: 'warehouseNumber', key: 'warehouseNumber'}
 ]
 
 const packageColumns = [
     { title: '捆号/包号', dataIndex: 'balesCode', key: 'balesCode', },
-    { title: '包类型', dataIndex: 'packageType', key: 'packageType' },
-    { title: '重量', dataIndex: 'weightCount', key: 'weightCount' },
+    { title: '包类型', dataIndex: 'packageTypeName', key: 'packageTypeName' },
+    { title: '重量（kg）', dataIndex: 'weightCount', key: 'weightCount' },
     { title: '入库数', dataIndex: 'num', key: 'num'},
     { title: '库位', dataIndex: 'warehousePosition', key: 'warehousePosition' }
 ]

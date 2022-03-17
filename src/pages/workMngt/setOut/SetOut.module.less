@@ -36,6 +36,10 @@
     margin-bottom: 0;
 }
 
+.normal {
+    width: 100%;
+    height: 12px;
+}
 .red {
     background-color: #F9A1A1 !important;
     color: #FFF;
@@ -46,6 +50,10 @@
 }
 .yellow {
     background-color: #FFB401 !important;
+    color: #FFF;
+}
+.brown {
+    background-color: #FF8C00 !important;
     color: #FFF;
 }
 
@@ -79,4 +87,15 @@
 
 .description {
     padding-left: 50px;
+}
+
+.tryAssemble {
+    :global(.ant-modal-body) {
+        padding: 0 !important;
+    }
+}
+
+.fastBtn {
+    position: absolute;
+    right: 16px;
 }

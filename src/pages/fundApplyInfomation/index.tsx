@@ -142,9 +142,9 @@ export default function FaundInfomation() {
                     </Radio.Group>
                     {payStatus == 1 ?
                         <span style={{ marginLeft: "20px" }}>
-                            请款金额总计：{data ? changeTwoDecimal_f(data.totalSumMoney) : 0.00}元
-                            已付金额合计：{data ? changeTwoDecimal_f(data.totalMoney) : 0.00}元
-                            应付款余额合计：{data ? changeTwoDecimal_f(data.totalPayMoney) : 0.00}元
+                            请款金额总计：<span style={{color: "#FF8C00", marginRight: 12}}>{data ? changeTwoDecimal_f(data.totalSumMoney) : 0.00}元</span>
+                            已付金额合计：<span style={{color: "#FF8C00", marginRight: 12}}>{data ? changeTwoDecimal_f(data.totalMoney) : 0.00}元</span>
+                            应付款余额合计：<span style={{color: "#FF8C00", marginRight: 12}}>{data ? changeTwoDecimal_f(data.totalPayMoney) : 0.00}元</span>
                         </span>
                         :
                         <span style={{ marginLeft: "20px" }}>请款金额总计：{data ? changeTwoDecimal_f(data.totalSumMoney) : 0.00}元</span>
@@ -234,7 +234,7 @@ export default function FaundInfomation() {
                             <>
                                 {
                                     pageData && pageData.length > 0 ? (
-                                        <Table.Summary.Row>
+                                        <Table.Summary.Row style={{background: "rgba(255, 140, 0, .08)"}}>
                                             {
                                                 number.map((item: any, index: number) => {
                                                     if (index === 0) {

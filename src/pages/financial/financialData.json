@@ -122,12 +122,26 @@
             "title": "关联收货单",
             "dataIndex": "receiptVos",
             "type": "popTable",
-            "path": "/tower-storage/receiveStock",
+            "path": "/tower-storage/receiveStock?receiveStatus=1",
             "width": 1011,
             "value": "receiveNumber",
             "selectType": "checkbox",
             "dependencies": true,
             "readOnly": true,
+            "search": [
+                {
+                    "title": "月份选择",
+                    "dataIndex": "receiveTime",
+                    "type": "date",
+                    "width": 200
+                },
+                {
+                    "title": "查询",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 200,
+                    "placeholder": "合同编号/收货单号/联系人"
+                }
+            ],
             "columns": [
                 {
                     "title": "收货单号",
@@ -140,15 +154,13 @@
                 },
                 {
                     "title": "合同编号",
-                    "dataIndex": "contractNumber",
-                    "search": true
+                    "dataIndex": "contractNumber"
                 },
                 {
                     "title": "完成时间",
                     "dataIndex": "receiveTime",
                     "type": "date",
-                    "format": "YYYY-MM-DD",
-                    "search": true
+                    "format": "YYYY-MM-DD"
                 },
                 {
                     "title": "创建人",
@@ -387,7 +399,7 @@
         },
         {
             "title": "企业类型",
-            "dataIndex": "businessName"
+            "dataIndex": "businessTypeName"
         },
         {
             "title": "企业名称",

@@ -30,7 +30,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 businessId: result.businessId + ',' + result.businessName,
                 receiptVos: {
                     value: result.receiptVos.map((item: any) => item.receiptNumber).join(","),
-                    records: result.receiptVos.map((item: any) => ({ ...item, id: item.receiptId }))
+                    records: result.receiptVos.map((item: any) => ({ ...item, id: item.receiptId, receiveNumber: item.receiptNumber }))
                 }
             })
             businessTypeChange(result.businessType);
@@ -63,7 +63,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     receiptId: item.receiptId,
                     receiptNumber: item.receiptNumber,
                 })),
-                fileIds: attchsRef.current?.getDataSource().map(item => item.id)
+                fileIds: attchsRef.current?.getDataSource().map(item => item.id),
+                invoiceRelationType: 1, // 新加票据是否关联 写死传1
             })
             resolve(true)
         } catch (error) {
@@ -115,7 +116,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             if (item.dataIndex === 'receiptVos') {
                 return ({
                     ...item,
-                    render: (data: any, props: any) => <PopTable data={data} {...props} />
+                    disabled: !baseForm.getFieldValue("businessType"),
+                    path: `${item.path}&companyRelationStatus=${baseForm.getFieldValue("businessType")}`
                 })
             }
             if (item.dataIndex === 'businessType') {

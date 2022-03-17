@@ -151,7 +151,7 @@ export default function RawMaterial() {
                         render: (_: any, records: any) => <>
                             <Button type="link" className="btn-operation-link" onClick={() => { detail(records.id) }}>任务详情</Button>
                             <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
-                            <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/materialList`)}>用料清单</Button>
+                            <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/detail/${records.planNumber}`)}>用料清单</Button>
                             <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button>
                         </>
                     }
@@ -180,12 +180,12 @@ export default function RawMaterial() {
                     {
                         name: 'batcherId',
                         label: '配料人',
-                        children: <IntgSelect width={200} />
+                        children: <IntgSelect width={400} />
                     },
                     {
                         name: 'purchaserId',
                         label: '采购人',
-                        children: <IntgSelect width={200} />
+                        children: <IntgSelect width={400} />
                     },
                     {
                         name: 'fuzzyQuery',

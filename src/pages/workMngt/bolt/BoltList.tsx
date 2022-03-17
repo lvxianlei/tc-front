@@ -116,12 +116,12 @@ export default function BoltList(): React.ReactNode {
                         record.boltLeader === userId ? <Link to={`/workMngt/boltList/boltListing/${record.id}/${record.boltLeader}/${record.boltStatus}`}>螺栓清单</Link> : <Button type="link" disabled>螺栓清单</Button>
                     }
                     {
-                        record.boltStatus === 4 && record.boltChecker === userId ? <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link> : <Button type="link" disabled>校核</Button>
+                        record.boltStatus === 3 && record.boltChecker === userId ? <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link> : <Button type="link" disabled>校核</Button>
                     }
-                    <Button type='link' onClick={async () => { 
+                    <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
-                        setAssignVisible(true); 
-                    }} disabled={ record.boltStatus !== 2 }>指派</Button>
+                        setAssignVisible(true);
+                    }} disabled={record.boltStatus !== 1}>指派</Button>
                 </Space>
             )
         }
@@ -130,42 +130,42 @@ export default function BoltList(): React.ReactNode {
     const location = useLocation<{ state?: number, userId?: string, weldingOperator?: string }>();
     const userId = AuthUtil.getUserId();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         setDepartment(departmentData);
     }), {})
-    const [user, setUser] = useState<any[]|undefined>([]);
-    const [checkPerson, setCheckPerson] = useState<any|undefined>([]);
-    const [department, setDepartment] = useState<any|undefined>([]);
+    const [user, setUser] = useState<any[] | undefined>([]);
+    const [checkPerson, setCheckPerson] = useState<any | undefined>([]);
+    const [department, setDepartment] = useState<any | undefined>([]);
     const [assignVisible, setAssignVisible] = useState<boolean>(false);
     const [drawTaskId, setDrawTaskId] = useState<string>('');
     const [form] = Form.useForm();
-    const [ refresh, setRefresh ] = useState(false);
-    const [ checkUser, setCheckUser ] = useState([]);
-    const [ filterValue, setFilterValue ] = useState<any>();
+    const [refresh, setRefresh] = useState(false);
+    const [checkUser, setCheckUser] = useState([]);
+    const [filterValue, setFilterValue] = useState<any>();
     const handleAssignModalOk = async () => {
         try {
             const submitData = await form.validateFields();
             submitData.id = drawTaskId;
-            await RequestUtil.post('/tower-science/boltRecord/assign', submitData).then(()=>{
+            await RequestUtil.post('/tower-science/boltRecord/assign', submitData).then(() => {
                 message.success('指派成功！')
-            }).then(()=>{
+            }).then(() => {
                 setAssignVisible(false);
                 form.resetFields();
-            }).then(()=>{
+            }).then(() => {
                 setRefresh(!refresh);
             })
         } catch (error) {
             console.log(error)
         }
     }
-    const handleAssignModalCancel = () => {setAssignVisible(false);form.resetFields();};
+    const handleAssignModalCancel = () => { setAssignVisible(false); form.resetFields(); };
     const formItemLayout = {
         labelCol: { span: 6 },
         wrapperCol: { span: 16 }
     };
-    const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
-        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
-        switch(title){
+    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
+        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
+        switch (title) {
             case "check":
                 form.setFieldsValue({ 'boltChecker': '' })
                 return setCheckPerson(userData.records);
@@ -174,47 +174,49 @@ export default function BoltList(): React.ReactNode {
                 return setUser(userData.records);
         }
     }
-    const renderTreeNodes = (data:any) =>
-    data.map((item:any) => {
-        if (item.children) {
-            return (
-            <TreeNode key={item.id} title={item.title} value={item.id}  className={styles.node}>
-                {renderTreeNodes(item.children)}
-            </TreeNode>
-            );
-        }
-        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
-    });
+    const renderTreeNodes = (data: any) =>
+        data.map((item: any) => {
+            if (item.children) {
+                return (
+                    <TreeNode key={item.id} title={item.name} value={item.id} className={styles.node}>
+                        {renderTreeNodes(item.children)}
+                    </TreeNode>
+                );
+            }
+            return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
+        });
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles.forEach((role: any & SelectDataNode): void => {
             role.value = role.id;
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
     }
     return <>
-        <Modal visible={ assignVisible } title="指派" okText="提交" onOk={ handleAssignModalOk } onCancel={ handleAssignModalCancel } width={ 800 }>
-            <Form form={ form } { ...formItemLayout }>
+        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel} width={800}>
+            <Form form={form} {...formItemLayout}>
                 作业员：
                 <Row>
                     <Col span={12}>
-                        <Form.Item name="dept" label="部门" rules={[{required:true,message:"请选择部门"}]}>
+                        <Form.Item name="dept" label="部门" rules={[{ required: true, message: "请选择部门" }]}>
                             <TreeSelect
-                                onChange={(value:any)=>{onDepartmentChange(value,'user')}  }
+                                onChange={(value: any) => { onDepartmentChange(value, 'user') }}
                             >
-                                {renderTreeNodes(wrapRole2DataNode( department ))}
+                                {renderTreeNodes(wrapRole2DataNode(department))}
                             </TreeSelect>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item name="boltOperator" label="人员" rules={[{required:true,message:"请选择人员"}]}>
-                            <Select style={{width:'100px'}}>
-                                { user && user.map((item:any)=>{
-                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                }) }
+                        <Form.Item name="boltOperator" label="人员" rules={[{ required: true, message: "请选择人员" }]}>
+                            <Select style={{ width: '100px' }}>
+                                {user && user.map((item: any) => {
+                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                                })}
                             </Select>
                         </Form.Item>
                     </Col>
@@ -222,34 +224,34 @@ export default function BoltList(): React.ReactNode {
                 校核员
                 <Row>
                     <Col span={12}>
-                        <Form.Item name="deptNew" label="部门" rules={[{required:true,message:"请选择部门"}]}>
+                        <Form.Item name="deptNew" label="部门" rules={[{ required: true, message: "请选择部门" }]}>
                             <TreeSelect
-                                onChange={(value:any)=>{onDepartmentChange(value,'check')}  }
+                                onChange={(value: any) => { onDepartmentChange(value, 'check') }}
                             >
-                                {renderTreeNodes(wrapRole2DataNode( department ))}
+                                {renderTreeNodes(wrapRole2DataNode(department))}
                             </TreeSelect>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item name="boltChecker" label="人员" rules={[{required:true,message:"请选择人员"}]}>
-                            <Select style={{width:'100px'}}>
-                                { checkPerson && checkPerson.map((item:any)=>{
-                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                }) }
+                        <Form.Item name="boltChecker" label="人员" rules={[{ required: true, message: "请选择人员" }]}>
+                            <Select style={{ width: '100px' }}>
+                                {checkPerson && checkPerson.map((item: any) => {
+                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                                })}
                             </Select>
                         </Form.Item>
                     </Col>
                 </Row>
             </Form>
-        </Modal> 
+        </Modal>
         <Page
             path="/tower-science/boltRecord"
             columns={columns}
             headTabs={[]}
-            refresh={ refresh }
+            refresh={refresh}
             exportPath={`/tower-science/boltRecord`}
             requestData={{ boltStatus: location.state?.state, weldingLeader: location.state?.userId }}
-            filterValue={ filterValue }
+            filterValue={filterValue}
             searchFormItems={[
                 {
                     name: 'updateTime',
@@ -262,11 +264,10 @@ export default function BoltList(): React.ReactNode {
                     children: <Form.Item name="boltStatus" initialValue={location.state?.state || ''}>
                         <Select style={{ width: '120px' }} placeholder="请选择">
                             <Select.Option value="" key="6">全部</Select.Option>
-                            <Select.Option value={1} key="1">待开始</Select.Option>
-                            <Select.Option value={2} key="2">待指派</Select.Option>
-                            <Select.Option value={3} key="3">进行中</Select.Option>
-                            <Select.Option value={4} key="4">校核中</Select.Option>
-                            <Select.Option value={5} key="5">已完成</Select.Option>
+                            <Select.Option value={1} key="1">待指派</Select.Option>
+                            <Select.Option value={2} key="2">待完成</Select.Option>
+                            <Select.Option value={3} key="3">校核中</Select.Option>
+                            <Select.Option value={4} key="4">已完成</Select.Option>
                         </Select>
                     </Form.Item>
                 },
@@ -276,11 +277,11 @@ export default function BoltList(): React.ReactNode {
                     children: <Row>
                         <Col>
                             <Form.Item name="dept">
-                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value:any)=>{
-                                    const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
-                                    setCheckUser(userData.records)  
+                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value: any) => {
+                                    const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
+                                    setCheckUser(userData.records)
                                 }}>
-                                    {renderTreeNodes(wrapRole2DataNode( department ))}
+                                    {renderTreeNodes(wrapRole2DataNode(department))}
                                 </TreeSelect>
                             </Form.Item>
                         </Col>
@@ -288,9 +289,9 @@ export default function BoltList(): React.ReactNode {
                             <Form.Item name="personnel">
                                 <Select placeholder="请选择" style={{ width: "150px" }}>
                                     <Select.Option value="" key="6">全部</Select.Option>
-                                    { checkUser && checkUser.map((item: any) => {
-                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                                    }) }
+                                    {checkUser && checkUser.map((item: any) => {
+                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                                    })}
                                 </Select>
                             </Form.Item>
                         </Col>

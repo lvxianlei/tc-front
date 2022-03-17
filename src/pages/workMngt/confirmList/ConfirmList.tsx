@@ -16,7 +16,7 @@ export default function ConfirmList(): React.ReactNode {
     const location = useLocation<{ state?: number, userId?: string }>();
     const history = useHistory();
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
         resole(data)
     }), {})
     const confirmLeader: any = data?.records || [];
@@ -95,6 +95,8 @@ export default function ConfirmList(): React.ReactNode {
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
@@ -142,7 +144,7 @@ export default function ConfirmList(): React.ReactNode {
                     children: <Form.Item name="confirmId" initialValue={location.state?.userId}>
                         <Select style={{ width: '100px' }} allowClear>
                             {confirmLeader && confirmLeader.map((item: any) => {
-                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                             })}
                         </Select>
                     </Form.Item>

@@ -22,9 +22,13 @@
             title: "纸质单号",
             dataIndex: "paperNumber",
             type: "text",
+            maxLength: 20,
             rules: [{
                 required: true,
                 message: "请输入纸质单号"
+            },{
+                pattern: new RegExp(/^[a-zA-Z0-9]*$/g, 'g'),
+                message: '请输入正确的纸质单号',
             }]
         }
     ]
@@ -55,6 +59,7 @@
     return (
         <Spin spinning={loading}>
             <BaseInfo
+                classStyle={"overall-form-class-padding0 height34"}
                 form={addCollectionForm}
                 dataSource={{content: 1}}
                 col={ 1 }

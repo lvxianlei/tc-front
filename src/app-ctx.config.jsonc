@@ -36,11 +36,11 @@
                         "appName": "COMM",
                         "authority": "dictionary_type_list",
                         "items": [
-                            {
-                                "label": "用户管理",
-                                "path": "/sys/users",
-                                "authority": "users"
-                            },
+                            // {
+                            //     "label": "用户管理",
+                            //     "path": "/sys/users",
+                            //     "authority": "users"
+                            // },
                             {
                                 "label": "字典管理",
                                 "path": "/sys/dxnry",
@@ -64,12 +64,12 @@
                                 "label": "角色管理",
                                 "path": "/auth/roles",
                                 "authority": "auth_section_role"
-                            },
-                            {
-                                "label": "部门管理",
-                                "path": "/auth/dept",
-                                "authority": "auth_section_department"
                             }
+                            // {
+                            //     "label": "部门管理",
+                            //     "path": "/auth/dept",
+                            //     "authority": "auth_section_department"
+                            // }
                         ]
                     },
                     // {
@@ -405,6 +405,20 @@
                         ]
                     },
                     {
+                        "label": "提料任务",
+                        "icon": "RD_fangyangrenwu",
+                        "path": "/materialTask",
+                        "appName": "RD",
+                        "authority": "rd_lofting_task",
+                        "items": [
+                            {
+                                "label": "提料任务",
+                                "path": "/materialTask/materialTaskList",
+                                "authority": "rd_lofting_task"
+                            }
+                        ]
+                    },
+                    {
                         "label": "采购任务",
                         "icon": "gongying-caigourenwu_caigourenwu",
                         "path": "/buyingTask",
@@ -595,7 +609,7 @@
                         "label": "计划排产",
                         "icon": "zhujihuapaichan-jihuapaichan_jihuapaichan",
                         "path": "/planProd",
-                        "appName": "PS",
+                        "appName": "PC",
                         "authority": "approvalm",
                         "items": [
                             {
@@ -604,7 +618,7 @@
                                 "authority": "approvalm"
                             },
                             {
-                                "label": "技术下发",
+                                "label": "技术排产",
                                 "path": "/planSchedule/planScheduleMngt",
                                 "authority": "approvalm"
                             }
@@ -667,7 +681,7 @@
                             },
                             {
                                 "label": "成品库存",
-                                "path": "/packagingWorkshop/stock",
+                                "path": "/packagingWorkshop/packageStock",
                                 "authority": "package_workshop_package_warehouse_management"
                             }
                         ]
@@ -952,7 +966,7 @@
                     {
                         "label": "车间计划基础配置",
                         "icon": "zhujihuapaichan-chejianjihuajichupeizhi_chejianjihuajichupeizhi",
-                        "appName": "PS",
+                        "appName": "PC",
                         "path": "/workshopPlanBasic",
                         "authority": "approvalm",
                         "items": [
@@ -971,7 +985,7 @@
                     {
                         "label": "主生产计划",
                         "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
-                        "appName": "PS",
+                        "appName": "PC",
                         "path": "/planBaseSetting",
                         "authority": "approvalm",
                         "items": [

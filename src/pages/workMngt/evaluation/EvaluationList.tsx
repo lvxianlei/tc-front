@@ -77,7 +77,7 @@ export default function EvaluationList(): React.ReactNode {
     ]
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
         resole(data);
     }), {})
     const programLeader: any = data?.records || [];
@@ -89,6 +89,8 @@ export default function EvaluationList(): React.ReactNode {
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
@@ -133,7 +135,7 @@ export default function EvaluationList(): React.ReactNode {
                 children: <Form.Item name="assessUser" initialValue={location.state?.userId || ''}>
                     <Select placeholder="请选择" style={{ width: "150px" }}>
                         {programLeader && programLeader.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                         })}
                     </Select>
                 </Form.Item>

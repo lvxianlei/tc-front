@@ -6,11 +6,6 @@
             "width": 120
         },
         {
-            "title": "生产批次",
-            "dataIndex": "productionBatch",
-            "width": 120
-        },
-        {
             "title": "状态",
             "dataIndex": "stockStatusName",
             "width": 120

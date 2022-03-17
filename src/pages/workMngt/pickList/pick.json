@@ -21,7 +21,7 @@
             "title": "镀锌要求"
         },
         {
-            "dataIndex": "description",
+            "dataIndex": "peculiarDescription",
             "title": "备注"
         }
     ],

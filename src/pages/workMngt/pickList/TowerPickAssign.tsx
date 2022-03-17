@@ -31,6 +31,7 @@ export interface TowerPickAssignState {
     pattern?: any[];
     materialCheckLeader?: any[];
     departmentData?: SelectDataNode[];
+    time: any;
 }
 
 interface IAppointed {
@@ -68,6 +69,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     public state: TowerPickAssignState = {
         visible: false,
         repeatModal: false,
+        time:'',
         user: [],
         materialCheckLeader: [],
         departmentData: [],
@@ -82,8 +84,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     }
 
     private async modalShow(): Promise<void> {
-        const data = this.props.type === 'message'||this.props.type === 'detail'? await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`):await RequestUtil.get<IAppointed>(`/tower-science/productSegment/${ this.props.id }`)
-        const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        const data = this.props.type === 'message'||this.props.type === 'detail'? await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`):await RequestUtil.get<IAppointed>(`/tower-science/materialProductCategory/assign/${ this.props.id }`)
+        const departmentData = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
             return {
                 label:name,
@@ -94,16 +96,16 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             departmentData: departmentData,
             visible: true,
             appointed: data,
-            pattern: renderEnum
+            pattern: renderEnum,
+            time: moment(data?.plannedDeliveryTime)
         })
         let detailData = this.props.detailData;
-        if(this.props.type === 'message'||this.props.type === 'detail'){
+        // if(this.props.type === 'message'||this.props.type === 'detail'){  //提料指派1.2.0版本 去掉
             detailData = {
                 ...detailData,
-                plannedDeliveryTime: moment(detailData?.plannedDeliveryTime)
+                plannedDeliveryTime: moment(data?.plannedDeliveryTime)
             }
-        }
-       
+        // }
         this.getForm()?.setFieldsValue({  ...data, ...detailData});
         if(this.props.type==='message'&& data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
             this.onDepartmentChange(data.materialCheckLeaderDepartment, "校核人");
@@ -123,7 +125,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                 let values = this.getForm()?.getFieldsValue(true);
                 values = {
                     ...values,
-                    plannedDeliveryTime: values?.plannedDeliveryTime && values?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
+                    plannedDeliveryTime: values?.plannedDeliveryTime && values?.plannedDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
                     productCategory: this.state.appointed?.productCategory || this.state.appointed?.productCategoryId,
                     productCategoryName: this.state.appointed?.productCategoryName,
                     pattern: this.state.appointed?.pattern,
@@ -149,7 +151,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
      * onDepartmentChange
      */
     public onDepartmentChange = async (value: Record<string, any>, title: string) => {
-        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
+        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${ value }&size=1000`);
         let appointed = this.getForm()?.getFieldsValue(true);
         if(title === '校对'){
             this.setState({
@@ -189,6 +191,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 this.wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
@@ -199,7 +203,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             return (
                 <TreeNode 
                     key={ item.id } 
-                    title={ item.title } 
+                    title={ item.name } 
                     value={ item.id } 
                     className={ styles.node } 
                     >
@@ -210,7 +214,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
         return <TreeNode 
                     { ...item } 
                     key={ item.id } 
-                    title={ item.title } 
+                    title={ item.name } 
                     value={ item.id }
                 />;
     });
@@ -289,6 +293,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                 : <><Descriptions.Item label="段信息">
                                 <Form.Item 
                                     name="name"
+                                    initialValue={'全部'}
                                     rules={[{
                                         required: true,
                                         message: '请输入段信息'
@@ -296,12 +301,12 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     {
                                         pattern: /^[^\s]*$/,
                                         message: '禁止输入空格',
-                                    }, 
+                                    },
                                     {
-                                        pattern: /^[0-9a-zA-Z-,]*$/,
-                                        message: '仅可输入数字/字母/-/,',
+                                        pattern: /^(全部)$|^([0-9a-zA-Z-,]*)$/,
+                                        message: '仅可输入数字/字母/-/,/全部',
                                     }]}>
-                                    <Input placeholder="请输入（1-3，5，ac，w）"/>
+                                    <Input placeholder="请输入（1-3，5，ac，w，全部）" />
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="提料人">
@@ -336,8 +341,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     <Select placeholder="请选择" style={{width:'120px'}}>
                                         { this.state?.user && this.state.user.map((item: any) => {
                                             return <Select.Option 
-                                                        key={ item.id } 
-                                                        value={ item.id }
+                                                        key={ item.userId } 
+                                                        value={ item.userId }
                                                     >
                                                         { item.name }
                                                     </Select.Option>
@@ -384,8 +389,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     <Select placeholder="请选择" style={{width:'120px'}}>
                                         { this.state?.materialCheckLeader && this.state.materialCheckLeader.map((item: any) => {
                                             return <Select.Option 
-                                                        key={ item.id } 
-                                                        value={ item.id }
+                                                        key={ item.userId } 
+                                                        value={ item.userId }
                                                     >
                                                         { item.name }
                                                     </Select.Option>
@@ -400,7 +405,9 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         required: true,
                                         message: '请选择交付时间'
                                     }]}>
-                                    <DatePicker />
+                                    <DatePicker format={'YYYY-MM-DD HH:mm:ss'} disabledDate={(current)=> {
+                                        return current && current < moment(this.state.time);
+                                    }} showTime/>
                                 </Form.Item>
                             </Descriptions.Item></>
                             }

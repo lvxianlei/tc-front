@@ -42,7 +42,7 @@
         },
         {
             "dataIndex": "weight",
-            "title": "重量（kg）合计"
+            "title": "重量（吨）合计"
         },
         {
             "dataIndex": "remark",
@@ -101,7 +101,7 @@
             "title": "品名"
         },
         {
-            "dataIndex": "materialStandardName",
+            "dataIndex": "standardName",
             "title": "标准"
         },
         {

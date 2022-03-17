@@ -3,7 +3,7 @@
  * 2021/11/22
  */
 import React, { useState, useRef } from 'react';
-import { Button, Input, DatePicker, Select, Form, TreeSelect, Table, Typography } from 'antd'
+import { Button, Input, DatePicker, Select, Form, TreeSelect, Table } from 'antd'
 import { Page } from '../common'
 import { fundRecordColumns } from "./fundRecord.json"
 import { payTypeOptions } from '../../configuration/DictionaryOptions';
@@ -11,9 +11,7 @@ import OverViewRecord from './overViewRecord'; // 查看付款记录详情
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil'
-import OtherDetail from '../questionMngt/OtherDetail';
 
-const { Text } = Typography;
 interface ViewRefProps {
     getDetail: () => void
 }
@@ -141,7 +139,7 @@ export default function FaundInfomation() {
                 ]}
                 sourceKey="paymentDetailListVOIPage.records"
                 extraOperation={(data: any) => <>
-                    金额合计：{data ? changeTwoDecimal_f(data.totalSumMoney) : 0.00}元
+                    金额合计：<span style={{ color: "#FF8C00" }}>{data ? changeTwoDecimal_f(data.totalSumMoney) : 0.00}元</span>
                 </>}
                 isSunmryLine={addList}
                 columns={[
@@ -200,7 +198,7 @@ export default function FaundInfomation() {
                             <>
                                 {
                                     (pageData && pageData.length > 0) ? (
-                                        <Table.Summary.Row>
+                                        <Table.Summary.Row style={{ background: "rgba(255, 140, 0, .08)" }}>
                                             {
                                                 number.map((item: any, index: number) => {
                                                     if (index === 0) {

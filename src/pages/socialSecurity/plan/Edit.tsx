@@ -142,18 +142,20 @@ export default function Edit() {
                                 ...item,
                                 render: (value: any, row: any, index: number) => {
                                     const obj: { children: any, props: { rowSpan: number, style: any } } = {
-                                        children: <Form.Item rules={[
-                                            {
-                                                "required": true,
-                                                "message": "请选择生效/失效日期..."
-                                            }
-                                        ]}
+                                        children: <Form.Item
+                                            style={{ height: 28 }}
+                                            rules={[
+                                                {
+                                                    "required": true,
+                                                    "message": "请选择生效/失效日期..."
+                                                }
+                                            ]}
                                             name={[index, item.dataIndex]}>
                                             <DatePicker.RangePicker value={value} picker="month" format="YYYY-MM" />
                                         </Form.Item>,
                                         props: {
                                             rowSpan: 0,
-                                            style: {}
+                                            style: { height: 28 }
                                         }
                                     }
                                     if (index % 2 === 0) {
@@ -172,6 +174,7 @@ export default function Edit() {
                                 return ({
                                     ...item,
                                     render: (value: string, record: any, index: number) => <Form.Item
+                                        style={{ height: 28 }}
                                         rules={[
                                             {
                                                 "required": true,
@@ -179,13 +182,14 @@ export default function Edit() {
                                             }
                                         ]}
                                         name={[index, item.dataIndex]}>
-                                        <InputNumber value={value} style={{ width: "100%" }} precision={2} />
+                                        <InputNumber value={value} style={{ width: "100%", height: 28 }} precision={2} />
                                     </Form.Item>
                                 })
                             case "cardinalityLowerBound":
                                 return ({
                                     ...item,
                                     render: (value: string, record: any, index: number) => <Form.Item
+                                        style={{ height: 28 }}
                                         rules={[
                                             {
                                                 "required": true,
@@ -193,20 +197,21 @@ export default function Edit() {
                                             }
                                         ]}
                                         name={[index, item.dataIndex]}>
-                                        <InputNumber value={value} style={{ width: "100%" }} precision={2} />
+                                        <InputNumber value={value} style={{ width: "100%", height: 28 }} precision={2} />
                                     </Form.Item>
                                 })
                             case "fixedCost":
                                 return ({
                                     ...item,
-                                    render: (value: string, record: any, index: number) => <Form.Item name={[index, item.dataIndex]}>
-                                        <InputNumber value={value} style={{ width: "100%" }} precision={2} />
+                                    render: (value: string, record: any, index: number) => <Form.Item style={{ height: 28 }} name={[index, item.dataIndex]}>
+                                        <InputNumber value={value} style={{ width: "100%", height: 28 }} precision={2} />
                                     </Form.Item>
                                 })
                             case "paymentProportion":
                                 return ({
                                     ...item,
                                     render: (value: string, record: any, index: number) => <Form.Item
+                                        style={{ height: 28 }}
                                         rules={[
                                             {
                                                 "required": true,
@@ -214,7 +219,7 @@ export default function Edit() {
                                             }
                                         ]}
                                         name={[index, item.dataIndex]}>
-                                        <InputNumber value={value} style={{ width: "100%" }} precision={2} />
+                                        <InputNumber value={value} style={{ width: "100%", height: 28 }} precision={2} />
                                     </Form.Item>
                                 })
                             default:
@@ -224,7 +229,7 @@ export default function Edit() {
                     dataSource={insuranceData} />
             </Form>
             <DetailTitle title="商业保险" />
-            <Row><Button type="primary" onClick={handleAdd}>新增</Button></Row>
+            <Row style={{ marginBottom: 16 }}><Button type="primary" onClick={handleAdd}>新增</Button></Row>
             <Form form={businessForm}>
                 <CommonTable
                     rowKey="id"

@@ -166,7 +166,7 @@ export default function SalesPlanEdit() {
         const productDetailsFormData = productDetailsForm.getFieldsValue()
         const newProductDetails = productDetails.map((item: any) => {
             if (productDetailsFormData[item.id].deliveryTime) {
-                return item
+                return ({ ...item, deliveryTime: productDetailsFormData[item.id].deliveryTime })
             } else {
                 newProductDetailsForm[item.id] = { ...deliveryTime }
                 return ({ ...item, ...deliveryTime })
@@ -193,7 +193,7 @@ export default function SalesPlanEdit() {
      * 比较时间大小
      */
     const comparisonTime = (timer: any) => {
-        let v:any = [];
+        let v: any = [];
         timer.map((d: any) => {
             let date = new Date(d).getTime();
             v.push(date);
@@ -213,7 +213,7 @@ export default function SalesPlanEdit() {
                 })
             }
         }
-        
+
     }, [JSON.stringify(productDetails)])
 
     // 当修改客户交货日期触发
@@ -290,6 +290,7 @@ export default function SalesPlanEdit() {
             <DetailTitle title="杆塔信息" operation={[<Button key="select" type="primary" disabled={!saleOrderId} onClick={handleSelectClick}>选择杆塔明细</Button>]} />
             <Form form={productDetailsForm} onFieldsChange={handleChange}>
                 <CommonTable
+                    pagination={false}
                     columns={[...salesAssist.map((item: any) => {
                         if (item.dataIndex === "deliveryTime") {
                             return ({
@@ -299,7 +300,7 @@ export default function SalesPlanEdit() {
                                     initialValue={value}
                                     rules={item.rules}
                                 >
-                                    <FormItemType type={item.type} data={item}  />
+                                    <FormItemType type={item.type} data={item} />
                                 </Form.Item>
                             })
                         }

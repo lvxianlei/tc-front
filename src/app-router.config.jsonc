@@ -715,7 +715,7 @@
     },
     { // 驾驶舱-合同看板-明细
       "name": "明细",
-      "path": "/cockpit/contract/:id",
+      "path": "/bulletin/contract/overView/:id",
       "module": "./pages/cockpit/contract/Overview",
       "exact": true,
       "authority": "sw_cockpit_contract_kanban_details"
@@ -800,7 +800,7 @@
     { // 库存管理-余料入库
       "name": "余料入库",
       "path": "/stock/surplusMaterialWarehousing",
-      "module": "./pages/stock/surplusMaterialWarehousing/surplusMaterialWarehousing",
+      "module": "./pages/stock/surplusMaterialWarehousing/index",
       "exact": true,
       "authority": "inventory_management_surplus_material_warehousing"
     },
@@ -814,7 +814,7 @@
     { // 配置管理-仓库管理
       "name": "仓库管理",
       "path": "/config/configList/warehouse",
-      "module": "./pages/stock/warehouse/warehouse",
+      "module": "./pages/stock/warehouse/index",
       "exact": true,
       "authority": "sw_configuration_management_warehouse_management"
     },
@@ -980,7 +980,7 @@
       "authority": "rd_product_material_list"
     },
     { // 工作管理-提料-杆塔配段-杆塔信息
-      "name": "杆塔配段",
+      "name": "杆塔提料明细",
       "path": "/workMngt/pickList/pickTower/:id/:status/pickTowerDetail/:productId",
       "module": "./pages/workMngt/pickList/PickTowerDetail",
       "exact": true,
@@ -1086,7 +1086,7 @@
     },
     { // 工作管理-样板列表
       "name": "样板列表-详情",
-      "path": "/workMngt/templateList/:id/:productCategoryId",
+      "path": "/workMngt/templateList/detail/:id/:productCategoryId",
       "module": "./pages/workMngt/templateList/detail",
       "exact": true,
       "authority": "rd_template_record"
@@ -1119,6 +1119,13 @@
       "exact": true,
       "authority": "rd_lofting_task"
     },
+    { // 提料任务
+      "name": "提料任务",
+      "path": "/materialTask/materialTaskList",
+      "module": "./pages/materialTask/MaterialTaskList",
+      "exact": true,
+      "authority": "rd_lofting_task"
+    },
     { //采购任务-原材料
       "name": "采购任务",
       "path": "/buyingTask/index",
@@ -1128,8 +1135,8 @@
     },
     { //采购任务-原材料-用料清单
       "name": "用料清单",
-      "path": "/buyingTask/materialList",
-      "module": "./pages/buyingTask/materialList",
+      "path": "/buyingTask/detail/:id",
+      "module": "./pages/buyingTask/Overview",
       "exact": true,
       "authority": "auth_section"
     },
@@ -1491,6 +1498,14 @@
       // "authority": "rd_draw_product_category_management"
       "authority": "rd_draw_product_category_management"
     },
+    { // 图纸塔型-配段信息
+      "name": "配段信息",
+      "path": "/drawTower/drawTowerMngt/withSectionInformation/:id",
+      "module": "./pages/drawTower/WithSectionInformation",
+      "exact": true,
+      // "authority": "rd_draw_product_category_management"
+      "authority": "rd_draw_product_category_management"
+    },
     { // 工作台
       "name": "工作台",
       "path": "/workBench/workBenchMngt",
@@ -1621,9 +1636,37 @@
       "authority": "approvalm"
     },
     { // 计划排产-技术下发
-      "name": "技术下发",
+      "name": "技术排产",
       "path": "/planSchedule/planScheduleMngt",
       "module": "./pages/planBaseSetting/planSchedule/PlanScheduleMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-拆分批次
+      "name": "拆分批次",
+      "path": "/planSchedule/planScheduleMngt/SplitBatch/:id",
+      "module": "./pages/planBaseSetting/planSchedule/SplitBatch",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-下发技术
+      "name": "下发技术",
+      "path": "/planSchedule/planScheduleMngt/distributedTech/:ids",
+      "module": "./pages/planBaseSetting/planSchedule/DistributedTech",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-计划交货期
+      "name": "计划交货期",
+      "path": "/planSchedule/planScheduleMngt/planDeliveryTime/:ids",
+      "module": "./pages/planBaseSetting/planSchedule/PlanDeliveryTime",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-计划交货期
+      "name": "变更记录",
+      "path": "/planSchedule/planScheduleMngt/planDeliveryTime/:ids/:id",
+      "module": "./pages/planBaseSetting/planSchedule/ChangeRecord",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1699,7 +1742,7 @@
     },
     { // 包装车间-成品库存
       "name": "成品库存",
-      "path": "/packagingWorkshop/stock",
+      "path": "/packagingWorkshop/packageStock",
       "module": "./pages/package-workshop/stock/StockList",
       "exact": true,
       "authority": "package_workshop_package_warehouse_management"

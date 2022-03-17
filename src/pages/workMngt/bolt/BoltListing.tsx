@@ -1,7 +1,7 @@
 /**
  * @author zyc
  * @copyright © 2021 
- * @description 工作管理-螺栓列表
+ * @description 工作管理-螺栓列表-螺栓清单-螺栓明细
  */
 
 import React, { useEffect, useState } from 'react';
@@ -109,7 +109,7 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请输入规格'
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={20}/>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={20} />
                 </Form.Item>
             )
         },
@@ -134,9 +134,54 @@ export default function BoltList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "subtotal"]} initialValue={_} rules={[{
                     required: true,
-                    message: '请输入名称'
+                    message: '请输入小计'
                 }]}>
-                    <Input type="number" size="small" onChange={() => rowChange(index)} />
+                    <Input type="number" size="small" onChange={(e) => {
+                        rowChange(index);
+                        const data = form.getFieldsValue(true).data;
+                        const total = Number(e.target.value) + Number(data[index].wealth)
+                        data[index] = {
+                            ...data[index],
+                            total: total
+                        }
+                        if (data[index].singleWeight) {
+                            data[index] = {
+                                ...data[index],
+                                totalWeight: total * data[index].singleWeight
+                            }
+                        }
+                        form?.setFieldsValue({ data: data })
+                    }} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'wealth',
+            title: '裕度',
+            width: 120,
+            dataIndex: 'wealth',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "wealth"]} initialValue={_} rules={[{
+                    required: true,
+                    message: '请输入裕度'
+                }]}>
+                    <Input type="number" max={9999} size="small" onChange={(e) => {
+                        rowChange(index);
+                        const data = form.getFieldsValue(true).data;
+                        const total = Number(e.target.value) + Number(data[index].subtotal)
+                        data[index] = {
+                            ...data[index],
+                            total: total
+                        }
+                        if (data[index].singleWeight) {
+                            data[index] = {
+                                ...data[index],
+                                totalWeight: total * data[index].singleWeight
+                            }
+                        }
+                        form?.setFieldsValue({ data: data })
+                    }} />
                 </Form.Item>
             )
         },
@@ -151,17 +196,7 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请输入合计'
                 }]}>
-                    <Input type="number" size="small" onChange={(e) => {
-                        rowChange(index);
-                        const data = form.getFieldsValue(true).data;
-                        if (data[index].singleWeight) {
-                            data[index] = {
-                                ...data[index],
-                                totalWeight: Number(e.target.value) * data[index].singleWeight
-                            }
-                            form?.setFieldsValue({ data: data })
-                        }
-                    }} />
+                    <Input type="number" size="small" onChange={() => rowChange(index)} disabled />
                 </Form.Item>
             )
         },
@@ -213,7 +248,7 @@ export default function BoltList(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "description"]} initialValue={_}>
-                    <Input size="small" onChange={() => rowChange(index)}/>
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -249,7 +284,7 @@ export default function BoltList(): React.ReactNode {
                             okText="确认"
                             cancelText="取消"
                         >
-                            <Button type="link" hidden={params.status === '3' && params.boltLeader === userId ? false : true}>删除</Button>
+                            <Button type="link" hidden={params.status === '2' && params.boltLeader === userId ? false : true}>删除</Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -281,7 +316,6 @@ export default function BoltList(): React.ReactNode {
 
     useEffect(() => {
         getDataSource();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return <>
@@ -291,7 +325,7 @@ export default function BoltList(): React.ReactNode {
                 <Button type="primary" onClick={() => downloadTemplate('/tower-science/boltRecord/exportTemplate', '螺栓导入模板')} ghost>模板下载</Button>
             </Space>
             <Space direction="horizontal" size="small" className={`${styles.topbtn} ${styles.btnRight}`}>
-                <Button type="primary" hidden={params.status === '3' && params.boltLeader === userId ? false : true} ghost onClick={() => {
+                <Button type="primary" hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost onClick={() => {
                     if (editorLock === '编辑') {
                         setColumns(columns);
                         setEditorLock('锁定');
@@ -304,7 +338,7 @@ export default function BoltList(): React.ReactNode {
                         form.setFieldsValue({ data: [...newData] })
                     } else {
                         const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-                        if(form) {
+                        if (form) {
                             form.validateFields().then(res => {
                                 let values = form.getFieldsValue(true).data;
                                 if (values) {
@@ -364,13 +398,13 @@ export default function BoltList(): React.ReactNode {
                         }
                     }}
                 >
-                    <Button type="primary" hidden={params.status === '3' && params.boltLeader === userId ? false : true} ghost>导入</Button>
+                    <Button type="primary" hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost>导入</Button>
                 </Upload>
-                {params.status === '3' && params.boltLeader === userId ? editorLock === '锁定' ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => { getDataSource() }} /> : null}
+                {params.status === '2' && params.boltLeader === userId ? editorLock === '锁定' ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => { getDataSource() }} /> : null}
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>
             <Form form={form}>
-                <Table columns={tableColumns} dataSource={dataSource} pagination={false} onRow={ () => ({ className: AbstractMngtComponentStyles.tableRow })}/>
+                <Table columns={tableColumns} dataSource={dataSource} pagination={false} onRow={() => ({ className: AbstractMngtComponentStyles.tableRow })} />
             </Form>
         </DetailContent>
         <Modal

@@ -21,6 +21,7 @@ export default function ApplicationColunm(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [acceptStatus, setAcceptStatus] = useState<number>(1);
+    const [filterValue, setFilterValue] = useState<any>({acceptStatus: 1});
     const [visible, setVisible] = useState<boolean>(false);
     const [visibleRecovery, setVisibleRecovery] = useState<boolean>(false);
     const [visibleSee, setVisibleSee] = useState<boolean>(false);
@@ -60,6 +61,7 @@ export default function ApplicationColunm(): React.ReactNode {
             delete value.guaranteeTime
         }
         value["acceptStatus"] = acceptStatus;
+        setFilterValue(value);
         return value
     }
 
@@ -182,7 +184,7 @@ export default function ApplicationColunm(): React.ReactNode {
                     </>
                 }
                 onFilterSubmit={onFilterSubmit}
-                filterValue={{ acceptStatus }}
+                filterValue={ filterValue }
                 searchFormItems={[
                     {
                         name: 'startRefundTime',

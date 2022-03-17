@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
+import React, { useState, forwardRef, useImperativeHandle, useRef, useEffect } from "react"
 import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber } from "antd"
 import { BaseInfo, CommonTable, DetailTitle, IntgSelect } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
@@ -10,10 +10,18 @@ interface EditProps {
     id: string
     type: "new" | "edit"
 }
+interface PagenationProps {
+    current: number
+    pageSize: number
+}
 
 const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref) => {
     const [form] = Form.useForm()
     const [selectRows, setSelectRows] = useState<any[]>([])
+    const [pagenation, setPagenation] = useState<PagenationProps>({
+        current: 1,
+        pageSize: 10
+    })
     const {
         loading,
         data,
@@ -22,15 +30,19 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan`, {
                 ...filterValue,
-                planStatus: 1
+                planStatus: 1,
+                current: pagenation.current,
+                pageSize: pagenation.pageSize
             })
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }))
+    }), {refreshDeps: [pagenation.current]})
 
     useImperativeHandle(ref, () => ({ selectRows }), [JSON.stringify(selectRows)])
+
+    const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
     return <>
         <Form form={form} onFinish={(values) => run({
@@ -65,7 +77,15 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
                 onChange: (_: any, selectedRows: any[]) => {
                     setSelectRows(selectedRows)
                 }
-            }} />
+            }}
+            pagination={{
+                size: "small",
+                pageSize: data?.pageSize,
+                onChange: paginationChange,
+                current: data?.current,
+                total: data?.total
+            }}
+        />
     </>
 })
 
@@ -82,6 +102,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [chooseVisible, setChooseVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
+    const [list, setList] = useState<any[]>([])
     const [form] = Form.useForm();
     const [purchasePlanId, setPurchasePlanId] = useState('');
     const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -96,7 +117,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     materialStandard: res.source === 1 ? res.materialStandardName : res.materialStandard
                 }
             })
-            setMaterialList(comparisonPriceDetailVos || [])
+            // setMaterialList(comparisonPriceDetailVos || [])
+            setList(comparisonPriceDetailVos || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -143,9 +165,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setMaterialList([])
     }
 
-    const handleAddModalOk = () => {
-        const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        setMaterialList([...materialList, ...newMaterialList.map((item: any) => ({
+    useEffect(() => {
+        const newMaterialList = list.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        setMaterialList([...list.map((item: any) => ({
             ...item,
             num: item.num || "0",
             width: formatSpec(item.spec).width,
@@ -153,6 +175,19 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2)
         }))])
         setVisible(false)
+    }, [JSON.stringify(list)])
+
+    const handleAddModalOk = () => {
+        setList(popDataList)
+        // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        // setMaterialList([...materialList, ...newMaterialList.map((item: any) => ({
+        //     ...item,
+        //     num: item.num || "0",
+        //     width: formatSpec(item.spec).width,
+        //     thickness: formatSpec(item.spec).thickness,
+        //     totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2)
+        // }))])
+        // setVisible(false)
     }
 
     const formatSpec = (spec: any): { width: string, thickness: string } => {
@@ -176,7 +211,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             ...item,
             num: item.planPurchaseNum || "0",
             spec: item.structureSpec,
-            width: formatSpec(item.spec).width,
+            // width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
             weight: item.singleWeight || 0,
             source: 1,
@@ -220,7 +255,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     return <Spin spinning={loading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
-            onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
+            onOk={handleAddModalOk} onCancel={() => {
+                const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+                setVisible(false)
+                // setMaterialList([])
+            }}>
             <PopTableContent data={{
                 ...(addMaterial as any),
                 columns: (addMaterial as any).columns.map((item: any) => {
@@ -234,15 +273,32 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return item
                 })
             }}
-                onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
-                    ...item,
-                    spec: item.structureSpec,
-                    source: 2,
-                    materialTexture: item.structureTexture,
-                    standardName: item.standardName,
-                    materialStandard: item.standard,
-                    proportion: item.proportion == -1 ? 0 : item.proportion
-                })))} />
+            value={{
+                id: "",
+                records: materialList,
+                value: ""
+            }}
+                onChange={(fields: any[]) => {
+                    setPopDataList(fields.map((item: any) => ({
+                        ...item,
+                        spec: item.structureSpec,
+                        source: 2,
+                        materialTexture: item.structureTexture,
+                        standardName: item.standardName,
+                        materialStandard: item.standard,
+                        proportion: item.proportion == -1 ? 0 : item.proportion
+                    })))
+                    // setMaterialList(fields.map((item: any) => ({
+                    //     ...item,
+                    //     spec: item.structureSpec,
+                    //     source: 2,
+                    //     materialTexture: item.structureTexture,
+                    //     standardName: item.standardName,
+                    //     materialStandard: item.standard,
+                    //     proportion: item.proportion == -1 ? 0 : item.proportion
+                    // })))
+                }}
+            />
         </Modal>
         <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk}
             onCancel={() => setChooseVisible(false)}>

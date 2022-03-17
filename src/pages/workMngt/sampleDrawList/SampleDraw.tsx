@@ -80,7 +80,7 @@ export default function SampleDraw(): React.ReactNode {
             // fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    {params.status === '2' ? <Popconfirm
+                    {params.status === '1' ? <Popconfirm
                         title="要删除该条数据吗？"
                         okText="确认"
                         cancelText="取消"
@@ -159,7 +159,7 @@ export default function SampleDraw(): React.ReactNode {
                         <Button type="primary" onClick={() => {
                             downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {}, true)
                         }}>导出</Button>
-                        {params.status === '2' ? <Upload
+                        {params.status === '1' ? <Upload
                             accept=".zip,.rar,.7z"
                             multiple={true}
                             action={`${process.env.REQUEST_API_PATH_PREFIX}/tower-science/smallSample/sampleUploadByZip/${params.id}`}
@@ -175,7 +175,7 @@ export default function SampleDraw(): React.ReactNode {
                         <Button type="primary" onClick={() => {
                             history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
                         }}>下载样图</Button>
-                        {params.status === '2' ? <Popconfirm
+                        {params.status === '1' ? <Popconfirm
                             title="确认完成小样图?"
                             onConfirm={async () => await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(() => {
                                 message.success('提交成功！');
@@ -188,7 +188,7 @@ export default function SampleDraw(): React.ReactNode {
                             <Button type="primary">完成小样图</Button>
                         </Popconfirm> : null}
                         <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                        <span>小样图数：{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount + headerName?.noSmallSampleCount}</span>
+                        <span>小样图数：<span style={{color:'#FF8C00'}}>{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount + headerName?.noSmallSampleCount}</span></span>
                     </Space>
                 }
                 searchFormItems={[

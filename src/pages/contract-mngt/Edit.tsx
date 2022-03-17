@@ -78,7 +78,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
             baseForm.setFieldsValue({
                 ...result,
-                operator: { first: result.operatorDeptId, second: result.operatorId },
+                operator: { id: result.operatorId, value: result.operatorName },
                 supplier: { id: result.supplierId, value: result.supplierName },
                 purchasePlan: { id: result.purchasePlanId, value: result.purchasePlanNumber }
             })
@@ -126,8 +126,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 const name = res.materialTexture;
                 return {
                     ...res,
-                    materialTexture: id,
-                    materialTextureId: name,
+                    materialTexture: name,
+                    materialTextureId: id,
                 }
             }) || [])
             setSupplierId(result.supplierId);
@@ -223,8 +223,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const values = {
                 ...baseInfo,
                 fileIds: attchsRef.current.getDataSource().map(item => item.id),
-                operatorDeptId: baseInfo.operator?.first,
-                operatorId: baseInfo.operator?.second,
+                operatorId: baseInfo.operator?.id,
                 supplierId: baseInfo.supplier.id,
                 supplierName: baseInfo.supplier.value,
                 purchasePlanId: baseInfo.purchasePlan?.id || data?.purchasePlanId,
@@ -251,8 +250,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         price: item.price,
                         taxTotalAmount: item.taxTotalAmount,
                         totalAmount: item.totalAmount,
-                        materialTexture: item.source === 1 ? id : item.materialTexture,
-                        materialTextureId: item.source === 1 ? name : item.materialTextureId,
+                        // materialTexture: item.source === 1 ? id : item.materialTexture,
+                        // materialTextureId: item.source === 1 ? name : item.materialTextureId,
+                        materialTexture: item.materialTexture,
+                        materialTextureId: item.materialTextureId,
                     })
                 })
             }
@@ -311,8 +312,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     taxPrice,
                     price,
                     width: formatSpec(item.structureSpec).width,
-                    materialTexture: id,
-                    materialTextureId: name,
+                    materialTexture: name,
+                    materialTextureId: id,
                     // length: formatSpec(item.structureSpec).length,
                     weight: item.weight || "1.00",
                     taxTotalAmount: (num * taxPrice).toFixed(2),
@@ -329,12 +330,13 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     num: parseFloat(item.num || "1"),
                     taxPrice: parseFloat(item.taxPrice || "1.00"),
                     price: parseFloat(item.price || "1.00"),
+                    weight: (item.weight && item.weight >= 0) ? parseFloat(item.weight) : parseFloat("0")
                 }
                 allData[dataIndex] = value
                 return ({
                     ...item,
-                    taxTotalAmount: (allData.num * allData.taxPrice).toFixed(2),
-                    totalAmount: (allData.num * allData.price).toFixed(2),
+                    taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),
+                    totalAmount: (allData.num * allData.price * allData.weight).toFixed(2),
                     [dataIndex]: value
                 })
             }
@@ -434,7 +436,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return item
                 })
             }}
-                onChange={(fields: any[]) =>
+            value={{
+                id: "",
+                records: materialList,
+                value: ""
+            }}
+                onChange={(fields: any[]) => {
                     setPopDataList(fields.map((item: any) => ({
                         ...item,
                         spec: item.structureSpec,
@@ -448,8 +455,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         taxTotalAmount: item.taxTotalAmount || 1.00,
                         totalAmount: item.totalAmount || 1.00,
                         weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3)
-                    }))
-                    )} />
+                    })))
+                    setMaterialList(fields || [])
+                }} />
         </Modal>
         <DetailTitle title="合同基本信息" />
         <BaseInfo
@@ -463,13 +471,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         return ({ ...item, enum: deliveryMethodEnum })
                     case "transportMethod":
                         return ({ ...item, enum: transportMethodEnum })
-                    case "operator":
-                        return ({
-                            ...item,
-                            render: () => <Form.Item label="" name="operator">
-                                <IntgSelect />
-                            </Form.Item>
-                        })
                     case "comparisonPriceNumber":
                         return ({ ...item, path: `${item.path}?supplierId=${supplierId}&comparisonStatus=2&purchasePlanId=${purchasePlanId}` })
                     default:
@@ -544,19 +545,22 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "materialStandard") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select style={{ width: '150px' }} value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName} onChange={(e: string) => {
-                                const newData = materialList.map((item: any, index: number) => {
-                                    if (index === key) {
-                                        return {
-                                            ...item,
-                                            materialStandard: e.split(',')[0],
-                                            materialStandardName: e.split(',')[1]
+                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select
+                                style={{ width: '150px' }}
+                                value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName}
+                                onChange={(e: string) => {
+                                    const newData = materialList.map((item: any, index: number) => {
+                                        if (index === key) {
+                                            return {
+                                                ...item,
+                                                materialStandard: e.split(',')[0],
+                                                materialStandardName: e.split(',')[1]
+                                            }
                                         }
-                                    }
-                                    return item
-                                })
-                                setMaterialList(newData)
-                            }}>
+                                        return item
+                                    })
+                                    setMaterialList(newData)
+                                }}>
                                 {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         })
@@ -564,19 +568,22 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "materialTextureId") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <Select style={{ width: '150px' }} value={materialList[key]?.materialTextureId && materialList[key]?.materialTextureId + ',' + materialList[key]?.materialTexture} onChange={(e: string) => {
-                                const newData = materialList.map((item: any, index: number) => {
-                                    if (index === key) {
-                                        return {
-                                            ...item,
-                                            materialTextureId: e.split(',')[0],
-                                            materialTexture: e.split(',')[1]
+                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialTexture : <Select
+                                style={{ width: '150px' }}
+                                value={materialList[key]?.materialTextureId && materialList[key]?.materialTextureId + ',' + materialList[key]?.materialTexture}
+                                onChange={(e: string) => {
+                                    const newData = materialList.map((item: any, index: number) => {
+                                        if (index === key) {
+                                            return {
+                                                ...item,
+                                                materialTextureId: e.split(',')[0],
+                                                materialTexture: e.split(',')[1]
+                                            }
                                         }
-                                    }
-                                    return item
-                                })
-                                setMaterialList(newData)
-                            }}>
+                                        return item
+                                    })
+                                    setMaterialList(newData)
+                                }}>
                                 {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         })

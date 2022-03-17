@@ -6,16 +6,17 @@ import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 
 const tableColumns = [
-    { 
-        key: 'index', 
-        title: '序号', 
-        dataIndex: 'index', 
-        width: 50, 
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
+    {
+        key: 'index',
+        title: '序号',
+        dataIndex: 'index',
+        width: 50,
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+    },
     {
         key: 'segmentName',
         title: '段号',
-        dataIndex: 'segmentName', 
+        dataIndex: 'segmentName',
     },
     {
         key: 'code',
@@ -60,16 +61,16 @@ const tableColumns = [
         dataIndex: 'length'
     },
     {
-        key: 'basicsWeight',
+        key: 'basicsTheoryWeight',
         title: '单件理算重量（kg）',
         width: 200,
-        dataIndex: 'basicsWeight'
+        dataIndex: 'basicsTheoryWeight'
     },
     {
-        key: 'drawBasicsWeight',
+        key: 'drawWeight',
         title: '单件图纸重量（kg）',
         width: 200,
-        dataIndex: 'drawBasicsWeight'
+        dataIndex: 'drawWeight'
     },
     {
         key: 'basicsPartNum',
@@ -79,17 +80,17 @@ const tableColumns = [
         dataIndex: 'basicsPartNum'
     },
     {
-        key: 'basicsPartWeight',
+        key: 'partTheoryWeight',
         title: '单段理算重量（kg）',
         width: 200,
         editable: false,
-        dataIndex: 'basicsPartWeight'
+        dataIndex: 'partTheoryWeight'
     },
     {
-        key: 'drawPartWeight',
+        key: 'partDrawWeight',
         title: '单段图纸重量（kg）',
         width: 200,
-        dataIndex: 'drawPartWeight'
+        dataIndex: 'partDrawWeight'
     },
     {
         key: 'description',
@@ -103,7 +104,7 @@ export default function ComponentDetail(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, segmentId: string, data: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/drawProductStructure/list/${ params.segmentId }`)
+        const data = await RequestUtil.get(`/tower-science/drawProductStructure/list/${params.segmentId}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -115,12 +116,22 @@ export default function ComponentDetail(): React.ReactNode {
         </Spin>
     }
 
-    return <DetailContent operation={ [
+    return <DetailContent operation={[
         <Space direction="horizontal" size="small" >
             <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
         </Space>
-    ] }>
-        <p><span>单段件号数：{ params.data.split(',')[0] }</span><span>单段件数：{ params.data.split(',')[1] }</span><span>单段重量：{ params.data.split(',')[2] }</span></p>
-        <CommonTable columns={ tableColumns } dataSource={ detailData } pagination={ false }/>
+    ]}>
+        <p>
+            <span>单段件号数：
+                <span style={{ color: '#FF8C00', paddingRight: '12px' }}>{params.data.split(',')[0]}</span>
+            </span>
+            <span>单段件数：
+                <span style={{ color: '#FF8C00', paddingRight: '12px' }}>{params.data.split(',')[1]}</span>
+            </span>
+            <span>单段重量：
+                <span style={{ color: '#FF8C00', paddingRight: '12px' }}>{params.data.split(',')[2]}</span>
+            </span>
+        </p>
+        <CommonTable columns={tableColumns} dataSource={detailData} pagination={false} />
     </DetailContent>
 }

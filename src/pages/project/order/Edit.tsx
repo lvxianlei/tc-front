@@ -15,6 +15,16 @@ export default function SeeGuarantee(): JSX.Element {
     const history = useHistory();
     const [addCollectionForm] = Form.useForm();
     const params = useParams<{ projectId: string, id: string }>();
+
+    const processingNumber = (arg: any, num: number) => {
+        arg = arg.replace(/[^\d.]/g, "");
+        arg = arg.replace(/^\./g, "");
+        arg = arg.replace(/\.{2,}/g, ".");
+        arg = arg.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        arg = arg.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3');
+        return arg
+    }
+
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
         if (fields.internalNumber) {
             // 关联合同
@@ -36,16 +46,17 @@ export default function SeeGuarantee(): JSX.Element {
         }
         if (fields.orderWeight) {
             // 订单重量改变
-               // 影响含税单价，不含税单价，不含税金额
+            // 影响含税单价，不含税单价，不含税金额
             // 不含税金额 = 不含税单价 * 订单重量
             const taxRate = addCollectionForm.getFieldValue("taxRate") * 1; // 税率
-            const taxPrice = addCollectionForm.getFieldValue("taxAmount") / addCollectionForm.getFieldValue("orderWeight"); // 含税单价
+            const taxPrice = addCollectionForm.getFieldValue("orderWeight") > 0 ? addCollectionForm.getFieldValue("taxAmount") / addCollectionForm.getFieldValue("orderWeight") : 0; // 含税单价
             const price = taxPrice / (1 + taxRate  / 100);
             const result =  (+addCollectionForm.getFieldValue("orderWeight") || 0) * price; // 含税金额
             addCollectionForm.setFieldsValue({
                 amount: doNumber(result, 4),
-                taxPrice: doNumber(taxPrice, 4), // 含税单价
-                price: doNumber(price, 4) // 不含税单价
+                taxPrice: processingNumber(taxPrice + "", 6), // 含税单价
+                price: doNumber(price, 4), // 不含税单价
+                orderWeight: processingNumber(fields.orderWeight, 8)
             })
             return;
         }
@@ -60,11 +71,15 @@ export default function SeeGuarantee(): JSX.Element {
                 const price = result / (1 + taxRate  / 100);
                 const amount =  (+addCollectionForm.getFieldValue("orderWeight") || 0) * price; // 含税金额
                 addCollectionForm.setFieldsValue({
-                    taxPrice: doNumber(result, 4),
+                    taxPrice: processingNumber(result + "", 6),
                     price: doNumber(price, 4),
-                    amount: doNumber(amount, 4)
+                    amount: doNumber(amount, 4),
+                    taxAmount: processingNumber(fields.taxAmount, 4),
                 })
             }
+            addCollectionForm.setFieldsValue({
+                taxAmount: processingNumber(fields.taxAmount, 4),
+            })
             return;
         }
         if (fields.taxRate) {
@@ -83,7 +98,6 @@ export default function SeeGuarantee(): JSX.Element {
     }
     const handleSave = async() => {
         const baseData: any = await addCollectionForm.validateFields();
-        console.log(baseData, "bas")
         const result = {
             projectId: params.projectId,
             ...baseData,
@@ -114,12 +128,20 @@ export default function SeeGuarantee(): JSX.Element {
     const { loading, data: orderData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/saleOrder/${params.id}`)
+            addCollectionForm.setFieldsValue({
+                ...result?.contractInfoVo,
+                ...result,
+                internalNumber: {
+                    id: result?.contractInfoVo.contractId,
+                    value: result?.contractInfoVo.internalNumber,
+                    records: result?.contractInfoVo ? [result?.contractInfoVo] : []
+                }
+            })
             resole(result);
         } catch (error) {
             reject(error)
         }
     }), { manual: params.id === "new" })
-    
     return (
         <Spin spinning={loading}>
             <DetailContent operation={[
@@ -131,23 +153,16 @@ export default function SeeGuarantee(): JSX.Element {
                     form={addCollectionForm}
                     onChange={performanceBondChange}
                     dataSource={{
-                        orderWeight: "0.00000000",
-                        taxAmount: "0.0000",
-                        amount: "0.0000",
-                        taxPrice: "0.0000",
-                        price: "0.0000",
+                        orderWeight: "0",
+                        taxAmount: "0",
+                        amount: "0",
+                        taxPrice: "0",
+                        price: "0",
                         taxRate: 13,
-                        foreignExchangeAmount: "0.00",
-                        exchangeRate: "0.0000",
-                        foreignPrice: "0.00",
-                        guaranteeAmount: "0.00",
-                        ...orderData?.contractInfoVo,
-                        ...orderData,
-                        internalNumber: {
-                            id: orderData?.contractInfoVo.contractId,
-                            value: orderData?.contractInfoVo.internalNumber,
-                            records: orderData?.contractInfoVo ? [orderData?.contractInfoVo] : []
-                        }
+                        foreignExchangeAmount: "0",
+                        exchangeRate: "0",
+                        foreignPrice: "0",
+                        guaranteeAmount: "0"
                     }}
                     col={4}
                     columns={[

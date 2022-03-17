@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Button, Select, Input, Modal, message, Upload } from 'antd'
+import { Button, Select, Input, Modal, message, Upload, Popconfirm } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { priceMaintain } from "./rawMaterial.json"
 import { Page } from '../../common'
@@ -52,23 +52,6 @@ export default function Overview(): React.ReactNode {
         }
     }), { manual: true })
 
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            title: "删除",
-            content: "确定删除吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    await deleteRun(id)
-                    message.success("成功删除...")
-                    resove(true)
-                    history.go(0)
-                } catch (error) {
-                    reject(false)
-                }
-            })
-        })
-    }
-
     const handleEditOk = async () => {
         await editRef.current.onSubmit()
         message.success("保存成功...")
@@ -120,7 +103,22 @@ export default function Overview(): React.ReactNode {
                                     setEditId(record.id)
                                     setVisible(true)
                                 }}>编辑</Button>
-                                <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
+                                <Popconfirm
+                                    title="确定删除吗？"
+                                    onConfirm={async() => {
+                                        await deleteRun(record?.id)
+                                        message.success("删除成功...")
+                                        history.go(0)
+                                    }}
+                                    okText="确认"
+                                    cancelText="取消"
+                                >
+                                    <Button
+                                        type="link"
+                                        size="small"
+                                        className="btn-operation-link"
+                                    >删除</Button>
+                                </Popconfirm>
                             </>
                         }
                     }

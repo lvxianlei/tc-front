@@ -1,9 +1,8 @@
 import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment, OperationRecord } from '../../common'
 import { paymentList, paymentdetail } from "./payment.json"
-import { auditIdRecord } from "../../approval-mngt/approval.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 
@@ -29,8 +28,9 @@ export default function Edit() {
             <DetailTitle title="请款明细" />
             <CommonTable columns={paymentdetail} dataSource={data?.payInfoVOList || []} />
             <Attachment dataSource={data?.attachVos || []} />
-            <DetailTitle title="审批记录" />
-            <CommonTable haveIndex columns={auditIdRecord} dataSource={data?.approveRecordVOList || []} />
+            {/* <DetailTitle title="审批记录" /> */}
+            {/* <CommonTable haveIndex columns={auditIdRecord} dataSource={data?.approveRecordVOList || []} /> */}
+            <OperationRecord title="审批记录" serviceId={params.id} serviceName="tower-market" operateTypeEnum="APPROVAL" />
         </Spin>
     </DetailContent>
 }
