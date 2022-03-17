@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
-import { Input, DatePicker, Select, Button } from 'antd'
+import { Input, DatePicker, Select, Button, Modal } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
 import { IntgSelect, Page } from '../../common'
 import AuthUtil from "../../../utils/AuthUtil";
+import TaskTower from './TaskTower'
 export default function EnquiryList(): React.ReactNode {
     const history = useHistory()
+    const [visible, setVisible] = useState<boolean>(false)
+    const [chooseId, setChooseId] = useState<string>("")
     const [filterValue, setFilterValue] = useState<object>(history.location.state as object);
     const userId = AuthUtil.getUserId()
     const onFilterSubmit = (value: any) => {
@@ -23,6 +26,10 @@ export default function EnquiryList(): React.ReactNode {
     }
 
     return <>
+        <Modal title="配料方案" visible={visible} width={1011}
+            footer={<Button type="primary" onClick={() => setVisible(false)}>确认</Button>} onCancel={() => setVisible(false)}>
+            <TaskTower id={chooseId} />
+        </Modal>
         <Page
             path="/tower-supply/materialPurchaseTask/inquirer"
             exportPath={`/tower-supply/materialPurchaseTask/inquirer`}
@@ -32,9 +39,22 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     title: '操作',
                     width: 100,
+                    fixed: "right",
                     dataIndex: 'operation',
                     //disabled={![1, 3].includes(records.batcheTaskStatus)}
-                    render: (_: any, records: any) => <Button className="btn-operation-link" type="link" disabled={userId !== records.batcherId} ><Link to={`/ingredients/buyBurdening/detail/${records.id}`}>查看</Link></Button>
+                    // render: (_: any, records: any) => <Button className="btn-operation-link" type="link" disabled={userId !== records.batcherId} ><Link to={`/ingredients/buyBurdening/detail/${records.id}`}>查看</Link></Button>
+                    render: (_: any, records: any) => (<>
+                        <Button type="link" disabled={![1, 3].includes(records.batcheTaskStatus)} >
+                            <Link to={`/ingredients/buyBurdening/component/${records.id}/${records.batcheTaskStatus}`}>明细</Link>
+                        </Button>
+                        <Button type="link" style={{ marginLeft: 12 }} disabled={![3].includes(records.batcheTaskStatus)}
+                            onClick={() => {
+                                setChooseId(records.id)
+                                setVisible(true)
+                            }} >配料方案</Button>
+                        {/* <Button type="link" onClick={() => handleCreateComponent(records.id)
+                        } >临时造数据</Button> */}
+                    </>)
                 }
             ]}
             filterValue={filterValue}
@@ -63,7 +83,7 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
-                    children: <Input placeholder="任务编号/内部合同号" maxLength={200} />
+                    children: <Input placeholder="批次号/塔型/计划号/任务编号/内部合同号" maxLength={200} />
                 }
             ]}
         />

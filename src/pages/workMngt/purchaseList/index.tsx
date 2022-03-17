@@ -41,7 +41,7 @@ export default function Invoicing() {
     })
     return <>
         <Modal title="配料方案" visible={visible} width={1011}
-            footer={<Button type="primary" onClick={() => setVisible(false)}>确认</Button>} onCancel={() => setVisible(false)}>
+            footer={<Button type="primary" ghost onClick={() => setVisible(false)}>关闭</Button>} onCancel={() => setVisible(false)}>
             <Overview id={chooseId} />
         </Modal>
         <Modal
@@ -99,7 +99,6 @@ export default function Invoicing() {
                     children: <Select style={{ width: 200 }}>
                         <Select.Option value="">全部</Select.Option>
                         <Select.Option value="1">待完成</Select.Option>
-                        <Select.Option value="2">待接收</Select.Option>
                         <Select.Option value="3">已完成</Select.Option>
                     </Select>
                 },
@@ -111,7 +110,7 @@ export default function Invoicing() {
                 {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
-                    children: <Input placeholder="原材料任务编号/采购计划编号/塔型" style={{ width: 300 }} />
+                    children: <Input placeholder="批次号/计划号/原材料任务编号/采购计划编号/塔型" style={{ width: 300 }} />
                 }
             ]}
             tableProps={{
