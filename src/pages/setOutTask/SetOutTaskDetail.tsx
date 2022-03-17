@@ -119,7 +119,8 @@ export default function SetOutTaskDetail(): React.ReactNode {
                 totalWeight: data.totalWeight,
                 loftingAbortTime: data.loftingAbortTime,
                 materialAbortTime: data.materialAbortTime,
-                description: data.description
+                description: data.description,
+                voltageGradeName: data.voltageGradeName
             },
         ])
         resole(data)

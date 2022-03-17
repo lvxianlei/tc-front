@@ -280,7 +280,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 let data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
                     segmentName: form.getFieldsValue(true).segmentName,
                     productCategoryId: params.productCategoryId,
-                    segmentId: params.segmentId
+                    segmentId: params.segmentId || ''
                 });
                 if (params.segmentId) {
                     settingData.forEach((items: IComponentList) => {
