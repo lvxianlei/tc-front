@@ -38,8 +38,8 @@
     ],
     "particulars": [
         {
-            "title": "材质名称",
-            "dataIndex": "productName"
+            "title": "品名",
+            "dataIndex": "materialName"
         },
         {
             "title": "标准",
@@ -80,7 +80,7 @@
         },
         {
             "title": "采购状态",
-            "dataIndex": "receiveStatusName"
+            "dataIndex": "receiveDetailStatusName"
         },
         {
             "title": "收货单",

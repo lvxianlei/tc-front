@@ -21,7 +21,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     const history = useHistory();
     const location = useLocation<{ state?: {} }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         setDepartment(departmentData);
         resole(data)
     }), {})
@@ -165,7 +165,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
         wrapperCol: { span: 16 }
     };
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
-        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         switch(title){
             case "confirmDept":
                 return setConfirmLeader(userData.records);
@@ -178,12 +178,12 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     data.map((item:any) => {
         if (item.children) {
             return (
-            <TreeNode key={item.id} title={item.title} value={item.id} className={styles.node}>
+            <TreeNode key={item.id} title={item.name} value={item.id} className={styles.node}>
                 {renderTreeNodes(item.children)}
             </TreeNode>
             );
         }
-        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+        return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
     });
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles.forEach((role: any & SelectDataNode): void => {
@@ -223,7 +223,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                         <Form.Item name="assignorId" label="人员" rules={[{required:true,message:"请选择人员"}]}>
                             <Select style={{width:'100px'}}>
                                 { user && user.map((item:any)=>{
-                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                 }) }
                             </Select>
                         </Form.Item>
@@ -282,7 +282,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     label:'',
                     children:   <Select style={{width:'100px'}}>
                                     { confirmLeader && confirmLeader.map((item:any)=>{
-                                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                     }) }
                                 </Select>
                 },

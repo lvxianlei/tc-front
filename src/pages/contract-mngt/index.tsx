@@ -1,7 +1,7 @@
 // 合同管理-原材料合同管理
 import React, { useState, useRef } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { DatePicker, Select, Input, Button, Modal, message, Form, Space } from 'antd'
+import { DatePicker, Select, Input, Button, Modal, message, Form, Space, Popconfirm } from 'antd'
 import { IntgSelect, Page } from "../common"
 import Edit from "./Edit"
 import Overview from "./Overview"
@@ -40,21 +40,7 @@ export default function ContractMngt(): JSX.Element {
             reject(false)
         }
     })
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            title: "删除",
-            content: "确定删除此合同吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    resove(await deleteRun(id))
-                    message.success("删除成功...")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        })
-    }
+
     const onFilterSubmit = (value: any) => {
         if (value.signStartTime) {
             const formatDate = value.signStartTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -67,6 +53,7 @@ export default function ContractMngt(): JSX.Element {
         setFilterValue(value)
         return value
     }
+    
     return (
         <>
             <Modal
@@ -138,8 +125,24 @@ export default function ContractMngt(): JSX.Element {
                                 setDetailId(records.id)
                                 setOverviewVisible(true)
                             }}>详情</Button>
-                            <Button type="link" className="btn-operation-link" disabled={records.isReceiptRef === 1}
-                                onClick={() => handleDelete(records.id)}>删除</Button>
+                            <Popconfirm
+                                title="确定删除此合同吗？"
+                                disabled={records.isReceiptRef === 1}
+                                onConfirm={async() => {
+                                    await deleteRun(records?.id)
+                                    message.success("删除成功...")
+                                    history.go(0)
+                                }}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button
+                                    type="link"
+                                    size="small"
+                                    className="btn-operation-link"
+                                    disabled={records.isReceiptRef === 1}
+                                >删除</Button>
+                            </Popconfirm>
                         </>
                     }
                 ]}
@@ -169,7 +172,7 @@ export default function ContractMngt(): JSX.Element {
                     {
                         name: 'operatorId',
                         label: '经办人',
-                        children: <IntgSelect width={200} />
+                        children: <IntgSelect width={400} />
                     },
                     {
                         name: 'fuzzyQuery',

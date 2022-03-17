@@ -1,7 +1,7 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle, useEffect } from "react"
-import { Button, message, Modal, Form, DatePicker, Row, Col, Select, Spin } from 'antd'
+import { Button, message, Modal, Form, DatePicker, Select, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, CommonTable, Attachment, AttachmentRef } from '../../common'
+import { DetailContent, Attachment, AttachmentRef } from '../../common'
 import { CargoDetails } from "./receivingListData.json"
 import useRequest from '@ahooksjs/use-request'
 import { Page } from '../../common';
@@ -24,10 +24,18 @@ const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, re
 
     const { run: saveRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
+            // 对上传数据进行处理
+            const fieldIds: any = [],
+                source = attachRef.current.getDataSource();
+            if (source.length < 1) {
+                message.error("请您先上传附件！");
+                return false;
+            }
+            source.map((item: any) => fieldIds.push(item.id));
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/attach`, {
-                attachTyp: type,
+                attachType: type,
                 id,
-                receiveDetailAttachInfoDTOS: attachRef.current.getDataSource()
+                fieldIds
             })
             resole(result?.attachInfoDtos || [])
         } catch (error) {
@@ -58,7 +66,7 @@ export default function Overview() {
                 receiveStockId: params.id,
                 startStatusUpdateTime: filterValue["startStatusUpdateTime"] || "",
                 endStatusUpdateTime: filterValue["endStatusUpdateTime"] || "",
-                receiveStatus: filterValue["receiveStatus"] || ""
+                receiveDetailStatus: filterValue["receiveDetailStatus"] || ""
             })
             resole(result)
         } catch (error) {
@@ -88,7 +96,7 @@ export default function Overview() {
         <Modal
             destroyOnClose
             visible={visible}
-            title="质保单"
+            title={attchType === 1 ? "质保单" : "质检单"}
             confirmLoading={saveLoding}
             onOk={handleAttachOk}
             okText="保存"
@@ -98,6 +106,7 @@ export default function Overview() {
                 setVisible(false)
             }}>
             <ReceiveStrokAttach type={attchType} id={detailId} ref={receiveRef} />
+
         </Modal>
         <Page
             path="/tower-storage/receiveStock/detail"
@@ -112,9 +121,9 @@ export default function Overview() {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'receiveStatus',
+                    name: 'receiveDetailStatus',
                     label: '采购状态',
-                    children: <Form.Item name="receiveStatus">
+                    children: <Form.Item name="receiveDetailStatus">
                         <Select defaultValue="全部" style={{ width: 150 }}>
                             <Select.Option value="">全部</Select.Option>
                             <Select.Option value={0}>待收货</Select.Option>
@@ -147,7 +156,12 @@ export default function Overview() {
                             setDetailId(records.id)
                             setVisible(true)
                         }}>质保单</a>
-                        <Button type="link" onClick={() => message.warning("功能开发中...")}>质检单</Button>
+                        <a style={{ marginRight: 12 }} onClick={() => {
+                            setAttachType(2)
+                            setDetailId(records.id)
+                            setVisible(true)
+                        }}>质检单</a>
+                        {/* <Button type="link" onClick={() => message.warning("功能开发中...")}>质检单</Button> */}
                     </>
                 }]}
         />

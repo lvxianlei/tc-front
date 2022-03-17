@@ -97,27 +97,35 @@
         },
         {
             "title": "出库时间",
-            "dataIndex": "updateTime"
+            "dataIndex": "outStockTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
         },
         {
             "title": "出库人",
-            "dataIndex": "outStockUserName"
+            "dataIndex": "outStockStaffIdName"
         },
         {
             "title": "领料人",
-            "dataIndex": "pickingPerson"
+            "dataIndex": "createUserName"
         },
         {
             "title": "材质",
             "dataIndex": "materialTexture"
         },
         {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
             "title": "原材料长度",
-            "dataIndex": "length"
+            "dataIndex": "length",
+            "type": "number"
         },
         {
             "title": "数量",
-            "dataIndex": "number"
+            "dataIndex": "quantity",
+            "type": "number"
         }
     ],
     "setting": [
@@ -144,10 +152,6 @@
         {
             "title": "合同签订单位",
             "dataIndex": "signCustomerName"
-        },
-        {
-            "title": "订单交货日期",
-            "dataIndex": "orderDeliveryTime"
         },
         {
             "title": "客户交货日期",

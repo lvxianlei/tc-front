@@ -84,7 +84,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
             key:'operation', 
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Button type='link' onClick={ () => {
                 if(paragraph){
-                    RequestUtil.post(`/tower-science/drawProductStructure/reuse?productSegmentId=${paragraph}&passivityProductSegment=${record.id}`).then(() => {
+                    RequestUtil.post(`/tower-science/drawProductStructure/reuse?productSegmentGroupId=${params.productSegmentId}&productSegmentId=${paragraph}&passivityProductSegment=${record.id}`).then(() => {
                         message.success('套用成功'); 
                     }).then(()=>{
                         history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
@@ -111,7 +111,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
     const [ paragraph, setParagraph ] = useState<string>('');
 
     const getTableDataSource = (pagination: TablePaginationConfig, filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<IResponseData>(`/tower-science/productCategory`, { ...pagination, ...filterValues });
+        const data = await RequestUtil.get<IResponseData>(`/tower-science/materialProductCategory/apply/page`, { ...pagination, ...filterValues });
         setDetailData(data);
         resole(data);
     });

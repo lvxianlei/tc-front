@@ -61,16 +61,16 @@ const tableColumns = [
         dataIndex: 'length'
     },
     {
-        key: 'basicsWeight',
+        key: 'basicsTheoryWeight',
         title: '单件理算重量（kg）',
         width: 200,
-        dataIndex: 'basicsWeight'
+        dataIndex: 'basicsTheoryWeight'
     },
     {
-        key: 'drawBasicsWeight',
+        key: 'drawWeight',
         title: '单件图纸重量（kg）',
         width: 200,
-        dataIndex: 'drawBasicsWeight'
+        dataIndex: 'drawWeight'
     },
     {
         key: 'basicsPartNum',
@@ -80,17 +80,17 @@ const tableColumns = [
         dataIndex: 'basicsPartNum'
     },
     {
-        key: 'basicsPartWeight',
+        key: 'partTheoryWeight',
         title: '单段理算重量（kg）',
         width: 200,
         editable: false,
-        dataIndex: 'basicsPartWeight'
+        dataIndex: 'partTheoryWeight'
     },
     {
-        key: 'drawPartWeight',
+        key: 'partDrawWeight',
         title: '单段图纸重量（kg）',
         width: 200,
-        dataIndex: 'drawPartWeight'
+        dataIndex: 'partDrawWeight'
     },
     {
         key: 'description',
@@ -123,13 +123,13 @@ export default function ComponentDetail(): React.ReactNode {
     ]}>
         <p>
             <span>单段件号数：
-                <span style={{ color: '#FF8C00' }}>{params.data.split(',')[0]}</span>
+                <span style={{ color: '#FF8C00', paddingRight: '12px' }}>{params.data.split(',')[0]}</span>
             </span>
             <span>单段件数：
-                <span style={{ color: '#FF8C00' }}>{params.data.split(',')[1]}</span>
+                <span style={{ color: '#FF8C00', paddingRight: '12px' }}>{params.data.split(',')[1]}</span>
             </span>
             <span>单段重量：
-                <span style={{ color: '#FF8C00' }}>{params.data.split(',')[2]}</span>
+                <span style={{ color: '#FF8C00', paddingRight: '12px' }}>{params.data.split(',')[2]}</span>
             </span>
         </p>
         <CommonTable columns={tableColumns} dataSource={detailData} pagination={false} />

@@ -25,7 +25,7 @@ export default function PickTowerMessage(): React.ReactNode {
     const [detail, setDetail] = useState<any>([]);
     const [form] = Form.useForm();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         setDepartment(departmentData);
         resole(data)
     }), {})
@@ -131,7 +131,7 @@ export default function PickTowerMessage(): React.ReactNode {
     ];
     const onDepartmentChange = async (value: Record<string, any>, name: string) => {
         if(value){
-            const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+            const userData: any= await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
             if(name==='提料'){
                 setPickLeader(userData.records);
             }
@@ -148,12 +148,12 @@ export default function PickTowerMessage(): React.ReactNode {
     data.map((item:any) => {
         if (item.children) {
             return (
-            <TreeNode key={item.id} title={item.title} value={item.id}  className={styles.node}>
+            <TreeNode key={item.id} title={item.name} value={item.id}  className={styles.node}>
                 {renderTreeNodes(item.children)}
             </TreeNode>
             );
         }
-        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+        return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
     });
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles.forEach((role: any & SelectDataNode): void => {
@@ -161,6 +161,8 @@ export default function PickTowerMessage(): React.ReactNode {
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
@@ -259,7 +261,7 @@ export default function PickTowerMessage(): React.ReactNode {
                 extraOperation={
                     <Space>
                     {/* <Button type="primary" ghost>导出</Button> */}
-                    { params.materialLeader===AuthUtil.getUserId()?<Popconfirm
+                    { params.materialLeader===AuthUtil.getUserId()&&params.status!=='3'?<Popconfirm
                         title="确认提交?"
                         onConfirm={ async () => {
                             await RequestUtil.post(`/tower-science/drawProductSegment/${params.id}/submit`).then(()=>{
@@ -309,7 +311,7 @@ export default function PickTowerMessage(): React.ReactNode {
                         label:'',
                         children:   <Select style={{width:'100px'}} allowClear>
                                         { pickLeader && pickLeader.map((item:any)=>{
-                                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                         }) }
                                     </Select>
                     },

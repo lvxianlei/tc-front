@@ -54,7 +54,7 @@
      
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}, flag: boolean = true) {
          const searchValues = flag ? filterValues : {};
-         const resData: IResponseData = await RequestUtil.get<IResponseData>('/sinzetech-user/user', {
+         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-system/employee', {
              ...searchValues,
              current: pagination.current || this.state.tablePagination.current,
              size: pagination.pageSize || this.state.tablePagination.pageSize
@@ -74,7 +74,7 @@
      public getFilterFormItemProps(): FormItemProps[] {
          return [{
              label: "用户姓名",
-             name: 'name',
+             name: 'fuzzyQuery',
              children: <Input placeholder="请输入用户姓名" />
          }];
      }
@@ -103,13 +103,13 @@
              title: '用户姓名',
              dataIndex: 'name'
          }, {
-             key: 'userRoleNames',
+             key: 'roleName',
              title: '所属角色',
-             dataIndex: 'userRoleNames'
+             dataIndex: 'roleName'
          }, {
-            key: 'departmentName',
+            key: 'deptName',
             title: '所属机构',
-            dataIndex: 'departmentName'
+            dataIndex: 'deptName'
         }];
      }
  

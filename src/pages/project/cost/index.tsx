@@ -90,7 +90,7 @@ export default function CostDetail() {
             />
             {!data?.askInfo?.askInfoVo && <Result style={{ paddingTop: 200 }}
                 title="去创建成本评估"
-                icon={<Image src={quesheng} />}
+                icon={<img src={quesheng} />}
                 extra={<Button type="primary" style={{ width: 70 }}><Link to={`/project/management/new/cost/${params.id}`}>创建</Link></Button>} />
             }
             {data?.askInfo?.askInfoVo && <DetailContent operation={[

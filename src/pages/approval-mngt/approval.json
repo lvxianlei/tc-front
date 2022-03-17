@@ -589,7 +589,8 @@
             "title": "签收人",
             "dataIndex": "signedUser",
             "type": "popTable",
-            "path": "/sinzetech-user/user",
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
             "readOnly": true,
             "dependencies": true,
             "value": "name",
@@ -605,11 +606,11 @@
                 },
                 {
                     "title": "所属角色",
-                    "dataIndex": "userRoleNames"
+                    "dataIndex": "roleName"
                 },
                 {
                     "title": "所属机构",
-                    "dataIndex": "departmentName"
+                    "dataIndex": "deptName"
                 }
             ],
             "rules": [
@@ -623,7 +624,8 @@
             "title": "接收人",
             "dataIndex": "receiver",
             "type": "popTable",
-            "path": "/sinzetech-user/user",
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
             "readOnly": true,
             "value": "name",
             "columns": [
@@ -638,11 +640,11 @@
                 },
                 {
                     "title": "所属角色",
-                    "dataIndex": "userRoleNames"
+                    "dataIndex": "roleName"
                 },
                 {
                     "title": "所属机构",
-                    "dataIndex": "departmentName"
+                    "dataIndex": "deptName"
                 }
             ],
             "rules": [

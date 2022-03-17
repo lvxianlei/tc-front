@@ -306,7 +306,7 @@ export default function TaskView(props: any){
     const handleModalCancel = () => {setVisible(false); form.setFieldsValue({})};
     const handlePrintModalCancel = () => {setPrintVisible(false); formRef.setFieldsValue({})};
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
-        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        const userData: any= await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         switch (title) {
             case "materialLeaderDepartment":
                 form.setFieldsValue({materialLeader:''});
@@ -327,6 +327,8 @@ export default function TaskView(props: any){
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
@@ -376,7 +378,7 @@ export default function TaskView(props: any){
                         {specialData?.productType}
                     </Descriptions.Item>
                     <Descriptions.Item label="打印条件">
-                        {specialData?.printSpecifications!== null ?specialData?.printSpecifications+','+specialData?.printSpecialProcess:specialData?.printSpecialProcess}
+                        {specialData?.printSpecifications!== null&&specialData?.printSpecialProcess!==null ?specialData?.printSpecifications+','+specialData?.printSpecialProcess:specialData?.printSpecialProcess!==null ?specialData?.printSpecialProcess:specialData?.printSpecifications!==null ?specialData?.printSpecifications:''}
                     </Descriptions.Item>
                     <Descriptions.Item label="数量">
                         {specialData?.structureNumber}
@@ -393,7 +395,7 @@ export default function TaskView(props: any){
                         }}>查看</Button>
                     </Descriptions.Item>
                     <Descriptions.Item label="接收人">
-                        {specialData?.drawLeaderName}
+                        {specialData?.drawLeaderDepartmentName+'-'+specialData?.drawLeaderName}
                     </Descriptions.Item>
                     <Descriptions.Item label="备注">
                         {specialData?.description}
@@ -405,7 +407,7 @@ export default function TaskView(props: any){
             </Modal>
             <Button type='link' onClick={async ()=>{
                 setVisible(true)
-                const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+                const departmentData: any = await RequestUtil.get(`/tower-system/department`);
                 setDepartment(departmentData);
                 const sampleData: any = await RequestUtil.get(`/tower-science/loftingTemplate/${props?.record?.id}`);
                 setSpecialData(sampleData);

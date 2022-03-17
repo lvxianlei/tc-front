@@ -14,7 +14,7 @@ export default function SampleDrawList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state?: number, userId?: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/sinzetech-user/user?size=1000`);
+        const data:any = await RequestUtil.get(`/tower-system/employee?size=1000`);
         resole(data?.records);
     }), {})
     const user:any = data||[];
@@ -155,9 +155,9 @@ export default function SampleDrawList(): React.ReactNode {
                     children:  <Form.Item name="smallSampleStatus" initialValue={ location.state?.state }>
                         <Select style={{width:"100px"}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>待开始</Select.Option>
-                            <Select.Option value={2} key={2}>进行中</Select.Option>
-                            <Select.Option value={3} key={3}>已完成</Select.Option>
+                            <Select.Option value={1} key={1}>待完成</Select.Option>
+                            {/* <Select.Option value={2} key={2}>进行中</Select.Option> */}
+                            <Select.Option value={2} key={2}>已完成</Select.Option>
                         </Select>
                     </Form.Item> 
                 },
@@ -181,12 +181,12 @@ export default function SampleDrawList(): React.ReactNode {
                     name: 'smallSampleLeader',
                     label:'小样图负责人',
                     children:   <Form.Item name="smallSampleLeader" initialValue={ location.state?.userId || '' }>
-                                <Select style={{width:'100px'}}>
-                                    <Select.Option key={''} value={''}>全部</Select.Option>
-                                    {user && user.map((item: any) => {
-                                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                    })}
-                                </Select>
+                                    <Select style={{width:'100px'}}>
+                                        <Select.Option key={''} value={''}>全部</Select.Option>
+                                            {user && user.map((item: any) => {
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                                            })}
+                                    </Select>
                                 </Form.Item>
                 },
                 {

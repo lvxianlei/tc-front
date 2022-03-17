@@ -369,7 +369,7 @@ class Gantt extends React.Component<IWithSectionModalRouteProps, WithSectionModa
               <Space>
                 <span>塔型：{this.state.value.name}</span>
                 <span>基数：{this.state.value.productNum}</span>
-                <span>重量：{this.state.value.weight}</span>
+                <span>重量（T）：{this.state.value.weight}</span>
                 <span>开始时间：{this.state.value.startTime}</span>
                 <span>结束时间：{this.state.value.endTime}</span>
               </Space>

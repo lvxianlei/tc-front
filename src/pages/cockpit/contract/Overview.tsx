@@ -3,6 +3,8 @@ import { Button, Input, Select, Form } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import { particulars } from "./contract.json";
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
 
 export default function Particulars(): React.ReactNode {
     const history = useHistory()
@@ -11,6 +13,17 @@ export default function Particulars(): React.ReactNode {
         value.contractId = params.id
         return value
     }
+
+    const { data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detailStatistics`, {
+                contractId: params.id
+            })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), {  })
 
     return (<Page
         path="/tower-storage/receiveStock/detail"
@@ -21,10 +34,10 @@ export default function Particulars(): React.ReactNode {
                 <>
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                     <span style={{ marginLeft: "20px" }}>
-                        已收货：重量(支)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{data?.receiveStockMessage?.receiveWeight || 0}</span>
-                        价税合计(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{data?.receiveStockMessage?.receivePrice || 0}</span>
-                        未收货：重量(支)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{data?.receiveStockMessage?.waitWeight || 0}</span>
-                        价税合计(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{data?.receiveStockMessage?.waitPrice || 0}</span>
+                        已收货：重量(支)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receiveWeight || 0}</span>
+                        价税合计(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receivePrice || 0}</span>
+                        未收货：重量(支)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.waitWeight || 0}</span>
+                        价税合计(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.waitPrice || 0}</span>
                     </span>
                 </>
             )
@@ -33,9 +46,9 @@ export default function Particulars(): React.ReactNode {
         filterValue={{ contractId: params.id }}
         searchFormItems={[
             {
-                name: 'receiveStatus',
+                name: 'receiveDetailStatus',
                 label: '采购状态',
-                children: <Form.Item name="receiveStatus" initialValue="">
+                children: <Form.Item name="receiveDetailStatus" initialValue="">
                     <Select placeholder="请选择" style={{ width: "150px" }}>
                         <Select.Option value={''} key="3">全部</Select.Option>
                         <Select.Option value={0} key="0">待收货</Select.Option>

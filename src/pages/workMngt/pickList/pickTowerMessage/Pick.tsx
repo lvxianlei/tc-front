@@ -35,11 +35,11 @@ export default function Lofting(): React.ReactNode {
     // const getForm = (): FormInstance | null => {
     //     return formRef?.current;
     // }
-    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
-        const data: [] = await RequestUtil.get(`/tower-science/drawProductSegment/getSegmentBySegmentGroupId`,{segmentGroupId:params.productSegmentId});
-        resole(data);
-    }), {})
-    const paragraphList: [] = data || [];
+    // const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
+    //     const data: [] = await RequestUtil.get(`/tower-science/drawProductSegment/getSegmentBySegmentGroupId`,{segmentGroupId:params.productSegmentId});
+    //     resole(data);
+    // }), {})
+    // const paragraphList: [] = data || [];
     const columns = [
         {
             key: 'id',
@@ -71,14 +71,22 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item 
-                    name={['data',index, "segmentId"]} 
-                    initialValue={ record.segmentId }
+                    name={['data',index, "segmentName"]} 
+                    initialValue={ record.segmentName }
+                    rules={[{
+                        required: true,
+                        message:'请输入段号'
+                    },{
+                        pattern: /^[0-9a-zA-Z-]*$/,
+                        message: '仅可输入数字/字母/-',
+                    }]}
                 >
-                    <Select onChange={ () => rowChange(index) }>
+                    {/* <Select onChange={ () => rowChange(index) }>
                         { paragraphList.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
                         }) }
-                    </Select>
+                    </Select> */}
+                    <Input size="small" onChange={ () => rowChange(index) } maxLength={10}/>
                 </Form.Item>
             )
         },
@@ -113,6 +121,13 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item 
                     name={['data',index, "code"]} 
                     initialValue={ _ }
+                    rules={[{
+                        required: true,
+                        message:'请输入构件编号'
+                    },{
+                        pattern: /^[0-9a-zA-Z-]*$/,
+                        message: '仅可输入数字/字母/-',
+                    }]}
                 >
                     <Input size="small" onChange={ () => rowChange(index) } maxLength={10}/>
                 </Form.Item>
@@ -128,6 +143,13 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item 
                     name={['data',index, "materialName"]} 
                     initialValue={ _ }
+                    rules={[{
+                        required: true,
+                        message:'请输入材料名称'
+                    },{
+                        pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]*$/,
+                        message: '仅可输入汉字/数字/字母',
+                    }]}
                 >
                     <Input size="small" onChange={ () => rowChange(index) } maxLength={10}/>
                 </Form.Item>
@@ -143,6 +165,13 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item 
                     name={['data',index, "structureTexture"]} 
                     initialValue={ _ }
+                    rules={[{
+                        required: true,
+                        message:'请输入材质'
+                    },{
+                        pattern: /^[0-9a-zA-Z-]*$/,
+                        message: '仅可输入数字/字母/-',
+                    }]}
                 >
                     <Input size="small" onChange={ () => rowChange(index) } maxLength={10}/>
                 </Form.Item>
@@ -158,6 +187,13 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item 
                     name={['data',index, "structureSpec"]} 
                     initialValue={ _ }
+                    rules={[{
+                        required: true,
+                        message:'请输入规格'
+                    },{
+                        pattern: /^[0-9-*L∠]*$/,
+                        message: '仅可输入数字/-/*/L/∠',
+                    }]}
                 >
                     <Input size="small" onChange={ () => rowChange(index) } maxLength={10}/>
                 </Form.Item>
@@ -172,6 +208,48 @@ export default function Lofting(): React.ReactNode {
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item 
                     name={['data',index, "length"]} 
+                    initialValue={ _ }
+                    rules={[{
+                        required: true,
+                        message:'请输入长度'
+                    }]}
+                >
+                    <InputNumber 
+                        size="small" 
+                        min={1} precision={0} max={999999}
+                        onChange={ () => rowChange(index) }
+                    />
+                </Form.Item>
+            ) 
+        },
+        { 
+            title: '宽度（mm）', 
+            dataIndex: 'width', 
+            key: 'width',
+            width: 120,
+            editable: true,
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item 
+                    name={['data',index, "width"]} 
+                    initialValue={ _ }
+                >
+                    <InputNumber 
+                        size="small" 
+                        min={1} precision={0} max={999999}
+                        onChange={ () => rowChange(index) }
+                    />
+                </Form.Item>
+            ) 
+        },
+        { 
+            title: '厚度（mm）', 
+            dataIndex: 'thickness', 
+            key: 'thickness',
+            width: 120,
+            editable: true,
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item 
+                    name={['data',index, "thickness"]} 
                     initialValue={ _ }
                 >
                     <InputNumber 
@@ -192,6 +270,10 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item 
                     name={['data',index, "basicsWeight"]} 
                     initialValue={ _===-1?0:_}
+                    rules={[{
+                        required: true,
+                        message:'请输入单件重量'
+                    }]}
                 >
                     <InputNumber 
                         size="small" 
@@ -211,6 +293,10 @@ export default function Lofting(): React.ReactNode {
                 <Form.Item 
                     name={['data',index, "basicsPartNum"]} 
                     initialValue={_===-1?0:_}
+                    rules={[{
+                        required: true,
+                        message:'请输入单段件数'
+                    }]}
                 >
                     <InputNumber 
                         size="small" 
@@ -448,7 +534,7 @@ export default function Lofting(): React.ReactNode {
                         </Upload>
                         <Button type="primary" ghost  onClick={()=>{
                             setAddVisible(true)
-                        }}>添加</Button>
+                        }} disabled={ editorLock==='锁定' }>添加</Button>
                         <Button type="primary" ghost  onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/drawApply`)}}>图纸塔型套用</Button>
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/setOutApply`)}}>放样塔型套用</Button>
                         <Popconfirm
@@ -465,17 +551,17 @@ export default function Lofting(): React.ReactNode {
                         >
                             <Button type="primary" ghost>完成提料</Button>
                         </Popconfirm>
-                        <Button type="primary" ghost onClick={ () => { 
+                        <Button type="primary" ghost onClick={ async () => { 
                             if(editorLock === '编辑') {
                                 setColumns(columns);
                                 setEditorLock('锁定');
                             } else {
                                 const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-
+                                let value = await formRef.validateFields();
                                 let values = formRef.getFieldsValue(true).data;
                                 console.log(values)
                                 
-                                if(values.length>0 && newRowChangeList.length>0) {
+                                if(values && values.length>0 && newRowChangeList.length>0) {
                                     let changeValues = values.filter((item: any, index: number) => {
                                         return newRowChangeList.indexOf(index) !== -1;
                                     }).map((item:any)=>{
@@ -491,7 +577,8 @@ export default function Lofting(): React.ReactNode {
                                         setEditorLock('编辑');
                                         formRef.resetFields()
                                         setRowChangeList([]);
-                                        setRefresh(!refresh);    
+                                        setRefresh(!refresh); 
+                                        history.go(0)   
                                     });
                                 }else{
                                     setColumns(columnsSetting);
@@ -503,7 +590,7 @@ export default function Lofting(): React.ReactNode {
                                 
                             }
                             console.log(formRef.getFieldsValue(true)) 
-                        } }>{ editorLock }</Button>
+                        } } disabled={formRef.getFieldsValue(true).data&&formRef.getFieldsValue(true).data?.length===0}>{ editorLock }</Button>
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
                         <Popconfirm
                             title="确认删除?"
@@ -512,7 +599,8 @@ export default function Lofting(): React.ReactNode {
                                     if(!(selectedKeys.length > 100)){
                                         await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${ selectedKeys.join(',') }`).then(()=>{
                                             message.success('删除成功！');
-                                            setRefresh(!refresh);   
+                                            setRefresh(!refresh);
+                                            history.go(0)   
                                         })
                                     }else{
                                         message.error('当前选择数量过多，请重新选择！')
@@ -523,9 +611,9 @@ export default function Lofting(): React.ReactNode {
                             }}
                             okText="提交"
                             cancelText="取消"
-                            disabled={ editorLock==='锁定' }
+                            disabled={ editorLock==='锁定'?true: !(selectedKeys.length>0)}
                         >
-                            <Button type="primary" ghost  disabled={ editorLock==='锁定' }>删除</Button>
+                            <Button type="primary" ghost  disabled={ editorLock==='锁定'?true: !(selectedKeys.length>0) }>删除</Button>
                         </Popconfirm>
                         <Button type="ghost" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回</Button>
                     </Space>
@@ -591,37 +679,65 @@ export default function Lofting(): React.ReactNode {
             <Table
                 columns={[
                     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-                    { title: '段号', dataIndex: 'segmentId', key: 'segmentId', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-                        <Form.Item name={['dataV',index, "segmentId"]} initialValue={ _a } rules={[{required:true, message:'请选择段号'}]}>
-                            <Select>
+                    { title: '段号', dataIndex: 'segmentName', key: 'segmentName', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                        <Form.Item name={['dataV',index, "segmentName"]} initialValue={ _a } rules={[{required:true, message:'请填写段号'}, {
+                            pattern: /^[0-9a-zA-Z-]*$/,
+                            message: '仅可输入数字/字母/-',
+                        }]}>
+                            {/* <Select>
                                 { paragraphList.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
                                 }) }
-                            </Select>
+                            </Select> */}
+                             <Input size="small" maxLength={10}/>
                         </Form.Item>
                     )},
                     { title: '构件编号', dataIndex: 'code', key: 'code',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "code"]} initialValue={ _ } rules={[{required:true, message:'请填写构件编号'}]}>
+                        <Form.Item name={['dataV',index, "code"]} initialValue={ _ } rules={[{required:true, message:'请填写构件编号'}, {
+                            pattern: /^[0-9a-zA-Z-]*$/,
+                            message: '仅可输入数字/字母/-',
+                        }]}>
                             <Input size="small" maxLength={10}/>
                         </Form.Item>
                     ) },
                     { title: '材料名称', dataIndex: 'materialName', key: 'materialName',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "materialName"]} initialValue={ _ } rules={[{required:true, message:'请输入材料名称'}]}>
+                        <Form.Item name={['dataV',index, "materialName"]} initialValue={ _ } rules={[{required:true, message:'请输入材料名称'}, {
+                            pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]*$/,
+                            message: '仅可输入汉字/数字/字母',
+                        }]}>
                             <Input size="small" maxLength={10}/>
                         </Form.Item>
                     ) },
                     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "structureTexture"]} initialValue={ _ } rules={[{required:true, message:'请输入材质'}]}>
+                        <Form.Item name={['dataV',index, "structureTexture"]} initialValue={ _ } rules={[{required:true, message:'请输入材质'}, {
+                            pattern: /^[0-9a-zA-Z-]*$/,
+                            message: '仅可输入数字/字母/-',
+                        }]}>
                             <Input size="small" maxLength={10}/>
                         </Form.Item>
                     ) },
                     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "structureSpec"]} initialValue={ _ } rules={[{required:true, message:'请输入规格'}]}>
+                        <Form.Item name={['dataV',index, "structureSpec"]} initialValue={ _ } rules={[{required:true, message:'请输入规格'},{
+                            
+                            pattern: /^[0-9-∠L*]*$/,
+                            message: '仅可输入数字/-/*/L/∠',
+                            
+                        }]}>
                             <Input size="small" maxLength={10}/>
                         </Form.Item>
                     ) },
                     { title: '长度（mm）', dataIndex: 'length', key: 'length',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name={['dataV',index, "length"]} rules={[{required:true, message:'请输入长度'}]}>
+                            <InputNumber size="small" min={1} precision={0} max={999999}/>
+                        </Form.Item>
+                    ) },
+                    { title: '宽度（mm）', dataIndex: 'width', key: 'width',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['dataV',index, "width"]}>
+                            <InputNumber size="small" min={1} precision={0} max={999999}/>
+                        </Form.Item>
+                    ) },
+                    { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['dataV',index, "thickness"]}>
                             <InputNumber size="small" min={1} precision={0} max={999999}/>
                         </Form.Item>
                     ) },

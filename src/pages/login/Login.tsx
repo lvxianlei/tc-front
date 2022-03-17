@@ -63,6 +63,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
             RequestUtil.get<ICaptcha>('/sinzetech-auth/oauth/captcha'),
             RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${window.location.host}`)
             // RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-test.dhwy.cn`)
+            // RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-dev.dhwy.cn`)
         ])
         this.setState({
             captcha: captcha,
@@ -142,6 +143,9 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                             rules={[{
                                                 required: true,
                                                 message: '请输入验证码'
+                                            }, {
+                                                pattern: new RegExp(/^[a-zA-Z0-9]*$/g, 'g'),
+                                                message: '请输入正确的验证码',
                                             }]}
                                         >
                                             <Input placeholder="请输入验证码" size="large" prefix={<SafetyCertificateOutlined />} />

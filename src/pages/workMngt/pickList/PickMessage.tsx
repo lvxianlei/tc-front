@@ -43,11 +43,7 @@ const tableColumns = [
                 case 2:
                     return '提料中';
                 case 3:
-                    return '配段中';
-                case 4:
                     return '已完成';
-                case 5:
-                    return '已提交';
             }
         } 
     }
@@ -59,7 +55,7 @@ export default function PickDetail(): React.ReactNode {
     const [pictureVisible, setPictureVisible] = useState<boolean>(false);
     const [pictureUrl, setPictureUrl] = useState('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`tower-science/materialTask/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/materialProductCategory/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;

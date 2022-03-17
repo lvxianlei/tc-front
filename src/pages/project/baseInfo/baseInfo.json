@@ -82,8 +82,9 @@
             "title": "业务经理",
             "dataIndex": "projectLeader",
             "type": "popTable",
-            "path": "/sinzetech-user/user",
+            "path": "/tower-system/employee",
             "value": "name",
+            "rowKey": "userId",
             "readOnly": true,
             "dependencies": true,
             "rules": [
@@ -104,11 +105,11 @@
                 },
                 {
                     "title": "所属角色",
-                    "dataIndex": "userRoleNames"
+                    "dataIndex": "roleName"
                 },
                 {
                     "title": "所属机构",
-                    "dataIndex": "departmentName"
+                    "dataIndex": "deptName"
                 }
             ]
         },
@@ -116,7 +117,7 @@
             "title": "招标人/客户",
             "dataIndex": "biddingPerson",
             "type": "popTable",
-            "path": "/tower-customer/customer",
+            "path": "/tower-market/customer",
             "readOnly": false,
             "value": "name",
             "dependencies": true,
@@ -150,7 +151,7 @@
             "title": "招标代理机构",
             "dataIndex": "biddingAgency",
             "type": "popTable",
-            "path": "/tower-customer/customer",
+            "path": "/tower-market/customer",
             "readOnly": false,
             "value": "name",
             "dependencies": true,

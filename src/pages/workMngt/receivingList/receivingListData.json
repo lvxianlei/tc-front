@@ -56,8 +56,8 @@
             "type": "string"
         },
         {
-            "title": "完成时间",
-            "dataIndex": "updateTime",
+            "title": "最新状态变更时间",
+            "dataIndex": "completionTime",
             "type": "date"
         },
         {
@@ -247,7 +247,7 @@
             "disabled": true
         },
         {
-            "title": "原材料税款合计（元）",
+            "title": "原材料价税合计（元）",
             "dataIndex": "price",
             "type": "number",
             "disabled": true
@@ -263,7 +263,7 @@
             ]
         },
         {
-            "title": "重量（kg）合计",
+            "title": "重量（吨）合计",
             "dataIndex": "weight",
             "type": "number",
             "disabled": true,
@@ -348,7 +348,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandardName",
+            "dataIndex": "standardName",
             "type": "string"
         },
         {
@@ -373,7 +373,7 @@
         },
         {
             "title": "数量",
-            "dataIndex": "num",
+            "dataIndex": "quantity",
             "type": "number"
         },
         {
@@ -426,7 +426,7 @@
         },
         {
             "title": "已选数量",
-            "dataIndex": "num",
+            "dataIndex": "quantity",
             "type": "number"
         }
     ],
@@ -465,7 +465,7 @@
         },
         {
             "title": "可选数量",
-            "dataIndex": "num",
+            "dataIndex": "quantity",
             "type": "number"
         }
     ],

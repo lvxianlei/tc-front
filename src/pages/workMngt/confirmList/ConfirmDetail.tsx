@@ -73,47 +73,47 @@ export default function ConfirmDetail(): React.ReactNode {
       const inputNode = inputType === 'number' ? <InputNumber style={{width:'100%'}} onChange={(value:number)=>{
         let number = 0;
         if(dataIndex==='otherWeight'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?formRef.getFieldValue('legWeightA'):0;
-          const dataB:number = formRef.getFieldValue('legWeightB')?formRef.getFieldValue('legWeightB'):0;
-          const dataC:number = formRef.getFieldValue('legWeightC')?formRef.getFieldValue('legWeightC'):0;
-          const dataD:number = formRef.getFieldValue('legWeightD')?formRef.getFieldValue('legWeightD'):0;
-          const data:number = formRef.getFieldValue('bodyWeight')?formRef.getFieldValue('bodyWeight'):0;
+          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
+          const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
+          const dataC:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
+          const dataD:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
+          const data:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
           number = dataA+dataB+dataC+dataD+data;
         }
         if(dataIndex==='legWeightA'){
-          const dataA:number = formRef.getFieldValue('legWeightB')?formRef.getFieldValue('legWeightB'):0;
-          const dataB:number = formRef.getFieldValue('legWeightC')?formRef.getFieldValue('legWeightC'):0;
-          const dataC:number = formRef.getFieldValue('legWeightD')?formRef.getFieldValue('legWeightD'):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?formRef.getFieldValue('bodyWeight'):0;
-          const data:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
+          const dataA:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
+          const dataB:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
+          const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
+          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
+          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
           number = dataA+dataB+dataC+dataD+data;
         }
         if(dataIndex==='legWeightB'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?formRef.getFieldValue('legWeightA'):0;
-          const dataB:number = formRef.getFieldValue('legWeightC')?formRef.getFieldValue('legWeightC'):0;
-          const dataC:number = formRef.getFieldValue('legWeightD')?formRef.getFieldValue('legWeightD'):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?formRef.getFieldValue('bodyWeight'):0;
-          const data:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
+          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
+          const dataB:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
+          const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
+          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
+          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
           number = dataA+dataB+dataC+dataD+data;
         }
         if(dataIndex==='legWeightC'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?formRef.getFieldValue('legWeightA'):0;
-          const dataB:number = formRef.getFieldValue('legWeightB')?formRef.getFieldValue('legWeightB'):0;
-          const dataC:number = formRef.getFieldValue('legWeightD')?formRef.getFieldValue('legWeightD'):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?formRef.getFieldValue('bodyWeight'):0;
-          const data:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
+          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
+          const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
+          const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
+          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
+          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
           number = dataA+dataB+dataC+dataD+data;
         }
         if(dataIndex==='legWeightD'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?formRef.getFieldValue('legWeightA'):0;
-          const dataB:number = formRef.getFieldValue('legWeightB')?formRef.getFieldValue('legWeightB'):0;
-          const dataC:number = formRef.getFieldValue('legWeightC')?formRef.getFieldValue('legWeightC'):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?formRef.getFieldValue('bodyWeight'):0;
-          const data:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
+          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
+          const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
+          const dataC:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
+          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
+          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
           number = dataA+dataB+dataC+dataD+data;
         }
         dataIndex!=="basicHeight" && formRef.setFieldsValue({
-            totalWeight:number + value
+            totalWeight:number + parseFloat(value.toString())
         })
       }} min={0} precision={2} max={dataIndex!=='basicHeight'&&dataIndex!=='otherWeight'? 99999.99 :dataIndex ==='basicHeight'?99.99: 999999.99}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
         return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
@@ -187,10 +187,11 @@ export default function ConfirmDetail(): React.ReactNode {
       }
       setTableDataSource(newData);
       let totalNumber = '0';
-        newData.forEach((item:any)=>{
-          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
-        })
-        setWeight(totalNumber);
+      console.log(newData)
+      newData.forEach((item:any)=>{
+        totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
+      })
+      setWeight(totalNumber);
     };
     const cancel = () => {
       setEditingKey('');
@@ -217,10 +218,13 @@ export default function ConfirmDetail(): React.ReactNode {
         }
         let totalNumber = '0';
         newData.forEach((item:any)=>{
+          console.log(item.totalWeight)
           totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
+          console.log(totalNumber)
         })
         setWeight(totalNumber);
-        RequestUtil.post(`/tower-science/drawProductDetail/save`,{...newData[index],drawTaskId: params.id}).then(()=>{
+       
+        RequestUtil.post(`/tower-science/drawProductDetail/save`,{...newData[index],drawTaskId: params.id, totalWeight:'0'}).then(()=>{
           message.success('保存成功！')
         })
       } catch (errInfo) {
@@ -243,30 +247,6 @@ export default function ConfirmDetail(): React.ReactNode {
           width: 80,
           editable: true,
           key: 'lineName', 
-      },
-      { 
-          title: '* 杆塔号', 
-          dataIndex: 'name', 
-          type:'text',
-          width: 80,
-          editable: true,
-          key: 'name' 
-      },
-      { 
-          title: '* 塔型', 
-          dataIndex: 'productCategory', 
-          type:'text',
-          width: 80,
-          editable: true,
-          key: 'productCategory' 
-      },
-      { 
-          title: '* 塔型钢印号', 
-          dataIndex: 'steelProductShape', 
-          type:'text',
-          width: 100,
-          editable: true,
-          key: 'steelProductShape' 
       },
       { 
           title: '* 产品类型', 
@@ -315,6 +295,31 @@ export default function ConfirmDetail(): React.ReactNode {
           } 
       },
       { 
+          title: '* 塔型', 
+          dataIndex: 'productCategory', 
+          type:'text',
+          width: 80,
+          editable: true,
+          key: 'productCategory' 
+      },
+      { 
+          title: '* 塔型钢印号', 
+          dataIndex: 'steelProductShape', 
+          type:'text',
+          width: 100,
+          editable: true,
+          key: 'steelProductShape' 
+      },
+      
+      { 
+        title: '* 杆塔号', 
+        dataIndex: 'name', 
+        type:'text',
+        width: 80,
+        editable: true,
+        key: 'name' 
+      },
+      { 
           title: '* 呼高（m）', 
           dataIndex: 'basicHeight', 
           type:'number',
@@ -348,17 +353,6 @@ export default function ConfirmDetail(): React.ReactNode {
             return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
           } 
       },
-      { 
-        title: '* 本体重量（kg）', 
-        dataIndex: 'bodyWeight', 
-        type:'number',
-        width: 120,
-        editable: true,
-        key: 'bodyWeight',
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }   
-      },//范春森于11月23日去掉，于龙于11月25号加上
       { 
         title: '接腿配置A', 
         dataIndex: 'legConfigurationA', 
@@ -446,6 +440,17 @@ export default function ConfirmDetail(): React.ReactNode {
       //       return parseFloat(value).toFixed(2)
       //     }  
       // },
+      { 
+        title: '* 本体重量（kg）', 
+        dataIndex: 'bodyWeight', 
+        type:'number',
+        width: 120,
+        editable: true,
+        key: 'bodyWeight',
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }   
+      },//范春森于11月23日去掉，于龙于11月25号加上
       { 
         title: '* 单重（kg）', 
         dataIndex: 'monomerWeight', 

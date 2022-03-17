@@ -32,7 +32,7 @@ export default function SchedulePlan(props: any){
     const [smallSampleUser, setSmallSampleUser] = useState<any|undefined>([]);
     const params = useParams<{ id: string, status: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         setDepartment(departmentData);
         const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);
         setTableDataSource(planData);
@@ -67,14 +67,14 @@ export default function SchedulePlan(props: any){
 
     const handleModalCancel = () => {setVisible(false); form.setFieldsValue({})};
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
-        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        const userData: any= await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         switch (title) {
-            case "materialLeaderDepartment":
-                form.setFieldsValue({materialLeader:''});
-                return setMaterialUser(userData.records);
-            case "materialPartLeaderDepartment":
-                form.setFieldsValue({materialPartLeader:''});
-                return setMaterialPartUser(userData.records);
+            // case "materialLeaderDepartment":
+            //     form.setFieldsValue({materialLeader:''});
+            //     return setMaterialUser(userData.records);
+            // case "materialPartLeaderDepartment":
+            //     form.setFieldsValue({materialPartLeader:''});
+            //     return setMaterialPartUser(userData.records);
             case "smallSampleLeaderDepartment":
                 form.setFieldsValue({smallSampleLeader:''});
                 return setSmallSampleUser(userData.records);
@@ -102,6 +102,8 @@ export default function SchedulePlan(props: any){
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
@@ -110,12 +112,12 @@ export default function SchedulePlan(props: any){
     data.map((item:any) => {
     if (item.children) {
         return (
-        <TreeNode key={item.id} title={item.title} value={item.id} className={styles.node}>
+        <TreeNode key={item.id} title={item.name} value={item.id} className={styles.node}>
             {renderTreeNodes(item.children)}
         </TreeNode>
         );
     }
-    return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+    return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
     });
     return (
         <>
@@ -144,7 +146,7 @@ export default function SchedulePlan(props: any){
                             </Row>
                         </Col>
                     </Row>
-                    <Row>
+                    {/* <Row>
                         <Col span={24}>
                             <Row>
                                 <Col span={15}>
@@ -160,15 +162,15 @@ export default function SchedulePlan(props: any){
                                     <Form.Item name="materialLeader" label="" rules={[{required: true,message:'请选择提料负责人'}]} >
                                         <Select >
                                             { materialUser && materialUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Col>
-                    </Row>
-                    <Row>
+                    </Row> */}
+                    {/* <Row>
                         <Col  span={24}>
                             <Row>
                                 <Col span={15}>
@@ -184,14 +186,14 @@ export default function SchedulePlan(props: any){
                                     <Form.Item name="materialPartLeader" label="" rules={[{required: true,message:'请选择提料配段负责人'}]} >
                                         <Select>
                                             { materialPartUser && materialPartUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Col>
-                    </Row>
+                    </Row> */}
                     <Row>
                         <Col  span={24}>
                             <Row>
@@ -208,7 +210,7 @@ export default function SchedulePlan(props: any){
                                     <Form.Item name="loftingLeader" label="" rules={[{required: true,message:'请选择放样负责人'}]} >
                                         <Select >
                                             { loftingUser && loftingUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -232,7 +234,7 @@ export default function SchedulePlan(props: any){
                                     <Form.Item name="weldingLeader" label="" rules={[{required: true,message:'请选择编程负责人'}]} >
                                         <Select > 
                                             { weldingUser && weldingUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -257,7 +259,7 @@ export default function SchedulePlan(props: any){
                                     <Form.Item name="smallSampleLeader" label="" rules={[{required: true,message:'请选择小样图负责人'}]} >
                                         <Select>
                                             { smallSampleUser && smallSampleUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -281,7 +283,7 @@ export default function SchedulePlan(props: any){
                                     <Form.Item name="boltLeader" label="" rules={[{required: true,message:'请选择螺栓清单负责人'}]} >
                                         <Select >
                                             { boltUser &&boltUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -306,7 +308,7 @@ export default function SchedulePlan(props: any){
                                     <Form.Item name="drawLeader" label="" rules={[{required: true,message:'请选择图纸上传负责人'}]} >
                                         <Select >
                                             { drawUser && drawUser.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
                                     </Form.Item>
@@ -359,38 +361,38 @@ export default function SchedulePlan(props: any){
                                             const resData: any = await RequestUtil.get(`/tower-science/assignPlan/planDetailById/${record.id}`)
                                             setScheduleData(resData);
                                             if(resData.materialLeaderDepartment){
-                                                const materialLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialLeaderDepartment}&size=1000`);
+                                                const materialLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialLeaderDepartment}&size=1000`);
                                                 setMaterialUser(materialLeaderDepartment.records);
                                             }
                                             if(resData.materialPartLeaderDepartment){
-                                                const materialPartLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialPartLeaderDepartment}&size=1000`);
+                                                const materialPartLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.materialPartLeaderDepartment}&size=1000`);
                                                 setMaterialPartUser(materialPartLeaderDepartment.records);
                                             }
                                             if(resData.smallSampleLeaderDepartment){
-                                                const smallSampleLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.smallSampleLeaderDepartment}&size=1000`);
+                                                const smallSampleLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.smallSampleLeaderDepartment}&size=1000`);
                                                 setSmallSampleUser(smallSampleLeaderDepartment.records);
                                             }
                                             if(resData.drawLeaderDepartment){
-                                                const drawLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.drawLeaderDepartment}&size=1000`);
+                                                const drawLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.drawLeaderDepartment}&size=1000`);
                                                 setDrawUser(drawLeaderDepartment.records);
                                             }
                                             if(resData.loftingLeaderDepartment){
-                                                const loftingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.loftingLeaderDepartment}&size=1000`);
+                                                const loftingLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.loftingLeaderDepartment}&size=1000`);
                                                 setLoftingUser(loftingLeaderDepartment.records);
                                             }
                                             if(resData.weldingLeaderDepartment){
-                                                const weldingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.weldingLeaderDepartment}&size=1000`);
+                                                const weldingLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.weldingLeaderDepartment}&size=1000`);
                                                 setWeldingUser(weldingLeaderDepartment.records);
                                             }
                                             if(resData.boltLeaderDepartment){
-                                                const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
+                                                const boltLeaderDepartment: any= await RequestUtil.get(`/tower-system/employee?dept=${resData.boltLeaderDepartment}&size=1000`);
                                                 setBoltUser(boltLeaderDepartment.records);
                                             }
                                             
                                             form.setFieldsValue({
                                                 ...resData,
-                                                materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
-                                                materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                                                // materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                                                // materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
                                                 boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
                                                 boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
                                                 weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
@@ -399,8 +401,8 @@ export default function SchedulePlan(props: any){
                                                 loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
                                                 drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
                                                 drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
-                                                materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
-                                                materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                                                // materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                                                // materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
                                                 smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
                                                 smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
                                             });

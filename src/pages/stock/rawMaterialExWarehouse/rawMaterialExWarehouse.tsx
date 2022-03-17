@@ -86,19 +86,19 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             <Select placeholder="请选择状态" style={{ width: "140px" }}>
                                 <Select.Option value="0">待完成</Select.Option>
                                 <Select.Option value="1">已完成</Select.Option>
-                            </Select>
-                        )
-                    },
-                    {
-                        name: 'batcherId',
-                        label: '出库人',
-                        children: <IntgSelect width={200} />
-                    },
-                    {
-                        name: 'selectName',
-                        label: "关键字",
-                        children: <Input placeholder="请输入领料编号/生产批次进行查询" style={{ width: 300 }} />
-                    }
+                        </Select>
+                    )
+                },
+                {
+                    name: 'batcherId',
+                    label: '申请人',
+                    children: <IntgSelect width={400} />
+                },
+                {
+                    name: 'selectName',
+                    label: "关键字",
+                    children: <Input placeholder="请输入领料编号/生产批次进行查询" style={{ width: 300 }} />
+                }
                 ]}
             />
         </>

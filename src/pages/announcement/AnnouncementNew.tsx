@@ -5,7 +5,7 @@ import { DetailTitle, DetailContent, Attachment, AttachmentRef } from '../common
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './AnnouncementMngt.module.less';
-import { IAnnouncement } from './AnnouncementMngt';
+import { IAnnouncement, IStaffList } from './AnnouncementMngt';
 import SelectUserTransfer from './SelectUserTransfer';
 import { IStaff } from '../dept/staff/StaffMngt';
 
@@ -14,7 +14,7 @@ export default function AnnouncementNew(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>()
     // const [attachInfo, setAttachInfo] = useState<FileProps[]>([]);
     const location = useLocation<{ type: string }>();
-    const [staffList, setStaffList] = useState<string[]>([]);
+    const [staffList, setStaffList] = useState<IStaffList[]>([]);
     const [detailData, setDetailData] = useState<IAnnouncement>({});
 
     const history = useHistory();
@@ -22,8 +22,20 @@ export default function AnnouncementNew(): React.ReactNode {
     const { loading } = useRequest<IAnnouncement>(() => new Promise(async (resole, reject) => {
         if (location.state.type === 'edit') {
             let data = await RequestUtil.get<IAnnouncement>(`/tower-system/notice/getNoticeById/${params.id}`);
-            setDetailData(data);
-            setStaffList(data.staffList || [])
+            setDetailData({
+                ...data, userNames: data.staffList?.map((res: IStaffList) => { return res.userName }).join(','), staffList: data.staffList?.map((res: IStaffList) => {
+                    return {
+                        name: res.userName,
+                        id: res.userId
+                    }
+                }) || []
+            });
+            setStaffList(data.staffList?.map((res: IStaffList) => {
+                return {
+                    name: res.userName,
+                    id: res.userId
+                }
+            }) || [])
             resole(data);
         } else {
             resole({});
@@ -45,7 +57,7 @@ export default function AnnouncementNew(): React.ReactNode {
                         id: detailData.id,
                         ...value,
                         fileIds: attachRef.current?.getDataSource().map(item => item.id),
-                        staffList: staffList,
+                        staffList: staffList.map((res: IStaffList) => { return res?.id }),
                         state: state
                     }).then(res => {
                         history.goBack();
@@ -55,7 +67,7 @@ export default function AnnouncementNew(): React.ReactNode {
                         id: detailData.id,
                         ...value,
                         fileIds: attachRef.current?.getDataSource().map(item => item.id),
-                        staffList: staffList,
+                        staffList: staffList.map((res: IStaffList) => { return res?.id }),
                         state: state
                     }).then(res => {
                         history.goBack();
@@ -101,14 +113,18 @@ export default function AnnouncementNew(): React.ReactNode {
                 }]}>
                     <Input addonBefore={<SelectUserTransfer save={(selectRows: IStaff[]) => {
                         const userNames = selectRows.map(res => { return res.name }).join(',');
-                        const staffList: string[] = selectRows.map((res: IStaff) => { return res.id || '' });
                         form.setFieldsValue({ userNames: userNames, staffList: staffList });
-                        setStaffList(staffList);
-                        setDetailData({ ...detailData, userNames: userNames, staffList: staffList })
-                    }} />} disabled />
+                        setStaffList(selectRows.map(res => {
+                            return {
+                                id: res?.id,
+                                name: res?.name
+                            }
+                        }));
+                        setDetailData({ ...detailData, userNames: userNames, staffList: selectRows })
+                    }} staffData={detailData?.staffList} />} disabled />
                 </Form.Item>
             </Form>
-            <Attachment ref={attachRef} dataSource={ detailData.attachInfoVos } edit/>
+            <Attachment ref={attachRef} dataSource={detailData.attachInfoVos} edit />
         </DetailContent>
     </>
 }

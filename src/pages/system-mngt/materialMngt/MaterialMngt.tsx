@@ -169,8 +169,8 @@ export default function MaterialMngt(): React.ReactNode {
     const checkBatchSn = (value: string): Promise<void | any> => {
         return new Promise(async (resolve, reject) => {  // 返回一个promise
             const resData = await RequestUtil.get('/tower-system/material/checkMaterialCode', {
-                materialCode: value,
-                id: detailData.id,
+                materialCode: code + value,
+                id: detailData.id
             });
             resolve(resData)
         }).catch(error => {
@@ -238,7 +238,7 @@ export default function MaterialMngt(): React.ReactNode {
                 {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
-                    children: <Input placeholder="品名/规格" />
+                    children: <Input placeholder="编号/品名/规格" />
                 }
             ]}
             onFilterSubmit={(values: Record<string, any>) => {
