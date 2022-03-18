@@ -1600,6 +1600,34 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 班组管理-班组管理列表
+      "name": "班组管理",
+      "path": "/workshopTeam/workshopTeamList",
+      "module": "./pages/workshopTeam/workshopTeamList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 班组管理-班组管理列表
+      "name": "添加班组",
+      "path": "/workshopTeam/workshopTeamList/add",
+      "module": "./pages/workshopTeam/workshopTeamAdd",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 班组管理-编辑班组
+      "name": "编辑班组",
+      "path": "/workshopTeam/workshopTeamList/edit/:id",
+      "module": "./pages/workshopTeam/workshopTeamEdit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 班组管理-班组详情
+      "name": "班组详情",
+      "path": "/workshopTeam/workshopTeamList/view/:id",
+      "module": "./pages/workshopTeam/workshopTeamView",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 成品库管理-成品库配置
       "name": "成品库配置",
       "path": "/shippingDepartmentMngt/shippingDepartmentConfig",

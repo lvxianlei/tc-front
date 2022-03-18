@@ -715,6 +715,20 @@
                         ]
                     },
                     {
+                        "label": "班组管理",
+                        "icon": "technology",
+                        "path": "/workshopTeam",
+                        "appName": "MC",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "班组列表",
+                                "path": "/workshopTeam/workshopTeamList",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "成品库管理",
                         "icon": "technology",
                         "path": "/shippingDepartmentMngt",
