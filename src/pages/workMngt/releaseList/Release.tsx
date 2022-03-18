@@ -42,7 +42,6 @@ export default function Release(): React.ReactNode {
     const SelectChange = (selectedRowKeys: React.Key[]): void => {
         setSelectedKeys(selectedRowKeys);
     }
-    
 
     return (
         <Spin spinning={false}>
@@ -289,9 +288,21 @@ export default function Release(): React.ReactNode {
                                                     return item.batchNum&&item.batchNum!==null&&item.batchNum!=='0'&&item.batchNum!==0
                                                 });
                                                 console.log(value)
-                                                setATableDataSource(value)
+                                                
+                                                let newArr: any[] = [];
+                                                value.forEach((el:any)=> {
+                                                  const res = newArr.findIndex(ol=> {
+                                                    return el.segmentName === ol.segmentName;
+                                                  });
+                                                  if (res!== -1) {
+                                                    newArr[res].batchNum = newArr[res].batchNum +  el.batchNum;
+                                                  } else {
+                                                    newArr.push(el);
+                                                  }
+                                                });
+                                                setATableDataSource(newArr)
                                                 formRef.setFieldsValue({
-                                                    trialAssembleSegments: value
+                                                    trialAssembleSegments: newArr
                                                 })
                                             }
                                         } }/>} 
