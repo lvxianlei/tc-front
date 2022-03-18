@@ -31,8 +31,8 @@ export default function EnquiryList(): React.ReactNode {
             <TaskTower id={chooseId} />
         </Modal>
         <Page
-            path="/tower-supply/materialPurchaseTask/inquirer"
-            exportPath={`/tower-supply/materialPurchaseTask/inquirer`}
+            path="/tower-supply/purchaseTaskTower"
+            exportPath={`/tower-supply/purchaseTaskTower`}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...baseInfo,

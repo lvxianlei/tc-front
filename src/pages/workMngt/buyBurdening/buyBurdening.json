@@ -1,8 +1,8 @@
 {
     "baseInfo": [
         {
-            "title": "批次号-新增",
-            "dataIndex": "purchaseNumber",
+            "title": "批次号",
+            "dataIndex": "batchNumber",
             "width": 200,
             "type": "string"
         },
@@ -13,8 +13,8 @@
             "type": "string"
         },
         {
-            "title": "计划号-新增",
-            "dataIndex": "purchaseNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
             "width": 200,
             "type": "string"
         },
@@ -37,8 +37,8 @@
             "type": "number"
         },
         {
-            "title": "提料重量（吨）--新增",
-            "dataIndex": "purchaseNumber",
+            "title": "提料重量（吨）",
+            "dataIndex": "totalWeight",
             "width": 200,
             "type": "string"
         },
@@ -59,8 +59,8 @@
             "format": "YYYY-MM-DD HH:mm"
         },
         {
-            "title": "方案编号-新增",
-            "dataIndex": "purchaseNumber",
+            "title": "方案编号",
+            "dataIndex": "schemeNumber",
             "width": 200,
             "type": "string"
         }

@@ -17,8 +17,8 @@
             "dataIndex": "length"
         },
         {
-            "title": "汇总重量(吨)--新增",
-            "dataIndex": "length"
+            "title": "汇总重量(吨)",
+            "dataIndex": "weight"
         },
         {
             "title": "汇总数量",
