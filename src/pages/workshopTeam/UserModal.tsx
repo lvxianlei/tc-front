@@ -271,13 +271,13 @@
      //接口、获值
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
          let resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/employee`, {
-             teamId: this.props.saleOrderId,
+            //  teamId: this.props.saleOrderId,
              ...filterValues,
-             // current: pagination.current || this.state.tablePagination?.current,
-             // size: pagination.pageSize || this.state.tablePagination?.pageSize
+             current: pagination.current || this.state.tablePagination?.current,
+             size: pagination.pageSize || this.state.tablePagination?.pageSize
          });
          const selectKeys: [] = this.props.selectKey;
-         let newData: any = resData;
+         let newData: any = resData.records;
          selectKeys?.forEach((item: any) => {
              newData = newData.filter((res:any) => res.userId !== item.userId);
          })
@@ -330,10 +330,10 @@
              width: '50%',
              dataIndex: 'name'
          }, {
-             key: 'position',
-             title: '职位',
+             key: 'deptName',
+             title: '所属部门',
              width: '50%',
-             dataIndex: 'position'
+             dataIndex: 'deptName'
          },
          //  {
          //     key: 'stationName',

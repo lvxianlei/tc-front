@@ -1,85 +1,74 @@
-import React, { useRef, useState } from 'react'
-import { Button, Spin, Space, Modal, Form, Row, Col, Upload, message, Image } from 'antd';
-import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle, Attachment, AttachmentRef } from '../common';
+import React, { useState } from 'react'
+import { Button, Spin, Space, Modal, Form, Row, Col } from 'antd';
+import { useHistory } from 'react-router-dom';
+import { DetailContent, DetailTitle  } from '../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
-import TextArea from 'antd/lib/input/TextArea';
-import { Table, Input, InputNumber, Popconfirm, Typography, Select } from 'antd';
-import AuthUtil from '../../utils/AuthUtil';
-import { patternTypeOptions, productTypeOptions, voltageGradeOptions } from '../../configuration/DictionaryOptions';
-interface Item {
-  key: string;
-  name: string;
-  partBidNumber: number;
-  address: string;
-  pattern: number;
-}
-
-const originData: Item[] = [];
-for (let i = 0; i < 100; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `Edrward ${i}`,
-    partBidNumber: 32,
-    pattern: 1,
-    address: `London Park no. ${i}`,
-  });
-}
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: 'number' | 'text' | 'select' | 'edit' | 'textArea';
-  enums?: object[];
-  record: Item;
-  index: number;
-  children: React.ReactNode;
-}
+import { Input, Select } from 'antd';
+import UserModal from './UserModal';
 
 
 
-export default function ConfirmDetail(): React.ReactNode {
+
+export default function WorkshopTeamAdd(): React.ReactNode {
     const history = useHistory();
     const [dataDTO, setDataDTO] = useState({});
+    const [user, setUser] = useState([]);
+    const [users, setUsers] = useState([{name:'张三'},{name:'李四'},{name:'王五'}]);
     const [form] = Form.useForm();
-    const [formRef] = Form.useForm();
-    
-    const params = useParams<{ id: string, status: string }>()
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
-
-        resole(data);
-    }), {})
-    const detailData: any = data;
     const formItemLayout = {
-      labelCol: { span: 6 },
-      wrapperCol: { span: 16 }
+      labelCol: { span: 2},
+      wrapperCol: { span: 10 }
     };
    
-
+    const { data, loading } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get<any[]>(`/tower-system/employee?current=1&size=1000`);
+        resole(data?.records.filter((item:any)=>{
+            // return item.deptName==='成品包装车间'
+            return item
+        }));
+    }), {})
 
    
     return <Spin spinning={loading}>
             <DetailContent operation={[
-              <>
-                <Space>
-                    <Button type='primary' onClick={async () => {
-                        try {
-                          const saveData:any = {
-                              drawTaskId: params.id,
-                          }
-                          
-                      } catch (error) {
-                          console.log(error)
-                      }
-                    }}>保存</Button>
-                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-                   
-                </Space>
-            </>]}>
+                    <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+                ]}>
                 <DetailTitle title="班组详情"/>
-                <Form form={formRef} component={false} >
+                <Form form={form}  {...formItemLayout}>
+                    <Form.Item name="productUnitId" label="班组名称" rules={[{
+                        "required": true,
+                        "message": "请选择所属生产单元"
+                    },
+                    {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }]}>
+                        <Input maxLength={40} disabled/>
+                    </Form.Item>
+                    <Form.Item name="name" label="班长">
+                        <Select placeholder="请选择" disabled>
+                            {data?.map((item: any) => {
+                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name="productUnitId" label="备注" >
+                        <Input.TextArea maxLength={300} showCount rows={3} disabled/>
+                    </Form.Item>
+                    <Form.Item name="productUnitId" label="组员">
+                    <Row>
+                        <Col span={10} style={{width:'100%'}}>
+                        {
+                            users.length>0&&<Space size={[20, 16]}  wrap style={{width:'100%'}}>{users.map((item:any,index:number)=>{
+
+                                    return <div >{item.name}</div>
+                                
+                            })}</Space>
+                        }
+                        </Col>
+                    </Row>
+                    </Form.Item>
                     
                 </Form>
             </DetailContent>

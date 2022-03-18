@@ -1,50 +1,21 @@
-import React, { useRef, useState } from 'react'
-import { Button, Spin, Space, Modal, Form, Row, Col, Upload, message, Image } from 'antd';
-import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle, Attachment, AttachmentRef } from '../common';
+import React, { useState } from 'react'
+import { Button, Spin, Space, Modal, Form, Row, Col } from 'antd';
+import { useHistory } from 'react-router-dom';
+import { DetailContent, DetailTitle  } from '../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
-import TextArea from 'antd/lib/input/TextArea';
-import { Table, Input, InputNumber, Popconfirm, Typography, Select } from 'antd';
-import AuthUtil from '../../utils/AuthUtil';
-import { patternTypeOptions, productTypeOptions, voltageGradeOptions } from '../../configuration/DictionaryOptions';
+import { Input, Select } from 'antd';
 import UserModal from './UserModal';
-interface Item {
-  key: string;
-  name: string;
-  partBidNumber: number;
-  address: string;
-  pattern: number;
-}
-
-const originData: Item[] = [];
-for (let i = 0; i < 100; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `Edrward ${i}`,
-    partBidNumber: 32,
-    pattern: 1,
-    address: `London Park no. ${i}`,
-  });
-}
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: 'number' | 'text' | 'select' | 'edit' | 'textArea';
-  enums?: object[];
-  record: Item;
-  index: number;
-  children: React.ReactNode;
-}
 
 
 
-export default function ConfirmDetail(): React.ReactNode {
+
+export default function WorkshopTeamAdd(): React.ReactNode {
     const history = useHistory();
     const [dataDTO, setDataDTO] = useState({});
+    const [user, setUser] = useState([]);
+    const [users, setUsers] = useState([]);
     const [form] = Form.useForm();
-    const [formRef] = Form.useForm();
     const formItemLayout = {
       labelCol: { span: 2},
       wrapperCol: { span: 10 }
@@ -89,10 +60,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             }]}>
                                 <Input maxLength={40}/>
                             </Form.Item>
-                            <Form.Item name="name" label="班长"  rules={[{
-                                "required": true,
-                                "message": "请选择班长"
-                            }]}>
+                            <Form.Item name="name" label="班长">
                                 <Select placeholder="请选择">
                                     {data?.map((item: any) => {
                                         return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
@@ -103,11 +71,24 @@ export default function ConfirmDetail(): React.ReactNode {
                                 <Input.TextArea maxLength={300} showCount rows={3}/>
                             </Form.Item>
                             <Form.Item name="productUnitId" label="组员">
-                                {/* <Button type='link'>选择组员</Button> */}
-                                {/* <UserModal onSelect={()=>{
-
-                                }}/> */}
+                                <UserModal onSelect={(selectedRows:any)=>{
+                                    console.log(selectedRows)
+                                    setUsers(selectedRows)
+                                }} buttonType='link' rowSelectionType='checkbox'/>
+                                
                             </Form.Item>
+                            <Row>
+                                <Col span={2}/>
+                                <Col span={10} style={{width:'100%'}}>
+                                {
+                                    users.length>0&&<Space size={[20, 16]}  wrap style={{width:'100%'}}>{users.map((item:any,index:number)=>{
+
+                                            return <div >{item.name}</div>
+                                        
+                                    })}</Space>
+                                }
+                                </Col>
+                            </Row>
                 </Form>
             </DetailContent>
             
