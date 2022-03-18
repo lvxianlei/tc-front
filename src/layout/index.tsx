@@ -36,6 +36,11 @@ const SiderMenu: React.FC = () => {
 
     const handleOpenChange = useCallback((openKeys: React.Key[]) => setSelectedSubMenuItem(openKeys), [setSelectedSubMenuItem, selectedSubMenuItem])
 
+    useEffect(() => {
+        setSelectedSubMenuItem([location.pathname, `/${location.pathname.split("/")[1]}`]);
+        setSelectedDarkMenuItem([location.pathname])
+    }, [JSON.stringify(location)])
+
     return <Menu
         mode="inline"
         theme={ctxConfig.layout.theme || "light"}
