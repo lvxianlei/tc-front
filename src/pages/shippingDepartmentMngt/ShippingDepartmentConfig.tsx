@@ -16,19 +16,19 @@
  export default function ProcessMngt(): React.ReactNode {
      const columns = [
          {
-             key: 'code',
+             key: 'name',
              title: '成品库名称',
-             dataIndex: 'code'
+             dataIndex: 'name'
          },
          {
-             key: 'workCenterName',
+             key: 'leaderName',
              title: '负责人',
-             dataIndex: 'workCenterName'
+             dataIndex: 'leaderName'
          },
          {
-             key: 'workCenterName',
+             key: 'description',
              title: '备注',
-             dataIndex: 'workCenterName'
+             dataIndex: 'description'
          },
          {
              key: 'operation',
@@ -45,7 +45,7 @@
                      <Popconfirm
                          title="确认删除?"
                          onConfirm={() => {
-                             RequestUtil.delete(``).then(res => {
+                             RequestUtil.delete(`/tower-production/packageStorage/${record.id}`).then(res => {
                                  message.success('删除成功');
                                  setRefresh(!refresh);
                              });
@@ -66,6 +66,7 @@
              message.success(`${type === "new" ? "创建" : "编辑"}成品库成功`)
              setVisible(false);
              resove(true);
+             setDetailedId('');
              setRefresh(!refresh);
          } catch (error) {
              reject(false)
@@ -83,7 +84,6 @@
              <Modal
                  destroyOnClose
                  visible={visible}
-                 width="60%"
                  title={type === "new" ? "添加成品库" : "编辑成品库"}
                  onOk={handleModalOk}
                  onCancel={() => {
@@ -95,14 +95,14 @@
                  <Edit type={type} ref={editRef} id={detailedId} />
              </Modal>
              <Page
-                 path=""
+                 path={`/tower-production/packageStorage`}
                  columns={columns}
                  headTabs={[]}
                  extraOperation={<Button type="primary" onClick={() => { setVisible(true); setType('new'); }}>添加</Button>}
                  refresh={refresh}
                  searchFormItems={[
                      {
-                         name: 'workCenterName',
+                         name: 'fuzzyMsg',
                          label: '',
                          children: <Input placeholder="成品库名称/负责人" />
                      }

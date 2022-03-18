@@ -21,9 +21,8 @@ export default function DailySchedule(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
-    const [visible, setVisible] = useState(true);
+    const [visible, setVisible] = useState(false);
     const editRef = useRef<EditRefProps>();
-    const [form] = Form.useForm();
     const [title, setTitle ] = useState<string>('');
     const [detailData, setDetailData] = useState<IPackingPlan>();
 
