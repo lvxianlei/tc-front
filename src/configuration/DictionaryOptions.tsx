@@ -10,6 +10,7 @@ export enum DictionaryEnums {
     MATERIAL_STANDARD = 104,
     BOLT_TYPE = 105,
     PATTERN = 106,
+    COMPOUND_TYPE = 107,
     CURRENCY_TYPE = 111,
     TAX_RATE = 112,
     REFUND_MODE = 113,
@@ -86,6 +87,7 @@ let collectionType: IDict[] | undefined = [];
 let weighingType: IDict[] | undefined = [];
 let packageType: IDict[] | undefined = [];
 let tenderDeliveryMethod: IDict[] | undefined = [];
+let compoundType: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -129,6 +131,7 @@ if (dictionary) {
     weighingType = dictionary[DictionaryEnums.WEIGHING_TYPE];
     packageType = dictionary[DictionaryEnums.PACKAGE_TYPE];
     tenderDeliveryMethod = dictionary[DictionaryEnums.TENDER_DELIVERY_METHOD];
+    compoundType = dictionary[DictionaryEnums.COMPOUND_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -171,3 +174,4 @@ export const collectionTypeeOptions = collectionType; // 回款类型
 export const weighingtypeOptions = weighingType; //过磅类型
 export const packageTypeOptions = packageType; //包类型
 export const tenderDeliveryMethodOptions = tenderDeliveryMethod; // 标书投递方式
+export const compoundTypeOptions = compoundType; // 组焊类型

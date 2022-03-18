@@ -1266,6 +1266,20 @@
       "exact": true,
       "authority": "rd_welding"
     },
+    { // 工作管理-组焊列表-组焊清单-添加组焊
+      "name": "添加组焊",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/new",
+      "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
+      "exact": true,
+      "authority": "rd_welding"
+    },
+    { // 工作管理-组焊列表-组焊清单-编辑
+      "name": "编辑",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/edit/:segmentId",
+      "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
+      "exact": true,
+      "authority": "rd_welding"
+    },
     { // 工作管理-组焊列表-校核
       "name": "校核",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId",
@@ -1361,6 +1375,34 @@
       "name": "小样图校核",
       "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id/:status",
       "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
+    { // 工作管理-下达列表
+      "name": "下达列表",
+      "path": "/workMngt/releaseList",
+      "module": "./pages/workMngt/releaseList/ReleaseList",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
+    { // 工作管理-下达列表-生产下达
+      "name": "生产下达",
+      "path": "/workMngt/releaseList/release/:id",
+      "module": "./pages/workMngt/releaseList/Release",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
+    { // 工作管理-下达列表-下达明细
+      "name": "下达明细",
+      "path": "/workMngt/releaseList/detail/:id/:productCategoryId",
+      "module": "./pages/workMngt/releaseList/ReleaseDetail",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
+    { // 工作管理-组焊明细-组焊明细
+      "name": "组焊明细",
+      "path": "/workMngt/releaseList/assemblyWelding/:id",
+      "module": "./pages/workMngt/releaseList/ReleaseAssemblyWeldingDetail",
       "exact": true,
       "authority": "rd_small_sample_management"
     },
