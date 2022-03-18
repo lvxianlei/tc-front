@@ -7,14 +7,8 @@
             "type": "string"
         },
         {
-            "title": "原材料任务编号",
+            "title": "原材料采购任务编号",
             "dataIndex": "purchaseNumber",
-            "width": 200,
-            "type": "string"
-        },
-        {
-            "title": "计划号",
-            "dataIndex": "planNumber",
             "width": 200,
             "type": "string"
         },
@@ -25,7 +19,13 @@
             "type": "string"
         },
         {
-            "title": "塔型（个）",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 200,
+            "type": "string"
+        },
+        {
+            "title": "塔型",
             "dataIndex": "productCategoryNum",
             "width": 100,
             "type": "number"
