@@ -1603,28 +1603,28 @@
     { // 班组管理-班组管理列表
       "name": "班组管理",
       "path": "/workshopTeam/workshopTeamList",
-      "module": "./pages/workshopTeam/workshopTeamList",
+      "module": "./pages/workshopTeam/WorkshopTeamList",
       "exact": true,
       "authority": "approvalm"
     },
     { // 班组管理-班组管理列表
       "name": "添加班组",
       "path": "/workshopTeam/workshopTeamList/add",
-      "module": "./pages/workshopTeam/workshopTeamAdd",
+      "module": "./pages/workshopTeam/WorkshopTeamAdd",
       "exact": true,
       "authority": "approvalm"
     },
     { // 班组管理-编辑班组
       "name": "编辑班组",
       "path": "/workshopTeam/workshopTeamList/edit/:id",
-      "module": "./pages/workshopTeam/workshopTeamEdit",
+      "module": "./pages/workshopTeam/WorkshopTeamEdit",
       "exact": true,
       "authority": "approvalm"
     },
     { // 班组管理-班组详情
       "name": "班组详情",
       "path": "/workshopTeam/workshopTeamList/view/:id",
-      "module": "./pages/workshopTeam/workshopTeamView",
+      "module": "./pages/workshopTeam/WorkshopTeamView",
       "exact": true,
       "authority": "approvalm"
     },
