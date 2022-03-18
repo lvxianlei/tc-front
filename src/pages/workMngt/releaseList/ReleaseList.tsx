@@ -61,10 +61,10 @@ export default function ReleaseList(): React.ReactNode {
             }
         },
         {
-            key: 'updateStatusTime',
+            key: 'batchUpdateStatusTime',
             title: '最新状态变更时间',
             width: 100,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'batchUpdateStatusTime'
         },
         {
             key: 'trialAssemble',
