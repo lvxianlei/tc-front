@@ -378,7 +378,7 @@ export default function ReleaseList(): React.ReactNode {
                                 </Select>
                 },
                 {
-                    name: 'fuzzyMsg',
+                    name: 'batchFuzzyMsg',
                     label: '模糊查询项',
                     children: <Input placeholder="" maxLength={200} />
                 },
