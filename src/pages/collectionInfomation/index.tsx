@@ -19,9 +19,9 @@ import { exportDown } from "../../utils/Export";
 export default function CollectionInfomation(): React.ReactNode {
     const history = useHistory()
     const [ refresh, setRefresh ] = useState<boolean>(false);
+    const [ clearSearch, setClearSearch ] = useState<boolean>(false);
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
     const [visible, setVisible] = useState(false);
-    const [filterValue, setFilterValue] = useState<any>({confirmStatus: 1});
     const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
     const [ contractList, setContractList ] = useState<Contract[]>([]);
     const addRef = useRef<EditRefProps>()
@@ -53,7 +53,6 @@ export default function CollectionInfomation(): React.ReactNode {
             delete value.startRefundTime;
         }
         value["confirmStatus"] = confirmStatus;
-        setFilterValue(value);
         return value
     }
     
@@ -61,6 +60,7 @@ export default function CollectionInfomation(): React.ReactNode {
     const operationChange = (event: any) => {
         setConfirmStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
+        setClearSearch(!clearSearch);
     }
 
     // 新增回调
@@ -152,6 +152,7 @@ export default function CollectionInfomation(): React.ReactNode {
                         }
                     }]}
                 refresh={ refresh }
+                clearSearch={clearSearch}
                 extraOperation={
                     <div style={{display: 'flex', flexWrap: 'nowrap', justifyContent: 'spance-between'}}>
                         <div>
@@ -198,7 +199,7 @@ export default function CollectionInfomation(): React.ReactNode {
                     </div>
                 }
                 onFilterSubmit={onFilterSubmit}
-                filterValue={ filterValue }
+                filterValue={{confirmStatus: confirmStatus}}
                 searchFormItems={[
                     {
                         name: 'returnType',

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Space, Button, Input, Modal, Form, message, Select, DatePicker } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page, BaseInfo, DetailTitle, EditTable, Attachment, AttachmentRef } from '../common'
+import { SearchTable as Page, BaseInfo, DetailTitle, EditTable, Attachment, AttachmentRef } from '../common'
 import ApprovalTypesView from "./ApprovalTypesView"
 import SelectAuditType from './SelectAuditType'
 import useRequest from '@ahooksjs/use-request'
@@ -437,7 +437,7 @@ export default function Information(): React.ReactNode {
                     width: 50,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
-                ...auditHead,
+                ...(auditHead as any),
                 {
                     title: '操作',
                     dataIndex: 'operation',
