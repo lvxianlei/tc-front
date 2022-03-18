@@ -446,7 +446,7 @@
     },
     { // 编辑开票申请
       "name": "编辑开票申请",
-      "path": "/project/invoicing/edit/:id",
+      "path": "/project/billList/invoicing/edit/:id",
       "module": "./pages/project/invoicing/Edit",
       "exact": true,
       "authority": "project"
@@ -1266,6 +1266,20 @@
       "exact": true,
       "authority": "rd_welding"
     },
+    { // 工作管理-组焊列表-组焊清单-添加组焊
+      "name": "添加组焊",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/new",
+      "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
+      "exact": true,
+      "authority": "rd_welding"
+    },
+    { // 工作管理-组焊列表-组焊清单-编辑
+      "name": "编辑",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/edit/:segmentId",
+      "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
+      "exact": true,
+      "authority": "rd_welding"
+    },
     { // 工作管理-组焊列表-校核
       "name": "校核",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId",
@@ -1361,6 +1375,34 @@
       "name": "小样图校核",
       "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id/:status",
       "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
+    { // 工作管理-下达列表
+      "name": "下达列表",
+      "path": "/workMngt/releaseList",
+      "module": "./pages/workMngt/releaseList/ReleaseList",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
+    { // 工作管理-下达列表-生产下达
+      "name": "生产下达",
+      "path": "/workMngt/releaseList/release/:id",
+      "module": "./pages/workMngt/releaseList/Release",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
+    { // 工作管理-下达列表-下达明细
+      "name": "下达明细",
+      "path": "/workMngt/releaseList/detail/:id/:productCategoryId",
+      "module": "./pages/workMngt/releaseList/ReleaseDetail",
+      "exact": true,
+      "authority": "rd_small_sample_management"
+    },
+    { // 工作管理-组焊明细-组焊明细
+      "name": "组焊明细",
+      "path": "/workMngt/releaseList/assemblyWelding/:id",
+      "module": "./pages/workMngt/releaseList/ReleaseAssemblyWeldingDetail",
       "exact": true,
       "authority": "rd_small_sample_management"
     },
@@ -2079,7 +2121,7 @@
     },
     { // 开票申请列表
       "name": "开票申请列表",
-      "path": "/invoicing",
+      "path": "/invoicing/billList",
       "module": "./pages/invoicing/index",
       "exact": true,
       "authority": "approvalm_invoicing_list"
@@ -2100,14 +2142,14 @@
     },
     { // 查看任务信息
       "name": "任务信息",
-      "path": "/invoicing/taskInfo/:invoicingId",
+      "path": "/invoicing/billList/taskInfo/:invoicingId",
       "module": "./pages/invoicing/TaskInfo",
       "exact": true,
       "authority": "fc_view_task_information"
     },
     { // 填写开票申请信息
       "name": "填写开票信息",
-      "path": "/invoicing/edit/:invoicingId",
+      "path": "/invoicing/billList/edit/:invoicingId",
       "module": "./pages/invoicing/Edit",
       "exact": true,
       "authority": "fc_approvalm_invoicing_list_edit"

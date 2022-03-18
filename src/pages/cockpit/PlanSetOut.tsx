@@ -14,14 +14,14 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'index',
             width: 50,
             fixed: "left" as FixedType,
-            render: (_a: any, _b: any, index: number) => {return index + 1}
+            render: (_a: any, _b: any, index: number) => { return index + 1 }
         },
-        {
-            key: 'taskNum',
-            title: '放样任务编号',
-            width: 100,
-            dataIndex: 'taskNum'
-        },
+        // {
+        //     key: 'taskNum',
+        //     title: '放样任务编号',
+        //     width: 100,
+        //     dataIndex: 'taskNum'
+        // },
         {
             key: 'planNumber',
             title: '计划号',
@@ -137,7 +137,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'loftingDeliverRealTime'
         },
         {
-            key: 'weldingLeaderName', 
+            key: 'weldingLeaderName',
             title: '放样配段负责人',
             width: 100,
             dataIndex: 'weldingLeaderName'
@@ -245,7 +245,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'description'
         },
     ];
-    const onFilterSubmit=(value: any)=>{
+    const onFilterSubmit = (value: any) => {
         setFilterValue(value)
         return value;
     }
@@ -254,20 +254,20 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
     const columnsSetting = columns.map(col => {
         return {
             ...col,
-            render:  col.render?col.render:(_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                col.dataIndex === 'index' ? index + 1 
-                : col.dataIndex === 'boltDeliverRealTime'&& moment(record.boltDeliverTime)<moment(record.boltDeliverRealTime?record.boltDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
-                : col.dataIndex === 'smallSampleDeliverRealTime'&& moment(record.smallSampleDeliverTime)<moment(record.smallSampleDeliverRealTime?record.smallSampleDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
-                : col.dataIndex === 'weldingDeliverRealTime'&& moment(record.weldingDeliverTime)<moment(record.weldingDeliverRealTime?record.weldingDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
-                : col.dataIndex === 'loftingPartDeliverRealTime'&& moment(record.loftingPartDeliverTime)<moment(record.loftingPartDeliverRealTime?record.loftingPartDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
-                : col.dataIndex === 'loftingDeliverRealTime'&& moment(record.loftingDeliverTime)<moment(record.loftingDeliverRealTime?record.loftingDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
-                : col.dataIndex === 'materialPartDeliverRealTime'&& moment(record.materialPartDeliverTime)<moment(record.materialPartDeliverRealTime?record.materialPartDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
-                : col.dataIndex === 'materialDeliverRealTime'&& moment(record.materialDeliverTime)<moment(record.materialDeliverRealTime?record.materialDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
-                : col.dataIndex === 'boltDrawDeliverRealTime'&& moment(record.boltDrawDeliverTime)<moment(record.boltDrawDeliverRealTime?record.boltDrawDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
-                : col.dataIndex === 'weldingDrawDeliverRealTime'&& moment(record.weldingDrawDeliverTime)<moment(record.weldingDrawDeliverRealTime?record.weldingDrawDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
-                : <div>{ _?_:'-' }</div>
-            )  
-        }     
+            render: col.render ? col.render : (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                col.dataIndex === 'index' ? index + 1
+                    : col.dataIndex === 'boltDeliverRealTime' && moment(record.boltDeliverTime) < moment(record.boltDeliverRealTime ? record.boltDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                        : col.dataIndex === 'smallSampleDeliverRealTime' && moment(record.smallSampleDeliverTime) < moment(record.smallSampleDeliverRealTime ? record.smallSampleDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                            : col.dataIndex === 'weldingDeliverRealTime' && moment(record.weldingDeliverTime) < moment(record.weldingDeliverRealTime ? record.weldingDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                                : col.dataIndex === 'loftingPartDeliverRealTime' && moment(record.loftingPartDeliverTime) < moment(record.loftingPartDeliverRealTime ? record.loftingPartDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                                    : col.dataIndex === 'loftingDeliverRealTime' && moment(record.loftingDeliverTime) < moment(record.loftingDeliverRealTime ? record.loftingDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                                        : col.dataIndex === 'materialPartDeliverRealTime' && moment(record.materialPartDeliverTime) < moment(record.materialPartDeliverRealTime ? record.materialPartDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                                            : col.dataIndex === 'materialDeliverRealTime' && moment(record.materialDeliverTime) < moment(record.materialDeliverRealTime ? record.materialDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                                                : col.dataIndex === 'boltDrawDeliverRealTime' && moment(record.boltDrawDeliverTime) < moment(record.boltDrawDeliverRealTime ? record.boltDrawDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                                                    : col.dataIndex === 'weldingDrawDeliverRealTime' && moment(record.weldingDrawDeliverTime) < moment(record.weldingDrawDeliverRealTime ? record.weldingDrawDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                                                        : <div>{_ ? _ : '-'}</div>
+            )
+        }
     })
     return <Page
         path="/tower-science/loftingTask/planLofting"
@@ -279,29 +279,51 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             {
                 name: 'priority',
                 label: '优先级',
-                children:  <Select style={{width:'100px'}}>
-                                <Select.Option value={''} key ={''}>全部</Select.Option>
-                                <Select.Option value={0} key={0}>紧急</Select.Option>
-                                <Select.Option value={1} key={1}>高</Select.Option>
-                                <Select.Option value={2} key={2}>中</Select.Option>
-                                <Select.Option value={3} key={3}>低</Select.Option>
-                            </Select>
+                children: <Select style={{ width: '100px' }} defaultValue={''}>
+                    <Select.Option value={''} key={''}>全部</Select.Option>
+                    <Select.Option value={0} key={0}>紧急</Select.Option>
+                    <Select.Option value={1} key={1}>高</Select.Option>
+                    <Select.Option value={2} key={2}>中</Select.Option>
+                    <Select.Option value={3} key={3}>低</Select.Option>
+                </Select>
+            },{
+                name: 'materialStatus',
+                label: '塔型提料状态',
+                children: <Select style={{ width: '100px' }} defaultValue={''}>
+                    <Select.Option value={''} key={''}>全部</Select.Option>
+                    <Select.Option value={1} key={1}>待指派</Select.Option>
+                    <Select.Option value={2} key={2}>提料中</Select.Option>
+                    <Select.Option value={3} key={3}>配段中</Select.Option>
+                    <Select.Option value={4} key={4}>已完成</Select.Option>
+                </Select>
             },
             {
-                name: 'pattern',
-                label: '模式',
-                children:  <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                        { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={ index } value={ id  }>
-                                { name }
-                            </Select.Option>
-                        }) }
-                    </Select>
+                name: 'loftingStatus',
+                label: '塔型放样状态',
+                children: <Select style={{ width: '100px' }} defaultValue={''}>
+                    <Select.Option value={''} key={''}>全部</Select.Option>
+                    <Select.Option value={0} key={0}>待指派</Select.Option>
+                    <Select.Option value={1} key={1}>放样中</Select.Option>
+                    <Select.Option value={2} key={2}>组焊中</Select.Option>
+                    <Select.Option value={3} key={3}>配段中</Select.Option>
+                    <Select.Option value={4} key={4}>已完成</Select.Option>
+                </Select>
             },
+            // {
+            //     name: 'pattern',
+            //     label: '模式',
+            //     children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+            //         {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+            //             return <Select.Option key={index} value={id}>
+            //                 {name}
+            //             </Select.Option>
+            //         })}
+            //     </Select>
+            // },
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号进行查询" maxLength={200} />
+                children: <Input placeholder="请输入计划号/塔型/内部合同编号进行查询" style={{ width: '300px' }} maxLength={200} />
             },
         ]}
     />
