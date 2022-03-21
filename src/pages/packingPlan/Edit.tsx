@@ -4,37 +4,37 @@
  * @description 包装计划-包装计划列表-派工
  */
 
-
 import React, { useImperativeHandle, forwardRef, useState } from "react"
 import { Spin, Radio } from 'antd'
 import { BaseInfo, CommonTable, DetailTitle } from '../common'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { IPackingPlan } from "./PackingPlanList"
+import { IPackingPlan, IResponseData } from "./PackingPlanList"
 
 interface EditProps {
-    type?: "new" | "edit",
     detailData: IPackingPlan,
-    title: string
+    title: string,
+    teamId: string;
 }
 
 export interface EditRefProps {
     onSubmit: () => void
 }
 
-export default forwardRef(function Edit({ type, detailData, title }: EditProps, ref) {
+export default forwardRef(function Edit({ detailData, title, teamId }: EditProps, ref) {
     const [selectedRowKeys,setSelectedRowKeys] = useState<React.Key[]>([]);
     const [selectedRows,setSelectedRows] = useState([]);
-    const [checked, setChecked] = useState<boolean>(false);
+    const [checked, setChecked] = useState<boolean>(true);
 
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(``);
-            resole(result)
+            const result: IResponseData = await RequestUtil.get(`/tower-production/workshopTeam?size=1000`);
+            setChecked(teamId ? false: true);
+            resole(result?.records)
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new", refreshDeps: [detailData] })
+    }), { refreshDeps: [detailData,title, teamId] })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
@@ -47,8 +47,10 @@ export default forwardRef(function Edit({ type, detailData, title }: EditProps, 
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
+            // // const idList = [!detailData.angleTeamId,!detailData.boardTeamId,!detailData.pipeTeamId]
+            // console.log(idList)
                 await saveRun({
-                    teamId: selectedRowKeys[0],
+                    teamId: checked ? 0 : selectedRowKeys[0],
                     planId: detailData.id,
                     type: title === '角钢包装班组' ? 1: title === '连板包装班组' ? 2 :3
                 })
@@ -128,12 +130,11 @@ export default forwardRef(function Edit({ type, detailData, title }: EditProps, 
         <CommonTable 
         columns={tableColumns} 
         pagination={false} 
-        dataSource={[]}
+        dataSource={data}
         rowSelection={{
                             selectedRowKeys: selectedRowKeys,
                             type:'radio',
                             onChange: (selectedRowKeys: React.Key[], selectedRows:any)=>{
-                                
                                 setChecked(false);
                                 setSelectedRowKeys(selectedRowKeys)
                                 setSelectedRows(selectedRows)

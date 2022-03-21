@@ -15,6 +15,16 @@ import { EditRefProps } from './Edit';
 import Edit from "./Edit";
 export interface IPackingPlan {
     readonly id?: string;
+    readonly angleTeamId?: string;
+    readonly boardTeamId?: string;
+    readonly pipeTeamId?: string;
+}
+
+export interface IResponseData {
+    readonly total: number | undefined;
+    readonly size: number | undefined;
+    readonly current: number | undefined;
+    readonly records: any[];
 }
 
 export default function DailySchedule(): React.ReactNode {
@@ -23,10 +33,11 @@ export default function DailySchedule(): React.ReactNode {
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
     const [visible, setVisible] = useState(false);
     const editRef = useRef<EditRefProps>();
-    const [title, setTitle ] = useState<string>('');
+    const [title, setTitle] = useState<string>('');
     const [detailData, setDetailData] = useState<IPackingPlan>();
+    const [teamId, setTeamId] = useState<string>('');
 
-    const columns  = [
+    const columns = [
         {
             "key": "planNumber",
             "title": "计划号",
@@ -93,24 +104,50 @@ export default function DailySchedule(): React.ReactNode {
             "width": 150,
             "dataIndex": "angleTeamName",
             render: (_: string, record: Record<string, any>) => (
-                <Button type="link" onClick={() => {
-                    setTitle('角钢包装班组');
-                    setVisible(true);
-                    setDetailData(record);
-                }}>{_}</Button>
+                record.status === 1
+                    ?
+                    '派工'
+                    : <Button type="link" onClick={() => {
+                        setTitle('角钢包装班组');
+                        setVisible(true);
+                        setDetailData(record);
+                        setTeamId(record.angleTeamId);
+                    }}>{_ || '派工'}</Button>
             )
         },
         {
             "key": "boardTeamName",
             "title": "连板包装班组",
             "width": 150,
-            "dataIndex": "boardTeamName"
+            "dataIndex": "boardTeamName",
+            render: (_: string, record: Record<string, any>) => (
+                record.status === 1
+                    ?
+                    '派工'
+                    : <Button type="link" onClick={() => {
+                        setTitle('连板包装班组');
+                        setVisible(true);
+                        setDetailData(record);
+                        setTeamId(record.boardTeamId);
+                    }}>{_ || '派工'}</Button>
+            )
         },
         {
             "key": "pipeTeamName",
             "title": "钢管包装班组",
             "width": 150,
-            "dataIndex": "pipeTeamName"
+            "dataIndex": "pipeTeamName",
+            render: (_: string, record: Record<string, any>) => (
+                record.status === 1
+                    ?
+                    '派工'
+                    : <Button type="link" onClick={() => {
+                        setTitle('钢管包装班组');
+                        setVisible(true);
+                        setDetailData(record);
+                        setTeamId(record.pipeTeamId);
+                    }}>{_ || '派工'}</Button>
+            )
         },
         {
             "key": "statusName",
@@ -140,7 +177,7 @@ export default function DailySchedule(): React.ReactNode {
 
     const operationChange = (event: any) => {
         setConfirmStatus(parseFloat(`${event.target.value}`));
-        setRefresh(!refresh);                                                          
+        setRefresh(!refresh);
     }
 
     const handleModalOk = () => new Promise(async (resove, reject) => {
@@ -164,34 +201,34 @@ export default function DailySchedule(): React.ReactNode {
     }
 
     return <>
-     <Modal
-                 destroyOnClose
-                 visible={visible}
-                 title={`派工给${ title }`}
-                 width="60%"
-                 onOk={handleModalOk}
-                 onCancel={() => {
-                     setDetailData({});
-                     setVisible(false);
-                 }}>
-                 <Edit ref={editRef} title={title} detailData={detailData || {}} />
-             </Modal>
+        <Modal
+            destroyOnClose
+            visible={visible}
+            title={`派工给${title}`}
+            width="60%"
+            onOk={handleModalOk}
+            onCancel={() => {
+                setDetailData({});
+                setVisible(false);
+            }}>
+            <Edit ref={editRef} title={title} detailData={detailData || {}} teamId={teamId} />
+        </Modal>
         <Page
             path={`/tower-production/packageWorkshop/page`}
             columns={
-                    [...columns, {
-                        "key": "operation",
-                        "title": "操作",
-                        "dataIndex": "operation",
-                        fixed: "right" as FixedType,
-                        "width": 150,
-                        render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                            <Space>
-                                <Button type='link'>详情</Button>
-                                {record.status===1 ? <Button type='link' onClick={() =>onConfirm(record.id)}>确认</Button> : null}
-                            </Space>
-                        )
-                    }]}
+                [...columns, {
+                    "key": "operation",
+                    "title": "操作",
+                    "dataIndex": "operation",
+                    fixed: "right" as FixedType,
+                    "width": 150,
+                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                        <Space>
+                            <Button type='link'>详情</Button>
+                            {record.status === 1 ? <Button type='link' onClick={() => onConfirm(record.id)}>确认</Button> : null}
+                        </Space>
+                    )
+                }]}
             headTabs={[]}
             requestData={{ status: confirmStatus }}
             extraOperation={
@@ -201,29 +238,29 @@ export default function DailySchedule(): React.ReactNode {
                     <Radio.Button value={3}>打包中</Radio.Button>
                     <Radio.Button value={4}>已完成</Radio.Button>
                 </Radio.Group>
-                }
+            }
             refresh={refresh}
             searchFormItems={[
                 {
-                name: 'galvanizedTeamId',
-                label: '镀锌班组',
-                children: <Select placeholder="请选择" style={{width: '120px'}}>
-                    <Select.Option key={0} value={''}>全部</Select.Option>
-                    {[] ?.map((item: any) => {
-                        return <Select.Option key={item.name} value={item.id}>{item.name}</Select.Option>
-                    })}
-                </Select>
-            },
-            {
-                name: 'tipackageTeamIdme',
-                label: '包装班组',
-                children: <Select placeholder="请选择" style={{width: '120px'}}>
-                <Select.Option key={0} value={''}>全部</Select.Option>
-                {[] ?.map((item: any) => {
-                    return <Select.Option key={item.name} value={item.id}>{item.name}</Select.Option>
-                })}
-            </Select>
-            },
+                    name: 'galvanizedTeamId',
+                    label: '镀锌班组',
+                    children: <Select placeholder="请选择" style={{ width: '120px' }}>
+                        <Select.Option key={0} value={''}>全部</Select.Option>
+                        {[]?.map((item: any) => {
+                            return <Select.Option key={item.name} value={item.id}>{item.name}</Select.Option>
+                        })}
+                    </Select>
+                },
+                {
+                    name: 'tipackageTeamIdme',
+                    label: '包装班组',
+                    children: <Select placeholder="请选择" style={{ width: '120px' }}>
+                        <Select.Option key={0} value={''}>全部</Select.Option>
+                        {[]?.map((item: any) => {
+                            return <Select.Option key={item.name} value={item.id}>{item.name}</Select.Option>
+                        })}
+                    </Select>
+                },
                 {
                     name: 'time',
                     label: '开始包装日期',
