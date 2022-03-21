@@ -19,7 +19,7 @@ export default function Release(): React.ReactNode {
     const [ form ] = Form.useForm();
     const [ formRef ] = Form.useForm();
     const params = useParams<{ id: string }>()
-    const [check, setCheck] = useState<boolean>(true);
+    const [check, setCheck] = useState<boolean>(false);
     const [disabled, setDisabled] = useState<boolean>(true);
     const [visible, setVisible] = useState<boolean>(false);
     const [releaseData, setReleaseData] = useState<any|undefined>({});
@@ -30,13 +30,19 @@ export default function Release(): React.ReactNode {
     }
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/tower-science/loftingBatch/${params.id}`);
+        const value  = data?.loftingBatchProductVOList.filter((item:any)=>{
+            return item.status===0||item.status==='0'
+        })
         form.setFieldsValue({
             ...data,
-            loftingBatchProductDTOList:data.loftingBatchProductVOList,
+            loftingBatchProductDTOList:value,
             // loftingBatchProductDTOList:[{id:1,segmentName:1,segmentNum:10,issuedNum:null},{id:2,segmentName:2,segmentNum:5,issuedNum:1},{id:3,segmentName:3,segmentNum:5,issuedNum:5}],
         })
+        formRef.setFieldsValue({
+            trialAssembleSegments:[],
+        })
         setDisabled(data?.trialAssemble===1)
-        setTableDataSource(data.loftingBatchProductVOList)
+        setTableDataSource(value)
         setReleaseData(data)
     }), {})
     const SelectChange = (selectedRowKeys: React.Key[]): void => {
@@ -415,7 +421,7 @@ export default function Release(): React.ReactNode {
                                                 },
                                               },
                                         ]}>
-                                            <InputNumber precision={0} min={1} style={{width:'100%'}} onChange={()=>rowChange(index)} disabled={record.segmentNum===record.issuedNum}/>
+                                            <InputNumber precision={0} min={0} style={{width:'100%'}} onChange={()=>rowChange(index)} disabled={record.segmentNum===record.issuedNum}/>
                                         </Form.Item>
                                     }
                                 }
