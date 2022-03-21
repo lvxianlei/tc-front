@@ -29,22 +29,22 @@ import { useHistory } from 'react-router-dom';
              render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
          },
          {
-             key: 'name',
+             key: 'teamName',
              title: '班组名称',
              width: 200,
-             dataIndex: 'name'
+             dataIndex: 'teamName'
          },
          {
-             key: 'productUnitName',
+             key: 'classPresidentName',
              title: '班长',
              width: 200,
-             dataIndex: 'productUnitName'
+             dataIndex: 'classPresidentName'
          },
          {
-             key: 'createUserName',
+             key: 'number',
              title: '总人数',
              width: 200,
-             dataIndex: 'createUserName'
+             dataIndex: 'number'
          },
          {
              key: 'description',
@@ -65,7 +65,7 @@ import { useHistory } from 'react-router-dom';
                      <Popconfirm
                          title="确认删除?"
                          onConfirm={() => {
-                             RequestUtil.delete(`/tower-production/team`, { id: record.id }).then(res => {
+                             RequestUtil.delete(`/tower-production/workshopTeam/remove`, { id: record.id }).then(res => {
                                  message.success('删除成功');
                                  setRefresh(!refresh);
                              });
@@ -95,7 +95,7 @@ import { useHistory } from 'react-router-dom';
      return (
          <>
              <Page
-                 path="/tower-production/team/page"
+                 path="/tower-production/workshopTeam"
                  columns={columns}
                  headTabs={[]}
                  extraOperation={<Button type="primary" onClick={() => {
@@ -111,57 +111,6 @@ import { useHistory } from 'react-router-dom';
                  ]}
                  onFilterSubmit={(values: Record<string, any>) => { return values; }}
              />
-             <Modal visible={visible} width="50%" title={title + "班组"} okText="保存" cancelText="取消" >
-                 <Spin spinning={loading}>
-                     <Form form={form} labelCol={{ span: 6 }}>
-                         <Row>
-                             <Col span={12}>
-                                 <Form.Item name="productUnitId" initialValue={detail.productUnitId} label="所属生产单元" rules={[{
-                                     "required": true,
-                                     "message": "请选择所属生产单元"
-                                 }]}>
-                                     <Select placeholder="请选择">
-                                         {productUnitData?.map((item: any) => {
-                                             return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                         })}
-                                     </Select>
-                                 </Form.Item>
-                             </Col>
-                             <Col span={12}>
-                                 <Form.Item name="name" label="班组名称" initialValue={detail.name} rules={[{
-                                     "required": true,
-                                     "message": "请输入班组名称"
-                                 },
-                                 {
-                                     pattern: /^[^\s]*$/,
-                                     message: '禁止输入空格',
-                                 }]}>
-                                     <Input maxLength={50} />
-                                 </Form.Item>
-                             </Col>
-                         </Row>
-                     </Form>
-                     <p><span style={{ color: 'red', paddingRight: '5px' }}>*</span>班组成员</p>
-                     <WorkshopUserModal
-                         rowSelectionType="checkbox"
-                         buttonTitle="添加员工"
-                         selectKey={userList.map(res => { return res.userId })}
-                         onSelect={(selectedRows: object[] | any) => {
-                             selectedRows = selectedRows.map((item: DataType) => {
-                                 return {
-                                     userId: item.id,
-                                     name: item.name,
-                                     position: item.stationName || '1',
-                                     teamId: detail.id
-                                 }
-                             })
-                             const res = new Map();
-                             const rows = [...userList, ...selectedRows]
-                             let newRows = rows.filter((item: DataType) => !res.has(item.userId) && res.set(item.userId, 1));
-                             setUserList(newRows);
-                         }} />
-                 </Spin>
-             </Modal>
          </>
      )
  }

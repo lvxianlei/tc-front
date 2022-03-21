@@ -36,9 +36,9 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                 ]}>
                 <DetailTitle title="班组详情"/>
                 <Form form={form}  {...formItemLayout}>
-                    <Form.Item name="productUnitId" label="班组名称" rules={[{
+                    <Form.Item name="classPresidentId" label="班组名称" rules={[{
                         "required": true,
-                        "message": "请选择所属生产单元"
+                        "message": "请填写班组名称"
                     },
                     {
                         pattern: /^[^\s]*$/,
@@ -46,17 +46,17 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                     }]}>
                         <Input maxLength={40} disabled/>
                     </Form.Item>
-                    <Form.Item name="name" label="班长">
+                    <Form.Item name="classPresidentId" label="班长">
                         <Select placeholder="请选择" disabled>
                             {data?.map((item: any) => {
                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                             })}
                         </Select>
                     </Form.Item>
-                    <Form.Item name="productUnitId" label="备注" >
+                    <Form.Item name="description" label="备注" >
                         <Input.TextArea maxLength={300} showCount rows={3} disabled/>
                     </Form.Item>
-                    <Form.Item name="productUnitId" label="组员">
+                    <Form.Item name="workshopUserDTOList" label="组员">
                     <Row>
                         <Col span={10} style={{width:'100%'}}>
                         {

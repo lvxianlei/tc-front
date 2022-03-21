@@ -276,14 +276,15 @@
              current: pagination.current || this.state.tablePagination?.current,
              size: pagination.pageSize || this.state.tablePagination?.pageSize
          });
-         const selectKeys: [] = this.props.selectKey;
+        //  const selectKeys: [] = this.props.selectKey;
          let newData: any = resData.records;
-         selectKeys?.forEach((item: any) => {
-             newData = newData.filter((res:any) => res.userId !== item.userId);
-         })
+        //  selectKeys?.forEach((item: any) => {
+        //      newData = newData.filter((res:any) => res.userId !== item.userId);
+        //  })
          this.setState({
              ...filterValues,
              tableDataSource: newData,
+             selectedRowKeys: this.props.selectKey||[],
              tablePagination: {
                  ...this.state.tablePagination,
                  // current: resData.current,

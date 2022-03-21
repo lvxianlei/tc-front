@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Button, Spin, Space, Modal, Form, Row, Col } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { Button, Spin, Space, Modal, Form, Row, Col, message } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, DetailTitle  } from '../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
@@ -15,6 +15,7 @@ export default function WorkshopTeamAdd(): React.ReactNode {
     const [dataDTO, setDataDTO] = useState({});
     const [user, setUser] = useState([]);
     const [users, setUsers] = useState([]);
+    const params = useParams<{ id: string }>();
     const [form] = Form.useForm();
     const formItemLayout = {
       labelCol: { span: 2},
@@ -23,6 +24,12 @@ export default function WorkshopTeamAdd(): React.ReactNode {
    
     const { data, loading } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get<any[]>(`/tower-system/employee?current=1&size=1000`);
+        const detailData: any = await RequestUtil.get<any[]>(`/tower-production/workshopTeam/detail`,{id: params.id});
+        form.setFieldsValue({
+            ...detailData
+        })
+        setUsers(detailData?.workshopUserVOList)
+        setDataDTO(detailData)
         resole(data?.records.filter((item:any)=>{
             // return item.deptName==='成品包装车间'
             return item
@@ -36,13 +43,35 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                 <Space>
                     <Button type='primary' onClick={async () => {
                         try {
-                          const saveData:any = {
-                              
-                          }
-                          
-                      } catch (error) {
-                          console.log(error)
-                      }
+                            await form.validateFields()
+                            const value = form.getFieldsValue(true);
+                            if(value.classPresidentId){
+                                const userIds = users.map((item:any)=>{
+                                    return  item.userId
+                                })
+                                if(userIds.includes(value.classPresidentId)){
+                                    return message.error('同一个人不可既是组长又是组员！')
+                                } 
+                                
+                            }
+                            const saveData:any = {
+                                ...value,
+                                id: params.id,
+                                workshopUserDTOList: users.map((item:any)=>{
+                                    return{
+                                        id:item.id,
+                                        teamId: params.id,
+                                        userId: item.userId
+                                    }
+                                })
+                            }
+                            RequestUtil.post(`/tower-production/workshopTeam/save`, saveData).then(()=>{
+                                message.success('保存成功！')
+                                history.push(`/workshopTeam/workshopTeamList`)
+                            });
+                        } catch (error) {
+                            console.log(error)
+                        }
                     }}>保存</Button>
                      <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                    
@@ -50,9 +79,9 @@ export default function WorkshopTeamAdd(): React.ReactNode {
             </>]}>
                 <DetailTitle title="编辑班组"/>
                 <Form form={form}  {...formItemLayout}>
-                    <Form.Item name="productUnitId" label="班组名称" rules={[{
+                    <Form.Item name="teamName" label="班组名称" rules={[{
                         "required": true,
-                        "message": "请选择所属生产单元"
+                        "message": "请填写班组名称"
                     },
                     {
                         pattern: /^[^\s]*$/,
@@ -60,21 +89,23 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                     }]}>
                         <Input maxLength={40}/>
                     </Form.Item>
-                    <Form.Item name="name" label="班长">
+                    <Form.Item name="classPresidentId" label="班长">
                         <Select placeholder="请选择" showSearch>
                             {data?.map((item: any) => {
                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                             })}
                         </Select>
                     </Form.Item>
-                    <Form.Item name="productUnitId" label="备注">
+                    <Form.Item name="description" label="备注">
                         <Input.TextArea maxLength={300} showCount rows={3}/>
                     </Form.Item>
-                    <Form.Item name="productUnitId" label="组员">
+                    <Form.Item name="workshopUserDTOList" label="组员">
                         <UserModal onSelect={(selectedRows:any)=>{
                             console.log(selectedRows)
                             setUsers(selectedRows)
-                        }} buttonType='link' rowSelectionType='checkbox'/>
+                        }} buttonType='link' rowSelectionType='checkbox' selectKey={users.map((item:any)=>{
+                            return item.userId
+                        })}/>
                         
                     </Form.Item>
                     <Row>
