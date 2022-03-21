@@ -329,22 +329,19 @@ export default function Release(): React.ReactNode {
                         </Form>
                 <DetailTitle title='杆塔信息' operation={[ <Checkbox checked={check} onChange={(e: { target: { checked: any; }; })=>{
                     if(e.target.checked){
-                        const value  = releaseData?.loftingBatchProductVOList.filter((item:any)=>{
-                            return item.status===0||item.status==='0'
-                        })
                         form.setFieldsValue({
-                            loftingBatchProductDTOList:value,
+                            loftingBatchProductDTOList:releaseData?.loftingBatchProductVOList,
                             trialAssembleSegment:''
                         })
                         formRef.setFieldsValue({
                             trialAssembleSegments:[],
                         })
-                        setTableDataSource(value)
+                        setTableDataSource(releaseData?.loftingBatchProductVOList)
                         setSelectedKeys([])
                         
                     }else{
                         const value  = releaseData?.loftingBatchProductVOList.filter((item:any)=>{
-                            return item.status===1||item.status==='1'
+                            return item.status===0||item.status==='0'
                         })
                         form.setFieldsValue({
                             loftingBatchProductDTOList:value,
