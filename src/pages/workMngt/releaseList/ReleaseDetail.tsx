@@ -110,10 +110,10 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'totalWeight'
         },
         {
-            key: 'totalWeight',
+            key: 'sumWeight',
             title: '总计重量（kg）',
             width: 200,
-            dataIndex: 'totalWeight'
+            dataIndex: 'sumWeight'
         },
         {
             key: 'holesNum',
