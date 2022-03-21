@@ -230,7 +230,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             setWeldingDetailedStructureList([...weldingDetailedStructureList || []])
         } else {
             setWeldingDetailedStructureList(weldingDetailedStructureList?.map((res: IComponentList) => {
-                if (res.id === record.id) {
+                if (res.structureId === record.structureId) {
                     return {
                         ...res,
                         singleNum: Number(res.singleNum) - 1
@@ -436,7 +436,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             "required": true,
                             "message": "请输入段号"
                         }]}>
-                            <Select placeholder="请选择" style={{ width: '100%' }} onChange={() => {
+                            <Select placeholder="请选择" onChange={() => {
                                 setWeldingDetailedStructureList([]);
                                 getComponentList()
                             }} >
@@ -467,7 +467,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             "required": true,
                             "message": "请选择组焊类型"
                         }]}>
-                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                            <Select placeholder="请选择">
                                 {compoundTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         </Form.Item>
