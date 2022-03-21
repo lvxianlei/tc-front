@@ -43,7 +43,7 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                 ]}>
                 <DetailTitle title="班组详情"/>
                 <Form form={form}  {...formItemLayout}>
-                    <Form.Item name="classPresidentId" label="班组名称" rules={[{
+                    <Form.Item name="teamName" label="班组名称" rules={[{
                         "required": true,
                         "message": "请填写班组名称"
                     },
