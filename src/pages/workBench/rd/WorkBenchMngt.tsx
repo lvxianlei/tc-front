@@ -328,8 +328,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 
 	const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
 		const data = await RequestUtil.get(`/tower-science/workbench`);
-		const announceData = await RequestUtil.get<IResponseData>(`/tower-system/notice?size=10`);
-		console.log(announceData)
+		const announceData = await RequestUtil.get<IResponseData>(`/tower-system/notice?size=10&state=1`);
 		setAnnounceData(announceData.records)
 		resole(data)
 	}), {})
