@@ -621,6 +621,16 @@
                                 "label": "技术排产",
                                 "path": "/planSchedule/planScheduleMngt",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "下发技术",
+                                "path": "/planSchedule/publishTech",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "分配车间",
+                                "path": "/planSchedule/publishWorkshop",
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -978,6 +988,11 @@
                             {
                                 "label": "工作中心管理",
                                 "path": "/workshopPlanBasic/workCenterMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "分配车间配置管理",
+                                "path": "/workshopPlanBasic/publishWorkshopMngt",
                                 "authority": "approvalm"
                             }
                         ]

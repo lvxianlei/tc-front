@@ -1,0 +1,24 @@
+{
+    "pageTable": [
+        {
+            "title": "下达单号",
+            "dataIndex": "a"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "b"
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "c"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "d"
+        },
+        {
+            "title": "生产下达时间",
+            "dataIndex": "e"
+        }
+    ]
+}

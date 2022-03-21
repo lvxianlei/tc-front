@@ -1,0 +1,162 @@
+{
+    "pageTable": [
+        {
+            "title": "批次号",
+            "dataIndex": "a"
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "a"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "a"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "a"
+        },
+        {
+            "title": "客户",
+            "dataIndex": "a"
+        },
+        {
+            "title": "线路名称",
+            "dataIndex": "a"
+        },
+        {
+            "title": "基数",
+            "dataIndex": "a"
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "a"
+        },
+        {
+            "title": "客户交货日期",
+            "dataIndex": "a"
+        },
+        {
+            "title": "合同重量（t）",
+            "dataIndex": "a"
+        },
+        {
+            "title": "计划交货日期",
+            "dataIndex": "a"
+        },
+        {
+            "title": "电压等级（kv）",
+            "dataIndex": "a"
+        },
+        {
+            "title": "审批日期",
+            "dataIndex": "a"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "a"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "a"
+        },
+        {
+            "title": "放样下发时间",
+            "dataIndex": "a"
+        },
+        {
+            "title": "放样下发人",
+            "dataIndex": "a"
+        },
+        {
+            "title": "放样计划完成日期",
+            "dataIndex": "a"
+        },
+        {
+            "title": "放样反馈完成时间",
+            "dataIndex": "a"
+        },
+        {
+            "title": "放样实际完成时间",
+            "dataIndex": "a"
+        }
+    ],
+    "settingPlanTime": [
+        {
+            "title": "计划号",
+            "dataIndex": "a"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "a"
+        },
+        {
+            "title": "杆塔号",
+            "dataIndex": "a"
+        },
+        {
+            "title": "客户交货日期",
+            "dataIndex": "a"
+        },
+        {
+            "title": "计划交货日期",
+            "dataIndex": "a"
+        },
+        {
+            "title": "交货期变更原因",
+            "dataIndex": "a"
+        }
+    ],
+    "splitBatch": [
+        {
+            "title": "批次",
+            "dataIndex": "a"
+        },
+        {
+            "title": "批次号",
+            "dataIndex": "a"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "a"
+        },
+        {
+            "title": "杆塔号",
+            "dataIndex": "a"
+        },
+        {
+            "title": "计划交货期",
+            "dataIndex": "a"
+        },
+        {
+            "title": "厂区名",
+            "dataIndex": "a"
+        },
+        {
+            "title": "生产车间",
+            "dataIndex": "a"
+        }
+    ],
+    "distributedTech": [
+        {
+            "title": "计划号",
+            "dataIndex": "a"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "a"
+        },
+        {
+            "title": "基数",
+            "dataIndex": "a"
+        },
+        {
+            "title": "放样计划完成日期",
+            "dataIndex": "a"
+        },
+        {
+            "title": "下发技术备注",
+            "dataIndex": "a"
+        }
+    ]
+}

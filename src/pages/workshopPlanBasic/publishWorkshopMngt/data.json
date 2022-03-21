@@ -1,0 +1,30 @@
+{
+    "pageTable": [
+        {
+            "title": "厂区名",
+            "dataIndex": ""
+        },
+        {
+            "title": "生产车间",
+            "dataIndex": ""
+        }
+    ],
+    "setting": [
+        {
+            "title": "产品类型",
+            "dataIndex": ""
+        },
+        {
+            "title": "组焊类型",
+            "dataIndex": ""
+        },
+        {
+            "title": "组焊加工车间",
+            "dataIndex": ""
+        },
+        {
+            "title": "加工车间",
+            "dataIndex": ""
+        }
+    ]
+}

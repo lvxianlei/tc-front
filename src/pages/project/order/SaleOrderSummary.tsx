@@ -1,6 +1,5 @@
 import React from "react";
 import { TableColumnType } from "antd";
-import { withTranslation } from "react-i18next";
 import { withRouter } from "react-router-dom";
 import { IRenderedGrid } from "../../../utils/SummaryRenderUtil";
 import {
@@ -202,7 +201,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
           <span>{
             status === 0 ? "未下发" :
               status === 1 ? "已下发" :
-              "审批中"  
+                "审批中"
           }</span>
         )
       }
@@ -254,4 +253,4 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
     ];
   }
 }
-export default withRouter(withTranslation()(ManagementSaleOrderSummary));
+export default withRouter(ManagementSaleOrderSummary);
