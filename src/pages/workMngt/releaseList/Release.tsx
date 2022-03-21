@@ -318,7 +318,7 @@ export default function Release(): React.ReactNode {
                                 </Col>
                             </Row>
                         </Form>
-                <DetailTitle title='批次信息' operation={[ <Checkbox checked={check} onChange={(e: { target: { checked: any; }; })=>{
+                <DetailTitle title='杆塔信息' operation={[ <Checkbox checked={check} onChange={(e: { target: { checked: any; }; })=>{
                     if(e.target.checked){
                         const value  = releaseData?.loftingBatchProductVOList.filter((item:any)=>{
                             return item.status===0||item.status==='0'
