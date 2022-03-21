@@ -271,8 +271,8 @@ export default function Release(): React.ReactNode {
                                         })
                                         setDisabled(value===1)
                                    }}>
-                                        <Select.Option value={1} key ={1}>是</Select.Option>
-                                        <Select.Option value={0} key={0}>否</Select.Option>
+                                        <Select.Option value={1} key ={1}>试组装</Select.Option>
+                                        <Select.Option value={0} key={0}>免试组</Select.Option>
                                     </Select>
                                 </Form.Item>
                                 </Col>
