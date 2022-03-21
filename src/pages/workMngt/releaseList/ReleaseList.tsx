@@ -320,6 +320,12 @@ export default function ReleaseList(): React.ReactNode {
             filterValue={filterValue}
             refresh={refresh}
             requestData={ {  size: 10, whether: 1  } }
+            tableProps={{
+                pagination: {
+                    showSizeChanger: false,
+                // showTotal: (total) => `共${total} 条记录`,
+                }
+            }}
             // exportPath="/tower-science/loftingList"
             searchFormItems={[
                 {
@@ -396,6 +402,12 @@ export default function ReleaseList(): React.ReactNode {
             extraOperation={(data: any) => 
                 <Space>总件号数：<span style={{color:'#FF8C00'}}>{data?.totalPieceNumber}</span>总件数：<span style={{color:'#FF8C00'}}>{data?.totalNumber}</span>总重量（kg）：<span style={{color:'#FF8C00'}}>{data?.totalWeight}</span>角钢总重量（kg）：<span style={{color:'#FF8C00'}}>{data?.angleTotalWeight}</span></Space>
             }
+            tableProps={{
+                pagination: {
+                    showSizeChanger: false,
+                // showTotal: (total) => `共${total} 条记录`,
+                }
+            }}
             searchFormItems={[
                 {
                     name: 'fuzzyMsg',
