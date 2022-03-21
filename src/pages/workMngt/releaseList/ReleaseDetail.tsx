@@ -174,14 +174,7 @@ export default function ReleaseList(): React.ReactNode {
                 {
                     name: 'materialName',
                     label:'材料名称',
-                    children:   <Select style={{width:"100px"}} defaultValue={''}>
-                                    { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
-                                        <Select.Option value={''} key ={''}>全部</Select.Option>
-                                        return <Select.Option key={ index } value={ name }>
-                                            { name }
-                                        </Select.Option>
-                                    }) }
-                                </Select>
+                    children:   <Input placeholder="" maxLength={50} />
                 },
                 {
                     name: 'fuzzyMsg',

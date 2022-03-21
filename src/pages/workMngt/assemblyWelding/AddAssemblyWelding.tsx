@@ -418,20 +418,20 @@ export default function AddAssemblyWelding(): React.ReactNode {
             <DetailTitle title="组焊信息" />
             <Form form={form}>
                 <Row>
-                    <Col span={3}>
+                    <Col flex={3}>
                         <Form.Item name="componentId" label="组件号">
                             <Input placeholder="自动产生" maxLength={10} disabled />
                         </Form.Item>
                     </Col>
-                    <Col span={3} offset={1}>
+                    <Col flex={3} offset={1}>
                         <Form.Item name="electricWeldingMeters" label="电焊米数（mm）" rules={[{
                             "required": true,
                             "message": "请输入电焊米数"
                         }]}>
-                            <Input placeholder="自动计算" disabled />
+                            <Input placeholder="自动计算"  disabled />
                         </Form.Item>
                     </Col>
-                    <Col span={3} offset={1}>
+                    <Col flex={3} offset={1}>
                         <Form.Item name="segmentName" label="段号" rules={[{
                             "required": true,
                             "message": "请输入段号"
@@ -446,15 +446,15 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={3} offset={1}>
-                        <Form.Item name="singleGroupWeight" label="单组重量（kg）" style={{ width: '100%' }} rules={[{
+                    <Col flex={3} offset={1}>
+                        <Form.Item name="singleGroupWeight" label="单组重量（kg）" rules={[{
                             "required": true,
                             "message": "请输入单组重量"
                         }]}>
-                            <Input placeholder="自动计算" style={{ width: '100%' }} disabled />
+                            <Input placeholder="自动计算" disabled />
                         </Form.Item>
                     </Col>
-                    <Col span={3} offset={1}>
+                    <Col flex={3} offset={1}>
                         <Form.Item name="segmentGroupNum" label="单段组数" rules={[{
                             "required": true,
                             "message": "请输入单段组数"
@@ -462,7 +462,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             <InputNumber min={1} style={{ width: '100%' }} placeholder="请输入" />
                         </Form.Item>
                     </Col>
-                    <Col span={3} offset={1}>
+                    <Col flex={3} offset={1}>
                         <Form.Item name="weldingType" label="组焊类型" rules={[{
                             "required": true,
                             "message": "请选择组焊类型"
