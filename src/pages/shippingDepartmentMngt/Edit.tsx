@@ -3,10 +3,11 @@ import { Spin, Form, Select, Input } from 'antd'
 import { BaseInfo } from '../common'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
+import { IShipping } from "./ShippingDepartmentConfig"
 
 interface EditProps {
     type: "new" | "edit",
-    id: string
+    detailedData: IShipping
 }
 
 export interface EditRefProps {
@@ -14,21 +15,20 @@ export interface EditRefProps {
     resetFields: () => void
 }
 
-export default forwardRef(function Edit({ type, id }: EditProps, ref) {
+export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) {
 
     const [baseForm] = Form.useForm();
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(``)
             baseForm.setFieldsValue({
-                ...result
+                ...detailedData
             })
-            resole(result)
+            resole(detailedData)
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new", refreshDeps: [id] })
+    }), { manual: type === "new", refreshDeps: [detailedData] })
 
     const { data: userList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -41,8 +41,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
-                const result: { [key: string]: any } = await RequestUtil[type === 'new' ? 'post' : 'put'](`/tower-production/packageStorage`, { ...postData, id: id })
-            
+            const result: { [key: string]: any } = await RequestUtil[type === 'new' ? 'post' : 'put'](`/tower-production/packageStorage`, { ...postData, id: detailedData.id })
+
             resole(result)
         } catch (error) {
             reject(error)
@@ -52,10 +52,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields();
-                await saveRun({
-                    ...baseData
-                })
-                resolve(true);
+            await saveRun({
+                ...baseData
+            })
+            resolve(true);
         } catch (error) {
             reject(false)
         }
@@ -102,24 +102,26 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     ...item, type: 'select',
                     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name="leaderId" style={{ width: '100%' }}>
-                            <Select placeholder="请选择" filterOption={(input, option) =>
-                                option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
+                            <Select
+                                placeholder="请选择"
+                                filterOption={(input, option) =>
+                                    option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
                                 showSearch>
                                 {userList?.map((item: any) => {
-                                    return <Select.Option key={item.name} value={item.id}>{item.name}</Select.Option>
+                                    return <Select.Option key={item.name} value={item.userId}>{item.name}</Select.Option>
                                 })}
                             </Select>
                         </Form.Item>
                     )
                 })
             }
-            if(item.dataIndex === "description") {
+            if (item.dataIndex === "description") {
                 return ({
                     ...item, type: 'string',
                     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name="description" style={{ width: '100%' }}>
-                            <Input.TextArea maxLength={300} placeholder="请输入备注" showCount/>
+                            <Input.TextArea maxLength={300} placeholder="请输入备注" showCount />
                         </Form.Item>
                     )
                 })
