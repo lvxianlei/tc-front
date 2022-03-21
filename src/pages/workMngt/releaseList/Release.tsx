@@ -13,6 +13,7 @@ import styles from './release.module.less';
 export default function Release(): React.ReactNode {
     const history = useHistory();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<React.Key[]>([]);
     const [tableDataSource, setTableDataSource] = useState<any[]>([]);
     const [aTableDataSource, setATableDataSource] = useState<any[]>([]);
     const location = useLocation<{ state?: number, userId?: string }>();
@@ -45,8 +46,9 @@ export default function Release(): React.ReactNode {
         setTableDataSource(value)
         setReleaseData(data)
     }), {})
-    const SelectChange = (selectedRowKeys: React.Key[]): void => {
+    const SelectChange = (selectedRowKeys: React.Key[],selectedRows: any): void => {
         setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows);
     }
 
     return (
@@ -123,6 +125,7 @@ export default function Release(): React.ReactNode {
                         ]}
                         dataSource={aTableDataSource} 
                         pagination={false}
+                        rowKey={'id'}
                     />
                 </Form>
             </Modal>
@@ -356,7 +359,7 @@ export default function Release(): React.ReactNode {
                     setCheck(e.target.checked)
                     
                 }}>显示已全部下达</Checkbox>,<Button type="primary" onClick={ ()=>{
-                    const value = tableDataSource.map((item:any)=>{
+                    const value = selectedRows.map((item:any)=>{
                         if(item.segmentNum-item.issuedNum!==0){
                             return {
                                 ...item,
@@ -435,6 +438,7 @@ export default function Release(): React.ReactNode {
                                     disabled: record.segmentNum===record.issuedNum
                                 })
                             }}
+                            rowKey={'id'}
                         />
                     </Form>
         </DetailContent>
