@@ -393,7 +393,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 standard: item.materialStandard,
                 materialStandardName: item.materialStandardName,
                 num: item.quantity,
-                contractUnitPrice: item.price,
+                contractUnitPrice: item.taxPrice,
                 quantity: item.quantity ? item.quantity : 0,
                 weight: (item.weight * item.quantity).toFixed(4),
                 /***
