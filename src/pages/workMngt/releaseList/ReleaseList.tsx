@@ -405,7 +405,6 @@ export default function ReleaseList(): React.ReactNode {
             tableProps={{
                 pagination: {
                     showSizeChanger: false,
-                // showTotal: (total) => `共${total} 条记录`,
                 }
             }}
             searchFormItems={[
