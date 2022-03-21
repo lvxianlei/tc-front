@@ -57,13 +57,13 @@ export default function ReleaseList(): React.ReactNode {
             width: 100,
             dataIndex: 'batchStatus',
             render:(text:number)=>{
-                return text===1?'待下达':text===2?'部分下达':text===3?'已下达':'-'
+                return text===1?'未下达':text===2?'部分下达':text===3?'已下达':'-'
             }
         },
         {
             key: 'batchUpdateStatusTime',
             title: '最新状态变更时间',
-            width: 100,
+            width: 150,
             dataIndex: 'batchUpdateStatusTime'
         },
         {
