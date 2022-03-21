@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Spin, Space, Modal, Form, Row, Col } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, DetailTitle  } from '../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
@@ -14,7 +14,8 @@ export default function WorkshopTeamAdd(): React.ReactNode {
     const history = useHistory();
     const [dataDTO, setDataDTO] = useState({});
     const [user, setUser] = useState([]);
-    const [users, setUsers] = useState([{name:'张三'},{name:'李四'},{name:'王五'}]);
+    const [users, setUsers] = useState([]);
+    const params = useParams<{ id: string }>();
     const [form] = Form.useForm();
     const formItemLayout = {
       labelCol: { span: 2},
@@ -23,6 +24,12 @@ export default function WorkshopTeamAdd(): React.ReactNode {
    
     const { data, loading } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get<any[]>(`/tower-system/employee?current=1&size=1000`);
+        const detailData: any = await RequestUtil.get<any[]>(`/tower-production/workshopTeam/${params.id}`,);
+        form.setFieldsValue({
+            ...detailData
+        })
+        setUsers(detailData?.workshopUserVOList)
+        setDataDTO(detailData)
         resole(data?.records.filter((item:any)=>{
             // return item.deptName==='成品包装车间'
             return item

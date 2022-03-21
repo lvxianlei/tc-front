@@ -53,7 +53,7 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                                     }
                                 })
                             }
-                            RequestUtil.post(`/tower-production/workshopTeam/save`, saveData).then(()=>{
+                            RequestUtil.post(`/tower-production/workshopTeam`, saveData).then(()=>{
                                 message.success('保存成功！')
                                 history.push(`/workshopTeam/workshopTeamList`)
                             });

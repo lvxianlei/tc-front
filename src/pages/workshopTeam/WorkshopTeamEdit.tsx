@@ -24,7 +24,7 @@ export default function WorkshopTeamAdd(): React.ReactNode {
    
     const { data, loading } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get<any[]>(`/tower-system/employee?current=1&size=1000`);
-        const detailData: any = await RequestUtil.get<any[]>(`/tower-production/workshopTeam/detail`,{id: params.id});
+        const detailData: any = await RequestUtil.get<any[]>(`/tower-production/workshopTeam/${params.id}`,);
         form.setFieldsValue({
             ...detailData
         })
@@ -65,7 +65,7 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                                     }
                                 })
                             }
-                            RequestUtil.post(`/tower-production/workshopTeam/save`, saveData).then(()=>{
+                            RequestUtil.post(`/tower-production/workshopTeam`, saveData).then(()=>{
                                 message.success('保存成功！')
                                 history.push(`/workshopTeam/workshopTeamList`)
                             });
