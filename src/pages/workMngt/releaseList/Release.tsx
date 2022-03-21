@@ -292,7 +292,7 @@ export default function Release(): React.ReactNode {
                                         addonAfter={<PlusOutlined onClick={async () => {
                                             await form.validateFields()
                                             form.getFieldsValue(true).trialAssemble===1 && setVisible(true);
-                                            if(!form.getFieldsValue(true).trialAssembleSegment){
+                                            // if(!form.getFieldsValue(true).trialAssembleSegment){
                                                 const value = form.getFieldsValue(true)?.loftingBatchProductDTOList.filter((item:any,index:number)=>{
                                                     return item.batchNum&&item.batchNum!==null&&item.batchNum!=='0'&&item.batchNum!==0
                                                 });
@@ -313,7 +313,7 @@ export default function Release(): React.ReactNode {
                                                 formRef.setFieldsValue({
                                                     trialAssembleSegments: newArr
                                                 })
-                                            }
+                                            // }
                                         } }/>} 
                                     />
                                 </Form.Item>
