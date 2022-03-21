@@ -309,6 +309,7 @@ export default function Release(): React.ReactNode {
                                                     newArr.push(el);
                                                   }
                                                 });
+                                                console.log(value)
                                                 setATableDataSource(newArr)
                                                 formRef.setFieldsValue({
                                                     trialAssembleSegments: newArr

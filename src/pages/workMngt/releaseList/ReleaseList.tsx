@@ -294,7 +294,7 @@ export default function ReleaseList(): React.ReactNode {
                         >删除</Button>
                     </Popconfirm> 
                     <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/detail/${record.id}/${record.productCategoryId}`)}}>下达明细</Button>
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/assemblyWelding/${record.productCategoryId}`)}}>组焊明细</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/assemblyWelding/${record.id}/${record.productCategoryId}`)}}>组焊明细</Button>
 
                 </Space>
             )

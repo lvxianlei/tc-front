@@ -16,14 +16,14 @@ export default function ReleaseList(): React.ReactNode {
     const match = useRouteMatch();
     const [isExport, setIsExport] = useState(false);
     const [segmentDataSource, setSegmentDataSource] = useState<any[]>([]);
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, weldingId: string }>()
     const [pages, setPages] = useState<any>({
         current: 1,
         size: 20
     })
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-science/welding/getDetailedById`, { ...pages, weldingId:params.id, fuzzyMsg: data?.fuzzyMsg })
+            const result: any = await RequestUtil.get(`/tower-science/welding/getDetailedById`, { ...pages, weldingId:params.id, fuzzyMsg: data?.fuzzyMsg,id: params.id })
             const dataSource:any = result?.records?.length>0? await RequestUtil.get(`/tower-science/welding/getStructureById`,{segmentId: result?.records[0]?.id}):[];
             setSegmentDataSource([...dataSource]);
             resole(result?.records)
