@@ -10,7 +10,7 @@ import AuthUtil from "../utils/AuthUtil";
 import EventBus from "../utils/EventBus";
 import RequestUtil from "../utils/RequestUtil";
 import { IFilter } from "./IFilter";
-
+import { setAuthorities } from "../hooks"
 /**
  * Authorization Filter
  */
@@ -23,7 +23,7 @@ export default class AuthorizationFilter implements IFilter {
      */
     public async doFilter(props: RouteComponentProps<{}, StaticContext, unknown>): Promise<boolean> {
         let accessable: boolean = true;
-        if (props.location.pathname !== '/login' && props.location.pathname !== '/driverSide/taskDetail' ) {
+        if (props.location.pathname !== '/login' && props.location.pathname !== '/driverSide/taskDetail') {
             accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
             if (accessable) {
                 const [, authorities] = await Promise.all<any>([
@@ -31,6 +31,7 @@ export default class AuthorizationFilter implements IFilter {
                     RequestUtil.get<AuthorityBasic[]>('/sinzetech-system/role/componentList')
                 ]);
                 ApplicationContext.get({ authorities: authorities });
+                setAuthorities(authorities as string[])
                 EventBus.emit('get/authorities');
             } else {
                 // const { location } = window;

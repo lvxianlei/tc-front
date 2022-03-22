@@ -3,20 +3,26 @@
         "authority": "",         //权限
         "title": "营销中心",      //应用展示名称
         "description": "包含客户、合同、订单等",//描述
-        "path": "/notice/SC",     //应用首页
+        "iconFont": "icon-yingxiaozhongxin2", // iconfont
+        "color": "#0CC971", // iconfont的颜色
+        "path": "/client/mngt",     //应用首页
         "appName": "SC"           //应用name
     },
     {
         "authority": "",
         "title": "计划中心",
         "description": "包含客户、合同、订单等",
-        "path": "/notice/PC",
+        "iconFont": "icon-jihuazhongxin2", // iconfont
+        "color": "#FCCD06", // iconfont的颜色
+        "path": "/planProd/planMgmt",
         "appName": "PC"
     },
     {
         "authority": "",
         "title": "研发中心",
         "description": "包含提料、放样等",
+        "iconFont": "icon-yanfazhongxin2", // iconfont
+        "color": "#FF8C00", // iconfont的颜色
         "path": "/workBench/workBenchMngt",
         "appName": "RD"
     },
@@ -24,6 +30,8 @@
         "authority": "",
         "title": "供应中心",
         "description": "包含配料、采购合同、采购计划、收货单等",
+        "iconFont": "icon-gongyingzhongxin21", // iconfont
+        "color": "#4071FF", // iconfont的颜色
         "path": "/supply/sw",
         "appName": "SW"
     },
@@ -31,6 +39,8 @@
         "authority": "",
         "title": "质检中心",
         "description": "质检过程相关功能",
+        "iconFont": "icon-zhijianzhongxin2", // iconfont
+        "color": "#9D45FF", // iconfont的颜色
         "path": "/notice/QMS",
         "appName": "QMS"
     },
@@ -38,7 +48,9 @@
         "authority": "",
         "title": "生产中心",
         "description": "生产过程管理相关功能",
-        "path": "/notice/MC",
+        "iconFont": "icon-shengchanzhongxin3", // iconfont
+        "color": "#FF8C00", // iconfont的颜色
+        "path": "/workshopManagement/processingTask",
         "appName": "MC"
     },
     {
@@ -46,6 +58,8 @@
         "icon": "logistic",
         "title": "生产设备",
         "description": "生产设备管理功能",
+        "iconFont": "icon-shengchanshebeitubiao", // iconfont
+        "color": "#9D45FF", // iconfont的颜色
         "path": "http://tc-prod-center-test.dhwy.cn/home",
         "corsWeb": true,
         "appName": "MC2"
@@ -55,6 +69,9 @@
         "icon": "logistic",
         "title": "物流中心",
         "description": "配车、发货等相关功能",
+        "iconFont": "icon-wuliuzhongxin22", // iconfont
+        "color": "#4071FF", // iconfont的颜色
+        "fontSize": 24,
         "path": "http://tc-logistic-test.dhwy.cn/home",
         "corsWeb": true,
         "appName": "TMS"
@@ -64,6 +81,8 @@
         "icon": "sales",
         "title": "售后中心",
         "description": "售后服务相关功能",
+        "iconFont": "icon-shouhouzhongxin2", // iconfont
+        "color": "#9D45FF", // iconfont的颜色
         "path": "/notice/ASM",
         "appName": "ASM"
     },
@@ -71,21 +90,27 @@
         "authority": "",
         "title": "人资中心",
         "description": "人资管理相关功能",
-        "path": "/notice/HR",
+        "iconFont": "icon-renzizhongxin2", // iconfont
+        "color": "#0CC971", // iconfont的颜色
+        "path": "/employeeRelation/recruit",
         "appName": "HR"
     },
     {
         "authority": "",
         "title": "财务中心",
         "description": "财务管理相关功能",
-        "path": "/notice/FC",
+        "iconFont": "icon-caiwuzhongxin2", // iconfont
+        "color": "#FCCD06", // iconfont的颜色
+        "path": "/invoicing/billList",
         "appName": "FC"
     },
     {
         "authority": "",
         "title": "通用中心",
         "description": "必备基础功能",
-        "path": "/notice/COMM",
+        "iconFont": "icon-tongyong2", // iconfont
+        "color": "#FF8C00", // iconfont的颜色
+        "path": "/sys/dxnry",
         "appName": "COMM"
     }
 ]

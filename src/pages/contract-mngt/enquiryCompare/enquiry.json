@@ -69,6 +69,11 @@
             "type": "number"
         },
         {
+            "title": "厚度（mm）",
+            "dataIndex": "thickness",
+            "type": "number"
+        },
+        {
             "title": "数量",
             "dataIndex": "num",
             "type": "number"

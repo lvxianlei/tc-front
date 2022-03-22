@@ -9,12 +9,12 @@ import { IDict } from '../configuration/IApplicationContext';
 import AuthUtil from '../utils/AuthUtil';
 import RequestUtil from '../utils/RequestUtil';
 import { IFilter } from './IFilter';
-
+import { setDictionary } from "../hooks"
 export interface IAllDict {
     readonly name: string;
     readonly id: string;
     readonly dictionaries?: IDict[];
-} 
+}
 
 /**
  * Dictionary Filter
@@ -37,6 +37,7 @@ export default class DictionaryFilter implements IFilter {
                     dictionaryOption[dict.id] = dict.dictionaries;
                 });
                 ApplicationContext.get({ dictionaryOption: dictionaryOption });
+                setDictionary(dictionaryOption as any)
             }
         }
         return true;

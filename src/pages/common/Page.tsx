@@ -29,8 +29,8 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     sourceKey?: string,
     isSunmryLine?: (result: IResponseData) => void;//添加计算行
     exportObject?: { [key: string]: any }, // 导出可能会包含的id等
+    clearSearch?: boolean
 }
-
 export interface IResponseData {
     readonly current: number;
     readonly size: number;
@@ -116,6 +116,9 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     public async componentDidUpdate(nextProps: any) {
         if (nextProps.refresh !== this.props.refresh) {
             this.fetchTableData({ ...this.props.filterValue }, { current: 1, pageSize: 20 })
+        }
+        if (nextProps.clearSearch !== this.props.clearSearch) {
+            this.clearFormProps()
         }
     }
 
@@ -210,6 +213,10 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
 
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
         return this.props.searchFormItems || []
+    }
+
+    public clearFormProps(): void {
+        this.getForm()?.resetFields();
     }
 
 }

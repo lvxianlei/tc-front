@@ -1,4 +1,6 @@
 import moment from "moment"
+import { matchPath } from "react-router-dom";
+import ctxRouter from "../app-router.config.jsonc"
 import * as XLSX from "xlsx"
 export function downLoadFile(path: string, fileName?: string | undefined) {
     const a = document.createElement("a");
@@ -70,4 +72,35 @@ export function fromIdNumberGetBirthday(idNumber: string): { birthday: string, a
         returnData.age = moment().diff(moment(regMatchData?.[0] || ""), 'years')
     }
     return returnData
+}
+const menuItemStack: any[] = []
+
+export function getMenuItemByPath(menuItems: any[], pathname: string): any | undefined {
+    traverseRootMenuItemByPath(menuItems, pathname);
+    return menuItemStack.pop();
+}
+
+
+export function traverseRootMenuItemByPath(menuItems: any[], path: string) {
+    for (let item of menuItems) {
+        menuItemStack.push(item);
+        if (new RegExp(item.path).test(path)) { // Hint the item
+            return;
+        } else if (item.items && item.items.length > 0) { // If the item has children, it will recurse
+            traverseRootMenuItemByPath(item.items, path);
+        }
+        menuItemStack.pop();
+    }
+}
+
+export function getRouterItemByPath(pathname: string) {
+    const routers = ctxRouter.routers || [];
+    const hintedRouters: any[] = routers.filter((value: any) => {
+        return !!matchPath(pathname, value);
+
+    });
+    if (hintedRouters && hintedRouters.length > 0) {
+        return hintedRouters[hintedRouters.length - 1];
+    }
+    return null;
 }
