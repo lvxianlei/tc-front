@@ -339,9 +339,9 @@ export default function ReleaseList(): React.ReactNode {
                     children:  
                         <Select style={{width:"100px"}} defaultValue={''}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>已下达</Select.Option>
+                            <Select.Option value={1} key={1}>未下达</Select.Option>
                             <Select.Option value={2} key={2}>部分下达</Select.Option>
-                            <Select.Option value={3} key={3}>未下达</Select.Option>
+                            <Select.Option value={3} key={3}>已下达</Select.Option>
                         </Select>
                 },
                 {
