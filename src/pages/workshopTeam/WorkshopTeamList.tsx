@@ -65,7 +65,7 @@ import { useHistory } from 'react-router-dom';
                      <Popconfirm
                          title="确认删除?"
                          onConfirm={() => {
-                             RequestUtil.delete(`/tower-production/workshopTeam/remove`, { id: record.id }).then(res => {
+                             RequestUtil.delete(`/tower-production/workshopTeam`, { id: record.id }).then(res => {
                                  message.success('删除成功');
                                  setRefresh(!refresh);
                              });
