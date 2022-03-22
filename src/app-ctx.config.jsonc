@@ -618,13 +618,8 @@
                                 "authority": "approvalm"
                             },
                             {
-                                "label": "技术排产",
-                                "path": "/planSchedule/planScheduleMngt",
-                                "authority": "approvalm"
-                            },
-                            {
                                 "label": "下发技术",
-                                "path": "/planSchedule/publishTech",
+                                "path": "/planSchedule/planScheduleMngt",
                                 "authority": "approvalm"
                             },
                             {

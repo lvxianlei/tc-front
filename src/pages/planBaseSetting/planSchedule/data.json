@@ -1,0 +1,126 @@
+{
+    "planSchedule": [
+        {
+            "title": "批次号",
+            "width": 100,
+            "dataIndex": "productionBatchNo",
+            "fixed": "left"
+        },
+        {
+            "title": "计划号",
+            "width": 150,
+            "dataIndex": "planNumber",
+            "fixed": "left"
+        }, 
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 120,
+            "fixed": "left"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 120
+        },
+        {
+            "title": "客户",
+            "dataIndex": "customerCompany",
+            "width": 120
+        },
+        {
+            "title": "线路名称",
+            "dataIndex": "lineName",
+            "width": 120
+        },
+        {
+            "title": "基数",
+            "dataIndex": "productNum",
+            "width": 50
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "businessManagerName",
+            "width": 120
+        },
+        {
+            "title": "客户交货日期",
+            "dataIndex": "customerDeliveryTime",
+            "width": 120
+        },
+        {
+            "title": "合同重量（t）",
+            "dataIndex": "weight",
+            "width": 120
+        },
+        {
+            "title": "计划交货日期",
+            "dataIndex": "planDeliveryTime",
+            "width": 120,
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "电压等级（kv）",
+            "dataIndex": "voltageGradeName",
+            "width": 120
+        },
+        {
+            "title": "审批日期",
+            "dataIndex": "approvalTime",
+            "width": 120
+        },
+        {
+            "title": "状态",
+            "dataIndex": "loftingStatus",
+            "width": 120,
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未下发"
+                },
+                {
+                    "value": 1,
+                    "label": "放样已下发"
+                },
+                {
+                    "value": 2,
+                    "label": "放样已确认"
+                },
+                {
+                    "value": 3,
+                    "label": "放样已完成"
+                }
+            ]
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "width": 200
+        },
+        {
+            "title": "放样下发时间",
+            "dataIndex": "loftingIssueTime",
+            "width": 120
+        },
+        {
+            "title": "放样下发人",
+            "dataIndex": "loftingIssueUserName",
+            "width": 120
+        },
+        {
+            "title": "放样计划完成时间",
+            "dataIndex": "loftingCompleteTime",
+            "width": 120
+        },
+        {
+            "title": "放样反馈完成时间",
+            "dataIndex": "loftingFeedBackTime"
+        },
+        {
+            "title": "放样实际完成时间",
+            "dataIndex": "loftingCompleteRealTime",
+            "width": 120
+        }
+    ]
+}

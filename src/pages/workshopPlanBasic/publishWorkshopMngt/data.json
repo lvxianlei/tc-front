@@ -1,30 +1,34 @@
 {
     "pageTable": [
         {
-            "title": "厂区名",
-            "dataIndex": ""
+            "title": "产品类型",
+            "dataIndex": "",
+            "type": "select",
+            "enum": []
         },
         {
-            "title": "生产车间",
-            "dataIndex": ""
-        }
-    ],
-    "setting": [
-        {
-            "title": "产品类型",
-            "dataIndex": ""
+            "title": "厂区名",
+            "dataIndex": "",
+            "type": "select",
+            "enum": []
         },
         {
             "title": "组焊类型",
-            "dataIndex": ""
+            "dataIndex": "",
+            "type": "select",
+            "enum": []
         },
         {
             "title": "组焊加工车间",
-            "dataIndex": ""
+            "dataIndex": "",
+            "type": "select",
+            "enum": []
         },
         {
             "title": "加工车间",
-            "dataIndex": ""
+            "dataIndex": "",
+            "type": "select",
+            "enum": []
         }
     ]
 }
