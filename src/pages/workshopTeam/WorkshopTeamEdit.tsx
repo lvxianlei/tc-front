@@ -31,7 +31,7 @@ export default function WorkshopTeamAdd(): React.ReactNode {
         setUsers(detailData?.workshopUserVOList.map((item:any)=>{
             return{
                 ...item,
-                name:item.userIdName
+                name:item.userName
             }
         }))
         setDataDTO(detailData)
