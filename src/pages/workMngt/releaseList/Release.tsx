@@ -161,7 +161,12 @@ export default function Release(): React.ReactNode {
                             voltageLevel: releaseData?.productCategoryVOList[0].voltageLevel,
                             weldingDemand: value.weldingDemand,
                             trialAssembleSegments: trialValue,
-                            loftingBatchProductDTOList: value.loftingBatchProductDTOList
+                            loftingBatchProductDTOList: value.loftingBatchProductDTOList.map((item:any)=>{
+                                return {
+                                    ...item,
+                                    batchNum: item.batchNum===null?0:item.batchNum
+                                }
+                            })
                         }
                         console.log(submitValue)
                         RequestUtil.post(`/tower-science/loftingBatch/save`,submitValue).then(()=>{
