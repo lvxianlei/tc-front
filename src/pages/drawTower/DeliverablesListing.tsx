@@ -82,7 +82,7 @@ class DeliverablesListing extends React.Component<IDeliverablesListingRouteProps
             name: '塔型图纸汇总.zip',
             use: '塔型图纸汇总',
             requestType: 'zip',
-            path: '/tower-science/materialProductCategory/lofting/draw/summary?productCategoryId=',
+            path: '/tower-science/productCategory/lofting/draw/summary?productCategoryId=',
         }]
 
         return <>
