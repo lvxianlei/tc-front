@@ -85,47 +85,53 @@ const Hbreadcrumb = memo(() => {
     const pathSnippets: string[] = location.pathname.split('/').filter((i: string) => i);
     const selectedMenuItem = getMenuItemByPath(ctxConfig.layout.menu, `/${pathSnippets[0]}`)
     return <div className={styles.breadcrumb}>
-        <MenuUnfoldOutlined
-            style={{
-                fontSize: "18px",
-                color: "#fff",
-                lineHeight: "40px",
-                verticalAlign: "middle",
-                padding: "0 10px"
-            }} />
-        <Breadcrumb separator="/" className={styles.breadcrumb}>
-            {
-                selectedMenuItem
-                    ?
-                    <Breadcrumb.Item key={selectedMenuItem.path}>
-                        {selectedMenuItem.label}
-                    </Breadcrumb.Item>
-                    :
-                    null
-            }
-            {
-                pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
-                    let path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
-                    const routerItem = getRouterItemByPath(path);
-                    return (
-                        routerItem
-                            ?
-                            <Breadcrumb.Item key={path}>
-                                {
-                                    path === location.pathname
+        {
+            location.pathname !== "/chooseApply" && (
+                <>
+                    <MenuUnfoldOutlined
+                        style={{
+                            fontSize: "18px",
+                            color: "#fff",
+                            lineHeight: "40px",
+                            verticalAlign: "middle",
+                            padding: "0 10px"
+                        }} />
+                    <Breadcrumb separator="/" className={styles.breadcrumb}>
+                        {
+                            selectedMenuItem
+                                ?
+                                <Breadcrumb.Item key={selectedMenuItem.path}>
+                                    {selectedMenuItem.label}
+                                </Breadcrumb.Item>
+                                :
+                                null
+                        }
+                        {
+                            pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
+                                let path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+                                const routerItem = getRouterItemByPath(path);
+                                return (
+                                    routerItem
                                         ?
-                                        routerItem.name
-                                        :
-                                        <Link to={path}>{routerItem.name}</Link>
+                                        <Breadcrumb.Item key={path}>
+                                            {
+                                                path === location.pathname
+                                                    ?
+                                                    routerItem.name
+                                                    :
+                                                    <Link to={path}>{routerItem.name}</Link>
 
-                                }
-                            </Breadcrumb.Item>
-                            :
-                            null
-                    );
-                })
-            }
-        </Breadcrumb>
+                                            }
+                                        </Breadcrumb.Item>
+                                        :
+                                        null
+                                );
+                            })
+                        }
+                    </Breadcrumb>
+                </>
+            )
+        }
     </div>
 })
 
@@ -175,10 +181,22 @@ export default function (): JSX.Element {
             <div className={layoutStyles.logout}>
                 <Row>
                     <Col>
-                        <Link to={`/approvalm/management`} className={layoutStyles.btn}>我的审批</Link>
+                        {/* <Link to={`/approvalm/management`} className={layoutStyles.btn}>我的审批</Link> */}
+                        <span className={`iconfont icon-wodeshenpi`} style={{
+                            fontFamily: "font_family",
+                            fontSize: 18,
+                            cursor: "pointer",
+                            marginRight: 8
+                        }}></span>
                     </Col>
                     <Col>
-                        <Link to={`/homePage/notice`} className={layoutStyles.btn}><BellOutlined className={layoutStyles.icon} /></Link>
+                        {/* <Link to={`/homePage/notice`} className={layoutStyles.btn}><BellOutlined className={layoutStyles.icon} /></Link> */}
+                        <span className={`iconfont icon-wodexiaoxi`} style={{
+                            fontFamily: "font_family",
+                            fontSize: 18,
+                            cursor: "pointer",
+                            marginRight: 16
+                        }}></span>
                     </Col>
                     <Col>
                         <Link to={`/homePage/personalCenter`} className={layoutStyles.btn}><UserOutlined className={layoutStyles.icon} />{AuthUtil.getRealName()}</Link>
