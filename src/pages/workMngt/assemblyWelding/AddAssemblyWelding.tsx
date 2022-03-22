@@ -230,7 +230,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             setWeldingDetailedStructureList([...weldingDetailedStructureList || []])
         } else {
             setWeldingDetailedStructureList(weldingDetailedStructureList?.map((res: IComponentList) => {
-                if (res.id === record.id) {
+                if (res.structureId === record.structureId) {
                     return {
                         ...res,
                         singleNum: Number(res.singleNum) - 1
@@ -246,7 +246,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
         if (isNewComponent) {
             let data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
                 segmentName: form.getFieldsValue(true).segmentName,
-                productCategoryId: params.productCategoryId
+                productCategoryId: params.productCategoryId,
+                segmentId: params.segmentId || ''
             });
             data.filter(res => { return res.id === record.structureId })
             setComponentList([
@@ -282,9 +283,12 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     productCategoryId: params.productCategoryId,
                     segmentId: params.segmentId || ''
                 });
+                let newData = data.filter(res => {
+                    return Number(res.basicsPartNumNow) !== 0
+                })
                 if (params.segmentId) {
                     settingData.forEach((items: IComponentList) => {
-                        data = data.map((item: IComponentList) => {
+                        newData = newData.map((item: IComponentList) => {
                             if (items.structureId === item.id) {
                                 return {
                                     ...item,
@@ -299,7 +303,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         })
                     })
                 }
-                setComponentList([...data])
+                setComponentList([...newData])
             })
         }
     }
@@ -414,25 +418,25 @@ export default function AddAssemblyWelding(): React.ReactNode {
             <DetailTitle title="组焊信息" />
             <Form form={form}>
                 <Row>
-                    <Col span={3}>
+                    <Col flex={3}>
                         <Form.Item name="componentId" label="组件号">
                             <Input placeholder="自动产生" maxLength={10} disabled />
                         </Form.Item>
                     </Col>
-                    <Col span={3} offset={1}>
+                    <Col flex={3} offset={1}>
                         <Form.Item name="electricWeldingMeters" label="电焊米数（mm）" rules={[{
                             "required": true,
                             "message": "请输入电焊米数"
                         }]}>
-                            <Input placeholder="自动计算" disabled />
+                            <Input placeholder="自动计算"  disabled />
                         </Form.Item>
                     </Col>
-                    <Col span={3} offset={1}>
+                    <Col flex={3} offset={1}>
                         <Form.Item name="segmentName" label="段号" rules={[{
                             "required": true,
                             "message": "请输入段号"
                         }]}>
-                            <Select placeholder="请选择" style={{ width: '100%' }} onChange={() => {
+                            <Select placeholder="请选择" onChange={() => {
                                 setWeldingDetailedStructureList([]);
                                 getComponentList()
                             }} >
@@ -442,15 +446,15 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={3} offset={1}>
-                        <Form.Item name="singleGroupWeight" label="单组重量（kg）" style={{ width: '100%' }} rules={[{
+                    <Col flex={3} offset={1}>
+                        <Form.Item name="singleGroupWeight" label="单组重量（kg）" rules={[{
                             "required": true,
                             "message": "请输入单组重量"
                         }]}>
-                            <Input placeholder="自动计算" style={{ width: '100%' }} disabled />
+                            <Input placeholder="自动计算" disabled />
                         </Form.Item>
                     </Col>
-                    <Col span={3} offset={1}>
+                    <Col flex={3} offset={1}>
                         <Form.Item name="segmentGroupNum" label="单段组数" rules={[{
                             "required": true,
                             "message": "请输入单段组数"
@@ -458,12 +462,12 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             <InputNumber min={1} style={{ width: '100%' }} placeholder="请输入" />
                         </Form.Item>
                     </Col>
-                    <Col span={3} offset={1}>
+                    <Col flex={3} offset={1}>
                         <Form.Item name="weldingType" label="组焊类型" rules={[{
                             "required": true,
                             "message": "请选择组焊类型"
                         }]}>
-                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                            <Select placeholder="请选择">
                                 {compoundTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         </Form.Item>

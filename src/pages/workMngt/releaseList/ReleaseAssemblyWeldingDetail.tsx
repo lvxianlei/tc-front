@@ -16,14 +16,14 @@ export default function ReleaseList(): React.ReactNode {
     const match = useRouteMatch();
     const [isExport, setIsExport] = useState(false);
     const [segmentDataSource, setSegmentDataSource] = useState<any[]>([]);
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, weldingId: string }>()
     const [pages, setPages] = useState<any>({
         current: 1,
         size: 20
     })
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-science/welding/getDetailedById`, { ...pages, weldingId:params.id, fuzzyMsg: data?.fuzzyMsg })
+            const result: any = await RequestUtil.get(`/tower-science/welding/getDetailedById`, { ...pages, weldingId:params.weldingId, fuzzyMsg: data?.fuzzyMsg,id: params.id })
             const dataSource:any = result?.records?.length>0? await RequestUtil.get(`/tower-science/welding/getStructureById`,{segmentId: result?.records[0]?.id}):[];
             setSegmentDataSource([...dataSource]);
             resole(result?.records)
@@ -149,6 +149,7 @@ export default function ReleaseList(): React.ReactNode {
         <>
         <Form layout="inline" style={{margin:'20px'}} onFinish={async (values) => {
             console.log(values)
+            setFilterValue(values)
             await run({
             ...values
         })}}>
@@ -178,9 +179,11 @@ export default function ReleaseList(): React.ReactNode {
                     current={1}
                     size={10}
                     total={0}
-                    url={`/tower-science/welding/getDetailedById`}
+                    url={`/tower-science/welding/downloadBatch`}
                     serchObj={{
-                        workPlanIds: params.id
+                        id: params.id,
+                        fuzzyMsg: filterValue,
+                        weldingId: params.weldingId
                     }}
                     closeExportList={() => setIsExport(false)}
                 /> : null}

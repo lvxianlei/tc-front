@@ -294,7 +294,7 @@ export default function ReleaseList(): React.ReactNode {
                         >删除</Button>
                     </Popconfirm> 
                     <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/detail/${record.id}/${record.productCategoryId}`)}}>下达明细</Button>
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/assemblyWelding/${record.productCategoryId}`)}}>组焊明细</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/assemblyWelding/${record.id}/${record.productCategoryId}`)}}>组焊明细</Button>
 
                 </Space>
             )
@@ -311,6 +311,10 @@ export default function ReleaseList(): React.ReactNode {
         setFilterValue(value)
         return value
     }
+    const onFilterASubmit = (value: any) => {
+        setFilterValue(value)
+        return value
+    }
     return (
         <>
         <Page
@@ -320,6 +324,12 @@ export default function ReleaseList(): React.ReactNode {
             filterValue={filterValue}
             refresh={refresh}
             requestData={ {  size: 10, whether: 1  } }
+            tableProps={{
+                pagination: {
+                    showSizeChanger: false,
+                // showTotal: (total) => `共${total} 条记录`,
+                }
+            }}
             // exportPath="/tower-science/loftingList"
             searchFormItems={[
                 {
@@ -333,9 +343,9 @@ export default function ReleaseList(): React.ReactNode {
                     children:  
                         <Select style={{width:"100px"}} defaultValue={''}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>已下达</Select.Option>
+                            <Select.Option value={1} key={1}>未下达</Select.Option>
                             <Select.Option value={2} key={2}>部分下达</Select.Option>
-                            <Select.Option value={3} key={3}>未下达</Select.Option>
+                            <Select.Option value={3} key={3}>已下达</Select.Option>
                         </Select>
                 },
                 {
@@ -344,7 +354,7 @@ export default function ReleaseList(): React.ReactNode {
                     children:  <Select style={{width:"100px"}} defaultValue={''}>
                                     <Select.Option value={''} key ={''}>全部</Select.Option>
                                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                        return <Select.Option key={index} value={id}>
+                                        return <Select.Option key={index} value={name}>
                                             {name}
                                         </Select.Option>
                                     })}
@@ -387,7 +397,7 @@ export default function ReleaseList(): React.ReactNode {
         <Page
             path="/tower-science/loftingBatch/batchResult"
             columns={detailColumns}
-            onFilterSubmit={onFilterSubmit}
+            onFilterSubmit={onFilterASubmit}
             filterValue={filterValue}
             refresh={detailrefresh}
             requestData={ {  size: 10  } }
@@ -396,6 +406,11 @@ export default function ReleaseList(): React.ReactNode {
             extraOperation={(data: any) => 
                 <Space>总件号数：<span style={{color:'#FF8C00'}}>{data?.totalPieceNumber}</span>总件数：<span style={{color:'#FF8C00'}}>{data?.totalNumber}</span>总重量（kg）：<span style={{color:'#FF8C00'}}>{data?.totalWeight}</span>角钢总重量（kg）：<span style={{color:'#FF8C00'}}>{data?.angleTotalWeight}</span></Space>
             }
+            tableProps={{
+                pagination: {
+                    showSizeChanger: false,
+                }
+            }}
             searchFormItems={[
                 {
                     name: 'fuzzyMsg',

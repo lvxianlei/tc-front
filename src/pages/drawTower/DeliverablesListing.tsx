@@ -77,7 +77,7 @@ class DeliverablesListing extends React.Component<IDeliverablesListingRouteProps
         const data = [{
             name: '提料塔型构件明细汇总.xls',
             use: '提料塔型构件明细汇总',
-            path: '/tower-science/productCategory/material/productCategoryStructure/download/excel?productCategoryId='
+            path: '/tower-science/materialProductCategory/material/productCategoryStructure/download/excel?productCategoryId='
         }, {
             name: '塔型图纸汇总.zip',
             use: '塔型图纸汇总',
