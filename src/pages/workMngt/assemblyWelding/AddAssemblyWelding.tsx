@@ -135,9 +135,9 @@ export default function AddAssemblyWelding(): React.ReactNode {
             dataIndex: 'weldingLength',
             key: 'weldingLength',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Input
-                    type="number"
+                <InputNumber
                     min={0}
+                    max={99999}
                     key={record.structureId}
                     defaultValue={record.weldingLength}
                     placeholder="请输入"
@@ -146,10 +146,10 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         const electricWeldingMeters = form.getFieldsValue(true).electricWeldingMeters;
                         newWeldingDetailedStructureList[index] = {
                             ...newWeldingDetailedStructureList[index],
-                            weldingLength: Number(e.target.value)
+                            weldingLength: Number(e)
                         }
                         setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
-                        form.setFieldsValue({ 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e.target.value) * Number(record.singleNum) });
+                        form.setFieldsValue({ 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e) * Number(record.singleNum) });
                     }}
                     bordered={false} />
             )
