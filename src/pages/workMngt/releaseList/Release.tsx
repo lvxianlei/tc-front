@@ -357,8 +357,8 @@ export default function Release(): React.ReactNode {
                     setCheck(e.target.checked)
                     
                 }}>显示已全部下达</Checkbox>,<Button type="primary" onClick={ ()=>{
-                    const value = selectedRows.map((item:any)=>{
-                        if(item.segmentNum-item.issuedNum!==0){
+                    const value = tableDataSource.map((item:any)=>{
+                        if(selectedKeys.includes(item.id)&&item.segmentNum-item.issuedNum!==0){
                             return {
                                 ...item,
                                 batchNum:item.issuedNum?item.segmentNum-item.issuedNum:item.segmentNum
