@@ -297,29 +297,25 @@ export default function Release(): React.ReactNode {
                                         addonAfter={<PlusOutlined onClick={async () => {
                                             await form.validateFields()
                                             form.getFieldsValue(true).trialAssemble===1 && setVisible(true);
-                                            // if(!form.getFieldsValue(true).trialAssembleSegment){
-                                                const value = form.getFieldsValue(true)?.loftingBatchProductDTOList.filter((item:any,index:number)=>{
-                                                    return item.batchNum&&item.batchNum!==null&&item.batchNum!=='0'&&item.batchNum!==0
+                                            const value = form.getFieldsValue(true)?.loftingBatchProductDTOList.filter((item:any,index:number)=>{
+                                                return item.batchNum&&item.batchNum!==null&&item.batchNum!=='0'&&item.batchNum!==0
+                                            });
+                                            let newArr: any[] = [];
+                                            const arr = JSON.parse(JSON.stringify(value))
+                                            for(var i = 0; i<arr.length; i++){
+                                                const res = newArr.findIndex(ol=> {
+                                                    return arr[i].segmentName === ol.segmentName;
                                                 });
-                                                console.log(value)
-                                                
-                                                let newArr: any[] = [];
-                                                value.forEach((el:any)=> {
-                                                  const res = newArr.findIndex(ol=> {
-                                                    return el.segmentName === ol.segmentName;
-                                                  });
-                                                  if (res!== -1) {
-                                                    newArr[res].batchNum = newArr[res].batchNum +  el.batchNum;
-                                                  } else {
-                                                    newArr.push(el);
-                                                  }
-                                                });
-                                                console.log(value)
-                                                setATableDataSource(newArr)
-                                                formRef.setFieldsValue({
-                                                    trialAssembleSegments: newArr
-                                                })
-                                            // }
+                                                if (res!== -1) {
+                                                newArr[res].batchNum = newArr[res].batchNum +  arr[i].batchNum;
+                                                } else {
+                                                newArr.push(arr[i]);
+                                                }
+                                            }
+                                            setATableDataSource(newArr)
+                                            formRef.setFieldsValue({
+                                                trialAssembleSegments: newArr
+                                            })
                                         } }/>} 
                                     />
                                 </Form.Item>

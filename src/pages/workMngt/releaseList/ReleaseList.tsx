@@ -350,7 +350,7 @@ export default function ReleaseList(): React.ReactNode {
                     children:  <Select style={{width:"100px"}} defaultValue={''}>
                                     <Select.Option value={''} key ={''}>全部</Select.Option>
                                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                        return <Select.Option key={index} value={id}>
+                                        return <Select.Option key={index} value={name}>
                                             {name}
                                         </Select.Option>
                                     })}
@@ -363,7 +363,7 @@ export default function ReleaseList(): React.ReactNode {
                                     <Select.Option value={''} key ={''}>全部</Select.Option>
                                     {voltageGradeOptions &&voltageGradeOptions.map(({ id, name }, index) => {
                                         return (
-                                            <Select.Option key={index} value={id}>
+                                            <Select.Option key={index} value={name}>
                                                 {name}
                                             </Select.Option>
                                         );
@@ -377,7 +377,7 @@ export default function ReleaseList(): React.ReactNode {
                                     <Select.Option value={''} key ={''}>全部</Select.Option>
                                    { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
                                         <Select.Option value={''} key ={''}>全部</Select.Option>
-                                        return <Select.Option key={ index } value={ id }>
+                                        return <Select.Option key={ index } value={ name }>
                                             { name }
                                         </Select.Option>
                                     }) }
