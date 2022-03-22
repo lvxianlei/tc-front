@@ -363,7 +363,7 @@ export default function ReleaseList(): React.ReactNode {
                                     <Select.Option value={''} key ={''}>全部</Select.Option>
                                     {voltageGradeOptions &&voltageGradeOptions.map(({ id, name }, index) => {
                                         return (
-                                            <Select.Option key={index} value={name}>
+                                            <Select.Option key={index} value={id}>
                                                 {name}
                                             </Select.Option>
                                         );
@@ -377,7 +377,7 @@ export default function ReleaseList(): React.ReactNode {
                                     <Select.Option value={''} key ={''}>全部</Select.Option>
                                    { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
                                         <Select.Option value={''} key ={''}>全部</Select.Option>
-                                        return <Select.Option key={ index } value={ name }>
+                                        return <Select.Option key={ index } value={ id }>
                                             { name }
                                         </Select.Option>
                                     }) }
