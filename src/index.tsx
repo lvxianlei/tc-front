@@ -1,7 +1,3 @@
-/**
- * @author Cory(coryisbest0728#gmail.com)
- * @copyright © 2021 Cory. All rights reserved
- */
 import React from 'react';
 import './index.css';
 import 'nprogress/nprogress.css';
@@ -10,7 +6,6 @@ import backend from 'i18next-http-backend';
 import ReactDOM from 'react-dom';
 import { initReactI18next } from 'react-i18next';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import LangUtil, { Lang } from './utils/LangUtil';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
@@ -43,8 +38,3 @@ ReactDOM.render(
   </ConfigProvider>,
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

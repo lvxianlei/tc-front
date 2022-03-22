@@ -3,7 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import React from 'react';
-import { Button, Card, Form, FormItemProps, Space, Pagination, Tabs, TabsProps, Row, Col } from 'antd';
+import { Button, Card, Form, FormItemProps, Space, Pagination, Tabs, TabsProps, Row, Col, FormInstance } from 'antd';
 import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import { RouteComponentProps } from 'react-router';
@@ -23,7 +23,7 @@ export interface IAbstractMngtComponentState {
  * The abstract management component
  */
 export default abstract class AbstractMngtComponent<P extends RouteComponentProps, S extends IAbstractMngtComponentState> extends AbstractTabableComponent<P, S> /*AsyncComponent<P, S> implements ITabableComponent*/ {
-
+    private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
     /**
      * @constructor
      * Creates an instance of AbstractMngtComponent.
@@ -112,6 +112,10 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      * @returns table columns 
      */
     abstract getTableColumns(item: ITabItem): ColumnType<object>[];
+
+    protected getForm(): FormInstance | null {
+        return this.form?.current;
+    }
 
     /**
      * @description Gets table props
@@ -212,7 +216,8 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected renderFilterContent(item: ITabItem): React.ReactNode {
         return (
-            <Form layout="inline" onFinish={this.onFilterSubmit}>
+            // onValuesChange={this.onFilterSubmit} 搜索项有修改则会触发请求
+            <Form layout="inline" onFinish={this.onFilterSubmit} ref={this.form}>
                 <Row gutter={[0, 16]}>
                     {
                         this.getFilterFormItemProps(item).map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
@@ -226,7 +231,10 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
                     </Col>
                     <Col>
                         <Form.Item>
-                            <Button htmlType="reset">重置</Button>
+                            <Button onClick={async() => {
+                                await (this.getForm() as any).resetFields();
+                                this.onFilterSubmit({})
+                            }}>重置</Button>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -247,8 +255,9 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      * @returns table content 
      */
     protected renderTableContent(item: ITabItem): React.ReactNode {
+        
         return (
-            <CommonTable {...(this.getTableProps(item) as any)} loading={this.state.loading} />
+            <CommonTable  {...(this.getTableProps(item) as any)} loading={this.state.loading} isPage={true} />
         );
     }
 

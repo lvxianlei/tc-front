@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Radio, Select } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import { collectionListHead } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -25,7 +25,7 @@ export default function Collection() {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startRefundTime = formatDate[0]
             value.endRefundTime = formatDate[1]
-        } 
+        }
         value.confirmStatus = confirmStatus;
         setFilterValue(value);
         return value
@@ -41,7 +41,7 @@ export default function Collection() {
         path="/tower-market/backMoney"
         exportPath={"/tower-market/backMoney"}
         columns={[
-            ...collectionListHead,
+            ...(collectionListHead as any),
             {
                 title: "操作",
                 dataIndex: "opration",
@@ -74,11 +74,11 @@ export default function Collection() {
                 label: '回款类型',
                 children: (
                     <Select placeholder="请选择回款类型" style={{ width: "140px" }}>
-                        { collectionTypeeOptions && collectionTypeeOptions.map(({ id, name }, index) => {
+                        {collectionTypeeOptions && collectionTypeeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
                             </Select.Option>
-                        }) }
+                        })}
                     </Select>
                 )
             },
