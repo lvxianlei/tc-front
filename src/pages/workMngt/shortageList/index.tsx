@@ -77,7 +77,7 @@ export default function Invoicing() {
         }}>
             <Form form={form}>
                 <Form.Item rules={[{ required: true, message: "请填写取消原因..." }]} label="取消原因"
-                    name="reason"><Input.TextArea /></Form.Item>
+                    name="reason"><Input.TextArea maxLength={400}/></Form.Item>
             </Form>
         </Modal>
         <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>
