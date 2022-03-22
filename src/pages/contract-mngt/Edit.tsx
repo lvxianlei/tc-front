@@ -325,6 +325,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
 
     const handleNumChange = (value: number, materialCode: string, dataIndex: string) => {
+        console.log(value, materialCode, dataIndex)
         const newData = materialList.map((item: any) => {
             if (item.materialCode === materialCode) {
                 const allData: any = {
@@ -334,10 +335,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     weight: (item.weight && item.weight >= 0) ? parseFloat(item.weight) : parseFloat("0")
                 }
                 allData[dataIndex] = value
+                console.log(allData, "alll")
                 return ({
                     ...item,
                     taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),
                     totalAmount: (allData.num * allData.price * allData.weight).toFixed(2),
+                    totalWeight: (allData.num * allData.weight).toFixed(3),
                     [dataIndex]: value
                 })
             }
