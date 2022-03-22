@@ -149,6 +149,7 @@ export default function ReleaseList(): React.ReactNode {
         <>
         <Form layout="inline" style={{margin:'20px'}} onFinish={async (values) => {
             console.log(values)
+            setFilterValue(values)
             await run({
             ...values
         })}}>
@@ -178,9 +179,11 @@ export default function ReleaseList(): React.ReactNode {
                     current={1}
                     size={10}
                     total={0}
-                    url={`/tower-science/welding/getDetailedById`}
+                    url={`/tower-science/welding/downloadBatch`}
                     serchObj={{
-                        workPlanIds: params.id
+                        id: params.id,
+                        fuzzyMsg: filterValue,
+                        weldingId: params.weldingId
                     }}
                     closeExportList={() => setIsExport(false)}
                 /> : null}
