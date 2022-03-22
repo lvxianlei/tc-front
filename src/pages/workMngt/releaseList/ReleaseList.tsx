@@ -311,6 +311,10 @@ export default function ReleaseList(): React.ReactNode {
         setFilterValue(value)
         return value
     }
+    const onFilterASubmit = (value: any) => {
+        setFilterValue(value)
+        return value
+    }
     return (
         <>
         <Page
@@ -393,7 +397,7 @@ export default function ReleaseList(): React.ReactNode {
         <Page
             path="/tower-science/loftingBatch/batchResult"
             columns={detailColumns}
-            onFilterSubmit={onFilterSubmit}
+            onFilterSubmit={onFilterASubmit}
             filterValue={filterValue}
             refresh={detailrefresh}
             requestData={ {  size: 10  } }
