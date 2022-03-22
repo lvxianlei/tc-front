@@ -28,7 +28,12 @@ export default function WorkshopTeamAdd(): React.ReactNode {
         form.setFieldsValue({
             ...detailData
         })
-        setUsers(detailData?.workshopUserVOList)
+        setUsers(detailData?.workshopUserVOList.map((item:any)=>{
+            return{
+                ...item,
+                name:item.userIdName
+            }
+        }))
         setDataDTO(detailData)
         resole(data?.records.filter((item:any)=>{
             // return item.deptName==='成品包装车间'
@@ -65,7 +70,7 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                                     }
                                 })
                             }
-                            RequestUtil.post(`/tower-production/workshopTeam`, saveData).then(()=>{
+                            RequestUtil.put(`/tower-production/workshopTeam`, saveData).then(()=>{
                                 message.success('保存成功！')
                                 history.push(`/workshopTeam/workshopTeamList`)
                             });
