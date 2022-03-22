@@ -1,4 +1,3 @@
-
 /**
  * @author zyc
  * @copyright © 2022 
@@ -6,13 +5,14 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Input, DatePicker, Button, Form, Modal, Row, Col, Radio, message, Space, Select } from 'antd';
+import { Input, DatePicker, Button, Modal, Radio, message, Space, Select } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './DailySchedule.module.less';
 import RequestUtil from '../../utils/RequestUtil';
 import { EditRefProps } from './Edit';
 import Edit from "./Edit";
+import useRequest from '@ahooksjs/use-request';
 export interface IPackingPlan {
     readonly id?: string;
     readonly angleTeamId?: string;
@@ -36,6 +36,24 @@ export default function DailySchedule(): React.ReactNode {
     const [title, setTitle] = useState<string>('');
     const [detailData, setDetailData] = useState<IPackingPlan>();
     const [teamId, setTeamId] = useState<string>('');
+
+    const { data: galvanizedTeamList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-production/workshopTeam?size=1000`);
+            resole(result?.records)
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
+    const { data: packagingTeamList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-production/team/page?size=1000`);
+            resole(result?.records)
+        } catch (error) {
+            reject(error)
+        }
+    }))
 
     const columns = [
         {
@@ -105,14 +123,15 @@ export default function DailySchedule(): React.ReactNode {
             "dataIndex": "angleTeamName",
             render: (_: string, record: Record<string, any>) => (
                 record.status === 1
-                    ?
-                    '派工'
-                    : <Button type="link" onClick={() => {
-                        setTitle('角钢包装班组');
-                        setVisible(true);
-                        setDetailData(record);
-                        setTeamId(record.angleTeamId);
-                    }}>{_ || '派工'}</Button>
+                    ? '派工'
+                    : record.status === 4
+                        ? { _ }
+                        : <Button type="link" onClick={() => {
+                            setTitle('角钢包装班组');
+                            setVisible(true);
+                            setDetailData(record);
+                            setTeamId(record.angleTeamId);
+                        }}>{_ || '派工'}</Button>
             )
         },
         {
@@ -122,14 +141,15 @@ export default function DailySchedule(): React.ReactNode {
             "dataIndex": "boardTeamName",
             render: (_: string, record: Record<string, any>) => (
                 record.status === 1
-                    ?
-                    '派工'
-                    : <Button type="link" onClick={() => {
-                        setTitle('连板包装班组');
-                        setVisible(true);
-                        setDetailData(record);
-                        setTeamId(record.boardTeamId);
-                    }}>{_ || '派工'}</Button>
+                    ? '派工'
+                    : record.status === 4
+                        ? { _ }
+                        : <Button type="link" onClick={() => {
+                            setTitle('连板包装班组');
+                            setVisible(true);
+                            setDetailData(record);
+                            setTeamId(record.boardTeamId);
+                        }}>{_ || '派工'}</Button>
             )
         },
         {
@@ -139,14 +159,15 @@ export default function DailySchedule(): React.ReactNode {
             "dataIndex": "pipeTeamName",
             render: (_: string, record: Record<string, any>) => (
                 record.status === 1
-                    ?
-                    '派工'
-                    : <Button type="link" onClick={() => {
-                        setTitle('钢管包装班组');
-                        setVisible(true);
-                        setDetailData(record);
-                        setTeamId(record.pipeTeamId);
-                    }}>{_ || '派工'}</Button>
+                    ? '派工'
+                    : record.status === 4
+                        ? { _ }
+                        : <Button type="link" onClick={() => {
+                            setTitle('钢管包装班组');
+                            setVisible(true);
+                            setDetailData(record);
+                            setTeamId(record.pipeTeamId);
+                        }}>{_ || '派工'}</Button>
             )
         },
         {
@@ -246,7 +267,7 @@ export default function DailySchedule(): React.ReactNode {
                     label: '镀锌班组',
                     children: <Select placeholder="请选择" style={{ width: '120px' }}>
                         <Select.Option key={0} value={''}>全部</Select.Option>
-                        {[]?.map((item: any) => {
+                        {packagingTeamList?.map((item: any) => {
                             return <Select.Option key={item.name} value={item.id}>{item.name}</Select.Option>
                         })}
                     </Select>
@@ -256,8 +277,8 @@ export default function DailySchedule(): React.ReactNode {
                     label: '包装班组',
                     children: <Select placeholder="请选择" style={{ width: '120px' }}>
                         <Select.Option key={0} value={''}>全部</Select.Option>
-                        {[]?.map((item: any) => {
-                            return <Select.Option key={item.name} value={item.id}>{item.name}</Select.Option>
+                        {galvanizedTeamList?.map((item: any) => {
+                            return <Select.Option key={item.teamName} value={item.id}>{item.teamName}</Select.Option>
                         })}
                     </Select>
                 },
