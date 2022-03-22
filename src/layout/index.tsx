@@ -213,7 +213,13 @@ export default function (): JSX.Element {
                             <SiderMenu />
                         </Sider>
                         <Layout style={{ backgroundColor: "#fff", height: "100%", overflow: "hidden", position: "relative" }}>
-                            <Content style={{ height: "100%", boxSizing: "border-box", padding: "16px" }}>
+                            <Content
+                                style={{
+                                    height: "100%",
+                                    boxSizing: "border-box",
+                                    padding: "16px",
+                                    overflowY: "auto"
+                                }}>
                                 {
                                     ctxRouter.routers.map((router: any): React.ReactNode => {
                                         return (
