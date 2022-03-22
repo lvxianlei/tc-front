@@ -3,13 +3,22 @@ import { Button, Input,  Select } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
-import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
+import RequestUtil from '../../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
 
 export default function ReleaseList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
+    const [materialNames, setMaterialNames] = useState([]);
     const params = useParams<{ id: string, productCategoryId: string }>()
     const history = useHistory();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
+        const value:any =  Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
+        console.log(value)
+        setMaterialNames(value)
+        resole(value);
+    }))
     const columns = [
         {
             key: 'index',
@@ -174,7 +183,14 @@ export default function ReleaseList(): React.ReactNode {
                 {
                     name: 'materialName',
                     label:'材料名称',
-                    children:   <Input placeholder="" maxLength={50} />
+                    children:  <Select style={{width:"100px"}} defaultValue={''}>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
+                                    {materialNames && materialNames.map((item: any) => {
+                                        return <Select.Option key={item} value={item}>
+                                            {item}
+                                        </Select.Option>
+                                    })}
+                                </Select>
                 },
                 {
                     name: 'fuzzyMsg',
