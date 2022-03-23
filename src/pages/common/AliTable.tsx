@@ -2,6 +2,7 @@ import { BaseTable, BaseTableProps, Classes, LoadingContentWrapperProps } from '
 import { Spin, Empty } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
+import "./AliTable.less"
 const StyledBaseTable = (styled(BaseTable)`
   --line-height: 1.5715;
   --font-size: 14px;

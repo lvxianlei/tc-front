@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button, Modal } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
-import { IntgSelect, Page } from '../../common'
+import { IntgSelect, SearchTable as Page } from '../../common'
 import AuthUtil from "../../../utils/AuthUtil";
 import TaskTower from './TaskTower'
 export default function EnquiryList(): React.ReactNode {
@@ -27,7 +27,7 @@ export default function EnquiryList(): React.ReactNode {
 
     return <>
         <Modal title="配料方案" visible={visible} width={1011}
-            footer={<Button type="primary" onClick={() => setVisible(false)}>确认</Button>} onCancel={() => setVisible(false)}>
+            footer={<Button type="primary" ghost onClick={() => setVisible(false)}>关闭</Button>} onCancel={() => setVisible(false)}>
             <TaskTower id={chooseId} />
         </Modal>
         <Page
@@ -35,25 +35,21 @@ export default function EnquiryList(): React.ReactNode {
             exportPath={`/tower-supply/purchaseTaskTower`}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
-                ...baseInfo,
+                ...baseInfo as any,
                 {
                     title: '操作',
-                    width: 100,
+                    width: 120,
                     fixed: "right",
                     dataIndex: 'operation',
-                    //disabled={![1, 3].includes(records.batcheTaskStatus)}
-                    // render: (_: any, records: any) => <Button className="btn-operation-link" type="link" disabled={userId !== records.batcherId} ><Link to={`/ingredients/buyBurdening/detail/${records.id}`}>查看</Link></Button>
                     render: (_: any, records: any) => (<>
-                        <Button type="link" disabled={![1, 3].includes(records.batcheTaskStatus)} >
+                        <Button type="link" className='btn-operation-link' disabled={![1, 3].includes(records.batcheTaskStatus)} >
                             <Link to={`/ingredients/buyBurdening/component/${records.id}/${records.batcheTaskStatus}`}>明细</Link>
                         </Button>
-                        <Button type="link" style={{ marginLeft: 12 }} disabled={![3].includes(records.batcheTaskStatus)}
+                        <Button type="link" className='btn-operation-link' disabled={![3].includes(records.batcheTaskStatus)}
                             onClick={() => {
                                 setChooseId(records.id)
                                 setVisible(true)
                             }} >配料方案</Button>
-                        {/* <Button type="link" onClick={() => handleCreateComponent(records.id)
-                        } >临时造数据</Button> */}
                     </>)
                 }
             ]}
@@ -68,10 +64,9 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'batcheTaskStatus',
                     label: '配料状态',
-                    children: <Select style={{ width: "100px" }} defaultValue="请选择">
+                    children: <Select style={{ width: "100px" }} defaultValue="">
                         <Select.Option value="">全部</Select.Option>
                         <Select.Option value="1">待完成</Select.Option>
-                        <Select.Option value="2">待接收</Select.Option>
                         <Select.Option value="3">已完成</Select.Option>
                     </Select>
                 },
