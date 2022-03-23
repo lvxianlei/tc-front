@@ -12,7 +12,6 @@ export default function SampleDraw(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
-    // const [selectedRows, setSelectedRows] = useState<IAnnouncement[]>([]);
     const [form] = Form.useForm();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         // const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
@@ -21,32 +20,25 @@ export default function SampleDraw(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const splitData = await form.validateFields()
-            const submitData = selectedKeys.map((item: any)=>{
+            const submitData = selectedKeys.map((item: any) => {
                 return {
                     id: item,
                     productionBatch: splitData?.productionBatch
                 }
             })
-            await RequestUtil.post(`/tower-aps/productionPlan/batchNo`,submitData).then(()=>{
+            await RequestUtil.post(`/tower-aps/productionPlan/batchNo`, submitData).then(() => {
                 message.success('提交成功！')
                 setVisible(false)
                 form.resetFields()
                 setRefresh(!refresh)
                 setSelectedKeys([])
-                
+
             })
         } catch (error) {
             console.log(error)
         }
     }
     const columns = [
-        // {
-        //     key: 'index',
-        //     title: '序号',
-        //     dataIndex: 'index',
-        //     width: 50,
-        //     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        // },
         {
             key: 'productionBatch',
             title: '批次',
@@ -79,137 +71,141 @@ export default function SampleDraw(): React.ReactNode {
         },
     ]
 
-    const handleModalCancel = () => { setVisible(false); form.resetFields()  };
+    const handleModalCancel = () => setVisible(false); form.resetFields();
     const onFilterSubmit = (value: any) => {
         setFilterValue(value)
         return value
     }
-    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
-        setSelectedKeys(selectedRowKeys);
-        // setSelectedRows(selectedRows)
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => setSelectedKeys(selectedRowKeys);
+
+    const finishBatch = () => {
+        Modal.confirm({
+            title:"完成批次设置"
+        })
     }
+
     return (
         <>
-            <Modal visible={visible} title="设置批次"  onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
+            <Modal visible={visible} title="设置批次" onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
                 <Form form={form}>
-                    <Form.Item name='productionBatch' rules={[{required:true, message:'请选择批次'}]} label='批次'>
+                    <Form.Item name='productionBatch' rules={[{ required: true, message: '请选择批次' }]} label='批次'>
                         <Select placeholder="请选择批次">
-                            <Select.Option 
-                                key={1} 
+                            <Select.Option
+                                key={1}
                                 value={'第一批'}
                             >
                                 {'第一批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={2} 
+                            <Select.Option
+                                key={2}
                                 value={'第二批'}
                             >
                                 {'第二批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={3} 
+                            <Select.Option
+                                key={3}
                                 value={'第三批'}
                             >
                                 {'第三批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={4} 
+                            <Select.Option
+                                key={4}
                                 value={'第四批'}
                             >
                                 {'第四批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={5} 
+                            <Select.Option
+                                key={5}
                                 value={'第五批'}
                             >
                                 {'第五批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={6} 
+                            <Select.Option
+                                key={6}
                                 value={'第六批'}
                             >
                                 {'第六批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={7} 
+                            <Select.Option
+                                key={7}
                                 value={'第七批'}
                             >
                                 {'第七批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={8} 
+                            <Select.Option
+                                key={8}
                                 value={'第八批'}
                             >
                                 {'第八批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={9} 
+                            <Select.Option
+                                key={9}
                                 value={'第九批'}
                             >
                                 {'第九批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={10} 
+                            <Select.Option
+                                key={10}
                                 value={'第十批'}
                             >
                                 {'第十批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={11} 
+                            <Select.Option
+                                key={11}
                                 value={'第十一批'}
                             >
                                 {'第十一批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={12} 
+                            <Select.Option
+                                key={12}
                                 value={'第十二批'}
                             >
                                 {'第十二批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={13} 
+                            <Select.Option
+                                key={13}
                                 value={'第十三批'}
                             >
                                 {'第十三批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={14} 
+                            <Select.Option
+                                key={14}
                                 value={'第十四批'}
                             >
                                 {'第十四批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={15} 
+                            <Select.Option
+                                key={15}
                                 value={'第十五批'}
                             >
                                 {'第十五批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={16} 
+                            <Select.Option
+                                key={16}
                                 value={'第十六批'}
                             >
                                 {'第十六批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={17} 
+                            <Select.Option
+                                key={17}
                                 value={'第十七批'}
                             >
                                 {'第十七批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={18} 
+                            <Select.Option
+                                key={18}
                                 value={'第十八批'}
                             >
                                 {'第十八批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={19} 
+                            <Select.Option
+                                key={19}
                                 value={'第十九批'}
                             >
                                 {'第十九批'}
                             </Select.Option>
-                            <Select.Option 
-                                key={20} 
+                            <Select.Option
+                                key={20}
                                 value={'第二十批'}
                             >
                                 {'第二十批'}
@@ -217,7 +213,7 @@ export default function SampleDraw(): React.ReactNode {
                         </Select>
                     </Form.Item>
                 </Form>
-               
+
             </Modal>
             <Page
                 path={`tower-aps/productionPlan/batchNo/${params.id}`}
@@ -234,21 +230,21 @@ export default function SampleDraw(): React.ReactNode {
                 }}
                 extraOperation={
                     <Space>
-                        <Button type="primary" onClick={() => {
-                            setVisible(true)
-                        }} disabled={!(selectedKeys.length!==0)}>设置批次</Button>
+                        <Button type="primary" onClick={() => setVisible(true)} disabled={!(selectedKeys.length !== 0)}>设置批次</Button>
+                        <Button type="primary" onClick={() => setVisible(true)} disabled={!(selectedKeys.length !== 0)}>完成批次设置</Button>
+                        <Button type="primary" onClick={() => setVisible(true)} disabled={!(selectedKeys.length !== 0)}>分配厂区</Button>
                         <Popconfirm
                             title="是否取消批次?"
-                            onConfirm={async () => await RequestUtil.put(`/tower-aps/productionPlan/batchNo`,selectedKeys).then(() => {
+                            onConfirm={async () => await RequestUtil.put(`/tower-aps/productionPlan/batchNo`, selectedKeys).then(() => {
                                 message.success('取消成功！');
                                 setRefresh(!refresh)
                                 setSelectedKeys([])
                             })}
                             okText="确认"
                             cancelText="取消"
-                            disabled={!(selectedKeys.length!==0)}
+                            disabled={!(selectedKeys.length !== 0)}
                         >
-                            <Button type="primary" disabled={!(selectedKeys.length!==0)}>取消批次</Button>
+                            <Button type="primary" disabled={!(selectedKeys.length !== 0)}>取消批次</Button>
                         </Popconfirm>
                         <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                     </Space>
