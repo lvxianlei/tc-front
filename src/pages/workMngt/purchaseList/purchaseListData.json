@@ -1,8 +1,20 @@
 {
     "baseInfo": [
         {
+            "title": "批次号",
+            "dataIndex": "batchNumber",
+            "width": 200,
+            "type": "string"
+        },
+        {
             "title": "原材料任务编号",
             "dataIndex": "purchaseNumber",
+            "width": 200,
+            "type": "string"
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber",
             "width": 200,
             "type": "string"
         },

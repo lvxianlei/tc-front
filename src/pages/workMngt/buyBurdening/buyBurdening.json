@@ -1,7 +1,13 @@
 {
     "baseInfo": [
         {
-            "title": "原材料任务编号",
+            "title": "批次号",
+            "dataIndex": "batchNumber",
+            "width": 200,
+            "type": "string"
+        },
+        {
+            "title": "原材料采购任务编号",
             "dataIndex": "purchaseNumber",
             "width": 200,
             "type": "string"
@@ -13,8 +19,14 @@
             "type": "string"
         },
         {
-            "title": "塔型（个）",
-            "dataIndex": "productCategoryNum",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 200,
+            "type": "string"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
             "width": 100,
             "type": "number"
         },
@@ -23,6 +35,12 @@
             "dataIndex": "productNum",
             "width": 100,
             "type": "number"
+        },
+        {
+            "title": "提料重量（吨）",
+            "dataIndex": "totalWeight",
+            "width": 200,
+            "type": "string"
         },
         {
             "title": "配料负责人",
@@ -39,6 +57,12 @@
             "dataIndex": "batcheStatusUpdateTime",
             "type": "date",
             "format": "YYYY-MM-DD HH:mm"
+        },
+        {
+            "title": "方案编号",
+            "dataIndex": "schemeNumber",
+            "width": 200,
+            "type": "string"
         }
     ],
     "SeeList": [
