@@ -301,6 +301,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const meterialList: any[] = await getComparisonPrice(fields.comparisonPriceNumber.id)
             setMaterialList(meterialList.map((item: any) => {
                 const num = parseFloat(item.num || "1")
+                const weight = parseFloat(item.weight || "1.00")
                 const taxPrice = parseFloat(item.taxOffer || "1.00")
                 const price = parseFloat(item.offer || "1.00")
                 const id = item.materialTextureId;
@@ -317,8 +318,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     materialTextureId: id,
                     // length: formatSpec(item.structureSpec).length,
                     weight: item.weight || "1.00",
-                    taxTotalAmount: (num * taxPrice).toFixed(2),
-                    totalAmount: (num * price).toFixed(2)
+                    taxTotalAmount: (weight * taxPrice).toFixed(2),
+                    totalAmount: (weight * price).toFixed(2)
                 })
             }))
         }
