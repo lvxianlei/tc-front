@@ -3,18 +3,20 @@
  * @copyright © 2021
  */
  import React from 'react';
- import { Button, FormItemProps, Input, Modal, Space } from 'antd';
+ import { Button, FormItemProps, Input, Modal, Space, TreeSelect } from 'antd';
  import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
  import { GetRowKey } from 'rc-table/lib/interface';
  import RequestUtil from '../../utils/RequestUtil';
  import { DataType, IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../components/AbstractSelectableModal';
-//  import styles from './AbstractSelectableModal.module.less';
+ import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
  import AbstractFilteredSelecableModal from '../../components/AbstractFilteredSelecableModal';
  import { ButtonType } from 'antd/lib/button';
  import { RowSelectionType } from 'antd/lib/table/interface';
+import { TreeNode } from 'antd/lib/tree-select';
  
  export interface IWorkshopUserSelectionComponentState extends IAbstractSelectableModalState {
      readonly tableDataSource: any[];
+     departmentData?: any[];
  }
  export interface IWorkshopUserSelectionComponentProps extends IAbstractSelectableModalProps {
      readonly saleOrderId?: string | number;
@@ -57,7 +59,7 @@
       * @description Gets state
       * @returns state 
       */
-     protected getState(): IWorkshopUserSelectionComponentState {
+     protected getState():IWorkshopUserSelectionComponentState {
          return {
              ...super.getState(),
              tablePagination: {
@@ -66,6 +68,7 @@
                  total: 0,
                  showSizeChanger: false
              },
+             departmentData: [],
              confirmTitle: "选择人员",
              selectedRows: [],
              selectedRowKeys: []
@@ -74,13 +77,17 @@
  
      public getTableProps(): TableProps<object> {
          return {
-             ...super.getTableProps(),
-             size:'small',
-             rowSelection: {
-                 type: this.props.rowSelectionType || 'radio',
-                 selectedRowKeys: this.state.selectedRowKeys,
-                 onChange: this.onSelectChange
-             }
+            rowKey: this.getTableRowKey(),
+            bordered: true,
+            dataSource: this.getTableDataSource(),
+            columns: this.getTableColumns(),
+            size: "small",
+            rowSelection: {
+                type: this.props.rowSelectionType || 'radio',
+                selectedRowKeys: this.state.selectedRowKeys,
+                onChange: this.onSelectChange
+            },
+
          }
      }
  
@@ -117,13 +124,13 @@
              size: pagination.pageSize || this.state.tablePagination?.pageSize
          });
         //  const selectKeys: [] = this.props.selectKey;
-         let newData: any = resData.records;
+         let newData: any = resData?.records&&resData?.records.length>0?resData?.records:[];
         //  selectKeys?.forEach((item: any) => {
         //      newData = newData.filter((res:any) => res.userId !== item.userId);
         //  })
          this.setState({
              ...filterValues,
-             tableDataSource: newData,
+             tableDataSource: newData||[{}],
              selectedRowKeys: this.props.selectKey||[],
              tablePagination: {
                  ...this.state.tablePagination,
@@ -133,17 +140,45 @@
              }
          });
      }
- 
+     public renderTreeNodes = (data:any) =>
+     data.map((item:any) => {
+     if (item.children) {
+         return (
+         <TreeNode key={item.id} title={item.name} value={item.id}>
+             {this.renderTreeNodes(item.children)}
+         </TreeNode>
+         );
+     }
+     return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
+     });
+     public wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                this.wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
+            }
+        });
+        return roles;
+    }
      //查询字段
      public getFilterFormItemProps(): FormItemProps[] {
          return [{
-             name: 'fuzzyMsg',
+             name: 'fuzzyQuery',
              children: <Input placeholder="请输入姓名进行查询" />
-         }, ]
+         }, {
+            name: 'dept',
+            children: <TreeSelect style={{width:'150px'}} placeholder="请输入所属部门查询">
+                {this.renderTreeNodes(this.wrapRole2DataNode( this.state.departmentData ))}
+            </TreeSelect>
+         },]
      }
  
      //查询
      public onFilterSubmit = async (values: Record<string, any>) => {
+         console.log(values)
          this.getTable(values, {
              current: 1,
              pageSize: 10,
@@ -153,7 +188,7 @@
      }
      //dataSource
      public getTableDataSource(): object[] {
-         return this.state.tableDataSource;
+         return this.state.tableDataSource||[];
      }
  
      //table-column
@@ -168,12 +203,10 @@
          {
              key: 'name',
              title: '姓名',
-             width: '50%',
              dataIndex: 'name'
          }, {
              key: 'deptName',
              title: '所属部门',
-             width: '50%',
              dataIndex: 'deptName'
          },
          //  {
@@ -212,10 +245,12 @@
      public render(): React.ReactNode {
          return (
              <>
-                 <Button type={this.props.buttonType || 'primary'} style={this.props.buttonType==='link'?{ paddingBottom: '0', paddingTop: '0', height: 'auto', lineHeight: 1 }:{}} onClick={()=>{
+                 <Button type={this.props.buttonType || 'primary'} style={this.props.buttonType==='link'?{ paddingBottom: '0', paddingTop: '0', height: 'auto', lineHeight: 1 }:{}} onClick={async ()=>{
                      this.getTable({})
+                     const departmentData: any = await RequestUtil.get(`/tower-system/department`);
                      this.setState({
-                         isModalVisible: true
+                         isModalVisible: true,
+                         departmentData
                      })
                  }}>{this.props.buttonTitle || '添加人员'}</Button>
                  <Modal
@@ -240,7 +275,7 @@
                          }
                      }
                      onCancel={this.handleCancel}
-                     width="80%"
+                     width="33%"
                  >
                      <Space direction="vertical" >
                          {this.renderTableContent()}
