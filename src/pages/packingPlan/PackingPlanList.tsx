@@ -18,6 +18,9 @@ export interface IPackingPlan {
     readonly angleTeamId?: string;
     readonly boardTeamId?: string;
     readonly pipeTeamId?: string;
+    readonly angleTeamName?: string;
+    readonly boardTeamName?: string;
+    readonly pipeTeamName?: string;
 }
 
 export interface IResponseData {
@@ -125,13 +128,13 @@ export default function DailySchedule(): React.ReactNode {
                 record.status === 1
                     ? '派工'
                     : record.status === 4
-                        ? { _ }
+                        ? <>{_ || '/'}</>
                         : <Button type="link" onClick={() => {
                             setTitle('角钢包装班组');
                             setVisible(true);
                             setDetailData(record);
                             setTeamId(record.angleTeamId);
-                        }}>{_ || '派工'}</Button>
+                        }}>{record.angleTeamId === '0' ? '/': _ || '派工'}</Button>
             )
         },
         {
@@ -143,13 +146,13 @@ export default function DailySchedule(): React.ReactNode {
                 record.status === 1
                     ? '派工'
                     : record.status === 4
-                        ? { _ }
+                        ? <>{_ || '/'}</>
                         : <Button type="link" onClick={() => {
                             setTitle('连板包装班组');
                             setVisible(true);
                             setDetailData(record);
                             setTeamId(record.boardTeamId);
-                        }}>{_ || '派工'}</Button>
+                        }}>{record.boardTeamId === '0' ? '/': _ || '派工'}</Button>
             )
         },
         {
@@ -161,7 +164,7 @@ export default function DailySchedule(): React.ReactNode {
                 record.status === 1
                     ? '派工'
                     : record.status === 4
-                        ? { _ }
+                        ? <>{_ || '/'}</>
                         : <Button type="link" onClick={() => {
                             setTitle('钢管包装班组');
                             setVisible(true);
@@ -277,7 +280,7 @@ export default function DailySchedule(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'tipackageTeamIdme',
+                    name: 'packageTeamId',
                     label: '包装班组',
                     children: <Select placeholder="请选择" style={{ width: '120px' }}>
                         <Select.Option key={0} value={''}>全部</Select.Option>
