@@ -81,7 +81,7 @@ export default function ApplyPayment() {
     const handleModalOk = (type?: "saveAndApply" | "save") => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit(type)
-            message.success("请款申请创建成功...")
+            message.success("票据创建成功...")
             setVisible(false)
             history.go(0)
             resove(true)
