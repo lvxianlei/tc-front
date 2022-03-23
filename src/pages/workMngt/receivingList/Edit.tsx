@@ -393,7 +393,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 standard: item.materialStandard,
                 materialStandardName: item.materialStandardName,
                 num: item.quantity,
-                contractUnitPrice: item.taxPrice,
+                contractUnitPrice: item.price,
                 quantity: item.quantity ? item.quantity : 0,
                 weight: (item.weight * item.quantity).toFixed(4),
                 /***
@@ -416,7 +416,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         if (dataSource.length > 0) {
             for (let i = 0; i < dataSource.length; i += 1) {
                 weightAll = weightAll + (((dataSource[i].weight) * 1 <= 0 ? 0 : dataSource[i].weight) * 1);
-                priceAll = dataSource[i].price * 1 + priceAll;
+                priceAll = dataSource[i].taxPrice * 1 + priceAll;
             }
             // 运费价税合计 = 总重量 * 单价
             transportPriceCount = weightAll * ((freightInformation as any).transportTaxPrice * 1) + "";

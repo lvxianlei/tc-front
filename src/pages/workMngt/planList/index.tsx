@@ -101,7 +101,7 @@ export default function Invoicing() {
                                 <Link className="btn-operation-link" to={`/ingredients/planList/relationTower/${record.id}`}>关联塔型</Link>
                                 <Link className="btn-operation-link" to={`/ingredients/planList/purchaseList/${record.id}`}>采购清单</Link>
                                 <Button type="link" className="btn-operation-link" disabled={record.purchasePlanStatus === 3} onClick={() => handleDelete(record.id)}>取消计划</Button>
-                                <Button type="link" disabled={record.purchasePlanStatus === 2} className="btn-operation-link" onClick={() => {
+                                <Button type="link" className="btn-operation-link" onClick={() => {
                                     setId(record.id);
                                     setVisible(true);
                                 }}>编辑计划</Button>
