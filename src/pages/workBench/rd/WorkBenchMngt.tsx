@@ -328,8 +328,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 
 	const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
 		const data = await RequestUtil.get(`/tower-science/workbench`);
-		const announceData = await RequestUtil.get<IResponseData>(`/tower-system/notice?size=10`);
-		console.log(announceData)
+		const announceData = await RequestUtil.get<IResponseData>(`/tower-system/notice?size=10&state=1`);
 		setAnnounceData(announceData.records)
 		resole(data)
 	}), {})
@@ -403,7 +402,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 			<div className={styles.notice}>
 				<p>
 					<SoundOutlined />公告通知
-					<Link to={`/announcement/list`} className={styles.more}>更多<DoubleRightOutlined /></Link>
+					<Link to={`/homePage/notice`} className={styles.more}>更多<DoubleRightOutlined /></Link>
 				</p>
 				<CommonTable dataSource={announceData} pagination={false} showHeader={false} columns={[{
 					key: 'updateTime',
@@ -415,7 +414,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					title: '文案',
 					dataIndex: 'title',
 					render: (_: string, record: Record<string, any>): React.ReactNode => (
-						<Link to={`/announcement/list/detail/${record.id}`}>{_}</Link>
+						<Link to={`/homePage/notice/detail/${record.id}`}>{_}</Link>
 					)
 				}]} />
 			</div>

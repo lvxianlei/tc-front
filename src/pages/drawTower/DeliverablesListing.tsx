@@ -75,14 +75,13 @@ class DeliverablesListing extends React.Component<IDeliverablesListingRouteProps
         ]
 
         const data = [{
-            name: '提料塔型构件明细汇总.xls',
-            use: '提料塔型构件明细汇总',
-            path: '/tower-science/productCategory/material/productCategoryStructure/download/excel?productCategoryId='
+            name: '塔型名称构件明细.xls',
+            use: '塔型名称构件明细',
+            path: '/tower-science/materialProductCategory/material/productCategoryStructure/download/excel?productCategoryId='
         }, {
-            name: '塔型图纸汇总.zip',
-            use: '塔型图纸汇总',
-            requestType: 'zip',
-            path: '/tower-science/productCategory/lofting/draw/summary?productCategoryId=',
+            name: '杆塔构件明细汇总表.xls',
+            use: '杆塔构件明细汇总表',
+            path: '/tower-science/materialProductCategory/material/productStructure/download/excel?productCategoryId=',
         }]
 
         return <>

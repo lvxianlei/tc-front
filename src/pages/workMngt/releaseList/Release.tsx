@@ -13,13 +13,14 @@ import styles from './release.module.less';
 export default function Release(): React.ReactNode {
     const history = useHistory();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<React.Key[]>([]);
     const [tableDataSource, setTableDataSource] = useState<any[]>([]);
     const [aTableDataSource, setATableDataSource] = useState<any[]>([]);
     const location = useLocation<{ state?: number, userId?: string }>();
     const [ form ] = Form.useForm();
     const [ formRef ] = Form.useForm();
     const params = useParams<{ id: string }>()
-    const [check, setCheck] = useState<boolean>(true);
+    const [check, setCheck] = useState<boolean>(false);
     const [disabled, setDisabled] = useState<boolean>(true);
     const [visible, setVisible] = useState<boolean>(false);
     const [releaseData, setReleaseData] = useState<any|undefined>({});
@@ -30,19 +31,25 @@ export default function Release(): React.ReactNode {
     }
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/tower-science/loftingBatch/${params.id}`);
+        const value  = data?.loftingBatchProductVOList.filter((item:any)=>{
+            return item.status===0||item.status==='0'
+        })
         form.setFieldsValue({
             ...data,
-            loftingBatchProductDTOList:data.loftingBatchProductVOList,
+            loftingBatchProductDTOList:value,
             // loftingBatchProductDTOList:[{id:1,segmentName:1,segmentNum:10,issuedNum:null},{id:2,segmentName:2,segmentNum:5,issuedNum:1},{id:3,segmentName:3,segmentNum:5,issuedNum:5}],
         })
+        formRef.setFieldsValue({
+            trialAssembleSegments:[],
+        })
         setDisabled(data?.trialAssemble===1)
-        setTableDataSource(data.loftingBatchProductVOList)
+        setTableDataSource(value)
         setReleaseData(data)
     }), {})
-    const SelectChange = (selectedRowKeys: React.Key[]): void => {
+    const SelectChange = (selectedRowKeys: React.Key[],selectedRows: any): void => {
         setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows);
     }
-    
 
     return (
         <Spin spinning={false}>
@@ -118,6 +125,7 @@ export default function Release(): React.ReactNode {
                         ]}
                         dataSource={aTableDataSource} 
                         pagination={false}
+                        rowKey={'id'}
                     />
                 </Form>
             </Modal>
@@ -153,7 +161,12 @@ export default function Release(): React.ReactNode {
                             voltageLevel: releaseData?.productCategoryVOList[0].voltageLevel,
                             weldingDemand: value.weldingDemand,
                             trialAssembleSegments: trialValue,
-                            loftingBatchProductDTOList: value.loftingBatchProductDTOList
+                            loftingBatchProductDTOList: value.loftingBatchProductDTOList.map((item:any)=>{
+                                return {
+                                    ...item,
+                                    batchNum: item.batchNum===null?0:item.batchNum
+                                }
+                            })
                         }
                         console.log(submitValue)
                         RequestUtil.post(`/tower-science/loftingBatch/save`,submitValue).then(()=>{
@@ -197,7 +210,7 @@ export default function Release(): React.ReactNode {
                             },
                             {
                                 title: "产品类型",
-                                dataIndex: "productType",
+                                dataIndex: "productTypeName",
                                 width: 150
                             }
                         ]}
@@ -272,8 +285,8 @@ export default function Release(): React.ReactNode {
                                         })
                                         setDisabled(value===1)
                                    }}>
-                                        <Select.Option value={1} key ={1}>是</Select.Option>
-                                        <Select.Option value={0} key={0}>否</Select.Option>
+                                        <Select.Option value={1} key ={1}>试组装</Select.Option>
+                                        <Select.Option value={0} key={0}>免试组</Select.Option>
                                     </Select>
                                 </Form.Item>
                                 </Col>
@@ -284,16 +297,25 @@ export default function Release(): React.ReactNode {
                                         addonAfter={<PlusOutlined onClick={async () => {
                                             await form.validateFields()
                                             form.getFieldsValue(true).trialAssemble===1 && setVisible(true);
-                                            if(!form.getFieldsValue(true).trialAssembleSegment){
-                                                const value = form.getFieldsValue(true)?.loftingBatchProductDTOList.filter((item:any,index:number)=>{
-                                                    return item.batchNum&&item.batchNum!==null&&item.batchNum!=='0'&&item.batchNum!==0
+                                            const value = form.getFieldsValue(true)?.loftingBatchProductDTOList.filter((item:any,index:number)=>{
+                                                return item.batchNum&&item.batchNum!==null&&item.batchNum!=='0'&&item.batchNum!==0
+                                            });
+                                            let newArr: any[] = [];
+                                            const arr = JSON.parse(JSON.stringify(value))
+                                            for(var i = 0; i<arr.length; i++){
+                                                const res = newArr.findIndex(ol=> {
+                                                    return arr[i].segmentName === ol.segmentName;
                                                 });
-                                                console.log(value)
-                                                setATableDataSource(value)
-                                                formRef.setFieldsValue({
-                                                    trialAssembleSegments: value
-                                                })
+                                                if (res!== -1) {
+                                                newArr[res].batchNum = newArr[res].batchNum +  arr[i].batchNum;
+                                                } else {
+                                                newArr.push(arr[i]);
+                                                }
                                             }
+                                            setATableDataSource(newArr)
+                                            formRef.setFieldsValue({
+                                                trialAssembleSegments: newArr
+                                            })
                                         } }/>} 
                                     />
                                 </Form.Item>
@@ -307,24 +329,21 @@ export default function Release(): React.ReactNode {
                                 </Col>
                             </Row>
                         </Form>
-                <DetailTitle title='批次信息' operation={[ <Checkbox checked={check} onChange={(e: { target: { checked: any; }; })=>{
+                <DetailTitle title='杆塔信息' operation={[ <Checkbox checked={check} onChange={(e: { target: { checked: any; }; })=>{
                     if(e.target.checked){
-                        const value  = releaseData?.loftingBatchProductVOList.filter((item:any)=>{
-                            return item.status===0||item.status==='0'
-                        })
                         form.setFieldsValue({
-                            loftingBatchProductDTOList:value,
+                            loftingBatchProductDTOList:releaseData?.loftingBatchProductVOList,
                             trialAssembleSegment:''
                         })
                         formRef.setFieldsValue({
                             trialAssembleSegments:[],
                         })
-                        setTableDataSource(value)
+                        setTableDataSource(releaseData?.loftingBatchProductVOList)
                         setSelectedKeys([])
                         
                     }else{
                         const value  = releaseData?.loftingBatchProductVOList.filter((item:any)=>{
-                            return item.status===1||item.status==='1'
+                            return item.status===0||item.status==='0'
                         })
                         form.setFieldsValue({
                             loftingBatchProductDTOList:value,
@@ -340,7 +359,7 @@ export default function Release(): React.ReactNode {
                     
                 }}>显示已全部下达</Checkbox>,<Button type="primary" onClick={ ()=>{
                     const value = tableDataSource.map((item:any)=>{
-                        if(item.segmentNum-item.issuedNum!==0){
+                        if(selectedKeys.includes(item.id)&&item.segmentNum-item.issuedNum!==0){
                             return {
                                 ...item,
                                 batchNum:item.issuedNum?item.segmentNum-item.issuedNum:item.segmentNum
@@ -404,7 +423,7 @@ export default function Release(): React.ReactNode {
                                                 },
                                               },
                                         ]}>
-                                            <InputNumber precision={0} min={1} style={{width:'100%'}} onChange={()=>rowChange(index)} disabled={record.segmentNum===record.issuedNum}/>
+                                            <InputNumber precision={0} min={0} style={{width:'100%'}} onChange={()=>rowChange(index)} disabled={record.segmentNum===record.issuedNum}/>
                                         </Form.Item>
                                     }
                                 }
@@ -418,6 +437,7 @@ export default function Release(): React.ReactNode {
                                     disabled: record.segmentNum===record.issuedNum
                                 })
                             }}
+                            rowKey={'id'}
                         />
                     </Form>
         </DetailContent>

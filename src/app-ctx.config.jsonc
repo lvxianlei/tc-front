@@ -418,64 +418,19 @@
                 "authority": "procurement_task",
                 "items": [
                     {
-                        "label": "工作管理",
-                        "icon": "RD_gongzuoguanli-gongzuobaogao",
-                        "path": "/workMngt",
-                        "appName": "RD",
-                        "authority": "work_management",
-                        "items": [
-                            {
-                                "label": "评估列表",
-                                "path": "/workMngt/evaluationList",
-                                "authority": "rd_assessment_task_list"
-                            },
-                            {
-                                "label": "确认列表",
-                                "path": "/workMngt/confirmList",
-                                "authority": "rd_draw_product_detail"
-                            },
-                            {
-                                "label": "指派列表",
-                                "path": "/workMngt/scheduleList",
-                                "authority": "rd_lofting_task_assign"
-                            },
-                            {
-                                "label": "提料列表",
-                                "path": "/workMngt/pickList",
-                                "authority": "rd_product_material_list"
-                            },
-                            {
-                                "label": "放样列表",
-                                "path": "/workMngt/setOutList",
-                                "authority": "rd_loft_task_list"
-                            },
-                            {
-                                "label": "组焊列表",
-                                "path": "/workMngt/assemblyWeldingList",
-                                "authority": "rd_welding"
-                            },
-                            {
-                                "label": "小样图列表",
-                                "path": "/workMngt/sampleDrawList",
-                                "authority": "rd_small_sample_management"
-                            },
-                            {
-                                "label": "螺栓列表",
-                                "path": "/workMngt/boltList",
-                                "authority": "rd_bolt_management"
-                            },
-                            {
-                                "label": "样板列表",
-                                "path": "/workMngt/templateList",
-                                "authority": "rd_template_record"
-                            },
-                            {
-                                "label": "下达列表",
-                                "path": "/workMngt/releaseList",
-                                "authority": "rd_template_record"
-                            }
-                        ]
-                    },
+                        "label": "原材料",
+                        "path": "/buyingTask/index",
+                        "authority": "procurement_task_raw_material"
+                    }
+                ]
+            },
+            {
+                "label": "工作管理",
+                "icon": "RD_gongzuoguanli-gongzuobaogao",
+                "path": "/workMngt",
+                "appName": "RD",
+                "authority": "work_management",
+                "items": [
                     {
                         "label": "评估列表",
                         "path": "/workMngt/evaluationList",
@@ -519,6 +474,11 @@
                     {
                         "label": "样板列表",
                         "path": "/workMngt/templateList",
+                        "authority": "rd_template_record"
+                    },
+                    {
+                        "label": "下达列表",
+                        "path": "/workMngt/releaseList",
                         "authority": "rd_template_record"
                     }
                 ]

@@ -207,7 +207,11 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     protected getTableProps(item: ITabItem): TableProps<object> {
         return {
             ...super.getTableProps(item),
-            ...this.props.tableProps
+            ...this.props.tableProps,
+            pagination: {
+                ...super.getTableProps(item).pagination,
+                ...this.props.tableProps?.pagination,
+            }
         }
     }
 

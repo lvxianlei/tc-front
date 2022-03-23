@@ -1401,7 +1401,7 @@
     },
     { // 工作管理-组焊明细-组焊明细
       "name": "组焊明细",
-      "path": "/workMngt/releaseList/assemblyWelding/:id",
+      "path": "/workMngt/releaseList/assemblyWelding/:id/:weldingId",
       "module": "./pages/workMngt/releaseList/ReleaseAssemblyWeldingDetail",
       "exact": true,
       "authority": "rd_small_sample_management"
