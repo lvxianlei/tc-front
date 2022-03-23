@@ -75,12 +75,14 @@ export default forwardRef(function Edit({ detailData, title, teamId }: EditProps
         {
             "title": "开始包装日期",
             "dataIndex": "startTime",
-            "type": "date"
+            "type": "date",
+            "format": 'YYYY-MM-DD'
         },
         {
             "title": "要求完成日期",
             "dataIndex": "endTime",
-            "type": "date"
+            "type": "date",
+            "format": 'YYYY-MM-DD'
         }
     ]
 

@@ -180,13 +180,17 @@ export default function DailySchedule(): React.ReactNode {
             "key": "startTime",
             "title": "开始包装日期",
             "width": 150,
-            "dataIndex": "startTime"
+            "dataIndex": "startTime",
+            "type": "date",
+            "format": 'YYYY-MM-DD'
         },
         {
             "key": "endTime",
             "title": "要求完成日期",
             "width": 150,
-            "dataIndex": "endTime"
+            "dataIndex": "endTime",
+            "type": "date",
+            "format": 'YYYY-MM-DD'
         },
         {
             "key": "description",
