@@ -95,7 +95,9 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                         <Input maxLength={40}/>
                     </Form.Item>
                     <Form.Item name="classPresidentId" label="班长">
-                        <Select placeholder="请选择" showSearch>
+                        <Select placeholder="请选择" showSearch filterOption={(input:string, option:any) =>
+                            option?.children.indexOf(input) >= 0
+                        }>
                             {data?.map((item: any) => {
                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                             })}

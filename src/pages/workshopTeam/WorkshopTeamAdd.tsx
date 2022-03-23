@@ -7,7 +7,7 @@ import RequestUtil from '../../utils/RequestUtil';
 import { Input, Select } from 'antd';
 import UserModal from './UserModal';
 
-
+const { Option } = Select;
 
 
 export default function WorkshopTeamAdd(): React.ReactNode {
@@ -23,9 +23,9 @@ export default function WorkshopTeamAdd(): React.ReactNode {
    
     const { data, loading } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get<any[]>(`/tower-system/employee?current=1&size=1000`);
+        setUser(data?.records)
         resole(data?.records);
     }), {})
-
    
     return <Spin spinning={loading}>
             <DetailContent operation={[
@@ -48,7 +48,6 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                                 ...value,
                                 workshopUserDTOList: users.map((item:any)=>{
                                     return{
-                                        id:item.id,
                                         userId: item.userId
                                     }
                                 })
@@ -78,8 +77,10 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                         <Input maxLength={40}/>
                     </Form.Item>
                     <Form.Item name="classPresidentId" label="班长">
-                        <Select placeholder="请选择" showSearch>
-                            {data?.map((item: any) => {
+                        <Select placeholder="请选择" showSearch filterOption={(input:string, option:any) =>
+                            option?.children.indexOf(input) >= 0
+                        }>
+                            {user?.map((item: any) => {
                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                             })}
                         </Select>
