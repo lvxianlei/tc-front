@@ -108,7 +108,7 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
                             <Select
                                 placeholder="请选择"
                                 filterOption={(input, option) =>
-                                    option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    option?.props?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                                 showSearch
                                 allowClear>
