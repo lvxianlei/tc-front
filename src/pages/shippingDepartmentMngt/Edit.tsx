@@ -129,6 +129,16 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
                     )
                 })
             }
+            if (item.dataIndex === "name") {
+                return ({
+                    ...item, type: 'string',
+                    render: (_: any): React.ReactNode => (
+                        <Form.Item name="name" style={{ width: '100%' }}>
+                            <Input maxLength={20} placeholder="请输入成品库名称" />
+                        </Form.Item>
+                    )
+                })
+            }
             return item
         })} col={1} dataSource={{}} edit />
     </Spin>
