@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Space, Button, Input, DatePicker, Select, message } from 'antd'
+import { Space, Button, Input, DatePicker, Select, message, Typography } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import ConfirmableButton from '../../components/ConfirmableButton'
-import { Page } from '../common'
+import { SearchTable as Page } from '../common'
 import RequestUtil from '../../utils/RequestUtil'
 import { baseList } from "./managementDetailData.json"
 export default function Management(): React.ReactNode {
@@ -37,7 +37,16 @@ export default function Management(): React.ReactNode {
                 if (item.dataIndex === "projectName") {
                     return ({
                         ...item,
-                        render: (_a: any, _b: any) => <Link to={`/project/management/detail/base/${_b.id}`}>{_b.projectName}</Link>
+                        render: (_a: any, _b: any) => <Link
+                            to={`/project/management/detail/base/${_b.id}`}>
+                            <Typography.Paragraph
+                                ellipsis={{ rows: 1 }}
+                                style={{
+                                    color: "#FF8C00",
+                                    cursor: "pointer"
+                                }}
+                            > {_b.projectName}</Typography.Paragraph>
+                        </Link>
                     })
                 }
                 return item

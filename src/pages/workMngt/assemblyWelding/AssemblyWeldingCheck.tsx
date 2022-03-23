@@ -13,18 +13,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { useState } from 'react';
 import styles from './AssemblyWelding.module.less';
 import { FixedType } from 'rc-table/lib/interface';
-
-interface IResponseData {
-    readonly id: number;
-    readonly size: number;
-    readonly current: number;
-    readonly total: number;
-    readonly records: IData[];
-}
-
-interface IData {
-    readonly id?: string;
-}
+import { IResponseData } from './IAssemblyWelding';
 
 export default function AssemblyWeldingCheck(): React.ReactNode {
     const towerColumns = [

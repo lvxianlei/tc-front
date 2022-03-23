@@ -6,31 +6,15 @@
 
 import React from 'react'
 import { Button, message, Modal, Popconfirm, Space, Spin, TablePaginationConfig, Upload } from 'antd';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { useState } from 'react';
 import styles from './AssemblyWelding.module.less';
 import { downloadTemplate } from '../setOut/downloadTemplate';
-import AssemblyWeldingNew, { IBaseData } from './AssemblyWeldingNew';
 import AuthUtil from '../../../utils/AuthUtil';
-
-interface IResponseData {
-    readonly id: number;
-    readonly size: number;
-    readonly current: number;
-    readonly total: number;
-    readonly records: IData[];
-}
-
-interface IData {
-    readonly id?: string;
-}
-
-export interface ISegmentNameList {
-    readonly id?: string;
-}
+import { IResponseData, ISegmentNameList } from './IAssemblyWelding';
 
 export default function AssemblyWeldingListing(): React.ReactNode {
     const towerColumns = [
@@ -49,6 +33,16 @@ export default function AssemblyWeldingListing(): React.ReactNode {
             title: '组件号',
             dataIndex: 'componentId',
             key: 'componentId'
+        },
+        {
+            title: '组焊类型',
+            dataIndex: 'weldingTypeName',
+            key: 'weldingTypeName'
+        },
+        {
+            title: '单段组数',
+            dataIndex: 'segmentGroupNum',
+            key: 'segmentGroupNum'
         },
         {
             title: '主件号',
@@ -82,7 +76,8 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                     >
                         <Button type="link">删除</Button>
                     </Popconfirm>
-                    <Button type="link" onClick={() => { setVisible(true); setName('编辑'); setRecord(record) }}>编辑</Button>
+                    <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/edit/${record.id}`}>编辑</Link>
+                    {/* <Button type="link" onClick={() => { setVisible(true); setName('编辑'); setRecord(record) }}>编辑</Button> */}
                 </Space>
             )
         }
@@ -157,10 +152,10 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const [paragraphData, setParagraphData] = useState([] as undefined | any);
     const [visible, setVisible] = useState(false);
     const [name, setName] = useState('');
-    const [record, setRecord] = useState<IBaseData>({});
+    // const [record, setRecord] = useState<IBaseData>({});
     const [url, setUrl] = useState<string>('');
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
-    const location = useLocation<{ status: number }>();
+    const location = useLocation<{ status?: number }>();
     const [segmentNameList, setSegmentNameList] = useState<ISegmentNameList[]>([]);
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
@@ -182,18 +177,21 @@ export default function AssemblyWeldingListing(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent>
                 <Space direction="horizontal" size="small" className={styles.bottomBtn}>
-                    {location.state.status === 3 ? <>
+                    {location.state?.status === 3 ? <>
                         <Button type="primary" onClick={() => downloadTemplate(`/tower-science/welding/downloadSummary?productCategoryId=${params.productCategoryId}`, '组焊清单')} ghost>导出</Button>
                         <Button type="primary" onClick={() => downloadTemplate('/tower-science/welding/exportTemplate', '组焊模板')} ghost>模板下载</Button>
                         <Button type="primary" onClick={() => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
                             history.goBack();
                         })} >完成组焊清单</Button>
-                        <Button type="primary" onClick={async () => {
+                        <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/new`}>
+                            <Button type="primary" >添加组焊</Button>
+                        </Link>
+                        {/* <Button type="primary" onClick={async () => {
                             setVisible(true);
                             setName('添加组焊');
                             const data: ISegmentNameList[] = await RequestUtil.get(`/tower-science/welding/getWeldingSegment?weldingId=${params.id}`);
                             setSegmentNameList(data);
-                        }}>添加组焊</Button>
+                        }}>添加组焊</Button> */}
                         <Upload
                             action={() => {
                                 const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
@@ -229,7 +227,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 </Space>
                 <CommonTable
                     dataSource={detailData?.records}
-                    columns={location.state.status === 3 ? towerColumns : towerColumns.splice(0, 6)}
+                    columns={location.state?.status === 3 ? towerColumns : towerColumns.splice(0, 6)}
                     onRow={(record: Record<string, any>, index: number) => ({
                         onClick: () => { getParagraphData(record.id) },
                         className: styles.tableRow
@@ -248,7 +246,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <CommonTable dataSource={paragraphData} columns={paragraphColumns} pagination={false} />
             </DetailContent>
         </Spin>
-        {
+        {/* {
             visible ?
                 <AssemblyWeldingNew
                     id={params.id}
@@ -262,7 +260,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                     segmentNameList={segmentNameList}
                 />
                 : null
-        }
+        } */}
         <Modal
             visible={urlVisible}
             onOk={() => {

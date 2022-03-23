@@ -13,7 +13,7 @@ export default function PlanTrack(): React.ReactNode {
             width: 50,
             dataIndex: 'index',
             fixed: "left" as FixedType,
-            render: (_a: any, _b: any, index: number) => {return index + 1}
+            render: (_a: any, _b: any, index: number) => { return index + 1 }
         },
         {
             key: 'businessUserName',
@@ -21,12 +21,12 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'businessUserName',
             width: 100,
         },
-        {
-            key: 'taskNum',
-            title: '放样任务编号',
-            width: 100,
-            dataIndex: 'taskNum'
-        },
+        // {
+        //     key: 'taskNum',
+        //     title: '放样任务编号',
+        //     width: 100,
+        //     dataIndex: 'taskNum'
+        // },
         {
             key: 'internalNumber',
             title: '内部合同号',
@@ -106,7 +106,7 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'description'
         },
     ];
-    const onFilterSubmit=(value: any)=>{
+    const onFilterSubmit = (value: any) => {
         setFilterValue(value)
         return value;
     }
@@ -115,13 +115,13 @@ export default function PlanTrack(): React.ReactNode {
 
         return {
             ...col,
-            render:  col.render?col.render:(_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                col.dataIndex === 'index' ? index + 1 
-                : col.dataIndex === 'loftingDeliverRealTime'&&moment(record.loftingDeliverTime)<moment(record.loftingDeliverRealTime?record.loftingDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
-                : col.dataIndex === 'materialDeliverRealTime'&& record.materialDeliverTime && moment(record.materialDeliverTime)<moment(record.materialDeliverRealTime?record.materialDeliverRealTime:undefined)?<div style={{backgroundColor:'#F9A1A1', color: '#fff'}}>{ _?_:'-' }</div>
-                : <span>{ _?_:'-' }</span>
-            )   
-        }     
+            render: col.render ? col.render : (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                col.dataIndex === 'index' ? index + 1
+                    : col.dataIndex === 'loftingDeliverRealTime' && moment(record.loftingDeliverTime) < moment(record.loftingDeliverRealTime ? record.loftingDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                        : col.dataIndex === 'materialDeliverRealTime' && record.materialDeliverTime && moment(record.materialDeliverTime) < moment(record.materialDeliverRealTime ? record.materialDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#fff' }}>{_ ? _ : '-'}</div>
+                            : <span>{_ ? _ : '-'}</span>
+            )
+        }
     })
     return <Page
         path="/tower-science/loftingTask/planTrack"
@@ -133,42 +133,41 @@ export default function PlanTrack(): React.ReactNode {
             {
                 name: 'priority',
                 label: '优先级',
-                children:   <Select style={{width:'100px'}}>
-                                <Select.Option value={''} key ={''}>全部</Select.Option>
-                                <Select.Option value={0} key={0}>紧急</Select.Option>
-                                <Select.Option value={1} key={1}>高</Select.Option>
-                                <Select.Option value={2} key={2}>中</Select.Option>
-                                <Select.Option value={3} key={3}>低</Select.Option>
-                            </Select>
+                children: <Select style={{ width: '100px' }} defaultValue={''}>
+                    <Select.Option value={''} key={''}>全部</Select.Option>
+                    <Select.Option value={0} key={0}>紧急</Select.Option>
+                    <Select.Option value={1} key={1}>高</Select.Option>
+                    <Select.Option value={2} key={2}>中</Select.Option>
+                    <Select.Option value={3} key={3}>低</Select.Option>
+                </Select>
             },
             {
                 name: 'materialStatus',
                 label: '塔型提料状态',
-                children:   <Select style={{width:'100px'}}>
-                                <Select.Option value={''} key ={''}>全部</Select.Option>
-                                <Select.Option value={1} key={1}>待指派</Select.Option>
-                                <Select.Option value={2} key={2}>提料中</Select.Option>
-                                {/* <Select.Option value={3} key={3}>配段中</Select.Option> */}
-                                <Select.Option value={3} key={3}>已完成</Select.Option>
-                            </Select>
+                children:   <Select style={{width:'100px'}} defaultValue={''}>
+                    <Select.Option value={''} key ={''}>全部</Select.Option>
+                    <Select.Option value={1} key={1}>待指派</Select.Option>
+                    <Select.Option value={2} key={2}>提料中</Select.Option>
+                    {/* <Select.Option value={3} key={3}>配段中</Select.Option> */}
+                    <Select.Option value={3} key={3}>已完成</Select.Option>
+                </Select>
             },
             {
                 name: 'loftingStatus',
                 label: '塔型放样状态',
-                children:   <Select style={{width:'100px'}}>
-                                <Select.Option value={''} key ={''}>全部</Select.Option>
-                                <Select.Option value={0} key={0}>已拒绝</Select.Option>
-                                <Select.Option value={1} key={1}>待确认</Select.Option>
-                                <Select.Option value={2} key={2}>待指派</Select.Option>
-                                <Select.Option value={3} key={3}>待完成</Select.Option>
-                                <Select.Option value={4} key={4}>已完成</Select.Option>
-                                <Select.Option value={5} key={5}>已提交</Select.Option>
-                            </Select>
+                children: <Select style={{ width: '100px' }} defaultValue={''}>
+                    <Select.Option value={''} key={''}>全部</Select.Option>
+                    <Select.Option value={0} key={0}>待指派</Select.Option>
+                    <Select.Option value={1} key={1}>放样中</Select.Option>
+                    <Select.Option value={2} key={2}>组焊中</Select.Option>
+                    <Select.Option value={3} key={3}>配段中</Select.Option>
+                    <Select.Option value={4} key={4}>已完成</Select.Option>
+                </Select>
             },
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号进行查询" maxLength={200} />
+                children: <Input placeholder="请输入计划号/塔型/内部合同编号/业务员进行查询" style={{ width: '300px' }} maxLength={200} />
             },
         ]}
     />

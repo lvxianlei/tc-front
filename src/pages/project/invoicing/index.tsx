@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import { invoicingListHead } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -81,7 +81,7 @@ export default function Invoicing() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 100,
+                    width: 130,
                     render: (_: any, record: any) => {
                         return <>
                             <span style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }} onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</span>
@@ -89,7 +89,7 @@ export default function Invoicing() {
                             <Popconfirm
                                 title="确定删除此开票申请吗？"
                                 disabled={record.state !== 0}
-                                onConfirm={async() => {
+                                onConfirm={async () => {
                                     await deleteRun(record?.id)
                                     message.success("删除成功...")
                                     history.go(0)

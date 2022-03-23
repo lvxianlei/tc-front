@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Select } from 'antd'
+import { Space, Input, DatePicker, Select, Typography } from 'antd'
 import { Link } from 'react-router-dom'
-import { Page } from '../common'
+import { SearchTable as Page } from '../common'
 import { base } from "./bidding.json"
 import { sourceOptions } from '../../configuration/DictionaryOptions'
-
+const { Paragraph } = Typography
 export default function Information(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({})
     const dictionaryOptions: any = sourceOptions
@@ -30,7 +30,7 @@ export default function Information(): React.ReactNode {
         setFilterValue(value)
         return value
     }
-    
+
     const handleAddress = (record: any) => {
         if (record.sourceWebsite) {
             window.open(record.sourceWebsite);
@@ -53,20 +53,27 @@ export default function Information(): React.ReactNode {
                         return ({
                             ...item,
                             render: (_: undefined, record: any): React.ReactNode => {
-                                return <Link to={`/bidding/information/detail/${record.id}`}>{record.projectName}</Link>
+                                return <Link to={`/bidding/information/detail/${record.id}`}>
+                                    <Paragraph style={
+                                        {
+                                            color: "#FF8C00",
+                                            cursor: "pointer"
+                                        }
+                                    } ellipsis={{ rows: 1 }}>{record.projectName}</Paragraph>
+                                </Link>
                             }
                         })
                     case "sourceWebsite":
                         return ({
                             ...item,
                             render: (_: any, record: any) => {
-                                return <span style={
+                                return <span onClick={() => handleAddress(record)
+                                }> <Paragraph style={
                                     {
                                         color: "#FF8C00",
                                         cursor: "pointer"
                                     }
-                                } onClick={() => handleAddress(record)
-                                }>{record.sourceWebsite || ""}</span>
+                                } ellipsis={{ rows: 1 }}>{record.sourceWebsite || ""}</Paragraph></span>
                             }
                         })
                     default:

@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { WithTranslation } from 'react-i18next';
 import { RouteComponentProps, useHistory } from 'react-router';
 import styles from './WorkBench.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
-import { DetailTitle } from '../../common';
+import { CommonTable, DetailTitle } from '../../common';
 import Line from './Line';
-import { CheckCircleOutlined, RightOutlined, SoundOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, RightOutlined, SoundOutlined, DoubleRightOutlined } from '@ant-design/icons';
 import useRequest from '@ahooksjs/use-request';
 import { Spin, Table } from 'antd';
 import AuthUtil from '../../../utils/AuthUtil';
 import ApplicationContext from '../../../configuration/ApplicationContext';
+import { Link } from 'react-router-dom';
 
 export interface WorkBenchMngtProps { }
 export interface IWorkBenchMngtRouteProps extends RouteComponentProps<WorkBenchMngtProps>, WithTranslation { }
@@ -30,6 +31,15 @@ interface IList {
 	readonly createUserId?: string;
 	readonly authority?: string;
 	readonly weldingUserId?: string;
+}
+
+export interface IResponseData {
+	readonly total: number | undefined;
+	readonly size: number | undefined;
+	readonly current: number | undefined;
+	readonly parentCode: string;
+	readonly records: [];
+	readonly paymentPlanVos: [];
 }
 
 export default function WorkBenchMngt(): React.ReactNode {
@@ -318,10 +328,14 @@ export default function WorkBenchMngt(): React.ReactNode {
 
 	const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
 		const data = await RequestUtil.get(`/tower-science/workbench`);
+		const announceData = await RequestUtil.get<IResponseData>(`/tower-system/notice?size=10`);
+		console.log(announceData)
+		setAnnounceData(announceData.records)
 		resole(data)
 	}), {})
 	const detailData: any = data;
 	const history = useHistory();
+	const [announceData, setAnnounceData] = useState([]);
 	if (loading) {
 		return <Spin spinning={loading}>
 			<div style={{ width: '100%', height: '300px' }}></div>
@@ -387,16 +401,22 @@ export default function WorkBenchMngt(): React.ReactNode {
 		</div>
 		<div className={styles.right}>
 			<div className={styles.notice}>
-				<p><SoundOutlined /> 公告通知</p>
-				<Table dataSource={[]} pagination={false} showHeader={false} columns={[{
-					key: 'time',
+				<p>
+					<SoundOutlined />公告通知
+					<Link to={`/announcement/list`} className={styles.more}>更多<DoubleRightOutlined /></Link>
+				</p>
+				<CommonTable dataSource={announceData} pagination={false} showHeader={false} columns={[{
+					key: 'updateTime',
 					title: '时间',
-					dataIndex: 'time',
+					dataIndex: 'updateTime',
 				},
 				{
-					key: 'description',
+					key: 'title',
 					title: '文案',
-					dataIndex: 'description'
+					dataIndex: 'title',
+					render: (_: string, record: Record<string, any>): React.ReactNode => (
+						<Link to={`/announcement/list/detail/${record.id}`}>{_}</Link>
+					)
 				}]} />
 			</div>
 			<div className={styles.notice}>

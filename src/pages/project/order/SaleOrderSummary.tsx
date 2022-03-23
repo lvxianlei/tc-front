@@ -202,7 +202,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
           <span>{
             status === 0 ? "未下发" :
               status === 1 ? "已下发" :
-              "审批中"  
+                "审批中"
           }</span>
         )
       }
@@ -254,4 +254,4 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
     ];
   }
 }
-export default withRouter(withTranslation()(ManagementSaleOrderSummary));
+export default withRouter(ManagementSaleOrderSummary);
