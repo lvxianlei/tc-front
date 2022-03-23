@@ -70,7 +70,7 @@ export default forwardRef(function Edit({ detailData, title, teamId }: EditProps
         {
             "title": "基数",
             "dataIndex": "number",
-            "type": "select"
+            "type": "string"
         },
         {
             "title": "开始包装日期",
@@ -95,7 +95,7 @@ export default forwardRef(function Edit({ detailData, title, teamId }: EditProps
         {
             "title": "连板重量（KG）",
             "dataIndex": "boardWeight",
-            "type": "select"
+            "type": "string"
         },
         {
             "title": "钢管重量（KG）",
