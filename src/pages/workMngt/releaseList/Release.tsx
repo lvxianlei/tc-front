@@ -210,7 +210,7 @@ export default function Release(): React.ReactNode {
                             },
                             {
                                 title: "产品类型",
-                                dataIndex: "productType",
+                                dataIndex: "productTypeName",
                                 width: 150
                             }
                         ]}
