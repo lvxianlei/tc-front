@@ -24,12 +24,12 @@ export interface EditRefProps {
 export default forwardRef(function Edit({ detailData, title, teamId }: EditProps, ref) {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState([]);
-    const [checked, setChecked] = useState<boolean>(true);
+    const [checked, setChecked] = useState<boolean>(false);
 
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: IResponseData = await RequestUtil.get(`/tower-production/workshopTeam?size=1000`);
-            setChecked(teamId && teamId !== '0' ? false : true);
+            setChecked(teamId && teamId === '0' ? true : false);
             setSelectedRowKeys([teamId])
             resole(result?.records)
         } catch (error) {
@@ -48,8 +48,6 @@ export default forwardRef(function Edit({ detailData, title, teamId }: EditProps
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            // // const idList = [!detailData.angleTeamId,!detailData.boardTeamId,!detailData.pipeTeamId]
-            // console.log(idList)
             await saveRun({
                 teamId: checked ? 0 : selectedRowKeys[0],
                 planId: detailData.id,
@@ -143,18 +141,24 @@ export default forwardRef(function Edit({ detailData, title, teamId }: EditProps
                     setSelectedRows(selectedRows)
                 }
             }} />
-        <Radio checked={checked} onClick={() => {
-            if (selectedRowKeys.length <= 0) {
-                message.warning('请选择班组')
-            } else {
-                setChecked(!checked);
-            }
-        }}
+        <Radio
+            checked={checked}
+            onClick={() => {
+                if (selectedRowKeys.length <= 0) {
+                    message.warning('请选择班组')
+                } else {
+                    setChecked(!checked);
+                }
+            }}
             onChange={() => {
                 if (!checked) {
                     setSelectedRows([]);
                     setSelectedRowKeys([]);
                 }
-            }}>无需派工</Radio>
+            }}
+            disabled={[!detailData.angleTeamName, !detailData.boardTeamName, !detailData.pipeTeamName].findIndex(res => res === false) === -1}
+        >
+            无需派工
+        </Radio>
     </Spin>
 })
