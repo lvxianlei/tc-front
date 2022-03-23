@@ -23,7 +23,7 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
         try {
             baseForm.setFieldsValue({
                 ...detailedData,
-                leaderId: detailedData.leaderId + ',' + detailedData.leaderName
+                leaderId: detailedData?.leaderId && detailedData?.leaderName ? detailedData?.leaderId + ',' + detailedData?.leaderName : ''
             })
             resole(detailedData)
         } catch (error) {
@@ -55,8 +55,8 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
             const baseData = await baseForm.validateFields();
             await saveRun({
                 ...baseData,
-                leaderId: baseData.leaderId.split(',')[0],
-                leaderName: baseData.leaderId.split(',')[1]
+                leaderId: baseData?.leaderId && baseData?.leaderId.split(',')[0],
+                leaderName: baseData?.leaderId && baseData?.leaderId.split(',')[1]
             })
             resolve(true);
         } catch (error) {
@@ -110,7 +110,8 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
                                 filterOption={(input, option) =>
                                     option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
-                                showSearch>
+                                showSearch
+                                allowClear>
                                 {userList?.map((item: any) => {
                                     return <Select.Option key={item.name} value={item.userId + ',' + item.name}>{item.name}</Select.Option>
                                 })}
