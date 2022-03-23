@@ -1,5 +1,5 @@
 import React from "react"
-import { TableColumnProps, Typography } from "antd"
+import { Checkbox, TableColumnProps, Typography } from "antd"
 import styles from "./CommonTable.module.less"
 import "./CommonTable.module.less"
 import moment from "moment"
@@ -99,15 +99,20 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         onCell: () => ({ className: styles.tableCell }),
         render: (_: any, _a: any, index: number) => <>{index + 1}</>
     }, ...formatColumns] : formatColumns
-
-    const pipeline = useTablePipeline()
+    const pipeline = useTablePipeline({ components: { Checkbox } })
         .input({ dataSource, columns: columnsResult as any })
+        .primaryKey(rowKey || "id")
         .use(features.columnResize({
             fallbackSize: 120,
             handleBackground: '#ececec',
             handleHoverBackground: '#ccc',
             handleActiveBackground: '#ccc',
-        }))
+        }));
+    props?.tableProps?.rowSelection?.type === "checkbox" &&  pipeline.use(features.multiSelect({
+        value: props?.tableProps?.rowSelection?.selectedRowKeys || [],
+        onChange: props?.tableProps?.rowSelection?.onChange,
+        isDisabled: props?.tableProps?.rowSelection?.getCheckboxProps
+    }))
 
     return <nav className={styles.componentsTable}>
         <AliTable
