@@ -7,24 +7,24 @@ import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
 import ExportList from '../../../components/export/list';
+import { downloadTemplate } from '../setOut/downloadTemplate';
 
 export default function ReleaseList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [filterValue, setFilterValue] = useState({});
+    const [filterValue, setFilterValue] = useState<any>({});
     const location = useLocation();
     const match = useRouteMatch();
-    const [isExport, setIsExport] = useState(false);
     const [segmentDataSource, setSegmentDataSource] = useState<any[]>([]);
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, weldingId: string }>()
     const [pages, setPages] = useState<any>({
         current: 1,
         size: 20
     })
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-science/welding/getDetailedById`, { ...pages, weldingId:params.id, fuzzyMsg: data?.fuzzyMsg })
-            const dataSource:any = await RequestUtil.get(`/tower-science/welding/getStructureById`,{segmentId: result?.records[0]?.id});
+            const result: any = await RequestUtil.get(`/tower-science/welding/getDetailedById`, { ...pages, weldingId:params.weldingId, fuzzyMsg: data?.fuzzyMsg,id: params.id })
+            const dataSource:any = result?.records?.length>0? await RequestUtil.get(`/tower-science/welding/getStructureById`,{segmentId: result?.records[0]?.id}):[];
             setSegmentDataSource([...dataSource]);
             resole(result?.records)
         } catch (error) {
@@ -149,6 +149,7 @@ export default function ReleaseList(): React.ReactNode {
         <>
         <Form layout="inline" style={{margin:'20px'}} onFinish={async (values) => {
             console.log(values)
+            setFilterValue(values)
             await run({
             ...values
         })}}>
@@ -162,28 +163,18 @@ export default function ReleaseList(): React.ReactNode {
                   <Button htmlType="reset">重置</Button>
               </Form.Item>
             </Form>
-        <Button style={{margin:'0px 20px 20px 20px'}} type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
+        {/* <Button  type="primary" onClick={() => setIsExport(true)} ghost>导出</Button> */}
+        <Button style={{margin:'0px 10px 20px 20px'}} type="primary" onClick={() => {
+            downloadTemplate(`/tower-science/welding/downloadBatch`, '组焊', {
+                id: params.id,
+                fuzzyMsg: filterValue?.fuzzyMsg,
+                weldingId: params.weldingId
+            },false, 'array')
+        }}>导出</Button>
         <Button style={{margin:'0px 20px 0px 0px'}}  onClick={() => history.goBack()} >返回</Button>
         <div style={{display:'flex',width:'100%'}} >
             <div style={{width:'40%',padding:'0px 20px 20px 20px'}}>
-                {isExport ? <ExportList
-                    history={history}
-                    location={location}
-                    match={match}
-                    columnsKey={() => {
-                        let keys = [...detailColumns]
-                        keys.pop()
-                        return keys
-                    }}
-                    current={1}
-                    size={10}
-                    total={0}
-                    url={`/tower-science/welding/getDetailedById`}
-                    serchObj={{
-                        workPlanIds: params.id
-                    }}
-                    closeExportList={() => setIsExport(false)}
-                /> : null}
+                
                 <CommonTable
                     style={{ padding: "0" }}
                     loading={loading}

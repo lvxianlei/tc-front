@@ -14,6 +14,7 @@ const USER_ID: string = 'USER_ID'
 const TENANT_NAME: string = 'SINZETECH_TENANT_NAME'
 const REAL_NAME: string = 'REAL_NAME';
 const APP_Name: string = 'CURRENT_APP_NAME';
+const ACCOUNT: string = "ACCOUNT";
 export default abstract class AuthUtil {
 
     static timeLength = 50 * 60 * 1000
@@ -159,6 +160,10 @@ export default abstract class AuthUtil {
         return Cookies.get(REAL_NAME) || '';
     }
 
+    public static getAccount(): string {
+        return Cookies.get(ACCOUNT) || '';
+    }
+
     /**
      * @static
      * @description Sets sinzetech auth
@@ -167,6 +172,10 @@ export default abstract class AuthUtil {
      */
     public static setRealName(token: string, options?: CookieAttributes): void {
         Cookies.set(REAL_NAME, token, options);
+    }
+
+    public static setAccout(token: string, options?: CookieAttributes): void {
+        Cookies.set(ACCOUNT, token, options);
     }
 
     /**

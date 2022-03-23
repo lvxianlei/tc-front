@@ -1401,7 +1401,7 @@
     },
     { // 工作管理-组焊明细-组焊明细
       "name": "组焊明细",
-      "path": "/workMngt/releaseList/assemblyWelding/:id",
+      "path": "/workMngt/releaseList/assemblyWelding/:id/:weldingId",
       "module": "./pages/workMngt/releaseList/ReleaseAssemblyWeldingDetail",
       "exact": true,
       "authority": "rd_small_sample_management"
@@ -1634,6 +1634,48 @@
       "module": "./pages/materialPicking/index",
       "exact": true,
       "authority": "sw_raw_material_requisition_list"
+    },
+    { // 包装计划-包装计划列表
+      "name": "包装计划列表",
+      "path": "/packingPlan/packingPlanList",
+      "module": "./pages/packingPlan/PackingPlanList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 班组管理-班组管理列表
+      "name": "班组管理",
+      "path": "/workshopTeam/workshopTeamList",
+      "module": "./pages/workshopTeam/WorkshopTeamList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 班组管理-班组管理列表
+      "name": "添加班组",
+      "path": "/workshopTeam/workshopTeamList/add",
+      "module": "./pages/workshopTeam/WorkshopTeamAdd",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 班组管理-编辑班组
+      "name": "编辑班组",
+      "path": "/workshopTeam/workshopTeamList/edit/:id",
+      "module": "./pages/workshopTeam/WorkshopTeamEdit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 班组管理-班组详情
+      "name": "班组详情",
+      "path": "/workshopTeam/workshopTeamList/view/:id",
+      "module": "./pages/workshopTeam/WorkshopTeamView",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 成品库管理-成品库配置
+      "name": "成品库配置",
+      "path": "/shippingDepartmentMngt/shippingDepartmentConfig",
+      "module": "./pages/shippingDepartmentMngt/ShippingDepartmentConfig",
+      "exact": true,
+      "authority": "approvalm"
     },
     { // 计划排产
       "name": "计划排产",
@@ -1894,13 +1936,13 @@
       "exact": true,
       "authority": "basic_settings_workshop_team_management"
     },
-    { // 基础配置-成品库配置
-      "name": "成品库配置",
-      "path": "/baseSetting/shippingDepartmentConfig",
-      "module": "./pages/baseSetting/ShippingDepartmentConfig",
-      "exact": true,
-      "authority": "basic_settings_finished_product_warehouse_configuration"
-    },
+    // { // 基础配置-成品库配置
+    //   "name": "成品库配置",
+    //   "path": "/baseSetting/shippingDepartmentConfig",
+    //   "module": "./pages/baseSetting/ShippingDepartmentConfig",
+    //   "exact": true,
+    //   "authority": "basic_settings_finished_product_warehouse_configuration"
+    // },
     { // 基础配置-车辆管理
       "name": "车辆管理",
       "path": "/baseSetting/vehicleMngt",
@@ -2433,6 +2475,13 @@
       "module": "./pages/planBaseSetting/prodUnit/prodUnit",
       "exact": true,
       "authority": "production_unit_management"
-    }
+    },
+    { // 修改密码
+      "name": "修改密码",
+      "path": "/changePage/personalPassWord",
+      "module": "./pages/changePassword",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
   ]
 }

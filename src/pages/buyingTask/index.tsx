@@ -73,7 +73,7 @@ export default function RawMaterial() {
             {
                 obj.taskStatus === 1 && <>
                     <Button onClick={() => setIsModalVisible3(true)}>拒绝</Button>
-                    <Button type="primary" onClick={() => { receive(id) }}>接受</Button>
+                    <Button type="primary" onClick={() => { receive(id) }}>接收</Button>
                 </>
             }
         </div>
