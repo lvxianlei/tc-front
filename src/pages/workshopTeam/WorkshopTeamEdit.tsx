@@ -64,7 +64,7 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                                 id: params.id,
                                 workshopUserDTOList: users.map((item:any)=>{
                                     return{
-                                        id:item.id,
+                                        // id:item.id,
                                         teamId: params.id,
                                         userId: item.userId
                                     }
