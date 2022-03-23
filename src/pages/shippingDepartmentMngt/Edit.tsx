@@ -125,7 +125,7 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
                     ...item, type: 'string',
                     render: (_: any): React.ReactNode => (
                         <Form.Item name="description" style={{ width: '100%' }}>
-                            <Input.TextArea maxLength={300} placeholder="请输入备注" showCount />
+                            <Input.TextArea maxLength={600} placeholder="请输入备注" showCount />
                         </Form.Item>
                     )
                 })
