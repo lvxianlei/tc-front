@@ -21,6 +21,9 @@ const StyledBaseTable = (styled(BaseTable)`
   .art-horizontal-scroll-container{
     z-index: 3
   }
+  .art-table-row.odd{
+    --bgcolor: #f8f8f8;
+  }
   &.dark {
     --lock-shadow: black 0 0px 6px 2px;
     --border-color: #303030;
@@ -43,7 +46,7 @@ const StyledBaseTable = (styled(BaseTable)`
     --cell-padding: 0px 8px;
     td {
         color: #666;
-        padding: 8px;
+        padding: 0 8px;
     }
   }
   td {
@@ -60,6 +63,7 @@ const StyledBaseTable = (styled(BaseTable)`
   &:not(.bordered) {
     --cell-border-vertical: none;
     --header-cell-border-vertical: none;
+    --cell-border-horizontal: none;
     thead > tr.first th {
       border-top: none;
     }
@@ -72,7 +76,7 @@ function AntdLoadingContentWrapper({ children, visible }: LoadingContentWrapperP
   return (
     <div
       className="ant-loading-content-wrapper"
-      style={{ opacity: visible ? 0.6 : undefined }}
+      style={{ opacity: visible ? 1 : undefined }}
     >
       {children}
     </div>
@@ -94,6 +98,7 @@ interface AntdTableProps extends BaseTableProps {
  * */
 export default ({ size = "default", ...props }: AntdTableProps) => {
   return <StyledBaseTable
+    defaultColumnWidth={100}
     {...props}
     className={`${size} ${props.className}`}
     components={{

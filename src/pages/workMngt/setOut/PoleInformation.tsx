@@ -43,6 +43,12 @@ export default function PoleInformation(): React.ReactNode {
             dataIndex: 'productHeight'
         },
         {
+            key: 'voltageGradeName',
+            title: '电压等级',
+            width: 150,
+            dataIndex: 'voltageGradeName'
+        },
+        {
             key: 'productCategoryName',
             title: '塔型',
             dataIndex: 'productCategoryName',
@@ -172,6 +178,8 @@ export default function PoleInformation(): React.ReactNode {
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;

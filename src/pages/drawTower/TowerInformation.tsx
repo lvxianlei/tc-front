@@ -18,22 +18,8 @@ export default function TowerInformation(): React.ReactNode {
             "title": "塔型钢印号"
         },
         {
-            "dataIndex": "pattern",
-            "title": "类型",
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
-                    case 1:
-                        return '新放';
-                    case 2:
-                        return '重新出卡';
-                    case 3:
-                        return '套用';
-                }
-            } 
-        },
-        {
-            "dataIndex": "taskCode",
-            "title": "任务单编号"
+            "dataIndex": "patternName",
+            "title": "模式"
         },
         {
             "dataIndex": "saleOrderNumber",
@@ -101,7 +87,7 @@ export default function TowerInformation(): React.ReactNode {
         },
         { 
             key: 'singleWeight', 
-            title: '单段重量', 
+            title: '单段重量（kg）', 
             dataIndex: 'singleWeight',
             render: (_: number): React.ReactNode => ( 
                 <span>{ _ === -1 ? undefined : _ }</span>

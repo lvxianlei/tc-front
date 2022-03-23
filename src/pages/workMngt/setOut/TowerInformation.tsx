@@ -38,9 +38,9 @@ export default function TowerInformation(): React.ReactNode {
     const [form] = useForm();
     const [recordStatus, setRecordStatus] = useState();
     const [loading1, setLoading1] = useState(false);
-    const editRef = useRef<TryAssembleProps>();
-    const [tryAssembleVisible, setTryAssembleVisiblee] = useState(false);
-    const [tryAssemble, setTryAssemble] = useState<[]>([]);
+    // const editRef = useRef<TryAssembleProps>();
+    // const [tryAssembleVisible, setTryAssembleVisiblee] = useState(false);
+    // const [tryAssemble, setTryAssemble] = useState<[]>([]);
 
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
@@ -54,6 +54,8 @@ export default function TowerInformation(): React.ReactNode {
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
             }
         });
         return roles;
@@ -271,20 +273,20 @@ export default function TowerInformation(): React.ReactNode {
         })
     }
 
-    const handleModalOk = () => new Promise(async (resove, reject) => {
-        try {
-            await editRef.current?.onSubmit();
-            message.success('提交成功');
-            setTryAssembleVisiblee(false);
-            setRefresh(!refresh);
-            resove(true);
-        } catch (error) {
-            reject(false)
-        }
-    })
+    // const handleModalOk = () => new Promise(async (resove, reject) => {
+    //     try {
+    //         await editRef.current?.onSubmit();
+    //         message.success('提交成功');
+    //         setTryAssembleVisiblee(false);
+    //         setRefresh(!refresh);
+    //         resove(true);
+    //     } catch (error) {
+    //         reject(false)
+    //     }
+    // })
 
     return <>
-        <Modal
+        {/* <Modal
             destroyOnClose
             visible={tryAssembleVisible}
             width="40%"
@@ -297,7 +299,7 @@ export default function TowerInformation(): React.ReactNode {
                 setRefresh(!refresh);
             }}>
             <TryAssemble id={params.id} type="edit" deatil={tryAssemble} ref={editRef} />
-        </Modal>
+        </Modal> */}
         <Modal title="段模式" visible={visible} onCancel={() => setVisible(false)} footer={<Space direction="horizontal" size="small" >
             <Button onClick={() => setVisible(false)}>关闭</Button>
             {
@@ -317,7 +319,7 @@ export default function TowerInformation(): React.ReactNode {
             exportPath={`/tower-science/productSegment`}
             requestData={{ productCategoryId: params.id }}
             extraOperation={<Space direction="horizontal" size="small">
-                <Button type="primary" onClick={async () => {
+                {/* <Button type="primary" onClick={async () => {
                     const result: [] = await RequestUtil.get(`/tower-science/productSegmentAssemble/${params.id}`);
                     if (result.length > 0) {
                         setTryAssemble(result)
@@ -325,7 +327,7 @@ export default function TowerInformation(): React.ReactNode {
                     } else {
                         message.warning('不存在试组装段信息')
                     }
-                }} disabled={!(location.state?.status < 3)} ghost>试组装信息</Button>
+                }} disabled={!(location.state?.status < 3)} ghost>试组装信息</Button> */}
                 <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList`, state: { status: location.state?.status } }}><Button type="primary" ghost>模型</Button></Link>
                 <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList`, state: { status: location.state?.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                 <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram`, state: { status: location.state?.status } }}><Button type="primary" ghost>NC程序</Button></Link>

@@ -241,7 +241,7 @@ export default function ManagementDetail(): React.ReactNode {
                 dataSource={productGroupData[productGroupFlag]}
             />
         </DetailContent>,
-        tab_salesPlan: <DetailContent>
+        tab_salesPlan: <DetailContent style={{ paddingTop: 14 }}>
             <Row>
                 <Radio.Group
                     defaultValue=""

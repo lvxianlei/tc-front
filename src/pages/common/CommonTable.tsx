@@ -1,5 +1,5 @@
 import React from "react"
-import { Table, TableColumnProps } from "antd"
+import { Table, TableColumnProps, Tooltip } from "antd"
 import styles from "./CommonTable.module.less"
 import "./CommonTable.module.less"
 import moment from "moment"
@@ -33,14 +33,14 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             return ({
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
+                render: (text: any) => <span title={text}>{text && !["-1", -1].includes(text) ? text : "-"}</span>,
                 ...data
             })
         default:
             return ({
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
+                render: (text: any) => <span title={text}>{text && !["-1", -1].includes(text) ? text : "-"}</span>,
                 ...data
             })
     }
@@ -77,9 +77,10 @@ interface CommonTableProps {
     haveIndex?: boolean
     [key: string]: any
     rowKey?: any
+    isPage?: boolean
 }
 
-export default function CommonTable({ columns, dataSource = [], rowKey, haveIndex = false, ...props }: CommonTableProps): JSX.Element {
+export default function CommonTable({ columns, dataSource = [], rowKey, haveIndex = false, isPage = false, ...props }: CommonTableProps): JSX.Element {
     const formatColumns = columns.map((item: any) => generateRender(item.type || "text", item))
     const columnsResult = haveIndex ? [{
         title: "序号",
@@ -89,10 +90,13 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         onCell: () => ({ className: styles.tableCell }),
         render: (_: any, _a: any, index: number) => <>{index + 1}</>
     }, ...formatColumns] : formatColumns
+    const height = document.documentElement.clientHeight - 320;
+    const scroll = isPage ? { x: true, y: height } : { x: true }
+
     return <nav className={styles.componentsTableResizableColumn}>
         <Table
             size="small"
-            scroll={{ x: true }}
+            scroll={scroll as any}
             rowKey={rowKey || "id"}
             columns={columnsResult as any}
             className={`${styles.opration} ${layoutStyles.opration}`}
