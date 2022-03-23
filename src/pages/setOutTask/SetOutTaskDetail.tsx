@@ -70,9 +70,9 @@ const productColumns = [
         dataIndex: 'productNum',
     },
     {
-        key: 'productType',
+        key: 'productTypeName',
         title: '产品类型',
-        dataIndex: 'productType'
+        dataIndex: 'productTypeName'
     },
     {
         key: 'voltageGradeName',
@@ -114,7 +114,7 @@ export default function SetOutTaskDetail(): React.ReactNode {
             {
                 productCategoryName: data.productCategoryName,
                 productNum: data.productNum,
-                productType: data.productType,
+                productTypeName: data.productTypeName,
                 productCategoryNum: data.productCategoryNum,
                 totalWeight: data.totalWeight,
                 loftingAbortTime: data.loftingAbortTime,
