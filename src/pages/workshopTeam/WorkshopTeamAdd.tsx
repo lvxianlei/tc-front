@@ -48,7 +48,6 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                                 ...value,
                                 workshopUserDTOList: users.map((item:any)=>{
                                     return{
-                                        id:item.id,
                                         userId: item.userId
                                     }
                                 })
