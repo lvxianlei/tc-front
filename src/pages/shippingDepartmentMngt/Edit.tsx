@@ -19,10 +19,11 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
 
     const [baseForm] = Form.useForm();
 
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             baseForm.setFieldsValue({
-                ...detailedData
+                ...detailedData,
+                leaderId: detailedData.leaderId + ',' + detailedData.leaderName
             })
             resole(detailedData)
         } catch (error) {
@@ -30,7 +31,7 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
         }
     }), { manual: type === "new", refreshDeps: [detailedData] })
 
-    const { data: userList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data: userList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/employee?size=1000`);
             resole(result?.records)
@@ -53,7 +54,9 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
         try {
             const baseData = await baseForm.validateFields();
             await saveRun({
-                ...baseData
+                ...baseData,
+                leaderId: baseData.leaderId.split(',')[0],
+                leaderName: baseData.leaderId.split(',')[1]
             })
             resolve(true);
         } catch (error) {
@@ -109,7 +112,7 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
                                 }
                                 showSearch>
                                 {userList?.map((item: any) => {
-                                    return <Select.Option key={item.name} value={item.userId}>{item.name}</Select.Option>
+                                    return <Select.Option key={item.name} value={item.userId + ',' + item.name}>{item.name}</Select.Option>
                                 })}
                             </Select>
                         </Form.Item>
@@ -119,7 +122,7 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
             if (item.dataIndex === "description") {
                 return ({
                     ...item, type: 'string',
-                    render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                    render: (_: any): React.ReactNode => (
                         <Form.Item name="description" style={{ width: '100%' }}>
                             <Input.TextArea maxLength={300} placeholder="请输入备注" showCount />
                         </Form.Item>

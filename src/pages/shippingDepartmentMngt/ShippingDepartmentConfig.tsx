@@ -15,6 +15,8 @@ import Edit from "./Edit"
 
 export interface IShipping {
     readonly id?: string;
+    readonly leaderId?: string;
+    readonly leaderName?: string;
 }
 
 export default function ProcessMngt(): React.ReactNode {
