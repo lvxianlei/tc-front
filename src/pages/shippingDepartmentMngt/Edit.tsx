@@ -113,7 +113,7 @@ export default forwardRef(function Edit({ type, detailedData }: EditProps, ref) 
                                 showSearch
                                 allowClear>
                                 {userList?.map((item: any) => {
-                                    return <Select.Option key={item.name} value={item.userId + ',' + item.name}>{item.name}</Select.Option>
+                                    return <Select.Option key={item.userId} value={item.userId + ',' + item.name}>{item.name}</Select.Option>
                                 })}
                             </Select>
                         </Form.Item>
