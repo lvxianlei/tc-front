@@ -15,6 +15,7 @@ export default function ReleaseList(): React.ReactNode {
     const [detailrefresh, setDetailRefresh] = useState<boolean>(false);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [filterValue, setFilterValue] = useState({});
+    const [aFilterValue, setAFilterValue] = useState({});
     const location = useLocation<{ state?: number, userId?: string }>();
     const [ form ] = Form.useForm();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -88,10 +89,10 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'materialStandardName'
         },
         { 
-            key: 'productType',
+            key: 'productTypeName',
             title: '产品类型',
             width: 100,
-            dataIndex: 'productType'
+            dataIndex: 'productTypeName'
         },
         {
             key: 'num',
@@ -294,7 +295,7 @@ export default function ReleaseList(): React.ReactNode {
                         >删除</Button>
                     </Popconfirm> 
                     <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/detail/${record.id}/${record.productCategoryId}`)}}>下达明细</Button>
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/assemblyWelding/${record.productCategoryId}`)}}>组焊明细</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/assemblyWelding/${record.id}/${record.productCategoryId}`)}}>组焊明细</Button>
 
                 </Space>
             )
@@ -304,11 +305,15 @@ export default function ReleaseList(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0]+ ' 00:00:00';
-            value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
+            value.batchUpdateStatusTimeStart = formatDate[0]+ ' 00:00:00';
+            value.batchUpdateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.statusUpdateTime
         }
         setFilterValue(value)
+        return value
+    }
+    const onFilterASubmit = (value: any) => {
+        setAFilterValue(value)
         return value
     }
     return (
@@ -320,6 +325,12 @@ export default function ReleaseList(): React.ReactNode {
             filterValue={filterValue}
             refresh={refresh}
             requestData={ {  size: 10, whether: 1  } }
+            tableProps={{
+                pagination: {
+                    showSizeChanger: false,
+                // showTotal: (total) => `共${total} 条记录`,
+                }
+            }}
             // exportPath="/tower-science/loftingList"
             searchFormItems={[
                 {
@@ -333,9 +344,9 @@ export default function ReleaseList(): React.ReactNode {
                     children:  
                         <Select style={{width:"100px"}} defaultValue={''}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>已下达</Select.Option>
+                            <Select.Option value={1} key={1}>未下达</Select.Option>
                             <Select.Option value={2} key={2}>部分下达</Select.Option>
-                            <Select.Option value={3} key={3}>未下达</Select.Option>
+                            <Select.Option value={3} key={3}>已下达</Select.Option>
                         </Select>
                 },
                 {
@@ -387,8 +398,8 @@ export default function ReleaseList(): React.ReactNode {
         <Page
             path="/tower-science/loftingBatch/batchResult"
             columns={detailColumns}
-            onFilterSubmit={onFilterSubmit}
-            filterValue={filterValue}
+            onFilterSubmit={onFilterASubmit}
+            filterValue={aFilterValue}
             refresh={detailrefresh}
             requestData={ {  size: 10  } }
             exportPath="/tower-science/loftingBatch/batchResult"
@@ -396,6 +407,11 @@ export default function ReleaseList(): React.ReactNode {
             extraOperation={(data: any) => 
                 <Space>总件号数：<span style={{color:'#FF8C00'}}>{data?.totalPieceNumber}</span>总件数：<span style={{color:'#FF8C00'}}>{data?.totalNumber}</span>总重量（kg）：<span style={{color:'#FF8C00'}}>{data?.totalWeight}</span>角钢总重量（kg）：<span style={{color:'#FF8C00'}}>{data?.angleTotalWeight}</span></Space>
             }
+            tableProps={{
+                pagination: {
+                    showSizeChanger: false,
+                }
+            }}
             searchFormItems={[
                 {
                     name: 'fuzzyMsg',

@@ -177,8 +177,8 @@ export default function AssemblyWeldingListing(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent>
                 <Space direction="horizontal" size="small" className={styles.bottomBtn}>
+                    {location.state?.status === 3 || location.state?.status === 4 ? <Button type="primary" onClick={() => downloadTemplate(`/tower-science/welding/downloadSummary?productCategoryId=${params.productCategoryId}`, '组焊清单')} ghost>导出</Button> : null}
                     {location.state?.status === 3 ? <>
-                        <Button type="primary" onClick={() => downloadTemplate(`/tower-science/welding/downloadSummary?productCategoryId=${params.productCategoryId}`, '组焊清单')} ghost>导出</Button>
                         <Button type="primary" onClick={() => downloadTemplate('/tower-science/welding/exportTemplate', '组焊模板')} ghost>模板下载</Button>
                         <Button type="primary" onClick={() => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
                             history.goBack();

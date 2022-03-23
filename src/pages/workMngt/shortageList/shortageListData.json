@@ -24,21 +24,17 @@
             "title": "品名",
             "dataIndex": "materialName",
             "type":"string"
-        },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "updateTime"
-        }, 
+        },     
         {
             "title": "搭配长度（mm）",
             "dataIndex": "length",
             "type":"number"
-        },   
+        } ,   
         {
             "title": "搭配数量",
             "dataIndex": "amount",
             "type":"integer"
-        },    
+        } ,    
         {
             "title": "重量（吨）",
             "dataIndex": "weight",
