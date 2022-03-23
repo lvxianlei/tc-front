@@ -240,16 +240,13 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 }
             }))
         }
-        let isNewComponent: boolean = (componentList || []).every((items: IComponentList) => {
-            return record.structureId !== items.id;
-        })
-        if (isNewComponent) {
+        if ((componentList || []).map(res=> res.id).findIndex((value) => value === record.structureId) === -1) {
             let data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
                 segmentName: form.getFieldsValue(true).segmentName,
                 productCategoryId: params.productCategoryId,
                 segmentId: params.segmentId || ''
             });
-            data.filter(res => { return res.id === record.structureId })
+            data = data.filter(res => { return res.id === record.structureId });
             setComponentList([
                 {
                     ...data[0],
@@ -492,6 +489,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     position: 'relative',
                     left: '42%'
                 }}
+                rowKey="structureId"
                 dataSource={[...(weldingDetailedStructureList || [])]}
                 pagination={false}
             />
