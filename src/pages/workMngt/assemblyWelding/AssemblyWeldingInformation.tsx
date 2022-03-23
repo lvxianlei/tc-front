@@ -86,7 +86,7 @@ const productColumns = [
         "title": "杆塔（基）"
     },
     {
-        "dataIndex": "productType",
+        "dataIndex": "productTypeName",
         "title": "产品类型"
     },
     {

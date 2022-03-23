@@ -89,10 +89,10 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'materialStandardName'
         },
         { 
-            key: 'productType',
+            key: 'productTypeName',
             title: '产品类型',
             width: 100,
-            dataIndex: 'productType'
+            dataIndex: 'productTypeName'
         },
         {
             key: 'num',
@@ -355,7 +355,7 @@ export default function ReleaseList(): React.ReactNode {
                     children:  <Select style={{width:"100px"}} defaultValue={''}>
                                     <Select.Option value={''} key ={''}>全部</Select.Option>
                                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                        return <Select.Option key={index} value={name}>
+                                        return <Select.Option key={index} value={id}>
                                             {name}
                                         </Select.Option>
                                     })}
