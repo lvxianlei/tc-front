@@ -57,7 +57,7 @@ export default function ContractMngt() {
     const handleAddOk = () => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit()
-            message.success("询比价保存成功...")
+            message.success("报价添加成功...")
             setVisible(false)
             resove(true)
             history.go(0)
