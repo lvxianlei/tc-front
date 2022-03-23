@@ -90,7 +90,7 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                         pattern: /^[^\s]*$/,
                         message: '禁止输入空格',
                     }]}>
-                        <Input maxLength={40}/>
+                        <Input maxLength={20}/>
                     </Form.Item>
                     <Form.Item name="classPresidentId" label="班长">
                         <Select placeholder="请选择" showSearch filterOption={(input:string, option:any) =>
