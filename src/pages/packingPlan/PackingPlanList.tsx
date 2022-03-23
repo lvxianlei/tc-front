@@ -125,13 +125,13 @@ export default function DailySchedule(): React.ReactNode {
                 record.status === 1
                     ? '派工'
                     : record.status === 4
-                        ? { _ }
+                        ? <>{_ || '/'}</>
                         : <Button type="link" onClick={() => {
                             setTitle('角钢包装班组');
                             setVisible(true);
                             setDetailData(record);
                             setTeamId(record.angleTeamId);
-                        }}>{_ || '派工'}</Button>
+                        }}>{record.angleTeamId === '0' ? '/': _ || '派工'}</Button>
             )
         },
         {
@@ -143,13 +143,13 @@ export default function DailySchedule(): React.ReactNode {
                 record.status === 1
                     ? '派工'
                     : record.status === 4
-                        ? { _ }
+                        ? <>{_ || '/'}</>
                         : <Button type="link" onClick={() => {
                             setTitle('连板包装班组');
                             setVisible(true);
                             setDetailData(record);
                             setTeamId(record.boardTeamId);
-                        }}>{_ || '派工'}</Button>
+                        }}>{record.boardTeamId === '0' ? '/': _ || '派工'}</Button>
             )
         },
         {
@@ -161,7 +161,7 @@ export default function DailySchedule(): React.ReactNode {
                 record.status === 1
                     ? '派工'
                     : record.status === 4
-                        ? { _ }
+                        ? <>{_ || '/'}</>
                         : <Button type="link" onClick={() => {
                             setTitle('钢管包装班组');
                             setVisible(true);
