@@ -15,6 +15,7 @@ export default function ReleaseList(): React.ReactNode {
     const [detailrefresh, setDetailRefresh] = useState<boolean>(false);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [filterValue, setFilterValue] = useState({});
+    const [aFilterValue, setAFilterValue] = useState({});
     const location = useLocation<{ state?: number, userId?: string }>();
     const [ form ] = Form.useForm();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -312,7 +313,7 @@ export default function ReleaseList(): React.ReactNode {
         return value
     }
     const onFilterASubmit = (value: any) => {
-        setFilterValue(value)
+        setAFilterValue(value)
         return value
     }
     return (
@@ -398,7 +399,7 @@ export default function ReleaseList(): React.ReactNode {
             path="/tower-science/loftingBatch/batchResult"
             columns={detailColumns}
             onFilterSubmit={onFilterASubmit}
-            filterValue={filterValue}
+            filterValue={aFilterValue}
             refresh={detailrefresh}
             requestData={ {  size: 10  } }
             exportPath="/tower-science/loftingBatch/batchResult"
