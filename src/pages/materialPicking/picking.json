@@ -191,14 +191,6 @@
                 {
                     "title": "所属车间",
                     "dataIndex": "workshopDeptName"
-                },
-                {
-                    "title": "工序",
-                    "dataIndex": "deptProcessesName"
-                },
-                {
-                    "title": "设备所属产线",
-                    "dataIndex": "productionLinesName"
                 }
             ]
         },
