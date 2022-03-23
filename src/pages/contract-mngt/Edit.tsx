@@ -311,7 +311,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     num,
                     taxPrice,
                     price,
-                    width: formatSpec(item.structureSpec).width,
+                    // 之前从规格拿宽度，后续添加了width字段
+                    // width: formatSpec(item.structureSpec).width,
                     materialTexture: name,
                     materialTextureId: id,
                     // length: formatSpec(item.structureSpec).length,
@@ -337,6 +338,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     ...item,
                     taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),
                     totalAmount: (allData.num * allData.price * allData.weight).toFixed(2),
+                    totalWeight: (allData.num * allData.weight).toFixed(3),
                     [dataIndex]: value
                 })
             }
