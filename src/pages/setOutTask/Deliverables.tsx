@@ -36,7 +36,7 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
             visible: true
         })
     }
-        
+
 
     /**
     * @description Renders AbstractDetailComponent
@@ -77,51 +77,62 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
             }
         ]
 
-        const data = [{
-            name: '提料塔型构件明细汇总.xls',
-            use: '提料塔型构件明细汇总',
-            path: '/tower-science/productCategory/material/productCategoryStructure/download?materialTaskId='
-        }, {
-            name: '提料杆塔构件明细汇总.xls',
-            use: '提料杆塔构件明细汇总',
-            path: '/tower-science/productCategory/material/productStructure/download?materialTaskId='
-        }, {
-            name: '放样塔型构件明细汇总.xls',
-            use: '放样塔型构件明细汇总',
-            path: '/tower-science/productStructure/productCategory/exportByTaskId?loftingTaskId='
-        }, {
-            name: '放样杆塔构件明细汇总.xls',
-            use: '放样杆塔构件明细汇总',
-            path: '/tower-science/productStructure/product/exportByTaskId?loftingTaskId='
-        }, {
-            name: '包装清单汇总.xls',
-            use: '包装清单汇总',
-            path: '/tower-science/packageStructure/exportByTaskId?loftingTaskId='
-        }, {
-            name: '塔型图纸汇总.zip',
-            use: '塔型图纸汇总',
-            requestType: 'zip',
-            path: '/tower-science/productCategory/summaryByTaskId?loftingId=',
-        }, {
-            name: '组焊清单汇总.xls',
-            use: '组焊清单汇总',
-            path: '/tower-science/welding/summaryByTaskId?loftingId=',
-        }, {
-            name: '小样图汇总.zip',
-            use: '小样图汇总',
-            path: '/tower-science/smallSample/downloadTask/',
-            requestType: 'zip'
-        }, {
-            name: '螺栓清单汇总.xls',
-            use: '螺栓清单汇总',
-            path: '/tower-science/boltRecord/downloadSummaryTask?loftTasking=',
-        
-        }, {
-            name: 'NC程序汇总.zip',
-            use: 'NC程序汇总',
-            path: '/tower-science/productNc/summaryByTaskId?loftingId=',
-            requestType: 'zip'
-        }]
+        const data = [
+            // {
+            //     name: '提料塔型构件明细汇总.xls',
+            //     use: '提料塔型构件明细汇总',
+            //     path: '/tower-science/productCategory/material/productCategoryStructure/download?materialTaskId='
+            // },
+            // {
+            //     name: '提料杆塔构件明细汇总.xls',
+            //     use: '提料杆塔构件明细汇总',
+            //     path: '/tower-science/productCategory/material/productStructure/download?materialTaskId='
+            // },
+            {
+                name: '放样塔型构件明细汇总.xls',
+                use: '放样塔型构件明细汇总',
+                path: '/tower-science/productStructure/productCategory/exportByTaskId?loftingTaskId='
+            },
+            {
+                name: '放样杆塔构件明细汇总.xls',
+                use: '放样杆塔构件明细汇总',
+                path: '/tower-science/productStructure/product/exportByTaskId?loftingTaskId='
+            },
+            {
+                name: '包装清单汇总.xls',
+                use: '包装清单汇总',
+                path: '/tower-science/packageStructure/exportByTaskId?loftingTaskId='
+            },
+            {
+                name: '塔型图纸汇总.zip',
+                use: '塔型图纸汇总',
+                requestType: 'zip',
+                path: '/tower-science/productCategory/summaryByTaskId?loftingId=',
+            },
+            {
+                name: '组焊清单汇总.xls',
+                use: '组焊清单汇总',
+                path: '/tower-science/welding/summaryByTaskId?loftingId=',
+            },
+            {
+                name: '小样图汇总.zip',
+                use: '小样图汇总',
+                path: '/tower-science/smallSample/downloadTask/',
+                requestType: 'zip'
+            },
+            {
+                name: '螺栓清单汇总.xls',
+                use: '螺栓清单汇总',
+                path: '/tower-science/boltRecord/downloadSummaryTask?loftTasking=',
+
+            },
+            {
+                name: 'NC程序汇总.zip',
+                use: 'NC程序汇总',
+                path: '/tower-science/productNc/summaryByTaskId?loftingId=',
+                requestType: 'zip'
+            }
+        ]
 
         return <div>
             <Button type="link" onClick={() => this.modalShow()}>交付物</Button>

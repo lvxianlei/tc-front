@@ -57,10 +57,10 @@ export default function AssemblyWeldingList(): React.ReactNode {
             width: 120
         },
         {
-            key: 'productType',
+            key: 'productCategory',
             title: '塔型',
             width: 200,
-            dataIndex: 'productType'
+            dataIndex: 'productCategory'
         },
         {
             key: 'plannedDeliveryTime',

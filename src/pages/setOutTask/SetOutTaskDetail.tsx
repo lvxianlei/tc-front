@@ -70,9 +70,14 @@ const productColumns = [
         dataIndex: 'productNum',
     },
     {
-        key: 'productType',
+        key: 'productTypeName',
         title: '产品类型',
-        dataIndex: 'productType'
+        dataIndex: 'productTypeName'
+    },
+    {
+        key: 'voltageGradeName',
+        title: '电压等级',
+        dataIndex: 'voltageGradeName'
     },
     // {
     //     key: 'loftingAbortTime',
@@ -109,12 +114,13 @@ export default function SetOutTaskDetail(): React.ReactNode {
             {
                 productCategoryName: data.productCategoryName,
                 productNum: data.productNum,
-                productType: data.productType,
+                productTypeName: data.productTypeName,
                 productCategoryNum: data.productCategoryNum,
                 totalWeight: data.totalWeight,
                 loftingAbortTime: data.loftingAbortTime,
                 materialAbortTime: data.materialAbortTime,
-                description: data.description
+                description: data.description,
+                voltageGradeName: data.voltageGradeName
             },
         ])
         resole(data)

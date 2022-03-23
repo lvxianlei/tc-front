@@ -64,11 +64,14 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-system/notice/getNoticeById/${params.id}`)
-        resole(data)
+        const data = await RequestUtil.get<any>(`/tower-system/notice/getNoticeById/${params.id}`)
+        resole({
+            ...data,
+            userNames: data?.staffList?.map((item: any) => { return item.userName }).join(',')
+        })
     }), {})
     const detailData: any = data;
-    
+
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
@@ -83,7 +86,7 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
         ]}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseColums} dataSource={detailData} col={2} />
-            <Attachment dataSource={ detailData.attachInfoVos }/>
+            <Attachment dataSource={detailData.attachInfoVos} />
             <DetailTitle title="操作信息" />
             <CommonTable columns={tableColumns} dataSource={detailData.businessRecordVos} pagination={false} />
         </DetailContent>

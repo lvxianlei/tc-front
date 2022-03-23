@@ -156,6 +156,7 @@ export default forwardRef(function AddModal({}: EditProps, ref) {
             setColumns(result);
             resolve(true)
         } catch (error) {
+            console.log(error, "=========")
             reject(false)
         }
     })
