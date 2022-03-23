@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import AliTable from './AliTable'
-import { FormInstance, message, Row, Button, Form } from "antd"
+import { FormInstance, message, Row, Button, Form, Space } from "antd"
 import FormItemType from './FormItemType'
 interface EditableTableProps {
     columns: any[]
@@ -91,7 +91,7 @@ export default function EditableTable({
         form={form}
         onValuesChange={onFormChange}
     >
-        <Row>{haveNewButton && <Button
+        <Space size={16} style={{ height: 32, margin: "0 16px 16px 0" }}>{haveNewButton && <Button
             onClick={async () => {
                 try {
                     form && await form.validateFields();
@@ -103,10 +103,9 @@ export default function EditableTable({
                 }
             }}
             type="primary"
-            style={{ height: 32, margin: "0 16px 16px 0" }}>{newButtonTitle}</Button>
-        }
+        >{newButtonTitle}</Button>}
             {opration}
-        </Row>
+        </Space>
         <AliTable
             size="small"
             primaryKey="id"

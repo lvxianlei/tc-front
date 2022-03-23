@@ -1,21 +1,45 @@
 import React, { Key, useState } from "react"
-import { Button, DatePicker, Input, message, Select } from "antd"
+import { Link } from "react-router-dom"
+import { Button, DatePicker, Input, Radio, Select } from "antd"
 import { Page } from "../../common"
-import { pageTable } from "./data.json"
+import { pageTable, workShopOrder } from "./data.json"
+
 export default () => {
-    const [filterValue, setFilterValue] = useState({});
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({});
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
     const onSelectChange = (selected: Key[]) => setSelectedRowKeys(selected)
+    const [status, setStatus] = useState<number>(1)
+    const [refresh, setRefresh] = useState<boolean>(false)
+
     return <Page
-        path="/tower-aps/productionLink"
-        columns={pageTable}
-        extraOperation={[
-            <Button type="primary" onClick={() => {
-                selectedRowKeys.length <= 0 && message.warning("请勾选下达单号")
-            }}>设置/变更计划交货期</Button>,
-            <Button type="primary">拆分批次</Button>,
-            <Button type="primary">下发技术</Button>
-        ]}
+        // path="/tower-aps/workshopOrder"
+        path="/tower-aps/productionPlan"
+        refresh={refresh}
+        columns={status === 1 ? pageTable : [...workShopOrder, {
+            title: "操作",
+            width: 100,
+            fixed: "right",
+            dataIndex: "opration",
+            render: (_, record: any) => <Link
+                to={`/planSchedule/publishWorkshop/${record.id}`}
+            ><Button type="link">手动分配车间</Button></Link>
+        }]}
+        extraOperation={
+            <>
+                <Radio.Group
+                    value={status}
+                    onChange={(event) => {
+                        setStatus(event.target.value)
+                        setFilterValue({ ...filterValue, status: event.target.value })
+                        setRefresh(true)
+                    }}
+                >
+                    <Radio.Button value={1}>待分配下达单</Radio.Button>
+                    <Radio.Button value={2}>已分配下达单</Radio.Button>
+                </Radio.Group>
+                {status === 1 && <Button type="primary">自动分配车间</Button>}
+            </>
+        }
         searchFormItems={[
             {
                 name: 'pleasePayStatus',
@@ -39,13 +63,13 @@ export default () => {
                 children: <Input placeholder="计划号/塔型/下达单号" style={{ width: 300 }} />
             }
         ]}
-        tableProps={{
+        filterValue={filterValue}
+        tableProps={status === 1 ? {
             rowSelection: {
-                selectedRowKeys,
+                selectedRowKeys: selectedRowKeys,
                 onChange: onSelectChange
             }
-        }}
-        filterValue={filterValue}
+        } : {}}
         onFilterSubmit={(values: Record<string, any>) => {
             if (values.time) {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))

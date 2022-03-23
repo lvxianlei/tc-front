@@ -1670,35 +1670,6 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { // 计划排产-下发技术
-      "name": "下发技术",
-      "path": "/planSchedule/publishTech",
-      "module": "./pages/planBaseSetting/publishTech/index",
-      "exact": true,
-      "authority": "approvalm"
-    },
-    { // 计划排产-下发技术-设置/变更计划交货期
-      "name": "设置/变更计划交货期",
-      "path": "/planSchedule/publishTech/settingPlanTime",
-      "module": "./pages/planBaseSetting/publishTech/settingPlanTime",
-      "exact": true,
-      "authority": "approvalm"
-    },
-    { // 计划排产-下发技术-拆分批次
-      "name": "拆分批次",
-      "path": "/planSchedule/publishTech/splitBatch",
-      "module": "./pages/planBaseSetting/publishTech/splitBatch",
-      "exact": true,
-      "authority": "approvalm"
-    },
-    { // 计划排产-下发技术-下发技术
-      "name": "拆分批次",
-      "path": "/planSchedule/publishTech/distributedTech",
-      "module": "./pages/planBaseSetting/publishTech/distributedTech",
-      "exact": true,
-      "authority": "approvalm"
-    },
-
     { // 计划排产-分配车间
       "name": "分配车间",
       "path": "/planSchedule/publishWorkshop",
@@ -1706,7 +1677,13 @@
       "exact": true,
       "authority": "approvalm"
     },
-
+    { // 计划排产-分配车间
+      "name": "手动分配车间",
+      "path": "/planSchedule/publishWorkshop/:id",
+      "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 包装车间-加工任务面板
       "name": "包装计划列表",
       "path": "/packagingWorkshop/processingTask",
