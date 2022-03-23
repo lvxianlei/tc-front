@@ -14,7 +14,7 @@ export default function WorkshopTeamAdd(): React.ReactNode {
     const history = useHistory();
     const [dataDTO, setDataDTO] = useState({});
     const [user, setUser] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<any[]>([]);
     const params = useParams<{ id: string }>();
     const [form] = Form.useForm();
     const formItemLayout = {
@@ -35,10 +35,8 @@ export default function WorkshopTeamAdd(): React.ReactNode {
             }
         }))
         setDataDTO(detailData)
-        resole(data?.records.filter((item:any)=>{
-            // return item.deptName==='成品包装车间'
-            return item
-        }));
+        setUser(data?.records)
+        resole(data?.records);
     }), {})
 
    
@@ -98,7 +96,7 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                         <Select placeholder="请选择" showSearch filterOption={(input:string, option:any) =>
                             option?.children.indexOf(input) >= 0
                         }>
-                            {data?.map((item: any) => {
+                            {user?.map((item: any) => {
                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                             })}
                         </Select>
@@ -108,8 +106,16 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                     </Form.Item>
                     <Form.Item name="workshopUserDTOList" label="组员">
                         <UserModal onSelect={(selectedRows:any)=>{
-                            console.log(selectedRows)
-                            setUsers(selectedRows)
+                            const c = users.concat(selectedRows)
+                            const temp:any = {}//用于id判断重复
+                            const result: any[] = [];//最后的新数组
+                            c.map((item:any,index:number)=>{
+                                if(!temp[item.id]){
+                                    result.push(item);
+                                    temp[item.id] = true
+                                }
+                            })
+                            setUsers(result)
                         }} buttonType='link' rowSelectionType='checkbox' selectKey={users.map((item:any)=>{
                             return item.userId
                         })}/>
