@@ -697,48 +697,48 @@
                     }
                 ]
             },
-            {
-                "label": "包装计划",
-                "icon": "technology",
-                "path": "/packingPlan",
-                "appName": "MC",
-                "authority": "approvalm",
-                "items": [
-                    {
-                        "label": "包装计划列表",
-                        "path": "/packingPlan/packingPlanList",
-                        "authority": "approvalm"
-                    }
-                ]
-            },
-            {
-                "label": "班组管理",
-                "icon": "technology",
-                "path": "/workshopTeam",
-                "appName": "MC",
-                "authority": "approvalm",
-                "items": [
-                    {
-                        "label": "班组列表",
-                        "path": "/workshopTeam/workshopTeamList",
-                        "authority": "approvalm"
-                    }
-                ]
-            },
-            {
-                "label": "成品库管理",
-                "icon": "technology",
-                "path": "/shippingDepartmentMngt",
-                "appName": "MC",
-                "authority": "approvalm",
-                "items": [
-                    {
-                        "label": "成品库配置",
-                        "path": "/shippingDepartmentMngt/shippingDepartmentConfig",
-                        "authority": "approvalm"
-                    }
-                ]
-            },
+            // {
+            //     "label": "包装计划",
+            //     "icon": "technology",
+            //     "path": "/packingPlan",
+            //     "appName": "MC",
+            //     "authority": "approvalm",
+            //     "items": [
+            //         {
+            //             "label": "包装计划列表",
+            //             "path": "/packingPlan/packingPlanList",
+            //             "authority": "approvalm"
+            //         }
+            //     ]
+            // },
+            // {
+            //     "label": "班组管理",
+            //     "icon": "technology",
+            //     "path": "/workshopTeam",
+            //     "appName": "MC",
+            //     "authority": "approvalm",
+            //     "items": [
+            //         {
+            //             "label": "班组列表",
+            //             "path": "/workshopTeam/workshopTeamList",
+            //             "authority": "approvalm"
+            //         }
+            //     ]
+            // },
+            // {
+            //     "label": "成品库管理",
+            //     "icon": "technology",
+            //     "path": "/shippingDepartmentMngt",
+            //     "appName": "MC",
+            //     "authority": "approvalm",
+            //     "items": [
+            //         {
+            //             "label": "成品库配置",
+            //             "path": "/shippingDepartmentMngt/shippingDepartmentConfig",
+            //             "authority": "approvalm"
+            //         }
+            //     ]
+            // },
             {
                 "label": "配置管理",
                 "icon": "gongying-peizhiguanli_peizhiguanli1",
