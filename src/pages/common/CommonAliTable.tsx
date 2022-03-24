@@ -5,7 +5,7 @@ import "./CommonTable.module.less"
 import moment from "moment"
 import AliTable from "./AliTable"
 import { useTablePipeline, features } from "ali-react-table"
-const { Paragraph } = Typography
+const { Text } = Typography
 export type ColumnsItemsType = "string" | "text" | "date" | "popTable" | "select" | "number" | undefined
 export interface columnsProps {
     title: string,
@@ -28,10 +28,11 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
-                render: (text: string) => <Paragraph
+                render: (text: string) => <Text
+                    style={{ width: "100%" }}
                     ellipsis={{
-                        rows: 1
-                    }}>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</Paragraph>,
+                        tooltip: text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"
+                    }}>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</Text>,
                 ...data
             })
         case "select":
@@ -39,11 +40,12 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
-                render: (text: string | number) => <Paragraph
+                render: (text: string | number) => <Text
+                    style={{ width: "100%" }}
                     ellipsis={{
-                        rows: 1
+                        tooltip: ((text || text === 0) && data.enum) ? data.enum?.find((item: EnumObject) => item.value === text)?.label : text
                     }}
-                >{((text || text === 0) && data.enum) ? data.enum?.find((item: EnumObject) => item.value === text)?.label : text}</Paragraph>,
+                >{((text || text === 0) && data.enum) ? data.enum?.find((item: EnumObject) => item.value === text)?.label : text}</Text>,
                 ...data
             })
         case "number":
@@ -51,10 +53,11 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
-                render: (text: number) => <Paragraph
+                render: (text: number) => <Text
+                    style={{ width: "100%" }}
                     ellipsis={{
-                        rows: 1
-                    }}>{text && !["-1", -1].includes(text) ? text : 0}</Paragraph>,
+                        tooltip: text && !["-1", -1].includes(text) ? text : 0
+                    }}>{text && !["-1", -1].includes(text) ? text : 0}</Text>,
                 ...data
             })
         case "string":
@@ -62,10 +65,11 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
-                render: data.render || ((text: number) => <Paragraph
+                render: data.render || ((text: number) => <Text
+                    style={{ width: "100%" }}
                     ellipsis={{
-                        rows: 1
-                    }}>{text && !["-1", -1].includes(text) ? text : "-"}</Paragraph>),
+                        tooltip: text && !["-1", -1].includes(text) ? text : "-"
+                    }}>{text && !["-1", -1].includes(text) ? text : "-"}</Text>),
                 ...data
             })
         default:
@@ -73,8 +77,9 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
-                render: data.render || ((text: number) => <Paragraph
-                    ellipsis={{ rows: 1 }}>{text && !["-1", -1].includes(text) ? text : "-"}</Paragraph>),
+                render: data.render || ((text: number) => <Text
+                    style={{ width: "100%" }}
+                    ellipsis={{ tooltip: text && !["-1", -1].includes(text) ? text : "-" }}>{text && !["-1", -1].includes(text) ? text : "-"}</Text>),
                 ...data
             })
     }
@@ -108,7 +113,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
             handleHoverBackground: '#ccc',
             handleActiveBackground: '#ccc',
         }));
-    props?.tableProps?.rowSelection?.type === "checkbox" &&  pipeline.use(features.multiSelect({
+    props?.tableProps?.rowSelection &&  pipeline.use(features.multiSelect({
         value: props?.tableProps?.rowSelection?.selectedRowKeys || [],
         onChange: props?.tableProps?.rowSelection?.onChange,
         isDisabled: props?.tableProps?.rowSelection?.getCheckboxProps
