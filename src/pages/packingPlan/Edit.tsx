@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Radio, message } from 'antd'
+import { Spin, Radio, message, TablePaginationConfig } from 'antd'
 import { BaseInfo, CommonTable, DetailTitle } from '../common'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -25,17 +25,28 @@ export default forwardRef(function Edit({ detailData, title, teamId }: EditProps
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState([]);
     const [checked, setChecked] = useState<boolean>(false);
+    const [workshopTeam, setWorkshopTeam] = useState<IResponseData>();
+    const page = {
+        current: 1,
+        pageSize: 10
+    };
 
-    const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+    const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: IResponseData = await RequestUtil.get(`/tower-production/workshopTeam?size=1000`);
+            // const result: IResponseData = await RequestUtil.get(`/tower-production/workshopTeam`, {...page});
+            getTableDataSource(page)
             setChecked(teamId && teamId === '0' ? true : false);
             setSelectedRowKeys([teamId])
-            resole(result?.records)
+            resole({})
         } catch (error) {
             reject(error)
         }
     }), { refreshDeps: [detailData, title, teamId] })
+
+    const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<IResponseData>(`/tower-production/workshopTeam`, { ...pagination });
+        setWorkshopTeam(data);
+    });
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
@@ -130,8 +141,16 @@ export default forwardRef(function Edit({ detailData, title, teamId }: EditProps
         <DetailTitle title="选择班组" />
         <CommonTable
             columns={tableColumns}
-            pagination={false}
-            dataSource={data}
+            dataSource={workshopTeam?.records}
+            pagination={{
+                current: workshopTeam?.current || 0,
+                pageSize: workshopTeam?.size || 0,
+                total: workshopTeam?.total || 0,
+                showSizeChanger: false
+            }}
+            onChange={(pagination: TablePaginationConfig) => {
+                getTableDataSource(pagination);
+            }}
             rowSelection={{
                 selectedRowKeys: selectedRowKeys,
                 type: 'radio',
@@ -160,6 +179,6 @@ export default forwardRef(function Edit({ detailData, title, teamId }: EditProps
         >
             无需派工
         </Radio>
-        <span>当前未指派任何班组，无法选择，其他班组派工后可选此项</span>
+        {[!detailData.angleTeamName, !detailData.boardTeamName, !detailData.pipeTeamName].findIndex(res => res === false) === -1 ? <span>当前未指派任何班组，无法选择，其他班组派工后可选此项</span> : null}
     </Spin>
 })
