@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-杆塔配段-包装清单-添加
 */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Space, Button, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions, Modal, Select } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -14,6 +14,7 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { packageTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IBundle, IPackingList } from './ISetOut';
+import ReuseTower, { EditProps } from './ReuseTower';
 
 export default function PackingListNew(): React.ReactNode {
     const history = useHistory();
@@ -37,6 +38,7 @@ export default function PackingListNew(): React.ReactNode {
     const [removeRow, setRemoveRow] = useState<IBundle[]>([]);
     const [selectWeight, setSelectWeight] = useState<number>(0);
     const [maxNum, setMaxNum] = useState<number>(0);
+    const editRef = useRef<EditProps>();
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if (!location.state) {
@@ -555,7 +557,34 @@ export default function PackingListNew(): React.ReactNode {
         </Spin>
     }
 
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            const selectKeys = await editRef.current?.onSubmit()
+            console.log(selectKeys);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
     return <>
+    <Modal
+            destroyOnClose
+            visible={false}
+            title="复用杆塔"
+            footer={<Space>
+                <Button key="back" onClick={() => {
+                }}>
+                    取消
+                </Button>
+                <Button type='primary' onClick={handleModalOk} ghost>保存</Button>
+            </Space>}
+            className={styles.tryAssemble}
+            onCancel={() => {
+                
+            }}>
+            <ReuseTower id={'1'} ref={editRef}/>
+        </Modal>
         <Modal visible={removeVisible} title="移除" okText="确认" onCancel={() => { setRemoveNum(0); setRemoveVisible(false); }} onOk={() => remove(removeList, removeIndex, removeNum)}>
             <Row>
                 <Col>数量</Col>

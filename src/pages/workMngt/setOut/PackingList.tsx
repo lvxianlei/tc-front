@@ -25,9 +25,15 @@ export default function PackingList(): React.ReactNode {
             fixed: 'left' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
+        // {
+        //     key: 'balesCode',
+        //     title: '捆号',
+        //     width: 150,
+        //     dataIndex: 'balesCode'
+        // },
         {
             key: 'balesCode',
-            title: '捆号',
+            title: '包号',
             width: 150,
             dataIndex: 'balesCode'
         },
@@ -44,14 +50,26 @@ export default function PackingList(): React.ReactNode {
             dataIndex: 'packageAttributeName'
         },
         {
-            key: 'balesCount',
-            title: '捆件数',
-            dataIndex: 'balesCount',
-            width: 120
+            key: 'packageAttributeName',
+            title: '包件号数（个）',
+            width: 150,
+            dataIndex: 'packageAttributeName'
         },
         {
+            key: 'packageAttributeName',
+            title: '包件数（个）',
+            width: 150,
+            dataIndex: 'packageAttributeName'
+        },
+        // {
+        //     key: 'balesCount',
+        //     title: '捆件数',
+        //     dataIndex: 'balesCount',
+        //     width: 120
+        // },
+        {
             key: 'weightCount',
-            title: '包重量（吨）',
+            title: '包重量（kg）',
             dataIndex: 'weightCount',
             width: 120
         },
@@ -61,9 +79,27 @@ export default function PackingList(): React.ReactNode {
             width: 200,
             dataIndex: 'createUserName'
         },
+        // {
+        //     key: 'createTime',
+        //     title: '创建时间',
+        //     width: 200,
+        //     dataIndex: 'createTime'
+        // },
         {
             key: 'createTime',
-            title: '创建时间',
+            title: '包说明',
+            width: 200,
+            dataIndex: 'createTime'
+        },
+        {
+            key: 'createTime',
+            title: '包段落',
+            width: 200,
+            dataIndex: 'createTime'
+        },
+        {
+            key: 'createTime',
+            title: '现场打包',
             width: 200,
             dataIndex: 'createTime'
         },
@@ -108,6 +144,36 @@ export default function PackingList(): React.ReactNode {
             dataIndex: 'pieceCode'
         },
         {
+            key: 'pieceCode',
+            title: '包装数量',
+            width: 150,
+            dataIndex: 'pieceCode'
+        },
+        {
+            key: 'pieceCode',
+            title: '单件重量（kg）',
+            width: 150,
+            dataIndex: 'pieceCode'
+        },
+        {
+            key: 'pieceCode',
+            title: '包装重量（kg）',
+            width: 150,
+            dataIndex: 'pieceCode'
+        },
+        {
+            key: 'materialSpec',
+            title: '材料',
+            dataIndex: 'materialSpec',
+            width: 120
+        },
+        {
+            key: 'materialSpec',
+            title: '材质',
+            dataIndex: 'materialSpec',
+            width: 120
+        },
+        {
             key: 'materialSpec',
             title: '材料规格',
             dataIndex: 'materialSpec',
@@ -115,15 +181,57 @@ export default function PackingList(): React.ReactNode {
         },
         {
             key: 'length',
-            title: '长度',
+            title: '长度（mm）',
+            dataIndex: 'length',
+            width: 120
+        },
+        {
+            key: 'length',
+            title: '宽度（mm）',
+            dataIndex: 'length',
+            width: 120
+        },
+        {
+            key: 'length',
+            title: '厚度（mm）',
             dataIndex: 'length',
             width: 120
         },
         {
             key: 'num',
-            title: '数量',
+            title: '电焊',
             width: 200,
             dataIndex: 'num'
+        },
+        {
+            key: 'length',
+            title: '火曲',
+            dataIndex: 'length',
+            width: 120
+        },
+        {
+            key: 'length',
+            title: '铲背',
+            dataIndex: 'length',
+            width: 120
+        },
+        {
+            key: 'length',
+            title: '清根',
+            dataIndex: 'length',
+            width: 120
+        },
+        {
+            key: 'length',
+            title: '打扁',
+            dataIndex: 'length',
+            width: 120
+        },
+        {
+            key: 'length',
+            title: '切角',
+            dataIndex: 'length',
+            width: 120
         },
         {
             key: 'description',
@@ -167,13 +275,17 @@ export default function PackingList(): React.ReactNode {
         <Space direction="horizontal" size="small" className={styles?.topcontent}>
             <span>塔型：{detailData?.productCategoryName}</span>
             <span>杆号：{detailData?.productNumber}</span>
-            <span>捆数: {detailData?.packageStructureCount}</span>
+            <span>已打包捆数: {detailData?.packageStructureCount}</span>
+            <span>总件数: { }</span>
+            <span>未打包件数: { }</span>
         </Space>
         <Space direction="horizontal" size="small" className={`${styles.padding16} ${styles.btnRight}`}>
             <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
             {
                 location?.state?.status === 4 ?
                     null : <>
+                        <Button type="primary" ghost onClick={() => { }}>套用包</Button>
+                        <Button type="primary" ghost>自动打包</Button>
                         <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListNew`, state: { productCategoryName: detailData?.productCategoryName, productNumber: detailData?.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
                         <Popconfirm
                             title="确认完成?"
