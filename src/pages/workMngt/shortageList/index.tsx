@@ -27,16 +27,17 @@ export default function Invoicing() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.updateStartTime) {
-            const formatDate = value.updateStartTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStartTime = formatDate[0]
-            value.updateEndTime = formatDate[1]
+        if (value.startRefundTime) {
+            const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateStartTime = `${formatDate[0]} 00:00:00`
+            value.updateEndTime = `${formatDate[1]} 23:59:59`
+            delete value.startRefundTime
         }
         if (value.handlerId) {
             // value.handlerDept = value.handlerId.first
             value.handlerId = value.handlerId.second
         }
-        setFilterValue({ ...filterValue, ...value })
+        // setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -75,7 +76,7 @@ export default function Invoicing() {
         }}>
             <Form form={form}>
                 <Form.Item rules={[{ required: true, message: "请填写取消原因..." }]} label="取消原因"
-                    name="reason"><Input.TextArea /></Form.Item>
+                   name="reason"><Input.TextArea maxLength={400}/></Form.Item>
             </Form>
         </Modal>
         <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>
@@ -137,7 +138,7 @@ export default function Invoicing() {
             }}
             searchFormItems={[
                 {
-                    name: 'updateStartTime',
+                    name: 'startRefundTime',
                     label: '最新状态变更时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },

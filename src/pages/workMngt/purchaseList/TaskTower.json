@@ -17,12 +17,16 @@
             "dataIndex": "length"
         },
         {
-            "title": "汇总重量(吨)",
-            "dataIndex": "weight"
+            "title": "单重(kg)",
+            "dataIndex": "singleWeight"
         },
         {
             "title": "汇总数量",
             "dataIndex": "collocationNum"
+        },
+        {
+            "title": "汇总重量(kg)",
+            "dataIndex": "weight"
         }
     ]
 }
