@@ -95,9 +95,9 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                             const temp:any = {}//用于id判断重复
                             const result:any[] = [];//最后的新数组
                             c.map((item:any,index:number)=>{
-                                if(!temp[item.id]){
+                                if(!temp[item.userId]){
                                     result.push(item);
-                                    temp[item.id] = true
+                                    temp[item.userId] = true
                                 }
                             })
                             setUsers(result)
