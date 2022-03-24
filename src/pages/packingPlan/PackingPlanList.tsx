@@ -313,7 +313,7 @@ export default function DailySchedule(): React.ReactNode {
                     values.packageEndTime = formatDate[1] + ' 23:59:59';
                 }
                 if (values?.finishiTtime) {
-                    const formatDate = values?.time?.map((item: any) => item.format("YYYY-MM-DD"));
+                    const formatDate = values?.finishiTtime?.map((item: any) => item.format("YYYY-MM-DD"));
                     values.completedStartTime = formatDate[0] + ' 00:00:00';
                     values.completedEndTime = formatDate[1] + ' 23:59:59';
                 }

@@ -87,9 +87,15 @@ import { TreeNode } from 'antd/lib/tree-select';
                 selectedRowKeys: this.state.selectedRowKeys,
                 onChange: this.onSelectChange
             },
-
+            pagination: {
+                ...this.state.tablePagination
+            },
+            onChange:  this.onTableChange 
          }
      }
+     public onTableChange = (pagination: TablePaginationConfig): void => {
+        this.getTable({ ...this.getForm()?.getFieldsValue(true) }, pagination);
+    }
  
      public onSelectChange = (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
          this.setState({
@@ -130,7 +136,7 @@ import { TreeNode } from 'antd/lib/tree-select';
         //  })
          this.setState({
              ...filterValues,
-             tableDataSource: newData||[{}],
+             tableDataSource: newData||[],
              selectedRowKeys: this.props.selectKey||[],
              tablePagination: {
                  ...this.state.tablePagination,
