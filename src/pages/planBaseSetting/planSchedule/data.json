@@ -2,77 +2,63 @@
     "planSchedule": [
         {
             "title": "批次号",
-            "width": 100,
             "dataIndex": "productionBatchNo",
             "fixed": "left"
         },
         {
             "title": "计划号",
-            "width": 150,
             "dataIndex": "planNumber",
             "fixed": "left"
-        }, 
+        },
         {
             "title": "塔型",
             "dataIndex": "productCategoryName",
-            "width": 120,
             "fixed": "left"
         },
         {
             "title": "产品类型",
-            "dataIndex": "productTypeName",
-            "width": 120
+            "dataIndex": "productTypeName"
         },
         {
             "title": "客户",
-            "dataIndex": "customerCompany",
-            "width": 120
+            "dataIndex": "customerCompany"
         },
         {
             "title": "线路名称",
-            "dataIndex": "lineName",
-            "width": 120
+            "dataIndex": "lineName"
         },
         {
             "title": "基数",
-            "dataIndex": "productNum",
-            "width": 50
+            "dataIndex": "productNum"
         },
         {
             "title": "业务经理",
-            "dataIndex": "businessManagerName",
-            "width": 120
+            "dataIndex": "businessManagerName"
         },
         {
             "title": "客户交货日期",
-            "dataIndex": "customerDeliveryTime",
-            "width": 120
+            "dataIndex": "customerDeliveryTime"
         },
         {
             "title": "合同重量（t）",
-            "dataIndex": "weight",
-            "width": 120
+            "dataIndex": "weight"
         },
         {
             "title": "计划交货日期",
             "dataIndex": "planDeliveryTime",
-            "width": 120,
             "format": "YYYY-MM-DD"
         },
         {
             "title": "电压等级（kv）",
-            "dataIndex": "voltageGradeName",
-            "width": 120
+            "dataIndex": "voltageGradeName"
         },
         {
             "title": "审批日期",
-            "dataIndex": "approvalTime",
-            "width": 120
+            "dataIndex": "approvalTime"
         },
         {
             "title": "状态",
             "dataIndex": "loftingStatus",
-            "width": 120,
             "type": "select",
             "enum": [
                 {
@@ -95,23 +81,19 @@
         },
         {
             "title": "备注",
-            "dataIndex": "description",
-            "width": 200
+            "dataIndex": "description"
         },
         {
             "title": "放样下发时间",
-            "dataIndex": "loftingIssueTime",
-            "width": 120
+            "dataIndex": "loftingIssueTime"
         },
         {
             "title": "放样下发人",
-            "dataIndex": "loftingIssueUserName",
-            "width": 120
+            "dataIndex": "loftingIssueUserName"
         },
         {
             "title": "放样计划完成时间",
-            "dataIndex": "loftingCompleteTime",
-            "width": 120
+            "dataIndex": "loftingCompleteTime"
         },
         {
             "title": "放样反馈完成时间",
@@ -119,8 +101,7 @@
         },
         {
             "title": "放样实际完成时间",
-            "dataIndex": "loftingCompleteRealTime",
-            "width": 120
+            "dataIndex": "loftingCompleteRealTime"
         }
     ]
 }

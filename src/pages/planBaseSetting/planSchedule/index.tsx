@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Button, Select, DatePicker, Space, message } from 'antd';
-import { Page } from '../../common';
+import { SearchTable as Page } from '../../common';
 import { planSchedule } from "./data.json"
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IPlanSchedule } from './IPlanSchedule';
@@ -47,8 +47,9 @@ export default function PlanScheduleMngt(): React.ReactNode {
         </Space>}
         tableProps={{
             rowSelection: {
+                type: "checkbox",
                 selectedRowKeys: selectedKeys,
-                onChange: SelectChange,
+                onChange: SelectChange
             }
         }}
         searchFormItems={[
@@ -85,7 +86,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
             }
         ]}
         filterValue={filterValue}
-        onFilterSubmit={(values: Record<string, any>) => {
+        onFilterSubmit={(values: any) => {
             if (values.time) {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
                 values.startTime = formatDate[0] + ' 00:00:00';

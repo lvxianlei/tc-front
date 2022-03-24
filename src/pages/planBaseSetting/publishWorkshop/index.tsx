@@ -1,7 +1,7 @@
 import React, { Key, useState } from "react"
 import { Link } from "react-router-dom"
 import { Button, DatePicker, Input, Radio, Select } from "antd"
-import { Page } from "../../common"
+import { SearchTable as Page } from "../../common"
 import { pageTable, workShopOrder } from "./data.json"
 
 export default () => {
@@ -17,7 +17,7 @@ export default () => {
         refresh={refresh}
         columns={status === 1 ? pageTable : [...workShopOrder, {
             title: "操作",
-            width: 100,
+            width: 50,
             fixed: "right",
             dataIndex: "opration",
             render: (_, record: any) => <Link
@@ -66,11 +66,12 @@ export default () => {
         filterValue={filterValue}
         tableProps={status === 1 ? {
             rowSelection: {
+                type: "checkbox",
                 selectedRowKeys: selectedRowKeys,
                 onChange: onSelectChange
             }
         } : {}}
-        onFilterSubmit={(values: Record<string, any>) => {
+        onFilterSubmit={(values: any) => {
             if (values.time) {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
                 values.startTime = formatDate[0] + ' 00:00:00';

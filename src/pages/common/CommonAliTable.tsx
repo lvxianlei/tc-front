@@ -28,6 +28,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
+                align: "left",
                 render: (text: string) => <Paragraph
                     ellipsis={{
                         rows: 1
@@ -38,7 +39,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
             return ({
                 name: data.title,
                 code: data.dataIndex,
-                lock: data.fixed,
+                lock: data.fixed, align: "left",
                 render: (text: string | number) => <Paragraph
                     ellipsis={{
                         rows: 1
@@ -50,7 +51,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
             return ({
                 name: data.title,
                 code: data.dataIndex,
-                lock: data.fixed,
+                lock: data.fixed, align: "left",
                 render: (text: number) => <Paragraph
                     ellipsis={{
                         rows: 1
@@ -61,7 +62,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
             return ({
                 name: data.title,
                 code: data.dataIndex,
-                lock: data.fixed,
+                lock: data.fixed, align: "left",
                 render: data.render || ((text: number) => <Paragraph
                     ellipsis={{
                         rows: 1
@@ -72,7 +73,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
             return ({
                 name: data.title,
                 code: data.dataIndex,
-                lock: data.fixed,
+                lock: data.fixed, align: "left",
                 render: data.render || ((text: number) => <Paragraph
                     ellipsis={{ rows: 1 }}>{text && !["-1", -1].includes(text) ? text : "-"}</Paragraph>),
                 ...data
@@ -95,7 +96,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         title: "序号",
         dataIndex: "index",
         width: 50,
-        fixed: "left",
+        fixed: "left", align: "left",
         onCell: () => ({ className: styles.tableCell }),
         render: (_: any, _a: any, index: number) => <>{index + 1}</>
     }, ...formatColumns] : formatColumns
@@ -108,10 +109,13 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
             handleHoverBackground: '#ccc',
             handleActiveBackground: '#ccc',
         }));
-    props?.tableProps?.rowSelection?.type === "checkbox" &&  pipeline.use(features.multiSelect({
+    props?.tableProps?.rowSelection?.type === "checkbox" && pipeline.use(features.multiSelect({
         value: props?.tableProps?.rowSelection?.selectedRowKeys || [],
         onChange: props?.tableProps?.rowSelection?.onChange,
-        isDisabled: props?.tableProps?.rowSelection?.getCheckboxProps
+        isDisabled: props?.tableProps?.rowSelection?.getCheckboxProps,
+        highlightRowWhenSelected: true,
+        clickArea: "cell",
+        checkboxColumn: { width: 40, lock: true, align: "left" }
     }))
 
     return <nav className={styles.componentsTable}>
