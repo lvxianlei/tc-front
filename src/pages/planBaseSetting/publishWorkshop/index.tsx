@@ -21,7 +21,7 @@ export default () => {
             fixed: "right",
             dataIndex: "opration",
             render: (_, record: any) => <Link
-                to={`/planSchedule/publishWorkshop/${record.id}`}
+                to={`/planProd/publishWorkshop/${record.id}`}
             ><Button type="link">手动分配车间</Button></Link>
         }]}
         extraOperation={

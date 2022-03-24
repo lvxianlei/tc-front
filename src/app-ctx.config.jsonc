@@ -616,12 +616,12 @@
                     },
                     {
                         "label": "下发技术",
-                        "path": "/planSchedule/planScheduleMngt",
+                        "path": "/planProd/planScheduleMngt",
                         "authority": "approvalm"
                     },
                     {
                         "label": "分配车间",
-                        "path": "/planSchedule/publishWorkshop",
+                        "path": "/planProd/publishWorkshop",
                         "authority": "approvalm"
                     }
                 ]

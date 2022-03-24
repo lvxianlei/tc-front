@@ -105,7 +105,7 @@ export default function DistributedTech(): React.ReactNode {
             width: 100,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Button type='link' onClick={() => { history.push(`/planSchedule/planScheduleMngt/planDeliveryTime/${params.ids}/${record.productId}`) }}>查看变更记录</Button>
+                <Button type='link' onClick={() => { history.push(`/planProd/planScheduleMngt/planDeliveryTime/${params.ids}/${record.productId}`) }}>查看变更记录</Button>
             )
 
         }

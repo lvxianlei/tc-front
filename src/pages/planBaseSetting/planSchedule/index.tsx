@@ -24,8 +24,8 @@ export default function PlanScheduleMngt(): React.ReactNode {
         columns={planSchedule as any}
         headTabs={[]}
         extraOperation={<Space>
-            <Link to={`/planSchedule/planScheduleMngt/planDeliveryTime/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>设置/变更计划交货期</Button></Link>
-            <Link to={`/planSchedule/planScheduleMngt/SplitBatch/${selectedKeys[0]}`}><Button type="primary" disabled={selectedKeys.length !== 1}>拆分批次</Button></Link>
+            <Link to={`/planProd/planScheduleMngt/planDeliveryTime/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>设置/变更计划交货期</Button></Link>
+            <Link to={`/planProd/planScheduleMngt/SplitBatch/${selectedKeys[0]}`}><Button type="primary" disabled={selectedKeys.length !== 1}>拆分批次</Button></Link>
             <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => {
                 let tip: boolean[] = [];
                 selectedRows.forEach(res => {
@@ -36,7 +36,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                     }
                 })
                 if (tip.findIndex(res => res === false) === -1) {
-                    history.push(`/planSchedule/planScheduleMngt/distributedTech/${selectedKeys.join(',')}`);
+                    history.push(`/planProd/planScheduleMngt/distributedTech/${selectedKeys.join(',')}`);
                     tip = []
                 } else {
                     message.warning('下发技术前，请先设置计划交货期和拆分批次')

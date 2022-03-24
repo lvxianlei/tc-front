@@ -1721,49 +1721,49 @@
     },
     { // 计划排产-技术下发
       "name": "下发技术",
-      "path": "/planSchedule/planScheduleMngt",
+      "path": "/planProd/planScheduleMngt",
       "module": "./pages/planBaseSetting/planSchedule/index",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-拆分批次
       "name": "拆分批次",
-      "path": "/planSchedule/planScheduleMngt/SplitBatch/:id",
+      "path": "/planProd/planScheduleMngt/SplitBatch/:id",
       "module": "./pages/planBaseSetting/planSchedule/SplitBatch",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-下发技术
       "name": "下发技术",
-      "path": "/planSchedule/planScheduleMngt/distributedTech/:ids",
+      "path": "/planProd/planScheduleMngt/distributedTech/:ids",
       "module": "./pages/planBaseSetting/planSchedule/DistributedTech",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-计划交货期
       "name": "计划交货期",
-      "path": "/planSchedule/planScheduleMngt/planDeliveryTime/:ids",
+      "path": "/planProd/planScheduleMngt/planDeliveryTime/:ids",
       "module": "./pages/planBaseSetting/planSchedule/PlanDeliveryTime",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-计划交货期
       "name": "变更记录",
-      "path": "/planSchedule/planScheduleMngt/planDeliveryTime/:ids/:id",
+      "path": "/planProd/planScheduleMngt/planDeliveryTime/:ids/:id",
       "module": "./pages/planBaseSetting/planSchedule/ChangeRecord",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-分配车间
       "name": "分配车间",
-      "path": "/planSchedule/publishWorkshop",
+      "path": "/planProd/publishWorkshop",
       "module": "./pages/planBaseSetting/publishWorkshop/index",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-分配车间
       "name": "手动分配车间",
-      "path": "/planSchedule/publishWorkshop/:id",
+      "path": "/planProd/publishWorkshop/:id",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
       "authority": "approvalm"
