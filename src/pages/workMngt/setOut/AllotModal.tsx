@@ -177,17 +177,20 @@ export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps
     useImperativeHandle(ref, () => ({ onSave, onSubmit, resetFields }), [ref, onSave, onSubmit, resetFields]);
 
     return <Spin spinning={loading}>
-        <DetailContent>
+        <DetailContent style={{padding:'20px'}}>
             <Form form={form} className={styles.descripForm}>
                 <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>基础信息</p>
-                <Descriptions title="" bordered size="small" colon={false} column={3}>
+                <Descriptions title="" bordered size="small" colon={false} column={4}>
                     <Descriptions.Item key={1} label="杆塔号">
                         {data?.productNumber}
                     </Descriptions.Item>
-                    <Descriptions.Item key={2} label="呼高">
+                    <Descriptions.Item key={1} label="呼高">
                         {data?.productHeight || '-'}
                     </Descriptions.Item>
-                    <Descriptions.Item key={3} label="配段信息">
+                    <Descriptions.Item key={2} label="配段信息">
+                        {data?.segmentInformation}
+                    </Descriptions.Item>
+                    <Descriptions.Item key={2} label="复用杆塔">
                         {data?.segmentInformation}
                     </Descriptions.Item>
                 </Descriptions>
