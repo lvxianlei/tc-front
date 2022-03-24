@@ -615,8 +615,13 @@
                         "authority": "approvalm"
                     },
                     {
-                        "label": "技术排产",
-                        "path": "/planSchedule/planScheduleMngt",
+                        "label": "下发技术",
+                        "path": "/planProd/planScheduleMngt",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "分配车间",
+                        "path": "/planProd/publishWorkshop",
                         "authority": "approvalm"
                     }
                 ]
