@@ -1,7 +1,17 @@
 {
     "baseInfo": [
         {
-            "title": "原材料任务编号",
+            "title": "下单单号-新增",
+            "dataIndex": "materialTaskCode",
+            "type": "string"
+        },
+        {
+            "title": "批次号-新增",
+            "dataIndex": "materialTaskCode",
+            "type": "string"
+        },
+        {
+            "title": "周期计划号-新增",
             "dataIndex": "materialTaskCode",
             "type": "string"
         },
@@ -16,14 +26,14 @@
             "type": "string"
         },
         {
-            "title": "杆塔（基）",
-            "dataIndex": "productNum",
-            "type": "integer"
-        },
-        {
-            "title": "放样总重（吨）",
+            "title": "总重量（kg）-新增",
             "dataIndex": "loftingWeightTotal",
             "type": "number"
+        },
+        {
+            "title": "下达时间-新增",
+            "dataIndex": "materialTaskCode",
+            "type": "string"
         },
         {
             "title": "计划交付时间",

@@ -9,11 +9,11 @@
             "dataIndex": "endTime"
         },
         {
-            "title": "塔型",
+            "title": "计划开始日期-新增",
             "dataIndex": "productCategoryName"
         },
         {
-            "title": "杆塔",
+            "title": "计划结束日期-新增",
             "dataIndex": "product"
         }
     ],

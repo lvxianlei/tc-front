@@ -113,6 +113,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
             handleHoverBackground: '#ccc',
             handleActiveBackground: '#ccc',
         }));
+    console.log(props)
     props?.tableProps?.rowSelection &&  pipeline.use(features.multiSelect({
         value: props?.tableProps?.rowSelection?.selectedRowKeys || [],
         onChange: props?.tableProps?.rowSelection?.onChange,

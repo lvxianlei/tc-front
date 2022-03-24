@@ -16,6 +16,7 @@ interface IngredientsRef {
 export default function Overview() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
+    const [state, setState] = useState<number>(1);
     const params = useParams<{ id: string, materialTaskCode: string, productCategoryName: string, loftingState: string }>()
     const ingredientRef = useRef<IngredientsRef>({ onSubmit: () => { } })
     const [ingredientsvisible, setIngredientsvisible] = useState<boolean>(false);
@@ -58,9 +59,10 @@ export default function Overview() {
             }}
             onCancel={() => setIngredientsvisible(false)}
         />
-        <div style={{marginTop: 20, paddingLeft: 20, boxSizing: "border-box"}}>
+        <div style={{marginBottom: 12, paddingLeft: 20, boxSizing: "border-box"}}>
             <Button key="export" type="primary" onClick={() => {
                     setIsExportStoreList(true)
+                    setState(1)
                 }} ghost style={{ marginRight: 16 }}>导出</Button>
             {
                 (params.loftingState as any) * 1 === 1 && <Button key="peiliao" type="primary" ghost onClick={() => setIngredientsvisible(true)} style={{ marginRight: 16 }}>配料</Button>
@@ -71,20 +73,12 @@ export default function Overview() {
             <Button type="ghost" key="cancel" onClick={() => history.go(-1)}>返回</Button>
         ]}>
             <Spin spinning={loading}>
-                <CommonTable haveIndex columns={ConstructionDetails.map((item: any) => {
-                    // if (item.dataIndex === "alreadyIngredients") {
-                    //     return ({
-                    //         ...item,
-                    //         render: (text: any, records: any) => {
-                    //             const formatText = [-1, "-1", 0, "0"].includes(text) ? "0" : text
-                    //             const formatNoIngredients = [-1, "-1", 0, "0"].includes(records.noIngredients) ? "0" : records.noIngredients
-                    //             return <>{formatText} / {formatNoIngredients}</>
-                    //         }
-                    //     })
-                    // }
-                    return item
-                })} dataSource={data?.detail || []} />
+                <CommonTable haveIndex columns={ConstructionDetails} dataSource={data?.detail || []} />
                 <DetailTitle title="生产配料方案" />
+                <Button key="export" type="primary" onClick={() => {
+                    setIsExportStoreList(true)
+                    setState(2);
+                }} ghost style={{ marginBottom: 12, marginLeft: 20 }}>导出</Button>
                 <CommonTable haveIndex columns={ProductionIngredients} dataSource={data?.programme || []} />
             </Spin>
         </DetailContent>
@@ -92,11 +86,11 @@ export default function Overview() {
             history={history}
             location={location}
             match={match}
-            columnsKey={() => ConstructionDetails as any[]}
+            columnsKey={() => state === 1 ? ConstructionDetails as any[] : ProductionIngredients as any[]}
             current={1}
-            size={data?.programme.length || 0}
-            total={data?.programme.length || 0}
-            url={`/tower-supply/produceIngredients/detail/${params.id}`}
+            size={state === 1 ? (data?.detail.length || 0) : (data?.programme.length || 0)}
+            total={state === 1 ? (data?.detail.length || 0) : (data?.programme.length || 0)}
+            url={state === 1 ? `/tower-supply/produceIngredients/detail/${params.id}`: ""}
             serchObj={{}}
             closeExportList={() => { setIsExportStoreList(false) }}
         /> : null}
