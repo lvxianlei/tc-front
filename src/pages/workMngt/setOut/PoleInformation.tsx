@@ -140,15 +140,14 @@ export default function PoleInformation(): React.ReactNode {
                             : null
                     }
                     {
-                        record.isSpecial === 1 ? record.loftingStatus === 3 || record.loftingStatus === 4 ?
+                        // record.loftingStatus === 3 || record.loftingStatus === 4 ?
                             <Button type="link" onClick={async () => {
                                 let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
                                 setAllotData(result)
                                 setAllotVisible(true);
                                 setProductId(record.id);
-                            }}>调拨</Button>
-                            : <Button type="link" disabled>调拨</Button>
-                            : <Button type="link" disabled>调拨</Button>
+                            }}>特殊件号</Button>
+                            // : <Button type="link" disabled>特殊件号</Button>
                     }
                 </Space>
             )
@@ -237,7 +236,7 @@ export default function PoleInformation(): React.ReactNode {
             destroyOnClose
             visible={allotVisible}
             width="60%"
-            title="调拨"
+            title="特殊件号"
             footer={<Space>
                 <Button type="ghost" onClick={() => {
                     setAllotVisible(false);
@@ -274,8 +273,8 @@ export default function PoleInformation(): React.ReactNode {
                     children: <Select style={{ width: '120px' }} placeholder="请选择">
                         <Select.Option value={""} key="5">全部</Select.Option>
                         <Select.Option value={1} key="1">待开始</Select.Option>
-                        <Select.Option value={2} key="2">配段中</Select.Option>
-                        <Select.Option value={3} key="3">出单中</Select.Option>
+                        <Select.Option value={2} key="2">待配段</Select.Option>
+                        <Select.Option value={3} key="3">待出单</Select.Option>
                         <Select.Option value={4} key="4">已完成 </Select.Option>
                     </Select>
                 },

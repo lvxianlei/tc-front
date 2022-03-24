@@ -99,6 +99,13 @@ const productColumns = [
         dataIndex: 'totalWeight',
     },
     {
+        key: 'loftingAbortTime',
+        title: '放样计划完成时间',
+        dataIndex: 'loftingAbortTime',
+        "type": "date",
+        "format": "YYYY-MM-DD"
+    },
+    {
         key: 'productDescription',
         title: '备注',
         dataIndex: 'productDescription'
@@ -120,7 +127,7 @@ export default function SetOutTaskDetail(): React.ReactNode {
                 loftingAbortTime: data.loftingAbortTime,
                 materialAbortTime: data.materialAbortTime,
                 description: data.description,
-                voltageGradeName: data.voltageGradeName
+                voltageGradeName: data.voltageGradeName,
             },
         ])
         resole(data)

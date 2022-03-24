@@ -36,6 +36,12 @@ export default function PickList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
+            key: 'taskNum',
+            title: '图纸/工程名称',
+            width: 100,
+            dataIndex: 'taskNum'
+        },
+        {
             key: 'planNumber',
             title: '计划号',
             width: 100,

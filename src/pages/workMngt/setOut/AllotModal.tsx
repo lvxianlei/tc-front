@@ -6,7 +6,7 @@
 
 import React, { useImperativeHandle, forwardRef } from "react";
 import { Spin, Form, Descriptions, InputNumber, Input } from 'antd';
-import { CommonTable, DetailContent } from '../../common';
+import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './TowerLoftingAssign.module.less';
@@ -124,6 +124,12 @@ export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps
             dataIndex: 'code'
         },
         {
+            key: 'BasicsPartTotalNum',
+            title: '单段件数',
+            width: 120,
+            dataIndex: 'BasicsPartTotalNum'
+        },
+        {
             key: 'basicsPartNum',
             title: '数量',
             width: 120,
@@ -131,20 +137,21 @@ export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['loftingProductStructure', index, 'basicsPartNum']} rules={[{
                     required: true,
-                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                        if (value !== null && value !== undefined && value !== '') {
-                            const data = form.getFieldsValue(true).loftingProductStructure;
-                            let BasicsPartTotalNum = 0;
-                            data?.filter((item: ILoftingProductStructureVOS) => { return record.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum += Number(items?.basicsPartNum) });
-                            if (BasicsPartTotalNum > record.BasicsPartTotalNum) {
-                                callback('关联段号数量和等于单段件数')
-                            } else {
-                                callback()
-                            }
-                        } else {
-                            callback('请输入数量')
-                        }
-                    }
+                    message:'请输入数量'
+                    // validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                    //     if (value !== null && value !== undefined && value !== '') {
+                    //         const data = form.getFieldsValue(true).loftingProductStructure;
+                    //         let BasicsPartTotalNum = 0;
+                    //         data?.filter((item: ILoftingProductStructureVOS) => { return record.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum += Number(items?.basicsPartNum) });
+                    //         if (BasicsPartTotalNum > record.BasicsPartTotalNum) {
+                    //             callback('关联段号数量和等于单段件数')
+                    //         } else {
+                    //             callback()
+                    //         }
+                    //     } else {
+                    //         callback('请输入数量')
+                    //     }
+                    // }
                 }
                 ]}>
                     <InputNumber min={0} max={record.BasicsPartTotalNum} onBlur={() => {
@@ -163,13 +170,8 @@ export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps
                     <Input disabled={data?.specialStatus === 2} size="small" />
                 </Form.Item>
             )
-        },
-        {
-            key: 'BasicsPartTotalNum',
-            title: '单段件数',
-            width: 120,
-            dataIndex: 'BasicsPartTotalNum'
         }
+        
     ]
 
     useImperativeHandle(ref, () => ({ onSave, onSubmit, resetFields }), [ref, onSave, onSubmit, resetFields]);
