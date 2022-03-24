@@ -37,7 +37,6 @@ export default function Invoicing() {
             // value.handlerDept = value.handlerId.first
             value.handlerId = value.handlerId.second
         }
-        console.log(value)
         // setFilterValue({ ...filterValue, ...value })
         return value
     }
@@ -77,7 +76,7 @@ export default function Invoicing() {
         }}>
             <Form form={form}>
                 <Form.Item rules={[{ required: true, message: "请填写取消原因..." }]} label="取消原因"
-                    name="reason"><Input.TextArea maxLength={400}/></Form.Item>
+                   name="reason"><Input.TextArea maxLength={400}/></Form.Item>
             </Form>
         </Modal>
         <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>

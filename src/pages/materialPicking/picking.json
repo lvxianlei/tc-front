@@ -190,7 +190,7 @@
                 },
                 {
                     "title": "所属车间",
-                    "dataIndex": "productUnitName"
+                    "dataIndex": "workshopDeptName"
                 }
             ]
         },

@@ -302,6 +302,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             setMaterialList(meterialList.map((item: any) => {
                 const num = parseFloat(item.num || "1")
                 const weight = parseFloat(item.weight || "1.00")
+                const totalWeight = parseFloat(item.totalWeight || "1.00")
                 const taxPrice = parseFloat(item.taxOffer || "1.00")
                 const price = parseFloat(item.offer || "1.00")
                 const id = item.materialTextureId;
@@ -318,15 +319,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     materialTextureId: id,
                     // length: formatSpec(item.structureSpec).length,
                     weight: item.weight || "1.00",
-                    taxTotalAmount: (weight * taxPrice).toFixed(2),
-                    totalAmount: (weight * price).toFixed(2)
+                    taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                    totalAmount: (totalWeight * price).toFixed(2)
                 })
             }))
         }
     }
 
     const handleNumChange = (value: number, materialCode: string, dataIndex: string) => {
-        console.log(value, materialCode, dataIndex)
         const newData = materialList.map((item: any) => {
             if (item.materialCode === materialCode) {
                 const allData: any = {
@@ -336,7 +336,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     weight: (item.weight && item.weight >= 0) ? parseFloat(item.weight) : parseFloat("0")
                 }
                 allData[dataIndex] = value
-                console.log(allData, "alll")
                 return ({
                     ...item,
                     taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),

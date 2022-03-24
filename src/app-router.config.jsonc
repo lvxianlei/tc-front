@@ -2475,6 +2475,13 @@
       "module": "./pages/planBaseSetting/prodUnit/prodUnit",
       "exact": true,
       "authority": "production_unit_management"
-    }
+    },
+    { // 修改密码
+      "name": "修改密码",
+      "path": "/changePage/personalPassWord",
+      "module": "./pages/changePassword",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
   ]
 }

@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useEffect, useState } from "react"
-import { Breadcrumb, Button, Col, Layout, Menu, Popconfirm, Row } from "antd";
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons"
+import { Avatar, Breadcrumb, Button, Col, Dropdown, Layout, Menu, Popconfirm, Row } from "antd";
+import { MenuUnfoldOutlined, MenuFoldOutlined, DownOutlined } from "@ant-design/icons"
 import styles from './Layout.module.less';
-import layoutStyles from './Layout.module.less';
+// import layoutStyles from './Layout.module.less';
 import { Link, Route, useHistory, useLocation } from "react-router-dom";
 import { UserOutlined, BellOutlined } from '@ant-design/icons';
 import AuthUtil from "../utils/AuthUtil";
@@ -13,6 +13,7 @@ import { useAuthorities, useDictionary, hasAuthority } from "../hooks"
 import AsyncPanel from "../AsyncPanel";
 import Logo from "./logo.png"
 import { getMenuItemByPath, getRouterItemByPath } from "../utils";
+import ApplicationContext from "../configuration/ApplicationContext";
 const { Header, Sider, Content } = Layout
 const filters = require.context("../filters", true, /.ts$/)
 
@@ -90,47 +91,53 @@ const Hbreadcrumb = memo(() => {
     const pathSnippets: string[] = location.pathname.split('/').filter((i: string) => i);
     const selectedMenuItem = getMenuItemByPath(ctxConfig.layout.menu, `/${pathSnippets[0]}`)
     return <div className={styles.breadcrumb}>
-        <MenuUnfoldOutlined
-            style={{
-                fontSize: "18px",
-                color: "#fff",
-                lineHeight: "40px",
-                verticalAlign: "middle",
-                padding: "0 10px"
-            }} />
-        <Breadcrumb separator="/" className={styles.breadcrumb}>
-            {
-                selectedMenuItem
-                    ?
-                    <Breadcrumb.Item key={selectedMenuItem.path}>
-                        {selectedMenuItem.label}
-                    </Breadcrumb.Item>
-                    :
-                    null
-            }
-            {
-                pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
-                    let path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
-                    const routerItem = getRouterItemByPath(path);
-                    return (
-                        routerItem
-                            ?
-                            <Breadcrumb.Item key={path}>
-                                {
-                                    path === location.pathname
+        {
+            location.pathname !== "/chooseApply" && (
+                <>
+                    <MenuUnfoldOutlined
+                        style={{
+                            fontSize: "18px",
+                            color: "#fff",
+                            lineHeight: "40px",
+                            verticalAlign: "middle",
+                            padding: "0 10px"
+                        }} />
+                    <Breadcrumb separator="/" className={styles.breadcrumb}>
+                        {
+                            selectedMenuItem
+                                ?
+                                <Breadcrumb.Item key={selectedMenuItem.path}>
+                                    {selectedMenuItem.label}
+                                </Breadcrumb.Item>
+                                :
+                                null
+                        }
+                        {
+                            pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
+                                let path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+                                const routerItem = getRouterItemByPath(path);
+                                return (
+                                    routerItem
                                         ?
-                                        routerItem.name
-                                        :
-                                        <Link to={path}>{routerItem.name}</Link>
+                                        <Breadcrumb.Item key={path}>
+                                            {
+                                                path === location.pathname
+                                                    ?
+                                                    routerItem.name
+                                                    :
+                                                    <Link to={path}>{routerItem.name}</Link>
 
-                                }
-                            </Breadcrumb.Item>
-                            :
-                            null
-                    );
-                })
-            }
-        </Breadcrumb>
+                                            }
+                                        </Breadcrumb.Item>
+                                        :
+                                        null
+                                );
+                            })
+                        }
+                    </Breadcrumb>
+                </>
+            )
+        }
     </div>
 })
 
@@ -168,6 +175,26 @@ export default function (): JSX.Element {
         doFiltersAll(history)
     }, [])
 
+    const menu = (
+        <Menu>
+          <Menu.Item>
+            <p style={{textAlign: "center", height: "24px", lineHeight: "24px", margin: 0}} onClick={() => history.push("/homePage/personalCenter")}>
+                个人信息
+            </p>
+          </Menu.Item>
+          <Menu.Item>
+            <p style={{textAlign: "center", height: "24px", lineHeight: "24px", margin: 0}} onClick={() => history.push("/changePage/personalPassWord")}>
+                修改密码
+            </p>
+          </Menu.Item>
+          <Menu.Item>
+            <p style={{textAlign: "center", height: "24px", lineHeight: "24px", margin: 0}} onClick={() => logOut()}>
+                退出账号
+            </p>
+          </Menu.Item>
+        </Menu>
+      );
+
     return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1
@@ -177,29 +204,35 @@ export default function (): JSX.Element {
                 <img className={styles.logo} src={Logo} />
             </h1>
             <Hbreadcrumb />
-            <div className={layoutStyles.logout}>
-                <Row>
-                    <Col>
-                        <Link to={`/approvalm/management`} className={layoutStyles.btn}>我的审批</Link>
-                    </Col>
-                    <Col>
-                        <Link to={`/homePage/notice`} className={layoutStyles.btn}><BellOutlined className={layoutStyles.icon} /></Link>
-                    </Col>
-                    <Col>
-                        <Link to={`/homePage/personalCenter`} className={layoutStyles.btn}><UserOutlined className={layoutStyles.icon} />{AuthUtil.getRealName()}</Link>
-                    </Col>
-                    <Col>
-                        <Popconfirm
-                            title="确认退出登录?"
-                            onConfirm={logOut}
-                            okText="确认"
-                            cancelText="取消"
-                        >
-                            <Button type="link" className={layoutStyles.btn}>退出</Button>
-                        </Popconfirm>
-                    </Col>
-                </Row>
-            </div>
+            {
+                location.pathname !== "/chooseApply" && (
+                    <>
+                        <div className={styles.logout}>
+                            <Row>
+                                <Col>
+                                    <Link to={`/approvalm/management`}>
+                                        <span className={`iconfont icon-wodeshenpi ${styles.approval}`}></span>
+                                    </Link>
+                                    
+                                </Col>
+                                <Col>
+                                    <Link to={`/homePage/notice`}>
+                                        <span className={`iconfont icon-wodexiaoxi ${styles.approval}`} style={{marginRight: 16}}></span>
+                                    </Link>
+                                </Col>
+                                <Col>
+                                    <Dropdown overlay={menu} placement="bottomCenter">
+                                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                            <Avatar size={20} style={{ backgroundColor: "#FF8C00", verticalAlign: 'middle', fontSize: 12, position: "relative", top: -1 }} gap={4}>{AuthUtil.getAccount() ? AuthUtil.getAccount().split("")[0].toLocaleUpperCase() : ""}</Avatar>
+                                            <span style={{marginLeft: 4, fontSize: 14, marginRight: 16, color: "#fff"}}>{AuthUtil.getAccount()}<DownOutlined /></span>
+                                        </a>
+                                    </Dropdown>
+                                </Col>
+                            </Row>
+                        </div>
+                    </>
+                )
+            }
         </Header>
         <Layout style={{ height: "100%", backgroundColor: "#fff" }}>
             {
