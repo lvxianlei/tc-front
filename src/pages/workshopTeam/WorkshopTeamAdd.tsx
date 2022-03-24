@@ -91,16 +91,16 @@ export default function WorkshopTeamAdd(): React.ReactNode {
                     <Form.Item name="workshopUserDTOList" label="组员">
                         <UserModal onSelect={(selectedRows:any[])=>{
                             
-                            const c = users.concat(selectedRows)
-                            const temp:any = {}//用于id判断重复
-                            const result:any[] = [];//最后的新数组
-                            c.map((item:any,index:number)=>{
-                                if(!temp[item.userId]){
-                                    result.push(item);
-                                    temp[item.userId] = true
-                                }
-                            })
-                            setUsers(result)
+                            // const c = users.concat(selectedRows)
+                            // const temp:any = {}//用于id判断重复
+                            // const result:any[] = [];//最后的新数组
+                            // c.map((item:any,index:number)=>{
+                            //     if(!temp[item.userId]){
+                            //         result.push(item);
+                            //         temp[item.userId] = true
+                            //     }
+                            // })
+                            setUsers(selectedRows)
                         }} buttonType='link' rowSelectionType='checkbox' selectKey={users.map((item:any)=>{
                             return item.userId
                         })}/>
