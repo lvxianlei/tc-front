@@ -160,5 +160,6 @@ export default forwardRef(function Edit({ detailData, title, teamId }: EditProps
         >
             无需派工
         </Radio>
+        <span>当前未指派任何班组，无法选择，其他班组派工后可选此项</span>
     </Spin>
 })
