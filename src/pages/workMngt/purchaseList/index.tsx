@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { IntgSelect, Page } from '../../common'
+import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./purchaseListData.json"
 import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
@@ -64,7 +64,7 @@ export default function Invoicing() {
                     width: 40,
                     render: (_: any, _a: any, index: number) => <>{index + 1}</>
                 },
-                ...baseInfo,
+                ...baseInfo as any,
                 {
                     title: "操作",
                     dataIndex: "opration",
@@ -96,7 +96,7 @@ export default function Invoicing() {
                 {
                     name: 'purchaseTaskStatus',
                     label: '塔型采购状态',
-                    children: <Select style={{ width: 200 }}>
+                    children: <Select style={{ width: 200 }} defaultValue={""}>
                         <Select.Option value="">全部</Select.Option>
                         <Select.Option value="1">待完成</Select.Option>
                         <Select.Option value="3">已完成</Select.Option>

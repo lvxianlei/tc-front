@@ -47,7 +47,7 @@ const icons: { [key in AppType]: any } = {
 export default function ChooseApply(): JSX.Element {
     const history = useHistory()
     return <DetailContent>
-        <DetailTitle title="选择应用" />
+        <DetailTitle title="选择应用" style={{ padding: "16px" }} />
         <div className={styles.content}>
             {
                 (apps as IApplyType[]).map((res: IApplyType, index: number) => (
@@ -71,7 +71,7 @@ export default function ChooseApply(): JSX.Element {
                         history.push(res.path)
                     }}>
                         <div className={styles.icon}>
-                            <span style={{display: "inline-block", width: 50, height: 50, background: res.color, borderRadius: 8, textAlign: "center", lineHeight: "50px"}}>
+                            <span style={{ display: "inline-block", width: 50, height: 50, background: res.color, borderRadius: 8, textAlign: "center", lineHeight: "50px" }}>
                                 <span className={`iconfont ${res.iconFont}`} style={{
                                     fontFamily: "font_family",
                                     fontSize: res.fontSize || 28,
