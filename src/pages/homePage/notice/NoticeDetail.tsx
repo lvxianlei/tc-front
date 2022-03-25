@@ -33,8 +33,11 @@ export default function NoticeDetail(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-system/notice/getNoticeById/${params.id}`)
-        resole(data)
+        const data = await RequestUtil.get<any>(`/tower-system/notice/getNoticeById/${params.id}`)
+        resole({
+            ...data,
+            userNames: data?.staffList?.map((item: any) => { return item.userName }).join(',')
+        })
     }), {})
     const detailData: any = data;
     if (loading) {

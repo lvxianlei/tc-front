@@ -120,11 +120,7 @@ export default function Invoicing() {
                     onChange: (selectedRowKeys: any[]) => {
                         setGenerateIds(selectedRowKeys)
                     },
-                    getCheckboxProps: (record: any) => {
-                        return ({
-                            disabled: !([1].includes(record.purchaseTaskStatus) && [-1, null].includes(record.purchasePlanId))
-                        })
-                    }
+                    getCheckboxProps: (record: any) => !([1].includes(record.purchaseTaskStatus) && [-1, null].includes(record.purchasePlanId))
                 }
             }}
         />

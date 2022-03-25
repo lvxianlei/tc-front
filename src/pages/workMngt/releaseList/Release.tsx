@@ -164,7 +164,7 @@ export default function Release(): React.ReactNode {
                             loftingBatchProductDTOList: value.loftingBatchProductDTOList.map((item:any)=>{
                                 return {
                                     ...item,
-                                    batchNum: item.batchNum===null?0:item.batchNum
+                                    batchNum: item.batchNum?item.batchNum===null?0:item.batchNum:0
                                 }
                             })
                         }

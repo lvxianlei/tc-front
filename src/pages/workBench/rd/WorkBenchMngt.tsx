@@ -328,7 +328,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 
 	const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
 		const data = await RequestUtil.get(`/tower-science/workbench`);
-		const announceData = await RequestUtil.get<IResponseData>(`/tower-system/notice?size=10&state=1`);
+		const announceData = await RequestUtil.get<IResponseData>(`/tower-system/notice/staff/list?size=10&state=1`);
 		setAnnounceData(announceData.records)
 		resole(data)
 	}), {})
@@ -405,9 +405,9 @@ export default function WorkBenchMngt(): React.ReactNode {
 					<Link to={`/homePage/notice`} className={styles.more}>更多<DoubleRightOutlined /></Link>
 				</p>
 				<CommonTable dataSource={announceData} pagination={false} showHeader={false} columns={[{
-					key: 'updateTime',
+					key: 'releaseTime',
 					title: '时间',
-					dataIndex: 'updateTime',
+					dataIndex: 'releaseTime',
 				},
 				{
 					key: 'title',
