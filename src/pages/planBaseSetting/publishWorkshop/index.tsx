@@ -1,8 +1,10 @@
 import React, { Key, useState } from "react"
 import { Link } from "react-router-dom"
-import { Button, DatePicker, Input, Radio, Select } from "antd"
+import { Button, DatePicker, Input, Modal, Radio, Row, Select } from "antd"
 import { SearchTable as Page } from "../../common"
 import { pageTable, workShopOrder } from "./data.json"
+import useRequest from "@ahooksjs/use-request"
+import RequestUtil from "../../../utils/RequestUtil"
 
 export default () => {
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({});
@@ -10,10 +12,33 @@ export default () => {
     const onSelectChange = (selected: Key[]) => setSelectedRowKeys(selected)
     const [status, setStatus] = useState<number>(1)
     const [refresh, setRefresh] = useState<boolean>(false)
+    const { data, run } = useRequest<any>((params: string[]) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.post(`/tower-aps/workshopOrder/autoDistribute`, params);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const handleAuto = async () => {
+        await run()
+        Modal.warn({
+            title: "自动分配车间",
+            icon: null,
+            okText: "确定",
+            content: <nav>
+                <h6>以下下达单未匹配到生产车间</h6>
+                <ul>
+                    {}
+                </ul>
+                <Row><h6>请配置分配规则</h6></Row>
+            </nav>
+        })
+    }
 
     return <Page
-        // path="/tower-aps/workshopOrder"
-        path="/tower-aps/productionPlan"
+        path="/tower-aps/workshopOrder"
         refresh={refresh}
         columns={status === 1 ? pageTable : [...workShopOrder, {
             title: "操作",
@@ -37,7 +62,7 @@ export default () => {
                     <Radio.Button value={1}>待分配下达单</Radio.Button>
                     <Radio.Button value={2}>已分配下达单</Radio.Button>
                 </Radio.Group>
-                {status === 1 && <Button type="primary">自动分配车间</Button>}
+                {status === 1 && <Button type="primary" onClick={handleAuto}>自动分配车间</Button>}
             </>
         }
         searchFormItems={[

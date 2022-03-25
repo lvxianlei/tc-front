@@ -1023,6 +1023,11 @@
                         "label": "工作中心管理",
                         "path": "/workshopPlanBasic/workCenterMngt",
                         "authority": "approvalm"
+                    },
+                    {
+                        "label": "分配车间配置管理",
+                        "path": "/workshopPlanBasic/publishWorkshopMngt",
+                        "authority": "approvalm"
                     }
                 ]
             },

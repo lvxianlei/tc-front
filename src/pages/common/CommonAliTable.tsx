@@ -109,10 +109,10 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
             handleHoverBackground: '#ccc',
             handleActiveBackground: '#ccc',
         }));
-    props?.tableProps?.rowSelection?.type === "checkbox" && pipeline.use(features.multiSelect({
-        value: props?.tableProps?.rowSelection?.selectedRowKeys || [],
-        onChange: props?.tableProps?.rowSelection?.onChange,
-        isDisabled: props?.tableProps?.rowSelection?.getCheckboxProps,
+    props?.rowSelection?.type === "checkbox" && pipeline.use(features.multiSelect({
+        value: props?.rowSelection?.selectedRowKeys || [],
+        onChange: (nextValue: string[]) => props?.rowSelection?.onChange(nextValue, dataSource.filter((item: any) => item[rowKey || "id"])),
+        isDisabled: props?.rowSelection?.getCheckboxProps,
         highlightRowWhenSelected: true,
         clickArea: "cell",
         checkboxColumn: { width: 40, lock: true, align: "left" }
