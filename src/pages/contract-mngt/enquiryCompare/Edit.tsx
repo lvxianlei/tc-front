@@ -215,7 +215,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             thickness: formatSpec(item.spec).thickness,
             weight: item.singleWeight || 0,
             source: 1,
-            totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(2),
+            totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
             materialTextureId: item.structureTexture,
             materialStandard: item.standardName,
             materialStandardName: item.standard,
