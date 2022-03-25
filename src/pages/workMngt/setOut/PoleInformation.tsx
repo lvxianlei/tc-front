@@ -146,6 +146,7 @@ export default function PoleInformation(): React.ReactNode {
                                 setAllotData(result)
                                 setAllotVisible(true);
                                 setProductId(record.id);
+                                setLoftingStatus(record.loftingStatus)
                             }}>特殊件号</Button>
                             // : <Button type="link" disabled>特殊件号</Button>
                     }
@@ -157,7 +158,7 @@ export default function PoleInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [refresh, setRefresh] = useState(false);
-
+    
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         resole(data);
@@ -170,7 +171,8 @@ export default function PoleInformation(): React.ReactNode {
     const editRef = useRef<allotModalProps>();
     const [productId, setProductId] = useState<string>('');
     const [allotData, setAllotData] = useState<IAllot>();
-
+    const [loftingStatus, setLoftingStatus] = useState<number>(0);
+    
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
             role.value = role.id;
@@ -237,7 +239,7 @@ export default function PoleInformation(): React.ReactNode {
             visible={allotVisible}
             width="60%"
             title="特殊件号"
-            footer={<Space>
+            footer={loftingStatus===3&&<Space>
                 <Button type="ghost" onClick={() => {
                     setAllotVisible(false);
                 }}>关闭</Button>
@@ -249,7 +251,7 @@ export default function PoleInformation(): React.ReactNode {
             onCancel={() => setAllotVisible(false)}
             className={styles.tryAssemble}
         >
-            <AllotModal id={productId} allotData={allotData || {}} ref={editRef} />
+            <AllotModal id={productId} allotData={allotData || {}} ref={editRef} status={loftingStatus}/>
         </Modal>
         <Page
             path="/tower-science/product/lofting"

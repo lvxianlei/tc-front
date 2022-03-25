@@ -4,8 +4,8 @@
  * @description rd1.2 调拨
  */
 
-import React, { useImperativeHandle, forwardRef } from "react";
-import { Spin, Form, Descriptions, InputNumber, Input } from 'antd';
+import React, { useImperativeHandle, forwardRef, useState } from "react";
+import { Spin, Form, Descriptions, InputNumber, Input, Modal } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -13,15 +13,20 @@ import styles from './TowerLoftingAssign.module.less';
 import { IAllot, ILoftingProductStructureVOS } from "./ISetOut";
 import { RuleObject } from "antd/es/form";
 import { StoreValue } from "antd/es/form/interface";
+import { PlusOutlined } from "@ant-design/icons"
 
 interface AllotModalProps {
     id: string;
     allotData: IAllot;
+    status: number;
 }
 
-export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps, ref) {
+export default forwardRef(function AllotModal({ id, allotData,status }: AllotModalProps, ref) {
     const [form] = Form.useForm();
-
+    const [visible,setVisible] = useState<boolean>(false)
+    const [towerData,setTowerData] = useState<any[]>([])
+    const [selectedRowKeys, setSelectedRowKeys]=useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows]=useState<any[]>([]);
     const { loading, data } = useRequest<IAllot>(() => new Promise(async (resole, reject) => {
         try {
             allotData = {
@@ -190,8 +195,19 @@ export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps
                     <Descriptions.Item key={2} label="配段信息">
                         {data?.segmentInformation}
                     </Descriptions.Item>
-                    <Descriptions.Item key={2} label="复用杆塔">
-                        {data?.segmentInformation}
+                    <Descriptions.Item key={1} label="复用杆塔">
+                        {status===4?data?.segmentInformation:
+                            <Form.Item name='tower'>
+                                <Input disabled addonAfter={
+                                    <PlusOutlined onClick={async () => {
+                                        // const value:any[] = await RequestUtil.get(``,{id:data?.id})
+                                        // setTowerData(value)
+                                        setVisible(true)
+                                    }} />
+                                }/>
+
+                            </Form.Item>
+                        }
                     </Descriptions.Item>
                 </Descriptions>
                 <p style={{ padding: "12px 0px", fontWeight: "bold", fontSize: '14PX' }}>特殊件号信息</p>
@@ -201,6 +217,48 @@ export default forwardRef(function AllotModal({ id, allotData }: AllotModalProps
                     dataSource={data?.loftingProductStructureVOS} />
             </Form>
         </DetailContent>
+        <Modal
+            destroyOnClose
+            visible={visible}
+            title="复用杆塔"
+            okText='保存'
+            cancelText='关闭'
+            onCancel={() => {
+                setVisible(false)
+            }}
+            onOk={()=>{
+                // RequestUtil.get(``,selectedRows)
+                // form.setFieldsValue({
+
+                // })
+                setVisible(false)
+            }}
+        >
+            <CommonTable dataSource={towerData} pagination={false} rowSelection={{
+                selectedRowKeys: selectedRowKeys,
+                onChange: (selectedRowKeys: React.Key[], selectedRows:any)=>{
+                    setSelectedRowKeys(selectedRowKeys);
+                    setSelectedRows(selectedRows)
+                }
+            }} columns={[
+                {
+                    title: '序号',
+                    dataIndex: 'index',
+                    key: 'index',
+                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                },
+                {
+                    title: '杆塔号',
+                    dataIndex: 'productNumber',
+                    key: 'productNumber'
+                },
+                {
+                    title: '呼高',
+                    dataIndex: 'productHeight',
+                    key: 'productHeight'
+                }
+            ]}/>
+        </Modal>
     </Spin>
 })
 
