@@ -1,17 +1,16 @@
 import React, { Key, useState } from "react"
 import { Link } from "react-router-dom"
-import { Button, DatePicker, Input, Modal, Radio, Row, Select } from "antd"
-import { SearchTable as Page } from "../../common"
+import { Button, DatePicker, Input, message, Modal, Radio, Row, Select } from "antd"
+import { Page } from "../../common"
 import { pageTable, workShopOrder } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
 
 export default () => {
-    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({});
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ status: 1 });
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
     const onSelectChange = (selected: Key[]) => setSelectedRowKeys(selected)
     const [status, setStatus] = useState<number>(1)
-    const [refresh, setRefresh] = useState<boolean>(false)
     const { data, run } = useRequest<any>((params: string[]) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-aps/workshopOrder/autoDistribute`, params);
@@ -22,24 +21,28 @@ export default () => {
     }), { manual: true })
 
     const handleAuto = async () => {
-        await run()
-        Modal.warn({
-            title: "自动分配车间",
-            icon: null,
-            okText: "确定",
-            content: <nav>
-                <h6>以下下达单未匹配到生产车间</h6>
-                <ul>
-                    {}
-                </ul>
-                <Row><h6>请配置分配规则</h6></Row>
-            </nav>
-        })
+        await run(selectedRowKeys)
+        if (data?.length) {
+            Modal.warn({
+                title: "自动分配车间",
+                icon: null,
+                okText: "确定",
+                content: <nav>
+                    <h6>以下下达单未匹配到生产车间</h6>
+                    <ul>
+                        { }
+                    </ul>
+                    <Row><h6>请配置分配规则</h6></Row>
+                </nav>
+            })
+        } else {
+            message.success("自动分配车间完成")
+        }
     }
 
     return <Page
         path="/tower-aps/workshopOrder"
-        refresh={refresh}
+        filterValue={filterValue}
         columns={status === 1 ? pageTable : [...workShopOrder, {
             title: "操作",
             width: 50,
@@ -56,13 +59,12 @@ export default () => {
                     onChange={(event) => {
                         setStatus(event.target.value)
                         setFilterValue({ ...filterValue, status: event.target.value })
-                        setRefresh(true)
                     }}
                 >
                     <Radio.Button value={1}>待分配下达单</Radio.Button>
                     <Radio.Button value={2}>已分配下达单</Radio.Button>
                 </Radio.Group>
-                {status === 1 && <Button type="primary" onClick={handleAuto}>自动分配车间</Button>}
+                {status === 1 && <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleAuto}>自动分配车间</Button>}
             </>
         }
         searchFormItems={[
@@ -88,7 +90,6 @@ export default () => {
                 children: <Input placeholder="计划号/塔型/下达单号" style={{ width: 300 }} />
             }
         ]}
-        filterValue={filterValue}
         tableProps={status === 1 ? {
             rowSelection: {
                 type: "checkbox",

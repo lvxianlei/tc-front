@@ -117,6 +117,9 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         if (nextProps.refresh !== this.props.refresh) {
             this.fetchTableData({ ...this.props.filterValue }, { current: 1, pageSize: 20 })
         }
+        if (nextProps.filterValue !== this.props.filterValue) {
+            this.fetchTableData({ ...this.props.filterValue }, { current: 1, pageSize: 20 })
+        }
         if (nextProps.clearSearch !== this.props.clearSearch) {
             this.clearFormProps()
         }
