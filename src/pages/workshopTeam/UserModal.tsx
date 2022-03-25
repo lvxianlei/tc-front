@@ -87,9 +87,14 @@ import { TreeNode } from 'antd/lib/tree-select';
                 selectedRowKeys: this.state.selectedRowKeys,
                 onChange: this.onSelectChange
             },
-
+            pagination: false,
+            scroll:{y:'300px'},
+            onChange:  this.onTableChange 
          }
      }
+     public onTableChange = (pagination: TablePaginationConfig): void => {
+        this.getTable({ ...this.getForm()?.getFieldsValue(true) }, pagination);
+    }
  
      public onSelectChange = (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
          this.setState({
@@ -120,8 +125,8 @@ import { TreeNode } from 'antd/lib/tree-select';
          let resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/employee`, {
             //  teamId: this.props.saleOrderId,
              ...filterValues,
-             current: pagination.current || this.state.tablePagination?.current,
-             size: pagination.pageSize || this.state.tablePagination?.pageSize
+             current: 1,
+             size: 1000
          });
         //  const selectKeys: [] = this.props.selectKey;
          let newData: any = resData?.records&&resData?.records.length>0?resData?.records:[];
@@ -130,14 +135,14 @@ import { TreeNode } from 'antd/lib/tree-select';
         //  })
          this.setState({
              ...filterValues,
-             tableDataSource: newData||[{}],
+             tableDataSource: newData||[],
              selectedRowKeys: this.props.selectKey||[],
-             tablePagination: {
-                 ...this.state.tablePagination,
-                 current: resData.current,
-                 pageSize: resData.size,
-                 total: resData.total
-             }
+            //  tablePagination: {
+            //      ...this.state.tablePagination,
+            //      current: resData.current,
+            //      pageSize: resData.size,
+            //      total: resData.total
+            //  }
          });
      }
      public renderTreeNodes = (data:any) =>
@@ -181,7 +186,7 @@ import { TreeNode } from 'antd/lib/tree-select';
          console.log(values)
          this.getTable(values, {
              current: 1,
-             pageSize: 10,
+             pageSize: 1000,
              total: 0,
              showSizeChanger: false
          });
