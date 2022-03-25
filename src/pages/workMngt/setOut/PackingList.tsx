@@ -67,7 +67,7 @@ export default function PackingList(): React.ReactNode {
             destroyOnClose
             visible={visible}
             title="套用包"
-            width='60%'
+            width='70%'
             footer={<Space>
                 <Button key="back" onClick={() => {
                     setVisible(false);
@@ -78,7 +78,7 @@ export default function PackingList(): React.ReactNode {
             </Space>}
             className={styles.tryAssemble}
             onCancel={() => {
-
+                setVisible(false);
             }}>
             <ApplyPacking id={'1'} ref={editRef} />
         </Modal>
