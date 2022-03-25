@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Space, Button, Modal, Form, message, Popconfirm, Select } from 'antd';
+import { Space, Button, Modal, Form, message, Select } from 'antd';
 import { SearchTable as Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
+import { factoryTypeOptions } from "../../../configuration/DictionaryOptions"
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 
@@ -22,6 +23,17 @@ export default function SampleDraw(): React.ReactNode {
             reject(error)
         }
     }), { manual: true })
+
+    const { run: completeBatchRun } = useRequest(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-aps/productionPlan/complete/batch/${params.id}`);
+            resole(result)
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        }
+    }), { manual: true })
+
     const handleModalOk = async () => {
         try {
             const splitData = await form.validateFields()
@@ -79,9 +91,15 @@ export default function SampleDraw(): React.ReactNode {
         Modal.confirm({
             title: "完成批次设置",
             content: "确认后，批次将不可修改",
-            onOk: () => {
-
-            }
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    await completeBatchRun()
+                    message.success("成功完成批次设置")
+                    resove(true)
+                } catch (error) {
+                    reject(error)
+                }
+            })
         })
     }
     const useFactory = () => {
@@ -89,15 +107,33 @@ export default function SampleDraw(): React.ReactNode {
             title: "分配车间",
             icon: null,
             content: <Form form={factoryForm}>
-                <Form.Item label="厂区名" required>
+                <Form.Item
+                    label="厂区名"
+                    name="factoryId"
+                    rules={[{ required: true, message: '请选择厂区名' }]}>
                     <Select>
+                        {factoryTypeOptions?.map((item: any) => <Select.Option
+                            value={item.id}>
+                            {item.name}
+                        </Select.Option>)}
                     </Select>
                 </Form.Item>
             </Form>,
-            onOk: async () => {
-                const factoryName = await factoryForm.validateFields()
-                return run({})
-            }
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    const factoryId = await factoryForm.validateFields()
+                    await run(selectedKeys.map(item => ({
+                        id: item,
+                        factoryId: factoryId.factoryId
+                    })))
+                    message.success("已成功分配厂区")
+                    setSelectedKeys([])
+                    factoryForm.resetFields()
+                    resove(true)
+                } catch (error) {
+                    reject(false)
+                }
+            })
         })
     }
 
@@ -105,9 +141,16 @@ export default function SampleDraw(): React.ReactNode {
         Modal.confirm({
             title: "取消分配车间",
             content: "是否取消分配车间？",
-            onOk: () => {
-
-            }
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    run(selectedKeys.map(item => ({ id: item })))
+                    message.success("已成功取消分配厂区")
+                    setSelectedKeys([])
+                    resove(true)
+                } catch (error) {
+                    reject(false)
+                }
+            })
         })
     }
 
@@ -264,11 +307,10 @@ export default function SampleDraw(): React.ReactNode {
                 <Button type="primary" onClick={settingBatch} disabled={!(selectedKeys.length !== 0)}>设置批次</Button>
                 <Button type="primary" onClick={finishBatch} disabled={!(selectedKeys.length !== 0)}>完成批次设置</Button>
                 <Button type="primary" onClick={useFactory} disabled={!(selectedKeys.length !== 0)}>分配厂区</Button>
-                <Button type="primary" onClick={cancelFactory} disabled={!(selectedKeys.length !== 0)}>取消分配车间</Button>
+                <Button type="primary" onClick={cancelFactory} disabled={!(selectedKeys.length !== 0)}>取消分配厂区</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>
         }
         searchFormItems={[]}
     />
-
 }

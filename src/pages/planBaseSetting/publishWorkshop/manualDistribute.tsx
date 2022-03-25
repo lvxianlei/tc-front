@@ -3,6 +3,7 @@ import { Button, Form, Input, Modal, Radio, Select } from "antd"
 import { Page } from "../../common"
 import { welding, workShopOrder } from "./data.json"
 export default function ManualDistribute(): ReactElement {
+    const [form] = Form.useForm()
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({});
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
     const onSelectChange = (selected: Key[]) => setSelectedRowKeys(selected)
@@ -11,8 +12,8 @@ export default function ManualDistribute(): ReactElement {
         Modal.confirm({
             title: "手动分配车间",
             icon: null,
-            content: <Form>
-                <Form.Item label="生产/组焊车间">
+            content: <Form form={form}>
+                <Form.Item name="" label="生产/组焊车间" rules={[{ required: true, message: "请选择生产/组焊车间..." }]}>
                     <Select></Select>
                 </Form.Item>
             </Form>

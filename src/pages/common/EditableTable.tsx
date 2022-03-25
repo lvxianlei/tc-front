@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import AliTable from './AliTable'
-import { FormInstance, message, Row, Button, Form, Space } from "antd"
+import { FormInstance, message, Button, Form, Space } from "antd"
 import FormItemType from './FormItemType'
 interface EditableTableProps {
     columns: any[]

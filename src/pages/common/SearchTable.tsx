@@ -21,6 +21,7 @@ interface SearchTableProps {
     onFilterSubmit?: <T>(arg: T) => T
     filterValues?: { [key: string]: any }
     extraOperation?: React.ReactNode | React.ReactNode[]
+    tableProps?: { [i: string]: any }
     [key: string]: any
 }
 
@@ -37,6 +38,7 @@ export default function SearchTable({
     extraOperation,
     searchFormItems = [],
     filterValues,
+    tableProps,
     ...props }: SearchTableProps): JSX.Element {
     const [pagenation, setPagenation] = useState<PagenationProps>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
@@ -96,6 +98,7 @@ export default function SearchTable({
             size="small"
             isLoading={loading}
             dataSource={data?.records || data || []}
+            {...tableProps}
             {...props}
         />
         <footer className={styles.pagenationWarp}>
