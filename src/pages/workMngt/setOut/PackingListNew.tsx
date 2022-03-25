@@ -15,6 +15,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { packageTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IBundle, IPackingList } from './ISetOut';
 import ReuseTower, { EditProps } from './ReuseTower';
+import { chooseColumns, packingColumns } from './SetOutInformation.json';
 
 export default function PackingListNew(): React.ReactNode {
     const history = useHistory();
@@ -65,168 +66,6 @@ export default function PackingListNew(): React.ReactNode {
     const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}), {})
 
     const detailData: IPackingList = data || {};
-
-    const chooseColumns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'segmentName',
-            title: '段名',
-            width: 150,
-            dataIndex: 'segmentName'
-        },
-        {
-            key: 'code',
-            title: '构件编号',
-            width: 150,
-            dataIndex: 'code'
-        },
-        {
-            key: 'materialName',
-            title: '材料名称',
-            width: 150,
-            dataIndex: 'materialName'
-        },
-        {
-            key: 'structureTexture',
-            title: '材质',
-            width: 150,
-            dataIndex: 'structureTexture'
-        },
-        {
-            key: 'structureSpec',
-            title: '规格',
-            width: 150,
-            dataIndex: 'structureSpec'
-        },
-        {
-            key: 'structureNum',
-            title: '单段件数',
-            width: 150,
-            dataIndex: 'structureNum'
-        },
-        {
-            key: 'width',
-            title: '宽度',
-            width: 150,
-            dataIndex: 'width'
-        },
-        {
-            key: 'thickness',
-            title: '厚度',
-            width: 150,
-            dataIndex: 'thickness'
-        },
-        {
-            key: 'length',
-            title: '长度',
-            width: 150,
-            dataIndex: 'length'
-        },
-        {
-            key: 'basicsWeight',
-            title: '重量',
-            width: 150,
-            dataIndex: 'basicsWeight'
-        },
-        {
-            key: 'electricWelding',
-            title: '电焊',
-            width: 150,
-            dataIndex: 'electricWelding'
-        },
-        {
-            key: 'bend',
-            title: '火曲',
-            width: 150,
-            dataIndex: 'bend'
-        },
-        {
-            key: 'rootClear',
-            title: '清根',
-            width: 150,
-            dataIndex: 'rootClear'
-        },
-        {
-            key: 'shovelBack',
-            title: '铲背',
-            width: 150,
-            dataIndex: 'shovelBack'
-        },
-        {
-            key: 'description',
-            title: '备注',
-            width: 150,
-            dataIndex: 'description'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            fixed: 'right' as FixedType,
-            width: 100,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Button type="link" onClick={() => packaging(record, index)}>添加</Button>
-            )
-        }
-    ]
-
-    const packingColumns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'pieceCode',
-            title: '构件编号',
-            width: 150,
-            dataIndex: 'pieceCode'
-        },
-        {
-            key: 'materialSpec',
-            title: '规格',
-            width: 150,
-            dataIndex: 'materialSpec'
-        },
-        {
-            key: 'length',
-            title: '长度',
-            width: 150,
-            dataIndex: 'length'
-        },
-        {
-            key: 'num',
-            title: '数量',
-            width: 150,
-            dataIndex: 'num'
-        },
-        {
-            key: 'description',
-            title: '备注',
-            width: 150,
-            dataIndex: 'description'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            fixed: 'right' as FixedType,
-            width: 100,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Button type='link' onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(record.num); setMaxNum(record.num) }}>移除</Button>
-            )
-        }
-    ]
 
     // 添加
     const packaging = (record: IBundle, index: number) => {
@@ -568,7 +407,7 @@ export default function PackingListNew(): React.ReactNode {
     })
 
     return <>
-    <Modal
+        <Modal
             destroyOnClose
             visible={false}
             title="复用杆塔"
@@ -581,9 +420,9 @@ export default function PackingListNew(): React.ReactNode {
             </Space>}
             className={styles.tryAssemble}
             onCancel={() => {
-                
+
             }}>
-            <ReuseTower id={'1'} ref={editRef}/>
+            <ReuseTower id={'1'} ref={editRef} />
         </Modal>
         <Modal visible={removeVisible} title="移除" okText="确认" onCancel={() => { setRemoveNum(0); setRemoveVisible(false); }} onOk={() => remove(removeList, removeIndex, removeNum)}>
             <Row>
@@ -674,7 +513,20 @@ export default function PackingListNew(): React.ReactNode {
                 <Button className={styles.fastBtn} type="primary" onClick={addTopack} ghost>添加</Button>
             </p>
             <CommonTable
-                columns={chooseColumns}
+                haveIndex
+                columns={[
+                    ...chooseColumns,
+                    {
+                        key: 'operation',
+                        title: '操作',
+                        dataIndex: 'operation',
+                        fixed: 'right' as FixedType,
+                        width: 100,
+                        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            <Button type="link" onClick={() => packaging(record, index)}>添加</Button>
+                        )
+                    }
+                ]}
                 pagination={false}
                 dataSource={[...stayDistrict]}
                 rowSelection={{
@@ -689,7 +541,20 @@ export default function PackingListNew(): React.ReactNode {
                 <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
             </p>
             <CommonTable
-                columns={packingColumns}
+                haveIndex
+                columns={[
+                    ...packingColumns,
+                    {
+                        key: 'operation',
+                        title: '操作',
+                        dataIndex: 'operation',
+                        fixed: 'right' as FixedType,
+                        width: 100,
+                        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            <Button type='link' onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(record.num); setMaxNum(record.num) }}>移除</Button>
+                        )
+                    }
+                ]}
                 pagination={false}
                 dataSource={packagingData}
                 rowKey="structureId"

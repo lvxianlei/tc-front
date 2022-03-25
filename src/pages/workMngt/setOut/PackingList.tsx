@@ -4,8 +4,8 @@
  * @description 工作管理-放样列表-杆塔配段-包装清单
 */
 
-import React, { useState } from 'react';
-import { Space, Button, Popconfirm, Spin } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Space, Button, Popconfirm, Spin, Modal, message } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -14,233 +14,10 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import ExportList from '../../../components/export/list';
 import { IBundle, IPackingList } from './ISetOut';
+import { bundleColumns, columns } from './SetOutInformation.json';
+import ApplyPacking, { EditProps } from './ApplyPacking';
 
 export default function PackingList(): React.ReactNode {
-    const columns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        // {
-        //     key: 'balesCode',
-        //     title: '捆号',
-        //     width: 150,
-        //     dataIndex: 'balesCode'
-        // },
-        {
-            key: 'balesCode',
-            title: '包号',
-            width: 150,
-            dataIndex: 'balesCode'
-        },
-        {
-            key: 'packageTypeName',
-            title: '包类型',
-            width: 150,
-            dataIndex: 'packageTypeName'
-        },
-        {
-            key: 'packageAttributeName',
-            title: '包属性',
-            width: 150,
-            dataIndex: 'packageAttributeName'
-        },
-        {
-            key: 'packageAttributeName',
-            title: '包件号数（个）',
-            width: 150,
-            dataIndex: 'packageAttributeName'
-        },
-        {
-            key: 'packageAttributeName',
-            title: '包件数（个）',
-            width: 150,
-            dataIndex: 'packageAttributeName'
-        },
-        // {
-        //     key: 'balesCount',
-        //     title: '捆件数',
-        //     dataIndex: 'balesCount',
-        //     width: 120
-        // },
-        {
-            key: 'weightCount',
-            title: '包重量（kg）',
-            dataIndex: 'weightCount',
-            width: 120
-        },
-        {
-            key: 'createUserName',
-            title: '创建人',
-            width: 200,
-            dataIndex: 'createUserName'
-        },
-        // {
-        //     key: 'createTime',
-        //     title: '创建时间',
-        //     width: 200,
-        //     dataIndex: 'createTime'
-        // },
-        {
-            key: 'createTime',
-            title: '包说明',
-            width: 200,
-            dataIndex: 'createTime'
-        },
-        {
-            key: 'createTime',
-            title: '包段落',
-            width: 200,
-            dataIndex: 'createTime'
-        },
-        {
-            key: 'createTime',
-            title: '现场打包',
-            width: 200,
-            dataIndex: 'createTime'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            fixed: 'right' as FixedType,
-            width: 100,
-            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Link to={`/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListSetting/${record.id}`}>
-                        <Button type="link" disabled={location?.state?.status === 4}>编辑</Button>
-                    </Link>
-                    <Popconfirm
-                        title="确认删除?"
-                        onConfirm={() => { RequestUtil.delete(`/tower-science/packageStructure?id=${record.id}`).then(res => history.go(0)) }}
-                        okText="确认"
-                        cancelText="取消"
-                        disabled={location?.state?.status === 4}
-                    >
-                        <Button type="link" disabled={location?.state?.status === 4}>删除</Button>
-                    </Popconfirm>
-                </Space>
-            )
-        }
-    ]
-
-    const bundleColumns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'pieceCode',
-            title: '件号',
-            width: 150,
-            dataIndex: 'pieceCode'
-        },
-        {
-            key: 'pieceCode',
-            title: '包装数量',
-            width: 150,
-            dataIndex: 'pieceCode'
-        },
-        {
-            key: 'pieceCode',
-            title: '单件重量（kg）',
-            width: 150,
-            dataIndex: 'pieceCode'
-        },
-        {
-            key: 'pieceCode',
-            title: '包装重量（kg）',
-            width: 150,
-            dataIndex: 'pieceCode'
-        },
-        {
-            key: 'materialSpec',
-            title: '材料',
-            dataIndex: 'materialSpec',
-            width: 120
-        },
-        {
-            key: 'materialSpec',
-            title: '材质',
-            dataIndex: 'materialSpec',
-            width: 120
-        },
-        {
-            key: 'materialSpec',
-            title: '材料规格',
-            dataIndex: 'materialSpec',
-            width: 120
-        },
-        {
-            key: 'length',
-            title: '长度（mm）',
-            dataIndex: 'length',
-            width: 120
-        },
-        {
-            key: 'length',
-            title: '宽度（mm）',
-            dataIndex: 'length',
-            width: 120
-        },
-        {
-            key: 'length',
-            title: '厚度（mm）',
-            dataIndex: 'length',
-            width: 120
-        },
-        {
-            key: 'num',
-            title: '电焊',
-            width: 200,
-            dataIndex: 'num'
-        },
-        {
-            key: 'length',
-            title: '火曲',
-            dataIndex: 'length',
-            width: 120
-        },
-        {
-            key: 'length',
-            title: '铲背',
-            dataIndex: 'length',
-            width: 120
-        },
-        {
-            key: 'length',
-            title: '清根',
-            dataIndex: 'length',
-            width: 120
-        },
-        {
-            key: 'length',
-            title: '打扁',
-            dataIndex: 'length',
-            width: 120
-        },
-        {
-            key: 'length',
-            title: '切角',
-            dataIndex: 'length',
-            width: 120
-        },
-        {
-            key: 'description',
-            title: '备注',
-            width: 200,
-            dataIndex: 'description'
-        }
-    ]
-
     const history = useHistory();
     const params = useParams<{ id: string, productId: string }>();
     const match = useRouteMatch();
@@ -248,6 +25,8 @@ export default function PackingList(): React.ReactNode {
     const [bundleData, setBundleData] = useState<IBundle[]>([]);
     const location = useLocation<{ status: number }>();
     const [loading1, setLoading1] = useState(false);
+    const editRef = useRef<EditProps>();
+    const [visible, setVisible] = useState<boolean>(false);
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         await RequestUtil.get(`/tower-science/packageStructure/${params.productId}`).then(res => {
@@ -270,8 +49,39 @@ export default function PackingList(): React.ReactNode {
         const resData: IPackingList = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${id}`);
         setBundleData([...(resData.packageRecordVOList || [])]);
     }
+    
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('复用成功');
+            setVisible(false);
+            history.go(0);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
 
     return <>
+        <Modal
+            destroyOnClose
+            visible={visible}
+            title="套用包"
+            width='60%'
+            footer={<Space>
+                <Button key="back" onClick={() => {
+                    setVisible(false);
+                }}>
+                    关闭
+                </Button>
+                <Button type='primary' onClick={handleModalOk} ghost>复制</Button>
+            </Space>}
+            className={styles.tryAssemble}
+            onCancel={() => {
+
+            }}>
+            <ApplyPacking id={'1'} ref={editRef} />
+        </Modal>
         <Space direction="horizontal" size="small" className={styles?.topcontent}>
             <span>塔型：{detailData?.productCategoryName}</span>
             <span>杆号：{detailData?.productNumber}</span>
@@ -284,7 +94,7 @@ export default function PackingList(): React.ReactNode {
             {
                 location?.state?.status === 4 ?
                     null : <>
-                        <Button type="primary" ghost onClick={() => { }}>套用包</Button>
+                        <Button type="primary" ghost onClick={() => setVisible(true)}>套用包</Button>
                         <Button type="primary" ghost>自动打包</Button>
                         <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListNew`, state: { productCategoryName: detailData?.productCategoryName, productNumber: detailData?.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
                         <Popconfirm
@@ -305,10 +115,46 @@ export default function PackingList(): React.ReactNode {
             <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>
         <DetailContent>
-            <CommonTable columns={columns} style={{ marginBottom: '50px' }} dataSource={detailData?.packageStructureVOList} pagination={false} onRow={(record: Record<string, any>, index: number) => ({
-                onClick: async () => { getBundleData(record.id); }
-            })} />
-            <CommonTable dataSource={[...bundleData]} columns={bundleColumns} pagination={false} />
+            <CommonTable
+                haveIndex
+                columns={[
+                    ...columns,
+                    {
+                        key: 'operation',
+                        title: '操作',
+                        dataIndex: 'operation',
+                        fixed: 'right' as FixedType,
+                        width: 100,
+                        render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                            <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                                <Link to={`/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListSetting/${record.id}`}>
+                                    <Button type="link" disabled={location?.state?.status === 4}>编辑</Button>
+                                </Link>
+                                <Popconfirm
+                                    title="确认删除?"
+                                    onConfirm={() => { RequestUtil.delete(`/tower-science/packageStructure?id=${record.id}`).then(res => history.go(0)) }}
+                                    okText="确认"
+                                    cancelText="取消"
+                                    disabled={location?.state?.status === 4}
+                                >
+                                    <Button type="link" disabled={location?.state?.status === 4}>删除</Button>
+                                </Popconfirm>
+                            </Space>
+                        )
+                    }
+                ]}
+                style={{ marginBottom: '50px' }}
+                dataSource={detailData?.packageStructureVOList}
+                pagination={false}
+                onRow={(record: Record<string, any>, index: number) => ({
+                    onClick: async () => { getBundleData(record.id); }
+                })} />
+            <CommonTable
+                dataSource={[...bundleData]}
+                haveIndex
+                columns={bundleColumns}
+                pagination={false}
+            />
         </DetailContent>
         {isExport ? <ExportList
             history={history}

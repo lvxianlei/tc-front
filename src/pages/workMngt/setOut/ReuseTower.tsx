@@ -61,7 +61,7 @@
      useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit]);
  
      return <Spin spinning={loading}>
-         <DetailContent>
+         <DetailContent style={{padding: '16px'}}>
          <CommonTable dataSource={data} pagination={false} rowSelection={{
                 selectedRowKeys: selectedRowKeys,
                 onChange: (selectedRowKeys: React.Key[], selectedRows:any)=>{
