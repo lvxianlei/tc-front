@@ -114,6 +114,8 @@ export interface IBundle {
     readonly topId?: string;
     readonly pieceCode?: string;
     readonly basicsWeight?: number;
+    readonly child?: IBundle[];
+    readonly isChild?: boolean;
 }
 
 export interface IPackingList {

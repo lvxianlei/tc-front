@@ -49,7 +49,7 @@ export default function PackingList(): React.ReactNode {
         const resData: IPackingList = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${id}`);
         setBundleData([...(resData.packageRecordVOList || [])]);
     }
-    
+
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit();
@@ -82,12 +82,22 @@ export default function PackingList(): React.ReactNode {
             }}>
             <ApplyPacking id={'1'} ref={editRef} />
         </Modal>
-        <Space direction="horizontal" size="small" className={styles?.topcontent}>
-            <span>塔型：{detailData?.productCategoryName}</span>
-            <span>杆号：{detailData?.productNumber}</span>
-            <span>已打包捆数: {detailData?.packageStructureCount}</span>
-            <span>总件数: { }</span>
-            <span>未打包件数: { }</span>
+        <Space direction="horizontal" size="small" className={styles.titleContent}>
+            <span>塔型：
+                <span className={styles.content}>{detailData?.productCategoryName}</span>
+            </span>
+            <span>杆号：
+                <span className={styles.content}>{detailData?.productNumber}</span>
+            </span>
+            <span>已打包捆数:
+                <span className={styles.content}>{detailData?.packageStructureCount}</span>
+            </span>
+            <span>总件数:
+                <span className={styles.content}>{ }</span>
+            </span>
+            <span>未打包件数:
+                <span className={styles.content}>{ }</span>
+            </span>
         </Space>
         <Space direction="horizontal" size="small" className={`${styles.padding16} ${styles.btnRight}`}>
             <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
@@ -114,7 +124,7 @@ export default function PackingList(): React.ReactNode {
             }
             <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>
-        <DetailContent>
+        <DetailContent key="packinglist">
             <CommonTable
                 haveIndex
                 columns={[

@@ -11,6 +11,7 @@
         padding: 0;
     }
 }
+
 .hidden {
     display: none;
 }
@@ -40,18 +41,22 @@
     width: 100%;
     height: 12px;
 }
+
 .red {
     background-color: #F9A1A1 !important;
     color: #FFF;
 }
+
 .green {
     background-color: #89DF88 !important;
     color: #FFF;
 }
+
 .yellow {
     background-color: #FFB401 !important;
     color: #FFF;
 }
+
 .brown {
     background-color: #FF8C00 !important;
     color: #FFF;
@@ -80,9 +85,18 @@
     }
 }
 
-.title {
+.titleContent {
     font-size: 16px;
-    margin: 10px;
+    padding: 16px 0px;
+    .title {
+        box-sizing: border-box;
+        font-size: 16px;
+        color: #181818;
+        font-weight: bold;
+    }
+    .content {
+        color: @primary-color;
+    }
 }
 
 .description {
@@ -98,4 +112,10 @@
 .fastBtn {
     position: absolute;
     right: 16px;
+}
+
+.descripForm {
+    :global(.ant-form-item) {
+        margin-bottom: 0;
+    }
 }

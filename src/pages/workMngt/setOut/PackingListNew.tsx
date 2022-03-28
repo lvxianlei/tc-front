@@ -20,13 +20,14 @@ import { chooseColumns, packingColumns } from './SetOutInformation.json';
 export default function PackingListNew(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, productId: string, packId: string }>();
+    const [searchForm] = Form.useForm();
     const [form] = Form.useForm();
     let [packagingData, setPackagingData] = useState<IBundle[]>([]);
     let [stayDistrict, setStayDistrict] = useState<IBundle[]>([]);
     const location = useLocation<{ productCategoryName: string, productNumber: string }>();
-    const [balesCode, setBalesCode] = useState<string>();
-    const [packageType, setPackageType] = useState<string>();
-    const [packageAttributeName, setPackageAttributeName] = useState<string>();
+    // const [balesCode, setBalesCode] = useState<string>();
+    // const [packageType, setPackageType] = useState<string>();
+    // const [packageAttributeName, setPackageAttributeName] = useState<string>();
     const [visible, setVisible] = useState<boolean>(false);
     const [userList, setUserList] = useState([]);
     const [removeVisible, setRemoveVisible] = useState<boolean>(false);
@@ -40,28 +41,38 @@ export default function PackingListNew(): React.ReactNode {
     const [selectWeight, setSelectWeight] = useState<number>(0);
     const [maxNum, setMaxNum] = useState<number>(0);
     const editRef = useRef<EditProps>();
+    const [showParts, setShowParts] = useState<boolean>(false);
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if (!location.state) {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${params.packId}`);
             setPackagingData(data?.packageRecordVOList || []);
-            setBalesCode(data?.balesCode || '');
-            setPackageType(data?.packageType || '');
-            setPackageAttributeName(data?.packageAttributeName)
+            // setBalesCode(data?.balesCode || '');
+            // setPackageType(data?.packageType || '');
+            // setPackageAttributeName(data?.packageAttributeName)
             resole(data);
         } else {
-            const BalesCode = await RequestUtil.get<string>(`/tower-science/packageStructure/nextBalesCode/${params.productId}`);
-            setBalesCode(BalesCode);
+            // const BalesCode = await RequestUtil.get<string>(`/tower-science/packageStructure/nextBalesCode/${params.productId}`);
+            // setBalesCode(BalesCode);
             resole({ productCategoryName: location.state.productCategoryName, productNumber: location.state.productNumber });
         }
         const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId });
-        const newData = list.filter((item: IBundle) => !packagingData.some((ele: IBundle) => ele.id !== item.id))
-        setStayDistrict(newData);
+        const newData = list.filter((item: IBundle) => !packagingData.some((ele: IBundle) => ele.id !== item.id));
+        setStayDistrict(newData.map((res, index) => {
+            return {
+                ...res,
+                child: [
+                    {
+                        apertureNumber: "6", basicsPartNum: "1", basicsWeight: 0.05, bend: 1, chamfer: "1", code: "1000", description: '', electricWelding: 1, greenColumn: [], groove: "1", holesNum: 0, id: index.toString(), intersectingLine: "1", length: "4832", materialName: "角钢", ncName: '54555', openCloseAngle: "1", perforate: "1", perimeter: "10", redColumn: [], repeatNum: 20, rootClear: 1, segmentGroupId: '565655', segmentId: "1502102178776219650", segmentName: "1", shovelBack: 1, sides: "1", slottedForm: "1", specialCode: '57', squash: "1", structureNum: 20, structureSpec: "∠63*5", structureTexture: "Q345", surfaceArea: "5", thickness: "60", totalWeight: "0.05", type: "类型1", weldingEdge: "1", width: "600", yellowColumn: []
+                    }
+                ]
+            }
+        }));
         const data: any = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
         setUserList(data?.loftingProductSegmentList);
     });
 
-    useEffect(() => setBalesCode(balesCode), [JSON.stringify(balesCode)])
+    // useEffect(() => setBalesCode(balesCode), [JSON.stringify(balesCode)])
 
     const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}), {})
 
@@ -345,38 +356,44 @@ export default function PackingListNew(): React.ReactNode {
         if (value.checkList?.indexOf('shovelBack') >= 0) {
             value.shovelBack = 1
         }
+        if (value.checkList?.indexOf('squash') >= 0) {
+            value.squash = 1
+        }
+        if (value.checkList?.indexOf('chamfer') >= 0) {
+            value.chamfer = 1
+        }
         getTableDataSource({ ...value });
     }
 
-    const packageChange = (e: string) => {
-        setPackageType(e);
-        const data: IBundle[] = packagingData.map((item: IBundle) => {
-            return {
-                ...item,
-                packageType: e,
-            }
-        })
-        setPackagingData([...data]);
-    }
+    // const packageChange = (e: string) => {
+    //     setPackageType(e);
+    //     const data: IBundle[] = packagingData.map((item: IBundle) => {
+    //         return {
+    //             ...item,
+    //             packageType: e,
+    //         }
+    //     })
+    //     setPackagingData([...data]);
+    // }
 
-    const packageAttributeChange = (e: string) => {
-        setPackageAttributeName(e);
-        const data: IBundle[] = packagingData.map((item: IBundle) => {
-            return {
-                ...item,
-                packageAttributeName: e,
-            }
-        })
-        setPackagingData([...data]);
-    }
+    // const packageAttributeChange = (e: string) => {
+    //     setPackageAttributeName(e);
+    //     const data: IBundle[] = packagingData.map((item: IBundle) => {
+    //         return {
+    //             ...item,
+    //             packageAttributeName: e,
+    //         }
+    //     })
+    //     setPackagingData([...data]);
+    // }
 
-    const numChange = (e: number, structureCount: number, index: number) => {
-        packagingData[index] = {
-            ...packagingData[index],
-            num: e
-        }
-        setPackagingData([...packagingData])
-    }
+    // const numChange = (e: number, structureCount: number, index: number) => {
+    //     packagingData[index] = {
+    //         ...packagingData[index],
+    //         num: e
+    //     }
+    //     setPackagingData([...packagingData])
+    // }
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
         setSelectedRowKeys(selectedRowKeys);
@@ -388,7 +405,6 @@ export default function PackingListNew(): React.ReactNode {
         setRemoveRowKeys(selectedRowKeys);
         setRemoveRow(selectRows)
     }
-
 
     if (loading) {
         return <Spin spinning={loading}>
@@ -406,13 +422,18 @@ export default function PackingListNew(): React.ReactNode {
         }
     })
 
+    const expandedRowRender = (record: Record<string, any>) => {
+        return <CommonTable haveIndex columns={chooseColumns} showHeader={false} dataSource={record.children} pagination={false} />;
+    }
+
     return <>
         <Modal
             destroyOnClose
-            visible={false}
+            visible={visible}
             title="复用杆塔"
             footer={<Space>
                 <Button key="back" onClick={() => {
+                    setVisible(false)
                 }}>
                     取消
                 </Button>
@@ -420,100 +441,178 @@ export default function PackingListNew(): React.ReactNode {
             </Space>}
             className={styles.tryAssemble}
             onCancel={() => {
-
+                setVisible(false)
             }}>
             <ReuseTower id={'1'} ref={editRef} />
         </Modal>
-        <Modal visible={removeVisible} title="移除" okText="确认" onCancel={() => { setRemoveNum(0); setRemoveVisible(false); }} onOk={() => remove(removeList, removeIndex, removeNum)}>
+        <Modal
+            visible={removeVisible}
+            title="移除"
+            okText="确认"
+            onCancel={() => {
+                setRemoveNum(0);
+                setRemoveVisible(false);
+            }}
+            onOk={() => remove(removeList, removeIndex, removeNum)}
+        >
             <Row>
                 <Col>数量</Col>
                 <Col><InputNumber max={maxNum} value={removeNum} onChange={(e) => setRemoveNum(Number(e))} /></Col>
             </Row>
         </Modal>
-        <DetailContent operation={[
+        <DetailContent key="packinglistnew" operation={[
             <Space direction="horizontal" size="small" >
-                <Button type="primary" onClick={() => {
-                    setVisible(true);
-                    setPackageType(detailData?.packageType);
-                    setPackageAttributeName(detailData?.packageAttributeName)
-                }}>保存包</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
+                <Button type="primary" onClick={() => {
+
+                }}>保存并关闭</Button>
+                <Button type="primary" onClick={() => {
+
+                }}>保存并继续</Button>
             </Space>
         ]}>
             <DetailTitle title="包装信息" />
-            <Form form={form} className={styles.topPadding} onFinish={(value: Record<string, any>) => onFinish(value)}>
-                <Descriptions style={{ width: '40%', position: 'absolute' }} title="" bordered size="small" column={2}>
+            <Form form={form} className={styles.descripForm}>
+                <Descriptions title="" bordered size="small" column={7}>
                     <Descriptions.Item label="塔型">
                         {detailData?.productCategoryName}
                     </Descriptions.Item>
                     <Descriptions.Item label="杆塔号">
                         {detailData?.productNumber}
                     </Descriptions.Item>
+                    <Descriptions.Item label="包号">
+                        自动生成
+                    </Descriptions.Item>
+                    <Descriptions.Item label="包类型">
+                        <Form.Item name="balesCode">
+                            <Select placeholder="请选择包类型" style={{ width: "100%" }}>
+                                {packageTypeOptions && packageTypeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={index} value={id}>
+                                        {name}
+                                    </Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="包说明">
+                        <Form.Item name="materialSpec">
+                            <Input placeholder="请输入" maxLength={300} />
+                        </Form.Item>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="包属性">
+                        <Form.Item name="materialSpec">
+                            <Select placeholder="请选择包属性" style={{ width: "100%" }}>
+                                <Select.Option value="通用" key="1">通用</Select.Option>
+                                <Select.Option value="专用包" key="2">专用包</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="复用杆塔">
+                        <Form.Item name="materialSpec">
+                            <Input addonBefore={<Button type="link" onClick={() => { setVisible(true) }}>选择杆塔</Button>} disabled />
+                        </Form.Item>
+                    </Descriptions.Item>
                 </Descriptions>
+            </Form>
+            <DetailTitle title="筛选区" style={{ padding: "8px 0px" }} />
+            <Form form={searchForm} layout="inline" onFinish={(value: Record<string, any>) => onFinish(value)}>
                 <Form.Item name="checkList">
-                    <Checkbox.Group style={{ width: '50%', position: 'absolute', right: '1%' }}>
+                    <Checkbox.Group style={{ width: '100%' }}>
                         <Row>
-                            <Col span={6}>
-                                <Checkbox value="electricWelding" key="1">是否电焊</Checkbox>
+                            <Col span={4}>
+                                <Checkbox value="electricWelding" key="1">电焊</Checkbox>
                             </Col>
-                            <Col span={6}>
-                                <Checkbox value="bend" key="2">是否火曲</Checkbox>
+                            <Col span={4}>
+                                <Checkbox value="bend" key="2">火曲</Checkbox>
                             </Col>
-                            <Col span={6}>
-                                <Checkbox value="rootClear" key="3">是否清根</Checkbox>
+                            <Col span={4}>
+                                <Checkbox value="rootClear" key="4">清根</Checkbox>
                             </Col>
-                            <Col span={6}>
-                                <Checkbox value="shovelBack" key="4">是否铲背</Checkbox>
+                            <Col span={4}>
+                                <Checkbox value="shovelBack" key="4">铲背</Checkbox>
+                            </Col>
+                            <Col span={4}>
+                                <Checkbox value="squash" key="5">打扁</Checkbox>
+                            </Col>
+                            <Col span={4}>
+                                <Checkbox value="chamfer" key="6">切角</Checkbox>
                             </Col>
                         </Row>
                     </Checkbox.Group>
                 </Form.Item>
-                <Row>
-                    <Col span={3}>
-                        <Form.Item name="materialSpec" label="材料名称" className={styles.rightPadding5}>
-                            <Input placeholder="请输入" maxLength={20} />
-                        </Form.Item>
-                    </Col>
-                    <Col offset={1} span={4}>
-                        <Form.Item name="segmentId" label="段名">
-                            <Select placeholder="请选择" style={{ width: '120px' }}>
-                                {userList && userList.map((item: any) => {
-                                    return <Select.Option key={item.id} value={item.segmentId}>{item.segmentName}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col offset={1} span={3}>
-                        <Form.Item name="minLength" label="长度范围" className={styles.rightPadding5}>
-                            <Input type="number" min={0} placeholder="请输入" />
-                        </Form.Item>
-                    </Col>
-                    <Col span={2}>
-                        <Form.Item name="maxLength">
-                            <Input type="number" min={0} placeholder="请输入" />
-                        </Form.Item>
-                    </Col>
-                    <Col offset={1} span={4}>
-                        <Form.Item name="code" label="查询">
-                            <Input placeholder="请输入" maxLength={50} />
-                        </Form.Item>
-                    </Col>
-                    <Col offset={1} span={3}>
-                        <Space direction="horizontal">
-                            <Button type="primary" htmlType="submit">搜索</Button>
-                            <Button type="ghost" htmlType="reset">重置</Button>
-                        </Space>
-                    </Col>
-                </Row>
+                <Form.Item name="materialSpec" label="材料名称" className={styles.rightPadding5}>
+                    <Input placeholder="请输入" maxLength={20} style={{ width: '100%' }} />
+                </Form.Item>
+                <Form.Item name="segmentId" label="段名">
+                    <Select placeholder="请选择" style={{ width: '100%' }}>
+                        {userList && userList.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.segmentId}>{item.segmentName}</Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item name="segmentId">
+                    <Checkbox value="electricWelding" key="7" style={{ width: '100%' }}>公用段</Checkbox>
+                </Form.Item>
+                <Form.Item name="minLength" label="长度范围" className={styles.rightPadding5}>
+                    <Input type="number" min={0} placeholder="请输入" />
+                </Form.Item>
+                <Form.Item name="maxLength">
+                    <Input type="number" min={0} placeholder="请输入" />
+                </Form.Item>
+                <Form.Item name="code" label="查询">
+                    <Input placeholder="构件编号" maxLength={50} />
+                </Form.Item>
+                <Space direction="horizontal">
+                    <Button type="primary" htmlType="submit">搜索</Button>
+                    <Button type="ghost" htmlType="reset">重置</Button>
+                </Space>
             </Form>
-            <p className={styles.title}>
-                <span>待选区</span>
-                <span className={styles.description}>未分配：{stayDistrict.length}</span>
-                <span className={styles.description}>已选择构件总重量：{selectWeight}吨</span>
+            <p className={styles.titleContent}>
+                <span className={styles.title}>待选区</span>
+                <span className={styles.description}>未包装数量：
+                    <span className={styles.content}>{stayDistrict.length}</span>
+                </span>
+                <span className={styles.description}>已选择：件数：
+                    <span className={styles.content}>{selectWeight}</span>
+                </span>
+                <span className={styles.description}>重量：
+                    <span className={styles.content}>{selectWeight}kg</span>
+                </span>
+                <span className={styles.description}>电焊件：
+                    <span className={styles.content}>{selectWeight}</span>
+                </span>
+                <p style={{ width: '100%', display: 'inline', paddingLeft: '20px' }}>
+                    <Checkbox value="electricWelding" onChange={(e) => {
+                        setShowParts(e.target.checked);
+                        let newdata: IBundle[] = []
+                        if (e.target.checked) {
+                            stayDistrict.forEach((res: IBundle, index: number) => {
+                                if (res?.child && res?.child?.length > 0) {
+                                    newdata.push(...[
+                                        { ...res, isChild: false },
+                                        ...res.child.map(item => {
+                                            return {
+                                                ...item,
+                                                isChild: true
+                                            }
+                                        })
+                                    ])
+                                } else {
+                                    newdata.push({ ...res, isChild: false })
+                                }
+                            })
+                        } else {
+                            newdata = stayDistrict.filter(res => res.isChild === false);
+                        }
+                            console.log(JSON.parse(JSON.stringify([...newdata])))
+                        setStayDistrict([...newdata]);
+                    }} key="8">显示电焊件中的零件</Checkbox>
+                </p>
                 <Button className={styles.fastBtn} type="primary" onClick={addTopack} ghost>添加</Button>
             </p>
             <CommonTable
                 haveIndex
+                // expandable={showParts ? { expandedRowRender: expandedRowRender, defaultExpandAllRows: true, checkStrictly: true } : false}
                 columns={[
                     ...chooseColumns,
                     {
@@ -533,11 +632,22 @@ export default function PackingListNew(): React.ReactNode {
                     selectedRowKeys: selectedRowKeys,
                     type: "checkbox",
                     onChange: onSelectChange,
+                    getCheckboxProps: (record: Record<string, any>) => ({
+                        disabled: record.isChild === true
+                    }),
                 }}
             />
-            <p className={styles.title}>包装区
-                <span className={styles.description}>已选择构件数：{packagingData.length}</span>
-                <span className={styles.description}>已选择构件总重量：{eval(packagingData.map(item => { return Number(item.num) * Number(item.basicsWeight) }).join('+')) || 0}吨</span>
+            <p className={styles.titleContent}>
+                <span className={styles.title}>包装区</span>
+                <span className={styles.description}>包重量（kg）：
+                    <span className={styles.content}>{eval(packagingData.map(item => { return Number(item.num) * Number(item.basicsWeight) }).join('+')) || 0}</span>
+                </span>
+                <span className={styles.description}> 包件数：
+                    <span className={styles.content}>{packagingData.length}</span>
+                </span>
+                <span className={styles.description}>电焊件：
+                    <span className={styles.content}>{selectWeight}</span>
+                </span>
                 <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
             </p>
             <CommonTable
@@ -562,9 +672,10 @@ export default function PackingListNew(): React.ReactNode {
                     selectedRowKeys: removeRowKeys,
                     type: "checkbox",
                     onChange: onRemoveSelectChange,
-                }} />
+                }}
+            />
         </DetailContent>
-        <Modal
+        {/* <Modal
             visible={visible}
             title="保存包"
             onCancel={() => {
@@ -614,6 +725,6 @@ export default function PackingListNew(): React.ReactNode {
                     </Select>
                 </Col>
             </Row>
-        </Modal>
+        </Modal> */}
     </>
 }
