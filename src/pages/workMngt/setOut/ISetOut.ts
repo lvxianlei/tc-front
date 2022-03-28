@@ -114,8 +114,9 @@ export interface IBundle {
     readonly topId?: string;
     readonly pieceCode?: string;
     readonly basicsWeight?: number;
-    readonly child?: IBundle[];
+    readonly weldingStructureList?: IBundle[];
     readonly isChild?: boolean;
+    readonly structureRemainingNum?: number;
 }
 
 export interface IPackingList {

@@ -334,16 +334,16 @@
     ],
     "packingColumns": [
         {
-            "key": "pieceCode",
+            "key": "segmentName",
             "title": "段名",
             "width": 150,
-            "dataIndex": "pieceCode"
+            "dataIndex": "segmentName"
         },
         {
-            "key": "materialSpec",
+            "key": "pieceCode",
             "title": "件号",
             "width": 150,
-            "dataIndex": "materialSpec"
+            "dataIndex": "pieceCode"
         },
         {
             "key": "structureNum",
@@ -358,10 +358,10 @@
             "dataIndex": "structureCountNum"
         },
         {
-            "key": "structureRemainingNum",
+            "key": "structureCount",
             "title": "包装数量",
             "width": 150,
-            "dataIndex": "structureRemainingNum"
+            "dataIndex": "structureCount"
         },
         {
             "key": "basicsWeight",

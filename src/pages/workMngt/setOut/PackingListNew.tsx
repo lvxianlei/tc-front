@@ -25,9 +25,6 @@ export default function PackingListNew(): React.ReactNode {
     let [packagingData, setPackagingData] = useState<IBundle[]>([]);
     let [stayDistrict, setStayDistrict] = useState<IBundle[]>([]);
     const location = useLocation<{ productCategoryName: string, productNumber: string }>();
-    // const [balesCode, setBalesCode] = useState<string>();
-    // const [packageType, setPackageType] = useState<string>();
-    // const [packageAttributeName, setPackageAttributeName] = useState<string>();
     const [visible, setVisible] = useState<boolean>(false);
     const [userList, setUserList] = useState([]);
     const [removeVisible, setRemoveVisible] = useState<boolean>(false);
@@ -41,19 +38,13 @@ export default function PackingListNew(): React.ReactNode {
     const [selectWeight, setSelectWeight] = useState<number>(0);
     const [maxNum, setMaxNum] = useState<number>(0);
     const editRef = useRef<EditProps>();
-    const [showParts, setShowParts] = useState<boolean>(false);
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if (!location.state) {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${params.packId}`);
             setPackagingData(data?.packageRecordVOList || []);
-            // setBalesCode(data?.balesCode || '');
-            // setPackageType(data?.packageType || '');
-            // setPackageAttributeName(data?.packageAttributeName)
             resole(data);
         } else {
-            // const BalesCode = await RequestUtil.get<string>(`/tower-science/packageStructure/nextBalesCode/${params.productId}`);
-            // setBalesCode(BalesCode);
             resole({ productCategoryName: location.state.productCategoryName, productNumber: location.state.productNumber });
         }
         const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId });
@@ -61,9 +52,11 @@ export default function PackingListNew(): React.ReactNode {
         setStayDistrict(newData.map((res, index) => {
             return {
                 ...res,
-                child: [
+                isChild: false,
+                structureRemainingNum: 10,
+                weldingStructureList: [
                     {
-                        apertureNumber: "6", basicsPartNum: "1", basicsWeight: 0.05, bend: 1, chamfer: "1", code: "1000", description: '', electricWelding: 1, greenColumn: [], groove: "1", holesNum: 0, id: index.toString(), intersectingLine: "1", length: "4832", materialName: "角钢", ncName: '54555', openCloseAngle: "1", perforate: "1", perimeter: "10", redColumn: [], repeatNum: 20, rootClear: 1, segmentGroupId: '565655', segmentId: "1502102178776219650", segmentName: "1", shovelBack: 1, sides: "1", slottedForm: "1", specialCode: '57', squash: "1", structureNum: 20, structureSpec: "∠63*5", structureTexture: "Q345", surfaceArea: "5", thickness: "60", totalWeight: "0.05", type: "类型1", weldingEdge: "1", width: "600", yellowColumn: []
+                        apertureNumber: "6", basicsPartNum: "1", basicsWeight: 0.05, bend: 1, chamfer: "1", code: "1000", description: '', electricWelding: 1, greenColumn: [], groove: "1", holesNum: 0, id: index.toString(), intersectingLine: "1", length: "4832", materialName: "角钢", ncName: '54555', openCloseAngle: "1", perforate: "1", perimeter: "10", redColumn: [], repeatNum: 20, rootClear: 1, segmentGroupId: '565655', segmentId: "1502102178776219650", segmentName: "1", shovelBack: 1, sides: "1", slottedForm: "1", specialCode: '57', squash: "1", structureRemainingNum: 20, structureSpec: "∠63*5", structureTexture: "Q345", surfaceArea: "5", thickness: "60", totalWeight: "0.05", type: "类型1", weldingEdge: "1", width: "600", yellowColumn: []
                     }
                 ]
             }
@@ -71,8 +64,6 @@ export default function PackingListNew(): React.ReactNode {
         const data: any = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
         setUserList(data?.loftingProductSegmentList);
     });
-
-    // useEffect(() => setBalesCode(balesCode), [JSON.stringify(balesCode)])
 
     const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}), {})
 
@@ -85,12 +76,11 @@ export default function PackingListNew(): React.ReactNode {
             description: record.description,
             length: record.length,
             pieceCode: record.code,
-            num: record.structureNum,
             materialSpec: record.structureSpec,
             productCategoryId: detailData.productCategoryId,
             productId: detailData.productId,
             structureId: record.id || record.topId,
-            structureCount: record.structureNum,
+            structureCount: record.structureRemainingNum,
             topId: record.id || record.topId,
             id: ''
         }
@@ -123,12 +113,11 @@ export default function PackingListNew(): React.ReactNode {
                     description: res.description,
                     length: res.length,
                     pieceCode: res.code,
-                    num: res.structureNum,
                     materialSpec: res.structureSpec,
                     productCategoryId: detailData.productCategoryId,
                     productId: detailData.productId,
                     structureId: res.id || res.topId || res.structureId,
-                    structureCount: res.structureNum,
+                    structureCount: res.structureRemainingNum,
                     topId: res.id || res.structureId,
                     id: ''
                 }
@@ -143,7 +132,7 @@ export default function PackingListNew(): React.ReactNode {
                     } else {
                         packagingData[find] = {
                             ...packagingData[find],
-                            num: Number(packagingData[find].num) + Number(record.structureNum)
+                            structureCount: Number(packagingData[find].structureCount) + Number(record.structureRemainingNum)
                         }
                     }
                 })
@@ -169,26 +158,25 @@ export default function PackingListNew(): React.ReactNode {
         }
     }
 
-
     // 移除
     const remove = async (value: Record<string, any>, index: number, num: number) => {
-        if (num === value.num) {
+        if (num === value.structureCount) {
             packagingData.splice(index, 1)
             setPackagingData([...packagingData]);
             if (value.id) {
-                const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
-                const newData: IPackingList = { ...newValue, structureNum: num };
-                const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                const newValue = await RequestUtil.get<IBundle>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
+                const newData: IBundle = { ...newValue, structureRemainingNum: num };
+                const find: number = stayDistrict.findIndex((res: IBundle) => {
                     return res.id === newData.id
                 })
                 if (find === -1) {
                     setStayDistrict([...stayDistrict, newValue]);
                 } else {
-                    setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                    setStayDistrict([...stayDistrict.map((res: IBundle, index: number) => {
                         if (index === find) {
                             return {
                                 ...res,
-                                structureNum: num + Number(res?.structureNum || 0)
+                                structureRemainingNum: num + Number(res?.structureRemainingNum || 0)
                             }
                         } else {
                             return res
@@ -196,19 +184,19 @@ export default function PackingListNew(): React.ReactNode {
                     })]);
                 }
             } else {
-                const newData: IPackingList = { ...value, structureNum: num };
-                const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                const newData: IBundle = { ...value, structureRemainingNum: num };
+                const find: number = stayDistrict.findIndex((res: IBundle) => {
                     return res.topId === newData.topId
                 })
                 if (find === -1) {
                     setStayDistrict([...stayDistrict, { ...value, id: value.topId || value.structureId }]);
                 } else {
-                    setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                    setStayDistrict([...stayDistrict.map((res: IBundle, index: number) => {
                         if (index === find) {
                             return {
                                 ...res,
                                 id: value.topId || value.structureId,
-                                structureNum: num + Number(res?.structureNum || 0)
+                                structureRemainingNum: num + Number(res?.structureRemainingNum || 0)
                             }
                         } else {
                             return {
@@ -223,23 +211,23 @@ export default function PackingListNew(): React.ReactNode {
             packagingData[index] = {
                 ...value,
                 id: value.topId || value.structureId,
-                num: value.num - num
+                structureCount: value.structureCount - num
             }
             setPackagingData([...packagingData]);
             if (value.id) {
-                const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
-                const newData: IPackingList = { ...newValue, structureNum: num };
-                const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                const newValue = await RequestUtil.get<IBundle>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
+                const newData: IBundle = { ...newValue, structureRemainingNum: num };
+                const find: number = stayDistrict.findIndex((res: IBundle) => {
                     return res.id === newData.id
                 })
                 if (find === -1) {
-                    setStayDistrict([...stayDistrict, { ...newValue, structureNum: num }]);
+                    setStayDistrict([...stayDistrict, { ...newValue, structureRemainingNum: num }]);
                 } else {
-                    setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                    setStayDistrict([...stayDistrict.map((res: IBundle, index: number) => {
                         if (index === find) {
                             return {
                                 ...res,
-                                structureNum: num + Number(res?.structureNum || 0)
+                                structureRemainingNum: num + Number(res?.structureRemainingNum || 0)
                             }
                         } else {
                             return res
@@ -247,19 +235,19 @@ export default function PackingListNew(): React.ReactNode {
                     })]);
                 }
             } else {
-                const newData: IPackingList = { ...value, structureNum: num };
-                const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                const newData: IBundle = { ...value, structureRemainingNum: num };
+                const find: number = stayDistrict.findIndex((res: IBundle) => {
                     return res.topId === newData.topId
                 })
                 if (find === -1) {
-                    setStayDistrict([...stayDistrict, { ...value, structureNum: num, id: value.topId || value.structureId }]);
+                    setStayDistrict([...stayDistrict, { ...value, structureRemainingNum: num, id: value.topId || value.structureId }]);
                 } else {
-                    setStayDistrict([...stayDistrict.map((res: IPackingList, index: number) => {
+                    setStayDistrict([...stayDistrict.map((res: IBundle, index: number) => {
                         if (index === find) {
                             return {
                                 ...res,
                                 id: value.topId || value.structureId,
-                                structureNum: num + Number(res?.structureNum || 0)
+                                structureRemainingNum: num + Number(res?.structureRemainingNum || 0)
                             }
                         } else {
                             return {
@@ -287,18 +275,18 @@ export default function PackingListNew(): React.ReactNode {
                     }
                 })
                 if (value.id) {
-                    const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
-                    const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                    const newValue = await RequestUtil.get<IBundle>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
+                    const find: number = stayDistrict.findIndex((res: IBundle) => {
                         return res.id === newValue.id
                     })
                     if (find === -1) {
                         stayDistrict = [...stayDistrict, { ...newValue }]
                     } else {
-                        stayDistrict = [...stayDistrict.map((res: IPackingList, index: number) => {
+                        stayDistrict = [...stayDistrict.map((res: IBundle, index: number) => {
                             if (index === find) {
                                 return {
                                     ...res,
-                                    structureNum: newValue?.structureNum
+                                    structureRemainingNum: newValue?.structureRemainingNum
                                 }
                             } else {
                                 return res
@@ -308,17 +296,17 @@ export default function PackingListNew(): React.ReactNode {
 
                     setStayDistrict([...stayDistrict]);
                 } else {
-                    const find: number = stayDistrict.findIndex((res: IPackingList) => {
+                    const find: number = stayDistrict.findIndex((res: IBundle) => {
                         return res.topId === value.topId
                     })
                     if (find === -1) {
                         stayDistrict = [...stayDistrict, { ...value, id: value.topId || value.structureId }]
                     } else {
-                        stayDistrict = [...stayDistrict.map((res: IPackingList, index: number) => {
+                        stayDistrict = [...stayDistrict.map((res: IBundle, index: number) => {
                             if (index === find) {
                                 return {
                                     ...res,
-                                    structureNum: value?.structureNum,
+                                    structureRemainingNum: value?.structureRemainingNum,
                                     id: value.topId || value.structureId
                                 }
                             } else {
@@ -365,40 +353,10 @@ export default function PackingListNew(): React.ReactNode {
         getTableDataSource({ ...value });
     }
 
-    // const packageChange = (e: string) => {
-    //     setPackageType(e);
-    //     const data: IBundle[] = packagingData.map((item: IBundle) => {
-    //         return {
-    //             ...item,
-    //             packageType: e,
-    //         }
-    //     })
-    //     setPackagingData([...data]);
-    // }
-
-    // const packageAttributeChange = (e: string) => {
-    //     setPackageAttributeName(e);
-    //     const data: IBundle[] = packagingData.map((item: IBundle) => {
-    //         return {
-    //             ...item,
-    //             packageAttributeName: e,
-    //         }
-    //     })
-    //     setPackagingData([...data]);
-    // }
-
-    // const numChange = (e: number, structureCount: number, index: number) => {
-    //     packagingData[index] = {
-    //         ...packagingData[index],
-    //         num: e
-    //     }
-    //     setPackagingData([...packagingData])
-    // }
-
     const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRow(selectRows);
-        setSelectWeight(eval((selectRows || [])?.map(item => { return Number(item.structureNum) * Number(item.basicsWeight) }).join('+')) || 0);
+        setSelectWeight(eval((selectRows || [])?.map(item => { return Number(item.structureRemainingNum) * Number(item.basicsWeight) }).join('+')) || 0);
     }
 
     const onRemoveSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
@@ -421,10 +379,6 @@ export default function PackingListNew(): React.ReactNode {
             reject(false)
         }
     })
-
-    const expandedRowRender = (record: Record<string, any>) => {
-        return <CommonTable haveIndex columns={chooseColumns} showHeader={false} dataSource={record.children} pagination={false} />;
-    }
 
     return <>
         <Modal
@@ -583,14 +537,14 @@ export default function PackingListNew(): React.ReactNode {
                 </span>
                 <p style={{ width: '100%', display: 'inline', paddingLeft: '20px' }}>
                     <Checkbox value="electricWelding" onChange={(e) => {
-                        setShowParts(e.target.checked);
-                        let newdata: IBundle[] = []
+                        let newStayDistrict: IBundle[] = [];
+                        let newPackagingData: IBundle[] = []
                         if (e.target.checked) {
                             stayDistrict.forEach((res: IBundle, index: number) => {
-                                if (res?.child && res?.child?.length > 0) {
-                                    newdata.push(...[
+                                if (res?.weldingStructureList && res?.weldingStructureList?.length > 0) {
+                                    newStayDistrict.push(...[
                                         { ...res, isChild: false },
-                                        ...res.child.map(item => {
+                                        ...res.weldingStructureList.map(item => {
                                             return {
                                                 ...item,
                                                 isChild: true
@@ -598,21 +552,37 @@ export default function PackingListNew(): React.ReactNode {
                                         })
                                     ])
                                 } else {
-                                    newdata.push({ ...res, isChild: false })
+                                    newStayDistrict.push({ ...res, isChild: false })
+                                }
+                            })
+                            packagingData.forEach((res: IBundle, index: number) => {
+                                if (res?.weldingStructureList && res?.weldingStructureList?.length > 0) {
+                                    newPackagingData.push(...[
+                                        { ...res, isChild: false },
+                                        ...res.weldingStructureList.map(item => {
+                                            return {
+                                                ...item,
+                                                isChild: true
+                                            }
+                                        })
+                                    ])
+                                } else {
+                                    newPackagingData.push({ ...res, isChild: false })
                                 }
                             })
                         } else {
-                            newdata = stayDistrict.filter(res => res.isChild === false);
+                            newStayDistrict = stayDistrict.filter(res => res.isChild === false);
+                            newPackagingData = packagingData.filter(res => res.isChild === false);
                         }
-                            console.log(JSON.parse(JSON.stringify([...newdata])))
-                        setStayDistrict([...newdata]);
+
+                        setStayDistrict([...newStayDistrict]);
+                        setPackagingData([...newPackagingData]);
                     }} key="8">显示电焊件中的零件</Checkbox>
                 </p>
                 <Button className={styles.fastBtn} type="primary" onClick={addTopack} ghost>添加</Button>
             </p>
             <CommonTable
                 haveIndex
-                // expandable={showParts ? { expandedRowRender: expandedRowRender, defaultExpandAllRows: true, checkStrictly: true } : false}
                 columns={[
                     ...chooseColumns,
                     {
@@ -622,7 +592,7 @@ export default function PackingListNew(): React.ReactNode {
                         fixed: 'right' as FixedType,
                         width: 100,
                         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Button type="link" onClick={() => packaging(record, index)}>添加</Button>
+                            <Button type="link" disabled={record.isChild} onClick={() => packaging(record, index)}>添加</Button>
                         )
                     }
                 ]}
@@ -661,7 +631,7 @@ export default function PackingListNew(): React.ReactNode {
                         fixed: 'right' as FixedType,
                         width: 100,
                         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Button type='link' onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(record.num); setMaxNum(record.num) }}>移除</Button>
+                            <Button type='link' disabled={record.isChild} onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(record.structureCount); setMaxNum(record.structureCount) }}>移除</Button>
                         )
                     }
                 ]}
@@ -672,6 +642,9 @@ export default function PackingListNew(): React.ReactNode {
                     selectedRowKeys: removeRowKeys,
                     type: "checkbox",
                     onChange: onRemoveSelectChange,
+                    getCheckboxProps: (record: Record<string, any>) => ({
+                        disabled: record.isChild === true
+                    }),
                 }}
             />
         </DetailContent>
