@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import AliTable from './AliTable'
-import { FormInstance, message, Button, Form, Space } from "antd"
+import { FormInstance, message, Button, Form, Space, Input } from "antd"
 import FormItemType from './FormItemType'
 interface EditableTableProps {
     columns: any[]
@@ -12,6 +12,7 @@ interface EditableTableProps {
     form?: FormInstance
     opration?: React.ReactNode[]
     onChange?: (data: any[], allFields: any[]) => void
+    rowKey?: string | ((row: any) => string)
 }
 
 const formatColunms = (columns: any[], haveIndex: boolean) => {
@@ -49,13 +50,26 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
         dataIndex: 'index',
         render: (_: any, $: any, index: number): React.ReactNode => index + 1
     })
-    return newColumns
+    return [
+        ...newColumns,
+        {
+            title: "",
+            code: "id",
+            width: 0,
+            render: (value: any, record: any, index: number) => {
+                return <Form.Item
+                    hidden
+                    name={['submit', index, "id"]}>
+                    <FormItemType data={{ title: "", dataIndex: "id" }} type="text" />
+                </Form.Item>
+            }
+        }]
 }
 
 
 export default function EditableTable({
     columns, dataSource = [], onChange, form, haveNewButton = true,
-    newButtonTitle = "新增一行", haveOpration = true, haveIndex = true, opration
+    newButtonTitle = "新增一行", haveOpration = true, haveIndex = true, opration, rowKey
 }: EditableTableProps): JSX.Element {
     const [editableDataSource, setEditableDataSource] = useState<any[]>(dataSource.map(item => ({
         ...item,
@@ -69,8 +83,9 @@ export default function EditableTable({
     }, [JSON.stringify(columns)])
 
     useEffect(() => {
-        setEditableDataSource(dataSource.map(item => ({ ...item, id: item.id || (Math.random() * 1000000).toFixed(0) })))
-        form && form.setFieldsValue({ submit: dataSource })
+        const newDataSource = dataSource.map(item => ({ ...item, id: item.id || (Math.random() * 1000000).toFixed(0) }))
+        setEditableDataSource(newDataSource)
+        form && form.setFieldsValue({ submit: newDataSource })
     }, [JSON.stringify(dataSource)])
 
     const removeItem = useCallback((id: string) => {
@@ -108,7 +123,7 @@ export default function EditableTable({
         </Space>
         <AliTable
             size="small"
-            primaryKey="id"
+            primaryKey={rowKey || "id"}
             style={{ overflow: 'auto', maxHeight: 400 }}
             defaultColumnWidth={150}
             columns={haveOpration ? [
