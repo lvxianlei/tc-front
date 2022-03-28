@@ -5,6 +5,7 @@ import { Page } from "../../common"
 import { pageTable, workShopOrder } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
+import { productTypeOptions } from "../../../configuration/DictionaryOptions"
 
 export default () => {
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ status: 1 });
@@ -69,14 +70,14 @@ export default () => {
         }
         searchFormItems={[
             {
-                name: 'pleasePayStatus',
+                name: 'productType',
                 label: '产品类型',
-                children: <Select style={{ width: 200 }} defaultValue="全部">
-                    <Select.Option value="">全部</Select.Option>
-                    <Select.Option value="1">已创建</Select.Option>
-                    <Select.Option value="2">待付款</Select.Option>
-                    <Select.Option value="3">部分付款</Select.Option>
-                    <Select.Option value="4">已付款</Select.Option>
+                children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={id}>
+                            {name}
+                        </Select.Option>
+                    })}
                 </Select>
             },
             {
@@ -103,7 +104,7 @@ export default () => {
                 values.startTime = formatDate[0] + ' 00:00:00';
                 values.endTime = formatDate[1] + ' 23:59:59';
             }
-            setFilterValue(values);
+            setFilterValue({ ...filterValue, ...values });
             return values;
         }}
     />
