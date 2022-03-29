@@ -52,6 +52,8 @@ export interface PdmModalProps {
 export interface allotModalProps {
     onSubmit: () => void;
     onSave: () => void;
+    onCheck: () => void;
+    selectedRowKeys: string[];
 }
 
 export interface IAllot {

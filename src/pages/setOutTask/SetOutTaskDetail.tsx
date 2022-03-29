@@ -99,9 +99,9 @@ const productColumns = [
         dataIndex: 'totalWeight',
     },
     {
-        key: 'loftingAbortTime',
+        key: 'loftingCompleteTime',
         title: '放样计划完成时间',
-        dataIndex: 'loftingAbortTime',
+        dataIndex: 'loftingCompleteTime',
         "type": "date",
         "format": "YYYY-MM-DD"
     },

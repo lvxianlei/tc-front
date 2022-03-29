@@ -36,10 +36,10 @@ export default function PickList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'taskNum',
+            key: 'projectName',
             title: '图纸/工程名称',
             width: 100,
-            dataIndex: 'taskNum'
+            dataIndex: 'projectName'
         },
         {
             key: 'planNumber',
