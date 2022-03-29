@@ -100,7 +100,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         title: "序号",
         dataIndex: "index",
         width: 50,
-        fixed: "left", align: "left",
+        fixed: "left",
         onCell: () => ({ className: styles.tableCell }),
         render: (_: any, _a: any, index: number) => <>{index + 1}</>
     }, ...formatColumns] : formatColumns
@@ -113,7 +113,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
             handleHoverBackground: '#ccc',
             handleActiveBackground: '#ccc',
         }));
-    props?.tableProps?.rowSelection &&  pipeline.use(features.multiSelect({
+    props?.tableProps?.rowSelection && pipeline.use(features.multiSelect({
         value: props?.tableProps?.rowSelection?.selectedRowKeys || [],
         onChange: props?.tableProps?.rowSelection?.onChange,
         isDisabled: props?.tableProps?.rowSelection?.getCheckboxProps
