@@ -11,7 +11,7 @@ export default function Index(): React.ReactElement {
     const handleEditClick = useCallback(() => setEdit(true), [setEdit])
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-aps/workshop/config/list`);
+            const result: any = await RequestUtil.get(`/tower-aps/workshop/config/list?size=1000`);
             resole(result?.records.map((item: any) => ({
                 ...item,
                 productTypeId: item.productTypeId?.split(",") || [],
@@ -64,7 +64,6 @@ export default function Index(): React.ReactElement {
                 opration={[
                     <Button type="primary" loading={saveLoading} key="edit" onClick={handleSubmit}>保存</Button>
                 ]}
-                rowKey="groupId"
                 columns={pageTableSetting.map((item: any) => {
                     switch (item.dataIndex) {
                         case "productTypeId":
@@ -95,7 +94,7 @@ export default function Index(): React.ReactElement {
                     }
                 })}
                 haveIndex={false}
-                dataSource={data || []}
+                dataSource={data.map((item: any) => ({ ...item, id: item.groupId })) || []}
             />}
             {!edit && <>
                 <Space size={16} style={{ marginBottom: 16 }}>

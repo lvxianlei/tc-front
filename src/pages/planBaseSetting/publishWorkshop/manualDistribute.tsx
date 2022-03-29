@@ -124,23 +124,9 @@ export default function ManualDistribute(): ReactElement {
             <Button type="primary" onClick={handleClick}>手动分配车间</Button>
         </Space>
         <CommonAliTable
-            columns={status === 1 ? welding : [...structure.map((item: any) => {
-                switch (item.dataIndex) {
-                    case "segmentName":
-                        return ({
-                            ...item,
-                            onCell: (record: any, index: number) => {
-                                console.log(record)
-                                if (record.segmentName) {
-                                    return { colSpan: 2 };
-                                }
-                            }
-                        })
-                    default:
-                        return item
-                }
-            })]}
+            columns={status === 1 ? welding : structure}
             size="small"
+            className={status === 1 ? "" : "bordered"}
             isLoading={loading}
             rowSelection={{
                 selectedRowKeys: selectedRowKeys,
