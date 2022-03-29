@@ -28,7 +28,7 @@ const renderRoute: any = (module: string | undefined, authority: any) => () => (
 const SiderMenu: React.FC = () => {
     const location = useLocation()
     const [selectedSubMenuItem, setSelectedSubMenuItem] = useState<React.Key[]>([location.pathname, `/${location.pathname.split("/")[1]}`])
-    const [selectedDarkMenuItem, setSelectedDarkMenuItem] = useState([location.pathname])
+    const [selectedDarkMenuItem, setSelectedDarkMenuItem] = useState([`/${location.pathname.split("/")[1]}/${location.pathname.split("/")[2]}`])
 
     const getMenuItemForAppName = () => {
         const currentApp = AuthUtil.getCurrentAppName()
@@ -39,7 +39,7 @@ const SiderMenu: React.FC = () => {
 
     useEffect(() => {
         setSelectedSubMenuItem([location.pathname, `/${location.pathname.split("/")[1]}`]);
-        setSelectedDarkMenuItem([location.pathname])
+        setSelectedDarkMenuItem([`/${location.pathname.split("/")[1]}/${location.pathname.split("/")[2]}`])
     }, [JSON.stringify(location)])
 
     return <Menu

@@ -13,8 +13,8 @@ const StyledBaseTable = (styled(BaseTable)`
   --border-color: #f0f0f0;
   --color: rgba(0, 0, 0, 0.85);
   --bgcolor: white;
-  --hover-bgcolor: #fafafa;
-  --highlight-bgcolor: #fafafa;
+  --hover-bgcolor: #fff8e6;
+  --highlight-bgcolor: #fff8e6;
   --header-color: rgba(0, 0, 0, 0.85);
   --header-bgcolor: #fafafa;
   --header-hover-bgcolor: #f5f5f5;
@@ -99,7 +99,7 @@ interface AntdTableProps extends BaseTableProps {
  * */
 export default ({ size = "default", ...props }: AntdTableProps) => {
   return <StyledBaseTable
-    defaultColumnWidth={100}
+    defaultColumnWidth={140}
     {...props}
     className={`${size} ${props.className}`}
     components={{

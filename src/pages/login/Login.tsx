@@ -31,8 +31,8 @@ export default function Login(): JSX.Element {
         try {
             const captcha: ICaptcha = await RequestUtil.get(`/sinzetech-auth/oauth/captcha`)
             const tenant: ITenant = await RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${window.location.host}`)
-            // const tenant: ITenant = await RequestUtil.get(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-dev.dhwy.cn`)
             // const tenant: ITenant = await RequestUtil.get(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-test.dhwy.cn`)
+            // const tenant: ITenant = await RequestUtil.get(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-dev.dhwy.cn`)
             resole({ captcha, tenant })
         } catch (error) {
             reject(false)

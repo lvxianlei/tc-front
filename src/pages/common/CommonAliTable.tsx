@@ -28,8 +28,8 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
-                render: (text: string) => <Text
-                    style={{ width: "100%" }}
+                align: "left",
+                render: (text: string) => <Paragraph
                     ellipsis={{
                         tooltip: text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"
                     }}>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</Text>,
@@ -39,9 +39,8 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
             return ({
                 name: data.title,
                 code: data.dataIndex,
-                lock: data.fixed,
-                render: (text: string | number) => <Text
-                    style={{ width: "100%" }}
+                lock: data.fixed, align: "left",
+                render: (text: string | number) => <Paragraph
                     ellipsis={{
                         tooltip: ((text || text === 0) && data.enum) ? data.enum?.find((item: EnumObject) => item.value === text)?.label : text
                     }}
@@ -52,9 +51,8 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
             return ({
                 name: data.title,
                 code: data.dataIndex,
-                lock: data.fixed,
-                render: (text: number) => <Text
-                    style={{ width: "100%" }}
+                lock: data.fixed, align: "left",
+                render: (text: number) => <Paragraph
                     ellipsis={{
                         tooltip: text && !["-1", -1].includes(text) ? text : 0
                     }}>{text && !["-1", -1].includes(text) ? text : 0}</Text>,
@@ -64,9 +62,8 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
             return ({
                 name: data.title,
                 code: data.dataIndex,
-                lock: data.fixed,
-                render: data.render || ((text: number) => <Text
-                    style={{ width: "100%" }}
+                lock: data.fixed, align: "left",
+                render: data.render || ((text: number) => <Paragraph
                     ellipsis={{
                         tooltip: text && !["-1", -1].includes(text) ? text : "-"
                     }}>{text && !["-1", -1].includes(text) ? text : "-"}</Text>),
@@ -76,10 +73,9 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
             return ({
                 name: data.title,
                 code: data.dataIndex,
-                lock: data.fixed,
-                render: data.render || ((text: number) => <Text
-                    style={{ width: "100%" }}
-                    ellipsis={{ tooltip: text && !["-1", -1].includes(text) ? text : "-" }}>{text && !["-1", -1].includes(text) ? text : "-"}</Text>),
+                lock: data.fixed, align: "left",
+                render: data.render || ((text: number) => <Paragraph
+                    ellipsis={{ rows: 1 }}>{text && !["-1", -1].includes(text) ? text : "-"}</Paragraph>),
                 ...data
             })
     }
@@ -100,7 +96,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         title: "序号",
         dataIndex: "index",
         width: 50,
-        fixed: "left",
+        fixed: "left", align: "left",
         onCell: () => ({ className: styles.tableCell }),
         render: (_: any, _a: any, index: number) => <>{index + 1}</>
     }, ...formatColumns] : formatColumns
@@ -113,10 +109,13 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
             handleHoverBackground: '#ccc',
             handleActiveBackground: '#ccc',
         }));
-    props?.tableProps?.rowSelection &&  pipeline.use(features.multiSelect({
-        value: props?.tableProps?.rowSelection?.selectedRowKeys || [],
-        onChange: props?.tableProps?.rowSelection?.onChange,
-        isDisabled: props?.tableProps?.rowSelection?.getCheckboxProps
+    props?.rowSelection?.type === "checkbox" && pipeline.use(features.multiSelect({
+        value: props?.rowSelection?.selectedRowKeys || [],
+        onChange: (nextValue: string[]) => props?.rowSelection?.onChange(nextValue, dataSource.filter((item: any) => item[rowKey || "id"])),
+        isDisabled: props?.rowSelection?.getCheckboxProps,
+        highlightRowWhenSelected: true,
+        clickArea: "cell",
+        checkboxColumn: { width: 40, lock: true, align: "left" }
     }))
 
     return <nav className={styles.componentsTable}>
