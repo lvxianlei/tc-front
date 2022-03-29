@@ -193,7 +193,7 @@ export default function Invoicing() {
                 {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
-                    children: <Input placeholder="方案编号/任务编号/生产批次/塔型" style={{ width: 300 }} />
+                    children: <Input placeholder="方案编号/生产批次/塔型" style={{ width: 300 }} />
                 }
             ]}
         />
