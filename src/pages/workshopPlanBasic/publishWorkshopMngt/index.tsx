@@ -76,7 +76,7 @@ export default function Index(): React.ReactElement {
                             })
                         case "factoryId":
                             return ({ ...item, enum: factoryTypeOptions?.map((item: any) => ({ label: item.name, value: item.id })) })
-                        case "weldingTypeName":
+                        case "weldingTypeId":
                             return ({ ...item, enum: compoundTypeOptions?.map((item: any) => ({ label: item.name, value: item.id })) })
                         case "weldingWorkshopId":
                             return ({
