@@ -65,7 +65,7 @@ export default function Overview() {
                     setState(1)
                 }} ghost style={{ marginRight: 16 }}>导出</Button>
             {
-                (params.loftingState as any) * 1 === 1 && <Button key="peiliao" type="primary" ghost onClick={() => setIngredientsvisible(true)} style={{ marginRight: 16 }}>配料</Button>
+                (params.loftingState as any) * 1 === 2 && <Button key="peiliao" type="primary" ghost onClick={() => setIngredientsvisible(true)} style={{ marginRight: 16 }}>配料</Button>
             }
             
         </div>
