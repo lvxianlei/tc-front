@@ -159,7 +159,7 @@ export default function PackingList(): React.ReactNode {
                     }
                 ]}
                 style={{ marginBottom: '50px' }}
-                dataSource={detailData?.packageStructureVOList}
+                dataSource={detailData}
                 pagination={false}
                 onRow={(record: Record<string, any>, index: number) => ({
                     onClick: async () => { getBundleData(record.id); }

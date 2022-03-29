@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-杆塔配段-包装清单-添加
 */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Space, Button, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions, Modal, Select } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -16,6 +16,7 @@ import { packageTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IBundle, IPackingList } from './ISetOut';
 import ReuseTower, { EditProps } from './ReuseTower';
 import { chooseColumns, packingColumns } from './SetOutInformation.json';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 export default function PackingListNew(): React.ReactNode {
     const history = useHistory();
@@ -38,14 +39,13 @@ export default function PackingListNew(): React.ReactNode {
     const [selectWeight, setSelectWeight] = useState<number>(0);
     const [maxNum, setMaxNum] = useState<number>(0);
     const editRef = useRef<EditProps>();
+    const [showParts, setShowParts] = useState<boolean>(false);
+    const [reuse, setReuse] = useState<[]>();
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if (!location.state) {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${params.packId}`);
             setPackagingData(data?.packageRecordVOList || []);
-            resole(data);
-        } else {
-            resole({ productCategoryName: location.state.productCategoryName, productNumber: location.state.productNumber });
         }
         const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId });
         const newData = list.filter((item: IBundle) => !packagingData.some((ele: IBundle) => ele.id !== item.id));
@@ -53,16 +53,12 @@ export default function PackingListNew(): React.ReactNode {
             return {
                 ...res,
                 isChild: false,
-                structureRemainingNum: 10,
-                weldingStructureList: [
-                    {
-                        apertureNumber: "6", basicsPartNum: "1", basicsWeight: 0.05, bend: 1, chamfer: "1", code: "1000", description: '', electricWelding: 1, greenColumn: [], groove: "1", holesNum: 0, id: index.toString(), intersectingLine: "1", length: "4832", materialName: "角钢", ncName: '54555', openCloseAngle: "1", perforate: "1", perimeter: "10", redColumn: [], repeatNum: 20, rootClear: 1, segmentGroupId: '565655', segmentId: "1502102178776219650", segmentName: "1", shovelBack: 1, sides: "1", slottedForm: "1", specialCode: '57', squash: "1", structureRemainingNum: 20, structureSpec: "∠63*5", structureTexture: "Q345", surfaceArea: "5", thickness: "60", totalWeight: "0.05", type: "类型1", weldingEdge: "1", width: "600", yellowColumn: []
-                    }
-                ]
+                weldingStructureList: res.weldingStructureList?.map(item => { return { ...item, isChild: true } })
             }
         }));
         const data: any = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
         setUserList(data?.loftingProductSegmentList);
+        resole(data);
     });
 
     const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}), {})
@@ -79,29 +75,65 @@ export default function PackingListNew(): React.ReactNode {
             materialSpec: record.structureSpec,
             productCategoryId: detailData.productCategoryId,
             productId: detailData.productId,
-            structureId: record.id || record.topId,
             structureCount: record.structureRemainingNum,
-            topId: record.id || record.topId,
-            id: ''
+            id: '',
+            weldingStructureList: record?.weldingStructureList?.map(res => {
+                return {
+                    ...res,
+                    description: res.description,
+                    length: res.length,
+                    pieceCode: res.code,
+                    materialSpec: res.structureSpec,
+                    productCategoryId: detailData.productCategoryId,
+                    productId: detailData.productId,
+                    structureCount: res.structureRemainingNum,
+                    id: '',
+                }
+            })
         }
+        let newData: IBundle[] = [];
         if (packagingData?.length > 0) {
             let find = packagingData.findIndex((res: IBundle) => {
-                return res.structureId === data.id || res.structureId === data.topId
+                return res.businessId === data.businessId
             })
             if (find === -1) {
-                packagingData.push(data)
+                if (showParts) {
+                    newData = [...packagingData, ...packagingDataShowParts([data])]
+                } else {
+                    packagingData.push(data)
+                    newData = packagingData
+                }
             } else {
                 packagingData[find] = {
                     ...packagingData[find],
-                    num: Number(packagingData[find].num) + Number(data.num)
+                    structureCount: Number(packagingData[find].structureCount) + Number(data.structureRemainingNum),
+                    weldingStructureList: packagingData[find].weldingStructureList?.map((res, index) => {
+                        return {
+                            ...res,
+                            structureCount: Number(res.structureCount) + Number(data?.weldingStructureList && data?.weldingStructureList[index].structureRemainingNum),
+                        }
+                    })
                 }
+                newData = packagingData.map(items => {
+                    if (items.mainStructureId === data.businessId && items.isChild) {
+                        const getData = data?.weldingStructureList && data?.weldingStructureList.filter(res => res.businessId === items.businessId)[0];
+                        return {
+                            ...items,
+                            structureCount: Number(items.structureCount) + Number(getData?.structureRemainingNum)
+                        }
+                    } else {
+                        return items;
+                    }
+                })
             }
         } else {
             packagingData.push(data)
+            newData = showParts ? packagingDataShowParts([...packagingData]) : packagingData
         }
-        setPackagingData([...packagingData]);
+        setPackagingData([...newData]);
         stayDistrict.splice(index, 1);
-        setStayDistrict([...stayDistrict]);
+        const list = stayDistrict.filter(res => res.mainStructureId !== data.businessId)
+        setStayDistrict([...list]);
     }
 
     // 批量添加 
@@ -116,38 +148,63 @@ export default function PackingListNew(): React.ReactNode {
                     materialSpec: res.structureSpec,
                     productCategoryId: detailData.productCategoryId,
                     productId: detailData.productId,
-                    structureId: res.id || res.topId || res.structureId,
                     structureCount: res.structureRemainingNum,
-                    topId: res.id || res.structureId,
-                    id: ''
+                    id: '',
+                    weldingStructureList: res?.weldingStructureList?.map(item => {
+                        return {
+                            ...item,
+                            description: item.description,
+                            length: item.length,
+                            pieceCode: item.code,
+                            materialSpec: item.structureSpec,
+                            productCategoryId: detailData.productCategoryId,
+                            productId: detailData.productId,
+                            structureCount: item.structureRemainingNum,
+                            id: '',
+                        }
+                    })
                 }
             })
             if (packagingData?.length > 0) {
                 data?.forEach((record: IBundle) => {
                     let find = packagingData.findIndex((res: IBundle) => {
-                        return res.structureId === record.id || res.structureId === record.topId
+                        return res.businessId === record.businessId
                     })
                     if (find === -1) {
                         packagingData = [...packagingData, record]
                     } else {
                         packagingData[find] = {
                             ...packagingData[find],
-                            structureCount: Number(packagingData[find].structureCount) + Number(record.structureRemainingNum)
+                            structureCount: Number(packagingData[find].structureCount) + Number(record.structureRemainingNum),
+                            weldingStructureList: packagingData[find].weldingStructureList?.map((res, index) => {
+                                return {
+                                    ...res,
+                                    structureCount: Number(res.structureRemainingNum) + Number(record?.weldingStructureList && record?.weldingStructureList[index].structureRemainingNum),
+                                }
+                            })
                         }
                     }
                 })
             } else {
                 packagingData = [...(data || [])]
             }
-            setPackagingData([...packagingData]);
+            let newPackagingData: IBundle[] = []
+            if (showParts) {
+                newPackagingData = packagingDataShowParts(packagingData);
+            } else {
+                newPackagingData = [...packagingData];
+            }
+            setPackagingData([...newPackagingData]);
+            let list: IBundle[] = stayDistrict
             data?.forEach((record: IBundle) => {
                 stayDistrict.forEach((res: IBundle, index: number) => {
-                    if (record.structureId === res.id || res.structureId === record.topId) {
-                        stayDistrict.splice(index, 1);
+                    if (record.businessId === res.businessId) {
+                        list.splice(index, 1);
+                        list = list.filter(res => res.mainStructureId !== record.businessId)
                     }
                 })
             })
-            setStayDistrict(stayDistrict);
+            setStayDistrict([...list]);
             setRemoveRow([]);
             setRemoveRowKeys([]);
             setSelectedRow([]);
@@ -160,68 +217,114 @@ export default function PackingListNew(): React.ReactNode {
 
     // 移除
     const remove = async (value: Record<string, any>, index: number, num: number) => {
-        if (num === value.structureCount) {
-            packagingData.splice(index, 1)
-            setPackagingData([...packagingData]);
+        if (num === Number(value.structureCount) / Number(value.singleNum)) {
+            packagingData.splice(index, 1);
+            const list = packagingData.filter(res => res.mainStructureId !== value.businessId);
+            setPackagingData([...list]);
             if (value.id) {
                 const newValue = await RequestUtil.get<IBundle>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
                 const newData: IBundle = { ...newValue, structureRemainingNum: num };
                 const find: number = stayDistrict.findIndex((res: IBundle) => {
-                    return res.id === newData.id
+                    return res.businessId === newData.businessId
                 })
                 if (find === -1) {
-                    setStayDistrict([...stayDistrict, newValue]);
+                    let data = showParts ? stayDistrictShowParts([newValue]) : [newValue]
+                    setStayDistrict([...stayDistrict, ...data]);
                 } else {
                     setStayDistrict([...stayDistrict.map((res: IBundle, index: number) => {
                         if (index === find) {
                             return {
                                 ...res,
-                                structureRemainingNum: num + Number(res?.structureRemainingNum || 0)
+                                structureRemainingNum: num + Number(res?.structureRemainingNum || 0),
+                                weldingStructureList: packagingData[find].weldingStructureList?.map((res, index)=>{
+                                    return {
+                                        ...res,
+                                        structureCount: Number(res.structureRemainingNum) + Number(value?.weldingStructureList && value?.weldingStructureList[index].structureRemainingNum),
+                                    }
+                                })
                             }
                         } else {
-                            return res
+                            return res;
                         }
                     })]);
                 }
             } else {
                 const newData: IBundle = { ...value, structureRemainingNum: num };
                 const find: number = stayDistrict.findIndex((res: IBundle) => {
-                    return res.topId === newData.topId
+                    return res.businessId === newData.businessId
                 })
                 if (find === -1) {
-                    setStayDistrict([...stayDistrict, { ...value, id: value.topId || value.structureId }]);
+                    let data = showParts ? stayDistrictShowParts([{ ...value, businessId:value.businessId }]) : [{ ...value, businessId: value.businessId }]
+                    setStayDistrict([...stayDistrict, ...data]);
                 } else {
-                    setStayDistrict([...stayDistrict.map((res: IBundle, index: number) => {
+                    let data: IBundle[] = [...stayDistrict.map((res: IBundle, index: number) => {
                         if (index === find) {
+                            const getData = res?.weldingStructureList && res?.weldingStructureList.filter(items => items.businessId === res.businessId)[0];
                             return {
                                 ...res,
-                                id: value.topId || value.structureId,
-                                structureRemainingNum: num + Number(res?.structureRemainingNum || 0)
+                                businessId: value.businessId,
+                                structureRemainingNum: Number(num) * Number(res.singleNum || 1) + Number(res?.structureRemainingNum || 0),
+                                weldingStructureList: res?.weldingStructureList?.map((item, index) => {
+                                    return {
+                                        ...item,
+                                        structureRemainingNum: Number(num) * Number(item.singleNum || 1) + Number(getData?.structureRemainingNum || 0)
+                                    }
+                                })
                             }
                         } else {
-                            return {
-                                ...res,
-                                id: value.topId || value.structureId
-                            }
+                            return res;
                         }
-                    })]);
+                    })]
+                    if (showParts) {
+                        data = data.map(items => {
+                            if (items.mainStructureId === value.businessId && items.isChild) {
+                                return {
+                                    ...items,
+                                    structureRemainingNum: Number(num) * Number(items.singleNum || 1) + Number(items?.structureRemainingNum || 0),
+                                }
+                            } else {
+                                return items;
+                            }
+                        })
+                    }
+                    setStayDistrict(data);
                 }
             }
         } else {
             packagingData[index] = {
                 ...value,
-                id: value.topId || value.structureId,
-                structureCount: value.structureCount - num
+                businessId: value.businessId,
+                structureCount: value.structureCount - Number(num) * Number(value.singleNum || 1),
+                weldingStructureList: packagingData[index].weldingStructureList?.map((res, index) => {
+                    return {
+                        ...res,
+                        structureCount: Number(res.structureCount) - Number(num) * Number(res.singleNum || 1),
+                    }
+                })
             }
-            setPackagingData([...packagingData]);
+            let list: IBundle[] = []
+            if (showParts) {
+                list = packagingData.map(res => {
+                    if (res.mainStructureId === packagingData[index].businessId && res.isChild) {
+                        return {
+                            ...res,
+                            structureCount: Number(res.structureCount) - Number(num) * Number(res.singleNum || 1)
+                        }
+                    } else {
+                        return res;
+                    }
+                })
+            }
+            setPackagingData(showParts ? list : [...packagingData]);
             if (value.id) {
                 const newValue = await RequestUtil.get<IBundle>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
                 const newData: IBundle = { ...newValue, structureRemainingNum: num };
                 const find: number = stayDistrict.findIndex((res: IBundle) => {
-                    return res.id === newData.id
+                    return res.businessId === newData.businessId
                 })
                 if (find === -1) {
-                    setStayDistrict([...stayDistrict, { ...newValue, structureRemainingNum: num }]);
+                    let data = showParts ? stayDistrictShowParts([{ ...newValue, structureRemainingNum: num }]) : [{ ...newValue, structureRemainingNum: num }]
+                    setStayDistrict([...stayDistrict, ...data]);
                 } else {
                     setStayDistrict([...stayDistrict.map((res: IBundle, index: number) => {
                         if (index === find) {
@@ -230,32 +333,61 @@ export default function PackingListNew(): React.ReactNode {
                                 structureRemainingNum: num + Number(res?.structureRemainingNum || 0)
                             }
                         } else {
-                            return res
+                            return res;
                         }
                     })]);
                 }
             } else {
                 const newData: IBundle = { ...value, structureRemainingNum: num };
                 const find: number = stayDistrict.findIndex((res: IBundle) => {
-                    return res.topId === newData.topId
+                    return res.businessId === newData.businessId
                 })
                 if (find === -1) {
-                    setStayDistrict([...stayDistrict, { ...value, structureRemainingNum: num, id: value.topId || value.structureId }]);
-                } else {
-                    setStayDistrict([...stayDistrict.map((res: IBundle, index: number) => {
-                        if (index === find) {
+                    const data: IBundle[] = [{
+                        ...value,
+                        structureRemainingNum: Number(num) * Number(value.singleNum || 1),
+                        businessId: value.businessId,
+                        weldingStructureList: value.weldingStructureList?.map((res: IBundle, index: number) => {
                             return {
                                 ...res,
-                                id: value.topId || value.structureId,
-                                structureRemainingNum: num + Number(res?.structureRemainingNum || 0)
+                                structureRemainingNum: Number(num) * Number(res.singleNum || 1),
+                            }
+                        })
+                    }]
+                    let newData = showParts ? stayDistrictShowParts(data) : data
+                    setStayDistrict([...stayDistrict, ...newData]);
+                } else {
+                    let data: IBundle[] = [...stayDistrict.map((res: IBundle, index: number) => {
+                        if (index === find) {
+                            const getData = res?.weldingStructureList && res?.weldingStructureList.filter(items => items.businessId === res.businessId)[0];
+                            return {
+                                ...res,
+                                businessId: value.businessId,
+                                structureRemainingNum: Number(num) * Number(res.singleNum || 1) + Number(res?.structureRemainingNum || 0),
+                                weldingStructureList: res?.weldingStructureList?.map((item, index) => {
+                                    return {
+                                        ...item,
+                                        structureRemainingNum: Number(num) * Number(item.singleNum || 1) + Number(getData?.structureRemainingNum || 0),
+                                    }
+                                })
                             }
                         } else {
-                            return {
-                                ...res,
-                                id: value.topId || value.structureId
-                            }
+                            return res;
                         }
-                    })]);
+                    })]
+                    if (showParts) {
+                        data = data.map(items => {
+                            if (items.mainStructureId === value.businessId && items.isChild) {
+                                return {
+                                    ...items,
+                                    structureRemainingNum: Number(num) * Number(items.singleNum || 1) + Number(items?.structureRemainingNum || 0),
+                                }
+                            } else {
+                                return items;
+                            }
+                        })
+                    }
+                    setStayDistrict(data);
                 }
             }
         }
@@ -270,14 +402,14 @@ export default function PackingListNew(): React.ReactNode {
         if (removeRow.length > 0) {
             removeRow?.forEach(async (value: IBundle, index: number) => {
                 packagingData.forEach((res: IBundle, index: number) => {
-                    if (value.structureId === res.structureId) {
+                    if (value.businessId === res.businessId) {
                         packagingData.splice(index, 1);
                     }
                 })
                 if (value.id) {
                     const newValue = await RequestUtil.get<IBundle>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
                     const find: number = stayDistrict.findIndex((res: IBundle) => {
-                        return res.id === newValue.id
+                        return res.businessId === newValue.businessId
                     })
                     if (find === -1) {
                         stayDistrict = [...stayDistrict, { ...newValue }]
@@ -297,30 +429,25 @@ export default function PackingListNew(): React.ReactNode {
                     setStayDistrict([...stayDistrict]);
                 } else {
                     const find: number = stayDistrict.findIndex((res: IBundle) => {
-                        return res.topId === value.topId
+                        return res.businessId === value.businessId
                     })
                     if (find === -1) {
-                        stayDistrict = [...stayDistrict, { ...value, id: value.topId || value.structureId }]
+                        stayDistrict = [...stayDistrict, { ...value, businessId: value.businessId }]
                     } else {
                         stayDistrict = [...stayDistrict.map((res: IBundle, index: number) => {
                             if (index === find) {
                                 return {
                                     ...res,
-                                    structureRemainingNum: value?.structureRemainingNum,
-                                    id: value.topId || value.structureId
+                                    structureRemainingNum: value?.structureRemainingNum
                                 }
                             } else {
-                                return {
-                                    ...res,
-                                    id: value.topId || value.structureId
-                                }
+                                return res
                             }
                         })]
                     }
                     setStayDistrict([...stayDistrict]);
                 }
             })
-
             setPackagingData([...packagingData]);
             setRemoveRow([]);
             setRemoveRowKeys([]);
@@ -364,21 +491,99 @@ export default function PackingListNew(): React.ReactNode {
         setRemoveRow(selectRows)
     }
 
-    if (loading) {
-        return <Spin spinning={loading}>
-            <div style={{ width: '100%', height: '300px' }}></div>
-        </Spin>
-    }
-
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
-            const selectKeys = await editRef.current?.onSubmit()
-            console.log(selectKeys);
+            const selectKeys: [] = await editRef.current?.onSubmit() || []
+            setReuse(selectKeys);
+            setVisible(false);
             resove(true);
         } catch (error) {
             reject(false)
         }
     })
+
+    const stayDistrictShowParts = (data: IBundle[]) => {
+        let newStayDistrict: IBundle[] = [];
+        data.forEach((res: IBundle, index: number) => {
+            if (res?.weldingStructureList && res?.weldingStructureList?.length > 0) {
+                newStayDistrict.push(...[
+                    { ...res, isChild: false },
+                    ...res.weldingStructureList.map(item => {
+                        return {
+                            ...item,
+                            isChild: true
+                        }
+                    })
+                ])
+            } else {
+                newStayDistrict.push({ ...res, isChild: false })
+            }
+        })
+        return newStayDistrict
+    }
+
+    const packagingDataShowParts = (data: IBundle[]) => {
+        let newPackagingData: IBundle[] = []
+        data.forEach((res: IBundle, index: number) => {
+            if (res?.weldingStructureList && res?.weldingStructureList?.length > 0) {
+                newPackagingData.push(...[
+                    { ...res, isChild: false },
+                    ...res.weldingStructureList.map(item => {
+                        return {
+                            ...item,
+                            isChild: true
+                        }
+                    })
+                ])
+            } else {
+                newPackagingData.push({ ...res, isChild: false })
+            }
+        })
+        return newPackagingData;
+    }
+
+    const isShowParts = (e: CheckboxChangeEvent) => {
+        setShowParts(e.target.checked);
+        let newStayDistrict: IBundle[] = [];
+        let newPackagingData: IBundle[] = []
+        if (e.target.checked) {
+            newStayDistrict = stayDistrictShowParts(stayDistrict);
+            newPackagingData = packagingDataShowParts(packagingData);
+        } else {
+            newStayDistrict = stayDistrict.filter(res => res.isChild === false);
+            newPackagingData = packagingData.filter(res => res.isChild === false);
+        }
+
+        setStayDistrict([...newStayDistrict]);
+        setPackagingData([...newPackagingData]);
+    }
+
+    const save = async () => {
+        if (form) {
+            const data = await form.validateFields();
+            const value = {
+                ...data,
+                id: params.packId,
+                productCategoryId: params.id,
+                productCategoryName: detailData.productCategoryName,
+                productId: params.productId,
+                productNumber: detailData.productNumber,
+                productIdList: reuse,
+                packageRecordSaveDTOList: showParts ? packagingData : packagingDataShowParts(packagingData)
+            };
+            RequestUtil.post(`/tower-science/packageStructure`, value).then(res => {
+                message.success('包装清单保存成功');
+                setVisible(false);
+                history.goBack();
+            })
+        }
+    }
+
+    if (loading) {
+        return <Spin spinning={loading}>
+            <div style={{ width: '100%', height: '300px' }}></div>
+        </Spin>
+    }
 
     return <>
         <Modal
@@ -397,7 +602,7 @@ export default function PackingListNew(): React.ReactNode {
             onCancel={() => {
                 setVisible(false)
             }}>
-            <ReuseTower id={'1'} ref={editRef} />
+            <ReuseTower productId={params.productId} id={detailData?.productCategoryId || ''} ref={editRef} />
         </Modal>
         <Modal
             visible={removeVisible}
@@ -418,7 +623,7 @@ export default function PackingListNew(): React.ReactNode {
             <Space direction="horizontal" size="small" >
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
                 <Button type="primary" onClick={() => {
-
+                    save()
                 }}>保存并关闭</Button>
                 <Button type="primary" onClick={() => {
 
@@ -435,10 +640,15 @@ export default function PackingListNew(): React.ReactNode {
                         {detailData?.productNumber}
                     </Descriptions.Item>
                     <Descriptions.Item label="包号">
-                        自动生成
+                        <Form.Item name="balesCode">
+                            <Input placeholder="自动生成" disabled />
+                        </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="包类型">
-                        <Form.Item name="balesCode">
+                        <Form.Item name="packageType" rules={[{
+                            "required": true,
+                            "message": "请选择包类型"
+                        }]}>
                             <Select placeholder="请选择包类型" style={{ width: "100%" }}>
                                 {packageTypeOptions && packageTypeOptions.map(({ id, name }, index) => {
                                     return <Select.Option key={index} value={id}>
@@ -449,22 +659,26 @@ export default function PackingListNew(): React.ReactNode {
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="包说明">
-                        <Form.Item name="materialSpec">
+                        <Form.Item name="packageDescription" rules={[{
+                            "required": true,
+                            "message": "请输入包说明"
+                        }]}>
                             <Input placeholder="请输入" maxLength={300} />
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="包属性">
-                        <Form.Item name="materialSpec">
+                        <Form.Item name="packageAttributeName" rules={[{
+                            "required": true,
+                            "message": "请选择包属性"
+                        }]}>
                             <Select placeholder="请选择包属性" style={{ width: "100%" }}>
-                                <Select.Option value="通用" key="1">通用</Select.Option>
-                                <Select.Option value="专用包" key="2">专用包</Select.Option>
+                                <Select.Option value="公用" key="1">公用</Select.Option>
+                                <Select.Option value="专用" key="2">专用</Select.Option>
                             </Select>
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="复用杆塔">
-                        <Form.Item name="materialSpec">
-                            <Input addonBefore={<Button type="link" onClick={() => { setVisible(true) }}>选择杆塔</Button>} disabled />
-                        </Form.Item>
+                        <Button type="link" onClick={() => { setVisible(true) }} disabled={form.getFieldsValue(true).packageAttributeName === '专用'}>选择杆塔</Button>
                     </Descriptions.Item>
                 </Descriptions>
             </Form>
@@ -536,55 +750,23 @@ export default function PackingListNew(): React.ReactNode {
                     <span className={styles.content}>{selectWeight}</span>
                 </span>
                 <p style={{ width: '100%', display: 'inline', paddingLeft: '20px' }}>
-                    <Checkbox value="electricWelding" onChange={(e) => {
-                        let newStayDistrict: IBundle[] = [];
-                        let newPackagingData: IBundle[] = []
-                        if (e.target.checked) {
-                            stayDistrict.forEach((res: IBundle, index: number) => {
-                                if (res?.weldingStructureList && res?.weldingStructureList?.length > 0) {
-                                    newStayDistrict.push(...[
-                                        { ...res, isChild: false },
-                                        ...res.weldingStructureList.map(item => {
-                                            return {
-                                                ...item,
-                                                isChild: true
-                                            }
-                                        })
-                                    ])
-                                } else {
-                                    newStayDistrict.push({ ...res, isChild: false })
-                                }
-                            })
-                            packagingData.forEach((res: IBundle, index: number) => {
-                                if (res?.weldingStructureList && res?.weldingStructureList?.length > 0) {
-                                    newPackagingData.push(...[
-                                        { ...res, isChild: false },
-                                        ...res.weldingStructureList.map(item => {
-                                            return {
-                                                ...item,
-                                                isChild: true
-                                            }
-                                        })
-                                    ])
-                                } else {
-                                    newPackagingData.push({ ...res, isChild: false })
-                                }
-                            })
-                        } else {
-                            newStayDistrict = stayDistrict.filter(res => res.isChild === false);
-                            newPackagingData = packagingData.filter(res => res.isChild === false);
-                        }
-
-                        setStayDistrict([...newStayDistrict]);
-                        setPackagingData([...newPackagingData]);
-                    }} key="8">显示电焊件中的零件</Checkbox>
+                    <Checkbox value="electricWelding" onChange={(e) => isShowParts(e)} key="8">显示电焊件中的零件</Checkbox>
                 </p>
                 <Button className={styles.fastBtn} type="primary" onClick={addTopack} ghost>添加</Button>
             </p>
             <CommonTable
                 haveIndex
+                rowKey='businessId'
                 columns={[
-                    ...chooseColumns,
+                    ...chooseColumns.map((item: any) => {
+                        if (item.dataIndex === 'code') {
+                            return ({
+                                ...item,
+                                render: (_: number, record: any, key: number): React.ReactNode => (record.isWelding === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
+                            })
+                        }
+                        return item
+                    }),
                     {
                         key: 'operation',
                         title: '操作',
@@ -623,7 +805,15 @@ export default function PackingListNew(): React.ReactNode {
             <CommonTable
                 haveIndex
                 columns={[
-                    ...packingColumns,
+                    ...packingColumns.map((item: any) => {
+                        if (item.dataIndex === 'pieceCode') {
+                            return ({
+                                ...item,
+                                render: (_: number, record: any, key: number): React.ReactNode => (record.isWelding === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{record.isWelding}</span>)
+                            })
+                        }
+                        return item
+                    }),
                     {
                         key: 'operation',
                         title: '操作',
@@ -631,13 +821,13 @@ export default function PackingListNew(): React.ReactNode {
                         fixed: 'right' as FixedType,
                         width: 100,
                         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Button type='link' disabled={record.isChild} onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(record.structureCount); setMaxNum(record.structureCount) }}>移除</Button>
+                            <Button type='link' disabled={record.isChild} onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(Number(record.structureCount) / Number(record.singleNum)); setMaxNum(Number(record.structureCount) / Number(record.singleNum)) }}>移除</Button>
                         )
                     }
                 ]}
                 pagination={false}
                 dataSource={packagingData}
-                rowKey="structureId"
+                rowKey="businessId"
                 rowSelection={{
                     selectedRowKeys: removeRowKeys,
                     type: "checkbox",
@@ -648,56 +838,5 @@ export default function PackingListNew(): React.ReactNode {
                 }}
             />
         </DetailContent>
-        {/* <Modal
-            visible={visible}
-            title="保存包"
-            onCancel={() => {
-                setVisible(false);
-                setPackageType('');
-            }}
-            onOk={() => {
-                if (packageType && packageAttributeName) {
-                    const value = {
-                        balesCode: balesCode,
-                        id: params.packId,
-                        productCategoryId: params.id,
-                        packageType: packageType,
-                        productCategoryName: detailData.productCategoryName,
-                        productId: params.productId,
-                        productNumber: detailData.productNumber,
-                        packageRecordSaveDTOList: packagingData,
-                        packageAttributeName: packageAttributeName
-                    };
-                    RequestUtil.post(`/tower-science/packageStructure`, value).then(res => {
-                        message.success('包装清单保存成功');
-                        setVisible(false);
-                        history.goBack();
-                    })
-                } else {
-                    message.warning('请选择包属性或包类型');
-                }
-            }}>
-            <Row>
-                <Col span={4}><span>捆号</span></Col>
-                <Col span={8}>{balesCode} </Col>
-                <Col span={4} offset={1}><span>包类型</span></Col>
-                <Col span={7}>
-                    <Select placeholder="请选择包类型" value={packageType} style={{ width: "100%" }} onChange={(e: string) => packageChange(e)}>
-                        {packageTypeOptions && packageTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id}>
-                                {name}
-                            </Select.Option>
-                        })}
-                    </Select>
-                </Col>
-                <Col span={4}><span>包属性</span></Col>
-                <Col span={8}>
-                    <Select placeholder="请选择包属性" style={{ width: "100%" }} value={packageAttributeName} onChange={(e: string) => packageAttributeChange(e)}>
-                        <Select.Option value="通用" key="1">通用</Select.Option>
-                        <Select.Option value="专用包" key="2">专用包</Select.Option>
-                    </Select>
-                </Col>
-            </Row>
-        </Modal> */}
     </>
 }

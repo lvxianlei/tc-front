@@ -10,16 +10,18 @@ import { CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { IResponseData } from "./ISetOut";
+import { StringLiteralLike } from "typescript";
 
 interface ReuseTowerProps {
     id: string;
+    productId: string;
 }
 
 export interface EditProps {
     onSubmit: () => void
 }
 
-export default forwardRef(function ReuseTower({ id }: ReuseTowerProps, ref) {
+export default forwardRef(function ReuseTower({ id, productId }: ReuseTowerProps, ref) {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const columns = [
         {
@@ -42,7 +44,7 @@ export default forwardRef(function ReuseTower({ id }: ReuseTowerProps, ref) {
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get<IResponseData>(`/tower-science/product/lofting?page=1&size=1000&productCategoryId=${id}`);
+            const result = await RequestUtil.get<IResponseData>(`/tower-science/product/lofting?page=1&size=1000&productCategoryId=${id}&productId=${productId}`);
             resole(result.records)
         } catch (error) {
             reject(error)
