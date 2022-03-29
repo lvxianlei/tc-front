@@ -42,7 +42,7 @@ export default function ManualDistribute(): ReactElement {
             content: <Form form={workshopForm}>
                 <Form.Item name="workshopId" label="生产/组焊车间" rules={[{ required: true, message: "请选择生产/组焊车间..." }]}>
                     <Select>
-                        {listData.map((item: any) => <Select.Option key={item.factoryId} value={item.factoryId}>{item.factoryName}</Select.Option>)}
+                        {listData.map((item: any, index: number) => <Select.Option key={item.factoryId || index} value={item.factoryId}>{item.factoryName}</Select.Option>)}
                     </Select>
                 </Form.Item>
             </Form>,
@@ -143,7 +143,6 @@ export default function ManualDistribute(): ReactElement {
             size="small"
             isLoading={loading}
             rowSelection={{
-                type: "checkbox",
                 selectedRowKeys: selectedRowKeys,
                 onChange: onSelectChange
             }}

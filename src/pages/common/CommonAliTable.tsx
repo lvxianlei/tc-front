@@ -113,10 +113,13 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
             handleHoverBackground: '#ccc',
             handleActiveBackground: '#ccc',
         }));
-    props?.tableProps?.rowSelection && pipeline.use(features.multiSelect({
-        value: props?.tableProps?.rowSelection?.selectedRowKeys || [],
-        onChange: props?.tableProps?.rowSelection?.onChange,
-        isDisabled: props?.tableProps?.rowSelection?.getCheckboxProps
+    props?.rowSelection && pipeline.use(features.multiSelect({
+        value: props?.rowSelection?.selectedRowKeys || [],
+        onChange: props?.rowSelection?.onChange,
+        isDisabled: props?.rowSelection?.getCheckboxProps,
+        highlightRowWhenSelected: true,
+        clickArea: "cell",
+        checkboxColumn: { width: 40, lock: true, align: "left" }
     }))
 
     return <nav className={styles.componentsTable}>
