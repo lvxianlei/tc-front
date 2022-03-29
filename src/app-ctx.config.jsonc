@@ -615,8 +615,13 @@
                         "authority": "approvalm"
                     },
                     {
-                        "label": "技术排产",
-                        "path": "/planSchedule/planScheduleMngt",
+                        "label": "下发技术",
+                        "path": "/planProd/planScheduleMngt",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "分配车间",
+                        "path": "/planProd/publishWorkshop",
                         "authority": "approvalm"
                     }
                 ]
@@ -1017,6 +1022,11 @@
                     {
                         "label": "工作中心管理",
                         "path": "/workshopPlanBasic/workCenterMngt",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "分配车间配置管理",
+                        "path": "/workshopPlanBasic/publishWorkshopMngt",
                         "authority": "approvalm"
                     }
                 ]

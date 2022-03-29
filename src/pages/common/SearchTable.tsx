@@ -2,7 +2,7 @@
 import React, { useCallback, useState } from "react"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../utils/RequestUtil"
-import CommonTable, { columnsProps } from "./CommonAliTable"
+import CommonAliTable, { columnsProps } from "./CommonAliTable"
 import { Button, Col, Form, Pagination, Row, Space } from "antd"
 import styles from "./CommonTable.module.less"
 import { stringify } from "querystring"
@@ -21,6 +21,7 @@ interface SearchTableProps {
     onFilterSubmit?: <T>(arg: T) => T
     filterValues?: { [key: string]: any }
     extraOperation?: React.ReactNode | React.ReactNode[]
+    tableProps?: { [i: string]: any }
     [key: string]: any
 }
 
@@ -37,6 +38,7 @@ export default function SearchTable({
     extraOperation,
     searchFormItems = [],
     filterValues,
+    tableProps,
     ...props }: SearchTableProps): JSX.Element {
     const [pagenation, setPagenation] = useState<PagenationProps>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
@@ -90,12 +92,13 @@ export default function SearchTable({
             marginBottom: 12,
             paddingLeft: 12
         }} size={12}>{extraOperation}</Space>
-        <CommonTable
+        <CommonAliTable
             columns={columns}
             rowKey={rowKey || ((record: any) => record.id)}
             size="small"
             isLoading={loading}
             dataSource={data?.records || data || []}
+            {...tableProps}
             {...props}
         />
         <footer className={styles.pagenationWarp}>
