@@ -73,6 +73,7 @@ export default function Login(): JSX.Element {
             AuthUtil.setUserId(user_id)
             AuthUtil.setTenantName(tenant_name)
             AuthUtil.setRealName(result.real_name)
+            AuthUtil.setAccout(result.account)
             history.push(ctxConfig.home || '/')
         }
     }
