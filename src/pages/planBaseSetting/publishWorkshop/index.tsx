@@ -1,5 +1,5 @@
 import React, { Key, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { Button, DatePicker, Input, message, Modal, Radio, Row, Select } from "antd"
 import { Page } from "../../common"
 import { pageTable, workShopOrder } from "./data.json"
@@ -8,6 +8,7 @@ import RequestUtil from "../../../utils/RequestUtil"
 import { productTypeOptions } from "../../../configuration/DictionaryOptions"
 
 export default () => {
+    const history = useHistory()
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ status: 1 });
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
     const onSelectChange = (selected: Key[]) => setSelectedRowKeys(selected)
@@ -38,6 +39,7 @@ export default () => {
             })
         } else {
             message.success("自动分配车间完成")
+            history.go(0)
         }
     }
 
