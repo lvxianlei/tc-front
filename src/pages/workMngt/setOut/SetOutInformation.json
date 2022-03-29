@@ -64,16 +64,16 @@
             "dataIndex": "packageAttributeName"
         },
         {
-            "key": "packageAttributeName",
+            "key": "packageStructCount",
             "title": "包件号数（个）",
             "width": 150,
-            "dataIndex": "packageAttributeName"
+            "dataIndex": "packageStructCount"
         },
         {
-            "key": "packageAttributeName",
+            "key": "packageCount",
             "title": "包件数（个）",
             "width": 150,
-            "dataIndex": "packageAttributeName"
+            "dataIndex": "packageCount"
         },
         {
             "key": "weightCount",
@@ -88,22 +88,22 @@
             "dataIndex": "createUserName"
         },
         {
-            "key": "createTime",
+            "key": "packageDescription",
             "title": "包说明",
             "width": 200,
-            "dataIndex": "createTime"
+            "dataIndex": "packageDescription"
         },
         {
-            "key": "createTime",
+            "key": "packageSegment",
             "title": "包段落",
             "width": 200,
-            "dataIndex": "createTime"
+            "dataIndex": "packageSegment"
         },
         {
-            "key": "createTime",
+            "key": "packStatus",
             "title": "现场打包",
             "width": 200,
-            "dataIndex": "createTime"
+            "dataIndex": "packStatus"
         }
     ],
     "bundleColumns": [
@@ -114,22 +114,22 @@
             "dataIndex": "pieceCode"
         },
         {
-            "key": "pieceCode",
+            "key": "structureCount",
             "title": "包装数量",
             "width": 150,
-            "dataIndex": "pieceCode"
+            "dataIndex": "structureCount"
         },
         {
-            "key": "pieceCode",
+            "key": "basicsWeight",
             "title": "单件重量（kg）",
             "width": 150,
-            "dataIndex": "pieceCode"
+            "dataIndex": "basicsWeight"
         },
         {
-            "key": "pieceCode",
+            "key": "totalWeight",
             "title": "包装重量（kg）",
             "width": 150,
-            "dataIndex": "pieceCode"
+            "dataIndex": "totalWeight"
         },
         {
             "key": "materialSpec",
@@ -156,51 +156,51 @@
             "width": 120
         },
         {
-            "key": "length",
+            "key": "width",
             "title": "宽度（mm）",
-            "dataIndex": "length",
+            "dataIndex": "width",
             "width": 120
         },
         {
-            "key": "length",
+            "key": "thickness",
             "title": "厚度（mm）",
-            "dataIndex": "length",
+            "dataIndex": "thickness",
             "width": 120
         },
         {
-            "key": "num",
+            "key": "electricWelding",
             "title": "电焊",
             "width": 80,
-            "dataIndex": "num"
+            "dataIndex": "electricWelding"
         },
         {
-            "key": "length",
+            "key": "bend",
             "title": "火曲",
-            "dataIndex": "length",
+            "dataIndex": "bend",
             "width": 80
         },
         {
-            "key": "length",
+            "key": "shovelBack",
             "title": "铲背",
-            "dataIndex": "length",
+            "dataIndex": "shovelBack",
             "width": 80
         },
         {
-            "key": "length",
+            "key": "rootClear",
             "title": "清根",
-            "dataIndex": "length",
+            "dataIndex": "rootClear",
             "width": 80
         },
         {
-            "key": "length",
+            "key": "squash",
             "title": "打扁",
-            "dataIndex": "length",
+            "dataIndex": "squash",
             "width": 80
         },
         {
-            "key": "length",
+            "key": "chamfer",
             "title": "切角",
-            "dataIndex": "length",
+            "dataIndex": "chamfer",
             "width": 80
         },
         {

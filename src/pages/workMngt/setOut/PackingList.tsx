@@ -13,7 +13,7 @@ import { Link, useHistory, useLocation, useParams, useRouteMatch } from 'react-r
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import ExportList from '../../../components/export/list';
-import { IBundle, IPackingList } from './ISetOut';
+import { IAllot, IBundle, ICount, ILofting, IPackingList } from './ISetOut';
 import { bundleColumns, columns } from './SetOutInformation.json';
 import ApplyPacking, { EditProps } from './ApplyPacking';
 
@@ -38,6 +38,11 @@ export default function PackingList(): React.ReactNode {
         });
     }), {})
     const detailData: any = data;
+
+    const { data: count } = useRequest<ICount>(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<ICount>(`/tower-science/packageStructure/count/${params.productId}`);
+        resole(data);
+    }), {})
 
     if (loading) {
         return <Spin spinning={loading}>
@@ -84,19 +89,19 @@ export default function PackingList(): React.ReactNode {
         </Modal>
         <Space direction="horizontal" size="small" className={styles.titleContent}>
             <span>塔型：
-                <span className={styles.content}>{detailData?.productCategoryName}</span>
+                <span className={styles.content}>{count?.productCategoryName}</span>
             </span>
             <span>杆号：
-                <span className={styles.content}>{detailData?.productNumber}</span>
+                <span className={styles.content}>{count?.productNumber}</span>
             </span>
-            <span>已打包捆数:
-                <span className={styles.content}>{detailData?.packageStructureCount}</span>
+            <span>已打包捆数：
+                <span className={styles.content}>{count?.packageStructureCount}</span>
             </span>
-            <span>总件数:
-                <span className={styles.content}>{ }</span>
+            <span>总件数：
+                <span className={styles.content}>{count?.count}</span>
             </span>
-            <span>未打包件数:
-                <span className={styles.content}>{ }</span>
+            <span>未打包件数：
+                <span className={styles.content}>{count?.untreatedCount}</span>
             </span>
         </Space>
         <Space direction="horizontal" size="small" className={`${styles.padding16} ${styles.btnRight}`}>
