@@ -74,6 +74,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
     const onCheck = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await form.validateFields()
+        
             resolve(true);
         } catch (error) {
             reject(false)
@@ -165,8 +166,8 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                             // const data = form.getFieldsValue(true).loftingProductStructure;
                             // let BasicsPartTotalNum = 0;
                             // data?.filter((item: ILoftingProductStructureVOS) => { return record.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum += Number(items?.basicsPartNum) });
-                            if (value < record.weldingNum) {
-                                callback('需要大于或等于电焊件中包含数')
+                            if (parseInt(value) < parseInt(record.weldingNum)) {
+                                callback(`需要大于或等于电焊件中包含数${record.weldingNum}`)
                             } else {
                                 callback()
                             }
@@ -216,7 +217,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                     <Descriptions.Item key={2} label="配段信息">
                         {data?.segmentInformation}
                     </Descriptions.Item>
-                    {status===2 && <Descriptions.Item key={1} label="复用杆塔">
+                    {status===2||status===3 && <Descriptions.Item key={1} label="复用杆塔">
                                     <Button onClick={async () => {
                                         setSelectedRowKeys(checkRowKeys)
                                         setVisible(true)

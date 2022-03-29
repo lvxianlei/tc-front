@@ -140,7 +140,7 @@ export default function PoleInformation(): React.ReactNode {
                             : null
                     }
                     {
-                        record.loftingStatus === 2 || record.loftingStatus === 4 ?
+                        record.loftingStatus !== 1  ?
                             <Button type="link" onClick={async () => {
                                 let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
                                 setAllotData(result)
@@ -291,7 +291,7 @@ export default function PoleInformation(): React.ReactNode {
             visible={allotVisible}
             width="60%"
             title="特殊件号"
-            footer={loftingStatus===2&&<Space>
+            footer={loftingStatus!==1&&<Space>
                 <Button type="ghost" onClick={() => {
                     setAllotVisible(false);
                 }}>关闭</Button>
@@ -301,7 +301,7 @@ export default function PoleInformation(): React.ReactNode {
                     </Space>
                 } */}
                 {
-                    <>
+                    loftingStatus!==4&&<>
                         <Button type="primary" onClick={handleModalOk} ghost>保存</Button>
                         <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button>
                     </>
