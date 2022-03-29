@@ -90,7 +90,7 @@ export default function Overview() {
             current={1}
             size={state === 1 ? (data?.detail.length || 0) : (data?.programme.length || 0)}
             total={state === 1 ? (data?.detail.length || 0) : (data?.programme.length || 0)}
-            url={state === 1 ? `/tower-supply/produceIngredients/detail/${params.id}`: ""}
+            url={state === 1 ? `/tower-supply/produceIngredients/detail/${params.id}`: `/tower-supply/produceIngredients/programme/excel/${params.id}`}
             serchObj={{}}
             closeExportList={() => { setIsExportStoreList(false) }}
         /> : null}

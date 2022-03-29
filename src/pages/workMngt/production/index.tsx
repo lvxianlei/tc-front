@@ -54,9 +54,9 @@ export default function Invoicing() {
             value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
         if (value.orderTimeUpdateTime) {
-            // const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            // value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
-            // value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
+            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startLoftingBatchTime = formatDate[0] + " 00:00:00"
+            value.endLoftingBatchTime = formatDate[1] + " 23:59:59"
         }
         if (value.loftingId) {
             value.loftingDeptId = value.loftingId.first

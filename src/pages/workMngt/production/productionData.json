@@ -1,18 +1,18 @@
 {
     "baseInfo": [
         {
-            "title": "下单单号-新增",
-            "dataIndex": "materialTaskCode",
+            "title": "下单单号",
+            "dataIndex": "issuedNumber",
             "type": "string"
         },
         {
-            "title": "批次号-新增",
-            "dataIndex": "materialTaskCode",
+            "title": "批次号",
+            "dataIndex": "productionBatchNo",
             "type": "string"
         },
         {
-            "title": "周期计划号-新增",
-            "dataIndex": "materialTaskCode",
+            "title": "周期计划号",
+            "dataIndex": "weekPlanNumber",
             "type": "string"
         },
         {
@@ -26,13 +26,13 @@
             "type": "string"
         },
         {
-            "title": "总重量（kg）-新增",
+            "title": "总重量（kg）",
             "dataIndex": "loftingWeightTotal",
             "type": "number"
         },
         {
-            "title": "下达时间-新增",
-            "dataIndex": "materialTaskCode",
+            "title": "下达时间",
+            "dataIndex": "loftingBatchTime",
             "type": "string"
         },
         {
