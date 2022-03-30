@@ -70,48 +70,48 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             width: 100,
             dataIndex: 'patternName',
         },
-        {
-            key: 'materialStatusName',
-            title: '塔型提料状态',
-            width: 100,
-            dataIndex: 'materialStatusName',
-        },
-        {
-            key: 'materialLeaderName',
-            title: '提料负责人',
-            width: 100,
-            dataIndex: 'materialLeaderName'
-        },
-        {
-            key: 'materialDeliverTime',
-            title: '提料计划交付时间',
-            width: 200,
-            dataIndex: 'materialDeliverTime'
-        },
-        {
-            key: 'materialDeliverRealTime',
-            title: '提料实际交付时间',
-            width: 200,
-            dataIndex: 'materialDeliverRealTime'
-        },
-        {
-            key: 'materialPartLeaderName',
-            title: '提料配段负责人',
-            width: 100,
-            dataIndex: 'materialPartLeaderName'
-        },
-        {
-            key: 'materialPartDeliverTime',
-            title: '提料配段计划交付时间',
-            width: 200,
-            dataIndex: 'materialPartDeliverTime'
-        },
-        {
-            key: 'materialPartDeliverRealTime',
-            title: '提料配段实际交付时间',
-            width: 200,
-            dataIndex: 'materialPartDeliverRealTime'
-        },
+        // {
+        //     key: 'materialStatusName',
+        //     title: '塔型提料状态',
+        //     width: 100,
+        //     dataIndex: 'materialStatusName',
+        // },
+        // {
+        //     key: 'materialLeaderName',
+        //     title: '提料负责人',
+        //     width: 100,
+        //     dataIndex: 'materialLeaderName'
+        // },
+        // {
+        //     key: 'materialDeliverTime',
+        //     title: '提料计划交付时间',
+        //     width: 200,
+        //     dataIndex: 'materialDeliverTime'
+        // },
+        // {
+        //     key: 'materialDeliverRealTime',
+        //     title: '提料实际交付时间',
+        //     width: 200,
+        //     dataIndex: 'materialDeliverRealTime'
+        // },
+        // {
+        //     key: 'materialPartLeaderName',
+        //     title: '提料配段负责人',
+        //     width: 100,
+        //     dataIndex: 'materialPartLeaderName'
+        // },
+        // {
+        //     key: 'materialPartDeliverTime',
+        //     title: '提料配段计划交付时间',
+        //     width: 200,
+        //     dataIndex: 'materialPartDeliverTime'
+        // },
+        // {
+        //     key: 'materialPartDeliverRealTime',
+        //     title: '提料配段实际交付时间',
+        //     width: 200,
+        //     dataIndex: 'materialPartDeliverRealTime'
+        // },
         {
             key: 'loftingStatusName',
             title: '塔型放样状态',
@@ -261,8 +261,8 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
                             : col.dataIndex === 'weldingDeliverRealTime' && moment(record.weldingDeliverTime) < moment(record.weldingDeliverRealTime ? record.weldingDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
                                 : col.dataIndex === 'loftingPartDeliverRealTime' && moment(record.loftingPartDeliverTime) < moment(record.loftingPartDeliverRealTime ? record.loftingPartDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
                                     : col.dataIndex === 'loftingDeliverRealTime' && moment(record.loftingDeliverTime) < moment(record.loftingDeliverRealTime ? record.loftingDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
-                                        : col.dataIndex === 'materialPartDeliverRealTime' && moment(record.materialPartDeliverTime) < moment(record.materialPartDeliverRealTime ? record.materialPartDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
-                                            : col.dataIndex === 'materialDeliverRealTime' && moment(record.materialDeliverTime) < moment(record.materialDeliverRealTime ? record.materialDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                                        // : col.dataIndex === 'materialPartDeliverRealTime' && moment(record.materialPartDeliverTime) < moment(record.materialPartDeliverRealTime ? record.materialPartDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
+                                        //     : col.dataIndex === 'materialDeliverRealTime' && moment(record.materialDeliverTime) < moment(record.materialDeliverRealTime ? record.materialDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
                                                 : col.dataIndex === 'boltDrawDeliverRealTime' && moment(record.boltDrawDeliverTime) < moment(record.boltDrawDeliverRealTime ? record.boltDrawDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
                                                     : col.dataIndex === 'weldingDrawDeliverRealTime' && moment(record.weldingDrawDeliverTime) < moment(record.weldingDrawDeliverRealTime ? record.weldingDrawDeliverRealTime : undefined) ? <div style={{ backgroundColor: '#F9A1A1', color: '#FFF' }}>{_ ? _ : '-'}</div>
                                                         : <div>{_ ? _ : '-'}</div>
@@ -286,17 +286,18 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
                     <Select.Option value={2} key={2}>中</Select.Option>
                     <Select.Option value={3} key={3}>低</Select.Option>
                 </Select>
-            },{
-                name: 'materialStatus',
-                label: '塔型提料状态',
-                children: <Select style={{ width: '100px' }} defaultValue={''}>
-                    <Select.Option value={''} key={''}>全部</Select.Option>
-                    <Select.Option value={1} key={1}>待指派</Select.Option>
-                    <Select.Option value={2} key={2}>提料中</Select.Option>
-                    <Select.Option value={3} key={3}>配段中</Select.Option>
-                    <Select.Option value={4} key={4}>已完成</Select.Option>
-                </Select>
             },
+            // {
+            //     name: 'materialStatus',
+            //     label: '塔型提料状态',
+            //     children: <Select style={{ width: '100px' }} defaultValue={''}>
+            //         <Select.Option value={''} key={''}>全部</Select.Option>
+            //         <Select.Option value={1} key={1}>待指派</Select.Option>
+            //         <Select.Option value={2} key={2}>提料中</Select.Option>
+            //         <Select.Option value={3} key={3}>配段中</Select.Option>
+            //         <Select.Option value={4} key={4}>已完成</Select.Option>
+            //     </Select>
+            // },
             {
                 name: 'loftingStatus',
                 label: '塔型放样状态',
