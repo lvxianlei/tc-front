@@ -52,6 +52,8 @@ export interface PdmModalProps {
 export interface allotModalProps {
     onSubmit: () => void;
     onSave: () => void;
+    onCheck: () => void;
+    selectedRowKeys: string[];
 }
 
 export interface IAllot {
@@ -61,6 +63,7 @@ export interface IAllot {
     readonly productHeight?: string;
     readonly productNumber?: string;
     readonly segmentInformation?: string;
+    readonly packageStructureCount?:string;
     readonly specialStatus?: number;
     readonly loftingProductStructureVOS?: ILoftingProductStructureVOS[];
 }
@@ -114,6 +117,13 @@ export interface IBundle {
     readonly topId?: string;
     readonly pieceCode?: string;
     readonly basicsWeight?: number;
+    readonly weldingStructureList?: IBundle[];
+    readonly isChild?: boolean;
+    readonly structureRemainingNum?: number;
+    readonly businessId?: string;
+    readonly mainStructureId?: string;
+    readonly singleNum?: string;
+    readonly isWelding?: number;
 }
 
 export interface IPackingList {
@@ -164,4 +174,15 @@ export interface IRecord {
     readonly rowId?: string;
     readonly currentValue?: string;
     readonly problemFieldName?: string;
+}
+
+export interface ICount {
+    readonly id?: string;
+    readonly count?: string;
+    readonly packageStructureCount?: string;
+    readonly productCategoryId?: string;
+    readonly productCategoryName?: string;
+    readonly productId?: string;
+    readonly productNumber?: string;
+    readonly untreatedCount?: string;
 }

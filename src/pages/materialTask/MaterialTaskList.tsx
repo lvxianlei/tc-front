@@ -61,6 +61,12 @@ export default function MaterialTaskList(): React.ReactNode {
             dataIndex: 'updateStatusTime'
         },
         {
+            key: 'projectName',
+            title: '图纸/工程名称',
+            dataIndex: 'projectName',
+            width: 200
+        },
+        {
             key: 'planNumber',
             title: '计划号',
             dataIndex: 'planNumber',
