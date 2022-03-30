@@ -40,7 +40,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const { data: materialList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/material?size=1000`);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/material?size=10000`);
             setAllMaterialList(result?.records);
             var newArr = result?.records.filter((item: any, index: any, self: any) => {
                 return self.findIndex((el: any) => el.materialName === item.materialName) === index
