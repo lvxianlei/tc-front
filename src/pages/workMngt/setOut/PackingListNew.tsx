@@ -41,7 +41,7 @@ export default function PackingListNew(): React.ReactNode {
     const editRef = useRef<EditProps>();
     const [showParts, setShowParts] = useState<boolean>(false);
     const [reuse, setReuse] = useState<[]>();
-    const [packageAttributeName,setPackageAttributeName]= useState<string>('专用');
+    const [packageAttributeName, setPackageAttributeName] = useState<string>('专用');
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if (!location.state) {
@@ -593,7 +593,7 @@ export default function PackingListNew(): React.ReactNode {
                             "required": true,
                             "message": "请选择包属性"
                         }]}>
-                            <Select placeholder="请选择包属性" onChange={(e) => {setPackageAttributeName(e?.toString() || '')}} style={{ width: "100%" }}>
+                            <Select placeholder="请选择包属性" onChange={(e) => { setPackageAttributeName(e?.toString() || '') }} style={{ width: "100%" }}>
                                 <Select.Option value="公用" key="1">公用</Select.Option>
                                 <Select.Option value="专用" key="2">专用</Select.Option>
                             </Select>
@@ -663,13 +663,13 @@ export default function PackingListNew(): React.ReactNode {
                     <span className={styles.content}>{stayDistrict.length}</span>
                 </span>
                 <span className={styles.description}>已选择：件数：
-                    <span className={styles.content}>{selectWeight}</span>
+                    <span className={styles.content}>{selectedRowKeys.length}</span>
                 </span>
                 <span className={styles.description}>重量：
                     <span className={styles.content}>{selectWeight}kg</span>
                 </span>
                 <span className={styles.description}>电焊件：
-                    <span className={styles.content}>{selectWeight}</span>
+                    <span className={styles.content}>{selectedRow.filter(res => res.isWelding === 1).length}</span>
                 </span>
                 <p style={{ width: '100%', display: 'inline', paddingLeft: '20px' }}>
                     <Checkbox value="electricWelding" onChange={(e) => isShowParts(e.target.checked)} key="8">显示电焊件中的零件</Checkbox>
@@ -714,13 +714,13 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.titleContent}>
                 <span className={styles.title}>包装区</span>
                 <span className={styles.description}>包重量（kg）：
-                    <span className={styles.content}>{eval(packagingData.map(item => { return Number(item.num) * Number(item.basicsWeight) }).join('+')) || 0}</span>
+                    <span className={styles.content}>{eval(packagingData.map(item => { return Number(item.structureCount) * Number(item.basicsWeight) }).join('+')) || 0}</span>
                 </span>
                 <span className={styles.description}> 包件数：
                     <span className={styles.content}>{packagingData.length}</span>
                 </span>
                 <span className={styles.description}>电焊件：
-                    <span className={styles.content}>{selectWeight}</span>
+                    <span className={styles.content}>{packagingData.filter(res => res.isWelding === 1).length}</span>
                 </span>
                 <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
             </p>
@@ -731,7 +731,7 @@ export default function PackingListNew(): React.ReactNode {
                         if (item.dataIndex === 'pieceCode') {
                             return ({
                                 ...item,
-                                render: (_: number, record: any, key: number): React.ReactNode => (record.isWelding === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{record.isWelding}</span>)
+                                render: (_: number, record: any, key: number): React.ReactNode => (record.isWelding === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
                             })
                         }
                         return item

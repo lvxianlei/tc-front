@@ -19,13 +19,25 @@ interface ApplyPackingProps {
 export interface EditProps {
     onSubmit: () => void
 }
+
+interface ISelectTower {
+    readonly id?: string;
+    readonly productCategory?: string;
+    readonly productCategoryName?: string;
+    readonly productHeight?: string;
+    readonly productId?: string;
+    readonly productNumber?: string;
+    readonly projectName?: string;
+}
+
 export default forwardRef(function ApplyPacking({ id }: ApplyPackingProps, ref) {
     const [form] = Form.useForm();
     const [dataSource, setDataSource] = useState<IPackingList[]>([]);
     const [packingData, setPackingData] = useState<IPackingList[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
     const [selectRows, setSelectRows] = useState<[]>([]);
-    
+    const [selectTower, setSelectTower] = useState<ISelectTower>({});
+
 
     const towerColumns = [
         {
@@ -112,7 +124,17 @@ export default forwardRef(function ApplyPacking({ id }: ApplyPackingProps, ref) 
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            await saveRun(selectRows)
+            const data = {
+                id: id,
+                productCategory: selectTower.productCategory,
+                productCategoryName: selectTower.productCategoryName,
+                productId: selectTower.id,
+                productNumber: selectTower.productNumber,
+                projectName: selectTower.projectName,
+                productHeight: selectTower.productHeight,
+                packageStructureSaveDTOS: selectRows
+            }
+            await saveRun(data)
             resolve(true);
         } catch (error) {
             reject(false)
@@ -128,8 +150,9 @@ export default forwardRef(function ApplyPacking({ id }: ApplyPackingProps, ref) 
         setSelectRows(selectRows)
     }
 
-    const getPackingList = (id: string) => new Promise(async (resole, reject) => {
-        const list = await RequestUtil.get<IPackingList[]>(`/tower-science/packageStructure/${id}`);
+    const getPackingList = (record: Record<string, any>) => new Promise(async (resole, reject) => {
+        const list = await RequestUtil.get<IPackingList[]>(`/tower-science/packageStructure/${record.id}`);
+        setSelectTower(record)
         setPackingData(list);
     });
 
@@ -160,36 +183,37 @@ export default forwardRef(function ApplyPacking({ id }: ApplyPackingProps, ref) 
                     <Button type="ghost" htmlType="reset">重置</Button>
                 </Space>
             </Form>
-            <CommonTable
-                haveIndex
-                columns={towerColumns}
-                dataSource={dataSource}
-                pagination={false}
-                style={{
-                    width: '48%',
-                    position: 'absolute'
-                }}
-                onRow={(record: Record<string, any>, index: number) => ({
-                    onClick: () => getPackingList(record.id),
-                    className: styles.tableRow
-                })}
-            />
-            <CommonTable
-                haveIndex
-                columns={packingColumns}
-                style={{
-                    width: '50%',
-                    position: 'relative',
-                    left: '50%'
-                }}
-                dataSource={packingData}
-                pagination={false}
-                rowSelection={{
-                    selectedRowKeys: selectedRowKeys,
-                    type: "checkbox",
-                    onChange: handleChange,
-                }}
-            />
+            <div style={{ display: 'flex' }}>
+                <CommonTable
+                    haveIndex
+                    columns={towerColumns}
+                    dataSource={dataSource}
+                    pagination={false}
+                    scroll={{ y: '500px' }}
+                    onRow={(record: Record<string, any>, index: number) => ({
+                        onClick: () => getPackingList(record),
+                        className: styles.tableRow
+                    })}
+                />
+                <CommonTable
+                    haveIndex
+                    columns={packingColumns}
+                    rowKey="id"
+                    style={{
+                        width: '80%',
+                        marginLeft: '20px'
+                    }}
+                    scroll={{ y: '500px' }}
+                    dataSource={packingData}
+                    pagination={false}
+                    rowSelection={{
+                        selectedRowKeys: selectedRowKeys,
+                        type: "checkbox",
+                        onChange: handleChange
+                    }}
+                />
+            </div>
+
         </DetailContent>
     </Spin>
 })

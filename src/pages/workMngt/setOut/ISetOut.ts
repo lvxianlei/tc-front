@@ -123,6 +123,7 @@ export interface IBundle {
     readonly businessId?: string;
     readonly mainStructureId?: string;
     readonly singleNum?: string;
+    readonly isWelding?: number;
 }
 
 export interface IPackingList {
