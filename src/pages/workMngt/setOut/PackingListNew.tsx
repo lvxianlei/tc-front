@@ -399,6 +399,9 @@ export default function PackingListNew(): React.ReactNode {
         if (value.checkList?.indexOf('chamfer') >= 0) {
             value.chamfer = 1
         }
+        if (value.isCommonSegment?.indexOf('isCommonSegment') >= 0) {
+            value.isCommonSegment = 1
+        }
         getTableDataSource({ ...value });
     }
 
@@ -640,8 +643,10 @@ export default function PackingListNew(): React.ReactNode {
                         })}
                     </Select>
                 </Form.Item>
-                <Form.Item name="segmentId">
-                    <Checkbox value="electricWelding" key="7" style={{ width: '100%' }}>公用段</Checkbox>
+                <Form.Item name="isCommonSegment">
+                    <Checkbox.Group style={{ width: '100%' }}>
+                        <Checkbox value="isCommonSegment" key="7" style={{ width: '100%' }}>公用段</Checkbox>
+                    </Checkbox.Group>
                 </Form.Item>
                 <Form.Item name="minLength" label="长度范围" className={styles.rightPadding5}>
                     <Input type="number" min={0} placeholder="请输入" />
@@ -650,7 +655,7 @@ export default function PackingListNew(): React.ReactNode {
                     <Input type="number" min={0} placeholder="请输入" />
                 </Form.Item>
                 <Form.Item name="code" label="查询">
-                    <Input placeholder="构件编号" maxLength={50} />
+                    <Input placeholder="件号" maxLength={50} />
                 </Form.Item>
                 <Space direction="horizontal">
                     <Button type="primary" htmlType="submit">搜索</Button>
