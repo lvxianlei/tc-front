@@ -124,7 +124,7 @@ export default function SetOutTaskDetail(): React.ReactNode {
                 productTypeName: data.productTypeName,
                 productCategoryNum: data.productCategoryNum,
                 totalWeight: data.totalWeight,
-                loftingAbortTime: data.loftingAbortTime,
+                loftingCompleteTime: data.loftingCompleteTime,
                 materialAbortTime: data.materialAbortTime,
                 description: data.description,
                 voltageGradeName: data.voltageGradeName,
