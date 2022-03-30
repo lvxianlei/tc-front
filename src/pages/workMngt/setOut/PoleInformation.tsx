@@ -213,7 +213,7 @@ export default function PoleInformation(): React.ReactNode {
                     setTipVisible(true)
                     return
                 }else{
-                    message.error('杆塔无此特殊件号，无法保存！')
+                    // message.error('杆塔无此特殊件号，无法保存！')
                     setTipVisible(false)
                     return
                 }
