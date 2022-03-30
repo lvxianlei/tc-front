@@ -91,9 +91,9 @@ export default function IngredientsModal(props: any) {
     }
 
     // 获取采购配料信息
-    const { run: runPurchaseBatchingScheme, data: purchaseBatchingData } = useRequest<{ [key: string]: any }>((purchaseTaskTowerId: string, materialTaskCode: string, productCategoryName: string) => new Promise(async (resole, reject) => {
+    const { run: runPurchaseBatchingScheme, data: purchaseBatchingData } = useRequest<{ [key: string]: any }>((batchNos: string) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/summary/${materialTaskCode}/${productCategoryName}`);
+            const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/summary/${batchNos}`);
             resole(result);
             setPurchaseBatchingDataList(result || []);
         } catch (error) {
@@ -254,8 +254,9 @@ export default function IngredientsModal(props: any) {
             getBatchingStrategy();
             // 获取编辑配料方案信息
             purchaseListRun(props.id);
+            console.log(props, "props")
             // 获取采购配料信息
-            runPurchaseBatchingScheme(props.id, props.materialTaskCode, props.productCategoryName);
+            runPurchaseBatchingScheme(props.batchNos);
             
         }
     }, [props.id && props.visible])
