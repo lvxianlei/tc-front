@@ -34,10 +34,11 @@ export default function OperationLog(): React.ReactNode {
             dataIndex: 'optTime'
         }
     ]
-    
+
     return <Page
-            path="/tower-system/log"
-            columns={ columns }
-            searchFormItems={[]}
-        />
+        path="/tower-system/log"
+        columns={columns}
+        searchFormItems={[]}
+        requestData={{ operateTypeEnum: 'OPERATE_RECORD' }}
+    />
 }
