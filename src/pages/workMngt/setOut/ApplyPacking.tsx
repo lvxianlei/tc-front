@@ -109,7 +109,7 @@ export default forwardRef(function ApplyPacking({ id }: ApplyPackingProps, ref) 
     }), { refreshDeps: [id] })
 
     const getTableDataSource = (filterValues?: Record<string, any>) => new Promise(async (resole, reject) => {
-        const list = await RequestUtil.get<IPackingList[]>(`/tower-science/packageStructure/getPackageProduct`, { ...filterValues });
+        const list = await RequestUtil.get<IPackingList[]>(`/tower-science/packageStructure/getPackageProduct`, { ...filterValues, productId: id });
         setDataSource(list);
     });
 
