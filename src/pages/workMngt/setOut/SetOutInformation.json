@@ -132,21 +132,21 @@
             "dataIndex": "totalWeight"
         },
         {
-            "key": "materialSpec",
+            "key": "materialName",
             "title": "材料",
-            "dataIndex": "materialSpec",
+            "dataIndex": "materialName",
             "width": 120
         },
         {
-            "key": "materialSpec",
+            "key": "structureTexture",
             "title": "材质",
-            "dataIndex": "materialSpec",
+            "dataIndex": "structureTexture",
             "width": 120
         },
         {
-            "key": "materialSpec",
+            "key": "structureSpec",
             "title": "材料规格",
-            "dataIndex": "materialSpec",
+            "dataIndex": "structureSpec",
             "width": 120
         },
         {
@@ -248,16 +248,16 @@
             "dataIndex": "basicsWeight"
         },
         {
-            "key": "materialName",
+            "key": "totalWeight",
             "title": "单基重量（kg）",
             "width": 150,
-            "dataIndex": "materialName"
+            "dataIndex": "totalWeight"
         },
         {
-            "key": "structureTexture",
+            "key": "materialName",
             "title": "材料",
             "width": 150,
-            "dataIndex": "structureTexture"
+            "dataIndex": "materialName"
         },
         {
             "key": "structureTexture",
@@ -272,10 +272,10 @@
             "dataIndex": "structureSpec"
         },
         {
-            "key": "width",
+            "key": "length",
             "title": "长度（mm）",
             "width": 150,
-            "dataIndex": "width"
+            "dataIndex": "length"
         },
         {
             "key": "width",
@@ -314,16 +314,16 @@
             "dataIndex": "shovelBack"
         },
         {
-            "key": "shovelBack",
+            "key": "squash",
             "title": "打扁",
-            "width": 150,
-            "dataIndex": "shovelBack"
+            "dataIndex": "squash",
+            "width": 80
         },
         {
-            "key": "shovelBack",
+            "key": "chamfer",
             "title": "切角",
-            "width": 150,
-            "dataIndex": "shovelBack"
+            "dataIndex": "chamfer",
+            "width": 80
         },
         {
             "key": "description",
@@ -370,15 +370,15 @@
             "dataIndex": "basicsWeight"
         },
         {
-            "key": "materialName",
+            "key": "totalWeight",
             "title": "包装重量（kg）",
             "width": 150,
-            "dataIndex": "materialName"
+            "dataIndex": "totalWeight"
         },{
-            "key": "structureTexture",
+            "key": "materialName",
             "title": "材料",
             "width": 150,
-            "dataIndex": "structureTexture"
+            "dataIndex": "materialName"
         },
         {
             "key": "structureTexture",
@@ -393,10 +393,10 @@
             "dataIndex": "structureSpec"
         },
         {
-            "key": "width",
+            "key": "length",
             "title": "长度（mm）",
             "width": 150,
-            "dataIndex": "width"
+            "dataIndex": "length"
         },
         {
             "key": "width",
@@ -435,16 +435,16 @@
             "dataIndex": "shovelBack"
         },
         {
-            "key": "shovelBack",
+            "key": "squash",
             "title": "打扁",
-            "width": 150,
-            "dataIndex": "shovelBack"
+            "dataIndex": "squash",
+            "width": 80
         },
         {
-            "key": "shovelBack",
+            "key": "chamfer",
             "title": "切角",
-            "width": 150,
-            "dataIndex": "shovelBack"
+            "dataIndex": "chamfer",
+            "width": 80
         },
         {
             "key": "description",
