@@ -180,9 +180,9 @@ export default function Invoicing() {
                     label: '状态',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="1">待完成</Select.Option>
-                        <Select.Option value="2">已完成</Select.Option>
-                        <Select.Option value="3">待确认</Select.Option>
+                        <Select.Option value="2">待完成</Select.Option>
+                        <Select.Option value="3">已完成</Select.Option>
+                        <Select.Option value="1">待确认</Select.Option>
                     </Select>
                 },
                 {
