@@ -5,7 +5,9 @@ import RequestUtil from "../../../utils/RequestUtil"
 import { DetailContent, EditableTable, CommonAliTable } from "../../common"
 import { pageTable, pageTableSetting } from "./data.json"
 import { compoundTypeOptions, factoryTypeOptions, productTypeOptions } from "../../../configuration/DictionaryOptions"
+import { useHistory } from "react-router"
 export default function Index(): React.ReactElement {
+    const history = useHistory()
     const [form] = Form.useForm()
     const [edit, setEdit] = useState<boolean>(false)
     const handleEditClick = useCallback(() => setEdit(true), [setEdit])
@@ -42,19 +44,19 @@ export default function Index(): React.ReactElement {
 
     const handleSubmit = async () => {
         const submitData = await form.validateFields()
-        const groupIds = data?.filter((item: any) => (submitData.submit?.map((sItem: any) => sItem.id).includes(item.groupId)))
+        const groupIds = data?.filter((item: any) => !((submitData.submit || []).map((sItem: any) => sItem.id).includes(item.groupId)))
         await saveRun({
             groupIds: groupIds.map((item: any) => item.groupId),
-            workshopConfigs: submitData.submit?.map((item: any) => ({
+            workshopConfigs: (submitData.submit || []).map((item: any) => ({
                 productTypeId: item.productTypeId.join(","),
                 weldingTypeId: item.weldingTypeId,
                 weldingWorkshopId: item.weldingWorkshopId,
                 workshopId: item.workshopId.join(","),
                 factoryId: item.factoryId
-            }) || [])
+            }))
         })
         message.success("保存成功...")
-        setEdit(false)
+        history.go(0)
     }
 
     return <DetailContent>
