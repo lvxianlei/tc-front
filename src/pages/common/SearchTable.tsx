@@ -22,6 +22,7 @@ interface SearchTableProps {
     filterValues?: { [key: string]: any }
     extraOperation?: React.ReactNode | React.ReactNode[]
     tableProps?: { [i: string]: any }
+    pagenation?: boolean
     [key: string]: any
 }
 
@@ -101,16 +102,18 @@ export default function SearchTable({
             {...tableProps}
             {...props}
         />
-        <footer className={styles.pagenationWarp}>
-            <Pagination
-                className={styles.pagination}
-                total={data?.total}
-                current={pagenation.current}
-                showTotal={(total: number) => `共${total}条记录`}
-                showSizeChanger
-                onChange={paginationChange}
-            />
-        </footer>
+        {
+            props.pagenation === false && <footer className={styles.pagenationWarp}>
+                <Pagination
+                    className={styles.pagination}
+                    total={data?.total}
+                    current={pagenation.current}
+                    showTotal={(total: number) => `共${total}条记录`}
+                    showSizeChanger
+                    onChange={paginationChange}
+                />
+            </footer>
+        }
     </>
 }
 
