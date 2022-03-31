@@ -113,7 +113,7 @@ export default function PackingListNew(): React.ReactNode {
         let newData: IBundle[] = JSON.parse(JSON.stringify(packagingData));
         if (showParts) {
             const list: IBundle[] = newData.filter(res => res.mainStructureId !== data.businessId).filter(res => res.businessId !== data.businessId)
-            newData = [...list, ...packagingDataShowParts(packagingData.filter(res => res.businessId === data.businessId))]
+            newData = [...list, ...dataShowParts(packagingData.filter(res => res.businessId === data.businessId))]
         }
         setPackagingData([...newData]);
         stayDistrict.splice(index, 1);
@@ -175,7 +175,7 @@ export default function PackingListNew(): React.ReactNode {
             if (showParts) {
                 data.forEach(items => {
                     newPackagingData = newPackagingData.filter(res => res.mainStructureId !== items.businessId).filter(res => res.businessId !== items.businessId)
-                    newPackagingData = [...newPackagingData, ...packagingDataShowParts(packagingData.filter(res => res.businessId === items.businessId))]
+                    newPackagingData = [...newPackagingData, ...dataShowParts(packagingData.filter(res => res.businessId === items.businessId))]
                 })
             }
             setPackagingData([...newPackagingData]);
@@ -260,7 +260,7 @@ export default function PackingListNew(): React.ReactNode {
             let newStayDistrict: IBundle[] = JSON.parse(JSON.stringify(stayDistrict));
             if (showParts) {
                 const list: IBundle[] = newStayDistrict.filter(res => res.mainStructureId !== value.businessId).filter(res => res.businessId !== value.businessId)
-                newStayDistrict = [...list, ...stayDistrictShowParts(stayDistrict.filter(res => res.businessId === value.businessId))]
+                newStayDistrict = [...list, ...dataShowParts(stayDistrict.filter(res => res.businessId === value.businessId))]
             }
             setStayDistrict(newStayDistrict);
         } else {
@@ -294,7 +294,7 @@ export default function PackingListNew(): React.ReactNode {
             let newStayDistrict: IBundle[] = JSON.parse(JSON.stringify(stayDistrict));
             if (showParts) {
                 const list: IBundle[] = newStayDistrict.filter(res => res.mainStructureId !== value.businessId).filter(res => res.businessId !== value.businessId)
-                newStayDistrict = [...list, ...stayDistrictShowParts(stayDistrict.filter(res => res.businessId === value.businessId))]
+                newStayDistrict = [...list, ...dataShowParts(stayDistrict.filter(res => res.businessId === value.businessId))]
             }
             setStayDistrict(newStayDistrict);
         }
@@ -335,7 +335,7 @@ export default function PackingListNew(): React.ReactNode {
                     let newStayDistrict: IBundle[] = JSON.parse(JSON.stringify(stayDistrict));
                     if (showParts) {
                         const list: IBundle[] = newStayDistrict.filter(res => res.mainStructureId !== value.businessId).filter(res => res.businessId !== value.businessId)
-                        newStayDistrict = [...list, ...stayDistrictShowParts(stayDistrict.filter(res => res.businessId === value.businessId))]
+                        newStayDistrict = [...list, ...dataShowParts(stayDistrict.filter(res => res.businessId === value.businessId))]
                     }
                     setStayDistrict([...newStayDistrict]);
                 } else {
@@ -359,7 +359,7 @@ export default function PackingListNew(): React.ReactNode {
                     let newStayDistrict: IBundle[] = JSON.parse(JSON.stringify(stayDistrict));
                     if (showParts) {
                         const list: IBundle[] = newStayDistrict.filter(res => res.mainStructureId !== value.businessId).filter(res => res.businessId !== value.businessId)
-                        newStayDistrict = [...list, ...stayDistrictShowParts(stayDistrict.filter(res => res.businessId === value.businessId))]
+                        newStayDistrict = [...list, ...dataShowParts(stayDistrict.filter(res => res.businessId === value.businessId))]
                     }
                     setStayDistrict([...newStayDistrict]);
                 }
@@ -401,14 +401,8 @@ export default function PackingListNew(): React.ReactNode {
     const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRow(selectRows);
-        
-        console.log(eval(selectRows.map(res => {
-            res?.weldingStructureList?.map(item => { 
-                return Number(item.structureRemainingNum) * Number(item.basicsWeight) 
-            })
-        }).join('+')))
-        setSelectWeight(eval((selectRows || [])?.map(item => { 
-            return Number(item.structureRemainingNum) * Number(item.basicsWeight) 
+        setSelectWeight(eval((dataShowParts(selectRows) || [])?.map(item => { 
+            return Number(item.structureCountNum) * Number(item.basicsWeight) 
         }).join('+'))?.toFixed(3) || 0);
     }
 
@@ -428,11 +422,11 @@ export default function PackingListNew(): React.ReactNode {
         }
     })
 
-    const stayDistrictShowParts = (data: IBundle[]) => {
-        let newStayDistrict: IBundle[] = [];
+    const dataShowParts = (data: IBundle[]) => {
+        let newData: IBundle[] = [];
         data.forEach((res: IBundle, index: number) => {
             if (res?.weldingStructureList && res?.weldingStructureList?.length > 0) {
-                newStayDistrict.push(...[
+                newData.push(...[
                     { ...res, isChild: false },
                     ...res.weldingStructureList.map(item => {
                         return {
@@ -442,30 +436,10 @@ export default function PackingListNew(): React.ReactNode {
                     })
                 ])
             } else {
-                newStayDistrict.push({ ...res, isChild: false })
+                newData.push({ ...res, isChild: false })
             }
         })
-        return newStayDistrict
-    }
-
-    const packagingDataShowParts = (data: IBundle[]) => {
-        let newPackagingData: IBundle[] = []
-        data.forEach((res: IBundle, index: number) => {
-            if (res?.weldingStructureList && res?.weldingStructureList?.length > 0) {
-                newPackagingData.push(...[
-                    { ...res, isChild: false },
-                    ...res.weldingStructureList.map(item => {
-                        return {
-                            ...item,
-                            isChild: true
-                        }
-                    })
-                ])
-            } else {
-                newPackagingData.push({ ...res, isChild: false })
-            }
-        })
-        return newPackagingData;
+        return newData
     }
 
     const isShowParts = (e: boolean) => {
@@ -473,8 +447,8 @@ export default function PackingListNew(): React.ReactNode {
         let newStayDistrict: IBundle[] = [];
         let newPackagingData: IBundle[] = []
         if (e) {
-            newStayDistrict = stayDistrictShowParts(stayDistrict);
-            newPackagingData = packagingDataShowParts(packagingData);
+            newStayDistrict = dataShowParts(stayDistrict);
+            newPackagingData = dataShowParts(packagingData);
         } else {
             newStayDistrict = stayDistrict.filter(res => res.isChild === false);
             newPackagingData = packagingData.filter(res => res.isChild === false);
@@ -495,7 +469,7 @@ export default function PackingListNew(): React.ReactNode {
                 productId: params.productId,
                 productNumber: detailData.productNumber,
                 productIdList: reuse,
-                packageRecordSaveDTOList: showParts ? packagingData : packagingDataShowParts(packagingData)
+                packageRecordSaveDTOList: showParts ? packagingData : dataShowParts(packagingData)
             };
             RequestUtil.post(`/tower-science/packageStructure`, value).then(res => {
                 message.success('包装清单保存成功');
@@ -720,7 +694,7 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.titleContent}>
                 <span className={styles.title}>包装区</span>
                 <span className={styles.description}>包重量（kg）：
-                    <span className={styles.content}>{eval(packagingData.map(item => { return Number(item.structureCount) * Number(item.basicsWeight) }).join('+'))?.toFixed(3) || 0}</span>
+                    <span className={styles.content}>{eval(dataShowParts(packagingData).map(item => { return Number(item.structureCountNum) * Number(item.basicsWeight) }).join('+'))?.toFixed(3) || 0}</span>
                 </span>
                 <span className={styles.description}> 包件数：
                     <span className={styles.content}>{packagingData.length}</span>

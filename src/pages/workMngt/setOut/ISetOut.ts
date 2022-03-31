@@ -124,6 +124,7 @@ export interface IBundle {
     readonly mainStructureId?: string;
     readonly singleNum?: string;
     readonly isWelding?: number;
+    readonly structureCountNum?: string;
 }
 
 export interface IPackingList {
