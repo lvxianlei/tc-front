@@ -70,10 +70,10 @@
             "dataIndex": "packageStructCount"
         },
         {
-            "key": "packageCount",
+            "key": "balesCount",
             "title": "包件数（个）",
             "width": 150,
-            "dataIndex": "packageCount"
+            "dataIndex": "balesCount"
         },
         {
             "key": "weightCount",
@@ -214,103 +214,109 @@
         {
             "key": "segmentName",
             "title": "段名",
-            "width": 150,
+            "width": 120,
             "dataIndex": "segmentName"
         },
         {
             "key": "code",
             "title": "件号",
-            "width": 150,
+            "width": 120,
             "dataIndex": "code"
         },
         {
             "key": "structureNum",
             "title": "单段数量",
-            "width": 150,
+            "width": 120,
             "dataIndex": "structureNum"
         },
         {
             "key": "structureCountNum",
             "title": "单基数量",
-            "width": 150,
+            "width": 120,
             "dataIndex": "structureCountNum"
         },
         {
             "key": "structureRemainingNum",
             "title": "剩余件数",
-            "width": 150,
+            "width": 120,
             "dataIndex": "structureRemainingNum"
         },
         {
             "key": "basicsWeight",
             "title": "单件重量（kg）",
-            "width": 150,
+            "width": 120,
             "dataIndex": "basicsWeight"
         },
         {
             "key": "totalWeight",
             "title": "单基重量（kg）",
-            "width": 150,
+            "width": 120,
             "dataIndex": "totalWeight"
+        },
+        {
+            "key": "specialCode",
+            "title": "特殊件号",
+            "width": 80,
+            "dataIndex": "specialCode"
         },
         {
             "key": "materialName",
             "title": "材料",
-            "width": 150,
+            "width": 120,
             "dataIndex": "materialName"
         },
         {
             "key": "structureTexture",
             "title": "材质",
-            "width": 150,
+            "width": 120,
             "dataIndex": "structureTexture"
         },
         {
             "key": "structureSpec",
             "title": "材料规格",
-            "width": 150,
+            "width": 120,
             "dataIndex": "structureSpec"
         },
         {
             "key": "length",
             "title": "长度（mm）",
-            "width": 150,
+            "width": 120,
             "dataIndex": "length"
         },
         {
             "key": "width",
             "title": "宽度（mm）",
-            "width": 150,
+            "width": 120,
             "dataIndex": "width"
         },
         {
             "key": "thickness",
             "title": "厚度（mm）",
-            "width": 150,
+            "width": 120,
             "dataIndex": "thickness"
         },
         {
             "key": "electricWelding",
             "title": "电焊",
-            "width": 150,
+            "width": 80,
             "dataIndex": "electricWelding"
         },
         {
             "key": "bend",
             "title": "火曲",
-            "width": 150,
+            "width": 80,
             "dataIndex": "bend"
         },
         {
             "key": "rootClear",
             "title": "清根",
-            "width": 150,
+            "width": 80,
             "dataIndex": "rootClear"
         },
         {
             "key": "shovelBack",
             "title": "铲背",
-            "width": 150,
+            "width": 80,
             "dataIndex": "shovelBack"
         },
         {
@@ -336,13 +342,13 @@
         {
             "key": "segmentName",
             "title": "段名",
-            "width": 150,
+            "width": 120,
             "dataIndex": "segmentName"
         },
         {
             "key": "pieceCode",
             "title": "件号",
-            "width": 150,
+            "width": 120,
             "dataIndex": "pieceCode"
         },
         {
