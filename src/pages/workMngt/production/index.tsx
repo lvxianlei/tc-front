@@ -136,11 +136,11 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 className="btn-operation-link" 
-                                disabled={userId !== record.batcherId || record.loftingState === 3}
+                                disabled={userId !== record.batcherId || record.loftingState === 1}
                             >
                                 <Link to={`/ingredients/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}/${record.productionBatchNo}`}>明细</Link>
                             </Button>
-                            <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 2}
+                            <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 3}
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setVisible(true)
