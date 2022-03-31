@@ -187,3 +187,9 @@ export interface ICount {
     readonly productNumber?: string;
     readonly untreatedCount?: string;
 }
+
+export interface ITower {
+    readonly id?: string;
+    readonly productNumber?: string;
+    readonly productHeight?: string;
+}

@@ -13,7 +13,7 @@ import styles from './SetOut.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { packageTypeOptions } from '../../../configuration/DictionaryOptions';
-import { IBundle, IPackingList } from './ISetOut';
+import { IBundle, IPackingList, ITower } from './ISetOut';
 import ReuseTower, { EditProps } from './ReuseTower';
 import { chooseColumns, packingColumns } from './SetOutInformation.json';
 
@@ -39,7 +39,7 @@ export default function PackingListNew(): React.ReactNode {
     const [maxNum, setMaxNum] = useState<number>(0);
     const editRef = useRef<EditProps>();
     const [showParts, setShowParts] = useState<boolean>(false);
-    const [reuse, setReuse] = useState<[]>();
+    const [reuse, setReuse] = useState<(string| undefined)[]>();
     const [packageAttributeName, setPackageAttributeName] = useState<string>('专用');
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
@@ -413,9 +413,12 @@ export default function PackingListNew(): React.ReactNode {
 
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
-            const selectKeys: [] = await editRef.current?.onSubmit() || []
-            setReuse(selectKeys);
+            const selectRows: ITower[] = await editRef.current?.onSubmit() || [];
+            if(selectRows.length > 0) {
+                setReuse(selectRows?.map(res => res?.id));
+            }
             setVisible(false);
+            form.setFieldsValue({towers: selectRows.map(res => res.productNumber)})
             resove(true);
         } catch (error) {
             reject(false)
@@ -578,7 +581,9 @@ export default function PackingListNew(): React.ReactNode {
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="复用杆塔">
-                        <Button type="link" onClick={() => { setVisible(true) }} disabled={packageAttributeName === '专用'}>选择杆塔</Button>
+                        <Form.Item name="towers">
+                    <Input addonBefore={<Button type="link" onClick={() => { setVisible(true) }} disabled={packageAttributeName === '专用'}>选择杆塔</Button>} disabled />
+                        </Form.Item>
                     </Descriptions.Item>
                 </Descriptions>
             </Form>
