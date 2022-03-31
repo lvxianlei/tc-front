@@ -48,6 +48,7 @@ export default function PackingListNew(): React.ReactNode {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${params.packId}`);
             form.setFieldsValue({ ...data })
             setPackagingData(data?.packageRecordVOList || []);
+            setPackageAttributeName(data?.packageAttributeName || '');
         }
         const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId });
         const newData = list.filter((item: IBundle) => !packagingData.some((ele: IBundle) => ele.id !== item.id));
@@ -584,10 +585,7 @@ export default function PackingListNew(): React.ReactNode {
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="包说明">
-                        <Form.Item name="packageDescription" rules={[{
-                            "required": true,
-                            "message": "请输入包说明"
-                        }]}>
+                        <Form.Item name="packageDescription">
                             <Input placeholder="请输入" maxLength={300} />
                         </Form.Item>
                     </Descriptions.Item>
