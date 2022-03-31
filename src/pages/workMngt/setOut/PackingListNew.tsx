@@ -408,7 +408,7 @@ export default function PackingListNew(): React.ReactNode {
     const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRow(selectRows);
-        setSelectWeight(eval((selectRows || [])?.map(item => { return Number(item.structureRemainingNum) * Number(item.basicsWeight) }).join('+')).toFixed(3) || 0);
+        setSelectWeight(eval((selectRows || [])?.map(item => { return Number(item.structureRemainingNum) * Number(item.basicsWeight) }).join('+'))?.toFixed(3) || 0);
     }
 
     const onRemoveSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
@@ -483,7 +483,7 @@ export default function PackingListNew(): React.ReactNode {
         setPackagingData([...newPackagingData]);
     }
 
-    const save = async () => {
+    const save = async (tip: number) => {
         if (form) {
             const data = await form.validateFields();
             const value = {
@@ -498,8 +498,11 @@ export default function PackingListNew(): React.ReactNode {
             };
             RequestUtil.post(`/tower-science/packageStructure`, value).then(res => {
                 message.success('包装清单保存成功');
-                setVisible(false);
-                history.goBack();
+                if(tip === 0) {
+                    history.goBack();
+                }else {
+                    history.go(0)
+                }
             })
         }
     }
@@ -548,11 +551,11 @@ export default function PackingListNew(): React.ReactNode {
             <Space direction="horizontal" size="small" >
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
                 <Button type="primary" onClick={() => {
-                    save()
+                    save(0);
                 }}>保存并关闭</Button>
-                <Button type="primary" onClick={() => {
-
-                }}>保存并继续</Button>
+                {params.packId ?null: <Button type="primary" onClick={() => {
+                    save(1);
+                }}>保存并继续</Button>}
             </Space>
         ]}>
             <DetailTitle title="包装信息" />
@@ -686,7 +689,7 @@ export default function PackingListNew(): React.ReactNode {
                         if (item.dataIndex === 'code') {
                             return ({
                                 ...item,
-                                render: (_: number, record: any, key: number): React.ReactNode => (record.isWelding === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
+                                render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
                             })
                         }
                         return item
@@ -716,7 +719,7 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.titleContent}>
                 <span className={styles.title}>包装区</span>
                 <span className={styles.description}>包重量（kg）：
-                    <span className={styles.content}>{eval(packagingData.map(item => { return Number(item.structureCount) * Number(item.basicsWeight) }).join('+')).toFixed(3) || 0}</span>
+                    <span className={styles.content}>{eval(packagingData.map(item => { return Number(item.structureCount) * Number(item.basicsWeight) }).join('+'))?.toFixed(3) || 0}</span>
                 </span>
                 <span className={styles.description}> 包件数：
                     <span className={styles.content}>{packagingData.length}</span>
@@ -733,7 +736,7 @@ export default function PackingListNew(): React.ReactNode {
                         if (item.dataIndex === 'pieceCode') {
                             return ({
                                 ...item,
-                                render: (_: number, record: any, key: number): React.ReactNode => (record.isWelding === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
+                                render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
                             })
                         }
                         return item

@@ -100,10 +100,10 @@
             "dataIndex": "packageSegment"
         },
         {
-            "key": "packStatus",
+            "key": "pack",
             "title": "现场打包",
             "width": 200,
-            "dataIndex": "packStatus"
+            "dataIndex": "pack"
         }
     ],
     "bundleColumns": [
