@@ -16,7 +16,6 @@ import { packageTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IBundle, IPackingList } from './ISetOut';
 import ReuseTower, { EditProps } from './ReuseTower';
 import { chooseColumns, packingColumns } from './SetOutInformation.json';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 export default function PackingListNew(): React.ReactNode {
     const history = useHistory();
@@ -409,7 +408,7 @@ export default function PackingListNew(): React.ReactNode {
     const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRow(selectRows);
-        setSelectWeight(eval((selectRows || [])?.map(item => { return Number(item.structureRemainingNum) * Number(item.basicsWeight) }).join('+')) || 0);
+        setSelectWeight(eval((selectRows || [])?.map(item => { return Number(item.structureRemainingNum) * Number(item.basicsWeight) }).join('+')).toFixed(3) || 0);
     }
 
     const onRemoveSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
@@ -717,7 +716,7 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.titleContent}>
                 <span className={styles.title}>包装区</span>
                 <span className={styles.description}>包重量（kg）：
-                    <span className={styles.content}>{eval(packagingData.map(item => { return Number(item.structureCount) * Number(item.basicsWeight) }).join('+')) || 0}</span>
+                    <span className={styles.content}>{eval(packagingData.map(item => { return Number(item.structureCount) * Number(item.basicsWeight) }).join('+')).toFixed(3) || 0}</span>
                 </span>
                 <span className={styles.description}> 包件数：
                     <span className={styles.content}>{packagingData.length}</span>
