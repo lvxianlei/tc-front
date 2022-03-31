@@ -135,6 +135,7 @@ export default function PackingListNew(): React.ReactNode {
                     productId: detailData.productId,
                     structureCount: res.structureRemainingNum,
                     id: '',
+                    isChild: false,
                     weldingStructureList: res?.weldingStructureList?.map(item => {
                         return {
                             ...item,
@@ -145,6 +146,7 @@ export default function PackingListNew(): React.ReactNode {
                             productCategoryId: detailData.productCategoryId,
                             productId: detailData.productId,
                             structureCount: item.structureRemainingNum,
+                            isChild: true,
                             id: '',
                         }
                     })
@@ -179,12 +181,7 @@ export default function PackingListNew(): React.ReactNode {
             setPackagingData([...newPackagingData]);
             let list: IBundle[] = stayDistrict
             data?.forEach((record: IBundle) => {
-                stayDistrict.forEach((res: IBundle, index: number) => {
-                    if (record.businessId === res.businessId) {
-                        list.splice(index, 1);
-                        list = list.filter(res => res.mainStructureId !== record.businessId)
-                    }
-                })
+                list = list.filter(res => res.businessId !== record.businessId).filter(item => item.mainStructureId !== record.businessId);
             })
             setStayDistrict([...list]);
             setRemoveRow([]);
@@ -311,12 +308,7 @@ export default function PackingListNew(): React.ReactNode {
         if (removeRow.length > 0) {
             let list: IBundle[] = packagingData
             removeRow?.forEach((value: IBundle, index: number) => {
-                packagingData.forEach((res: IBundle, index: number) => {
-                    if (value.businessId === res.businessId) {
-                        list.splice(index, 1);
-                        list = list.filter(res => res.mainStructureId !== value.businessId)
-                    }
-                })
+                list = list.filter(res => res.businessId !== value.businessId).filter(item => item.mainStructureId !== value.businessId);
             })
             setPackagingData([...list]);
             removeRow?.forEach(async (value: IBundle, index: number) => {
@@ -498,9 +490,9 @@ export default function PackingListNew(): React.ReactNode {
             };
             RequestUtil.post(`/tower-science/packageStructure`, value).then(res => {
                 message.success('包装清单保存成功');
-                if(tip === 0) {
+                if (tip === 0) {
                     history.goBack();
-                }else {
+                } else {
                     history.go(0)
                 }
             })
@@ -553,7 +545,7 @@ export default function PackingListNew(): React.ReactNode {
                 <Button type="primary" onClick={() => {
                     save(0);
                 }}>保存并关闭</Button>
-                {params.packId ?null: <Button type="primary" onClick={() => {
+                {params.packId ? null : <Button type="primary" onClick={() => {
                     save(1);
                 }}>保存并继续</Button>}
             </Space>
