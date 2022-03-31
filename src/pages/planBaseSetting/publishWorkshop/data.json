@@ -1,0 +1,178 @@
+{
+    "pageTable": [
+        {
+            "title": "下达单号",
+            "dataIndex": "issuedNumber"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategory"
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planNum"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName"
+        },
+        {
+            "title": "生产下达时间",
+            "dataIndex": "loftingBatchTime"
+        }
+    ],
+    "workShopOrder": [
+        {
+            "title": "下达单号",
+            "dataIndex": "issuedNumber"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategory"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName"
+        },
+        {
+            "title": "组焊车间",
+            "dataIndex": "weldingWorkshop"
+        },
+        {
+            "title": "加工车间",
+            "dataIndex": "processWorkshop"
+        },
+        {
+            "title": "生产下达时间",
+            "dataIndex": "loftingBatchTime"
+        }
+    ],
+    "welding": [
+        {
+            "title": "段号",
+            "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "title": "零件号",
+            "dataIndex": "code",
+            "width": 100
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 100
+        },
+        {
+            "title": "材料",
+            "dataIndex": "materialName",
+            "width": 100
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100
+        },
+        {
+            "title": "加工数",
+            "dataIndex": "number",
+            "width": 100
+        },
+        {
+            "title": "单件孔数",
+            "dataIndex": "holesNum",
+            "width": 100
+        },
+        {
+            "title": "总重（t）",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "title": " 加工车间",
+            "dataIndex": "processWorkshop",
+            "width": 200
+        },
+        {
+            "title": "调整后加工车间",
+            "dataIndex": "newProcessWorkshop",
+            "width": 200
+        }
+    ],
+    "structure": [
+        {
+            "title": "段名",
+            "dataIndex": "segmentName",
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
+        },
+        {
+            "title": "组件号",
+            "dataIndex": "componentId",
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
+        },
+        {
+            "title": "加工组数",
+            "dataIndex": "segmentGroupNum",
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
+        },
+        {
+            "title": "单组重量（t）",
+            "dataIndex": "singleGroupWeight",
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
+        },
+        {
+            "title": "零部件号",
+            "dataIndex": "code",
+            "width": 100
+        },
+        {
+            "title": "材料",
+            "dataIndex": "materialName",
+            "width": 100
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 100
+        },
+        {
+            "title": "单组件数",
+            "dataIndex": "singleNum",
+            "width": 100
+        },
+        {
+            "title": "组焊车间",
+            "dataIndex": "weldingWorkshop",
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
+        },
+        {
+            "title": "调整后加工车间",
+            "dataIndex": "newWeldingWorkshop",
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
+        }
+    ]
+}

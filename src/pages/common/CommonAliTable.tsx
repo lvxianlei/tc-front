@@ -108,17 +108,22 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         .input({ dataSource, columns: columnsResult as any })
         .primaryKey(rowKey || "id")
         .use(features.columnResize({
-            fallbackSize: 120,
+            minSize: 40,
+            maxSize: 500,
             handleBackground: '#ececec',
             handleHoverBackground: '#ccc',
-            handleActiveBackground: '#ccc',
+            handleActiveBackground: '#ccc'
         }));
-    props?.tableProps?.rowSelection &&  pipeline.use(features.multiSelect({
-        value: props?.tableProps?.rowSelection?.selectedRowKeys || [],
-        onChange: props?.tableProps?.rowSelection?.onChange,
-        isDisabled: props?.tableProps?.rowSelection?.getCheckboxProps
-    }))
-
+    props?.rowSelection && pipeline.use(features.multiSelect({
+        value: props?.rowSelection?.selectedRowKeys || [],
+        onChange: (nextValue: string[]) => props?.rowSelection?.onChange(nextValue, dataSource.filter((item: any) => item[(typeof rowKey === "function" ? rowKey(item) : rowKey) || "id"])),
+        isDisabled: props?.rowSelection?.getCheckboxProps,
+        highlightRowWhenSelected: true,
+        checkboxPlacement: 'start',
+        clickArea: "cell",
+        checkboxColumn: { width: 40, lock: true, align: "left" }
+    }));
+    pipeline.use(features.autoRowSpan());
     return <nav className={styles.componentsTable}>
         <AliTable
             size="small"

@@ -1,30 +1,20 @@
-/**
- * @author zyc
- * @copyright © 2022 
- * @description 下发技术
- */
-
 import React, { useState } from "react";
-import { Button, Select, Form, Space, Spin, Divider, Modal, InputNumber, Input, message } from 'antd';
-import { BaseInfo, CommonTable, DetailContent } from '../../common';
+import { Button, Form, Space, Spin, Modal, Input, message, DatePicker } from 'antd';
+import { BaseInfo, CommonAliTable, DetailContent } from '../../common';
 import { ILink, IPlanSchedule, IUnit } from './IPlanSchedule';
 import { useHistory, useParams } from 'react-router-dom';
-import { arrayMove, SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
-import { MenuOutlined } from '@ant-design/icons';
 import useRequest from "@ahooksjs/use-request";
 import RequestUtil from "../../../utils/RequestUtil";
-
+import moment from "moment";
+import zhCN from 'antd/es/date-picker/locale/zh_CN';
 export interface DistributedTechRefProps {
     onSubmit: () => void
     resetFields: () => void
 }
 
-const SortableItem = SortableElement((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableRowElement> & React.HTMLAttributes<HTMLTableRowElement>) => <tr {...props} />);
-const SortableCon = SortableContainer((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableSectionElement> & React.HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props} />);
-
 export default function DistributedTech(): React.ReactNode {
-    const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
     const [form] = Form.useForm();
+    const [completeTimeForm] = Form.useForm();
     const [modalForm] = Form.useForm();
     const [linkList, setLinkList] = useState<ILink[]>([])
     const history = useHistory();
@@ -52,13 +42,30 @@ export default function DistributedTech(): React.ReactNode {
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [] })
+    }), {})
+
+    const { data: time, run } = useRequest<any>((params: any[]) => new Promise(async (resole, reject) => {
+        try {
+            const result: IUnit[] = await RequestUtil.post(`/tower-aps/productionPlan/lofting/complete/time`, params);
+            message.success("成功设置计划完成日期")
+            setDataSource(dataSource.map((item: any) => ({
+                ...item,
+                loftingCompleteTime: params.find(fitem => fitem.id === item.id)?.loftingCompleteTime || item.loftingCompleteTime
+            })))
+            setSelectedRows([])
+            completeTimeForm.resetFields()
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     const baseColumns = [
         {
             "title": "生产单元",
             "dataIndex": "unitId",
             "type": "select",
+            enum: data?.map(item => ({ label: item.name, value: item.id })),
             "rules": [
                 {
                     "required": true,
@@ -70,6 +77,7 @@ export default function DistributedTech(): React.ReactNode {
             "title": "生产环节",
             "dataIndex": "linkId",
             "type": "select",
+            enum: linkList?.map(item => ({ label: item.name, value: item.id })),
             "rules": [
                 {
                     "required": true,
@@ -81,58 +89,31 @@ export default function DistributedTech(): React.ReactNode {
 
     const tableColumns = [
         {
-            title: '排序',
-            dataIndex: 'sort',
-            width: 50,
-            className: 'drag-visible',
-            render: () => <DragHandle />,
-        },
-        {
-            key: 'planNumber',
             title: '计划号',
             dataIndex: 'planNumber',
             width: 150
         },
         {
-            key: 'productCategoryName',
             title: '塔型',
             dataIndex: 'productCategoryName',
             width: 150
         },
         {
-            key: 'productNum',
             title: '基数',
             dataIndex: 'productNum',
             width: 120
         },
         {
-            key: 'issueDescription',
+            title: '放样计划完成日期',
+            dataIndex: 'loftingCompleteTime',
+            type: "date",
+            format: "YYYY-MM-DD"
+        },
+        {
             title: '下发技术备注',
             dataIndex: 'issueDescription'
         }
     ]
-
-    const onSortEnd = (props: { oldIndex: number; newIndex: number; }) => {
-        if (props.oldIndex !== props.newIndex) {
-            const newData = arrayMove(dataSource, props.oldIndex, props.newIndex).filter(el => !!el);
-            setDataSource(newData)
-        }
-    };
-
-    const DraggableContainer = (props: any) => (
-        <SortableCon
-            useDragHandle
-            disableAutoscroll
-            helperClass="row-dragging"
-            onSortEnd={onSortEnd}
-            {...props}
-        />
-    );
-
-    const DraggableBodyRow = ({ ...restProps }) => {
-        const index = dataSource.findIndex((x: any) => x.index === restProps['data-row-key']);
-        return <SortableItem index={index} {...restProps} />;
-    };
 
     const unitChange = async (value: string) => {
         const result: ILink[] = await RequestUtil.get(`/tower-aps/productionLink/link/${value}`);
@@ -158,7 +139,7 @@ export default function DistributedTech(): React.ReactNode {
                 return item
             }
         })
-        await RequestUtil.post(`/tower-aps/productionPlan/batch/issue/remark`, list.map((res: IPlanSchedule, index: number) => {
+        return RequestUtil.post(`/tower-aps/productionPlan/batch/issue/remark`, list.map((res: IPlanSchedule, index: number) => {
             return {
                 id: res.id,
                 issueDescription: res.issueDescription,
@@ -176,6 +157,7 @@ export default function DistributedTech(): React.ReactNode {
                     index: index
                 }
             }))
+            modalForm.resetFields();
         });
     }
 
@@ -187,17 +169,36 @@ export default function DistributedTech(): React.ReactNode {
         });
     }
 
-    return (<Spin spinning={loading}>
-        <Modal
-            title="下发技术备注"
-            visible={visible}
-            onOk={modalOk}
-            onCancel={() => {
-                setVisible(false);
-                modalForm.resetFields();
-            }}
-        >
-            <Form form={modalForm}>
+    const completeTime = () => {
+        Modal.confirm({
+            title: "设置放样计划完成日期",
+            icon: null,
+            content: <Form form={completeTimeForm} style={{ marginTop: 16 }}>
+                <Form.Item name="loftingCompleteTime" label="放样计划完成日期" rules={[{ required: true, message: "请选择放样计划完成日期" }]}>
+                    <DatePicker
+                        style={{ width: "100%" }}
+                        locale={zhCN}
+                        placeholder="放样计划完成日期"
+                        format="YYYY-MM-DD"
+                        disabledDate={current => current && current < moment().startOf('day')}
+                    />
+                </Form.Item>
+            </Form>,
+            onOk: async () => {
+                const loftingCompleteTime = await completeTimeForm.validateFields()
+                return run(selectedKeys.map((item: any) => ({
+                    id: item,
+                    loftingCompleteTime: loftingCompleteTime.loftingCompleteTime.format("YYYY-MM-DD") + " 00:00:00"
+                })))
+            }
+        })
+    }
+
+    const techDescription = () => {
+        Modal.confirm({
+            title: "下发技术备注",
+            icon: null,
+            content: <Form form={modalForm} style={{ marginTop: 16 }}>
                 <Form.Item label="下发技术备注" name="issueDescription" rules={[{
                     required: true,
                     message: '请输入下发技术备注'
@@ -208,64 +209,34 @@ export default function DistributedTech(): React.ReactNode {
                 }]}>
                     <Input.TextArea maxLength={100} />
                 </Form.Item>
-            </Form>
-        </Modal>
+            </Form>,
+            onOk: modalOk,
+            onCancel: () => modalForm.resetFields()
+        })
+    }
+
+    return (<Spin spinning={loading}>
         <DetailContent operation={[
-            <Space direction="horizontal" size="small" >
-                <Button type="primary" onClick={issue}>下发技术</Button>
-                <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
-            </Space>
+            <Button style={{ marginRight: 16 }} type="primary" key="tech" onClick={issue}>下发技术</Button>,
+            <Button key="close" onClick={() => history.goBack()}>关闭</Button>
         ]}>
-            <BaseInfo form={form} columns={baseColumns.map((item: any) => {
-                if (item.dataIndex === "unitId") {
-                    return ({
-                        ...item,
-                        type: 'select',
-                        render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Form.Item name="unitId" style={{ width: '100%' }}>
-                                <Select getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e: string) => unitChange(e)} style={{ width: "70%" }}>
-                                    {data && data.map(({ id, name }, index) => {
-                                        return <Select.Option key={index} value={id}>
-                                            {name}
-                                        </Select.Option>
-                                    })}
-                                </Select>
-                            </Form.Item>)
-                    })
-                }
-                if (item.dataIndex === "linkId") {
-                    return ({
-                        ...item,
-                        type: 'select',
-                        render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Form.Item name="linkId" style={{ width: '100%' }}>
-                                <Select getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "70%" }}>
-                                    {linkList && linkList.map(({ id, name }, index) => {
-                                        return <Select.Option key={index} value={id}>
-                                            {name}
-                                        </Select.Option>
-                                    })}
-                                </Select>
-                            </Form.Item>)
-                    })
-                }
-                return item
-            })} col={1} dataSource={{}} edit />
-            <Divider style={{ marginTop: '0' }}>请拖拽列表排序，列表排序为任务完成的顺序</Divider>
-            <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => setVisible(true)} style={{ marginBottom: '6px' }}>下发技术备注</Button>
-            <CommonTable
-                scroll={{ x: '700' }}
-                rowKey="index"
+            <BaseInfo form={form} columns={baseColumns} col={4} dataSource={{}} edit />
+            <Space size={16} style={{ marginBottom: '6px' }}>
+                <Button
+                    type="primary"
+                    disabled={selectedKeys.length <= 0}
+                    onClick={completeTime} >设置计划完成日期</Button>
+                <Button
+                    type="primary"
+                    disabled={selectedKeys.length <= 0}
+                    onClick={techDescription} >下发技术备注</Button>
+            </Space>
+            <CommonAliTable
                 dataSource={dataSource}
                 pagination={false}
                 columns={tableColumns}
-                components={{
-                    body: {
-                        wrapper: DraggableContainer,
-                        row: DraggableBodyRow,
-                    },
-                }}
                 rowSelection={{
+                    type: "checkbox",
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange
                 }}
