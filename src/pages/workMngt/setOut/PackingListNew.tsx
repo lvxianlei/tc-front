@@ -196,8 +196,7 @@ export default function PackingListNew(): React.ReactNode {
 
     // 移除
     const remove = async (value: Record<string, any>, index: number, num: number) => {
-        console.log(maxNum)
-        if (num === Number(value.structureCount) / Number(value.singleNum)) {
+        if (num === Number(value.structureCount) / Number(value.singleNum || 1)) {
             packagingData.splice(index, 1);
             const list = packagingData.filter(res => res.mainStructureId !== value.businessId);
             setPackagingData([...list]);
