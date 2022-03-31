@@ -196,6 +196,7 @@ export default function PackingListNew(): React.ReactNode {
 
     // 移除
     const remove = async (value: Record<string, any>, index: number, num: number) => {
+        console.log(maxNum)
         if (num === Number(value.structureCount) / Number(value.singleNum)) {
             packagingData.splice(index, 1);
             const list = packagingData.filter(res => res.mainStructureId !== value.businessId);
@@ -400,7 +401,15 @@ export default function PackingListNew(): React.ReactNode {
     const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRow(selectRows);
-        setSelectWeight(eval((selectRows || [])?.map(item => { return Number(item.structureRemainingNum) * Number(item.basicsWeight) }).join('+'))?.toFixed(3) || 0);
+        
+        console.log(eval(selectRows.map(res => {
+            res?.weldingStructureList?.map(item => { 
+                return Number(item.structureRemainingNum) * Number(item.basicsWeight) 
+            })
+        }).join('+')))
+        setSelectWeight(eval((selectRows || [])?.map(item => { 
+            return Number(item.structureRemainingNum) * Number(item.basicsWeight) 
+        }).join('+'))?.toFixed(3) || 0);
     }
 
     const onRemoveSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
@@ -740,7 +749,7 @@ export default function PackingListNew(): React.ReactNode {
                         fixed: 'right' as FixedType,
                         width: 100,
                         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Button type='link' disabled={record.isChild} onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(Number(record.structureCount) / Number(record.singleNum)); setMaxNum(Number(record.structureCount) / Number(record.singleNum)) }}>移除</Button>
+                            <Button type='link' disabled={record.isChild} onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(Number(record.structureCount) / Number(record.singleNum || 1)); setMaxNum(Number(record.structureCount) / Number(record.singleNum || 1));}}>移除</Button>
                         )
                     }
                 ]}
