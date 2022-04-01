@@ -14,14 +14,15 @@ import { IResponseData, ITower } from "./ISetOut";
 interface ReuseTowerProps {
     id: string;
     productId: string;
+    selectedKeys: React.Key[];
 }
 
 export interface EditProps {
     onSubmit: () => void
 }
 
-export default forwardRef(function ReuseTower({ id, productId }: ReuseTowerProps, ref) {
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+export default forwardRef(function ReuseTower({ id, productId, selectedKeys }: ReuseTowerProps, ref) {
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>(selectedKeys);
     const [selectedRow, setSelectedRow] = useState<ITower[]>([]);
     const columns = [
         {

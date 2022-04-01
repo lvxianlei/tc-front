@@ -39,7 +39,7 @@ export default function PackingListNew(): React.ReactNode {
     const [maxNum, setMaxNum] = useState<number>(0);
     const editRef = useRef<EditProps>();
     const [showParts, setShowParts] = useState<boolean>(false);
-    const [reuse, setReuse] = useState<(string| undefined)[]>();
+    const [reuse, setReuse] = useState<any>();
     const [packageAttributeName, setPackageAttributeName] = useState<string>('专用');
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
@@ -507,7 +507,7 @@ export default function PackingListNew(): React.ReactNode {
             onCancel={() => {
                 setVisible(false)
             }}>
-            <ReuseTower productId={params.productId} id={detailData?.productCategoryId || ''} ref={editRef} />
+            <ReuseTower productId={params.productId} selectedKeys={reuse || []} id={detailData?.productCategoryId || ''} ref={editRef} />
         </Modal>
         <Modal
             visible={removeVisible}
