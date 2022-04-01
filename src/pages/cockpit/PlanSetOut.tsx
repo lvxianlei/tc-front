@@ -60,7 +60,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
         },
         {
             key: 'weight',
-            title: '重量',
+            title: '重量（吨）',
             width: 100,
             dataIndex: 'weight'
         },
