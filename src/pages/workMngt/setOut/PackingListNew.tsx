@@ -39,7 +39,7 @@ export default function PackingListNew(): React.ReactNode {
     const [maxNum, setMaxNum] = useState<number>(0);
     const editRef = useRef<EditProps>();
     const [showParts, setShowParts] = useState<boolean>(false);
-    const [reuse, setReuse] = useState<(string| undefined)[]>();
+    const [reuse, setReuse] = useState<any>();
     const [packageAttributeName, setPackageAttributeName] = useState<string>('专用');
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
@@ -372,7 +372,7 @@ export default function PackingListNew(): React.ReactNode {
         }
     }
 
-    const onFinish = (value: Record<string, any>) => {
+    const onFinish = async (value: Record<string, any>) => {
         if (value.checkList?.indexOf('electricWelding') >= 0) {
             value.electricWelding = 1
         }
@@ -394,14 +394,27 @@ export default function PackingListNew(): React.ReactNode {
         if (value.isCommonSegment?.indexOf('isCommonSegment') >= 0) {
             value.isCommonSegment = 1
         }
-        getTableDataSource({ ...value });
+        if (!location.state) {
+            const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${params.packId}`);
+            setPackagingData(data?.packageRecordVOList || []);
+        } else {
+            setPackagingData([]);
+        }
+        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...value, packageStructureId: params.packId });
+        setStayDistrict(list.map((res, index) => {
+            return {
+                ...res,
+                isChild: false,
+                weldingStructureList: res.weldingStructureList?.map(item => { return { ...item, isChild: true } })
+            }
+        }));
     }
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRow(selectRows);
         setSelectWeight(eval((dataShowParts(selectRows) || [])?.map(item => { 
-            return Number(item.structureCountNum) * Number(item.basicsWeight) 
+            return Number(item.structureCountNum) * Number(item.totalWeight) 
         }).join('+'))?.toFixed(3) || 0);
     }
 
@@ -507,7 +520,7 @@ export default function PackingListNew(): React.ReactNode {
             onCancel={() => {
                 setVisible(false)
             }}>
-            <ReuseTower productId={params.productId} id={detailData?.productCategoryId || ''} ref={editRef} />
+            <ReuseTower productId={params.productId} selectedKeys={reuse || []} id={detailData?.productCategoryId || ''} ref={editRef} />
         </Modal>
         <Modal
             visible={removeVisible}
@@ -698,7 +711,7 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.titleContent}>
                 <span className={styles.title}>包装区</span>
                 <span className={styles.description}>包重量（kg）：
-                    <span className={styles.content}>{eval(dataShowParts(packagingData).map(item => { return Number(item.structureCountNum) * Number(item.basicsWeight) }).join('+'))?.toFixed(3) || 0}</span>
+                    <span className={styles.content}>{eval(dataShowParts(packagingData).map(item => { return Number(item.structureCountNum) * Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0}</span>
                 </span>
                 <span className={styles.description}> 包件数：
                     <span className={styles.content}>{packagingData.length}</span>

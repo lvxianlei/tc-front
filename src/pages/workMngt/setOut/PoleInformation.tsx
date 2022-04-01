@@ -287,7 +287,7 @@ export default function PoleInformation(): React.ReactNode {
             复用杆塔已经存在特殊件号调整后的数据，是否覆盖？
         </Modal>
         <Modal
-            destroyOnClose
+            // destroyOnClose
             visible={allotVisible}
             width="60%"
             title="特殊件号"
