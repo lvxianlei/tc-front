@@ -372,7 +372,7 @@ export default function PackingListNew(): React.ReactNode {
         }
     }
 
-    const onFinish = (value: Record<string, any>) => {
+    const onFinish = async (value: Record<string, any>) => {
         if (value.checkList?.indexOf('electricWelding') >= 0) {
             value.electricWelding = 1
         }
@@ -394,7 +394,20 @@ export default function PackingListNew(): React.ReactNode {
         if (value.isCommonSegment?.indexOf('isCommonSegment') >= 0) {
             value.isCommonSegment = 1
         }
-        getTableDataSource({ ...value });
+        if (!location.state) {
+            const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${params.packId}`);
+            setPackagingData(data?.packageRecordVOList || []);
+        } else {
+            setPackagingData([]);
+        }
+        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...value, packageStructureId: params.packId });
+        setStayDistrict(list.map((res, index) => {
+            return {
+                ...res,
+                isChild: false,
+                weldingStructureList: res.weldingStructureList?.map(item => { return { ...item, isChild: true } })
+            }
+        }));
     }
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
