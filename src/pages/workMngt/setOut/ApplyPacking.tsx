@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, Input, Space, Button } from 'antd';
+import { Spin, Form, Input, Space, Button, message, Modal } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -14,6 +14,7 @@ import styles from './SetOut.module.less';
 
 interface ApplyPackingProps {
     id: string;
+    detailData: any;
 }
 
 export interface EditProps {
@@ -30,12 +31,12 @@ interface ISelectTower {
     readonly projectName?: string;
 }
 
-export default forwardRef(function ApplyPacking({ id }: ApplyPackingProps, ref) {
+export default forwardRef(function ApplyPacking({ id, detailData }: ApplyPackingProps, ref) {
     const [form] = Form.useForm();
     const [dataSource, setDataSource] = useState<IPackingList[]>([]);
     const [packingData, setPackingData] = useState<IPackingList[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
-    const [selectRows, setSelectRows] = useState<[]>([]);
+    const [selectRows, setSelectRows] = useState<any>([]);
     const [selectTower, setSelectTower] = useState<ISelectTower>({});
 
 
@@ -124,18 +125,38 @@ export default forwardRef(function ApplyPacking({ id }: ApplyPackingProps, ref) 
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const data = {
-                id: id,
-                productCategory: selectTower.productCategory,
-                productCategoryName: selectTower.productCategoryName,
-                productId: selectTower.id,
-                productNumber: selectTower.productNumber,
-                projectName: selectTower.projectName,
-                productHeight: selectTower.productHeight,
-                packageStructureSaveDTOS: selectRows
+            if (selectRows.length > 0) {
+                const newDetailData = detailData.map((res: any) => res.balesCode)
+                const tip = selectRows.filter((item: any) => newDetailData.indexOf(item.balesCode) > -1);
+                const data = {
+                    id: id,
+                    productCategory: selectTower.productCategory,
+                    productCategoryName: selectTower.productCategoryName,
+                    productId: selectTower.id,
+                    productNumber: selectTower.productNumber,
+                    projectName: selectTower.projectName,
+                    productHeight: selectTower.productHeight,
+                    packageStructureSaveDTOS: selectRows
+                }
+                if (tip.length > 0) {
+                    Modal.confirm({
+                        title: "复制",
+                        content: "包名已存在，是否覆盖？",
+                        onOk: async () => {
+                            await saveRun(data);
+                            resolve(true);
+                        }
+                    })
+
+                } else {
+                    await saveRun(data)
+                    resolve(true);
+                }
+
+            } else {
+                message.warning('请选择要复制的数据');
+                reject(false)
             }
-            await saveRun(data)
-            resolve(true);
         } catch (error) {
             reject(false)
         }

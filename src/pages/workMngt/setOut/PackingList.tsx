@@ -85,7 +85,7 @@ export default function PackingList(): React.ReactNode {
             onCancel={() => {
                 setVisible(false);
             }}>
-            <ApplyPacking id={params.productId} ref={editRef} />
+            <ApplyPacking id={params.productId} detailData={detailData} ref={editRef} />
         </Modal>
         <Space direction="horizontal" size="small" className={styles.titleContent}>
             <span>塔型：
