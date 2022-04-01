@@ -666,7 +666,7 @@ export default function PackingListNew(): React.ReactNode {
                     <span className={styles.content}>{stayDistrict.length}</span>
                 </span>
                 <span className={styles.description}>已选择：件数：
-                    <span className={styles.content}>{selectedRowKeys.length}</span>
+                    <span className={styles.content}>{dataShowParts(selectedRow).length}</span>
                 </span>
                 <span className={styles.description}>重量：
                     <span className={styles.content}>{selectWeight}kg</span>
@@ -720,7 +720,7 @@ export default function PackingListNew(): React.ReactNode {
                     <span className={styles.content}>{eval(dataShowParts(packagingData).map(item => { return Number(item.structureCountNum) * Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0}</span>
                 </span>
                 <span className={styles.description}> 包件数：
-                    <span className={styles.content}>{packagingData.length}</span>
+                    <span className={styles.content}>{dataShowParts(packagingData).length}</span>
                 </span>
                 <span className={styles.description}>电焊件：
                     <span className={styles.content}>{packagingData.filter(res => res.isWelding === 1).length}</span>
