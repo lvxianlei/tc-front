@@ -124,6 +124,7 @@ export interface IBundle {
     readonly mainStructureId?: string;
     readonly singleNum?: string;
     readonly isWelding?: number;
+    readonly structureCountNum?: string;
 }
 
 export interface IPackingList {
@@ -185,4 +186,10 @@ export interface ICount {
     readonly productId?: string;
     readonly productNumber?: string;
     readonly untreatedCount?: string;
+}
+
+export interface ITower {
+    readonly id?: string;
+    readonly productNumber?: string;
+    readonly productHeight?: string;
 }

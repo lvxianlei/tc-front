@@ -9,8 +9,7 @@ import { Spin } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import { IResponseData } from "./ISetOut";
-import { StringLiteralLike } from "typescript";
+import { IResponseData, ITower } from "./ISetOut";
 
 interface ReuseTowerProps {
     id: string;
@@ -23,6 +22,7 @@ export interface EditProps {
 
 export default forwardRef(function ReuseTower({ id, productId }: ReuseTowerProps, ref) {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [selectedRow, setSelectedRow] = useState<ITower[]>([]);
     const columns = [
         {
             title: '序号',
@@ -53,7 +53,7 @@ export default forwardRef(function ReuseTower({ id, productId }: ReuseTowerProps
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            resolve(selectedRowKeys);
+            resolve(selectedRow);
         } catch (error) {
             reject(false)
         }
@@ -67,6 +67,7 @@ export default forwardRef(function ReuseTower({ id, productId }: ReuseTowerProps
                 selectedRowKeys: selectedRowKeys,
                 onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
                     setSelectedRowKeys(selectedRowKeys);
+                    setSelectedRow(selectedRows)
                 }
             }} columns={columns} />
         </DetailContent>
