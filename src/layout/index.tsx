@@ -194,7 +194,6 @@ export default function (): JSX.Element {
           </Menu.Item>
         </Menu>
       );
-
     return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1

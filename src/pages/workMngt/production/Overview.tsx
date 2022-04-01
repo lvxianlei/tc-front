@@ -17,7 +17,7 @@ export default function Overview() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [state, setState] = useState<number>(1);
-    const params = useParams<{ id: string, materialTaskCode: string, productCategoryName: string, loftingState: string }>()
+    const params = useParams<{ id: string, materialTaskCode: string, productCategoryName: string, loftingState: string, batchNos: string }>()
     const ingredientRef = useRef<IngredientsRef>({ onSubmit: () => { } })
     const [ingredientsvisible, setIngredientsvisible] = useState<boolean>(false);
     const [isExport, setIsExportStoreList] = useState(false)
@@ -52,6 +52,7 @@ export default function Overview() {
             id={params.id}
             materialTaskCode={params.materialTaskCode}
             productCategoryName={params.productCategoryName}
+            batchNos={params.batchNos}
             visible={ingredientsvisible}
             onOk={() => {
                 history.go(0);
@@ -65,7 +66,7 @@ export default function Overview() {
                     setState(1)
                 }} ghost style={{ marginRight: 16 }}>导出</Button>
             {
-                (params.loftingState as any) * 1 === 1 && <Button key="peiliao" type="primary" ghost onClick={() => setIngredientsvisible(true)} style={{ marginRight: 16 }}>配料</Button>
+                (params.loftingState as any) * 1 === 2 && <Button key="peiliao" type="primary" ghost onClick={() => setIngredientsvisible(true)} style={{ marginRight: 16 }}>配料</Button>
             }
             
         </div>

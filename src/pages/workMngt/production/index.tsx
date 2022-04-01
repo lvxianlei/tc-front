@@ -136,11 +136,11 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 className="btn-operation-link" 
-                                disabled={userId !== record.batcherId || record.loftingState === 3}
+                                disabled={userId !== record.batcherId || record.loftingState === 1}
                             >
-                                <Link to={`/ingredients/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}`}>明细</Link>
+                                <Link to={`/ingredients/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}/${record.productionBatchNo}`}>明细</Link>
                             </Button>
-                            <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 2}
+                            <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 3}
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setVisible(true)
@@ -180,9 +180,9 @@ export default function Invoicing() {
                     label: '状态',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="1">待完成</Select.Option>
-                        <Select.Option value="2">已完成</Select.Option>
-                        <Select.Option value="3">待确认</Select.Option>
+                        <Select.Option value="2">待完成</Select.Option>
+                        <Select.Option value="3">已完成</Select.Option>
+                        <Select.Option value="1">待确认</Select.Option>
                     </Select>
                 },
                 {
@@ -193,7 +193,7 @@ export default function Invoicing() {
                 {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
-                    children: <Input placeholder="方案编号/任务编号/生产批次/塔型" style={{ width: 300 }} />
+                    children: <Input placeholder="方案编号/生产批次/塔型" style={{ width: 300 }} />
                 }
             ]}
         />
