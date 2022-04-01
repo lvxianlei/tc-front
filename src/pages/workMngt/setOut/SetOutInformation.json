@@ -43,5 +43,420 @@
             "dataIndex": "totalWeight",
             "title": "总重量（kg）"
         }
+    ],
+    "columns": [
+        {
+            "key": "balesCode",
+            "title": "包号",
+            "width": 150,
+            "dataIndex": "balesCode"
+        },
+        {
+            "key": "packageTypeName",
+            "title": "包类型",
+            "width": 150,
+            "dataIndex": "packageTypeName"
+        },
+        {
+            "key": "packageAttributeName",
+            "title": "包属性",
+            "width": 150,
+            "dataIndex": "packageAttributeName"
+        },
+        {
+            "key": "packageStructCount",
+            "title": "包件号数（个）",
+            "width": 150,
+            "dataIndex": "packageStructCount"
+        },
+        {
+            "key": "balesCount",
+            "title": "包件数（个）",
+            "width": 150,
+            "dataIndex": "balesCount"
+        },
+        {
+            "key": "weightCount",
+            "title": "包重量（kg）",
+            "dataIndex": "weightCount",
+            "width": 120
+        },
+        {
+            "key": "createUserName",
+            "title": "创建人",
+            "width": 200,
+            "dataIndex": "createUserName"
+        },
+        {
+            "key": "packageDescription",
+            "title": "包说明",
+            "width": 200,
+            "dataIndex": "packageDescription"
+        },
+        {
+            "key": "packageSegment",
+            "title": "包段落",
+            "width": 200,
+            "dataIndex": "packageSegment"
+        },
+        {
+            "key": "pack",
+            "title": "现场打包",
+            "width": 200,
+            "dataIndex": "pack"
+        }
+    ],
+    "bundleColumns": [
+        {
+            "key": "pieceCode",
+            "title": "件号",
+            "width": 150,
+            "dataIndex": "pieceCode"
+        },
+        {
+            "key": "structureCount",
+            "title": "包装数量",
+            "width": 150,
+            "dataIndex": "structureCount"
+        },
+        {
+            "key": "basicsWeight",
+            "title": "单件重量（kg）",
+            "width": 150,
+            "dataIndex": "basicsWeight"
+        },
+        {
+            "key": "totalWeight",
+            "title": "包装重量（kg）",
+            "width": 150,
+            "dataIndex": "totalWeight"
+        },
+        {
+            "key": "materialName",
+            "title": "材料",
+            "dataIndex": "materialName",
+            "width": 120
+        },
+        {
+            "key": "structureTexture",
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 120
+        },
+        {
+            "key": "structureSpec",
+            "title": "材料规格",
+            "dataIndex": "structureSpec",
+            "width": 120
+        },
+        {
+            "key": "length",
+            "title": "长度（mm）",
+            "dataIndex": "length",
+            "width": 120
+        },
+        {
+            "key": "width",
+            "title": "宽度（mm）",
+            "dataIndex": "width",
+            "width": 120
+        },
+        {
+            "key": "thickness",
+            "title": "厚度（mm）",
+            "dataIndex": "thickness",
+            "width": 120
+        },
+        {
+            "key": "electricWelding",
+            "title": "电焊",
+            "width": 80,
+            "dataIndex": "electricWelding"
+        },
+        {
+            "key": "bend",
+            "title": "火曲",
+            "dataIndex": "bend",
+            "width": 80
+        },
+        {
+            "key": "shovelBack",
+            "title": "铲背",
+            "dataIndex": "shovelBack",
+            "width": 80
+        },
+        {
+            "key": "rootClear",
+            "title": "清根",
+            "dataIndex": "rootClear",
+            "width": 80
+        },
+        {
+            "key": "squash",
+            "title": "打扁",
+            "dataIndex": "squash",
+            "width": 80
+        },
+        {
+            "key": "chamfer",
+            "title": "切角",
+            "dataIndex": "chamfer",
+            "width": 80
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "width": 200,
+            "dataIndex": "description"
+        }
+    ],
+    "chooseColumns": [
+        {
+            "key": "segmentName",
+            "title": "段名",
+            "width": 120,
+            "dataIndex": "segmentName"
+        },
+        {
+            "key": "code",
+            "title": "件号",
+            "width": 120,
+            "dataIndex": "code"
+        },
+        {
+            "key": "structureNum",
+            "title": "单段数量",
+            "width": 120,
+            "dataIndex": "structureNum"
+        },
+        {
+            "key": "structureCountNum",
+            "title": "单基数量",
+            "width": 120,
+            "dataIndex": "structureCountNum"
+        },
+        {
+            "key": "structureRemainingNum",
+            "title": "剩余件数",
+            "width": 120,
+            "dataIndex": "structureRemainingNum"
+        },
+        {
+            "key": "basicsWeight",
+            "title": "单件重量（kg）",
+            "width": 120,
+            "dataIndex": "basicsWeight"
+        },
+        {
+            "key": "totalWeight",
+            "title": "单基重量（kg）",
+            "width": 120,
+            "dataIndex": "totalWeight"
+        },
+        {
+            "key": "specialCode",
+            "title": "特殊件号",
+            "width": 80,
+            "dataIndex": "specialCode"
+        },
+        {
+            "key": "materialName",
+            "title": "材料",
+            "width": 120,
+            "dataIndex": "materialName"
+        },
+        {
+            "key": "structureTexture",
+            "title": "材质",
+            "width": 120,
+            "dataIndex": "structureTexture"
+        },
+        {
+            "key": "structureSpec",
+            "title": "材料规格",
+            "width": 120,
+            "dataIndex": "structureSpec"
+        },
+        {
+            "key": "length",
+            "title": "长度（mm）",
+            "width": 120,
+            "dataIndex": "length"
+        },
+        {
+            "key": "width",
+            "title": "宽度（mm）",
+            "width": 120,
+            "dataIndex": "width"
+        },
+        {
+            "key": "thickness",
+            "title": "厚度（mm）",
+            "width": 120,
+            "dataIndex": "thickness"
+        },
+        {
+            "key": "electricWelding",
+            "title": "电焊",
+            "width": 80,
+            "dataIndex": "electricWelding"
+        },
+        {
+            "key": "bend",
+            "title": "火曲",
+            "width": 80,
+            "dataIndex": "bend"
+        },
+        {
+            "key": "rootClear",
+            "title": "清根",
+            "width": 80,
+            "dataIndex": "rootClear"
+        },
+        {
+            "key": "shovelBack",
+            "title": "铲背",
+            "width": 80,
+            "dataIndex": "shovelBack"
+        },
+        {
+            "key": "squash",
+            "title": "打扁",
+            "dataIndex": "squash",
+            "width": 80
+        },
+        {
+            "key": "chamfer",
+            "title": "切角",
+            "dataIndex": "chamfer",
+            "width": 80
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "width": 150,
+            "dataIndex": "description"
+        }
+    ],
+    "packingColumns": [
+        {
+            "key": "segmentName",
+            "title": "段名",
+            "width": 80,
+            "dataIndex": "segmentName"
+        },
+        {
+            "key": "pieceCode",
+            "title": "件号",
+            "width": 100,
+            "dataIndex": "pieceCode"
+        },
+        {
+            "key": "structureNum",
+            "title": "单段数量",
+            "width": 100,
+            "dataIndex": "structureNum"
+        },
+        {
+            "key": "structureCountNum",
+            "title": "单基数量",
+            "width": 100,
+            "dataIndex": "structureCountNum"
+        },
+        {
+            "key": "structureCount",
+            "title": "包装数量",
+            "width": 100,
+            "dataIndex": "structureCount"
+        },
+        {
+            "key": "basicsWeight",
+            "title": "单件重量（kg）",
+            "width": 100,
+            "dataIndex": "basicsWeight"
+        },
+        {
+            "key": "totalWeight",
+            "title": "包装重量（kg）",
+            "width": 100,
+            "dataIndex": "totalWeight"
+        },{
+            "key": "materialName",
+            "title": "材料",
+            "width": 120,
+            "dataIndex": "materialName"
+        },
+        {
+            "key": "structureTexture",
+            "title": "材质",
+            "width": 120,
+            "dataIndex": "structureTexture"
+        },
+        {
+            "key": "structureSpec",
+            "title": "材料规格",
+            "width": 120,
+            "dataIndex": "structureSpec"
+        },
+        {
+            "key": "length",
+            "title": "长度（mm）",
+            "width": 120,
+            "dataIndex": "length"
+        },
+        {
+            "key": "width",
+            "title": "宽度（mm）",
+            "width": 120,
+            "dataIndex": "width"
+        },
+        {
+            "key": "thickness",
+            "title": "厚度（mm）",
+            "width": 120,
+            "dataIndex": "thickness"
+        },
+        {
+            "key": "electricWelding",
+            "title": "电焊",
+            "width": 80,
+            "dataIndex": "electricWelding"
+        },
+        {
+            "key": "bend",
+            "title": "火曲",
+            "width": 80,
+            "dataIndex": "bend"
+        },
+        {
+            "key": "rootClear",
+            "title": "清根",
+            "width": 80,
+            "dataIndex": "rootClear"
+        },
+        {
+            "key": "shovelBack",
+            "title": "铲背",
+            "width": 80,
+            "dataIndex": "shovelBack"
+        },
+        {
+            "key": "squash",
+            "title": "打扁",
+            "dataIndex": "squash",
+            "width": 80
+        },
+        {
+            "key": "chamfer",
+            "title": "切角",
+            "dataIndex": "chamfer",
+            "width": 80
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "width": 150,
+            "dataIndex": "description"
+        }
     ]
 }

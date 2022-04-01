@@ -78,6 +78,10 @@ export default function SampleDraw(): React.ReactNode {
             key: 'planDeliveryTime',
             title: '计划交货期',
             dataIndex: 'planDeliveryTime'
+        },
+        {
+            title: '厂区名',
+            dataIndex: 'factoryName'
         }
     ]
 
@@ -129,6 +133,7 @@ export default function SampleDraw(): React.ReactNode {
                     message.success("已成功分配厂区")
                     setSelectedKeys([])
                     factoryForm.resetFields()
+                    history.go(0)
                     resove(true)
                 } catch (error) {
                     reject(false)
@@ -146,6 +151,7 @@ export default function SampleDraw(): React.ReactNode {
                     run(selectedKeys.map(item => ({ id: item })))
                     message.success("已成功取消分配厂区")
                     setSelectedKeys([])
+                    history.go(0)
                     resove(true)
                 } catch (error) {
                     reject(false)

@@ -5,14 +5,20 @@ import RequestUtil from "../../../utils/RequestUtil"
 import { DetailContent, EditableTable, CommonAliTable } from "../../common"
 import { pageTable, pageTableSetting } from "./data.json"
 import { compoundTypeOptions, factoryTypeOptions, productTypeOptions } from "../../../configuration/DictionaryOptions"
+import { useHistory } from "react-router"
 export default function Index(): React.ReactElement {
+    const history = useHistory()
     const [form] = Form.useForm()
     const [edit, setEdit] = useState<boolean>(false)
     const handleEditClick = useCallback(() => setEdit(true), [setEdit])
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-aps/workshop/config/list`);
-            resole(result)
+            const result: any = await RequestUtil.get(`/tower-aps/workshop/config/list?size=1000`);
+            resole(result?.records.map((item: any) => ({
+                ...item,
+                productTypeId: item.productTypeId?.split(",") || [],
+                workshopId: item.workshopId?.split(",") || []
+            })))
         } catch (error) {
             reject(error)
         }
@@ -38,19 +44,19 @@ export default function Index(): React.ReactElement {
 
     const handleSubmit = async () => {
         const submitData = await form.validateFields()
-        const groupIds = data?.records.filter((item: any) => !(submitData.submit.map((sItem: any) => sItem.id).includes(item.id)))
+        const groupIds = data?.filter((item: any) => !((submitData.submit || []).map((sItem: any) => sItem.id).includes(item.groupId)))
         await saveRun({
-            groupIds: groupIds.map((item: any) => item.id),
-            workshopConfigs: submitData.submit.map((item: any) => ({
-                productTypeId: item.productTypeName,
-                weldingTypeId: item.weldingTypeName,
-                weldingWorkshopId: item.weldingWorkshopName,
-                workshopId: item.workshopName,
-                factoryId: item.factoryName
+            groupIds: groupIds.map((item: any) => item.groupId),
+            workshopConfigs: (submitData.submit || []).map((item: any) => ({
+                productTypeId: item.productTypeId.join(","),
+                weldingTypeId: item.weldingTypeId,
+                weldingWorkshopId: item.weldingWorkshopId,
+                workshopId: item.workshopId.join(","),
+                factoryId: item.factoryId
             }))
         })
         message.success("保存成功...")
-        setEdit(false)
+        history.go(0)
     }
 
     return <DetailContent>
@@ -62,23 +68,23 @@ export default function Index(): React.ReactElement {
                 ]}
                 columns={pageTableSetting.map((item: any) => {
                     switch (item.dataIndex) {
-                        case "productTypeName":
+                        case "productTypeId":
                             return ({
                                 ...item,
                                 mode: "multiple",
                                 allowClear: true,
                                 enum: productTypeOptions?.map((item: any) => ({ label: item.name, value: item.id }))
                             })
-                        case "factoryName":
+                        case "factoryId":
                             return ({ ...item, enum: factoryTypeOptions?.map((item: any) => ({ label: item.name, value: item.id })) })
-                        case "weldingTypeName":
+                        case "weldingTypeId":
                             return ({ ...item, enum: compoundTypeOptions?.map((item: any) => ({ label: item.name, value: item.id })) })
-                        case "weldingWorkshopName":
+                        case "weldingWorkshopId":
                             return ({
                                 ...item,
                                 enum: productionUnitData?.map((item: any) => ({ label: item.name, value: item.id }))
                             })
-                        case "workshopName":
+                        case "workshopId":
                             return ({
                                 ...item,
                                 mode: "multiple",
@@ -90,13 +96,13 @@ export default function Index(): React.ReactElement {
                     }
                 })}
                 haveIndex={false}
-                dataSource={data?.records}
+                dataSource={data.map((item: any) => ({ ...item, id: item.groupId })) || []}
             />}
             {!edit && <>
                 <Space size={16} style={{ marginBottom: 16 }}>
                     <Button type="primary" onClick={handleEditClick}>编辑</Button>
                 </Space>
-                <CommonAliTable columns={pageTable} dataSource={data?.records} />
+                <CommonAliTable columns={pageTable} dataSource={data || []} />
             </>}
         </Spin>
     </DetailContent>

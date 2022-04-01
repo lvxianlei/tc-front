@@ -103,22 +103,38 @@
         {
             "title": "段名",
             "dataIndex": "segmentName",
-            "width": 100
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
         },
         {
             "title": "组件号",
             "dataIndex": "componentId",
-            "width": 100
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
         },
         {
             "title": "加工组数",
             "dataIndex": "segmentGroupNum",
-            "width": 100
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
         },
         {
             "title": "单组重量（t）",
             "dataIndex": "singleGroupWeight",
-            "width": 100
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
         },
         {
             "title": "零部件号",
@@ -143,12 +159,20 @@
         {
             "title": "组焊车间",
             "dataIndex": "weldingWorkshop",
-            "width": 100
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
         },
         {
             "title": "调整后加工车间",
             "dataIndex": "newWeldingWorkshop",
-            "width": 100
+            "width": 100,
+            "features": {
+                "autoRowSpan": true,
+                "sortable": true
+            }
         }
     ]
 }
