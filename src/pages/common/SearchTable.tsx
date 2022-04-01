@@ -40,15 +40,16 @@ export default function SearchTable({
     searchFormItems = [],
     filterValues,
     tableProps,
+    pagenation = false,
     ...props }: SearchTableProps): JSX.Element {
-    const [pagenation, setPagenation] = useState<PagenationProps>({ current: 1, pageSize: 10 })
+    const [pagenationParams, setPagenationParams] = useState<PagenationProps>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
     const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const formValue = await form.getFieldsValue()
             const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
-            params.current = pagenation.current
-            params.size = pagenation.pageSize
+            params.current = pagenationParams.current
+            params.size = pagenationParams.pageSize
             const paramsOptions = filterValues ? stringify({ ...params, ...filterValues }) : stringify(params)
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
@@ -56,17 +57,17 @@ export default function SearchTable({
         } catch (error) {
             reject(false)
         }
-    }), { refreshDeps: [pagenation.current, pagenation.pageSize] })
+    }), { refreshDeps: [pagenationParams.current, pagenationParams.pageSize] })
     const paginationChange = useCallback((page: number, pageSize?: number) => {
-        setPagenation({
-            ...pagenation,
+        setPagenationParams({
+            ...pagenationParams,
             current: page,
-            pageSize: pageSize || pagenation.pageSize
+            pageSize: pageSize || pagenationParams.pageSize
         })
-    }, [setPagenation, JSON.stringify(pagenation)])
+    }, [setPagenationParams, JSON.stringify(pagenationParams)])
     return <>
         <Form style={{ marginBottom: 16 }} form={form} onFinish={async () => {
-            setPagenation({ ...pagenation, current: 1, pageSize: 10 })
+            setPagenationParams({ ...pagenationParams, current: 1, pageSize: 10 })
             await run()
         }}>
             <Row gutter={[8, 8]}>
@@ -103,11 +104,11 @@ export default function SearchTable({
             {...props}
         />
         {
-            props.pagenation === false && <footer className={styles.pagenationWarp}>
+            pagenation === false && <footer className={styles.pagenationWarp}>
                 <Pagination
                     className={styles.pagination}
                     total={data?.total}
-                    current={pagenation.current}
+                    current={pagenationParams.current}
                     showTotal={(total: number) => `共${total}条记录`}
                     showSizeChanger
                     onChange={paginationChange}
