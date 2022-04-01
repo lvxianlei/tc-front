@@ -102,10 +102,12 @@ export default function PackingListNew(): React.ReactNode {
             packagingData[find] = {
                 ...packagingData[find],
                 structureCount: Number(packagingData[find].structureCount) + Number(data.structureRemainingNum),
+                totalWeight: (Number(packagingData[find].structureCount) + Number(data.structureRemainingNum)) * Number(data.basicsWeight),
                 weldingStructureList: packagingData[find].weldingStructureList?.map((res, ind) => {
                     return {
                         ...res,
                         structureCount: Number(res.structureCount) + Number(data?.weldingStructureList && data?.weldingStructureList[ind].structureRemainingNum),
+                        totalWeight: (Number(res.structureCount) + Number(data?.weldingStructureList && data?.weldingStructureList[ind].structureRemainingNum)) * Number(data.basicsWeight),
                     }
                 })
             }
@@ -161,11 +163,12 @@ export default function PackingListNew(): React.ReactNode {
                 } else {
                     packagingData[find] = {
                         ...packagingData[find],
-                        structureCount: Number(packagingData[find].structureCount) + Number(record.structureRemainingNum),
+                        structureCount: Number(packagingData[find].structureCount) + Number(record.structureRemainingNum),totalWeight: (Number(packagingData[find].structureCount) + Number(record.structureRemainingNum)) * Number(record.basicsWeight),
                         weldingStructureList: packagingData[find].weldingStructureList?.map((res, index) => {
                             return {
                                 ...res,
                                 structureCount: Number(res.structureCount) + Number(record?.weldingStructureList && record?.weldingStructureList[index].structureRemainingNum),
+                                totalWeight: (Number(res.structureCount) + Number(record?.weldingStructureList && record?.weldingStructureList[index].structureRemainingNum)) * Number(record.basicsWeight),
                             }
                         })
                     }
@@ -205,10 +208,12 @@ export default function PackingListNew(): React.ReactNode {
                 ...value,
                 businessId: value.businessId,
                 structureCount: value.structureCount - Number(num) * Number(value.singleNum || 1),
+                totalWeight: (value.structureCount - Number(num) * Number(value.singleNum || 1)) * Number(value.basicsWeight),
                 weldingStructureList: packagingData[index].weldingStructureList?.map((res, index) => {
                     return {
                         ...res,
                         structureCount: Number(res.structureCount) - Number(num) * Number(res.singleNum || 1),
+                        totalWeight: (Number(res.structureCount) - Number(num) * Number(res.singleNum || 1)) * Number(value.basicsWeight),
                     }
                 })
             }
@@ -218,7 +223,8 @@ export default function PackingListNew(): React.ReactNode {
                     if (res.mainStructureId === packagingData[index].businessId && res.isChild) {
                         return {
                             ...res,
-                            structureCount: Number(res.structureCount) - Number(num) * Number(res.singleNum || 1)
+                            structureCount: Number(res.structureCount) - Number(num) * Number(res.singleNum || 1),
+                            totalWeight: (Number(res.structureCount) - Number(num) * Number(res.singleNum || 1)) * Number(value.basicsWeight),
                         }
                     } else {
                         return res;
@@ -251,7 +257,7 @@ export default function PackingListNew(): React.ReactNode {
                     weldingStructureList: stayDistrict[find]?.weldingStructureList?.map((item, index) => {
                         return {
                             ...item,
-                            structureRemainingNum: Number(num) * Number(item.singleNum || 1) + Number(item?.structureRemainingNum || 0),
+                            structureRemainingNum: Number(num) * Number(item.singleNum || 1) + Number(item?.structureRemainingNum || 0)
                         }
                     })
                 }
@@ -285,7 +291,7 @@ export default function PackingListNew(): React.ReactNode {
                     weldingStructureList: stayDistrict[find]?.weldingStructureList?.map((item, index) => {
                         return {
                             ...item,
-                            structureRemainingNum: Number(num) * Number(item.singleNum || 1) + Number(item?.structureRemainingNum || 0),
+                            structureRemainingNum: Number(num) * Number(item.singleNum || 1) + Number(item?.structureRemainingNum || 0)
                         }
                     })
                 }
@@ -413,8 +419,8 @@ export default function PackingListNew(): React.ReactNode {
     const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRow(selectRows);
-        setSelectWeight(eval((dataShowParts(selectRows) || [])?.map(item => { 
-            return Number(item.structureCountNum) * Number(item.totalWeight) 
+        setSelectWeight(eval((dataShowParts(selectRows) || [])?.map(item => {
+            return Number(item.structureCountNum) * Number(item.totalWeight)
         }).join('+'))?.toFixed(3) || 0);
     }
 
@@ -426,11 +432,11 @@ export default function PackingListNew(): React.ReactNode {
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
             const selectRows: ITower[] = await editRef.current?.onSubmit() || [];
-            if(selectRows.length > 0) {
+            if (selectRows.length > 0) {
                 setReuse(selectRows?.map(res => res?.id));
             }
             setVisible(false);
-            form.setFieldsValue({towers: selectRows.map(res => res.productNumber)})
+            form.setFieldsValue({ towers: selectRows.map(res => res.productNumber) })
             resove(true);
         } catch (error) {
             reject(false)
@@ -594,7 +600,7 @@ export default function PackingListNew(): React.ReactNode {
                     </Descriptions.Item>
                     <Descriptions.Item label="复用杆塔">
                         <Form.Item name="towers">
-                    <Input addonBefore={<Button type="link" onClick={() => { setVisible(true) }} disabled={packageAttributeName === '专用'}>选择杆塔</Button>} disabled />
+                            <Input addonBefore={<Button type="link" onClick={() => { setVisible(true) }} disabled={packageAttributeName === '专用'}>选择杆塔</Button>} disabled />
                         </Form.Item>
                     </Descriptions.Item>
                 </Descriptions>
@@ -740,7 +746,7 @@ export default function PackingListNew(): React.ReactNode {
                         fixed: 'right' as FixedType,
                         width: 100,
                         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Button type='link' disabled={record.isChild} onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(Number(record.structureCount) / Number(record.singleNum || 1)); setMaxNum(Number(record.structureCount) / Number(record.singleNum || 1));}}>移除</Button>
+                            <Button type='link' disabled={record.isChild} onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(Number(record.structureCount) / Number(record.singleNum || 1)); setMaxNum(Number(record.structureCount) / Number(record.singleNum || 1)); }}>移除</Button>
                         )
                     }
                 ]}
