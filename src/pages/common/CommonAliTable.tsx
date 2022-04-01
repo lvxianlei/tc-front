@@ -128,6 +128,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         <AliTable
             size="small"
             className={styles.components}
+            useVirtual={{ vertical: true }}
             {...pipeline.getProps()}
             {...props}
         />
