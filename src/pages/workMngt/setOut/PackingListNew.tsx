@@ -401,7 +401,7 @@ export default function PackingListNew(): React.ReactNode {
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRow(selectRows);
         setSelectWeight(eval((dataShowParts(selectRows) || [])?.map(item => { 
-            return Number(item.structureCountNum) * Number(item.basicsWeight) 
+            return Number(item.structureCountNum) * Number(item.totalWeight) 
         }).join('+'))?.toFixed(3) || 0);
     }
 
@@ -698,7 +698,7 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.titleContent}>
                 <span className={styles.title}>包装区</span>
                 <span className={styles.description}>包重量（kg）：
-                    <span className={styles.content}>{eval(dataShowParts(packagingData).map(item => { return Number(item.structureCountNum) * Number(item.basicsWeight) }).join('+'))?.toFixed(3) || 0}</span>
+                    <span className={styles.content}>{eval(dataShowParts(packagingData).map(item => { return Number(item.structureCountNum) * Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0}</span>
                 </span>
                 <span className={styles.description}> 包件数：
                     <span className={styles.content}>{packagingData.length}</span>
