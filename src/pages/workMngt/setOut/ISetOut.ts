@@ -127,6 +127,7 @@ export interface IBundle {
     readonly isWelding?: number;
     readonly structureCountNum?: string;
     readonly totalWeight?: number;
+    readonly isMainPart?: number;
 }
 
 export interface IPackingList {

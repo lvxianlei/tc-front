@@ -430,7 +430,7 @@ export default function PackingListNew(): React.ReactNode {
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRow(selectRows);
         setSelectWeight(eval((dataShowParts(selectRows) || [])?.map(item => {
-            return Number(item.structureCountNum) * Number(item.totalWeight)
+            return Number(item.structureRemainingNum) * Number(item.basicsWeight)
         }).join('+'))?.toFixed(3) || 0);
     }
 
@@ -682,7 +682,7 @@ export default function PackingListNew(): React.ReactNode {
                     <span className={styles.content}>{selectWeight}kg</span>
                 </span>
                 <span className={styles.description}>电焊件：
-                    <span className={styles.content}>{dataShowParts(selectedRow).filter(res => res.isWelding === 1).length}</span>
+                    <span className={styles.content}>{dataShowParts(selectedRow).filter(res => res.isMainPart === 1).length}</span>
                 </span>
                 <p style={{ width: '100%', display: 'inline', paddingLeft: '20px' }}>
                     <Checkbox value="electricWelding" onChange={(e) => isShowParts(e.target.checked)} key="8">显示电焊件中的零件</Checkbox>
@@ -727,13 +727,13 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.titleContent}>
                 <span className={styles.title}>包装区</span>
                 <span className={styles.description}>包重量（kg）：
-                    <span className={styles.content}>{eval((showParts ? packagingData : dataShowParts(packagingData)).map(item => { return Number(item.structureCountNum) * Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0}</span>
+                    <span className={styles.content}>{eval((showParts ? packagingData : dataShowParts(packagingData)).map(item => { return Number(item.structureCountNum) * Number(item.basicsWeight) }).join('+'))?.toFixed(3) || 0}</span>
                 </span>
                 <span className={styles.description}> 包件数：
                     <span className={styles.content}>{showParts ? packagingData?.length : dataShowParts(packagingData).length}</span>
                 </span>
                 <span className={styles.description}>电焊件：
-                    <span className={styles.content}>{(showParts ? packagingData : dataShowParts(packagingData)).filter(res => res.isWelding === 1).length}</span>
+                    <span className={styles.content}>{(showParts ? packagingData : dataShowParts(packagingData)).filter(res => res.isMainPart === 1).length}</span>
                 </span>
                 <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
             </p>
