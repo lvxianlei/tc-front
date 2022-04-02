@@ -281,10 +281,12 @@ export default function PackingListNew(): React.ReactNode {
             if (find === -1) {
                 const data: IBundle = {
                     ...value,
+                    code: value.pieceCode,
                     structureRemainingNum: Number(num) * Number(value.singleNum || 1),
                     weldingStructureList: value.weldingStructureList?.map((res: IBundle, index: number) => {
                         return {
                             ...res,
+                            code: res.pieceCode,
                             structureRemainingNum: Number(num) * Number(res.singleNum || 1),
                         }
                     })
@@ -293,10 +295,12 @@ export default function PackingListNew(): React.ReactNode {
             } else {
                 stayDistrict[find] = {
                     ...stayDistrict[find],
+                    code: value.pieceCode,
                     structureRemainingNum: Number(num) * Number(value.singleNum || 1) + Number(stayDistrict[find]?.structureRemainingNum || 0),
                     weldingStructureList: stayDistrict[find]?.weldingStructureList?.map((item, index) => {
                         return {
                             ...item,
+                            code: item.pieceCode,
                             structureRemainingNum: Number(num) * Number(item.singleNum || 1) + Number(item?.structureRemainingNum || 0)
                         }
                     })
@@ -336,10 +340,12 @@ export default function PackingListNew(): React.ReactNode {
                     } else {
                         stayDistrict[find] = {
                             ...stayDistrict[find],
+                            code: value.pieceCode,
                             structureRemainingNum: Number(newValue?.structureCount) + Number(stayDistrict[find].structureRemainingNum),
                             weldingStructureList: stayDistrict[find]?.weldingStructureList?.map((item, index) => {
                                 return {
                                     ...item,
+                                    code: item.pieceCode,
                                     structureRemainingNum: Number(newValue.weldingStructureList && newValue.weldingStructureList[index]?.structureCount) + Number(item?.structureRemainingNum || 0),
                                 }
                             })
@@ -360,10 +366,12 @@ export default function PackingListNew(): React.ReactNode {
                     } else {
                         stayDistrict[find] = {
                             ...stayDistrict[find],
+                            code: value.pieceCode,
                             structureRemainingNum: Number(value?.structureCount) + Number(stayDistrict[find].structureRemainingNum),
                             weldingStructureList: stayDistrict[find]?.weldingStructureList?.map((item, index) => {
                                 return {
                                     ...item,
+                                    code: item.pieceCode,
                                     structureRemainingNum: Number(value.weldingStructureList && value.weldingStructureList[index]?.structureCount) + Number(item?.structureRemainingNum || 0),
                                 }
                             })
@@ -408,16 +416,19 @@ export default function PackingListNew(): React.ReactNode {
         if (value.isCommonSegment?.indexOf('isCommonSegment') >= 0) {
             value.isCommonSegment = 1
         }
-        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...value, packageStructureId: params.packId });
-        let newData: IBundle[] = []
-        stayDistrict.forEach(res => {
-            list.map((item: IBundle) => {
-                if (item.businessId === res.businessId) {
-                    newData.push(res)
+        let list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...value, packageStructureId: params.packId });
+        list = list.map(res=>{
+            const packagingRow = packagingData.filter(item => item.businessId === res.businessId);
+            if(packagingRow.length > 0) {
+                return {
+                    ...res,
+                    structureRemainingNum: Number(res.packageRemainingNum) - Number(packagingRow[0].structureCount)
                 }
-            })
+            } else {
+                return res
+            }
         })
-        setStayDistrict(newData.map((res, index) => {
+        setStayDistrict(list.map((res, index) => {
             return {
                 ...res,
                 isChild: false,
@@ -430,7 +441,7 @@ export default function PackingListNew(): React.ReactNode {
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRow(selectRows);
         setSelectWeight(eval((dataShowParts(selectRows) || [])?.map(item => {
-            return Number(item.structureCountNum) * Number(item.totalWeight)
+            return Number(item.structureRemainingNum) * Number(item.basicsWeight)
         }).join('+'))?.toFixed(3) || 0);
     }
 
@@ -682,7 +693,7 @@ export default function PackingListNew(): React.ReactNode {
                     <span className={styles.content}>{selectWeight}kg</span>
                 </span>
                 <span className={styles.description}>电焊件：
-                    <span className={styles.content}>{dataShowParts(selectedRow).filter(res => res.isWelding === 1).length}</span>
+                    <span className={styles.content}>{dataShowParts(selectedRow).filter(res => res.isMainPart === 1).length}</span>
                 </span>
                 <p style={{ width: '100%', display: 'inline', paddingLeft: '20px' }}>
                     <Checkbox value="electricWelding" onChange={(e) => isShowParts(e.target.checked)} key="8">显示电焊件中的零件</Checkbox>
@@ -727,13 +738,13 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.titleContent}>
                 <span className={styles.title}>包装区</span>
                 <span className={styles.description}>包重量（kg）：
-                    <span className={styles.content}>{eval((showParts ? packagingData : dataShowParts(packagingData)).map(item => { return Number(item.structureCountNum) * Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0}</span>
+                    <span className={styles.content}>{eval((showParts ? packagingData : dataShowParts(packagingData)).map(item => { return Number(item.structureCountNum) * Number(item.basicsWeight) }).join('+'))?.toFixed(3) || 0}</span>
                 </span>
                 <span className={styles.description}> 包件数：
                     <span className={styles.content}>{showParts ? packagingData?.length : dataShowParts(packagingData).length}</span>
                 </span>
                 <span className={styles.description}>电焊件：
-                    <span className={styles.content}>{(showParts ? packagingData : dataShowParts(packagingData)).filter(res => res.isWelding === 1).length}</span>
+                    <span className={styles.content}>{(showParts ? packagingData : dataShowParts(packagingData)).filter(res => res.isMainPart === 1).length}</span>
                 </span>
                 <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
             </p>
