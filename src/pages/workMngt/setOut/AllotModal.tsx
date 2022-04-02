@@ -18,7 +18,7 @@ import { PlusOutlined } from "@ant-design/icons"
 interface AllotModalProps {
     id: string;
     allotData: IAllot;
-    status: number;
+    status: number|string;
 }
 
 export default forwardRef(function AllotModal({ id, allotData,status }: AllotModalProps, ref) {
@@ -217,7 +217,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                     <Descriptions.Item key={2} label="配段信息">
                         {data?.segmentInformation}
                     </Descriptions.Item>
-                    {status===2||status===3 && <Descriptions.Item key={1} label="复用杆塔">
+                    {status=='2'||status=='3' && <Descriptions.Item key={1} label="复用杆塔">
                                     <Button onClick={async () => {
                                         setSelectedRowKeys(checkRowKeys)
                                         setVisible(true)
