@@ -281,10 +281,12 @@ export default function PackingListNew(): React.ReactNode {
             if (find === -1) {
                 const data: IBundle = {
                     ...value,
+                    code: value.pieceCode,
                     structureRemainingNum: Number(num) * Number(value.singleNum || 1),
                     weldingStructureList: value.weldingStructureList?.map((res: IBundle, index: number) => {
                         return {
                             ...res,
+                            code: res.pieceCode,
                             structureRemainingNum: Number(num) * Number(res.singleNum || 1),
                         }
                     })
@@ -293,10 +295,12 @@ export default function PackingListNew(): React.ReactNode {
             } else {
                 stayDistrict[find] = {
                     ...stayDistrict[find],
+                    code: value.pieceCode,
                     structureRemainingNum: Number(num) * Number(value.singleNum || 1) + Number(stayDistrict[find]?.structureRemainingNum || 0),
                     weldingStructureList: stayDistrict[find]?.weldingStructureList?.map((item, index) => {
                         return {
                             ...item,
+                            code: item.pieceCode,
                             structureRemainingNum: Number(num) * Number(item.singleNum || 1) + Number(item?.structureRemainingNum || 0)
                         }
                     })
@@ -336,10 +340,12 @@ export default function PackingListNew(): React.ReactNode {
                     } else {
                         stayDistrict[find] = {
                             ...stayDistrict[find],
+                            code: value.pieceCode,
                             structureRemainingNum: Number(newValue?.structureCount) + Number(stayDistrict[find].structureRemainingNum),
                             weldingStructureList: stayDistrict[find]?.weldingStructureList?.map((item, index) => {
                                 return {
                                     ...item,
+                                    code: item.pieceCode,
                                     structureRemainingNum: Number(newValue.weldingStructureList && newValue.weldingStructureList[index]?.structureCount) + Number(item?.structureRemainingNum || 0),
                                 }
                             })
@@ -360,10 +366,12 @@ export default function PackingListNew(): React.ReactNode {
                     } else {
                         stayDistrict[find] = {
                             ...stayDistrict[find],
+                            code: value.pieceCode,
                             structureRemainingNum: Number(value?.structureCount) + Number(stayDistrict[find].structureRemainingNum),
                             weldingStructureList: stayDistrict[find]?.weldingStructureList?.map((item, index) => {
                                 return {
                                     ...item,
+                                    code: item.pieceCode,
                                     structureRemainingNum: Number(value.weldingStructureList && value.weldingStructureList[index]?.structureCount) + Number(item?.structureRemainingNum || 0),
                                 }
                             })
@@ -408,16 +416,19 @@ export default function PackingListNew(): React.ReactNode {
         if (value.isCommonSegment?.indexOf('isCommonSegment') >= 0) {
             value.isCommonSegment = 1
         }
-        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...value, packageStructureId: params.packId });
-        let newData: IBundle[] = []
-        stayDistrict.forEach(res => {
-            list.map((item: IBundle) => {
-                if (item.businessId === res.businessId) {
-                    newData.push(res)
+        let list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...value, packageStructureId: params.packId });
+        list = list.map(res=>{
+            const packagingRow = packagingData.filter(item => item.businessId === res.businessId);
+            if(packagingRow.length > 0) {
+                return {
+                    ...res,
+                    structureRemainingNum: Number(res.packageRemainingNum) - Number(packagingRow[0].structureCount)
                 }
-            })
+            } else {
+                return res
+            }
         })
-        setStayDistrict(newData.map((res, index) => {
+        setStayDistrict(list.map((res, index) => {
             return {
                 ...res,
                 isChild: false,
