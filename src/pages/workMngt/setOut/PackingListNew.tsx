@@ -168,7 +168,7 @@ export default function PackingListNew(): React.ReactNode {
                     packagingData[find] = {
                         ...packagingData[find],
                         id: '',
-                        structureCount: Number(packagingData[find].structureCount) + Number(record.structureRemainingNum),totalWeight: (Number(packagingData[find].structureCount) + Number(record.structureRemainingNum)) * Number(record.basicsWeight),
+                        structureCount: Number(packagingData[find].structureCount) + Number(record.structureRemainingNum), totalWeight: (Number(packagingData[find].structureCount) + Number(record.structureRemainingNum)) * Number(record.basicsWeight),
                         weldingStructureList: packagingData[find].weldingStructureList?.map((res, index) => {
                             return {
                                 ...res,
@@ -412,7 +412,7 @@ export default function PackingListNew(): React.ReactNode {
         let newData: IBundle[] = []
         stayDistrict.forEach(res => {
             list.map((item: IBundle) => {
-                if(item.businessId === res.businessId) {
+                if (item.businessId === res.businessId) {
                     newData.push(res)
                 }
             })
@@ -727,13 +727,13 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.titleContent}>
                 <span className={styles.title}>包装区</span>
                 <span className={styles.description}>包重量（kg）：
-                    <span className={styles.content}>{eval(dataShowParts(packagingData).map(item => { return Number(item.structureCountNum) * Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0}</span>
+                    <span className={styles.content}>{eval((showParts ? packagingData : dataShowParts(packagingData)).map(item => { return Number(item.structureCountNum) * Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0}</span>
                 </span>
                 <span className={styles.description}> 包件数：
-                    <span className={styles.content}>{dataShowParts(packagingData).length}</span>
+                    <span className={styles.content}>{showParts ? packagingData?.length : dataShowParts(packagingData).length}</span>
                 </span>
                 <span className={styles.description}>电焊件：
-                    <span className={styles.content}>{dataShowParts(packagingData).filter(res => res.isWelding === 1).length}</span>
+                    <span className={styles.content}>{(showParts ? packagingData : dataShowParts(packagingData)).filter(res => res.isWelding === 1).length}</span>
                 </span>
                 <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
             </p>
