@@ -90,10 +90,7 @@ export default function BoltList(): React.ReactNode {
             dataIndex: 'level',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "level"]} initialValue={_} rules={[{
-                    required: true,
-                    message: '请输入等级'
-                }]}>
+                <Form.Item name={['data', index, "level"]} initialValue={_}>
                     <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
