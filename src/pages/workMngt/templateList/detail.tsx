@@ -235,8 +235,20 @@ export default function TemplateDetail() {
         if (['jpg', 'jpeg', 'png', 'gif'].includes(data.fileSuffix)) {
             setIsImgModal(true)
             setImgUrl(data.downloadUrl)
-        } else {
-            window.open(data.downloadUrl)
+        } else if(data.fileSuffix === 'pdf'){
+            let response = await fetch(data.downloadUrl); // 内容转变成blob地址
+            let blob = await response.blob();
+            let blobNew = new Blob([blob], { type: 'application/pdf' });
+            let href =  window.URL.createObjectURL(blobNew)// 创建下载的链接
+            // var a = document.createElement('a');
+            // a.href = href;
+            // document.body.appendChild(a);
+            // a.click();
+            // window.URL.revokeObjectURL(href);
+            window.open(href)
+        } 
+        else{
+            message.error('暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf预览...')
         }
     }
     /**
