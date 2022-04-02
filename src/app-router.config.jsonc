@@ -1649,7 +1649,27 @@
       "exact": true,
       "authority": "approvalm"
     },
-    
+    { // 包装计划-包装计划列表-详情
+      "name": "详情",
+      "path": "/packingPlan/packingPlanList/detail",
+      "module": "./pages/packingPlan/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装计划-包捆列表
+      "name": "包捆列表",
+      "path": "/packingPlan/baleList",
+      "module": "./pages/packingPlan/baleList/BaleList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装计划-包捆列表-详情
+      "name": "详情",
+      "path": "/packingPlan/baleList/detail",
+      "module": "./pages/packingPlan/baleList/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 班组管理-班组管理列表
       "name": "班组管理",
       "path": "/workshopTeam/workshopTeamList",
@@ -2490,6 +2510,6 @@
       "module": "./pages/changePassword",
       "exact": true,
       "authority": "home_page_person_center"
-    },
+    }
   ]
 }
