@@ -145,6 +145,7 @@ export default function PoleInformation(): React.ReactNode {
                                 setLoftingStatus(record.loftingStatus)
                                 let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
                                 setAllotData(result)
+                                await editRef.current?.visibleData()
                                 setAllotVisible(true);
                                 setProductId(record.id);
                                 
