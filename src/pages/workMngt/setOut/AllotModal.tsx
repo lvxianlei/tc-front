@@ -183,9 +183,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                         form.validateFields()
                     }} disabled={data?.specialStatus === 2} size="small" /> */}
 
-                    <InputNumber min={0} max={99} onBlur={() => {
-                        form.validateFields()
-                    }} disabled={status===4} size="small" />
+                    <InputNumber min={0} max={99} disabled={status===4} size="small" />
                 </Form.Item>
             )
         },
