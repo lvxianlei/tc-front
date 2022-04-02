@@ -1,16 +1,20 @@
 {
     "baseInfo": [
         {
+            "title": "开始时间",
+            "dataIndex": "startTime"
+        },
+        {
             "title": "完成时间",
             "dataIndex": "endTime"
         },
         {
-            "title": "计划开始日期",
-            "dataIndex": "planStartTime"
+            "title": "塔型",
+            "dataIndex": "productCategoryName"
         },
         {
-            "title": "计划结束日期",
-            "dataIndex": "planEndTime"
+            "title": "杆塔",
+            "dataIndex": "product"
         }
     ],
     "operationInformation": [
