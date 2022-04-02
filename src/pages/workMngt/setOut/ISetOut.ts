@@ -54,6 +54,7 @@ export interface allotModalProps {
     onSave: () => void;
     onCheck: () => void;
     resetFields:()=> void;
+    visibleData:()=> void;
     selectedRowKeys: string[];
 }
 
