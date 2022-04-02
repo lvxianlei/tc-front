@@ -708,6 +708,11 @@
                         "label": "包装计划列表",
                         "path": "/packingPlan/packingPlanList",
                         "authority": "approvalm"
+                    },
+                    {
+                        "label": "改包捆",
+                        "path": "/packingPlan/baleChange",
+                        "authority": "approvalm"
                     }
                 ]
             },
