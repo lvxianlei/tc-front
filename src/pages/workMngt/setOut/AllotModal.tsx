@@ -46,7 +46,9 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
             }
             setStatusValue(status)
             const towerData:any = await RequestUtil.get(`/tower-science/product/lofting?page=1&size=1000&productCategoryId=${allotData.productCategory}&productId=${id}`)
-            setTowerData(towerData?.records)
+            setTowerData(towerData?.records.filter((item:any)=>{
+                return item.isSpecial!==1
+            }))
             form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
             resole(allotData)
         } catch (error) {
