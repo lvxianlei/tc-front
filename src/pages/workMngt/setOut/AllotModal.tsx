@@ -29,6 +29,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
     const [selectedRows, setSelectedRows]=useState<any[]>([]);
     const [checkRowKeys, setCheckRowKeys]=useState<any[]>([]);
     const [checkRows, setCheckRows]=useState<any[]>([]);
+    const [statusValue, setStatusValue]=useState<any>('');
     const { loading, data } = useRequest<IAllot>(() => new Promise(async (resole, reject) => {
         try {
             allotData = {
@@ -43,6 +44,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                     }
                 })
             }
+            setStatusValue(status)
             const towerData:any = await RequestUtil.get(`/tower-science/product/lofting?page=1&size=1000&productCategoryId=${allotData.productCategory}&productId=${id}`)
             setTowerData(towerData?.records)
             form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
@@ -202,7 +204,6 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
     ]
 
     useImperativeHandle(ref, () => ({ selectedRowKeys,onCheck,  onSave, onSubmit, resetFields }), [ref, selectedRowKeys, onCheck, onSave, onSubmit, resetFields]);
-
     return <Spin spinning={loading}>
         <DetailContent style={{padding:'20px'}}>
             <Form form={form} className={styles.descripForm}>
@@ -217,7 +218,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                     <Descriptions.Item key={2} label="配段信息">
                         {data?.segmentInformation}
                     </Descriptions.Item>
-                    {status=='2'||status=='3' && <Descriptions.Item key={1} label="复用杆塔">
+                    {(statusValue=='2'||statusValue=='3')&& <Descriptions.Item key={1} label="复用杆塔">
                                     <Button onClick={async () => {
                                         setSelectedRowKeys(checkRowKeys)
                                         setVisible(true)
