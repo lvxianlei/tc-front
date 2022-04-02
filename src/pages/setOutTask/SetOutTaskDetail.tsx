@@ -106,9 +106,9 @@ const productColumns = [
         "format": "YYYY-MM-DD"
     },
     {
-        key: 'productDescription',
+        key: 'issueDescription',
         title: '备注',
-        dataIndex: 'productDescription'
+        dataIndex: 'issueDescription'
     }
 ]
 export default function SetOutTaskDetail(): React.ReactNode {
