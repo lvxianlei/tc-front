@@ -55,12 +55,9 @@ export default function DetailOverView(props: OverViewProps): JSX.Element {
             maskClosable={false}
             width={800}
             footer={
-                [1].includes(props.loftingState) ? 
                 [
                     <Button key="back" onClick={props?.onCancel}>关闭</Button>,
-                    <Button type="primary" onClick={hanlePromise}>接受</Button>
-                ] : [
-                    <Button key="back" onClick={props?.onCancel}>关闭</Button>
+                    <Button type="primary" disabled={props.loftingState !== 3} onClick={hanlePromise}>接受</Button>
                 ]
             }
         >
