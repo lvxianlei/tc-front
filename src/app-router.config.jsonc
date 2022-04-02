@@ -1030,7 +1030,7 @@
     },
     { // 工作管理-生产配料-构件明细
       "name": "构件明细",
-      "path": "/ingredients/production/detailed/:id/:materialTaskCode/:productCategoryName/:loftingState/:batchNos",
+      "path": "/ingredients/production/detailed/:id/:materialTaskCode/:productCategoryName/:loftingState",
       "module": "./pages/workMngt/production/Overview",
       "exact": true,
       "authority": "sw_work_management_production_ingredients_component_details"
