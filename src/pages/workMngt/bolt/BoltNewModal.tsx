@@ -126,10 +126,6 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
             }, {
                 label: '等级',
                 name: 'level',
-                rules: [{
-                    required: true,
-                    message: '请输入等级'
-                }],
                 children: (
                     <Input maxLength={20} />
                 )

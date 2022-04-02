@@ -292,8 +292,9 @@ export default function PoleInformation(): React.ReactNode {
             width="60%"
             title="特殊件号"
             footer={loftingStatus!==1&&<Space>
-                <Button type="ghost" onClick={() => {
+                <Button type="ghost" onClick={async () => {
                     setAllotVisible(false);
+                    editRef.current?.resetFields()
                 }}>关闭</Button>
                 {/* {
                     allotData?.specialStatus === 0 || allotData?.specialStatus === 1 ? <><Button type="primary" onClick={handleModalOk} ghost>保存</Button>
