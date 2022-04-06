@@ -145,9 +145,10 @@ export default function PoleInformation(): React.ReactNode {
                                 setLoftingStatus(record.loftingStatus)
                                 let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
                                 setAllotData(result)
+                                setProductId(record.id);
                                 await editRef.current?.visibleData()
                                 setAllotVisible(true);
-                                setProductId(record.id);
+                                
                                 
                             }}>特殊件号</Button>
                             : <Button type="link" disabled>特殊件号</Button>
