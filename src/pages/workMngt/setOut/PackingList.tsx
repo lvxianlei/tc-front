@@ -182,7 +182,6 @@ export default function PackingList(): React.ReactNode {
             match={match}
             columnsKey={() => {
                 let keys = [...columns]
-                keys.pop()
                 return keys
             }}
             current={detailData?.current || 1}
