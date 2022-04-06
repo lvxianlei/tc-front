@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-杆塔配段-包装清单-添加
 */
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Space, Button, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions, Modal, Select } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -41,6 +41,9 @@ export default function PackingListNew(): React.ReactNode {
     const [showParts, setShowParts] = useState<boolean>(false);
     const [reuse, setReuse] = useState<any>();
     const [packageAttributeName, setPackageAttributeName] = useState<string>('专用');
+    const [packageWeight, setPackageWeight] = useState<number>(0);
+  
+    useEffect(() => setPackageWeight(eval((showParts ? [...packagingData] : dataShowParts([...packagingData])).map(item => { return Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0), [JSON.stringify([...packagingData])])
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if (!location.state) {
@@ -59,6 +62,7 @@ export default function PackingListNew(): React.ReactNode {
         }));
         const data: any = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
         setUserList(data?.loftingProductSegmentList);
+        
         resole(data);
     });
 
@@ -218,8 +222,9 @@ export default function PackingListNew(): React.ReactNode {
                 weldingStructureList: packagingData[index].weldingStructureList?.map((res, index) => {
                     return {
                         ...res,
+                        businessId: value.businessId,
                         structureCount: Number(res.structureCount) - Number(num) * Number(res.singleNum || 1),
-                        totalWeight: (Number(res.structureCount) - Number(num) * Number(res.singleNum || 1)) * Number(value.basicsWeight),
+                        totalWeight: (Number(res.structureCount) - Number(num) * Number(res.singleNum || 1)) * Number(res.basicsWeight),
                     }
                 })
             }
@@ -230,14 +235,14 @@ export default function PackingListNew(): React.ReactNode {
                         return {
                             ...res,
                             structureCount: Number(res.structureCount) - Number(num) * Number(res.singleNum || 1),
-                            totalWeight: (Number(res.structureCount) - Number(num) * Number(res.singleNum || 1)) * Number(value.basicsWeight),
+                            totalWeight: (Number(res.structureCount) - Number(num) * Number(res.singleNum || 1)) * Number(res.basicsWeight),
                         }
                     } else {
                         return res;
                     }
                 })
             }
-            setPackagingData(showParts ? list : [...packagingData]);
+            setPackagingData(showParts ? [...list] : [...packagingData]);
         }
         if (value.id) {
             const newValue = await RequestUtil.get<IBundle>(`/tower-science/packageStructure/delRecord?packageRecordId=${value.id}`);
@@ -684,7 +689,7 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.titleContent}>
                 <span className={styles.title}>待选区</span>
                 <span className={styles.description}>未包装数量：
-                    <span className={styles.content}>{stayDistrict.length}</span>
+                    <span className={styles.content}>{showParts ? stayDistrict?.length : dataShowParts(stayDistrict).length}</span>
                 </span>
                 <span className={styles.description}>已选择：件数：
                     <span className={styles.content}>{dataShowParts(selectedRow).length}</span>
@@ -738,7 +743,7 @@ export default function PackingListNew(): React.ReactNode {
             <p className={styles.titleContent}>
                 <span className={styles.title}>包装区</span>
                 <span className={styles.description}>包重量（kg）：
-                    <span className={styles.content}>{eval((showParts ? packagingData : dataShowParts(packagingData)).map(item => { return Number(item.structureCountNum) * Number(item.basicsWeight) }).join('+'))?.toFixed(3) || 0}</span>
+                    <span className={styles.content}>{packageWeight}</span>
                 </span>
                 <span className={styles.description}> 包件数：
                     <span className={styles.content}>{showParts ? packagingData?.length : dataShowParts(packagingData).length}</span>
