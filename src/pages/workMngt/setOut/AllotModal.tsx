@@ -46,14 +46,23 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
             }
             setStatusValue(status)
             const towerData:any = await RequestUtil.get(`/tower-science/product/lofting?page=1&size=1000&productCategoryId=${allotData.productCategory}&productId=${id}`)
-            setTowerData(towerData?.records)
+            setTowerData(towerData?.records.filter((item:any)=>{
+                return item.isSpecial!==1
+            }))
             form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
             resole(allotData)
         } catch (error) {
             reject(error)
         }
     }), { refreshDeps: [id] })
-
+    const { run: visibleData } = useRequest((postData: any) => new Promise(async (resole, reject) => {
+        try {
+            form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
+            resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     const { run: submitRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
@@ -201,7 +210,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
         
     ]
 
-    useImperativeHandle(ref, () => ({ selectedRowKeys,onCheck,  onSave, onSubmit, resetFields }), [ref, selectedRowKeys, onCheck, onSave, onSubmit, resetFields]);
+    useImperativeHandle(ref, () => ({ selectedRowKeys,onCheck,  onSave, onSubmit, resetFields, visibleData }), [ref, selectedRowKeys, onCheck, onSave, onSubmit, resetFields, visibleData]);
     return <Spin spinning={loading}>
         <DetailContent style={{padding:'20px'}}>
             <Form form={form} className={styles.descripForm}>
