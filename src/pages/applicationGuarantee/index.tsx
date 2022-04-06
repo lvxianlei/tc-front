@@ -66,7 +66,6 @@ export default function ApplicationColunm(): React.ReactNode {
 
     // tab切换
     const operationChange = (event: any) => {
-        console.log(event)
         setAcceptStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
         setClearSearch(!clearSearch);
