@@ -355,7 +355,7 @@ export default function PoleInformation(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col>
-                            <Form.Item name="materialUser">
+                            <Form.Item name="loftingUser">
                                 <Select placeholder="请选择" style={{ width: "150px" }}>
                                     {materialUser && materialUser.map((item: any) => {
                                         return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
