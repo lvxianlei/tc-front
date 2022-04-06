@@ -12,83 +12,86 @@ import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './PackingPlan.module.less'
 
-interface ISetOut {
-    readonly stateRecordVOS?: ITaskDataVOList[];
+interface IPackagePlan {
+    readonly packagePlanProductVOS?: IPackagePlanProduct[];
 }
 
-interface ITaskDataVOList {
-    readonly createTime?: string;
-    readonly status?: string;
-    readonly createUser?: string;
-    readonly createDepartment?: string;
-    readonly description?: string;
+interface IPackagePlanProduct {
+    readonly id?: string;
+    readonly packageProgress?: string;
+    readonly productHeight?: string;
+    readonly productNumber?: string;
+    readonly productPackageStatus?: string;
+    readonly productPackageStatusName?: string;
+    readonly receiveProgress?: string;
+    readonly totalWeight?: string;
 }
 
 const baseColums = [
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "planNumber",
         "title": "计划号",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "angleWeight",
         "title": "角钢重量（KG）",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "galvanizedTeamName",
         "title": "镀锌班组",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "productTypeName",
         "title": "产品类型",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "orderProjectName",
         "title": "工程名称",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "boardWeight",
         "title": "连板重量（KG）",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "angleTeamName",
         "title": "角钢包装班组",
         "type": "string"
     },
 
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "boardTeamName",
         "title": "连板包装班组",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "productCategoryName",
         "title": "塔型",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "pipeWeight",
         "title": "钢管重量（KG）",
         "type": "string"
     },
 
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "startTime",
         "title": "开始包装日期",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "pipeTeamName",
         "title": "钢管包装班组",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "voltageGradeName",
         "title": "电压等级",
         "type": "string"
     },
@@ -98,22 +101,22 @@ const baseColums = [
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "endTime",
         "title": "要求完成日期",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "weight",
         "title": "基数",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "statusName",
         "title": "计划状态",
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "description",
         "title": "备注",
         "type": "string"
     },
@@ -122,72 +125,72 @@ const baseColums = [
 
 const tableColumns = [
     {
-        key: 'createDeptName',
+        key: 'productNumber',
         title: '杆塔号',
-        dataIndex: 'createDeptName',
+        dataIndex: 'productNumber',
     },
     {
-        key: 'createUserName',
+        key: 'productHeight',
         title: '呼高（M）',
-        dataIndex: 'createUserName'
+        dataIndex: 'productHeight'
     },
     {
-        key: 'createTime',
+        key: 'totalWeight',
         title: '总重（KG）',
-        dataIndex: 'createTime'
+        dataIndex: 'totalWeight'
     },
     {
-        key: 'createTime',
+        key: 'productPackageStatus',
         title: '杆塔状态',
-        dataIndex: 'createTime'
+        dataIndex: 'productPackageStatus'
     },
     {
-        key: 'createTime',
+        key: 'packageProgress',
         title: '打包进度',
-        dataIndex: 'createTime'
+        dataIndex: 'packageProgress'
     },
     {
-        key: 'description',
+        key: 'receiveProgress',
         title: '入库进度',
-        dataIndex: 'description'
+        dataIndex: 'receiveProgress'
     }
 ]
 
 const packColumns = [
     {
-        key: 'createDeptName',
+        key: 'packageCode',
         title: '包号',
-        dataIndex: 'createDeptName',
+        dataIndex: 'packageCode',
     },
     {
-        key: 'createUserName',
+        key: 'packageComponentCount',
         title: '包件数',
-        dataIndex: 'createUserName'
+        dataIndex: 'packageComponentCount'
     },
     {
-        key: 'createTime',
+        key: 'packageWeight',
         title: '包重（KG）',
-        dataIndex: 'createTime'
+        dataIndex: 'packageWeight'
     },
     {
-        key: 'createTime',
+        key: 'packageTypeName',
         title: '包类型',
-        dataIndex: 'createTime'
+        dataIndex: 'packageTypeName'
     },
     {
-        key: 'createTime',
+        key: 'packageAttributeName',
         title: '包属性',
-        dataIndex: 'createTime'
+        dataIndex: 'packageAttributeName'
     },
     {
-        key: 'description',
+        key: 'teamName',
         title: '包装班组',
-        dataIndex: 'description'
+        dataIndex: 'teamName'
     },
     {
-        key: 'description',
-        title: '包类型',
-        dataIndex: 'description'
+        key: 'packageStatusName',
+        title: '包状态',
+        dataIndex: 'packageStatusName'
     }
 ]
 
@@ -196,14 +199,14 @@ export default function SetOutInformation(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const [packData, setPackData] = useState([]);
     const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<any>(``);
-        getTableDataSource(data && data?.length > 0 &&data[0]?.id)
+        const data = await RequestUtil.get<IPackagePlan>(`/tower-production/packageWorkshop/detail/${params.id}`);
+        getTableDataSource(data?.packagePlanProductVOS && data?.packagePlanProductVOS?.length > 0 && data?.packagePlanProductVOS[0] && data?.packagePlanProductVOS[0].id || '')
         resole(data)
     }), {})
-    const detailData: ISetOut = data;
+    const detailData: IPackagePlan = data;
 
     const getTableDataSource = (id: string) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<[]>(``);
+        const data = await RequestUtil.get<[]>(`/tower-production/packageWorkshop/detail/package/${id}`);
         setPackData(data);
     });
 
@@ -220,10 +223,13 @@ export default function SetOutInformation(): React.ReactNode {
     ]}>
         <DetailTitle title="基本信息" />
         <BaseInfo columns={baseColums} dataSource={detailData} col={4} />
-        <p className={styles.detailtitle}><span>杆塔明细</span><span>计划进度：{0/9}</span></p>
+        <p className={styles.detailtitle}>
+            <span>杆塔明细</span>
+            <span className={styles.content}>计划进度：<span className={styles.num}>{0 / 9}</span></span>
+        </p>
         <CommonTable
             haveIndex
-            dataSource={[]}
+            dataSource={detailData?.packagePlanProductVOS}
             columns={tableColumns}
             onRow={(record: Record<string, any>, index: number) => ({
                 onClick: async () => {
