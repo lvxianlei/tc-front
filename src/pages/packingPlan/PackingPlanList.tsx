@@ -13,6 +13,7 @@ import RequestUtil from '../../utils/RequestUtil';
 import { EditRefProps } from './Edit';
 import Edit from "./Edit";
 import useRequest from '@ahooksjs/use-request';
+import { Link } from 'react-router-dom';
 export interface IPackingPlan {
     readonly id?: string;
     readonly angleTeamId?: string;
@@ -134,7 +135,7 @@ export default function DailySchedule(): React.ReactNode {
                             setVisible(true);
                             setDetailData(record);
                             setTeamId(record.angleTeamId);
-                        }}>{record.angleTeamId === '0' ? '/': _ || '派工'}</Button>
+                        }}>{record.angleTeamId === '0' ? '/' : _ || '派工'}</Button>
             )
         },
         {
@@ -152,7 +153,7 @@ export default function DailySchedule(): React.ReactNode {
                             setVisible(true);
                             setDetailData(record);
                             setTeamId(record.boardTeamId);
-                        }}>{record.boardTeamId === '0' ? '/': _ || '派工'}</Button>
+                        }}>{record.boardTeamId === '0' ? '/' : _ || '派工'}</Button>
             )
         },
         {
@@ -252,7 +253,7 @@ export default function DailySchedule(): React.ReactNode {
                     "width": 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space>
-                            <Button type='link'>详情</Button>
+                            <Link to={`/packingPlan/packingPlanList/detail`}>详情</Link>
                             {record.status === 1 ? <Button type='link' onClick={() => onConfirm(record.id)}>确认</Button> : null}
                         </Space>
                     )
