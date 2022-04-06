@@ -11,6 +11,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import { DataNode } from 'antd/lib/tree';
 import useRequest from '@ahooksjs/use-request';
+const { TreeNode } = Tree;
 export interface IPackingPlan {
     readonly id?: string;
     readonly angleTeamId?: string;
@@ -196,12 +197,39 @@ export default function DailySchedule(): React.ReactNode {
         materials.forEach((material: (IResponseTree & DataNode)): void => {
             material.title = material.treeName;
             material.key = material.code;
+            material.disabled = material?.children.length>0?true:false;
+            
             if (material.children && material?.children.length) {
                 wrapMaterialTree2DataNode(material.children as (IResponseTree & DataNode)[]);
             }
         });
         return materials;
     }
+    const renderTreeNodes = (data:any) => data.map((item:any) => {
+
+      if (item.children && item.children.length > 0) {
+          item.disabled = true;
+          
+          return (<TreeNode key={ item.id } title={ item.treeName }  disabled={ item.disabled } >
+              { renderTreeNodes(item.children) }
+          </TreeNode>);
+      }
+      item.title = (
+        <div>
+         <span onClick={()=>{
+           console.log(2)
+         }}>
+          {item.treeName}
+         </span>
+         {/* <Icon type='close' style={{marginLeft:10}} onClick={() => this.onClose(item.key, item.defaultValue)}/>
+         <Icon type='check' style={{marginLeft:10}} onClick={() => this.onSave(item.key)}/> */}
+         <Button type='link' onClick={()=>{
+console.log(item)
+         }}>+</Button>
+        </div>
+       );
+      return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
+  });
     //展开控制
     const onExpand = (expandKeys: React.Key[]) => {
         setExpandKeys(expandKeys)
@@ -241,7 +269,6 @@ export default function DailySchedule(): React.ReactNode {
                             }}>全部</Button> */}
                             <DetailTitle title='包号' operation={[<Button 
                               type='primary'
-                              disabled={!(busySelectedKeys.length>0)}
                               onClick={()=>{
                                 const value = waitTableDataSource;
                                 value.push(busySelectedRows)
@@ -249,13 +276,16 @@ export default function DailySchedule(): React.ReactNode {
                               }}
                             >新增包</Button>]}/>
                             <Tree
-                                onSelect={onSelect}
-                                treeData={wrapMaterialTree2DataNode(treeData as (IResponseTree & DataNode)[])}
-                                expandedKeys={expandKeys}
-                                autoExpandParent={autoExpandParent}
-                                onExpand={onExpand}
+                                // onSelect={onSelect}
+                                // treeData={wrapMaterialTree2DataNode(treeData as (IResponseTree & DataNode)[])}
+                                // expandedKeys={expandKeys}
+                                // autoExpandParent={autoExpandParent}
+                                // onExpand={onExpand}
+                                defaultExpandAll
                                 selectedKeys={selectedKey}
-                            />
+                            >
+                               {renderTreeNodes(treeData as (IResponseTree & DataNode)[])}
+                            </Tree>
                         {/* </Card> */}
                     </Col>
                     <Col span={9} style={{marginRight:"20px"}}>
