@@ -253,7 +253,7 @@ export default function DailySchedule(): React.ReactNode {
                     "width": 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space>
-                            <Link to={`/packingPlan/packingPlanList/detail`}>详情</Link>
+                            <Link to={`/packingPlan/packingPlanList/detail/${record.id}`}>详情</Link>
                             {record.status === 1 ? <Button type='link' onClick={() => onConfirm(record.id)}>确认</Button> : null}
                         </Space>
                     )

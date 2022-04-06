@@ -7,10 +7,10 @@
 import React, { useState } from 'react';
 import { Spin, Button, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
-import RequestUtil from '../../utils/RequestUtil';
+import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../../common';
+import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import styles from './PackingPlan.module.less'
+import styles from '../PackingPlan.module.less';
 
 interface ISetOut {
     readonly stateRecordVOS?: ITaskDataVOList[];
@@ -32,17 +32,7 @@ const baseColums = [
     },
     {
         "dataIndex": "materialStandard",
-        "title": "角钢重量（KG）",
-        "type": "string"
-    },
-    {
-        "dataIndex": "materialStandard",
-        "title": "镀锌班组",
-        "type": "string"
-    },
-    {
-        "dataIndex": "materialStandard",
-        "title": "产品类型",
+        "title": "包号",
         "type": "string"
     },
     {
@@ -52,18 +42,12 @@ const baseColums = [
     },
     {
         "dataIndex": "materialStandard",
-        "title": "连板重量（KG）",
+        "title": "包件数",
         "type": "string"
     },
     {
         "dataIndex": "materialStandard",
-        "title": "角钢包装班组",
-        "type": "string"
-    },
-
-    {
-        "dataIndex": "materialStandard",
-        "title": "连板包装班组",
+        "title": "包装班组",
         "type": "string"
     },
     {
@@ -73,7 +57,7 @@ const baseColums = [
     },
     {
         "dataIndex": "materialStandard",
-        "title": "钢管重量（KG）",
+        "title": "包重量（KG）",
         "type": "string"
     },
 
@@ -84,19 +68,15 @@ const baseColums = [
     },
     {
         "dataIndex": "materialStandard",
-        "title": "钢管包装班组",
-        "type": "string"
-    },
-    {
-        "dataIndex": "materialStandard",
         "title": "电压等级",
         "type": "string"
     },
     {
         "dataIndex": "materialStandard",
-        "title": "总重量（KG）",
+        "title": "包类型",
         "type": "string"
     },
+
     {
         "dataIndex": "materialStandard",
         "title": "要求完成日期",
@@ -104,19 +84,19 @@ const baseColums = [
     },
     {
         "dataIndex": "materialStandard",
-        "title": "基数",
+        "title": "杆塔号",
         "type": "string"
     },
     {
         "dataIndex": "materialStandard",
-        "title": "计划状态",
+        "title": "包属性",
         "type": "string"
     },
     {
         "dataIndex": "materialStandard",
-        "title": "备注",
+        "title": "包状态",
         "type": "string"
-    },
+    }
 ]
 
 
@@ -153,59 +133,15 @@ const tableColumns = [
     }
 ]
 
-const packColumns = [
-    {
-        key: 'createDeptName',
-        title: '包号',
-        dataIndex: 'createDeptName',
-    },
-    {
-        key: 'createUserName',
-        title: '包件数',
-        dataIndex: 'createUserName'
-    },
-    {
-        key: 'createTime',
-        title: '包重（KG）',
-        dataIndex: 'createTime'
-    },
-    {
-        key: 'createTime',
-        title: '包类型',
-        dataIndex: 'createTime'
-    },
-    {
-        key: 'createTime',
-        title: '包属性',
-        dataIndex: 'createTime'
-    },
-    {
-        key: 'description',
-        title: '包装班组',
-        dataIndex: 'description'
-    },
-    {
-        key: 'description',
-        title: '包类型',
-        dataIndex: 'description'
-    }
-]
-
 export default function SetOutInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [packData, setPackData] = useState([]);
     const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<any>(``);
-        getTableDataSource(data && data?.length > 0 &&data[0]?.id)
-        resole(data)
+        // const data = await RequestUtil.get<any>(``);
+        resole([])
     }), {})
     const detailData: ISetOut = data;
-
-    const getTableDataSource = (id: string) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<[]>(``);
-        setPackData(data);
-    });
 
     if (loading) {
         return <Spin spinning={loading}>
@@ -219,19 +155,12 @@ export default function SetOutInformation(): React.ReactNode {
         </Space>
     ]}>
         <DetailTitle title="基本信息" />
-        <BaseInfo columns={baseColums} dataSource={detailData} col={4} />
-        <p className={styles.detailtitle}><span>杆塔明细</span><span>计划进度：{0/9}</span></p>
+        <BaseInfo columns={baseColums} dataSource={detailData} col={3} />
+        <p className={styles.detailtitle}><span>杆塔明细</span><span>包捆进度{0/9}</span></p>
         <CommonTable
             haveIndex
             dataSource={[]}
             columns={tableColumns}
-            onRow={(record: Record<string, any>, index: number) => ({
-                onClick: async () => {
-                    getTableDataSource(record.id)
-                },
-                className: styles.tableRow
-            })}
         />
-        <CommonTable dataSource={packData} columns={packColumns} />
     </DetailContent>
 }

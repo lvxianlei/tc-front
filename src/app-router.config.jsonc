@@ -1652,7 +1652,7 @@
     { // 包装计划-包装计划列表-详情
       "name": "详情",
       "path": "/packingPlan/packingPlanList/detail",
-      "module": "./pages/packingPlan/Detail",
+      "module": "./pages/packingPlan/Detail/:id",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1665,7 +1665,7 @@
     },
     { // 包装计划-包捆列表-详情
       "name": "详情",
-      "path": "/packingPlan/baleList/detail",
+      "path": "/packingPlan/baleList/detail/:id",
       "module": "./pages/packingPlan/baleList/Detail",
       "exact": true,
       "authority": "approvalm"
