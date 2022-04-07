@@ -12,7 +12,10 @@ import { RightOutlined } from '@ant-design/icons';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import RequestUtil from '../../utils/RequestUtil';
 import { DataNode } from 'antd/lib/tree';
+import { packageTypeOptions } from '../../configuration/DictionaryOptions';
 import useRequest from '@ahooksjs/use-request';
+import styles from './PackingPlan.module.less'
+
 const { TreeNode } = Tree;
 export interface IPackingPlan {
     readonly id?: string;
@@ -46,6 +49,7 @@ export default function DailySchedule(): React.ReactNode {
     const [treeData, setTreeData] = useState<IResponseTree[]>([]);
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [selectedKey, setSelectedKey] = useState([]);
+    const [visible, setVisible] = useState<boolean>(false);
     const [waitSelectedKeys, setWaitSelectedKeys] = useState<React.Key[]>([]);
     const [waitSelectedRows, setWaitSelectedRows] = useState([]);
     const [busySelectedKeys, setBusySelectedKeys] = useState<React.Key[]>([]);
@@ -53,10 +57,11 @@ export default function DailySchedule(): React.ReactNode {
     const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
     const [waitTableDataSource, setWaitTableDataSource] = useState<any[]>([]);
     const [busyTableDataSource, setBusyTableDataSource] = useState<any[]>([]);
-    const [ids,setIds]=useState([])   //该数组记录每次点击时各个层级点击的当前项id
-    const [arr1,setArr1]=useState<any>([])  //第一层数据
-    const [arr2,setArr2]=useState([])     //第二层数据
-    const [arr3,setArr3]=useState([])
+    const [towerTArr,setTowerTArr]=useState<any>([])  //第一层塔型数据
+    const [towerArr,setTowerArr]=useState<any>([])     //第二层杆塔数据
+    const [packArr,setPackArr]=useState<any>([]) //第二层包数据
+    const [productNumberId,setProductNumberId]=useState<string>('') //第二层包数据
+    
 
 
 
@@ -77,7 +82,7 @@ export default function DailySchedule(): React.ReactNode {
             // setExpandKeys(expandKeysByValue(resData))
             const resData: any[] = await RequestUtil.get<any[]>('/tower-production/package/plan/categories');
             console.log(resData)
-            setArr1(resData)
+            setTowerTArr(resData)
         // } catch (error) {
         //     reject(error)
         // }
@@ -183,15 +188,33 @@ export default function DailySchedule(): React.ReactNode {
             endTime: values.time && values?.time[1].format('YYYY-MM-DD') + ' 23:59:59'
         })
     }
-    const onSelect = async (selectedKeys: React.Key[], info: any) => {
-        let value: any = {
-            smallCategory: info.node.level === 3 ? selectedKeys[0] : '',
-            middleCategory: info.node.level === 2 ? selectedKeys[0] : '',
-            bigCategory: info.node.level === 1 ? selectedKeys[0] : '',
-        }
-        await run({
-            ...value,
-        })
+    // const onSelect = async (selectedKeys: React.Key[], info: any) => {
+    //     let value: any = {
+    //         smallCategory: info.node.level === 3 ? selectedKeys[0] : '',
+    //         middleCategory: info.node.level === 2 ? selectedKeys[0] : '',
+    //         bigCategory: info.node.level === 1 ? selectedKeys[0] : '',
+    //     }
+    //     await run({
+    //         ...value,
+    //     })
+    // };
+    const onTowerSelect = async (info: any) => {
+        const resTowerData: any = await RequestUtil.get<any[]>(`/tower-production/package/plan/products/${info.id}`);
+        console.log(resTowerData)
+        setTowerArr(resTowerData?.productList!==null&&resTowerData?.productList.length>0?resTowerData?.productList:[])
+        setPackArr([])
+    };
+    const onPackSelect = async (info: any) => {
+        const resPackData: any[] = await RequestUtil.get<any[]>(`/tower-production/package/plan/products/pkg/${info.id}`);
+        console.log(resPackData)
+        setProductNumberId(info.id)
+        setPackArr(resPackData!==null?resPackData:[])
+        setBusyTableDataSource([])
+    };
+    const onSelectTable = async (info: any) => {
+        const tableDataSource: any[] = await RequestUtil.get<any[]>(`/tower-production/package/plan/products/pkg/components/${info.id}`);
+        console.log(tableDataSource)
+        setBusyTableDataSource(tableDataSource!==null?tableDataSource:[])
     };
 //     const wrapMaterialTree2DataNode=(materials: (IResponseTree & DataNode)[] = []): DataNode[] =>{
 //         materials.forEach((material: (IResponseTree & DataNode)): void => {
@@ -235,23 +258,7 @@ export default function DailySchedule(): React.ReactNode {
 //         setExpandKeys(expandKeys)
 //         setAutoExpandParent(false)
 //     }
-    const handlerClickItem=(type:any,item:any)=>{
-        let newIds=JSON.parse(JSON.stringify(ids));
-        switch(type){
-            case "1":
-                newIds[0]=item.id;
-                break;
-            case "2":
-                newIds[1]=item.id;
-                break;
-            case "3":
-                newIds[0]=item.id;
-                break;
-            default:
-        }
-
-        setIds(newIds)
-    }
+ 
     return <>
         <Spin spinning={false}>
             <DetailContent>
@@ -273,30 +280,32 @@ export default function DailySchedule(): React.ReactNode {
                 <Row style={{ background: '#fff' }}>
                     <Col span={2} >
                         <DetailTitle title='塔型'/>
-                        {arr1.map((item:any)=>{
-
+                        {towerTArr.length>0 && towerTArr.map((item:any)=>{
+                            return <div ><div className={ styles.btnDefault } onClick={()=>{
+                                onTowerSelect(item)
+                            }}>{item.productCategoryName} <RightOutlined/></div>
+                            
+                            </div>
                         })}
                     </Col>
                     <Col span={2} >
                         <DetailTitle title='杆塔'/>
+                        {towerArr.length>0 && towerArr.map((item:any)=>{
+                            return <div onClick={()=>{
+                                onPackSelect(item)
+                            }}>{item.productNumber} <RightOutlined/></div>
+                        })}
                     </Col>
                     <Col span={2} style={{marginRight:"20px"}}>
-                            {/* <Button onClick={() => {
-                                this.setState({
-                                    selectedKey: []
-                                })
-                                this.fetchMaterials({}, {
-                                    current: 1,
-                                    pageSize: 10,
-                                    total: 0,
-                                    showSizeChanger: false
-                                });
-                            }}>全部</Button> */}
-                            <DetailTitle title='包号' operation={[<PlusCircleOutlined onClick={()=>{
-                                const value = waitTableDataSource;
-                                value.push(busySelectedRows)
-                                setWaitTableDataSource(value)
-                              }}/>]}/>
+                        <DetailTitle title='包号' operation={[<PlusCircleOutlined onClick={()=>{
+                            setVisible(true)
+                            }}/>]}
+                        />
+                        {packArr.length>0 && packArr.map((item:any)=>{
+                            return <div onClick={()=>{
+                                onSelectTable(item)
+                            }}>{item.id}</div>
+                        })}
                             {/* <Tree
                                 // onSelect={onSelect}
                                 // treeData={wrapMaterialTree2DataNode(treeData as (IResponseTree & DataNode)[])}
@@ -360,6 +369,61 @@ export default function DailySchedule(): React.ReactNode {
                         />
                     </Col>
                 </Row>
+                <Modal visible={ visible } width="40%" title={ "添加包捆" }  onOk={ async ()=>{
+                    await form.resetFields()
+                    const value = form.getFieldsValue(true)
+                    const submitData = {
+                        packageCode:value.packageCode,
+                        packageAttribute: value.packageAttribute,
+                        packageType: value.packageType,
+                        productId: productNumberId
+                    }
+                    RequestUtil.post(`/tower-production/package`,submitData).then(()=>{
+                        message.success('新增成功！')
+                        setVisible(false)
+                    }).then(()=>{
+                        onPackSelect({id:productNumberId})
+                    });
+                } } onCancel={ ()=>{
+                    setVisible(false)
+                    form.setFieldsValue({
+                        packageCode:'',
+                        packageType:'',
+                    })
+                } }>
+                    <Form form={ form } labelCol={{ span: 4 }}>
+                        <Form.Item name="packageCode" label="包号" rules={[{
+                                "required": true,
+                                "message": "请输入包号"
+                            },
+                            {
+                            pattern: /^[^\s]*$/,
+                            message: '禁止输入空格',
+                            }]}>
+                            <Input placeholder="请输入" maxLength={ 50 } defaultValue={'未命名包'}/>
+                        </Form.Item>
+                        <Form.Item name="packageAttribute" label="包属性"  rules={[{
+                                "required": true,
+                                "message": "请选择包属性"
+                            }]}>
+                            <Select placeholder="请选择" defaultValue={0} disabled style={{ width: "100%" }}>
+                                <Select.Option key={0} value={0}>专用包</Select.Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item name="packageType" label="包类型"  rules={[{
+                                "required": true,
+                                "message": "请选择包类型"
+                            }]}>
+                            <Select placeholder="请选择包类型"  style={{ width: "100%" }} >
+                                {packageTypeOptions && packageTypeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={index} value={id}>
+                                        {name}
+                                    </Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+                    </Form>
+                </Modal>
             </DetailContent>
         </Spin>
     </>
