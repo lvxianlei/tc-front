@@ -43,11 +43,11 @@ export default function SampleDraw(): React.ReactNode {
                     productionBatch: splitData?.productionBatch
                 }
             })
-            await RequestUtil.post(`/tower-aps/productionPlan/batchNo`, submitData).then(() => {
+            await RequestUtil.post(`/tower-aps/productionPlan/batchNo/${params.id}`, submitData).then(() => {
                 message.success('提交成功！')
                 form.resetFields()
-                setRefresh(!refresh)
                 setSelectedKeys([])
+                history.go(0)
             })
         } catch (error) {
             console.log(error)
@@ -108,7 +108,7 @@ export default function SampleDraw(): React.ReactNode {
     }
     const useFactory = () => {
         Modal.confirm({
-            title: "分配车间",
+            title: "分配厂区",
             icon: null,
             content: <Form form={factoryForm}>
                 <Form.Item
@@ -138,14 +138,17 @@ export default function SampleDraw(): React.ReactNode {
                 } catch (error) {
                     reject(false)
                 }
-            })
+            }),
+            onCancel() {
+                factoryForm.resetFields()
+            }
         })
     }
 
     const cancelFactory = () => {
         Modal.confirm({
-            title: "取消分配车间",
-            content: "是否取消分配车间？",
+            title: "取消分配厂区",
+            content: "是否取消分配厂区？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     run(selectedKeys.map(item => ({ id: item })))

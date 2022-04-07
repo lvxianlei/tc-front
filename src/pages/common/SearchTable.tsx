@@ -22,7 +22,7 @@ interface SearchTableProps {
     filterValues?: { [key: string]: any }
     extraOperation?: React.ReactNode | React.ReactNode[]
     tableProps?: { [i: string]: any }
-    pagenation?: boolean
+    pagination?: boolean
     [key: string]: any
 }
 
@@ -40,7 +40,7 @@ export default function SearchTable({
     searchFormItems = [],
     filterValues,
     tableProps,
-    pagenation = false,
+    pagination,
     ...props }: SearchTableProps): JSX.Element {
     const [pagenationParams, setPagenationParams] = useState<PagenationProps>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
@@ -48,8 +48,10 @@ export default function SearchTable({
         try {
             const formValue = await form.getFieldsValue()
             const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
-            params.current = pagenationParams.current
-            params.size = pagenationParams.pageSize
+            if (pagination !== false) {
+                params.current = pagenationParams.current
+                params.size = pagenationParams.pageSize
+            }
             const paramsOptions = filterValues ? stringify({ ...params, ...filterValues }) : stringify(params)
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
@@ -65,13 +67,14 @@ export default function SearchTable({
             pageSize: pageSize || pagenationParams.pageSize
         })
     }, [setPagenationParams, JSON.stringify(pagenationParams)])
+
     return <>
-        <Form style={{ marginBottom: 16 }} form={form} onFinish={async () => {
+        {searchFormItems.length > 0 && <Form style={{ marginBottom: 16 }} form={form} onFinish={async () => {
             setPagenationParams({ ...pagenationParams, current: 1, pageSize: 10 })
             await run()
         }}>
             <Row gutter={[8, 8]}>
-                {searchFormItems.length > 0 && searchFormItems.map((fItem: any) => <Col
+                {searchFormItems.map((fItem: any) => <Col
                     style={{ height: 32 }}
                     span={(searchFormItems.length + 1) / 24}
                     key={fItem.dataIndex || fItem.name}><Form.Item
@@ -89,7 +92,7 @@ export default function SearchTable({
                     </Form.Item>
                 </Col>
             </Row>
-        </Form>
+        </Form>}
         <Space style={{
             marginBottom: 12,
             paddingLeft: 12
@@ -104,7 +107,7 @@ export default function SearchTable({
             {...props}
         />
         {
-            pagenation === false && <footer className={styles.pagenationWarp}>
+            pagination !== false && <footer className={styles.pagenationWarp}>
                 <Pagination
                     className={styles.pagination}
                     total={data?.total}
