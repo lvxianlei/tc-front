@@ -91,7 +91,7 @@ export default function BoltList(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "level"]} initialValue={_}>
-                    <Input size="small" onChange={() => rowChange(index)} />
+                    <Input size="small" maxLength={20} onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -118,7 +118,7 @@ export default function BoltList(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "unbuckleLength"]} initialValue={_}>
-                    <Input type="number" size="small" onChange={() => rowChange(index)} />
+                    <Input max={999} type="number" size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -133,7 +133,7 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请输入小计'
                 }]}>
-                    <Input type="number" size="small" onChange={(e) => {
+                    <Input type="number" max={9999} size="small" onChange={(e) => {
                         rowChange(index);
                         const data = form.getFieldsValue(true).data;
                         const total = Number(e.target.value) + Number(data[index].wealth)
@@ -245,7 +245,7 @@ export default function BoltList(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "description"]} initialValue={_}>
-                    <Input size="small" onChange={() => rowChange(index)} />
+                    <Input maxLength={100} size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
