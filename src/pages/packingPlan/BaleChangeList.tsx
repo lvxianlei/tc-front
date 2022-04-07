@@ -8,6 +8,8 @@ import React, { useRef, useState } from 'react';
 import { Input, DatePicker, Button, Modal, Radio, message, Space, Select, Spin, Form, Row, Col, Tree, Card } from 'antd';
 import { CommonTable, DetailContent, DetailTitle, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
+import { RightOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import RequestUtil from '../../utils/RequestUtil';
 import { DataNode } from 'antd/lib/tree';
 import useRequest from '@ahooksjs/use-request';
@@ -51,17 +53,12 @@ export default function DailySchedule(): React.ReactNode {
     const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
     const [waitTableDataSource, setWaitTableDataSource] = useState<any[]>([]);
     const [busyTableDataSource, setBusyTableDataSource] = useState<any[]>([]);
-// readonly selectedMaterialKeys: React.Key[];
-// readonly selectedMaterials: IMaterial[];
+    const [ids,setIds]=useState([])   //该数组记录每次点击时各个层级点击的当前项id
+    const [arr1,setArr1]=useState<any>([])  //第一层数据
+    const [arr2,setArr2]=useState([])     //第二层数据
+    const [arr3,setArr3]=useState([])
 
-//  const { loading, data: galvanizedTeamList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-//      try {
-//          const result: { [key: string]: any } = await RequestUtil.get(`/tower-production/workshopTeam?size=1000`);
-//          resole(result?.records)
-//      } catch (error) {
-//          reject(error)
-//      }
-//  }))
+
 
     const { loading, data, run } = useRequest<any[]>((filterValue) => new Promise(async (resole, reject) => {
         // try {
@@ -75,32 +72,35 @@ export default function DailySchedule(): React.ReactNode {
             //     resole([])
             // }
             console.log(1)
-            const resData: IResponseTree[] = await RequestUtil.get<IResponseTree[]>('/tower-system/materialCategory/tree');
-            setTreeData(resData);
-            setExpandKeys(expandKeysByValue(resData))
+            // const resData: IResponseTree[] = await RequestUtil.get<IResponseTree[]>('/tower-system/materialCategory/tree');
+            // setTreeData(resData);
+            // setExpandKeys(expandKeysByValue(resData))
+            const resData: any[] = await RequestUtil.get<any[]>('/tower-production/package/plan/categories');
+            console.log(resData)
+            setArr1(resData)
         // } catch (error) {
         //     reject(error)
         // }
     }))
-    /**
-     * 获取expandKeys
-     */
-    const  expandKeysByValue=(materialTrees: IResponseTree[]): number[] =>{
-        let data: number[] = [];
-        data = expandKeysId(materialTrees, data);
-        return data;
-    }
+    // /**
+    //  * 获取expandKeys
+    //  */
+    // const  expandKeysByValue=(materialTrees: IResponseTree[]): number[] =>{
+    //     let data: number[] = [];
+    //     data = expandKeysId(materialTrees, data);
+    //     return data;
+    // }
 
-    //获取childrenID 
-    const  expandKeysId=(materialTrees: IResponseTree[], data: number[]): number[] =>{
-        materialTrees.forEach((item: IResponseTree): void => {
-            data.push(item.code)
-            if (item.children && item.children.length) {
-                expandKeysId(item.children as IResponseTree[], data);
-            }
-        });
-        return data;
-    }
+    // //获取childrenID 
+    // const  expandKeysId=(materialTrees: IResponseTree[], data: number[]): number[] =>{
+    //     materialTrees.forEach((item: IResponseTree): void => {
+    //         data.push(item.code)
+    //         if (item.children && item.children.length) {
+    //             expandKeysId(item.children as IResponseTree[], data);
+    //         }
+    //     });
+    //     return data;
+    // }
     const tableColumns = [
         {
             "key": "planNumber",
@@ -193,47 +193,64 @@ export default function DailySchedule(): React.ReactNode {
             ...value,
         })
     };
-    const wrapMaterialTree2DataNode=(materials: (IResponseTree & DataNode)[] = []): DataNode[] =>{
-        materials.forEach((material: (IResponseTree & DataNode)): void => {
-            material.title = material.treeName;
-            material.key = material.code;
-            material.disabled = material?.children.length>0?true:false;
+//     const wrapMaterialTree2DataNode=(materials: (IResponseTree & DataNode)[] = []): DataNode[] =>{
+//         materials.forEach((material: (IResponseTree & DataNode)): void => {
+//             material.title = material.treeName;
+//             material.key = material.code;
+//             material.disabled = material?.children.length>0?true:false;
             
-            if (material.children && material?.children.length) {
-                wrapMaterialTree2DataNode(material.children as (IResponseTree & DataNode)[]);
-            }
-        });
-        return materials;
-    }
-    const renderTreeNodes = (data:any) => data.map((item:any) => {
+//             if (material.children && material?.children.length) {
+//                 wrapMaterialTree2DataNode(material.children as (IResponseTree & DataNode)[]);
+//             }
+//         });
+//         return materials;
+//     }
+//     const renderTreeNodes = (data:any) => data.map((item:any) => {
 
-      if (item.children && item.children.length > 0) {
-          item.disabled = true;
+//       if (item.children && item.children.length > 0) {
+//           item.disabled = true;
           
-          return (<TreeNode key={ item.id } title={ item.treeName }  disabled={ item.disabled } >
-              { renderTreeNodes(item.children) }
-          </TreeNode>);
-      }
-      item.title = (
-        <div>
-         <span onClick={()=>{
-           console.log(2)
-         }}>
-          {item.treeName}
-         </span>
-         {/* <Icon type='close' style={{marginLeft:10}} onClick={() => this.onClose(item.key, item.defaultValue)}/>
-         <Icon type='check' style={{marginLeft:10}} onClick={() => this.onSave(item.key)}/> */}
-         <Button type='link' onClick={()=>{
-console.log(item)
-         }}>+</Button>
-        </div>
-       );
-      return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
-  });
-    //展开控制
-    const onExpand = (expandKeys: React.Key[]) => {
-        setExpandKeys(expandKeys)
-        setAutoExpandParent(false)
+//           return (<TreeNode key={ item.id } title={ item.treeName }  disabled={ item.disabled } >
+//               { renderTreeNodes(item.children) }
+//           </TreeNode>);
+//       }
+//       item.title = (
+//         <div>
+//          <span onClick={()=>{
+//            console.log(2)
+//          }}>
+//           {item.treeName}
+//          </span>
+//          {/* <Icon type='close' style={{marginLeft:10}} onClick={() => this.onClose(item.key, item.defaultValue)}/>
+//          <Icon type='check' style={{marginLeft:10}} onClick={() => this.onSave(item.key)}/> */}
+//          <Button type='link' onClick={()=>{
+//             console.log(item)
+//          }}>+</Button>
+//         </div>
+//        );
+//       return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
+//   });
+//     //展开控制
+//     const onExpand = (expandKeys: React.Key[]) => {
+//         setExpandKeys(expandKeys)
+//         setAutoExpandParent(false)
+//     }
+    const handlerClickItem=(type:any,item:any)=>{
+        let newIds=JSON.parse(JSON.stringify(ids));
+        switch(type){
+            case "1":
+                newIds[0]=item.id;
+                break;
+            case "2":
+                newIds[1]=item.id;
+                break;
+            case "3":
+                newIds[0]=item.id;
+                break;
+            default:
+        }
+
+        setIds(newIds)
     }
     return <>
         <Spin spinning={false}>
@@ -254,8 +271,16 @@ console.log(item)
                     </Row>
                 </Form>
                 <Row style={{ background: '#fff' }}>
-                    <Col span={4} style={{marginRight:"20px"}}>
-                        {/* <Card bordered={false}> */}
+                    <Col span={2} >
+                        <DetailTitle title='塔型'/>
+                        {arr1.map((item:any)=>{
+
+                        })}
+                    </Col>
+                    <Col span={2} >
+                        <DetailTitle title='杆塔'/>
+                    </Col>
+                    <Col span={2} style={{marginRight:"20px"}}>
                             {/* <Button onClick={() => {
                                 this.setState({
                                     selectedKey: []
@@ -267,15 +292,12 @@ console.log(item)
                                     showSizeChanger: false
                                 });
                             }}>全部</Button> */}
-                            <DetailTitle title='包号' operation={[<Button 
-                              type='primary'
-                              onClick={()=>{
+                            <DetailTitle title='包号' operation={[<PlusCircleOutlined onClick={()=>{
                                 const value = waitTableDataSource;
                                 value.push(busySelectedRows)
                                 setWaitTableDataSource(value)
-                              }}
-                            >新增包</Button>]}/>
-                            <Tree
+                              }}/>]}/>
+                            {/* <Tree
                                 // onSelect={onSelect}
                                 // treeData={wrapMaterialTree2DataNode(treeData as (IResponseTree & DataNode)[])}
                                 // expandedKeys={expandKeys}
@@ -285,10 +307,9 @@ console.log(item)
                                 selectedKeys={selectedKey}
                             >
                                {renderTreeNodes(treeData as (IResponseTree & DataNode)[])}
-                            </Tree>
-                        {/* </Card> */}
+                            </Tree> */}
                     </Col>
-                    <Col span={9} style={{marginRight:"20px"}}>
+                    <Col span={8} style={{marginRight:"20px"}}>
                         <DetailTitle title='件号' operation={[<Button 
                           type='primary'
                           disabled={!(busySelectedKeys.length>0)}
@@ -313,7 +334,7 @@ console.log(item)
                             }}
                         />
                     </Col>
-                    <Col span={10} style={{marginRight:"20px"}}>
+                    <Col span={9} style={{marginRight:"20px"}}>
                         <DetailTitle title='待放区' operation={[<Button 
                           type='primary'
                           disabled={!(waitSelectedKeys.length>0)}
@@ -343,48 +364,3 @@ console.log(item)
         </Spin>
     </>
 }
-
-// import { Transfer, Switch } from 'antd';
-// import React from 'react';
-
-// export default function DailySchedule(): React.ReactNode{
-//   const [mockData, setMockData] = React.useState([]);
-//   const [targetKeys, setTargetKeys] = React.useState([]);
-
-//   React.useEffect(() => {
-//     const newTargetKeys :any= [];
-//     const newMockData:any = [];
-//     for (let i = 0; i < 2000; i++) {
-//       const data = {
-//         key: i.toString(),
-//         title: `content${i + 1}`,
-//         description: `description of content${i + 1}`,
-//         chosen: Math.random() * 2 > 1,
-//       };
-//       if (data.chosen) {
-//         newTargetKeys.push(data.key);
-//       }
-//       newMockData.push(data);
-//     }
-
-//     setTargetKeys(newTargetKeys);
-//     setMockData(newMockData);
-//   }, []);
-
-//   const onChange = (newTargetKeys:any, direction: any, moveKeys: any) => {
-//     console.log(moveKeys);
-//     setTargetKeys(newTargetKeys);
-//   };
-
-//   return (
-//     <>
-//       <Transfer
-//         dataSource={mockData}
-//         targetKeys={targetKeys}
-//         onChange={onChange}
-//         render={(item:any) => item.title}
-//         pagination={false}
-//       />
-//     </>
-//   );
-// };
