@@ -24,20 +24,11 @@ export default function Lofting(): React.ReactNode {
     const [tipVisible, setTipVisible] = useState<boolean>(false);
     const [addVisible, setAddVisible] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
-    const [filterValue, setFilterValue] = useState({ segmentGroupId: params.productSegmentId });
     const [editorLock, setEditorLock] = useState('编辑');
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
     const [tableDataSource, setTableDataSource] = useState<any[]>([])
-    // const formRef: React.RefObject<FormInstance> = React.createRef<FormInstance>();
-    // const getForm = (): FormInstance | null => {
-    //     return formRef?.current;
-    // }
-    // const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
-    //     const data: [] = await RequestUtil.get(`/tower-science/drawProductSegment/getSegmentBySegmentGroupId`,{segmentGroupId:params.productSegmentId});
-    //     resole(data);
-    // }), {})
-    // const paragraphList: [] = data || [];
+
     const columns = [
         {
             key: 'id',
@@ -401,217 +392,203 @@ export default function Lofting(): React.ReactNode {
     })
     const [tableColumns, setColumns] = useState(columnsSetting);
     const onFilterSubmit = (value: any) => {
-        setFilterValue({ ...filterValue, ...value })
+        return value
     }
     const rowChange = (index: number) => {
         rowChangeList.push(index);
         setRowChangeList([...rowChangeList]);
     }
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
-    const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
-    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
-        setSelectedKeys(selectedRowKeys);
-        setSelectedRows(selectedRows)
-    }
-    return <>
-        <Form
-            layout="inline"
-            style={{ margin: '20px' }}
-            onFinish={onFilterSubmit}
-        >
-            <Form.Item label='材料名称' name='materialName'>
-                <Input />
-            </Form.Item>
-            <Form.Item label='材质' name='structureTexture'>
-                <Input />
-            </Form.Item>
-            <Form.Item label='段号' name='segmentName'>
-                <Input />
-            </Form.Item>
-            <Form.Item>
-                <Button type="primary" htmlType="submit">查询</Button>
-            </Form.Item>
-            <Form.Item>
-                <Button htmlType="reset">重置</Button>
-            </Form.Item>
-        </Form>
-        <Form
-            form={formRef}
-            className={styles.descripForm}
-        >
-            <Modal
-                visible={visible}
-                onOk={() => {
-                    window.open(url);
-                    setVisible(false);
-                }}
-                onCancel={() => { setVisible(false); setUrl('') }}
-                title='提示'
-                okText='下载'
-            >
-                当前存在错误数据，请重新下载上传！
-            </Modal>
+    const SelectChange = (selectedRowKeys: React.Key[]): void => setSelectedKeys(selectedRowKeys)
 
-            <Page
-                path="/tower-science/drawProductStructure"
-                exportPath="/tower-science/drawProductStructure"
-                columns={[...tableColumns as any, {
-                    key: 'operation',
-                    title: '操作',
-                    dataIndex: 'operation',
-                    fixed: 'right' as FixedType,
-                    width: 100,
-                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        <div className={styles.operationBtn}>
-                            <Popconfirm
-                                title="确认删除?"
-                                onConfirm={async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${record.id}`).then(() => {
-                                    message.success('删除成功！');
+    return <>
+        <Modal
+            visible={visible}
+            onOk={() => {
+                window.open(url);
+                setVisible(false);
+            }}
+            onCancel={() => { setVisible(false); setUrl('') }}
+            title='提示'
+            okText='下载'
+        >
+            当前存在错误数据，请重新下载上传！
+        </Modal>
+        <Page
+            path="/tower-science/drawProductStructure"
+            exportPath="/tower-science/drawProductStructure"
+            columns={[...tableColumns as any, {
+                key: 'operation',
+                title: '操作',
+                dataIndex: 'operation',
+                fixed: 'right' as FixedType,
+                width: 100,
+                render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                    <div className={styles.operationBtn}>
+                        <Popconfirm
+                            title="确认删除?"
+                            onConfirm={async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${record.id}`).then(() => {
+                                message.success('删除成功！');
+                                setRefresh(!refresh);
+                            })}
+                            okText="提交"
+                            cancelText="取消"
+                            disabled={editorLock === '锁定'}
+                        >
+                            <Button type="link" disabled={editorLock === '锁定'}>删除</Button>
+                        </Popconfirm>
+                    </div>
+                )
+            }]}
+            filterValues={{ segmentGroupId: params.productSegmentId }}
+            pagination={false}
+            tableProps={{
+                rowSelection: {
+                    selectedRowKeys: selectedKeys,
+                    onChange: SelectChange
+                }
+            }}
+            extraOperation={
+                <Space direction="horizontal" size="small">
+                    <Button type="primary" ghost onClick={() => downloadTemplate('/tower-science/drawProductStructure/exportTemplate', '构建明细')}>模板下载</Button>
+                    <Button type="primary" ghost onClick={() => { setTipVisible(true) }}>提示说明</Button>
+                    <Upload
+                        accept=".xls,.xlsx"
+                        action={() => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl + '/tower-science/drawProductStructure/import'
+                        }}
+                        headers={
+                            {
+                                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
+                        }
+                        data={{ productSegmentId: params.productSegmentId }}
+                        showUploadList={false}
+                        onChange={(info) => {
+                            if (info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            } else if (info.file.response && info.file.response?.success) {
+                                if (info.file.response?.data) {
+                                    setUrl(info.file.response?.data);
+                                    setVisible(true);
+                                } else {
+                                    message.success('导入成功！');
                                     setRefresh(!refresh);
-                                })}
-                                okText="提交"
-                                cancelText="取消"
-                                disabled={editorLock === '锁定'}
-                            >
-                                <Button type="link" disabled={editorLock === '锁定'}>删除</Button>
-                            </Popconfirm>
-                        </div>
-                    )
-                }]}
-                filterValues={filterValue}
-                refresh={refresh}
-                pagination={false}
-                tableProps={{
-                    rowSelection: {
-                        selectedRowKeys: selectedKeys,
-                        onChange: SelectChange
-                    }
-                }}
-                extraOperation={
-                    <Space direction="horizontal" size="small">
-                        <Button type="primary" ghost onClick={() => downloadTemplate('/tower-science/drawProductStructure/exportTemplate', '构建明细')}>模板下载</Button>
-                        <Button type="primary" ghost onClick={() => { setTipVisible(true) }}>提示说明</Button>
-                        <Upload
-                            accept=".xls,.xlsx"
-                            action={() => {
-                                const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                                return baseUrl + '/tower-science/drawProductStructure/import'
-                            }}
-                            headers={
-                                {
-                                    'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                                    'Tenant-Id': AuthUtil.getTenantId(),
-                                    'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                                 }
                             }
-                            data={{ productSegmentId: params.productSegmentId }}
-                            showUploadList={false}
-                            onChange={(info) => {
-                                if (info.file.response && !info.file.response?.success) {
-                                    message.warning(info.file.response?.msg)
-                                } else if (info.file.response && info.file.response?.success) {
-                                    if (info.file.response?.data) {
-                                        setUrl(info.file.response?.data);
-                                        setVisible(true);
-                                    } else {
-                                        message.success('导入成功！');
-                                        setRefresh(!refresh);
+                        }}
+                    >
+                        <Button type="primary" ghost disabled={editorLock === '锁定'}>导入</Button>
+                    </Upload>
+                    <Button type="primary" ghost onClick={() => {
+                        setAddVisible(true)
+                    }} disabled={editorLock === '锁定'}>添加</Button>
+                    <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/drawApply`) }}>图纸塔型套用</Button>
+                    <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/setOutApply`) }}>放样塔型套用</Button>
+                    <Popconfirm
+                        title="确认完成提料?"
+                        onConfirm={async () => {
+                            await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting?segmentGroupId=${params.productSegmentId}`).then(() => {
+                                message.success('提料成功！')
+                            }).then(() => {
+                                history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)
+                            })
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="primary" ghost>完成提料</Button>
+                    </Popconfirm>
+                    <Button type="primary" ghost onClick={async () => {
+                        if (editorLock === '编辑') {
+                            setColumns(columns);
+                            setEditorLock('锁定');
+                        } else {
+                            const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
+                            let value = await formRef.validateFields();
+                            let values = formRef.getFieldsValue(true).data;
+                            console.log(values)
+
+                            if (values && values.length > 0 && newRowChangeList.length > 0) {
+                                let changeValues = values.filter((item: any, index: number) => {
+                                    return newRowChangeList.indexOf(index) !== -1;
+                                }).map((item: any) => {
+                                    return {
+                                        ...item,
+                                        productCategory: params.id,
+                                        segmentGroupId: params.productSegmentId
                                     }
-                                }
-                            }}
-                        >
-                            <Button type="primary" ghost disabled={editorLock === '锁定'}>导入</Button>
-                        </Upload>
-                        <Button type="primary" ghost onClick={() => {
-                            setAddVisible(true)
-                        }} disabled={editorLock === '锁定'}>添加</Button>
-                        <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/drawApply`) }}>图纸塔型套用</Button>
-                        <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/setOutApply`) }}>放样塔型套用</Button>
-                        <Popconfirm
-                            title="确认完成提料?"
-                            onConfirm={async () => {
-                                await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting?segmentGroupId=${params.productSegmentId}`).then(() => {
-                                    message.success('提料成功！')
-                                }).then(() => {
-                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)
                                 })
-                            }}
-                            okText="确认"
-                            cancelText="取消"
-                        >
-                            <Button type="primary" ghost>完成提料</Button>
-                        </Popconfirm>
-                        <Button type="primary" ghost onClick={async () => {
-                            if (editorLock === '编辑') {
-                                setColumns(columns);
-                                setEditorLock('锁定');
-                            } else {
-                                const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-                                let value = await formRef.validateFields();
-                                let values = formRef.getFieldsValue(true).data;
-                                console.log(values)
+                                RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [...changeValues]).then(res => {
 
-                                if (values && values.length > 0 && newRowChangeList.length > 0) {
-                                    let changeValues = values.filter((item: any, index: number) => {
-                                        return newRowChangeList.indexOf(index) !== -1;
-                                    }).map((item: any) => {
-                                        return {
-                                            ...item,
-                                            productCategory: params.id,
-                                            segmentGroupId: params.productSegmentId
-                                        }
-                                    })
-                                    RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [...changeValues]).then(res => {
-
-                                        setColumns(columnsSetting);
-                                        setEditorLock('编辑');
-                                        formRef.resetFields()
-                                        setRowChangeList([]);
-                                        setRefresh(!refresh);
-                                        history.go(0)
-                                    });
-                                } else {
                                     setColumns(columnsSetting);
                                     setEditorLock('编辑');
                                     formRef.resetFields()
                                     setRowChangeList([]);
                                     setRefresh(!refresh);
-                                }
-
+                                    history.go(0)
+                                });
+                            } else {
+                                setColumns(columnsSetting);
+                                setEditorLock('编辑');
+                                formRef.resetFields()
+                                setRowChangeList([]);
+                                setRefresh(!refresh);
                             }
-                            console.log(formRef.getFieldsValue(true))
-                        }} disabled={formRef.getFieldsValue(true).data && formRef.getFieldsValue(true).data?.length === 0}>{editorLock}</Button>
-                        <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/recognize`) }}>识别</Button>
-                        <Popconfirm
-                            title="确认删除?"
-                            onConfirm={async () => {
-                                if (selectedKeys.length > 0)
-                                    if (!(selectedKeys.length > 100)) {
-                                        await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${selectedKeys.join(',')}`).then(() => {
-                                            message.success('删除成功！');
-                                            setRefresh(!refresh);
-                                            history.go(0)
-                                        })
-                                    } else {
-                                        message.error('当前选择数量过多，请重新选择！')
-                                    }
-                                else {
-                                    message.warning('请选择要删除的数据')
+
+                        }
+                        console.log(formRef.getFieldsValue(true))
+                    }} disabled={formRef.getFieldsValue(true).data && formRef.getFieldsValue(true).data?.length === 0}>{editorLock}</Button>
+                    <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/recognize`) }}>识别</Button>
+                    <Popconfirm
+                        title="确认删除?"
+                        onConfirm={async () => {
+                            if (selectedKeys.length > 0)
+                                if (!(selectedKeys.length > 100)) {
+                                    await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${selectedKeys.join(',')}`).then(() => {
+                                        message.success('删除成功！');
+                                        setRefresh(!refresh);
+                                        history.go(0)
+                                    })
+                                } else {
+                                    message.error('当前选择数量过多，请重新选择！')
                                 }
-                            }}
-                            okText="提交"
-                            cancelText="取消"
-                            disabled={editorLock === '锁定' ? true : !(selectedKeys.length > 0)}
-                        >
-                            <Button type="primary" ghost disabled={editorLock === '锁定' ? true : !(selectedKeys.length > 0)}>删除</Button>
-                        </Popconfirm>
-                        <Button type="ghost" onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`) }}>返回</Button>
-                    </Space>
+                            else {
+                                message.warning('请选择要删除的数据')
+                            }
+                        }}
+                        okText="提交"
+                        cancelText="取消"
+                        disabled={editorLock === '锁定' ? true : !(selectedKeys.length > 0)}
+                    >
+                        <Button type="primary" ghost disabled={editorLock === '锁定' ? true : !(selectedKeys.length > 0)}>删除</Button>
+                    </Popconfirm>
+                    <Button type="ghost" onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`) }}>返回</Button>
+                </Space>
+            }
+            searchFormItems={[
+                {
+                    name: 'materialName',
+                    label: '材料名称',
+                    children: <Input maxLength={50} />
+                },
+                {
+                    name: 'structureTexture',
+                    label: '材质',
+                    children: <Input maxLength={50} />
+                },
+                {
+                    name: 'segmentName',
+                    label: '段号',
+                    children: <Input maxLength={50} />
                 }
-                searchFormItems={[]}
-            />
-        </Form>
+            ]}
+            onFilterSubmit={onFilterSubmit}
+        />
         <Modal title='提示' visible={tipVisible} footer={false} onCancel={() => {
             setTipVisible(false)
         }}>
