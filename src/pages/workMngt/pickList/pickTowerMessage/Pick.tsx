@@ -24,7 +24,7 @@ export default function Lofting(): React.ReactNode {
     const [tipVisible, setTipVisible] = useState<boolean>(false);
     const [addVisible, setAddVisible] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
-    const [filterValue, setFilterValue] = useState({});
+    const [filterValue, setFilterValue] = useState({ segmentGroupId: params.productSegmentId });
     const [editorLock, setEditorLock] = useState('编辑');
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
@@ -401,9 +401,7 @@ export default function Lofting(): React.ReactNode {
     })
     const [tableColumns, setColumns] = useState(columnsSetting);
     const onFilterSubmit = (value: any) => {
-        setFilterValue(value)
-        // return value
-        setRefresh(!refresh);
+        setFilterValue({ ...filterValue, ...value })
     }
     const rowChange = (index: number) => {
         rowChangeList.push(index);
@@ -481,7 +479,7 @@ export default function Lofting(): React.ReactNode {
                         </div>
                     )
                 }]}
-                filterValue={filterValue}
+                filterValues={filterValue}
                 refresh={refresh}
                 pagination={false}
                 tableProps={{

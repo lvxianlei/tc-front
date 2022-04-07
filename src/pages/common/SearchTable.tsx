@@ -69,12 +69,12 @@ export default function SearchTable({
     }, [setPagenationParams, JSON.stringify(pagenationParams)])
 
     return <>
-        <Form style={{ marginBottom: 16 }} form={form} onFinish={async () => {
+        {searchFormItems.length > 0 && <Form style={{ marginBottom: 16 }} form={form} onFinish={async () => {
             setPagenationParams({ ...pagenationParams, current: 1, pageSize: 10 })
             await run()
         }}>
             <Row gutter={[8, 8]}>
-                {searchFormItems.length > 0 && searchFormItems.map((fItem: any) => <Col
+                {searchFormItems.map((fItem: any) => <Col
                     style={{ height: 32 }}
                     span={(searchFormItems.length + 1) / 24}
                     key={fItem.dataIndex || fItem.name}><Form.Item
@@ -92,7 +92,7 @@ export default function SearchTable({
                     </Form.Item>
                 </Col>
             </Row>
-        </Form>
+        </Form>}
         <Space style={{
             marginBottom: 12,
             paddingLeft: 12
