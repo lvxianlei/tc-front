@@ -204,13 +204,17 @@ export default forwardRef(function ApplyPacking({ id, detailData }: ApplyPacking
                     <Button type="ghost" htmlType="reset">重置</Button>
                 </Space>
             </Form>
-            <div style={{ display: 'flex' }}>
+            <div style={{minHeight: '476px'}}>
                 <CommonTable
                     haveIndex
                     columns={towerColumns}
                     dataSource={dataSource}
                     pagination={false}
                     scroll={{ y: '500px' }}
+                    style={{
+                        width: '48%',
+                        position: 'absolute'
+                    }}
                     onRow={(record: Record<string, any>, index: number) => ({
                         onClick: () => getPackingList(record),
                         className: styles.tableRow
@@ -221,8 +225,10 @@ export default forwardRef(function ApplyPacking({ id, detailData }: ApplyPacking
                     columns={packingColumns}
                     rowKey="id"
                     style={{
-                        width: '80%',
-                        marginLeft: '20px'
+                        width: '48%',
+                        position: 'absolute',
+                        left: '50%',
+                        right:'16px'
                     }}
                     scroll={{ y: '500px' }}
                     dataSource={packingData}
@@ -233,8 +239,8 @@ export default forwardRef(function ApplyPacking({ id, detailData }: ApplyPacking
                         onChange: handleChange
                     }}
                 />
+                
             </div>
-
         </DetailContent>
     </Spin>
 })

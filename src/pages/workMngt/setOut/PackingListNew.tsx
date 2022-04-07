@@ -40,7 +40,7 @@ export default function PackingListNew(): React.ReactNode {
     const editRef = useRef<EditProps>();
     const [showParts, setShowParts] = useState<boolean>(false);
     const [reuse, setReuse] = useState<any>();
-    const [packageAttributeName, setPackageAttributeName] = useState<string>('专用');
+    // const [packageAttributeName, setPackageAttributeName] = useState<string>('专用');
     const [packageWeight, setPackageWeight] = useState<number>(0);
   
     useEffect(() => setPackageWeight(eval((showParts ? [...packagingData] : dataShowParts([...packagingData])).map(item => { return Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0), [JSON.stringify([...packagingData])])
@@ -50,7 +50,7 @@ export default function PackingListNew(): React.ReactNode {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${params.packId}`);
             form.setFieldsValue({ ...data })
             setPackagingData(data?.packageRecordVOList || []);
-            setPackageAttributeName(data?.packageAttributeName || '');
+            // setPackageAttributeName(data?.packageAttributeName || '');
         }
         const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId });
         setStayDistrict(list.map((res, index) => {
@@ -618,17 +618,17 @@ export default function PackingListNew(): React.ReactNode {
                             "required": true,
                             "message": "请选择包属性"
                         }]}>
-                            <Select placeholder="请选择包属性" onChange={(e) => { setPackageAttributeName(e?.toString() || '') }} style={{ width: "100%" }}>
+                            <Select placeholder="请选择包属性" style={{ width: "100%" }}>
                                 <Select.Option value="公用" key="1">公用</Select.Option>
                                 <Select.Option value="专用" key="2">专用</Select.Option>
                             </Select>
                         </Form.Item>
                     </Descriptions.Item>
-                    <Descriptions.Item label="复用杆塔">
+                    {/* <Descriptions.Item label="复用杆塔">
                         <Form.Item name="towers">
                             <Input addonBefore={<Button type="link" onClick={() => { setVisible(true) }} disabled={packageAttributeName === '专用'}>选择杆塔</Button>} disabled />
                         </Form.Item>
-                    </Descriptions.Item>
+                    </Descriptions.Item> */}
                 </Descriptions>
             </Form>
             <DetailTitle title="筛选区" style={{ padding: "8px 0px" }} />
