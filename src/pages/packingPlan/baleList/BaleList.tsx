@@ -127,13 +127,25 @@ export default function DailySchedule(): React.ReactNode {
         }
     ]
 
+    const BatchComplete = () => {
+        if(selectedKeys.length > 0) {
+            RequestUtil.put(`/tower-production/package/packageStatus/${selectedKeys.join(',')}`).then(res => {
+                message.success('批量完成！');
+                setRefresh(!refresh);
+                getSummary();
+            })
+        } else {
+            message.warning('请选择需要批量完成的数据！')
+        }
+    }
+
     const menu = (
         <Menu>
             <Menu.Item key="1">
-                <Button type='text'>批量完成</Button>
+                <Button type='text' onClick={BatchComplete}>批量完成</Button>
             </Menu.Item>
             <Menu.Item key="2">
-                打印列表
+                <Button type='text'>打印列表</Button>
             </Menu.Item>
         </Menu>
     );
@@ -185,7 +197,7 @@ export default function DailySchedule(): React.ReactNode {
                 </p>
                 <Dropdown overlay={menu}>
                     <Button>
-                        更多操作 <DownOutlined />
+                        更多操作<DownOutlined />
                     </Button>
                 </Dropdown>
             </>
