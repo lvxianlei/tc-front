@@ -14,6 +14,7 @@ import styles from './PackingPlan.module.less'
 
 interface IPackagePlan {
     readonly packagePlanProductVOS?: IPackagePlanProduct[];
+    readonly planProgress?: string;
 }
 
 interface IPackagePlanProduct {
@@ -225,7 +226,7 @@ export default function SetOutInformation(): React.ReactNode {
         <BaseInfo columns={baseColums} dataSource={detailData} col={4} />
         <p className={styles.detailtitle}>
             <span>杆塔明细</span>
-            <span className={styles.content}>计划进度：<span className={styles.num}>{0 / 9}</span></span>
+            <span className={styles.content}>计划进度：<span className={styles.num}>{detailData?.planProgress}</span></span>
         </p>
         <CommonTable
             haveIndex
