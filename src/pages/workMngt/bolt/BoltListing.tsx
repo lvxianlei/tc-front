@@ -401,7 +401,7 @@ export default function BoltList(): React.ReactNode {
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>
             <Form form={form}>
-                <Table columns={tableColumns} dataSource={dataSource} pagination={false} onRow={() => ({ className: AbstractMngtComponentStyles.tableRow })} />
+                <CommonTable columns={tableColumns} dataSource={dataSource} pagination={false} onRow={() => ({ className: AbstractMngtComponentStyles.tableRow })} />
             </Form>
         </DetailContent>
         <Modal
