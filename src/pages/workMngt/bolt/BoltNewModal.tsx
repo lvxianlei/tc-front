@@ -121,7 +121,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                 label: '无扣长',
                 name: 'unbuckleLength',
                 children: (
-                    <Input type="number" max={9999} />
+                    <Input type="number" max={999} />
                 )
             }, {
                 label: '等级',
@@ -203,7 +203,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                 label: '备注',
                 name: 'description',
                 children: (
-                    <Input maxLength={50} />
+                    <Input maxLength={100} />
                 )
             }]
         }]];
