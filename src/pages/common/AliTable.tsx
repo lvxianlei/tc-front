@@ -49,6 +49,18 @@ const StyledBaseTable = (styled(BaseTable)`
         color: #666;
         padding: 0 8px;
     }
+    &.edit {
+      td {
+        color: #666;
+        padding: 4px 8px;
+      }
+    }
+  }
+  &.edit {
+    td {
+      color: #666;
+      padding: 4px 8px;
+      }
   }
   td {
     transition: background 0.3s;
@@ -96,6 +108,7 @@ interface AntdTableProps extends BaseTableProps {
  *  `className="bordered"` 带边框样式
  *  `className="compact"` 紧凑样式
  *  `className="dark"` 暗色主题
+ *  `className="edit"` 编辑时样式
  * */
 export default ({ size = "default", ...props }: AntdTableProps) => {
   return <StyledBaseTable

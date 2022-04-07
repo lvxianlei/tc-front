@@ -150,14 +150,9 @@ export default function DistributedTech(): React.ReactNode {
             setSelectedKeys([]);
             setSelectedRows([]);
             setVisible(false);
-            const data: IPlanSchedule[] = await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/issue`, [...params.ids.split(',')]);
-            setDataSource(data.map((item: IPlanSchedule, index: number) => {
-                return {
-                    ...item,
-                    index: index
-                }
-            }))
+            await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/issue`, [...params.ids.split(',')]);
             modalForm.resetFields();
+            history.go(0)
         });
     }
 
@@ -190,6 +185,9 @@ export default function DistributedTech(): React.ReactNode {
                     id: item,
                     loftingCompleteTime: loftingCompleteTime.loftingCompleteTime.format("YYYY-MM-DD") + " 00:00:00"
                 })))
+            },
+            onCancel() {
+                completeTimeForm.resetFields()
             }
         })
     }

@@ -75,7 +75,7 @@ const popTableTransform = (value: any) => {
     }
     return value
 }
-const generateRules = (type: string, columnItems: any) => {
+export const generateRules = (type: string, columnItems: any) => {
     let rules = columnItems.rules || []
     if (columnItems.required) {
         const inputType = ["date", "select", "popTable"].includes(columnItems.type) ? "选择" : "输入"
