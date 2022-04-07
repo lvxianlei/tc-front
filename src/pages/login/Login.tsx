@@ -27,7 +27,8 @@ interface ILoginState {
 
 export default function Login(): JSX.Element {
     const history = useHistory()
-    const { data } = useRequest<ILoginState>(() => new Promise(async (resole, reject) => {
+    const [loginForm] = Form.useForm();
+    const { data, run: updateRun } = useRequest<ILoginState>(() => new Promise(async (resole, reject) => {
         try {
             const captcha: ICaptcha = await RequestUtil.get(`/sinzetech-auth/oauth/captcha`)
             const tenant: ITenant = await RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${window.location.host}`)
@@ -63,8 +64,15 @@ export default function Login(): JSX.Element {
         //values.password = MD5(values.password).toString()
         const { access_token, refresh_token, user_id, tenant_id, tenant_name, ...result } = await run(values)
         if (result.error) {
+            // 错误提示
             notification.error({
                 message: result.error_description
+            })
+            // 获取验证码
+            await updateRun();
+            // 清空验证码
+            loginForm.setFieldsValue({
+                code: undefined
             })
         } else {
             Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })
@@ -94,7 +102,7 @@ export default function Login(): JSX.Element {
                             <div className={style.loginTitleTop}><span>塔云</span><span style={{ color: 'black' }}>平台</span></div>
                             <div className={style.loginTitleBottom}>铁塔设计制造一站式解决方案</div>
                         </div>
-                        <Form onFinish={onSubmit}>
+                        <Form onFinish={onSubmit} form={loginForm}>
                             <Form.Item name="username" rules={[
                                 {
                                     required: true,
