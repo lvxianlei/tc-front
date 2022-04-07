@@ -153,6 +153,7 @@ export default function SetOutInformation(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [searchForm] = Form.useForm();
     const [tableData, setTableData] = useState<IPackageInfo[]>();
+    const [filterValue, setFilterValue] = useState({});
     const [detailData, setDetailData] = useState<IBale>()
     const { loading }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
         getTableDataSource({});
@@ -166,7 +167,7 @@ export default function SetOutInformation(): React.ReactNode {
     });
 
     const beforeFinishPacked = () => {
-        if(detailData?.count === detailData?.done) {
+        if (detailData?.count === detailData?.done) {
             Modal.confirm({
                 title: "所有件均已打进包捆，是否确定完成打包",
                 onOk: async () => new Promise(async (resove, reject) => {
@@ -207,7 +208,14 @@ export default function SetOutInformation(): React.ReactNode {
     }))
 
     const onFinish = (value: Record<string, any>) => {
+        setFilterValue(value);
         getTableDataSource(value);
+    }
+
+    const updatePackage = (id: string, packageNum?: string, unPackageNum?: string) => {
+        RequestUtil.put<IBale>(`/tower-production/package/updatePackageInfoById`, { id: id, packageNum: packageNum, unPackageNum: unPackageNum }).then(res => {
+            getTableDataSource(filterValue);
+        })
     }
 
     if (loading) {
@@ -233,7 +241,7 @@ export default function SetOutInformation(): React.ReactNode {
         <DetailContent key={'edtail'} operation={[
             <Space direction="horizontal" size="small" >
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
-                <Button type='primary' onClick={finishPacked}>完成打包</Button>
+                <Button type='primary' onClick={beforeFinishPacked}>完成打包</Button>
             </Space>
         ]}>
             <DetailTitle title="基本信息" />
@@ -241,8 +249,8 @@ export default function SetOutInformation(): React.ReactNode {
             <p className={styles.detailtitle}>
                 <span>杆塔明细</span>
                 <span className={styles.content}>
-                    <Tooltip title={'包捆进度：已打进包件数/包捆全部件数。'}><QuestionCircleOutlined /></Tooltip>
-                    包捆进度：<span className={styles.num}>{detailData?.done || 0} /{detailData?.count || 0}</span>
+                    <Tooltip title={'包捆进度：已打进包件数/包捆全部件数。'}><QuestionCircleOutlined /> </Tooltip>
+                    包捆进度：<span className={styles.num}>{detailData?.done || 0} / {detailData?.count || 0}</span>
                 </span>
                 <Button type='primary' className={styles.operationBtn} onClick={() => setVisible(true)} ghost>原始包装清单</Button>
             </p>
@@ -272,20 +280,16 @@ export default function SetOutInformation(): React.ReactNode {
                         key: 'packageNum',
                         title: '已打数量',
                         dataIndex: 'packageNum',
-                        render: (value: string, record: Record<string, any>, index: number) => (
-                            <InputNumber min={0} max={999999} placeholder="请输入" onBlur={() => {
-
-                            }} size='small' />
+                        render: (value: number, record: Record<string, any>, index: number) => (
+                            <InputNumber min={0} max={999999} placeholder="请输入" value={record?.packageNum} onBlur={(e) => updatePackage(record.id, e.target.value)} size='small' />
                         )
                     },
                     {
                         key: 'unPackageNum',
                         title: '缺件数量',
                         dataIndex: 'unPackageNum',
-                        render: (value: string, record: Record<string, any>, index: number) => (
-                            <InputNumber min={0} max={999999} placeholder="请输入" onBlur={() => {
-
-                            }} size='small' />
+                        render: (value: number, record: Record<string, any>, index: number) => (
+                            <InputNumber min={0} max={999999} placeholder="请输入" value={value} onBlur={(e) => updatePackage(record.id, '', e.target.value)} size='small' />
                         )
                     }
                 ]}

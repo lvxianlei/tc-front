@@ -15,14 +15,10 @@ interface OriginalListProps {
 }
 
 export default forwardRef(function OriginalList({ id }: OriginalListProps, ref) {
-    const page = {
-        current: 1,
-        pageSize: 10
-    };
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get(``);
+            const result = await RequestUtil.get(`/tower-production/package/getOriginalPackingList/${id}`);
             resole(result)
         } catch (error) {
             reject(error)
@@ -31,14 +27,39 @@ export default forwardRef(function OriginalList({ id }: OriginalListProps, ref) 
 
     const tableColumns = [
         {
-            key: 'teamName',
-            title: '班组名称',
-            dataIndex: 'teamName'
+            key: 'balesCode',
+            title: '包号',
+            dataIndex: 'balesCode',
         },
         {
-            key: 'classPresidentName',
-            title: '班长',
-            dataIndex: 'classPresidentName'
+            key: 'pieceCode',
+            title: '件号',
+            dataIndex: 'pieceCode'
+        },
+        {
+            key: 'materialSpec',
+            title: '材料规格',
+            dataIndex: 'materialSpec'
+        },
+        {
+            key: 'length',
+            title: '长度（mm）',
+            dataIndex: 'length'
+        },
+        {
+            key: 'num',
+            title: '数量',
+            dataIndex: 'num'
+        },
+        {
+            key: 'basicsWeight',
+            title: '重量（KG）',
+            dataIndex: 'basicsWeight'
+        },
+        {
+            key: 'description',
+            title: '备注',
+            dataIndex: 'description'
         }
     ]
 
@@ -46,15 +67,7 @@ export default forwardRef(function OriginalList({ id }: OriginalListProps, ref) 
         <CommonTable
             columns={tableColumns}
             dataSource={data}
-        //  pagination={{
-        //      current: workshopTeam?.current || 0,
-        //      pageSize: workshopTeam?.size || 0,
-        //      total: workshopTeam?.total || 0,
-        //      showSizeChanger: false
-        //  }}
-        //  onChange={(pagination: TablePaginationConfig) => {
-        //      getTableDataSource(pagination);
-        //  }}
+            pagination={false}
         />
     </Spin>
 })
