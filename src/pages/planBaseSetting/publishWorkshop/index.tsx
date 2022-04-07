@@ -105,8 +105,8 @@ export default () => {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
                 values.startTime = formatDate[0] + ' 00:00:00';
                 values.endTime = formatDate[1] + ' 23:59:59';
+                delete values.time
             }
-            setFilterValue({ ...filterValue, ...values });
             return values;
         }}
     />

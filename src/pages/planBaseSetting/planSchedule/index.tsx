@@ -5,6 +5,7 @@ import { planSchedule } from "./data.json"
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IPlanSchedule } from './IPlanSchedule';
 import { Link, useHistory } from 'react-router-dom';
+import moment from 'moment';
 export interface TechnicalIssuePropsRefProps {
     onSubmit: () => void
     resetFields: () => void
@@ -21,13 +22,24 @@ export default function PlanScheduleMngt(): React.ReactNode {
     const history = useHistory();
     return (<Page
         path="/tower-aps/productionPlan"
-        columns={planSchedule as any}
+        columns={(planSchedule as any).map((item: any) => {
+            if (item.dataIndex === "loftingFeedBackTime") {
+                return ({
+                    ...item,
+                    getCellProps(value: any, record: any) {
+                        if (moment(record.loftingCompleteTime).isBefore(moment(value), "day")) {
+                            return { style: { background: "red", color: 'white', fontWeight: 'bold' } }
+                        }
+                    }
+                })
+            }
+            return item
+        })}
         headTabs={[]}
         extraOperation={<Space>
             <Link to={`/planProd/planScheduleMngt/planDeliveryTime/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>设置/变更计划交货期</Button></Link>
             <Link to={`/planProd/planScheduleMngt/SplitBatch/${selectedKeys[0]}`}><Button type="primary" disabled={selectedKeys.length !== 1}>拆分批次</Button></Link>
             <Button type="primary" disabled={selectedKeys.length <= 0} onClick={() => {
-                console.log(selectedKeys,selectedRows)
                 let tip: boolean[] = [];
                 selectedRows.forEach(res => {
                     if (res.planDeliveryTime && res.productionBatchNo) {

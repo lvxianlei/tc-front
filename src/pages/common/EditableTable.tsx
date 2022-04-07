@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import AliTable from './AliTable'
-import { FormInstance, message, Button, Form, Space, Input } from "antd"
+import { FormInstance, message, Button, Form, Space } from "antd"
 import FormItemType from './FormItemType'
+import { generateRules } from "./BaseInfo"
 interface EditableTableProps {
     columns: any[]
     dataSource: any[]
@@ -17,30 +18,31 @@ interface EditableTableProps {
 
 const formatColunms = (columns: any[], haveIndex: boolean) => {
     const newColumns = columns.map(item => {
+        const rules = generateRules(item.type, item)
         if (item.type === "popTable") {
             return ({
-                title: item.title,
+                title: `${item.required ? "*" : ""} ${item.title}`,
                 code: item.dataIndex,
                 render: (value: any, record: any, index: number) => <Form.Item
                     style={{ margin: 0 }}
-                    rules={item.rules}
+                    rules={rules}
                     name={['submit', index, item.dataIndex]}>
                     <FormItemType data={item} type={item.type} />
                 </Form.Item>
             })
         }
         return ({
-            title: item.title,
+            ...item,
+            title: `${item.required ? "*" : ""} ${item.title}`,
             code: item.dataIndex,
             render: (value: any, record: any, index: number) => {
                 return <Form.Item
                     style={{ margin: 0 }}
-                    rules={item.rules}
+                    rules={rules}
                     name={['submit', index, item.dataIndex]}>
                     <FormItemType data={item} type={item.type} />
                 </Form.Item>
-            },
-            ...item
+            }
         })
     })
     haveIndex && newColumns.unshift({
@@ -123,15 +125,16 @@ export default function EditableTable({
         </Space>
         <AliTable
             size="small"
+            className="edit"
             primaryKey={rowKey || "id"}
-            style={{ overflow: 'auto', maxHeight: 400 }}
+            style={{ overflow: 'auto', minHeight: 400 }}
             defaultColumnWidth={150}
             columns={haveOpration ? [
                 ...eidtableColumns,
                 {
                     title: "操作",
                     lock: true,
-                    width: "80px",
+                    width: 40,
                     code: "opration",
                     render: (_: undefined, record: any) => <Button style={{ paddingLeft: 0 }} size="small" type="link" onClick={() => removeItem(record.id)}>删除</Button>
                 }

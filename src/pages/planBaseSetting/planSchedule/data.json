@@ -85,7 +85,9 @@
         },
         {
             "title": "放样下发时间",
-            "dataIndex": "loftingIssueTime"
+            "dataIndex": "loftingIssueTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
         },
         {
             "title": "放样下发人",
@@ -93,15 +95,21 @@
         },
         {
             "title": "放样计划完成时间",
-            "dataIndex": "loftingCompleteTime"
+            "dataIndex": "loftingCompleteTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "放样反馈完成时间",
-            "dataIndex": "loftingFeedBackTime"
+            "dataIndex": "loftingFeedBackTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
         },
         {
             "title": "放样实际完成时间",
-            "dataIndex": "loftingCompleteRealTime"
+            "dataIndex": "loftingCompleteRealTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
         }
     ]
 }
