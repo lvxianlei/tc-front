@@ -208,9 +208,9 @@ export default forwardRef(function ApplyPacking({ id, detailData }: ApplyPacking
                 <CommonTable
                     haveIndex
                     columns={towerColumns}
-                    dataSource={dataSource}
+                    dataSource={[...dataSource]}
                     pagination={false}
-                    scroll={{ y: '500px' }}
+                    scroll={{ y: '444px' }}
                     style={{
                         width: '48%',
                         position: 'absolute'
@@ -226,11 +226,11 @@ export default forwardRef(function ApplyPacking({ id, detailData }: ApplyPacking
                     rowKey="id"
                     style={{
                         width: '48%',
-                        position: 'absolute',
+                        position: 'relative',
                         left: '50%',
                         right:'16px'
                     }}
-                    scroll={{ y: '500px' }}
+                    scroll={{ y: '444px' }}
                     dataSource={packingData}
                     pagination={false}
                     rowSelection={{
