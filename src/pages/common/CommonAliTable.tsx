@@ -116,7 +116,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         }));
     props?.rowSelection && pipeline.use(features.multiSelect({
         value: props?.rowSelection?.selectedRowKeys || [],
-        onChange: (nextValue: string[]) => props?.rowSelection?.onChange(nextValue, dataSource.filter((item: any) => item[(typeof rowKey === "function" ? rowKey(item) : rowKey) || "id"])),
+        onChange: (nextValue: string[]) => props?.rowSelection?.onChange(nextValue, dataSource.filter((item: any) => nextValue.includes(typeof rowKey === "function" ? rowKey(item) : item[rowKey || "id"]))),
         isDisabled: props?.rowSelection?.getCheckboxProps,
         highlightRowWhenSelected: true,
         checkboxPlacement: 'start',
