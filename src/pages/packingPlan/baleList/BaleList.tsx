@@ -207,7 +207,7 @@ export default function DailySchedule(): React.ReactNode {
             {
                 name: 'packageType',
                 label: '包类型',
-                children: <Select placeholder="请选择" style={{ width: '120px' }}>
+                children: <Select placeholder="请选择" style={{ width: '120px' }} defaultValue={''}>
                     <Select.Option key={0} value={''}>全部</Select.Option>
                 </Select>
             },
@@ -223,7 +223,7 @@ export default function DailySchedule(): React.ReactNode {
             {
                 name: 'teamId',
                 label: '包装班组',
-                children: <Select placeholder="请选择" style={{ width: '120px' }}>
+                children: <Select placeholder="请选择" style={{ width: '120px' }} defaultValue={''}>
                     <Select.Option key={0} value={''}>全部</Select.Option>
                     {galvanizedTeamList?.map((item: any) => {
                         return <Select.Option key={item.teamName} value={item.id}>{item.teamName}</Select.Option>

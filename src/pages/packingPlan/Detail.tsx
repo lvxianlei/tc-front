@@ -128,7 +128,7 @@ const tableColumns = [
     {
         key: 'productNumber',
         title: '杆塔号',
-        dataIndex: 'productNumber',
+        dataIndex: 'productNumber'
     },
     {
         key: 'productHeight',
@@ -161,7 +161,7 @@ const packColumns = [
     {
         key: 'packageCode',
         title: '包号',
-        dataIndex: 'packageCode',
+        dataIndex: 'packageCode'
     },
     {
         key: 'packageComponentCount',
@@ -201,7 +201,9 @@ export default function SetOutInformation(): React.ReactNode {
     const [packData, setPackData] = useState([]);
     const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IPackagePlan>(`/tower-production/packageWorkshop/detail/${params.id}`);
-        getTableDataSource(data?.packagePlanProductVOS && data?.packagePlanProductVOS?.length > 0 && data?.packagePlanProductVOS[0] && data?.packagePlanProductVOS[0].id || '')
+        if (data?.packagePlanProductVOS && data?.packagePlanProductVOS[0] && data?.packagePlanProductVOS[0].id) {
+            getTableDataSource(data?.packagePlanProductVOS[0].id)
+        }
         resole(data)
     }), {})
     const detailData: IPackagePlan = data;
@@ -232,6 +234,7 @@ export default function SetOutInformation(): React.ReactNode {
             haveIndex
             dataSource={detailData?.packagePlanProductVOS}
             columns={tableColumns}
+            style={{ position: 'absolute', width: '48%' }}
             onRow={(record: Record<string, any>, index: number) => ({
                 onClick: async () => {
                     getTableDataSource(record.id)
@@ -239,6 +242,6 @@ export default function SetOutInformation(): React.ReactNode {
                 className: styles.tableRow
             })}
         />
-        <CommonTable dataSource={packData} columns={packColumns} />
+        <CommonTable dataSource={packData} columns={packColumns} style={{ position: 'absolute', width: '48%', left: '50%' }} />
     </DetailContent>
 }

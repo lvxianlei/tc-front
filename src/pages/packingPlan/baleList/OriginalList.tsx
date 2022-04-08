@@ -37,9 +37,9 @@ export default forwardRef(function OriginalList({ id }: OriginalListProps, ref) 
             dataIndex: 'pieceCode'
         },
         {
-            key: 'materialSpec',
+            key: 'structureSpec',
             title: '材料规格',
-            dataIndex: 'materialSpec'
+            dataIndex: 'structureSpec'
         },
         {
             key: 'length',

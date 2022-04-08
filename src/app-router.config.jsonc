@@ -1651,8 +1651,8 @@
     },
     { // 包装计划-包装计划列表-详情
       "name": "详情",
-      "path": "/packingPlan/packingPlanList/detail",
-      "module": "./pages/packingPlan/Detail/:id",
+      "path": "/packingPlan/packingPlanList/detail/:id",
+      "module": "./pages/packingPlan/Detail",
       "exact": true,
       "authority": "approvalm"
     },
