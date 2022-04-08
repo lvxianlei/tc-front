@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Input, FormProps, Select } from 'antd';
+import { Button, Modal, Input, FormProps, Select, InputNumber } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -121,7 +121,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                 label: '无扣长',
                 name: 'unbuckleLength',
                 children: (
-                    <Input type="number" max={999} />
+                    <InputNumber max={999} />
                 )
             }, {
                 label: '等级',
@@ -137,9 +137,9 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请输入单重'
                 }],
                 children: (
-                    <Input type="number" min={0} max={9999} onChange={(e) => {
+                    <InputNumber min={0} max={9999} onChange={(e) => {
                         if (this.getForm()?.getFieldsValue(true).total) {
-                            this.getForm()?.setFieldsValue({ totalWeight: Number(e.target.value) * this.getForm()?.getFieldsValue(true).total })
+                            this.getForm()?.setFieldsValue({ totalWeight: Number(e) * this.getForm()?.getFieldsValue(true).total })
                         }
                     }} />
                 )
@@ -151,8 +151,8 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请输入小计'
                 }],
                 children: (
-                    <Input type="number" max={9999} onChange={(e) => {
-                        const total = Number(e.target.value) + Number(this.getForm()?.getFieldsValue(true).wealth);
+                    <InputNumber max={9999} onChange={(e) => {
+                        const total = Number(e) + Number(this.getForm()?.getFieldsValue(true).wealth);
                         this.getForm()?.setFieldsValue({ total: total })
                         if (this.getForm()?.getFieldsValue(true).singleWeight) {
 
@@ -170,9 +170,8 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                 }],
                 initialValue: 0,
                 children: (
-                    <Input type="number" max={9999} onChange={(e) => {
-
-                        const total = Number(e.target.value) + Number(this.getForm()?.getFieldsValue(true).subtotal);
+                    <InputNumber max={9999} onChange={(e) => {
+                        const total = Number(e) + Number(this.getForm()?.getFieldsValue(true).subtotal);
                         this.getForm()?.setFieldsValue({ total: total })
                         if (this.getForm()?.getFieldsValue(true).subtotal && this.getForm()?.getFieldsValue(true).singleWeight) {
                             this.getForm()?.setFieldsValue({ totalWeight: total * this.getForm()?.getFieldsValue(true).singleWeight })
