@@ -141,20 +141,23 @@ export default function DailySchedule(): React.ReactNode {
     ]
     const columns = [
         {
-            "key": "planNumber",
+            "key": "productNumber",
             "title": "杆塔号",
             "width": 100,
-            "dataIndex": "planNumber"
+            "dataIndex": "productNumber"
         },{
-            "key": "planNumber",
+            "key": "packageCode",
             "title": "原包号",
             "width": 100,
-            "dataIndex": "planNumber"
+            "dataIndex": "packageCode"
         },{
-            "key": "planNumber",
+            "key": "packageAttribute",
             "title": "包属性",
             "width": 100,
-            "dataIndex": "planNumber"
+            "dataIndex": "packageAttribute",
+            "render":(text:number)=>{
+                return text===0?'专用包':text===1?'通用包':"-"
+            }
         },
         {
             "key": "code",
@@ -216,7 +219,7 @@ export default function DailySchedule(): React.ReactNode {
         setBusyTableDataSource([])
     };
     const onSelectTable = async (info: any) => {
-        const tableDataSource: any[] = await RequestUtil.get<any[]>(`/tower-production/package/plan/products/pkg/components/${info.id}`);
+        const tableDataSource: any[] = await RequestUtil.get<any[]>(`/tower-production/package/plan/products/pkg/${info.id}/components`);
         console.log(tableDataSource)
         setBusyTableDataSource(tableDataSource!==null?tableDataSource:[])
     };
@@ -313,19 +316,20 @@ export default function DailySchedule(): React.ReactNode {
                         {packArr.length>0 && packArr.map((item:any)=>{
                             return <div onClick={()=>{
                                 onSelectTable(item)
-                            }}>{item.packageCode} <FormOutlined onClick={()=>{
+                            }}>{item.packageCode}（{item.packageComponentCount}件） <FormOutlined onClick={()=>{
                                 formRefNew.setFieldsValue({
                                     packageCode: item.packageCode
                                 })
                                 setPackageCodeId(item.id)
                                 setVisibleNew(true)
-                            }}/> <DeleteOutlined onClick={()=>{
+                            }}/> {item.packageComponentCount===0 && <DeleteOutlined onClick={()=>{
+                                
                                 RequestUtil.delete(`/tower-production/package`,item.id).then(()=>{
                                     message.success('删除成功！')
                                 }).then(()=>{
                                     onPackSelect({id:productNumberId})
                                 });
-                            }}/> </div>
+                            }}/>} </div>
                         })}
                             {/* <Tree
                                 // onSelect={onSelect}
@@ -348,6 +352,19 @@ export default function DailySchedule(): React.ReactNode {
                             value.push(...busySelectedRows)
                             console.log(value)
                             setWaitTableDataSource([...value])
+                            var tempArray1 = [];//临时数组1
+                            var tempArray2 = [];//临时数组2
+
+                            for(var i=0;i<busySelectedRows.length;i++){
+                                tempArray1[busySelectedRows[i].messageId]=true;//将数array2 中的元素值作为tempArray1 中的键，值为true；
+                            }
+                            for(var i=0;i<busyTableDataSource.length;i++){
+                                if(!tempArray1[busyTableDataSource[i].messageId]){
+                                tempArray2.push(busyTableDataSource[i]);//过滤array1 中与array2 相同的元素；
+                                }
+                            }
+                            console.log(tempArray2)
+                            setBusyTableDataSource(tempArray2)
                           }}
                         >移到待放区→</Button>]}/>
                         <CommonTable 
