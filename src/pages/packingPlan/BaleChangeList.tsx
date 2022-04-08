@@ -4,19 +4,14 @@
  * @description 包装计划-改包捆
  */
 
-import React, { useRef, useState } from 'react';
-import { Input, DatePicker, Button, Modal, Radio, message, Space, Select, Spin, Form, Row, Col, Tree, Card } from 'antd';
-import { CommonTable, DetailContent, DetailTitle, Page } from '../common';
-import { FixedType } from 'rc-table/lib/interface';
+import React, { useState } from 'react';
+import { Input, Button, Modal, message, Space, Select, Spin, Form, Row, Col, Tree } from 'antd';
+import { CommonTable, DetailContent, DetailTitle } from '../common';
 import { RightOutlined,PlusCircleOutlined,FormOutlined, DeleteOutlined} from '@ant-design/icons';
 
 import RequestUtil from '../../utils/RequestUtil';
-import { DataNode } from 'antd/lib/tree';
 import { packageTypeOptions } from '../../configuration/DictionaryOptions';
 import useRequest from '@ahooksjs/use-request';
-import styles from './PackingPlan.module.less'
-
-const { TreeNode } = Tree;
 export interface IPackingPlan {
     readonly id?: string;
     readonly angleTeamId?: string;
@@ -48,68 +43,47 @@ export default function DailySchedule(): React.ReactNode {
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
     const [formRefNew] = Form.useForm();
-    const [treeData, setTreeData] = useState<IResponseTree[]>([]);
-    const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
-    const [selectedKey, setSelectedKey] = useState<any>([]);
     const [visible, setVisible] = useState<boolean>(false);
     const [visibleNew, setVisibleNew] = useState<boolean>(false);
     const [waitSelectedKeys, setWaitSelectedKeys] = useState<React.Key[]>([]);
     const [waitSelectedRows, setWaitSelectedRows] = useState<any>([]);
     const [busySelectedKeys, setBusySelectedKeys] = useState<React.Key[]>([]);
     const [busySelectedRows, setBusySelectedRows] = useState<any>([]);
-    const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
     const [waitTableDataSource, setWaitTableDataSource] = useState<any[]>([]);
     const [busyTableDataSource, setBusyTableDataSource] = useState<any[]>([]);
-    const [towerTArr,setTowerTArr]=useState<any>([])  //第一层塔型数据
-    const [towerArr,setTowerArr]=useState<any>([])     //第二层杆塔数据
-    const [packArr,setPackArr]=useState<any>([]) //第二层包数据
-    const [productNumberId,setProductNumberId]=useState<string>('') //杆塔Id
-    const [packageCodeId,setPackageCodeId]=useState<string>('') //包捆Id
-    
+    const [towerTArr,setTowerTArr]= useState<any>([])  //第一层塔型数据
+    const [towerArr,setTowerArr]= useState<any>([])     //第二层杆塔数据
+    const [packArr,setPackArr]= useState<any>([]) //第二层包数据
+    const [productNumberId,setProductNumberId]= useState<string>('') //杆塔Id
+    const [packageCodeId,setPackageCodeId]= useState<string>('') //包捆Id
+    const [code,setCode] = useState<string>('')//件号Id
+    const [numTowerT,setNumTowerT]= useState<any>('');
+    const [numTower,setNumTower]= useState<any>('');
+    const [numPack,setNumPack]= useState<any>('');
 
 
 
     const { loading, data, run } = useRequest<any[]>((filterValue) => new Promise(async (resole, reject) => {
-        // try {
-            // if (filterValue.type) {
-            //     const result: any[] = await RequestUtil.get(`/tower-aps/workPlan`, {
-            //         ...filterValue
-            //     })
-            //     resole(result)
-            // } else {
-            //     message.warning('请选择类型')
-            //     resole([])
-            // }
-            console.log(1)
-            // const resData: IResponseTree[] = await RequestUtil.get<IResponseTree[]>('/tower-system/materialCategory/tree');
-            // setTreeData(resData);
-            // setExpandKeys(expandKeysByValue(resData))
-            const resData: any[] = await RequestUtil.get<any[]>('/tower-production/package/plan/categories');
+            const resData: any[] = await RequestUtil.get<any[]>('/tower-production/package/plan/categories',
+                filterValue
+            );
             console.log(resData)
             setTowerTArr(resData)
-        // } catch (error) {
-        //     reject(error)
-        // }
+            setTowerArr('')
+            setPackArr('')
+            setNumPack('')
+            setNumTower('')
+            setNumTowerT('')
+            setPackageCodeId('')
+            setProductNumberId('')
+            setCode('')
+            // setWaitSelectedKeys([])
+            // setWaitSelectedRows([])
+            setBusySelectedKeys([])
+            setBusySelectedRows([])
+            // setWaitTableDataSource([])
+            setBusyTableDataSource([])
     }))
-    // /**
-    //  * 获取expandKeys
-    //  */
-    // const  expandKeysByValue=(materialTrees: IResponseTree[]): number[] =>{
-    //     let data: number[] = [];
-    //     data = expandKeysId(materialTrees, data);
-    //     return data;
-    // }
-
-    // //获取childrenID 
-    // const  expandKeysId=(materialTrees: IResponseTree[], data: number[]): number[] =>{
-    //     materialTrees.forEach((item: IResponseTree): void => {
-    //         data.push(item.code)
-    //         if (item.children && item.children.length) {
-    //             expandKeysId(item.children as IResponseTree[], data);
-    //         }
-    //     });
-    //     return data;
-    // }
     const tableColumns = [
         {
             "key": "code",
@@ -190,81 +164,87 @@ export default function DailySchedule(): React.ReactNode {
     const finish = async (values: any) => {
         await run({
             ...values,
-            // status: confirmStatus,
-            startTime: values.time && values?.time[0].format('YYYY-MM-DD') + ' 00:00:00',
-            endTime: values.time && values?.time[1].format('YYYY-MM-DD') + ' 23:59:59'
         })
     }
-    // const onSelect = async (selectedKeys: React.Key[], info: any) => {
-    //     let value: any = {
-    //         smallCategory: info.node.level === 3 ? selectedKeys[0] : '',
-    //         middleCategory: info.node.level === 2 ? selectedKeys[0] : '',
-    //         bigCategory: info.node.level === 1 ? selectedKeys[0] : '',
-    //     }
-    //     await run({
-    //         ...value,
-    //     })
-    // };
+    //获取杆塔
     const onTowerSelect = async (info: any) => {
         const resTowerData: any = await RequestUtil.get<any[]>(`/tower-production/package/plan/products/${info.id}`);
-        console.log(resTowerData)
         setTowerArr(resTowerData?.productList!==null&&resTowerData?.productList.length>0?resTowerData?.productList:[])
+        setNumTower('')
+        setNumPack('')
         setPackArr([])
     };
+    //获取包号
     const onPackSelect = async (info: any) => {
         const resPackData: any[] = await RequestUtil.get<any[]>(`/tower-production/package/plan/products/pkg/${info.id}`);
-        console.log(resPackData)
         setProductNumberId(info.id)
+        if(info.hasOwnProperty("productNumber")){
+            setNumPack('')
+        }
         setPackArr(resPackData!==null?resPackData:[])
         setBusyTableDataSource([])
     };
-    const onSelectTable = async (info: any) => {
+    //获取件号
+    const onSelectTable = async (info: any, type: string) => {
         const tableDataSource: any[] = await RequestUtil.get<any[]>(`/tower-production/package/plan/products/pkg/${info.id}/components`);
+        
+        var tempArray1:any = [];//临时数组1
+        var tempArray2:any = [];//临时数组2
+        if(tableDataSource!==null&& tableDataSource.length>0&& type!=='unnormal'){
+            for(var i=0;i<waitTableDataSource.length;i++){
+                tempArray1[waitTableDataSource[i]?.id]=true;//将数array2 中的元素值作为tempArray1 中的键，值为true；
+            }
+            for(var i=0;i<tableDataSource.length;i++){
+                if(!tempArray1[tableDataSource[i]?.id]){
+                tempArray2.push(tableDataSource[i]);//过滤array1 中与array2 相同的元素；
+                }
+            }
+        }
         console.log(tableDataSource)
-        setBusyTableDataSource(tableDataSource!==null?tableDataSource:[])
+        console.log(tempArray2)
+        setBusySelectedKeys([])
+        setBusySelectedRows([])
+        setBusyTableDataSource(type==='unnormal'?tableDataSource:tempArray2)
     };
-//     const wrapMaterialTree2DataNode=(materials: (IResponseTree & DataNode)[] = []): DataNode[] =>{
-//         materials.forEach((material: (IResponseTree & DataNode)): void => {
-//             material.title = material.treeName;
-//             material.key = material.code;
-//             material.disabled = material?.children.length>0?true:false;
-            
-//             if (material.children && material?.children.length) {
-//                 wrapMaterialTree2DataNode(material.children as (IResponseTree & DataNode)[]);
-//             }
-//         });
-//         return materials;
-//     }
-//     const renderTreeNodes = (data:any) => data.map((item:any) => {
-
-//       if (item.children && item.children.length > 0) {
-//           item.disabled = true;
-          
-//           return (<TreeNode key={ item.id } title={ item.treeName }  disabled={ item.disabled } >
-//               { renderTreeNodes(item.children) }
-//           </TreeNode>);
-//       }
-//       item.title = (
-//         <div>
-//          <span onClick={()=>{
-//            console.log(2)
-//          }}>
-//           {item.treeName}
-//          </span>
-//          {/* <Icon type='close' style={{marginLeft:10}} onClick={() => this.onClose(item.key, item.defaultValue)}/>
-//          <Icon type='check' style={{marginLeft:10}} onClick={() => this.onSave(item.key)}/> */}
-//          <Button type='link' onClick={()=>{
-//             console.log(item)
-//          }}>+</Button>
-//         </div>
-//        );
-//       return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
-//   });
-//     //展开控制
-//     const onExpand = (expandKeys: React.Key[]) => {
-//         setExpandKeys(expandKeys)
-//         setAutoExpandParent(false)
-//     }
+    const selectTowerTStyle = (index:number)=>{
+        if(index===numTowerT){
+            return{
+                color: '#fff',
+                backgroundColor:'#ffa538',
+                borderColor: '#ffa538'
+            }
+        }else{
+            return{
+                color: '#000'
+            }
+        } 
+    }
+    const selectTowerStyle = (index:number)=>{
+        if(index===numTower){
+            return{
+                color: '#fff',
+                backgroundColor:'#ffa538',
+                borderColor: '#ffa538'
+            }
+        }else{
+            return{
+                color: '#000'
+            }
+        } 
+    }
+    const selectPackStyle = (index:number)=>{
+        if(index===numPack){
+            return{
+                color: '#fff',
+                backgroundColor:'#ffa538',
+                borderColor: '#ffa538'
+            }
+        }else{
+            return{
+                color: '#000'
+            }
+        } 
+    }
  
     return <>
         <Spin spinning={false}>
@@ -272,8 +252,8 @@ export default function DailySchedule(): React.ReactNode {
                 <Form form={form} onFinish={(values) => finish(values)}>
                     <Row>
                         <Col>
-                            <Form.Item label="模糊查询项" name="fuzzyMsg" style={{marginRight:'20px'}}>
-                                <Input style={{ width: '300px' }} placeholder="请输入订单工程名称/计划号/塔型进行查询" />
+                            <Form.Item label="模糊查询项" name="fuzzyQuery" style={{marginRight:'20px'}}>
+                                <Input style={{ width: '300px' }} placeholder="请输入计划号/塔型进行查询" />
                             </Form.Item>
                         </Col>
                         <Col>
@@ -287,19 +267,19 @@ export default function DailySchedule(): React.ReactNode {
                 <Row style={{ background: '#fff' }}>
                     <Col span={2} >
                         <DetailTitle title='塔型'/>
-                        {towerTArr.length>0 && towerTArr.map((item:any)=>{
-                            return <div ><div className={ styles.btnDefault } onClick={()=>{
+                        {towerTArr.length>0 && towerTArr.map((item:any,index:number)=>{
+                            return <div style={selectTowerTStyle(index)} onClick={()=>{
                                 onTowerSelect(item)
-                            }}>{item.productCategoryName} <RightOutlined/></div>
-                            
-                            </div>
+                                setNumTowerT(index)
+                            }}>{item.productCategoryName}<RightOutlined/></div>
                         })}
                     </Col>
                     <Col span={2} >
                         <DetailTitle title='杆塔'/>
-                        {towerArr.length>0 && towerArr.map((item:any)=>{
-                            return <div onClick={()=>{
+                        {towerArr.length>0 && towerArr.map((item:any,index:number)=>{
+                            return <div style={selectTowerStyle(index)} onClick={()=>{
                                 onPackSelect(item)
+                                setNumTower(index)
                             }}>{item.productNumber} <RightOutlined/></div>
                         })}
                     </Col>
@@ -313,10 +293,12 @@ export default function DailySchedule(): React.ReactNode {
                            
                             }}/>]}
                         />
-                        {packArr.length>0 && packArr.map((item:any)=>{
-                            return <div onClick={()=>{
-                                onSelectTable(item)
-                            }}>{item.packageCode}（{item.packageComponentCount}件） <FormOutlined onClick={()=>{
+                        {packArr.length>0 && packArr.map((item:any,index:number)=>{
+                            return <div style={selectPackStyle(index)} onClick={()=>{
+                                onSelectTable(item,'normal')
+                                setCode(item.id)
+                                setNumPack(index)
+                            }}> {item.packageCode}（{item.packageComponentCount}件） <FormOutlined onClick={()=>{
                                 formRefNew.setFieldsValue({
                                     packageCode: item.packageCode
                                 })
@@ -331,17 +313,6 @@ export default function DailySchedule(): React.ReactNode {
                                 });
                             }}/>} </div>
                         })}
-                            {/* <Tree
-                                // onSelect={onSelect}
-                                // treeData={wrapMaterialTree2DataNode(treeData as (IResponseTree & DataNode)[])}
-                                // expandedKeys={expandKeys}
-                                // autoExpandParent={autoExpandParent}
-                                // onExpand={onExpand}
-                                defaultExpandAll
-                                selectedKeys={selectedKey}
-                            >
-                               {renderTreeNodes(treeData as (IResponseTree & DataNode)[])}
-                            </Tree> */}
                     </Col>
                     <Col span={8} style={{marginRight:"20px"}}>
                         <DetailTitle title='件号' operation={[<Button 
@@ -364,6 +335,8 @@ export default function DailySchedule(): React.ReactNode {
                                 }
                             }
                             console.log(tempArray2)
+                            setBusySelectedKeys([])
+                            setBusySelectedRows([])
                             setBusyTableDataSource(tempArray2)
                           }}
                         >移到待放区→</Button>]}/>
@@ -387,9 +360,31 @@ export default function DailySchedule(): React.ReactNode {
                           type='primary'
                           disabled={!(waitSelectedKeys.length>0)}
                           onClick={()=>{
-                            const value = busyTableDataSource;
-                            value.push(busySelectedRows)
-                            setBusyTableDataSource(value)
+                            const submitData={
+                                packageId:code,
+                                idList: waitSelectedKeys
+                            }
+                            RequestUtil.put(`/tower-production/package/components`,submitData).then(()=>{
+                                message.success('保存成功！')
+                            }).then(async ()=>{
+                                var tempArray1:any = [];//临时数组1
+                                var tempArray2:any = [];//临时数组2
+    
+                                for(var i=0;i<waitSelectedRows.length;i++){
+                                    tempArray1[waitSelectedRows[i]?.id]=true;//将数array2 中的元素值作为tempArray1 中的键，值为true；
+                                }
+                                for(var i=0;i<waitTableDataSource.length;i++){
+                                    if(!tempArray1[waitTableDataSource[i]?.id]){
+                                    tempArray2.push(waitTableDataSource[i]);//过滤array1 中与array2 相同的元素；
+                                    }
+                                }
+                                setWaitSelectedRows([])
+                                setWaitSelectedKeys([])
+                                console.log(tempArray2)
+                                setWaitTableDataSource(tempArray2)
+                                await onPackSelect({id: productNumberId})
+                                await onSelectTable({id: code},'unnormal')
+                            })
                           }}
                         >←移到包捆内</Button>]}/>
                         <CommonTable 
