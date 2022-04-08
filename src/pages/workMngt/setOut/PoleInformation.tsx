@@ -231,13 +231,13 @@ export default function PoleInformation(): React.ReactNode {
             console.log(editRef.current)
             setButtonName('保存')
             await onTip();
-            if(!(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0)){
+            // if(!(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0)){
                 await editRef.current?.onSave();
                 message.success('保存成功！');
                 setTipVisible(false);
                 setAllotVisible(false);
                 setRefresh(!refresh);
-            }
+            // }
             resove(true);
         } catch (error) {
             reject(false)
@@ -248,13 +248,13 @@ export default function PoleInformation(): React.ReactNode {
         try {
             setButtonName('提交')
             await onTip();
-            if(!(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0)){
+            // if(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0){
                 await editRef.current?.onSubmit();
                 message.success('提交成功！');
                 setTipVisible(false);
                 setAllotVisible(false);
                 setRefresh(!refresh);
-            }
+            // }
             resove(true);
         } catch (error) {
             reject(false)
