@@ -8,8 +8,8 @@ import React, { useRef, useState } from 'react';
 import { Input, DatePicker, Button, Modal, Radio, message, Space, Select, Spin, Form, Row, Col, Tree, Card } from 'antd';
 import { CommonTable, DetailContent, DetailTitle, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
-import { RightOutlined } from '@ant-design/icons';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { RightOutlined,PlusCircleOutlined,FormOutlined, DeleteOutlined} from '@ant-design/icons';
+
 import RequestUtil from '../../utils/RequestUtil';
 import { DataNode } from 'antd/lib/tree';
 import { packageTypeOptions } from '../../configuration/DictionaryOptions';
@@ -46,10 +46,13 @@ export interface IResponseTree {
 }
 export default function DailySchedule(): React.ReactNode {
     const [form] = Form.useForm();
+    const [formRef] = Form.useForm();
+    const [formRefNew] = Form.useForm();
     const [treeData, setTreeData] = useState<IResponseTree[]>([]);
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [selectedKey, setSelectedKey] = useState([]);
     const [visible, setVisible] = useState<boolean>(false);
+    const [visibleNew, setVisibleNew] = useState<boolean>(false);
     const [waitSelectedKeys, setWaitSelectedKeys] = useState<React.Key[]>([]);
     const [waitSelectedRows, setWaitSelectedRows] = useState([]);
     const [busySelectedKeys, setBusySelectedKeys] = useState<React.Key[]>([]);
@@ -60,7 +63,8 @@ export default function DailySchedule(): React.ReactNode {
     const [towerTArr,setTowerTArr]=useState<any>([])  //第一层塔型数据
     const [towerArr,setTowerArr]=useState<any>([])     //第二层杆塔数据
     const [packArr,setPackArr]=useState<any>([]) //第二层包数据
-    const [productNumberId,setProductNumberId]=useState<string>('') //第二层包数据
+    const [productNumberId,setProductNumberId]=useState<string>('') //杆塔Id
+    const [packageCodeId,setPackageCodeId]=useState<string>('') //包捆Id
     
 
 
@@ -108,31 +112,31 @@ export default function DailySchedule(): React.ReactNode {
     // }
     const tableColumns = [
         {
-            "key": "planNumber",
+            "key": "code",
             "title": "件号",
             "width": 100,
-            "dataIndex": "planNumber"
+            "dataIndex": "code"
         },
         {
-            "key": "planNumber",
+            "key": "structureSpec",
             "title": "材料规格",
             "width": 100,
-            "dataIndex": "planNumber"
+            "dataIndex": "structureSpec"
         },{
-            "key": "planNumber",
+            "key": "length",
             "title": "长度（mm）",
             "width": 100,
-            "dataIndex": "planNumber"
+            "dataIndex": "length"
         },{
-            "key": "planNumber",
+            "key": "num",
             "title": "数量",
             "width": 100,
-            "dataIndex": "planNumber"
+            "dataIndex": "num"
         },{
-            "key": "planNumber",
+            "key": "description",
             "title": "备注",
             "width": 150,
-            "dataIndex": "planNumber"
+            "dataIndex": "description"
         },
     ]
     const columns = [
@@ -153,31 +157,31 @@ export default function DailySchedule(): React.ReactNode {
             "dataIndex": "planNumber"
         },
         {
-            "key": "planNumber",
+            "key": "code",
             "title": "件号",
             "width": 100,
-            "dataIndex": "planNumber"
+            "dataIndex": "code"
         },
         {
-            "key": "planNumber",
+            "key": "structureSpec",
             "title": "材料规格",
             "width": 100,
-            "dataIndex": "planNumber"
+            "dataIndex": "structureSpec"
         },{
-            "key": "planNumber",
+            "key": "length",
             "title": "长度（mm）",
             "width": 100,
-            "dataIndex": "planNumber"
+            "dataIndex": "length"
         },{
-            "key": "planNumber",
+            "key": "num",
             "title": "数量",
             "width": 100,
-            "dataIndex": "planNumber"
+            "dataIndex": "num"
         },{
-            "key": "planNumber",
+            "key": "description",
             "title": "备注",
             "width": 150,
-            "dataIndex": "planNumber"
+            "dataIndex": "description"
         },
     ]
     const finish = async (values: any) => {
@@ -298,13 +302,30 @@ export default function DailySchedule(): React.ReactNode {
                     </Col>
                     <Col span={2} style={{marginRight:"20px"}}>
                         <DetailTitle title='包号' operation={[<PlusCircleOutlined onClick={()=>{
-                            setVisible(true)
+                            if(productNumberId){
+                                setVisible(true)
+                            }else{
+                                message.error('未选择杆塔，不可新增包！')
+                            }
+                           
                             }}/>]}
                         />
                         {packArr.length>0 && packArr.map((item:any)=>{
                             return <div onClick={()=>{
                                 onSelectTable(item)
-                            }}>{item.id}</div>
+                            }}>{item.packageCode} <FormOutlined onClick={()=>{
+                                formRefNew.setFieldsValue({
+                                    packageCode: item.packageCode
+                                })
+                                setPackageCodeId(item.id)
+                                setVisibleNew(true)
+                            }}/> <DeleteOutlined onClick={()=>{
+                                RequestUtil.delete(`/tower-production/package`,item.id).then(()=>{
+                                    message.success('删除成功！')
+                                }).then(()=>{
+                                    onPackSelect({id:productNumberId})
+                                });
+                            }}/> </div>
                         })}
                             {/* <Tree
                                 // onSelect={onSelect}
@@ -324,8 +345,9 @@ export default function DailySchedule(): React.ReactNode {
                           disabled={!(busySelectedKeys.length>0)}
                           onClick={()=>{
                             const value = waitTableDataSource;
-                            value.push(busySelectedRows)
-                            setWaitTableDataSource(value)
+                            value.push(...busySelectedRows)
+                            console.log(value)
+                            setWaitTableDataSource([...value])
                           }}
                         >移到待放区→</Button>]}/>
                         <CommonTable 
@@ -370,8 +392,8 @@ export default function DailySchedule(): React.ReactNode {
                     </Col>
                 </Row>
                 <Modal visible={ visible } width="40%" title={ "添加包捆" }  onOk={ async ()=>{
-                    await form.resetFields()
-                    const value = form.getFieldsValue(true)
+                    await formRef.validateFields()
+                    const value = formRef.getFieldsValue(true)
                     const submitData = {
                         packageCode:value.packageCode,
                         packageAttribute: value.packageAttribute,
@@ -386,26 +408,28 @@ export default function DailySchedule(): React.ReactNode {
                     });
                 } } onCancel={ ()=>{
                     setVisible(false)
-                    form.setFieldsValue({
-                        packageCode:'',
+                    formRef.setFieldsValue({
+                        packageCode:'未命名包',
                         packageType:'',
                     })
                 } }>
-                    <Form form={ form } labelCol={{ span: 4 }}>
-                        <Form.Item name="packageCode" label="包号" rules={[{
+                    <Form form={ formRef } labelCol={{ span: 4 }}>
+                        <Form.Item name="packageCode" label="包号" initialValue={'未命名包'} rules={[{
                                 "required": true,
                                 "message": "请输入包号"
                             },
                             {
                             pattern: /^[^\s]*$/,
                             message: '禁止输入空格',
-                            }]}>
-                            <Input placeholder="请输入" maxLength={ 50 } defaultValue={'未命名包'}/>
+                            }]}
+                        >
+                            <Input placeholder="请输入" maxLength={ 50 } />
                         </Form.Item>
-                        <Form.Item name="packageAttribute" label="包属性"  rules={[{
+                        <Form.Item name="packageAttribute" label="包属性" initialValue={0}  rules={[{
                                 "required": true,
                                 "message": "请选择包属性"
-                            }]}>
+                            }]}
+                        >
                             <Select placeholder="请选择" defaultValue={0} disabled style={{ width: "100%" }}>
                                 <Select.Option key={0} value={0}>专用包</Select.Option>
                             </Select>
@@ -413,7 +437,8 @@ export default function DailySchedule(): React.ReactNode {
                         <Form.Item name="packageType" label="包类型"  rules={[{
                                 "required": true,
                                 "message": "请选择包类型"
-                            }]}>
+                            }]}
+                        >
                             <Select placeholder="请选择包类型"  style={{ width: "100%" }} >
                                 {packageTypeOptions && packageTypeOptions.map(({ id, name }, index) => {
                                     return <Select.Option key={index} value={id}>
@@ -421,6 +446,39 @@ export default function DailySchedule(): React.ReactNode {
                                     </Select.Option>
                                 })}
                             </Select>
+                        </Form.Item>
+                    </Form>
+                </Modal>
+                <Modal visible={ visibleNew } width="40%" title={ "重命名包捆" }  onOk={ async ()=>{
+                    await formRefNew.validateFields()
+                    const value = formRefNew.getFieldsValue(true)
+                    const submitData = {
+                        packageCode:value.packageCode,
+                        id: packageCodeId
+                    }
+                    RequestUtil.put(`/tower-production/package`,submitData).then(()=>{
+                        message.success('命名成功！')
+                        setVisibleNew(false)
+                    }).then(()=>{
+                        onPackSelect({id:productNumberId})
+                    });
+                } } onCancel={ ()=>{
+                    setVisibleNew(false)
+                    formRefNew.setFieldsValue({
+                        packageCode:''
+                    })
+                } }>
+                    <Form form={ formRefNew } labelCol={{ span: 4 }}>
+                        <Form.Item name="packageCode" label="包号"  rules={[{
+                                "required": true,
+                                "message": "请输入包号"
+                            },
+                            {
+                            pattern: /^[^\s]*$/,
+                            message: '禁止输入空格',
+                            }]}
+                        >
+                            <Input placeholder="请输入" maxLength={ 50 } />
                         </Form.Item>
                     </Form>
                 </Modal>
