@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-{ // 路由配置
+ { // 路由配置
   "globalRouters": [
     {
       "name": "首页",
@@ -1030,7 +1030,7 @@
     },
     { // 工作管理-生产配料-构件明细
       "name": "构件明细",
-      "path": "/ingredients/production/detailed/:id/:materialTaskCode/:productCategoryName/:loftingState",
+      "path": "/ingredients/production/detailed/:id/:materialTaskCode/:productCategoryName/:loftingState/:batchNos",
       "module": "./pages/workMngt/production/Overview",
       "exact": true,
       "authority": "sw_work_management_production_ingredients_component_details"
