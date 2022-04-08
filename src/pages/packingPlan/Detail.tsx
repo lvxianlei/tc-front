@@ -242,7 +242,6 @@ export default function SetOutInformation(): React.ReactNode {
                 },
                 className: styles.tableRow
             })}
-
         />
         <CommonTable
             dataSource={packData}
