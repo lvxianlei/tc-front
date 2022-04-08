@@ -50,13 +50,13 @@ export default function DailySchedule(): React.ReactNode {
     const [formRefNew] = Form.useForm();
     const [treeData, setTreeData] = useState<IResponseTree[]>([]);
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
-    const [selectedKey, setSelectedKey] = useState([]);
+    const [selectedKey, setSelectedKey] = useState<any>([]);
     const [visible, setVisible] = useState<boolean>(false);
     const [visibleNew, setVisibleNew] = useState<boolean>(false);
     const [waitSelectedKeys, setWaitSelectedKeys] = useState<React.Key[]>([]);
-    const [waitSelectedRows, setWaitSelectedRows] = useState([]);
+    const [waitSelectedRows, setWaitSelectedRows] = useState<any>([]);
     const [busySelectedKeys, setBusySelectedKeys] = useState<React.Key[]>([]);
-    const [busySelectedRows, setBusySelectedRows] = useState([]);
+    const [busySelectedRows, setBusySelectedRows] = useState<any>([]);
     const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
     const [waitTableDataSource, setWaitTableDataSource] = useState<any[]>([]);
     const [busyTableDataSource, setBusyTableDataSource] = useState<any[]>([]);
@@ -352,14 +352,14 @@ export default function DailySchedule(): React.ReactNode {
                             value.push(...busySelectedRows)
                             console.log(value)
                             setWaitTableDataSource([...value])
-                            var tempArray1 = [];//临时数组1
-                            var tempArray2 = [];//临时数组2
+                            var tempArray1:any = [];//临时数组1
+                            var tempArray2:any = [];//临时数组2
 
                             for(var i=0;i<busySelectedRows.length;i++){
-                                tempArray1[busySelectedRows[i].messageId]=true;//将数array2 中的元素值作为tempArray1 中的键，值为true；
+                                tempArray1[busySelectedRows[i]?.id]=true;//将数array2 中的元素值作为tempArray1 中的键，值为true；
                             }
                             for(var i=0;i<busyTableDataSource.length;i++){
-                                if(!tempArray1[busyTableDataSource[i].messageId]){
+                                if(!tempArray1[busyTableDataSource[i]?.id]){
                                 tempArray2.push(busyTableDataSource[i]);//过滤array1 中与array2 相同的元素；
                                 }
                             }
