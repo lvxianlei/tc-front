@@ -208,7 +208,7 @@ export default forwardRef(function ApplyPacking({ id, detailData }: ApplyPacking
                 <CommonTable
                     haveIndex
                     columns={towerColumns}
-                    dataSource={[...dataSource,{id:5454},{id:5454},{id:5454},{id:5454},{id:5454},{id:5454},{id:5454}]}
+                    dataSource={[...dataSource]}
                     pagination={false}
                     scroll={{ y: '444px' }}
                     style={{
