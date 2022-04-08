@@ -18,6 +18,7 @@ interface IBale {
     readonly packageInfoVOList?: IPackageInfo[];
     readonly done?: string;
     readonly count?: string;
+    readonly packageStatus?: number;
 }
 
 interface IPackageInfo {
@@ -100,12 +101,20 @@ const baseColums = [
     {
         "dataIndex": "packageAttribute",
         "title": "包属性",
-        "type": "string"
+        "type": "select",
+        "enum": [
+            { "value": 0, "label": "专用包" },
+            { "value": 1, "label": "公用包" }
+        ]
     },
     {
         "dataIndex": "packageStatus",
         "title": "包状态",
-        "type": "string"
+        "type": "select",
+        "enum": [
+            { "value": 1, "label": "打包中" },
+            { "value": 2, "label": "已完成" }
+        ]
     }
 ]
 
@@ -154,17 +163,14 @@ export default function SetOutInformation(): React.ReactNode {
     const [searchForm] = Form.useForm();
     const [tableData, setTableData] = useState<IPackageInfo[]>();
     const [filterValue, setFilterValue] = useState({});
-    const [detailData, setDetailData] = useState<IBale>()
-    const { loading }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
-        getTableDataSource({});
-        resole([])
+
+    const { loading, data, run: getTableDataSource }: Record<string, any> = useRequest((filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data: IBale = await RequestUtil.put<IBale>(`/tower-production/package/detail`, { ...filterValues, id: params.id });
+        setTableData(data?.packageInfoVOList || []);
+        resole(data)
     }), {})
 
-    const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IBale = await RequestUtil.put<IBale>(`/tower-production/package/detail`, { ...filterValues, id: params.id });
-        setDetailData(data);
-        setTableData(data?.packageInfoVOList || []);
-    });
+    const detailData: IBale = data;
 
     const beforeFinishPacked = () => {
         if (detailData?.count === detailData?.done) {
@@ -172,10 +178,12 @@ export default function SetOutInformation(): React.ReactNode {
                 title: "所有件均已打进包捆，是否确定完成打包",
                 onOk: async () => new Promise(async (resove, reject) => {
                     try {
-                        const result = await finishPacked()
-                        message.success("打包完成")
-                        history.go(0);
-                        resove(result)
+                        RequestUtil.put<IBale>(`/tower-production/package/updatePackageInfo/${params.id}`).then(res => {
+                            message.success("打包完成")
+                            history.go(0);
+                        })
+
+                        resove(true)
                     } catch (error) {
                         reject(error)
                     }
@@ -186,10 +194,11 @@ export default function SetOutInformation(): React.ReactNode {
                 title: "部分件未打进包捆，是否确定完成打包",
                 onOk: async () => new Promise(async (resove, reject) => {
                     try {
-                        const result = await finishPacked()
-                        message.success("打包完成")
-                        history.go(0);
-                        resove(result)
+                        RequestUtil.put<IBale>(`/tower-production/package/updatePackageInfo`, { packageId: params.id }).then(res => {
+                            message.success("打包完成")
+                            history.go(0);
+                        })
+                        resove(true)
                     } catch (error) {
                         reject(error)
                     }
@@ -197,15 +206,6 @@ export default function SetOutInformation(): React.ReactNode {
             })
         }
     }
-
-    const { run: finishPacked } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        try {
-            const data: any = await RequestUtil.put<IBale>(`/tower-production/package/updatePackageInfo`, { packageId: params.id })
-            resole(data)
-        } catch (error) {
-            reject(error)
-        }
-    }))
 
     const onFinish = (value: Record<string, any>) => {
         setFilterValue(value);
@@ -241,7 +241,8 @@ export default function SetOutInformation(): React.ReactNode {
         <DetailContent key={'edtail'} operation={[
             <Space direction="horizontal" size="small" >
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
-                <Button type='primary' onClick={beforeFinishPacked}>完成打包</Button>
+                {detailData?.packageStatus === 1 ? <Button type='primary' onClick={beforeFinishPacked} disabled={(tableData || [])?.length <=
+                     0}>完成打包</Button> : null}
             </Space>
         ]}>
             <DetailTitle title="基本信息" />
@@ -281,7 +282,7 @@ export default function SetOutInformation(): React.ReactNode {
                         title: '已打数量',
                         dataIndex: 'packageNum',
                         render: (value: number, record: Record<string, any>, index: number) => (
-                            <InputNumber min={0} max={999999} placeholder="请输入" value={record?.packageNum} onBlur={(e) => updatePackage(record.id, e.target.value)} size='small' />
+                            <InputNumber min={0} max={Number(record?.num) - Number(record?.unPackageNum)} placeholder="请输入" value={record?.packageNum} onBlur={(e) => updatePackage(record.id, e.target.value)} size='small' disabled={detailData?.packageStatus === 2} />
                         )
                     },
                     {
@@ -289,7 +290,7 @@ export default function SetOutInformation(): React.ReactNode {
                         title: '缺件数量',
                         dataIndex: 'unPackageNum',
                         render: (value: number, record: Record<string, any>, index: number) => (
-                            <InputNumber min={0} max={999999} placeholder="请输入" value={value} onBlur={(e) => updatePackage(record.id, '', e.target.value)} size='small' />
+                            <InputNumber min={0} max={Number(record?.num) - Number(record?.packageNum)} placeholder="请输入" value={value} onBlur={(e) => updatePackage(record.id, '', e.target.value)} size='small' />
                         )
                     }
                 ]}

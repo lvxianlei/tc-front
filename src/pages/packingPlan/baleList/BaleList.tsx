@@ -44,7 +44,7 @@ export default function DailySchedule(): React.ReactNode {
     }), {})
 
     const getSummary = () => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<ISummaryData>(`/tower-production/package/summary`, { ...filterValue });
+        const data = await RequestUtil.get<ISummaryData>(`/tower-production/package/summary`, { packageStatus: confirmStatus, ...filterValue });
         setSummaryData(data);
     });
 
@@ -95,7 +95,15 @@ export default function DailySchedule(): React.ReactNode {
             "key": "packageAttribute",
             "title": "包属性",
             "width": 150,
-            "dataIndex": "packageAttribute"
+            "dataIndex": "packageAttribute",
+            render: (packageAttribute: number): React.ReactNode => {
+                switch (packageAttribute) {
+                    case 0:
+                        return '专用包';
+                    case 1:
+                        return '公用包';
+                }
+            }
         },
         {
             "key": "teamName",
@@ -107,7 +115,15 @@ export default function DailySchedule(): React.ReactNode {
             "key": "packageStatus",
             "title": "包状态",
             "width": 150,
-            "dataIndex": "packageStatus"
+            "dataIndex": "packageStatus",
+            render: (packageStatus: number): React.ReactNode => {
+                switch (packageStatus) {
+                    case 1:
+                        return '打包中';
+                    case 2:
+                        return '已完成';
+                }
+            }
         },
         {
             "key": "startTime",
@@ -133,6 +149,7 @@ export default function DailySchedule(): React.ReactNode {
                 message.success('批量完成！');
                 setRefresh(!refresh);
                 getSummary();
+                setSelectedKeys([]);
             })
         } else {
             message.warning('请选择需要批量完成的数据！')
@@ -171,7 +188,7 @@ export default function DailySchedule(): React.ReactNode {
                 )
             }]}
         headTabs={[]}
-        requestData={{ status: confirmStatus }}
+        requestData={{ packageStatus: confirmStatus }}
         extraOperation={
             <>
                 <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
@@ -180,19 +197,19 @@ export default function DailySchedule(): React.ReactNode {
                 </Radio.Group>
                 <p className={styles.title}>
                     <span className={styles.description}>总计划数：
-                        <span className={styles.content}>{summaryData?.planCount}</span>
+                        <span className={styles.content}>{summaryData?.planCount || 0}</span>
                     </span>
                     <span className={styles.description}>塔型数：
-                        <span className={styles.content}>{summaryData?.productCategoryCount}</span>
+                        <span className={styles.content}>{summaryData?.productCategoryCount || 0}</span>
                     </span>
                     <span className={styles.description}>总包捆数：
-                        <span className={styles.content}>{summaryData?.packageCount}</span>
+                        <span className={styles.content}>{summaryData?.packageCount || 0}</span>
                     </span>
                     <span className={styles.description}>总件数：
-                        <span className={styles.content}>{summaryData?.packageComponentCount}</span>
+                        <span className={styles.content}>{summaryData?.packageComponentCount || 0}</span>
                     </span>
                     <span className={styles.description}>总重量：
-                        <span className={styles.content}>{summaryData?.packageWeight}</span>KG
+                        <span className={styles.content}>{summaryData?.packageWeight || 0}</span> KG
                     </span>
                 </p>
                 <Dropdown overlay={menu}>
