@@ -235,13 +235,20 @@ export default function SetOutInformation(): React.ReactNode {
             dataSource={detailData?.packagePlanProductVOS}
             columns={tableColumns}
             style={{ position: 'absolute', width: '48%' }}
+            pagination={false}
             onRow={(record: Record<string, any>, index: number) => ({
                 onClick: async () => {
                     getTableDataSource(record.id)
                 },
                 className: styles.tableRow
             })}
+
         />
-        <CommonTable dataSource={packData} columns={packColumns} style={{ position: 'absolute', width: '48%', left: '50%' }} />
+        <CommonTable
+            dataSource={packData}
+            pagination={false}
+            columns={packColumns}
+            scroll={{ x: '500px' }}
+            style={{ position: 'relative', width: '48%', left: '50%' }} />
     </DetailContent>
 }
