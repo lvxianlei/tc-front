@@ -39,14 +39,16 @@ export default function Management(): React.ReactNode {
                         ...item,
                         render: (_a: any, _b: any) => <Link
                             to={`/project/management/detail/base/${_b.id}`}>
-                            <Typography.Paragraph
-                                ellipsis={{ rows: 1 }}
+                            <Typography.Text
+                                ellipsis={{ tooltip: _a }}
                                 style={{
                                     color: "#FF8C00",
-                                    cursor: "pointer"
+                                    cursor: "pointer",
+                                    width: "100%"
                                 }}
-                            > {_b.projectName}</Typography.Paragraph>
+                            > {_a}</Typography.Text>
                         </Link>
+                        
                     })
                 }
                 return item

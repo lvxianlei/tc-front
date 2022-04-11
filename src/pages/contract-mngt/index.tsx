@@ -147,13 +147,13 @@ export default function ContractMngt(): JSX.Element {
                     }
                 ]}
                 extraOperation={<>
-                    <Link to="/contract-mngt/index"><Button
+                    <Button
                         type="primary" ghost
                         onClick={() => {
                             setDetailId("")
                             setOprationType("new")
                             setEditVisible(true)
-                        }}>创建</Button></Link>
+                        }}>创建</Button>
                 </>}
                 searchFormItems={[
                     {

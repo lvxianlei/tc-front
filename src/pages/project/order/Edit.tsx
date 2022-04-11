@@ -49,7 +49,7 @@ export default function SeeGuarantee(): JSX.Element {
             // 影响含税单价，不含税单价，不含税金额
             // 不含税金额 = 不含税单价 * 订单重量
             const taxRate = addCollectionForm.getFieldValue("taxRate") * 1; // 税率
-            const taxPrice = addCollectionForm.getFieldValue("orderWeight") > 0 ? addCollectionForm.getFieldValue("taxAmount") / addCollectionForm.getFieldValue("orderWeight") : 0; // 含税单价
+            const taxPrice = (addCollectionForm.getFieldValue("orderWeight") > 0 && addCollectionForm.getFieldValue("taxAmount"))? addCollectionForm.getFieldValue("taxAmount") / addCollectionForm.getFieldValue("orderWeight") : 0; // 含税单价
             const price = taxPrice / (1 + taxRate  / 100);
             const result =  (+addCollectionForm.getFieldValue("orderWeight") || 0) * price; // 含税金额
             addCollectionForm.setFieldsValue({
