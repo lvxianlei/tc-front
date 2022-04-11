@@ -262,7 +262,8 @@ export default function BoltCheck(): React.ReactNode {
                             <Input.TextArea
                                 className="input"
                                 placeholder="请输入"
-                                maxLength={400}
+                                maxLength={800}
+                                showCount
                                 value={description}
                                 onChange={(e) => {
                                     setdescription(e.target.value)

@@ -27,8 +27,8 @@
     ],
     "productInfoData": [
         {
-            "dataIndex": "productCategoryNum",
-            "title": "塔型（个）"
+            "dataIndex": "productCategoryName",
+            "title": "塔型"
         },
         {
             "dataIndex": "productNum",

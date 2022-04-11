@@ -65,8 +65,8 @@ export default function PickDetail(): React.ReactNode {
             <DetailContent operation={[
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
-                <DetailTitle title="特殊要求" />
-                <BaseInfo columns={specialInfoData} dataSource={detailData || {}} />
+                {/* <DetailTitle title="特殊要求" />
+                <BaseInfo columns={specialInfoData} dataSource={detailData || {}} /> */}
                 <DetailTitle title="产品信息" />
                 <BaseInfo columns={productInfoData} dataSource={detailData || {}} />
                 <Attachment dataSource={detailData?.attachVos} />

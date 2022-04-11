@@ -59,7 +59,7 @@ export default function PlanTrack(): React.ReactNode {
         },
         {
             key: 'totalWeight',
-            title: '合同总量',
+            title: '合同总量（吨）',
             width: 100,
             dataIndex: 'totalWeight'
         },
@@ -135,10 +135,10 @@ export default function PlanTrack(): React.ReactNode {
                 label: '优先级',
                 children: <Select style={{ width: '100px' }} defaultValue={''}>
                     <Select.Option value={''} key={''}>全部</Select.Option>
-                    <Select.Option value={0} key={0}>紧急</Select.Option>
-                    <Select.Option value={1} key={1}>高</Select.Option>
-                    <Select.Option value={2} key={2}>中</Select.Option>
-                    <Select.Option value={3} key={3}>低</Select.Option>
+                    <Select.Option value={1} key={1}>紧急</Select.Option>
+                    <Select.Option value={2} key={2}>高</Select.Option>
+                    <Select.Option value={3} key={3}>中</Select.Option>
+                    <Select.Option value={4} key={4}>低</Select.Option>
                 </Select>
             },
             {
@@ -157,11 +157,11 @@ export default function PlanTrack(): React.ReactNode {
                 label: '塔型放样状态',
                 children: <Select style={{ width: '100px' }} defaultValue={''}>
                     <Select.Option value={''} key={''}>全部</Select.Option>
-                    <Select.Option value={0} key={0}>待指派</Select.Option>
-                    <Select.Option value={1} key={1}>放样中</Select.Option>
-                    <Select.Option value={2} key={2}>组焊中</Select.Option>
-                    <Select.Option value={3} key={3}>配段中</Select.Option>
-                    <Select.Option value={4} key={4}>已完成</Select.Option>
+                    <Select.Option value={1} key={1}>待指派</Select.Option>
+                    <Select.Option value={2} key={2}>放样中</Select.Option>
+                    <Select.Option value={3} key={3}>组焊中</Select.Option>
+                    <Select.Option value={4} key={4}>配段中</Select.Option>
+                    <Select.Option value={5} key={5}>已完成</Select.Option>
                 </Select>
             },
             {
