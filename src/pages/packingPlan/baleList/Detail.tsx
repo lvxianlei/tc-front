@@ -262,9 +262,8 @@ export default function SetOutInformation(): React.ReactNode {
                 <Form.Item name="componentStatus" label="件状态">
                     <Select placeholder="请选择" style={{ width: '120px' }} defaultValue={''}>
                         <Select.Option key={4} value={''}>全部</Select.Option>
-                        <Select.Option key={0} value={0}>已打</Select.Option>
-                        <Select.Option key={1} value={1}>未打</Select.Option>
-                        <Select.Option key={2} value={2}>缺件</Select.Option>
+                        <Select.Option key={0} value={0}>未打</Select.Option>
+                        <Select.Option key={1} value={1}>已打</Select.Option>
                     </Select>
                 </Form.Item>
                 <Space direction="horizontal">
