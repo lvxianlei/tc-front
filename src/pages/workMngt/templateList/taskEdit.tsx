@@ -360,7 +360,7 @@ export default function TaskNew(props:any){
                     productCategoryId: printData?.productCategoryId,
                     printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
                     printSpecialProcess: saveData?.printSpecialProcess?.join(','),
-                    productType: printData?.productType
+                    productTypeName: printData?.productTypeName
                 });
                 form.setFieldsValue({
                     structureNumber: data?.length
@@ -504,7 +504,7 @@ export default function TaskNew(props:any){
                                              form.setFieldsValue({
                                                  planNumber:value,
                                                  productCategoryId:'',
-                                                 productType:'',
+                                                 productTypeName:'',
                                                  print:'',
                                                  structureNumber:'',
                                                  drawLeaderDepartment:'',
@@ -537,12 +537,12 @@ export default function TaskNew(props:any){
                                         setMaterialUser(drawLeaderDepartment.records);
                                         
                                     }
-                                    const type:any =  formValue[0]?.productType;
+                                    const type:any =  formValue[0]?.productTypeName;
                                     if(type === '四管塔' ||type === '管塔'|| type === '架构'|| type === '架构塔'|| type === '钢架构'){
                                         setRadioValue('自定义')
                                         setPrintData({
                                             ...printData,
-                                            productType: formValue[0]?.productType,
+                                            productTypeName: formValue[0]?.productTypeName,
                                             productCategoryId: value,
                                             printSpecifications: '全部'
                                         })
@@ -563,7 +563,7 @@ export default function TaskNew(props:any){
                                         setPrintData({
                                             ...printData,
                                             printSpecifications: '1-12',
-                                            productType: formValue[0]?.productType,
+                                            productTypeName: formValue[0]?.productTypeName,
                                             productCategoryId: value,
                                             
                                         })
@@ -581,7 +581,7 @@ export default function TaskNew(props:any){
                                         })
                                         setPrintData({
                                             ...printData,
-                                            productType: formValue[0]?.productType,
+                                            productTypeName: formValue[0]?.productTypeName,
                                             productCategoryId: value,
                                             printSpecialProcess: '火曲,钻孔,铆焊'
                                         })
@@ -607,14 +607,15 @@ export default function TaskNew(props:any){
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="productType" label="产品类型" >
-                                        <Select style={{width:'100%'}} disabled>
+                                    <Form.Item name="productTypeName" label="产品类型" >
+                                        {/* <Select style={{width:'100%'}} disabled>
                                             {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                                 return <Select.Option key={index} value={name}>
                                                     {name}
                                                 </Select.Option>
                                             })}
-                                        </Select>
+                                        </Select> */}
+                                        <Input disabled/>
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -644,7 +645,7 @@ export default function TaskNew(props:any){
                                         productCategoryId: printData?.productCategoryId,
                                         printSpecifications: printData?.printSpecifications,
                                         printSpecialProcess: printData?.printSpecialProcess,
-                                        productType: printData?.productType
+                                        productTypeName: printData?.productTypeName
                                     });
                                     setSteelData(data)
                                     setSteelVisible(true)
