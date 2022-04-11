@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Input, Button, Modal, message, Space, Select, Spin, Form, Row, Col, Tree } from 'antd';
+import { Input, Button, Modal, message, Space, Select, Spin, Form, Row, Col, Tree, Popconfirm } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../common';
 import { RightOutlined,PlusCircleOutlined,FormOutlined, DeleteOutlined} from '@ant-design/icons';
 
@@ -54,9 +54,10 @@ export default function DailySchedule(): React.ReactNode {
     const [towerTArr,setTowerTArr]= useState<any>([])  //第一层塔型数据
     const [towerArr,setTowerArr]= useState<any>([])     //第二层杆塔数据
     const [packArr,setPackArr]= useState<any>([]) //第二层包数据
+    const [towerTId,setTowerTId]= useState<string>('') //杆塔Id
     const [productNumberId,setProductNumberId]= useState<string>('') //杆塔Id
     const [packageCodeId,setPackageCodeId]= useState<string>('') //包捆Id
-    const [code,setCode] = useState<string>('')//件号Id
+    const [code,setCode] = useState<any>({})//件号选中数据
     const [numTowerT,setNumTowerT]= useState<any>('');
     const [numTower,setNumTower]= useState<any>('');
     const [numPack,setNumPack]= useState<any>('');
@@ -75,8 +76,9 @@ export default function DailySchedule(): React.ReactNode {
             setNumTower('')
             setNumTowerT('')
             setPackageCodeId('')
+            setTowerTId('')
             setProductNumberId('')
-            setCode('')
+            setCode({})
             // setWaitSelectedKeys([])
             // setWaitSelectedRows([])
             setBusySelectedKeys([])
@@ -169,6 +171,7 @@ export default function DailySchedule(): React.ReactNode {
     //获取杆塔
     const onTowerSelect = async (info: any) => {
         const resTowerData: any = await RequestUtil.get<any[]>(`/tower-production/package/plan/products/${info.id}`);
+        setTowerTId(info.id);
         setTowerArr(resTowerData?.productList!==null&&resTowerData?.productList.length>0?resTowerData?.productList:[])
         setNumTower('')
         setNumPack('')
@@ -296,21 +299,37 @@ export default function DailySchedule(): React.ReactNode {
                         {packArr.length>0 && packArr.map((item:any,index:number)=>{
                             return <div style={selectPackStyle(index)} onClick={()=>{
                                 onSelectTable(item,'normal')
-                                setCode(item.id)
+                                setCode(item)
                                 setNumPack(index)
-                            }}> {item.packageCode}（{item.packageComponentCount}件） <FormOutlined onClick={()=>{
-                                formRefNew.setFieldsValue({
-                                    packageCode: item.packageCode
-                                })
-                                setPackageCodeId(item.id)
-                                setVisibleNew(true)
-                            }}/> {item.packageComponentCount===0 && <DeleteOutlined onClick={()=>{
+                            }}> {item.packageCode}（{item.packageComponentCount}件）
+                                {item.packageAttribute!==0?<Popconfirm
+                                    title="当前为通用包，是否批量改名?"
+                                    onConfirm={() => {
+                                        formRefNew.setFieldsValue({
+                                            packageCode: item.packageCode
+                                        })
+                                        setPackageCodeId(item.id)
+                                        setVisibleNew(true)
+                                    }}
+                                    okText="是"
+                                    cancelText="否"
+                                >
+                                    <FormOutlined/>
+                                </Popconfirm>:
+                                <FormOutlined onClick={()=>{
+                                        formRefNew.setFieldsValue({
+                                            packageCode: item.packageCode
+                                        })
+                                        setPackageCodeId(item.id)
+                                        setVisibleNew(true)
+                                }}/>}
+                                {item.packageComponentCount===0 && <DeleteOutlined onClick={()=>{
                                 
-                                RequestUtil.delete(`/tower-production/package`,item.id).then(()=>{
-                                    message.success('删除成功！')
-                                }).then(()=>{
-                                    onPackSelect({id:productNumberId})
-                                });
+                                    RequestUtil.delete(`/tower-production/package`,item.id).then(()=>{
+                                        message.success('删除成功！')
+                                    }).then(()=>{
+                                        onPackSelect({id:productNumberId})
+                                    });
                             }}/>} </div>
                         })}
                     </Col>
@@ -318,11 +337,25 @@ export default function DailySchedule(): React.ReactNode {
                         <DetailTitle title='件号' operation={[<Button 
                           type='primary'
                           disabled={!(busySelectedKeys.length>0)}
-                          onClick={()=>{
+                          onClick={async ()=>{
                             const value = waitTableDataSource;
                             value.push(...busySelectedRows)
-                            console.log(value)
-                            setWaitTableDataSource([...value])
+                            console.log('待选区所有数据',value)
+                            const addValue:any[] = await  RequestUtil.get(`/tower-production/package/plan/${towerTId}/products/pkg/${code?.packageCode}/components/${busySelectedRows.map((item:any)=>{
+                                return item.code
+                            }).join(',')}`)
+                            var temp:any = {};  //用于id判断重复
+                            var result:any[] = []; //最后的新数组
+                             
+                            const waitValue =  [...value].concat([...addValue])
+                            waitValue.map(function (item, index) {
+                              if(!(temp[item.id])){
+                                result.push(item);
+                                temp[item.id] = true;
+                              }
+                            });
+                            console.log('去重数据',result)
+                            setWaitTableDataSource(result)
                             var tempArray1:any = [];//临时数组1
                             var tempArray2:any = [];//临时数组2
 
@@ -334,7 +367,7 @@ export default function DailySchedule(): React.ReactNode {
                                 tempArray2.push(busyTableDataSource[i]);//过滤array1 中与array2 相同的元素；
                                 }
                             }
-                            console.log(tempArray2)
+                            console.log('包捆内数据',tempArray2)
                             setBusySelectedKeys([])
                             setBusySelectedRows([])
                             setBusyTableDataSource(tempArray2)
@@ -356,40 +389,78 @@ export default function DailySchedule(): React.ReactNode {
                         />
                     </Col>
                     <Col span={9} style={{marginRight:"20px"}}>
-                        <DetailTitle title='待放区' operation={[<Button 
-                          type='primary'
-                          disabled={!(waitSelectedKeys.length>0)}
-                          onClick={()=>{
-                            const submitData={
-                                packageId:code,
-                                idList: waitSelectedKeys
-                            }
-                            RequestUtil.put(`/tower-production/package/components`,submitData).then(()=>{
-                                message.success('保存成功！')
-                            }).then(async ()=>{
-                                var tempArray1:any = [];//临时数组1
-                                var tempArray2:any = [];//临时数组2
-    
-                                for(var i=0;i<waitSelectedRows.length;i++){
-                                    tempArray1[waitSelectedRows[i]?.id]=true;//将数array2 中的元素值作为tempArray1 中的键，值为true；
-                                }
-                                for(var i=0;i<waitTableDataSource.length;i++){
-                                    if(!tempArray1[waitTableDataSource[i]?.id]){
-                                    tempArray2.push(waitTableDataSource[i]);//过滤array1 中与array2 相同的元素；
-                                    }
-                                }
-                                setWaitSelectedRows([])
-                                setWaitSelectedKeys([])
-                                console.log(tempArray2)
-                                setWaitTableDataSource(tempArray2)
-                                await onPackSelect({id: productNumberId})
-                                await onSelectTable({id: code},'unnormal')
-                            })
-                          }}
+                        <DetailTitle title='待放区' operation={[waitSelectedRows.map((items:any) => items.packageAttribute).indexOf(1)>-1?
+                        <Popconfirm 
+                            title={'存在其他通用包，是否确定将此构件平均放在通用包内？'}
+                            onConfirm={() => {
+                                // const submitData={
+                                //     packageId: code?.id,
+                                //     idList: waitSelectedRows.map((item: { id: any; })=>{return item.id})
+                                // }
+                                // RequestUtil.put(`/tower-production/package/components`,submitData).then(()=>{
+                                //     message.success('保存成功！')
+                                // }).then(async ()=>{
+                                //     var tempArray1:any = [];//临时数组1
+                                //     var tempArray2:any = [];//临时数组2
+        
+                                //     for(var i=0;i<waitSelectedRows.length;i++){
+                                //         tempArray1[waitSelectedRows[i]?.id]=true;//将数array2 中的元素值作为tempArray1 中的键，值为true；
+                                //     }
+                                //     for(var i=0;i<waitTableDataSource.length;i++){
+                                //         if(!tempArray1[waitTableDataSource[i]?.id]){
+                                //         tempArray2.push(waitTableDataSource[i]);//过滤array1 中与array2 相同的元素；
+                                //         }
+                                //     }
+                                //     setWaitSelectedRows([])
+                                //     setWaitSelectedKeys([])
+                                //     console.log(tempArray2)
+                                //     setWaitTableDataSource(tempArray2)
+                                //     await onPackSelect({id: productNumberId})
+                                //     await onSelectTable({id: code?.id},'unnormal')
+                                // })
+                            }}
+                            okText="是"
+                            cancelText="否"
+                            disabled={!(waitSelectedKeys.length>0)}
+                        >
+                            <Button type='primary' disabled={!(waitSelectedKeys.length>0)}>←移到包捆内</Button>
+                        </Popconfirm>:
+                        <Button 
+                            type='primary'
+                            disabled={!(waitSelectedKeys.length>0)}
+                            onClick={()=>{
+                                console.log(waitSelectedRows)
+                                // const submitData={
+                                //     packageId: code?.id,
+                                //     idList: waitSelectedRows.map((item: { id: any; })=>{return item.id})
+                                // }
+                                // RequestUtil.put(`/tower-production/package/components`,submitData).then(()=>{
+                                //     message.success('保存成功！')
+                                // }).then(async ()=>{
+                                //     var tempArray1:any = [];//临时数组1
+                                //     var tempArray2:any = [];//临时数组2
+        
+                                //     for(var i=0;i<waitSelectedRows.length;i++){
+                                //         tempArray1[waitSelectedRows[i]?.id]=true;//将数array2 中的元素值作为tempArray1 中的键，值为true；
+                                //     }
+                                //     for(var i=0;i<waitTableDataSource.length;i++){
+                                //         if(!tempArray1[waitTableDataSource[i]?.id]){
+                                //         tempArray2.push(waitTableDataSource[i]);//过滤array1 中与array2 相同的元素；
+                                //         }
+                                //     }
+                                //     setWaitSelectedRows([])
+                                //     setWaitSelectedKeys([])
+                                //     console.log(tempArray2)
+                                //     setWaitTableDataSource(tempArray2)
+                                //     await onPackSelect({id: productNumberId})
+                                //     await onSelectTable({id: code?.id},'unnormal')
+                                // })
+                            }}
                         >←移到包捆内</Button>]}/>
                         <CommonTable 
                             columns={columns} 
-                            rowKey='id'
+                            // rowKey='id'
+                            rowKey={(records: any) => `${records.packageAttribute}-${records.code}`}
                             dataSource={[...waitTableDataSource]} 
                             pagination={false} 
                             rowSelection={{
@@ -397,7 +468,21 @@ export default function DailySchedule(): React.ReactNode {
                                 type: "checkbox",
                                 onChange: (selectedRowKeys: React.Key[], selectedRows:any)=>{
                                     setWaitSelectedKeys(selectedRowKeys)
-                                    setWaitSelectedRows(selectedRows)
+                                    
+                                    var tempArray1:any = [];//临时数组1
+                                    var tempArray2:any = [];//临时数组2
+
+                                    for(var i=0;i<selectedRows.length;i++){
+                                        tempArray1[selectedRows[i]?.packageAttribute]=true;//将数array2 中的元素值作为tempArray1 中的键，值为true；
+                                        tempArray1[selectedRows[i]?.code]=true;
+                                    }
+                                    for(var i=0;i<waitTableDataSource.length;i++){
+                                        if(tempArray1[waitTableDataSource[i]?.code]&&tempArray1[waitTableDataSource[i]?.packageAttribute]){
+                                        tempArray2.push(waitTableDataSource[i]);//过滤array1 中与array2 相同的元素；
+                                        }
+                                    }
+                                    setWaitSelectedRows(tempArray2)
+                                    // console.log()
                                 }
                             }}
                         />
