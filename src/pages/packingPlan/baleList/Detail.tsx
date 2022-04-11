@@ -242,7 +242,7 @@ export default function SetOutInformation(): React.ReactNode {
             <Space direction="horizontal" size="small" >
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
                 {detailData?.packageStatus === 1 ? <Button type='primary' onClick={beforeFinishPacked} disabled={(tableData || [])?.length <=
-                     0}>完成打包</Button> : null}
+                    0}>完成打包</Button> : null}
             </Space>
         ]}>
             <DetailTitle title="基本信息" />
@@ -262,9 +262,8 @@ export default function SetOutInformation(): React.ReactNode {
                 <Form.Item name="componentStatus" label="件状态">
                     <Select placeholder="请选择" style={{ width: '120px' }} defaultValue={''}>
                         <Select.Option key={4} value={''}>全部</Select.Option>
-                        <Select.Option key={0} value={0}>已打</Select.Option>
-                        <Select.Option key={1} value={1}>未打</Select.Option>
-                        <Select.Option key={2} value={2}>缺件</Select.Option>
+                        <Select.Option key={0} value={0}>未打</Select.Option>
+                        <Select.Option key={1} value={1}>已打</Select.Option>
                     </Select>
                 </Form.Item>
                 <Space direction="horizontal">
@@ -282,7 +281,7 @@ export default function SetOutInformation(): React.ReactNode {
                         title: '已打数量',
                         dataIndex: 'packageNum',
                         render: (value: number, record: Record<string, any>, index: number) => (
-                            <InputNumber min={0} max={Number(record?.num) - Number(record?.unPackageNum)} placeholder="请输入" value={record?.packageNum} onBlur={(e) => updatePackage(record.id, e.target.value)} size='small' disabled={detailData?.packageStatus === 2} />
+                            <InputNumber min={0} max={Number(record?.num) - Number(record?.unPackageNum)} placeholder="请输入" value={record?.packageNum} onBlur={(e) => updatePackage(record.id, e.target.value, record?.unPackageNum)} size='small' disabled={detailData?.packageStatus === 2} />
                         )
                     },
                     {
@@ -290,7 +289,7 @@ export default function SetOutInformation(): React.ReactNode {
                         title: '缺件数量',
                         dataIndex: 'unPackageNum',
                         render: (value: number, record: Record<string, any>, index: number) => (
-                            <InputNumber min={0} max={Number(record?.num) - Number(record?.packageNum)} placeholder="请输入" value={value} onBlur={(e) => updatePackage(record.id, '', e.target.value)} size='small' />
+                            <InputNumber min={0} max={Number(record?.num) - Number(record?.packageNum)} placeholder="请输入" value={value} onBlur={(e) => updatePackage(record.id, record?.packageNum, e.target.value)} size='small' />
                         )
                     }
                 ]}
