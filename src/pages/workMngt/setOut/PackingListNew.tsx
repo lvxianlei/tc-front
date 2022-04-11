@@ -222,7 +222,7 @@ export default function PackingListNew(): React.ReactNode {
                 weldingStructureList: packagingData[index].weldingStructureList?.map((res, index) => {
                     return {
                         ...res,
-                        businessId: value.businessId,
+                        businessId: res.businessId,
                         structureCount: Number(res.structureCount) - Number(num) * Number(res.singleNum || 1),
                         totalWeight: (Number(res.structureCount) - Number(num) * Number(res.singleNum || 1)) * Number(res.basicsWeight),
                     }
