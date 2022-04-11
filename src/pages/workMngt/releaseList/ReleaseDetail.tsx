@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input,  Select } from 'antd';
+import { Button, Input, Select } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
@@ -13,8 +13,8 @@ export default function ReleaseList(): React.ReactNode {
     const params = useParams<{ id: string, productCategoryId: string }>()
     const history = useHistory();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
-        const value:any =  Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
+        const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
+        const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
         console.log(value)
         setMaterialNames(value)
         resole(value);
@@ -176,21 +176,21 @@ export default function ReleaseList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={ { productCategoryId:params.productCategoryId, id:params.id } }
+            requestData={{ productCategoryId: params.productCategoryId, id: params.id }}
             exportPath="/tower-science/loftingBatch/batchDetail"
-            extraOperation={<Button style={{margin:'0px 20px 0px 0px'}}  onClick={() => history.goBack()} >返回</Button>}
+            extraOperation={<Button style={{ margin: '0px 20px 0px 0px' }} onClick={() => history.goBack()} >返回</Button>}
             searchFormItems={[
                 {
                     name: 'materialName',
-                    label:'材料名称',
-                    children:  <Select style={{width:"100px"}} defaultValue={''}>
-                                    <Select.Option value={''} key ={''}>全部</Select.Option>
-                                    {materialNames && materialNames.map((item: any) => {
-                                        return <Select.Option key={item} value={item}>
-                                            {item}
-                                        </Select.Option>
-                                    })}
-                                </Select>
+                    label: '材料名称',
+                    children: <Select style={{ width: "100px" }} defaultValue={''}>
+                        <Select.Option value={''} key={''}>全部</Select.Option>
+                        {materialNames && materialNames.map((item: any) => {
+                            return <Select.Option key={item} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
                 },
                 {
                     name: 'fuzzyMsg',

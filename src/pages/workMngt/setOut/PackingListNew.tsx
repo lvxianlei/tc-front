@@ -42,7 +42,7 @@ export default function PackingListNew(): React.ReactNode {
     const [reuse, setReuse] = useState<any>();
     // const [packageAttributeName, setPackageAttributeName] = useState<string>('专用');
     const [packageWeight, setPackageWeight] = useState<number>(0);
-  
+
     useEffect(() => setPackageWeight(eval((showParts ? [...packagingData] : dataShowParts([...packagingData])).map(item => { return Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0), [JSON.stringify([...packagingData])])
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
@@ -62,7 +62,7 @@ export default function PackingListNew(): React.ReactNode {
         }));
         const data: any = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
         setUserList(data?.loftingProductSegmentList);
-        
+
         resole(data);
     });
 
@@ -222,7 +222,7 @@ export default function PackingListNew(): React.ReactNode {
                 weldingStructureList: packagingData[index].weldingStructureList?.map((res, index) => {
                     return {
                         ...res,
-                        businessId: value.businessId,
+                        businessId: res.businessId,
                         structureCount: Number(res.structureCount) - Number(num) * Number(res.singleNum || 1),
                         totalWeight: (Number(res.structureCount) - Number(num) * Number(res.singleNum || 1)) * Number(res.basicsWeight),
                     }
@@ -422,24 +422,28 @@ export default function PackingListNew(): React.ReactNode {
             value.isCommonSegment = 1
         }
         let list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...value, packageStructureId: params.packId });
-        list = list.map(res=>{
+        list = list.map(res => {
             const packagingRow = packagingData.filter(item => item.businessId === res.businessId);
-            if(packagingRow.length > 0) {
+            if (packagingRow.length > 0) {
                 return {
                     ...res,
-                    structureRemainingNum: Number(res.packageRemainingNum) - Number(packagingRow[0].structureCount)
+                    isChild: false,
+                    structureRemainingNum: Number(res.packageRemainingNum) - Number(packagingRow[0].structureCount),
+                    weldingStructureList: res.weldingStructureList?.map(item => { return { ...item, isChild: true } })
                 }
             } else {
-                return res
+                return {
+                    ...res,
+                    isChild: false,
+                    weldingStructureList: res.weldingStructureList?.map(item => { return { ...item, isChild: true } })
+                }
             }
         })
-        setStayDistrict(list.map((res, index) => {
-            return {
-                ...res,
-                isChild: false,
-                weldingStructureList: res.weldingStructureList?.map(item => { return { ...item, isChild: true } })
-            }
-        }));
+        if (showParts) {
+            setStayDistrict(dataShowParts(list));
+        } else {
+            setStayDistrict(list);
+        }
     }
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: IBundle[]) => {

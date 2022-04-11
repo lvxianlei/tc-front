@@ -164,7 +164,7 @@ export default function Release(): React.ReactNode {
                             loftingBatchProductDTOList: value.loftingBatchProductDTOList.map((item:any)=>{
                                 return {
                                     ...item,
-                                    batchNum: item.batchNum===null?0:item.batchNum
+                                    batchNum: item.batchNum?item.batchNum===null?0:item.batchNum:0
                                 }
                             })
                         }
@@ -358,15 +358,16 @@ export default function Release(): React.ReactNode {
                     setCheck(e.target.checked)
                     
                 }}>显示已全部下达</Checkbox>,<Button type="primary" onClick={ ()=>{
-                    const value = tableDataSource.map((item:any)=>{
-                        if(selectedKeys.includes(item.id)&&item.segmentNum-item.issuedNum!==0){
+                    const value = tableDataSource.map((item:any,index:number)=>{
+                        if(selectedKeys.includes(index.toString())&&item.segmentNum-item.issuedNum!==0){
                             return {
                                 ...item,
                                 batchNum:item.issuedNum?item.segmentNum-item.issuedNum:item.segmentNum
                             }
                         }else{
                             return {
-                                ...item
+                                ...item,
+                                batchNum: item.batchNum?item.batchNum:0
                             }
                         }
                         
@@ -437,7 +438,8 @@ export default function Release(): React.ReactNode {
                                     disabled: record.segmentNum===record.issuedNum
                                 })
                             }}
-                            rowKey={'id'}
+                            rowKey={(item: any, index:number) => `${index}`}
+                            // rowKey = {'index'}
                         />
                     </Form>
         </DetailContent>

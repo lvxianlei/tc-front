@@ -194,7 +194,7 @@ export default function ReleaseList(): React.ReactNode {
             width: 100,
             dataIndex: 'trialAssemble',
             render:(text:string)=>{
-                return text==='1'?'是':text==='0'?'否':'-'
+                return text==='1'?'试组装':text==='0'?'免试组':'-'
             }
         },
         { 
