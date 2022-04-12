@@ -6,7 +6,6 @@ import { base } from "./bidding.json"
 import { sourceOptions } from '../../configuration/DictionaryOptions'
 const { Paragraph } = Typography
 export default function Information(): React.ReactNode {
-    const [filterValue, setFilterValue] = useState({})
     const dictionaryOptions: any = sourceOptions
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
@@ -27,7 +26,6 @@ export default function Information(): React.ReactNode {
         if (value.source) {
             value.source = value.source.join(",")
         }
-        setFilterValue(value)
         return value
     }
 
@@ -94,7 +92,6 @@ export default function Information(): React.ReactNode {
         ]}
         headTabs={[]}
         onFilterSubmit={onFilterSubmit}
-        filterValue={filterValue}
         searchFormItems={[
             {
                 name: 'startBidBuyEndTime',

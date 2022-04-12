@@ -441,7 +441,7 @@ export default function Lofting(): React.ReactNode {
                     </div>
                 )
             }]}
-            filterValues={{ segmentGroupId: params.productSegmentId }}
+            filterValue={{ segmentGroupId: params.productSegmentId }}
             pagination={false}
             tableProps={{
                 rowSelection: {

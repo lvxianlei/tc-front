@@ -1,7 +1,7 @@
 import React, { Key, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { Button, DatePicker, Input, message, Modal, Radio, Row, Select } from "antd"
-import { Page } from "../../common"
+import { SearchTable as Page } from "../../common"
 import { pageTable, workShopOrder } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
@@ -46,15 +46,28 @@ export default () => {
     return <Page
         path="/tower-aps/workshopOrder"
         filterValue={filterValue}
-        columns={status === 1 ? pageTable : [...workShopOrder, {
-            title: "操作",
-            width: 50,
-            fixed: "right",
-            dataIndex: "opration",
-            render: (_, record: any) => <Link
-                to={`/planProd/publishWorkshop/${record.id}`}
-            ><Button type="link">手动分配车间</Button></Link>
-        }]}
+        columns={status === 1 ? [
+            ...pageTable,
+            {
+                title: "操作",
+                width: 100,
+                fixed: "right",
+                dataIndex: "opration",
+                render: (_, record: any) => <>
+                    <Link to={`/planProd/publishWorkshop/${record.id}`}><Button type="link" size="small">构件明细</Button></Link>
+                    <Link to={`/planProd/publishWorkshop/${record.id}`}><Button type="link" size="small">组焊明细</Button></Link>
+                </>
+            }] : [
+            ...workShopOrder,
+            {
+                title: "操作",
+                width: 50,
+                fixed: "right",
+                dataIndex: "opration",
+                render: (_, record: any) => <Link
+                    to={`/planProd/publishWorkshop/${record.id}`}
+                >手动分配车间</Link>
+            }]}
         extraOperation={
             <>
                 <Radio.Group
@@ -67,7 +80,10 @@ export default () => {
                     <Radio.Button value={1}>待分配下达单</Radio.Button>
                     <Radio.Button value={2}>已分配下达单</Radio.Button>
                 </Radio.Group>
-                {status === 1 && <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleAuto}>自动分配车间</Button>}
+                {status === 1 && <>
+                    <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleAuto}>电焊分配车间</Button>
+                    <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleAuto}>快速分配车间</Button>
+                </>}
             </>
         }
         searchFormItems={[

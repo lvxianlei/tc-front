@@ -24,7 +24,7 @@ export default function ManualDistribute(): ReactElement {
         }
     }))
 
-    const { data: weldingData, run: weldingRun } = useRequest<any>((params) => new Promise(async (resole, reject) => {
+    const { run: weldingRun } = useRequest<any>((params) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.put(`/tower-aps/workshopOrder/manualDistribute`, params);
             message.success("手动分配车间完成...")
