@@ -393,31 +393,31 @@ export default function DailySchedule(): React.ReactNode {
                         <Popconfirm 
                             title={'存在其他通用包，是否确定将此构件平均放在通用包内？'}
                             onConfirm={() => {
-                                // const submitData={
-                                //     packageId: code?.id,
-                                //     idList: waitSelectedRows.map((item: { id: any; })=>{return item.id})
-                                // }
-                                // RequestUtil.put(`/tower-production/package/components`,submitData).then(()=>{
-                                //     message.success('保存成功！')
-                                // }).then(async ()=>{
-                                //     var tempArray1:any = [];//临时数组1
-                                //     var tempArray2:any = [];//临时数组2
+                                const submitData={
+                                    packageId: code?.id,
+                                    idList: waitSelectedRows.map((item: { id: any; })=>{return item.id})
+                                }
+                                RequestUtil.put(`/tower-production/package/components`,submitData).then(()=>{
+                                    message.success('保存成功！')
+                                }).then(async ()=>{
+                                    var tempArray1:any = [];//临时数组1
+                                    var tempArray2:any = [];//临时数组2
         
-                                //     for(var i=0;i<waitSelectedRows.length;i++){
-                                //         tempArray1[waitSelectedRows[i]?.id]=true;//将数array2 中的元素值作为tempArray1 中的键，值为true；
-                                //     }
-                                //     for(var i=0;i<waitTableDataSource.length;i++){
-                                //         if(!tempArray1[waitTableDataSource[i]?.id]){
-                                //         tempArray2.push(waitTableDataSource[i]);//过滤array1 中与array2 相同的元素；
-                                //         }
-                                //     }
-                                //     setWaitSelectedRows([])
-                                //     setWaitSelectedKeys([])
-                                //     console.log(tempArray2)
-                                //     setWaitTableDataSource(tempArray2)
-                                //     await onPackSelect({id: productNumberId})
-                                //     await onSelectTable({id: code?.id},'unnormal')
-                                // })
+                                    for(var i=0;i<waitSelectedRows.length;i++){
+                                        tempArray1[waitSelectedRows[i]?.id]=true;//将数array2 中的元素值作为tempArray1 中的键，值为true；
+                                    }
+                                    for(var i=0;i<waitTableDataSource.length;i++){
+                                        if(!tempArray1[waitTableDataSource[i]?.id]){
+                                        tempArray2.push(waitTableDataSource[i]);//过滤array1 中与array2 相同的元素；
+                                        }
+                                    }
+                                    setWaitSelectedRows([])
+                                    setWaitSelectedKeys([])
+                                    console.log(tempArray2)
+                                    setWaitTableDataSource(tempArray2)
+                                    await onPackSelect({id: productNumberId})
+                                    await onSelectTable({id: code?.id},'unnormal')
+                                })
                             }}
                             okText="是"
                             cancelText="否"
