@@ -55,7 +55,7 @@ export default function ReleaseList(): React.ReactNode {
         },
         {
             key: 'mainPartId',
-            title: '组件号',
+            title: '主件号',
             width: 100,
             dataIndex: 'mainPartId'
         },
