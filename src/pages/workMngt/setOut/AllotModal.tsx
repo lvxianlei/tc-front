@@ -54,7 +54,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [id] })
+    }), { refreshDeps: [id,allotData,status] })
     const { run: visibleData } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
             form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
