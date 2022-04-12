@@ -6,62 +6,14 @@ import { useParams } from "react-router"
 import { Button, Col, Form, Input, message, Modal, Pagination, Radio, Row, Select, Space } from "antd"
 import { CommonAliTable } from "../../common"
 import styles from "../../common/CommonTable.module.less"
-export default function ManualDistribute(): ReactElement {
+export default function Welding(): ReactElement {
     const params = useParams<{ id: string }>()
     const [pagenation, setPagenation] = useState<any>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
-    const [workshopForm] = Form.useForm()
-    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
-    const onSelectChange = (selected: Key[]) => setSelectedRowKeys(selected)
-    const [status, setStatus] = useState<number>(1)
-
-    const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: any = await RequestUtil.get(`/tower-aps/productionUnit?size=1000`);
-            resole(result.records || [])
-        } catch (error) {
-            reject(error)
-        }
-    }))
-
-    const { run: weldingRun } = useRequest<any>((params) => new Promise(async (resole, reject) => {
-        try {
-            const result: any = await RequestUtil.put(`/tower-aps/workshopOrder/manualDistribute`, params);
-            message.success("手动分配车间完成...")
-            setSelectedRowKeys([])
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
-    const handleClick = () => {
-        Modal.confirm({
-            title: "手动分配车间",
-            icon: null,
-            content: <Form form={workshopForm}>
-                <Form.Item name="workshopId" label="生产/组焊车间" rules={[{ required: true, message: "请选择生产/组焊车间..." }]}>
-                    <Select>
-                        {listData.map((item: any) => <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>)}
-                    </Select>
-                </Form.Item>
-            </Form>,
-            onOk: async () => {
-                const workshop = await workshopForm.validateFields()
-                return weldingRun(selectedRowKeys.map((item: Key) => ({
-                    id: item,
-                    workshopId: workshop.workshopId,
-                    workshopName: listData.find((item: any) => item.id === workshop.workshopId).name,
-                    type: status
-                })))
-            }
-        })
-    }
-
     const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const formValue = await form.getFieldsValue()
-            const result: any = await RequestUtil.get(`/tower-aps/workshopOrder/${status === 1 ? "structure" : "welding"}`, {
+            const result: any = await RequestUtil.get(`/tower-aps/workshopOrder/welding`, {
                 issueOrderId: params.id,
                 ...formValue,
                 current: pagenation.current,
@@ -71,7 +23,7 @@ export default function ManualDistribute(): ReactElement {
         } catch (error) {
             reject(false)
         }
-    }), { refreshDeps: [pagenation.current, pagenation.pageSize, status] })
+    }), { refreshDeps: [pagenation.current, pagenation.pageSize] })
 
     const paginationChange = useCallback((page: number, pageSize?: number) => {
         setPagenation({
@@ -110,28 +62,11 @@ export default function ManualDistribute(): ReactElement {
                 </Col>
             </Row>
         </Form>
-        <Space style={{
-            marginBottom: 12,
-            paddingLeft: 12
-        }} size={12}>
-            <Radio.Group
-                value={status}
-                onChange={(event) => setStatus(event.target.value)}
-            >
-                <Radio.Button value={1}>构建明细</Radio.Button>
-                <Radio.Button value={2}>组焊明细</Radio.Button>
-            </Radio.Group>
-            <Button type="primary" onClick={handleClick}>手动分配车间</Button>
-        </Space>
         <CommonAliTable
-            columns={status === 1 ? welding : structure}
+            columns={welding}
             size="small"
-            className={status === 1 ? "" : "bordered"}
+            className="bordered"
             isLoading={loading}
-            rowSelection={{
-                selectedRowKeys: selectedRowKeys,
-                onChange: onSelectChange
-            }}
             dataSource={data?.recordDate.records || []}
         />
         <footer className={styles.pagenationWarp}>

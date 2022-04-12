@@ -9,10 +9,6 @@
             "dataIndex": "factoryName"
         },
         {
-            "title": "组焊类型",
-            "dataIndex": "weldingTypeName"
-        },
-        {
             "title": "组焊加工车间",
             "dataIndex": "weldingWorkshopName"
         },
@@ -32,13 +28,6 @@
         {
             "title": "厂区名",
             "dataIndex": "factoryId",
-            "type": "select",
-            "enum": [],
-            "required": true
-        },
-        {
-            "title": "组焊类型",
-            "dataIndex": "weldingTypeId",
             "type": "select",
             "enum": [],
             "required": true

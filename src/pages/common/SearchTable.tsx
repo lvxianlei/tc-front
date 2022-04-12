@@ -1,5 +1,5 @@
 
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../utils/RequestUtil"
 import CommonAliTable, { columnsProps } from "./CommonAliTable"
@@ -19,7 +19,7 @@ interface SearchTableProps {
     rowKey?: string | ((row: any) => string)
     searchFormItems: SearchFormItemsProps[]
     onFilterSubmit?: <T>(arg: T) => T
-    filterValues?: { [key: string]: any }
+    filterValue?: { [key: string]: any }
     extraOperation?: React.ReactNode | React.ReactNode[]
     tableProps?: { [i: string]: any }
     pagination?: boolean
@@ -38,28 +38,27 @@ export default function SearchTable({
     onFilterSubmit,
     extraOperation,
     searchFormItems = [],
-    filterValues,
+    filterValue = {},
     tableProps,
     pagination,
     ...props }: SearchTableProps): JSX.Element {
     const [pagenationParams, setPagenationParams] = useState<PagenationProps>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
-    const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest<{ [key: string]: any }>((params: { [key: string]: any } = {}) => new Promise(async (resole, reject) => {
         try {
-            const formValue = await form.getFieldsValue()
-            const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
             if (pagination !== false) {
                 params.current = pagenationParams.current
                 params.size = pagenationParams.pageSize
             }
-            const paramsOptions = filterValues ? stringify({ ...params, ...filterValues }) : stringify(params)
+            const paramsOptions = stringify({ ...params, ...filterValue })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole(result)
         } catch (error) {
             reject(false)
         }
-    }), { refreshDeps: [pagenationParams.current, pagenationParams.pageSize] })
+    }), { refreshDeps: [pagenationParams.current, pagenationParams.pageSize, JSON.stringify(filterValue)] })
+
     const paginationChange = useCallback((page: number, pageSize?: number) => {
         setPagenationParams({
             ...pagenationParams,
@@ -70,8 +69,10 @@ export default function SearchTable({
 
     return <>
         {searchFormItems.length > 0 && <Form style={{ marginBottom: 16 }} form={form} onFinish={async () => {
+            const formValue = await form.getFieldsValue()
+            const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
             setPagenationParams({ ...pagenationParams, current: 1, pageSize: 10 })
-            await run()
+            await run(params)
         }}>
             <Row gutter={[8, 8]}>
                 {searchFormItems.map((fItem: any) => <Col
