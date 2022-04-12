@@ -141,9 +141,9 @@ const tableColumns = [
         dataIndex: 'totalWeight'
     },
     {
-        key: 'productPackageStatus',
+        key: 'productPackageStatusName',
         title: '杆塔状态',
-        dataIndex: 'productPackageStatus'
+        dataIndex: 'productPackageStatusName'
     },
     {
         key: 'packageProgress',
