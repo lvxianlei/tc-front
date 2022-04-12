@@ -1,6 +1,6 @@
 import React, { Key, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
-import { Button, DatePicker, Input, message, Modal, Radio, Row, Select } from "antd"
+import { Button, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from "antd"
 import { SearchTable as Page } from "../../common"
 import { pageTable, workShopOrder } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
@@ -9,6 +9,7 @@ import { productTypeOptions } from "../../../configuration/DictionaryOptions"
 
 export default () => {
     const history = useHistory()
+    const [weldingForm] = Form.useForm()
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ status: 1 });
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
     const onSelectChange = (selected: Key[]) => setSelectedRowKeys(selected)
@@ -21,6 +22,26 @@ export default () => {
             reject(error)
         }
     }), { manual: true })
+
+    const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-aps/productionUnit?size=1000`);
+            resole(result.records || [])
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
+    const { run: weldingRun } = useRequest<any>((params) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.post(`/tower-aps/workshopOrder/welding/distribution`, params);
+            message.success("电焊分配车间完成...")
+            setSelectedRowKeys([])
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }))
 
     const handleAuto = async () => {
         await run(selectedRowKeys)
@@ -43,6 +64,28 @@ export default () => {
         }
     }
 
+    const handleWeldingClick = async () => {
+        Modal.confirm({
+            icon: null,
+            title: "电焊分配车间",
+            content: <Form form={weldingForm}>
+                <Form.Item name="workshopId" label="电焊车间" rules={[{ required: true, message: "请选择组焊车间..." }]}>
+                    <Select>
+                        {listData.map((item: any) => <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>)}
+                    </Select>
+                </Form.Item>
+            </Form>,
+            onOk: async () => {
+                const workshop = await weldingForm.validateFields()
+                return weldingRun({
+                    workshopId: workshop.workshopId,
+                    workshopName: listData.find((item: any) => item.id === workshop.workshopId).name,
+                    issueOrderIds: selectedRowKeys
+                })
+            }
+        })
+    }
+
     return <Page
         path="/tower-aps/workshopOrder"
         filterValue={filterValue}
@@ -54,8 +97,8 @@ export default () => {
                 fixed: "right",
                 dataIndex: "opration",
                 render: (_, record: any) => <>
-                    <Link to={`/planProd/publishWorkshop/${record.id}`}><Button type="link" size="small">构件明细</Button></Link>
-                    <Link to={`/planProd/publishWorkshop/${record.id}`}><Button type="link" size="small">组焊明细</Button></Link>
+                    <Link to={`/planProd/publishWorkshop/welding/${record.id}`}><Button type="link" size="small">构件明细</Button></Link>
+                    <Link to={`/planProd/publishWorkshop/structure/${record.id}`}><Button type="link" size="small">组焊明细</Button></Link>
                 </>
             }] : [
             ...workShopOrder,
@@ -65,7 +108,7 @@ export default () => {
                 fixed: "right",
                 dataIndex: "opration",
                 render: (_, record: any) => <Link
-                    to={`/planProd/publishWorkshop/${record.id}`}
+                    to={`/planProd/publishWorkshop/manual/${record.id}`}
                 >手动分配车间</Link>
             }]}
         extraOperation={
@@ -81,7 +124,7 @@ export default () => {
                     <Radio.Button value={2}>已分配下达单</Radio.Button>
                 </Radio.Group>
                 {status === 1 && <>
-                    <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleAuto}>电焊分配车间</Button>
+                    <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleWeldingClick}>电焊分配车间</Button>
                     <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleAuto}>快速分配车间</Button>
                 </>}
             </>

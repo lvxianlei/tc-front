@@ -87,6 +87,11 @@ export default function StaffMngt(): React.ReactNode {
             width: 120
         },
         {
+            title: "企业微信用户",
+            dataIndex: 'businessWxUserId',
+            width: 120
+        },
+        {
             title: '员工类型',
             width: 100,
             dataIndex: 'categoryName'

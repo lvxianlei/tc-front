@@ -50,7 +50,7 @@ export default function SearchTable({
                 params.current = pagenationParams.current
                 params.size = pagenationParams.pageSize
             }
-            const paramsOptions = stringify({ ...params })
+            const paramsOptions = stringify({ ...params, ...filterValue })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole(result)
