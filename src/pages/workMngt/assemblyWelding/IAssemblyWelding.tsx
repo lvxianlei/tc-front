@@ -13,6 +13,8 @@ export interface IResponseData {
 interface IData {
     readonly id?: string;
     readonly mainPartId?: string;
+    readonly segmentId?: string;
+    readonly segmentName?: string;
 }
 
 export interface IComponentList {

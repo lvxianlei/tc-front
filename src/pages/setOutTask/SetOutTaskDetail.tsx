@@ -99,9 +99,16 @@ const productColumns = [
         dataIndex: 'totalWeight',
     },
     {
-        key: 'productDescription',
+        key: 'loftingCompleteTime',
+        title: '放样计划完成时间',
+        dataIndex: 'loftingCompleteTime',
+        "type": "date",
+        "format": "YYYY-MM-DD"
+    },
+    {
+        key: 'issueDescription',
         title: '备注',
-        dataIndex: 'productDescription'
+        dataIndex: 'issueDescription'
     }
 ]
 export default function SetOutTaskDetail(): React.ReactNode {
@@ -117,10 +124,11 @@ export default function SetOutTaskDetail(): React.ReactNode {
                 productTypeName: data.productTypeName,
                 productCategoryNum: data.productCategoryNum,
                 totalWeight: data.totalWeight,
-                loftingAbortTime: data.loftingAbortTime,
+                loftingCompleteTime: data.loftingCompleteTime,
                 materialAbortTime: data.materialAbortTime,
                 description: data.description,
-                voltageGradeName: data.voltageGradeName
+                voltageGradeName: data.voltageGradeName,
+                issueDescription: data.issueDescription,
             },
         ])
         resole(data)

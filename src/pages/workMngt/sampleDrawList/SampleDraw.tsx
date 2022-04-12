@@ -98,8 +98,12 @@ export default function SampleDraw(): React.ReactNode {
                     </Popconfirm> : null}
                     <Button type='link' onClick={async () => {
                         const url: any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
-                        setUrl(url?.downloadUrl);
-                        setVisible(true)
+                        if(url?.fileSuffix === 'pdf') {
+                            window.open(url?.downloadUrl)
+                        } else {
+                            setUrl(url?.downloadUrl);
+                            setVisible(true)
+                        }
                     }}>查看</Button>
                 </Space>
             )
