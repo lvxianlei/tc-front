@@ -13,6 +13,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { Link } from 'react-router-dom';
 import { DownOutlined } from '@ant-design/icons';
+import { packageTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export interface ISummaryData {
     readonly planCount?: string;
@@ -144,7 +145,7 @@ export default function DailySchedule(): React.ReactNode {
     ]
 
     const BatchComplete = () => {
-        if(selectedKeys.length > 0) {
+        if (selectedKeys.length > 0) {
             RequestUtil.put(`/tower-production/package/packageStatus/${selectedKeys.join(',')}`).then(res => {
                 message.success('批量完成！');
                 setRefresh(!refresh);
@@ -226,6 +227,11 @@ export default function DailySchedule(): React.ReactNode {
                 label: '包类型',
                 children: <Select placeholder="请选择" style={{ width: '120px' }} defaultValue={''}>
                     <Select.Option key={0} value={''}>全部</Select.Option>
+                    {packageTypeOptions && packageTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={id}>
+                            {name}
+                        </Select.Option>
+                    })}
                 </Select>
             },
             {
