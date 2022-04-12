@@ -41,7 +41,7 @@ export default () => {
         } catch (error) {
             reject(error)
         }
-    }))
+    }), { manual: true })
 
     const handleAuto = async () => {
         await run(selectedRowKeys)
@@ -97,8 +97,8 @@ export default () => {
                 fixed: "right",
                 dataIndex: "opration",
                 render: (_, record: any) => <>
-                    <Link to={`/planProd/publishWorkshop/welding/${record.id}`}><Button type="link" size="small">构件明细</Button></Link>
-                    <Link to={`/planProd/publishWorkshop/structure/${record.id}`}><Button type="link" size="small">组焊明细</Button></Link>
+                    <Link to={`/planProd/publishWorkshop/structure/${record.id}`}><Button type="link" size="small">构件明细</Button></Link>
+                    <Link to={`/planProd/publishWorkshop/welding/${record.id}`}><Button type="link" size="small">组焊明细</Button></Link>
                 </>
             }] : [
             ...workShopOrder,
