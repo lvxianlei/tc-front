@@ -213,6 +213,17 @@ export default function StaffNew(): React.ReactNode {
             )
         },
         {
+
+            title: "企业微信用户",
+            dataIndex: 'businessWxUserId',
+            width: 150,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={["list", index, "number"]} key={index} initialValue={_}>
+                    <Input maxLength={50} />
+                </Form.Item>
+            )
+        },
+        {
             title: <span><span style={{ color: 'red' }}>*</span>员工类型</span>,
             dataIndex: 'category',
             width: 180,

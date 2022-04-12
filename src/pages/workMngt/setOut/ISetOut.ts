@@ -53,6 +53,8 @@ export interface allotModalProps {
     onSubmit: () => void;
     onSave: () => void;
     onCheck: () => void;
+    resetFields:()=> void;
+    visibleData:()=> void;
     selectedRowKeys: string[];
 }
 
@@ -125,7 +127,9 @@ export interface IBundle {
     readonly singleNum?: string;
     readonly isWelding?: number;
     readonly structureCountNum?: string;
-    readonly totalWeight?: string;
+    readonly totalWeight?: number;
+    readonly isMainPart?: number;
+    readonly packageRemainingNum?: string;
 }
 
 export interface IPackingList {

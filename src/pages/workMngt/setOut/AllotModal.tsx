@@ -18,7 +18,7 @@ import { PlusOutlined } from "@ant-design/icons"
 interface AllotModalProps {
     id: string;
     allotData: IAllot;
-    status: number;
+    status: number|string;
 }
 
 export default forwardRef(function AllotModal({ id, allotData,status }: AllotModalProps, ref) {
@@ -29,6 +29,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
     const [selectedRows, setSelectedRows]=useState<any[]>([]);
     const [checkRowKeys, setCheckRowKeys]=useState<any[]>([]);
     const [checkRows, setCheckRows]=useState<any[]>([]);
+    const [statusValue, setStatusValue]=useState<any>('');
     const { loading, data } = useRequest<IAllot>(() => new Promise(async (resole, reject) => {
         try {
             allotData = {
@@ -43,15 +44,25 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                     }
                 })
             }
+            setStatusValue(status)
             const towerData:any = await RequestUtil.get(`/tower-science/product/lofting?page=1&size=1000&productCategoryId=${allotData.productCategory}&productId=${id}`)
-            setTowerData(towerData?.records)
+            setTowerData(towerData?.records.filter((item:any)=>{
+                return item.isSpecial===1&&item.isSpecial!==null&&item.specialStatus!==2
+            }))
             form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
             resole(allotData)
         } catch (error) {
             reject(error)
         }
     }), { refreshDeps: [id] })
-
+    const { run: visibleData } = useRequest((postData: any) => new Promise(async (resole, reject) => {
+        try {
+            form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
+            resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     const { run: submitRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
@@ -181,9 +192,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                         form.validateFields()
                     }} disabled={data?.specialStatus === 2} size="small" /> */}
 
-                    <InputNumber min={0} max={99} onBlur={() => {
-                        form.validateFields()
-                    }} disabled={status===4} size="small" />
+                    <InputNumber min={0} max={99} disabled={status===4} size="small" />
                 </Form.Item>
             )
         },
@@ -201,8 +210,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
         
     ]
 
-    useImperativeHandle(ref, () => ({ selectedRowKeys,onCheck,  onSave, onSubmit, resetFields }), [ref, selectedRowKeys, onCheck, onSave, onSubmit, resetFields]);
-
+    useImperativeHandle(ref, () => ({ selectedRowKeys,onCheck,  onSave, onSubmit, resetFields, visibleData }), [ref, selectedRowKeys, onCheck, onSave, onSubmit, resetFields, visibleData]);
     return <Spin spinning={loading}>
         <DetailContent style={{padding:'20px'}}>
             <Form form={form} className={styles.descripForm}>
@@ -217,7 +225,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                     <Descriptions.Item key={2} label="配段信息">
                         {data?.segmentInformation}
                     </Descriptions.Item>
-                    {status===2||status===3 && <Descriptions.Item key={1} label="复用杆塔">
+                    {(statusValue=='2'||statusValue=='3')&& <Descriptions.Item key={1} label="复用杆塔">
                                     <Button onClick={async () => {
                                         setSelectedRowKeys(checkRowKeys)
                                         setVisible(true)

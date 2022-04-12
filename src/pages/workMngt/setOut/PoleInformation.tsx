@@ -142,11 +142,14 @@ export default function PoleInformation(): React.ReactNode {
                     {
                         record.loftingStatus !== 1  ?
                             <Button type="link" onClick={async () => {
+                                setLoftingStatus(record.loftingStatus)
                                 let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
                                 setAllotData(result)
-                                setAllotVisible(true);
                                 setProductId(record.id);
-                                setLoftingStatus(record.loftingStatus)
+                                await editRef.current?.visibleData()
+                                setAllotVisible(true);
+                                
+                                
                             }}>特殊件号</Button>
                             : <Button type="link" disabled>特殊件号</Button>
                     }
@@ -211,11 +214,9 @@ export default function PoleInformation(): React.ReactNode {
                 console.log(result)
                 if(result){
                     setTipVisible(true)
-                    return
                 }else{
                     // message.error('杆塔无此特殊件号，无法保存！')
                     setTipVisible(false)
-                    return
                 }
             }
             resolve(true);
@@ -228,13 +229,13 @@ export default function PoleInformation(): React.ReactNode {
             console.log(editRef.current)
             setButtonName('保存')
             await onTip();
-            if(!(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0)){
+            // if(!(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0)){
                 await editRef.current?.onSave();
                 message.success('保存成功！');
                 setTipVisible(false);
                 setAllotVisible(false);
                 setRefresh(!refresh);
-            }
+            // }
             resove(true);
         } catch (error) {
             reject(false)
@@ -245,13 +246,13 @@ export default function PoleInformation(): React.ReactNode {
         try {
             setButtonName('提交')
             await onTip();
-            if(!(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0)){
+            // if(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0){
                 await editRef.current?.onSubmit();
                 message.success('提交成功！');
                 setTipVisible(false);
                 setAllotVisible(false);
                 setRefresh(!refresh);
-            }
+            // }
             resove(true);
         } catch (error) {
             reject(false)
@@ -292,8 +293,9 @@ export default function PoleInformation(): React.ReactNode {
             width="60%"
             title="特殊件号"
             footer={loftingStatus!==1&&<Space>
-                <Button type="ghost" onClick={() => {
+                <Button type="ghost" onClick={async () => {
                     setAllotVisible(false);
+                    editRef.current?.resetFields()
                 }}>关闭</Button>
                 {/* {
                     allotData?.specialStatus === 0 || allotData?.specialStatus === 1 ? <><Button type="primary" onClick={handleModalOk} ghost>保存</Button>
@@ -353,7 +355,7 @@ export default function PoleInformation(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col>
-                            <Form.Item name="materialUser">
+                            <Form.Item name="loftingUser">
                                 <Select placeholder="请选择" style={{ width: "150px" }}>
                                     {materialUser && materialUser.map((item: any) => {
                                         return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>

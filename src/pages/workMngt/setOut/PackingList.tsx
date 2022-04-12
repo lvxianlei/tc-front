@@ -29,13 +29,18 @@ export default function PackingList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        await RequestUtil.get(`/tower-science/packageStructure/${params.productId}`).then(res => {
-            resole(res)
+        const data = await RequestUtil.get(`/tower-science/packageStructure/${params.productId}`).then((res: any) => {
+            return res
         }).catch(error => {
             setTimeout(() => {
                 history.goBack();
             }, 500)
         });
+        resole(data)
+        if (data && data?.length > 0) {
+            const resData: IPackingList = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${data[0]?.id}`);
+            setBundleData([...(resData.packageRecordVOList || [])]);
+        }
     }), {})
     const detailData: any = data;
 
@@ -177,13 +182,12 @@ export default function PackingList(): React.ReactNode {
             match={match}
             columnsKey={() => {
                 let keys = [...columns]
-                keys.pop()
                 return keys
             }}
             current={detailData?.current || 1}
             size={detailData?.size || 10}
             total={detailData?.total || 0}
-            url={`/tower-science/packageStructure/exportByProductId`}
+            url={`/tower-science/packageStructure/${params.productId}`}
             serchObj={{ productId: params.productId }}
             closeExportList={() => setIsExport(false)}
         /> : null}
