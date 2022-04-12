@@ -97,7 +97,7 @@ const baseColums = [
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "weight",
         "title": "总重量（KG）",
         "type": "string"
     },
@@ -107,7 +107,7 @@ const baseColums = [
         "type": "string"
     },
     {
-        "dataIndex": "weight",
+        "dataIndex": "number",
         "title": "基数",
         "type": "string"
     },
