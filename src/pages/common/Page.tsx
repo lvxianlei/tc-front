@@ -208,7 +208,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         return {
             ...super.getTableProps(item),
             ...this.props.tableProps,
-            pagination: {
+            pagination: this.props.tableProps?.pagination=== false?false:{
                 ...super.getTableProps(item).pagination,
                 ...this.props.tableProps?.pagination,
             }

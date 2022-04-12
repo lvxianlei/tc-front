@@ -358,7 +358,7 @@ export default function TaskNew(props:any){
                     productCategoryId: printData?.productCategoryId,
                     printSpecifications: saveData?.print?.printSpecifications === '全部'?'全部':saveData?.print?.printSpecifications === '自定义'?saveData?.print?.before+'-'+saveData?.print?.after:'',
                     printSpecialProcess: saveData?.printSpecialProcess?.join(','),
-                    productType: printData?.productType
+                    productTypeName: printData?.productTypeName
                 });
                 form.setFieldsValue({
                     structureNumber: data?.length
@@ -541,20 +541,20 @@ export default function TaskNew(props:any){
                                         
                                     }
                                     let data: any = [];
-                                    const type:any =  formValue[0]?.productType;
+                                    const type:any =  formValue[0]?.productTypeName;
                                     if(formValue[0]?.printSpecifications!==null||formValue[0]?.printSpecialProcess!==null){
                                         data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
                                             productCategoryId: formValue[0]?.productCategoryId,
                                             printSpecifications: formValue[0]?.printSpecifications,
                                             printSpecialProcess: formValue[0]?.printSpecialProcess,
-                                            productType: formValue[0]?.productType
+                                            productTypeName: formValue[0]?.productTypeName
                                         });
                                     }
                                     if(type === '四管塔' ||type === '管塔'|| type === '架构'|| type === '架构塔'|| type === '钢架构'){
                                         setRadioValue('全部')
                                         setPrintData({
                                             ...printData,
-                                            productType: formValue[0]?.productType,
+                                            productTypeName: formValue[0]?.productTypeName,
                                             productCategoryId: value,
                                             printSpecifications: '全部'
                                         })
@@ -569,7 +569,7 @@ export default function TaskNew(props:any){
                                         })
                                         data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
                                             productCategoryId: formValue[0]?.productCategoryId,
-                                            productType: formValue[0]?.productType
+                                            productTypeName: formValue[0]?.productTypeName
                                         });  
                                     }
                                     else if(type === '钢管杆'){
@@ -582,7 +582,7 @@ export default function TaskNew(props:any){
                                         setPrintData({
                                             ...printData,
                                             printSpecifications:'1-12',
-                                            productType: formValue[0]?.productType,
+                                            productTypeName: formValue[0]?.productTypeName,
                                             productCategoryId: value,
                                             
                                         })
@@ -596,7 +596,7 @@ export default function TaskNew(props:any){
                                         data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
                                             productCategoryId: formValue[0]?.productCategoryId,
                                             printSpecifications: '1-12',
-                                            productType: formValue[0]?.productType
+                                            productTypeName: formValue[0]?.productTypeName
                                         });    
                                     }
                                     else if(type === '角钢塔'){
@@ -606,7 +606,7 @@ export default function TaskNew(props:any){
                                         })
                                         setPrintData({
                                             ...printData,
-                                            productType: formValue[0]?.productType,
+                                            productTypeName: formValue[0]?.productTypeName,
                                             productCategoryId: value,
                                             printSpecialProcess: '火曲,钻孔,铆焊'
                                         })
@@ -616,12 +616,12 @@ export default function TaskNew(props:any){
                                         data = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`,{
                                             productCategoryId: formValue[0]?.productCategoryId,
                                             printSpecialProcess: '火曲,钻孔,铆焊',
-                                            productType: formValue[0]?.productType
+                                            productTypeName: formValue[0]?.productTypeName
                                         });   
                                     }else{
                                         setPrintData({
                                             ...printData,
-                                            productType: formValue[0]?.productType,
+                                            productTypeName: formValue[0]?.productTypeName,
                                             productCategoryId: value,
                                         })
                                     }
@@ -644,14 +644,15 @@ export default function TaskNew(props:any){
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="productType" label="产品类型" >
-                                        <Select style={{width:'100%'}}  disabled={true}>
+                                    <Form.Item name="productTypeName" label="产品类型" >
+                                        {/* <Select style={{width:'100%'}}  disabled={true}>
                                             {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                                     return <Select.Option key={index} value={name}>
                                                         {name}
                                                     </Select.Option>
                                             })}
-                                        </Select>
+                                        </Select> */}
+                                        <Input disabled/>
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -682,7 +683,7 @@ export default function TaskNew(props:any){
                                         productCategoryId: printData?.productCategoryId,
                                         printSpecifications: printData?.printSpecifications,
                                         printSpecialProcess: printData?.printSpecialProcess,
-                                        productType: printData?.productType
+                                        productTypeName: printData?.productTypeName
                                     });
                                     setSteelData(data)
                                     setSteelVisible(true)

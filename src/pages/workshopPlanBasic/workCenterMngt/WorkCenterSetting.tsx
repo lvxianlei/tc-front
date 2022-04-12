@@ -19,7 +19,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const [baseForm] = Form.useForm();
     const [form] = Form.useForm();
     const [workCenterRelationsList, setWorkCenterRelationsList] = useState<IWorkCenterMngt[]>([]);
-    const [allMaterialList, setAllMaterialList] = useState<any>([]);
+    // const [allMaterialList, setAllMaterialList] = useState<any>([]);
     const [specifications, setSpecifications] = useState<any>({});
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -40,12 +40,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const { data: materialList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/material?size=1000`);
-            setAllMaterialList(result?.records);
-            var newArr = result?.records.filter((item: any, index: any, self: any) => {
-                return self.findIndex((el: any) => el.materialName === item.materialName) === index
-            })
-            resole(newArr)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/material/selectDetail`);
+            // setAllMaterialList(result?.materialNames);
+            // var newArr = result?.records.filter((item: any, index: any, self: any) => {
+            //     return self.findIndex((el: any) => el.materialName === item.materialName) === index
+            // })
+            resole(result?.materialNames)
         } catch (error) {
             reject(error)
         }
@@ -107,10 +107,11 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         baseForm.resetFields();
     }
 
-    const materialChange = (e: string, index: number) => {
-        var newArr = allMaterialList.filter((item: any, index: any, self: any) => {
-            return e === item.materialName
-        })
+    const materialChange = async (e: string, index: number) => {
+        // var newArr = allMaterialList.filter((item: any, index: any, self: any) => {
+        //     return e === item.materialName
+        // })
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/material?materialName=${e}`);
         const workCenterRelations = form.getFieldsValue(true)?.workCenterRelations;
         workCenterRelations[index] = {
             ...workCenterRelations[index],
@@ -119,7 +120,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         form.setFieldsValue({ workCenterRelations: workCenterRelations })
         setSpecifications({
             ...specifications,
-            [index]: newArr
+            [index]: result?.records
         })
     }
 
@@ -213,7 +214,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 }]}>
                     <Select placeholder="请选择" size="small" style={{ width: '200px' }} onChange={(e: string) => materialChange(e, index)}>
                         {materialList?.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.materialName}>{item.materialName}</Select.Option>
+                            return <Select.Option key={item} value={item}>{item}</Select.Option>
                         })}
                     </Select>
                 </Form.Item>
@@ -231,7 +232,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 }]}>
                     <Select placeholder="请选择" size="small" style={{ width: '200px' }} key={index} onDropdownVisibleChange={
                         (open) => {
-                            if(open && form.getFieldsValue(true)?.workCenterRelations[index]?.materialName) {
+                            if (open && form.getFieldsValue(true)?.workCenterRelations[index]?.materialName) {
                                 materialChange(form.getFieldsValue(true)?.workCenterRelations[index]?.materialName, index);
                             }
                         }

@@ -375,7 +375,7 @@ export default function TaskView(props: any){
                         {specialData?.productCategoryName}
                     </Descriptions.Item>
                     <Descriptions.Item label="产品类型">
-                        {specialData?.productType}
+                        {specialData?.productTypeName}
                     </Descriptions.Item>
                     <Descriptions.Item label="打印条件">
                         {specialData?.printSpecifications!== null&&specialData?.printSpecialProcess!==null ?specialData?.printSpecifications+','+specialData?.printSpecialProcess:specialData?.printSpecialProcess!==null ?specialData?.printSpecialProcess:specialData?.printSpecifications!==null ?specialData?.printSpecifications:''}
@@ -388,7 +388,7 @@ export default function TaskView(props: any){
                                 productCategoryId: specialData?.productCategoryId,
                                 printSpecifications: specialData?.printSpecifications,
                                 printSpecialProcess: specialData?.printSpecialProcess,
-                                productType: specialData?.productType
+                                productTypeName: specialData?.productTypeName
                             });
                             setSteelData(data)
                             setSteelVisible(true)

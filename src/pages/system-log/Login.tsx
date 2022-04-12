@@ -1,4 +1,5 @@
 import React from 'react'
+import AuthUtil from '../../utils/AuthUtil';
 import { Page } from '../common';
 
 export default function Login(): React.ReactNode {
@@ -74,5 +75,6 @@ export default function Login(): React.ReactNode {
             path="/sinzetech-log/login"
             columns={ columns }
             searchFormItems={[]}
+            requestData={{tenantId: AuthUtil.getTenantId()}}
         />
 }

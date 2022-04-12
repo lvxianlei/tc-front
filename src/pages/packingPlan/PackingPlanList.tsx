@@ -5,7 +5,7 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Input, DatePicker, Button, Modal, Radio, message, Space, Select } from 'antd';
+import { Input, DatePicker, Button, Modal, Radio, message, Space, Select, Form } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './DailySchedule.module.less';
@@ -273,22 +273,26 @@ export default function DailySchedule(): React.ReactNode {
                 {
                     name: 'galvanizedTeamId',
                     label: '镀锌班组',
-                    children: <Select placeholder="请选择" style={{ width: '120px' }}>
-                        <Select.Option key={0} value={''}>全部</Select.Option>
-                        {packagingTeamList?.map((item: any) => {
-                            return <Select.Option key={item.name} value={item.id}>{item.name}</Select.Option>
-                        })}
-                    </Select>
+                    children: <Form.Item name="galvanizedTeamId" initialValue={''}>
+                        <Select placeholder="请选择" style={{ width: '120px' }}>
+                            <Select.Option key={0} value={''}>全部</Select.Option>
+                            {packagingTeamList?.map((item: any) => {
+                                return <Select.Option key={item.name} value={item.id}>{item.name}</Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
                 },
                 {
                     name: 'packageTeamId',
                     label: '包装班组',
-                    children: <Select placeholder="请选择" style={{ width: '120px' }}>
-                        <Select.Option key={0} value={''}>全部</Select.Option>
-                        {galvanizedTeamList?.map((item: any) => {
-                            return <Select.Option key={item.teamName} value={item.id}>{item.teamName}</Select.Option>
-                        })}
-                    </Select>
+                    children: <Form.Item name="packageTeamId" initialValue={''}>
+                        <Select placeholder="请选择" style={{ width: '120px' }}>
+                            <Select.Option key={0} value={''}>全部</Select.Option>
+                            {galvanizedTeamList?.map((item: any) => {
+                                return <Select.Option key={item.teamName} value={item.id}>{item.teamName}</Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
                 },
                 {
                     name: 'time',
