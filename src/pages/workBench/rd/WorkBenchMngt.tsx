@@ -52,19 +52,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 				{
 					title: '待确认',
 					dataIndex: 'assessToBeConfirmed',
-					path: '/assessmentTask/assessmentTaskList',
+					path: '/taskMngt/assessmentTaskList',
 					state: 1,
 					authority: 'assess_to_be_confirmed'
 				}, {
 					title: '待指派',
 					dataIndex: 'assessToBeAssigned',
-					path: '/assessmentTask/assessmentTaskList',
+					path: '/taskMngt/assessmentTaskList',
 					state: 2,
 					authority: 'assess_to_be_assigned'
 				}, {
 					title: '待提交',
 					dataIndex: 'assessToBeSubmitted',
-					path: '/assessmentTask/assessmentTaskList',
+					path: '/taskMngt/assessmentTaskList',
 					state: 4,
 					authority: 'assess_to_be_submitted'
 				}
@@ -76,19 +76,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 				{
 					title: '待确认',
 					dataIndex: 'confirmToBeConfirmed',
-					path: '/confirmTask/ConfirmTaskMngt',
+					path: '/taskMngt/ConfirmTaskMngt',
 					state: 1,
 					authority: 'confirm_to_be_confirmed'
 				}, {
 					title: '待指派',
 					dataIndex: 'confirmToBeAssigned',
-					path: '/confirmTask/ConfirmTaskMngt',
+					path: '/taskMngt/ConfirmTaskMngt',
 					state: 2,
 					authority: 'confirm_to_be_assigned'
 				}, {
 					title: '待提交',
 					dataIndex: 'confirmToBeSubmitted',
-					path: '/confirmTask/ConfirmTaskMngt',
+					path: '/taskMngt/ConfirmTaskMngt',
 					state: 4,
 					authority: 'confirm_to_be_submitted'
 				}
@@ -100,7 +100,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 				{
 					title: '待确认',
 					dataIndex: 'loftingToBeConfirmed',
-					path: '/setOutTask/setOutTaskList',
+					path: '/taskMngt/setOutTaskList',
 					state: 1,
 					authority: 'lofting_to_be_confirmed'
 				}, {
@@ -112,7 +112,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 				}, {
 					title: '待提交',
 					dataIndex: 'loftingToBeSubmitted',
-					path: '/setOutTask/setOutTaskList',
+					path: '/taskMngt/setOutTaskList',
 					state: 4,
 					authority: 'lofting_to_be_submitted'
 				}

@@ -92,7 +92,7 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                 message.success('提交成功！')
                 setVisible(false)
             }).then(()=>{
-                history.push(`/confirmTask/ConfirmTaskMngt`)
+                history.push(`/taskMngt/ConfirmTaskMngt`)
             })
         
         } catch (error) {
@@ -114,7 +114,7 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                                 await RequestUtil.post('/tower-science/drawTask/receiveDrawTask',{drawTaskId: params.id}).then(()=>{
                                     message.success('接收成功！');
                                 }).then(()=>{
-                                    history.push(`/confirmTask/ConfirmTaskMngt`)
+                                    history.push(`/taskMngt/ConfirmTaskMngt`)
                                 });  
                             }}
                         >接收</Button>

@@ -130,7 +130,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={()=>history.push(`/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/${record.id}/${record.status}`)} >任务详情</Button>
+                    <Button type='link' onClick={()=>history.push(`/taskMngt/ConfirmTaskMngt/ConfirmTaskDetail/${record.id}/${record.status}`)} >任务详情</Button>
                     <Button type='link' onClick={async () => { 
                         setDrawTaskId(record.id);
                         form.setFieldsValue({
@@ -138,7 +138,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                         })
                         setVisible(true); 
                     }} disabled={ record.status !== 2 }>指派</Button>
-                    <Button type='link' onClick={()=>history.push(`/confirmTask/ConfirmTaskMngt/ConfirmDetail/${record.id}`)} disabled={ record.status < 4 }>明细</Button>
+                    <Button type='link' onClick={()=>history.push(`/taskMngt/ConfirmTaskMngt/ConfirmDetail/${record.id}`)} disabled={ record.status < 4 }>明细</Button>
                     <Popconfirm
                         title="确认提交任务?"
                         onConfirm={ async () => {
