@@ -159,6 +159,7 @@ export default function MaterialMngt(): React.ReactNode {
                         message.success('保存成功');
                     })
                 }
+                history.go(0)
             })
         }
     }

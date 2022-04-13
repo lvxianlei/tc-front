@@ -20,7 +20,10 @@ interface TaskRef {
 }
 export default function EnquiryTask(): React.ReactNode {
     const history = useHistory()
-    const [filterValue, setFilterValue] = useState<object>(history.location.state as object);
+    const [filterValue, setFilterValue] = useState<object>({
+        ...history.location.state as object,
+        inquirer: sessionStorage.getItem('USER_ID'),
+    });
     const [detailId, setDetailId] = useState<string>("")
     const [currentData, setCurrentData] = useState<any>({})
     const overviewRef = useRef<OverviewRef>({ onReceive: () => { }, onRejection: () => { }, footer: [] })
