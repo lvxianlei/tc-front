@@ -2,11 +2,12 @@ import React, { Key, ReactElement, useState, useCallback } from "react"
 import { welding, structure } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
-import { useParams } from "react-router"
+import { useHistory, useParams } from "react-router"
 import { Button, Col, Form, Input, message, Modal, Pagination, Radio, Row, Select, Space } from "antd"
 import { CommonAliTable } from "../../common"
 import styles from "../../common/CommonTable.module.less"
 export default function ManualDistribute(): ReactElement {
+    const history = useHistory()
     const params = useParams<{ id: string }>()
     const [pagenation, setPagenation] = useState<any>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
@@ -27,9 +28,11 @@ export default function ManualDistribute(): ReactElement {
     const { run: weldingRun } = useRequest<any>((params) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.put(`/tower-aps/workshopOrder/manualDistribute`, params);
-            message.success("手动分配车间完成...")
+            await message.success("手动分配车间完成...")
             setSelectedRowKeys([])
+            workshopForm.resetFields()
             resole(result)
+            history.go(0)
         } catch (error) {
             reject(error)
         }
@@ -121,7 +124,7 @@ export default function ManualDistribute(): ReactElement {
                 <Radio.Button value={1}>构件明细</Radio.Button>
                 <Radio.Button value={2}>组焊明细</Radio.Button>
             </Radio.Group>
-            <Button type="primary" onClick={handleClick}>手动分配车间</Button>
+            <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleClick}>手动分配车间</Button>
         </Space>
         <CommonAliTable
             columns={status === 1 ? structure : welding}
@@ -130,13 +133,19 @@ export default function ManualDistribute(): ReactElement {
             isLoading={loading}
             rowSelection={{
                 selectedRowKeys: selectedRowKeys,
-                onChange: onSelectChange
+                onChange: onSelectChange,
+                checkboxColumn: status === 2 ? {
+                    features: {
+                        autoRowSpan: true,
+                        sortable: true
+                    }
+                } : {}
             }}
             dataSource={data?.recordDate.records || []}
         />
         <footer className={styles.pagenationWarp}>
             <Pagination
-                total={data?.total}
+                total={data?.recordDate.total}
                 current={pagenation.current}
                 showTotal={(total: number) => `共${total}条记录`}
                 showSizeChanger

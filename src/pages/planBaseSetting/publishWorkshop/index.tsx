@@ -35,9 +35,11 @@ export default () => {
     const { run: weldingRun } = useRequest<any>((params) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-aps/workshopOrder/welding/distribution`, params);
-            message.success("电焊分配车间完成...")
+            await message.success("电焊分配车间完成...")
             setSelectedRowKeys([])
+            weldingForm.resetFields()
             resole(result)
+            history.go(0)
         } catch (error) {
             reject(error)
         }
@@ -59,7 +61,7 @@ export default () => {
                 </nav>
             })
         } else {
-            message.success("自动分配车间完成")
+            await message.success("自动分配车间完成")
             history.go(0)
         }
     }

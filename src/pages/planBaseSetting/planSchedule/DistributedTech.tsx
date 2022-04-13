@@ -146,7 +146,7 @@ export default function DistributedTech(): React.ReactNode {
                 sort: index
             }
         })).then(async res => {
-            message.success('批量新增备注成功');
+            await message.success('批量新增备注成功');
             setSelectedKeys([]);
             setSelectedRows([]);
             setVisible(false);
