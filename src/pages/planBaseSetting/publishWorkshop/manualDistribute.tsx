@@ -118,13 +118,13 @@ export default function ManualDistribute(): ReactElement {
                 value={status}
                 onChange={(event) => setStatus(event.target.value)}
             >
-                <Radio.Button value={1}>构建明细</Radio.Button>
+                <Radio.Button value={1}>构件明细</Radio.Button>
                 <Radio.Button value={2}>组焊明细</Radio.Button>
             </Radio.Group>
             <Button type="primary" onClick={handleClick}>手动分配车间</Button>
         </Space>
         <CommonAliTable
-            columns={status === 1 ? welding : structure}
+            columns={status === 1 ? structure : welding}
             size="small"
             className={status === 1 ? "" : "bordered"}
             isLoading={loading}

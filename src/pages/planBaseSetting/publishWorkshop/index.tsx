@@ -104,7 +104,7 @@ export default () => {
             ...workShopOrder,
             {
                 title: "操作",
-                width: 50,
+                width: 100,
                 fixed: "right",
                 dataIndex: "opration",
                 render: (_, record: any) => <Link

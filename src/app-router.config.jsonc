@@ -1762,14 +1762,14 @@
       "authority": "approvalm"
     },
     { // 计划排产-分配车间-构件明细
-      "name": "构件明细",
+      "name": "组焊明细",
       "path": "/planProd/publishWorkshop/welding/:id",
       "module": "./pages/planBaseSetting/publishWorkshop/welding",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-分配车间-组焊明细
-      "name": "组焊明细",
+      "name": "构件明细",
       "path": "/planProd/publishWorkshop/structure/:id",
       "module": "./pages/planBaseSetting/publishWorkshop/structure",
       "exact": true,
