@@ -82,6 +82,18 @@ export default function PickCheckList(): React.ReactNode {
             editable: true 
         },
         { 
+            title: '大头', 
+            dataIndex: 'thickness', 
+            key: 'thickness', 
+            editable: true 
+        },
+        { 
+            title: '小头', 
+            dataIndex: 'thickness', 
+            key: 'thickness', 
+            editable: true 
+        },
+        { 
             title: '单段件数', 
             dataIndex: 'basicsPartNum', 
             key: 'basicsPartNum', 
