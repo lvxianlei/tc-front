@@ -14,7 +14,10 @@ export default function Invoicing() {
     const [generateVisible, setGenerateVisible] = useState<boolean>(false)
     const [generateIds, setGenerateIds] = useState<string[]>([])
     const [chooseId, setChooseId] = useState<string>("")
-    const [filterValue, setFilterValue] = useState<object>(history.location.state as object);
+    const [filterValue, setFilterValue] = useState<object>({
+        ...history.location.state as object,
+        purchaserId: sessionStorage.getItem('USER_ID'),
+    });
     const onFilterSubmit = (value: any) => {
         if (value.startPurchaseStatusUpdateTime) {
             const formatDate = value.startPurchaseStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
