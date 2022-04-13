@@ -70,7 +70,7 @@ export default function Structure(): ReactElement {
         />
         <footer className={styles.pagenationWarp}>
             <Pagination
-                total={data?.total}
+                total={data?.recordDate.total}
                 current={pagenation.current}
                 showTotal={(total: number) => `共${total}条记录`}
                 showSizeChanger

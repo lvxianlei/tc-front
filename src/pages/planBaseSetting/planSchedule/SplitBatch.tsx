@@ -91,7 +91,6 @@ export default function SampleDraw(): React.ReactNode {
         return value
     }
     const handleSelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
-        console.log(selectedRows)
         setSelectedKeys(selectedRowKeys)
         setSelectedRows(selectedRows)
     };
@@ -103,7 +102,7 @@ export default function SampleDraw(): React.ReactNode {
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     await completeBatchRun()
-                    message.success("成功完成批次设置")
+                    await message.success("成功完成批次设置")
                     resove(true)
                 } catch (error) {
                     reject(error)
@@ -112,7 +111,6 @@ export default function SampleDraw(): React.ReactNode {
         })
     }
     const useFactory = () => {
-        console.log(selectedRows)
         Modal.confirm({
             title: "分配厂区",
             icon: null,
@@ -160,8 +158,7 @@ export default function SampleDraw(): React.ReactNode {
             content: "是否取消分配厂区？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    run(selectedRows.map((item: any) => ({ id: item.id, productionBatchNo: item.productionBatchNo })))
-                    await message.success("已成功取消分配厂区")
+                    await run(selectedRows.map((item: any) => ({ id: item.id, productionBatchNo: item.productionBatchNo })))
                     setSelectedKeys([])
                     setSelectedRows([])
                     history.go(0)

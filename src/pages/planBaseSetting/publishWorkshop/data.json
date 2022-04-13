@@ -89,6 +89,11 @@
             "width": 100
         },
         {
+            "title": "类型",
+            "dataIndex": "type",
+            "width": 100
+        },
+        {
             "title": " 加工车间",
             "dataIndex": "processWorkshop",
             "width": 200
@@ -154,6 +159,11 @@
         {
             "title": "单组件数",
             "dataIndex": "singleNum",
+            "width": 100
+        },
+        {
+            "title": "类型",
+            "dataIndex": "type",
             "width": 100
         },
         {
