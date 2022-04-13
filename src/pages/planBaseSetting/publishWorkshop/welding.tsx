@@ -1,9 +1,9 @@
-import React, { Key, ReactElement, useState, useCallback } from "react"
-import { welding, structure } from "./data.json"
+import React, { ReactElement, useState, useCallback } from "react"
+import { welding } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
 import { useParams } from "react-router"
-import { Button, Col, Form, Input, message, Modal, Pagination, Radio, Row, Select, Space } from "antd"
+import { Button, Col, Form, Input, Pagination, Row } from "antd"
 import { CommonAliTable } from "../../common"
 import styles from "../../common/CommonTable.module.less"
 export default function Welding(): ReactElement {

@@ -47,7 +47,7 @@
             "dataIndex": "loftingBatchTime"
         }
     ],
-    "welding": [
+    "structure": [
         {
             "title": "段号",
             "dataIndex": "segmentName",
@@ -99,7 +99,7 @@
             "width": 200
         }
     ],
-    "structure": [
+    "welding": [
         {
             "title": "段名",
             "dataIndex": "segmentName",
