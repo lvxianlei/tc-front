@@ -93,7 +93,7 @@ export default () => {
             ...pageTable,
             {
                 title: "操作",
-                width: 100,
+                width: 160,
                 fixed: "right",
                 dataIndex: "opration",
                 render: (_, record: any) => <>
