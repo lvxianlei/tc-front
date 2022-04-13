@@ -36,14 +36,24 @@ export default function Release(): React.ReactNode {
         })
         form.setFieldsValue({
             ...data,
-            loftingBatchProductDTOList:value,
+            loftingBatchProductDTOList:value.map((item:any)=>{
+                return{
+                    ...item,
+                    batchNum:0
+                }
+            }),
             // loftingBatchProductDTOList:[{id:1,segmentName:1,segmentNum:10,issuedNum:null},{id:2,segmentName:2,segmentNum:5,issuedNum:1},{id:3,segmentName:3,segmentNum:5,issuedNum:5}],
         })
         formRef.setFieldsValue({
             trialAssembleSegments:[],
         })
         setDisabled(data?.trialAssemble===1)
-        setTableDataSource(value)
+        setTableDataSource(value.map((item:any)=>{
+            return{
+                ...item,
+                batchNum:0
+            }
+        }))
         setReleaseData(data)
     }), {})
     const SelectChange = (selectedRowKeys: React.Key[],selectedRows: any): void => {
@@ -332,13 +342,23 @@ export default function Release(): React.ReactNode {
                 <DetailTitle title='杆塔信息' operation={[ <Checkbox checked={check} onChange={(e: { target: { checked: any; }; })=>{
                     if(e.target.checked){
                         form.setFieldsValue({
-                            loftingBatchProductDTOList:releaseData?.loftingBatchProductVOList,
+                            loftingBatchProductDTOList:releaseData?.loftingBatchProductVOList.map((item:any)=>{
+                                return{
+                                    ...item,
+                                    batchNum:0
+                                }
+                            }),
                             trialAssembleSegment:''
                         })
                         formRef.setFieldsValue({
                             trialAssembleSegments:[],
                         })
-                        setTableDataSource(releaseData?.loftingBatchProductVOList)
+                        setTableDataSource(releaseData?.loftingBatchProductVOList.map((item:any)=>{
+                            return{
+                                ...item,
+                                batchNum:0
+                            }
+                        }))
                         setSelectedKeys([])
                         
                     }else{
@@ -346,13 +366,23 @@ export default function Release(): React.ReactNode {
                             return item.status===0||item.status==='0'
                         })
                         form.setFieldsValue({
-                            loftingBatchProductDTOList:value,
+                            loftingBatchProductDTOList:value.map((item:any)=>{
+                                return{
+                                    ...item,
+                                    batchNum:0
+                                }
+                            }),
                             trialAssembleSegment:''
                         })
                         formRef.setFieldsValue({
                             trialAssembleSegments:[],
                         })
-                        setTableDataSource(value)
+                        setTableDataSource(value.map((item:any)=>{
+                            return{
+                                ...item,
+                                batchNum:0
+                            }
+                        }))
                         setSelectedKeys([])
                     }
                     setCheck(e.target.checked)
