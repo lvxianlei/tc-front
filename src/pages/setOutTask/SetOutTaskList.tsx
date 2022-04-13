@@ -45,7 +45,7 @@ export default function SetOutTaskList(): React.ReactNode {
             width: 150,
             dataIndex: 'productCategoryProportion',
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Link to={`/setOutTask/setOutTaskList/setOutTaskTower/${record.id}`}>{_}</Link>
+            //     <Link to={`/taskMngt/setOutTaskList/setOutTaskTower/${record.id}`}>{_}</Link>
             // )
         },
         {
@@ -54,7 +54,7 @@ export default function SetOutTaskList(): React.ReactNode {
             dataIndex: 'productProportion',
             width: 200,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Link to={`/setOutTask/setOutTaskList/setOutTaskPole/${record.id}`}>{_}</Link>
+            //     <Link to={`/taskMngt/setOutTaskList/setOutTaskPole/${record.id}`}>{_}</Link>
             // )
         },
         {
@@ -97,7 +97,7 @@ export default function SetOutTaskList(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/setOutTask/setOutTaskList/setOutTaskDetail/${record.id}`}>任务详情</Link>
+                    <Link to={`/taskMngt/setOutTaskList/setOutTaskDetail/${record.id}`}>任务详情</Link>
                     {
                         record.status === 3 || record.status === 4 || record.status === 5 ?
                             <Deliverables id={record.id} />
