@@ -97,7 +97,7 @@ const baseColums = [
         "type": "string"
     },
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "weight",
         "title": "总重量（KG）",
         "type": "string"
     },
@@ -107,7 +107,7 @@ const baseColums = [
         "type": "string"
     },
     {
-        "dataIndex": "weight",
+        "dataIndex": "number",
         "title": "基数",
         "type": "string"
     },
@@ -141,9 +141,9 @@ const tableColumns = [
         dataIndex: 'totalWeight'
     },
     {
-        key: 'productPackageStatus',
+        key: 'productPackageStatusName',
         title: '杆塔状态',
-        dataIndex: 'productPackageStatus'
+        dataIndex: 'productPackageStatusName'
     },
     {
         key: 'packageProgress',

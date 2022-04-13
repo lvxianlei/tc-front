@@ -194,7 +194,7 @@ export default function SetOutInformation(): React.ReactNode {
                 title: "部分件未打进包捆，是否确定完成打包",
                 onOk: async () => new Promise(async (resove, reject) => {
                     try {
-                        RequestUtil.put<IBale>(`/tower-production/package/updatePackageInfo`, { packageId: params.id }).then(res => {
+                        RequestUtil.put<IBale>(`/tower-production/package/updatePackageInfo/${params.id}`).then(res => {
                             message.success("打包完成")
                             history.go(0);
                         })
