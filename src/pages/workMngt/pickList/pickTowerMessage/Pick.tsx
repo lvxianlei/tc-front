@@ -261,6 +261,44 @@ export default function Lofting(): React.ReactNode {
             ) 
         },
         { 
+            title: '大头', 
+            dataIndex: 'big', 
+            key: 'big',
+            width: 120,
+            editable: true,
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item 
+                    name={['data',index, "big"]} 
+                    initialValue={ _ }
+                >
+                    <InputNumber 
+                        size="small" 
+                        precision={0} max={999999}
+                        onChange={ () => rowChange(index) }
+                    />
+                </Form.Item>
+            ) 
+        },
+        { 
+            title: '小头', 
+            dataIndex: 'small', 
+            key: 'small',
+            width: 120,
+            editable: true,
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item 
+                    name={['data',index, "small"]} 
+                    initialValue={ _ }
+                >
+                    <InputNumber 
+                        size="small" 
+                        precision={0} max={999999}
+                        onChange={ () => rowChange(index) }
+                    />
+                </Form.Item>
+            ) 
+        },
+        { 
             title: '单件重量（kg）', 
             dataIndex: 'basicsWeight', 
             key: 'basicsWeight' ,
@@ -680,10 +718,12 @@ export default function Lofting(): React.ReactNode {
                 columns={[
                     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
                     { title: '段号', dataIndex: 'segmentName', key: 'segmentName', render:(_a: any, _b: any, index: number): React.ReactNode =>(
-                        <Form.Item name={['dataV',index, "segmentName"]} initialValue={ _a } rules={[{required:true, message:'请填写段号'}, {
-                            pattern: /^[0-9a-zA-Z-]*$/,
-                            message: '仅可输入数字/字母/-',
-                        }]}>
+                        <Form.Item name={['dataV',index, "segmentName"]} initialValue={ _a } rules={[{required:true, message:'请填写段号'}
+                        // , {
+                        //     pattern: /^[0-9a-zA-Z-]*$/,
+                        //     message: '仅可输入数字/字母/-',
+                        // }
+                        ]}>
                             {/* <Select>
                                 { paragraphList.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
@@ -739,6 +779,16 @@ export default function Lofting(): React.ReactNode {
                     { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                         <Form.Item name={['dataV',index, "thickness"]}>
                             <InputNumber size="small" min={1} precision={0} max={999999}/>
+                        </Form.Item>
+                    ) },
+                    { title: '大头', dataIndex: 'big', key: 'big',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['dataV',index, "big"]}>
+                            <InputNumber size="small" precision={0} max={999999}/>
+                        </Form.Item>
+                    ) },
+                    { title: '小头', dataIndex: 'small', key: 'small',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['dataV',index, "small"]}>
+                            <InputNumber size="small" precision={0} max={999999}/>
                         </Form.Item>
                     ) },
                     { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
