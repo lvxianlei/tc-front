@@ -401,7 +401,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		<div className={styles.right}>
 			<div className={styles.notice}>
 				<p>
-					<SoundOutlined />公告通知
+					<SoundOutlined />公告
 					<Link to={`/homePage/notice`} className={styles.more}>更多<DoubleRightOutlined /></Link>
 				</p>
 				<CommonTable dataSource={announceData} pagination={false} showHeader={false} columns={[{
@@ -419,7 +419,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 				}]} />
 			</div>
 			<div className={styles.notice}>
-				<p><SoundOutlined /> 通知提醒</p>
+				<p><SoundOutlined /> 提醒</p>
 				<Table dataSource={[]} pagination={false} showHeader={false} columns={[{
 					key: 'time',
 					title: '时间',
