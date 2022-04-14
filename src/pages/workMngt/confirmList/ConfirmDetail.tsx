@@ -232,298 +232,298 @@ export default function ConfirmDetail(): React.ReactNode {
       }
     };
 
-    const tableColumns = [
-      { 
-          title: '序号', 
-          dataIndex: 'index', 
-          key: 'index', 
-          width: 50,
-          render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
-      },
-      { 
-          title: '* 线路名称', 
-          dataIndex: 'lineName',
-          type:'text',
-          width: 80,
-          editable: true,
-          key: 'lineName', 
-      },
-      { 
-          title: '* 产品类型', 
-          dataIndex: 'productType', 
-          type:'select',
-          width: 100,
-          editable: true,
-          key: 'productType',
-          enums:productTypeOptions && productTypeOptions.map(({ id, name }) => {
-            return {
-                label:name,
-                value: id,
-            }
-          }),
-          render: (value: number, record: object): React.ReactNode => {
-            const renderEnum: any = productTypeOptions && productTypeOptions.map(({ id, name }) => {
-              return {
-                  label:name,
-                  value: id,
-              }
-            })
-            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
-          }
-      },
-      { 
-          title: '* 电压等级（kv）', 
-          dataIndex: 'voltageLevel',
-          type:'select', 
-          width: 120,
-          editable: true,
-          key: 'voltageLevel',
-          enums:voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
-            return {
-                label:name,
-                value: id,
-            }
-          }),
-          render: (value: number, record: object): React.ReactNode => {
-            const renderEnum: any = voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
-              return {
-                  label:name,
-                  value: id,
-              }
-            })
-            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
-          } 
-      },
-      { 
-          title: '* 塔型', 
-          dataIndex: 'productCategory', 
-          type:'text',
-          width: 80,
-          editable: true,
-          key: 'productCategory' 
-      },
-      { 
-          title: '* 塔型钢印号', 
-          dataIndex: 'steelProductShape', 
-          type:'text',
-          width: 100,
-          editable: true,
-          key: 'steelProductShape' 
-      },
+    // const tableColumns = [
+    //   { 
+    //       title: '序号', 
+    //       dataIndex: 'index', 
+    //       key: 'index', 
+    //       width: 50,
+    //       render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
+    //   },
+    //   { 
+    //       title: '* 线路名称', 
+    //       dataIndex: 'lineName',
+    //       // type:'text',
+    //       width: 80,
+    //       // editable: true,
+    //       // key: 'lineName', 
+    //   },
+    //   { 
+    //       title: '* 产品类型', 
+    //       dataIndex: 'productType', 
+    //       // type:'select',
+    //       width: 100,
+    //       // editable: true,
+    //       // key: 'productType',
+    //       // enums:productTypeOptions && productTypeOptions.map(({ id, name }) => {
+    //       //   return {
+    //       //       label:name,
+    //       //       value: id,
+    //       //   }
+    //       // }),
+    //       // render: (value: number, record: object): React.ReactNode => {
+    //       //   const renderEnum: any = productTypeOptions && productTypeOptions.map(({ id, name }) => {
+    //       //     return {
+    //       //         label:name,
+    //       //         value: id,
+    //       //     }
+    //       //   })
+    //       //   return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
+    //       // }
+    //   },
+    //   { 
+    //       title: '* 电压等级（kv）', 
+    //       dataIndex: 'voltageLevel',
+    //       // type:'select', 
+    //       width: 120,
+    //       // editable: true,
+    //       // key: 'voltageLevel',
+    //       // enums:voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
+    //       //   return {
+    //       //       label:name,
+    //       //       value: id,
+    //       //   }
+    //       // }),
+    //       // render: (value: number, record: object): React.ReactNode => {
+    //       //   const renderEnum: any = voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
+    //       //     return {
+    //       //         label:name,
+    //       //         value: id,
+    //       //     }
+    //       //   })
+    //       //   return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
+    //       // } 
+    //   },
+    //   { 
+    //       title: '* 塔型', 
+    //       dataIndex: 'productCategory', 
+    //       // type:'text',
+    //       width: 80,
+    //       // editable: true,
+    //       // key: 'productCategory' 
+    //   },
+    //   { 
+    //       title: '* 塔型钢印号', 
+    //       dataIndex: 'steelProductShape', 
+    //       // type:'text',
+    //       width: 100,
+    //       // editable: true,
+    //       // key: 'steelProductShape' 
+    //   },
       
-      { 
-        title: '* 杆塔号', 
-        dataIndex: 'name', 
-        type:'text',
-        width: 80,
-        editable: true,
-        key: 'name' 
-      },
-      { 
-          title: '* 呼高（m）', 
-          dataIndex: 'basicHeight', 
-          type:'number',
-          width: 90,
-          editable: true,
-          key: 'basicHeight',
-          render:(value:any)=>{
-            return parseFloat(value).toFixed(2)
-          }  
-      },
-      { 
-          title: '* 模式', 
-          dataIndex: 'pattern', 
-          type:'select',
-          width: 90,
-          editable: true,
-          key: 'pattern',
-          enums:patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
-            return {
-                label:name,
-                value: id,
-            }
-          }),
-          render: (value: string, record: object): React.ReactNode => {
-            const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
-              return {
-                  label:name,
-                  value: id,
-              }
-            })
-            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
-          } 
-      },
-      { 
-        title: '接腿配置A', 
-        dataIndex: 'legConfigurationA', 
-        type:'textArea',
-        width: 80,
-        editable: true,
-        key: 'legConfigurationA' 
-      },
-      { 
-        title: '接腿配置B', 
-        dataIndex: 'legConfigurationB', 
-        type:'textArea',
-        width: 80,
-        editable: true,
-        key: 'legConfigurationB' 
-      },
-      { 
-        title: '接腿配置C', 
-        dataIndex: 'legConfigurationC', 
-        type:'textArea',
-        width: 80,
-        editable: true,
-        key: 'legConfigurationC' 
-      },
-      { 
-        title: '接腿配置D', 
-        dataIndex: 'legConfigurationD', 
-        type:'textArea',
-        width: 80,
-        editable: true,
-        key: 'legConfigurationD' 
-      },
-      { 
-        title: '接腿重A（kg）', 
-        dataIndex: 'legWeightA', 
-        type:'number',
-        width: 100,
-        editable: true,
-        key: 'legWeightA', 
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }  
-      },
-      { 
-        title: '接腿重B（kg）', 
-        dataIndex: 'legWeightB', 
-        type:'number',
-        width: 100,
-        editable: true,
-        key: 'legWeightB', 
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }  
-      },
-      { 
-        title: '接腿重C（kg）', 
-        dataIndex: 'legWeightC', 
-        type:'number',
-        width: 100,
-        editable: true,
-        key: 'legWeightC', 
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }  
-      },
-      { 
-        title: '接腿重D（kg）', 
-        dataIndex: 'legWeightD', 
-        type:'number',
-        width: 100,
-        editable: true,
-        key: 'legWeightD', 
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }  
-      },
-      // { 
-      //     title: '* 杆塔重量（kg）', 
-      //     dataIndex: 'monomerWeight', 
-      //     type:'number',
-      //     width: 100,
-      //     editable: true,
-      //     key: 'monomerWeight', 
-      //     render:(value:any)=>{
-      //       return parseFloat(value).toFixed(2)
-      //     }  
-      // },
-      { 
-        title: '* 本体重量（kg）', 
-        dataIndex: 'bodyWeight', 
-        type:'number',
-        width: 120,
-        editable: true,
-        key: 'bodyWeight',
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }   
-      },//范春森于11月23日去掉，于龙于11月25号加上
-      { 
-        title: '* 单重（kg）', 
-        dataIndex: 'monomerWeight', 
-        type:'edit',
-        width: 100,
-        editable: true,
-        key: 'monomerWeight', 
-        render:(_:any,record:any)=>{
-          return <span>{(parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
-        }  
-      },
-      { 
-          title: '其他重量（kg）', 
-          dataIndex: 'otherWeight', 
-          type:'number',
-          width: 120,
-          editable: true,
-          key: 'otherWeight',
-          render:(value:any)=>{
-            return parseFloat(value).toFixed(2)
-          }  
-      },
-      { 
-          title: '* 总重（kg）', 
-          dataIndex: 'totalWeight', 
-          type:'edit',
-          width: 100,
-          editable: true,
-          key: 'totalWeight',
-          render:(_:any,record:any)=>{
-              return <span>{(parseFloat(record.otherWeight)+parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
-          } 
-      },
-      { 
-          title: '备注', 
-          dataIndex: 'description', 
-          type:'textArea',
-          width: 250,
-          editable: true,
-          key: 'description' 
-      },
-      {
-          key: 'operation',
-          title: '操作',
-          width: 100,
-          dataIndex: 'operation',
-          render: (_: any, record: Item) => {
-          const editable = isEditing(record);
-          return editable ? (
-            <span>
-              <a href="javascript:;" onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-                保存
-              </a>
-              <Popconfirm title="确定取消更改吗？" onConfirm={cancel}>
-                <a>取消</a>
-              </Popconfirm>
-            </span>
-          ) : (
-              <Space>
-                  <Typography.Link disabled={editingKey !== ''||params.status!=='3'} onClick={() => edit(record)}>
-                      编辑
-                  </Typography.Link>
-                  <Popconfirm title="确定删除该条数据吗？" onConfirm={() => onDelete(record.key)} disabled={editingKey !== ''||params.status!=='3'}>
-                    <Typography.Link disabled={editingKey !== ''||params.status!=='3'}>
-                        删除
-                    </Typography.Link>
-                  </Popconfirm>
-              </Space>
-          );
-        },
-      }
+    //   { 
+    //       title: '* 杆塔号', 
+    //       dataIndex: 'name', 
+    //       // type:'text',
+    //       width: 80,
+    //       // editable: true,
+    //       // key: 'name' 
+    //   },
+    //   { 
+    //       title: '* 呼高（m）', 
+    //       dataIndex: 'basicHeight', 
+    //       // type:'number',
+    //       width: 90,
+    //       // editable: true,
+    //       // key: 'basicHeight',
+    //       // render:(value:any)=>{
+    //       //   return parseFloat(value).toFixed(2)
+    //       // }  
+    //   },
+    //   { 
+    //       title: '* 模式', 
+    //       dataIndex: 'pattern', 
+    //       // type:'select',
+    //       width: 90,
+    //       // editable: true,
+    //       // key: 'pattern',
+    //       // enums:patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
+    //       //   return {
+    //       //       label:name,
+    //       //       value: id,
+    //       //   }
+    //       // }),
+    //       // render: (value: string, record: object): React.ReactNode => {
+    //       //   const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
+    //       //     return {
+    //       //         label:name,
+    //       //         value: id,
+    //       //     }
+    //       //   })
+    //       //   return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
+    //       // } 
+    //   },
+    //   { 
+    //     title: '接腿配置A', 
+    //     dataIndex: 'legConfigurationA', 
+    //     // type:'textArea',
+    //     width: 80,
+    //     // editable: true,
+    //     // key: 'legConfigurationA' 
+    //   },
+    //   { 
+    //     title: '接腿配置B', 
+    //     dataIndex: 'legConfigurationB', 
+    //     // type:'textArea',
+    //     width: 80,
+    //     // editable: true,
+    //     // key: 'legConfigurationB' 
+    //   },
+    //   { 
+    //     title: '接腿配置C', 
+    //     dataIndex: 'legConfigurationC', 
+    //     // type:'textArea',
+    //     width: 80,
+    //     // editable: true,
+    //     // key: 'legConfigurationC' 
+    //   },
+    //   { 
+    //     title: '接腿配置D', 
+    //     dataIndex: 'legConfigurationD', 
+    //     // type:'textArea',
+    //     width: 80,
+    //     // editable: true,
+    //     // key: 'legConfigurationD' 
+    //   },
+    //   { 
+    //     title: '接腿重A（kg）', 
+    //     dataIndex: 'legWeightA', 
+    //     // type:'number',
+    //     width: 100,
+    //     // editable: true,
+    //     // key: 'legWeightA', 
+    //     // render:(value:any)=>{
+    //     //   return parseFloat(value).toFixed(2)
+    //     // }  
+    //   },
+    //   { 
+    //     title: '接腿重B（kg）', 
+    //     dataIndex: 'legWeightB', 
+    //     // type:'number',
+    //     width: 100,
+    //     // editable: true,
+    //     // key: 'legWeightB', 
+    //     // render:(value:any)=>{
+    //     //   return parseFloat(value).toFixed(2)
+    //     // }  
+    //   },
+    //   { 
+    //     title: '接腿重C（kg）', 
+    //     dataIndex: 'legWeightC', 
+    //     // type:'number',
+    //     width: 100,
+    //     // editable: true,
+    //     // key: 'legWeightC', 
+    //     // render:(value:any)=>{
+    //     //   return parseFloat(value).toFixed(2)
+    //     // }  
+    //   },
+    //   { 
+    //     title: '接腿重D（kg）', 
+    //     dataIndex: 'legWeightD', 
+    //     // type:'number',
+    //     width: 100,
+    //     // editable: true,
+    //     // key: 'legWeightD', 
+    //     // render:(value:any)=>{
+    //     //   return parseFloat(value).toFixed(2)
+    //     // }  
+    //   },
+    //   // { 
+    //   //     title: '* 杆塔重量（kg）', 
+    //   //     dataIndex: 'monomerWeight', 
+    //   //     type:'number',
+    //   //     width: 100,
+    //   //     editable: true,
+    //   //     key: 'monomerWeight', 
+    //   //     render:(value:any)=>{
+    //   //       return parseFloat(value).toFixed(2)
+    //   //     }  
+    //   // },
+    //   { 
+    //     title: '* 本体重量（kg）', 
+    //     dataIndex: 'bodyWeight', 
+    //     // type:'number',
+    //     width: 120,
+    //     // editable: true,
+    //     // key: 'bodyWeight',
+    //     // render:(value:any)=>{
+    //     //   return parseFloat(value).toFixed(2)
+    //     // }   
+    //   },//范春森于11月23日去掉，于龙于11月25号加上
+    //   { 
+    //     title: '* 单重（kg）', 
+    //     dataIndex: 'monomerWeight', 
+    //     // type:'edit',
+    //     width: 100,
+    //     // editable: true,
+    //     // key: 'monomerWeight', 
+    //     // render:(_:any,record:any)=>{
+    //     //   return <span>{(parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
+    //     // }  
+    //   },
+    //   // { 
+    //   //     title: '其他重量（kg）', 
+    //   //     dataIndex: 'otherWeight', 
+    //   //     type:'number',
+    //   //     width: 120,
+    //   //     editable: true,
+    //   //     key: 'otherWeight',
+    //   //     render:(value:any)=>{
+    //   //       return parseFloat(value).toFixed(2)
+    //   //     }  
+    //   // },
+    //   { 
+    //       title: '* 总重（kg）', 
+    //       dataIndex: 'totalWeight', 
+    //       // type:'edit',
+    //       width: 100,
+    //       // editable: true,
+    //       // key: 'totalWeight',
+    //       render:(_:any,record:any)=>{
+    //           return <span>{(parseFloat(record.otherWeight)+parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
+    //       } 
+    //   },
+    //   { 
+    //       title: '备注', 
+    //       dataIndex: 'description', 
+    //       // type:'textArea',
+    //       width: 250,
+    //       // editable: true,
+    //       // key: 'description' 
+    //   },
+    //   {
+    //       key: 'operation',
+    //       title: '操作',
+    //       width: 100,
+    //       dataIndex: 'operation',
+    //       render: (_: any, record: Item) => {
+    //       const editable = isEditing(record);
+    //       return editable ? (
+    //         <span>
+    //           <a href="javascript:;" onClick={() => save(record.key)} style={{ marginRight: 8 }}>
+    //             保存
+    //           </a>
+    //           <Popconfirm title="确定取消更改吗？" onConfirm={cancel}>
+    //             <a>取消</a>
+    //           </Popconfirm>
+    //         </span>
+    //       ) : (
+    //           <Space>
+    //               <Typography.Link disabled={editingKey !== ''||params.status!=='3'} onClick={() => edit(record)}>
+    //                   编辑
+    //               </Typography.Link>
+    //               <Popconfirm title="确定删除该条数据吗？" onConfirm={() => onDelete(record.key)} disabled={editingKey !== ''||params.status!=='3'}>
+    //                 <Typography.Link disabled={editingKey !== ''||params.status!=='3'}>
+    //                     删除
+    //                 </Typography.Link>
+    //               </Popconfirm>
+    //           </Space>
+    //       );
+    //     },
+    //   }
 
-    ];
+    // ];
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields();
@@ -548,6 +548,7 @@ export default function ConfirmDetail(): React.ReactNode {
             console.log(error)
         }
     }
+    
     const handleModalCancel = () => {setVisible(false);form.resetFields();}
     const handlePictureModalCancel = () => {setPictureVisible(false)}
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
@@ -583,22 +584,22 @@ export default function ConfirmDetail(): React.ReactNode {
       labelCol: { span: 6 },
       wrapperCol: { span: 16 }
     };
-    const mergedColumns = tableColumns.map((col:any) => {
-      if (!col.editable) {
-        return col;
-      }
-      return {
-        ...col,
-        onCell: (record: Item) => ({
-          record,
-          inputType: col.type,
-          dataIndex: col.dataIndex,
-          enums: col.enums,
-          title: col.title,
-          editing: isEditing(record),
-        }),
-      };
-    });
+    // const mergedColumns = tableColumns.map((col:any) => {
+    //   if (!col.editable) {
+    //     return col;
+    //   }
+    //   return {
+    //     ...col,
+    //     onCell: (record: Item) => ({
+    //       record,
+    //       inputType: col.type,
+    //       dataIndex: col.dataIndex,
+    //       enums: col.enums,
+    //       title: col.title,
+    //       editing: isEditing(record),
+    //     }),
+    //   };
+    // });
 
 
     /**
@@ -640,6 +641,263 @@ export default function ConfirmDetail(): React.ReactNode {
       })
     }
     
+    const tableColumns = [
+      { 
+          title: '序号', 
+          dataIndex: 'index', 
+          key: 'index', 
+          width: 50,
+          render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
+      },
+      { 
+          title: '* 线路名称', 
+          dataIndex: 'lineName',
+          width: 80,
+          key: 'lineName', 
+      },
+      { 
+          title: '* 产品类型', 
+          dataIndex: 'productType', 
+          width: 100,
+          key: 'productType',
+      },
+      { 
+          title: '* 电压等级（kv）', 
+          dataIndex: 'voltageLevel',
+          width: 120,
+          key: 'voltageLevel'
+      },
+      { 
+          title: '* 塔型', 
+          dataIndex: 'productCategory', 
+          width: 80,
+          key: 'productCategory' 
+      },
+      { 
+          title: '* 塔型钢印号', 
+          dataIndex: 'steelProductShape', 
+          width: 100,
+          key: 'steelProductShape' 
+      },
+      
+      { 
+          title: '* 杆塔号', 
+          dataIndex: 'name', 
+          width: 80,
+          key: 'name' 
+      },
+      { 
+          title: '* 呼高（m）', 
+          dataIndex: 'basicHeight', 
+          width: 90,
+          key: 'basicHeight',
+          render:(value:any)=>{
+            return parseFloat(value).toFixed(2)
+          }  
+      },
+      { 
+          title: '* 模式', 
+          dataIndex: 'pattern', 
+          width: 90,
+          key: 'pattern',
+      },
+      { 
+        title: '接腿配置A', 
+        dataIndex: 'legConfigurationA', 
+        width: 80,
+        key: 'legConfigurationA' 
+      },
+      { 
+        title: '接腿配置B', 
+        dataIndex: 'legConfigurationB', 
+        width: 80,
+        key: 'legConfigurationB' 
+      },
+      { 
+        title: '接腿配置C', 
+        dataIndex: 'legConfigurationC', 
+        width: 80,
+        key: 'legConfigurationC' 
+      },
+      { 
+        title: '接腿配置D', 
+        dataIndex: 'legConfigurationD', 
+        width: 80,
+        key: 'legConfigurationD' 
+      },
+      { 
+        title: '接腿重A（kg）', 
+        dataIndex: 'legWeightA', 
+        width: 100,
+        key: 'legWeightA', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '接腿重B（kg）', 
+        dataIndex: 'legWeightB', 
+        width: 100,
+        key: 'legWeightB', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '接腿重C（kg）', 
+        dataIndex: 'legWeightC',
+        width: 100,
+        key: 'legWeightC', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '接腿重D（kg）', 
+        dataIndex: 'legWeightD',
+        width: 100,
+        key: 'legWeightD', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      // { 
+      //     title: '* 杆塔重量（kg）', 
+      //     dataIndex: 'monomerWeight', 
+      //     type:'number',
+      //     width: 100,
+      //     editable: true,
+      //     key: 'monomerWeight', 
+      //     render:(value:any)=>{
+      //       return parseFloat(value).toFixed(2)
+      //     }  
+      // },
+      { 
+        title: '* 本体重量（kg）', 
+        dataIndex: 'bodyWeight', 
+        width: 120,
+        key: 'bodyWeight',
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }   
+      },//范春森于11月23日去掉，于龙于11月25号加上
+      { 
+        title: '* 单重（kg）', 
+        dataIndex: 'monomerWeight', 
+        width: 100,
+        key: 'monomerWeight', 
+        render:(_:any,record:any)=>{
+          return <span>{(parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
+        }  
+      },
+      // { 
+      //     title: '其他重量（kg）', 
+      //     dataIndex: 'otherWeight', 
+      //     type:'number',
+      //     width: 120,
+      //     editable: true,
+      //     key: 'otherWeight',
+      //     render:(value:any)=>{
+      //       return parseFloat(value).toFixed(2)
+      //     }  
+      // },
+      { 
+          title: '* 总重（kg）', 
+          dataIndex: 'totalWeight', 
+          width: 100,
+          key: 'totalWeight',
+          render:(_:any,record:any)=>{
+              return <span>{(parseFloat(record.otherWeight)+parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
+          } 
+      },
+      { 
+          title: '备注', 
+          dataIndex: 'description', 
+          width: 250,
+          key: 'description' 
+      },
+      {
+          key: 'operation',
+          title: '操作',
+          width: 100,
+          dataIndex: 'operation',
+          render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            <Space direction="horizontal" size="small">
+                <Popconfirm
+                    title="确认删除?"
+                    onConfirm={async () => {
+                      // const newData:any = [...tableDataSource];
+                      // const index = newData.findIndex((item:any) => key === item.key);
+                      // console.log(newData[index])
+                      // if (index > -1 && newData[index].id) {
+                        RequestUtil.delete(`/tower-science/drawProductDetail?id=${record.id}`)
+                      //   newData.splice(index, 1);
+                      // }else{
+                      //   newData.splice(index, 1);
+                      // }
+                      // setTableDataSource(newData);
+                      // let totalNumber = '0';
+                      // console.log(newData)
+                      // newData.forEach((item:any)=>{
+                      //   totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
+                      // })
+                      // setWeight(totalNumber);
+                        const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
+                        setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{
+                          return{ 
+                            ...item, 
+                            key: index.toString(),
+                            index: index,
+                            legConfigurationA:item.legConfigurationA? item.legConfigurationA: 0,
+                            legConfigurationB:item.legConfigurationB? item.legConfigurationB: 0,
+                            legConfigurationC:item.legConfigurationC? item.legConfigurationC: 0,
+                            legConfigurationD:item.legConfigurationD? item.legConfigurationD: 0,
+                            otherWeight:item.otherWeight? item.otherWeight: 0,
+                            totalWeight: item.totalWeight? item.totalWeight: 0,
+                          }
+                        }));
+                        setAttachInfo([...data.fileVOList]);
+                        setDescription(data?.description);
+                        let totalNumber = '0';
+                        data?.drawProductDetailList.forEach((item:any)=>{
+                          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
+                        })
+                        setWeight(totalNumber);
+                    }}
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Button type="link">删除</Button>
+                </Popconfirm>
+            </Space>
+        )
+          // render: (_: any, record: Item) => {
+          // const editable = isEditing(record);
+          // return editable ? (
+          //   <span>
+          //     <a href="javascript:;" onClick={() => save(record.key)} style={{ marginRight: 8 }}>
+          //       保存
+          //     </a>
+          //     <Popconfirm title="确定取消更改吗？" onConfirm={cancel}>
+          //       <a>取消</a>
+          //     </Popconfirm>
+          //   </span>
+          // ) : (
+          //     <Space>
+          //         <Typography.Link disabled={editingKey !== ''||params.status!=='3'} onClick={() => edit(record)}>
+          //             编辑
+          //         </Typography.Link>
+          //         <Popconfirm title="确定删除该条数据吗？" onConfirm={() => onDelete(record.key)} disabled={editingKey !== ''||params.status!=='3'}>
+          //           <Typography.Link disabled={editingKey !== ''||params.status!=='3'}>
+          //               删除
+          //           </Typography.Link>
+          //         </Popconfirm>
+          //     </Space>
+          // );
+        // }
+      }
+
+    ];
     return <Spin spinning={loading}>
             <DetailContent operation={[
               <>
@@ -803,7 +1061,7 @@ export default function ConfirmDetail(): React.ReactNode {
                 >
                     当前存在错误数据，请重新下载上传！
                 </Modal>
-                <Form form={formRef} component={false} >
+                {/* <Form form={formRef} component={false} >
                     <Table
                       components={{
                         body: {
@@ -823,7 +1081,8 @@ export default function ConfirmDetail(): React.ReactNode {
                       scroll={{x:1000}}
                       pagination={false}
                     />
-                </Form>
+                </Form> */}
+                <CommonTable columns={tableColumns} dataSource={[...tableDataSource]} pagination={false}/>
                 <div style={{paddingBottom: '24px'}}>
                   <DetailTitle title="备注"/>
                   {detailData?<TextArea maxLength={ 200 } defaultValue={detailData?.description} onChange={(e)=>{
