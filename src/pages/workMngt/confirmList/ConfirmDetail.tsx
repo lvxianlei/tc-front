@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Button, Spin, Space, Modal, Form, Row, Col, Upload, message, Image } from 'antd';
+import { Button, Spin, Space, Modal, Form, Row, Col, Upload, message, Image, Descriptions } from 'antd';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -11,34 +11,34 @@ import { downLoadFile } from '../../../utils';
 import { patternTypeOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import ExportList from '../../../components/export/list';
-interface Item {
-  key: string;
-  name: string;
-  partBidNumber: number;
-  address: string;
-  pattern: number;
-}
+// interface Item {
+//   key: string;
+//   name: string;
+//   partBidNumber: number;
+//   address: string;
+//   pattern: number;
+// }
 
-const originData: Item[] = [];
-for (let i = 0; i < 100; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `Edrward ${i}`,
-    partBidNumber: 32,
-    pattern: 1,
-    address: `London Park no. ${i}`,
-  });
-}
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: 'number' | 'text' | 'select' | 'edit' | 'textArea';
-  enums?: object[];
-  record: Item;
-  index: number;
-  children: React.ReactNode;
-}
+// const originData: Item[] = [];
+// for (let i = 0; i < 100; i++) {
+//   originData.push({
+//     key: i.toString(),
+//     name: `Edrward ${i}`,
+//     partBidNumber: 32,
+//     pattern: 1,
+//     address: `London Park no. ${i}`,
+//   });
+// }
+// interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+//   editing: boolean;
+//   dataIndex: string;
+//   title: any;
+//   inputType: 'number' | 'text' | 'select' | 'edit' | 'textArea';
+//   enums?: object[];
+//   record: Item;
+//   index: number;
+//   children: React.ReactNode;
+// }
 
 
 
@@ -50,187 +50,188 @@ export default function ConfirmDetail(): React.ReactNode {
     const [tableDataSource, setTableDataSource] = useState<object[]>([]);
     const [weight,setWeight] = useState<string>('0');
     const [description, setDescription] = useState('');
-    const [attachInfo, setAttachInfo] = useState<any[]>([])
+    const [attachInfo, setAttachInfo] = useState<any[]>([]);
+    const [confirmData, setConfirmData] = useState<any[]>([{}]);
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
 
     const [editingKey, setEditingKey] = useState('');
-    const isEditing = (record: Item) => record.key === editingKey;
+    // const isEditing = (record: Item) => record.key === editingKey;
 
-    const EditableCell: React.FC<EditableCellProps> = ({
-      editing,
-      dataIndex,
-      title,
-      inputType,
-      enums,
-      record,
-      index,
-      children,
-      ...restProps
-    }) => {
-      const inputNode = inputType === 'number' ? <InputNumber style={{width:'100%'}} onChange={(value:number)=>{
-        let number = 0;
-        if(dataIndex==='otherWeight'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
-          const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
-          const dataC:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
-          const dataD:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
-          const data:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
-          number = dataA+dataB+dataC+dataD+data;
-        }
-        if(dataIndex==='legWeightA'){
-          const dataA:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
-          const dataB:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
-          const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
-          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
-          number = dataA+dataB+dataC+dataD+data;
-        }
-        if(dataIndex==='legWeightB'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
-          const dataB:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
-          const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
-          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
-          number = dataA+dataB+dataC+dataD+data;
-        }
-        if(dataIndex==='legWeightC'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
-          const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
-          const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
-          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
-          number = dataA+dataB+dataC+dataD+data;
-        }
-        if(dataIndex==='legWeightD'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
-          const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
-          const dataC:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
-          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
-          number = dataA+dataB+dataC+dataD+data;
-        }
-        dataIndex!=="basicHeight" && formRef.setFieldsValue({
-            totalWeight:number + parseFloat(value.toString())
-        })
-      }} min={0} precision={2} max={dataIndex!=='basicHeight'&&dataIndex!=='otherWeight'? 99999.99 :dataIndex ==='basicHeight'?99.99: 999999.99}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
-        return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
-      })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={dataIndex==='description'?400:10} rows={1}/>:<Input />;
-      if(dataIndex === 'name'){
-        return (
-        <td {...restProps}>
-          {editing ? (
-            <Form.Item
-              name={dataIndex}
-              style={{ margin: 0 }}
-              rules={[
-                {
-                  required: true,
-                  validator: (rule: any, value: string, callback: (error?: string) => void) => {
-                    checkProductNumber1(value,index).then(res => {
-                          if (res > 0) {
-                              callback('请输入* 杆塔号，且同一塔型下杆塔号唯一！')
-                          } else {
-                              callback();
-                          }
-                      })
-                  }
-                },
-              ]}
-            >
-              {inputNode}
-            </Form.Item>
-          ) : (
-            children
-          )}
-        </td>)
-      }
-      else{
-        return (
-          <td {...restProps}>
-            {editing ? (
-              <Form.Item
-                name={dataIndex}
-                style={{ margin: 0 }}
-                rules={[
-                  {
-                    required: inputType==='textArea'?false:true,
-                    message: `请输入${title}!`,
-                  },
-                ]}
-              >
-                {inputNode}
-              </Form.Item>
-            ) : (
-              children
-            )}
-          </td>
-        );
-      }
+    // const EditableCell: React.FC<EditableCellProps> = ({
+    //   editing,
+    //   dataIndex,
+    //   title,
+    //   inputType,
+    //   enums,
+    //   record,
+    //   index,
+    //   children,
+    //   ...restProps
+    // }) => {
+    //   const inputNode = inputType === 'number' ? <InputNumber style={{width:'100%'}} onChange={(value:number)=>{
+    //     let number = 0;
+    //     if(dataIndex==='otherWeight'){
+    //       const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
+    //       const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
+    //       const dataC:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
+    //       const dataD:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
+    //       const data:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
+    //       number = dataA+dataB+dataC+dataD+data;
+    //     }
+    //     if(dataIndex==='legWeightA'){
+    //       const dataA:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
+    //       const dataB:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
+    //       const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
+    //       const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
+    //       const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
+    //       number = dataA+dataB+dataC+dataD+data;
+    //     }
+    //     if(dataIndex==='legWeightB'){
+    //       const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
+    //       const dataB:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
+    //       const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
+    //       const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
+    //       const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
+    //       number = dataA+dataB+dataC+dataD+data;
+    //     }
+    //     if(dataIndex==='legWeightC'){
+    //       const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
+    //       const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
+    //       const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
+    //       const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
+    //       const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
+    //       number = dataA+dataB+dataC+dataD+data;
+    //     }
+    //     if(dataIndex==='legWeightD'){
+    //       const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
+    //       const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
+    //       const dataC:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
+    //       const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
+    //       const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
+    //       number = dataA+dataB+dataC+dataD+data;
+    //     }
+    //     dataIndex!=="basicHeight" && formRef.setFieldsValue({
+    //         totalWeight:number + parseFloat(value.toString())
+    //     })
+    //   }} min={0} precision={2} max={dataIndex!=='basicHeight'&&dataIndex!=='otherWeight'? 99999.99 :dataIndex ==='basicHeight'?99.99: 999999.99}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
+    //     return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
+    //   })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={dataIndex==='description'?400:10} rows={1}/>:<Input />;
+    //   if(dataIndex === 'name'){
+    //     return (
+    //     <td {...restProps}>
+    //       {editing ? (
+    //         <Form.Item
+    //           name={dataIndex}
+    //           style={{ margin: 0 }}
+    //           rules={[
+    //             {
+    //               required: true,
+    //               validator: (rule: any, value: string, callback: (error?: string) => void) => {
+    //                 checkProductNumber1(value,index).then(res => {
+    //                       if (res > 0) {
+    //                           callback('请输入* 杆塔号，且同一塔型下杆塔号唯一！')
+    //                       } else {
+    //                           callback();
+    //                       }
+    //                   })
+    //               }
+    //             },
+    //           ]}
+    //         >
+    //           {inputNode}
+    //         </Form.Item>
+    //       ) : (
+    //         children
+    //       )}
+    //     </td>)
+    //   }
+    //   else{
+    //     return (
+    //       <td {...restProps}>
+    //         {editing ? (
+    //           <Form.Item
+    //             name={dataIndex}
+    //             style={{ margin: 0 }}
+    //             rules={[
+    //               {
+    //                 required: inputType==='textArea'?false:true,
+    //                 message: `请输入${title}!`,
+    //               },
+    //             ]}
+    //           >
+    //             {inputNode}
+    //           </Form.Item>
+    //         ) : (
+    //           children
+    //         )}
+    //       </td>
+    //     );
+    //   }
      
-    };
-    const edit = (record: Partial<Item> & { key: React.Key }) => {
-      formRef.setFieldsValue({ partBidNumber: '', unit: '', address: '', ...record });
-      setEditingKey(record.key);
-    };
-    const onDelete = (key: React.Key)=>{
-      const newData:any = [...tableDataSource];
-      const index = newData.findIndex((item:any) => key === item.key);
-      console.log(newData[index])
-      if (index > -1 && newData[index].id) {
-        RequestUtil.delete(`/tower-science/drawProductDetail?id=${newData[index].id}`)
-        newData.splice(index, 1);
-      }else{
-        newData.splice(index, 1);
-      }
-      setTableDataSource(newData);
-      let totalNumber = '0';
-      console.log(newData)
-      newData.forEach((item:any)=>{
-        totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
-      })
-      setWeight(totalNumber);
-    };
-    const cancel = () => {
-      setEditingKey('');
-    };
+    // };
+    // const edit = (record: Partial<Item> & { key: React.Key }) => {
+    //   formRef.setFieldsValue({ partBidNumber: '', unit: '', address: '', ...record });
+    //   setEditingKey(record.key);
+    // };
+    // const onDelete = (key: React.Key)=>{
+    //   const newData:any = [...tableDataSource];
+    //   const index = newData.findIndex((item:any) => key === item.key);
+    //   console.log(newData[index])
+    //   if (index > -1 && newData[index].id) {
+    //     RequestUtil.delete(`/tower-science/drawProductDetail?id=${newData[index].id}`)
+    //     newData.splice(index, 1);
+    //   }else{
+    //     newData.splice(index, 1);
+    //   }
+    //   setTableDataSource(newData);
+    //   let totalNumber = '0';
+    //   console.log(newData)
+    //   newData.forEach((item:any)=>{
+    //     totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
+    //   })
+    //   setWeight(totalNumber);
+    // };
+    // const cancel = () => {
+    //   setEditingKey('');
+    // };
 
-    const save = async (key: React.Key) => {
-      try {
-        const row = (await formRef.validateFields()) as Item;
+    // const save = async (key: React.Key) => {
+    //   try {
+    //     const row = (await formRef.validateFields()) as Item;
 
-        const newData = [...tableDataSource];
-        const index = newData.findIndex((item:any) => key === item.key);
-        if (index > -1) {
-          const item = newData[index];
-          newData.splice(index, 1, {
-            ...item,
-            ...row,
-          });
-          setTableDataSource(newData);
-          setEditingKey('');
-        } else {
-          newData.push(row);
-          setTableDataSource(newData);
-          setEditingKey('');
-        }
-        let totalNumber = '0';
-        newData.forEach((item:any)=>{
-          console.log(item.totalWeight)
-          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
-          console.log(totalNumber)
-        })
-        setWeight(totalNumber);
+    //     const newData = [...tableDataSource];
+    //     const index = newData.findIndex((item:any) => key === item.key);
+    //     if (index > -1) {
+    //       const item = newData[index];
+    //       newData.splice(index, 1, {
+    //         ...item,
+    //         ...row,
+    //       });
+    //       setTableDataSource(newData);
+    //       setEditingKey('');
+    //     } else {
+    //       newData.push(row);
+    //       setTableDataSource(newData);
+    //       setEditingKey('');
+    //     }
+    //     let totalNumber = '0';
+    //     newData.forEach((item:any)=>{
+    //       console.log(item.totalWeight)
+    //       totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
+    //       console.log(totalNumber)
+    //     })
+    //     setWeight(totalNumber);
        
-        RequestUtil.post(`/tower-science/drawProductDetail/save`,{...newData[index],drawTaskId: params.id, totalWeight:'0'}).then(()=>{
-          message.success('保存成功！')
-        })
-      } catch (errInfo) {
-        console.log('Validate Failed:', errInfo);
-      }
-    };
+    //     RequestUtil.post(`/tower-science/drawProductDetail/save`,{...newData[index],drawTaskId: params.id, totalWeight:'0'}).then(()=>{
+    //       message.success('保存成功！')
+    //     })
+    //   } catch (errInfo) {
+    //     console.log('Validate Failed:', errInfo);
+    //   }
+    // };
 
     // const tableColumns = [
     //   { 
@@ -914,16 +915,17 @@ export default function ConfirmDetail(): React.ReactNode {
                               }}),
                               description
                           }
-                          let saveDisabled = false;
-                          tableDataSource.forEach((item:any)=>{
-                            if(isEditing(item)){
-                              saveDisabled = true;
-                            }
-                          })
-                          if(saveDisabled){
-                            message.error('存在塔信息未保存！')
-                          }
-                          else if(tableDataSource.length>0){
+                          // let saveDisabled = false;
+                          // tableDataSource.forEach((item:any)=>{
+                          //   if(isEditing(item)){
+                          //     saveDisabled = true;
+                          //   }
+                          // })
+                          // if(saveDisabled){
+                          //   message.error('存在塔信息未保存！')
+                          // }
+                          // else 
+                          if(tableDataSource.length>0){
                               console.log(saveData)
                               await RequestUtil.post('/tower-science/drawProductDetail/saveDrawProduct', saveData).then(()=>{
                                   message.success('保存成功！');
@@ -950,16 +952,17 @@ export default function ConfirmDetail(): React.ReactNode {
                             }}),
                             description
                           }
-                          let saveDisabled = false;
-                          tableDataSource.forEach((item:any)=>{
-                            if(isEditing(item)){
-                              saveDisabled = true;
-                            }
-                          })
-                          if(saveDisabled){
-                            message.error('存在塔信息未保存！')
-                          }
-                          else if(tableDataSource.length>0){
+                          // let saveDisabled = false;
+                          // tableDataSource.forEach((item:any)=>{
+                          //   if(isEditing(item)){
+                          //     saveDisabled = true;
+                          //   }
+                          // })
+                          // if(saveDisabled){
+                          //   message.error('存在塔信息未保存！')
+                          // }
+                          // else 
+                          if(tableDataSource.length>0){
                               console.log(submitData)
                               await RequestUtil.post('/tower-science/drawProductDetail/submitDrawProduct', submitData).then(()=>{
                                   message.success('提交成功！');
@@ -1131,9 +1134,9 @@ export default function ConfirmDetail(): React.ReactNode {
             <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
                 <Image src={pictureUrl} preview={false}/>
             </Modal>
-            <Modal visible={visible} title="添加" onOk={handleModalOk} onCancel={handleModalCancel}  width={ 800 }>
+            <Modal visible={visible} title="添加" onOk={handleModalOk} onCancel={handleModalCancel}  width={ '95%'}>
                 <Form form={form} { ...formItemLayout }>
-                    <Row>
+                    {/* <Row>
                       <Col span={12}>
                         <Form.Item name="lineName" label="线路名称" rules={[{
                             "required": true,
@@ -1379,8 +1382,362 @@ export default function ConfirmDetail(): React.ReactNode {
                             <TextArea rows={1} showCount maxLength={400}/>
                         </Form.Item>
                       </Col>
-                    </Row>
+                    </Row> */}
                     {/* <BaseInfo columns={towerData} dataSource={detailData || {}} edit col={ 2 }/> */}
+                        <Descriptions title="" bordered size="small" colon={ false } column={ 14 }>
+                            <Descriptions.Item label="线路名称" span={ 2 }>
+                                <Form.Item name="lineName" rules={[{
+                                    "required": true,
+                                    "message":"请输入线路名称"
+                                }]}>
+                                    <Input  maxLength={50}/>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="塔型" span={ 2 }>
+                                <Form.Item name="productCategory" rules={[{
+                                  "required": true,
+                                  "message":"请输入塔型"
+                                }]}>
+                                    <Input  maxLength={50}/>
+                                </Form.Item>
+                              
+                            </Descriptions.Item>
+                            <Descriptions.Item label="塔型钢印号" span={ 2 }>
+                                <Form.Item name="steelProductShape" rules={[{
+                                    "required": true,
+                                    "message":"请输入塔型钢印号"
+                                }]}>
+                                    <Input  maxLength={50}/>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="产品类型" span={ 2 }>
+                                <Form.Item name="productType" rules={[{
+                                    "required": true,
+                                    "message":"请选择产品类型"
+                                }]}>
+                                    <Select>
+                                      {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                          return <Select.Option key={index} value={id}>
+                                              {name}
+                                          </Select.Option>
+                                      })}
+                                    </Select>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="电压等级" span={ 2 }>
+                                <Form.Item name="productType" rules={[{
+                                    "required": true,
+                                    "message":"请选择产品类型"
+                                }]}>
+                                    <Select>
+                                      {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                          return <Select.Option key={index} value={id}>
+                                              {name}
+                                          </Select.Option>
+                                      })}
+                                    </Select>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="模式" span={ 2 }>
+                                <Form.Item name="pattern" rules={[{
+                                    "required": true,
+                                    "message":"请选择模式"
+                                }]}>
+                                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                      { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                          return <Select.Option key={ index } value={ id }>
+                                              { name }
+                                          </Select.Option>
+                                      }) }
+                                  </Select>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item children span={ 14 }></Descriptions.Item>
+                            {/* <Descriptions.Item span={ 1 }><Button type="primary" ghost size="small" onClick={ () => this.addRow() }>添加</Button></Descriptions.Item> */}
+                            {
+                                confirmData?.map((item: any, index: number) => {
+                                    return  <>  
+                                        <Descriptions.Item label="杆塔号" span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "name"]} rules={[{
+                                              required: true,
+                                              validator: (rule: any, value: string, callback: (error?: string) => void) => {
+                                                checkProductNumber(value).then(res => {
+                                                      if (res>-1) {
+                                                          callback('请输入杆塔号，且同一塔型下杆塔号唯一！')
+                                                      } else {
+                                                          callback();
+                                                      }
+                                                  })
+                                              }
+                                          }]}>
+                                              <Input  maxLength={50}/>
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="基数"  span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "A"]}
+                                                rules={[{
+                                                    required: true
+                                                }]} >
+                                                <Input  maxLength={50}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="呼高（m）"  span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "basicHeight"]}  rules={[{
+                                              "required": true,
+                                              "message":"请输入呼高（m）"
+                                          }]}>
+                                              <InputNumber precision={2}  min={0} max={99.99}/>
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="本体重量（kg）" span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "bodyWeight"]} rules={[{
+                                              "required": true,
+                                              "message":"请输入本体重量（kg）"
+                                          }]} initialValue={0}>
+                                              <InputNumber precision={2}  min={0}  onChange={(value:number)=>{
+                                                  // const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                                  // const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                                  // const dataC:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                                  // const dataD:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                                  // const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                                                  // form.setFieldsValue({
+                                                  //     monomerWeight:dataA+dataB+dataC+dataD+value,
+                                                  //     totalWeight:data+dataA+dataB+dataC+dataD+value
+                                                  // })
+                                              }} max={999999.99}/>
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿配置A" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legConfigurationA"]}>
+                                              <Input   maxLength={10}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿配置B" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legConfigurationB"]} >
+                                                <Input   maxLength={10}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿配置C" span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "legConfigurationC"]}>
+                                              <Input   maxLength={10}/>
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿配置D" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legConfigurationD"]} >
+                                                <Input  maxLength={10}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿重A（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legWeightA"]}
+                                            // rules={[{
+                                            //     "required": true,
+                                            //     "message":"请输入接腿重A（kg）"
+                                            // }]}
+                                            initialValue={0}
+                                            >
+                                                <InputNumber precision={2} min={0}  onChange={(value:number)=>{
+                                                    // const dataA:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                                    // const dataB:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                                    // const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                                    // const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
+                                                    // const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     monomerWeight:dataA+dataB+dataC+dataD+value,
+                                                    //     totalWeight:data+dataA+dataB+dataC+dataD+value
+                                                    // })
+                                                }} max={99999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿重B（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legWeightB"]}  initialValue={0}>
+                                                <InputNumber precision={2} min={0}  onChange={(value:number)=>{
+                                                    const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                                    const dataB:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                                    const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                                    const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
+                                                    const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                                                    form.setFieldsValue({
+                                                        monomerWeight:dataA+dataB+dataC+dataD+value,
+                                                        totalWeight:data+dataA+dataB+dataC+dataD+value
+                                                    })
+                                                }} max={99999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿重C（kg）" span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "legWeightC"]}  initialValue={0}>
+                                              <InputNumber precision={2} min={0}   onChange={(value:number)=>{
+                                                  // const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                                  // const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                                  // const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                                  // const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
+                                                  // const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                                                  // form.setFieldsValue({
+                                                  //     monomerWeight:dataA+dataB+dataC+dataD+value,
+                                                  //     totalWeight:data+dataA+dataB+dataC+dataD+value
+                                                  // })
+                                              }} max={99999.99}/>
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿重D（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legWeightD"]}  initialValue={0}>
+                                                <InputNumber precision={2}  min={0}  onChange={(value:number)=>{
+                                                    // const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                                    // const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                                    // const dataC:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                                    // const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
+                                                    // const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     monomerWeight:dataA+dataB+dataC+dataD+value,
+                                                    //     totalWeight:data+dataA+dataB+dataC+dataD+value
+                                                    // })
+                                                }} max={99999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="单重（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "monomerWeight"]}  rules={[{
+                                                "required": true,
+                                                "message":"请输入单重（kg）"
+                                            }]} initialValue={0}>
+                                                <InputNumber precision={2} disabled  max={9999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="总重（kg）" span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "totalWeight"]} rules={[{
+                                              "required": true,
+                                              "message":"请输入总重（kg）"
+                                          }]} initialValue={0}>
+                                              <InputNumber precision={2} disabled />
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-抱箍（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "B"]} >
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    // const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     totalWeight:data+value
+                                                    // })
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-平台（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "C"]} >
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    // const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     totalWeight:data+value
+                                                    // })
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-相序牌（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "D"]} >
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    // const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     totalWeight:data+value
+                                                    // })
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-爬梯（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "E"]} >
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    // const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     totalWeight:data+value
+                                                    // })
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-防盗（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "F"]} >
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    // const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     totalWeight:data+value
+                                                    // })
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-兜底绳施工孔板（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "G"]}  >
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    // const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     totalWeight:data+value
+                                                    // })
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-挂点修改（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "H"]}>
+                                                <InputNumber precision={2} min={0} onChange={(value:number)=>{
+                                                    // const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     totalWeight:data+value
+                                                    // })
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-修改（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "I"]} >
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    // const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     totalWeight:data+value
+                                                    // })
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-全塔双帽（kg）"span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "J"]}>
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    // const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     totalWeight:data+value
+                                                    // })
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-螺栓（kg）"span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "K"]} >
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    // const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
+                                                    // form.setFieldsValue({
+                                                    //     totalWeight:data+value
+                                                    // })
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="备注" span={ 2 }>
+                                            <Form.Item name="description" >
+                                                <TextArea rows={1} showCount maxLength={400}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item span={6}>
+                                            <Space direction="horizontal">
+                                                <Button type="primary" ghost size="small" onClick={ () => {
+                                                    confirmData.push({
+                                                      description:2
+                                                    })
+                                                    form.setFieldsValue({
+                                                      confirmList: [...confirmData]
+                                                    })
+                                                    console.log(confirmData)
+                                                    console.log(form.getFieldsValue(true))
+                                                    setConfirmData([...confirmData])
+                                                    
+                                                } }>添加</Button>
+                                                <Button type="ghost" size="small" onClick={ () => {
+                                                    confirmData.splice(index,1)
+                                                    setConfirmData([...confirmData])
+                                                }}>删除</Button>
+                                            </Space>
+                                        </Descriptions.Item>
+                                    </>
+                                })
+                            }
+                        </Descriptions>
                 </Form>
             </Modal>
         </Spin>
