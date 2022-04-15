@@ -450,7 +450,7 @@ export default function Lofting(): React.ReactNode {
         // },
         // {
         //     key: 'perforate',
-        //     title: '有钻孔',
+        //     title: '有扩孔',
         //     width: 200,
         //     dataIndex: 'perforate',
         //     editable: true,
