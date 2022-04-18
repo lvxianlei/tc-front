@@ -26,7 +26,7 @@ export default () => {
     const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-aps/workshop/config/welding`);
-            resole(result.records || [])
+            resole(result || [])
         } catch (error) {
             reject(error)
         }
@@ -69,7 +69,9 @@ export default () => {
             content: <Form form={weldingForm}>
                 <Form.Item name="workshopId" label="电焊车间" rules={[{ required: true, message: "请选择组焊车间..." }]}>
                     <Select>
-                        {listData.map((item: any) => <Select.Option key={item.weldingWorkshopId} value={item.weldingWorkshopId}>{item.weldingWorkshopName}</Select.Option>)}
+                        {listData.map((item: any) => <Select.Option
+                            key={item.weldingWorkshopId}
+                            value={item.weldingWorkshopId}>{item.weldingWorkshopName}</Select.Option>)}
                     </Select>
                 </Form.Item>
             </Form>,
