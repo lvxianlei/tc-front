@@ -15,19 +15,17 @@ interface modalProps {
 }
 
 export default forwardRef(function MissCheck({ id }: modalProps, ref) {
-    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
-        try {
-             const result: [] = await RequestUtil.get(``);
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { refreshDeps: [id] })
+    // const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
+    //     try {
+    //          const result: [] = await RequestUtil.get(``);
+    //         resole(result)
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }), { refreshDeps: [id] })
 
 
-    return <Spin spinning={loading}>
-        <DetailContent>
-            <Input.TextArea value={data} disabled />
+    return <DetailContent>
+            <Input.TextArea value={'11'} disabled />
         </DetailContent>
-    </Spin>
 })

@@ -4,18 +4,20 @@
  * @description 工作管理-放样列表-杆塔配段-配段
 */
 import React from 'react';
-import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, message, Row, Col } from 'antd';
+import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, message, Row, Col, Select } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { IDetailData, IProductSegmentList } from './ISetOut';
+import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export interface WithSectionModalProps { }
 export interface IWithSectionModalRouteProps extends RouteComponentProps<WithSectionModalProps>, WithTranslation {
-    readonly id: number | string;
+    readonly id?: number | string;
     readonly updateList: () => void;
+    readonly type?: string;
 }
 
 export interface WithSectionModalState {
@@ -47,12 +49,18 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
     }
 
     private async modalShow(): Promise<void> {
-        const data = await RequestUtil.get<IDetailData>(`/tower-science/productSegment/distribution?productId=${this.props.id}`);
-        this.setState({
-            visible: true,
-            detailData: { ...data }
-        })
-        this.getForm()?.setFieldsValue({ ...data, productSegmentListDTOList: [...data.loftingProductSegmentList || []] });
+        if (this.props.type === 'batch') {
+            this.setState({
+                visible: true
+            })
+        } else {
+            const data = await RequestUtil.get<IDetailData>(`/tower-science/productSegment/distribution?productId=${this.props.id}`);
+            this.setState({
+                visible: true,
+                detailData: { ...data }
+            })
+            this.getForm()?.setFieldsValue({ ...data, productSegmentListDTOList: [...data.loftingProductSegmentList || []] });
+        }
     }
 
     protected save = (path: string) => {
@@ -85,21 +93,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
         }
     }
 
-    // public handleModalOk = async () => {
-    //     const detailData: IProductSegmentList[] = await RequestUtil.get<IProductSegmentList[]>(`/tower-science/productSegment/quickLofting/${this.props.id}/${this.fastForm.current?.getFieldsValue(true).part}`);
-    //     this.setState({
-    //         fastVisible: false,
-    //         detailData: {
-    //             ...this.getForm()?.getFieldsValue(true),
-    //             loftingProductSegmentList: [...detailData]
-    //         }
-    //     })
-    //     this.getForm()?.setFieldsValue({
-    //         ...this.getForm()?.getFieldsValue(true),
-    //         productSegmentListDTOList: [...detailData]
-    //     })
-    // }
-
     public fastWithSectoin = async () => {
         this.setState({
             fastLoading: true
@@ -126,32 +119,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
     public render(): React.ReactNode {
         const detailData: IDetailData | undefined = this.state.detailData;
         return <>
-            <Button type="link" key={this.props.id} onClick={() => this.modalShow()} ghost>配段</Button>
-            {/* <Modal
-                destroyOnClose
-                visible={this.state.fastVisible}
-                width="30%"
-                title="配段信息"
-                onOk={this.handleModalOk}
-                className={styles.tryAssemble}
-                onCancel={() => {
-                    this.setState({
-                        fastVisible: false
-                    })
-                }}>
-                <Form ref={this.fastForm} className={styles.descripForm}>
-                    <Descriptions title="" bordered size="small" colon={false} column={4}>
-                        <Descriptions.Item key={4} label="配段">
-                            <Form.Item name="part" rules={[{
-                                pattern: /^[a-zA-Z0-9-,*()]*$/,
-                                message: '仅可输入英文字母/数字/特殊字符',
-                            }]}>
-                                <Input placeholder="请输入" />
-                            </Form.Item>
-                        </Descriptions.Item>
-                    </Descriptions>
-                </Form>
-            </Modal> */}
+            {this.props.type === 'batch' ? <Button type="primary" onClick={() => this.modalShow()} ghost>批量配段</Button> : <Button type="link" key={this.props.id} onClick={() => this.modalShow()}>配段</Button>}
             <Modal
                 visible={this.state.visible}
                 width="60%"
@@ -165,12 +133,42 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
             >
                 <Form ref={this.fastForm}>
                     <Row>
-                        <Col span={14}>
+                        {this.props.type === 'batch' ? <><Col span={6}>
+                            <Form.Item name="part" label="杆塔" rules={[{
+                                required: true,
+                                message: '请选择呼高'
+                            }]}>
+                                <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                    {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                        return <Select.Option key={index} value={id}>
+
+                                            {name}
+                                        </Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                            <Col span={5}>
+                                <Form.Item name="part" rules={[{
+                                    required: true,
+                                    message: '请选择杆塔'
+                                }]}>
+                                    <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                        {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                            return <Select.Option key={index} value={id}>
+
+                                                {name}
+                                            </Select.Option>
+                                        })}
+                                    </Select>
+                                </Form.Item>
+                            </Col></> : null}
+                        <Col offset={this.props.type === 'batch' ? 1 : 0} span={6}>
                             <Form.Item name="part" label="快速配段" rules={[{
                                 pattern: /^[a-zA-Z0-9-,*()]*$/,
                                 message: '仅可输入英文字母/数字/特殊字符',
                             }]}>
-                                <Input style={{ width: '100%' }} />
+                                <Input />
                             </Form.Item>
                         </Col>
                         <Col offset={2} span={4}>
@@ -182,18 +180,10 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                     <Form ref={this.form} className={styles.descripForm}>
                         <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>
                             <span>塔腿配段信息</span>
-                            {/* <Button className={styles.fastBtn} type="primary" onClick={() => {
-                                this.setState({
-                                    fastVisible: true
-                                })
-                            }} ghost>快速配段</Button> */}
                         </p>
                         <Descriptions title="" bordered size="small" colon={false} column={4}>
                             <Descriptions.Item key={1} label="A">
                                 <Form.Item name="legNumberA" initialValue={detailData?.legNumberA} rules={[{
-                                    required: true,
-                                    message: '请输入塔腿A'
-                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
@@ -202,9 +192,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                             </Descriptions.Item>
                             <Descriptions.Item key={2} label="B">
                                 <Form.Item name="legNumberB" initialValue={detailData?.legNumberB} rules={[{
-                                    required: true,
-                                    message: '请输入塔腿B'
-                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
@@ -213,9 +200,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                             </Descriptions.Item>
                             <Descriptions.Item key={3} label="C">
                                 <Form.Item name="legNumberC" initialValue={detailData?.legNumberC} rules={[{
-                                    required: true,
-                                    message: '请输入塔腿C'
-                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
@@ -224,9 +208,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                             </Descriptions.Item>
                             <Descriptions.Item key={4} label="D">
                                 <Form.Item name="legNumberD" initialValue={detailData?.legNumberD} rules={[{
-                                    required: true,
-                                    message: '请输入塔腿D'
-                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
