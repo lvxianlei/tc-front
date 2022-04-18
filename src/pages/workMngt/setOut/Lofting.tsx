@@ -13,11 +13,13 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from './downloadTemplate';
-import { ILofting, PdmModalProps } from './ISetOut';
-import PdmModal from './PdmModal';
+import { ILofting, modalProps } from './ISetOut';
 import { DownOutlined } from '@ant-design/icons';
 import { UploadChangeParam } from 'antd/lib/upload';
 import { UploadFile } from 'antd/lib/upload/interface';
+import StructureTextureAbbreviations from './StructureTextureAbbreviations';
+import StructureTextureEdit from './StructureTextureEdit';
+import MissCheck from './MissCheck';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
@@ -27,11 +29,11 @@ export default function Lofting(): React.ReactNode {
 
     const menu = (
         <Menu>
-            <Menu.Item key="1">
-                <Button type="primary" onClick={() => { }} ghost>修改零件材质缩写</Button>
+            <Menu.Item key="1" onClick={() => setVisible(true)}>
+                修改零件材质缩写
             </Menu.Item>
-            <Menu.Item key="2">
-                <Button type="primary" onClick={() => { }} ghost>修改材质</Button>
+            <Menu.Item key="2" onClick={() => setEditVisible(true)}>
+                修改材质
             </Menu.Item>
         </Menu>
     );
@@ -615,8 +617,20 @@ export default function Lofting(): React.ReactNode {
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit();
-            message.success('提交成功');
-            setPdmVisible(false);
+            message.success('修改零件材质缩写成功');
+            setVisible(false);
+            setRefresh(!refresh);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const handleEditModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('修改材质成功');
+            setEditVisible(false);
             setRefresh(!refresh);
             resove(true);
         } catch (error) {
@@ -701,24 +715,47 @@ export default function Lofting(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<ILofting[]>([]);
     const [loading1, setLoading1] = useState(false);
-    const editRef = useRef<PdmModalProps>();
-    const [pdmVisible, setPdmVisible] = useState<boolean>(false);
+    const editRef = useRef<modalProps>();
+    const editModalRef = useRef<modalProps>();
+    const [visible, setVisible] = useState<boolean>(false);
+    const [editVisible, setEditVisible] = useState<boolean>(false);
+    const [missVisible, setMissVisible] = useState<boolean>(false);
     const [loading2, setLoading2] = useState(false);
 
     return <>
-        {/* <Modal
+        <Modal
             destroyOnClose
-            visible={pdmVisible}
+            visible={visible}
             width="30%"
-            title="PDM同步"
+            title="修改零件材质缩写"
             onOk={handleModalOk}
-            className={styles.tryAssemble}
             onCancel={() => {
-                setPdmVisible(false);
-                setRefresh(!refresh);
+                setVisible(false);
             }}>
-            <PdmModal id={''} ref={editRef} />
-        </Modal> */}
+            <StructureTextureAbbreviations id={''} ref={editRef} />
+        </Modal>
+        <Modal
+            destroyOnClose
+            visible={editVisible}
+            width="30%"
+            title="修改材质"
+            onOk={handleEditModalOk}
+            onCancel={() => {
+                setEditVisible(false);
+            }}>
+            <StructureTextureEdit id={''} ref={editModalRef} />
+        </Modal>
+        <Modal
+            destroyOnClose
+            visible={missVisible}
+            width="30%"
+            title="漏件检查"
+            footer={<Button onClick={() => setMissVisible(false)} >关闭</Button>}
+            onCancel={() => {
+                setMissVisible(false);
+            }}>
+            <MissCheck id={''} />
+        </Modal>
         <Form layout="inline" style={{ margin: '20px' }} onFinish={(value: Record<string, any>) => {
             setFilterValue(value)
             setRefresh(!refresh);
@@ -759,8 +796,8 @@ export default function Lofting(): React.ReactNode {
                 requestData={{ productSegmentGroupId: params.productSegmentId, ...filterValue }}
                 extraOperation={<Space direction="horizontal" size="small">
                     <Button type="primary" onClick={() => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板')} ghost>模板下载</Button>
-                    <Button type="primary" onClick={() => { }} ghost>漏件检查</Button>
-                    <Dropdown overlay={menu}>
+                    <Button type="primary" onClick={() => setMissVisible(true)} ghost>漏件检查</Button>
+                    <Dropdown overlay={menu} trigger={['click']}>
                         <Button type="primary" ghost>
                             批量修改<DownOutlined />
                         </Button>
@@ -802,8 +839,8 @@ export default function Lofting(): React.ReactNode {
                     >
                         <Button type="primary" disabled={editorLock === '锁定'} ghost>导入</Button>
                     </Upload>
-                    <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.productSegmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
-                    <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
+                    {/* <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.productSegmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
+                    <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button> */}
                     <Button type="primary" loading={loading2} onClick={() => {
                         setLoading2(true);
                         RequestUtil.post(`/tower-science/productStructure/pdmSynchronous/${params.productSegmentId}`).then(res => {
@@ -826,7 +863,35 @@ export default function Lofting(): React.ReactNode {
                     </Popconfirm>
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </Space>}
-                searchFormItems={[]}
+                searchFormItems={[]
+                    //     [
+                    //     {
+                    //         name: 'materialName',
+                    //         label: '材料名称',
+                    //         children:<Input maxLength={50} />
+                    //     },
+                    //     {
+                    //         name: 'structureTexture',
+                    //         label: '材质',
+                    //         children:<Input maxLength={50} />
+                    //     },
+                    //     {
+                    //         name: 'segmentName',
+                    //         label: '段名',
+                    //         children:<Input maxLength={50} />
+                    //     },
+                    //     {
+                    //         name: 'code',
+                    //         label: '查询',
+                    //         children:<Input placeholder="请输入构件编号查询" maxLength={50} />
+                    //     },
+                    // ]
+                }
+            // filterValue={filterValue}
+            // onFilterSubmit={(values: Record<string, any>) => {
+            //     setFilterValue(values);
+            //     return values;
+            // }}
             />
         </Form>
         <Modal
