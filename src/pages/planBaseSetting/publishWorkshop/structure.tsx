@@ -3,11 +3,11 @@ import { structure } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
 import { useParams } from "react-router"
-import { Button, Col, Form, Input, Pagination, Row } from "antd"
+import { Button, Col, Form, Input, Pagination, Row, Space } from "antd"
 import { CommonAliTable } from "../../common"
 import styles from "../../common/CommonTable.module.less"
 export default function Structure(): ReactElement {
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, issuedNumber: string, productCategory: string }>()
     const [pagenation, setPagenation] = useState<any>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
     const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -62,8 +62,30 @@ export default function Structure(): ReactElement {
                 </Col>
             </Row>
         </Form>
+        <Row style={{ paddingLeft: 20 }}>
+            <Space>
+                <span><label>下达单号：</label>{params.issuedNumber}</span>
+                <span><label>塔型：</label>{params.productCategory}</span>
+            </Space>
+        </Row>
+        <Row style={{ paddingLeft: 20 }}>
+            <Space>
+                <span><label>合计：</label>{ }</span>
+                <span><label>总件数：</label>{data?.totalNumber || "0"}</span>
+                <span><label>总重量：</label>{data?.totalWeight || "0"}</span>
+                <span><label>总孔数：</label>{data?.totalNumber || "0"}</span>
+            </Space>
+        </Row>
         <CommonAliTable
-            columns={structure}
+            columns={structure.map((item: any) => {
+                if (item.dataIndex === "processWorkshop") {
+                    return ({
+                        ...item,
+                        getCellProps: (value: any, record: any) => record.processWorkshop ? ({}) : ({ style: { backgroundColor: "red" } })
+                    })
+                }
+                return item
+            })}
             size="small"
             isLoading={loading}
             dataSource={data?.recordDate.records || []}
