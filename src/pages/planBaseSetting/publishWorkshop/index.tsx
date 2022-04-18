@@ -25,7 +25,7 @@ export default () => {
 
     const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-aps/productionUnit?size=1000`);
+            const result: any = await RequestUtil.get(`/tower-aps/workshop/config/welding`);
             resole(result.records || [])
         } catch (error) {
             reject(error)
@@ -35,8 +35,6 @@ export default () => {
     const { run: weldingRun } = useRequest<any>((params) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-aps/workshopOrder/welding/distribution`, params);
-            message.success("电焊分配车间完成...")
-            setSelectedRowKeys([])
             resole(result)
         } catch (error) {
             reject(error)
@@ -47,7 +45,7 @@ export default () => {
         await run(selectedRowKeys)
         if (data?.length) {
             Modal.warn({
-                title: "自动分配车间",
+                title: "快速分配车间",
                 icon: null,
                 okText: "确定",
                 content: <nav>
@@ -59,7 +57,7 @@ export default () => {
                 </nav>
             })
         } else {
-            message.success("自动分配车间完成")
+            await message.success("快速分配车间完成")
             history.go(0)
         }
     }
@@ -71,18 +69,29 @@ export default () => {
             content: <Form form={weldingForm}>
                 <Form.Item name="workshopId" label="电焊车间" rules={[{ required: true, message: "请选择组焊车间..." }]}>
                     <Select>
-                        {listData.map((item: any) => <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>)}
+                        {listData.map((item: any) => <Select.Option key={item.weldingWorkshopId} value={item.weldingWorkshopId}>{item.weldingWorkshopName}</Select.Option>)}
                     </Select>
                 </Form.Item>
             </Form>,
-            onOk: async () => {
+            onOk: async () => new Promise(async (resove, reject) => {
                 const workshop = await weldingForm.validateFields()
-                return weldingRun({
-                    workshopId: workshop.workshopId,
-                    workshopName: listData.find((item: any) => item.id === workshop.workshopId).name,
-                    issueOrderIds: selectedRowKeys
-                })
-            }
+                try {
+                    await weldingRun({
+                        workshopId: workshop.workshopId,
+                        workshopName: listData.find((item: any) => item.weldingWorkshopId === workshop.workshopId).weldingWorkshopName,
+                        issueOrderIds: selectedRowKeys
+                    })
+                    resove(true)
+                    await message.success("电焊分配车间完成...")
+                    setSelectedRowKeys([])
+                    weldingForm.resetFields()
+                    history.go(0)
+                } catch (error) {
+                    console.log(error)
+                    reject(error)
+                }
+            }),
+            onCancel: () => weldingForm.resetFields()
         })
     }
 
@@ -93,22 +102,22 @@ export default () => {
             ...pageTable,
             {
                 title: "操作",
-                width: 100,
+                width: 160,
                 fixed: "right",
                 dataIndex: "opration",
                 render: (_, record: any) => <>
-                    <Link to={`/planProd/publishWorkshop/structure/${record.id}`}><Button type="link" size="small">构件明细</Button></Link>
-                    <Link to={`/planProd/publishWorkshop/welding/${record.id}`}><Button type="link" size="small">组焊明细</Button></Link>
+                    <Link to={`/planProd/publishWorkshop/structure/${record.id}/${record.issuedNumber}/${record.productCategory}`}><Button type="link" size="small">构件明细</Button></Link>
+                    <Link to={`/planProd/publishWorkshop/welding/${record.id}/${record.issuedNumber}/${record.productCategory}`}><Button type="link" size="small">组焊明细</Button></Link>
                 </>
             }] : [
             ...workShopOrder,
             {
                 title: "操作",
-                width: 50,
+                width: 100,
                 fixed: "right",
                 dataIndex: "opration",
                 render: (_, record: any) => <Link
-                    to={`/planProd/publishWorkshop/manual/${record.id}`}
+                    to={`/planProd/publishWorkshop/manual/${record.id}/${record.issuedNumber}/${record.productCategory}`}
                 >手动分配车间</Link>
             }]}
         extraOperation={

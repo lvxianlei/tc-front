@@ -47,7 +47,7 @@
             "dataIndex": "loftingBatchTime"
         }
     ],
-    "welding": [
+    "structure": [
         {
             "title": "段号",
             "dataIndex": "segmentName",
@@ -89,17 +89,22 @@
             "width": 100
         },
         {
+            "title": "类型",
+            "dataIndex": "type",
+            "width": 100
+        },
+        {
             "title": " 加工车间",
             "dataIndex": "processWorkshop",
             "width": 200
         },
         {
             "title": "调整后加工车间",
-            "dataIndex": "newProcessWorkshop",
+            "dataIndex": "newWeldingWorkshop",
             "width": 200
         }
     ],
-    "structure": [
+    "welding": [
         {
             "title": "段名",
             "dataIndex": "segmentName",
@@ -154,6 +159,11 @@
         {
             "title": "单组件数",
             "dataIndex": "singleNum",
+            "width": 100
+        },
+        {
+            "title": "类型",
+            "dataIndex": "type",
             "width": 100
         },
         {

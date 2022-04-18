@@ -2,17 +2,26 @@ import React, { Key, ReactElement, useState, useCallback } from "react"
 import { welding, structure } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
-import { useParams } from "react-router"
+import { useHistory, useParams } from "react-router"
 import { Button, Col, Form, Input, message, Modal, Pagination, Radio, Row, Select, Space } from "antd"
 import { CommonAliTable } from "../../common"
 import styles from "../../common/CommonTable.module.less"
+import { groupBy } from "ali-react-table"
+interface CountProps {
+    totalNumber: number
+    totalGroupNum: number
+    totalWeight: string
+    totalHolesNum: number
+}
+
 export default function ManualDistribute(): ReactElement {
-    const params = useParams<{ id: string }>()
+    const history = useHistory()
+    const params = useParams<{ id: string, issuedNumber: string, productCategory: string }>()
     const [pagenation, setPagenation] = useState<any>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
     const [workshopForm] = Form.useForm()
-    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
-    const onSelectChange = (selected: Key[]) => setSelectedRowKeys(selected)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([])
+    const [counts, setCounts] = useState<CountProps>({ totalNumber: 0, totalGroupNum: 0, totalWeight: "0", totalHolesNum: 0 })
     const [status, setStatus] = useState<number>(1)
 
     const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -27,13 +36,76 @@ export default function ManualDistribute(): ReactElement {
     const { run: weldingRun } = useRequest<any>((params) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.put(`/tower-aps/workshopOrder/manualDistribute`, params);
-            message.success("手动分配车间完成...")
-            setSelectedRowKeys([])
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
+
+    const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const formValue = await form.getFieldsValue()
+            const result: any = await RequestUtil.get(`/tower-aps/workshopOrder/${status === 1 ? "structure" : "welding"}`, {
+                issueOrderId: params.id,
+                ...formValue,
+                current: pagenation.current,
+                size: pagenation.pageSize
+            })
+            if (status === 2) {
+                const groupRecords = groupBy(result.recordDate.records, (t: any) => t.segmentName)
+                resole({
+                    ...result,
+                    recordDate: {
+                        ...result.recordDate,
+                        records: Object.values(groupRecords).reduce((count: any[], item: any[]) => {
+                            const componentIds = groupBy(item, (t: any) => t.componentId)
+                            const components = Object.values(componentIds).reduce((cCount: any[], cItem: any[]) => cCount.concat(cItem), [])
+                            return count.concat(components)
+                        }, [])
+                    }
+                })
+                return
+            }
+            resole(result)
+        } catch (error) {
+            reject(false)
+        }
+    }), { refreshDeps: [pagenation.current, pagenation.pageSize, status] })
+
+    const onSelectChange = (_: Key, selectedRowKeys: any[]) => {
+        if (status === 1) {
+            const newCounts = selectedRowKeys.reduce((result: CountProps, item: any) => ({
+                totalNumber: result.totalNumber + parseFloat(item.number || "0"),
+                totalWeight: Number((parseFloat(result.totalWeight) + parseFloat(item.totalWeight || "0"))).toFixed(4),
+                totalHolesNum: result.totalHolesNum + parseFloat(item.holesNum || "0")
+            }), {
+                totalNumber: 0,
+                totalGroupNum: 0,
+                totalWeight: 0,
+                totalHolesNum: 0
+            })
+            setSelectedRowKeys(selectedRowKeys)
+            setCounts(newCounts)
+            return
+        } else {
+            const selectRows = selectedRowKeys.reduce((result: any[], item: any) => {
+                const dataSegmentResult = data?.recordDate.records.filter((dataItem: any) => dataItem.segmentName === item.segmentName)
+                return result.concat(dataSegmentResult)
+            }, [])
+            const newCounts = selectRows.reduce((result: CountProps, item: any) => ({
+                totalGroupNum: result.totalGroupNum + parseFloat(item.segmentGroupNum || "0"),
+                totalWeight: Number((parseFloat(result.totalWeight) + parseFloat(item.singleGroupWeight || "0"))).toFixed(4)
+            }), {
+                totalNumber: 0,
+                totalGroupNum: 0,
+                totalWeight: 0,
+                totalHolesNum: 0
+            })
+            setSelectedRowKeys(selectedRowKeys)
+            setCounts(newCounts)
+            return
+        }
+    }
 
     const handleClick = () => {
         Modal.confirm({
@@ -46,32 +118,29 @@ export default function ManualDistribute(): ReactElement {
                     </Select>
                 </Form.Item>
             </Form>,
-            onOk: async () => {
+            onOk: async () => new Promise(async (resove, reject) => {
                 const workshop = await workshopForm.validateFields()
-                return weldingRun(selectedRowKeys.map((item: Key) => ({
-                    id: item,
-                    workshopId: workshop.workshopId,
-                    workshopName: listData.find((item: any) => item.id === workshop.workshopId).name,
-                    type: status
-                })))
-            }
+                try {
+                    await weldingRun(selectedRowKeys.map((item: any) => ({
+                        id: item.id,
+                        workshopId: workshop.workshopId,
+                        weldingId: item.weldingId,
+                        workshopName: listData.find((item: any) => item.id === workshop.workshopId).name,
+                        type: status
+                    })))
+                    resove(true)
+                    await message.success("手动分配车间完成...")
+                    setSelectedRowKeys([])
+                    workshopForm.resetFields()
+                    history.go(0)
+                } catch (error) {
+                    console.log(error)
+                    reject(error)
+                }
+            }),
+            onCancel: () => workshopForm.resetFields()
         })
     }
-
-    const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        try {
-            const formValue = await form.getFieldsValue()
-            const result: any = await RequestUtil.get(`/tower-aps/workshopOrder/${status === 1 ? "structure" : "welding"}`, {
-                issueOrderId: params.id,
-                ...formValue,
-                current: pagenation.current,
-                size: pagenation.pageSize
-            })
-            resole(result)
-        } catch (error) {
-            reject(false)
-        }
-    }), { refreshDeps: [pagenation.current, pagenation.pageSize, status] })
 
     const paginationChange = useCallback((page: number, pageSize?: number) => {
         setPagenation({
@@ -110,6 +179,12 @@ export default function ManualDistribute(): ReactElement {
                 </Col>
             </Row>
         </Form>
+        <Row style={{ paddingLeft: 20 }}>
+            <Space>
+                <span><label>下达单号：</label>{params.issuedNumber}</span>
+                <span><label>塔型：</label>{params.productCategory}</span>
+            </Space>
+        </Row>
         <Space style={{
             marginBottom: 12,
             paddingLeft: 12
@@ -118,25 +193,48 @@ export default function ManualDistribute(): ReactElement {
                 value={status}
                 onChange={(event) => setStatus(event.target.value)}
             >
-                <Radio.Button value={1}>构建明细</Radio.Button>
+                <Radio.Button value={1}>构件明细</Radio.Button>
                 <Radio.Button value={2}>组焊明细</Radio.Button>
             </Radio.Group>
-            <Button type="primary" onClick={handleClick}>手动分配车间</Button>
+            <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleClick}>手动分配车间</Button>
         </Space>
+        <Row style={{ paddingLeft: 20 }}>
+            <Space>
+                <span style={{ fontWeight: 600 }}>合计：</span>
+                {status === 1 && <span><label>总件数：</label>{counts.totalNumber}</span>}
+                {status === 2 && <span><label>总组数：</label>{counts.totalGroupNum}</span>}
+                <span><label>总重量：</label>{counts.totalWeight}</span>
+                {status === 1 && <span><label>总孔数：</label>{counts.totalHolesNum}</span>}
+            </Space>
+        </Row>
         <CommonAliTable
-            columns={status === 1 ? welding : structure}
+            columns={status === 1 ? structure.map((item: any) => {
+                if (item.dataIndex === "processWorkshop") {
+                    return ({
+                        ...item,
+                        getCellProps: (value: any, record: any) => record.processWorkshop ? ({}) : ({ style: { backgroundColor: "red" } })
+                    })
+                }
+                return item
+            }) : welding}
             size="small"
             className={status === 1 ? "" : "bordered"}
             isLoading={loading}
             rowSelection={{
-                selectedRowKeys: selectedRowKeys,
-                onChange: onSelectChange
+                selectedRowKeys: selectedRowKeys.map((item: any) => item.id),
+                onChange: onSelectChange,
+                checkboxColumn: status === 2 ? {
+                    features: {
+                        autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.segmentName === row2.segmentName,
+                        sortable: true
+                    }
+                } : {}
             }}
             dataSource={data?.recordDate.records || []}
         />
         <footer className={styles.pagenationWarp}>
             <Pagination
-                total={data?.total}
+                total={data?.recordDate.total}
                 current={pagenation.current}
                 showTotal={(total: number) => `共${total}条记录`}
                 showSizeChanger

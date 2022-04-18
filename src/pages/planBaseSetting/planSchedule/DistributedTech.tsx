@@ -47,13 +47,6 @@ export default function DistributedTech(): React.ReactNode {
     const { data: time, run } = useRequest<any>((params: any[]) => new Promise(async (resole, reject) => {
         try {
             const result: IUnit[] = await RequestUtil.post(`/tower-aps/productionPlan/lofting/complete/time`, params);
-            message.success("成功设置计划完成日期")
-            setDataSource(dataSource.map((item: any) => ({
-                ...item,
-                loftingCompleteTime: params.find(fitem => fitem.id === item.id)?.loftingCompleteTime || item.loftingCompleteTime
-            })))
-            setSelectedRows([])
-            completeTimeForm.resetFields()
             resole(result)
         } catch (error) {
             reject(error)
@@ -126,35 +119,40 @@ export default function DistributedTech(): React.ReactNode {
         setSelectedRows(selectedRows);
     }
 
-    const modalOk = async () => {
-        const data = await modalForm.validateFields();
-        let list: IPlanSchedule[] = []
-        list = dataSource.map((item: IPlanSchedule) => {
-            if (selectedRows.findIndex((items: any) => items.id === item.id) !== -1) {
-                return {
-                    ...item,
-                    issueDescription: data.issueDescription
+    const modalOk = () => new Promise(async (resolve, reject) => {
+        try {
+            const data = await modalForm.validateFields();
+            let list: IPlanSchedule[] = []
+            list = dataSource.map((item: IPlanSchedule) => {
+                if (selectedRows.findIndex((items: any) => items.id === item.id) !== -1) {
+                    return {
+                        ...item,
+                        issueDescription: data.issueDescription
+                    }
+                } else {
+                    return item
                 }
-            } else {
-                return item
-            }
-        })
-        return RequestUtil.post(`/tower-aps/productionPlan/batch/issue/remark`, list.map((res: IPlanSchedule, index: number) => {
-            return {
-                id: res.id,
-                issueDescription: res.issueDescription,
-                sort: index
-            }
-        })).then(async res => {
-            message.success('批量新增备注成功');
-            setSelectedKeys([]);
-            setSelectedRows([]);
-            setVisible(false);
-            await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/issue`, [...params.ids.split(',')]);
+            })
+            await RequestUtil.post(`/tower-aps/productionPlan/batch/issue/remark`, list.map((res: IPlanSchedule, index: number) => {
+                return {
+                    id: res.id,
+                    issueDescription: res.issueDescription,
+                    sort: index
+                }
+            })).then(async res => {
+                setSelectedKeys([]);
+                setSelectedRows([]);
+                setVisible(false);
+                await RequestUtil.post(`/tower-aps/productionPlan/issue/detail/issue`, [...params.ids.split(',')]);
+            });
+            resolve(true)
             modalForm.resetFields();
+            await message.success('批量新增备注成功');
             history.go(0)
-        });
-    }
+        } catch (error) {
+            reject(false)
+        }
+    })
 
     const issue = async () => {
         const data = await form.validateFields();
@@ -179,13 +177,22 @@ export default function DistributedTech(): React.ReactNode {
                     />
                 </Form.Item>
             </Form>,
-            onOk: async () => {
-                const loftingCompleteTime = await completeTimeForm.validateFields()
-                return run(selectedKeys.map((item: any) => ({
-                    id: item,
-                    loftingCompleteTime: loftingCompleteTime.loftingCompleteTime.format("YYYY-MM-DD") + " 00:00:00"
-                })))
-            },
+            onOk: () => new Promise(async (resolve, reject) => {
+                try {
+                    const loftingCompleteTime = await completeTimeForm.validateFields()
+                    await run(selectedKeys.map((item: any) => ({
+                        id: item,
+                        loftingCompleteTime: loftingCompleteTime.loftingCompleteTime.format("YYYY-MM-DD") + " 00:00:00"
+                    })))
+                    resolve(true)
+                    setSelectedRows([])
+                    completeTimeForm.resetFields()
+                    await message.success("成功设置计划完成日期")
+                    history.go(0)
+                } catch (error) {
+                    reject(false)
+                }
+            }),
             onCancel() {
                 completeTimeForm.resetFields()
             }

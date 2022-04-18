@@ -121,7 +121,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         highlightRowWhenSelected: true,
         checkboxPlacement: 'start',
         clickArea: "cell",
-        checkboxColumn: { width: 40, lock: true, align: "left" }
+        checkboxColumn: { width: 40, lock: true, align: "left", ...props?.rowSelection?.checkboxColumn }
     }));
     pipeline.use(features.autoRowSpan());
     return <nav className={styles.componentsTable}>
