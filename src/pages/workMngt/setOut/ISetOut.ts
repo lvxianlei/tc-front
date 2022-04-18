@@ -45,7 +45,7 @@ export interface ILofting {
     readonly weldingEdge?: string;
 }
 
-export interface PdmModalProps {
+export interface modalProps {
     onSubmit: () => void;
 }
 
