@@ -5,7 +5,7 @@
  */
 
  import React, { useImperativeHandle, forwardRef, useState } from "react";
- import { Spin, Form, Descriptions, InputNumber, Checkbox, Select, Input } from 'antd';
+ import { Spin, Form, Select, Input } from 'antd';
  import { DetailContent } from '../../common';
  import RequestUtil from '../../../utils/RequestUtil';
  import useRequest from '@ahooksjs/use-request';

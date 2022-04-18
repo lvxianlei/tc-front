@@ -127,7 +127,7 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
     return <Spin spinning={loading}>
-        <DetailContent>
+        <DetailContent key='StructureTextureAbbreviations'>
             <Form form={form} className={styles.descripForm}>
                 <Form.Item name="status" label="范围选择" initialValue={''} style={{ paddingBottom: '16px' }}>
                     <Select style={{ width: '120px' }} placeholder="请选择">
@@ -142,7 +142,7 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
                 <CommonTable
                     haveIndex
                     pagination={false}
-                    dataSource={list}
+                    dataSource={[]}
                     rowKey="index"
                     rowSelection={{
                         selectedRowKeys: selectedRowKeys,
