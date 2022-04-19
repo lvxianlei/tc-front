@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import AliTable from './AliTable'
-import { FormInstance, message, Row, Button, Form } from "antd"
+import { FormInstance, message, Button, Form, Space } from "antd"
 import FormItemType from './FormItemType'
+import { generateRules } from "./BaseInfo"
 interface EditableTableProps {
     columns: any[]
     dataSource: any[]
@@ -12,34 +13,36 @@ interface EditableTableProps {
     form?: FormInstance
     opration?: React.ReactNode[]
     onChange?: (data: any[], allFields: any[]) => void
+    rowKey?: string | ((row: any) => string)
 }
 
 const formatColunms = (columns: any[], haveIndex: boolean) => {
     const newColumns = columns.map(item => {
+        const rules = generateRules(item.type, item)
         if (item.type === "popTable") {
             return ({
-                title: item.title,
+                title: `${item.required ? "*" : ""} ${item.title}`,
                 code: item.dataIndex,
                 render: (value: any, record: any, index: number) => <Form.Item
                     style={{ margin: 0 }}
-                    rules={item.rules}
+                    rules={rules}
                     name={['submit', index, item.dataIndex]}>
                     <FormItemType data={item} type={item.type} />
                 </Form.Item>
             })
         }
         return ({
-            title: item.title,
+            ...item,
+            title: `${item.required ? "*" : ""} ${item.title}`,
             code: item.dataIndex,
             render: (value: any, record: any, index: number) => {
                 return <Form.Item
                     style={{ margin: 0 }}
-                    rules={item.rules}
+                    rules={rules}
                     name={['submit', index, item.dataIndex]}>
                     <FormItemType data={item} type={item.type} />
                 </Form.Item>
-            },
-            ...item
+            }
         })
     })
     haveIndex && newColumns.unshift({
@@ -49,13 +52,26 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
         dataIndex: 'index',
         render: (_: any, $: any, index: number): React.ReactNode => index + 1
     })
-    return newColumns
+    return [
+        ...newColumns,
+        {
+            title: "",
+            code: "id",
+            width: 0,
+            render: (value: any, record: any, index: number) => {
+                return <Form.Item
+                    hidden
+                    name={['submit', index, "id"]}>
+                    <FormItemType data={{ title: "", dataIndex: "id" }} type="text" />
+                </Form.Item>
+            }
+        }]
 }
 
 
 export default function EditableTable({
     columns, dataSource = [], onChange, form, haveNewButton = true,
-    newButtonTitle = "新增一行", haveOpration = true, haveIndex = true, opration
+    newButtonTitle = "新增一行", haveOpration = true, haveIndex = true, opration, rowKey
 }: EditableTableProps): JSX.Element {
     const [editableDataSource, setEditableDataSource] = useState<any[]>(dataSource.map(item => ({
         ...item,
@@ -69,8 +85,9 @@ export default function EditableTable({
     }, [JSON.stringify(columns)])
 
     useEffect(() => {
-        setEditableDataSource(dataSource.map(item => ({ ...item, id: item.id || (Math.random() * 1000000).toFixed(0) })))
-        form && form.setFieldsValue({ submit: dataSource })
+        const newDataSource = dataSource.map(item => ({ ...item, id: item.id || (Math.random() * 1000000).toFixed(0) }))
+        setEditableDataSource(newDataSource)
+        form && form.setFieldsValue({ submit: newDataSource })
     }, [JSON.stringify(dataSource)])
 
     const removeItem = useCallback((id: string) => {
@@ -91,7 +108,7 @@ export default function EditableTable({
         form={form}
         onValuesChange={onFormChange}
     >
-        <Row>{haveNewButton && <Button
+        <Space size={16} style={{ height: 32, margin: "0 16px 16px 0" }}>{haveNewButton && <Button
             onClick={async () => {
                 try {
                     form && await form.validateFields();
@@ -103,21 +120,21 @@ export default function EditableTable({
                 }
             }}
             type="primary"
-            style={{ height: 32, margin: "0 16px 16px 0" }}>{newButtonTitle}</Button>
-        }
+        >{newButtonTitle}</Button>}
             {opration}
-        </Row>
+        </Space>
         <AliTable
             size="small"
-            primaryKey="id"
-            style={{ overflow: 'auto', maxHeight: 400 }}
+            className="edit"
+            primaryKey={rowKey || "id"}
+            style={{ overflow: 'auto', minHeight: 400 }}
             defaultColumnWidth={150}
             columns={haveOpration ? [
                 ...eidtableColumns,
                 {
                     title: "操作",
                     lock: true,
-                    width: "80px",
+                    width: 40,
                     code: "opration",
                     render: (_: undefined, record: any) => <Button style={{ paddingLeft: 0 }} size="small" type="link" onClick={() => removeItem(record.id)}>删除</Button>
                 }

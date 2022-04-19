@@ -1720,37 +1720,65 @@
       "authority": "approvalm"
     },
     { // 计划排产-技术下发
-      "name": "技术排产",
-      "path": "/planSchedule/planScheduleMngt",
-      "module": "./pages/planBaseSetting/planSchedule/PlanScheduleMngt",
+      "name": "下发技术",
+      "path": "/planProd/planScheduleMngt",
+      "module": "./pages/planBaseSetting/planSchedule/index",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-拆分批次
       "name": "拆分批次",
-      "path": "/planSchedule/planScheduleMngt/SplitBatch/:id",
+      "path": "/planProd/planScheduleMngt/SplitBatch/:id",
       "module": "./pages/planBaseSetting/planSchedule/SplitBatch",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-下发技术
       "name": "下发技术",
-      "path": "/planSchedule/planScheduleMngt/distributedTech/:ids",
+      "path": "/planProd/planScheduleMngt/distributedTech/:ids",
       "module": "./pages/planBaseSetting/planSchedule/DistributedTech",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-计划交货期
       "name": "计划交货期",
-      "path": "/planSchedule/planScheduleMngt/planDeliveryTime/:ids",
+      "path": "/planProd/planScheduleMngt/planDeliveryTime/:ids",
       "module": "./pages/planBaseSetting/planSchedule/PlanDeliveryTime",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-计划交货期
       "name": "变更记录",
-      "path": "/planSchedule/planScheduleMngt/planDeliveryTime/:ids/:id",
+      "path": "/planProd/planScheduleMngt/planDeliveryTime/:ids/:id",
       "module": "./pages/planBaseSetting/planSchedule/ChangeRecord",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-分配车间
+      "name": "分配车间",
+      "path": "/planProd/publishWorkshop",
+      "module": "./pages/planBaseSetting/publishWorkshop/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-分配车间-构件明细
+      "name": "组焊明细",
+      "path": "/planProd/publishWorkshop/welding/:id/:issuedNumber/:productCategory",
+      "module": "./pages/planBaseSetting/publishWorkshop/welding",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-分配车间-组焊明细
+      "name": "构件明细",
+      "path": "/planProd/publishWorkshop/structure/:id/:issuedNumber/:productCategory",
+      "module": "./pages/planBaseSetting/publishWorkshop/structure",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-分配车间
+      "name": "手动分配车间",
+      "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
+      "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
       "authority": "approvalm"
     },
@@ -2462,6 +2490,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作中心管理
+      "name": "分配车间配置管理",
+      "path": "/workshopPlanBasic/publishWorkshopMngt",
+      "module": "./pages/workshopPlanBasic/publishWorkshopMngt/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 生产环节管理
       "name": "生产环节管理",
       "path": "/planBaseSetting/prodLink",
@@ -2482,6 +2517,6 @@
       "module": "./pages/changePassword",
       "exact": true,
       "authority": "home_page_person_center"
-    },
+    }
   ]
 }

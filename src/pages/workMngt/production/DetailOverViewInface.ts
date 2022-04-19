@@ -1,7 +1,7 @@
 export interface OverViewProps {
     visible?: boolean;
     id?: string;
-    loftingState?: number;
+    loftingState: number;
     onCancel: () => void;
     onOk: () => void;
 }
