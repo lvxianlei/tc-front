@@ -77,7 +77,7 @@ export default function ManualDistribute(): ReactElement {
             const newCounts = selectedRowKeys.reduce((result: CountProps, item: any) => ({
                 totalNumber: result.totalNumber + parseFloat(item.number || "0"),
                 totalWeight: Number((parseFloat(result.totalWeight) + parseFloat(item.totalWeight || "0"))).toFixed(4),
-                totalHolesNum: result.totalHolesNum + parseFloat(item.holesNum || "0")
+                totalHolesNum: result.totalHolesNum + (parseFloat(item.holesNum || "0") * item.number)
             }), {
                 totalNumber: 0,
                 totalGroupNum: 0,
@@ -205,7 +205,7 @@ export default function ManualDistribute(): ReactElement {
                 <span style={{ fontWeight: 600 }}>合计：</span>
                 {status === 1 && <span><label>总件数：</label>{counts.totalNumber}</span>}
                 {status === 2 && <span><label>总组数：</label>{counts.totalGroupNum}</span>}
-                <span><label>总重量：</label>{counts.totalWeight}</span>
+                <span><label>总重量(t)：</label>{counts.totalWeight}</span>
                 {status === 1 && <span><label>总孔数：</label>{counts.totalHolesNum}</span>}
             </Space>
         </Row>
@@ -218,7 +218,18 @@ export default function ManualDistribute(): ReactElement {
                     })
                 }
                 return item
-            }) : welding}
+            }) : welding.map((item: any) => {
+                if (item.dataIndex === "segmentGroupNum") {
+                    return ({
+                        ...item,
+                        features: {
+                            ...item.features,
+                            autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.componentId === row2.componentId
+                        }
+                    })
+                }
+                return item
+            })}
             size="small"
             className={status === 1 ? "" : "bordered"}
             isLoading={loading}
