@@ -273,13 +273,13 @@ export default function DailySchedule(): React.ReactNode {
         onFilterSubmit={(values: Record<string, any>) => {
             if (values?.time) {
                 const formatDate = values?.time?.map((item: any) => item.format("YYYY-MM-DD"));
-                values.startTimeMin = formatDate[0];
-                values.startTimeMax = formatDate[1];
+                values.startTimeMin = formatDate[0] + ' 00:00:00';
+                values.startTimeMax = formatDate[1] + ' 23:59:59';
             }
             if (values?.finishiTtime) {
                 const formatDate = values?.finishiTtime?.map((item: any) => item.format("YYYY-MM-DD"));
-                values.endTimeMin = formatDate[0];
-                values.endTimeMax = formatDate[1];
+                values.endTimeMin = formatDate[0] + ' 00:00:00';
+                values.endTimeMax = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
             return values;
