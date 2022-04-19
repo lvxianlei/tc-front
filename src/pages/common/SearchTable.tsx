@@ -35,8 +35,9 @@ export default function SearchTable({
     rowKey,
     onFilterSubmit,
     extraOperation,
+    pagination = true,
     searchFormItems = [],
-    filterValues,
+    filterValue,
     ...props }: SearchTableProps): JSX.Element {
     const [pagenation, setPagenation] = useState<PagenationProps>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
@@ -46,14 +47,14 @@ export default function SearchTable({
             const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
             params.current = pagenation.current
             params.size = pagenation.pageSize
-            const paramsOptions = filterValues ? stringify({ ...params, ...filterValues }) : stringify(params)
+            const paramsOptions = filterValue ? stringify({ ...params, ...filterValue }) : stringify(params)
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole(result)
         } catch (error) {
             reject(false)
         }
-    }), { refreshDeps: [pagenation.current, pagenation.pageSize] })
+    }), { refreshDeps: [pagenation.current, pagenation.pageSize, filterValue] })
     const paginationChange = useCallback((page: number, pageSize?: number) => {
         setPagenation({
             ...pagenation,
@@ -99,14 +100,14 @@ export default function SearchTable({
             {...props}
         />
         <footer className={styles.pagenationWarp}>
-            <Pagination
+            {pagination&&<Pagination
                 className={styles.pagination}
                 total={data?.total}
                 current={pagenation.current}
                 showTotal={(total: number) => `共${total}条记录`}
                 showSizeChanger
                 onChange={paginationChange}
-            />
+            />}
         </footer>
     </>
 }
