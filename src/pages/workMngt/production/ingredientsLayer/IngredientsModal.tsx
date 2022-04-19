@@ -1,35 +1,33 @@
-import React, {
-    useState,
-    useEffect 
-} from 'react';
-import { 
-    Modal,
-    Button,
-    Table,
-    Form,
-    Select,
-    Spin,
-    message,
-    InputNumber
-} from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Modal, Button, Row, Col, Table, Form, Select, Spin, message, InputNumber } from 'antd';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../../utils/RequestUtil';
 import { DetailTitle, CommonTable } from '../../../common'
-import {
-    BatchingScheme,
-    alternative,
-    ConstructionClassification,
-    ConstructionClassificationDetail,
-    PurchaseIngredients
-} from './IngredientsModal.json';
-
-import {
-    SchemeComponentList,
-    SchemeList
-} from "./ingredients";
-
-// 引less
+import { BatchingScheme, alternative, ConstructionClassification, ConstructionClassificationDetail, PurchaseIngredients } from './IngredientsModal.json';
 import "./ingredientsModal.less"
+interface DataType {
+    key: React.Key;
+    name: string;
+    age: number;
+    address: string;
+    structureSpec: string;
+    structureTexture: string
+}
+interface SchemeComponentList {
+    code: string;
+    num: string;
+    length: string;
+}
+interface SchemeList {
+    length: string,
+    lossLength: string,
+    plannedSurplusLength: string,
+    structureSpec: string,
+    structureTexture: string,
+    utilizationRate: string,
+    source: string;
+    loftingComponentInfoDtos: SchemeComponentList[]
+}
 
 export default function IngredientsModal(props: any) {
     const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>('radio');
@@ -59,12 +57,9 @@ export default function IngredientsModal(props: any) {
     const [purchaseBatchingDataList, setPurchaseBatchingDataList] = useState<any>([]);
     // 构建分类当前选中项
     const [selectedRowsRadio, setSelectedRowsRadio] = useState<any>([]);
-
     let [numbers, setNumbers] = useState<any>(0);
-
     const [ serarchForm ] = Form.useForm();
 
-    // 定义存储数组
     let map:Map<string,number> = new Map();
       
     const handleOkuseState = async() => {
@@ -96,9 +91,9 @@ export default function IngredientsModal(props: any) {
     }
 
     // 获取采购配料信息
-    const { run: runPurchaseBatchingScheme, data: purchaseBatchingData } = useRequest<{ [key: string]: any }>((batchNos: string) => new Promise(async (resole, reject) => {
+    const { run: runPurchaseBatchingScheme, data: purchaseBatchingData } = useRequest<{ [key: string]: any }>((purchaseTaskTowerId: string, materialTaskCode: string, productCategoryName: string) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/summary/${batchNos}`);
+            const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/summary/${materialTaskCode}/${productCategoryName}`);
             resole(result);
             setPurchaseBatchingDataList(result || []);
         } catch (error) {
@@ -254,27 +249,13 @@ export default function IngredientsModal(props: any) {
     }), { manual: true })
 
     useEffect(() => {
-        if (props.visible) {
             getUser(props.id);
             getBatchingStrategy();
             // 获取编辑配料方案信息
             purchaseListRun(props.id);
-            console.log(props, "props")
             // 获取采购配料信息
-            runPurchaseBatchingScheme(props.batchNos);
-            
-        }
+            runPurchaseBatchingScheme(props.id, props.materialTaskCode, props.productCategoryName);
     }, [props.id && props.visible])
-
-    useEffect(() => {
-        if (props.visible) {
-            serarchForm.setFieldsValue({
-                num1: policyDetailed && policyDetailed[0],
-                num3: batchingLength && batchingLength[0],
-                num4: batchingLength && batchingLength[batchingLength.length - 1]
-            })
-        }
-    }, [policyDetailed, batchingLength ])
 
     const rowSelection = {
         selectedRowKeys: selectSort,
@@ -471,6 +452,7 @@ export default function IngredientsModal(props: any) {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/produceIngredients/scheme/auto`, {
                 purchaseTowerId: props.id
             })
+            console.log(result, "resuklt")
             if (!result?.schemeData || result?.schemeData.length < 1) {
                 message.error("暂无合适的配料方案");
                 return false;
@@ -502,8 +484,6 @@ export default function IngredientsModal(props: any) {
                 // 清空表单
                 serarchForm.resetFields();
                 props.onCancel();
-                setSelectSort([]);
-                setSelectedRowKeysCheck([]);
             }}
             footer={[
                 <Button type="primary" onClick={() => handleAutomatic()}>
@@ -531,8 +511,6 @@ export default function IngredientsModal(props: any) {
                     // 清空表单
                     serarchForm.resetFields();
                     props.onCancel();
-                    setSelectSort([]);
-                    setSelectedRowKeysCheck([]);
                 }}>
                    取消
                 </Button>
@@ -548,6 +526,7 @@ export default function IngredientsModal(props: any) {
                             <Form.Item
                                 name="num1"
                                 label="开数"
+                                initialValue={policyDetailed && policyDetailed[0]}
                             >
                                 <Select style={{ width: 120 }} placeholder="请选择">
                                     {policyDetailed && policyDetailed.map((item: any, index: number) => {
@@ -557,6 +536,7 @@ export default function IngredientsModal(props: any) {
                             </Form.Item>&nbsp;
                             <Form.Item
                                 name="num3"
+                                initialValue={batchingLength && batchingLength[0]}
                                 label="米数"
                             >
                                 <Select style={{ width: 80 }} placeholder="请选择">
@@ -566,6 +546,7 @@ export default function IngredientsModal(props: any) {
                                 </Select>
                             </Form.Item>
                             <Form.Item
+                                initialValue={batchingLength && batchingLength[batchingLength.length - 1]}
                                 name="num4">
                                     <Select style={{ width: 80 }} placeholder="请选择">
                                         {batchingLength && batchingLength.map((item: any, index: number) => {
@@ -603,8 +584,8 @@ export default function IngredientsModal(props: any) {
                         <Table
                             size="small"
                             rowSelection={{
-                                type: "checkbox",
-                                ...rowSelectionCheck,
+                            type: "checkbox",
+                            ...rowSelectionCheck,
                             }}
                             columns={ConstructionClassificationDetail}
                             dataSource={constructionClassificationDetail}
