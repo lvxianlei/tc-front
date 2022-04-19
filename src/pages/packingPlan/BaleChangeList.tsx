@@ -286,7 +286,7 @@ export default function DailySchedule(): React.ReactNode {
                             }}>{item.productNumber} <RightOutlined/></div>
                         })}
                     </Col>
-                    <Col span={2} style={{marginRight:"20px"}}>
+                    <Col span={3} style={{marginRight:"20px"}}>
                         <DetailTitle title='包号' operation={[<PlusCircleOutlined onClick={()=>{
                             if(productNumberId){
                                 setVisible(true)
@@ -301,8 +301,8 @@ export default function DailySchedule(): React.ReactNode {
                                 onSelectTable(item,'normal')
                                 setCode(item)
                                 setNumPack(index)
-                            }}> {item.packageCode}（{item.packageComponentCount}件）
-                                {item.packageAttribute!==0?<Popconfirm
+                            }} title={item.packageCode}> {item.packageCode.length>15?item.packageCode.substr(0,15)+'...':item.packageCode}（{item.packageComponentCount}件）
+                                <Space size={15}>{item.packageAttribute!==0?<Popconfirm
                                     title="当前为通用包，是否批量改名?"
                                     onConfirm={() => {
                                         formRefNew.setFieldsValue({
@@ -325,15 +325,15 @@ export default function DailySchedule(): React.ReactNode {
                                 }}/>}
                                 {item.packageComponentCount===0 && <DeleteOutlined onClick={()=>{
                                 
-                                    RequestUtil.delete(`/tower-production/package`,item.id).then(()=>{
+                                    RequestUtil.delete(`/tower-production/package/${item.id}`).then(()=>{
                                         message.success('删除成功！')
                                     }).then(()=>{
                                         onPackSelect({id:productNumberId})
                                     });
-                            }}/>} </div>
+                            }}/>} </Space></div>
                         })}
                     </Col>
-                    <Col span={8} style={{marginRight:"20px"}}>
+                    <Col span={7} style={{marginRight:"20px"}}>
                         <DetailTitle title='件号' operation={[<Button 
                           type='primary'
                           disabled={!(busySelectedKeys.length>0)}
@@ -341,9 +341,9 @@ export default function DailySchedule(): React.ReactNode {
                             const value = waitTableDataSource;
                             value.push(...busySelectedRows)
                             console.log('待选区所有数据',value)
-                            const addValue:any[] = await  RequestUtil.get(`/tower-production/package/plan/${towerTId}/products/pkg/${code?.packageCode}/components/${busySelectedRows.map((item:any)=>{
+                            const addValue:any[] = code.packageAttribute===1?await  RequestUtil.get(`/tower-production/package/plan/${towerTId}/products/pkg/${code?.packageCode}/components/${busySelectedRows.map((item:any)=>{
                                 return item.code
-                            }).join(',')}`)
+                            }).join(',')}`):[]
                             var temp:any = {};  //用于id判断重复
                             var result:any[] = []; //最后的新数组
                              
