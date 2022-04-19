@@ -25,7 +25,7 @@ export default function Lofting(): React.ReactNode {
     const [tipVisible, setTipVisible] = useState<boolean>(false);
     const [addVisible, setAddVisible] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
-    const [editorLock, setEditorLock] = useState('编辑');
+    const [editorLock, setEditorLock] = useState('添加');
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
     const [tableDataSource, setTableDataSource] = useState<any[]>([])
@@ -400,9 +400,13 @@ export default function Lofting(): React.ReactNode {
         setRowChangeList([...rowChangeList]);
     }
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<object[]>([]);
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
-    const SelectChange = (selectedRowKeys: React.Key[]): void => setSelectedKeys(selectedRowKeys)
-
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: object[]): void => {
+        console.log(selectedRowKeys,selectedRows)
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
     return <>
         <Modal
             visible={visible}
@@ -425,8 +429,18 @@ export default function Lofting(): React.ReactNode {
                 dataIndex: 'operation',
                 fixed: 'right' as FixedType,
                 width: 100,
-                render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    <div className={styles.operationBtn}>
+                render: (_: number, record: any, index: number): React.ReactNode => (
+                    <Space className={styles.operationBtn}>
+                        <Button type="link"
+                            onClick={()=>{
+                                console.log([record])
+                                setEditorLock('编辑');
+                                // console.log(selectedRows)
+                                form.setFieldsValue({ dataV: [record] })
+                                setTableDataSource([record])
+                                setAddVisible(true);
+                            }}
+                        >编辑</Button>
                         <Popconfirm
                             title="确认删除?"
                             onConfirm={async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${record.id}`).then(() => {
@@ -435,11 +449,11 @@ export default function Lofting(): React.ReactNode {
                             })}
                             okText="提交"
                             cancelText="取消"
-                            disabled={editorLock === '锁定'}
+                            disabled={editorLock === '编辑'}
                         >
-                            <Button type="link" disabled={editorLock === '锁定'}>删除</Button>
+                            <Button type="link" disabled={editorLock === '编辑'}>删除</Button>
                         </Popconfirm>
-                    </div>
+                    </Space>
                 )
             }]}
             filterValue={filterValue}
@@ -484,11 +498,11 @@ export default function Lofting(): React.ReactNode {
                             }
                         }}
                     >
-                        <Button type="primary" ghost disabled={editorLock === '锁定'}>导入</Button>
+                        <Button type="primary" ghost disabled={editorLock === '编辑'}>导入</Button>
                     </Upload>
                     <Button type="primary" ghost onClick={() => {
                         setAddVisible(true)
-                    }} disabled={editorLock === '锁定'}>添加</Button>
+                    }} disabled={editorLock === '编辑'}>添加</Button>
                     <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/drawApply`) }}>图纸塔型套用</Button>
                     <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/setOutApply`) }}>放样塔型套用</Button>
                     <Popconfirm
@@ -505,46 +519,48 @@ export default function Lofting(): React.ReactNode {
                     >
                         <Button type="primary" ghost>完成提料</Button>
                     </Popconfirm>
-                    <Button type="primary" ghost onClick={async () => {
-                        if (editorLock === '编辑') {
-                            setColumns(columns);
-                            setEditorLock('锁定');
-                        } else {
-                            const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-                            let value = await formRef.validateFields();
-                            let values = formRef.getFieldsValue(true).data;
-                            console.log(values)
+                    {/* <Button type="primary" ghost onClick={async () => {
+                        
+           
+                        // if (editorLock === '编辑') {
+                        //     setColumns(columns);
+                        //     setEditorLock('锁定');
+                        // } else {
+                        //     const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
+                        //     let value = await formRef.validateFields();
+                        //     let values = formRef.getFieldsValue(true).data;
+                        //     console.log(values)
 
-                            if (values && values.length > 0 && newRowChangeList.length > 0) {
-                                let changeValues = values.filter((item: any, index: number) => {
-                                    return newRowChangeList.indexOf(index) !== -1;
-                                }).map((item: any) => {
-                                    return {
-                                        ...item,
-                                        productCategory: params.id,
-                                        segmentGroupId: params.productSegmentId
-                                    }
-                                })
-                                RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [...changeValues]).then(res => {
+                        //     if (values && values.length > 0 && newRowChangeList.length > 0) {
+                        //         let changeValues = values.filter((item: any, index: number) => {
+                        //             return newRowChangeList.indexOf(index) !== -1;
+                        //         }).map((item: any) => {
+                        //             return {
+                        //                 ...item,
+                        //                 productCategory: params.id,
+                        //                 segmentGroupId: params.productSegmentId
+                        //             }
+                        //         })
+                        //         RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [...changeValues]).then(res => {
 
-                                    setColumns(columnsSetting);
-                                    setEditorLock('编辑');
-                                    formRef.resetFields()
-                                    setRowChangeList([]);
-                                    setRefresh(!refresh);
-                                    history.go(0)
-                                });
-                            } else {
-                                setColumns(columnsSetting);
-                                setEditorLock('编辑');
-                                formRef.resetFields()
-                                setRowChangeList([]);
-                                setRefresh(!refresh);
-                            }
+                        //             setColumns(columnsSetting);
+                        //             setEditorLock('编辑');
+                        //             formRef.resetFields()
+                        //             setRowChangeList([]);
+                        //             setRefresh(!refresh);
+                        //             history.go(0)
+                        //         });
+                        //     } else {
+                        //         setColumns(columnsSetting);
+                        //         setEditorLock('编辑');
+                        //         formRef.resetFields()
+                        //         setRowChangeList([]);
+                        //         setRefresh(!refresh);
+                        //     }
 
-                        }
-                        console.log(formRef.getFieldsValue(true))
-                    }} disabled={formRef.getFieldsValue(true).data && formRef.getFieldsValue(true).data?.length === 0}>{editorLock}</Button>
+                        // }
+                        // console.log(formRef.getFieldsValue(true))
+                    }} disabled={!(selectedKeys.length === 1)}>编辑</Button> */}
                     <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/recognize`) }}>识别</Button>
                     <Popconfirm
                         title="确认删除?"
@@ -614,13 +630,15 @@ export default function Lofting(): React.ReactNode {
                 }]}
             />
         </Modal>
-        <Modal title='添加' visible={addVisible} onCancel={() => {
+        <Modal title={editorLock} visible={addVisible} onCancel={() => {
             setAddVisible(false);
             setTableDataSource([]);
             form.setFieldsValue({ dataV: [] })
-        }} width={'90%'} onOk={
+        }} 
+        okText={editorLock==='编辑'?'锁定':'确定'}
+        width={'90%'} onOk={
             () => {
-                form.validateFields().then(() => {
+                editorLock==='添加'?form.validateFields().then(() => {
                     const values = form.getFieldsValue(true).dataV.map((item: any) => {
                         return {
                             ...item,
@@ -635,17 +653,17 @@ export default function Lofting(): React.ReactNode {
                         message.success('添加成功！')
                         setRefresh(!refresh);
                     });
-                })
+                }):setRefresh(!refresh);
             }
         }>
             <Form form={form}>
-                <Button onClick={() => {
+                {editorLock==='添加'&&<Button onClick={() => {
                     const value = form.getFieldsValue(true).dataV || [];
                     value.push({})
                     setTableDataSource([...value])
                     console.log(value)
                     form.setFieldsValue({ dataV: [...value] })
-                }} type='primary' ghost>添加一行</Button>
+                }} type='primary' ghost>添加一行</Button>}
                 <Table
                     columns={[
                         { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
