@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Input, DatePicker, Button, message, Space, Select, Dropdown, Menu, Radio } from 'antd';
+import { Input, DatePicker, Button, message, Space, Select, Dropdown, Menu, Radio, Modal } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from '../PackingPlan.module.less';
@@ -14,6 +14,7 @@ import useRequest from '@ahooksjs/use-request';
 import { Link } from 'react-router-dom';
 import { DownOutlined } from '@ant-design/icons';
 import { packageTypeOptions } from '../../../configuration/DictionaryOptions';
+import { modalGlobalConfig } from 'antd/lib/modal/confirm';
 
 export interface ISummaryData {
     readonly planCount?: string;
@@ -44,8 +45,8 @@ export default function DailySchedule(): React.ReactNode {
         resole(true);
     }), {})
 
-    const getSummary = () => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<ISummaryData>(`/tower-production/package/summary`, { packageStatus: confirmStatus, ...filterValue });
+    const getSummary = (values?: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<ISummaryData>(`/tower-production/package/summary`, { packageStatus: confirmStatus, ...filterValue, ...values });
         setSummaryData(data);
     });
 
@@ -146,11 +147,20 @@ export default function DailySchedule(): React.ReactNode {
 
     const BatchComplete = () => {
         if (selectedKeys.length > 0) {
-            RequestUtil.put(`/tower-production/package/packageStatus/${selectedKeys.join(',')}`).then(res => {
-                message.success('批量完成！');
-                setRefresh(!refresh);
-                getSummary();
-                setSelectedKeys([]);
+            Modal.confirm({
+                title: "确定要完成所选的包捆吗",
+                onOk: async () => new Promise(async (resove, reject) => {
+                    try {
+                        RequestUtil.put(`/tower-production/package/packageStatus/${selectedKeys.join(',')}`).then(res => {
+                            message.success('批量完成！');
+                            setRefresh(!refresh);
+                            getSummary();
+                            setSelectedKeys([]);
+                        })
+                    } catch (error) {
+                        reject(error)
+                    }
+                })
             })
         } else {
             message.warning('请选择需要批量完成的数据！')
@@ -171,12 +181,22 @@ export default function DailySchedule(): React.ReactNode {
     const operationChange = (event: any) => {
         setConfirmStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
+        getSummary({packageStatus: parseFloat(`${event.target.value}`)})
     }
 
     return <Page
         path={`tower-production/package`}
         columns={
-            [...columns, {
+            [...columns,
+            // {
+            //     "key": "endTime",
+            //     "title": "实际完成日期",
+            //     "width": 150,
+            //     "dataIndex": "endTime",
+            //     "type": "date",
+            //     "format": 'YYYY-MM-DD'
+            // },
+            {
                 "key": "operation",
                 "title": "操作",
                 "dataIndex": "operation",
@@ -213,11 +233,11 @@ export default function DailySchedule(): React.ReactNode {
                         <span className={styles.content}>{summaryData?.packageWeight || 0}</span> KG
                     </span>
                 </p>
-                <Dropdown overlay={menu}>
+                {confirmStatus === 1 ? <Dropdown overlay={menu}>
                     <Button>
                         更多操作<DownOutlined />
                     </Button>
-                </Dropdown>
+                </Dropdown> : null}
             </>
         }
         refresh={refresh}
@@ -282,15 +302,16 @@ export default function DailySchedule(): React.ReactNode {
                 values.endTimeMax = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
+            getSummary({ ...values });
             return values;
         }}
-        tableProps={{
+        tableProps={confirmStatus === 1 ? {
             rowSelection: {
                 selectedRowKeys: selectedKeys,
                 onChange: (selectedRowKeys: React.Key[]): void => {
                     setSelectedKeys(selectedRowKeys);
                 }
             }
-        }}
+        } : {}}
     />
 }
