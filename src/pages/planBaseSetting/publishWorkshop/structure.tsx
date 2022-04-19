@@ -72,20 +72,12 @@ export default function Structure(): ReactElement {
             <Space>
                 <span><label>合计：</label>{ }</span>
                 <span><label>总件数：</label>{data?.totalNumber || "0"}</span>
-                <span><label>总重量：</label>{data?.totalWeight || "0"}</span>
-                <span><label>总孔数：</label>{data?.totalNumber || "0"}</span>
+                <span><label>总重量(t)：</label>{data?.totalWeight || "0"}</span>
+                <span><label>总孔数：</label>{data?.totalHolesNum || "0"}</span>
             </Space>
         </Row>
         <CommonAliTable
-            columns={structure.map((item: any) => {
-                if (item.dataIndex === "processWorkshop") {
-                    return ({
-                        ...item,
-                        getCellProps: (value: any, record: any) => record.processWorkshop ? ({}) : ({ style: { backgroundColor: "red" } })
-                    })
-                }
-                return item
-            })}
+            columns={structure}
             size="small"
             isLoading={loading}
             dataSource={data?.recordDate.records || []}
