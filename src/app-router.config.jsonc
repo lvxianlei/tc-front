@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-{ // 路由配置
+ { // 路由配置
   "globalRouters": [
     {
       "name": "首页",

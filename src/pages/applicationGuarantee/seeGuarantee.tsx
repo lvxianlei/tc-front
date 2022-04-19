@@ -6,9 +6,11 @@ import { Modal, Form, Button } from 'antd';
 import { BaseInfo, DetailTitle, Attachment, AttachmentRef, OperationRecord } from '../common';
 import { seeBaseForm, guaranteeForm, recoveryForm } from './applicationColunm.json';
 import { OverViewProps } from './application';
+
 export default function SeeGuarantee(props: OverViewProps): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const fillGuarantee = useRef<AttachmentRef>();
+    
     return (
         <Modal
             title={'保函申请'}
