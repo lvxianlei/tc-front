@@ -25,23 +25,17 @@ const columns = [
         width: 150,
         dataIndex: 'segmentName'
     },
-    {
-        key: 'repeatNum',
-        title: '段重复数',
-        width: 150,
-        dataIndex: 'repeatNum'
-    },
+    // {
+    //     key: 'repeatNum',
+    //     title: '段重复数',
+    //     width: 150,
+    //     dataIndex: 'repeatNum'
+    // },
     {
         key: 'code',
         title: '构件编号',
         dataIndex: 'code',
         width: 120
-    },
-    {
-        key: 'materialName',
-        title: '材料名称',
-        width: 200,
-        dataIndex: 'materialName'
     },
     {
         key: 'structureTexture',
@@ -50,10 +44,22 @@ const columns = [
         dataIndex: 'structureTexture',
     },
     {
+        key: 'materialName',
+        title: '材料名称',
+        width: 200,
+        dataIndex: 'materialName'
+    },
+    {
         key: 'structureSpec',
         title: '规格',
         dataIndex: 'structureSpec',
         width: 200,
+    },
+    {
+        key: 'length',
+        title: '长度（mm）',
+        width: 200,
+        dataIndex: 'length'
     },
     {
         key: 'width',
@@ -68,41 +74,23 @@ const columns = [
         dataIndex: 'thickness'
     },
     {
-        key: 'length',
-        title: '长度（mm）',
-        width: 200,
-        dataIndex: 'length'
-    },
-    {
         key: 'basicsPartNum',
         title: '单段件数',
         width: 200,
         dataIndex: 'basicsPartNum'
     },
     {
-        key: 'basicsWeight',
-        title: '单件重量（kg）',
+        key: 'apertureNumber',
+        title: '各孔径孔数',
         width: 200,
-        dataIndex: 'basicsWeight'
+        dataIndex: 'apertureNumber'
     },
-    {
-        key: 'totalWeight',
-        title: '小计重量（kg）',
-        width: 200,
-        dataIndex: 'totalWeight'
-    },
-    {
-        key: 'description',
-        title: '备注',
-        width: 200,
-        dataIndex: 'description'
-    },
-    {
-        key: 'specialCode',
-        title: '特殊件号',
-        width: 200,
-        dataIndex: 'specialCode'
-    },
+    // {
+    //     key: 'apertureNumber',
+    //     title: '单件孔数',
+    //     width: 200,
+    //     dataIndex: 'apertureNumber'
+    // },
     {
         key: 'electricWelding',
         title: '电焊',
@@ -110,16 +98,28 @@ const columns = [
         dataIndex: 'electricWelding'
     },
     {
-        key: 'bend',
-        title: '火曲',
+        key: 'groove',
+        title: '坡口',
         width: 200,
-        dataIndex: 'bend'
+        dataIndex: 'groove'
     },
     {
         key: 'chamfer',
         title: '切角',
         width: 200,
         dataIndex: 'chamfer'
+    },
+    {
+        key: 'openCloseAngle',
+        title: '开合角',
+        width: 200,
+        dataIndex: 'openCloseAngle'
+    },
+    {
+        key: 'bend',
+        title: '火曲',
+        width: 200,
+        dataIndex: 'bend'
     },
     {
         key: 'shovelBack',
@@ -140,22 +140,34 @@ const columns = [
         dataIndex: 'squash'
     },
     {
-        key: 'openCloseAngle',
-        title: '开合角',
+        key: 'specialCode',
+        title: '特殊件号',
         width: 200,
-        dataIndex: 'openCloseAngle'
+        dataIndex: 'specialCode'
     },
+    // {
+    //     key: 'specialCode',
+    //     title: '压制',
+    //     width: 200,
+    //     dataIndex: 'specialCode'
+    // },
+    // {
+    //     key: 'specialCode',
+    //     title: '坡口米数（米）',
+    //     width: 200,
+    //     dataIndex: 'specialCode'
+    // },
+    // {
+    //     key: 'specialCode',
+    //     title: '拼数',
+    //     width: 200,
+    //     dataIndex: 'specialCode'
+    // },
     {
-        key: 'perforate',
-        title: '钻孔',
+        key: 'slottedForm',
+        title: '开槽形式',
         width: 200,
-        dataIndex: 'perforate'
-    },
-    {
-        key: 'groove',
-        title: '坡口',
-        width: 200,
-        dataIndex: 'groove'
+        dataIndex: 'slottedForm'
     },
     {
         key: 'intersectingLine',
@@ -163,11 +175,71 @@ const columns = [
         width: 200,
         dataIndex: 'intersectingLine'
     },
+    // {
+    //     key: 'intersectingLine',
+    //     title: '零件类型',
+    //     width: 200,
+    //     dataIndex: 'intersectingLine'
+    // },
     {
-        key: 'slottedForm',
-        title: '开槽形式',
+        key: 'description',
+        title: '备注',
         width: 200,
-        dataIndex: 'slottedForm'
+        dataIndex: 'description'
+    },
+    // {
+    //     key: 'description',
+    //     title: '含弧',
+    //     width: 200,
+    //     dataIndex: 'description'
+    // },
+    {
+        key: 'perforate',
+        title: '钻孔',
+        width: 200,
+        dataIndex: 'perforate'
+    },
+    // {
+    //     key: 'description',
+    //     title: '钻孔孔径孔数',
+    //     width: 200,
+    //     dataIndex: 'description'
+    // },
+    // {
+    //     key: 'perforate',
+    //     title: '有扩孔',
+    //     width: 200,
+    //     dataIndex: 'perforate'
+    // },
+    // {
+    //     key: 'perforate',
+    //     title: '扩孔孔径孔数',
+    //     width: 200,
+    //     dataIndex: 'perforate'
+    // },
+    // {
+    //     key: 'perforate',
+    //     title: '气割孔（0/1）',
+    //     width: 200,
+    //     dataIndex: 'perforate'
+    // },
+    // {
+    //     key: 'perforate',
+    //     title: '气割孔径孔数',
+    //     width: 200,
+    //     dataIndex: 'perforate'
+    // },
+    {
+        key: 'basicsWeight',
+        title: '单件重量（kg）',
+        width: 200,
+        dataIndex: 'basicsWeight'
+    },
+    {
+        key: 'totalWeight',
+        title: '总重（kg）',
+        width: 200,
+        dataIndex: 'totalWeight'
     },
     {
         key: 'sides',
@@ -195,12 +267,6 @@ const columns = [
         render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
             <span>{_ === -1 ? undefined : _}</span>
         )
-    },
-    {
-        key: 'apertureNumber',
-        title: '各孔径孔数',
-        width: 200,
-        dataIndex: 'apertureNumber'
     },
     {
         key: 'weldingEdge',

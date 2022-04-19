@@ -24,6 +24,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
     const [form] = Form.useForm();
     const history = useHistory();
     const [settingData, setSettingData] = useState<IComponentList[]>([]);
+    const [segment, setSegment] = useState<string>('');
 
     const { loading, data } = useRequest<ISegmentNameList[]>(() => new Promise(async (resole, reject) => {
         const data: ISegmentNameList[] = await RequestUtil.get(`/tower-science/welding/getWeldingSegment?weldingId=${params.id}`);
@@ -127,6 +128,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             }
                         }
                         setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
+                        setSegment(record.segmentId + ',' + record.segmentName)
                     }}></Radio>
             )
         },
@@ -141,16 +143,16 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     key={record.structureId}
                     defaultValue={record.weldingLength}
                     placeholder="请输入"
-                    onChange={(e) => {
-                        const newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
-                        const electricWeldingMeters = form.getFieldsValue(true).electricWeldingMeters;
-                        newWeldingDetailedStructureList[index] = {
-                            ...newWeldingDetailedStructureList[index],
-                            weldingLength: Number(e)
-                        }
-                        setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
-                        form.setFieldsValue({ 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e) * Number(record.singleNum) });
-                    }}
+                    // onChange={(e) => {
+                    //     const newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
+                    //     const electricWeldingMeters = form.getFieldsValue(true).electricWeldingMeters;
+                    //     newWeldingDetailedStructureList[index] = {
+                    //         ...newWeldingDetailedStructureList[index],
+                    //         weldingLength: Number(e)
+                    //     }
+                    //     setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
+                    //     form.setFieldsValue({ 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e) * Number(record.singleNum) });
+                    // }}
                     bordered={false} />
             )
         },
@@ -197,7 +199,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
             title: '单段件数',
             dataIndex: 'basicsPartNum',
             key: 'basicsPartNum'
-        }, {
+        }, 
+        {
             title: '剩余数量',
             dataIndex: 'basicsPartNumNow',
             key: 'basicsPartNumNow'
@@ -275,8 +278,15 @@ export default function AddAssemblyWelding(): React.ReactNode {
     const getComponentList = () => {
         if (form) {
             form.validateFields(['segmentName']).then(async res => {
+                let values = form.getFieldsValue(true)?.segmentName;
+                values = values.map((res: string) => {
+                    return {
+                        name: res.split(',')[0],
+                        id: res.split(',')[1],
+                    }
+                })
                 let data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
-                    segmentName: form.getFieldsValue(true)?.segmentName.split(',')[0],
+                    segmentName: values,
                     productCategoryId: params.productCategoryId,
                     segmentId: params.segmentId || ''
                 });
@@ -301,6 +311,9 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     })
                 }
                 setComponentList([...newData])
+
+                console.log(weldingDetailedStructureList);
+                console.log(newData)
             })
         }
     }
@@ -321,8 +334,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
             segmentId: params.segmentId,
             structureId: record.id,
             singleNum: 1,
-            weldingLength: 0,
-            isMainPart: 0
+            isMainPart: 0,
+            weldingLength: record.weldingEdge
         } : {}
         newWeldingDetailedStructureList = newWeldingDetailedStructureList.map((item: IComponentList) => {
             if (item.structureId === record.id) {
@@ -367,8 +380,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
         if (form) {
             form?.validateFields().then(res => {
                 const values = form?.getFieldsValue(true);
-                const segmentList = values.segmentName?.split(',');
-                console.log(segmentList[1])
+                const segmentList = segment?.split(',');
                 if (weldingDetailedStructureList && weldingDetailedStructureList?.filter(item => item && item['isMainPart'] === 1).length < 1) {
                     message.warning('请选择主件');
                 } else {
@@ -379,13 +391,13 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         ...values,
                         componentId: mainPartId,
                         mainPartId: mainPartId,
-                        segmentName: segmentList[0],
-                        segmentId: segmentList[1],
+                        segmentName: segmentList[1],
+                        segmentId: segmentList[0],
                         weldingDetailedStructureList: [...(weldingDetailedStructureList?.map((res: IComponentList) => {
                             return {
                                 ...res,
-                                segmentName: segmentList[0],
-                                segmentId: segmentList[1],
+                                segmentName: segmentList[1],
+                                segmentId: segmentList[0],
                                 singleWeldingNum: Number(res.singleNum) * Number(form.getFieldsValue(true).segmentGroupNum)
                             }
                         }) || [])]
@@ -439,10 +451,11 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             "required": true,
                             "message": "请输入段号"
                         }]}>
-                            <Select placeholder="请选择" onChange={() => {
-                                setWeldingDetailedStructureList([]);
-                                getComponentList()
-                            }} >
+                            <Select placeholder="请选择" style={{ width: '150px' }}
+                                mode="multiple" onChange={() => {
+                                    // setWeldingDetailedStructureList([]);
+                                    getComponentList()
+                                }} >
                                 {segmentNameList.map((item: any) => {
                                     return <Select.Option key={item.name + ',' + item.id} value={item.name + ',' + item.id}>{item.name}</Select.Option>
                                 })}
