@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-杆塔配段-配段
 */
 import React from 'react';
-import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, message, Row, Col, Select } from 'antd';
+import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, Row, Col, Select } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
@@ -141,7 +141,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                 <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
                                     {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
                                         return <Select.Option key={index} value={id}>
-
                                             {name}
                                         </Select.Option>
                                     })}
@@ -156,7 +155,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                     <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
                                         {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
                                             return <Select.Option key={index} value={id}>
-
                                                 {name}
                                             </Select.Option>
                                         })}
