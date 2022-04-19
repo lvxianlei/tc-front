@@ -214,43 +214,43 @@
         {
             "key": "segmentName",
             "title": "段名",
-            "width": 120,
+            "width": 80,
             "dataIndex": "segmentName"
         },
         {
             "key": "code",
             "title": "件号",
-            "width": 120,
+            "width": 100,
             "dataIndex": "code"
         },
         {
             "key": "structureNum",
             "title": "单段数量",
-            "width": 120,
+            "width": 100,
             "dataIndex": "structureNum"
         },
         {
             "key": "structureCountNum",
             "title": "单基数量",
-            "width": 120,
+            "width": 100,
             "dataIndex": "structureCountNum"
         },
         {
             "key": "structureRemainingNum",
             "title": "剩余件数",
-            "width": 120,
+            "width": 100,
             "dataIndex": "structureRemainingNum"
         },
         {
             "key": "basicsWeight",
             "title": "单件重量（kg）",
-            "width": 120,
+            "width": 100,
             "dataIndex": "basicsWeight"
         },
         {
             "key": "totalWeight",
             "title": "单基重量（kg）",
-            "width": 120,
+            "width": 100,
             "dataIndex": "totalWeight"
         },
         {

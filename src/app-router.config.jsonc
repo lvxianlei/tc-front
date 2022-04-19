@@ -1761,9 +1761,23 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 计划排产-分配车间-构件明细
+      "name": "组焊明细",
+      "path": "/planProd/publishWorkshop/welding/:id/:issuedNumber/:productCategory",
+      "module": "./pages/planBaseSetting/publishWorkshop/welding",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-分配车间-组焊明细
+      "name": "构件明细",
+      "path": "/planProd/publishWorkshop/structure/:id/:issuedNumber/:productCategory",
+      "module": "./pages/planBaseSetting/publishWorkshop/structure",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 计划排产-分配车间
       "name": "手动分配车间",
-      "path": "/planProd/publishWorkshop/:id",
+      "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
       "authority": "approvalm"
@@ -2503,6 +2517,6 @@
       "module": "./pages/changePassword",
       "exact": true,
       "authority": "home_page_person_center"
-    },
+    }
   ]
 }

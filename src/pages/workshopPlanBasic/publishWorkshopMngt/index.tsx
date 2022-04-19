@@ -48,10 +48,10 @@ export default function Index(): React.ReactElement {
         await saveRun({
             groupIds: groupIds.map((item: any) => item.groupId),
             workshopConfigs: (submitData.submit || []).map((item: any) => ({
-                productTypeId: item.productTypeId.join(","),
+                productTypeId: item.productTypeId?.join(","),
                 weldingTypeId: item.weldingTypeId,
                 weldingWorkshopId: item.weldingWorkshopId,
-                workshopId: item.workshopId.join(","),
+                workshopId: item.workshopId?.join(","),
                 factoryId: item.factoryId
             }))
         })

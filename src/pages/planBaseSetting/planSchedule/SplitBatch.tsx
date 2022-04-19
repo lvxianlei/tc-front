@@ -10,8 +10,8 @@ export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const history = useHistory();
     const [filterValue, setFilterValue] = useState({});
-    const [refresh, setRefresh] = useState<boolean>(false);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<React.Key[]>([]);
     const [form] = Form.useForm();
     const [factoryForm] = Form.useForm();
     const { run } = useRequest((option) => new Promise(async (resole, reject) => {
@@ -37,17 +37,18 @@ export default function SampleDraw(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const splitData = await form.validateFields()
-            const submitData = selectedKeys.map((item: any) => {
+            const submitData = selectedRows.map((item: any) => {
                 return {
-                    id: item,
+                    id: item.id,
                     productionBatch: splitData?.productionBatch
                 }
             })
-            await RequestUtil.post(`/tower-aps/productionPlan/batchNo`, submitData).then(() => {
+            await RequestUtil.post(`/tower-aps/productionPlan/batchNo/${params.id}`, submitData).then(() => {
                 message.success('提交成功！')
                 form.resetFields()
-                setRefresh(!refresh)
                 setSelectedKeys([])
+                setSelectedRows([])
+                history.go(0)
             })
         } catch (error) {
             console.log(error)
@@ -89,7 +90,10 @@ export default function SampleDraw(): React.ReactNode {
         setFilterValue(value)
         return value
     }
-    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => setSelectedKeys(selectedRowKeys);
+    const handleSelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys)
+        setSelectedRows(selectedRows)
+    };
 
     const finishBatch = () => {
         Modal.confirm({
@@ -98,7 +102,7 @@ export default function SampleDraw(): React.ReactNode {
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     await completeBatchRun()
-                    message.success("成功完成批次设置")
+                    await message.success("成功完成批次设置")
                     resove(true)
                 } catch (error) {
                     reject(error)
@@ -108,7 +112,7 @@ export default function SampleDraw(): React.ReactNode {
     }
     const useFactory = () => {
         Modal.confirm({
-            title: "分配车间",
+            title: "分配厂区",
             icon: null,
             content: <Form form={factoryForm}>
                 <Form.Item
@@ -117,6 +121,7 @@ export default function SampleDraw(): React.ReactNode {
                     rules={[{ required: true, message: '请选择厂区名' }]}>
                     <Select>
                         {factoryTypeOptions?.map((item: any) => <Select.Option
+                            key={item.id}
                             value={item.id}>
                             {item.name}
                         </Select.Option>)}
@@ -126,31 +131,36 @@ export default function SampleDraw(): React.ReactNode {
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     const factoryId = await factoryForm.validateFields()
-                    await run(selectedKeys.map(item => ({
-                        id: item,
+                    await run(selectedRows.map((item: any) => ({
+                        id: item.id,
+                        productionBatchNo: item.productionBatchNo,
                         factoryId: factoryId.factoryId
                     })))
-                    message.success("已成功分配厂区")
+                    await message.success("已成功分配厂区")
                     setSelectedKeys([])
+                    setSelectedRows([])
                     factoryForm.resetFields()
                     history.go(0)
                     resove(true)
                 } catch (error) {
                     reject(false)
                 }
-            })
+            }),
+            onCancel() {
+                factoryForm.resetFields()
+            }
         })
     }
 
     const cancelFactory = () => {
         Modal.confirm({
-            title: "取消分配车间",
-            content: "是否取消分配车间？",
+            title: "取消分配厂区",
+            content: "是否取消分配厂区？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    run(selectedKeys.map(item => ({ id: item })))
-                    message.success("已成功取消分配厂区")
+                    await run(selectedRows.map((item: any) => ({ id: item.id, productionBatchNo: item.productionBatchNo })))
                     setSelectedKeys([])
+                    setSelectedRows([])
                     history.go(0)
                     resove(true)
                 } catch (error) {
@@ -297,7 +307,6 @@ export default function SampleDraw(): React.ReactNode {
     return <Page
         path={`tower-aps/productionPlan/batchNo/${params.id}`}
         columns={columns}
-        refresh={refresh}
         onFilterSubmit={onFilterSubmit}
         filterValue={filterValue}
         requestData={{ productCategoryId: params.id }}
@@ -305,7 +314,7 @@ export default function SampleDraw(): React.ReactNode {
             rowSelection: {
                 type: "checkbox",
                 selectedRowKeys: selectedKeys,
-                onChange: SelectChange
+                onChange: handleSelectChange
             }
         }}
         extraOperation={

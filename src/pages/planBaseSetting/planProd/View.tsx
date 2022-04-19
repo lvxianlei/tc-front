@@ -20,8 +20,6 @@ export default function RecruitEdit(): React.ReactNode {
     const [prodUnitList, setProdUnitList] = useState<any[]>([])
     const [productivity, setProductivity] = useState<any>('');
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
-    const [selectedRows, setSelectedRows] = useState<any>([]);
-    const [towerData, setTowerData] = useState<any>({});
     const columns: TableColumnProps<object>[] = [
         {
             title: '杆塔号',

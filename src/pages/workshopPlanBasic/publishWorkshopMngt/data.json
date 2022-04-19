@@ -9,10 +9,6 @@
             "dataIndex": "factoryName"
         },
         {
-            "title": "组焊类型",
-            "dataIndex": "weldingTypeName"
-        },
-        {
             "title": "组焊加工车间",
             "dataIndex": "weldingWorkshopName"
         },
@@ -26,31 +22,29 @@
             "title": "产品类型",
             "dataIndex": "productTypeId",
             "type": "select",
-            "enum": []
+            "enum": [],
+            "required": true
         },
         {
             "title": "厂区名",
             "dataIndex": "factoryId",
             "type": "select",
-            "enum": []
-        },
-        {
-            "title": "组焊类型",
-            "dataIndex": "weldingTypeId",
-            "type": "select",
-            "enum": []
+            "enum": [],
+            "required": true
         },
         {
             "title": "组焊加工车间",
             "dataIndex": "weldingWorkshopId",
             "type": "select",
-            "enum": []
+            "enum": [],
+            "required": true
         },
         {
             "title": "加工车间",
             "dataIndex": "workshopId",
             "type": "select",
-            "enum": []
+            "enum": [],
+            "required": true
         }
     ]
 }

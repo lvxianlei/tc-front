@@ -106,9 +106,9 @@ const productColumns = [
         "format": "YYYY-MM-DD"
     },
     {
-        key: 'productDescription',
+        key: 'issueDescription',
         title: '备注',
-        dataIndex: 'productDescription'
+        dataIndex: 'issueDescription'
     }
 ]
 export default function SetOutTaskDetail(): React.ReactNode {
@@ -128,6 +128,7 @@ export default function SetOutTaskDetail(): React.ReactNode {
                 materialAbortTime: data.materialAbortTime,
                 description: data.description,
                 voltageGradeName: data.voltageGradeName,
+                issueDescription: data.issueDescription,
             },
         ])
         resole(data)
