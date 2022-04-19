@@ -1,16 +1,17 @@
 /**
- * @author zyc
+ * @author lxy
  * @copyright © 2022
  * @description 提料-杆塔信息-配段
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, Input, Row, Col, Button, message, Descriptions } from 'antd'
+import { Spin, Form, Input, Row, Col, Button, message, Descriptions, Select } from 'antd'
 import { DetailTitle } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import styles from './TowerPickAssign.module.less';
 import { IDetail, IMaterialDetail } from "./PickTower"
+import { patternTypeOptions } from "../../../configuration/DictionaryOptions"
 
 export interface EditProps {
     type: "new" | "detail",
@@ -184,15 +185,45 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
     return <Spin spinning={loading}>
         <Form form={fastForm}>
             <Row>
-                <Col span={14}>
-                    <Form.Item name="fast" label="快速配段" rules={[{
-                        pattern: /^[a-zA-Z0-9-,*()]*$/,
-                        message: '仅可输入英文字母/数字/特殊字符',
+            {type === 'new' ? <><Col span={6}>
+                    <Form.Item name="part" label="杆塔" rules={[{
+                        required: true,
+                        message: '请选择呼高'
                     }]}>
-                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
+                        <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                            {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={index} value={id}>
+
+                                    {name}
+                                </Select.Option>
+                            })}
+                        </Select>
                     </Form.Item>
                 </Col>
-                <Col offset={1} span={4}>
+                <Col span={5}>
+                    <Form.Item name="part" rules={[{
+                        required: true,
+                        message: '请选择杆塔'
+                    }]}>
+                        <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                            {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={index} value={id}>
+
+                                    {name}
+                                </Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
+                </Col></> : null}
+                <Col offset={type === 'new' ? 1 : 0} span={6}>
+                            <Form.Item name="part" label="快速配段" rules={[{
+                                pattern: /^[a-zA-Z0-9-,*()]*$/,
+                                message: '仅可输入英文字母/数字/特殊字符',
+                            }]}>
+                                <Input style={{ width: '100%' }} disabled={type === 'detail'}/>
+                            </Form.Item>
+                        </Col>
+                <Col offset={2} span={4}>
                     <Button type="primary" loading={fastLoading} disabled={type === 'detail'} onClick={fastWithSectoin} ghost>确定</Button>
                 </Col>
             </Row>
