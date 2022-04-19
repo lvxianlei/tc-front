@@ -341,9 +341,9 @@ export default function DailySchedule(): React.ReactNode {
                             const value = waitTableDataSource;
                             value.push(...busySelectedRows)
                             console.log('待选区所有数据',value)
-                            const addValue:any[] = await  RequestUtil.get(`/tower-production/package/plan/${towerTId}/products/pkg/${code?.packageCode}/components/${busySelectedRows.map((item:any)=>{
+                            const addValue:any[] = code.packageAttribute===1?await  RequestUtil.get(`/tower-production/package/plan/${towerTId}/products/pkg/${code?.packageCode}/components/${busySelectedRows.map((item:any)=>{
                                 return item.code
-                            }).join(',')}`)
+                            }).join(',')}`):[]
                             var temp:any = {};  //用于id判断重复
                             var result:any[] = []; //最后的新数组
                              
