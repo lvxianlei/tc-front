@@ -87,6 +87,7 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
             //  const result: [] = await RequestUtil.get(``);
+            form.setFieldsValue({data: [...list]})
             resole([])
         } catch (error) {
             reject(error)
@@ -105,6 +106,13 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
+            let values = form.getFieldsValue(true);
+            let newSelected = selectedRows.map((res) => {
+                return {
+                    ...res,
+                    suffix: values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
+                }
+            })
             await saveRun({
 
             })
@@ -142,7 +150,7 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
                 <CommonTable
                     haveIndex
                     pagination={false}
-                    dataSource={[]}
+                    dataSource={list}
                     rowKey="index"
                     rowSelection={{
                         selectedRowKeys: selectedRowKeys,
