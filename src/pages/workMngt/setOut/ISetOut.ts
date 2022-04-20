@@ -47,6 +47,7 @@ export interface ILofting {
 
 export interface modalProps {
     onSubmit: () => void;
+    resetFields: () => void
 }
 
 export interface allotModalProps {

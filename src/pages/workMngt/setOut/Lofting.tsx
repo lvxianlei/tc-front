@@ -629,9 +629,21 @@ export default function Lofting(): React.ReactNode {
 
     const handleEditModalOk = () => new Promise(async (resove, reject) => {
         try {
-            await editRef.current?.onSubmit();
+            await editModalRef.current?.onSubmit();
             message.success('修改材质成功');
             setEditVisible(false);
+            setRefresh(!refresh);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+    
+    const handleAddModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await addModalRef.current?.onSubmit();
+            message.success('添加成功');
+            setAddVisible(false);
             setRefresh(!refresh);
             resove(true);
         } catch (error) {
@@ -718,6 +730,7 @@ export default function Lofting(): React.ReactNode {
     const [loading1, setLoading1] = useState(false);
     const editRef = useRef<modalProps>();
     const editModalRef = useRef<modalProps>();
+    const addModalRef = useRef<modalProps>();
     const [visible, setVisible] = useState<boolean>(false);
     const [editVisible, setEditVisible] = useState<boolean>(false);
     const [missVisible, setMissVisible] = useState<boolean>(false);
@@ -766,11 +779,12 @@ export default function Lofting(): React.ReactNode {
             visible={addVisible}
             width="80%"
             title="添加"
+            onOk={handleAddModalOk}
             key='add'
             onCancel={() => {
                 setAddVisible(false);
             }}>
-            <AddLofting id={''} />
+            <AddLofting id={''}  ref={addModalRef}/>
         </Modal>
         <Form layout="inline" style={{ margin: '20px' }} onFinish={(value: Record<string, any>) => {
             setFilterValue(value)

@@ -153,7 +153,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     //     setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
                     //     form.setFieldsValue({ 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e) * Number(record.singleNum) });
                     // }}
-                    bordered={false} />
+                    bordered={false} 
+                    disabled/>
             )
         },
         {
@@ -199,7 +200,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             title: '单段件数',
             dataIndex: 'basicsPartNum',
             key: 'basicsPartNum'
-        }, 
+        },
         {
             title: '剩余数量',
             dataIndex: 'basicsPartNumNow',
@@ -311,8 +312,17 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     })
                 }
                 setComponentList([...newData])
-
-                console.log(weldingDetailedStructureList);
+                newData = newData.map(res => {
+                    const weldingDetailedStructureListNew: IComponentList[] = weldingDetailedStructureList?.filter(item => item.structureId === res.id) || [];
+                    if (weldingDetailedStructureListNew.length > 0) {
+                        return {
+                            ...res,
+                            basicsPartNumNow: Number(res.basicsPartNumNow) - Number(weldingDetailedStructureListNew[0].singleNum)
+                        }
+                    } else {
+                        return {...res}
+                    }
+                })
                 console.log(newData)
             })
         }
