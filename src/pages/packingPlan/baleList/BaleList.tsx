@@ -46,7 +46,7 @@ export default function DailySchedule(): React.ReactNode {
     }), {})
 
     const getSummary = (values?: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<ISummaryData>(`/tower-production/package/summary`, { packageStatus: confirmStatus, ...filterValue, ...values });
+        const data = await RequestUtil.get<ISummaryData>(`/tower-production/package/summary`, { packageStatus: confirmStatus, ...values });
         setSummaryData(data);
     });
 
@@ -208,9 +208,10 @@ export default function DailySchedule(): React.ReactNode {
                         RequestUtil.put(`/tower-production/package/packageStatus/${selectedKeys.join(',')}`).then(res => {
                             message.success('批量完成！');
                             setRefresh(!refresh);
-                            getSummary();
+                            getSummary({...filterValue});
                             setSelectedKeys([]);
                         })
+                        resove(true)
                     } catch (error) {
                         reject(error)
                     }
