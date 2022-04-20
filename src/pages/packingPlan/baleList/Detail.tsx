@@ -285,7 +285,7 @@ export default function SetOutInformation(): React.ReactNode {
                                 min={0}
                                 max={Number(record?.num) - Number(record?.unPackageNum)}
                                 placeholder="请输入"
-                                value={record?.packageNum}
+                                defaultValue={record?.packageNum}
                                 onBlur={(e) => updatePackage(record.id, e.target.value, record?.unPackageNum)}
                                 size='small'
                                 disabled={detailData?.packageStatus === 2}
@@ -301,7 +301,7 @@ export default function SetOutInformation(): React.ReactNode {
                                 min={0}
                                 max={Number(record?.num) - Number(record?.packageNum)}
                                 placeholder="请输入"
-                                value={value}
+                                defaultValue={value}
                                 onBlur={(e) => updatePackage(record.id, record?.packageNum, e.target.value)}
                                 size='small'
                                 disabled={detailData?.packageStatus === 2}
