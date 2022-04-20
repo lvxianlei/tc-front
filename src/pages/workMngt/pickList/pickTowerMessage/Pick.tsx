@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Space, Button, Popconfirm, Input, Form, message, InputNumber, Upload, Modal, Table } from 'antd';
 import { SearchTable as Page } from '../../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
@@ -8,6 +8,7 @@ import RequestUtil from '../../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 import AuthUtil from '../../../../utils/AuthUtil';
 import { downloadTemplate } from '../../setOut/downloadTemplate';
+import StructureTextureEdit from './StructureTextureEdit';
 interface Column extends ColumnType<object> {
     editable?: boolean;
 }
@@ -27,9 +28,20 @@ export default function Lofting(): React.ReactNode {
     const [url, setUrl] = useState<string>('');
     const [editorLock, setEditorLock] = useState('添加');
     const [form] = Form.useForm();
-    const [formRef] = Form.useForm();
+    const [editVisible, setEditVisible] = useState<boolean>(false);
     const [tableDataSource, setTableDataSource] = useState<any[]>([])
-
+    const editModalRef = useRef<any>();
+    const handleEditModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editModalRef.current?.onSubmit();
+            message.success('修改材质成功');
+            setEditVisible(false);
+            setRefresh(!refresh);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
     const columns = [
         {
             key: 'id',
@@ -519,6 +531,11 @@ export default function Lofting(): React.ReactNode {
                     >
                         <Button type="primary" ghost>完成提料</Button>
                     </Popconfirm>
+                    <Button type="primary" ghost
+                    onClick={()=>{
+                        setEditVisible(true)
+                    }}
+                    >修改材质</Button>
                     {/* <Button type="primary" ghost onClick={async () => {
                         
            
@@ -607,6 +624,18 @@ export default function Lofting(): React.ReactNode {
             ]}
             onFilterSubmit={onFilterSubmit}
         />
+        <Modal
+            destroyOnClose
+            key='StructureTextureEdit'
+            visible={editVisible}
+            width="30%"
+            title="修改材质"
+            onOk={handleEditModalOk}
+            onCancel={() => {
+                setEditVisible(false);
+            }}>
+            <StructureTextureEdit id={''} ref={editModalRef} />
+        </Modal>
         <Modal title='提示' visible={tipVisible} footer={false} onCancel={() => {
             setTipVisible(false)
         }}>
