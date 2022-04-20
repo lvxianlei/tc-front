@@ -341,7 +341,7 @@ export default function DailySchedule(): React.ReactNode {
                         })}
                     </Col>
                     <Col span={7} style={{marginRight:"20px"}}>
-                        <DetailTitle title={`件号${code?.packageAttribute===1?'（通用包）':code?.packageAttribute===0?'（专用包）':''}`} operation={[
+                        <DetailTitle title={`件号${code?.packageAttribute===1?'（公用包）':code?.packageAttribute===0?'（专用包）':''}`} operation={[
                             code?.packageAttribute===1?<Popconfirm 
                             title={'还有其他通用包中有此构件，是否一次性移到待放区？'}
                             onConfirm={async ()=>{
@@ -551,6 +551,10 @@ export default function DailySchedule(): React.ReactNode {
                     RequestUtil.post(`/tower-production/package`,submitData).then(()=>{
                         message.success('新增成功！')
                         setVisible(false)
+                        formRef.setFieldsValue({
+                            packageCode:'未命名包',
+                            packageType:'',
+                        })
                     }).then(()=>{
                         onPackSelect({id:productNumberId})
                     });
