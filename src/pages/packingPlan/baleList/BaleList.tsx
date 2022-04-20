@@ -145,6 +145,60 @@ export default function DailySchedule(): React.ReactNode {
         }
     ]
 
+    const searchItems = [
+        {
+            name: 'packageType',
+            label: '包类型',
+            children: <Select placeholder="请选择" style={{ width: '120px' }} defaultValue={''}>
+                <Select.Option key={0} value={''}>全部</Select.Option>
+                {packageTypeOptions && packageTypeOptions.map(({ id, name }, index) => {
+                    return <Select.Option key={index} value={id}>
+                        {name}
+                    </Select.Option>
+                })}
+            </Select>
+        },
+        {
+            name: 'packageAttribute',
+            label: '包属性',
+            children: <Select placeholder="请选择" style={{ width: '120px' }} defaultValue={''}>
+                <Select.Option key={4} value={''}>全部</Select.Option>
+                <Select.Option key={0} value={0}>专用包</Select.Option>
+                <Select.Option key={1} value={1}>公用包</Select.Option>
+            </Select>
+        },
+        {
+            name: 'teamId',
+            label: '包装班组',
+            children: <Select placeholder="请选择" style={{ width: '120px' }} defaultValue={''}>
+                <Select.Option key={0} value={''}>全部</Select.Option>
+                {galvanizedTeamList?.map((item: any) => {
+                    return <Select.Option key={item.teamName} value={item.id}>{item.teamName}</Select.Option>
+                })}
+            </Select>
+        },
+        {
+            name: 'time',
+            label: '开始包装日期',
+            children: <DatePicker.RangePicker />
+        },
+        {
+            name: 'finishiTtime',
+            label: '要求完成日期',
+            children: <DatePicker.RangePicker />
+        },
+        {
+            name: 'actualTime',
+            label: '实际完成日期',
+            children: <DatePicker.RangePicker />
+        },
+        {
+            name: 'fuzzyQuery',
+            label: "模糊查询项",
+            children: <Input style={{ width: '200px' }} placeholder="计划号/塔型" />
+        }
+    ]
+
     const BatchComplete = () => {
         if (selectedKeys.length > 0) {
             Modal.confirm({
@@ -181,33 +235,53 @@ export default function DailySchedule(): React.ReactNode {
     const operationChange = (event: any) => {
         setConfirmStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
-        getSummary({packageStatus: parseFloat(`${event.target.value}`)})
+        getSummary({ packageStatus: parseFloat(`${event.target.value}`) })
     }
 
     return <Page
         path={`tower-production/package`}
         columns={
-            [...columns,
-            // {
-            //     "key": "endTime",
-            //     "title": "实际完成日期",
-            //     "width": 150,
-            //     "dataIndex": "endTime",
-            //     "type": "date",
-            //     "format": 'YYYY-MM-DD'
-            // },
-            {
-                "key": "operation",
-                "title": "操作",
-                "dataIndex": "operation",
-                fixed: "right" as FixedType,
-                "width": 150,
-                render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    <Space>
-                        <Link to={`/packingPlan/baleList/detail/${record.id}`}>详情</Link>
-                    </Space>
-                )
-            }]}
+            confirmStatus === 1 ?
+                [
+                    ...columns,
+                    {
+                        "key": "operation",
+                        "title": "操作",
+                        "dataIndex": "operation",
+                        fixed: "right" as FixedType,
+                        "width": 150,
+                        render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                            <Space>
+                                <Link to={`/packingPlan/baleList/detail/${record.id}`}>详情</Link>
+                            </Space>
+                        )
+                    }
+                ]
+                :
+                [
+                    ...columns,
+                    {
+                        "key": "finishTime",
+                        "title": "实际完成日期",
+                        "width": 150,
+                        "dataIndex": "finishTime",
+                        "type": "date",
+                        "format": 'YYYY-MM-DD'
+                    },
+                    {
+                        "key": "operation",
+                        "title": "操作",
+                        "dataIndex": "operation",
+                        fixed: "right" as FixedType,
+                        "width": 150,
+                        render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                            <Space>
+                                <Link to={`/packingPlan/baleList/detail/${record.id}`}>详情</Link>
+                            </Space>
+                        )
+                    }
+                ]
+        }
         headTabs={[]}
         requestData={{ packageStatus: confirmStatus }}
         extraOperation={
@@ -241,54 +315,7 @@ export default function DailySchedule(): React.ReactNode {
             </>
         }
         refresh={refresh}
-        searchFormItems={[
-            {
-                name: 'packageType',
-                label: '包类型',
-                children: <Select placeholder="请选择" style={{ width: '120px' }} defaultValue={''}>
-                    <Select.Option key={0} value={''}>全部</Select.Option>
-                    {packageTypeOptions && packageTypeOptions.map(({ id, name }, index) => {
-                        return <Select.Option key={index} value={id}>
-                            {name}
-                        </Select.Option>
-                    })}
-                </Select>
-            },
-            {
-                name: 'packageAttribute',
-                label: '包属性',
-                children: <Select placeholder="请选择" style={{ width: '120px' }} defaultValue={''}>
-                    <Select.Option key={4} value={''}>全部</Select.Option>
-                    <Select.Option key={0} value={0}>专用包</Select.Option>
-                    <Select.Option key={1} value={1}>公用包</Select.Option>
-                </Select>
-            },
-            {
-                name: 'teamId',
-                label: '包装班组',
-                children: <Select placeholder="请选择" style={{ width: '120px' }} defaultValue={''}>
-                    <Select.Option key={0} value={''}>全部</Select.Option>
-                    {galvanizedTeamList?.map((item: any) => {
-                        return <Select.Option key={item.teamName} value={item.id}>{item.teamName}</Select.Option>
-                    })}
-                </Select>
-            },
-            {
-                name: 'time',
-                label: '开始包装日期',
-                children: <DatePicker.RangePicker />
-            },
-            {
-                name: 'finishiTtime',
-                label: '要求完成日期',
-                children: <DatePicker.RangePicker />
-            },
-            {
-                name: 'fuzzyQuery',
-                label: "模糊查询项",
-                children: <Input style={{ width: '200px' }} placeholder="计划号/塔型" />
-            }
-        ]}
+        searchFormItems={confirmStatus === 1 ? searchItems?.filter(res => res.name !== 'actualTime') : searchItems}
         filterValue={filterValue}
         onFilterSubmit={(values: Record<string, any>) => {
             if (values?.time) {
@@ -300,6 +327,11 @@ export default function DailySchedule(): React.ReactNode {
                 const formatDate = values?.finishiTtime?.map((item: any) => item.format("YYYY-MM-DD"));
                 values.endTimeMin = formatDate[0] + ' 00:00:00';
                 values.endTimeMax = formatDate[1] + ' 23:59:59';
+            }
+            if (values?.actualTime) {
+                const formatDate = values?.actualTime?.map((item: any) => item.format("YYYY-MM-DD"));
+                values.finishTimeMin = formatDate[0] + ' 00:00:00';
+                values.finishTimeMax = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
             getSummary({ ...values });
