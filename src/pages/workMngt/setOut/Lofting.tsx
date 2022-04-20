@@ -322,42 +322,42 @@ export default function Lofting(): React.ReactNode {
             //     </Form.Item>
             // )
         },
-        // {
-        //     key: 'specialCode',
-        //     title: '压制',
-        //     width: 200,
-        //     dataIndex: 'specialCode',
-        //     editable: true,
-        //     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data', index, "specialCode"]} initialValue={_}>
-        //             <Input size="small" onChange={() => rowChange(index)} />
-        //         </Form.Item>
-        //     )
-        // },
-        // {
-        //     key: 'specialCode',
-        //     title: '坡口米数（米）',
-        //     width: 200,
-        //     dataIndex: 'specialCode',
-        //     editable: true,
-        //     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data', index, "specialCode"]} initialValue={_}>
-        //             <Input size="small" onChange={() => rowChange(index)} />
-        //         </Form.Item>
-        //     )
-        // },
-        // {
-        //     key: 'specialCode',
-        //     title: '拼数',
-        //     width: 200,
-        //     dataIndex: 'specialCode',
-        //     editable: true,
-        //     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data', index, "specialCode"]} initialValue={_}>
-        //             <Input size="small" onChange={() => rowChange(index)} />
-        //         </Form.Item>
-        //     )
-        // },
+        {
+            key: 'suppress',
+            title: '压制',
+            width: 200,
+            dataIndex: 'suppress',
+            editable: true,
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Form.Item name={['data', index, "suppress"]} initialValue={_}>
+            //         <Input size="small" onChange={() => rowChange(index)} />
+            //     </Form.Item>
+            // )
+        },
+        {
+            key: 'grooveMeters',
+            title: '坡口米数（米）',
+            width: 200,
+            dataIndex: 'grooveMeters',
+            editable: true,
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
+            //         <Input size="small" onChange={() => rowChange(index)} />
+            //     </Form.Item>
+            // )
+        },
+        {
+            key: 'spellNumber',
+            title: '拼数',
+            width: 200,
+            dataIndex: 'spellNumber',
+            editable: true,
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Form.Item name={['data', index, "spellNumber"]} initialValue={_}>
+            //         <Input size="small" onChange={() => rowChange(index)} />
+            //     </Form.Item>
+            // )
+        },
         {
             key: 'slottedForm',
             title: '开槽形式',
@@ -412,18 +412,18 @@ export default function Lofting(): React.ReactNode {
             //     </Form.Item>
             // )
         },
-        // {
-        //     key: 'description',
-        //     title: '含弧',
-        //     width: 200,
-        //     dataIndex: 'description',
-        //     editable: true,
-        //     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data', index, "description"]} initialValue={_}>
-        //             <Input size="small" maxLength={50} onChange={() => rowChange(index)} />
-        //         </Form.Item>
-        //     )
-        // },
+        {
+            key: 'arcContaining',
+            title: '含弧',
+            width: 200,
+            dataIndex: 'arcContaining',
+            editable: true,
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Form.Item name={['data', index, "arcContaining"]} initialValue={_}>
+            //         <Input size="small" maxLength={50} onChange={() => rowChange(index)} />
+            //     </Form.Item>
+            // )
+        },
         {
             key: 'perforate',
             title: '钻孔',
@@ -439,66 +439,66 @@ export default function Lofting(): React.ReactNode {
             //     </Form.Item>
             // )
         },
-        // {
-        //     key: 'perforate',
-        //     title: '钻孔孔径孔数',
-        //     width: 200,
-        //     dataIndex: 'perforate',
-        //     editable: true,
-        //     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data', index, "perforate"]} initialValue={_}>
-        //             <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-        //         </Form.Item>
-        //     )
-        // },
-        // {
-        //     key: 'perforate',
-        //     title: '有扩孔',
-        //     width: 200,
-        //     dataIndex: 'perforate',
-        //     editable: true,
-        //     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data', index, "perforate"]} initialValue={_}>
-        //             <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-        //         </Form.Item>
-        //     )
-        // },
-        // {
-        //     key: 'perforate',
-        //     title: '扩孔孔径孔数',
-        //     width: 200,
-        //     dataIndex: 'perforate',
-        //     editable: true,
-        //     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data', index, "perforate"]} initialValue={_}>
-        //             <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-        //         </Form.Item>
-        //     )
-        // },
-        // {
-        //     key: 'perforate',
-        //     title: '气割孔（0/1）',
-        //     width: 200,
-        //     dataIndex: 'perforate',
-        //     editable: true,
-        //     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data', index, "perforate"]} initialValue={_}>
-        //             <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-        //         </Form.Item>
-        //     )
-        // },
-        // {
-        //     key: 'perforate',
-        //     title: '气割孔孔径孔数',
-        //     width: 200,
-        //     dataIndex: 'perforate',
-        //     editable: true,
-        //     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data', index, "perforate"]} initialValue={_}>
-        //             <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-        //         </Form.Item>
-        //     )
-        // },
+        {
+            key: 'perforateNumber',
+            title: '钻孔孔径孔数',
+            width: 200,
+            dataIndex: 'perforateNumber',
+            editable: true,
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Form.Item name={['data', index, "perforateNumber"]} initialValue={_}>
+            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+            //     </Form.Item>
+            // )
+        },
+        {
+            key: 'withReaming',
+            title: '有扩孔',
+            width: 200,
+            dataIndex: 'withReaming',
+            editable: true,
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Form.Item name={['data', index, "withReaming"]} initialValue={_}>
+            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+            //     </Form.Item>
+            // )
+        },
+        {
+            key: 'reamingNumber',
+            title: '扩孔孔径孔数',
+            width: 200,
+            dataIndex: 'reamingNumber',
+            editable: true,
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Form.Item name={['data', index, "reamingNumber"]} initialValue={_}>
+            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+            //     </Form.Item>
+            // )
+        },
+        {
+            key: 'gasCutting',
+            title: '气割孔（0/1）',
+            width: 200,
+            dataIndex: 'gasCutting',
+            editable: true,
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Form.Item name={['data', index, "gasCutting"]} initialValue={_}>
+            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+            //     </Form.Item>
+            // )
+        },
+        {
+            key: 'gasCuttingNumber',
+            title: '气割孔孔径孔数',
+            width: 200,
+            dataIndex: 'gasCuttingNumber',
+            editable: true,
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Form.Item name={['data', index, "gasCuttingNumber"]} initialValue={_}>
+            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+            //     </Form.Item>
+            // )
+        },
         {
             key: 'basicsWeight',
             title: '单件重量（kg）',
@@ -531,18 +531,18 @@ export default function Lofting(): React.ReactNode {
             //     </Form.Item>
             // )
         },
-        // {
-        //     key: 'sides',
-        //     title: '工艺列（核对）',
-        //     width: 200,
-        //     dataIndex: 'sides',
-        //     editable: true,
-        //     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-        //         <Form.Item name={['data', index, "sides"]} initialValue={_ === -1 ? undefined : _}>
-        //             <Input size="small" onChange={() => rowChange(index)} />
-        //         </Form.Item>
-        //     )
-        // },
+        {
+            key: 'craftName',
+            title: '工艺列（核对）',
+            width: 200,
+            dataIndex: 'craftName',
+            editable: true,
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <Form.Item name={['data', index, "craftName"]} initialValue={_ === -1 ? undefined : _}>
+            //         <Input size="small" onChange={() => rowChange(index)} />
+            //     </Form.Item>
+            // )
+        },
         {
             key: 'sides',
             title: '边数',

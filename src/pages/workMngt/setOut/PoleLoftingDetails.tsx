@@ -85,12 +85,12 @@ const columns = [
         width: 200,
         dataIndex: 'apertureNumber'
     },
-    // {
-    //     key: 'apertureNumber',
-    //     title: '单件孔数',
-    //     width: 200,
-    //     dataIndex: 'apertureNumber'
-    // },
+    {
+        key: 'holesNum',
+        title: '单件孔数',
+        width: 200,
+        dataIndex: 'holesNum'
+    },
     {
         key: 'electricWelding',
         title: '电焊',
@@ -145,24 +145,24 @@ const columns = [
         width: 200,
         dataIndex: 'specialCode'
     },
-    // {
-    //     key: 'specialCode',
-    //     title: '压制',
-    //     width: 200,
-    //     dataIndex: 'specialCode'
-    // },
-    // {
-    //     key: 'specialCode',
-    //     title: '坡口米数（米）',
-    //     width: 200,
-    //     dataIndex: 'specialCode'
-    // },
-    // {
-    //     key: 'specialCode',
-    //     title: '拼数',
-    //     width: 200,
-    //     dataIndex: 'specialCode'
-    // },
+    {
+        key: 'suppress',
+        title: '压制',
+        width: 200,
+        dataIndex: 'suppress'
+    },
+    {
+        key: 'grooveMeters',
+        title: '坡口米数（米）',
+        width: 200,
+        dataIndex: 'grooveMeters'
+    },
+    {
+        key: 'spellNumber',
+        title: '拼数',
+        width: 200,
+        dataIndex: 'spellNumber'
+    },
     {
         key: 'slottedForm',
         title: '开槽形式',
@@ -175,60 +175,60 @@ const columns = [
         width: 200,
         dataIndex: 'intersectingLine'
     },
-    // {
-    //     key: 'intersectingLine',
-    //     title: '零件类型',
-    //     width: 200,
-    //     dataIndex: 'intersectingLine'
-    // },
+    {
+        key: 'type',
+        title: '零件类型',
+        width: 200,
+        dataIndex: 'type'
+    },
     {
         key: 'description',
         title: '备注',
         width: 200,
         dataIndex: 'description'
     },
-    // {
-    //     key: 'description',
-    //     title: '含弧',
-    //     width: 200,
-    //     dataIndex: 'description'
-    // },
+    {
+        key: 'arcContaining',
+        title: '含弧',
+        width: 200,
+        dataIndex: 'arcContaining'
+    },
     {
         key: 'perforate',
         title: '钻孔',
         width: 200,
         dataIndex: 'perforate'
     },
-    // {
-    //     key: 'description',
-    //     title: '钻孔孔径孔数',
-    //     width: 200,
-    //     dataIndex: 'description'
-    // },
-    // {
-    //     key: 'perforate',
-    //     title: '有扩孔',
-    //     width: 200,
-    //     dataIndex: 'perforate'
-    // },
-    // {
-    //     key: 'perforate',
-    //     title: '扩孔孔径孔数',
-    //     width: 200,
-    //     dataIndex: 'perforate'
-    // },
-    // {
-    //     key: 'perforate',
-    //     title: '气割孔（0/1）',
-    //     width: 200,
-    //     dataIndex: 'perforate'
-    // },
-    // {
-    //     key: 'perforate',
-    //     title: '气割孔径孔数',
-    //     width: 200,
-    //     dataIndex: 'perforate'
-    // },
+    {
+        key: 'perforateNumber',
+        title: '钻孔孔径孔数',
+        width: 200,
+        dataIndex: 'perforateNumber'
+    },
+    {
+        key: 'withReaming',
+        title: '有扩孔',
+        width: 200,
+        dataIndex: 'withReaming'
+    },
+    {
+        key: 'reamingNumber',
+        title: '扩孔孔径孔数',
+        width: 200,
+        dataIndex: 'reamingNumber'
+    },
+    {
+        key: 'gasCutting',
+        title: '气割孔（0/1）',
+        width: 200,
+        dataIndex: 'gasCutting'
+    },
+    {
+        key: 'gasCuttingNumber',
+        title: '气割孔径孔数',
+        width: 200,
+        dataIndex: 'gasCuttingNumber'
+    },
     {
         key: 'basicsWeight',
         title: '单件重量（kg）',
@@ -240,6 +240,12 @@ const columns = [
         title: '总重（kg）',
         width: 200,
         dataIndex: 'totalWeight'
+    },
+    {
+        key: 'craftName',
+        title: '工艺列（核对）',
+        width: 200,
+        dataIndex: 'craftName'
     },
     {
         key: 'sides',

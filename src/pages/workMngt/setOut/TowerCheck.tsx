@@ -96,13 +96,13 @@ const columns = [
         width: 200,
         dataIndex: 'apertureNumber'
     },
-    // {
-    //     key: 'apertureNumber',
-    //     title: '单件孔数',
-    //     editable: true,
-    //     width: 200,
-    //     dataIndex: 'apertureNumber'
-    // },
+    {
+        key: 'holesNum',
+        title: '单件孔数',
+        editable: true,
+        width: 200,
+        dataIndex: 'holesNum'
+    },
     {
         key: 'electricWelding',
         title: '电焊',
@@ -166,27 +166,27 @@ const columns = [
         width: 200,
         dataIndex: 'specialCode'
     },
-    // {
-    //     key: 'specialCode',
-    //     title: '坡口米数（米）',
-    //     editable: true,
-    //     width: 200,
-    //     dataIndex: 'specialCode'
-    // },
-    // {
-    //     key: 'specialCode',
-    //     title: '压制',
-    //     editable: true,
-    //     width: 200,
-    //     dataIndex: 'specialCode'
-    // },
-    // {
-    //     key: 'specialCode',
-    //     title: '拼数',
-    //     editable: true,
-    //     width: 200,
-    //     dataIndex: 'specialCode'
-    // },
+    {
+        key: 'grooveMeters',
+        title: '坡口米数（米）',
+        editable: true,
+        width: 200,
+        dataIndex: 'grooveMeters'
+    },
+    {
+        key: 'suppress',
+        title: '压制',
+        editable: true,
+        width: 200,
+        dataIndex: 'suppress'
+    },
+    {
+        key: 'spellNumber',
+        title: '拼数',
+        editable: true,
+        width: 200,
+        dataIndex: 'spellNumber'
+    },
     {
         key: 'slottedForm',
         title: '开槽形式',
@@ -214,13 +214,13 @@ const columns = [
         width: 200,
         dataIndex: 'description'
     },
-    // {
-    //     key: 'description',
-    //     title: '含弧',
-    //     editable: true,
-    //     width: 200,
-    //     dataIndex: 'description'
-    // },
+    {
+        key: 'arcContaining',
+        title: '含弧',
+        editable: true,
+        width: 200,
+        dataIndex: 'arcContaining'
+    },
     {
         key: 'perforate',
         title: '钻孔',
@@ -228,41 +228,41 @@ const columns = [
         width: 200,
         dataIndex: 'perforate'
     },
-    // {
-    //     key: 'perforate',
-    //     title: '钻孔孔径孔数',
-    //     editable: true,
-    //     width: 200,
-    //     dataIndex: 'perforate'
-    // },
-    // {
-    //     key: 'perforate',
-    //     title: '有扩孔',
-    //     editable: true,
-    //     width: 200,
-    //     dataIndex: 'perforate'
-    // },
-    // {
-    //     key: 'perforate',
-    //     title: '扩孔孔径孔数',
-    //     editable: true,
-    //     width: 200,
-    //     dataIndex: 'perforate'
-    // },
-    // {
-    //     key: 'perforate',
-    //     title: '气割孔（0/1）',
-    //     editable: true,
-    //     width: 200,
-    //     dataIndex: 'perforate'
-    // },
-    // {
-    //     key: 'perforate',
-    //     title: '气割孔孔径孔数',
-    //     editable: true,
-    //     width: 200,
-    //     dataIndex: 'perforate'
-    // },
+    {
+        key: 'perforateNumber',
+        title: '钻孔孔径孔数',
+        editable: true,
+        width: 200,
+        dataIndex: 'perforateNumber'
+    },
+    {
+        key: 'withReaming',
+        title: '有扩孔',
+        editable: true,
+        width: 200,
+        dataIndex: 'withReaming'
+    },
+    {
+        key: 'reamingNumber',
+        title: '扩孔孔径孔数',
+        editable: true,
+        width: 200,
+        dataIndex: 'reamingNumber'
+    },
+    {
+        key: 'gasCutting',
+        title: '气割孔（0/1）',
+        editable: true,
+        width: 200,
+        dataIndex: 'gasCutting'
+    },
+    {
+        key: 'gasCuttingNumber',
+        title: '气割孔孔径孔数',
+        editable: true,
+        width: 200,
+        dataIndex: 'gasCuttingNumber'
+    },
     {
         key: 'basicsWeight',
         title: '单件重量（kg）',
@@ -277,13 +277,13 @@ const columns = [
         editable: false,
         dataIndex: 'totalWeight'
     },
-    // {
-    //     key: 'totalWeight',
-    //     title: '工艺列（核对）',
-    //     width: 200,
-    //     editable: false,
-    //     dataIndex: 'totalWeight'
-    // },
+    {
+        key: 'craftName',
+        title: '工艺列（核对）',
+        width: 200,
+        editable: false,
+        dataIndex: 'craftName'
+    },
     {
         key: 'sides',
         title: '边数',

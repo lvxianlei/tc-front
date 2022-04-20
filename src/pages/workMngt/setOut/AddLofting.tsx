@@ -162,7 +162,14 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
                     required: true,
                     message: '请输入单段件数'
                 }]}>
-                    <InputNumber size="small" max={99} />
+                    <InputNumber min={0} max={99} size="small" onChange={(e) => {
+                        const data = form.getFieldsValue(true).data;
+                        data[index] = {
+                            ...data[index],
+                            totalWeight: Number(e) * Number(data[index].basicsWeight)
+                        }
+                        form.setFieldsValue({ data: [...data] })
+                    }} />
                 </Form.Item>
             )
         },
@@ -302,145 +309,145 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
             )
         },
         {
-            key: 'segmentName',
+            key: 'suppress',
             title: '压制',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'suppress',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "suppress"]} initialValue={_}>
                     <InputNumber size="small" min={1} max={1} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'grooveMeters',
             title: '坡口米数（米）',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'grooveMeters',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
                     <InputNumber size="small" min={0} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'spellNumber',
             title: '拼数',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'spellNumber',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "spellNumber"]} initialValue={_}>
                     <InputNumber size="small" min={0} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'slottedForm',
             title: '开槽形式',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'slottedForm',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "slottedForm"]} initialValue={_}>
                     <InputNumber size="small" min={1} max={1} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'intersectingLine',
             title: '割相贯线',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'intersectingLine',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "intersectingLine"]} initialValue={_}>
                     <InputNumber size="small" min={1} max={1} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'type',
             title: '零件类型',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'type',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "type"]} initialValue={_}>
                     <Input size="small" maxLength={20} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'description',
             title: '备注',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'description',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "description"]} initialValue={_}>
                     <Input.TextArea size="small" maxLength={50} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'arcContaining',
             title: '含弧',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'arcContaining',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "arcContaining"]} initialValue={_}>
                     <InputNumber size="small" min={1} max={1} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'perforate',
             title: '钻孔',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'perforate',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "perforate"]} initialValue={_}>
                     <InputNumber size="small" min={1} max={1} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'perforateNumber',
             title: '钻孔孔径孔数',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'perforateNumber',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "perforateNumber"]} initialValue={_}>
                     <InputNumber size="small" min={0} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'withReaming',
             title: '有扩孔',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'withReaming',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "withReaming"]} initialValue={_}>
                     <InputNumber size="small" min={1} max={1} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'reamingNumber',
             title: '扩孔孔径孔数',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'reamingNumber',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_} rules={[{
+                <Form.Item name={['data', index, "reamingNumber"]} initialValue={_} rules={[{
                     pattern: /^[0-9*,]*$/,
                     message: '仅可输入数字/,/*',
                 }]}>
@@ -449,25 +456,25 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
             )
         },
         {
-            key: 'segmentName',
+            key: 'gasCutting',
             title: '气割孔（0/1）',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'gasCutting',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "gasCutting"]} initialValue={_}>
                     <InputNumber size="small" min={1} max={1} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'gasCuttingNumber',
             title: '气割孔孔径孔数',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'gasCuttingNumber',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_} rules={[{
+                <Form.Item name={['data', index, "gasCuttingNumber"]} initialValue={_} rules={[{
                     pattern: /^[0-9*,]*$/,
                     message: '仅可输入数字/,/*',
                 }]}>
@@ -476,85 +483,92 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
             )
         },
         {
-            key: 'segmentName',
+            key: 'basicsWeight',
             title: '单件重量（kg）',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'basicsWeight',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
-                    <Input size="small" maxLength={10} disabled />
+                <Form.Item name={['data', index, "basicsWeight"]} initialValue={_}>
+                    <Input type="number" min={0} size="small" onChange={(e) => {
+                        const data = form.getFieldsValue(true).data;
+                        data[index] = {
+                            ...data[index],
+                            totalWeight: Number(e.target.value) * Number(data[index].basicsPartNum)
+                        }
+                        form.setFieldsValue({ data: [...data] })
+                    }} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'totalWeight',
             title: '总重（kg）',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'totalWeight',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "totalWeight"]} initialValue={_}>
                     <Input size="small" maxLength={10} disabled />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'craftName',
             title: '工艺列（核对）',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'craftName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "craftName"]} initialValue={_}>
                     <Input size="small" maxLength={50} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'sides',
             title: '边数',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'sides',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "sides"]} initialValue={_}>
                     <InputNumber size="small" min={0} max={9999.99} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'perimeter',
             title: '周长',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'perimeter',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "perimeter"]} initialValue={_}>
                     <InputNumber size="small" min={0} max={9999.99} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'surfaceArea',
             title: '表面积（m2）',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'surfaceArea',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "surfaceArea"]} initialValue={_}>
                     <InputNumber size="small" min={0} max={9999.99} />
                 </Form.Item>
             )
         },
         {
-            key: 'segmentName',
+            key: 'weldingEdge',
             title: '焊接边（mm）',
             width: 150,
             editable: true,
-            dataIndex: 'segmentName',
+            dataIndex: 'weldingEdge',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                <Form.Item name={['data', index, "weldingEdge"]} initialValue={_}>
                     <InputNumber size="small" maxLength={50} />
                 </Form.Item>
             )
@@ -606,14 +620,14 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
     const addRow = () => {
         const values = form.getFieldsValue(true).data || [];
         values.push({})
-        form.setFieldsValue({data: [...values]});
+        form.setFieldsValue({ data: [...values] });
         setTableData([...values])
     }
 
     const delRow = (index: number) => {
         const values = form.getFieldsValue(true).data || [];
         values.splice(index, 1);
-        form.setFieldsValue({data: [...values]});
+        form.setFieldsValue({ data: [...values] });
         setTableData([...values])
     }
 
@@ -624,15 +638,15 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
     return <DetailContent key='AddLofting'>
-            <Button type="primary" onClick={addRow} ghost>添加一行</Button>
-            <Form form={form} className={styles.descripForm}>
-                <CommonTable
-                    haveIndex
-                    pagination={false}
-                    dataSource={tableData}
-                    rowKey="index"
-                    columns={colunm} />
-            </Form>
-        </DetailContent>
+        <Button type="primary" onClick={addRow} ghost>添加一行</Button>
+        <Form form={form} className={styles.descripForm}>
+            <CommonTable
+                haveIndex
+                pagination={false}
+                dataSource={tableData}
+                rowKey="index"
+                columns={colunm} />
+        </Form>
+    </DetailContent>
 })
 
