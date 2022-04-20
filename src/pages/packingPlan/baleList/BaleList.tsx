@@ -211,6 +211,7 @@ export default function DailySchedule(): React.ReactNode {
                             getSummary({...filterValue});
                             setSelectedKeys([]);
                         })
+                        resove(true)
                     } catch (error) {
                         reject(error)
                     }
