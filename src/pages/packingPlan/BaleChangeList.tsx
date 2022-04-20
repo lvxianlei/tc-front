@@ -323,18 +323,25 @@ export default function DailySchedule(): React.ReactNode {
                                         setPackageCodeId(item.id)
                                         setVisibleNew(true)
                                 }}/>}
-                                {item.packageComponentCount===0 && <DeleteOutlined onClick={()=>{
+                                {item.packageComponentCount===0 && <Popconfirm
+                                    title="是否删除?"
+                                    onConfirm={() => {
                                 
-                                    RequestUtil.delete(`/tower-production/package/${item.id}`).then(()=>{
-                                        message.success('删除成功！')
-                                    }).then(()=>{
-                                        onPackSelect({id:productNumberId})
-                                    });
-                            }}/>} </Space></div>
+                                            RequestUtil.delete(`/tower-production/package/${item.id}`).then(()=>{
+                                                message.success('删除成功！')
+                                            }).then(()=>{
+                                                onPackSelect({id:productNumberId})
+                                            });
+                                    }}
+                                    okText="是"
+                                    cancelText="否"
+                                >
+                                    <DeleteOutlined />
+                                </Popconfirm>} </Space></div>
                         })}
                     </Col>
                     <Col span={7} style={{marginRight:"20px"}}>
-                        <DetailTitle title='件号' operation={[<Button 
+                        <DetailTitle title={`件号${code?.packageAttribute===1?'（通用包）':code?.packageAttribute===0?'（专用包）':''}`} operation={[<Button 
                           type='primary'
                           disabled={!(busySelectedKeys.length>0)}
                           onClick={async ()=>{
