@@ -748,7 +748,7 @@ export default function Lofting(): React.ReactNode {
             onCancel={() => {
                 setVisible(false);
             }}>
-            <StructureTextureAbbreviations id={''} ref={editRef} />
+            <StructureTextureAbbreviations id={params.productSegmentId} ref={editRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -760,7 +760,7 @@ export default function Lofting(): React.ReactNode {
             onCancel={() => {
                 setEditVisible(false);
             }}>
-            <StructureTextureEdit id={''} ref={editModalRef} />
+            <StructureTextureEdit id={params.productSegmentId} ref={editModalRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -868,8 +868,8 @@ export default function Lofting(): React.ReactNode {
                 >
                     <Button type="primary" disabled={editorLock === '锁定'} ghost>导入</Button>
                 </Upload>
-                {/* <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.productSegmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
-                    <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button> */}
+                <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.productSegmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
+                {/* <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button> */}
                 <Button type="primary" loading={loading2} onClick={() => {
                     setLoading2(true);
                     RequestUtil.post(`/tower-science/productStructure/pdmSynchronous/${params.productSegmentId}`).then(res => {

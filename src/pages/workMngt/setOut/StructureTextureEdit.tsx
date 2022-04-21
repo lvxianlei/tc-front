@@ -47,9 +47,11 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
-            //  const result: [] = await RequestUtil.get(``);
-            form.setFieldsValue({data: [...list]})
-            resole([])
+            const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
+                productSegmentGroupId: id
+            });
+            form.setFieldsValue({ data: [...list] })
+            resole(data)
         } catch (error) {
             reject(error)
         }
@@ -58,7 +60,7 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(``);
+            const result = await RequestUtil.put(`/tower-science/productStructure/structureTexture`, postData);
             resole(result)
         } catch (error) {
             reject(error)
@@ -70,13 +72,18 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
             let values = form.getFieldsValue(true);
             let newSelected = selectedRows.map((res) => {
                 return {
-                    ...res,
-                    suffix: values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
+                    structureTexture: res.structureTexture,
+                    updateTexture: values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
                 }
             })
-            console.log(newSelected)
             await saveRun({
-
+                textureUpdateList: newSelected,
+                segmentGroupId: id,
+                segmentIdList: values.segmentNameList,
+                structureTextureId: values.fuzzyReplaceBefore?.split(',')[0],
+                structureTexture: values.fuzzyReplaceBefore?.split(',')[1],
+                newStructureTextureId: values.fuzzyReplaceAfter?.split(',')[0],
+                newStructureTexture: values.fuzzyReplaceAfter?.split(',')[1],
             })
             resolve(true);
         } catch (error) {
@@ -98,14 +105,11 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
     return <Spin spinning={loading}>
         <DetailContent>
             <Form form={form} className={styles.descripForm}>
-                <Form.Item name="status" label="范围选择" initialValue={''} style={{ paddingBottom: '16px' }}>
-                    <Select style={{ width: '120px' }} placeholder="请选择">
-                        <Select.Option value="" key="0">全部</Select.Option>
-                        <Select.Option value={1} key="1">待指派</Select.Option>
-                        <Select.Option value={2} key="2">放样中</Select.Option>
-                        <Select.Option value={3} key="3">组焊中</Select.Option>
-                        <Select.Option value={4} key="4">配段中</Select.Option>
-                        <Select.Option value={5} key="5">已完成</Select.Option>
+                <Form.Item name="segmentNameList" label="范围选择" style={{ paddingBottom: '16px' }}>
+                    <Select mode="multiple" allowClear style={{ width: '120px' }} placeholder="不选默认全部">
+                        {data?.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.segmentName}>{item.segmentName}</Select.Option>
+                        })}
                     </Select>
                 </Form.Item>
                 <CommonTable
@@ -146,14 +150,18 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
                 />
                 <Descriptions bordered column={2} className={styles.descripForm}>
                     <Descriptions.Item label="修改前材质">
-                        <Select placeholder="请选择" size="small">
-                            {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
-                        </Select>
+                        <Form.Item name="fuzzyReplaceBefore">
+                            <Select placeholder="请选择" size="small">
+                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' +item.name} key={index}>{item.name}</Select.Option>)}
+                            </Select>
+                        </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="修改后材质">
-                        <Select placeholder="请选择" size="small">
-                            {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
-                        </Select>
+                        <Form.Item name="fuzzyReplaceAfter">
+                            <Select placeholder="请选择" size="small">
+                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' +item.name} key={index}>{item.name}</Select.Option>)}
+                            </Select>
+                        </Form.Item>
                     </Descriptions.Item>
                 </Descriptions>
             </Form>
