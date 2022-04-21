@@ -211,7 +211,6 @@ export default function PoleInformation(): React.ReactNode {
             await editRef.current?.onCheck()
             if (editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length > 0) {
                 const result = await RequestUtil.post(`/tower-science/productStructure/judge`, { productIds: editRef.current?.selectedRowKeys });
-                console.log(result)
                 if (result) {
                     setTipVisible(true)
                 } else {
@@ -226,16 +225,13 @@ export default function PoleInformation(): React.ReactNode {
     })
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
-            console.log(editRef.current)
             setButtonName('保存')
             await onTip();
-            // if(!(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0)){
             await editRef.current?.onSave();
             message.success('保存成功！');
             setTipVisible(false);
             setAllotVisible(false);
             setRefresh(!refresh);
-            // }
             resove(true);
         } catch (error) {
             reject(false)
@@ -246,13 +242,11 @@ export default function PoleInformation(): React.ReactNode {
         try {
             setButtonName('提交')
             await onTip();
-            // if(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0){
             await editRef.current?.onSubmit();
             message.success('提交成功！');
             setTipVisible(false);
             setAllotVisible(false);
             setRefresh(!refresh);
-            // }
             resove(true);
         } catch (error) {
             reject(false)
@@ -323,7 +317,7 @@ export default function PoleInformation(): React.ReactNode {
             requestData={{ productCategoryId: params.id }}
             refresh={refresh}
             extraOperation={<Space direction="horizontal" size="small">
-                <WithSectionModal type="batch" updateList={() => setRefresh(!refresh)} />
+                <WithSectionModal type="batch" productCategoryId={params.id} updateList={() => setRefresh(!refresh)} />
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>}
             searchFormItems={[

@@ -15,9 +15,10 @@ import { FixedType } from 'rc-table/lib/interface';
 
 interface modalProps {
     id: string;
+    productSegmentId: string;
 }
 
-export default forwardRef(function AddLofting({ id }: modalProps, ref) {
+export default forwardRef(function AddLofting({ id, productSegmentId }: modalProps, ref) {
     const [form] = Form.useForm();
     const [tableData, setTableData] = useState<any>([])
 
@@ -595,7 +596,7 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
     //     } catch (error) {
     //         reject(error)
     //     }
-    // }), { refreshDeps: [id] })
+    // }), { refreshDeps: [id, productSegmentId] })
 
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
@@ -611,7 +612,13 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
         try {
             const values = form.getFieldsValue(true).data || [];
             console.log(values)
-            await saveRun([...values])
+            await saveRun(values?.map((res:any) => {
+                return {
+                    ...res,
+                    productCategoryId: id,
+                    segmentGroupId: productSegmentId
+                }
+            }))
             resolve(true);
         } catch (error) {
             reject(false)

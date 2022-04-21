@@ -18,6 +18,7 @@ export interface IWithSectionModalRouteProps extends RouteComponentProps<WithSec
     readonly id?: number | string;
     readonly updateList: () => void;
     readonly type?: string;
+    readonly productCategoryId?: string;
 }
 
 export interface WithSectionModalState {
@@ -25,6 +26,23 @@ export interface WithSectionModalState {
     readonly detailData?: IDetailData;
     readonly fastVisible: boolean;
     readonly fastLoading?: boolean;
+    readonly basicHeightList?: IBasicHeight[];
+    readonly productList?: IProductVOList[];
+}
+
+interface IBasicHeight {
+    readonly basicHeight?: string;
+    readonly productVOList?: IProductVOList[];
+}
+
+interface IProductVOList {
+    readonly id?: string;
+    readonly productCategoryId?: string;
+    readonly productCategoryNum?: string;
+    readonly productCategoryType?: string;
+    readonly productNum?: string;
+    readonly productNumber?: string;
+    readonly totalWeight?: string;
 }
 
 class WithSectionModal extends React.Component<IWithSectionModalRouteProps, WithSectionModalState> {
@@ -46,12 +64,30 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
             visible: false
         })
         this.getForm()?.resetFields();
+        this.fastForm.current?.resetFields();
     }
 
     private async modalShow(): Promise<void> {
         if (this.props.type === 'batch') {
+            const data = await RequestUtil.get<IBasicHeight[]>(`/tower-science/product/getBasicHeightProduct?productCategoryId=${this.props.productCategoryId}`);
+            if (data && data.length > 0 && data[0]?.productVOList && data[0]?.productVOList.length > 0) {
+                const detail = await RequestUtil.get<IDetailData>(`/tower-science/productSegment/distribution?productId=${data[0]?.productVOList[0].id}`);
+                this.setState({
+                    detailData: {
+                        productCategoryName: detail.productCategoryName,
+                        productCategoryId: this.props.productCategoryId,
+                        loftingProductSegmentList: detail.loftingProductSegmentList?.map(res => {
+                            return {
+                                ...res,
+                                count: '0'
+                            }
+                        })
+                    }
+                })
+            }
             this.setState({
-                visible: true
+                visible: true,
+                basicHeightList: data
             })
         } else {
             const data = await RequestUtil.get<IDetailData>(`/tower-science/productSegment/distribution?productId=${this.props.id}`);
@@ -83,6 +119,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                     }
                 });
                 value.productSegmentListDTOList = value.productSegmentListDTOList.filter((item: IProductSegmentList) => { return item !== undefined });
+                value.productIdList = this.state.detailData?.productIdList
                 RequestUtil.post(path, { ...value }).then(res => {
                     this.props.updateList();
                     this.modalCancel();
@@ -134,28 +171,43 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 <Form ref={this.fastForm}>
                     <Row>
                         {this.props.type === 'batch' ? <><Col span={6}>
-                            <Form.Item name="part" label="杆塔" rules={[{
+                            <Form.Item name="basicHeight" label="杆塔" rules={[{
                                 required: true,
                                 message: '请选择呼高'
                             }]}>
-                                <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                                    {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                                        return <Select.Option key={index} value={id}>
-                                            {name}
+                                <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e) => {
+                                    const data = this.state.basicHeightList?.filter(res => res.basicHeight === e);
+                                    this.setState({
+                                        productList: data && data[0].productVOList
+                                    })
+                                }}>
+                                    {this.state.basicHeightList && this.state.basicHeightList?.map(({ basicHeight }, index) => {
+                                        return <Select.Option key={index} value={basicHeight || ''}>
+                                            {basicHeight}
                                         </Select.Option>
                                     })}
                                 </Select>
                             </Form.Item>
                         </Col>
                             <Col span={5}>
-                                <Form.Item name="part" rules={[{
+                                <Form.Item name="productId" rules={[{
                                     required: true,
                                     message: '请选择杆塔'
                                 }]}>
-                                    <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                                        {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                                            return <Select.Option key={index} value={id}>
-                                                {name}
+                                    <Select placeholder="请选择" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={() => {
+                                        const productId = this.fastForm.current?.getFieldsValue(true).productId;
+                                        console.log(productId)
+                                        this.setState({
+                                            detailData: {
+                                                ...this.state.detailData,
+                                                productNumber: productId?.map((res: string) => res.split(',')[1]),
+                                                productIdList: productId?.map((res: string) => res.split(',')[0])
+                                            }
+                                        })
+                                    }}>
+                                        {this.state.productList && this.state.productList.map(({ id, productNumber }, index) => {
+                                            return <Select.Option key={index} value={id + ',' + productNumber || ''}>
+                                                {productNumber}
                                             </Select.Option>
                                         })}
                                     </Select>

@@ -772,7 +772,7 @@ export default function Lofting(): React.ReactNode {
             onCancel={() => {
                 setMissVisible(false);
             }}>
-            <MissCheck id={''} />
+            <MissCheck id={params.productSegmentId} />
         </Modal>
         <Modal
             destroyOnClose
@@ -784,7 +784,7 @@ export default function Lofting(): React.ReactNode {
             onCancel={() => {
                 setAddVisible(false);
             }}>
-            <AddLofting id={''}  ref={addModalRef}/>
+            <AddLofting id={params.id} productSegmentId={params.productSegmentId}  ref={addModalRef}/>
         </Modal>
         <Form layout="inline" style={{ margin: '20px' }} onFinish={(value: Record<string, any>) => {
             setFilterValue(value)
