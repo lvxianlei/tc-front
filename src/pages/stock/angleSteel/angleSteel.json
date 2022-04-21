@@ -1,18 +1,6 @@
 {
     "angleConfigStrategy": [
         {
-            "title": "材质",
-            "dataIndex": "materialTextureIds",
-            "type": "string",
-            "mode": "multiple",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择材质..."
-                }
-            ]
-        },
-        {
             "title": "厚度",
             "dataIndex": "thickness",
             "type": "number"
@@ -23,7 +11,7 @@
             "type": "number"
         },
         {
-            "title": "夹钳总损耗",
+            "title": "端头长(mm)",
             "dataIndex": "clampLoss",
             "type": "number",
             "rules": [
@@ -34,7 +22,29 @@
             ]
         },
         {
-            "title": "每刀口耗损",
+            "title": "刀口宽(mm)",
+            "dataIndex": "edgeLoss",
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入每刀口耗损..."
+                }
+            ]
+        },
+        {
+            "title": "余量(mm)",
+            "dataIndex": "edgeLoss",
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入每刀口耗损..."
+                }
+            ]
+        },
+        {
+            "title": "理想库存长(mm)",
             "dataIndex": "edgeLoss",
             "type": "number",
             "rules": [
@@ -76,12 +86,6 @@
     ],
     "material": [
         {
-            "title": "材质",
-            "dataIndex": "materialTexture",
-            "type": "string",
-            "width": 100
-        },
-        {
             "title": "厚度mm",
             "dataIndex": "thickness",
             "type": "string",
@@ -94,13 +98,25 @@
             "width": 100
         },
         {
-            "title": "夹钳总耗损mm",
+            "title": "端头长(mm)----待确定字段",
             "dataIndex": "clampLoss",
             "type": "number",
             "width": 100
         },
         {
-            "title": "每刀口耗损mm",
+            "title": "刀口宽(mm)---待确定字段",
+            "dataIndex": "edgeLoss",
+            "type": "number",
+            "width": 100
+        },
+        {
+            "title": "余量(mm)---待确定字段",
+            "dataIndex": "edgeLoss",
+            "type": "number",
+            "width": 100
+        },
+        {
+            "title": "理想库存长(mm)---待确定字段",
             "dataIndex": "edgeLoss",
             "type": "number",
             "width": 100

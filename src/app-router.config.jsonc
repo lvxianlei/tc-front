@@ -1434,6 +1434,20 @@
       "exact": true,
       "authority": "buy_burdening_detail"
     },
+    { // 工作管理-采购配料重写
+      "name": "配料明细",
+      "path": "/ingredients/buyBurdening/ingredientsList/:id/:status",
+      "module": "./pages/workMngt/buyBurdening/IngredientsList",
+      "exact": true,
+      "authority": "buy_burdening_detail"
+    },
+    { // 工作管理-采购配料-配料方案
+      "name": "配料方案",
+      "path": "/ingredients/buyBurdening/batchingScheme/:id",
+      "module": "./pages/workMngt/buyBurdening/BatchingScheme",
+      "exact": true,
+      "authority": "work_management_purchase_ingredients"
+    },
     { // 问题单
       "name": "问题单列表",
       "path": "/question/questionMngt",

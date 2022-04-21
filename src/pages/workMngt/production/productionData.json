@@ -16,6 +16,11 @@
             "type": "string"
         },
         {
+            "title": "原材料采购任务编号",
+            "dataIndex": "purchaseNumber",
+            "type": "string"
+        },
+        {
             "title": "计划号",
             "dataIndex": "planNumber",
             "type": "string"

@@ -7,18 +7,6 @@
             "type": "string"
         },
         {
-            "title": "原材料采购任务编号",
-            "dataIndex": "purchaseNumber",
-            "width": 200,
-            "type": "string"
-        },
-        {
-            "title": "内部合同编号",
-            "dataIndex": "internalNumber",
-            "width": 150,
-            "type": "string"
-        },
-        {
             "title": "计划号",
             "dataIndex": "planNumber",
             "width": 200,
@@ -37,7 +25,7 @@
             "type": "number"
         },
         {
-            "title": "提料重量（kg）",
+            "title": "提料重量（吨）",
             "dataIndex": "totalWeight",
             "width": 200,
             "type": "string"

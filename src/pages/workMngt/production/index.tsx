@@ -138,7 +138,7 @@ export default function Invoicing() {
                                 className="btn-operation-link" 
                                 disabled={userId !== record.batcherId || record.loftingState === 1}
                             >
-                                <Link to={`/ingredients/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}/${record.productionBatchNo}`}>明细</Link>
+                                <Link to={`/ingredients/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}/${record.productionBatchNo}`}>配料</Link>
                             </Button>
                             <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 3}
                                 onClick={() => {
