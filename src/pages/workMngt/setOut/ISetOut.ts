@@ -159,6 +159,7 @@ export interface IDetailData {
     readonly legNumberC?: string;
     readonly legNumberD?: string;
     readonly loftingProductSegmentList?: IProductSegmentList[];
+    readonly productIdList?: string[];
 }
 
 export interface IProductSegmentList {
