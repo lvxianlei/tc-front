@@ -89,7 +89,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'materialName',
             title: '材料名称',
-            width: 200,
+            width: 150,
             dataIndex: 'materialName',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -102,7 +102,7 @@ export default function Lofting(): React.ReactNode {
             key: 'structureSpec',
             title: '规格',
             dataIndex: 'structureSpec',
-            width: 200,
+            width: 150,
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "structureSpec"]} initialValue={_}>
@@ -113,7 +113,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'length',
             title: '长度（mm）',
-            width: 200,
+            width: 150,
             dataIndex: 'length',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -125,7 +125,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'width',
             title: '宽度（mm）',
-            width: 200,
+            width: 150,
             dataIndex: 'width',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -137,7 +137,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'thickness',
             title: '厚度（mm）',
-            width: 200,
+            width: 150,
             dataIndex: 'thickness',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -149,7 +149,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'basicsPartNum',
             title: '单段件数',
-            width: 200,
+            width: 150,
             dataIndex: 'basicsPartNum',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -169,7 +169,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'apertureNumber',
             title: '各孔径孔数',
-            width: 200,
+            width: 80,
             dataIndex: 'apertureNumber',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -181,7 +181,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'holesNum',
             title: '单件孔数',
-            width: 200,
+            width: 80,
             dataIndex: 'holesNum',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -193,7 +193,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'electricWelding',
             title: '电焊',
-            width: 200,
+            width: 80,
             dataIndex: 'electricWelding',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -208,7 +208,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'groove',
             title: '坡口',
-            width: 200,
+            width: 80,
             dataIndex: 'groove',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -223,7 +223,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'chamfer',
             title: '切角',
-            width: 200,
+            width: 80,
             dataIndex: 'chamfer',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -238,7 +238,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'openCloseAngle',
             title: '开合角',
-            width: 200,
+            width: 80,
             dataIndex: 'openCloseAngle',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -253,7 +253,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'bend',
             title: '火曲',
-            width: 200,
+            width: 80,
             dataIndex: 'bend',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -268,7 +268,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'shovelBack',
             title: '铲背',
-            width: 200,
+            width: 80,
             dataIndex: 'shovelBack',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -283,7 +283,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'rootClear',
             title: '清根',
-            width: 200,
+            width: 80,
             dataIndex: 'rootClear',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -298,7 +298,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'squash',
             title: '打扁',
-            width: 200,
+            width: 80,
             dataIndex: 'squash',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -313,7 +313,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'specialCode',
             title: '特殊件号',
-            width: 200,
+            width: 80,
             dataIndex: 'specialCode',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -325,7 +325,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'suppress',
             title: '压制',
-            width: 200,
+            width: 80,
             dataIndex: 'suppress',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -337,7 +337,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'grooveMeters',
             title: '坡口米数（米）',
-            width: 200,
+            width: 120,
             dataIndex: 'grooveMeters',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -349,7 +349,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'spellNumber',
             title: '拼数',
-            width: 200,
+            width: 80,
             dataIndex: 'spellNumber',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -361,7 +361,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'slottedForm',
             title: '开槽形式',
-            width: 200,
+            width: 80,
             dataIndex: 'slottedForm',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -376,7 +376,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'intersectingLine',
             title: '割相贯线',
-            width: 200,
+            width: 80,
             dataIndex: 'intersectingLine',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -391,7 +391,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'type',
             title: '零件类型',
-            width: 200,
+            width: 80,
             dataIndex: 'type',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -403,7 +403,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'description',
             title: '备注',
-            width: 200,
+            width: 150,
             dataIndex: 'description',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -415,7 +415,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'arcContaining',
             title: '含弧',
-            width: 200,
+            width: 80,
             dataIndex: 'arcContaining',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -427,7 +427,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'perforate',
             title: '钻孔',
-            width: 200,
+            width: 80,
             dataIndex: 'perforate',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -442,7 +442,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'perforateNumber',
             title: '钻孔孔径孔数',
-            width: 200,
+            width: 80,
             dataIndex: 'perforateNumber',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -454,7 +454,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'withReaming',
             title: '有扩孔',
-            width: 200,
+            width: 80,
             dataIndex: 'withReaming',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -466,7 +466,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'reamingNumber',
             title: '扩孔孔径孔数',
-            width: 200,
+            width: 120,
             dataIndex: 'reamingNumber',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -478,7 +478,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'gasCutting',
             title: '气割孔（0/1）',
-            width: 200,
+            width: 120,
             dataIndex: 'gasCutting',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -490,7 +490,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'gasCuttingNumber',
             title: '气割孔孔径孔数',
-            width: 200,
+            width: 120,
             dataIndex: 'gasCuttingNumber',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -502,7 +502,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'basicsWeight',
             title: '单件重量（kg）',
-            width: 200,
+            width: 120,
             dataIndex: 'basicsWeight',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -522,7 +522,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'totalWeight',
             title: '总重（kg）',
-            width: 200,
+            width: 80,
             dataIndex: 'totalWeight',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -534,7 +534,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'craftName',
             title: '工艺列（核对）',
-            width: 200,
+            width: 120,
             dataIndex: 'craftName',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -546,7 +546,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'sides',
             title: '边数',
-            width: 200,
+            width: 80,
             dataIndex: 'sides',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -558,7 +558,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'perimeter',
             title: '周长',
-            width: 200,
+            width: 80,
             dataIndex: 'perimeter',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -570,7 +570,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'surfaceArea',
             title: '表面积（m2）',
-            width: 200,
+            width: 120,
             dataIndex: 'surfaceArea',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -582,7 +582,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'weldingEdge',
             title: '焊接边（mm）',
-            width: 200,
+            width: 120,
             dataIndex: 'weldingEdge',
             editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -642,7 +642,7 @@ export default function Lofting(): React.ReactNode {
     const handleAddModalOk = () => new Promise(async (resove, reject) => {
         try {
             await addModalRef.current?.onSubmit();
-            message.success('添加成功');
+            message.success('添加构件成功');
             setAddVisible(false);
             setRefresh(!refresh);
             resove(true);
@@ -842,8 +842,7 @@ export default function Lofting(): React.ReactNode {
                         }).catch(error => {
                             setLoading1(false);
                         })
-                    }
-                    }
+                    }}
                     okText="确认"
                     cancelText="取消"
                     disabled={editorLock === '锁定'}

@@ -166,8 +166,9 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
                             ...data[index],
-                            totalWeight: Number(e) * Number(data[index].basicsWeight)
+                            totalWeight: Number(e) * Number(data[index].basicsWeight || 0)
                         }
+                        setTableData([...data])
                         form.setFieldsValue({ data: [...data] })
                     }} />
                 </Form.Item>
@@ -494,8 +495,10 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
                             ...data[index],
-                            totalWeight: Number(e.target.value) * Number(data[index].basicsPartNum)
+                            totalWeight: Number(e.target.value) * Number(data[index].basicsPartNum || 0)
                         }
+                        console.log(data)
+                        setTableData([...data])
                         form.setFieldsValue({ data: [...data] })
                     }} />
                 </Form.Item>
@@ -597,7 +600,7 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(``);
+            const result = await RequestUtil.post(`/tower-science/productStructure/save`, [...postData]);
             resole(result)
         } catch (error) {
             reject(error)
@@ -608,9 +611,7 @@ export default forwardRef(function AddLofting({ id }: modalProps, ref) {
         try {
             const values = form.getFieldsValue(true).data || [];
             console.log(values)
-            await saveRun({
-
-            })
+            await saveRun([...values])
             resolve(true);
         } catch (error) {
             reject(false)
