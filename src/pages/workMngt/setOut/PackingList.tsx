@@ -120,7 +120,7 @@ export default function PackingList(): React.ReactNode {
                                 history.go(0)  
                                 message.success('自动打包成功');
                             }).catch(error => {
-                                history.go(0);
+                                console.log(error)
                             })
                         }} ghost>自动打包</Button>
                         <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListNew`, state: { productCategoryName: detailData?.productCategoryName, productNumber: detailData?.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
