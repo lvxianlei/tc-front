@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import { Space, Input, Select, Button, Form, Row, Col, InputNumber, Radio, Popconfirm, message, Spin } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
-import { FixedType } from 'rc-table/lib/interface';
+import { FixedType, TriggerEventHandler } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
@@ -34,8 +34,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
             setSettingData([...result]);
             const baseData = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, segmentId: params.segmentId });
             setMainPartId(baseData.records[0]?.mainPartId || '');
-            form.setFieldsValue({ ...baseData.records[0], segmentName: baseData?.records[0]?.segmentName + ',' + baseData?.records[0]?.segmentId });
-            getComponentList()
+            form.setFieldsValue({ ...baseData.records[0], segmentName: [] });
+            getComponentList({})
         } else {
             setWeldingDetailedStructureList([]);
         }
@@ -136,13 +136,13 @@ export default function AddAssemblyWelding(): React.ReactNode {
             title: '电焊长度（mm）',
             dataIndex: 'weldingLength',
             key: 'weldingLength',
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <InputNumber
-                    min={0}
-                    max={99999}
-                    key={record.structureId}
-                    defaultValue={record.weldingLength}
-                    placeholder="请输入"
+            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            //     <InputNumber
+            //         min={0}
+            //         max={99999}
+            //         key={record.structureId}
+            //         defaultValue={record.weldingLength}
+            //         placeholder="请输入"
                     // onChange={(e) => {
                     //     const newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
                     //     const electricWeldingMeters = form.getFieldsValue(true).electricWeldingMeters;
@@ -153,9 +153,9 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     //     setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
                     //     form.setFieldsValue({ 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e) * Number(record.singleNum) });
                     // }}
-                    bordered={false} 
-                    disabled/>
-            )
+            //         bordered={false} 
+            //         disabled/>
+            // )
         },
         {
             title: '操作',
@@ -276,18 +276,11 @@ export default function AddAssemblyWelding(): React.ReactNode {
     /**
      * @description 获取构件明细列表 
      */
-    const getComponentList = () => {
-        if (form) {
+    const getComponentList = (values: Record<string, any>) => {
+        if (form && values.length > 0) {
             form.validateFields(['segmentName']).then(async res => {
-                let values = form.getFieldsValue(true)?.segmentName;
-                values = values.map((res: string) => {
-                    return {
-                        name: res.split(',')[0],
-                        id: res.split(',')[1],
-                    }
-                })
-                let data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
-                    segmentName: values,
+                let data: IComponentList[] = await RequestUtil.post(`/tower-science/welding/getStructure`, {
+                    weldingSegmentDTOS: values,
                     productCategoryId: params.productCategoryId,
                     segmentId: params.segmentId || ''
                 });
@@ -311,7 +304,6 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         })
                     })
                 }
-                setComponentList([...newData])
                 newData = newData.map(res => {
                     const weldingDetailedStructureListNew: IComponentList[] = weldingDetailedStructureList?.filter(item => item.structureId === res.id) || [];
                     if (weldingDetailedStructureListNew.length > 0) {
@@ -323,6 +315,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         return {...res}
                     }
                 })
+                setComponentList([...newData])
                 console.log(newData)
             })
         }
@@ -341,7 +334,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
         let newComponentList: IComponentList = isNewComponent ? {
             ...record,
             id: '',
-            segmentId: params.segmentId,
+            // segmentId: params.segmentId,
             structureId: record.id,
             singleNum: 1,
             isMainPart: 0,
@@ -464,7 +457,14 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             <Select placeholder="请选择" style={{ width: '150px' }}
                                 mode="multiple" onChange={() => {
                                     // setWeldingDetailedStructureList([]);
-                                    getComponentList()
+                                    let values = form.getFieldsValue(true)?.segmentName;
+                                    values = values.map((res: string) => {
+                                        return {
+                                            segmentName: res.split(',')[0],
+                                            segmentId: res.split(',')[1],
+                                        }
+                                    })
+                                    getComponentList(values)
                                 }} >
                                 {segmentNameList.map((item: any) => {
                                     return <Select.Option key={item.name + ',' + item.id} value={item.name + ',' + item.id}>{item.name}</Select.Option>
