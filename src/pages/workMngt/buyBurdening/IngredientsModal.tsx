@@ -245,11 +245,23 @@ export default function IngredientsModal(props: any) {
     }), { manual: true })
 
     useEffect(() => {
+        if (props.visible) {
             getUser(props.id);
             getBatchingStrategy();
             // 获取编辑配料方案信息
             purchaseListRun(props.id);
+        } 
     }, [props.id && props.visible])
+
+    useEffect(() => {
+        if (props.visible) {
+            serarchForm.setFieldsValue({
+                num1: policyDetailed && policyDetailed[0],
+                num3: batchingLength && batchingLength[0],
+                num4: batchingLength && batchingLength[batchingLength.length - 1]
+            })
+        }
+    }, [policyDetailed, batchingLength ])
 
     const rowSelection = {
         selectedRowKeys: selectSort,
@@ -398,6 +410,8 @@ export default function IngredientsModal(props: any) {
                 // 清空表单
                 serarchForm.resetFields();
                 props.onCancel();
+                setSelectSort([]);
+                setSelectedRowKeysCheck([]);
             }}
             footer={[
                 <Button type="primary" onClick={() => handleAutomatic(props.id)}>
@@ -416,7 +430,13 @@ export default function IngredientsModal(props: any) {
                     保存并提交
                 </Button>,
                 <Button key="back" onClick={() => {
+                    // 清空备选方案以及配料方案
+                    setPreparation([]);
                     props.onCancel();
+                    // 清空表单
+                    serarchForm.resetFields();
+                    setSelectSort([]);
+                    setSelectedRowKeysCheck([]);
                 }}>
                    取消
                 </Button>
@@ -432,7 +452,7 @@ export default function IngredientsModal(props: any) {
                                 <Form.Item
                                     name="num1"
                                     label="开数"
-                                    initialValue={policyDetailed && policyDetailed[0]}
+                                    // initialValue={policyDetailed && policyDetailed[0]}
                                 >
                                         <Select style={{ width: 120 }} placeholder="请选择">
                                             {policyDetailed && policyDetailed.map((item: any, index: number) => {
@@ -442,7 +462,7 @@ export default function IngredientsModal(props: any) {
                                 </Form.Item>&nbsp;
                                 <Form.Item
                                     name="num3"
-                                    initialValue={batchingLength && batchingLength[0]}
+                                    // initialValue={batchingLength && batchingLength[0]}
                                     label="米数"
                                 >
                                         <Select style={{ width: 80 }} placeholder="请选择">
@@ -452,7 +472,7 @@ export default function IngredientsModal(props: any) {
                                         </Select>
                                 </Form.Item>
                                 <Form.Item
-                                    initialValue={batchingLength && batchingLength[batchingLength.length - 1]}
+                                    // initialValue={batchingLength && batchingLength[batchingLength.length - 1]}
                                     name="num4">
                                         <Select style={{ width: 80 }} placeholder="请选择">
                                             {batchingLength && batchingLength.map((item: any, index: number) => {

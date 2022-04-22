@@ -34,6 +34,7 @@ export enum DictionaryEnums {
     SUPPLY_PRODUCTS = 148,
     EMPLOYEE_TYPE = 149,
     WEIGHING_TYPE = 151,
+    FACTORY_TYPE = 152,
     INVOICE_TYPE = 1210,
     PAY_TYPE = 1211,
     STAFF_TYPE = 1213,
@@ -88,6 +89,7 @@ let weighingType: IDict[] | undefined = [];
 let packageType: IDict[] | undefined = [];
 let tenderDeliveryMethod: IDict[] | undefined = [];
 let compoundType: IDict[] | undefined = [];
+let factoryType: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -132,6 +134,7 @@ if (dictionary) {
     packageType = dictionary[DictionaryEnums.PACKAGE_TYPE];
     tenderDeliveryMethod = dictionary[DictionaryEnums.TENDER_DELIVERY_METHOD];
     compoundType = dictionary[DictionaryEnums.COMPOUND_TYPE];
+    factoryType = dictionary[DictionaryEnums.FACTORY_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -175,3 +178,4 @@ export const weighingtypeOptions = weighingType; //过磅类型
 export const packageTypeOptions = packageType; //包类型
 export const tenderDeliveryMethodOptions = tenderDeliveryMethod; // 标书投递方式
 export const compoundTypeOptions = compoundType; // 组焊类型
+export const factoryTypeOptions = factoryType; // 厂区名称

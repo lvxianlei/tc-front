@@ -21,7 +21,9 @@ export default forwardRef(function RecoveryGuaranteeLayer({id, requiredReturnTim
     } else if (addCollectionForm.getFieldValue("isOriginalScript") !== 1) {
       // 添加原因 并且必填
       result = column.filter((item: any) => item.dataIndex !== 'reason');
+
       const index = column.findIndex((item: any) => item.dataIndex === "isOriginalScript");
+
       const v = {
           "dataIndex": "reason",
           "title": "原因",
@@ -60,14 +62,15 @@ export default forwardRef(function RecoveryGuaranteeLayer({id, requiredReturnTim
   const onSubmit = () => new Promise(async (resolve, reject) => {
       try {
           const baseData = await addCollectionForm.validateFields()
-          // baseData.cancelledReturnTime = moment(baseData.cancelledReturnTime).format("YYYY-MM-DD");
           await run({path: "/tower-finance/guarantee/saveRecycledGuarantee", data: {...baseData, id}})
           resolve(true)
       } catch (error) {
           reject(false)
       }
   })
+
   useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit]);
+
   return (
     <Spin spinning={loading}>
       <BaseInfo
