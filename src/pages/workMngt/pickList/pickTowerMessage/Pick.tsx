@@ -646,7 +646,7 @@ export default function Lofting(): React.ReactNode {
             onCancel={() => {
                 setEditVisible(false);
             }}>
-            <StructureTextureEdit id={''} ref={editModalRef} />
+            <StructureTextureEdit id={params.productSegmentId} ref={editModalRef} />
         </Modal>
         <Modal title='提示' visible={tipVisible} footer={false} onCancel={() => {
             setTipVisible(false)
