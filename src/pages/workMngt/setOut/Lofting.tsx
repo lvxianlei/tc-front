@@ -56,11 +56,11 @@ export default function Lofting(): React.ReactNode {
             width: 150,
             editable: true,
             dataIndex: 'segmentName',
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} disabled />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} disabled />
+                </Form.Item>
+            )
         },
         {
             key: 'code',
@@ -68,11 +68,11 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'code',
             width: 120,
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "code"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "code"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'structureTexture',
@@ -80,11 +80,11 @@ export default function Lofting(): React.ReactNode {
             width: 150,
             dataIndex: 'structureTexture',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "structureTexture"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "structureTexture"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'materialName',
@@ -92,11 +92,11 @@ export default function Lofting(): React.ReactNode {
             width: 150,
             dataIndex: 'materialName',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "materialName"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "materialName"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'structureSpec',
@@ -104,11 +104,11 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'structureSpec',
             width: 150,
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "structureSpec"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "structureSpec"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'length',
@@ -116,11 +116,11 @@ export default function Lofting(): React.ReactNode {
             width: 150,
             dataIndex: 'length',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "length"]} initialValue={_ === -1 ? undefined : _}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "length"]} initialValue={_ === -1 ? undefined : _}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'width',
@@ -128,11 +128,11 @@ export default function Lofting(): React.ReactNode {
             width: 150,
             dataIndex: 'width',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "width"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "width"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'thickness',
@@ -140,11 +140,11 @@ export default function Lofting(): React.ReactNode {
             width: 150,
             dataIndex: 'thickness',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "thickness"]} initialValue={_ === -1 ? undefined : _}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "thickness"]} initialValue={_ === -1 ? undefined : _}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'basicsPartNum',
@@ -152,19 +152,19 @@ export default function Lofting(): React.ReactNode {
             width: 150,
             dataIndex: 'basicsPartNum',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "basicsPartNum"]} initialValue={_}>
-            //         <Input type="number" min={0} size="small" onChange={(e) => {
-            //             const data = form.getFieldsValue(true).data;
-            //             data[index] = {
-            //                 ...data[index],
-            //                 totalWeight: Number(e.target.value) * Number(data[index].basicsWeight)
-            //             }
-            //             form.setFieldsValue({ data: [...data] })
-            //             rowChange(index);
-            //         }} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "basicsPartNum"]} initialValue={_}>
+                    <Input type="number" min={0} size="small" onChange={(e) => {
+                        const data = form.getFieldsValue(true).data;
+                        data[index] = {
+                            ...data[index],
+                            totalWeight: Number(e.target.value) * Number(data[index].basicsWeight)
+                        }
+                        form.setFieldsValue({ data: [...data] })
+                        rowChange(index);
+                    }} />
+                </Form.Item>
+            )
         },
         {
             key: 'apertureNumber',
@@ -172,11 +172,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'apertureNumber',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "apertureNumber"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "apertureNumber"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'holesNum',
@@ -184,11 +184,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'holesNum',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "holesNum"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "holesNum"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'electricWelding',
@@ -196,14 +196,14 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'electricWelding',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "electricWelding"]} initialValue={_} rules={[{
-            //         pattern: /^[1-2\s]*$/,
-            //         message: '仅可输入1/2',
-            //     }]}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "electricWelding"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'groove',
@@ -211,14 +211,14 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'groove',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "groove"]} initialValue={_} rules={[{
-            //         pattern: /^[1-2\s]*$/,
-            //         message: '仅可输入1/2',
-            //     }]}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "groove"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'chamfer',
@@ -226,14 +226,14 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'chamfer',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "chamfer"]} initialValue={_} rules={[{
-            //         pattern: /^[1-2\s]*$/,
-            //         message: '仅可输入1/2',
-            //     }]}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "chamfer"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'openCloseAngle',
@@ -241,14 +241,14 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'openCloseAngle',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "openCloseAngle"]} initialValue={_} rules={[{
-            //         pattern: /^[1-2\s]*$/,
-            //         message: '仅可输入1/2',
-            //     }]}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "openCloseAngle"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'bend',
@@ -256,14 +256,14 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'bend',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "bend"]} initialValue={_} rules={[{
-            //         pattern: /^[1-2\s]*$/,
-            //         message: '仅可输入1/2',
-            //     }]}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "bend"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'shovelBack',
@@ -271,14 +271,14 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'shovelBack',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "shovelBack"]} initialValue={_} rules={[{
-            //         pattern: /^[1-2\s]*$/,
-            //         message: '仅可输入1/2',
-            //     }]}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "shovelBack"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'rootClear',
@@ -286,14 +286,14 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'rootClear',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "rootClear"]} initialValue={_} rules={[{
-            //         pattern: /^[1-2\s]*$/,
-            //         message: '仅可输入1/2',
-            //     }]}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "rootClear"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'squash',
@@ -301,14 +301,14 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'squash',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "squash"]} initialValue={_} rules={[{
-            //         pattern: /^[1-2\s]*$/,
-            //         message: '仅可输入1/2',
-            //     }]}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "squash"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'specialCode',
@@ -316,11 +316,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'specialCode',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "specialCode"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "specialCode"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'suppress',
@@ -328,11 +328,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'suppress',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "suppress"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "suppress"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'grooveMeters',
@@ -340,11 +340,11 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             dataIndex: 'grooveMeters',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'spellNumber',
@@ -352,11 +352,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'spellNumber',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "spellNumber"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "spellNumber"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'slottedForm',
@@ -364,14 +364,14 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'slottedForm',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "slottedForm"]} initialValue={_} rules={[{
-            //         pattern: /^[1-2\s]*$/,
-            //         message: '仅可输入1/2',
-            //     }]}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "slottedForm"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'intersectingLine',
@@ -379,14 +379,14 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'intersectingLine',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "intersectingLine"]} initialValue={_} rules={[{
-            //         pattern: /^[1-2\s]*$/,
-            //         message: '仅可输入1/2',
-            //     }]}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "intersectingLine"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'type',
@@ -394,11 +394,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'type',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "type"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "type"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'description',
@@ -406,11 +406,11 @@ export default function Lofting(): React.ReactNode {
             width: 150,
             dataIndex: 'description',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "description"]} initialValue={_}>
-            //         <Input size="small" maxLength={50} onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "description"]} initialValue={_}>
+                    <Input size="small" maxLength={50} onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'arcContaining',
@@ -418,11 +418,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'arcContaining',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "arcContaining"]} initialValue={_}>
-            //         <Input size="small" maxLength={50} onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "arcContaining"]} initialValue={_}>
+                    <Input size="small" maxLength={50} onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'perforate',
@@ -430,14 +430,14 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'perforate',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "perforate"]} initialValue={_} rules={[{
-            //         pattern: /^[1-2\s]*$/,
-            //         message: '仅可输入1/2',
-            //     }]}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "perforate"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'perforateNumber',
@@ -445,11 +445,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'perforateNumber',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "perforateNumber"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "perforateNumber"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'withReaming',
@@ -457,11 +457,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'withReaming',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "withReaming"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "withReaming"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'reamingNumber',
@@ -469,11 +469,11 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             dataIndex: 'reamingNumber',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "reamingNumber"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "reamingNumber"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'gasCutting',
@@ -481,11 +481,11 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             dataIndex: 'gasCutting',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "gasCutting"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "gasCutting"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'gasCuttingNumber',
@@ -493,11 +493,11 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             dataIndex: 'gasCuttingNumber',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "gasCuttingNumber"]} initialValue={_}>
-            //         <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "gasCuttingNumber"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
         },
         {
             key: 'basicsWeight',
@@ -505,19 +505,19 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             dataIndex: 'basicsWeight',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "basicsWeight"]} initialValue={_}>
-            //         <Input type="number" min={0} size="small" onChange={(e) => {
-            //             const data = form.getFieldsValue(true).data;
-            //             data[index] = {
-            //                 ...data[index],
-            //                 totalWeight: Number(e.target.value) * Number(data[index].basicsPartNum)
-            //             }
-            //             form.setFieldsValue({ data: [...data] })
-            //             rowChange(index);
-            //         }} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "basicsWeight"]} initialValue={_}>
+                    <Input type="number" min={0} size="small" onChange={(e) => {
+                        const data = form.getFieldsValue(true).data;
+                        data[index] = {
+                            ...data[index],
+                            totalWeight: Number(e.target.value) * Number(data[index].basicsPartNum)
+                        }
+                        form.setFieldsValue({ data: [...data] })
+                        rowChange(index);
+                    }} />
+                </Form.Item>
+            )
         },
         {
             key: 'totalWeight',
@@ -525,11 +525,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'totalWeight',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "totalWeight"]} initialValue={_}>
-            //         <Input size="small" disabled />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "totalWeight"]} initialValue={_}>
+                    <Input size="small" disabled />
+                </Form.Item>
+            )
         },
         {
             key: 'craftName',
@@ -537,11 +537,11 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             dataIndex: 'craftName',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "craftName"]} initialValue={_ === -1 ? undefined : _}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "craftName"]} initialValue={_ === -1 ? undefined : _}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'sides',
@@ -549,11 +549,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'sides',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "sides"]} initialValue={_ === -1 ? undefined : _}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "sides"]} initialValue={_ === -1 ? undefined : _}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'perimeter',
@@ -561,11 +561,11 @@ export default function Lofting(): React.ReactNode {
             width: 80,
             dataIndex: 'perimeter',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "perimeter"]} initialValue={_ === -1 ? undefined : _}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "perimeter"]} initialValue={_ === -1 ? undefined : _}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'surfaceArea',
@@ -573,11 +573,11 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             dataIndex: 'surfaceArea',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "surfaceArea"]} initialValue={_ === -1 ? undefined : _}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "surfaceArea"]} initialValue={_ === -1 ? undefined : _}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         },
         {
             key: 'weldingEdge',
@@ -585,11 +585,11 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             dataIndex: 'weldingEdge',
             editable: true,
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <Form.Item name={['data', index, "weldingEdge"]} initialValue={_ === -1 ? undefined : _}>
-            //         <Input size="small" onChange={() => rowChange(index)} />
-            //     </Form.Item>
-            // )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "weldingEdge"]} initialValue={_ === -1 ? undefined : _}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
         }
     ]
 
@@ -809,7 +809,7 @@ export default function Lofting(): React.ReactNode {
                 <Button htmlType="reset">重置</Button>
             </Form.Item>
         </Form>
-        {/* <Form form={form} className={styles.descripForm}> */}
+        <Form form={form} className={styles.descripForm}>
         <Page
             path="/tower-science/productStructure/list"
             exportPath={`/tower-science/productStructure/list`}
@@ -869,7 +869,7 @@ export default function Lofting(): React.ReactNode {
                     <Button type="primary" disabled={editorLock === '锁定'} ghost>导入</Button>
                 </Upload>
                 <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.productSegmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
-                {/* <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button> */}
+                <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
                 <Button type="primary" loading={loading2} onClick={() => {
                     setLoading2(true);
                     RequestUtil.post(`/tower-science/productStructure/pdmSynchronous/${params.productSegmentId}`).then(res => {
@@ -880,7 +880,6 @@ export default function Lofting(): React.ReactNode {
                         setLoading2(false);
                     })
                 }} disabled={editorLock === '锁定'} ghost>PDM同步</Button>
-                {/* <Button type="primary" onClick={() => setPdmVisible(true)} ghost>PDM同步</Button> */}
                 <Popconfirm
                     title="确认删除?"
                     onConfirm={del}
@@ -922,7 +921,7 @@ export default function Lofting(): React.ReactNode {
         //     return values;
         // }}
         />
-        {/* </Form> */}
+        </Form>
         <Modal
             visible={urlVisible}
             onOk={() => {

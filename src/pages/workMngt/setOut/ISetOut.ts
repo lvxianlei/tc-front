@@ -166,7 +166,7 @@ export interface IProductSegmentList {
     readonly productCategoryId?: string;
     readonly segmentName?: string;
     readonly id?: string | number;
-    readonly count?: string;
+    readonly count?: number;
     readonly segmentId?: string;
 }
 

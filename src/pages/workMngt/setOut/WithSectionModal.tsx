@@ -4,14 +4,13 @@
  * @description 工作管理-放样列表-杆塔配段-配段
 */
 import React from 'react';
-import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, Row, Col, Select } from 'antd';
+import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, Row, Col, Select, message } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { IDetailData, IProductSegmentList } from './ISetOut';
-import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export interface WithSectionModalProps { }
 export interface IWithSectionModalRouteProps extends RouteComponentProps<WithSectionModalProps>, WithTranslation {
@@ -79,7 +78,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                         loftingProductSegmentList: detail.loftingProductSegmentList?.map(res => {
                             return {
                                 ...res,
-                                count: '0'
+                                count: 0
                             }
                         })
                     }
@@ -101,52 +100,153 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
 
     protected save = (path: string) => {
         if (this.getForm()) {
-            this.getForm()?.validateFields().then(res => {
-                const value = this.getForm()?.getFieldsValue(true);
-                const loftingProductSegmentList = this.state.detailData?.loftingProductSegmentList;
-                value.productCategoryId = this.state.detailData?.productCategoryId;
-                value.productId = this.state.detailData?.productId;
-                value.productSegmentListDTOList = value.productSegmentListDTOList?.map((items: IProductSegmentList, index: number) => {
-                    if (items) {
-                        return {
-                            id: loftingProductSegmentList && loftingProductSegmentList[index].id === -1 ? '' : loftingProductSegmentList && loftingProductSegmentList[index].id,
-                            segmentName: loftingProductSegmentList && loftingProductSegmentList[index].segmentName,
-                            count: items.count,
-                            segmentId: loftingProductSegmentList && loftingProductSegmentList[index].segmentId,
+            if (this.state.detailData?.productId || this.state.detailData?.productIdList) {
+                this.getForm()?.validateFields().then(res => {
+                    const value = this.getForm()?.getFieldsValue(true);
+                    const loftingProductSegmentList = this.state.detailData?.loftingProductSegmentList;
+                    value.productCategoryId = this.state.detailData?.productCategoryId;
+                    value.productId = this.state.detailData?.productId;
+                    value.productSegmentListDTOList = value.productSegmentListDTOList?.map((items: IProductSegmentList, index: number) => {
+                        if (items) {
+                            return {
+                                id: loftingProductSegmentList && loftingProductSegmentList[index].id === -1 ? '' : loftingProductSegmentList && loftingProductSegmentList[index].id,
+                                segmentName: loftingProductSegmentList && loftingProductSegmentList[index].segmentName,
+                                count: items.count,
+                                segmentId: loftingProductSegmentList && loftingProductSegmentList[index].segmentId,
+                            }
+                        } else {
+                            return undefined
                         }
-                    } else {
-                        return undefined
-                    }
-                });
-                value.productSegmentListDTOList = value.productSegmentListDTOList.filter((item: IProductSegmentList) => { return item !== undefined });
-                value.productIdList = this.state.detailData?.productIdList
-                RequestUtil.post(path, { ...value }).then(res => {
-                    this.props.updateList();
-                    this.modalCancel();
-                }).catch(error => {
-                    this.getForm()?.setFieldsValue({})
-                });
-            })
+                    });
+                    value.productSegmentListDTOList = value.productSegmentListDTOList.filter((item: IProductSegmentList) => { return item !== undefined });
+                    value.productIdList = this.state.detailData?.productIdList
+                    RequestUtil.post(path, { ...value }).then(res => {
+                        this.props.updateList();
+                        this.modalCancel();
+                    }).catch(error => {
+                        this.getForm()?.setFieldsValue({})
+                    });
+                })
+            } else {
+                message.warning('请选择杆塔')
+            }
+
         }
+    }
+
+    public delSameObjValue = (list: IProductSegmentList[]) => {
+        let target: IProductSegmentList[] = [];
+        let keysArr = new Set(list.map(item => item.segmentName));
+        keysArr.forEach(item => {
+            const arr = list.filter(keys => keys.segmentName == item);
+            const sum = arr.reduce((total, currentValue) => total + Number(currentValue.count), 0)
+            target.push({
+                segmentName: item,
+                count: Number(sum)
+            })
+        })
+        return target;
     }
 
     public fastWithSectoin = async () => {
         this.setState({
             fastLoading: true
         })
-        const detailData: IProductSegmentList[] = await RequestUtil.get<IProductSegmentList[]>(`/tower-science/productSegment/quickLofting/${this.props.id}/${this.fastForm.current?.getFieldsValue(true).part}`);
-        this.setState({
-            fastVisible: false,
-            detailData: {
-                ...this.getForm()?.getFieldsValue(true),
-                loftingProductSegmentList: [...detailData]
-            },
-            fastLoading: false
-        })
-        this.getForm()?.setFieldsValue({
-            ...this.getForm()?.getFieldsValue(true),
-            productSegmentListDTOList: [...detailData]
-        })
+        // const detailData: IProductSegmentList[] = await RequestUtil.get<IProductSegmentList[]>(`/tower-science/productSegment/quickLofting/${this.props.id}/${this.fastForm.current?.getFieldsValue(true).part}`);
+        // this.setState({
+        //     fastVisible: false,
+        //     detailData: {
+        //         ...this.getForm()?.getFieldsValue(true),
+        //         loftingProductSegmentList: [...detailData]
+        //     },
+        //     fastLoading: false
+        // })
+        // this.getForm()?.setFieldsValue({
+        //     ...this.getForm()?.getFieldsValue(true),
+        //     productSegmentListDTOList: [...detailData]
+        // })
+        const inputString: string = this.fastForm.current?.getFieldsValue(true).part;
+        if (inputString) {
+            if ((/[(,*-]+\*[0-9]+|[(,*-]+\*[a-zA-Z()-*,]+|^[*),]+/g).test(inputString)) {
+                message.error('请输入正确格式');
+                this.setState({
+                    fastLoading: false
+                })
+            } else {
+                const inputList = inputString.split(',');
+                let list: IProductSegmentList[] = [];
+                inputList.forEach((res: string) => {
+                    const newRes = res.split('*')[0].replace(/\(|\)/g, "");
+                    if ((/^[0-9]+-[0-9]+$/).test(newRes)) {
+                        const length = Number(newRes.split('-')[0]) - Number(newRes.split('-')[1]);
+                        if (length <= 0) {
+                            let num = Number(newRes.split('-')[0]);
+                            let t = setInterval(() => {
+                                list.push({
+                                    segmentName: (num++).toString(),
+                                    count: Number(res.split('*')[1]) || 1
+                                })
+                                if (num > Number(newRes.split('-')[1])) {
+                                    clearInterval(t);
+                                }
+                            }, 0)
+                        } else {
+                            let num = Number(newRes.split('-')[0])
+                            let t = setInterval(() => {
+                                list.push({
+                                    segmentName: (num--).toString(),
+                                    count: Number(res.split('*')[1]) || 1
+                                })
+                                if (num < Number(newRes.split('-')[1])) {
+                                    clearInterval(t);
+                                }
+                            }, 0)
+                        }
+                    } else {
+                        list.push({
+                            segmentName: newRes,
+                            count: Number(res.split('*')[1]) || 1
+                        })
+                    }
+
+                })
+                setTimeout(() => {
+                    const delSameObjList = this.delSameObjValue(list);
+                    const newList = this.state.detailData?.loftingProductSegmentList?.map(res => {
+                        const newData = delSameObjList.filter(item => item.segmentName === res.segmentName);
+                        if (res.segmentName === newData[0].segmentName) {
+                            return {
+                                ...res,
+                                count: newData[0].count
+                            }
+                        } else {
+                            return res
+                        }
+                    })
+                    this.setState({
+                        fastVisible: false,
+                        detailData: {
+                            ...this.getForm()?.getFieldsValue(true),
+                            productCategoryName: this.state.detailData?.productCategoryName,
+                            productCategoryId: this.props.productCategoryId,
+                            productNumber: this.state.detailData?.productNumber,
+                            productIdList: this.state.detailData?.productIdList,
+                            loftingProductSegmentList: [...newList || []]
+                        },
+                        fastLoading: false
+                    })
+                    this.getForm()?.setFieldsValue({
+                        ...this.getForm()?.getFieldsValue(true),
+                        productSegmentListDTOList: [...newList || []]
+                    })
+                }, 1000)
+            }
+        } else {
+            message.warning('请输入需快速配段的信息')
+            this.setState({
+                fastLoading: false
+            })
+        }
     }
 
     /**
@@ -196,7 +296,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                 }]}>
                                     <Select placeholder="请选择" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={() => {
                                         const productId = this.fastForm.current?.getFieldsValue(true).productId;
-                                        console.log(productId)
                                         this.setState({
                                             detailData: {
                                                 ...this.state.detailData,
