@@ -165,7 +165,7 @@ export default function SetOutInformation(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
 
     const { loading, data, run: getTableDataSource }: Record<string, any> = useRequest((filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IBale = await RequestUtil.put<IBale>(`/tower-production/package/detail`, { ...filterValues, id: params.id });
+        const data: IBale = await RequestUtil.get<IBale>(`/tower-production/package/detail`, { ...filterValues, id: params.id });
         setTableData(data?.packageInfoVOList || []);
         resole(data)
     }), {})
@@ -285,7 +285,7 @@ export default function SetOutInformation(): React.ReactNode {
                                 min={0}
                                 max={Number(record?.num) - Number(record?.unPackageNum)}
                                 placeholder="请输入"
-                                value={record?.packageNum}
+                                defaultValue={record?.packageNum}
                                 onBlur={(e) => updatePackage(record.id, e.target.value, record?.unPackageNum)}
                                 size='small'
                                 disabled={detailData?.packageStatus === 2}
@@ -301,7 +301,7 @@ export default function SetOutInformation(): React.ReactNode {
                                 min={0}
                                 max={Number(record?.num) - Number(record?.packageNum)}
                                 placeholder="请输入"
-                                value={value}
+                                defaultValue={value}
                                 onBlur={(e) => updatePackage(record.id, record?.packageNum, e.target.value)}
                                 size='small'
                                 disabled={detailData?.packageStatus === 2}
