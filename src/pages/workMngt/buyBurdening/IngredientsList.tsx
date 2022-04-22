@@ -98,7 +98,6 @@ export default function IngredientsList(): React.ReactNode {
 
     // 新增/删除
     const onEdit = (targetKey: any, action: any) => {
-        console.log(targetKey, "====>>>", action);
         action === "remove" ?
             remove(targetKey)
             : add();
