@@ -116,10 +116,10 @@ export default function PackingList(): React.ReactNode {
                     null : <>
                         <Button type="primary" ghost onClick={() => setVisible(true)}>套用包</Button>
                         <Button type="primary" onClick={() => {
-                            RequestUtil.post(`/tower-science/packageStructure/automatic/${params.id}/${params.productId}`).then(
-                                res => history.go(0)
-                            ).catch(error => {
+                            RequestUtil.post(`/tower-science/packageStructure/automatic/${params.id}/${params.productId}`).then(res => {
+                                history.go(0)  
                                 message.success('自动打包成功');
+                            }).catch(error => {
                                 history.go(0);
                             })
                         }} ghost>自动打包</Button>
