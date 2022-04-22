@@ -209,6 +209,12 @@ export default function PickTower(): React.ReactNode {
                 exportPath="/tower-science/materialProduct"
                 extraOperation={
                     <Space>
+                        <Button type='primary' onClick={() => {
+                            setWithSectionVisible(true);
+                            setProductId('');
+                            setStatus('0');
+                            setBatchNo(false)
+                        }}>批量配段</Button>
                         <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
                     </Space>
                 }

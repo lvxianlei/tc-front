@@ -15,6 +15,7 @@ import FillGuaranteeInformation from './fillGuaranteeInformation';
 import RecoveryGuaranteeLayer from './recoveryGuarantee';
 // 引入查看保函申请
 import SeeGuarantee from './seeGuarantee';
+// 引入interface类型
 import { EditRefProps } from './application';
 
 export default function ApplicationColunm(): React.ReactNode {
@@ -38,8 +39,10 @@ export default function ApplicationColunm(): React.ReactNode {
             reject(error)
         }
     }), { manual: true })
+
     // 查询按钮
     const onFilterSubmit = (value: any) => {
+        // 申请日期
         if (value.startRefundTime) {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.applicantStartTime = `${formatDate[0]} 00:00:00`
@@ -66,7 +69,6 @@ export default function ApplicationColunm(): React.ReactNode {
 
     // tab切换
     const operationChange = (event: any) => {
-        console.log(event)
         setAcceptStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
         setClearSearch(!clearSearch);
@@ -98,6 +100,7 @@ export default function ApplicationColunm(): React.ReactNode {
         }
     })
 
+    // 保留小数
     const changeTwoDecimal_f = (x: string) => {
         var f_x = parseFloat(x);
         if (isNaN(f_x)) return 0;
@@ -125,7 +128,13 @@ export default function ApplicationColunm(): React.ReactNode {
                         dataIndex: 'index',
                         fixed: "left",
                         width: 50,
-                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                        render: (_a: any, _b: any, index: number): React.ReactNode => {
+                            return (
+                                <span>
+                                    {index + 1}
+                                </span>
+                            )
+                        }
                     },
                     ...collectionListHead.map((item: any) => {
                         if (item.dataIndex === 'requiredReturnTime') {
@@ -134,7 +143,16 @@ export default function ApplicationColunm(): React.ReactNode {
                                 dataIndex: item.dataIndex,
                                 width: 50,
                                 render: (_: any, record: any): React.ReactNode => (
-                                    <span style={{ color: (acceptStatus === 2 && moment(record.requiredReturnTime).diff(moment(moment(new Date()).format("YYYY-MM-DD")), 'days') < 0) ? 'red' : '' }}>{record.requiredReturnTime ? record.requiredReturnTime : ''}</span>
+                                    <span
+                                        style={{ color: (
+                                            acceptStatus === 2 && moment(record.requiredReturnTime).diff(moment(moment(new Date()).format("YYYY-MM-DD")), 'days') < 0)
+                                                ? 
+                                                    'red'
+                                                :   '' 
+                                            }}
+                                    >
+                                        {record.requiredReturnTime ? record.requiredReturnTime : ''}
+                                    </span>
                                 )
                             })
                         }
@@ -143,7 +161,12 @@ export default function ApplicationColunm(): React.ReactNode {
                                 title: item.title,
                                 dataIndex: item.dataIndex,
                                 width: 50,
-                                render: (_: any, record: any): React.ReactNode => (<span>{record.guaranteePrice ? changeTwoDecimal_f(record.guaranteePrice) : ''}</span>)
+                                render: (_: any, record: any): React.ReactNode => {
+                                    return (
+                                        <span>
+                                            {record.guaranteePrice ? changeTwoDecimal_f(record.guaranteePrice) : ''}
+                                        </span>)
+                                }
                             })
                         }
                         return item;
@@ -156,20 +179,30 @@ export default function ApplicationColunm(): React.ReactNode {
                         render: (_: any, record: any) => {
                             return (
                                 <>
-                                    <Button type="link" className="btn-operation-link" onClick={() => {
-                                        getUser(record.id)
-                                        setId(record.id);
-                                    }}>查看</Button>
-                                    {acceptStatus === 1 && <Button type="link" className="btn-operation-link" onClick={() => {
-                                        setVisible(true);
-                                        setId(record.id);
-                                    }}>填写保函信息</Button>}
-                                    {acceptStatus === 2 && <Button className="btn-operation-link" type="link" onClick={() => {
-                                        setVisibleRecovery(true);
-                                        setId(record.id);
-                                        setRequiredReturnTime(record.requiredReturnTime)
-                                    }}>回收保函</Button>}
-                                    {/* {acceptStatus === 1 && <Button type="link" onClick={()=>{window.open(record.filePath)}}>生成文件</Button>} */}
+                                    <Button type="link"
+                                        className="btn-operation-link"
+                                        onClick={() => {
+                                            getUser(record.id)
+                                            setId(record.id);
+                                        }}
+                                    >查看</Button>
+                                    {acceptStatus === 1 && <Button
+                                        type="link"
+                                        className="btn-operation-link"
+                                        onClick={() => {
+                                            setVisible(true);
+                                            setId(record.id);
+                                        }}
+                                    >填写保函信息</Button>}
+                                    {acceptStatus === 2 && <Button
+                                        className="btn-operation-link"
+                                        type="link"
+                                        onClick={() => {
+                                            setVisibleRecovery(true);
+                                            setId(record.id);
+                                            setRequiredReturnTime(record.requiredReturnTime)
+                                        }}
+                                    >回收保函</Button>}
                                 </>
                             )
                         }
@@ -178,10 +211,18 @@ export default function ApplicationColunm(): React.ReactNode {
                 clearSearch={clearSearch}
                 extraOperation={
                     <>
-                        <Radio.Group defaultValue={acceptStatus} onChange={operationChange}>
-                            {
-                                approvalStatus.map((item: any, index: number) => <Radio.Button value={item.value} key={`${index}_${item.value}`}>{item.label}</Radio.Button>)
-                            }
+                        <Radio.Group
+                            defaultValue={acceptStatus}
+                            onChange={operationChange}>
+                                {
+                                    approvalStatus.map((item: any, index: number) => 
+                                    {
+                                        return <Radio.Button
+                                            value={item.value}
+                                            key={`${index}_${item.value}`}>{item.label}
+                                        </Radio.Button>
+                                    })
+                                }
                         </Radio.Group>
                     </>
                 }
@@ -221,13 +262,20 @@ export default function ApplicationColunm(): React.ReactNode {
                     setVisible(false);
                 }}
                 footer={[
-                    <Button key="submit" type="primary" onClick={() => handleOk()}>
+                    <Button
+                        key="submit"
+                        type="primary"
+                        onClick={() => handleOk()}
+                    >
                         提交
                     </Button>,
-                    <Button key="back" onClick={() => {
-                        addRef.current?.resetFields();
-                        setVisible(false);
-                    }}>
+                    <Button
+                        key="back"
+                        onClick={() => {
+                            addRef.current?.resetFields();
+                            setVisible(false);
+                        }}
+                    >
                         取消
                     </Button>
                 ]}
@@ -245,13 +293,20 @@ export default function ApplicationColunm(): React.ReactNode {
                     addRecoveryRef.current?.resetFields();
                 }}
                 footer={[
-                    <Button key="submit" type="primary" onClick={() => handleOkuseState()}>
+                    <Button
+                        key="submit"
+                        type="primary"
+                        onClick={() => handleOkuseState()}
+                    >
                         提交
                     </Button>,
-                    <Button key="back" onClick={() => {
-                        setVisibleRecovery(false)
-                        addRecoveryRef.current?.resetFields();
-                    }}>
+                    <Button
+                        key="back"
+                        onClick={() => {
+                            setVisibleRecovery(false)
+                            addRecoveryRef.current?.resetFields();
+                        }}
+                    >
                         取消
                     </Button>
                 ]}

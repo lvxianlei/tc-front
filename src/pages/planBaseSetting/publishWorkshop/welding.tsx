@@ -84,11 +84,22 @@ export default function Welding(): ReactElement {
             <Space>
                 <span><label>合计：</label>{ }</span>
                 <span><label>总组数：</label>{data?.totalGroupNum || "0"}</span>
-                <span><label>总重量：</label>{data?.totalWeight || "0"}</span>
+                <span><label>总重量(t)：</label>{data?.totalWeight || "0"}</span>
             </Space>
         </Row>
         <CommonAliTable
-            columns={welding}
+            columns={welding.map((item: any) => {
+                if (item.dataIndex === "segmentGroupNum") {
+                    return ({
+                        ...item,
+                        features: {
+                            ...item.features,
+                            autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.componentId === row2.componentId
+                        }
+                    })
+                }
+                return item
+            })}
             size="small"
             className="bordered"
             isLoading={loading}
