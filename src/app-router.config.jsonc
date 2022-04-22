@@ -321,7 +321,7 @@
     { // 原材料管理
       "name": "原材料管理",
       "path": "/config/configList/material",
-      "module": "./pages/system-mngt/material/MaterialMngt",
+      "module": "./pages/system-mngt/materialMngt/MaterialMngt",
       "exact": true,
       "authority": "material_management"
     },
