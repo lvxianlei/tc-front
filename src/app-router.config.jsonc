@@ -2545,6 +2545,20 @@
       "module": "./pages/changePassword",
       "exact": true,
       "authority": "home_page_person_center"
+    },
+    { // 工序配置
+      "name": "工序配置列表",
+      "path": "/processConfiguration/list",
+      "module": "./pages/processConfiguration/ProcessConfigurationList",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
+    { // 不合格项目金额配置
+      "name": "不合格项目金额配置列表",
+      "path": "/unqualifiedAmount/list",
+      "module": "./pages/unqualifiedAmount/UnqualifiedAmountList",
+      "exact": true,
+      "authority": "home_page_person_center"
     }
   ]
 }
