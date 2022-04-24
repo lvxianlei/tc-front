@@ -25,23 +25,28 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
     const list = [
         {
             index: 0,
-            structureTexture: 'Q235'
+            structureTexture: 'Q235',
+            suffix: 'B'
         },
         {
             index: 1,
-            structureTexture: 'Q345'
+            structureTexture: 'Q345',
+            suffix: 'B'
         },
         {
             index: 2,
-            structureTexture: 'Q420'
+            structureTexture: 'Q420',
+            suffix: 'B'
         },
         {
             index: 3,
-            structureTexture: 'Q460'
+            structureTexture: 'Q460',
+            suffix: 'B'
         },
         {
             index: 4,
-            structureTexture: 'Q355'
+            structureTexture: 'Q355',
+            suffix: 'B'
         }
     ]
 
