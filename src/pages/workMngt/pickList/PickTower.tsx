@@ -21,6 +21,7 @@ export interface IDetail {
     legNumberD?: string;
     readonly materialSegmentList?: IMaterialDetail[];
     readonly productCategoryId?: string;
+    productIdList?: any;
 }
 export interface IMaterialDetail {
     count?: number;
@@ -48,6 +49,7 @@ export default function PickTower(): React.ReactNode {
         try {
             await editRef.current?.onSubmit();
             message.success('配段成功');
+            editRef.current?.resetFields();
             setWithSectionVisible(false);
             setRefresh(!refresh);
             resove(true);
@@ -120,7 +122,7 @@ export default function PickTower(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Button type='link' disabled={record?.materialLeaderList?.findIndex((res: string) => { return res === userId }) === -1} onClick={async () => {
+                    <Button type='link'  onClick={async () => {
                         setWithSectionVisible(true);
                         setProductId(record.id);
                         setStatus(params.status);
@@ -197,7 +199,7 @@ export default function PickTower(): React.ReactNode {
                     editRef.current?.resetFields();
                     setWithSectionVisible(false);
                 }}>
-                <WithSection id={productId} ref={editRef} type={status === '3' ? 'detail' : 'new'} batchNo={batchNo} />
+                <WithSection id={productId} ref={editRef} type={status === '3' ? 'detail' : productId?'edit': 'new'} batchNo={batchNo}  productCategoryId={params.id}/>
             </Modal>
             <Page
                 path="/tower-science/materialProduct"
