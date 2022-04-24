@@ -638,7 +638,7 @@ export default function Lofting(): React.ReactNode {
             reject(false)
         }
     })
-    
+
     const handleAddModalOk = () => new Promise(async (resove, reject) => {
         try {
             await addModalRef.current?.onSubmit();
@@ -678,7 +678,11 @@ export default function Lofting(): React.ReactNode {
                     return newRowChangeList.indexOf(index) !== -1;
                 })
                 if (changeValues && changeValues.length > 0) {
-                    RequestUtil.post(`/tower-science/productStructure/save`, [...changeValues]).then(res => {
+                    RequestUtil.post(`/tower-science/productStructure/save`, changeValues.map((res: any) => {
+                        return {
+                            ...res, productCategoryId: params.id
+                        }
+                    })).then(res => {
                         setColumns(columnsSetting);
                         setEditorLock('编辑');
                         setRowChangeList([]);
@@ -784,7 +788,7 @@ export default function Lofting(): React.ReactNode {
             onCancel={() => {
                 setAddVisible(false);
             }}>
-            <AddLofting id={params.id} productSegmentId={params.productSegmentId}  ref={addModalRef}/>
+            <AddLofting id={params.id} productSegmentId={params.productSegmentId} ref={addModalRef} />
         </Modal>
         <Form layout="inline" style={{ margin: '20px' }} onFinish={(value: Record<string, any>) => {
             setFilterValue(value)
@@ -810,117 +814,117 @@ export default function Lofting(): React.ReactNode {
             </Form.Item>
         </Form>
         <Form form={form} className={styles.descripForm}>
-        <Page
-            path="/tower-science/productStructure/list"
-            exportPath={`/tower-science/productStructure/list`}
-            columns={tableColumns}
-            headTabs={[]}
-            refresh={refresh}
-            tableProps={{
-                pagination: false,
-                rowSelection: {
-                    selectedRowKeys: selectedKeys,
-                    onChange: SelectChange
-                }
-            }}
-            requestData={{ productSegmentGroupId: params.productSegmentId, ...filterValue }}
-            extraOperation={<Space direction="horizontal" size="small">
-                <Button type="primary" key='1' onClick={() => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板')} ghost>模板下载</Button>
-                <Button type="primary" key='2' onClick={async () => { setMissVisible(true) }} ghost>漏件检查</Button>
-                <Dropdown overlay={menu} trigger={['click']}>
-                    <Button type="primary" ghost>
-                        批量修改<DownOutlined />
-                    </Button>
-                </Dropdown>
-                <Button type="primary" onClick={() => { setAddVisible(true) }} ghost>添加构件</Button>
-                <Popconfirm
-                    title="确认完成放样?"
-                    onConfirm={() => {
-                        setLoading1(true);
-                        RequestUtil.post(`/tower-science/productSegment/complete?productSegmentGroupId=${params.productSegmentId}`).then(res => {
-                            history.goBack();
-                        }).catch(error => {
-                            setLoading1(false);
-                        })
-                    }}
-                    okText="确认"
-                    cancelText="取消"
-                    disabled={editorLock === '锁定'}
-                >
-                    <Button type="primary" loading={loading1} disabled={editorLock === '锁定'} ghost>完成放样</Button>
-                </Popconfirm>
-                <Upload
-                    action={() => {
-                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                        return baseUrl + '/tower-science/productStructure/import'
-                    }}
-                    headers={
-                        {
-                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                            'Tenant-Id': AuthUtil.getTenantId(),
-                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                        }
+            <Page
+                path="/tower-science/productStructure/list"
+                exportPath={`/tower-science/productStructure/list`}
+                columns={tableColumns}
+                headTabs={[]}
+                refresh={refresh}
+                tableProps={{
+                    pagination: false,
+                    rowSelection: {
+                        selectedRowKeys: selectedKeys,
+                        onChange: SelectChange
                     }
-                    data={{ productSegmentGroupId: params.productSegmentId }}
-                    showUploadList={false}
-                    disabled={editorLock === '锁定'}
-                    onChange={(info) => uploadChange(info)}
-                >
-                    <Button type="primary" disabled={editorLock === '锁定'} ghost>导入</Button>
-                </Upload>
-                <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.productSegmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
-                <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
-                <Button type="primary" loading={loading2} onClick={() => {
-                    setLoading2(true);
-                    RequestUtil.post(`/tower-science/productStructure/pdmSynchronous/${params.productSegmentId}`).then(res => {
-                        setLoading2(false);
-                        message.success('PDM同步成功');
-                        history.go(0);
-                    }).catch(error => {
-                        setLoading2(false);
-                    })
-                }} disabled={editorLock === '锁定'} ghost>PDM同步</Button>
-                <Popconfirm
-                    title="确认删除?"
-                    onConfirm={del}
-                    okText="确认"
-                    cancelText="取消"
-                    disabled={editorLock === '锁定'}
-                >
-                    <Button type="primary" disabled={editorLock === '锁定'} ghost>删除</Button>
-                </Popconfirm>
-                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-            </Space>}
-            searchFormItems={[]
-                //     [
-                //     {
-                //         name: 'materialName',
-                //         label: '材料名称',
-                //         children:<Input maxLength={50} />
-                //     },
-                //     {
-                //         name: 'structureTexture',
-                //         label: '材质',
-                //         children:<Input maxLength={50} />
-                //     },
-                //     {
-                //         name: 'segmentName',
-                //         label: '段名',
-                //         children:<Input maxLength={50} />
-                //     },
-                //     {
-                //         name: 'code',
-                //         label: '查询',
-                //         children:<Input placeholder="请输入构件编号查询" maxLength={50} />
-                //     },
-                // ]
-            }
-        // filterValue={filterValue}
-        // onFilterSubmit={(values: Record<string, any>) => {
-        //     setFilterValue(values);
-        //     return values;
-        // }}
-        />
+                }}
+                requestData={{ productSegmentGroupId: params.productSegmentId, ...filterValue }}
+                extraOperation={<Space direction="horizontal" size="small">
+                    <Button type="primary" key='1' onClick={() => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板')} ghost>模板下载</Button>
+                    <Button type="primary" key='2' onClick={async () => { setMissVisible(true) }} ghost>漏件检查</Button>
+                    <Dropdown overlay={menu} trigger={['click']}>
+                        <Button type="primary" ghost>
+                            批量修改<DownOutlined />
+                        </Button>
+                    </Dropdown>
+                    <Button type="primary" onClick={() => { setAddVisible(true) }} ghost>添加构件</Button>
+                    <Popconfirm
+                        title="确认完成放样?"
+                        onConfirm={() => {
+                            setLoading1(true);
+                            RequestUtil.post(`/tower-science/productSegment/complete?productSegmentGroupId=${params.productSegmentId}`).then(res => {
+                                history.goBack();
+                            }).catch(error => {
+                                setLoading1(false);
+                            })
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                        disabled={editorLock === '锁定'}
+                    >
+                        <Button type="primary" loading={loading1} disabled={editorLock === '锁定'} ghost>完成放样</Button>
+                    </Popconfirm>
+                    <Upload
+                        action={() => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl + '/tower-science/productStructure/import'
+                        }}
+                        headers={
+                            {
+                                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
+                        }
+                        data={{ productSegmentGroupId: params.productSegmentId }}
+                        showUploadList={false}
+                        disabled={editorLock === '锁定'}
+                        onChange={(info) => uploadChange(info)}
+                    >
+                        <Button type="primary" disabled={editorLock === '锁定'} ghost>导入</Button>
+                    </Upload>
+                    <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.productSegmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
+                    <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
+                    <Button type="primary" loading={loading2} onClick={() => {
+                        setLoading2(true);
+                        RequestUtil.post(`/tower-science/productStructure/pdmSynchronous/${params.productSegmentId}`).then(res => {
+                            setLoading2(false);
+                            message.success('PDM同步成功');
+                            history.go(0);
+                        }).catch(error => {
+                            setLoading2(false);
+                        })
+                    }} disabled={editorLock === '锁定'} ghost>PDM同步</Button>
+                    <Popconfirm
+                        title="确认删除?"
+                        onConfirm={del}
+                        okText="确认"
+                        cancelText="取消"
+                        disabled={editorLock === '锁定'}
+                    >
+                        <Button type="primary" disabled={editorLock === '锁定'} ghost>删除</Button>
+                    </Popconfirm>
+                    <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
+                </Space>}
+                searchFormItems={[]
+                    //     [
+                    //     {
+                    //         name: 'materialName',
+                    //         label: '材料名称',
+                    //         children:<Input maxLength={50} />
+                    //     },
+                    //     {
+                    //         name: 'structureTexture',
+                    //         label: '材质',
+                    //         children:<Input maxLength={50} />
+                    //     },
+                    //     {
+                    //         name: 'segmentName',
+                    //         label: '段名',
+                    //         children:<Input maxLength={50} />
+                    //     },
+                    //     {
+                    //         name: 'code',
+                    //         label: '查询',
+                    //         children:<Input placeholder="请输入构件编号查询" maxLength={50} />
+                    //     },
+                    // ]
+                }
+            // filterValue={filterValue}
+            // onFilterSubmit={(values: Record<string, any>) => {
+            //     setFilterValue(values);
+            //     return values;
+            // }}
+            />
         </Form>
         <Modal
             visible={urlVisible}
