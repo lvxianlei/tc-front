@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-{ // 路由配置
+ { // 路由配置
   "globalRouters": [
     {
       "name": "首页",
@@ -841,21 +841,21 @@
     },
     { // 确认任务
       "name": "确认任务",
-      "path": "/confirmTask/ConfirmTaskMngt",
+      "path": "/taskMngt/ConfirmTaskMngt",
       "module": "./pages/confirmTask/ConfirmTaskMngt",
       "exact": true,
       "authority": "rd_draw"
     },
     { // 确认任务详情
       "name": "确认任务详情",
-      "path": "/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/:id/:status",
+      "path": "/taskMngt/ConfirmTaskMngt/ConfirmTaskDetail/:id/:status",
       "module": "./pages/confirmTask/ConfirmTaskDetail",
       "exact": true,
       "authority": "rd_draw"
     },
     { // 确认任务明细
       "name": "确认任务明细",
-      "path": "/confirmTask/ConfirmTaskMngt/ConfirmDetail/:id",
+      "path": "/taskMngt/ConfirmTaskMngt/ConfirmDetail/:id",
       "module": "./pages/confirmTask/ConfirmDetail",
       "exact": true,
       "authority": "rd_draw"
@@ -897,14 +897,14 @@
     },
     { // 评估任务
       "name": "评估任务",
-      "path": "/assessmentTask/assessmentTaskList",
+      "path": "/taskMngt/assessmentTaskList",
       "module": "./pages/assessmentTask/AssessmentTaskList",
       "exact": true,
       "authority": "rd_assess_task_management"
     },
     { // 评估任务详情
       "name": "评估任务详情",
-      "path": "/assessmentTask/assessmentTaskList/assessmentTaskDetail/:id",
+      "path": "/taskMngt/assessmentTaskList/assessmentTaskDetail/:id",
       "module": "./pages/assessmentTask/AssessmentTaskDetail",
       "exact": true,
       "authority": "rd_assess_task_management"
@@ -1093,35 +1093,35 @@
     },
     { // 放样任务
       "name": "放样任务",
-      "path": "/setOutTask/setOutTaskList",
+      "path": "/taskMngt/setOutTaskList",
       "module": "./pages/setOutTask/SetOutTaskList",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务详情
       "name": "放样任务详情",
-      "path": "/setOutTask/setOutTaskList/setOutTaskDetail/:id",
+      "path": "/taskMngt/setOutTaskList/setOutTaskDetail/:id",
       "module": "./pages/setOutTask/SetOutTaskDetail",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务-塔型
       "name": "塔型",
-      "path": "/setOutTask/setOutTaskList/setOutTaskTower/:id",
+      "path": "/taskMngt/setOutTaskList/setOutTaskTower/:id",
       "module": "./pages/setOutTask/SetOutTaskTower",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务-杆塔
       "name": "杆塔",
-      "path": "/setOutTask/setOutTaskList/setOutTaskPole/:id",
+      "path": "/taskMngt/setOutTaskList/setOutTaskPole/:id",
       "module": "./pages/setOutTask/SetOutTaskPole",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 提料任务
       "name": "提料任务",
-      "path": "/materialTask/materialTaskList",
+      "path": "/taskMngt/materialTaskList",
       "module": "./pages/materialTask/MaterialTaskList",
       "exact": true,
       "authority": "rd_lofting_task"

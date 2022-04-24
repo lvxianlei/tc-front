@@ -15,11 +15,13 @@ export default function EnquiryList(): React.ReactNode {
     });
     const userId = AuthUtil.getUserId()
     const onFilterSubmit = (value: any) => {
+        // 最新状态变更时间
         if (value.startBatcheStatusUpdateTime) {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startBatcheStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endBatcheStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
+        // 配料人
         if (value.batcherId) {
             value.batcherDeptId = value.batcherId.first
             value.batcherId = value.batcherId.second

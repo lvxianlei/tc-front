@@ -5,22 +5,40 @@
 */
 
 import React, { useRef, useState } from 'react';
-import { Space, Button, Popconfirm, Input, Form, Upload, message, Modal } from 'antd';
-import { Page } from '../../common';
+import { Space, Button, Popconfirm, Input, Form, Upload, message, Modal, Dropdown, Menu } from 'antd';
+import { DetailContent, Page } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './TowerLoftingAssign.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from './downloadTemplate';
-import { ILofting, PdmModalProps } from './ISetOut';
-import PdmModal from './PdmModal';
+import { ILofting, modalProps } from './ISetOut';
+import { DownOutlined } from '@ant-design/icons';
+import { UploadChangeParam } from 'antd/lib/upload';
+import { UploadFile } from 'antd/lib/upload/interface';
+import StructureTextureAbbreviations from './StructureTextureAbbreviations';
+import StructureTextureEdit from './StructureTextureEdit';
+import MissCheck from './MissCheck';
+import AddLofting from './AddLofting';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
 }
 
 export default function Lofting(): React.ReactNode {
+
+    const menu = (
+        <Menu>
+            <Menu.Item key="1" onClick={() => setVisible(true)}>
+                修改零件材质缩写
+            </Menu.Item>
+            <Menu.Item key="2" onClick={() => setEditVisible(true)}>
+                修改材质
+            </Menu.Item>
+        </Menu>
+    );
+
     const columns = [
         {
             key: 'id',
@@ -57,18 +75,6 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            key: 'materialName',
-            title: '材料名称',
-            width: 200,
-            dataIndex: 'materialName',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "materialName"]} initialValue={_}>
-                    <Input size="small" onChange={() => rowChange(index)} />
-                </Form.Item>
-            )
-        },
-        {
             key: 'structureTexture',
             title: '材质',
             width: 150,
@@ -81,10 +87,22 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
+            key: 'materialName',
+            title: '材料名称',
+            width: 150,
+            dataIndex: 'materialName',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "materialName"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
             key: 'structureSpec',
             title: '规格',
             dataIndex: 'structureSpec',
-            width: 200,
+            width: 150,
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "structureSpec"]} initialValue={_}>
@@ -93,9 +111,21 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
+            key: 'length',
+            title: '长度（mm）',
+            width: 150,
+            dataIndex: 'length',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "length"]} initialValue={_ === -1 ? undefined : _}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
             key: 'width',
             title: '宽度（mm）',
-            width: 200,
+            width: 150,
             dataIndex: 'width',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -107,7 +137,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'thickness',
             title: '厚度（mm）',
-            width: 200,
+            width: 150,
             dataIndex: 'thickness',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -117,21 +147,9 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            key: 'length',
-            title: '长度（mm）',
-            width: 200,
-            dataIndex: 'length',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "length"]} initialValue={_ === -1 ? undefined : _}>
-                    <Input size="small" onChange={() => rowChange(index)} />
-                </Form.Item>
-            )
-        },
-        {
             key: 'basicsPartNum',
             title: '单段件数',
-            width: 200,
+            width: 150,
             dataIndex: 'basicsPartNum',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -149,9 +167,342 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
+            key: 'apertureNumber',
+            title: '各孔径孔数',
+            width: 80,
+            dataIndex: 'apertureNumber',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "apertureNumber"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'holesNum',
+            title: '单件孔数',
+            width: 80,
+            dataIndex: 'holesNum',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "holesNum"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'electricWelding',
+            title: '电焊',
+            width: 80,
+            dataIndex: 'electricWelding',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "electricWelding"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'groove',
+            title: '坡口',
+            width: 80,
+            dataIndex: 'groove',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "groove"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'chamfer',
+            title: '切角',
+            width: 80,
+            dataIndex: 'chamfer',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "chamfer"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'openCloseAngle',
+            title: '开合角',
+            width: 80,
+            dataIndex: 'openCloseAngle',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "openCloseAngle"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'bend',
+            title: '火曲',
+            width: 80,
+            dataIndex: 'bend',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "bend"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'shovelBack',
+            title: '铲背',
+            width: 80,
+            dataIndex: 'shovelBack',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "shovelBack"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'rootClear',
+            title: '清根',
+            width: 80,
+            dataIndex: 'rootClear',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "rootClear"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'squash',
+            title: '打扁',
+            width: 80,
+            dataIndex: 'squash',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "squash"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'specialCode',
+            title: '特殊件号',
+            width: 80,
+            dataIndex: 'specialCode',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "specialCode"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'suppress',
+            title: '压制',
+            width: 80,
+            dataIndex: 'suppress',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "suppress"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'grooveMeters',
+            title: '坡口米数（米）',
+            width: 120,
+            dataIndex: 'grooveMeters',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'spellNumber',
+            title: '拼数',
+            width: 80,
+            dataIndex: 'spellNumber',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "spellNumber"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'slottedForm',
+            title: '开槽形式',
+            width: 80,
+            dataIndex: 'slottedForm',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "slottedForm"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'intersectingLine',
+            title: '割相贯线',
+            width: 80,
+            dataIndex: 'intersectingLine',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "intersectingLine"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'type',
+            title: '零件类型',
+            width: 80,
+            dataIndex: 'type',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "type"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'description',
+            title: '备注',
+            width: 150,
+            dataIndex: 'description',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "description"]} initialValue={_}>
+                    <Input size="small" maxLength={50} onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'arcContaining',
+            title: '含弧',
+            width: 80,
+            dataIndex: 'arcContaining',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "arcContaining"]} initialValue={_}>
+                    <Input size="small" maxLength={50} onChange={() => rowChange(index)} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'perforate',
+            title: '钻孔',
+            width: 80,
+            dataIndex: 'perforate',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "perforate"]} initialValue={_} rules={[{
+                    pattern: /^[1-2\s]*$/,
+                    message: '仅可输入1/2',
+                }]}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'perforateNumber',
+            title: '钻孔孔径孔数',
+            width: 80,
+            dataIndex: 'perforateNumber',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "perforateNumber"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'withReaming',
+            title: '有扩孔',
+            width: 80,
+            dataIndex: 'withReaming',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "withReaming"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'reamingNumber',
+            title: '扩孔孔径孔数',
+            width: 120,
+            dataIndex: 'reamingNumber',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "reamingNumber"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'gasCutting',
+            title: '气割孔（0/1）',
+            width: 120,
+            dataIndex: 'gasCutting',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "gasCutting"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'gasCuttingNumber',
+            title: '气割孔孔径孔数',
+            width: 120,
+            dataIndex: 'gasCuttingNumber',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "gasCuttingNumber"]} initialValue={_}>
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                </Form.Item>
+            )
+        },
+        {
             key: 'basicsWeight',
             title: '单件重量（kg）',
-            width: 200,
+            width: 120,
             dataIndex: 'basicsWeight',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -170,8 +521,8 @@ export default function Lofting(): React.ReactNode {
         },
         {
             key: 'totalWeight',
-            title: '小计重量（kg）',
-            width: 200,
+            title: '总重（kg）',
+            width: 80,
             dataIndex: 'totalWeight',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -181,214 +532,13 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            key: 'holesNum',
-            title: '单件孔数',
-            width: 200,
-            dataIndex: 'holesNum',
+            key: 'craftName',
+            title: '工艺列（核对）',
+            width: 120,
+            dataIndex: 'craftName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "holesNum"]} initialValue={_}>
-                    <Input size="small" onChange={() => rowChange(index)} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'description',
-            title: '备注',
-            width: 200,
-            dataIndex: 'description',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "description"]} initialValue={_}>
-                    <Input size="small" maxLength={50} onChange={() => rowChange(index)} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'specialCode',
-            title: '特殊件号',
-            width: 200,
-            dataIndex: 'specialCode',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "specialCode"]} initialValue={_}>
-                    <Input size="small" onChange={() => rowChange(index)} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'electricWelding',
-            title: '电焊',
-            width: 200,
-            dataIndex: 'electricWelding',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "electricWelding"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'bend',
-            title: '火曲',
-            width: 200,
-            dataIndex: 'bend',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "bend"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'chamfer',
-            title: '切角',
-            width: 200,
-            dataIndex: 'chamfer',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "chamfer"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'shovelBack',
-            title: '铲背',
-            width: 200,
-            dataIndex: 'shovelBack',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "shovelBack"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'rootClear',
-            title: '清根',
-            width: 200,
-            dataIndex: 'rootClear',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "rootClear"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'squash',
-            title: '打扁',
-            width: 200,
-            dataIndex: 'squash',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "squash"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'openCloseAngle',
-            title: '开合角',
-            width: 200,
-            dataIndex: 'openCloseAngle',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "openCloseAngle"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'perforate',
-            title: '钻孔',
-            width: 200,
-            dataIndex: 'perforate',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "perforate"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'groove',
-            title: '坡口',
-            width: 200,
-            dataIndex: 'groove',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "groove"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'intersectingLine',
-            title: '割相贯线',
-            width: 200,
-            dataIndex: 'intersectingLine',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "intersectingLine"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'slottedForm',
-            title: '开槽形式',
-            width: 200,
-            dataIndex: 'slottedForm',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "slottedForm"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
-                </Form.Item>
-            )
-        },
-        {
-            key: 'type',
-            title: '类型',
-            width: 200,
-            dataIndex: 'type',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "type"]} initialValue={_}>
+                <Form.Item name={['data', index, "craftName"]} initialValue={_ === -1 ? undefined : _}>
                     <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
@@ -396,7 +546,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'sides',
             title: '边数',
-            width: 200,
+            width: 80,
             dataIndex: 'sides',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -408,7 +558,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'perimeter',
             title: '周长',
-            width: 200,
+            width: 80,
             dataIndex: 'perimeter',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -419,8 +569,8 @@ export default function Lofting(): React.ReactNode {
         },
         {
             key: 'surfaceArea',
-            title: '表面积',
-            width: 200,
+            title: '表面积（m2）',
+            width: 120,
             dataIndex: 'surfaceArea',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -430,21 +580,9 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            key: 'apertureNumber',
-            title: '各孔径孔数',
-            width: 200,
-            dataIndex: 'apertureNumber',
-            editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "apertureNumber"]} initialValue={_}>
-                    <Input size="small" onChange={() => rowChange(index)} />
-                </Form.Item>
-            )
-        },
-        {
             key: 'weldingEdge',
             title: '焊接边（mm）',
-            width: 200,
+            width: 120,
             dataIndex: 'weldingEdge',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -480,14 +618,106 @@ export default function Lofting(): React.ReactNode {
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit();
-            message.success('提交成功');
-            setPdmVisible(false);
+            message.success('修改零件材质缩写成功');
+            setVisible(false);
             setRefresh(!refresh);
             resove(true);
         } catch (error) {
             reject(false)
         }
     })
+
+    const handleEditModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editModalRef.current?.onSubmit();
+            message.success('修改材质成功');
+            setEditVisible(false);
+            setRefresh(!refresh);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const handleAddModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await addModalRef.current?.onSubmit();
+            message.success('添加构件成功');
+            setAddVisible(false);
+            setRefresh(!refresh);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const uploadChange = (info: UploadChangeParam<UploadFile<any>>) => {
+        if (info.file.response && !info.file.response?.success) {
+            message.warning(info.file.response?.msg)
+        }
+        if (info.file.response && info.file.response?.success) {
+            if (Object.keys(info.file.response?.data).length > 0) {
+                setUrl(info.file.response?.data);
+                setUrlVisible(true);
+            } else {
+                message.success('导入成功！');
+                setRefresh(!refresh);
+            }
+        }
+    }
+
+    const closeOrEdit = () => {
+        if (editorLock === '编辑') {
+            setColumns(columns);
+            setEditorLock('锁定');
+        } else {
+            const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
+            let values = form.getFieldsValue(true).data;
+            if (values) {
+                let changeValues = values.filter((item: any, index: number) => {
+                    return newRowChangeList.indexOf(index) !== -1;
+                })
+                if (changeValues && changeValues.length > 0) {
+                    RequestUtil.post(`/tower-science/productStructure/save`, changeValues.map((res: any) => {
+                        return {
+                            ...res, productCategoryId: params.id
+                        }
+                    })).then(res => {
+                        setColumns(columnsSetting);
+                        setEditorLock('编辑');
+                        setRowChangeList([]);
+                        form.resetFields();
+                        setRefresh(!refresh);
+                    });
+                } else {
+                    setColumns(columnsSetting);
+                    setEditorLock('编辑');
+                    setRowChangeList([]);
+                    form.resetFields();
+                }
+            } else {
+                setColumns(columnsSetting);
+                setEditorLock('编辑');
+                setRowChangeList([]);
+                form.resetFields();
+            }
+        }
+    }
+
+    const del = () => {
+        if (selectedKeys.length > 0) {
+            if (selectedKeys.length > 100) {
+                message.warning('删除项不可大于100')
+            } else {
+                RequestUtil.delete(`/tower-science/productStructure?productStructureIdList=${selectedKeys.join(',')}`).then(res => {
+                    message.success('删除成功');
+                    history.go(0);
+                })
+            }
+        } else {
+            message.warning('请选择要删除的数据')
+        }
+    }
 
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string }>();
@@ -502,24 +732,64 @@ export default function Lofting(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<ILofting[]>([]);
     const [loading1, setLoading1] = useState(false);
-    const editRef = useRef<PdmModalProps>();
-    const [pdmVisible, setPdmVisible] = useState<boolean>(false);
+    const editRef = useRef<modalProps>();
+    const editModalRef = useRef<modalProps>();
+    const addModalRef = useRef<modalProps>();
+    const [visible, setVisible] = useState<boolean>(false);
+    const [editVisible, setEditVisible] = useState<boolean>(false);
+    const [missVisible, setMissVisible] = useState<boolean>(false);
+    const [addVisible, setAddVisible] = useState<boolean>(false);
     const [loading2, setLoading2] = useState(false);
 
-    return <>
-        {/* <Modal
+    return <DetailContent>
+        <Modal
             destroyOnClose
-            visible={pdmVisible}
+            key='StructureTextureAbbreviations'
+            visible={visible}
             width="30%"
-            title="PDM同步"
+            title="修改零件材质缩写"
             onOk={handleModalOk}
-            className={styles.tryAssemble}
             onCancel={() => {
-                setPdmVisible(false);
-                setRefresh(!refresh);
+                setVisible(false);
             }}>
-            <PdmModal id={''} ref={editRef} />
-        </Modal> */}
+            <StructureTextureAbbreviations id={params.productSegmentId} ref={editRef} />
+        </Modal>
+        <Modal
+            destroyOnClose
+            key='StructureTextureEdit'
+            visible={editVisible}
+            width="30%"
+            title="修改材质"
+            onOk={handleEditModalOk}
+            onCancel={() => {
+                setEditVisible(false);
+            }}>
+            <StructureTextureEdit id={params.productSegmentId} ref={editModalRef} />
+        </Modal>
+        <Modal
+            destroyOnClose
+            key='MissCheck'
+            visible={missVisible}
+            width="30%"
+            title="漏件检查"
+            footer={<Button onClick={() => setMissVisible(false)} >关闭</Button>}
+            onCancel={() => {
+                setMissVisible(false);
+            }}>
+            <MissCheck id={params.productSegmentId} />
+        </Modal>
+        <Modal
+            destroyOnClose
+            visible={addVisible}
+            width="80%"
+            title="添加"
+            onOk={handleAddModalOk}
+            key='add'
+            onCancel={() => {
+                setAddVisible(false);
+            }}>
+            <AddLofting id={params.id} productSegmentId={params.productSegmentId} ref={addModalRef} />
+        </Modal>
         <Form layout="inline" style={{ margin: '20px' }} onFinish={(value: Record<string, any>) => {
             setFilterValue(value)
             setRefresh(!refresh);
@@ -559,7 +829,14 @@ export default function Lofting(): React.ReactNode {
                 }}
                 requestData={{ productSegmentGroupId: params.productSegmentId, ...filterValue }}
                 extraOperation={<Space direction="horizontal" size="small">
-                    <Button type="primary" onClick={() => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板')} ghost>模板下载</Button>
+                    <Button type="primary" key='1' onClick={() => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板')} ghost>模板下载</Button>
+                    <Button type="primary" key='2' onClick={async () => { setMissVisible(true) }} ghost>漏件检查</Button>
+                    <Dropdown overlay={menu} trigger={['click']}>
+                        <Button type="primary" ghost>
+                            批量修改<DownOutlined />
+                        </Button>
+                    </Dropdown>
+                    <Button type="primary" onClick={() => { setAddVisible(true) }} ghost>添加构件</Button>
                     <Popconfirm
                         title="确认完成放样?"
                         onConfirm={() => {
@@ -569,8 +846,7 @@ export default function Lofting(): React.ReactNode {
                             }).catch(error => {
                                 setLoading1(false);
                             })
-                        }
-                        }
+                        }}
                         okText="确认"
                         cancelText="取消"
                         disabled={editorLock === '锁定'}
@@ -592,57 +868,12 @@ export default function Lofting(): React.ReactNode {
                         data={{ productSegmentGroupId: params.productSegmentId }}
                         showUploadList={false}
                         disabled={editorLock === '锁定'}
-                        onChange={(info) => {
-                            if (info.file.response && !info.file.response?.success) {
-                                message.warning(info.file.response?.msg)
-                            }
-                            if (info.file.response && info.file.response?.success) {
-                                if (Object.keys(info.file.response?.data).length > 0) {
-                                    setUrl(info.file.response?.data);
-                                    setUrlVisible(true);
-                                } else {
-                                    message.success('导入成功！');
-                                    setRefresh(!refresh);
-                                }
-                            }
-                        }}
+                        onChange={(info) => uploadChange(info)}
                     >
                         <Button type="primary" disabled={editorLock === '锁定'} ghost>导入</Button>
                     </Upload>
                     <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.productSegmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
-                    <Button type="primary" ghost onClick={() => {
-                        if (editorLock === '编辑') {
-                            setColumns(columns);
-                            setEditorLock('锁定');
-                        } else {
-                            const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-                            let values = form.getFieldsValue(true).data;
-                            if (values) {
-                                let changeValues = values.filter((item: any, index: number) => {
-                                    return newRowChangeList.indexOf(index) !== -1;
-                                })
-                                if (changeValues && changeValues.length > 0) {
-                                    RequestUtil.post(`/tower-science/productStructure/save`, [...changeValues]).then(res => {
-                                        setColumns(columnsSetting);
-                                        setEditorLock('编辑');
-                                        setRowChangeList([]);
-                                        form.resetFields();
-                                        setRefresh(!refresh);
-                                    });
-                                } else {
-                                    setColumns(columnsSetting);
-                                    setEditorLock('编辑');
-                                    setRowChangeList([]);
-                                    form.resetFields();
-                                }
-                            } else {
-                                setColumns(columnsSetting);
-                                setEditorLock('编辑');
-                                setRowChangeList([]);
-                                form.resetFields();
-                            }
-                        }
-                    }}>{editorLock}</Button>
+                    <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
                     <Button type="primary" loading={loading2} onClick={() => {
                         setLoading2(true);
                         RequestUtil.post(`/tower-science/productStructure/pdmSynchronous/${params.productSegmentId}`).then(res => {
@@ -653,23 +884,9 @@ export default function Lofting(): React.ReactNode {
                             setLoading2(false);
                         })
                     }} disabled={editorLock === '锁定'} ghost>PDM同步</Button>
-                    {/* <Button type="primary" onClick={() => setPdmVisible(true)} ghost>PDM同步</Button> */}
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={() => {
-                            if (selectedKeys.length > 0) {
-                                if (selectedKeys.length > 100) {
-                                    message.warning('删除项不可大于100')
-                                } else {
-                                    RequestUtil.delete(`/tower-science/productStructure?productStructureIdList=${selectedKeys.join(',')}`).then(res => {
-                                        message.success('删除成功');
-                                        history.go(0);
-                                    })
-                                }
-                            } else {
-                                message.warning('请选择要删除的数据')
-                            }
-                        }}
+                        onConfirm={del}
                         okText="确认"
                         cancelText="取消"
                         disabled={editorLock === '锁定'}
@@ -678,7 +895,35 @@ export default function Lofting(): React.ReactNode {
                     </Popconfirm>
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </Space>}
-                searchFormItems={[]}
+                searchFormItems={[]
+                    //     [
+                    //     {
+                    //         name: 'materialName',
+                    //         label: '材料名称',
+                    //         children:<Input maxLength={50} />
+                    //     },
+                    //     {
+                    //         name: 'structureTexture',
+                    //         label: '材质',
+                    //         children:<Input maxLength={50} />
+                    //     },
+                    //     {
+                    //         name: 'segmentName',
+                    //         label: '段名',
+                    //         children:<Input maxLength={50} />
+                    //     },
+                    //     {
+                    //         name: 'code',
+                    //         label: '查询',
+                    //         children:<Input placeholder="请输入构件编号查询" maxLength={50} />
+                    //     },
+                    // ]
+                }
+            // filterValue={filterValue}
+            // onFilterSubmit={(values: Record<string, any>) => {
+            //     setFilterValue(values);
+            //     return values;
+            // }}
             />
         </Form>
         <Modal
@@ -693,5 +938,5 @@ export default function Lofting(): React.ReactNode {
         >
             当前存在错误数据，请重新下载上传！
         </Modal>
-    </>
+    </DetailContent>
 }

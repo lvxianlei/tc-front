@@ -1,21 +1,23 @@
 /**
- * @author zyc
+ * @author lxy
  * @copyright © 2022
  * @description 提料-杆塔信息-配段
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, Input, Row, Col, Button, message, Descriptions } from 'antd'
+import { Spin, Form, Input, Row, Col, Button, message, Descriptions, Select } from 'antd'
 import { DetailTitle } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import styles from './TowerPickAssign.module.less';
 import { IDetail, IMaterialDetail } from "./PickTower"
+import { patternTypeOptions } from "../../../configuration/DictionaryOptions"
 
 export interface EditProps {
-    type: "new" | "detail",
+    type: "new" | "detail" | "edit",
     id: string,
-    batchNo: boolean
+    batchNo: boolean,
+    productCategoryId: string
 }
 
 export interface EditRefProps {
@@ -23,31 +25,71 @@ export interface EditRefProps {
     resetFields: () => void
 }
 
-export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
+export default forwardRef(function Edit({ type, id, batchNo, productCategoryId }: EditProps, ref) {
     const [form] = Form.useForm();
     const [fastForm] = Form.useForm();
     const [fastLoading, setFastLoading] = useState(false);
     const [detailData, setDetailData] = useState<IDetail>();
-
+    const [basicHeightList, setBasicHeightList] = useState<any[]>([]);
+    const [productList, setProductList] = useState<any[]>([]);
+    const [productNumber,setProductNumber] = useState<any>('');
     const { loading, data } = useRequest<IDetail>(() => new Promise(async (resole, reject) => {
-        try {
-            let result: IDetail = await RequestUtil.get<IDetail>(`/tower-science/materialProduct/${id}`)
-            const detailData: IMaterialDetail[] | undefined = result && result.materialDrawProductSegmentList && result.materialDrawProductSegmentList.map((item: IMaterialDetail) => {
-                return {
-                    ...item
+        try {let result :any= {};
+            if (type === 'new') {
+                const data = await RequestUtil.get<any[]>(`/tower-science/materialProduct/getBasicHeightProduct?productCategoryId=${productCategoryId}`);
+                console.log(1)
+                if (data && data.length > 0 && data[0]?.materialProductVOList && data[0]?.materialProductVOList.length > 0) {
+                    result = await RequestUtil.get<IDetail>(`/tower-science/materialProduct/${data[0]?.materialProductVOList[0].id}`)
+                    const detailData: IMaterialDetail[] | undefined = result && result.materialDrawProductSegmentList && result.materialDrawProductSegmentList.map((item: IMaterialDetail) => {
+                        return {
+                            ...item
+                        }
+                    })
+                    form.setFieldsValue({
+                        // legNumberA: result?.legNumberA,
+                        // legNumberB: result?.legNumberB,
+                        // legNumberC: result?.legNumberC,
+                        // legNumberD: result?.legNumberD,
+                        productSegmentListDTOList: detailData?.map((item:any)=>{
+                            return {
+                                ...item,
+                                count:0
+                            }
+                        })
+                    });
+                    setDetailData({
+                        ...result,
+                        materialDrawProductSegmentList: detailData?.map((item:any)=>{
+                            return {
+                                ...item,
+                                count:0
+                            }
+                        })
+                    })
                 }
-            })
-            form.setFieldsValue({
-                legNumberA: result?.legNumberA,
-                legNumberB: result?.legNumberB,
-                legNumberC: result?.legNumberC,
-                legNumberD: result?.legNumberD,
-                productSegmentListDTOList: detailData
-            });
-            setDetailData({
-                ...result,
-                materialDrawProductSegmentList: detailData
-            })
+                setBasicHeightList(data)
+
+            } else {
+                result = await RequestUtil.get<IDetail>(`/tower-science/materialProduct/${id}`)
+                const detailData: IMaterialDetail[] | undefined = result && result.materialDrawProductSegmentList && result.materialDrawProductSegmentList.map((item: IMaterialDetail) => {
+                    return {
+                        ...item
+                    }
+                })
+                form.setFieldsValue({
+                    legNumberA: result?.legNumberA,
+                    legNumberB: result?.legNumberB,
+                    legNumberC: result?.legNumberC,
+                    legNumberD: result?.legNumberD,
+                    productSegmentListDTOList: detailData
+                });
+                setDetailData({
+                    ...result,
+                    materialDrawProductSegmentList: detailData
+                })
+               
+            }
+            
             resole({
                 ...result,
                 materialDrawProductSegmentList: detailData
@@ -68,6 +110,7 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
+            await fastForm.validateFields();
             let baseData = await form.validateFields();
             const productSegmentListDTOList = form.getFieldsValue(true).productSegmentListDTOList;
             const value = productSegmentListDTOList.map((res: any, index: number) => {
@@ -184,15 +227,54 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
     return <Spin spinning={loading}>
         <Form form={fastForm}>
             <Row>
-                <Col span={14}>
-                    <Form.Item name="fast" label="快速配段" rules={[{
-                        pattern: /^[a-zA-Z0-9-,*()]*$/,
-                        message: '仅可输入英文字母/数字/特殊字符',
-                    }]}>
-                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
-                    </Form.Item>
-                </Col>
-                <Col offset={1} span={4}>
+            {type === 'new' ? <>
+                            <Form.Item name="basicHeight" label="杆塔" rules={[{
+                                required: true,
+                                message: '请选择呼高'
+                            }]}>
+                                <Select placeholder="请选择呼高" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e) => {
+                                    const data = basicHeightList?.filter(res => res.basicHeight === e);
+                                    setProductList( data && data[0].materialProductVOList)
+                                }}>
+                                    {basicHeightList && basicHeightList?.map(({ basicHeight }, index) => {
+                                        return <Select.Option key={index} value={basicHeight || ''}>
+                                            {basicHeight}
+                                        </Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        {/* </Col> */}
+                            {/* <Col span={5}> */}
+                                <Form.Item name="productId" rules={[{
+                                    required: true,
+                                    message: '请选择杆塔'
+                                }]}>
+                                    <Select placeholder="请选择杆塔" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={() => {
+                                        const productId = fastForm.getFieldsValue(true).productId;
+                                        setProductNumber(productId?.map((res: string) => res.split(',')[1]))
+                                        setDetailData({
+                                            ...detailData,
+                                            productNumber: productId?.map((res: string) => res.split(',')[1]),
+                                            productIdList: productId?.map((res: string) => res.split(',')[0])
+                                        })
+                                    }}>
+                                        {productList && productList.map(({ id, productNumber }, index) => {
+                                            return <Select.Option key={index} value={id + ',' + productNumber || ''}>
+                                                {productNumber}
+                                            </Select.Option>
+                                        })}
+                                    </Select>
+                                </Form.Item>
+                            </> : null}
+                <Col offset={type === 'new' ? 1 : 0} span={6}>
+                            <Form.Item name="fast" label="快速配段" rules={[{
+                                pattern: /^[a-zA-Z0-9-,*()]*$/,
+                                message: '仅可输入英文字母/数字/特殊字符',
+                            }]}>
+                                <Input style={{ width: '100%' }} disabled={type === 'detail'}/>
+                            </Form.Item>
+                        </Col>
+                <Col offset={2} span={4}>
                     <Button type="primary" loading={fastLoading} disabled={type === 'detail'} onClick={fastWithSectoin} ghost>确定</Button>
                 </Col>
             </Row>
@@ -202,9 +284,6 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
             <Row>
                 <Col span={5}>
                     <Form.Item name="legNumberA" label="A" rules={[{
-                        required: true,
-                        message: '请输入塔腿A'
-                    }, {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
@@ -214,9 +293,6 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
                 <Col span={1} />
                 <Col span={5}>
                     <Form.Item name="legNumberB" label="B" rules={[{
-                        required: true,
-                        message: '请输入塔腿B'
-                    }, {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
@@ -226,9 +302,6 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
                 <Col span={1} />
                 <Col span={5}>
                     <Form.Item name="legNumberC" label="C" rules={[{
-                        required: true,
-                        message: '请输入塔腿C'
-                    }, {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
@@ -238,9 +311,6 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
                 <Col span={1} />
                 <Col span={5}>
                     <Form.Item name="legNumberD" label="D" rules={[{
-                        required: true,
-                        message: '请输入塔腿D'
-                    }, {
                         pattern: /^[0-9a-zA-Z]*$/,
                         message: '仅可输入数字/字母',
                     }]}>
@@ -254,7 +324,7 @@ export default forwardRef(function Edit({ type, id, batchNo }: EditProps, ref) {
                     <span>{detailData?.productCategoryName}</span>
                 </Descriptions.Item>
                 <Descriptions.Item label="杆塔号">
-                    <span>{detailData?.productNumber}</span>
+                    <span>{type==='new'?productNumber:detailData?.productNumber}</span>
                 </Descriptions.Item>
                 {
                     [...detailData?.materialDrawProductSegmentList || []]?.map((items: IMaterialDetail, index: number) => {

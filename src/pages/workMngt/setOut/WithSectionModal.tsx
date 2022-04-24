@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-杆塔配段-配段
 */
 import React from 'react';
-import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, message, Row, Col } from 'antd';
+import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, Row, Col, Select, message } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
@@ -14,8 +14,10 @@ import { IDetailData, IProductSegmentList } from './ISetOut';
 
 export interface WithSectionModalProps { }
 export interface IWithSectionModalRouteProps extends RouteComponentProps<WithSectionModalProps>, WithTranslation {
-    readonly id: number | string;
+    readonly id?: number | string;
     readonly updateList: () => void;
+    readonly type?: string;
+    readonly productCategoryId?: string;
 }
 
 export interface WithSectionModalState {
@@ -23,6 +25,23 @@ export interface WithSectionModalState {
     readonly detailData?: IDetailData;
     readonly fastVisible: boolean;
     readonly fastLoading?: boolean;
+    readonly basicHeightList?: IBasicHeight[];
+    readonly productList?: IProductVOList[];
+}
+
+interface IBasicHeight {
+    readonly basicHeight?: string;
+    readonly productVOList?: IProductVOList[];
+}
+
+interface IProductVOList {
+    readonly id?: string;
+    readonly productCategoryId?: string;
+    readonly productCategoryNum?: string;
+    readonly productCategoryType?: string;
+    readonly productNum?: string;
+    readonly productNumber?: string;
+    readonly totalWeight?: string;
 }
 
 class WithSectionModal extends React.Component<IWithSectionModalRouteProps, WithSectionModalState> {
@@ -44,79 +63,190 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
             visible: false
         })
         this.getForm()?.resetFields();
+        this.fastForm.current?.resetFields();
     }
 
     private async modalShow(): Promise<void> {
-        const data = await RequestUtil.get<IDetailData>(`/tower-science/productSegment/distribution?productId=${this.props.id}`);
-        this.setState({
-            visible: true,
-            detailData: { ...data }
-        })
-        this.getForm()?.setFieldsValue({ ...data, productSegmentListDTOList: [...data.loftingProductSegmentList || []] });
+        if (this.props.type === 'batch') {
+            const data = await RequestUtil.get<IBasicHeight[]>(`/tower-science/product/getBasicHeightProduct?productCategoryId=${this.props.productCategoryId}`);
+            if (data && data.length > 0 && data[0]?.productVOList && data[0]?.productVOList.length > 0) {
+                const detail = await RequestUtil.get<IDetailData>(`/tower-science/productSegment/distribution?productId=${data[0]?.productVOList[0].id}`);
+                this.setState({
+                    detailData: {
+                        productCategoryName: detail.productCategoryName,
+                        productCategoryId: this.props.productCategoryId,
+                        loftingProductSegmentList: detail.loftingProductSegmentList?.map(res => {
+                            return {
+                                ...res,
+                                count: 0
+                            }
+                        })
+                    }
+                })
+            }
+            this.setState({
+                visible: true,
+                basicHeightList: data
+            })
+        } else {
+            const data = await RequestUtil.get<IDetailData>(`/tower-science/productSegment/distribution?productId=${this.props.id}`);
+            this.setState({
+                visible: true,
+                detailData: { ...data }
+            })
+            this.getForm()?.setFieldsValue({ ...data, productSegmentListDTOList: [...data.loftingProductSegmentList || []] });
+        }
     }
 
     protected save = (path: string) => {
         if (this.getForm()) {
-            this.getForm()?.validateFields().then(res => {
-                const value = this.getForm()?.getFieldsValue(true);
-                const loftingProductSegmentList = this.state.detailData?.loftingProductSegmentList;
-                value.productCategoryId = this.state.detailData?.productCategoryId;
-                value.productId = this.state.detailData?.productId;
-                value.productSegmentListDTOList = value.productSegmentListDTOList?.map((items: IProductSegmentList, index: number) => {
-                    if (items) {
-                        return {
-                            id: loftingProductSegmentList && loftingProductSegmentList[index].id === -1 ? '' : loftingProductSegmentList && loftingProductSegmentList[index].id,
-                            segmentName: loftingProductSegmentList && loftingProductSegmentList[index].segmentName,
-                            count: items.count,
-                            segmentId: loftingProductSegmentList && loftingProductSegmentList[index].segmentId,
+            if (this.state.detailData?.productId || this.state.detailData?.productIdList) {
+                this.getForm()?.validateFields().then(res => {
+                    const value = this.getForm()?.getFieldsValue(true);
+                    const loftingProductSegmentList = this.state.detailData?.loftingProductSegmentList;
+                    value.productCategoryId = this.state.detailData?.productCategoryId;
+                    value.productId = this.state.detailData?.productId;
+                    value.productSegmentListDTOList = value.productSegmentListDTOList?.map((items: IProductSegmentList, index: number) => {
+                        if (items) {
+                            return {
+                                id: loftingProductSegmentList && loftingProductSegmentList[index].id === -1 ? '' : loftingProductSegmentList && loftingProductSegmentList[index].id,
+                                segmentName: loftingProductSegmentList && loftingProductSegmentList[index].segmentName,
+                                count: items.count,
+                                segmentId: loftingProductSegmentList && loftingProductSegmentList[index].segmentId,
+                            }
+                        } else {
+                            return undefined
                         }
-                    } else {
-                        return undefined
-                    }
-                });
-                value.productSegmentListDTOList = value.productSegmentListDTOList.filter((item: IProductSegmentList) => { return item !== undefined });
-                RequestUtil.post(path, { ...value }).then(res => {
-                    this.props.updateList();
-                    this.modalCancel();
-                }).catch(error => {
-                    this.getForm()?.setFieldsValue({})
-                });
-            })
+                    });
+                    value.productSegmentListDTOList = value.productSegmentListDTOList.filter((item: IProductSegmentList) => { return item !== undefined });
+                    value.productIdList = this.state.detailData?.productIdList
+                    RequestUtil.post(path, { ...value }).then(res => {
+                        this.props.updateList();
+                        this.modalCancel();
+                    }).catch(error => {
+                        this.getForm()?.setFieldsValue({})
+                    });
+                })
+            } else {
+                message.warning('请选择杆塔')
+            }
+
         }
     }
 
-    // public handleModalOk = async () => {
-    //     const detailData: IProductSegmentList[] = await RequestUtil.get<IProductSegmentList[]>(`/tower-science/productSegment/quickLofting/${this.props.id}/${this.fastForm.current?.getFieldsValue(true).part}`);
-    //     this.setState({
-    //         fastVisible: false,
-    //         detailData: {
-    //             ...this.getForm()?.getFieldsValue(true),
-    //             loftingProductSegmentList: [...detailData]
-    //         }
-    //     })
-    //     this.getForm()?.setFieldsValue({
-    //         ...this.getForm()?.getFieldsValue(true),
-    //         productSegmentListDTOList: [...detailData]
-    //     })
-    // }
+    public delSameObjValue = (list: IProductSegmentList[]) => {
+        let target: IProductSegmentList[] = [];
+        let keysArr = new Set(list.map(item => item.segmentName));
+        keysArr.forEach(item => {
+            const arr = list.filter(keys => keys.segmentName == item);
+            const sum = arr.reduce((total, currentValue) => total + Number(currentValue.count), 0)
+            target.push({
+                segmentName: item,
+                count: Number(sum)
+            })
+        })
+        return target;
+    }
 
     public fastWithSectoin = async () => {
         this.setState({
             fastLoading: true
         })
-        const detailData: IProductSegmentList[] = await RequestUtil.get<IProductSegmentList[]>(`/tower-science/productSegment/quickLofting/${this.props.id}/${this.fastForm.current?.getFieldsValue(true).part}`);
-        this.setState({
-            fastVisible: false,
-            detailData: {
-                ...this.getForm()?.getFieldsValue(true),
-                loftingProductSegmentList: [...detailData]
-            },
-            fastLoading: false
-        })
-        this.getForm()?.setFieldsValue({
-            ...this.getForm()?.getFieldsValue(true),
-            productSegmentListDTOList: [...detailData]
-        })
+        // const detailData: IProductSegmentList[] = await RequestUtil.get<IProductSegmentList[]>(`/tower-science/productSegment/quickLofting/${this.props.id}/${this.fastForm.current?.getFieldsValue(true).part}`);
+        // this.setState({
+        //     fastVisible: false,
+        //     detailData: {
+        //         ...this.getForm()?.getFieldsValue(true),
+        //         loftingProductSegmentList: [...detailData]
+        //     },
+        //     fastLoading: false
+        // })
+        // this.getForm()?.setFieldsValue({
+        //     ...this.getForm()?.getFieldsValue(true),
+        //     productSegmentListDTOList: [...detailData]
+        // })
+        const inputString: string = this.fastForm.current?.getFieldsValue(true).part;
+        if (inputString) {
+            if ((/[(,*-]+\*[0-9]+|[(,*-]+\*[a-zA-Z()-*,]+|^[*),]+/g).test(inputString)) {
+                message.error('请输入正确格式');
+                this.setState({
+                    fastLoading: false
+                })
+            } else {
+                const inputList = inputString.split(',');
+                let list: IProductSegmentList[] = [];
+                inputList.forEach((res: string) => {
+                    const newRes = res.split('*')[0].replace(/\(|\)/g, "");
+                    if ((/^[0-9]+-[0-9]+$/).test(newRes)) {
+                        const length = Number(newRes.split('-')[0]) - Number(newRes.split('-')[1]);
+                        if (length <= 0) {
+                            let num = Number(newRes.split('-')[0]);
+                            let t = setInterval(() => {
+                                list.push({
+                                    segmentName: (num++).toString(),
+                                    count: Number(res.split('*')[1]) || 1
+                                })
+                                if (num > Number(newRes.split('-')[1])) {
+                                    clearInterval(t);
+                                }
+                            }, 0)
+                        } else {
+                            let num = Number(newRes.split('-')[0])
+                            let t = setInterval(() => {
+                                list.push({
+                                    segmentName: (num--).toString(),
+                                    count: Number(res.split('*')[1]) || 1
+                                })
+                                if (num < Number(newRes.split('-')[1])) {
+                                    clearInterval(t);
+                                }
+                            }, 0)
+                        }
+                    } else {
+                        list.push({
+                            segmentName: newRes,
+                            count: Number(res.split('*')[1]) || 1
+                        })
+                    }
+
+                })
+                setTimeout(() => {
+                    const delSameObjList = this.delSameObjValue(list);
+                    const newList = this.state.detailData?.loftingProductSegmentList?.map(res => {
+                        const newData = delSameObjList.filter(item => item.segmentName === res.segmentName);
+                        if (res.segmentName === newData[0].segmentName) {
+                            return {
+                                ...res,
+                                count: newData[0].count
+                            }
+                        } else {
+                            return res
+                        }
+                    })
+                    this.setState({
+                        fastVisible: false,
+                        detailData: {
+                            ...this.getForm()?.getFieldsValue(true),
+                            productCategoryName: this.state.detailData?.productCategoryName,
+                            productCategoryId: this.props.productCategoryId,
+                            productNumber: this.state.detailData?.productNumber,
+                            productIdList: this.state.detailData?.productIdList,
+                            loftingProductSegmentList: [...newList || []]
+                        },
+                        fastLoading: false
+                    })
+                    this.getForm()?.setFieldsValue({
+                        ...this.getForm()?.getFieldsValue(true),
+                        productSegmentListDTOList: [...newList || []]
+                    })
+                }, 1000)
+            }
+        } else {
+            message.warning('请输入需快速配段的信息')
+            this.setState({
+                fastLoading: false
+            })
+        }
     }
 
     /**
@@ -126,32 +256,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
     public render(): React.ReactNode {
         const detailData: IDetailData | undefined = this.state.detailData;
         return <>
-            <Button type="link" key={this.props.id} onClick={() => this.modalShow()} ghost>配段</Button>
-            {/* <Modal
-                destroyOnClose
-                visible={this.state.fastVisible}
-                width="30%"
-                title="配段信息"
-                onOk={this.handleModalOk}
-                className={styles.tryAssemble}
-                onCancel={() => {
-                    this.setState({
-                        fastVisible: false
-                    })
-                }}>
-                <Form ref={this.fastForm} className={styles.descripForm}>
-                    <Descriptions title="" bordered size="small" colon={false} column={4}>
-                        <Descriptions.Item key={4} label="配段">
-                            <Form.Item name="part" rules={[{
-                                pattern: /^[a-zA-Z0-9-,*()]*$/,
-                                message: '仅可输入英文字母/数字/特殊字符',
-                            }]}>
-                                <Input placeholder="请输入" />
-                            </Form.Item>
-                        </Descriptions.Item>
-                    </Descriptions>
-                </Form>
-            </Modal> */}
+            {this.props.type === 'batch' ? <Button type="primary" onClick={() => this.modalShow()} ghost>批量配段</Button> : <Button type="link" key={this.props.id} onClick={() => this.modalShow()}>配段</Button>}
             <Modal
                 visible={this.state.visible}
                 width="60%"
@@ -165,12 +270,54 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
             >
                 <Form ref={this.fastForm}>
                     <Row>
-                        <Col span={14}>
+                        {this.props.type === 'batch' ? <><Col span={6}>
+                            <Form.Item name="basicHeight" label="杆塔" rules={[{
+                                required: true,
+                                message: '请选择呼高'
+                            }]}>
+                                <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e) => {
+                                    const data = this.state.basicHeightList?.filter(res => res.basicHeight === e);
+                                    this.setState({
+                                        productList: data && data[0].productVOList
+                                    })
+                                }}>
+                                    {this.state.basicHeightList && this.state.basicHeightList?.map(({ basicHeight }, index) => {
+                                        return <Select.Option key={index} value={basicHeight || ''}>
+                                            {basicHeight}
+                                        </Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                            <Col span={5}>
+                                <Form.Item name="productId" rules={[{
+                                    required: true,
+                                    message: '请选择杆塔'
+                                }]}>
+                                    <Select placeholder="请选择" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={() => {
+                                        const productId = this.fastForm.current?.getFieldsValue(true).productId;
+                                        this.setState({
+                                            detailData: {
+                                                ...this.state.detailData,
+                                                productNumber: productId?.map((res: string) => res.split(',')[1]),
+                                                productIdList: productId?.map((res: string) => res.split(',')[0])
+                                            }
+                                        })
+                                    }}>
+                                        {this.state.productList && this.state.productList.map(({ id, productNumber }, index) => {
+                                            return <Select.Option key={index} value={id + ',' + productNumber || ''}>
+                                                {productNumber}
+                                            </Select.Option>
+                                        })}
+                                    </Select>
+                                </Form.Item>
+                            </Col></> : null}
+                        <Col offset={this.props.type === 'batch' ? 1 : 0} span={6}>
                             <Form.Item name="part" label="快速配段" rules={[{
                                 pattern: /^[a-zA-Z0-9-,*()]*$/,
                                 message: '仅可输入英文字母/数字/特殊字符',
                             }]}>
-                                <Input style={{ width: '100%' }} />
+                                <Input />
                             </Form.Item>
                         </Col>
                         <Col offset={2} span={4}>
@@ -182,18 +329,10 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                     <Form ref={this.form} className={styles.descripForm}>
                         <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>
                             <span>塔腿配段信息</span>
-                            {/* <Button className={styles.fastBtn} type="primary" onClick={() => {
-                                this.setState({
-                                    fastVisible: true
-                                })
-                            }} ghost>快速配段</Button> */}
                         </p>
                         <Descriptions title="" bordered size="small" colon={false} column={4}>
                             <Descriptions.Item key={1} label="A">
                                 <Form.Item name="legNumberA" initialValue={detailData?.legNumberA} rules={[{
-                                    required: true,
-                                    message: '请输入塔腿A'
-                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
@@ -202,9 +341,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                             </Descriptions.Item>
                             <Descriptions.Item key={2} label="B">
                                 <Form.Item name="legNumberB" initialValue={detailData?.legNumberB} rules={[{
-                                    required: true,
-                                    message: '请输入塔腿B'
-                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
@@ -213,9 +349,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                             </Descriptions.Item>
                             <Descriptions.Item key={3} label="C">
                                 <Form.Item name="legNumberC" initialValue={detailData?.legNumberC} rules={[{
-                                    required: true,
-                                    message: '请输入塔腿C'
-                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
@@ -224,9 +357,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                             </Descriptions.Item>
                             <Descriptions.Item key={4} label="D">
                                 <Form.Item name="legNumberD" initialValue={detailData?.legNumberD} rules={[{
-                                    required: true,
-                                    message: '请输入塔腿D'
-                                }, {
                                     pattern: /^[0-9a-zA-Z]*$/,
                                     message: '仅可输入数字/字母',
                                 }]}>
