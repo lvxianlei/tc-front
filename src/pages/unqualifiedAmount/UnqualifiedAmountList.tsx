@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Select, Form, Popconfirm } from 'antd'
+import { Space, Input, DatePicker, Button, Select, Form, Popconfirm, Modal, InputNumber, message } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../common'
@@ -8,12 +8,19 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import AuthUtil from '../../utils/AuthUtil';
+import { patternTypeOptions } from '../../configuration/DictionaryOptions';
+import TextArea from 'antd/lib/input/TextArea';
 
 export default function UnqualifiedAmountList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const [refresh, setRefresh] = useState<boolean>(false);
     const location = useLocation<{ state?: number, userId?: string }>();
     const history = useHistory();
+    const [visible, setVisible] = useState<boolean>(false);
+    const [lock, setLock] = useState<string>('锁定');
+    const [edit, setEdit] = useState<string>('添加');
+    const [editValue, setEditValue] = useState<any>({});
+    const [form] = Form.useForm();
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
         resole(data)
@@ -82,6 +89,12 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             dataIndex: 'updateStatusTime'
         },
         {
+            key: 'updateStatusTime',
+            title: '锁定状态',
+            width: 200,
+            dataIndex: 'updateStatusTime'
+        },
+        {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
@@ -90,7 +103,12 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={() => { 
-                        history.push(`/workMngt/confirmList/confirmMessage/${record.id}`) 
+                        setEditValue(record)
+                        setEdit('编辑') 
+                        form.setFieldsValue({
+                            ...record
+                        })
+                        setVisible(true)
                     }} disabled={AuthUtil.getUserId() !== record.confirmId}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
@@ -113,7 +131,30 @@ export default function UnqualifiedAmountList(): React.ReactNode {
         setFilterValue(value)
         return value
     }
+    const onSubmit = async ()=> {
+        await form.validateFields();
+        const value = form.getFieldsValue(true)
+        if(edit==='编辑'){
+            RequestUtil.put(``,)
+            message.success(`编辑成功！`)
+            setVisible(false)
+            form.resetFields()
+            setRefresh(!refresh)
+        }else{
+            RequestUtil.put(``,)
+            message.success(`新增成功！`)
+            setVisible(false)
+            form.resetFields()
+            setRefresh(!refresh)
+        }
+    }
+
+    const formItemLayout = {
+        labelCol: { span: 6 },
+        wrapperCol: { span: 16 }
+    };
     return (
+        <>
         <Page
             path="/tower-science/drawProductDetail"
             columns={columns}
@@ -122,6 +163,11 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             refresh={refresh}
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
+            extraOperation={<Button type='primary' ghost onClick={()=>{
+                setEdit('添加')
+                setLock('锁定')
+                setVisible(true)
+            }}>新增</Button>}
             searchFormItems={[
                 {
                     name: 'status',
@@ -180,5 +226,99 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                 }
             ]}
         />
+        <Modal 
+            visible={visible} 
+            title={edit} 
+            footer={
+                <Space>
+                    <Button type='primary' ghost onClick={onSubmit} >保存</Button>
+                    <Button type='primary' ghost onClick={()=>{
+                        setLock('解锁')
+                    }}>{lock}</Button>
+                    {/* {<Button type='primary' onClick={onSubmit}>解锁</Button>} */}
+                    <Button onClick={()=>{
+                        setVisible(false)
+                        edit==='编辑'&& setEdit(`添加`)
+                        form.resetFields()
+                    }}>关闭</Button>
+                </Space>
+            }
+            onCancel={()=>{
+                setVisible(false)
+                edit==='编辑'&& setEdit(`添加`)
+                form.resetFields()
+            }}  width={ 800 }
+        >
+                <Form form={form} {...formItemLayout}>
+                      <Form.Item name="pattern" label="生产环节">
+                            <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                              { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                  return <Select.Option key={ index } value={ id }>
+                                      { name }
+                                  </Select.Option>
+                              }) }
+                          </Select>
+                        </Form.Item>
+                        <Form.Item name="pattern" label="生产单元">
+                            <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                              { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                  return <Select.Option key={ index } value={ id }>
+                                      { name }
+                                  </Select.Option>
+                              }) }
+                          </Select>
+                        </Form.Item>
+                        <Form.Item name="pattern" label="不合格项目" rules={[{
+                            "required": true,
+                            "message":"请输入不合格项目"
+                        }]}>
+                            <Input/>
+                        </Form.Item>
+                        <Form.Item name="pattern" label="责任工序" >
+                            <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                              { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                  return <Select.Option key={ index } value={ id }>
+                                      { name }
+                                  </Select.Option>
+                              }) }
+                          </Select>
+                        </Form.Item>
+                        <Form.Item name="pattern" label="处理类型">
+                            <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                              { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                  return <Select.Option key={ index } value={ id }>
+                                      { name }
+                                  </Select.Option>
+                              }) }
+                          </Select>
+                        </Form.Item>
+                        <Form.Item name="pattern" label="罚款系数（元）">
+                            <InputNumber min={0} precision={2}/>
+                        </Form.Item>
+                        <Form.Item name="description" label="说明">
+                            <TextArea rows={1} showCount maxLength={100}/>
+                        </Form.Item>
+                        <Form.Item name="pattern" label="罚款类别" rules={[{
+                            "required": true,
+                            "message":"请选择罚款类别"
+                        }]}>
+                            <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                              { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                  return <Select.Option key={ index } value={ id }>
+                                      { name }
+                                  </Select.Option>
+                              }) }
+                          </Select>
+                        </Form.Item>
+                        <Form.Item name="pattern" label="制单人">
+                            <Input/>
+                        </Form.Item>
+                        <Form.Item name="pattern" label="是否有效" >
+                            <Input value={'是'}/>
+                        </Form.Item>
+                    {/* <BaseInfo columns={towerData} dataSource={detailData || {}} edit col={ 2 }/> */}
+                </Form>
+            </Modal>
+        </>
     )
 }
