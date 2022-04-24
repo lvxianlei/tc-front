@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, Descriptions, InputNumber, Checkbox, Select, Input } from 'antd';
+import { Spin, Form, Select, Input } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -24,63 +24,78 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
     const list = [
         {
             index: 0,
-            structureTexture: 'Q235B'
+            structureTexture: 'Q235B',
+            suffix: ''
         },
         {
             index: 1,
-            structureTexture: 'Q345B'
+            structureTexture: 'Q345B',
+            suffix: 'H'
         },
         {
             index: 2,
-            structureTexture: 'Q420B'
+            structureTexture: 'Q420B',
+            suffix: 'P'
         },
         {
             index: 3,
-            structureTexture: 'Q460B'
+            structureTexture: 'Q460B',
+            suffix: ''
         },
         {
             index: 4,
-            structureTexture: 'Q355B'
+            structureTexture: 'Q355B',
+            suffix: 'H'
         },
         {
             index: 5,
-            structureTexture: 'Q235C'
+            structureTexture: 'Q235C',
+            suffix: 'FC'
         },
         {
             index: 6,
-            structureTexture: 'Q345C'
+            structureTexture: 'Q345C',
+            suffix: 'HC'
         },
         {
             index: 7,
-            structureTexture: 'Q420C'
+            structureTexture: 'Q420C',
+            suffix: 'PC'
         },
         {
             index: 8,
-            structureTexture: 'Q460C'
+            structureTexture: 'Q460C',
+            suffix: 'TC'
         },
         {
             index: 9,
-            structureTexture: 'Q355C'
+            structureTexture: 'Q355C',
+            suffix: 'HC'
         },
         {
             index: 10,
-            structureTexture: 'Q235D'
+            structureTexture: 'Q235D',
+            suffix: 'FD'
         },
         {
             index: 11,
-            structureTexture: 'Q345D'
+            structureTexture: 'Q345D',
+            suffix: 'HD'
         },
         {
             index: 12,
-            structureTexture: 'Q420D'
+            structureTexture: 'Q420D',
+            suffix: 'PD'
         },
         {
             index: 13,
-            structureTexture: 'Q460D'
+            structureTexture: 'Q460D',
+            suffix: 'TD'
         },
         {
             index: 14,
-            structureTexture: 'Q355D'
+            structureTexture: 'Q355D',
+            suffix: 'HD'
         }
     ]
 
@@ -112,7 +127,7 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
             let newSelected = selectedRows.map((res) => {
                 return {
                     structureTexture: res.structureTexture,
-                    updateTexture: values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
+                    updateTexture: '-' + values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
                 }
             })
             await saveRun({
@@ -174,11 +189,11 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
                             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['data', index, 'suffix']} rules={
                                     [{
-                                        pattern: new RegExp(/[a-zA-Z-]$/),
+                                        pattern: new RegExp(/[a-zA-Z]$/),
                                         message: '请输入字母/-'
                                     }]}
                                 >
-                                    <Input placeholder="请输入" maxLength={50} size="small" />
+                                    <Input placeholder="请输入" prefix={<span>-</span>} maxLength={50} size="small" />
                                 </Form.Item>
                             )
                         },
