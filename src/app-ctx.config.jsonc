@@ -1062,6 +1062,20 @@
                 ]
             },
             {
+                "label": "处置单",
+                "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
+                "appName": "QMS",
+                "path": "/disposition",
+                "authority": "approvalm",
+                "items": [
+                    {
+                        "label": "处置单列表",
+                        "path": "/disposition/list",
+                        "authority": "approvalm"
+                    }
+                ]
+            },
+            {
                 "label": "工序配置",
                 "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
                 "appName": "QMS",

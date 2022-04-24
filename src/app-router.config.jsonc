@@ -2559,6 +2559,20 @@
       "module": "./pages/unqualifiedAmount/UnqualifiedAmountList",
       "exact": true,
       "authority": "home_page_person_center"
+    },
+    { // 处置单列表
+      "name": "处置单列表",
+      "path": "/disposition/list",
+      "module": "./pages/disposition/DispositionList",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
+    { // 处置单详情
+      "name": "详情",
+      "path": "/disposition/list/detail/:id",
+      "module": "./pages/disposition/DispositionDetail",
+      "exact": true,
+      "authority": "home_page_person_center"
     }
   ]
 }
