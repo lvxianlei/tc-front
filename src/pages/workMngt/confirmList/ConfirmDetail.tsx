@@ -34,6 +34,7 @@ export default function ConfirmDetail(): React.ReactNode {
         legWeightB:0,
         legWeightC:0,
         legWeightD:0,
+        description:'',
     }]);
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
@@ -64,7 +65,24 @@ export default function ConfirmDetail(): React.ReactNode {
                     steelProductShape:'',
                     voltageLevel:'',
                     lineName: '',
-                    confirmList:[]
+                    
+                    confirmList:[{
+                        otherWeightBg:0,
+                        otherWeightPt:0,
+                        otherWeightXxp:0,
+                        otherWeightPat:0,
+                        otherWeightFd:0,
+                        otherWeightGdxg:0,
+                        otherWeightXg:0,
+                        otherWeightQtsm:0,
+                        otherWeightLs:0,
+                        legWeightA:0,
+                        legWeightB:0,
+                        legWeightC:0,
+                        legWeightD:0,
+                        bodyWeight:0,
+                        description:'',
+                    }]
                 })
                 setConfirmData([{
                     otherWeightBg:0,
@@ -80,6 +98,8 @@ export default function ConfirmDetail(): React.ReactNode {
                     legWeightB:0,
                     legWeightC:0,
                     legWeightD:0,
+                    bodyWeight:0,
+                    description:'',
                 }])
                 setVisible(false)
                 message.success('添加成功！')
@@ -108,7 +128,24 @@ export default function ConfirmDetail(): React.ReactNode {
                     steelProductShape:'',
                     voltageLevel:'',
                     lineName: '',
-                    confirmList:[]
+                    description:'',
+                    confirmList:[{
+                        otherWeightBg:0,
+                        otherWeightPt:0,
+                        otherWeightXxp:0,
+                        otherWeightPat:0,
+                        otherWeightFd:0,
+                        otherWeightGdxg:0,
+                        otherWeightXg:0,
+                        otherWeightQtsm:0,
+                        otherWeightLs:0,
+                        legWeightA:0,
+                        legWeightB:0,
+                        legWeightC:0,
+                        legWeightD:0,
+                        bodyWeight:0,
+                        description:'',
+                    }]
                 })
                 setConfirmData([{
                     otherWeightBg:0,
@@ -124,6 +161,8 @@ export default function ConfirmDetail(): React.ReactNode {
                     legWeightB:0,
                     legWeightC:0,
                     legWeightD:0,
+                    bodyWeight:0,
+                    description:'',
                 }])
                 setRowId('')
                 setVisible(false)
@@ -163,6 +202,7 @@ export default function ConfirmDetail(): React.ReactNode {
             legWeightB:0,
             legWeightC:0,
             legWeightD:0,
+            description:'',
         }]
     )}
     // const handlePictureModalCancel = () => {setPictureVisible(false)}
@@ -1329,7 +1369,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="备注" span={ 7 }>
-                                            <Form.Item name="description" >
+                                            <Form.Item name={["confirmList", index, "description"]}>
                                                 <TextArea rows={1}  maxLength={400} style={{width:'100%'}}/>
                                             </Form.Item>
                                         </Descriptions.Item>
