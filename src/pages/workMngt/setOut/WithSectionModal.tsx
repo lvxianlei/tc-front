@@ -213,8 +213,8 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 setTimeout(() => {
                     const delSameObjList = this.delSameObjValue(list);
                     const newList = this.state.detailData?.loftingProductSegmentList?.map(res => {
-                        const newData = delSameObjList.filter(item => item.segmentName === res.segmentName);
-                        if (res.segmentName === newData[0].segmentName) {
+                        const newData = delSameObjList.filter(item => item?.segmentName === res?.segmentName);
+                        if (res?.segmentName === newData[0]?.segmentName) {
                             return {
                                 ...res,
                                 count: newData[0].count
