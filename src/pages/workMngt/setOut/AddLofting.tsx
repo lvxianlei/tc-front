@@ -380,7 +380,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "type"]} initialValue={_}>
                     <Select placeholder="请选择" size="small">
-                        {componentTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id +','+item.name} key={index}>{item.name}</Select.Option>)}
+                        {componentTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                     </Select>
                 </Form.Item>
             )
@@ -494,7 +494,10 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             editable: true,
             dataIndex: 'basicsWeight',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "basicsWeight"]} initialValue={_}>
+                <Form.Item name={['data', index, "basicsWeight"]} initialValue={_} rules={[{
+                    required: true,
+                    message: '请输入单件重量'
+                }]}>
                     <Input type="number" min={0} size="small" onChange={(e) => {
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
@@ -528,7 +531,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             dataIndex: 'craftName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "craftName"]} initialValue={_}>
-                    <Input size="small" maxLength={50} placeholder='自动获取' disabled/>
+                    <Input size="small" maxLength={50} placeholder='自动获取' disabled />
                 </Form.Item>
             )
         },
@@ -611,19 +614,22 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
         }
     }), { manual: true })
 
-    const onSubmit = () => new Promise(async (resolve, reject) => {
+    const onSubmit = () => new Promise((resolve, reject) => {
         try {
-            const values = form.getFieldsValue(true).data || [];
-            await saveRun(values?.map((res: any) => {
-                return {
-                    ...res,
-                    productCategoryId: id,
-                    segmentGroupId: productSegmentId,
-                    type: res?.type?.split(',')[1],
-                    typeDictId: res?.type?.split(',')[0]
-                }
-            }))
-            resolve(true);
+            form.validateFields().then(async res => {
+                const values = form.getFieldsValue(true).data || [];
+                await saveRun(values?.map((res: any) => {
+                    return {
+                        ...res,
+                        productCategoryId: id,
+                        segmentGroupId: productSegmentId,
+                        type: res?.type?.split(',')[1],
+                        typeDictId: res?.type?.split(',')[0]
+                    }
+                }))
+                resolve(true);
+            })
+
         } catch (error) {
             reject(false)
         }
