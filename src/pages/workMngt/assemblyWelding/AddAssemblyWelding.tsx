@@ -129,6 +129,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         }
                         setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
                         setSegment(record.segmentId + ',' + record.segmentName)
+                        form.setFieldsValue({ 'segmentGroupNum': record.basicsPartNum });
                     }}></Radio>
             )
         },
@@ -411,7 +412,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                                 setComponentList([]);
                                 setWeldingDetailedStructureList([]);
                                 setMainPartId('');
-                                form.resetFields();
+                                form.resetFields(['componentId', 'electricWeldingMeters', 'segmentName','singleGroupWeight','segmentGroupNum']);
                             } else {
                                 history.goBack();
                             }
