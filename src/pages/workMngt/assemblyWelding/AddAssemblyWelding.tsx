@@ -406,7 +406,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             }
                         }) || [])]
                     }
-                    if (value.electricWeldingMeters > 0) {
+                    // if (value.electricWeldingMeters > 0) {
                         RequestUtil.post(`/tower-science/welding`, { ...value }).then(res => {
                             message.success('添加成功');
                             if (tip === 'goOn') {
@@ -418,9 +418,9 @@ export default function AddAssemblyWelding(): React.ReactNode {
                                 history.goBack();
                             }
                         })
-                    } else {
-                        message.warning('电焊米数需大于0');
-                    }
+                    // } else {
+                    //     message.warning('电焊米数需大于0');
+                    // }
                 }
             })
         }
