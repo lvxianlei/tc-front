@@ -528,7 +528,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             dataIndex: 'craftName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "craftName"]} initialValue={_}>
-                    <Input size="small" maxLength={50} />
+                    <Input size="small" maxLength={50} placeholder='自动获取' disabled/>
                 </Form.Item>
             )
         },
