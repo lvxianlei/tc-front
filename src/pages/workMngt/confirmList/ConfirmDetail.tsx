@@ -66,6 +66,21 @@ export default function ConfirmDetail(): React.ReactNode {
                     lineName: '',
                     confirmList:[]
                 })
+                setConfirmData([{
+                    otherWeightBg:0,
+                    otherWeightPt:0,
+                    otherWeightXxp:0,
+                    otherWeightPat:0,
+                    otherWeightFd:0,
+                    otherWeightGdxg:0,
+                    otherWeightXg:0,
+                    otherWeightQtsm:0,
+                    otherWeightLs:0,
+                    legWeightA:0,
+                    legWeightB:0,
+                    legWeightC:0,
+                    legWeightD:0,
+                }])
                 setVisible(false)
                 message.success('添加成功！')
                 run();
@@ -95,6 +110,21 @@ export default function ConfirmDetail(): React.ReactNode {
                     lineName: '',
                     confirmList:[]
                 })
+                setConfirmData([{
+                    otherWeightBg:0,
+                    otherWeightPt:0,
+                    otherWeightXxp:0,
+                    otherWeightPat:0,
+                    otherWeightFd:0,
+                    otherWeightGdxg:0,
+                    otherWeightXg:0,
+                    otherWeightQtsm:0,
+                    otherWeightLs:0,
+                    legWeightA:0,
+                    legWeightB:0,
+                    legWeightC:0,
+                    legWeightD:0,
+                }])
                 setRowId('')
                 setVisible(false)
                 message.success('修改成功！')
@@ -116,7 +146,25 @@ export default function ConfirmDetail(): React.ReactNode {
         }
     }
     
-    const handleModalCancel = () => {setVisible(false);form.resetFields();}
+    const handleModalCancel = () => {
+        setVisible(false);
+        form.resetFields();
+        setConfirmData([{
+            otherWeightBg:0,
+            otherWeightPt:0,
+            otherWeightXxp:0,
+            otherWeightPat:0,
+            otherWeightFd:0,
+            otherWeightGdxg:0,
+            otherWeightXg:0,
+            otherWeightQtsm:0,
+            otherWeightLs:0,
+            legWeightA:0,
+            legWeightB:0,
+            legWeightC:0,
+            legWeightD:0,
+        }]
+    )}
     // const handlePictureModalCancel = () => {setPictureVisible(false)}
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
