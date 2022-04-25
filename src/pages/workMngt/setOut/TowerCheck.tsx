@@ -94,12 +94,18 @@ const columns = [
         title: '各孔径孔数',
         editable: true,
         width: 200,
-        dataIndex: 'apertureNumber'
+        dataIndex: 'apertureNumber',
+        rules: [
+            {
+                pattern: /^[0-9*,]*$/,
+                message: '仅可输入数字/,/*',
+            }
+        ]
     },
     {
         key: 'holesNum',
         title: '单件孔数',
-        editable: true,
+        editable: false,
         width: 200,
         dataIndex: 'holesNum'
     },
@@ -204,6 +210,7 @@ const columns = [
     {
         key: 'type',
         title: '零件类型',
+        editable: true,
         width: 200,
         dataIndex: 'type'
     },
@@ -247,7 +254,13 @@ const columns = [
         title: '扩孔孔径孔数',
         editable: true,
         width: 200,
-        dataIndex: 'reamingNumber'
+        dataIndex: 'reamingNumber',
+        rules: [
+            {
+                pattern: /^[0-9*,]*$/,
+                message: '仅可输入数字/,/*',
+            }
+        ]
     },
     {
         key: 'gasCutting',
@@ -261,7 +274,13 @@ const columns = [
         title: '气割孔孔径孔数',
         editable: true,
         width: 200,
-        dataIndex: 'gasCuttingNumber'
+        dataIndex: 'gasCuttingNumber',
+        rules: [
+            {
+                pattern: /^[0-9*,]*$/,
+                message: '仅可输入数字/,/*',
+            }
+        ]
     },
     {
         key: 'basicsWeight',

@@ -129,6 +129,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         }
                         setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
                         setSegment(record.segmentId + ',' + record.segmentName)
+                        form.setFieldsValue({ 'segmentGroupNum': record.basicsPartNum });
                     }}></Radio>
             )
         },
@@ -143,16 +144,16 @@ export default function AddAssemblyWelding(): React.ReactNode {
             //         key={record.structureId}
             //         defaultValue={record.weldingLength}
             //         placeholder="请输入"
-                    // onChange={(e) => {
-                    //     const newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
-                    //     const electricWeldingMeters = form.getFieldsValue(true).electricWeldingMeters;
-                    //     newWeldingDetailedStructureList[index] = {
-                    //         ...newWeldingDetailedStructureList[index],
-                    //         weldingLength: Number(e)
-                    //     }
-                    //     setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
-                    //     form.setFieldsValue({ 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e) * Number(record.singleNum) });
-                    // }}
+            // onChange={(e) => {
+            //     const newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
+            //     const electricWeldingMeters = form.getFieldsValue(true).electricWeldingMeters;
+            //     newWeldingDetailedStructureList[index] = {
+            //         ...newWeldingDetailedStructureList[index],
+            //         weldingLength: Number(e)
+            //     }
+            //     setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
+            //     form.setFieldsValue({ 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e) * Number(record.singleNum) });
+            // }}
             //         bordered={false} 
             //         disabled/>
             // )
@@ -312,11 +313,10 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             basicsPartNumNow: Number(res.basicsPartNumNow) - Number(weldingDetailedStructureListNew[0].singleNum)
                         }
                     } else {
-                        return {...res}
+                        return { ...res }
                     }
                 })
                 setComponentList([...newData])
-                console.log(newData)
             })
         }
     }
@@ -326,7 +326,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
     */
     const addComponent = (record: Record<string, any>, index: number) => {
         let newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
-        let weldingLength: number = 0;
+        let weldingLength: number = form.getFieldsValue(true).electricWeldingMeters;
         let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) + (Number(record.basicsWeight) || 0) * (Number(record.singleNum) || 1);
         let isNewComponent: boolean = newWeldingDetailedStructureList.every((items: IComponentList) => {
             return record.id !== items.structureId;
@@ -354,10 +354,10 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 }
             }
         })
-        weldingDetailedStructureList?.forEach((item: IComponentList) => {
-            weldingLength = weldingLength + (Number(item.singleNum) || 1) * Number(item.weldingLength || 0);
-        })
-        form.setFieldsValue({ 'singleGroupWeight': weight.toFixed(3), 'electricWeldingMeters': weldingLength });
+        // weldingDetailedStructureList?.forEach((item: IComponentList) => {
+        //     weldingLength = weldingLength + (Number(item.singleNum) || 1) * Number(item.weldingLength || 0);
+        // })
+        form.setFieldsValue({ 'singleGroupWeight': weight.toFixed(3), 'electricWeldingMeters': Number(weldingLength || 0) + (Number(record.singleNum) || 1) * Number(record.weldingEdge || 0) });
         setWeldingDetailedStructureList(Object.keys(newComponentList).length > 0 ? [...newWeldingDetailedStructureList, newComponentList] : [...newWeldingDetailedStructureList]);
         if (Number(record.basicsPartNumNow) === 1) {
             componentList.splice(index, 1);
@@ -412,7 +412,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                                 setComponentList([]);
                                 setWeldingDetailedStructureList([]);
                                 setMainPartId('');
-                                form.resetFields();
+                                form.resetFields(['componentId', 'electricWeldingMeters', 'segmentName','singleGroupWeight','segmentGroupNum']);
                             } else {
                                 history.goBack();
                             }
@@ -458,14 +458,35 @@ export default function AddAssemblyWelding(): React.ReactNode {
                                 mode="multiple" onChange={() => {
                                     // setWeldingDetailedStructureList([]);
                                     let values = form.getFieldsValue(true)?.segmentName;
-                                    values = values.map((res: string) => {
-                                        return {
-                                            segmentName: res.split(',')[0],
-                                            segmentId: res.split(',')[1],
+                                    if (values.length > 0) {
+                                        if (values.findIndex((value: string) => value === 'all') !== -1) {
+                                            const selected = segmentNameList?.map(item => {
+                                                return item.name + ',' + item.id
+                                            })
+                                            form.setFieldsValue({
+                                                segmentName: ['all', ...selected]
+                                            })
+                                            values = selected.map((res: string) => {
+                                                return {
+                                                    segmentName: res.split(',')[0],
+                                                    segmentId: res.split(',')[1],
+                                                }
+                                            })
+                                            getComponentList(values)
+                                        } else {
+                                            values = values.map((res: string) => {
+                                                return {
+                                                    segmentName: res.split(',')[0],
+                                                    segmentId: res.split(',')[1],
+                                                }
+                                            })
+                                            getComponentList(values)
                                         }
-                                    })
-                                    getComponentList(values)
+                                    } else {
+                                        setComponentList([]);
+                                    }
                                 }} >
+                                <Select.Option key={'all'} value={'all'}>全部</Select.Option>
                                 {segmentNameList.map((item: any) => {
                                     return <Select.Option key={item.name + ',' + item.id} value={item.name + ',' + item.id}>{item.name}</Select.Option>
                                 })}

@@ -138,12 +138,12 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                             <Input.TextArea maxLength={300} placeholder="请输入备注信息" rows={1} showCount disabled={record.status === 1} />
                         </Form.Item>
                         {
-                            ['specialCode', 'electricWelding', 'bend', 'chamfer', 'shovelBack', 'rootClear', 'squash', 'openCloseAngle', 'perforate', 'groove', 'intersectingLine', 'slottedForm'].findIndex((value) => value === record.problemField) !== -1 ?
+                            ['apertureNumber','specialCode', 'electricWelding', 'bend', 'chamfer', 'shovelBack', 'rootClear', 'squash', 'openCloseAngle', 'perforate', 'groove', 'intersectingLine', 'slottedForm', 'grooveMeters', 'suppress', 'spellNumber', 'arcContaining', 'perforateNumber','withReaming','reamingNumber','gasCutting', 'gasCuttingNumber'].findIndex((value) => value === record.problemField) !== -1 ?
                                 <Form.Item name="newValue" label="校对后信息"
                                     rules={[{
                                         pattern: /^[^\s]*$/,
                                         message: '禁止输入空格',
-                                    }]}
+                                    }, ...record?.rules]}
                                     initialValue={record.newValue}>
                                     <Input maxLength={100} placeholder="请输入" disabled={record.status === 1} />
                                 </Form.Item>
