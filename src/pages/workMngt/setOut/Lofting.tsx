@@ -442,7 +442,7 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'perforateNumber',
             title: '钻孔孔径孔数',
-            width: 80,
+            width: 120,
             dataIndex: 'perforateNumber',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
