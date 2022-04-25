@@ -827,7 +827,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                                         confirmList: [...legValueSum]
                                                     })
                                                     setConfirmData([...legValueSum])
-                                              }}/>
+                                              }} disabled={edit==='编辑'}/>
                                           </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="基数"  span={ 2 }>
@@ -1336,7 +1336,8 @@ export default function ConfirmDetail(): React.ReactNode {
                                         <Descriptions.Item span={2}>
                                             <Space direction="horizontal">
                                                 {index===confirmData.length-1&&edit!=='编辑'&&<Button type="primary" ghost size="small" onClick={ () => {
-                                                    confirmData.push({
+                                                    const value = form.getFieldsValue(true).confirmList
+                                                    value.push({
                                                        otherWeightBg:0,
                                                        otherWeightPt:0,
                                                        otherWeightXxp:0,
@@ -1352,9 +1353,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                        legWeightD:0,
                                                     })
                                                     form.setFieldsValue({
-                                                      confirmList: [...confirmData]
+                                                      confirmList: [...value]
                                                     })
-                                                    setConfirmData([...confirmData])
+                                                    setConfirmData([...value])
                                                     
                                                 } }>添加</Button>}
                                                 {confirmData.length!==1&&<Button type="ghost" size="small" onClick={ () => {
