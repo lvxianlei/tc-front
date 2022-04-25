@@ -25,29 +25,34 @@ import { materialTextureOptions } from "../../../../configuration/DictionaryOpti
      const list = [
          {
              index: 0,
-             structureTexture: 'Q235'
+             structureTexture: 'Q235',
+             suffix: 'B'
          },
          {
              index: 1,
-             structureTexture: 'Q345'
+             structureTexture: 'Q345',
+             suffix: 'B'
          },
          {
              index: 2,
-             structureTexture: 'Q420'
+             structureTexture: 'Q420',
+             suffix: 'B'
          },
          {
              index: 3,
-             structureTexture: 'Q460'
+             structureTexture: 'Q460',
+             suffix: 'B'
          },
          {
              index: 4,
-             structureTexture: 'Q355'
+             structureTexture: 'Q355',
+             suffix: 'B'
          }
      ]
  
      const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
          try {
-             const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
+             const data: [] = await RequestUtil.get<[]>(`http://tc-qa-gateway.dhwy.cn/tower-science/drawProductSegment/pattern/1518508886881427457`, {
                  productSegmentGroupId: id
              });
              form.setFieldsValue({ data: [...list] })
@@ -139,7 +144,7 @@ import { materialTextureOptions } from "../../../../configuration/DictionaryOpti
                              title: '修改项',
                              dataIndex: 'suffix',
                              render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                 <Form.Item name={['data', index, 'suffix']} rules={
+                                 <Form.Item name={['data', index, 'suffix']} initialValue={_} rules={
                                      [{
                                          pattern: new RegExp(/^[BC]{1}$/),
                                          message: '请输入B/C'

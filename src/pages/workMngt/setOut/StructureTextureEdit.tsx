@@ -52,9 +52,7 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
-            const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
-                productSegmentGroupId: id
-            });
+            const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList/${id}`);
             form.setFieldsValue({ data: [...list] })
             resole(data)
         } catch (error) {
