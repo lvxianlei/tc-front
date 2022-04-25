@@ -5,13 +5,14 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, InputNumber, Input, Button } from 'antd';
+import { Spin, Form, InputNumber, Input, Button, Select } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './TowerLoftingAssign.module.less';
 import CommonTable from "../../common/CommonTable";
 import { FixedType } from 'rc-table/lib/interface';
+import { componentTypeOptions } from "../../../configuration/DictionaryOptions";
 
 interface modalProps {
     id: string;
@@ -378,7 +379,9 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             dataIndex: 'type',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "type"]} initialValue={_}>
-                    <Input size="small" maxLength={20} />
+                    <Select placeholder="请选择">
+                        {componentTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
+                    </Select>
                 </Form.Item>
             )
         },
@@ -612,7 +615,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
         try {
             const values = form.getFieldsValue(true).data || [];
             console.log(values)
-            await saveRun(values?.map((res:any) => {
+            await saveRun(values?.map((res: any) => {
                 return {
                     ...res,
                     productCategoryId: id,
