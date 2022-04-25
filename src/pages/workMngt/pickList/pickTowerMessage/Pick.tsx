@@ -458,10 +458,11 @@ export default function Lofting(): React.ReactNode {
                         <Button type="link"
                             onClick={()=>{
                                 console.log([record])
+                                const value = [record]
                                 setEditorLock('编辑');
                                 // console.log(selectedRows)
-                                form.setFieldsValue({ dataV: [record] })
-                                setTableDataSource([record])
+                                form.setFieldsValue({ dataV: [...value] })
+                                setTableDataSource([...value])
                                 setAddVisible(true);
                             }}
                         >编辑</Button>
@@ -473,9 +474,8 @@ export default function Lofting(): React.ReactNode {
                             })}
                             okText="提交"
                             cancelText="取消"
-                            disabled={editorLock === '编辑'}
                         >
-                            <Button type="link" disabled={editorLock === '编辑'}>删除</Button>
+                            <Button type="link" >删除</Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -522,11 +522,11 @@ export default function Lofting(): React.ReactNode {
                             }
                         }}
                     >
-                        <Button type="primary" ghost disabled={editorLock === '编辑'}>导入</Button>
+                        <Button type="primary" ghost >导入</Button>
                     </Upload>
                     <Button type="primary" ghost onClick={() => {
                         setAddVisible(true)
-                    }} disabled={editorLock === '编辑'}>添加</Button>
+                    }}>添加</Button>
                     <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/drawApply`) }}>图纸塔型套用</Button>
                     <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/setOutApply`) }}>放样塔型套用</Button>
                     <Popconfirm
@@ -610,9 +610,9 @@ export default function Lofting(): React.ReactNode {
                         }}
                         okText="提交"
                         cancelText="取消"
-                        disabled={editorLock === '锁定' ? true : !(selectedKeys.length > 0)}
+                        disabled={ !(selectedKeys.length > 0)}
                     >
-                        <Button type="primary" ghost disabled={editorLock === '锁定' ? true : !(selectedKeys.length > 0)}>删除</Button>
+                        <Button type="primary" ghost disabled={!(selectedKeys.length > 0)}>删除</Button>
                     </Popconfirm>
                     <Button type="ghost" onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`) }}>返回</Button>
                 </Space>
@@ -693,8 +693,26 @@ export default function Lofting(): React.ReactNode {
                         form.setFieldsValue({ dataV: [] })
                         message.success('添加成功！')
                         setRefresh(!refresh);
+                        history.go(0)
                     });
-                }):setRefresh(!refresh);
+                }):form.validateFields().then(() => {
+                    const values = form.getFieldsValue(true).dataV.map((item: any) => {
+                        return {
+                            ...item,
+                            productCategory: params.id,
+                            segmentGroupId: params.productSegmentId
+                        }
+                    })
+                    RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [...values]).then(res => {
+                        setAddVisible(false);
+                        setTableDataSource([]);
+                        form.setFieldsValue({ dataV: [] })
+                        message.success('锁定成功！')
+                        setRefresh(!refresh);
+                        history.go(0)
+                    });
+                })
+                ;
             }
         }>
             <Form form={form}>
