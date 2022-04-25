@@ -263,7 +263,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 title="配段"
                 footer={<Space>
                     <Button type="ghost" onClick={() => this.modalCancel()}>关闭</Button>
-                    <Button type="primary" onClick={() => this.save('/tower-science/productSegment/distribution/save')} ghost>保存</Button>
                     <Button type="primary" onClick={() => this.save('/tower-science/productSegment/distribution/submit')} ghost>保存并提交</Button>
                 </Space>}
                 onCancel={() => this.modalCancel()}
