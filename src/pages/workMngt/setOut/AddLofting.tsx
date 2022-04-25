@@ -379,8 +379,8 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             dataIndex: 'type',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "type"]} initialValue={_}>
-                    <Select placeholder="请选择">
-                        {componentTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
+                    <Select placeholder="请选择" size="small">
+                        {componentTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id +','+item.name} key={index}>{item.name}</Select.Option>)}
                     </Select>
                 </Form.Item>
             )
@@ -614,12 +614,13 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const values = form.getFieldsValue(true).data || [];
-            console.log(values)
             await saveRun(values?.map((res: any) => {
                 return {
                     ...res,
                     productCategoryId: id,
-                    segmentGroupId: productSegmentId
+                    segmentGroupId: productSegmentId,
+                    type: res?.type?.split(',')[1],
+                    typeDictId: res?.type?.split(',')[0]
                 }
             }))
             resolve(true);
