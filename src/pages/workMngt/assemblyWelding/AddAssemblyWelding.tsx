@@ -35,6 +35,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             const baseData = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, segmentId: params.segmentId });
             setMainPartId(baseData.records[0]?.mainPartId || '');
             form.setFieldsValue({ ...baseData.records[0], segmentName: [] });
+            setSegment(baseData?.records[0]?.segmentId + ',' + baseData?.records[0]?.segmentName)
             getComponentList({})
         } else {
             setWeldingDetailedStructureList([]);
@@ -450,10 +451,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         </Form.Item>
                     </Col>
                     <Col flex={3} offset={1}>
-                        <Form.Item name="segmentName" label="段号" rules={[{
-                            "required": true,
-                            "message": "请输入段号"
-                        }]}>
+                        <Form.Item name="segmentName" label="段号">
                             <Select placeholder="请选择" style={{ width: '150px' }}
                                 mode="multiple" onChange={() => {
                                     // setWeldingDetailedStructureList([]);
