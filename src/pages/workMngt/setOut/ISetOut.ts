@@ -182,6 +182,7 @@ export interface IRecord {
     readonly rowId?: string;
     readonly currentValue?: string;
     readonly problemFieldName?: string;
+    readonly rules?: any;
 }
 
 export interface ICount {
