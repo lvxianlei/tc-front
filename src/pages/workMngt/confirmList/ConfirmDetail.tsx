@@ -685,10 +685,7 @@ export default function ConfirmDetail(): React.ReactNode {
                               
                             </Descriptions.Item>
                             <Descriptions.Item label="塔型钢印号" span={ 2 }>
-                                <Form.Item name="steelProductShape" rules={[{
-                                    "required": true,
-                                    "message":"请输入塔型钢印号"
-                                }]}>
+                                <Form.Item name="steelProductShape">
                                     <Input  maxLength={30}/>
                                 </Form.Item>
                             </Descriptions.Item>
