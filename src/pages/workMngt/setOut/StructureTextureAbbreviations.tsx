@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, Select, Input } from 'antd';
+import { Spin, Form, Select, Input, message } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -123,19 +123,24 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            let values = form.getFieldsValue(true);
-            let newSelected = selectedRows.map((res) => {
-                return {
-                    structureTexture: res.structureTexture,
-                    updateTexture: '-' + values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
-                }
-            })
-            await saveRun({
-                textureUpdateList: newSelected,
-                segmentGroupId: id,
-                segmentIdList: values.segmentNameList
-            })
-            resolve(true);
+            if(selectedRows.length > 0) {
+                let values = form.getFieldsValue(true);
+                let newSelected = selectedRows.map((res) => {
+                    return {
+                        structureTexture: res.structureTexture,
+                        updateTexture: '-' + values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
+                    }
+                })
+                await saveRun({
+                    textureUpdateList: newSelected,
+                    segmentGroupId: id,
+                    segmentIdList: values.segmentNameList
+                })
+                resolve(true);
+            } else {
+                message.warning("请勾选需要修改的数据")
+            }
+            
         } catch (error) {
             reject(false)
         }
