@@ -299,7 +299,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                         this.setState({
                                             detailData: {
                                                 ...this.state.detailData,
-                                                productNumber: productId?.map((res: string) => res.split(',')[1]),
+                                                productNumber: productId?.map((res: string) => res.split(',')[1]).join(','),
                                                 productIdList: productId?.map((res: string) => res.split(',')[0])
                                             }
                                         })
