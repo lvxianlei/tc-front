@@ -5,13 +5,14 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, InputNumber, Input, Button } from 'antd';
+import { Spin, Form, InputNumber, Input, Button, Select } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './TowerLoftingAssign.module.less';
 import CommonTable from "../../common/CommonTable";
 import { FixedType } from 'rc-table/lib/interface';
+import { componentTypeOptions } from "../../../configuration/DictionaryOptions";
 
 interface modalProps {
     id: string;
@@ -378,7 +379,9 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             dataIndex: 'type',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "type"]} initialValue={_}>
-                    <Input size="small" maxLength={20} />
+                    <Select placeholder="请选择" size="small">
+                        {componentTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id +','+item.name} key={index}>{item.name}</Select.Option>)}
+                    </Select>
                 </Form.Item>
             )
         },
@@ -432,7 +435,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
         },
         {
             key: 'withReaming',
-            title: '有扩孔',
+            title: '扩孔',
             width: 150,
             editable: true,
             dataIndex: 'withReaming',
@@ -525,7 +528,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             dataIndex: 'craftName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "craftName"]} initialValue={_}>
-                    <Input size="small" maxLength={50} />
+                    <Input size="small" maxLength={50} placeholder='自动获取' disabled/>
                 </Form.Item>
             )
         },
@@ -611,12 +614,13 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const values = form.getFieldsValue(true).data || [];
-            console.log(values)
-            await saveRun(values?.map((res:any) => {
+            await saveRun(values?.map((res: any) => {
                 return {
                     ...res,
                     productCategoryId: id,
-                    segmentGroupId: productSegmentId
+                    segmentGroupId: productSegmentId,
+                    type: res?.type?.split(',')[1],
+                    typeDictId: res?.type?.split(',')[0]
                 }
             }))
             resolve(true);

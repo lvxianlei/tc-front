@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, Select, Input } from 'antd';
+import { Spin, Form, Select, Input, message } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -123,19 +123,24 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            let values = form.getFieldsValue(true);
-            let newSelected = selectedRows.map((res) => {
-                return {
-                    structureTexture: res.structureTexture,
-                    updateTexture: '-' + values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
-                }
-            })
-            await saveRun({
-                textureUpdateList: newSelected,
-                segmentGroupId: id,
-                segmentIdList: values.segmentNameList
-            })
-            resolve(true);
+            if(selectedRows.length > 0) {
+                let values = form.getFieldsValue(true);
+                let newSelected = selectedRows.map((res) => {
+                    return {
+                        structureTexture: res.structureTexture,
+                        updateTexture: '-' + values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
+                    }
+                })
+                await saveRun({
+                    textureUpdateList: newSelected,
+                    segmentGroupId: id,
+                    segmentIdList: values.segmentIdList
+                })
+                resolve(true);
+            } else {
+                message.warning("请勾选需要修改的数据")
+            }
+            
         } catch (error) {
             reject(false)
         }
@@ -159,7 +164,7 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
                 <Form.Item name="segmentIdList" label="范围选择" style={{ paddingBottom: '16px' }}>
                     <Select mode="multiple" allowClear style={{ width: '120px' }} placeholder="不选默认全部">
                         {data?.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.segmentName}>{item.segmentName}</Select.Option>
+                            return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
                         })}
                     </Select>
                 </Form.Item>

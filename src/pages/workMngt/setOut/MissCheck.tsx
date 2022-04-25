@@ -26,6 +26,6 @@ export default forwardRef(function MissCheck({ id }: modalProps, ref) {
 
 
     return <DetailContent>
-        <Input.TextArea value={data} disabled />
+        <Input.TextArea rows={8} value={data} disabled />
     </DetailContent>
 })
