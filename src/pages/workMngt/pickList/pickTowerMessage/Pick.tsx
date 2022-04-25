@@ -470,6 +470,7 @@ export default function Lofting(): React.ReactNode {
                             title="确认删除?"
                             onConfirm={async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${record.id}`).then(() => {
                                 message.success('删除成功！');
+                                history.go(0)
                                 setRefresh(!refresh);
                             })}
                             okText="提交"
@@ -516,6 +517,7 @@ export default function Lofting(): React.ReactNode {
                                     setVisible(true);
                                 } else {
                                     message.success('导入成功！');
+                                    history.go(0)
                                     // setRefresh(!refresh);
                                     setFilterValue({ segmentGroupId: params.productSegmentId })
                                 }
