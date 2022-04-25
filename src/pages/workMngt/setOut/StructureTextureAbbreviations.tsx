@@ -134,7 +134,7 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
                 await saveRun({
                     textureUpdateList: newSelected,
                     segmentGroupId: id,
-                    segmentIdList: values.segmentNameList
+                    segmentIdList: values.segmentIdList
                 })
                 resolve(true);
             } else {
@@ -164,7 +164,7 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
                 <Form.Item name="segmentIdList" label="范围选择" style={{ paddingBottom: '16px' }}>
                     <Select mode="multiple" allowClear style={{ width: '120px' }} placeholder="不选默认全部">
                         {data?.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.segmentName}>{item.segmentName}</Select.Option>
+                            return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
                         })}
                     </Select>
                 </Form.Item>
