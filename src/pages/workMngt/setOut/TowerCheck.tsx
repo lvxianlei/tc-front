@@ -237,7 +237,7 @@ const columns = [
     },
     {
         key: 'withReaming',
-        title: '有扩孔',
+        title: '扩孔',
         editable: true,
         width: 200,
         dataIndex: 'withReaming'

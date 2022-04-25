@@ -453,7 +453,7 @@ export default function Lofting(): React.ReactNode {
         },
         {
             key: 'withReaming',
-            title: '有扩孔',
+            title: '扩孔',
             width: 80,
             dataIndex: 'withReaming',
             editable: true,

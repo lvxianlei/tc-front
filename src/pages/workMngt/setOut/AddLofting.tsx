@@ -432,7 +432,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
         },
         {
             key: 'withReaming',
-            title: '有扩孔',
+            title: '扩孔',
             width: 150,
             editable: true,
             dataIndex: 'withReaming',
