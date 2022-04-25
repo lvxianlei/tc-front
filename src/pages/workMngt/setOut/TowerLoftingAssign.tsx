@@ -1,3 +1,9 @@
+/**
+ * @author zyc
+ * @copyright © 2022 
+ * @description 工作管理-放样列表-塔型信息-塔型放样指派
+ */
+
 import React from 'react';
 import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, TreeSelect, Select, message } from 'antd';
 import { DetailContent } from '../../common';
@@ -259,8 +265,8 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                 pattern: /^[^\s]*$/,
                                                 message: '禁止输入空格',
                                             }, {
-                                                pattern: /^[0-9a-zA-Z-,]*$/,
-                                                message: '仅可输入数字/字母/-/,',
+                                                pattern: /^[0-9a-zA-Z-\u4e00-\u9fa5]*$/,
+                                                message: '仅可输入数字/字母/-/汉字',
                                             }]}>
                                             <Input placeholder="请输入（1-3，5，ac，w）" />
                                         </Form.Item>
