@@ -187,7 +187,20 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
                     pattern: /^[0-9*,]*$/,
                     message: '仅可输入数字/,/*',
                 }]}>
-                    <Input size="small" maxLength={50} />
+                    <Input size="small" maxLength={50} onBlur={(e) => {
+                        let list = e.target.value.split(',');
+                        let num: number = 0;
+                        list.forEach(res => {
+                            num += Number(res.split('*')[1] || 1)
+                        })
+                        const data = form.getFieldsValue(true).data;
+                        data[index] = {
+                            ...data[index],
+                            holesNum: num
+                        }
+                        setTableData([...data])
+                        form.setFieldsValue({ data: [...data] })
+                    }} />
                 </Form.Item>
             )
         },
@@ -504,7 +517,6 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
                             ...data[index],
                             totalWeight: Number(e.target.value) * Number(data[index].basicsPartNum || 0)
                         }
-                        console.log(data)
                         setTableData([...data])
                         form.setFieldsValue({ data: [...data] })
                     }} />
