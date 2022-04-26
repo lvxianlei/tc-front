@@ -6,11 +6,11 @@
 
  import React, { useState } from 'react';
  import { Input, DatePicker, Select, Form, Spin } from 'antd';
- import { Page } from '../common';
+ import { Page } from '../../common';
  import { FixedType } from 'rc-table/lib/interface';
  import { Link, useLocation } from 'react-router-dom';
  import useRequest from '@ahooksjs/use-request';
- import RequestUtil from '../../utils/RequestUtil';
+ import RequestUtil from '../../../utils/RequestUtil';
  
  export default function SetOutList(): React.ReactNode {
      const columns = [

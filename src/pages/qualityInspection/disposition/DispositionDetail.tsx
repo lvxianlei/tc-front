@@ -7,8 +7,8 @@
 import React, { useState } from 'react';
 import { Spin, Button, Space, Modal, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
-import RequestUtil from '../../utils/RequestUtil';
+import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../../common';
+import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 
 const specialColums = [

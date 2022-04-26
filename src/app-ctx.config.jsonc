@@ -1062,15 +1062,15 @@
                 ]
             },
             {
-                "label": "处置单",
+                "label": "质量检验看板",
                 "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
                 "appName": "QMS",
-                "path": "/disposition",
+                "path": "/qualityInspection",
                 "authority": "approvalm",
                 "items": [
                     {
-                        "label": "处置单列表",
-                        "path": "/disposition/list",
+                        "label": "不合格处置单",
+                        "path": "/qualityInspection/disposition",
                         "authority": "approvalm"
                     }
                 ]
