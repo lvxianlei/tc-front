@@ -1044,6 +1044,16 @@
                         "label": "分配车间配置管理",
                         "path": "/workshopPlanBasic/publishWorkshopMngt",
                         "authority": "approvalm"
+                    },
+                    {
+                        "label": "周期计划类型配置管理",
+                        "path": "/workshopPlanBasic/cyclePlanConfig",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "计划看板配置管理",
+                        "path": "/workshopPlanBasic/kanBanPlanConfig",
+                        "authority": "approvalm"
                     }
                 ]
             },
