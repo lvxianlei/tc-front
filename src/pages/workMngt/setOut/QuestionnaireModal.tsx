@@ -139,7 +139,7 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                         </Form.Item>
                         {
                             ['apertureNumber','specialCode', 'electricWelding', 'bend', 'chamfer', 'shovelBack', 'rootClear', 'squash', 'openCloseAngle', 'perforate', 'groove', 'intersectingLine', 'slottedForm', 'grooveMeters', 'suppress', 'spellNumber', 'arcContaining', 'perforateNumber','withReaming','reamingNumber','gasCutting', 'gasCuttingNumber'].findIndex((value) => value === record.problemField) !== -1 ?
-                                <Form.Item name="newValue" label="校对后信息"
+                            <Form.Item name="newValue" label="校对后信息"
                                     rules={[{
                                         pattern: /^[^\s]*$/,
                                         message: '禁止输入空格',
