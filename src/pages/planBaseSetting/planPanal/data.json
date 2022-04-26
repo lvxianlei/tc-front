@@ -1,0 +1,88 @@
+{
+    "tableHeader": [
+        {
+            "title": "计划号",
+            "dataIndex": ""
+        },
+        {
+            "title": "塔型",
+            "dataIndex": ""
+        },
+        {
+            "title": "批次号",
+            "dataIndex": ""
+        },
+        {
+            "title": "下达单号",
+            "dataIndex": ""
+        },
+        {
+            "title": "基数",
+            "dataIndex": ""
+        },
+        {
+            "title": "电压等级(Kv)",
+            "dataIndex": ""
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": ""
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": ""
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": ""
+        },
+        {
+            "title": "厂区",
+            "dataIndex": ""
+        },
+        {
+            "title": "审批日期",
+            "dataIndex": ""
+        },
+        {
+            "title": "客户交货日期",
+            "dataIndex": ""
+        },
+        {
+            "title": "计划交货日期",
+            "dataIndex": ""
+        },
+        {
+            "title": "试装类型",
+            "dataIndex": ""
+        },
+        {
+            "title": "技术下达重量（t）",
+            "dataIndex": ""
+        },
+        {
+            "title": "角钢重量（t）",
+            "dataIndex": ""
+        },
+        {
+            "title": "连扳重量（t）",
+            "dataIndex": ""
+        },
+        {
+            "title": "总件数",
+            "dataIndex": ""
+        },
+        {
+            "title": "总孔数",
+            "dataIndex": ""
+        },
+        {
+            "title": "库存备料",
+            "dataIndex": ""
+        },
+        {
+            "title": "确认备料",
+            "dataIndex": ""
+        }
+    ]
+}

@@ -628,6 +628,11 @@
                         "label": "周期计划",
                         "path": "/planProd/cyclePlan",
                         "authority": "approvalm"
+                    },
+                    {
+                        "label": "计划看板",
+                        "path": "/planProd/planPanal",
+                        "authority": "approvalm"
                     }
                 ]
             },
@@ -729,7 +734,6 @@
                         "path": "/packingPlan/baleChange",
                         "authority": "approvalm"
                     }
-                   
                 ]
             },
             {
