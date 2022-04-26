@@ -94,12 +94,18 @@ const columns = [
         title: '各孔径孔数',
         editable: true,
         width: 200,
-        dataIndex: 'apertureNumber'
+        dataIndex: 'apertureNumber',
+        rules: [
+            {
+                pattern: /^[0-9*,]*$/,
+                message: '仅可输入数字/,/*',
+            }
+        ]
     },
     {
         key: 'holesNum',
         title: '单件孔数',
-        editable: true,
+        editable: false,
         width: 200,
         dataIndex: 'holesNum'
     },
@@ -204,6 +210,7 @@ const columns = [
     {
         key: 'type',
         title: '零件类型',
+        editable: true,
         width: 200,
         dataIndex: 'type'
     },
@@ -237,7 +244,7 @@ const columns = [
     },
     {
         key: 'withReaming',
-        title: '有扩孔',
+        title: '扩孔',
         editable: true,
         width: 200,
         dataIndex: 'withReaming'
@@ -247,7 +254,13 @@ const columns = [
         title: '扩孔孔径孔数',
         editable: true,
         width: 200,
-        dataIndex: 'reamingNumber'
+        dataIndex: 'reamingNumber',
+        rules: [
+            {
+                pattern: /^[0-9*,]*$/,
+                message: '仅可输入数字/,/*',
+            }
+        ]
     },
     {
         key: 'gasCutting',
@@ -261,7 +274,13 @@ const columns = [
         title: '气割孔孔径孔数',
         editable: true,
         width: 200,
-        dataIndex: 'gasCuttingNumber'
+        dataIndex: 'gasCuttingNumber',
+        rules: [
+            {
+                pattern: /^[0-9*,]*$/,
+                message: '仅可输入数字/,/*',
+            }
+        ]
     },
     {
         key: 'basicsWeight',
@@ -339,10 +358,10 @@ export default function TowerCheck(): React.ReactNode {
         setVisible(true);
         const data: IRecord = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${record.id}&problemField=${col.dataIndex}`);
         if (tip === 'red') {
-            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data, rules: col.rules || [] });
             setTitle('查看问题单');
         } else {
-            setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+            setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, rules: col.rules || [] });
         }
     }
 

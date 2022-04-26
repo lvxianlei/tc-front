@@ -99,9 +99,9 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
     }
 
     protected save = (path: string) => {
-        if (this.getForm()) {
+        if (this.fastForm) {
             if (this.state.detailData?.productId || this.state.detailData?.productIdList) {
-                this.getForm()?.validateFields().then(res => {
+                this.fastForm.current?.validateFields().then(res => {
                     const value = this.getForm()?.getFieldsValue(true);
                     const loftingProductSegmentList = this.state.detailData?.loftingProductSegmentList;
                     value.productCategoryId = this.state.detailData?.productCategoryId;
@@ -213,8 +213,8 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 setTimeout(() => {
                     const delSameObjList = this.delSameObjValue(list);
                     const newList = this.state.detailData?.loftingProductSegmentList?.map(res => {
-                        const newData = delSameObjList.filter(item => item.segmentName === res.segmentName);
-                        if (res.segmentName === newData[0].segmentName) {
+                        const newData = delSameObjList.filter(item => item?.segmentName === res?.segmentName);
+                        if (res?.segmentName === newData[0]?.segmentName) {
                             return {
                                 ...res,
                                 count: newData[0].count
@@ -263,7 +263,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 title="配段"
                 footer={<Space>
                     <Button type="ghost" onClick={() => this.modalCancel()}>关闭</Button>
-                    <Button type="primary" onClick={() => this.save('/tower-science/productSegment/distribution/save')} ghost>保存</Button>
                     <Button type="primary" onClick={() => this.save('/tower-science/productSegment/distribution/submit')} ghost>保存并提交</Button>
                 </Space>}
                 onCancel={() => this.modalCancel()}
@@ -278,7 +277,15 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                 <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e) => {
                                     const data = this.state.basicHeightList?.filter(res => res.basicHeight === e);
                                     this.setState({
-                                        productList: data && data[0].productVOList
+                                        productList: data && data[0].productVOList,
+                                            detailData: {
+                                                ...this.state.detailData,
+                                                productNumber: '',
+                                                productIdList: []
+                                            }
+                                    })
+                                    this.fastForm.current?.setFieldsValue({
+                                        productId: []
                                     })
                                 }}>
                                     {this.state.basicHeightList && this.state.basicHeightList?.map(({ basicHeight }, index) => {
@@ -299,7 +306,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                         this.setState({
                                             detailData: {
                                                 ...this.state.detailData,
-                                                productNumber: productId?.map((res: string) => res.split(',')[1]),
+                                                productNumber: productId?.map((res: string) => res.split(',')[1]).join(','),
                                                 productIdList: productId?.map((res: string) => res.split(',')[0])
                                             }
                                         })

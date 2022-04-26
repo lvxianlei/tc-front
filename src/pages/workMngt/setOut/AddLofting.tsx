@@ -5,13 +5,14 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, InputNumber, Input, Button } from 'antd';
+import { Spin, Form, InputNumber, Input, Button, Select } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './TowerLoftingAssign.module.less';
 import CommonTable from "../../common/CommonTable";
 import { FixedType } from 'rc-table/lib/interface';
+import { componentTypeOptions } from "../../../configuration/DictionaryOptions";
 
 interface modalProps {
     id: string;
@@ -186,7 +187,20 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
                     pattern: /^[0-9*,]*$/,
                     message: '仅可输入数字/,/*',
                 }]}>
-                    <Input size="small" maxLength={50} />
+                    <Input size="small" maxLength={50} onBlur={(e) => {
+                        let list = e.target.value.split(',');
+                        let num: number = 0;
+                        list.forEach(res => {
+                            num += Number(res.split('*')[1] || 1)
+                        })
+                        const data = form.getFieldsValue(true).data;
+                        data[index] = {
+                            ...data[index],
+                            holesNum: num
+                        }
+                        setTableData([...data])
+                        form.setFieldsValue({ data: [...data] })
+                    }} />
                 </Form.Item>
             )
         },
@@ -378,7 +392,9 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             dataIndex: 'type',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "type"]} initialValue={_}>
-                    <Input size="small" maxLength={20} />
+                    <Select placeholder="请选择" size="small">
+                        {componentTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
+                    </Select>
                 </Form.Item>
             )
         },
@@ -432,7 +448,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
         },
         {
             key: 'withReaming',
-            title: '有扩孔',
+            title: '扩孔',
             width: 150,
             editable: true,
             dataIndex: 'withReaming',
@@ -491,14 +507,16 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             editable: true,
             dataIndex: 'basicsWeight',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "basicsWeight"]} initialValue={_}>
+                <Form.Item name={['data', index, "basicsWeight"]} initialValue={_} rules={[{
+                    required: true,
+                    message: '请输入单件重量'
+                }]}>
                     <Input type="number" min={0} size="small" onChange={(e) => {
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
                             ...data[index],
                             totalWeight: Number(e.target.value) * Number(data[index].basicsPartNum || 0)
                         }
-                        console.log(data)
                         setTableData([...data])
                         form.setFieldsValue({ data: [...data] })
                     }} />
@@ -525,7 +543,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             dataIndex: 'craftName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "craftName"]} initialValue={_}>
-                    <Input size="small" maxLength={50} />
+                    <Input size="small" maxLength={50} placeholder='自动获取' disabled />
                 </Form.Item>
             )
         },
@@ -608,18 +626,22 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
         }
     }), { manual: true })
 
-    const onSubmit = () => new Promise(async (resolve, reject) => {
+    const onSubmit = () => new Promise((resolve, reject) => {
         try {
-            const values = form.getFieldsValue(true).data || [];
-            console.log(values)
-            await saveRun(values?.map((res:any) => {
-                return {
-                    ...res,
-                    productCategoryId: id,
-                    segmentGroupId: productSegmentId
-                }
-            }))
-            resolve(true);
+            form.validateFields().then(async res => {
+                const values = form.getFieldsValue(true).data || [];
+                await saveRun(values?.map((res: any) => {
+                    return {
+                        ...res,
+                        productCategoryId: id,
+                        segmentGroupId: productSegmentId,
+                        type: res?.type?.split(',')[1],
+                        typeDictId: res?.type?.split(',')[0]
+                    }
+                }))
+                resolve(true);
+            })
+
         } catch (error) {
             reject(false)
         }

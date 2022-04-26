@@ -84,7 +84,7 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
             await saveRun({
                 textureUpdateList: newSelected,
                 segmentGroupId: id,
-                segmentIdList: values.segmentNameList,
+                segmentIdList: values.segmentIdList,
                 structureTextureId: values.fuzzyReplaceBefore?.split(',')[0],
                 structureTexture: values.fuzzyReplaceBefore?.split(',')[1],
                 newStructureTextureId: values.fuzzyReplaceAfter?.split(',')[0],
@@ -110,10 +110,10 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
     return <Spin spinning={loading}>
         <DetailContent>
             <Form form={form} className={styles.descripForm}>
-                <Form.Item name="segmentNameList" label="范围选择" style={{ paddingBottom: '16px' }}>
+                <Form.Item name="segmentIdList" label="范围选择" style={{ paddingBottom: '16px' }}>
                     <Select mode="multiple" allowClear style={{ width: '120px' }} placeholder="不选默认全部">
                         {data?.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.segmentName}>{item.segmentName}</Select.Option>
+                            return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
                         })}
                     </Select>
                 </Form.Item>
@@ -157,14 +157,14 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
                     <Descriptions.Item label="修改前材质">
                         <Form.Item name="fuzzyReplaceBefore">
                             <Select placeholder="请选择" size="small">
-                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' +item.name} key={index}>{item.name}</Select.Option>)}
+                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="修改后材质">
                         <Form.Item name="fuzzyReplaceAfter">
                             <Select placeholder="请选择" size="small">
-                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' +item.name} key={index}>{item.name}</Select.Option>)}
+                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         </Form.Item>
                     </Descriptions.Item>

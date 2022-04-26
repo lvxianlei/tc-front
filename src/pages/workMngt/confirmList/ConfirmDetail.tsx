@@ -29,11 +29,13 @@ export default function ConfirmDetail(): React.ReactNode {
         otherWeightGdxg:0,
         otherWeightXg:0,
         otherWeightQtsm:0,
+        otherWeightDdssgkb:0,
         otherWeightLs:0,
         legWeightA:0,
         legWeightB:0,
         legWeightC:0,
         legWeightD:0,
+        description:'',
     }]);
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
@@ -64,8 +66,44 @@ export default function ConfirmDetail(): React.ReactNode {
                     steelProductShape:'',
                     voltageLevel:'',
                     lineName: '',
-                    confirmList:[]
+                    
+                    confirmList:[{
+                        otherWeightBg:0,
+                        otherWeightPt:0,
+                        otherWeightXxp:0,
+                        otherWeightPat:0,
+                        otherWeightFd:0,
+                        otherWeightGdxg:0,
+                        otherWeightXg:0,
+                        otherWeightQtsm:0,
+                        otherWeightDdssgkb:0,
+                        otherWeightLs:0,
+                        legWeightA:0,
+                        legWeightB:0,
+                        legWeightC:0,
+                        legWeightD:0,
+                        bodyWeight:0,
+                        description:'',
+                    }]
                 })
+                setConfirmData([{
+                    otherWeightBg:0,
+                    otherWeightPt:0,
+                    otherWeightXxp:0,
+                    otherWeightPat:0,
+                    otherWeightFd:0,
+                    otherWeightGdxg:0,
+                    otherWeightXg:0,
+                    otherWeightQtsm:0,
+                    otherWeightDdssgkb:0,
+                    otherWeightLs:0,
+                    legWeightA:0,
+                    legWeightB:0,
+                    legWeightC:0,
+                    legWeightD:0,
+                    bodyWeight:0,
+                    description:'',
+                }])
                 setVisible(false)
                 message.success('添加成功！')
                 run();
@@ -93,8 +131,44 @@ export default function ConfirmDetail(): React.ReactNode {
                     steelProductShape:'',
                     voltageLevel:'',
                     lineName: '',
-                    confirmList:[]
+                    description:'',
+                    confirmList:[{
+                        otherWeightBg:0,
+                        otherWeightPt:0,
+                        otherWeightXxp:0,
+                        otherWeightPat:0,
+                        otherWeightFd:0,
+                        otherWeightGdxg:0,
+                        otherWeightXg:0,
+                        otherWeightDdssgkb:0,
+                        otherWeightQtsm:0,
+                        otherWeightLs:0,
+                        legWeightA:0,
+                        legWeightB:0,
+                        legWeightC:0,
+                        legWeightD:0,
+                        bodyWeight:0,
+                        description:'',
+                    }]
                 })
+                setConfirmData([{
+                    otherWeightBg:0,
+                    otherWeightPt:0,
+                    otherWeightXxp:0,
+                    otherWeightPat:0,
+                    otherWeightFd:0,
+                    otherWeightGdxg:0,
+                    otherWeightXg:0,
+                    otherWeightQtsm:0,
+                    otherWeightDdssgkb:0,
+                    otherWeightLs:0,
+                    legWeightA:0,
+                    legWeightB:0,
+                    legWeightC:0,
+                    legWeightD:0,
+                    bodyWeight:0,
+                    description:'',
+                }])
                 setRowId('')
                 setVisible(false)
                 message.success('修改成功！')
@@ -116,7 +190,27 @@ export default function ConfirmDetail(): React.ReactNode {
         }
     }
     
-    const handleModalCancel = () => {setVisible(false);form.resetFields();}
+    const handleModalCancel = () => {
+        setVisible(false);
+        form.resetFields();
+        setConfirmData([{
+            otherWeightBg:0,
+            otherWeightPt:0,
+            otherWeightXxp:0,
+            otherWeightPat:0,
+            otherWeightFd:0,
+            otherWeightGdxg:0,
+            otherWeightXg:0,
+            otherWeightQtsm:0,
+            otherWeightLs:0,
+            otherWeightDdssgkb:0,
+            legWeightA:0,
+            legWeightB:0,
+            legWeightC:0,
+            legWeightD:0,
+            description:'',
+        }]
+    )}
     // const handlePictureModalCancel = () => {setPictureVisible(false)}
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
@@ -685,10 +779,7 @@ export default function ConfirmDetail(): React.ReactNode {
                               
                             </Descriptions.Item>
                             <Descriptions.Item label="塔型钢印号" span={ 2 }>
-                                <Form.Item name="steelProductShape" rules={[{
-                                    "required": true,
-                                    "message":"请输入塔型钢印号"
-                                }]}>
+                                <Form.Item name="steelProductShape">
                                     <Input  maxLength={30}/>
                                 </Form.Item>
                             </Descriptions.Item>
@@ -782,7 +873,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                                         confirmList: [...legValueSum]
                                                     })
                                                     setConfirmData([...legValueSum])
-                                              }}/>
+                                              }} disabled={edit==='编辑'}/>
                                           </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="基数"  span={ 2 }>
@@ -1284,14 +1375,15 @@ export default function ConfirmDetail(): React.ReactNode {
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="备注" span={ 7 }>
-                                            <Form.Item name="description" >
+                                            <Form.Item name={["confirmList", index, "description"]}>
                                                 <TextArea rows={1}  maxLength={400} style={{width:'100%'}}/>
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item span={2}>
                                             <Space direction="horizontal">
                                                 {index===confirmData.length-1&&edit!=='编辑'&&<Button type="primary" ghost size="small" onClick={ () => {
-                                                    confirmData.push({
+                                                    const value = form.getFieldsValue(true).confirmList
+                                                    value.push({
                                                        otherWeightBg:0,
                                                        otherWeightPt:0,
                                                        otherWeightXxp:0,
@@ -1307,9 +1399,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                        legWeightD:0,
                                                     })
                                                     form.setFieldsValue({
-                                                      confirmList: [...confirmData]
+                                                      confirmList: [...value]
                                                     })
-                                                    setConfirmData([...confirmData])
+                                                    setConfirmData([...value])
                                                     
                                                 } }>添加</Button>}
                                                 {confirmData.length!==1&&<Button type="ghost" size="small" onClick={ () => {

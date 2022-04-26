@@ -25,31 +25,34 @@ import { materialTextureOptions } from "../../../../configuration/DictionaryOpti
      const list = [
          {
              index: 0,
-             structureTexture: 'Q235'
+             structureTexture: 'Q235',
+             suffix: 'B'
          },
          {
              index: 1,
-             structureTexture: 'Q345'
+             structureTexture: 'Q345',
+             suffix: 'B'
          },
          {
              index: 2,
-             structureTexture: 'Q420'
+             structureTexture: 'Q420',
+             suffix: 'B'
          },
          {
              index: 3,
-             structureTexture: 'Q460'
+             structureTexture: 'Q460',
+             suffix: 'B'
          },
          {
              index: 4,
-             structureTexture: 'Q355'
+             structureTexture: 'Q355',
+             suffix: 'B'
          }
      ]
  
      const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
          try {
-             const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
-                 productSegmentGroupId: id
-             });
+             const data: [] = await RequestUtil.get<[]>(`/tower-science/drawProductSegment/getSegmentName`,{segmentGroupId:id});
              form.setFieldsValue({ data: [...list] })
              resole(data)
          } catch (error) {
@@ -74,7 +77,7 @@ import { materialTextureOptions } from "../../../../configuration/DictionaryOpti
              let newSelected = selectedRows.map((res) => {
                  return {
                     before: res.structureTexture,
-                    after: values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
+                    after: res.structureTexture + values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
                  }
              })
              console.log(values)
@@ -139,7 +142,7 @@ import { materialTextureOptions } from "../../../../configuration/DictionaryOpti
                              title: '修改项',
                              dataIndex: 'suffix',
                              render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                 <Form.Item name={['data', index, 'suffix']} rules={
+                                 <Form.Item name={['data', index, 'suffix']} initialValue={_} rules={
                                      [{
                                          pattern: new RegExp(/^[BC]{1}$/),
                                          message: '请输入B/C'
