@@ -248,25 +248,32 @@ export default function AddAssemblyWelding(): React.ReactNode {
         }
         if ((componentList || []).map(res => res.id).findIndex((value) => value === record.structureId) === -1) {
             let values = form.getFieldsValue(true).segmentName;
-            values = values.map((res: string) => {
-                return {
-                    segmentName: res.split(',')[0],
-                    segmentId: res.split(',')[1],
-                }
-            })
-            let data: IComponentList[] = await RequestUtil.post(`/tower-science/welding/getStructure`, {
-                weldingSegmentDTOS: values,
-                productCategoryId: params.productCategoryId,
-                segmentId: params.segmentId || ''
-            });
-            data = data.filter(res => { return res.id === record.structureId });
-            setComponentList([
-                {
-                    ...data[0],
-                    basicsPartNumNow: 1
-                },
-                ...componentList
-            ])
+            if (values) {
+                setComponentList([
+                    ...componentList
+                ])
+            } else {
+                values = values.map((res: string) => {
+                    return {
+                        segmentName: res.split(',')[0],
+                        segmentId: res.split(',')[1],
+                    }
+                })
+                let data: IComponentList[] = await RequestUtil.post(`/tower-science/welding/getStructure`, {
+                    weldingSegmentDTOS: values,
+                    productCategoryId: params.productCategoryId,
+                    segmentId: params.segmentId || ''
+                });
+                data = data.filter(res => { return res.id === record.structureId });
+                setComponentList([
+                    {
+                        ...data[0],
+                        basicsPartNumNow: 1
+                    },
+                    ...componentList
+                ])
+            }
+
         } else {
             setComponentList(componentList?.map((res: IComponentList) => {
                 if (res.id === record.structureId) {
@@ -414,17 +421,17 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         }) || [])]
                     }
                     // if (value.electricWeldingMeters > 0) {
-                        RequestUtil.post(`/tower-science/welding`, { ...value }).then(res => {
-                            message.success('添加成功');
-                            if (tip === 'goOn') {
-                                setComponentList([]);
-                                setWeldingDetailedStructureList([]);
-                                setMainPartId('');
-                                form.resetFields(['componentId', 'electricWeldingMeters', 'segmentName','singleGroupWeight','segmentGroupNum']);
-                            } else {
-                                history.goBack();
-                            }
-                        })
+                    RequestUtil.post(`/tower-science/welding`, { ...value }).then(res => {
+                        message.success('添加成功');
+                        if (tip === 'goOn') {
+                            setComponentList([]);
+                            setWeldingDetailedStructureList([]);
+                            setMainPartId('');
+                            form.resetFields(['componentId', 'electricWeldingMeters', 'segmentName', 'singleGroupWeight', 'segmentGroupNum']);
+                        } else {
+                            history.goBack();
+                        }
+                    })
                     // } else {
                     //     message.warning('电焊米数需大于0');
                     // }
