@@ -358,10 +358,10 @@ export default function TowerCheck(): React.ReactNode {
         setVisible(true);
         const data: IRecord = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${record.id}&problemField=${col.dataIndex}`);
         if (tip === 'red') {
-            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data, rules: col.rules });
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data, rules: col.rules || [] });
             setTitle('查看问题单');
         } else {
-            setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, rules: col.rules });
+            setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, rules: col.rules || [] });
         }
     }
 
