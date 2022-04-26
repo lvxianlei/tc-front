@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
-import { Button, DatePicker, Input, Select } from "antd"
+import { Button, DatePicker, Input, message, Popconfirm, Select } from "antd"
 import { SearchTable as Page } from "../../common"
 import { tableHeader } from "./data.json"
 import { productTypeOptions } from "../../../configuration/DictionaryOptions"
 import NewAdd from "./New"
+import RequestUtil from "../../../utils/RequestUtil"
 export default () => {
     const history = useHistory()
     const [isAdd, setIsAdd] = useState<boolean>(false)
@@ -26,11 +27,23 @@ export default () => {
                     fixed: "right",
                     render: (record: any) => <>
                         <Link
-                            to={`/planProd/publishWorkshop/structure/${record.id}/${record.issuedNumber}/${record.productCategory}`}
+                            to={`/planProd/cyclePlan/detail/${record.id}`}
                         >
                             <Button type="link" size="small">详情</Button>
                         </Link>
-                        <Button type="link" size="small">删除</Button>
+                        <Popconfirm
+                            title="确认删除?"
+                            onConfirm={() => {
+                                RequestUtil.delete(`/tower-system/notice?ids=${record.id}`)
+                                message.success("删除成功...")
+                                history.go(0)
+                            }}
+                            okText="确认"
+                            cancelText="取消"
+                            disabled={record.state === 1}
+                        >
+                            <Button type="link" disabled={record.state === 1}>删除</Button>
+                        </Popconfirm>
                     </>
                 }
             ]}

@@ -44,11 +44,34 @@
             "title": "计划起止日期",
             "dataIndex": "",
             "type": "rangePicker",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择计划起止日期..."
+                }
+            ]
         },
         {
             "title": "周期计划类型",
-            "dataIndex": ""
+            "dataIndex": "returnType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "111"
+                },
+                {
+                    "value": 1,
+                    "label": "222"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择周期计划类型..."
+                }
+            ]
         }
     ]
 }
