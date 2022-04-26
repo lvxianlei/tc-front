@@ -235,6 +235,9 @@ export default forwardRef(function Edit({ type, id, batchNo, productCategoryId }
                                 <Select placeholder="请选择呼高" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e) => {
                                     const data = basicHeightList?.filter(res => res.basicHeight === e);
                                     setProductList( data && data[0].materialProductVOList)
+                                    fastForm.setFieldsValue({
+                                        productId:[]
+                                    })
                                 }}>
                                     {basicHeightList && basicHeightList?.map(({ basicHeight }, index) => {
                                         return <Select.Option key={index} value={basicHeight || ''}>
@@ -251,7 +254,7 @@ export default forwardRef(function Edit({ type, id, batchNo, productCategoryId }
                                 }]}>
                                     <Select placeholder="请选择杆塔" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={() => {
                                         const productId = fastForm.getFieldsValue(true).productId;
-                                        setProductNumber(productId?.map((res: string) => res.split(',')[1]))
+                                        setProductNumber(productId?.map((res: string) => res.split(',')[1]).join(','))
                                         setDetailData({
                                             ...detailData,
                                             productNumber: productId?.map((res: string) => res.split(',')[1]),
