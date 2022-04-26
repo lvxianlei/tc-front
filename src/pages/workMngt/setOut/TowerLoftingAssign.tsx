@@ -265,8 +265,8 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                 pattern: /^[^\s]*$/,
                                                 message: '禁止输入空格',
                                             }, {
-                                                pattern: /^[0-9a-zA-Z-\u4e00-\u9fa5]*$/,
-                                                message: '仅可输入数字/字母/-/汉字',
+                                                pattern: /^[0-9a-zA-Z-\u4e00-\u9fa5,]*$/,
+                                                message: '仅可输入数字/字母/-/汉字/,',
                                             }]}>
                                             <Input placeholder="请输入（1-3，5，ac，w）" />
                                         </Form.Item>
