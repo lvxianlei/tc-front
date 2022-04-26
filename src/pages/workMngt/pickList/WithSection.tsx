@@ -125,6 +125,7 @@ export default forwardRef(function Edit({ type, id, batchNo, productCategoryId }
                 legNumberD: baseData.legNumberD,
                 productCategoryId: detailData?.productCategory,
                 productId: detailData?.productId,
+                productIdList: detailData?.productIdList,
                 productSegmentListDTOList: value
             })
             resolve(true);
