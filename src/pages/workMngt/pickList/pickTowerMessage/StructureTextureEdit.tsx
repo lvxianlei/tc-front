@@ -77,7 +77,7 @@ import { materialTextureOptions } from "../../../../configuration/DictionaryOpti
              let newSelected = selectedRows.map((res) => {
                  return {
                     before: res.structureTexture,
-                    after: values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
+                    after: res.structureTexture + values?.data?.filter((item: { structureTexture: any; }) => item.structureTexture === res.structureTexture)[0].suffix
                  }
              })
              console.log(values)
