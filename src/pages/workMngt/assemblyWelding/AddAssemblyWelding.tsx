@@ -247,8 +247,15 @@ export default function AddAssemblyWelding(): React.ReactNode {
             }))
         }
         if ((componentList || []).map(res => res.id).findIndex((value) => value === record.structureId) === -1) {
-            let data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
-                segmentName: form.getFieldsValue(true).segmentName.split(',')[0],
+            let values = form.getFieldsValue(true).segmentName;
+            values = values.map((res: string) => {
+                return {
+                    segmentName: res.split(',')[0],
+                    segmentId: res.split(',')[1],
+                }
+            })
+            let data: IComponentList[] = await RequestUtil.post(`/tower-science/welding/getStructure`, {
+                weldingSegmentDTOS: values,
                 productCategoryId: params.productCategoryId,
                 segmentId: params.segmentId || ''
             });
@@ -286,12 +293,9 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     productCategoryId: params.productCategoryId,
                     segmentId: params.segmentId || ''
                 });
-                let newData = data.filter(res => {
-                    return Number(res.basicsPartNumNow) !== 0
-                })
                 if (params.segmentId) {
                     settingData.forEach((items: IComponentList) => {
-                        newData = newData.map((item: IComponentList) => {
+                        data = data.map((item: IComponentList) => {
                             if (items.structureId === item.id) {
                                 return {
                                     ...item,
@@ -306,7 +310,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         })
                     })
                 }
-                newData = newData.map(res => {
+                data = data.map(res => {
                     const weldingDetailedStructureListNew: IComponentList[] = weldingDetailedStructureList?.filter(item => item.structureId === res.id) || [];
                     if (weldingDetailedStructureListNew.length > 0) {
                         return {
@@ -316,6 +320,9 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     } else {
                         return { ...res }
                     }
+                })
+                let newData = data.filter(res => {
+                    return Number(res.basicsPartNumNow) !== 0
                 })
                 setComponentList([...newData])
             })
