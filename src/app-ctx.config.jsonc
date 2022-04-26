@@ -623,6 +623,11 @@
                         "label": "分配车间",
                         "path": "/planProd/publishWorkshop",
                         "authority": "approvalm"
+                    },
+                    {
+                        "label": "周期计划",
+                        "path": "/planProd/cyclePlan",
+                        "authority": "approvalm"
                     }
                 ]
             },
