@@ -52,7 +52,7 @@ import { materialTextureOptions } from "../../../../configuration/DictionaryOpti
  
      const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
          try {
-             const data: [] = await RequestUtil.get<[]>(`http://tc-qa-gateway.dhwy.cn/tower-science/drawProductSegment/pattern/${id}`);
+             const data: [] = await RequestUtil.get<[]>(`/tower-science/drawProductSegment/pattern/${id}`);
              form.setFieldsValue({ data: [...list] })
              resole(data)
          } catch (error) {
