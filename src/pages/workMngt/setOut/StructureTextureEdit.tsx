@@ -52,7 +52,9 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
-            const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList/${id}`);
+            const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
+                productSegmentGroupId: id
+            });
             form.setFieldsValue({ data: [...list] })
             resole(data)
         } catch (error) {
@@ -155,14 +157,14 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
                     <Descriptions.Item label="修改前材质">
                         <Form.Item name="fuzzyReplaceBefore">
                             <Select placeholder="请选择" size="small">
-                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' +item.name} key={index}>{item.name}</Select.Option>)}
+                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="修改后材质">
                         <Form.Item name="fuzzyReplaceAfter">
                             <Select placeholder="请选择" size="small">
-                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' +item.name} key={index}>{item.name}</Select.Option>)}
+                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         </Form.Item>
                     </Descriptions.Item>
