@@ -46,8 +46,8 @@ const formItemLayout = {
 export default function IngredientsList(): React.ReactNode {
     const history = useHistory()
     const [ serarchForm ] = Form.useForm();
-    // 传递的参数 status: 状态 batchNumber：批次号 productCategoryName： 塔型 materialStandardName： 标准
-    const params = useParams<{ id: string, status: string, batchNumber: string, productCategoryName: string, materialStandardName: string }>();
+    // 传递的参数 status: 状态 productionBatchNo：批次号 productCategoryName： 塔型 materialStandardName： 标准
+    const params = useParams<{ id: string, status: string, productionBatchNo: string, productCategoryName: string, materialStandardName: string }>();
     console.log(params, "=========>>>>>")
 
     // 切换tab数据
@@ -57,7 +57,7 @@ export default function IngredientsList(): React.ReactNode {
 
     // 按钮
     const btnList: BtnList[] = [
-        // { key: "inherit", value: "继承一次方案" },
+        { key: "inherit", value: "继承一次方案" },
         { key: "fast", value: "快速配料" },
         { key: "programme", value: "已配方案" },
         { key: "save", value: "保存" },
@@ -67,12 +67,12 @@ export default function IngredientsList(): React.ReactNode {
     ]
 
     // 全局存储的数据接口
-    const [globallyStoredData, setGloballyStoredData] = useState<any>([]);
+    const [globallyStoredData, setGloballyStoredData] = useState<any>({});
 
     // tab选中的项
     const [activeKey, setActiveKey] = useState<string>("fangan1");
     // 库存单选
-    const [value, setValue] = useState<string>("1");
+    const [value, setValue] = useState<string>("2");
     // 构建分类明细选择的集合
     const [selectedRowKeysCheck, setSelectedRowKeysCheck] = useState<any>([]);
     // 控制继承一次方案
@@ -104,10 +104,13 @@ export default function IngredientsList(): React.ReactNode {
     const [schemeComparison, setSchemeComparison] = useState<any[]>([]);
     // 已配方案的全部数据
     const [allocatedScheme, setAllocatedScheme] = useState<any[]>([]);
+    // 继承一次方案的数据
+    const [inheritScheme, setInheritScheme] = useState<any[]>([]);
 
     // 已选方案 用于计算数量
     const [selectedScheme, setSelectedScheme] = useState<any[]>([]);
-
+    // 存储仓库id
+    const [warehouseId, setWarehouseId] = useState<any>([]);
     // 操作按钮
     const handleBtnClick = (options: BtnList) => {
         switch (options.key) {
@@ -115,7 +118,8 @@ export default function IngredientsList(): React.ReactNode {
                 history.go(-1);
                 break;
             case "inherit":
-                setVisible(true);
+                getPurchaseBatchingSchemeList(params?.productionBatchNo, activeSort.split("_")[0], activeSort.split("_")[1]);
+                // setVisible(true);
                 break;
             case "programme":
                 handleAllocatedScheme();
@@ -127,7 +131,7 @@ export default function IngredientsList(): React.ReactNode {
                 history.push("/config/configList/angleSteel")
                 break;
             case "save":
-                const panes = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
+                const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
                 if (panes.length !== 1) {
                     message.error("请您先进行方案对比!");
                     return false;
@@ -139,7 +143,7 @@ export default function IngredientsList(): React.ReactNode {
                 handleSaveData(1);
                 break;
             case "generate":
-                const result = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
+                const result = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
                 if (result.length !== 1) {
                     message.error("请您先进行方案对比!");
                     return false;
@@ -157,7 +161,7 @@ export default function IngredientsList(): React.ReactNode {
 
     // 保存数据处理
     const handleSaveData = (code: number) => {
-        const result = globallyStoredData;
+        const result = globallyStoredData.sortChildren;
         let v: any[] = [];
         for (let i = 0; i < result.length; i += 1) {
             for (let p = 0; p < result[i].children.length; p += 1) {
@@ -170,8 +174,8 @@ export default function IngredientsList(): React.ReactNode {
             return false;
         }
         const res = {
-            purchaseTaskTowerId: params.id,
-            schemeList: v
+            produceId: params.id,
+            schemeDtos: v
         }
         if (code === 1) {
             getPurchaseBatchingScheme(res)
@@ -191,18 +195,55 @@ export default function IngredientsList(): React.ReactNode {
     const onTabChange = (activeKey: string) => {
         console.log(activeKey, "====>>")
         setActiveKey(activeKey);
-        const panes = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
+        const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
         const index2 = panes.findIndex((item: any) => item.key === activeKey);
         serarchForm.setFieldsValue({
             ...panes[index2].batchingStrategy
         })
     }
 
+    // 继承一次方案的回调
+    const handleInheritClick = (options: any) => {
+        let v = globallyStoredData?.sortChildren;
+        const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
+        const index = globallyStoredData?.sortChildren?.findIndex((item: any) => item.key === activeSort);
+        // 全局存储已选方案
+        const programme = panes.filter((item: any) => item.key === activeKey);
+        const index2 = panes.findIndex((item: any) => item.key === activeKey);
+        // selectedScheme
+        panes[index2].selectedScheme = options || []
+        // 页面存储已选方案，计算
+        const {
+            meterNumber,
+            numberAll,
+            surplusMaaterial,
+            disassemblyNumber,
+            calculation
+        } = calculationStatistics(panes[index2].selectedScheme);
+        panes[index2].selectedSchemeSummary = [{
+            meterNumber,
+            numberAll,
+            surplusMaaterial,
+            disassemblyNumber,
+            calculation
+        }]
+        v[index].children = panes;
+        console.log(v, "点击选中后的修改")
+        setGloballyStoredData({
+            id: params.id,
+            sortChildren: v
+        })
+        // 清空备选方案
+        setAlternativeData([]);
+        // 展示的已选方案
+        setSelectedScheme(panes[index2].selectedScheme);
+    }
+
     // 新增tab
     const add = () => {
-        let v = globallyStoredData;
-        const panes = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
-        const index = globallyStoredData?.findIndex((item: any) => item.key === activeSort);
+        let v = globallyStoredData?.sortChildren;
+        const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
+        const index = globallyStoredData?.sortChildren?.findIndex((item: any) => item.key === activeSort);
         // 存储配料策略
         const index2 = panes.findIndex((item: any) => item.key === activeKey);
         console.log(index, "index")
@@ -215,7 +256,7 @@ export default function IngredientsList(): React.ReactNode {
             return false;
         }
         const news = [
-            ...globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children,
+            ...globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children,
             {
                 title: `方案${+(panes[panes.length - 1].key?.split("fangan")[1] as any) + 1}`,
                 key: `fangan${+(panes[panes.length - 1].key?.split("fangan")[1] as any) + 1}`,
@@ -234,16 +275,19 @@ export default function IngredientsList(): React.ReactNode {
         serarchForm.resetFields();
         // 存储数据
         setActiveKey(`fangan${+(panes[panes.length - 1].key?.split("fangan")[1] as any) + 1}`);
-        setGloballyStoredData(v)
+        setGloballyStoredData({
+            id: params.id,
+            sortChildren: v
+        })
     };
 
     // 移除
     const remove = (targetKey: string) => {
         let newActiveKey: any = activeKey;
         let lastIndex: any;
-        let v = globallyStoredData;
-        const panes = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
-        const index = globallyStoredData?.findIndex((item: any) => item.key === activeSort);
+        let v = globallyStoredData?.sortChildren;
+        const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
+        const index = globallyStoredData?.sortChildren?.findIndex((item: any) => item.key === activeSort);
         panes.forEach((pane: { key: string; }, i: number) => {
             if (pane.key === targetKey) {
                 lastIndex = i - 1;
@@ -260,7 +304,10 @@ export default function IngredientsList(): React.ReactNode {
         v[index].children = newPanes;
         console.log(newPanes, "=====>>>新增======》》")
         setActiveKey(newActiveKey);
-        setGloballyStoredData(v)
+        setGloballyStoredData({
+            id: params.id,
+            sortChildren: v
+        })
     };
 
     // 库存单选改变
@@ -277,7 +324,7 @@ export default function IngredientsList(): React.ReactNode {
             setSelectedRowCheck(selectedRows)
         },
         getCheckboxProps: (record: any) => ({
-            disabled: record.notConfigured <= 0, // Column configuration not to be checked
+            disabled: record.noIngredients <= 0, // Column configuration not to be checked
             name: record.name,
         }),
     };
@@ -285,7 +332,7 @@ export default function IngredientsList(): React.ReactNode {
     // 已配方案
     const handleAllocatedScheme = () => {
         // 已配方案的数据
-        const result = globallyStoredData;
+        const result = globallyStoredData.sortChildren;
         let v: any[] = [];
         for (let i = 0; i < result.length; i += 1) {
             for (let p = 0; p < result[i].children.length; p += 1) {
@@ -298,10 +345,10 @@ export default function IngredientsList(): React.ReactNode {
     }
 
     // 已选方案移除
-    const handleRemove = (idx: number) => { 
-        let v = globallyStoredData;
-        const panes = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
-        const index = globallyStoredData?.findIndex((item: any) => item.key === activeSort);
+    const handleRemove = (idx: number) => {
+        let v = globallyStoredData?.sortChildren;
+        const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
+        const index = globallyStoredData?.sortChildren?.findIndex((item: any) => item.key === activeSort);
         const index2 = panes.findIndex((item: any) => item.key === activeKey);
         // console.log(panes[index2].selectedScheme.splice(idx, 1), "===>>", panes[index2].selectedScheme, idx)
         let t = panes[index2].selectedScheme;
@@ -324,7 +371,10 @@ export default function IngredientsList(): React.ReactNode {
         }]
         v[index].children = panes;
         console.log(v, "v====================>>>")
-        setGloballyStoredData([...v])
+        setGloballyStoredData({
+            id: params.id,
+            sortChildren: v
+        })
     }
 
     // 统计数量
@@ -332,7 +382,7 @@ export default function IngredientsList(): React.ReactNode {
         let map: Map<string, number> = new Map();
         map.clear();
         // 先获取当前构建下面 => 当前方案下的已选方案
-        const panes = globallyStoredData?.filter((v: any) => v.key === activeSort)[0]?.children;
+        const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
         console.log("统计数量，当前构建下的所有方案", panes, activeKey)
         // 当前方案下的已选方案
         const schemeData = panes?.filter((item: any) => item.key === activeKey)[0]?.selectedScheme || [];
@@ -400,9 +450,9 @@ export default function IngredientsList(): React.ReactNode {
             if (map.has(result[i].code)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(result[i]?.code) || 0;
-                result[i].notConfigured = result[i].num - num;
+                result[i].noIngredients = result[i].num - num;
             } else {
-                result[i].notConfigured = result[i].num;
+                result[i].noIngredients = result[i].num;
             }
         }
         console.log(result, "result")
@@ -428,12 +478,11 @@ export default function IngredientsList(): React.ReactNode {
             if (map.has(`${sort[ix].structureTexture}_${sort[ix].structureSpec}`)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(`${sort[ix].structureTexture}_${sort[ix].structureSpec}`) || 0;
-                sort[ix].notConfigured = sort[ix].totalNum - num;
+                sort[ix].noIngredients = sort[ix].totalNum - num;
             } else {
-                sort[ix].notConfigured = sort[ix].totalNum;
+                sort[ix].noIngredients = sort[ix].totalNum;
             }
         }
-
         setConstructionClassification(sort.slice(0))
     }
 
@@ -446,9 +495,9 @@ export default function IngredientsList(): React.ReactNode {
     // 备选方案点击选中
     const handleAlternativeCick = (options: any) => {
         console.log(options, "======>>>")
-        let v = globallyStoredData;
-        const panes = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
-        const index = globallyStoredData?.findIndex((item: any) => item.key === activeSort);
+        let v = globallyStoredData?.sortChildren;
+        const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
+        const index = globallyStoredData?.sortChildren?.findIndex((item: any) => item.key === activeSort);
         // 全局存储已选方案
         const programme = panes.filter((item: any) => item.key === activeKey);
         const index2 = panes.findIndex((item: any) => item.key === activeKey);
@@ -474,7 +523,10 @@ export default function IngredientsList(): React.ReactNode {
         }]
         v[index].children = panes;
         console.log(v, "点击选中后的修改")
-        setGloballyStoredData(v)
+        setGloballyStoredData({
+            id: params.id,
+            sortChildren: v
+        })
         // 清空备选方案
         setAlternativeData([]);
         // 展示的已选方案
@@ -532,7 +584,7 @@ export default function IngredientsList(): React.ReactNode {
                 }
             }
         }
-        calculation = parseFloat((totalUtilization / numberAll) + "").toFixed(2); // 总利用率
+        calculation = (totalUtilization && numberAll) ? parseFloat((totalUtilization / numberAll) + "").toFixed(2) : 0; // 总利用率
         console.log(map, "===============>>>map")
         map.forEach((value: any) => {
             if (+value >= 2) {
@@ -541,7 +593,7 @@ export default function IngredientsList(): React.ReactNode {
         })
         console.log(disassemblyNumber, "拆号数")
         return {
-            meterNumber: meterNumber.join("、"),
+            meterNumber: meterNumber.join("、") || 0,
             numberAll,
             surplusMaaterial,
             disassemblyNumber,
@@ -551,8 +603,8 @@ export default function IngredientsList(): React.ReactNode {
 
     // 点击方案对比
     const handleSchemeComparison = () => {
-        console.log(globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children)
-        const res = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
+        console.log(globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children)
+        const res = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
         let schemeComparisonList: any = [];
         for (let i = 0; i < res.length; i += 1) {
             if (res[i].selectedSchemeSummary.length > 0) {
@@ -570,17 +622,20 @@ export default function IngredientsList(): React.ReactNode {
     // 方案对比的回调
     const handleComparisonOfSelectedSchemes = (res: any) => {
         if (res.code) {
-            console.log(globallyStoredData)
-            let v = globallyStoredData;
-            const index = globallyStoredData?.findIndex((item: any) => item.key === activeSort);
-            const result = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children.filter((v: any) => v.key === res.data[0]);
+            console.log(globallyStoredData?.sortChildren)
+            let v = globallyStoredData?.sortChildren;
+            const index = globallyStoredData?.sortChildren?.findIndex((item: any) => item.key === activeSort);
+            const result = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children.filter((v: any) => v.key === res.data[0]);
             result[0].title = "方案1";
             result[0].key = "fangan1";
             result[0].closable = false;
             v[index].children = result;
             v[index].isContrast = true; // 已对比
             setActiveKey("fangan1");
-            setGloballyStoredData(v)
+            setGloballyStoredData({
+                id: params.id,
+                sortChildren: v
+            })
             serarchForm.setFieldsValue({
                 ...result[0].batchingStrategy
             })
@@ -590,8 +645,8 @@ export default function IngredientsList(): React.ReactNode {
 
     // 点击构建分类
     const handleConstructionClassification = (options: string) => {
-        let v = globallyStoredData;
-        const panes = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
+        let v = globallyStoredData?.sortChildren;
+        const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
         if (panes.length !== 1) {
             message.error("请您先进行方案对比!");
             return false;
@@ -603,15 +658,18 @@ export default function IngredientsList(): React.ReactNode {
         panes[0].batchingStrategy = serarchForm.getFieldsValue();
         setActiveSort(options);
         setActiveKey("fangan1");
-        setGloballyStoredData(v)
-        const result = globallyStoredData?.filter((v: any) => v.key === options)[0].children;
+        setGloballyStoredData({
+            id: params.id,
+            sortChildren: v
+        })
+        const result = globallyStoredData?.sortChildren?.filter((v: any) => v.key === options)[0].children;
         console.log(result, "======================>>>>", options)
         // 重新调用
         getIngredient(options.split("_")[1]);
         // 获取构建分类明细
         getSortDetail(params.id, options.split("_")[1], options.split("_")[0]);
         // 获取库存
-        getAvailableInventoryList("", options.split("_")[1])
+        getAvailableInventoryList("", 2, "", "", options.split("_")[0],options.split("_")[1]);
         if (JSON.stringify(result[0].batchingStrategy) == "{}") {
             serarchForm.resetFields();
         } else {
@@ -632,7 +690,7 @@ export default function IngredientsList(): React.ReactNode {
     // 保存操作
     const { run: getPurchaseBatchingScheme } = useRequest<{ [key: string]: any }>((options: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/purchaseBatchingScheme`, options);
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/produceIngredients/programme`, options);
             console.log(result, "保存")
             if (result) {
                 message.success("保存成功！");
@@ -646,7 +704,7 @@ export default function IngredientsList(): React.ReactNode {
     // 生成配料
     const { run: getFinish } = useRequest<{ [key: string]: any }>((options: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/purchaseBatchingScheme/finish`, options);
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/produceIngredients/programme/create`, options);
             console.log(result, "保存")
             if (result) {
                 message.success("生成配料成功！");
@@ -681,30 +739,35 @@ export default function IngredientsList(): React.ReactNode {
     // 获取构建分类
     const { run: getSort, data: SortData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseTaskTower/component/material/${id}`);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/loftingScheme/${id}`);
             // 获取页面配料方案
-            const schemeResult: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/scheme/${id}`);
+            const schemeResult: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/programme/getLoftingSchemesByProduceId`, {
+                produceId: params.id
+            });
             console.log(schemeResult, "获取到的配料方案");
-            result?.materialList.map((element: any, index: number) => {
+            result?.map((element: any, index: number) => {
                 element["key"] = `${element.structureTexture}_${index}`
             });
-            setConstructionClassification(result?.materialList || []);
-            if (result?.materialList.length > 0) {
-                setActiveSort(`${result?.materialList[0].structureTexture}_${result?.materialList[0].structureSpec}`)
+            setConstructionClassification((result as any) || []);
+            if (result?.length > 0) {
+                setActiveSort(`${result?.[0].structureTexture}_${result?.[0].structureSpec}`)
                 // 根据构建分类获取配料策略
-                getIngredient(result?.materialList[0]?.structureSpec);
+                getIngredient(result?.[0]?.structureSpec);
                 // // 获取构建分类明细
-                getSortDetail(params.id, result?.materialList[0]?.structureSpec, result?.materialList[0]?.structureTexture);
-                // 获取库存
-                getAvailableInventoryList("", result?.materialList[0].structureSpec)
+                getSortDetail(params.id, result?.[0]?.structureSpec, result?.[0]?.structureTexture);
+                // 获取库存,
+                getAvailableInventoryList("", 2, "", "", result?.[0].structureTexture, result?.[0].structureSpec)
 
                 // 全局存储数据结构
                 // setGloballyStoredData
-                const v: any = []
-                for (let i = 0; i < result.materialList.length; i += 1) {
+                const v: Gobal = {
+                    id: params.id,
+                    sortChildren: []
+                }
+                for (let i = 0; i < result.length; i += 1) {
                     const data = {
                         isContrast: false, // 是否对比
-                        key: `${result?.materialList[i].structureTexture}_${result?.materialList[i].structureSpec}`, // 构建分类的唯一标识
+                        key: `${result?.[i].structureTexture}_${result?.[i].structureSpec}`, // 构建分类的唯一标识
                         children: [
                             {
                                 title: "方案1",
@@ -716,21 +779,25 @@ export default function IngredientsList(): React.ReactNode {
                             }
                         ] // 二级数据 方案
                     }
-                    v.push(data);
+                    v.sortChildren.push(data);
                 }
-                if (schemeResult.length > 0) {
-                    // 说明有配料方案，合并处理
-                    for (let i = 0; i < schemeResult.length; i += 1) {
-                        for (let p = 0; p < v.length; p += 1) {
-                            if (`${schemeResult[i].structureTexture}_${schemeResult[i].structureSpec}` === v[p].key) {
-                                v[p].children[0].selectedScheme = schemeResult[i].details;
-                                v[p].children[0].selectedSchemeSummary = [{
-                                    numberAll: schemeResult[i].statisticsVo.quantity,
-                                    calculation: schemeResult[i].statisticsVo.utilizationRate,
-                                    surplusMaaterial: schemeResult[i].statisticsVo.plannedSurplusLength,
-                                    disassemblyNumber: schemeResult[i].statisticsVo.disassemblyNum,
-                                    meterNumber: schemeResult[i].statisticsVo.meterRange
-                                }];
+                if (schemeResult?.loftingComponentMaterialVOS.length > 0) {
+                    // 存在配料方案，合并处理
+                    for (let i = 0; i < schemeResult?.loftingComponentMaterialVOS.length; i += 1) {
+                        for (let p = 0; p < v.sortChildren.length; p += 1) {
+                            if (`${schemeResult?.loftingComponentMaterialVOS[i].structureTexture}_${schemeResult?.loftingComponentMaterialVOS[i].structureSpec}` === v.sortChildren[p].key) {
+                                // 添加已选方案数量quantity
+                                schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeVOS?.map((element: any, index: number) => {
+                                    element["quantity"] = `${element.num}`
+                                });
+                                v.sortChildren[p].children[0].selectedScheme = schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeVOS;
+                                v.sortChildren[p].children[0].selectedSchemeSummary = [{
+                                    numberAll: schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeStatisticsListVO.quantity || 0,
+                                    calculation: schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeStatisticsListVO.utilizationRate || 0,
+                                    surplusMaaterial: schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeStatisticsListVO.plannedSurplusLength || 0,
+                                    disassemblyNumber: schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeStatisticsListVO.disassemblyNum || 0,
+                                    meterNumber: schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeStatisticsListVO.meterRange || 0
+                                }]
                             }
                         }
                     }
@@ -746,12 +813,12 @@ export default function IngredientsList(): React.ReactNode {
     // 获取构建分类明细
     const { run: getSortDetail } = useRequest<{ [key: string]: any }>((purchaseTowerId: string, spec: string, texture: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseTaskTower/component/${purchaseTowerId}/${spec}/${texture}`)
-            result?.componentList.map((element: any, index: number) => {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/loftingScheme/${purchaseTowerId}/${spec}/${texture}`)
+            result?.map((element: any, index: number) => {
                 element["key"] = `${element.id}`
             });
             console.log(result, "构建分类明细")
-            setSortDetailList(result?.componentList || [])
+            setSortDetailList((result as any) || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -760,13 +827,21 @@ export default function IngredientsList(): React.ReactNode {
 
     // 获取库存
     const { run: getAvailableInventoryList, data: AvailableInventoryData } = useRequest<{ [key: string]: any }>((
-        lenRange: string = "",
-        spec: string = ""
+        latestArrivalTime: string = "",
+        inRoadInventory: number = 2,
+        length: string = "",
+        warehouseId: string = "",
+        structureTexture: string = "",
+        structureSpec: string = ""
     ) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-supply/angleConfigStrategy/ingredientsInventoryList`, {
-                spec,
-                lenRange
+            const result: any = await RequestUtil.get(`/tower-storage/materialStock/getAvailableInventoryList`, {
+                warehouseId,
+                structureTexture, // 材质
+                structureSpec, // 规格
+                latestArrivalTime, // 最晚到货时间
+                length,
+                inRoadInventory, // 是否使用在途库存（1:使用 2:不使用）
             });
             let v: any[] = [];
             for (let i = 0; i < result.length; i += 1) {
@@ -798,19 +873,21 @@ export default function IngredientsList(): React.ReactNode {
                 if (sortDetailList[i].id === selectedRowKeysCheck[0]) {
                     comp.push({
                         ...sortDetailList[i],
+                        notConfigured: sortDetailList[i].noIngredients,
                         head: true
                     })
                 } else {
                     comp.push({
                         ...sortDetailList[i],
+                        notConfigured: sortDetailList[i].noIngredients,
                         head: false
                     })
                 }
             }
-            const result: any[] = await RequestUtil.post(`/tower-supply/purchaseBatchingScheme/batcher/scheme`, {
+            const result: any[] = await RequestUtil.post(`/tower-supply/produceIngredients/batcher/scheme`, {
                 ...serarchData,
                 components: comp, // 构建明细分类
-                purchaseTowerId: params.id, // 采购塔型的id
+                produceId: params.id, // 采购塔型的id
                 stockDetails: availableInventoryData, // 库存信息
                 structureSpec: activeSort.split("_")[1], // 规格
                 structureTexture: activeSort.split("_")[0], // 材质
@@ -822,15 +899,35 @@ export default function IngredientsList(): React.ReactNode {
                 message.error("暂无合适的备选方案！");
                 return false;
             }
-            setAlternativeData(result || []);
+            const v: any[] = [];
+            result.map((item: any) => {
+                v.push(Object.assign(item, { num: item.quantity }))
+            })
+            setAlternativeData(v || []);
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
 
-    console.log("全局", globallyStoredData, activeSort)
+    // 继承一次配料方案
+    const { run: getPurchaseBatchingSchemeList } = useRequest<{ [key: string]: any }>((productionBatchNo: string, spec: string, texture: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/${productionBatchNo}/${spec}/${texture}`)
+            result?.map((element: any, index: number) => {
+                element["key"] = `${element.id}`
+            });
+            console.log(result, "继承一次配料方案")
+            setInheritScheme((result) || [])
+            setVisible(true);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
+    console.log(globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0], "全局", globallyStoredData?.sortChildren, activeSort)
+    console.log(constructionClassification, "构建分类")
     return (
         <div className='ingredientsListWrapper'>
             <DetailContent operation={
@@ -840,7 +937,7 @@ export default function IngredientsList(): React.ReactNode {
             }>
                 <DetailTitle title="配料信息" key={"ingre"}/>
                 <Descriptions bordered>
-                    <Descriptions.Item label="批次号">{ params.batchNumber || "" }</Descriptions.Item>
+                    <Descriptions.Item label="批次号">{ params.productionBatchNo || "" }</Descriptions.Item>
                     <Descriptions.Item label="塔型">{ params.productCategoryName || "" }</Descriptions.Item>
                     <Descriptions.Item label="标准">{ params.materialStandardName || "" }</Descriptions.Item>
                 </Descriptions>
@@ -853,8 +950,8 @@ export default function IngredientsList(): React.ReactNode {
                                     const flag = activeSort === `${item.structureTexture}_${item.structureSpec}`;
                                     return <div className={`contentWrapperLeftlist ${flag ? "active" : ""}`} onClick={() => handleConstructionClassification(`${item.structureTexture}_${item.structureSpec}`)}>
                                         <div className='color' style={{
-                                            backgroundColor: item.notConfigured === item.totalNum ? "#EE483C"
-                                                : item.notConfigured === 0 ? "#13C519" : "#FFB631"
+                                            backgroundColor: item.noIngredients === item.totalNum ? "#EE483C"
+                                                : item.noIngredients === 0 ? "#13C519" : "#FFB631"
                                         }}></div>
                                         <div className='structure_wrapper'>
                                             <p>{ item.structureTexture }</p>
@@ -874,8 +971,7 @@ export default function IngredientsList(): React.ReactNode {
                                     onEdit={(targetKey, action) => onEdit(targetKey, action)}
                                 >
                                     {
-                                        globallyStoredData?.filter((v: any) => v.key === activeSort)[0]?.children?.map((item: Panes) => {
-                                            console.log(item, "====>>>item")
+                                        globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0]?.children?.map((item: Panes) => {
                                             return <TabPane tab={item.title} key={item.key} closable={item.closable} style={{position: "relative"}}>
                                                 <div className='ingredients_content_wrapper'>
                                                     <div className='ingredients_content_wrapper_left'>
@@ -992,12 +1088,12 @@ export default function IngredientsList(): React.ReactNode {
                                                             </Form.Item>
                                                         </Form>
                                                         <DetailTitle title="库存" key={"stock"} operation={[
-                                                            // <Button disabled={value === "1"} type="primary" ghost key="add" style={{ marginRight: 8 }} onClick={() => setVisibleSelectWarehouse(true)}>选择仓库</Button>,
-                                                            <Button type="primary" ghost key="choose" onClick={() => setVisibleSelectMeters(true)}>选择米数</Button>
+                                                            <Button disabled={value === "1"} type="primary" ghost key="add" style={{ marginRight: 8 }} onClick={() => setVisibleSelectWarehouse(true)}>选择仓库</Button>,
+                                                            <Button disabled={warehouseId.length < 1} type="primary" ghost key="choose" onClick={() => setVisibleSelectMeters(true)}>选择米数</Button>
                                                         ]} />
                                                         <Radio.Group onChange={onRaioChange} value={value} style={{marginBottom: 8}}>
-                                                            <Radio value={"1"}>理想库存</Radio>
-                                                            {/* <Radio value={"2"}>可用库存</Radio> */}
+                                                            {/* <Radio value={"1"}>理想库存</Radio> */}
+                                                            <Radio value={"2"}>可用库存</Radio>
                                                         </Radio.Group>
                                                         <Table
                                                             size="small"
@@ -1172,7 +1268,7 @@ export default function IngredientsList(): React.ReactNode {
                             <div className='operation_button'>
                                 <Button ghost
                                     type="primary"
-                                    disabled={globallyStoredData?.filter((v: any) => v.key === activeSort)[0]?.children.length === 1}
+                                    disabled={globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children.length === 1}
                                     onClick={() => handleSchemeComparison()}>方案对比</Button>
                             </div>
                         </div>
@@ -1181,8 +1277,11 @@ export default function IngredientsList(): React.ReactNode {
                 
             </DetailContent>
             {/* 继承一次方案 */}
-            <InheritOneIngredient visible={visible} hanleInheritSure={(res) => {
+            <InheritOneIngredient visible={visible} inheritScheme={inheritScheme} hanleInheritSure={(res) => {
                 console.log(res);
+                if (res.code) {
+                    handleInheritClick(res.data.selectedRowsCheck);
+                }
                 setVisible(false);
             }}/>
             {/* 已配方案 */}
@@ -1193,7 +1292,7 @@ export default function IngredientsList(): React.ReactNode {
             <SelectMeters visible={visibleSelectMeters} meterNumber={meterNumber} hanleInheritSure={(res) => {
                 console.log(res, "res")
                 if (res.code) {
-                    getAvailableInventoryList(res.data.join(","), activeSort.split("_")[1]);
+                    getAvailableInventoryList("", 2, res.data.join(","), warehouseId.join(","), activeSort.split("_")[0],activeSort.split("_")[1]);
                 }
                 setVisibleSelectMeters(false);
             }} />
@@ -1201,6 +1300,15 @@ export default function IngredientsList(): React.ReactNode {
             <ComparisonOfSelectedSchemes visible={visibleComparisonOfSelectedSchemes} schemeComparison={schemeComparison} hanleInheritSure={(res) => handleComparisonOfSelectedSchemes(res)} />
             {/* 选择仓库 */}
             <SelectWarehouse visible={visibleSelectWarehouse} hanleInheritSure={(res) => {
+                console.log(res,)
+                if (res.code) {
+                    setWarehouseId(res.data.selectedRowKeysCheck);
+                    if (res.data.inventory) {
+                        getAvailableInventoryList(`${res.data.inventoryTime} 00:00:00`, 1, "", res.data.selectedRowKeysCheck.join(","), activeSort.split("_")[0],activeSort.split("_")[1]);
+                    } else {
+                        getAvailableInventoryList("", 2, "", res?.data.selectedRowKeysCheck.join(","), activeSort.split("_")[0],activeSort.split("_")[1]);
+                    }
+                }
                 setVisibleSelectWarehouse(false);
             }} />
         </div>

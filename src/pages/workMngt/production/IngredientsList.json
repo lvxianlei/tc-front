@@ -1,17 +1,43 @@
 {
-    "MaterialSummary": [
+    "StockColumn": [
         {
-            "title": "品名",
-            "dataIndex": "materialName"
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "width": 80
         },
         {
-            "title": "材质",
-            "dataIndex": "structureTexture"
+            "title": "总数",
+            "dataIndex": "totalNum"
         },
         {
-            "title": "规格",
-            "dataIndex": "structureSpec"
+            "title": "已用",
+            "dataIndex": "alreadyNum"
         },
+        {
+            "title": "剩余",
+            "dataIndex": "surplus"
+        }
+    ],
+    "ConstructionDetailsColumn": [
+        {
+            "title": "件号",
+            "dataIndex": "code"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "width": 80
+        },
+        {
+            "title": "总数",
+            "dataIndex": "num"
+        },
+        {
+            "title": "剩余",
+            "dataIndex": "noIngredients"
+        }
+    ],
+    "BatchingScheme": [
         {
             "title": "原材料长度（mm）",
             "dataIndex": "length",
@@ -19,38 +45,19 @@
             "type": "number"
         },
         {
-            "title": "单重",
-            "dataIndex": "weight"
-        },
-        {
-            "title": "汇总数量",
-            "dataIndex": "quantity"
-        },
-        {
-            "title": "汇总重量",
-            "dataIndex": "totalWeight"
-        }
-    ],
-    "SummaryBatchingScheme": [
-        {
-            "title": "品名",
-            "dataIndex": "materialName"
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture"
-        },
-        {
-            "title": "规格",
-            "dataIndex": "structureSpec"
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length"
-        },
-        {
             "title": "数量",
+            "width": 100,
             "dataIndex": "quantity"
+        },
+        {
+            "title": "利用率",
+            "width": 100,
+            "dataIndex": "utilizationRate"
+        },
+        {
+            "title": "余料长度",
+            "width": 100,
+            "dataIndex": "plannedSurplusLength"
         },
         {
             "title": "零件1",
@@ -113,16 +120,6 @@
             "title": "数量4",
             "width": 100,
             "dataIndex": "num4"
-        },
-        {
-            "title": "余料长度",
-            "width": 100,
-            "dataIndex": "plannedSurplusLength"
-        },
-        {
-            "title": "利用率",
-            "width": 100,
-            "dataIndex": "utilizationRate"
         }
     ]
 }

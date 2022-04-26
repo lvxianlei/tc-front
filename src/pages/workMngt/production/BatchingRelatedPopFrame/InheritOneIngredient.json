@@ -2,11 +2,11 @@
     "InheritOneIngredientCloumn": [
         {
             "title": "原材料长度",
-            "dataIndex": "utilizationRate"
+            "dataIndex": "length"
         },
         {
             "title": "数量",
-            "dataIndex": "utilizationRate"
+            "dataIndex": "quantity"
         },
         {
             "title": "利用率",
@@ -14,7 +14,7 @@
         },
         {
             "title": "余料长度",
-            "dataIndex": "utilizationRate"
+            "dataIndex": "plannedSurplusLength"
         },
         {
             "title": "零件1",
@@ -176,7 +176,7 @@
     "SelectMetersCloumn": [
         {
             "title": "原材料米数",
-            "dataIndex": "meterNumber"
+            "dataIndex": "length"
         }
     ],
     "ComparisonOfSelectedSchemesCloumn": [

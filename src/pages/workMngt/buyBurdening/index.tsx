@@ -44,17 +44,17 @@ export default function EnquiryList(): React.ReactNode {
                     fixed: "right",
                     dataIndex: 'operation',
                     render: (_: any, records: any) => (<>
-                        <Button type="link" className='btn-operation-link' disabled={![1, 3].includes(records.batcheTaskStatus)} >
+                        <Button type="link" className='btn-operation-link' disabled={![1].includes(records.batcheTaskStatus)} >
                             {/* <Link to={`/ingredients/buyBurdening/component/${records.id}/${records.batcheTaskStatus}`}>配料</Link> */}
-                            <Link to={`/ingredients/buyBurdening/ingredientsList/${records.id}/${records.batcheTaskStatus}`}>配料</Link>
+                            <Link to={`/ingredients/buyBurdening/ingredientsList/${records.id}/${records.batcheTaskStatus}/${records.batchNumber}/${records.productCategoryName}/${records.materialStandardName || "--"}`}>配料</Link>
                         </Button>
                         {/* <Button type="link" className='btn-operation-link' disabled={![3].includes(records.batcheTaskStatus)}
                             onClick={() => {
                                 setChooseId(records.id)
                                 setVisible(true)
                             }} >配料方案</Button> */}
-                        <Button type="link" className='btn-operation-link'>
-                            <Link to={`/ingredients/buyBurdening/batchingScheme/${records.id}`}>配料方案</Link>
+                        <Button type="link" className='btn-operation-link' disabled={![3].includes(records.batcheTaskStatus)}>
+                            <Link to={`/ingredients/buyBurdening/batchingScheme/${records.id}/${records.batcheTaskStatus}`}>配料方案</Link>
                         </Button>
                     </>)
                 }

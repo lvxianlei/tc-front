@@ -1035,6 +1035,20 @@
       "exact": true,
       "authority": "sw_work_management_production_ingredients_component_details"
     },
+    { // 工作管理-生产配料-生产配料
+      "name": "生产配料",
+      "path": "/ingredients/production/ingredientsList/:id/:status/:productionBatchNo/:productCategoryName/:materialStandardName",
+      "module": "./pages/workMngt/production/IngredientsList",
+      "exact": true,
+      "authority": "sw_work_management_production_ingredients_component_details"
+    },
+    { // 工作管理-生产配料-配料单
+      "name": "配料单",
+      "path": "/ingredients/production/batchingScheme/:id",
+      "module": "./pages/workMngt/production/BatchingScheme",
+      "exact": true,
+      "authority": "sw_work_management_production_ingredients_component_details"
+    },
     { // 工作管理-收货列表
       "name": "收货列表",
       "path": "/ingredients/receiving",
@@ -1436,14 +1450,14 @@
     },
     { // 工作管理-采购配料重写
       "name": "配料明细",
-      "path": "/ingredients/buyBurdening/ingredientsList/:id/:status",
+      "path": "/ingredients/buyBurdening/ingredientsList/:id/:status/:batchNumber/:productCategoryName/:materialStandardName",
       "module": "./pages/workMngt/buyBurdening/IngredientsList",
       "exact": true,
       "authority": "buy_burdening_detail"
     },
     { // 工作管理-采购配料-配料方案
       "name": "配料方案",
-      "path": "/ingredients/buyBurdening/batchingScheme/:id",
+      "path": "/ingredients/buyBurdening/batchingScheme/:id/:batcheTaskStatus",
       "module": "./pages/workMngt/buyBurdening/BatchingScheme",
       "exact": true,
       "authority": "work_management_purchase_ingredients"

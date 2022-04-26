@@ -136,15 +136,21 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 className="btn-operation-link" 
-                                disabled={userId !== record.batcherId || record.loftingState === 1}
+                                disabled={userId !== record.batcherId || record.loftingState !== 2}
                             >
-                                <Link to={`/ingredients/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}/${record.productionBatchNo}`}>配料</Link>
+                                {/* <Link to={`/ingredients/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}/${record.productionBatchNo}`}>配料</Link> */}
+                                <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.productionBatchNo}/${record.productCategoryName}/${record.materialStandardName || "--"}`}>配料</Link>
                             </Button>
-                            <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 3}
+                            {/* <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 3}
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setVisible(true)
-                                }}>配料单</Button>
+                                }}>配料单</Button> */}
+                            <Button type="link" className='btn-operation-link'
+                                 disabled={userId !== record.batcherId || record.loftingState !== 3}
+                            >
+                                <Link to={`/ingredients/production/batchingScheme/${record.id}`}>配料单</Link>
+                            </Button>
                             {/* <Button type="link" disabled={userId !== record.batcherId}
                                 onClick={async () => {
                                     await getLoftingRun(record.productionBatch)

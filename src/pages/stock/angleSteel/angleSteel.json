@@ -34,23 +34,23 @@
         },
         {
             "title": "余量(mm)",
-            "dataIndex": "edgeLoss",
+            "dataIndex": "margin",
             "type": "number",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入每刀口耗损..."
+                    "message": "请输入余量(mm)..."
                 }
             ]
         },
         {
             "title": "理想库存长(mm)",
-            "dataIndex": "edgeLoss",
+            "dataIndex": "idealRepertoryLength",
             "type": "number",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入每刀口耗损..."
+                    "message": "请输入理想库存长(mm)..."
                 }
             ]
         },
@@ -98,26 +98,26 @@
             "width": 100
         },
         {
-            "title": "端头长(mm)----待确定字段",
+            "title": "端头长(mm)",
             "dataIndex": "clampLoss",
             "type": "number",
             "width": 100
         },
         {
-            "title": "刀口宽(mm)---待确定字段",
+            "title": "刀口宽(mm)",
             "dataIndex": "edgeLoss",
             "type": "number",
             "width": 100
         },
         {
-            "title": "余量(mm)---待确定字段",
-            "dataIndex": "edgeLoss",
+            "title": "余量(mm)",
+            "dataIndex": "margin",
             "type": "number",
             "width": 100
         },
         {
-            "title": "理想库存长(mm)---待确定字段",
-            "dataIndex": "edgeLoss",
+            "title": "理想库存长(mm)",
+            "dataIndex": "idealRepertoryLength",
             "type": "number",
             "width": 100
         },

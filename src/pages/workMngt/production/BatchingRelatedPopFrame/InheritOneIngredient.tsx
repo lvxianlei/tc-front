@@ -1,28 +1,34 @@
 /**
- * 选择米数
+ * 继承一次方案
  * author: mschange
  * time: 2022/4/21
  */
 import React, { useState } from 'react';
-import { Button, Form, message, Modal, Spin, Table } from 'antd';
+import { Button, Form, Modal, Spin, Table } from 'antd';
 import { EditProps } from "./index"
-import { SelectMetersCloumn } from "./InheritOneIngredient.json";
+import { InheritOneIngredientCloumn } from "./InheritOneIngredient.json";
 import { CommonTable } from '../../../common';
 
 
-export default function SelectMeters(props: EditProps): JSX.Element {
+export default function InheritOneIngredient(props: EditProps): JSX.Element {
     const [selectedRowKeysCheck, setSelectedRowKeysCheck] = useState<any>([]);
+    const [selectedRowsCheck, setSelectedRowsCheck] = useState<any>([]);
     const rowSelectionCheck = {
         selectedRowKeys: selectedRowKeysCheck,
         onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
             setSelectedRowKeysCheck(selectedRowKeys)
-        }
+            setSelectedRowsCheck(selectedRows);
+        },
+        getCheckboxProps: (record: any) => ({
+            disabled: record.notConfigured <= 0, // Column configuration not to be checked
+            name: record.name,
+        }),
     };
     return (
         <Modal
-            title={'选择原材料米数'}
+            title={'一次配料方案'}
             visible={props?.visible}
-            width={400}
+            width={1000}
             maskClosable={false}
             onCancel={() => {
                 props?.hanleInheritSure({
@@ -33,6 +39,8 @@ export default function SelectMeters(props: EditProps): JSX.Element {
                 <Button
                     key="back"
                     onClick={() => {
+                        setSelectedRowKeysCheck([])
+                        setSelectedRowsCheck([]);
                         props?.hanleInheritSure({
                             code: false
                         })
@@ -46,12 +54,16 @@ export default function SelectMeters(props: EditProps): JSX.Element {
                     onClick={() => {
                         props?.hanleInheritSure({
                             code: true,
-                            // data为传递回的数据
-                            data: selectedRowKeysCheck
+                            data: {
+                                selectedRowKeysCheck,
+                                selectedRowsCheck
+                            }
                         })
+                        setSelectedRowKeysCheck([])
+                        setSelectedRowsCheck([]);
                     }}
                 >
-                    确认
+                    继承方案
                 </Button>
             ]}
         >
@@ -61,8 +73,7 @@ export default function SelectMeters(props: EditProps): JSX.Element {
                     ...rowSelectionCheck,
                 }}
                 pagination={false}
-                rowKey="meterNumber"
-                columns={SelectMetersCloumn} dataSource={props?.meterNumber || []} />
+                haveIndex columns={InheritOneIngredientCloumn} dataSource={props?.inheritScheme || []} />
         </Modal>
     )
 }

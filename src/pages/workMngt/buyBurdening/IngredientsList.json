@@ -2,39 +2,39 @@
     "StockColumn": [
         {
             "title": "长度(mm)",
-            "dataIndex": "structureTexture",
+            "dataIndex": "length",
             "width": 80
         },
         {
             "title": "总数",
-            "dataIndex": "structureSpec"
+            "dataIndex": "totalNum"
         },
         {
             "title": "已用",
-            "dataIndex": "length"
+            "dataIndex": "alreadyNum"
         },
         {
             "title": "剩余",
-            "dataIndex": "component1"
+            "dataIndex": "surplus"
         }
     ],
     "ConstructionDetailsColumn": [
         {
             "title": "件号",
-            "dataIndex": "structureTexture"
+            "dataIndex": "code"
         },
         {
             "title": "长度(mm)",
-            "dataIndex": "structureTexture",
+            "dataIndex": "length",
             "width": 80
         },
         {
             "title": "总数",
-            "dataIndex": "structureSpec"
+            "dataIndex": "num"
         },
         {
             "title": "剩余",
-            "dataIndex": "component1"
+            "dataIndex": "notConfigured"
         }
     ],
     "BatchingScheme": [
@@ -47,7 +47,7 @@
         {
             "title": "数量",
             "width": 100,
-            "dataIndex": "utilizationRate"
+            "dataIndex": "quantity"
         },
         {
             "title": "利用率",

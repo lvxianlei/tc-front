@@ -4,7 +4,7 @@
  * time: 2022/4/21
  */
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, DatePicker, Form, Modal, Spin, Table } from 'antd';
+import { Button, Checkbox, DatePicker, Form, message, Modal, Spin, Table } from 'antd';
 import { EditProps } from "./index"
 import { SelectWarehouseCloumn } from "./InheritOneIngredient.json";
 import { CommonTable } from '../../../common';
@@ -20,6 +20,7 @@ export default function SelectWarehouse(props: EditProps): JSX.Element {
     const rowSelectionCheck = {
         selectedRowKeys: selectedRowKeysCheck,
         onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
+            console.log(selectedRowKeys, "selectedRowKeys")
             setSelectedRowKeysCheck(selectedRowKeys)
         },
         getCheckboxProps: (record: any) => ({
@@ -76,11 +77,30 @@ export default function SelectWarehouse(props: EditProps): JSX.Element {
                     type="primary"
                     onClick={() => {
                         console.log("dsdsdsd")
-                        props?.hanleInheritSure({
-                            code: true,
-                            // data为传递回的数据
-                            data: "222"
-                        })
+                        if (inventory) {
+                            if (!inventoryTime) {
+                                message.error("请您选择在途库存最晚到货时间！");
+                                return false;
+                            }
+                            props?.hanleInheritSure({
+                                code: true,
+                                // data为传递回的数据
+                                data: {
+                                    selectedRowKeysCheck,
+                                    inventory: true,
+                                    inventoryTime
+                                }
+                            })
+                        } else {
+                            props?.hanleInheritSure({
+                                code: true,
+                                // data为传递回的数据
+                                data: {
+                                    selectedRowKeysCheck
+                                }
+                            })
+                        }
+                        
                     }}
                 >
                     确认
