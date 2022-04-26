@@ -1817,6 +1817,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 计划排产-计划看板
+      "name": "计划看板",
+      "path": "/planProd/planPanal",
+      "module": "./pages/planBaseSetting/planPanal/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 包装车间-加工任务面板
       "name": "包装计划列表",
       "path": "/packagingWorkshop/processingTask",
