@@ -111,6 +111,7 @@ export default function IngredientsList(): React.ReactNode {
     const [selectedScheme, setSelectedScheme] = useState<any[]>([]);
     // 存储仓库id
     const [warehouseId, setWarehouseId] = useState<any>([]);
+    let [count, setCount] = useState<number>(0);
     // 操作按钮
     const handleBtnClick = (options: BtnList) => {
         switch (options.key) {
@@ -470,6 +471,8 @@ export default function IngredientsList(): React.ReactNode {
                 // map对应存在，则需要减少
                 let num:number = map.get(resultAvailableInventoryData[i]?.length) || 0;
                 resultAvailableInventoryData[i].alreadyNum = num;
+            } else {
+                resultAvailableInventoryData[i].alreadyNum = 0;
             }
         }
         setAvailableInventoryData(resultAvailableInventoryData.slice(0))
@@ -495,7 +498,7 @@ export default function IngredientsList(): React.ReactNode {
     useEffect(() => {
         console.log("需要修改数据了==============================>>>>>>>>>>>>>>>", constructionClassification)
         Statistics()
-    }, [JSON.stringify(globallyStoredData), activeKey, activeSort])
+    }, [JSON.stringify(globallyStoredData), activeKey, activeSort, count])
 
     // 备选方案点击选中
     const handleAlternativeCick = (options: any) => {
@@ -857,6 +860,7 @@ export default function IngredientsList(): React.ReactNode {
             setAvailableInventoryData(result || []);
             // 获取米数
             setMeterNumber(v);
+            setCount(++count);
             resole(result)
         } catch (error) {
             reject(error)
@@ -1190,7 +1194,6 @@ export default function IngredientsList(): React.ReactNode {
                                                                         <Select.Option value="">全部</Select.Option>
                                                                         <Select.Option value="1">完全下料优先</Select.Option>
                                                                         <Select.Option value="2">利用率<ArrowDownOutlined /></Select.Option>
-                                                                        <Select.Option value="3">利用率<ArrowUpOutlined /></Select.Option>
                                                                         <Select.Option value="4">余料长度<ArrowDownOutlined /></Select.Option>
                                                                         <Select.Option value="5">余料长度<ArrowUpOutlined /></Select.Option>
                                                                     </Select>
@@ -1219,7 +1222,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                                 return ({
                                                                                     title: item.title,
                                                                                     dataIndex: item.dataIndex,
-                                                                                    width: 50,
+                                                                                    width: item.width,
                                                                                     render: (_: any, record: any): React.ReactNode => (
                                                                                         // <span>{record[item.dataIndex]}</span>
                                                                                         <div style={{
@@ -1235,7 +1238,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                                 return ({
                                                                                     title: item.title,
                                                                                     dataIndex: item.dataIndex,
-                                                                                    width: 50,
+                                                                                    width: item.width,
                                                                                     render: (_: any, record: any): React.ReactNode => (
                                                                                         <span>{record.utilizationRate}%</span>
                                                                                     )
