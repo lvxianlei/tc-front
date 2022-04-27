@@ -6,13 +6,13 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../../utils/RequestUtil';
 import AuthUtil from '../../../../utils/AuthUtil';
 import { useState } from 'react';
-import Cropper from "react-cropper";
-import "cropperjs/dist/cropper.css";
 import "./recognize.less";
 import styles from './SetOut.module.less';
 
 
 export default function PickTowerDetail(): React.ReactNode {
+    
+
     const history = useHistory()
     const params = useParams<{ id: string, productSegmentId: string, status: string, materialLeader: string }>()
     const [ url, setUrl ] = useState<string>('')
@@ -24,13 +24,6 @@ export default function PickTowerDetail(): React.ReactNode {
         // const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
         resole(data)
     }), {});
-    const [cropData, setCropData] = useState("");
-    const [cropper, setCropper] = useState<any>();
-    const getCropData = () => {
-        if (typeof cropper !== "undefined") {
-          setCropData(cropper.getCroppedCanvas().toDataURL());
-        }
-    };
     const columns = [
         // { title: '段组号', dataIndex: 'segmentGroupName', key: 'segmentGroupName', render:(_: any, record: Record<string, any>, index: number): React.ReactNode =>(
         //     <Form.Item name={['data',index, "segmentGroupName"]} initialValue={ _ }>
@@ -109,7 +102,27 @@ export default function PickTowerDetail(): React.ReactNode {
             return 'normal'
         }
     }
+    window.addEventListener("paste", function (e:any){
+        if ( !(e.clipboardData && e.clipboardData.items) ) {
+            return ;
+        }
     
+        for (var i = 0, len = e.clipboardData.items.length; i < len; i++) {
+            var item = e.clipboardData.items[i];
+            console.log(item)
+            if (item.kind === "string") {
+                console.log(1)  // str 是获取到的字符串
+            } else if (item.kind === "file") {
+                var pasteFile = item.getAsFile();
+                var reader = new FileReader();
+                reader.readAsDataURL(pasteFile);//读取图像文件 result 为 DataURL, DataURL 可直接 赋值给 img.src
+                reader.onload = function(event:any){
+                    setUrlBase(event.target.result) //base64
+                }
+                // pasteFile就是获取到的文件
+            }
+        }
+    });
    
     return <>
         <Spin spinning={loading}>
@@ -150,7 +163,30 @@ export default function PickTowerDetail(): React.ReactNode {
                 <Button key="goback" onClick={() => history.goBack()} style={{marginLeft:"10px"}}>返回</Button>
             ]}>
                 <Space>
-                <Upload
+                
+                    {/* <Button type='primary' onClick={getCropData} disabled={!urlBase}>确认剪裁</Button> */}
+                    <Button type='primary' onClick={async ()=>{
+                        const tableDataSource: any[]  = await RequestUtil.post(`/tower-science/drawProductStructure/ocr`,{base64File: urlBase, productSegmentId: params.productSegmentId});
+                        setTableDataSource(tableDataSource);
+                        form.setFieldsValue({
+                            data: tableDataSource
+                        })
+                    }} 
+                    disabled={!urlBase}
+                    >识别文字</Button>
+
+                </Space>
+                <div style={{ display: 'flex', width:'100%' }}>
+                    <Form form={form} style={{width:'60%'}}>
+                    <Table
+                        columns={columns}
+                        pagination={false}
+                        dataSource={[...tableDataSource]}
+                        scroll={{x:1500}}
+                    />
+                    </Form>
+                    <div style={{ width:'40%'}}>
+                        <Upload
                     maxCount = { 1 }
                     accept="image/png,image/jpeg"
                     action={ () => {
@@ -173,7 +209,6 @@ export default function PickTowerDetail(): React.ReactNode {
                                     myBase64: file?.target?.result, // 把 本地图片的base64编码传给后台，调接口，生成图片的url
                                 };
                                 setUrlBase(params.myBase64);
-                                setCropData('');
                                 form.setFieldsValue({
                                     data: []
                                 })
@@ -192,62 +227,17 @@ export default function PickTowerDetail(): React.ReactNode {
                             console.log(info.file, info.fileList);
                         }
                     } } showUploadList= {false}>
-                        <Button type="primary">选择图片</Button>
+                        <Button type="primary" style={{marginLeft:'10px'}}>选择图片</Button>
                     </Upload>
-                    <Button type='primary' onClick={getCropData} disabled={!urlBase}>确认剪裁</Button>
-                    <Button type='primary' onClick={async ()=>{
-                        const tableDataSource: any[]  = await RequestUtil.post(`/tower-science/drawProductStructure/ocr`,{base64File: cropData, productSegmentId: params.productSegmentId});
-                        setTableDataSource(tableDataSource);
-                        form.setFieldsValue({
-                            data: tableDataSource
-                        })
-                    }} disabled={!cropData}>识别文字</Button>
-
-                </Space>
-                <div style={{ display: 'flex', width:'100%' }}>
-                    {/* <CommonTable dataSource={[...tableDataSource]} columns={towerColumns} pagination={false} rowKey='index'/> */}
-                    <Form form={form} style={{width:'60%'}}>
-                    <Table
-                        columns={columns}
-                        pagination={false}
-                        dataSource={[...tableDataSource]}
-                        scroll={{x:1500}}
-                    />
-                    </Form>
-                    <div style={{ boxShadow:'0px 0px 5px 5px #ccc', width:'40%', marginLeft:'10px', textAlign:'center'}}>
+                    <span>或<span style={{fontWeight:'bold',fontSize:"20px"}}>Ctrl+V</span>粘贴图片</span>
+                    <div style={{ boxShadow:'0px 0px 5px 5px #ccc', width:'100%', marginLeft:'10px', textAlign:'center'}}>
+                        
                         {urlBase?<div style={{ width:'100%'}}>
-                            <div style={{ width: "100%" }}>
-                                <Cropper
-                                    style={{ height: 300, width: "100%" }}
-                                    zoomTo={0.5}
-                                    initialAspectRatio={1}
-                                    preview=".img-preview"
-                                    src={urlBase}
-                                    viewMode={1}
-                                    minCropBoxHeight={10}
-                                    minCropBoxWidth={10}
-                                    background={false}
-                                    responsive={true}
-                                    autoCropArea={1}
-                                    checkOrientation={false} 
-                                    onInitialized={(instance) => {
-                                        setCropper(instance);
-                                    }}
-                                    guides={true}
-                                    />
-                            </div>
-                            <div>
-                                <div className="box" style={{ width: "100%", float: "right" }}>
-                                {/* <h1>Preview</h1> */}
-                                {/* <div
-                                    className="img-preview"
-                                    style={{ width: "100%", float: "left", height: "500px" }}
-                                /> */}
-                                    {cropData?<Image style={{ width: "100%" }} src={cropData} alt="cropped" />:null}
-                                </div>
-                            </div>
+                                <Image style={{ width: "100%" }} src={urlBase}  />
                         </div>:<span style={{lineHeight:"200px"}}>当前暂无图片</span>}
                     </div>
+                        </div>
+                    
                 </div>
             </DetailContent>
             <Modal visible={visible} title='' onCancel={()=>{setVisible(false)}} okText='是' cancelText='否' footer={<Space><Button onClick={async ()=>{

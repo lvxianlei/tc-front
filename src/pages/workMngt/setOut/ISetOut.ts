@@ -45,8 +45,9 @@ export interface ILofting {
     readonly weldingEdge?: string;
 }
 
-export interface PdmModalProps {
+export interface modalProps {
     onSubmit: () => void;
+    resetFields: () => void
 }
 
 export interface allotModalProps {
@@ -158,13 +159,14 @@ export interface IDetailData {
     readonly legNumberC?: string;
     readonly legNumberD?: string;
     readonly loftingProductSegmentList?: IProductSegmentList[];
+    readonly productIdList?: string[];
 }
 
 export interface IProductSegmentList {
     readonly productCategoryId?: string;
     readonly segmentName?: string;
     readonly id?: string | number;
-    readonly count?: string;
+    readonly count?: number;
     readonly segmentId?: string;
 }
 
@@ -180,6 +182,7 @@ export interface IRecord {
     readonly rowId?: string;
     readonly currentValue?: string;
     readonly problemFieldName?: string;
+    readonly rules?: any;
 }
 
 export interface ICount {

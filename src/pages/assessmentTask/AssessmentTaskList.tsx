@@ -83,7 +83,7 @@ export default function AssessmentTaskList(): React.ReactNode {
             width: 230,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Link to={`/assessmentTask/assessmentTaskList/assessmentTaskDetail/${record.id}`}>任务详情</Link>
+                    <Link to={`/taskMngt/assessmentTaskList/assessmentTaskDetail/${record.id}`}>任务详情</Link>
                     {
                         record.status === 2
                             ? <Assign id={record.id} updataList={() => { setRefresh(!refresh); }} />
