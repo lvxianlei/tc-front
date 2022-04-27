@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
- { // 路由配置
+{ // 路由配置
   "globalRouters": [
     {
       "name": "首页",
@@ -1835,6 +1835,41 @@
       "name": "手动分配车间",
       "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-周期计划
+      "name": "周期计划",
+      "path": "/planProd/cyclePlan",
+      "module": "./pages/planBaseSetting/cyclePlan/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-周期计划-详情
+      "name": "详情",
+      "path": "/planProd/cyclePlan/detail/:id",
+      "module": "./pages/planBaseSetting/cyclePlan/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-车间计划基础配置-周期计划类型配置
+      "name": "周期计划类型配置管理",
+      "path": "/workshopPlanBasic/cyclePlanConfig",
+      "module": "./pages/planBaseSetting/configMngt/CyclePlanConfig",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-车间计划基础配置-计划看板配置
+      "name": "计划看板配置管理",
+      "path": "/workshopPlanBasic/kanBanPlanConfig",
+      "module": "./pages/planBaseSetting/configMngt/KanBanPlanConfig",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-计划看板
+      "name": "计划看板",
+      "path": "/planProd/planPanal",
+      "module": "./pages/planBaseSetting/planPanal/index",
       "exact": true,
       "authority": "approvalm"
     },

@@ -1,0 +1,38 @@
+{
+    "tableHeader": [
+        {
+            "title": "周期计划号",
+            "dataIndex": "cyclePlanNumber"
+        },
+        {
+            "title": "周期计划类型",
+            "dataIndex": "configName"
+        },
+        {
+            "title": "计划开始日期",
+            "dataIndex": "startTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "计划完成日期",
+            "dataIndex": "endTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "周期计划状态",
+            "dataIndex": "status"
+        },
+        {
+            "title": "下发日期",
+            "dataIndex": "issueTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "下发人",
+            "dataIndex": "createUserName"
+        }
+    ]
+}

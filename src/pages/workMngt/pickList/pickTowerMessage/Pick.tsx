@@ -36,6 +36,7 @@ export default function Lofting(): React.ReactNode {
             await editModalRef.current?.onSubmit();
             message.success('修改材质成功');
             setEditVisible(false);
+            history.go(0)
             setRefresh(!refresh);
             resove(true);
         } catch (error) {

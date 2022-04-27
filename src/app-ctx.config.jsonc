@@ -638,6 +638,16 @@
                         "label": "分配车间",
                         "path": "/planProd/publishWorkshop",
                         "authority": "approvalm"
+                    },
+                    {
+                        "label": "周期计划",
+                        "path": "/planProd/cyclePlan",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "计划看板",
+                        "path": "/planProd/planPanal",
+                        "authority": "approvalm"
                     }
                 ]
             },
@@ -739,7 +749,6 @@
                         "path": "/packingPlan/baleChange",
                         "authority": "approvalm"
                     }
-                   
                 ]
             },
             {
@@ -1053,6 +1062,16 @@
                     {
                         "label": "分配车间配置管理",
                         "path": "/workshopPlanBasic/publishWorkshopMngt",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "周期计划类型配置管理",
+                        "path": "/workshopPlanBasic/cyclePlanConfig",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "计划看板配置管理",
+                        "path": "/workshopPlanBasic/kanBanPlanConfig",
                         "authority": "approvalm"
                     }
                 ]
