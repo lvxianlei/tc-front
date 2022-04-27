@@ -21,22 +21,25 @@ export default function CyclePlanConfig(): React.ReactNode {
     }), {})
     const columns = [
         {
-            key: 'taskNum',
+            key: 'cyclePlan',
             title: '周期计划类型',
             // width: 100,
-            dataIndex: 'taskNum'
+            dataIndex: 'cyclePlan'
         },
         {
-            key: 'planNumber',
+            key: 'unitName',
             title: '生产单元',
             // width: 400,
-            dataIndex: 'planNumber'
+            dataIndex: 'unitName'
         },
         {
-            key: 'saleOrderNumber',
+            key: 'isStock',
             title: '是否备料',
             // width: 100,
-            dataIndex: 'saleOrderNumber'
+            dataIndex: 'isStock',
+            render:(text:boolean)=>{
+                return <span>{text===true?'是':'否'}</span>
+            }
         },
         {
             key: 'operation',
@@ -48,14 +51,16 @@ export default function CyclePlanConfig(): React.ReactNode {
                         setTitle('编辑')
                         setSelectedValue(record)
                         form.setFieldsValue({
-                            // record
+                            cyclePlan:record?.cyclePlan,
+                            unitId: record?.unitId.split(','),
+                            isStock: record?.isStock === true?1:2
                         })
                         setVisible(true)
                     }}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={async () => {
-                            await RequestUtil.delete(`/tower-system/notice?ids=${record.id}`)
+                            await RequestUtil.delete(`/tower-aps/workshop/config/cycleConfig/${record.groupId}`)
                             message.success("删除成功...")
                             setRefresh(!refresh)
                         }}
@@ -86,15 +91,22 @@ export default function CyclePlanConfig(): React.ReactNode {
                 await form.validateFields()
                 const value = form.getFieldsValue(true)
                 if(title==='新增'){
-                    await RequestUtil.put(``,value).then(()=>{
+                    const submitData = {
+                        ...value,
+                        isStock: value?.isStock === 1?true:false,
+                        unitId: value?.unitId.join(',')
+                    }
+                    await RequestUtil.post(`/tower-aps/workshop/config/cycleConfig`,submitData).then(()=>{
                         message.success('添加成功！')
                     })
                 }else{
                     const submitData = {
                         ...value,
-                        id: selectedValue.id
+                        unitId: value?.unitId.join(','),
+                        isStock: value?.isStock === 1?true:false,
+                        groupId: selectedValue.groupId
                     }
-                    await RequestUtil.post(``,submitData).then(()=>{
+                    await RequestUtil.post(`/tower-aps/workshop/config/cycleConfig`,submitData).then(()=>{
                         message.success('编辑成功！')
                     })
                 }
@@ -106,7 +118,7 @@ export default function CyclePlanConfig(): React.ReactNode {
                 setTitle('新增')
             } }>
                 <Form form={ form } { ...formItemLayout }>
-                    <Form.Item name="dept" label="周期计划类型" rules={[
+                    <Form.Item name="cyclePlan" label="周期计划类型" rules={[
                         {
                             required:true,
                             message:"请填写周期计划部门"
@@ -118,7 +130,7 @@ export default function CyclePlanConfig(): React.ReactNode {
                     ]}>
                         <Input maxLength={100}/>
                     </Form.Item>
-                    <Form.Item name="assignorId" label="生产单元" rules={[{required:true,message:"请选择生产单元"}]}>
+                    <Form.Item name="unitId" label="生产单元" rules={[{required:true,message:"请选择生产单元"}]}>
                         <Select style={{width:'100%'}} mode='multiple'>
                             {
                                 prodUnitList.map((item: any, index: number) => {
@@ -133,7 +145,7 @@ export default function CyclePlanConfig(): React.ReactNode {
                             }
                         </Select>
                     </Form.Item>
-                    <Form.Item name="assignorId" label="是否备料" rules={[{required:true,message:"请选择是否备料"}]}>
+                    <Form.Item name="isStock" label="是否备料" rules={[{required:true,message:"请选择是否备料"}]}>
                         <Select style={{width:'100%'}}>
                             <Select.Option key={1} value={1}>是</Select.Option>
                             <Select.Option key={2} value={2}>否</Select.Option>
@@ -142,7 +154,7 @@ export default function CyclePlanConfig(): React.ReactNode {
                 </Form>
             </Modal>
             <Page
-                path="/tower-science/loftingTask"
+                path="/tower-aps/workshop/config/cycleConfig"
                 columns={columns}
                 // exportPath="/tower-science/loftingTask"
                 onFilterSubmit={onFilterSubmit}

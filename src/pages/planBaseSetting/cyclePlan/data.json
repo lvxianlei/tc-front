@@ -2,76 +2,37 @@
     "tableHeader": [
         {
             "title": "周期计划号",
-            "dataIndex": ""
+            "dataIndex": "cyclePlanNumber"
         },
         {
             "title": "周期计划类型",
-            "dataIndex": ""
+            "dataIndex": "configName"
         },
         {
             "title": "计划开始日期",
-            "dataIndex": "",
+            "dataIndex": "startTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
             "title": "计划完成日期",
-            "dataIndex": "",
+            "dataIndex": "endTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
             "title": "周期计划状态",
-            "dataIndex": ""
+            "dataIndex": "status"
         },
         {
             "title": "下发日期",
-            "dataIndex": "",
+            "dataIndex": "issueTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
             "title": "下发人",
-            "dataIndex": ""
-        }
-    ],
-    "setting": [
-        {
-            "title": "周期计划号",
-            "dataIndex": ""
-        },
-        {
-            "title": "计划起止日期",
-            "dataIndex": "",
-            "type": "rangePicker",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择计划起止日期..."
-                }
-            ]
-        },
-        {
-            "title": "周期计划类型",
-            "dataIndex": "returnType",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 0,
-                    "label": "111"
-                },
-                {
-                    "value": 1,
-                    "label": "222"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择周期计划类型..."
-                }
-            ]
+            "dataIndex": "createUserName"
         }
     ]
 }

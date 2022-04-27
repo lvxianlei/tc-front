@@ -22,16 +22,16 @@ export default function KanbanPlanConfig(): React.ReactNode {
     }), {})
     const columns = [
         {
-            key: 'taskNum',
+            key: 'productType',
             title: '产品类型',
             // width: 100,
-            dataIndex: 'taskNum'
+            dataIndex: 'productType'
         },
         {
-            key: 'planNumber',
+            key: 'productionLinks',
             title: '生产环节',
             // width: 400,
-            dataIndex: 'planNumber'
+            dataIndex: 'productionLinks'
         },
         {
             key: 'operation',
@@ -43,14 +43,16 @@ export default function KanbanPlanConfig(): React.ReactNode {
                         setTitle('编辑')
                         setSelectedValue(record)
                         form.setFieldsValue({
-                            // record
+                            // recor
+                            productType:record?.productTypeId+','+record?.productType,
+                            productionLinkIds: record?.productionLinkIds.split(',')
                         })
                         setVisible(true)
                     }}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={async () => {
-                            await RequestUtil.delete(`/tower-system/notice?ids=${record.id}`)
+                            await RequestUtil.delete(`/tower-aps/workshop/config/planBoard/${record.productTypeId}`)
                             message.success("删除成功...")
                             setRefresh(!refresh)
                         }}
@@ -81,15 +83,23 @@ export default function KanbanPlanConfig(): React.ReactNode {
                 await form.validateFields()
                 const value = form.getFieldsValue(true)
                 if(title==='新增'){
-                    await RequestUtil.put(``,value).then(()=>{
+                    const submitData={
+                        productionLinkIds: value?.productionLinkIds.join(','),
+                        productTypeId:value?.productType.split(',')[0],
+                        productType:value?.productType.split(',')[1]
+                    }
+                    await RequestUtil.post(`/tower-aps/workshop/config/planBoard`,submitData).then(()=>{
                         message.success('添加成功！')
                     })
                 }else{
                     const submitData = {
                         ...value,
-                        id: selectedValue.id
+                        productionLinkIds: value?.productionLinkIds.join(','),
+                        productTypeId:value?.productType.split(',')[0],
+                        productType:value?.productType.split(',')[1],
+                        id: selectedValue.productTypeId
                     }
-                    await RequestUtil.post(``,submitData).then(()=>{
+                    await RequestUtil.post(`/tower-aps/workshop/config/planBoard`,submitData).then(()=>{
                         message.success('编辑成功！')
                     })
                 }
@@ -101,7 +111,7 @@ export default function KanbanPlanConfig(): React.ReactNode {
                 setTitle('新增')
             } }>
                 <Form form={ form } { ...formItemLayout }>
-                    <Form.Item name="dept" label="产品类型" rules={[
+                    <Form.Item name="productType" label="产品类型" rules={[
                         {
                             required:true,
                             message:"请选择产品类型"
@@ -109,11 +119,11 @@ export default function KanbanPlanConfig(): React.ReactNode {
                     ]}>
                         <Select style={{width:'100%'}}>
                             { productTypeOptions && productTypeOptions.map((item:any)=>{
-                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                    return <Select.Option key={item.id} value={item.id+','+item.name}>{item.name}</Select.Option>
                                 }) }
                         </Select>
                     </Form.Item>
-                    <Form.Item name="assignorId" label="生产环节" rules={[{required:true,message:"请选择生产环节"}]}>
+                    <Form.Item name="productionLinkIds" label="生产环节" rules={[{required:true,message:"请选择生产环节"}]}>
                         <Select style={{width:'100%'}} mode='multiple'>
                             { prodLinkList && prodLinkList.map((item:any)=>{
                                 return <Select.Option key={item.userId} value={item.id}>{item.name}</Select.Option>
@@ -123,7 +133,7 @@ export default function KanbanPlanConfig(): React.ReactNode {
                 </Form>
             </Modal>
             <Page
-                path="/tower-science/loftingTask"
+                path="/tower-aps/workshop/config/planBoard"
                 columns={columns}
                 // exportPath="/tower-science/loftingTask"
                 onFilterSubmit={onFilterSubmit}
