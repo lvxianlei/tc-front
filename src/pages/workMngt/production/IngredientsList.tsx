@@ -197,6 +197,7 @@ export default function IngredientsList(): React.ReactNode {
         setActiveKey(activeKey);
         const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
         const index2 = panes.findIndex((item: any) => item.key === activeKey);
+        serarchForm.resetFields();
         serarchForm.setFieldsValue({
             ...panes[index2].batchingStrategy
         })
@@ -302,11 +303,15 @@ export default function IngredientsList(): React.ReactNode {
             }
         }
         v[index].children = newPanes;
-        console.log(newPanes, "=====>>>新增======》》")
+        console.log(newPanes, "=====>>>新增======》》", newActiveKey)
         setActiveKey(newActiveKey);
         setGloballyStoredData({
             id: params.id,
             sortChildren: v
+        })
+        // form处理
+        serarchForm.setFieldsValue({
+            ...newPanes[0].batchingStrategy
         })
     };
 
