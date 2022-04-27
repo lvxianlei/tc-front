@@ -46,9 +46,11 @@ export default () => {
                                 ...head,
                                 title: <Dropdown
                                     overlay={(<Menu selectable onClick={({ key }) => handleChange(key, item.productionLinkIds)}>
-                                        <Menu.Item key={1}>未开始</Menu.Item>
-                                        <Menu.Item key={2} >待完成</Menu.Item>
-                                        <Menu.Item key={3} >已完成</Menu.Item>
+                                        <Menu.Item key={1}>待排产</Menu.Item>
+                                        <Menu.Item key={2} >已锁定</Menu.Item>
+                                        <Menu.Item key={3} >已下发</Menu.Item>
+                                        <Menu.Item key={4} >已下达</Menu.Item>
+                                        <Menu.Item key={5} >已完成</Menu.Item>
                                     </Menu>)}>
                                     <div className={style.dropdown}>
                                         <span>{head.title}</span>
