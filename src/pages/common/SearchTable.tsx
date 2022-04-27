@@ -55,7 +55,8 @@ export default function SearchTable({
             const paramsOptions = stringify({ ...params, ...filterValue })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
-            resole(result)
+            const resultData = result?.records || result || []
+            resole({ ...result, dataSource: transformResult ? transformResult(resultData) : resultData })
         } catch (error) {
             reject(false)
         }
@@ -105,7 +106,7 @@ export default function SearchTable({
             rowKey={rowKey || ((record: any) => record.id)}
             size="small"
             isLoading={loading}
-            dataSource={transformResult ? transformResult(data) : (data?.records || data || [])}
+            dataSource={data?.dataSource}
             {...tableProps}
             {...props}
         />
