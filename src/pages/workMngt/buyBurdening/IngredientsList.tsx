@@ -601,10 +601,6 @@ export default function IngredientsList(): React.ReactNode {
             message.error("请您先进行方案对比!");
             return false;
         }
-        if (panes[0].selectedScheme.length < 1) {
-            message.error("请您先配料！");
-            return false;
-        }
         panes[0].batchingStrategy = serarchForm.getFieldsValue();
         setActiveSort(options);
         setActiveKey("fangan1");
