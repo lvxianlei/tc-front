@@ -47,14 +47,18 @@ export default function EnquiryList(): React.ReactNode {
                     fixed: "right",
                     dataIndex: 'operation',
                     render: (_: any, records: any) => (<>
-                        <Button type="link" className='btn-operation-link' disabled={![1, 3].includes(records.batcheTaskStatus)} >
-                            <Link to={`/ingredients/buyBurdening/component/${records.id}/${records.batcheTaskStatus}`}>明细</Link>
+                        <Button type="link" className='btn-operation-link' disabled={![1].includes(records.batcheTaskStatus)} >
+                            {/* <Link to={`/ingredients/buyBurdening/component/${records.id}/${records.batcheTaskStatus}`}>配料</Link> */}
+                            <Link to={`/ingredients/buyBurdening/ingredientsList/${records.id}/${records.batcheTaskStatus}/${records.batchNumber}/${records.productCategoryName}/${records.materialStandardName || "--"}`}>配料</Link>
                         </Button>
-                        <Button type="link" className='btn-operation-link' disabled={![3].includes(records.batcheTaskStatus)}
+                        {/* <Button type="link" className='btn-operation-link' disabled={![3].includes(records.batcheTaskStatus)}
                             onClick={() => {
                                 setChooseId(records.id)
                                 setVisible(true)
-                            }} >配料方案</Button>
+                            }} >配料方案</Button> */}
+                        <Button type="link" className='btn-operation-link' disabled={![3].includes(records.batcheTaskStatus)}>
+                            <Link to={`/ingredients/buyBurdening/batchingScheme/${records.id}/${records.batcheTaskStatus}`}>配料方案</Link>
+                        </Button>
                     </>)
                 }
             ]}
@@ -83,7 +87,7 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
-                    children: <Input placeholder="批次号/塔型/计划号/任务编号/内部合同号" maxLength={200} />
+                    children: <Input placeholder="批次号/塔型/计划号" maxLength={200} />
                 }
             ]}
         />

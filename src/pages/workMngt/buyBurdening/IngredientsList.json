@@ -1,0 +1,125 @@
+{
+    "StockColumn": [
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "width": 80
+        },
+        {
+            "title": "总数",
+            "dataIndex": "totalNum"
+        },
+        {
+            "title": "已用",
+            "dataIndex": "alreadyNum"
+        },
+        {
+            "title": "剩余",
+            "dataIndex": "surplus"
+        }
+    ],
+    "ConstructionDetailsColumn": [
+        {
+            "title": "件号",
+            "dataIndex": "code"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "width": 80
+        },
+        {
+            "title": "总数",
+            "dataIndex": "num"
+        },
+        {
+            "title": "剩余",
+            "dataIndex": "notConfigured"
+        }
+    ],
+    "BatchingScheme": [
+        {
+            "title": "原材料长度（mm）",
+            "dataIndex": "length",
+            "width": 140,
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "width": 100,
+            "dataIndex": "quantity"
+        },
+        {
+            "title": "利用率",
+            "width": 100,
+            "dataIndex": "utilizationRate"
+        },
+        {
+            "title": "余料长度",
+            "width": 100,
+            "dataIndex": "plannedSurplusLength"
+        },
+        {
+            "title": "零件1",
+            "dataIndex": "component1",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "长度1（mm）",
+            "dataIndex": "len1",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "数量1",
+            "width": 100,
+            "dataIndex": "num1"
+        },
+        {
+            "title": "零件2",
+            "width": 100,
+            "dataIndex": "component2"
+        },
+        {
+            "title": "长度2（mm）",
+            "width": 100,
+            "dataIndex": "len2"
+        },
+        {
+            "title": "数量2",
+            "width": 100,
+            "dataIndex": "num2"
+        },
+        {
+            "title": "零件3",
+            "width": 100,
+            "dataIndex": "component3"
+        },
+        {
+            "title": "长度3（mm）",
+            "width": 100,
+            "dataIndex": "len3"
+        },
+        {
+            "title": "数量3",
+            "width": 100,
+            "dataIndex": "num3"
+        },
+        {
+            "title": "零件4",
+            "width": 100,
+            "dataIndex": "component4"
+        },
+        {
+            "title": "长度4（mm）",
+            "width": 100,
+            "dataIndex": "len4"
+        },
+        {
+            "title": "数量4",
+            "width": 100,
+            "dataIndex": "num4"
+        }
+    ]
+}

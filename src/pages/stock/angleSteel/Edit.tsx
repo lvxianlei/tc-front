@@ -32,15 +32,15 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const baseData = await baseForm.validateFields()
+            const baseData = await baseForm.validateFields();
             await saveRun(type === "new" ? ({
                 ...baseData,
-                materialTextureIds: baseData.materialTextureIds.join(","),
+                // materialTextureIds: baseData.materialTextureIds.join(","),
                 thickness: `${baseData.thicknessMin}~${baseData.thicknessMax}`,
                 width: `${baseData.widthMin}~${baseData.widthMax}`
             }) : ({
                 ...baseData,
-                materialTextureIds: baseData.materialTextureIds.join(","),
+                // materialTextureIds: baseData.materialTextureIds.join(","),
                 thickness: `${baseData.thicknessMin}~${baseData.thicknessMax}`,
                 width: `${baseData.widthMin}~${baseData.widthMax}`,
                 id: data?.id
@@ -68,12 +68,12 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
         form={baseForm}
         columns={angleConfigStrategy.map((item: any) => {
             switch (item.dataIndex) {
-                case "materialTextureIds":
-                    return ({
-                        ...item,
-                        type: "select",
-                        enum: materialTextureEnum
-                    })
+                // case "materialTextureIds":
+                //     return ({
+                //         ...item,
+                //         type: "select",
+                //         enum: materialTextureEnum
+                //     })
                 case "thickness":
                     return ({
                         ...item,
