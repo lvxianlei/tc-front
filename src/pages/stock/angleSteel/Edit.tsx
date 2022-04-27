@@ -37,12 +37,14 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
                 ...baseData,
                 // materialTextureIds: baseData.materialTextureIds.join(","),
                 thickness: `${baseData.thicknessMin}~${baseData.thicknessMax}`,
-                width: `${baseData.widthMin}~${baseData.widthMax}`
+                width: `${baseData.widthMin}~${baseData.widthMax}`,
+                idealRepertoryLength: `${baseData.idealRepertoryLengthMin}/${baseData.idealRepertoryLengthMax}`,
             }) : ({
                 ...baseData,
                 // materialTextureIds: baseData.materialTextureIds.join(","),
                 thickness: `${baseData.thicknessMin}~${baseData.thicknessMax}`,
                 width: `${baseData.widthMin}~${baseData.widthMax}`,
+                idealRepertoryLength: `${baseData.idealRepertoryLengthMin}/${baseData.idealRepertoryLengthMax}`,
                 id: data?.id
             }))
             resolve(true)
@@ -57,7 +59,8 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
         } else {
             const thickness = data.thickness.split("~")
             const width = data.width.split("~")
-            baseForm.setFieldsValue({ data, widthMin: width[0], widthMax: width[1], thicknessMin: thickness[0], thicknessMax: thickness[1] })
+            const idealRepertoryLength = data.idealRepertoryLength.split("/");
+            baseForm.setFieldsValue({ data, widthMin: width[0], widthMax: width[1], thicknessMin: thickness[0], thicknessMax: thickness[1],  idealRepertoryLengthMin: idealRepertoryLength[0], idealRepertoryLengthMax: idealRepertoryLength[1]})
         }
 
     }, [JSON.stringify(data), type])
@@ -90,6 +93,15 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
                             <Col span={11}><Form.Item name="widthMin" rules={[{ required: true, message: "请输入最小值..." }]}><InputNumber /></Form.Item></Col>
                             <Col span={2} style={{ lineHeight: "32px" }}>~</Col>
                             <Col span={11}><Form.Item name="widthMax" rules={[{ required: true, message: "请输入最大值..." }]}><InputNumber /></Form.Item></Col>
+                        </Row>
+                    })
+                case "idealRepertoryLength":
+                    return ({
+                        ...item,
+                        render: () => <Row>
+                            <Col span={11}><Form.Item name="idealRepertoryLengthMin" rules={[{ required: true, message: "请输入最小值..." }]}><InputNumber /></Form.Item></Col>
+                            <Col span={2} style={{ lineHeight: "32px" }}>~</Col>
+                            <Col span={11}><Form.Item name="idealRepertoryLengthMax" rules={[{ required: true, message: "请输入最大值..." }]}><InputNumber /></Form.Item></Col>
                         </Row>
                     })
                 default:

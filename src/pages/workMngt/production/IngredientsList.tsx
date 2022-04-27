@@ -137,20 +137,12 @@ export default function IngredientsList(): React.ReactNode {
                     message.error("请您先进行方案对比!");
                     return false;
                 }
-                if (panes[0].selectedScheme.length < 1) {
-                    message.error("请您先配料！");
-                    return false;
-                }
                 handleSaveData(1);
                 break;
             case "generate":
                 const result = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
                 if (result.length !== 1) {
                     message.error("请您先进行方案对比!");
-                    return false;
-                }
-                if (result[0].selectedScheme.length < 1) {
-                    message.error("请您先配料！");
                     return false;
                 }
                 handleSaveData(2);
@@ -659,10 +651,6 @@ export default function IngredientsList(): React.ReactNode {
             message.error("请您先进行方案对比!");
             return false;
         }
-        if (panes[0].selectedScheme.length < 1) {
-            message.error("请您先配料！");
-            return false;
-        }
         panes[0].batchingStrategy = serarchForm.getFieldsValue();
         setActiveSort(options);
         setActiveKey("fangan1");
@@ -952,7 +940,7 @@ export default function IngredientsList(): React.ReactNode {
                 </Descriptions>
                 {
                     constructionClassification.length > 0 && <div className='content_wrapper'>
-                        <div className='contentWrapperLeft'>
+                        <div className='contentWrapperLeft' style={{maxHeight: document.documentElement.clientHeight - 240, overflow: "auto"}}>
                             {/* 构建list */}
                             {
                                 constructionClassification?.map((item: any) => {
@@ -1184,7 +1172,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     scroll={{ x: 1200, y: 200 }}
                                                                 />
                                                             </div>
-                                                            <div className='title_wrapper' style={{width: document.documentElement.clientWidth - 1018}}>
+                                                            <div className='title_wrapper' style={{width: document.documentElement.clientWidth - 1038}}>
                                                                 <div>备选方案</div>
                                                                 <div>
                                                                     <span>排序</span>
