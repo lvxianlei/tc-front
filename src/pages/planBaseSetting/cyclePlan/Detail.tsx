@@ -266,9 +266,10 @@ export default function CyclePlanDetail(): React.ReactNode {
                             configName: detail?.configName,
                             startTime: value?.startTime,
                             endTime: value?.endTime,
-                            deleteIdList: deleteIdList
+                            deleteIdList: deleteIdList,
+                            issueOrderDTOList: dataSource 
                         }
-                        await RequestUtil.post(`/tower-aps/cyclePlan`,submitData)
+                        await RequestUtil.put(`/tower-aps/cyclePlan`,submitData)
                         message.success('保存成功！')
                         setSelectedKeys([])
                         setDeleteIdList([])

@@ -702,14 +702,21 @@ export default function ReleaseOrder({run}:{run:()=>void}): React.ReactElement {
             setVisible(false)
         } } width={'80%'}>
             <Page
-                path="/tower-aps/planBoard"
+                path="/tower-aps/cyclePlan"
                 filterValue={filterValue}
+                tableProps={{
+                    rowSelection: {
+                        type: "checkbox",
+                        selectedRowKeys: selectedKeys,
+                        onChange: SelectChange
+                    }
+                }}
                 columns={columns}
                 sourceKey='planBoards.records'
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>
-                            合计：总件数： {data?.totalNumber || "-"}  总孔数：{data?.totalHoles|| "-"}  总重量（t）：{data?.totalWeight || "0.00"}
+                            合计：总件数： {data?.totalNumber}  总孔数：{data?.totalHoles}  总重量（t）：{data?.totalWeight || "0.00"}
                         </span>
                     </>
                 }}
@@ -744,12 +751,8 @@ export default function ReleaseOrder({run}:{run:()=>void}): React.ReactElement {
                 onFilterSubmit={(values: any) => {
                     return values;
                 }}
-                tableProps={{
-                    rowSelection: {
-                        selectedRowKeys: selectedKeys,
-                        onChange: SelectChange
-                    }
-                }}
+                
+                
             />
         </Modal>
         <Button type="primary" ghost onClick={() => {setVisible(true)}}>添加下达单</Button>
