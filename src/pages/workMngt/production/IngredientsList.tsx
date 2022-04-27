@@ -924,7 +924,7 @@ export default function IngredientsList(): React.ReactNode {
         try {
             const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/${productionBatchNo}/${spec}/${texture}`)
             result?.map((element: any, index: number) => {
-                element["key"] = `${element.id}`
+                element["num"] = `${element.quantity}`
             });
             console.log(result, "继承一次配料方案")
             setInheritScheme((result) || [])
