@@ -345,34 +345,34 @@ export default function IngredientsList(): React.ReactNode {
             // 根据件号
             if (schemeData[i].component1) {
                 if (map.has(schemeData[i].component1)) {
-                    const result = map.get(schemeData[i].component1);
-                    map.set(schemeData[i].component1, result + schemeData[i].num1);
+                    const result: number = map.get(schemeData[i].component1) || 0;
+                    map.set(schemeData[i].component1, result + schemeData[i].num1 * schemeData[i].quantity);
                 } else {
-                    map.set(schemeData[i].component1, schemeData[i].num1);
+                    map.set(schemeData[i].component1, schemeData[i].num1 * schemeData[i].quantity);
                 }
             }
             if (schemeData[i].component2) {
                 if (map.has(schemeData[i].component2)) {
-                    const result = map.get(schemeData[i].component2);
-                    map.set(schemeData[i].component2, result + schemeData[i].num2);
+                    const result: number = map.get(schemeData[i].component2) || 0;
+                    map.set(schemeData[i].component2, result + schemeData[i].num2 * schemeData[i].quantity);
                 } else {
-                    map.set(schemeData[i].component2, schemeData[i].num2);
+                    map.set(schemeData[i].component2, schemeData[i].num2 * schemeData[i].quantity);
                 }
             }
             if (schemeData[i].component3) {
                 if (map.has(schemeData[i].component3)) {
-                    const result = map.get(schemeData[i].component3);
-                    map.set(schemeData[i].component3, result + schemeData[i].num3);
+                    const result: number = map.get(schemeData[i].component3) || 0;
+                    map.set(schemeData[i].component3, result + schemeData[i].num3 * schemeData[i].quantity);
                 } else {
-                    map.set(schemeData[i].component3, schemeData[i].num3);
+                    map.set(schemeData[i].component3, schemeData[i].num3 * schemeData[i].quantity);
                 }
             }
             if (schemeData[i].component4) {
                 if (map.has(schemeData[i].component4)) {
-                    const result = map.get(schemeData[i].component4);
-                    map.set(schemeData[i].component4, result + schemeData[i].num4);
+                    const result: number = map.get(schemeData[i].component4) || 0;
+                    map.set(schemeData[i].component4, result + schemeData[i].num4 * schemeData[i].quantity);
                 } else {
-                    map.set(schemeData[i].component4, schemeData[i].num4);
+                    map.set(schemeData[i].component4, schemeData[i].num4 * schemeData[i].quantity);
                 }
             }
             // 根据原材料长度
