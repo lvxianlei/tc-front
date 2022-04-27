@@ -20,7 +20,6 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
 
     const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            console.log("=-=====111111")
             const url: string = type === "new" ? `/tower-supply/angleConfigStrategy/saveIngredientsMaterialConfig`
                 :
                 `/tower-supply/angleConfigStrategy/updateIngredientsMaterialConfig`
@@ -33,9 +32,7 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            console.log("=============>>>")
             const baseData = await baseForm.validateFields();
-            console.log(baseData, "数据", type)
             await saveRun(type === "new" ? ({
                 ...baseData,
                 // materialTextureIds: baseData.materialTextureIds.join(","),
