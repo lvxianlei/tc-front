@@ -5,6 +5,7 @@ export interface EditProps {
     meterNumber?: List[] // 选择米数
     schemeComparison?: SchemeComparisonList[] // 对比方案数据
     allocatedScheme?: any[] // 已配方案的数据
+    spec?: string // 规格
 }
 
 interface List {

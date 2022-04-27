@@ -41,7 +41,6 @@ export default function SelectWarehouse(props: EditProps): JSX.Element {
             for (let i = 0; i < result.length; i += 1) {
                 v.push(result[i].id);
             }
-            console.log(v, "v=====")
             setSelectedRowKeysCheck(v);
             resole(result)
         } catch (error) {
@@ -75,7 +74,6 @@ export default function SelectWarehouse(props: EditProps): JSX.Element {
                     key="submit"
                     type="primary"
                     onClick={() => {
-                        console.log("dsdsdsd")
                         props?.hanleInheritSure({
                             code: true,
                             // data为传递回的数据

@@ -176,7 +176,7 @@
     "SelectMetersCloumn": [
         {
             "title": "原材料米数",
-            "dataIndex": "meterNumber"
+            "dataIndex": "length"
         }
     ],
     "ComparisonOfSelectedSchemesCloumn": [

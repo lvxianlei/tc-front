@@ -3,11 +3,13 @@
  * author: mschange
  * time: 2022/4/21
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, message, Modal, Spin, Table } from 'antd';
 import { EditProps } from "./index"
 import { SelectMetersCloumn } from "./InheritOneIngredient.json";
 import { CommonTable } from '../../../common';
+import RequestUtil from '../../../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
 
 
 export default function SelectMeters(props: EditProps): JSX.Element {
@@ -18,6 +20,26 @@ export default function SelectMeters(props: EditProps): JSX.Element {
             setSelectedRowKeysCheck(selectedRowKeys)
         }
     };
+    useEffect(() => {
+        if (props.visible) {
+            getAvailableInventoryList("", props?.spec);
+        } 
+    }, [props.visible])
+
+    const { run: getAvailableInventoryList, data: AvailableInventoryData } = useRequest<{ [key: string]: any }>((
+        lenRange: string = "",
+        spec: string = ""
+    ) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-supply/angleConfigStrategy/ingredientsInventoryList`, {
+                spec,
+                lenRange
+            });
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
     return (
         <Modal
             title={'选择原材料米数'}
@@ -28,6 +50,7 @@ export default function SelectMeters(props: EditProps): JSX.Element {
                 props?.hanleInheritSure({
                     code: false
                 })
+                setSelectedRowKeysCheck([]);
             }}
             footer={[
                 <Button
@@ -46,9 +69,9 @@ export default function SelectMeters(props: EditProps): JSX.Element {
                     onClick={() => {
                         props?.hanleInheritSure({
                             code: true,
-                            // data为传递回的数据
                             data: selectedRowKeysCheck
                         })
+                        setSelectedRowKeysCheck([]);
                     }}
                 >
                     确认
@@ -61,8 +84,8 @@ export default function SelectMeters(props: EditProps): JSX.Element {
                     ...rowSelectionCheck,
                 }}
                 pagination={false}
-                rowKey="meterNumber"
-                columns={SelectMetersCloumn} dataSource={props?.meterNumber || []} />
+                rowKey="length"
+                columns={SelectMetersCloumn} dataSource={(AvailableInventoryData as any) || []} />
         </Modal>
     )
 }

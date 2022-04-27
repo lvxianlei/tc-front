@@ -1190,7 +1190,7 @@ export default function IngredientsList(): React.ReactNode {
                 setVisibleAllocatedScheme(false);
             }} />
             {/* 选择米数 */}
-            <SelectMeters visible={visibleSelectMeters} meterNumber={meterNumber} hanleInheritSure={(res) => {
+            <SelectMeters visible={visibleSelectMeters} spec={ activeSort.split("_")[1]} hanleInheritSure={(res) => {
                 console.log(res, "res")
                 if (res.code) {
                     getAvailableInventoryList(res.data.join(","), activeSort.split("_")[1]);
