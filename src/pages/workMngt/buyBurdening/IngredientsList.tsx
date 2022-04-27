@@ -254,7 +254,7 @@ export default function IngredientsList(): React.ReactNode {
         v[index].children = newPanes;
         console.log(newPanes, "=====>>>新增======》》")
         setActiveKey(newActiveKey);
-        setGloballyStoredData(v)
+        setGloballyStoredData(v.slice(0))
     };
 
     // 库存单选改变
