@@ -812,10 +812,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="模式" span={ 2 }>
-                                <Form.Item name="pattern" rules={[{
-                                    "required": true,
-                                    "message":"请选择模式"
-                                }]}>
+                                <Form.Item name="pattern" >
                                     <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
                                       { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
                                           return <Select.Option key={ index } value={ id }>
