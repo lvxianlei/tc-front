@@ -17,7 +17,7 @@
         },
         {
             "title": "原材料采购任务编号",
-            "dataIndex": "purchaseNumber",
+            "dataIndex": "materialTaskCode",
             "type": "string"
         },
         {

@@ -624,6 +624,7 @@ export default function IngredientsList(): React.ReactNode {
                 ...result[0].batchingStrategy
             })
         }
+        setCount(++count);
     }
 
     // 初始获取数据
