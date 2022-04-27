@@ -159,6 +159,12 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'productCategory'
         },
         {
+            key: 'productionBatchNo',
+            title: '批次号',
+            width: 100,
+            dataIndex: 'productionBatchNo'
+        },
+        {
             key: 'steelProductShape',
             title: '钢印号',
             width: 100,

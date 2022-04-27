@@ -1,5 +1,6 @@
 export interface ISegmentNameList {
     readonly id?: string;
+    readonly name?: string;
 }
 
 export interface IResponseData {
