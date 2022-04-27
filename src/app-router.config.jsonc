@@ -321,7 +321,7 @@
     { // 原材料管理
       "name": "原材料管理",
       "path": "/config/configList/material",
-      "module": "./pages/system-mngt/materialMngt/MaterialMngt",
+      "module": "./pages/system-mngt/material/MaterialMngt",
       "exact": true,
       "authority": "material_management"
     },
@@ -1667,6 +1667,34 @@
       "name": "包装计划列表",
       "path": "/packingPlan/packingPlanList",
       "module": "./pages/packingPlan/PackingPlanList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装计划-改包捆
+      "name": "改包捆",
+      "path": "/packingPlan/baleChange",
+      "module": "./pages/packingPlan/BaleChangeList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装计划-包装计划列表-详情
+      "name": "详情",
+      "path": "/packingPlan/packingPlanList/detail/:id",
+      "module": "./pages/packingPlan/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装计划-包捆列表
+      "name": "包捆列表",
+      "path": "/packingPlan/baleList",
+      "module": "./pages/packingPlan/baleList/BaleList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装计划-包捆列表-详情
+      "name": "详情",
+      "path": "/packingPlan/baleList/detail/:id",
+      "module": "./pages/packingPlan/baleList/Detail",
       "exact": true,
       "authority": "approvalm"
     },
