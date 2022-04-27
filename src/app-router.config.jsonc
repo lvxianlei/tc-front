@@ -1824,6 +1824,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 计划排产-车间计划基础配置-周期计划类型配置
+      "name": "周期计划类型配置管理",
+      "path": "/workshopPlanBasic/cyclePlanConfig",
+      "module": "./pages/planBaseSetting/configMngt/CyclePlanConfig",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-车间计划基础配置-计划看板配置
+      "name": "计划看板配置管理",
+      "path": "/workshopPlanBasic/kanBanPlanConfig",
+      "module": "./pages/planBaseSetting/configMngt/KanBanPlanConfig",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 计划排产-计划看板
       "name": "计划看板",
       "path": "/planProd/planPanal",
