@@ -1,8 +1,23 @@
 {
     "baseInfo": [
         {
-            "title": "原材料任务编号",
-            "dataIndex": "materialTaskCode",
+            "title": "下单单号",
+            "dataIndex": "issuedNumber",
+            "type": "string"
+        },
+        {
+            "title": "批次号",
+            "dataIndex": "productionBatchNo",
+            "type": "string"
+        },
+        {
+            "title": "周期计划号",
+            "dataIndex": "weekPlanNumber",
+            "type": "string"
+        },
+        {
+            "title": "原材料采购任务编号",
+            "dataIndex": "purchaseNumber",
             "type": "string"
         },
         {
@@ -16,14 +31,14 @@
             "type": "string"
         },
         {
-            "title": "杆塔（基）",
-            "dataIndex": "productNum",
-            "type": "integer"
-        },
-        {
-            "title": "放样总重（吨）",
+            "title": "总重量（kg）",
             "dataIndex": "loftingWeightTotal",
             "type": "number"
+        },
+        {
+            "title": "下达时间",
+            "dataIndex": "loftingBatchTime",
+            "type": "string"
         },
         {
             "title": "计划交付时间",

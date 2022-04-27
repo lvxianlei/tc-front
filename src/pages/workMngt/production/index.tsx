@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Select, Modal, Form, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { IntgSelect, Page } from '../../common'
+import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./productionData.json"
 import Overview from "./Edit"
 import useRequest from "@ahooksjs/use-request";
@@ -52,6 +52,11 @@ export default function Invoicing() {
             const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
             value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
+        }
+        if (value.orderTimeUpdateTime) {
+            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startLoftingBatchTime = formatDate[0] + " 00:00:00"
+            value.endLoftingBatchTime = formatDate[1] + " 23:59:59"
         }
         if (value.loftingId) {
             value.loftingDeptId = value.loftingId.first
@@ -115,12 +120,12 @@ export default function Invoicing() {
                     width: 40,
                     render: (_: any, _a: any, index: number) => <>{index + 1}</>
                 },
-                ...baseInfo,
+                ...baseInfo as any,
                 {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 100,
+                    width: 160,
                     render: (_: any, record: any) => {
                         return <>
                             <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId} onClick={() => {
@@ -131,15 +136,21 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 className="btn-operation-link" 
-                                disabled={userId !== record.batcherId || record.loftingState === 3}
+                                disabled={userId !== record.batcherId || record.loftingState !== 2}
                             >
-                                <Link to={`/ingredients/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}`}>明细</Link>
+                                {/* <Link to={`/ingredients/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}/${record.productionBatchNo}`}>配料</Link> */}
+                                <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.productionBatchNo}/${record.productCategoryName}/${record.materialStandardName || "--"}`}>配料</Link>
                             </Button>
-                            <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 2}
+                            {/* <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 3}
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setVisible(true)
-                                }}>配料单</Button>
+                                }}>配料单</Button> */}
+                            <Button type="link" className='btn-operation-link'
+                                 disabled={userId !== record.batcherId || record.loftingState !== 3}
+                            >
+                                <Link to={`/ingredients/production/batchingScheme/${record.id}`}>配料单</Link>
+                            </Button>
                             {/* <Button type="link" disabled={userId !== record.batcherId}
                                 onClick={async () => {
                                     await getLoftingRun(record.productionBatch)
@@ -160,10 +171,14 @@ export default function Invoicing() {
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
-
                 {
                     name: 'startStatusUpdateTime',
                     label: '最新状态变更时间',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'orderTimeUpdateTime',
+                    label: '下达时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
@@ -171,9 +186,9 @@ export default function Invoicing() {
                     label: '状态',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="1">待完成</Select.Option>
-                        <Select.Option value="2">已完成</Select.Option>
-                        <Select.Option value="3">待确认</Select.Option>
+                        <Select.Option value="2">待完成</Select.Option>
+                        <Select.Option value="3">已完成</Select.Option>
+                        <Select.Option value="1">待确认</Select.Option>
                     </Select>
                 },
                 {
@@ -184,7 +199,7 @@ export default function Invoicing() {
                 {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
-                    children: <Input placeholder="方案编号/任务编号/生产批次/塔型" style={{ width: 300 }} />
+                    children: <Input placeholder="方案编号/生产批次/塔型" style={{ width: 300 }} />
                 }
             ]}
         />
