@@ -137,20 +137,12 @@ export default function IngredientsList(): React.ReactNode {
                     message.error("请您先进行方案对比!");
                     return false;
                 }
-                if (panes[0].selectedScheme.length < 1) {
-                    message.error("请您先配料！");
-                    return false;
-                }
                 handleSaveData(1);
                 break;
             case "generate":
                 const result = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
                 if (result.length !== 1) {
                     message.error("请您先进行方案对比!");
-                    return false;
-                }
-                if (result[0].selectedScheme.length < 1) {
-                    message.error("请您先配料！");
                     return false;
                 }
                 handleSaveData(2);
