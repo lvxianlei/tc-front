@@ -103,6 +103,7 @@ export default function KanbanPlanConfig(): React.ReactNode {
                         message.success('编辑成功！')
                     })
                 }
+                form.resetFields()
                 setVisible(false)
                 setRefresh(!refresh)
             } } onCancel={ ()=>{
