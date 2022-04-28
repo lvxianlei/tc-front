@@ -702,7 +702,7 @@ export default function ReleaseOrder({run}:{run:()=>void}): React.ReactElement {
             setVisible(false)
         } } width={'80%'}>
             <Page
-                path="/tower-aps/planBoard"
+                path="/tower-aps/planBoard/issue/list"
                 filterValue={filterValue}
                 tableProps={{
                     rowSelection: {
