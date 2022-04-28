@@ -478,9 +478,9 @@ export default function IngredientsList(): React.ReactNode {
             if (map.has(`${sort[ix].structureTexture}_${sort[ix].structureSpec}`)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(`${sort[ix].structureTexture}_${sort[ix].structureSpec}`) || 0;
-                sort[ix].noIngredients = sort[ix].totalNum - num;
+                sort[ix].notConfigured = sort[ix].totalNum - num;
             } else {
-                sort[ix].noIngredients = sort[ix].totalNum;
+                sort[ix].notConfigured = sort[ix].totalNum;
             }
         }
         setConstructionClassification(sort.slice(0))
@@ -950,8 +950,8 @@ export default function IngredientsList(): React.ReactNode {
                                     const flag = activeSort === `${item.structureTexture}_${item.structureSpec}`;
                                     return <div className={`contentWrapperLeftlist ${flag ? "active" : ""}`} onClick={() => handleConstructionClassification(`${item.structureTexture}_${item.structureSpec}`)}>
                                         <div className='color' style={{
-                                            backgroundColor: item.noIngredients === item.totalNum ? "#EE483C"
-                                                : item.noIngredients === 0 ? "#13C519" : "#FFB631"
+                                            backgroundColor: item.notConfigured === item.totalNum ? "#EE483C"
+                                                : item.notConfigured === 0 ? "#13C519" : "#FFB631"
                                         }}></div>
                                         <div className='structure_wrapper'>
                                             <p>{ item.structureTexture }</p>
