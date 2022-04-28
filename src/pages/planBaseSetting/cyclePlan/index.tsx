@@ -22,6 +22,60 @@ export default () => {
         labelCol: { span: 6 },
         wrapperCol: { span: 16 }
     };
+    const columns = [
+        {
+            title: "周期计划号",
+            width: 150,
+            dataIndex: "cyclePlanNumber"
+        },
+        {
+            title: "周期计划类型",
+            width: 200,
+            dataIndex: "configName"
+        },
+        {
+            title: "计划开始日期",
+            dataIndex: "startTime",
+            type: "date",
+            width: 200,
+            format: "YYYY-MM-DD"
+        },
+        {
+            title: "计划完成日期",
+            dataIndex: "endTime",
+            type: "date",
+            width: 200,
+            format: "YYYY-MM-DD"
+        },
+        {
+            title: "周期计划状态",
+            dataIndex: "status",
+            width: 150,
+            type: "select",
+            enum: [
+                {
+                    "value": 1,
+                    "label": "未下发"
+                },
+                {
+                    "value": 2,
+                    "label": "已下发"
+                }
+            ]
+        },
+        {
+            title: "下发日期",
+            dataIndex: "issueTime",
+            type: "date",
+            width: 200,
+            format: "YYYY-MM-DD"
+        },
+        {
+            title: "下发人",
+            width: 150,
+            dataIndex: "createUserName"
+        }
+    ] 
     return <>
         <Modal visible={isAdd} title="新增周期计划" onOk={async ()=>{
             await form.validateFields()
@@ -52,7 +106,7 @@ export default () => {
         }}>
             <Form form={form} {...formItemLayout}>
                     <Form.Item name="cyclePlanNumber" label="周期计划号">
-                        <Input/>
+                        <Input disabled placeholder="自动生成"/>
                     </Form.Item>
                     <Form.Item name="date" label="计划起止日期" rules={[
                         {
@@ -85,7 +139,7 @@ export default () => {
                 onClick={useCallback(() => setIsAdd(true), [setIsAdd])}
             >新增周期计划</Button>}
             columns={[
-                ...tableHeader as any,
+                ...columns as any,
                 {
                     title: "操作",
                     dataIndex: "opration",
