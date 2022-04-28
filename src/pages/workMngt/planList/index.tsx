@@ -18,7 +18,7 @@ export default function Invoicing() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({
         ...history.location.state as object,
-        purchaserId: sessionStorage.getItem('USER_ID'),
+        purchaserId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
     })
     const [id, setId] = useState<string>();
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {

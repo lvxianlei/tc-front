@@ -15,7 +15,7 @@ export default function RawMaterial() {
     const [detailId, setDetailId] = useState<string>("")
     const [filterValue, setFilterValue] = useState<object>({
         ...history.location.state as object,
-        inquirer: sessionStorage.getItem('USER_ID'),
+        inquirer: history.location.state ? sessionStorage.getItem('USER_ID') : "",
     })
     const tarkRef = useRef<TaskAssignRef>({ onSubmit: () => { }, resetFields: () => { } })
     const [isModalVisible, setIsModalVisible] = useState(false);

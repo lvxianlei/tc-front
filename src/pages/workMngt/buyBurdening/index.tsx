@@ -11,7 +11,7 @@ export default function EnquiryList(): React.ReactNode {
     const [chooseId, setChooseId] = useState<string>("")
     const [filterValue, setFilterValue] = useState<object>({
         ...history.location.state as object,
-        batcherId: sessionStorage.getItem('USER_ID'),
+        batcherId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
     });
     const userId = AuthUtil.getUserId()
     const onFilterSubmit = (value: any) => {
