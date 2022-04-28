@@ -105,7 +105,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请输入名称'
                 }],
                 children: (
-                    <Input maxLength={10} />
+                    <Input maxLength={50} />
                 )
             }, {
                 label: '规格',
