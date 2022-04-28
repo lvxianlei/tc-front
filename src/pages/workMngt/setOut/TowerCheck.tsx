@@ -41,13 +41,6 @@ const columns = [
         width: 120
     },
     {
-        key: 'materialName',
-        title: '材料名称',
-        editable: true,
-        width: 200,
-        dataIndex: 'materialName'
-    },
-    {
         key: 'structureTexture',
         title: '材质',
         editable: true,
@@ -55,11 +48,25 @@ const columns = [
         dataIndex: 'structureTexture',
     },
     {
+        key: 'materialName',
+        title: '材料名称',
+        editable: true,
+        width: 200,
+        dataIndex: 'materialName'
+    },
+    {
         key: 'structureSpec',
         title: '规格',
         dataIndex: 'structureSpec',
         editable: true,
         width: 200,
+    },
+    {
+        key: 'length',
+        title: '长度（mm）',
+        editable: true,
+        width: 200,
+        dataIndex: 'length'
     },
     {
         key: 'width',
@@ -76,13 +83,6 @@ const columns = [
         dataIndex: 'thickness'
     },
     {
-        key: 'length',
-        title: '长度（mm）',
-        editable: true,
-        width: 200,
-        dataIndex: 'length'
-    },
-    {
         key: 'basicsPartNum',
         title: '单段件数',
         editable: true,
@@ -90,32 +90,24 @@ const columns = [
         dataIndex: 'basicsPartNum'
     },
     {
-        key: 'basicsWeight',
-        title: '单件重量（kg）',
+        key: 'apertureNumber',
+        title: '各孔径孔数',
         editable: true,
         width: 200,
-        dataIndex: 'basicsWeight'
+        dataIndex: 'apertureNumber',
+        rules: [
+            {
+                pattern: /^[0-9*,]*$/,
+                message: '仅可输入数字/,/*',
+            }
+        ]
     },
     {
-        key: 'totalWeight',
-        title: '小计重量（kg）',
-        width: 200,
+        key: 'holesNum',
+        title: '单件孔数',
         editable: false,
-        dataIndex: 'totalWeight'
-    },
-    {
-        key: 'description',
-        title: '备注',
-        editable: true,
         width: 200,
-        dataIndex: 'description'
-    },
-    {
-        key: 'specialCode',
-        title: '特殊件号',
-        editable: true,
-        width: 200,
-        dataIndex: 'specialCode'
+        dataIndex: 'holesNum'
     },
     {
         key: 'electricWelding',
@@ -125,11 +117,11 @@ const columns = [
         dataIndex: 'electricWelding'
     },
     {
-        key: 'bend',
-        title: '火曲',
+        key: 'groove',
+        title: '坡口',
         editable: true,
         width: 200,
-        dataIndex: 'bend'
+        dataIndex: 'groove'
     },
     {
         key: 'chamfer',
@@ -137,6 +129,20 @@ const columns = [
         editable: true,
         width: 200,
         dataIndex: 'chamfer'
+    },
+    {
+        key: 'openCloseAngle',
+        title: '开合角',
+        editable: true,
+        width: 200,
+        dataIndex: 'openCloseAngle'
+    },
+    {
+        key: 'bend',
+        title: '火曲',
+        editable: true,
+        width: 200,
+        dataIndex: 'bend'
     },
     {
         key: 'shovelBack',
@@ -160,25 +166,39 @@ const columns = [
         dataIndex: 'squash'
     },
     {
-        key: 'openCloseAngle',
-        title: '开合角',
+        key: 'specialCode',
+        title: '特殊件号',
         editable: true,
         width: 200,
-        dataIndex: 'openCloseAngle'
+        dataIndex: 'specialCode'
     },
     {
-        key: 'perforate',
-        title: '钻孔',
+        key: 'grooveMeters',
+        title: '坡口米数（米）',
         editable: true,
         width: 200,
-        dataIndex: 'perforate'
+        dataIndex: 'grooveMeters'
     },
     {
-        key: 'groove',
-        title: '坡口',
+        key: 'suppress',
+        title: '压制',
         editable: true,
         width: 200,
-        dataIndex: 'groove'
+        dataIndex: 'suppress'
+    },
+    {
+        key: 'spellNumber',
+        title: '拼数',
+        editable: true,
+        width: 200,
+        dataIndex: 'spellNumber'
+    },
+    {
+        key: 'slottedForm',
+        title: '开槽形式',
+        editable: true,
+        width: 200,
+        dataIndex: 'slottedForm'
     },
     {
         key: 'intersectingLine',
@@ -188,11 +208,100 @@ const columns = [
         dataIndex: 'intersectingLine'
     },
     {
-        key: 'slottedForm',
-        title: '开槽形式',
+        key: 'type',
+        title: '零件类型',
         editable: true,
         width: 200,
-        dataIndex: 'slottedForm'
+        dataIndex: 'type'
+    },
+    {
+        key: 'description',
+        title: '备注',
+        editable: true,
+        width: 200,
+        dataIndex: 'description'
+    },
+    {
+        key: 'arcContaining',
+        title: '含弧',
+        editable: true,
+        width: 200,
+        dataIndex: 'arcContaining'
+    },
+    {
+        key: 'perforate',
+        title: '钻孔',
+        editable: true,
+        width: 200,
+        dataIndex: 'perforate'
+    },
+    {
+        key: 'perforateNumber',
+        title: '钻孔孔径孔数',
+        editable: true,
+        width: 200,
+        dataIndex: 'perforateNumber'
+    },
+    {
+        key: 'withReaming',
+        title: '扩孔',
+        editable: true,
+        width: 200,
+        dataIndex: 'withReaming'
+    },
+    {
+        key: 'reamingNumber',
+        title: '扩孔孔径孔数',
+        editable: true,
+        width: 200,
+        dataIndex: 'reamingNumber',
+        rules: [
+            {
+                pattern: /^[0-9*,]*$/,
+                message: '仅可输入数字/,/*',
+            }
+        ]
+    },
+    {
+        key: 'gasCutting',
+        title: '气割孔（0/1）',
+        editable: true,
+        width: 200,
+        dataIndex: 'gasCutting'
+    },
+    {
+        key: 'gasCuttingNumber',
+        title: '气割孔孔径孔数',
+        editable: true,
+        width: 200,
+        dataIndex: 'gasCuttingNumber',
+        rules: [
+            {
+                pattern: /^[0-9*,]*$/,
+                message: '仅可输入数字/,/*',
+            }
+        ]
+    },
+    {
+        key: 'basicsWeight',
+        title: '单件重量（kg）',
+        editable: true,
+        width: 200,
+        dataIndex: 'basicsWeight'
+    },
+    {
+        key: 'totalWeight',
+        title: '总重（kg）',
+        width: 200,
+        editable: false,
+        dataIndex: 'totalWeight'
+    },
+    {
+        key: 'craftName',
+        title: '工艺列（核对）',
+        width: 200,
+        editable: false,
+        dataIndex: 'craftName'
     },
     {
         key: 'sides',
@@ -215,12 +324,6 @@ const columns = [
         )
     },
     {
-        key: 'type',
-        title: '类型',
-        width: 200,
-        dataIndex: 'type'
-    },
-    {
         key: 'surfaceArea',
         title: '表面积',
         editable: true,
@@ -229,13 +332,6 @@ const columns = [
         render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
             <span>{_ === -1 ? undefined : _}</span>
         )
-    },
-    {
-        key: 'apertureNumber',
-        title: '各孔径孔数',
-        editable: true,
-        width: 200,
-        dataIndex: 'apertureNumber'
     },
     {
         key: 'weldingEdge',
@@ -262,10 +358,10 @@ export default function TowerCheck(): React.ReactNode {
         setVisible(true);
         const data: IRecord = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${record.id}&problemField=${col.dataIndex}`);
         if (tip === 'red') {
-            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data, rules: col.rules || [] });
             setTitle('查看问题单');
         } else {
-            setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+            setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, rules: col.rules || [] });
         }
     }
 
@@ -294,7 +390,7 @@ export default function TowerCheck(): React.ReactNode {
                 col.dataIndex === 'index' ? index + 1
                     : !col.editable ? _
                         :
-                        <p onDoubleClick={(e) => { questionnaire(_, record, col, checkColor(record, col.dataIndex)) }} className={checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : checkColor(record, col.dataIndex) === 'brown' ? styles.brown : styles.normal}>{_||'-'}</p>
+                        <p onDoubleClick={(e) => { questionnaire(_, record, col, checkColor(record, col.dataIndex)) }} className={checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : checkColor(record, col.dataIndex) === 'brown' ? styles.brown : styles.normal}>{_ || '-'}</p>
             )
         }
     })

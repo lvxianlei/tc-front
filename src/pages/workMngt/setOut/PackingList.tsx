@@ -115,7 +115,14 @@ export default function PackingList(): React.ReactNode {
                 location?.state?.status === 4 ?
                     null : <>
                         <Button type="primary" ghost onClick={() => setVisible(true)}>套用包</Button>
-                        <Button type="primary" ghost>自动打包</Button>
+                        <Button type="primary" onClick={() => {
+                            RequestUtil.post(`/tower-science/packageStructure/automatic/${params.id}/${params.productId}`).then(res => {
+                                history.go(0)  
+                                message.success('自动打包成功');
+                            }).catch(error => {
+                                console.log(error)
+                            })
+                        }} ghost>自动打包</Button>
                         <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListNew`, state: { productCategoryName: detailData?.productCategoryName, productNumber: detailData?.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
                         <Popconfirm
                             title="确认完成?"

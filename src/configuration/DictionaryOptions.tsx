@@ -11,6 +11,7 @@ export enum DictionaryEnums {
     BOLT_TYPE = 105,
     PATTERN = 106,
     COMPOUND_TYPE = 107,
+    COMPONENT_TYPE = 108,
     CURRENCY_TYPE = 111,
     TAX_RATE = 112,
     REFUND_MODE = 113,
@@ -90,6 +91,7 @@ let packageType: IDict[] | undefined = [];
 let tenderDeliveryMethod: IDict[] | undefined = [];
 let compoundType: IDict[] | undefined = [];
 let factoryType: IDict[] | undefined = [];
+let componentType: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -135,6 +137,7 @@ if (dictionary) {
     tenderDeliveryMethod = dictionary[DictionaryEnums.TENDER_DELIVERY_METHOD];
     compoundType = dictionary[DictionaryEnums.COMPOUND_TYPE];
     factoryType = dictionary[DictionaryEnums.FACTORY_TYPE];
+    componentType = dictionary[DictionaryEnums.COMPONENT_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -179,3 +182,4 @@ export const packageTypeOptions = packageType; //包类型
 export const tenderDeliveryMethodOptions = tenderDeliveryMethod; // 标书投递方式
 export const compoundTypeOptions = compoundType; // 组焊类型
 export const factoryTypeOptions = factoryType; // 厂区名称
+export const componentTypeOptions = componentType; // 零件类型
