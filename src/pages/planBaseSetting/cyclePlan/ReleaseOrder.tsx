@@ -1,20 +1,21 @@
 import React, { useState } from 'react'
 import { Button, Input, Select,  Modal, message} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle, Page } from '../../common';
+import { Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React.ReactElement {
     const history = useHistory()
+    const params = useParams<{ id: string, configId:string }>()
     const [ visible, setVisible] = useState<boolean>(false)
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [ selectedRows, setSelectedRows ] = useState<any[]>([]);
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({
         productTypeId: productTypeOptions && productTypeOptions.length>0 && productTypeOptions[0].id,
-        configId: data?.configId
+        configId: params?.configId
     });
-    const params = useParams<{ id: string }>()
+    
     const columns : any =[
         {
             key: 'planNumber',
@@ -707,6 +708,9 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
             <Page
                 path="/tower-aps/planBoard/issue/list"
                 filterValue={filterValue}
+                requestData={{
+                    configId: params?.configId
+                }}
                 tableProps={{
                     rowSelection: {
                         type: "checkbox",
@@ -743,7 +747,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                     {
                         name: "productTypeId",
                         label: "产品类型",
-                        children:<Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                        children:<Select placeholder="请选择" defaultValue={productTypeOptions&&productTypeOptions[0].id} getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
                             {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                 return <Select.Option key={index} value={id}>
                                     {name}
@@ -753,7 +757,9 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                     },
                 ]}
                 onFilterSubmit={(values: any) => {
-                    values.configId = data?.configId
+                    values.configId = params?.configId
+                    values.productTypeId = values?.productTypeId?values.productTypeId:productTypeOptions&&productTypeOptions[0].id
+                    console.log(values)
                     return values;
                 }}
                 

@@ -2,7 +2,6 @@ import React, { useCallback, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { Button, DatePicker, Form, Input, message, Modal, Popconfirm, Select, Space } from "antd"
 import { Page } from "../../common"
-import { tableHeader } from "./data.json"
 import { productTypeOptions } from "../../../configuration/DictionaryOptions"
 import RequestUtil from "../../../utils/RequestUtil"
 import useRequest from "@ahooksjs/use-request"
@@ -146,7 +145,7 @@ export default () => {
                     fixed: "right",
                     render: (_:any,record: any) => <Space>
                         <Link
-                            to={`/planProd/cyclePlan/detail/${record?.id}`}
+                            to={`/planProd/cyclePlan/detail/${record?.id}/${record?.configId}`}
                         >
                             <Button type="link" size="small">详情</Button>
                         </Link>

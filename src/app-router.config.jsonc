@@ -1847,7 +1847,7 @@
     },
     { // 计划排产-周期计划-详情
       "name": "详情",
-      "path": "/planProd/cyclePlan/detail/:id",
+      "path": "/planProd/cyclePlan/detail/:id/:configId",
       "module": "./pages/planBaseSetting/cyclePlan/Detail",
       "exact": true,
       "authority": "approvalm"
