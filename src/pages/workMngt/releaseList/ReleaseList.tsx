@@ -258,19 +258,19 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'galvanizeDemand'
         },
         {
-            key: 'distributionStatus',
+            key: 'status',
             title: '配料状态',
             width: 150,
-            dataIndex: 'distributionStatus',
+            dataIndex: 'status',
             render:(text:number)=>{
                 return text===1?'未配料':text===2?'已配料':'-'
             }
         },
         {
-            key: 'status',
+            key: 'distributionStatus',
             title: '分配状态',
             width: 150,
-            dataIndex: 'status',
+            dataIndex: 'distributionStatus',
             render:(text:number)=>{
                 return text===1?'未分配':text===2?'已分配':'-'
             }
