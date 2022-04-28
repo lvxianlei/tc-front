@@ -433,10 +433,10 @@ export default function IngredientsList(): React.ReactNode {
             // 添加构建分类map
             if (map.has(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`)) {
                 const result = map.get(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`) || 0;
-                let num = (schemeData[i].num1 || 0) + (schemeData[i].num2 || 0) + (schemeData[i].num3 || 0) + (schemeData[i].num4 || 0)
+                let num = (schemeData[i].num1 || 0) * schemeData[i].quantity + (schemeData[i].num2 || 0) * schemeData[i].quantity + (schemeData[i].num3 || 0) * schemeData[i].quantity + (schemeData[i].num4 || 0) * schemeData[i].quantity
                 map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, result + num);
             } else {
-                let num = (schemeData[i].num1 || 0) + (schemeData[i].num2 || 0) + (schemeData[i].num3 || 0) + (schemeData[i].num4 || 0)
+                let num = (schemeData[i].num1 || 0) * schemeData[i].quantity + (schemeData[i].num2 || 0) * schemeData[i].quantity + (schemeData[i].num3 || 0) * schemeData[i].quantity + (schemeData[i].num4 || 0) * schemeData[i].quantity
                 map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, num);
             }
         }
@@ -478,9 +478,9 @@ export default function IngredientsList(): React.ReactNode {
             if (map.has(`${sort[ix].structureTexture}_${sort[ix].structureSpec}`)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(`${sort[ix].structureTexture}_${sort[ix].structureSpec}`) || 0;
-                sort[ix].noIngredients = sort[ix].totalNum - num;
+                sort[ix].notConfigured = sort[ix].totalNum - num;
             } else {
-                sort[ix].noIngredients = sort[ix].totalNum;
+                sort[ix].notConfigured = sort[ix].totalNum;
             }
         }
         setConstructionClassification(sort.slice(0))
@@ -673,6 +673,8 @@ export default function IngredientsList(): React.ReactNode {
                 ...result[0].batchingStrategy
             })
         }
+        setCount(++count);
+        setAlternativeData([])
     }
 
     // 初始获取数据
@@ -948,8 +950,8 @@ export default function IngredientsList(): React.ReactNode {
                                     const flag = activeSort === `${item.structureTexture}_${item.structureSpec}`;
                                     return <div className={`contentWrapperLeftlist ${flag ? "active" : ""}`} onClick={() => handleConstructionClassification(`${item.structureTexture}_${item.structureSpec}`)}>
                                         <div className='color' style={{
-                                            backgroundColor: item.noIngredients === item.totalNum ? "#EE483C"
-                                                : item.noIngredients === 0 ? "#13C519" : "#FFB631"
+                                            backgroundColor: item.notConfigured === item.totalNum ? "#EE483C"
+                                                : item.notConfigured === 0 ? "#13C519" : "#FFB631"
                                         }}></div>
                                         <div className='structure_wrapper'>
                                             <p>{ item.structureTexture }</p>
