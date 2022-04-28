@@ -70,10 +70,10 @@ export default function DistributedTech(): React.ReactNode {
             dataIndex: 'planDeliveryTime',
             width: 120,
             format: 'YYYY-MM-DD',
-            render:(text: string, record: any)=>{
-                return <Tooltip title={()=>{
-                    
-                    return  <CommonTable columns={[ {
+            render: (text: string, record: any) => {
+                return <Tooltip title={() => {
+
+                    return <CommonTable columns={[{
                         key: 'originalDeliveryTime',
                         title: '原计划交货日期',
                         dataIndex: 'originalDeliveryTime',
@@ -82,15 +82,15 @@ export default function DistributedTech(): React.ReactNode {
                         key: 'newDeliveryTime',
                         title: '变更后交货日期',
                         dataIndex: 'newDeliveryTime',
-                    }]} pagination={false} scroll={false} dataSource={changeDataSource||[]}/>
-                }} onVisibleChange={async (visible:boolean)=>{
-                    if(visible){
+                    }]} pagination={false} scroll={false} dataSource={changeDataSource || []} />
+                }} onVisibleChange={async (visible: boolean) => {
+                    if (visible) {
                         const data: any = await RequestUtil.get(`/tower-aps/productionPlan/change/record/${record.productId}`);
                         setChangeDataSource(data?.recordVOList)
-                    }else{
+                    } else {
                         setChangeDataSource([])
                     }
-                }}><span style={{color: '#ff8c00'}}>{text}</span></Tooltip>
+                }}><span style={{ color: '#ff8c00' }}>{text}</span></Tooltip>
             }
         },
         {
@@ -105,9 +105,9 @@ export default function DistributedTech(): React.ReactNode {
             width: 100,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Button type='link' onClick={()=>{history.push(`/planSchedule/planScheduleMngt/planDeliveryTime/${params.ids}/${record.productId}`)}}>查看变更记录</Button>
+                <Button type='link' onClick={() => { history.push(`/planProd/planScheduleMngt/planDeliveryTime/${params.ids}/${record.productId}`) }}>查看变更记录</Button>
             )
-            
+
         }
     ]
 
@@ -136,7 +136,7 @@ export default function DistributedTech(): React.ReactNode {
     const modalChangeOk = async () => {
         const data = await formRef.validateFields();
         const value = formRef.getFieldsValue().list;
-        RequestUtil.put(`/tower-aps/productionPlan/batch/deliveryTime`, value.map((res:any,index:number) => {
+        RequestUtil.put(`/tower-aps/productionPlan/batch/deliveryTime`, value.map((res: any, index: number) => {
             return {
                 id: selectedKeys[index],
                 ...res,
@@ -156,7 +156,7 @@ export default function DistributedTech(): React.ReactNode {
 
     return (
         <Spin spinning={loading}>
-            <DetailContent operation={[<Button type="ghost" onClick={() => history.goBack()}>返回</Button>]}>
+            <DetailContent operation={[<Button type="ghost" key="goback" onClick={() => history.goBack()}>返回</Button>]}>
                 <Modal
                     title="批量设置计划交货期"
                     visible={visible}
@@ -196,66 +196,68 @@ export default function DistributedTech(): React.ReactNode {
                                 title: '塔型',
                                 dataIndex: 'productCategoryName',
                                 width: 120,
-                                render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                    <Form.Item name={ ["list", index, "productCategoryName"] } key={ index } initialValue={ _ }>
+                                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                    <Form.Item name={["list", index, "productCategoryName"]} key={index} initialValue={_}>
                                         <span>{_}</span>
                                     </Form.Item>
-                                ) 
+                                )
                             },
                             {
                                 key: 'productNumber',
                                 title: '杆塔号',
                                 dataIndex: 'productNumber',
                                 width: 120,
-                                render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                    <Form.Item name={ ["list", index, "productNumber"] } key={ index }>
+                                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                    <Form.Item name={["list", index, "productNumber"]} key={index}>
                                         <span>{_}</span>
                                     </Form.Item>
-                                ) 
+                                )
                             },
                             {
                                 key: 'planDeliveryTime',
                                 title: '* 计划交货日期',
                                 dataIndex: 'planDeliveryTime',
                                 width: 120,
-                                render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                    <Form.Item name={ ["list", index, "newPlanDeliveryTime"] } key={ index } rules={[{
-                                        required:true,
-                                        message:'请选择计划交货日期'
+                                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                    <Form.Item name={["list", index, "newPlanDeliveryTime"]} key={index} rules={[{
+                                        required: true,
+                                        message: '请选择计划交货日期'
                                     }]}>
-                                        <DatePicker format='YYYY-MM-DD' style={{ width: '100%' }}/>
+                                        <DatePicker format='YYYY-MM-DD' style={{ width: '100%' }} />
                                     </Form.Item>
-                                ) 
+                                )
                             },
                             {
                                 key: 'reason',
                                 title: '* 交货期变更原因',
                                 dataIndex: 'reason',
                                 width: 150,
-                                render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                    <Form.Item name={ ["list", index, "reason"] } key={ index } 
+                                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                    <Form.Item name={["list", index, "reason"]} key={index}
                                     // rules={[{
                                     //     required:true,
                                     //     message:'请填写交货期变更原因'
                                     // }]}
                                     >
-                                        <Input maxLength={ 50 }/>
+                                        <Input maxLength={50} />
                                     </Form.Item>
-                                ) 
+                                )
                             },
-                        ]} dataSource={[...tableChangeRows]} pagination={false} size='small'/>
+                        ]} dataSource={[...tableChangeRows]} pagination={false} size='small' />
                     </Form>
                 </Modal>
                 <Space>
-                    <Button type="primary" disabled={selectedKeys.length <= 0 || selectedRows.some((res)=>{
-                        if(res.planDeliveryTime) return true;
-                    })} onClick={() => setVisible(true)} style={{ marginBottom: '6px' }}>批量设置交货期</Button>
-                    <Button type="primary" disabled={selectedKeys.length <= 0 || selectedRows.some((res)=>{
-                        if(!res.planDeliveryTime) return true;
+                    <Button
+                        type="primary"
+                        disabled={selectedKeys.length <= 0 || selectedRows.some((res) => !!res.planDeliveryTime)}
+                        onClick={() => setVisible(true)} style={{ marginBottom: '6px' }}
+                    >批量设置交货期</Button>
+                    <Button type="primary" disabled={selectedKeys.length <= 0 || selectedRows.some((res) => {
+                        if (!res.planDeliveryTime) return true;
                     })} onClick={
                         () => {
                             console.log(selectedRows)
-                            const value:any = selectedRows.map((res)=>{
+                            const value: any = selectedRows.map((res) => {
                                 return {
                                     ...res,
                                     newPlanDeliveryTime: res.planDeliveryTime && moment(res.planDeliveryTime)
@@ -266,7 +268,7 @@ export default function DistributedTech(): React.ReactNode {
                             })
                             setTableChangeRows(value)
                             setVisibleChange(true);
-                            
+
                         }
                     } style={{ marginBottom: '6px' }}>变更计划交货期</Button>
                 </Space>

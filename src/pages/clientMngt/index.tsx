@@ -8,7 +8,6 @@ import useRequest from '@ahooksjs/use-request'
 
 export default function Index(): JSX.Element {
     const history = useHistory()
-    const [filterValue, setFilterValue] = useState<Object>({})
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/customer?customerId=${id}`)
@@ -18,17 +17,11 @@ export default function Index(): JSX.Element {
         }
     }), { manual: true })
 
-    const onFilterSubmit = (value: any) => {
-        setFilterValue(value)
-        return value
-    }
-
     return <Page
         path="/tower-market/customer"
-        filterValue={filterValue}
-        extraOperation={[
-            <Button key="new" type="primary"><Link to="/client/mngt/edit/new">新增客户</Link></Button>
-        ]}
+        extraOperation={
+            <Button type="primary"><Link to="/client/mngt/edit/new">新增客户</Link></Button>
+        }
         columns={[
             {
                 title: '序号',
@@ -41,10 +34,11 @@ export default function Index(): JSX.Element {
             {
                 title: '操作',
                 dataIndex: 'operation',
-                width: 80,
+                width: 100,
+                fixed: "right",
                 render: (_: undefined, record: any): React.ReactNode => (
                     <>
-                        <Button type="link" size="small" style={{ padding: 0, marginRight: 12 }}><Link to={`/client/mngt/edit/${record?.id}`}>编辑</Link></Button>
+                        <Link to={`/client/mngt/edit/${record?.id}`}>编辑</Link>
                         <Popconfirm
                             title="确认删除?"
                             onConfirm={async () => {
@@ -60,7 +54,6 @@ export default function Index(): JSX.Element {
                     </>
                 )
             }]}
-        onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
                 name: 'name',

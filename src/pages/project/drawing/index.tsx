@@ -149,19 +149,21 @@ export default function Drawing(): React.ReactNode {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 200,
+                    width: 190,
                     render: (_: undefined, record: any) => <>
-                        <span
-                            style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }}
+                        <Button
+                            type="link"
+                            size="small"
+                            style={{ padding: 2 }}
                             onClick={() => {
                                 setDetailedId(record.id)
                                 setDetailVisible(true)
-                            }}>查看</span>
+                            }}>查看</Button>
                         <Button
                             type="link"
                             size="small"
                             disabled={![0, 3].includes(record.auditStatus)}
-                            className="btn-operation-link"
+                            style={{ padding: 2 }}
                             onClick={() => {
                                 setType("edit")
                                 setDetailedId(record.id)
@@ -171,7 +173,7 @@ export default function Drawing(): React.ReactNode {
                             type="link"
                             size="small"
                             disabled={(![null, "-1", -1, 4].includes(record.auditStatus)) || record.contractId}
-                            className="btn-operation-link"
+                            style={{ padding: 2 }}
                             onClick={() => {
                                 setDetailedId(record.id)
                                 setConnectVisible(true)
@@ -190,14 +192,14 @@ export default function Drawing(): React.ReactNode {
                             <Button
                                 type="link"
                                 size="small"
-                                className="btn-operation-link"
+                                style={{ padding: 2 }}
                                 disabled={![0, 3].includes(record.auditStatus)}
                             >删除</Button>
                         </Popconfirm>
                         <Button
                             type="link"
                             size="small"
-                            className="btn-operation-link"
+                            style={{ padding: 2 }}
                             disabled={record.auditStatus !== 1}
                             onClick={() => handleCancel(record.id)}
                         >撤回</Button>

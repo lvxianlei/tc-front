@@ -25,6 +25,7 @@ export default function CollectionInfomation(): React.ReactNode {
     const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
     const [ contractList, setContractList ] = useState<Contract[]>([]);
     const addRef = useRef<EditRefProps>()
+
     const confirmed = [
         { "title": "备注", "dataIndex": "description"}
     ],
@@ -33,6 +34,8 @@ export default function CollectionInfomation(): React.ReactNode {
             { "title": "确认日期", "dataIndex": "confirmTime" },
             { "title": "备注", "dataIndex": "description" }
         ]
+    
+    // 查看的数据
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/backMoney/${id}`)
@@ -46,6 +49,7 @@ export default function CollectionInfomation(): React.ReactNode {
 
     // 查询按钮
     const onFilterSubmit = (value: any) => {
+        // 来款日期
         if (value.startRefundTime) {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startPayTime = `${formatDate[0]} 00:00:00`
@@ -103,7 +107,11 @@ export default function CollectionInfomation(): React.ReactNode {
                         dataIndex: 'index',
                         fixed: "left",
                         width: 50,
-                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                        render: (_a: any, _b: any, index: number): React.ReactNode => {
+                            return (
+                                <span>{index + 1}</span>
+                            )
+                        }
                     },
                     ...collectionListHead.map((item: any) => {
                         if (item.dataIndex === "payMoney") {
@@ -111,7 +119,11 @@ export default function CollectionInfomation(): React.ReactNode {
                                 title: item.title,
                                 dataIndex: item.dataIndex,
                                 width: 50,
-                                render: (_: any, record: any): React.ReactNode => (<span>{record.payMoney ? changeTwoDecimal_f(record.payMoney) : ''}</span>)
+                                render: (_: any, record: any): React.ReactNode => {
+                                    return (
+                                        <span>{record.payMoney ? changeTwoDecimal_f(record.payMoney) : ''}</span>
+                                    )
+                                }
                             })
                         }
                         if (item.dataIndex === "abroadMoney") {
@@ -119,7 +131,11 @@ export default function CollectionInfomation(): React.ReactNode {
                                 title: item.title,
                                 dataIndex: item.dataIndex,
                                 width: 50,
-                                render: (_: any, record: any): React.ReactNode => (<span>{record.abroadMoney ? changeTwoDecimal_f(record.abroadMoney) : ''}</span>)
+                                render: (_: any, record: any): React.ReactNode => {
+                                    return (
+                                        <span>{record.abroadMoney ? changeTwoDecimal_f(record.abroadMoney) : ''}</span>
+                                    )
+                                }
                             })
                         }
                         return item;
@@ -132,7 +148,11 @@ export default function CollectionInfomation(): React.ReactNode {
                         render: (_: any, record: any) => {
                             return (
                                 <>
-                                    <Button type="link" className="btn-operation-link" onClick={() => getUser(record.id)}>查看</Button>
+                                    <Button
+                                        type="link"
+                                        className="btn-operation-link"
+                                        onClick={() => getUser(record.id)}
+                                    >查看</Button>
                                     {record.confirmStatus === 1 && (
                                        <Popconfirm
                                             title="您确定删除该条回款信息?"
@@ -156,14 +176,26 @@ export default function CollectionInfomation(): React.ReactNode {
                 extraOperation={
                     <div style={{display: 'flex', flexWrap: 'nowrap', justifyContent: 'spance-between'}}>
                         <div>
-                            <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
-                                {approvalStatus.map((item: any, index: number) => <Radio.Button value={item.value} key={`${index}_${item.value}`}>{item.label}</Radio.Button>)}
+                            <Radio.Group
+                                defaultValue={confirmStatus}
+                                onChange={operationChange}
+                            >
+                                {approvalStatus.map((item: any, index: number) => {
+                                    return <Radio.Button
+                                        value={item.value}
+                                        key={`${index}_${item.value}`}
+                                    >{item.label}</Radio.Button>
+                                })}
                             </Radio.Group>
                         </div>
                         {
                            confirmStatus === 1 && (
                                 <div style={{marginLeft: '20px'}}>
-                                    <Button type="primary" style={{marginRight: 20}} onClick={() => setVisible(true)}>新增</Button>
+                                    <Button
+                                        type="primary"
+                                        style={{marginRight: 20}}
+                                        onClick={() => setVisible(true)}
+                                    >新增</Button>
                                     <Upload 
                                         accept=".xls,.xlsx"
                                         action={ () => {
@@ -190,9 +222,12 @@ export default function CollectionInfomation(): React.ReactNode {
                                     >
                                         <Button type="primary" ghost>导入</Button>
                                     </Upload>
-                                    <Button type="link" onClick={() => {
-                                        exportDown("/tower-finance/backMoney/exportBackMoney", "POST", {}, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "回款信息管理导入模板")
-                                    } }>下载导入模板</Button>
+                                    <Button
+                                        type="link"
+                                        onClick={() => {
+                                            exportDown("/tower-finance/backMoney/exportBackMoney", "POST", {}, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "回款信息管理导入模板")
+                                        }
+                                    }>下载导入模板</Button>
                                 </div>
                            ) 
                         }
@@ -236,7 +271,11 @@ export default function CollectionInfomation(): React.ReactNode {
                     setVisible(false);
                 }}
                   footer={[
-                    <Button key="submit" type="primary" onClick={() => handleOk()}>
+                    <Button
+                        key="submit"
+                        type="primary"
+                        onClick={() => handleOk()}
+                    >
                       提交
                     </Button>,
                     <Button key="back" onClick={() => {

@@ -355,61 +355,76 @@
                 ]
             },
             {
-                "label": "评估任务",
+                "label": "任务管理",
                 "icon": "RD_pinggurenwu",
-                "path": "/assessmentTask",
+                "path": "/taskMngt",
                 "appName": "RD",
                 "authority": "rd_assess_task_management",
                 "items": [
                     {
                         "label": "评估任务",
-                        "path": "/assessmentTask/assessmentTaskList",
+                        "path": "/taskMngt/assessmentTaskList",
                         "authority": "rd_assess_task_management"
-                    }
-                ]
-            },
-            {
-                "label": "确认任务",
-                "icon": "RD_querenrenwu1",
-                "path": "/confirmTask",
-                "appName": "RD",
-                "authority": "rd_draw",
-                "items": [
+                    },
                     {
                         "label": "确认任务",
-                        "path": "/confirmTask/ConfirmTaskMngt",
+                        "path": "/taskMngt/ConfirmTaskMngt",
                         "authority": "rd_draw"
-                    }
-                ]
-            },
-            {
-                "label": "放样任务",
-                "icon": "RD_fangyangrenwu",
-                "path": "/setOutTask",
-                "appName": "RD",
-                "authority": "rd_lofting_task",
-                "items": [
+                    },
                     {
                         "label": "放样任务",
-                        "path": "/setOutTask/setOutTaskList",
+                        "path": "/taskMngt/setOutTaskList",
                         "authority": "rd_lofting_task"
-                    }
-                ]
-            },
-            {
-                "label": "提料任务",
-                "icon": "RD_fangyangrenwu",
-                "path": "/materialTask",
-                "appName": "RD",
-                "authority": "rd_lofting_task",
-                "items": [
+                    },
                     {
                         "label": "提料任务",
-                        "path": "/materialTask/materialTaskList",
+                        "path": "/taskMngt/materialTaskList",
                         "authority": "rd_lofting_task"
                     }
                 ]
             },
+            // {
+            //     "label": "确认任务",
+            //     "icon": "RD_querenrenwu1",
+            //     "path": "/confirmTask",
+            //     "appName": "RD",
+            //     "authority": "rd_draw",
+            //     "items": [
+            //         {
+            //             "label": "确认任务",
+            //             "path": "/confirmTask/ConfirmTaskMngt",
+            //             "authority": "rd_draw"
+            //         }
+            //     ]
+            // },
+            // {
+            //     "label": "放样任务",
+            //     "icon": "RD_fangyangrenwu",
+            //     "path": "/setOutTask",
+            //     "appName": "RD",
+            //     "authority": "rd_lofting_task",
+            //     "items": [
+            //         {
+            //             "label": "放样任务",
+            //             "path": "/setOutTask/setOutTaskList",
+            //             "authority": "rd_lofting_task"
+            //         }
+            //     ]
+            // },
+            // {
+            //     "label": "提料任务",
+            //     "icon": "RD_fangyangrenwu",
+            //     "path": "/materialTask",
+            //     "appName": "RD",
+            //     "authority": "rd_lofting_task",
+            //     "items": [
+            //         {
+            //             "label": "提料任务",
+            //             "path": "/materialTask/materialTaskList",
+            //             "authority": "rd_lofting_task"
+            //         }
+            //     ]
+            // },
             {
                 "label": "采购任务",
                 "icon": "gongying-caigourenwu_caigourenwu",
@@ -615,8 +630,13 @@
                         "authority": "approvalm"
                     },
                     {
-                        "label": "技术排产",
-                        "path": "/planSchedule/planScheduleMngt",
+                        "label": "下发技术",
+                        "path": "/planProd/planScheduleMngt",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "分配车间",
+                        "path": "/planProd/publishWorkshop",
                         "authority": "approvalm"
                     }
                 ]
@@ -708,7 +728,18 @@
                         "label": "包装计划列表",
                         "path": "/packingPlan/packingPlanList",
                         "authority": "approvalm"
+                    },
+                    {
+                        "label": "包捆列表",
+                        "path": "/packingPlan/baleList",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "改包捆",
+                        "path": "/packingPlan/baleChange",
+                        "authority": "approvalm"
                     }
+                   
                 ]
             },
             {
@@ -1017,6 +1048,11 @@
                     {
                         "label": "工作中心管理",
                         "path": "/workshopPlanBasic/workCenterMngt",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "分配车间配置管理",
+                        "path": "/workshopPlanBasic/publishWorkshopMngt",
                         "authority": "approvalm"
                     }
                 ]

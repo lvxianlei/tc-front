@@ -14,11 +14,14 @@
     const [addCollectionForm] = Form.useForm();
     const [attachVosData, setAttachVosData] = useState<any[]>([])
     const fillGuarantee = useRef<AttachmentRef>();
+    
+    // 关闭
     const resetFields = () => {
         addCollectionForm.resetFields();
         setAttachVosData([]);
     }
 
+    // 提交
     const { loading, run } = useRequest((postData: { path: string, data: {} }) => new Promise(async (resolve, reject) => {
         try {
             const result = await RequestUtil.put(postData.path, postData.data)
@@ -45,7 +48,9 @@
             reject(false)
         }
     })
+
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit])
+
     return (
         <Spin spinning={loading}>
             <BaseInfo
@@ -59,7 +64,10 @@
                 dataSource={ attachVosData }
                 onDoneChange={
                     (attachs: FileProps[]) => {
-                        setAttachVosData([...attachVosData, ...attachs]);
+                        setAttachVosData([
+                            ...attachVosData,
+                            ...attachs
+                        ]);
                     }
                 }
                 ref={fillGuarantee}

@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-{ // 路由配置
+ { // 路由配置
   "globalRouters": [
     {
       "name": "首页",
@@ -321,7 +321,7 @@
     { // 原材料管理
       "name": "原材料管理",
       "path": "/config/configList/material",
-      "module": "./pages/system-mngt/materialMngt/MaterialMngt",
+      "module": "./pages/system-mngt/material/MaterialMngt",
       "exact": true,
       "authority": "material_management"
     },
@@ -841,21 +841,21 @@
     },
     { // 确认任务
       "name": "确认任务",
-      "path": "/confirmTask/ConfirmTaskMngt",
+      "path": "/taskMngt/ConfirmTaskMngt",
       "module": "./pages/confirmTask/ConfirmTaskMngt",
       "exact": true,
       "authority": "rd_draw"
     },
     { // 确认任务详情
       "name": "确认任务详情",
-      "path": "/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/:id/:status",
+      "path": "/taskMngt/ConfirmTaskMngt/ConfirmTaskDetail/:id/:status",
       "module": "./pages/confirmTask/ConfirmTaskDetail",
       "exact": true,
       "authority": "rd_draw"
     },
     { // 确认任务明细
       "name": "确认任务明细",
-      "path": "/confirmTask/ConfirmTaskMngt/ConfirmDetail/:id",
+      "path": "/taskMngt/ConfirmTaskMngt/ConfirmDetail/:id",
       "module": "./pages/confirmTask/ConfirmDetail",
       "exact": true,
       "authority": "rd_draw"
@@ -897,14 +897,14 @@
     },
     { // 评估任务
       "name": "评估任务",
-      "path": "/assessmentTask/assessmentTaskList",
+      "path": "/taskMngt/assessmentTaskList",
       "module": "./pages/assessmentTask/AssessmentTaskList",
       "exact": true,
       "authority": "rd_assess_task_management"
     },
     { // 评估任务详情
       "name": "评估任务详情",
-      "path": "/assessmentTask/assessmentTaskList/assessmentTaskDetail/:id",
+      "path": "/taskMngt/assessmentTaskList/assessmentTaskDetail/:id",
       "module": "./pages/assessmentTask/AssessmentTaskDetail",
       "exact": true,
       "authority": "rd_assess_task_management"
@@ -1093,35 +1093,35 @@
     },
     { // 放样任务
       "name": "放样任务",
-      "path": "/setOutTask/setOutTaskList",
+      "path": "/taskMngt/setOutTaskList",
       "module": "./pages/setOutTask/SetOutTaskList",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务详情
       "name": "放样任务详情",
-      "path": "/setOutTask/setOutTaskList/setOutTaskDetail/:id",
+      "path": "/taskMngt/setOutTaskList/setOutTaskDetail/:id",
       "module": "./pages/setOutTask/SetOutTaskDetail",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务-塔型
       "name": "塔型",
-      "path": "/setOutTask/setOutTaskList/setOutTaskTower/:id",
+      "path": "/taskMngt/setOutTaskList/setOutTaskTower/:id",
       "module": "./pages/setOutTask/SetOutTaskTower",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务-杆塔
       "name": "杆塔",
-      "path": "/setOutTask/setOutTaskList/setOutTaskPole/:id",
+      "path": "/taskMngt/setOutTaskList/setOutTaskPole/:id",
       "module": "./pages/setOutTask/SetOutTaskPole",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 提料任务
       "name": "提料任务",
-      "path": "/materialTask/materialTaskList",
+      "path": "/taskMngt/materialTaskList",
       "module": "./pages/materialTask/MaterialTaskList",
       "exact": true,
       "authority": "rd_lofting_task"
@@ -1642,6 +1642,34 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 包装计划-改包捆
+      "name": "改包捆",
+      "path": "/packingPlan/baleChange",
+      "module": "./pages/packingPlan/BaleChangeList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装计划-包装计划列表-详情
+      "name": "详情",
+      "path": "/packingPlan/packingPlanList/detail/:id",
+      "module": "./pages/packingPlan/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装计划-包捆列表
+      "name": "包捆列表",
+      "path": "/packingPlan/baleList",
+      "module": "./pages/packingPlan/baleList/BaleList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装计划-包捆列表-详情
+      "name": "详情",
+      "path": "/packingPlan/baleList/detail/:id",
+      "module": "./pages/packingPlan/baleList/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 班组管理-班组管理列表
       "name": "班组管理",
       "path": "/workshopTeam/workshopTeamList",
@@ -1720,37 +1748,65 @@
       "authority": "approvalm"
     },
     { // 计划排产-技术下发
-      "name": "技术排产",
-      "path": "/planSchedule/planScheduleMngt",
-      "module": "./pages/planBaseSetting/planSchedule/PlanScheduleMngt",
+      "name": "下发技术",
+      "path": "/planProd/planScheduleMngt",
+      "module": "./pages/planBaseSetting/planSchedule/index",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-拆分批次
       "name": "拆分批次",
-      "path": "/planSchedule/planScheduleMngt/SplitBatch/:id",
+      "path": "/planProd/planScheduleMngt/SplitBatch/:id",
       "module": "./pages/planBaseSetting/planSchedule/SplitBatch",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-下发技术
       "name": "下发技术",
-      "path": "/planSchedule/planScheduleMngt/distributedTech/:ids",
+      "path": "/planProd/planScheduleMngt/distributedTech/:ids",
       "module": "./pages/planBaseSetting/planSchedule/DistributedTech",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-计划交货期
       "name": "计划交货期",
-      "path": "/planSchedule/planScheduleMngt/planDeliveryTime/:ids",
+      "path": "/planProd/planScheduleMngt/planDeliveryTime/:ids",
       "module": "./pages/planBaseSetting/planSchedule/PlanDeliveryTime",
       "exact": true,
       "authority": "approvalm"
     },
     { // 计划排产-计划交货期
       "name": "变更记录",
-      "path": "/planSchedule/planScheduleMngt/planDeliveryTime/:ids/:id",
+      "path": "/planProd/planScheduleMngt/planDeliveryTime/:ids/:id",
       "module": "./pages/planBaseSetting/planSchedule/ChangeRecord",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-分配车间
+      "name": "分配车间",
+      "path": "/planProd/publishWorkshop",
+      "module": "./pages/planBaseSetting/publishWorkshop/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-分配车间-构件明细
+      "name": "组焊明细",
+      "path": "/planProd/publishWorkshop/welding/:id/:issuedNumber/:productCategory",
+      "module": "./pages/planBaseSetting/publishWorkshop/welding",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-分配车间-组焊明细
+      "name": "构件明细",
+      "path": "/planProd/publishWorkshop/structure/:id/:issuedNumber/:productCategory",
+      "module": "./pages/planBaseSetting/publishWorkshop/structure",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-分配车间
+      "name": "手动分配车间",
+      "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
+      "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
       "authority": "approvalm"
     },
@@ -2462,6 +2518,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作中心管理
+      "name": "分配车间配置管理",
+      "path": "/workshopPlanBasic/publishWorkshopMngt",
+      "module": "./pages/workshopPlanBasic/publishWorkshopMngt/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 生产环节管理
       "name": "生产环节管理",
       "path": "/planBaseSetting/prodLink",
@@ -2482,6 +2545,6 @@
       "module": "./pages/changePassword",
       "exact": true,
       "authority": "home_page_person_center"
-    },
+    }
   ]
 }

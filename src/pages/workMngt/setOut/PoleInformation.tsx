@@ -140,7 +140,7 @@ export default function PoleInformation(): React.ReactNode {
                             : null
                     }
                     {
-                        record.loftingStatus !== 1  ?
+                        record.loftingStatus !== 1 ?
                             <Button type="link" onClick={async () => {
                                 setLoftingStatus(record.loftingStatus)
                                 let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
@@ -148,8 +148,8 @@ export default function PoleInformation(): React.ReactNode {
                                 setProductId(record.id);
                                 await editRef.current?.visibleData()
                                 setAllotVisible(true);
-                                
-                                
+
+
                             }}>特殊件号</Button>
                             : <Button type="link" disabled>特殊件号</Button>
                     }
@@ -162,7 +162,7 @@ export default function PoleInformation(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const [refresh, setRefresh] = useState(false);
     const [buttonName, setButtonName] = useState('');
-    const [tipVisible,setTipVisible] = useState<boolean>(false)
+    const [tipVisible, setTipVisible] = useState<boolean>(false)
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         resole(data);
@@ -176,7 +176,7 @@ export default function PoleInformation(): React.ReactNode {
     const [productId, setProductId] = useState<string>('');
     const [allotData, setAllotData] = useState<IAllot>();
     const [loftingStatus, setLoftingStatus] = useState<number>(0);
-    
+
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
             role.value = role.id;
@@ -209,12 +209,11 @@ export default function PoleInformation(): React.ReactNode {
     const onTip = () => new Promise(async (resolve, reject) => {
         try {
             await editRef.current?.onCheck()
-            if(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0){
-                const result = await RequestUtil.post(`/tower-science/productStructure/judge`,{productIds:editRef.current?.selectedRowKeys});
-                console.log(result)
-                if(result){
+            if (editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length > 0) {
+                const result = await RequestUtil.post(`/tower-science/productStructure/judge`, { productIds: editRef.current?.selectedRowKeys });
+                if (result) {
                     setTipVisible(true)
-                }else{
+                } else {
                     // message.error('杆塔无此特殊件号，无法保存！')
                     setTipVisible(false)
                 }
@@ -226,16 +225,13 @@ export default function PoleInformation(): React.ReactNode {
     })
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
-            console.log(editRef.current)
             setButtonName('保存')
             await onTip();
-            // if(!(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0)){
-                await editRef.current?.onSave();
-                message.success('保存成功！');
-                setTipVisible(false);
-                setAllotVisible(false);
-                setRefresh(!refresh);
-            // }
+            await editRef.current?.onSave();
+            message.success('保存成功！');
+            setTipVisible(false);
+            setAllotVisible(false);
+            setRefresh(!refresh);
             resove(true);
         } catch (error) {
             reject(false)
@@ -246,13 +242,11 @@ export default function PoleInformation(): React.ReactNode {
         try {
             setButtonName('提交')
             await onTip();
-            // if(editRef.current?.selectedRowKeys && editRef.current?.selectedRowKeys.length>0){
-                await editRef.current?.onSubmit();
-                message.success('提交成功！');
-                setTipVisible(false);
-                setAllotVisible(false);
-                setRefresh(!refresh);
-            // }
+            await editRef.current?.onSubmit();
+            message.success('提交成功！');
+            setTipVisible(false);
+            setAllotVisible(false);
+            setRefresh(!refresh);
             resove(true);
         } catch (error) {
             reject(false)
@@ -266,18 +260,17 @@ export default function PoleInformation(): React.ReactNode {
     }
 
     return <>
-    
-        <Modal title='提示' okText='是' cancelText='否' visible={tipVisible} onCancel={()=>{
+        <Modal title='提示' okText='是' cancelText='否' visible={tipVisible} onCancel={() => {
             setButtonName('')
             setTipVisible(false)
-        }} onOk={async ()=>{
-            if(buttonName==='保存'){
+        }} onOk={async () => {
+            if (buttonName === '保存') {
                 await editRef.current?.onSave();
                 message.success('保存成功！');
                 setTipVisible(false);
                 setAllotVisible(false);
                 setRefresh(!refresh);
-            }else if(buttonName==='提交'){
+            } else if (buttonName === '提交') {
                 await editRef.current?.onSubmit();
                 message.success('提交成功！');
                 setTipVisible(false);
@@ -292,7 +285,7 @@ export default function PoleInformation(): React.ReactNode {
             visible={allotVisible}
             width="60%"
             title="特殊件号"
-            footer={loftingStatus!==1&&<Space>
+            footer={loftingStatus !== 1 && <Space>
                 <Button type="ghost" onClick={async () => {
                     setAllotVisible(false);
                     editRef.current?.resetFields()
@@ -303,18 +296,18 @@ export default function PoleInformation(): React.ReactNode {
                     </Space>
                 } */}
                 {
-                    loftingStatus!==4&&<>
+                    loftingStatus !== 4 && <>
                         <Button type="primary" onClick={handleModalOk} ghost>保存</Button>
                         <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button>
                     </>
-                   
+
                 }
             </Space>}
             // onOk={handleModalOk}
             onCancel={() => setAllotVisible(false)}
             className={styles.tryAssemble}
         >
-            <AllotModal id={productId} allotData={allotData || {}} ref={editRef} status={loftingStatus}/>
+            <AllotModal id={productId} allotData={allotData || {}} ref={editRef} status={loftingStatus} />
         </Modal>
         <Page
             path="/tower-science/product/lofting"
@@ -324,6 +317,7 @@ export default function PoleInformation(): React.ReactNode {
             requestData={{ productCategoryId: params.id }}
             refresh={refresh}
             extraOperation={<Space direction="horizontal" size="small">
+                <WithSectionModal type="batch" productCategoryId={params.id} updateList={() => setRefresh(!refresh)} />
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>}
             searchFormItems={[

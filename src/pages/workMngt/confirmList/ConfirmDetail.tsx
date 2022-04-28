@@ -1,560 +1,222 @@
 import React, { useRef, useState } from 'react'
-import { Button, Spin, Space, Modal, Form, Row, Col, Upload, message, Image } from 'antd';
+import { Button, Spin, Space, Modal, Form, Upload, message, Image, Descriptions } from 'antd';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
-import { Table, Input, InputNumber, Popconfirm, Typography, Select } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Select } from 'antd';
 import AuthUtil from '../../../utils/AuthUtil';
-import { downLoadFile } from '../../../utils';
 import { patternTypeOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import { downloadTemplate } from '../setOut/downloadTemplate';
-import ExportList from '../../../components/export/list';
-interface Item {
-  key: string;
-  name: string;
-  partBidNumber: number;
-  address: string;
-  pattern: number;
-}
-
-const originData: Item[] = [];
-for (let i = 0; i < 100; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `Edrward ${i}`,
-    partBidNumber: 32,
-    pattern: 1,
-    address: `London Park no. ${i}`,
-  });
-}
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: 'number' | 'text' | 'select' | 'edit' | 'textArea';
-  enums?: object[];
-  record: Item;
-  index: number;
-  children: React.ReactNode;
-}
-
-
-
+import styles from './confirm.module.less'
 export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
-    const [pictureVisible, setPictureVisible] = useState<boolean>(false);
+    // const [pictureVisible, setPictureVisible] = useState<boolean>(false);
     const [pictureUrl, setPictureUrl] = useState('');
+    const [rowId, setRowId] = useState('');
     const [tableDataSource, setTableDataSource] = useState<object[]>([]);
     const [weight,setWeight] = useState<string>('0');
     const [description, setDescription] = useState('');
-    const [attachInfo, setAttachInfo] = useState<any[]>([])
+    const [attachInfo, setAttachInfo] = useState<any[]>([]);
+    const [confirmData, setConfirmData] = useState<any[]>([{
+        otherWeightBg:0,
+        otherWeightPt:0,
+        otherWeightXxp:0,
+        otherWeightPat:0,
+        otherWeightFd:0,
+        otherWeightGdxg:0,
+        otherWeightXg:0,
+        otherWeightQtsm:0,
+        otherWeightDdssgkb:0,
+        otherWeightLs:0,
+        legWeightA:0,
+        legWeightB:0,
+        legWeightC:0,
+        legWeightD:0,
+        description:'',
+    }]);
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
-    const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
 
-    const [editingKey, setEditingKey] = useState('');
-    const isEditing = (record: Item) => record.key === editingKey;
-
-    const EditableCell: React.FC<EditableCellProps> = ({
-      editing,
-      dataIndex,
-      title,
-      inputType,
-      enums,
-      record,
-      index,
-      children,
-      ...restProps
-    }) => {
-      const inputNode = inputType === 'number' ? <InputNumber style={{width:'100%'}} onChange={(value:number)=>{
-        let number = 0;
-        if(dataIndex==='otherWeight'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
-          const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
-          const dataC:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
-          const dataD:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
-          const data:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
-          number = dataA+dataB+dataC+dataD+data;
-        }
-        if(dataIndex==='legWeightA'){
-          const dataA:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
-          const dataB:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
-          const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
-          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
-          number = dataA+dataB+dataC+dataD+data;
-        }
-        if(dataIndex==='legWeightB'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
-          const dataB:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
-          const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
-          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
-          number = dataA+dataB+dataC+dataD+data;
-        }
-        if(dataIndex==='legWeightC'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
-          const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
-          const dataC:number = formRef.getFieldValue('legWeightD')?parseFloat(formRef.getFieldValue('legWeightD')):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
-          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
-          number = dataA+dataB+dataC+dataD+data;
-        }
-        if(dataIndex==='legWeightD'){
-          const dataA:number = formRef.getFieldValue('legWeightA')?parseFloat(formRef.getFieldValue('legWeightA')):0;
-          const dataB:number = formRef.getFieldValue('legWeightB')?parseFloat(formRef.getFieldValue('legWeightB')):0;
-          const dataC:number = formRef.getFieldValue('legWeightC')?parseFloat(formRef.getFieldValue('legWeightC')):0;
-          const dataD:number = formRef.getFieldValue('bodyWeight')?parseFloat(formRef.getFieldValue('bodyWeight')):0;
-          const data:number = formRef.getFieldValue('otherWeight')?parseFloat(formRef.getFieldValue('otherWeight')):0;
-          number = dataA+dataB+dataC+dataD+data;
-        }
-        dataIndex!=="basicHeight" && formRef.setFieldsValue({
-            totalWeight:number + parseFloat(value.toString())
-        })
-      }} min={0} precision={2} max={dataIndex!=='basicHeight'&&dataIndex!=='otherWeight'? 99999.99 :dataIndex ==='basicHeight'?99.99: 999999.99}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
-        return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
-      })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={dataIndex==='description'?400:10} rows={1}/>:<Input />;
-      if(dataIndex === 'name'){
-        return (
-        <td {...restProps}>
-          {editing ? (
-            <Form.Item
-              name={dataIndex}
-              style={{ margin: 0 }}
-              rules={[
-                {
-                  required: true,
-                  validator: (rule: any, value: string, callback: (error?: string) => void) => {
-                    checkProductNumber1(value,index).then(res => {
-                          if (res > 0) {
-                              callback('请输入* 杆塔号，且同一塔型下杆塔号唯一！')
-                          } else {
-                              callback();
-                          }
-                      })
-                  }
-                },
-              ]}
-            >
-              {inputNode}
-            </Form.Item>
-          ) : (
-            children
-          )}
-        </td>)
-      }
-      else{
-        return (
-          <td {...restProps}>
-            {editing ? (
-              <Form.Item
-                name={dataIndex}
-                style={{ margin: 0 }}
-                rules={[
-                  {
-                    required: inputType==='textArea'?false:true,
-                    message: `请输入${title}!`,
-                  },
-                ]}
-              >
-                {inputNode}
-              </Form.Item>
-            ) : (
-              children
-            )}
-          </td>
-        );
-      }
-     
-    };
-    const edit = (record: Partial<Item> & { key: React.Key }) => {
-      formRef.setFieldsValue({ partBidNumber: '', unit: '', address: '', ...record });
-      setEditingKey(record.key);
-    };
-    const onDelete = (key: React.Key)=>{
-      const newData:any = [...tableDataSource];
-      const index = newData.findIndex((item:any) => key === item.key);
-      console.log(newData[index])
-      if (index > -1 && newData[index].id) {
-        RequestUtil.delete(`/tower-science/drawProductDetail?id=${newData[index].id}`)
-        newData.splice(index, 1);
-      }else{
-        newData.splice(index, 1);
-      }
-      setTableDataSource(newData);
-      let totalNumber = '0';
-      console.log(newData)
-      newData.forEach((item:any)=>{
-        totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
-      })
-      setWeight(totalNumber);
-    };
-    const cancel = () => {
-      setEditingKey('');
-    };
-
-    const save = async (key: React.Key) => {
-      try {
-        const row = (await formRef.validateFields()) as Item;
-
-        const newData = [...tableDataSource];
-        const index = newData.findIndex((item:any) => key === item.key);
-        if (index > -1) {
-          const item = newData[index];
-          newData.splice(index, 1, {
-            ...item,
-            ...row,
-          });
-          setTableDataSource(newData);
-          setEditingKey('');
-        } else {
-          newData.push(row);
-          setTableDataSource(newData);
-          setEditingKey('');
-        }
-        let totalNumber = '0';
-        newData.forEach((item:any)=>{
-          console.log(item.totalWeight)
-          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
-          console.log(totalNumber)
-        })
-        setWeight(totalNumber);
-       
-        RequestUtil.post(`/tower-science/drawProductDetail/save`,{...newData[index],drawTaskId: params.id, totalWeight:'0'}).then(()=>{
-          message.success('保存成功！')
-        })
-      } catch (errInfo) {
-        console.log('Validate Failed:', errInfo);
-      }
-    };
-
-    const tableColumns = [
-      { 
-          title: '序号', 
-          dataIndex: 'index', 
-          key: 'index', 
-          width: 50,
-          render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
-      },
-      { 
-          title: '* 线路名称', 
-          dataIndex: 'lineName',
-          type:'text',
-          width: 80,
-          editable: true,
-          key: 'lineName', 
-      },
-      { 
-          title: '* 产品类型', 
-          dataIndex: 'productType', 
-          type:'select',
-          width: 100,
-          editable: true,
-          key: 'productType',
-          enums:productTypeOptions && productTypeOptions.map(({ id, name }) => {
-            return {
-                label:name,
-                value: id,
-            }
-          }),
-          render: (value: number, record: object): React.ReactNode => {
-            const renderEnum: any = productTypeOptions && productTypeOptions.map(({ id, name }) => {
-              return {
-                  label:name,
-                  value: id,
-              }
-            })
-            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
-          }
-      },
-      { 
-          title: '* 电压等级（kv）', 
-          dataIndex: 'voltageLevel',
-          type:'select', 
-          width: 120,
-          editable: true,
-          key: 'voltageLevel',
-          enums:voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
-            return {
-                label:name,
-                value: id,
-            }
-          }),
-          render: (value: number, record: object): React.ReactNode => {
-            const renderEnum: any = voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
-              return {
-                  label:name,
-                  value: id,
-              }
-            })
-            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
-          } 
-      },
-      { 
-          title: '* 塔型', 
-          dataIndex: 'productCategory', 
-          type:'text',
-          width: 80,
-          editable: true,
-          key: 'productCategory' 
-      },
-      { 
-          title: '* 塔型钢印号', 
-          dataIndex: 'steelProductShape', 
-          type:'text',
-          width: 100,
-          editable: true,
-          key: 'steelProductShape' 
-      },
-      
-      { 
-        title: '* 杆塔号', 
-        dataIndex: 'name', 
-        type:'text',
-        width: 80,
-        editable: true,
-        key: 'name' 
-      },
-      { 
-          title: '* 呼高（m）', 
-          dataIndex: 'basicHeight', 
-          type:'number',
-          width: 90,
-          editable: true,
-          key: 'basicHeight',
-          render:(value:any)=>{
-            return parseFloat(value).toFixed(2)
-          }  
-      },
-      { 
-          title: '* 模式', 
-          dataIndex: 'pattern', 
-          type:'select',
-          width: 90,
-          editable: true,
-          key: 'pattern',
-          enums:patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
-            return {
-                label:name,
-                value: id,
-            }
-          }),
-          render: (value: string, record: object): React.ReactNode => {
-            const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
-              return {
-                  label:name,
-                  value: id,
-              }
-            })
-            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value)?.label}</>
-          } 
-      },
-      { 
-        title: '接腿配置A', 
-        dataIndex: 'legConfigurationA', 
-        type:'textArea',
-        width: 80,
-        editable: true,
-        key: 'legConfigurationA' 
-      },
-      { 
-        title: '接腿配置B', 
-        dataIndex: 'legConfigurationB', 
-        type:'textArea',
-        width: 80,
-        editable: true,
-        key: 'legConfigurationB' 
-      },
-      { 
-        title: '接腿配置C', 
-        dataIndex: 'legConfigurationC', 
-        type:'textArea',
-        width: 80,
-        editable: true,
-        key: 'legConfigurationC' 
-      },
-      { 
-        title: '接腿配置D', 
-        dataIndex: 'legConfigurationD', 
-        type:'textArea',
-        width: 80,
-        editable: true,
-        key: 'legConfigurationD' 
-      },
-      { 
-        title: '接腿重A（kg）', 
-        dataIndex: 'legWeightA', 
-        type:'number',
-        width: 100,
-        editable: true,
-        key: 'legWeightA', 
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }  
-      },
-      { 
-        title: '接腿重B（kg）', 
-        dataIndex: 'legWeightB', 
-        type:'number',
-        width: 100,
-        editable: true,
-        key: 'legWeightB', 
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }  
-      },
-      { 
-        title: '接腿重C（kg）', 
-        dataIndex: 'legWeightC', 
-        type:'number',
-        width: 100,
-        editable: true,
-        key: 'legWeightC', 
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }  
-      },
-      { 
-        title: '接腿重D（kg）', 
-        dataIndex: 'legWeightD', 
-        type:'number',
-        width: 100,
-        editable: true,
-        key: 'legWeightD', 
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }  
-      },
-      // { 
-      //     title: '* 杆塔重量（kg）', 
-      //     dataIndex: 'monomerWeight', 
-      //     type:'number',
-      //     width: 100,
-      //     editable: true,
-      //     key: 'monomerWeight', 
-      //     render:(value:any)=>{
-      //       return parseFloat(value).toFixed(2)
-      //     }  
-      // },
-      { 
-        title: '* 本体重量（kg）', 
-        dataIndex: 'bodyWeight', 
-        type:'number',
-        width: 120,
-        editable: true,
-        key: 'bodyWeight',
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(2)
-        }   
-      },//范春森于11月23日去掉，于龙于11月25号加上
-      { 
-        title: '* 单重（kg）', 
-        dataIndex: 'monomerWeight', 
-        type:'edit',
-        width: 100,
-        editable: true,
-        key: 'monomerWeight', 
-        render:(_:any,record:any)=>{
-          return <span>{(parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
-        }  
-      },
-      { 
-          title: '其他重量（kg）', 
-          dataIndex: 'otherWeight', 
-          type:'number',
-          width: 120,
-          editable: true,
-          key: 'otherWeight',
-          render:(value:any)=>{
-            return parseFloat(value).toFixed(2)
-          }  
-      },
-      { 
-          title: '* 总重（kg）', 
-          dataIndex: 'totalWeight', 
-          type:'edit',
-          width: 100,
-          editable: true,
-          key: 'totalWeight',
-          render:(_:any,record:any)=>{
-              return <span>{(parseFloat(record.otherWeight)+parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
-          } 
-      },
-      { 
-          title: '备注', 
-          dataIndex: 'description', 
-          type:'textArea',
-          width: 250,
-          editable: true,
-          key: 'description' 
-      },
-      {
-          key: 'operation',
-          title: '操作',
-          width: 100,
-          dataIndex: 'operation',
-          render: (_: any, record: Item) => {
-          const editable = isEditing(record);
-          return editable ? (
-            <span>
-              <a href="javascript:;" onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-                保存
-              </a>
-              <Popconfirm title="确定取消更改吗？" onConfirm={cancel}>
-                <a>取消</a>
-              </Popconfirm>
-            </span>
-          ) : (
-              <Space>
-                  <Typography.Link disabled={editingKey !== ''||params.status!=='3'} onClick={() => edit(record)}>
-                      编辑
-                  </Typography.Link>
-                  <Popconfirm title="确定删除该条数据吗？" onConfirm={() => onDelete(record.key)} disabled={editingKey !== ''||params.status!=='3'}>
-                    <Typography.Link disabled={editingKey !== ''||params.status!=='3'}>
-                        删除
-                    </Typography.Link>
-                  </Popconfirm>
-              </Space>
-          );
-        },
-      }
-
-    ];
+    const [edit, setEdit] = useState('添加');
     const handleModalOk = async () => {
         try {
-            const submitData = await form.validateFields();
-            submitData.key = tableDataSource && tableDataSource.length.toString();
-            submitData.otherWeight = submitData.otherWeight?submitData.otherWeight:0;
-            submitData.index = tableDataSource.length;
-            const id:any = await RequestUtil.post(`/tower-science/drawProductDetail/save`,{
-              ...submitData,
-              drawTaskId: params.id
-            })
-            submitData['id'] = id;
-            tableDataSource.push(submitData);
-            let number = '0';
-            tableDataSource.forEach((item:any)=>{
-                number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(2)
-            })
-            setWeight(number);
-            setTableDataSource(tableDataSource);
-            form.resetFields();
-            setVisible(false);
+            if(edit==='添加'){
+                const value = await form.validateFields();
+                const submitData = value?.confirmList.map((item:any)=>{
+                   return{
+                    ...item,
+                    pattern:value?.pattern,
+                    productCategory:value?.productCategory,
+                    productType:value?.productType,
+                    steelProductShape:value?.steelProductShape,
+                    voltageLevel:value?.voltageLevel,
+                    lineName: value?.lineName,
+                    drawTaskId: params.id
+                   } 
+                })
+                await RequestUtil.post(`/tower-science/drawProductDetail/saveBatch`,submitData)
+                form.setFieldsValue({
+                    pattern:'',
+                    productCategory:'',
+                    productType:'',
+                    steelProductShape:'',
+                    voltageLevel:'',
+                    lineName: '',
+                    
+                    confirmList:[{
+                        otherWeightBg:0,
+                        otherWeightPt:0,
+                        otherWeightXxp:0,
+                        otherWeightPat:0,
+                        otherWeightFd:0,
+                        otherWeightGdxg:0,
+                        otherWeightXg:0,
+                        otherWeightQtsm:0,
+                        otherWeightDdssgkb:0,
+                        otherWeightLs:0,
+                        legWeightA:0,
+                        legWeightB:0,
+                        legWeightC:0,
+                        legWeightD:0,
+                        bodyWeight:0,
+                        description:'',
+                    }]
+                })
+                setConfirmData([{
+                    otherWeightBg:0,
+                    otherWeightPt:0,
+                    otherWeightXxp:0,
+                    otherWeightPat:0,
+                    otherWeightFd:0,
+                    otherWeightGdxg:0,
+                    otherWeightXg:0,
+                    otherWeightQtsm:0,
+                    otherWeightDdssgkb:0,
+                    otherWeightLs:0,
+                    legWeightA:0,
+                    legWeightB:0,
+                    legWeightC:0,
+                    legWeightD:0,
+                    bodyWeight:0,
+                    description:'',
+                }])
+                setVisible(false)
+                message.success('添加成功！')
+                run();
+            }else{
+                const value = await form.validateFields();
+                console.log(value)
+                const submitData = value?.confirmList.map((item:any)=>{
+                   return{
+                    ...item,
+                    pattern:value?.pattern,
+                    productCategory:value?.productCategory,
+                    productType:value?.productType,
+                    steelProductShape:value?.steelProductShape,
+                    voltageLevel:value?.voltageLevel,
+                    lineName: value?.lineName,
+                    drawTaskId: params.id,
+                    id: rowId
+                   } 
+                })
+                await RequestUtil.post(`/tower-science/drawProductDetail/save`,submitData[0])
+                form.setFieldsValue({
+                    pattern:'',
+                    productCategory:'',
+                    productType:'',
+                    steelProductShape:'',
+                    voltageLevel:'',
+                    lineName: '',
+                    description:'',
+                    confirmList:[{
+                        otherWeightBg:0,
+                        otherWeightPt:0,
+                        otherWeightXxp:0,
+                        otherWeightPat:0,
+                        otherWeightFd:0,
+                        otherWeightGdxg:0,
+                        otherWeightXg:0,
+                        otherWeightDdssgkb:0,
+                        otherWeightQtsm:0,
+                        otherWeightLs:0,
+                        legWeightA:0,
+                        legWeightB:0,
+                        legWeightC:0,
+                        legWeightD:0,
+                        bodyWeight:0,
+                        description:'',
+                    }]
+                })
+                setConfirmData([{
+                    otherWeightBg:0,
+                    otherWeightPt:0,
+                    otherWeightXxp:0,
+                    otherWeightPat:0,
+                    otherWeightFd:0,
+                    otherWeightGdxg:0,
+                    otherWeightXg:0,
+                    otherWeightQtsm:0,
+                    otherWeightDdssgkb:0,
+                    otherWeightLs:0,
+                    legWeightA:0,
+                    legWeightB:0,
+                    legWeightC:0,
+                    legWeightD:0,
+                    bodyWeight:0,
+                    description:'',
+                }])
+                setRowId('')
+                setVisible(false)
+                message.success('修改成功！')
+                run();
+                // value['id'] = id;
+                // tableDataSource.push(value);
+                // let number = '0';
+                // tableDataSource.forEach((item:any)=>{
+                //     number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(2)
+                // })
+                // setWeight(number);
+                // setTableDataSource(tableDataSource);
+                // form.resetFields();
+                // setVisible(false);
+            }
+            
         } catch (error) {
             console.log(error)
         }
     }
-    const handleModalCancel = () => {setVisible(false);form.resetFields();}
-    const handlePictureModalCancel = () => {setPictureVisible(false)}
+    
+    const handleModalCancel = () => {
+        setVisible(false);
+        form.resetFields();
+        setConfirmData([{
+            otherWeightBg:0,
+            otherWeightPt:0,
+            otherWeightXxp:0,
+            otherWeightPat:0,
+            otherWeightFd:0,
+            otherWeightGdxg:0,
+            otherWeightXg:0,
+            otherWeightQtsm:0,
+            otherWeightLs:0,
+            otherWeightDdssgkb:0,
+            legWeightA:0,
+            legWeightB:0,
+            legWeightC:0,
+            legWeightD:0,
+            description:'',
+        }]
+    )}
+    // const handlePictureModalCancel = () => {setPictureVisible(false)}
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const params = useParams<{ id: string, status: string }>()
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{
           return{ 
@@ -583,22 +245,6 @@ export default function ConfirmDetail(): React.ReactNode {
       labelCol: { span: 6 },
       wrapperCol: { span: 16 }
     };
-    const mergedColumns = tableColumns.map((col:any) => {
-      if (!col.editable) {
-        return col;
-      }
-      return {
-        ...col,
-        onCell: (record: Item) => ({
-          record,
-          inputType: col.type,
-          dataIndex: col.dataIndex,
-          enums: col.enums,
-          title: col.title,
-          editing: isEditing(record),
-        }),
-      };
-    });
 
 
     /**
@@ -640,6 +286,315 @@ export default function ConfirmDetail(): React.ReactNode {
       })
     }
     
+    const tableColumns = [
+      { 
+          title: '序号', 
+          dataIndex: 'index', 
+          key: 'index', 
+          width: 50,
+          render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
+      },
+      { 
+          title: '* 线路名称', 
+          dataIndex: 'lineName',
+          width: 80,
+          key: 'lineName', 
+      },
+      { 
+          title: '* 产品类型', 
+          dataIndex: 'productTypeName', 
+          width: 100,
+          key: 'productTypeName',
+      },
+      { 
+          title: '* 电压等级（kv）', 
+          dataIndex: 'voltageLevelName',
+          width: 120,
+          key: 'voltageLevelName'
+      },
+      { 
+          title: '* 塔型', 
+          dataIndex: 'productCategory', 
+          width: 80,
+          key: 'productCategory' 
+      },
+      { 
+          title: '* 塔型钢印号', 
+          dataIndex: 'steelProductShape', 
+          width: 100,
+          key: 'steelProductShape' 
+      },
+      
+      { 
+          title: '* 杆塔号', 
+          dataIndex: 'name', 
+          width: 80,
+          key: 'name' 
+      },
+      { 
+          title: '* 呼高（m）', 
+          dataIndex: 'basicHeight', 
+          width: 90,
+          key: 'basicHeight',
+          render:(value:any)=>{
+            return parseFloat(value).toFixed(2)
+          }  
+      },
+      { 
+          title: '* 模式', 
+          dataIndex: 'patternName', 
+          width: 90,
+          key: 'patternName',
+      },
+      { 
+        title: '接腿配置A', 
+        dataIndex: 'legConfigurationA', 
+        width: 80,
+        key: 'legConfigurationA' 
+      },
+      { 
+        title: '接腿配置B', 
+        dataIndex: 'legConfigurationB', 
+        width: 80,
+        key: 'legConfigurationB' 
+      },
+      { 
+        title: '接腿配置C', 
+        dataIndex: 'legConfigurationC', 
+        width: 80,
+        key: 'legConfigurationC' 
+      },
+      { 
+        title: '接腿配置D', 
+        dataIndex: 'legConfigurationD', 
+        width: 80,
+        key: 'legConfigurationD' 
+      },
+      { 
+        title: '接腿重A（kg）', 
+        dataIndex: 'legWeightA', 
+        width: 100,
+        key: 'legWeightA', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '接腿重B（kg）', 
+        dataIndex: 'legWeightB', 
+        width: 100,
+        key: 'legWeightB', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '接腿重C（kg）', 
+        dataIndex: 'legWeightC',
+        width: 100,
+        key: 'legWeightC', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '接腿重D（kg）', 
+        dataIndex: 'legWeightD',
+        width: 100,
+        key: 'legWeightD', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '* 本体重量（kg）', 
+        dataIndex: 'bodyWeight', 
+        width: 120,
+        key: 'bodyWeight',
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }   
+      },
+      { 
+        title: '* 单重（kg）', 
+        dataIndex: 'monomerWeight', 
+        width: 100,
+        key: 'monomerWeight', 
+        render:(_:any,record:any)=>{
+          return <span>{(parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
+        }  
+      },
+      { 
+          title: '* 总重（kg）', 
+          dataIndex: 'totalWeight', 
+          width: 100,
+          key: 'totalWeight',
+          render:(value:any)=>{
+            return parseFloat(value).toFixed(2)
+          }
+        //   render:(_:any,record:any)=>{
+        //       return <span>{(parseFloat(record.otherWeight)+parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
+        //   } 
+      },
+      { 
+        title: '其他增重-抱箍（kg）', 
+        dataIndex: 'otherWeightBg', 
+        width: 200,
+        key: 'otherWeightBg', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '其他增重-平台（kg）', 
+        dataIndex: 'otherWeightPt', 
+        width: 200,
+        key: 'otherWeightPt', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '其他增重-相序牌（kg）', 
+        dataIndex: 'otherWeightXxp', 
+        width: 200,
+        key: 'otherWeightXxp', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '其他增重-爬梯（kg）', 
+        dataIndex: 'otherWeightPat', 
+        width: 200,
+        key: 'otherWeightPat', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '其他增重-防盗（kg）', 
+        dataIndex: 'otherWeightFd', 
+        width: 200,
+        key: 'otherWeightFd', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '其他增重-兜底绳施工孔板（kg）', 
+        dataIndex: 'otherWeightDdssgkb', 
+        width: 200,
+        key: 'otherWeightDdssgkb', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '其他增重-挂点修改（kg）', 
+        dataIndex: 'otherWeightGdxg', 
+        width: 200,
+        key: 'otherWeightGdxg', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '其他增重-修改（kg）', 
+        dataIndex: 'otherWeightXg', 
+        width: 200,
+        key: 'otherWeightXg', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '其他增重-全塔双帽（kg）', 
+        dataIndex: 'otherWeightQtsm', 
+        width: 200,
+        key: 'otherWeightQtsm', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '其他增重-螺栓（kg）', 
+        dataIndex: 'otherWeightLs', 
+        width: 200,
+        key: 'otherWeightLs', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+
+      { 
+          title: '备注', 
+          dataIndex: 'description', 
+          width: 250,
+          key: 'description' 
+      },
+      {
+          key: 'operation',
+          title: '操作',
+          width: 100,
+          dataIndex: 'operation',
+          render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            <Space direction="horizontal" size="small">
+                <Button type="link" onClick={()=>{
+                    setEdit('编辑')
+                    setRowId(record?.id)
+                    form.setFieldsValue({
+                        pattern:record?.pattern,
+                        productCategory:record?.productCategory,
+                        productType:record?.productType,
+                        steelProductShape:record?.steelProductShape,
+                        voltageLevel:record?.voltageLevel,
+                        lineName: record?.lineName,
+                        confirmList: [record].map((item:any)=>{
+                            return{
+                                ...item,
+                                A: item.name.indexOf(',')>-1||item.name.indexOf('/')>-1?item.name.split(/\/|,/).filter((item:any)=>item).length:1,
+                                basicHeight:Number(item.basicHeight),
+                                bodyWeight:Number(item.bodyWeight),
+                                legWeightA:Number(item.legWeightA),
+                                legWeightB:Number(item.legWeightB),
+                                legWeightC:Number(item.legWeightC),
+                                legWeightD:Number(item.legWeightD),
+                                monomerWeight:Number(item.monomerWeight),
+                                otherWeightBg:Number(item.otherWeightBg),
+                                otherWeightDdssgkb:Number(item.otherWeightDdssgkb),
+                                otherWeightFd:Number(item.otherWeightFd),
+                                otherWeightGdxg:Number(item.otherWeightGdxg),
+                                otherWeightLs:Number(item.otherWeightLs),
+                                otherWeightPat:Number(item.otherWeightPat),
+                                otherWeightPt:Number(item.otherWeightPt),
+                                otherWeightQtsm:Number(item.otherWeightQtsm),
+                                otherWeightXg:Number(item.otherWeightXg),
+                                otherWeightXxp:Number(item.otherWeightXxp),
+                                totalWeight:Number(item.totalWeight),
+                            }
+                        }),
+                        id: record?.id
+                    })
+                    setVisible(true)
+                }}>编辑</Button>
+                <Popconfirm
+                    title="确认删除?"
+                    onConfirm={async () => {
+                        await  RequestUtil.delete(`/tower-science/drawProductDetail?id=${record.id}`)
+                        message.success('删除成功！')
+                        run()
+                    }}
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Button type="link">删除</Button>
+                </Popconfirm>
+            </Space>
+        )
+      }
+
+    ];
     return <Spin spinning={loading}>
             <DetailContent operation={[
               <>
@@ -656,16 +611,7 @@ export default function ConfirmDetail(): React.ReactNode {
                               }}),
                               description
                           }
-                          let saveDisabled = false;
-                          tableDataSource.forEach((item:any)=>{
-                            if(isEditing(item)){
-                              saveDisabled = true;
-                            }
-                          })
-                          if(saveDisabled){
-                            message.error('存在塔信息未保存！')
-                          }
-                          else if(tableDataSource.length>0){
+                          if(tableDataSource.length>0){
                               console.log(saveData)
                               await RequestUtil.post('/tower-science/drawProductDetail/saveDrawProduct', saveData).then(()=>{
                                   message.success('保存成功！');
@@ -692,16 +638,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             }}),
                             description
                           }
-                          let saveDisabled = false;
-                          tableDataSource.forEach((item:any)=>{
-                            if(isEditing(item)){
-                              saveDisabled = true;
-                            }
-                          })
-                          if(saveDisabled){
-                            message.error('存在塔信息未保存！')
-                          }
-                          else if(tableDataSource.length>0){
+                          if(tableDataSource.length>0){
                               console.log(submitData)
                               await RequestUtil.post('/tower-science/drawProductDetail/submitDrawProduct', submitData).then(()=>{
                                   message.success('提交成功！');
@@ -764,22 +701,23 @@ export default function ConfirmDetail(): React.ReactNode {
                                           setUrlVisible(true);
                                       } else {
                                           message.success('导入成功！');
-                                          const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
-                                          setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index,
-                                            legConfigurationA:item.legConfigurationA? item.legConfigurationA: 0,
-                                            legConfigurationB:item.legConfigurationB? item.legConfigurationB: 0,
-                                            legConfigurationC:item.legConfigurationC? item.legConfigurationC: 0,
-                                            legConfigurationD:item.legConfigurationD? item.legConfigurationD: 0,
-                                            otherWeight:item.otherWeight? item.otherWeight: 0,
-                                            totalWeight: item.totalWeight? item.totalWeight: 0,
-                                          }}));
-                                          setAttachInfo([...data.fileVOList]);
-                                          setDescription(data?.description);
-                                          let totalNumber = '0';
-                                          data?.drawProductDetailList.forEach((item:any)=>{
-                                            totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
-                                          })
-                                          setWeight(totalNumber);
+                                          run();
+                                        //   const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
+                                        //   setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index,
+                                        //     legConfigurationA:item.legConfigurationA? item.legConfigurationA: 0,
+                                        //     legConfigurationB:item.legConfigurationB? item.legConfigurationB: 0,
+                                        //     legConfigurationC:item.legConfigurationC? item.legConfigurationC: 0,
+                                        //     legConfigurationD:item.legConfigurationD? item.legConfigurationD: 0,
+                                        //     otherWeight:item.otherWeight? item.otherWeight: 0,
+                                        //     totalWeight: item.totalWeight? item.totalWeight: 0,
+                                        //   }}));
+                                        //   setAttachInfo([...data.fileVOList]);
+                                        //   setDescription(data?.description);
+                                        //   let totalNumber = '0';
+                                        //   data?.drawProductDetailList.forEach((item:any)=>{
+                                        //     totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
+                                        //   })
+                                        //   setWeight(totalNumber);
                                       }
                                   }
                                 } 
@@ -788,7 +726,11 @@ export default function ConfirmDetail(): React.ReactNode {
                             <Button type="primary" ghost>导入</Button>
                         </Upload>:null}
                 
-                        {params.status==='3'?<Button type='primary' ghost onClick={() => setVisible(true)}>添加</Button>:null}
+                        {params.status==='3'?<Button type='primary' ghost onClick={() => {
+                            setEdit('添加')
+                            setVisible(true)
+                            
+                        }}>添加</Button>:null}
                     </Space>
                 </div>
                 <Modal
@@ -803,325 +745,675 @@ export default function ConfirmDetail(): React.ReactNode {
                 >
                     当前存在错误数据，请重新下载上传！
                 </Modal>
-                <Form form={formRef} component={false} >
-                    <Table
-                      components={{
-                        body: {
-                          cell: EditableCell,
-                        },
-                      }}
-                      size='small'
-                      bordered
-                      dataSource={[...tableDataSource]}
-                      columns={mergedColumns}
-                      rowClassName="editable-row"
-                      // rowKey='index'
-                      // pagination={{
-                      //   onChange: cancel,
-                      // }}
-                      style={{paddingBottom: '24px'}}
-                      scroll={{x:1000}}
-                      pagination={false}
-                    />
-                </Form>
+                <CommonTable columns={tableColumns} dataSource={[...tableDataSource]} pagination={false}/>
                 <div style={{paddingBottom: '24px'}}>
                   <DetailTitle title="备注"/>
                   {detailData?<TextArea maxLength={ 200 } defaultValue={detailData?.description} onChange={(e)=>{
                       setDescription(e.target.value)
                   }} disabled={params.status!=='3'} />:null}
                 </div>
-                {/* <DetailTitle title="附件信息" operation={[params.status==='3'?<Upload
-                    action={ () => {
-                      const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                      return baseUrl+'/sinzetech-resource/oss/put-file'
-                    } } 
-                    headers={
-                        {
-                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                            'Tenant-Id': AuthUtil.getTenantId(),
-                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                        }
-                    }
-                    showUploadList={ false }
-                    data={ { productCategoryId: params.id } }
-                    onChange={ uploadChange}
-                ><Button key="enclosure" type="primary" ghost>添加</Button></Upload>:null]} />
-                <CommonTable columns={[
-                    {
-                        title: '附件名称',
-                        dataIndex: 'name',
-                        key: 'name',
-                    },
-                    {
-                      key: 'operation',
-                      title: '操作',
-                      dataIndex: 'operation',
-                      render: (_: undefined, record: any): React.ReactNode => (
-                          <Space direction="horizontal" size="small">
-                              <Button type="link" onClick={() => downLoadFile(record.id?record.filePath:record.link)}>下载</Button>
-                              {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.id?record.filePath:record.link)}}>预览</Button>:null}
-                              {['jpg','jpeg', 'png', 'gif'].includes(record.fileSuffix)?<Button type='link' onClick={()=>{setPictureUrl(record.id?record.filePath:record.link);setPictureVisible(true);}}>预览</Button>:null}
-                              <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-
-                          </Space>
-                      )
-                  }
-                ]} dataSource={attachInfo}  pagination={ false }/> */}
+                
                 <Attachment dataSource={attachInfo} edit={params.status==='3'?true:false} title="附件信息" ref={attchsRef}/>
             </DetailContent>
-            <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
+            {/* <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
                 <Image src={pictureUrl} preview={false}/>
-            </Modal>
-            <Modal visible={visible} title="添加" onOk={handleModalOk} onCancel={handleModalCancel}  width={ 800 }>
-                <Form form={form} { ...formItemLayout }>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="lineName" label="线路名称" rules={[{
-                            "required": true,
-                            "message":"请输入线路名称"
-                        }]}>
-                            <Input  maxLength={50}/>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item name="name" label="杆塔号" rules={[{
-                            required: true,
-                            validator: (rule: any, value: string, callback: (error?: string) => void) => {
-                              checkProductNumber(value).then(res => {
-                                    if (res>-1) {
-                                        callback('请输入杆塔号，且同一塔型下杆塔号唯一！')
-                                    } else {
-                                        callback();
-                                    }
+            </Modal> */}
+            <Modal visible={visible} title={edit} onOk={handleModalOk} onCancel={handleModalCancel}  width={ '95%'}>
+                <Form form={form} { ...formItemLayout } className={styles.descripForm} >
+                        <Descriptions title="" bordered size="small" colon={ false } column={ 14 }>
+                            <Descriptions.Item label="线路名称" span={ 2 }>
+                                <Form.Item name="lineName" rules={[{
+                                    "required": true,
+                                    "message":"请输入线路名称"
+                                }]}>
+                                    <Input  maxLength={50}/>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="塔型" span={ 2 }>
+                                <Form.Item name="productCategory" rules={[{
+                                  "required": true,
+                                  "message":"请输入塔型"
+                                }]}>
+                                    <Input  maxLength={30}/>
+                                </Form.Item>
+                              
+                            </Descriptions.Item>
+                            <Descriptions.Item label="塔型钢印号" span={ 2 }>
+                                <Form.Item name="steelProductShape">
+                                    <Input  maxLength={30}/>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="产品类型" span={ 2 }>
+                                <Form.Item name="productType" rules={[{
+                                    "required": true,
+                                    "message":"请选择产品类型"
+                                }]}>
+                                    <Select style={{width:'100px'}}>
+                                      {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                          return <Select.Option key={index} value={id}>
+                                              {name}
+                                          </Select.Option>
+                                      })}
+                                    </Select>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="电压等级" span={ 2 }>
+                                <Form.Item name="voltageLevel" rules={[{
+                                    "required": true,
+                                    "message":"请选择产品类型"
+                                }]}>
+                                    <Select style={{width:'100px'}}>
+                                    {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                                        return <Select.Option key={index} value={id}>
+                                            {name}
+                                        </Select.Option>
+                                    })}
+                                    </Select>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="模式" span={ 2 }>
+                                <Form.Item name="pattern" >
+                                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                      { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                          return <Select.Option key={ index } value={ id }>
+                                              { name }
+                                          </Select.Option>
+                                      }) }
+                                  </Select>
+                                </Form.Item>
+                            </Descriptions.Item>
+                            <Descriptions.Item children span={ 14 }></Descriptions.Item>
+                            {
+                                confirmData?.map((item: any, index: number) => {
+                                    return  <>  
+                                        <Descriptions.Item label="杆塔号" span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "name"]} rules={[{
+                                              required: true,
+                                              message:'请输入杆塔号'
+                                            //   validator: (rule: any, value: string, callback: (error?: string) => void) => {
+                                            //     checkProductNumber(value).then(res => {
+                                            //           if (res>-1) {
+                                            //               callback('请输入杆塔号，且同一塔型下杆塔号唯一！')
+                                            //           } else {
+                                            //               callback();
+                                            //           }
+                                            //       })
+                                            //   }
+                                          },
+                                          {
+                                              pattern: /^[^\s]*$/,
+                                              message: '禁止输入空格',
+                                          }]}>
+                                              <Input  maxLength={50} onChange={(value)=>{
+
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherA:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    legValueSum[index].A = legValueSum[index].name.indexOf(',')>-1||legValueSum[index].name.indexOf('/')>-1?legValueSum[index].name.split(/\/|,/).filter((item:any)=>{return item}).length:1
+                                                    legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherA+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ
+                                                    legValueSum[index].totalWeight = legValueSum[index].A*legValueSum[index].monomerWeight
+                                                    
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                              }} disabled={edit==='编辑'}/>
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="基数"  span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "A"]}>
+                                                <Input  maxLength={50} disabled/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="呼高（m）"  span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "basicHeight"]}  rules={[{
+                                              "required": true,
+                                              "message":"请输入呼高（m）"
+                                          }]}>
+                                              <InputNumber precision={2}  min={0} max={99.99}/>
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="本体重量（kg）" span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "bodyWeight"]} rules={[{
+                                              "required": true,
+                                              "message":"请输入本体重量（kg）"
+                                          }]} initialValue={0}>
+                                              <InputNumber precision={2}  min={0}  onChange={(value:number)=>{
+                                                  const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                  const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                  const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                  const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                  const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                  const otherA:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                  const otherB:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                  const otherC:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                  const otherD:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                  const otherE:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                  const otherF:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                  const otherG:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                  const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                  const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                  const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                  const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                  legValueSum[index].monomerWeight = dataA+dataB+dataC+dataD+otherA+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                  legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                  form.setFieldsValue({
+                                                      confirmList: [...legValueSum]
+                                                  })
+                                                  setConfirmData([...legValueSum])
+                                                  // const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                                  // const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                                  // const dataC:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                                  // const dataD:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                                  // const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                                                  // form.setFieldsValue({
+                                                  //     monomerWeight:dataA+dataB+dataC+dataD+value,
+                                                  //     totalWeight:data+dataA+dataB+dataC+dataD+value
+                                                  // })
+                                              }} max={999999.99}/>
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿配置A" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legConfigurationA"]}>
+                                              <Input   maxLength={10}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿配置B" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legConfigurationB"]} >
+                                                <Input   maxLength={10}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿配置C" span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "legConfigurationC"]}>
+                                              <Input   maxLength={10}/>
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿配置D" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legConfigurationD"]} >
+                                                <Input  maxLength={10}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿重A（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legWeightA"]}
+                                            initialValue={0}
+                                            >
+                                                <InputNumber precision={2} min={0}  onChange={(value:number)=>{
+                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                     const dataA: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                     const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                     const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                     const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                     const otherA:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                     const otherB:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                     const otherC:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                     const otherD:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                     const otherE:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                     const otherF:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                     const otherG:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                     const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                     const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                     const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                     const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                     legValueSum[index].monomerWeight = dataA+dataB+dataC+dataD+otherA+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                     legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                     console.log(legValueSum)
+                                                     form.setFieldsValue({
+                                                         confirmList: [...legValueSum]
+                                                     })
+                                                     setConfirmData([...legValueSum])
+                                                }} max={99999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿重B（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legWeightB"]}  initialValue={0}>
+                                                <InputNumber precision={2} min={0}  onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const dataA: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherA:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = dataA+dataB+dataC+dataD+otherA+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={99999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿重C（kg）" span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "legWeightC"]}  initialValue={0}>
+                                              <InputNumber precision={2} min={0}   onChange={(value:number)=>{
+                                                  const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                  const dataA: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                  const dataB: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                  const dataC: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                  const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                  const otherA:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                  const otherB:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                  const otherC:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                  const otherD:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                  const otherE:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                  const otherF:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                  const otherG:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                  const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                  const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                  const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                  const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                  legValueSum[index].monomerWeight = dataA+dataB+dataC+dataD+otherA+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                  legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                  console.log(legValueSum)
+                                                  form.setFieldsValue({
+                                                      confirmList: [...legValueSum]
+                                                  })
+                                                  setConfirmData([...legValueSum])
+                                              }} max={99999.99}/>
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="接腿重D（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legWeightD"]}  initialValue={0}>
+                                                <InputNumber precision={2}  min={0}  onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const dataA: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const otherA:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = dataA+dataB+dataC+dataD+otherA+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={99999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="单重（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "monomerWeight"]}  rules={[{
+                                                "required": true,
+                                                "message":"请输入单重（kg）"
+                                            }]} initialValue={0}>
+                                                <InputNumber precision={2} disabled  max={9999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="总重（kg）" span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "totalWeight"]} rules={[{
+                                              "required": true,
+                                              "message":"请输入总重（kg）"
+                                          }]} initialValue={0}>
+                                              <InputNumber precision={2} disabled />
+                                          </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-抱箍（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightBg"]} initialValue={0}>
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-平台（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightPt"]} initialValue={0}>
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-相序牌（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightXxp"]} initialValue={0}>
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    console.log(legValueSum)
+                                                    const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-爬梯（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightPat"]} initialValue={0}>
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-防盗（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightFd"]} initialValue={0}>
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-兜底绳施工孔板（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightDdssgkb"]} initialValue={0} >
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-挂点修改（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightGdxg"]} initialValue={0}>
+                                                <InputNumber precision={2} min={0} onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-修改（kg）" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightXg"]} initialValue={0} >
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-全塔双帽（kg）"span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightQtsm"]} initialValue={0}>
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightLs?legValueSum[index]?.otherWeightLs:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="其他增重-螺栓（kg）"span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightLs"]} initialValue={0}>
+                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                                    const legValueSum = form.getFieldsValue(true)?.confirmList;
+                                                    const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
+                                                    const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
+                                                    const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
+                                                    const dataC: number = legValueSum[index]?.legWeightC?legValueSum[index]?.legWeightC:0;
+                                                    const dataD: number = legValueSum[index]?.legWeightD?legValueSum[index]?.legWeightD:0;
+                                                    const otherB:number = legValueSum[index]?.otherWeightBg?legValueSum[index]?.otherWeightBg:0;
+                                                    const otherC:number = legValueSum[index]?.otherWeightPt?legValueSum[index]?.otherWeightPt:0;
+                                                    const otherD:number = legValueSum[index]?.otherWeightXxp?legValueSum[index]?.otherWeightXxp:0;
+                                                    const otherE:number = legValueSum[index]?.otherWeightPat?legValueSum[index]?.otherWeightPat:0;
+                                                    const otherF:number = legValueSum[index]?.otherWeightFd?legValueSum[index]?.otherWeightFd:0;
+                                                    const otherG:number = legValueSum[index]?.otherWeightDdssgkb?legValueSum[index]?.otherWeightDdssgkb:0;
+                                                    const otherH:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
+                                                    const otherI:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
+                                                    const otherJ:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
+                                                    const A = legValueSum[index]?.A?legValueSum[index]?.A:0;
+                                                    legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ+value
+                                                    legValueSum[index].totalWeight = A*legValueSum[index].monomerWeight
+                                                    console.log(legValueSum)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...legValueSum]
+                                                    })
+                                                    setConfirmData([...legValueSum])
+                                                }} max={999999.99}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="备注" span={ 7 }>
+                                            <Form.Item name={["confirmList", index, "description"]}>
+                                                <TextArea rows={1}  maxLength={400} style={{width:'100%'}}/>
+                                            </Form.Item>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item span={2}>
+                                            <Space direction="horizontal">
+                                                {index===confirmData.length-1&&edit!=='编辑'&&<Button type="primary" ghost size="small" onClick={ () => {
+                                                    const value = form.getFieldsValue(true).confirmList
+                                                    value.push({
+                                                       otherWeightBg:0,
+                                                       otherWeightPt:0,
+                                                       otherWeightXxp:0,
+                                                       otherWeightPat:0,
+                                                       otherWeightFd:0,
+                                                       otherWeightGdxg:0,
+                                                       otherWeightXg:0,
+                                                       otherWeightQtsm:0,
+                                                       otherWeightLs:0,
+                                                       legWeightA:0,
+                                                       legWeightB:0,
+                                                       legWeightC:0,
+                                                       legWeightD:0,
+                                                    })
+                                                    form.setFieldsValue({
+                                                      confirmList: [...value]
+                                                    })
+                                                    setConfirmData([...value])
+                                                    
+                                                } }>添加</Button>}
+                                                {confirmData.length!==1&&<Button type="ghost" size="small" onClick={ () => {
+                                                    confirmData.splice(index,1)
+                                                    form.setFieldsValue({
+                                                        confirmList: [...confirmData]
+                                                    })
+                                                    setConfirmData([...confirmData])
+                                                }}>删除</Button>}
+                                            </Space>
+                                        </Descriptions.Item>
+                                    </>
                                 })
                             }
-                        }]}>
-                            <Input  maxLength={50}/>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="productCategory" label="塔型" rules={[{
-                            "required": true,
-                            "message":"请输入塔型"
-                        }]}>
-                            <Input  maxLength={50}/>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item name="steelProductShape" label="塔型钢印号" rules={[{
-                            "required": true,
-                            "message":"请输入塔型钢印号"
-                        }]}>
-                            <Input  maxLength={50}/>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="productType" label="产品类型" rules={[{
-                            "required": true,
-                            "message":"请选择产品类型"
-                        }]}>
-                            <Select>
-                              {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                  return <Select.Option key={index} value={id}>
-                                      {name}
-                                  </Select.Option>
-                              })}
-                            </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item name="voltageLevel" label="电压等级（kV）" rules={[{
-                            "required": true,
-                            "message":"请选择电压等级（kV）"
-                        }]}>
-                            <Select>
-                              {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
-                                  return <Select.Option key={index} value={id}>
-                                      {name}
-                                  </Select.Option>
-                              })}
-                            </Select>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="basicHeight" label="呼高（m）" rules={[{
-                            "required": true,
-                            "message":"请输入呼高（m）"
-                        }]}>
-                            <InputNumber precision={2} style={{width:'100%'}} min={0} max={99.99}/>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item name="pattern" label="模式" rules={[{
-                            "required": true,
-                            "message":"请选择模式"
-                        }]}>
-                            <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                              { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                                  return <Select.Option key={ index } value={ id }>
-                                      { name }
-                                  </Select.Option>
-                              }) }
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="legConfigurationA" label="接腿配置A">
-                            <Input style={{width:'100%'}}  maxLength={10}/>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item name="legConfigurationB" label="接腿配置B">
-                            <Input style={{width:'100%'}}  maxLength={10}/>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="legConfigurationC" label="接腿配置C">
-                            <Input style={{width:'100%'}}  maxLength={10}/>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item name="legConfigurationD" label="接腿配置D">
-                            <Input style={{width:'100%'}} maxLength={10}/>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="legWeightA" label="接腿重A（kg）" 
-                        // rules={[{
-                        //     "required": true,
-                        //     "message":"请输入接腿重A（kg）"
-                        // }]}
-                        initialValue={0}
-                        >
-                            <InputNumber precision={2} style={{width:'100%'}} min={0}  onChange={(value:number)=>{
-                                const dataA:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
-                                const dataB:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
-                                const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
-                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
-                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
-                                form.setFieldsValue({
-                                    monomerWeight:dataA+dataB+dataC+dataD+value,
-                                    totalWeight:data+dataA+dataB+dataC+dataD+value
-                                })
-                            }} max={99999.99}/>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item name="legWeightB" label="接腿重B（kg）" initialValue={0}>
-                            <InputNumber precision={2} style={{width:'100%'}} min={0}  onChange={(value:number)=>{
-                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
-                                const dataB:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
-                                const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
-                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
-                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
-                                form.setFieldsValue({
-                                    monomerWeight:dataA+dataB+dataC+dataD+value,
-                                    totalWeight:data+dataA+dataB+dataC+dataD+value
-                                })
-                            }} max={99999.99}/>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="legWeightC" label="接腿重C（kg）" initialValue={0}>
-                            <InputNumber precision={2} style={{width:'100%'}} min={0}   onChange={(value:number)=>{
-                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
-                                const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
-                                const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
-                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
-                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
-                                form.setFieldsValue({
-                                    monomerWeight:dataA+dataB+dataC+dataD+value,
-                                    totalWeight:data+dataA+dataB+dataC+dataD+value
-                                })
-                            }} max={99999.99}/>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item name="legWeightD" label="接腿重D（kg）" initialValue={0}>
-                            <InputNumber precision={2} style={{width:'100%'}} min={0}  onChange={(value:number)=>{
-                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
-                                const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
-                                const dataC:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
-                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
-                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
-                                form.setFieldsValue({
-                                    monomerWeight:dataA+dataB+dataC+dataD+value,
-                                    totalWeight:data+dataA+dataB+dataC+dataD+value
-                                })
-                            }} max={99999.99}/>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="bodyWeight" label="本体重量（kg）" rules={[{
-                            "required": true,
-                            "message":"请输入本体重量（kg）"
-                        }]} initialValue={0}>
-                            <InputNumber precision={2} style={{width:'100%'}} min={0}  onChange={(value:number)=>{
-                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
-                                const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
-                                const dataC:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
-                                const dataD:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
-                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
-                                form.setFieldsValue({
-                                    monomerWeight:dataA+dataB+dataC+dataD+value,
-                                    totalWeight:data+dataA+dataB+dataC+dataD+value
-                                })
-                            }} max={999999.99}/>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item name="monomerWeight" label="单重（kg）" rules={[{
-                            "required": true,
-                            "message":"请输入单重（kg）"
-                        }]} initialValue={0}>
-                            <InputNumber precision={2} style={{width:'100%'}} disabled  max={9999999.99}/>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="otherWeight" label="其他增重（kg）">
-                            <InputNumber precision={2} style={{width:'100%'}} min={0} onChange={(value:number)=>{
-                                const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
-                                form.setFieldsValue({
-                                    totalWeight:data+value
-                                })
-                            }} max={999999.99}/>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item name="totalWeight" label="总重（kg）" rules={[{
-                            "required": true,
-                            "message":"请输入总重（kg）"
-                        }]} initialValue={0}>
-                            <InputNumber precision={2} style={{width:'100%'}} disabled />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="description" label="备注">
-                            <TextArea rows={1} showCount maxLength={400}/>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    {/* <BaseInfo columns={towerData} dataSource={detailData || {}} edit col={ 2 }/> */}
+                        </Descriptions>
                 </Form>
             </Modal>
         </Spin>
