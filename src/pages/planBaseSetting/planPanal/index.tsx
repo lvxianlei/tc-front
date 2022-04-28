@@ -36,6 +36,7 @@ export default () => {
         <Page
             path="/tower-aps/planBoard"
             filterValue={filterValue}
+            rowKey="onlyId"
             transformResult={(dataSource: any) => {
                 setColumns([...tableHeader, ...dataSource.header.map(((item: any) => ({
                     title: item.productionLinks,
@@ -67,7 +68,7 @@ export default () => {
                         })
                     })
                 })))])
-                return dataSource.planBoards.records
+                return dataSource.planBoards.records.map((item: any, index: number) => ({ ...item, onlyId: `${item.id}-${index}` }))
             }}
             columns={columns}
             extraOperation={
