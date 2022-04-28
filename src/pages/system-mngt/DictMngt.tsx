@@ -279,26 +279,30 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
     
     //modal-value
     public onFinish = async ( values: IDictDataSource ) =>{
-        let dataSource: IDictDataSource = {};
         const { selectedValue } = this.state; 
-        if(selectedValue.id){
-            dataSource = selectedValue;
-        }
-        else{
-            dataSource.type = this.state.selectedTab;
-            dataSource.category = this.state.type;
-        }
-        dataSource.name = values.name;
-        
+        // 控制状态
         this.setState({
             visible: false,
         })
-        selectedValue.id?await RequestUtil.put('/tower-system/dictionary', dataSource).then(()=>{
+        // 定义状态
+        let flag = false;
+        selectedValue.id?await RequestUtil.put('/tower-system/dictionary', {
+            ...selectedValue,
+            name: values.name
+        }).then(()=>{
             message.warn('刷新或退出重新登录，即可生效！')
-        }):await RequestUtil.post('/tower-system/dictionary', dataSource).then(()=>{
+        }).catch((error) => {
+            console.log(error, "================>>>")
+            flag = true
+        }):await RequestUtil.post('/tower-system/dictionary', {
+            type: this.state.selectedTab,
+            category: this.state.type,
+            name: values.name
+        }).then(()=>{
             message.warn('刷新或退出重新登录，即可生效！')
         });
-        this.updateTab(this.state.selectedTab)
+        // 更新数据
+        flag && this.updateTab(this.state.selectedTab);
     }
 
     //tab-change-tableDataSource

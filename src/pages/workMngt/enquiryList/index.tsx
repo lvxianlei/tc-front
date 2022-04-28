@@ -8,7 +8,9 @@ import AuthUtil from "../../../utils/AuthUtil"
 export default function EnquiryList(): React.ReactNode {
     const userId = AuthUtil.getUserId()
     const history = useHistory()
-    const [filterValue] = useState<any>(history.location.state)
+    const [filterValue] = useState<any>({
+        ...history.location.state as object
+    })
     const [visible, setVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
     const [inquiryStatus, setInquiryStatus] = useState<number>(0)

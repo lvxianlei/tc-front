@@ -9,7 +9,10 @@ export default function EnquiryList(): React.ReactNode {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [chooseId, setChooseId] = useState<string>("")
-    const [filterValue, setFilterValue] = useState<object>(history.location.state as object);
+    const [filterValue, setFilterValue] = useState<object>({
+        ...history.location.state as object,
+        batcherId: sessionStorage.getItem('USER_ID'),
+    });
     const userId = AuthUtil.getUserId()
     const onFilterSubmit = (value: any) => {
         // 最新状态变更时间
