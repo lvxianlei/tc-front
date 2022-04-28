@@ -18,6 +18,7 @@ interface SearchTableProps {
     columns: columnsProps[]
     rowKey?: string | ((row: any) => string)
     searchFormItems: SearchFormItemsProps[]
+    transformResult?: (result: any) => any[]
     onFilterSubmit?: <T>(arg: T) => T
     filterValue?: { [key: string]: any }
     extraOperation?: React.ReactNode | React.ReactNode[]
@@ -37,6 +38,7 @@ export default function SearchTable({
     rowKey,
     onFilterSubmit,
     extraOperation,
+    transformResult,
     searchFormItems = [],
     filterValue = {},
     tableProps,
@@ -53,7 +55,8 @@ export default function SearchTable({
             const paramsOptions = stringify({ ...params, ...filterValue })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
-            resole(result)
+            const resultData = result?.records || result || []
+            resole({ ...result, dataSource: transformResult ? transformResult(resultData) : resultData })
         } catch (error) {
             reject(false)
         }
@@ -103,7 +106,7 @@ export default function SearchTable({
             rowKey={rowKey || ((record: any) => record.id)}
             size="small"
             isLoading={loading}
-            dataSource={data?.records || data || []}
+            dataSource={data?.dataSource}
             {...tableProps}
             {...props}
         />
