@@ -94,7 +94,7 @@ const AngleSteel = () => {
         }}>
             <BaseInfo form={baseInfoForm} columns={baseInfo} dataSource={{}} edit />
         </Modal>
-        <DetailTitle title="配料基础配置" />
+        <DetailTitle title="通用策略配置" />
         <CommonTable
             loading={loading}
             columns={[
@@ -120,7 +120,7 @@ const AngleSteel = () => {
             ]}
             dataSource={data?.ingredientsConfigVos || []}
         />
-        <DetailTitle style={{marginTop: "12px"}} title="材质配料设定" operation={[
+        <DetailTitle style={{marginTop: "12px"}} title="具体策略设置" operation={[
             <Button key="add" type="primary" ghost style={{ marginRight: 16 }} onClick={() => {
                 setVisible(true)
                 setType("new")
