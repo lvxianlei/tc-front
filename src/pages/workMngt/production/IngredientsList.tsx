@@ -815,6 +815,7 @@ export default function IngredientsList(): React.ReactNode {
             });
             console.log(result, "构建分类明细")
             setSortDetailList((result as any) || [])
+            setCount(++count)
             resole(result)
         } catch (error) {
             reject(error)
