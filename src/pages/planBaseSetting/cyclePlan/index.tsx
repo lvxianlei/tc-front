@@ -41,6 +41,7 @@ export default () => {
             await RequestUtil.post(`/tower-aps/cyclePlan`,value).then(()=>{
                 message.success('新增成功！')
             }).then(()=>{
+                form.resetFields()
                 setIsAdd(false)
                 setRefresh(!refresh)
             })
@@ -100,6 +101,7 @@ export default () => {
                             onConfirm={() => {
                                 RequestUtil.delete(`/tower-aps/cyclePlan/${record?.id}`)
                                 message.success("删除成功...")
+                                history.go(0)
                                 setRefresh(!refresh)
                             }}
                             okText="确认"

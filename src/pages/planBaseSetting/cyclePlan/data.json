@@ -22,7 +22,18 @@
         },
         {
             "title": "周期计划状态",
-            "dataIndex": "status"
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "未下发"
+                },
+                {
+                    "value": 2,
+                    "label": "已下发"
+                }
+            ]
         },
         {
             "title": "下发日期",
