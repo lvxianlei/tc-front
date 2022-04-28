@@ -41,6 +41,7 @@ export default () => {
             await RequestUtil.post(`/tower-aps/cyclePlan`,value).then(()=>{
                 message.success('新增成功！')
             }).then(()=>{
+                form.resetFields()
                 setIsAdd(false)
                 setRefresh(!refresh)
             })
@@ -98,9 +99,10 @@ export default () => {
                         <Popconfirm
                             title="确认删除?"
                             onConfirm={() => {
-                                RequestUtil.delete(`/tower-system/notice?ids=${record?.id}`)
+                                RequestUtil.delete(`/tower-aps/cyclePlan/${record?.id}`)
                                 message.success("删除成功...")
                                 history.go(0)
+                                setRefresh(!refresh)
                             }}
                             okText="确认"
                             cancelText="取消"
@@ -118,7 +120,7 @@ export default () => {
                     children: <Input placeholder="周期计划号" style={{ width: 150 }} />
                 },
                 {
-                    name: "fuzzyMsg",
+                    name: "configId",
                     label: '周期计划类型',
                     children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
                         {cyclePlanType && cyclePlanType.map(({ groupId, cyclePlan }, index) => {
