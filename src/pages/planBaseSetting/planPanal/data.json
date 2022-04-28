@@ -2,87 +2,115 @@
     "tableHeader": [
         {
             "title": "计划号",
-            "dataIndex": ""
+            "dataIndex": "planNumber"
         },
         {
             "title": "塔型",
-            "dataIndex": ""
+            "dataIndex": "productCategoryName"
         },
         {
             "title": "批次号",
-            "dataIndex": ""
+            "dataIndex": "productionBatchNo"
         },
         {
             "title": "下达单号",
-            "dataIndex": ""
+            "dataIndex": "issuedNumber"
         },
         {
             "title": "基数",
-            "dataIndex": ""
+            "dataIndex": "number"
         },
         {
             "title": "电压等级(Kv)",
-            "dataIndex": ""
+            "dataIndex": "voltageGradeName"
         },
         {
             "title": "工程名称",
-            "dataIndex": ""
+            "dataIndex": "orderProjectName"
         },
         {
             "title": "业务经理",
-            "dataIndex": ""
+            "dataIndex": "businessManagerName"
         },
         {
             "title": "产品类型",
-            "dataIndex": ""
+            "dataIndex": "productTypeName"
         },
         {
             "title": "厂区",
-            "dataIndex": ""
+            "dataIndex": "factoryName"
         },
         {
-            "title": "审批日期",
-            "dataIndex": ""
+            "title": "审批时间",
+            "dataIndex": "approvalTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "客户交货日期",
-            "dataIndex": ""
+            "dataIndex": "customerDeliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "计划交货日期",
-            "dataIndex": ""
+            "dataIndex": "planDeliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "试装类型",
-            "dataIndex": ""
+            "dataIndex": "trialAssemble"
         },
         {
             "title": "技术下达重量（t）",
-            "dataIndex": ""
+            "dataIndex": "totalWeight"
         },
         {
             "title": "角钢重量（t）",
-            "dataIndex": ""
+            "dataIndex": "steelTotalWeight"
         },
         {
             "title": "连扳重量（t）",
-            "dataIndex": ""
+            "dataIndex": "platTotalWeight"
         },
         {
             "title": "总件数",
-            "dataIndex": ""
+            "dataIndex": "totalProcessNum"
         },
         {
             "title": "总孔数",
-            "dataIndex": ""
+            "dataIndex": "totalHolesNum"
         },
         {
             "title": "库存备料",
-            "dataIndex": ""
+            "dataIndex": "storageMaterialDescription"
         },
         {
             "title": "确认备料",
-            "dataIndex": ""
+            "dataIndex": "processMaterialDescription"
+        }
+    ],
+    "commonHeader": [
+        {
+            "title": "下发日期",
+            "code": "issueTime"
+        },
+        {
+            "title": "计划完成日期",
+            "code": "loftingCompleteTime"
+        },
+        {
+            "title": "实际完成日期",
+            "code": "completeTime"
+        },
+        {
+            "title": "状态",
+            "code": "status"
+        },
+        {
+            "title": "执行单元",
+            "code": "unitName"
         }
     ]
 }
