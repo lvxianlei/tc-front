@@ -25,7 +25,7 @@
             "type": "number"
         },
         {
-            "title": "提料重量（吨）",
+            "title": "提料重量（kg）",
             "dataIndex": "totalWeight",
             "width": 200,
             "type": "string"
