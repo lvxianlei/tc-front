@@ -433,10 +433,10 @@ export default function IngredientsList(): React.ReactNode {
             // 添加构建分类map
             if (map.has(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`)) {
                 const result = map.get(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`) || 0;
-                let num = (schemeData[i].num1 || 0) + (schemeData[i].num2 || 0) + (schemeData[i].num3 || 0) + (schemeData[i].num4 || 0)
+                let num = (schemeData[i].num1 || 0) * schemeData[i].quantity + (schemeData[i].num2 || 0) * schemeData[i].quantity + (schemeData[i].num3 || 0) * schemeData[i].quantity + (schemeData[i].num4 || 0) * schemeData[i].quantity
                 map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, result + num);
             } else {
-                let num = (schemeData[i].num1 || 0) + (schemeData[i].num2 || 0) + (schemeData[i].num3 || 0) + (schemeData[i].num4 || 0)
+                let num = (schemeData[i].num1 || 0) * schemeData[i].quantity + (schemeData[i].num2 || 0) * schemeData[i].quantity + (schemeData[i].num3 || 0) * schemeData[i].quantity + (schemeData[i].num4 || 0) * schemeData[i].quantity
                 map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, num);
             }
         }
@@ -673,6 +673,8 @@ export default function IngredientsList(): React.ReactNode {
                 ...result[0].batchingStrategy
             })
         }
+        setCount(++count);
+        setAlternativeData([])
     }
 
     // 初始获取数据
