@@ -553,7 +553,7 @@ export default function ConfirmDetail(): React.ReactNode {
                         confirmList: [record].map((item:any)=>{
                             return{
                                 ...item,
-                                A: item.name.indexOf(',')>-1?item.name.split(',').filter((item:any)=>item).length:1,
+                                A: item.name.indexOf(',')>-1||item.name.indexOf('/')>-1?item.name.split(/\/|,/).filter((item:any)=>item).length:1,
                                 basicHeight:Number(item.basicHeight),
                                 bodyWeight:Number(item.bodyWeight),
                                 legWeightA:Number(item.legWeightA),
@@ -862,7 +862,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                                     const otherH:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
                                                     const otherI:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
                                                     const otherJ:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
-                                                    legValueSum[index].A = legValueSum[index].name.indexOf(',')>-1?legValueSum[index].name.split(',').filter((item:any)=>{return item}).length:1
+                                                    legValueSum[index].A = legValueSum[index].name.indexOf(',')>-1||legValueSum[index].name.indexOf('/')>-1?legValueSum[index].name.split(/\/|,/).filter((item:any)=>{return item}).length:1
                                                     legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherA+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ
                                                     legValueSum[index].totalWeight = legValueSum[index].A*legValueSum[index].monomerWeight
                                                     

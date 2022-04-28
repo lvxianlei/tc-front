@@ -248,11 +248,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
         }
         if ((componentList || []).map(res => res.id).findIndex((value) => value === record.structureId) === -1) {
             let values = form.getFieldsValue(true).segmentName;
-            if (values) {
-                setComponentList([
-                    ...componentList
-                ])
-            } else {
+            if (values && values.length > 0) {
+                values = values.filter((res: string) => res !== 'all')
                 values = values.map((res: string) => {
                     return {
                         segmentName: res.split(',')[0],
@@ -272,8 +269,11 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     },
                     ...componentList
                 ])
+            } else {
+                setComponentList([
+                    ...componentList
+                ])
             }
-
         } else {
             setComponentList(componentList?.map((res: IComponentList) => {
                 if (res.id === record.structureId) {
@@ -449,89 +449,75 @@ export default function AddAssemblyWelding(): React.ReactNode {
             </Space>
         ]}>
             <DetailTitle title="组焊信息" />
-            <Form form={form}>
-                <Row>
-                    <Col flex={3}>
-                        <Form.Item name="componentId" label="组件号">
-                            <Input placeholder="自动产生" maxLength={10} disabled />
-                        </Form.Item>
-                    </Col>
-                    <Col flex={3} offset={1}>
-                        <Form.Item name="electricWeldingMeters" label="电焊米数（mm）" rules={[{
-                            "required": true,
-                            "message": "请输入电焊米数"
-                        }]}>
-                            <Input placeholder="自动计算" disabled />
-                        </Form.Item>
-                    </Col>
-                    <Col flex={3} offset={1}>
-                        <Form.Item name="segmentName" label="段号">
-                            <Select placeholder="请选择" style={{ width: '150px' }}
-                                mode="multiple" onChange={() => {
-                                    // setWeldingDetailedStructureList([]);
-                                    let values = form.getFieldsValue(true)?.segmentName;
-                                    if (values.length > 0) {
-                                        if (values.findIndex((value: string) => value === 'all') !== -1) {
-                                            const selected = segmentNameList?.map(item => {
-                                                return item.name + ',' + item.id
-                                            })
-                                            form.setFieldsValue({
-                                                segmentName: ['all', ...selected]
-                                            })
-                                            values = selected.map((res: string) => {
-                                                return {
-                                                    segmentName: res.split(',')[0],
-                                                    segmentId: res.split(',')[1],
-                                                }
-                                            })
-                                            getComponentList(values)
-                                        } else {
-                                            values = values.map((res: string) => {
-                                                return {
-                                                    segmentName: res.split(',')[0],
-                                                    segmentId: res.split(',')[1],
-                                                }
-                                            })
-                                            getComponentList(values)
+            <Form form={form} layout="inline">
+                <Form.Item name="componentId" label="组件号">
+                    <Input placeholder="自动产生" maxLength={10} disabled />
+                </Form.Item>
+                <Form.Item name="electricWeldingMeters" label="电焊米数（mm）" rules={[{
+                    "required": true,
+                    "message": "请输入电焊米数"
+                }]}>
+                    <Input placeholder="自动计算" disabled />
+                </Form.Item>
+                <Form.Item name="segmentName" label="段号">
+                    <Select placeholder="请选择" style={{ width: '150px' }}
+                        mode="multiple" onChange={() => {
+                            // setWeldingDetailedStructureList([]);
+                            let values = form.getFieldsValue(true)?.segmentName;
+                            if (values.length > 0) {
+                                if (values.findIndex((value: string) => value === 'all') !== -1) {
+                                    const selected = segmentNameList?.map(item => {
+                                        return item.name + ',' + item.id
+                                    })
+                                    form.setFieldsValue({
+                                        segmentName: ['all', ...selected]
+                                    })
+                                    values = selected.map((res: string) => {
+                                        return {
+                                            segmentName: res.split(',')[0],
+                                            segmentId: res.split(',')[1],
                                         }
-                                    } else {
-                                        setComponentList([]);
-                                    }
-                                }} >
-                                <Select.Option key={'all'} value={'all'}>全部</Select.Option>
-                                {segmentNameList.map((item: any) => {
-                                    return <Select.Option key={item.name + ',' + item.id} value={item.name + ',' + item.id}>{item.name}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col flex={3} offset={1}>
-                        <Form.Item name="singleGroupWeight" label="单组重量（kg）" rules={[{
-                            "required": true,
-                            "message": "请输入单组重量"
-                        }]}>
-                            <Input placeholder="自动计算" disabled />
-                        </Form.Item>
-                    </Col>
-                    <Col flex={3} offset={1}>
-                        <Form.Item name="segmentGroupNum" label="单段组数" rules={[{
-                            "required": true,
-                            "message": "请输入单段组数"
-                        }]}>
-                            <InputNumber min={1} style={{ width: '100%' }} placeholder="请输入" />
-                        </Form.Item>
-                    </Col>
-                    <Col flex={3} offset={1}>
-                        <Form.Item name="weldingType" label="组焊类型" rules={[{
-                            "required": true,
-                            "message": "请选择组焊类型"
-                        }]}>
-                            <Select placeholder="请选择">
-                                {compoundTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
+                                    })
+                                    getComponentList(values)
+                                } else {
+                                    values = values.map((res: string) => {
+                                        return {
+                                            segmentName: res.split(',')[0],
+                                            segmentId: res.split(',')[1],
+                                        }
+                                    })
+                                    getComponentList(values)
+                                }
+                            } else {
+                                setComponentList([]);
+                            }
+                        }} >
+                        <Select.Option key={'all'} value={'all'}>全部</Select.Option>
+                        {segmentNameList.map((item: any) => {
+                            return <Select.Option key={item.name + ',' + item.id} value={item.name + ',' + item.id}>{item.name}</Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item name="singleGroupWeight" label="单组重量（kg）" rules={[{
+                    "required": true,
+                    "message": "请输入单组重量"
+                }]}>
+                    <Input placeholder="自动计算" disabled />
+                </Form.Item>
+                <Form.Item name="segmentGroupNum" label="单段组数" rules={[{
+                    "required": true,
+                    "message": "请输入单段组数"
+                }]}>
+                    <InputNumber min={1} placeholder="请输入" />
+                </Form.Item>
+                <Form.Item name="weldingType" label="组焊类型" rules={[{
+                    "required": true,
+                    "message": "请选择组焊类型"
+                }]}>
+                    <Select placeholder="请选择" style={{ width: '150px' }}>
+                        {compoundTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
+                    </Select>
+                </Form.Item>
             </Form>
             <DetailTitle title="构件信息" />
             <CommonTable
