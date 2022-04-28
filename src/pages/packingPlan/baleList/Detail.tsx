@@ -165,7 +165,7 @@ export default function SetOutInformation(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
 
     const { loading, data, run: getTableDataSource }: Record<string, any> = useRequest((filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IBale = await RequestUtil.put<IBale>(`/tower-production/package/detail`, { ...filterValues, id: params.id });
+        const data: IBale = await RequestUtil.get<IBale>(`/tower-production/package/detail`, { ...filterValues, id: params.id });
         setTableData(data?.packageInfoVOList || []);
         resole(data)
     }), {})
