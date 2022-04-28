@@ -21,7 +21,7 @@ export default function Invoicing() {
     const [loftingState, setLoftingState] = useState<number>(0);
     const [filterValue, setFilterValue] = useState<object>({
         ...history.location.state as object,
-        loftingId: sessionStorage.getItem('USER_ID'),
+        loftingId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
     });
     const { loading, run: saveRun } = useRequest<any[]>((id: string, productCategoryName: string) => new Promise(async (resole, reject) => {
         try {

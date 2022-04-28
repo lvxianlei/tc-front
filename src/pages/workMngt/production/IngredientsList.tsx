@@ -61,7 +61,7 @@ export default function IngredientsList(): React.ReactNode {
         { key: "fast", value: "快速配料" },
         { key: "programme", value: "已配方案" },
         { key: "save", value: "保存" },
-        { key: "generate", value: "生成配料" },
+        { key: "generate", value: "生成配料方案" },
         { key: "batchingStrategy", value: "配料策略设置" },
         { key: "goback", value: "返回", type: "default" }
     ]
@@ -1179,10 +1179,10 @@ export default function IngredientsList(): React.ReactNode {
                                                                 <div>备选方案</div>
                                                                 <div>
                                                                     <span>排序</span>
-                                                                    <Select placeholder="请选择" style={{ width: 150 }} onChange={(res) => {
+                                                                    <Select placeholder="请选择" defaultValue={""} style={{ width: 150 }} onChange={(res) => {
                                                                         getScheme(res);
                                                                     }}>
-                                                                        <Select.Option value="">全部</Select.Option>
+                                                                        <Select.Option value="">默认排序</Select.Option>
                                                                         <Select.Option value="1">完全下料优先</Select.Option>
                                                                         <Select.Option value="2">利用率<ArrowDownOutlined /></Select.Option>
                                                                         <Select.Option value="4">余料长度<ArrowDownOutlined /></Select.Option>

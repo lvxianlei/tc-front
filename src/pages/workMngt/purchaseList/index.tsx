@@ -16,7 +16,7 @@ export default function Invoicing() {
     const [chooseId, setChooseId] = useState<string>("")
     const [filterValue, setFilterValue] = useState<object>({
         ...history.location.state as object,
-        purchaserId: sessionStorage.getItem('USER_ID'),
+        purchaserId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
     });
     const onFilterSubmit = (value: any) => {
         if (value.startPurchaseStatusUpdateTime) {

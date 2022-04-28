@@ -22,7 +22,7 @@ export default function EnquiryTask(): React.ReactNode {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<object>({
         ...history.location.state as object,
-        inquirer: sessionStorage.getItem('USER_ID'),
+        inquirer: history.location.state ? sessionStorage.getItem('USER_ID') : "",
     });
     const [detailId, setDetailId] = useState<string>("")
     const [currentData, setCurrentData] = useState<any>({})
