@@ -5,12 +5,15 @@ import { DetailContent, CommonTable, DetailTitle, Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
-export default function ReleaseOrder({run}:{run:()=>void}): React.ReactElement {
+export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React.ReactElement {
     const history = useHistory()
     const [ visible, setVisible] = useState<boolean>(false)
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [ selectedRows, setSelectedRows ] = useState<any[]>([]);
-    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({});
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({
+        productTypeId: productTypeOptions && productTypeOptions.length>0 && productTypeOptions[0].id,
+        configId: data?.configId
+    });
     const params = useParams<{ id: string }>()
     const columns : any =[
         {
@@ -21,127 +24,127 @@ export default function ReleaseOrder({run}:{run:()=>void}): React.ReactElement {
             dataIndex: 'planNumber'
         },
         {
-            key: 'productCategory',
+            key: 'productCategoryName',
             title: '塔型',
             width: 100,
             fixed: "left",
-            dataIndex: 'productCategory'
+            dataIndex: 'productCategoryName'
         },
         {
-            key: 'batchNo',
+            key: 'productionBatchNo',
             title: '批次号',
             width: 100,
             fixed: "left",
-            dataIndex: 'batchNo'
+            dataIndex: 'productionBatchNo'
         },
         {
-            key: 'issueOrderNumber',
+            key: 'issuedNumber',
             title: '下达单号',
             width: 100,
             fixed: "left",
-            dataIndex: 'issueOrderNumber'
+            dataIndex: 'issuedNumber'
         },
         {
-            key: 'lineName',
+            key: 'number',
             title: '基数',
             width: 100,
-            dataIndex: 'lineName'
+            dataIndex: 'number'
         },
         {
-            key: 'totalWeight',
+            key: 'voltageGradeName',
             title: '电压等级（Kv）',
             width: 150,
-            dataIndex: 'totalWeight'
+            dataIndex: 'voltageGradeName'
         },
         {
-            key: 'productType',
+            key: 'orderProjectName',
             title: '工程名称',
             width: 100,
-            dataIndex: 'productType'
+            dataIndex: 'orderProjectName'
         },
         {
-            key: 'description',
+            key: 'businessManagerName',
             title: '业务经理',
             width: 100,
-            dataIndex: 'description'
+            dataIndex: 'businessManagerName'
         },
         {
-            key: 'description',
+            key: 'productTypeName',
             title: '产品类型',
             width: 100,
-            dataIndex: 'description'
+            dataIndex: 'productTypeName'
         },
         {
-            key: 'totalHoles',
+            key: 'factoryName',
             title: '厂区',
             width: 100,
-            dataIndex: 'totalHoles'
+            dataIndex: 'factoryName'
         },
         {
-            key: 'totalNumber',
+            key: 'approvalTime',
             title: '审批日期',
             width: 100,
-            dataIndex: 'totalNumber'
+            dataIndex: 'approvalTime'
+        },
+        {
+            key: 'customerDeliveryTime',
+            title: '客户交货日期',
+            width: 100,
+            dataIndex: 'customerDeliveryTime'
+        },
+        {
+            key: 'planDeliveryTime',
+            title: '计划交货日期',
+            width: 100,
+            dataIndex: 'planDeliveryTime'
+        },
+        {
+            key: 'trialAssemble',
+            title: '试装类型',
+            width: 100,
+            dataIndex: 'trialAssemble'
         },
         {
             key: 'totalWeight',
-            title: '客户交货日期',
+            title: '技术下达重量（t）',
             width: 100,
             dataIndex: 'totalWeight'
         },
         {
-            key: 'description',
-            title: '计划交货日期',
-            width: 100,
-            dataIndex: 'description'
-        },
-        {
-            key: 'description',
-            title: '试装类型',
-            width: 100,
-            dataIndex: 'description'
-        },
-        {
-            key: 'description',
-            title: '技术下达重量（t）',
-            width: 100,
-            dataIndex: 'description'
-        },
-        {
-            key: 'description',
+            key: 'steelTotalWeight',
             title: '角钢重量（t）',
             width: 100,
-            dataIndex: 'description'
+            dataIndex: 'steelTotalWeight'
         },
         {
-            key: 'description',
+            key: 'platTotalWeight',
             title: '连板重量（t）',
             width: 100,
-            dataIndex: 'description'
+            dataIndex: 'platTotalWeight'
         },
         {
-            key: 'description',
+            key: 'totalProcessNum',
             title: '总件数',
             width: 100,
-            dataIndex: 'description'
+            dataIndex: 'totalProcessNum'
         },
         {
-            key: 'description',
+            key: 'totalHolesNum',
             title: '总孔数',
             width: 100,
-            dataIndex: 'description'
+            dataIndex: 'totalHolesNum'
         },
         {
-            key: 'description',
+            key: 'storageMaterialDescription',
             title: '库存备料',
             width: 100,
-            dataIndex: 'description'
+            dataIndex: 'storageMaterialDescription'
         },
         {
-            key: 'description',
+            key: 'processMaterialDescription',
             title: '生产备料',
             width: 100,
-            dataIndex: 'description'
+            dataIndex: 'processMaterialDescription'
         },
         // {
         //     title: '放样',
@@ -702,7 +705,7 @@ export default function ReleaseOrder({run}:{run:()=>void}): React.ReactElement {
             setVisible(false)
         } } width={'80%'}>
             <Page
-                path="/tower-aps/planBoard"
+                path="/tower-aps/planBoard/issue/list"
                 filterValue={filterValue}
                 tableProps={{
                     rowSelection: {
@@ -720,6 +723,7 @@ export default function ReleaseOrder({run}:{run:()=>void}): React.ReactElement {
                         </span>
                     </>
                 }}
+
                 searchFormItems={[
                     {
                         name: "planNum",
@@ -749,6 +753,7 @@ export default function ReleaseOrder({run}:{run:()=>void}): React.ReactElement {
                     },
                 ]}
                 onFilterSubmit={(values: any) => {
+                    values.configId = data?.configId
                     return values;
                 }}
                 
