@@ -339,7 +339,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                 </Form>
                 <DetailTitle title="周期计划下达单"/>
                 <Space>
-                    <ReleaseOrder run={run}/>
+                    <ReleaseOrder run={run} data={detail}/>
                     <Button type="primary" ghost onClick={() => {
                         setVisible(true)
                     }} disabled={!(selectedKeys.length===1)}>周期计划备注</Button>
