@@ -55,7 +55,8 @@ export default () => {
                         {result.message.split("/").map((item: string) => <li>{item}</li>)}
                     </ul>
                     <Row><h6>请配置分配规则</h6></Row>
-                </nav>
+                </nav>,
+                onOk: () => history.go(0)
             })
         } else {
             await message.success("快速分配车间完成")
