@@ -108,6 +108,9 @@ export default function IngredientsList(): React.ReactNode {
     // 已选方案 用于计算数量
     const [selectedScheme, setSelectedScheme] = useState<any[]>([]);
 
+    // 过滤
+    const [sort, setSort] = useState<string>("");
+
     let [count, setCount] = useState<number>(0);
 
     // 操作按钮
@@ -781,8 +784,12 @@ export default function IngredientsList(): React.ReactNode {
     }), { manual: true })
 
     // 手动配料
-    const { run: getScheme } = useRequest<{ [key: string]: any }>((sort: string = "") => new Promise(async (resole, reject) => {
+    const { run: getScheme } = useRequest<{ [key: string]: any }>((code: number = 1, sorts: string = "") => new Promise(async (resole, reject) => {
+        setAlternativeData([]);
         try {
+            if (code === 1) {
+                setSort("");
+            }
             const serarchData = await serarchForm.validateFields();
             console.log(serarchData, "==========>>>")
             if (selectedRowCheck.length < 1) {
@@ -812,7 +819,7 @@ export default function IngredientsList(): React.ReactNode {
                 structureSpec: activeSort.split("_")[1], // 规格
                 structureTexture: activeSort.split("_")[0], // 材质
                 useStock: false, // 是否使用实际库存
-                sort: sort ? +sort : ""
+                sort: code === 1 ? "" : sorts
             });
             console.log(result, "手动配料")
             if (result.length < 1) {
@@ -1027,7 +1034,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     message.warn("该功能暂未开发！");
                                                                     return false;
                                                                 }}>自动配料</Button>,
-                                                                <Button type="primary" ghost key="choose" onClick={() => getScheme()}>手动配料</Button>
+                                                                <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
                                                             <Table
                                                                 size="small"
@@ -1080,8 +1087,9 @@ export default function IngredientsList(): React.ReactNode {
                                                                 <div>备选方案</div>
                                                                 <div>
                                                                     <span>排序</span>
-                                                                    <Select placeholder="请选择" defaultValue={""} style={{ width: 150 }} onChange={(res) => {
-                                                                        getScheme(res);
+                                                                    <Select placeholder="请选择" value={sort} style={{ width: 150 }} onChange={(res) => {
+                                                                        setSort(res);
+                                                                        getScheme(2, res);
                                                                     }}>
                                                                         <Select.Option value="">默认排序</Select.Option>
                                                                         <Select.Option value="1">完全下料优先</Select.Option>
