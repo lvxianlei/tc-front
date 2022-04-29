@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Input, Select,  Modal, message} from 'antd';
+import { Button, Input, Select,  Modal, message, Form} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -728,6 +728,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 }}
                 
                 tableProps={{
+                    pagination:false,
                     rowSelection: {
                         type: "checkbox",
                         selectedRowKeys: selectedKeys,
@@ -763,19 +764,21 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                     {
                         name: "productTypeId",
                         label: "产品类型",
-                        children:<Select placeholder="请选择" defaultValue={productTypeOptions&&productTypeOptions[0].id} getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                            {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                return <Select.Option key={index} value={id}>
-                                    {name}
-                                </Select.Option>
-                            })}
-                        </Select>
+                        children:
+                        <Form.Item initialValue={productTypeOptions&&productTypeOptions[0].id} name='productTypeId'>
+                            <Select placeholder="请选择"  getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={index} value={id}>
+                                        {name}
+                                    </Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
                     },
                 ]}
                 onFilterSubmit={(values: any) => {
                     values.configId = params?.configId
-                    values.productTypeId = values?.productTypeId?values.productTypeId:productTypeOptions&&productTypeOptions[0].id
-                    console.log(values)
+                    setFilterValue(values)
                     return values;
                 }}
                 
