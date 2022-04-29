@@ -11,6 +11,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
     const [ visible, setVisible] = useState<boolean>(false)
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [ selectedRows, setSelectedRows ] = useState<any[]>([]);
+    const [ detail, setDetail ] = useState<any>({totalHoles: 0 ,totalNumber:0 , totalWeight:'0'});
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({
         productTypeId: productTypeOptions && productTypeOptions.length>0 && productTypeOptions[0].id,
         configId: params?.configId
@@ -684,6 +685,20 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
+        const totalHoles = selectedRows.reduce((pre,cur)=>{
+			return pre + cur.totalHolesNum
+		},0)
+        const totalNumber = selectedRows.reduce((pre,cur)=>{
+			return pre + cur.totalProcessNum
+		},0)
+        const totalWeight = selectedRows.reduce((pre,cur)=>{
+			return parseFloat(pre) + parseFloat(cur.totalWeight)
+		},0)
+        setDetail({
+            totalHoles,
+            totalNumber,
+            totalWeight
+        })
     }
     return <>
         <Modal visible={ visible } title='添加下达单' okText="确认" onOk={ async ()=>{
@@ -711,6 +726,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 requestData={{
                     configId: params?.configId
                 }}
+                
                 tableProps={{
                     rowSelection: {
                         type: "checkbox",
@@ -723,7 +739,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>
-                            合计：总件数： {data?.totalNumber}  总孔数：{data?.totalHoles}  总重量（t）：{data?.totalWeight || "0.00"}
+                            合计：总件数： {detail?.totalNumber}  总孔数：{detail?.totalHoles}  总重量（t）：{detail?.totalWeight || "0.00"}
                         </span>
                     </>
                 }}
