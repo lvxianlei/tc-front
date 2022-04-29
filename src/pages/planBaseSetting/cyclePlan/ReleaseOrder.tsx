@@ -703,7 +703,12 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
     return <>
         <Modal visible={ visible } title='添加下达单' okText="确认" onOk={ async ()=>{
             if(selectedKeys.length>0){
-                await RequestUtil.post(`/tower-aps/cyclePlan/issueOrder`,selectedRows).then(()=>{
+                await RequestUtil.post(`/tower-aps/cyclePlan/issueOrder`,selectedRows.map((item:any)=>{
+                    return{
+                        ...item,
+                        cyclePlanId: params.id,
+                    }
+                })).then(()=>{
                     message.success('添加成功！')
                 })
                 setSelectedKeys([])
@@ -728,6 +733,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 }}
                 
                 tableProps={{
+                    rowKey:'index',
                     pagination:false,
                     rowSelection: {
                         type: "checkbox",
