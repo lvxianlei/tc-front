@@ -43,7 +43,8 @@ export default () => {
 
     const handleAuto = async () => {
         const result = await run(selectedRowKeys)
-        if (result?.data === "405") {
+        console.log(result, "----")
+        if (result?.code === 405) {
             Modal.warn({
                 title: "快速分配车间",
                 icon: null,
@@ -51,7 +52,7 @@ export default () => {
                 content: <nav>
                     <h6>以下下达单未匹配到生产车间</h6>
                     <ul>
-                        { }
+                        {result.message.split("/").map((item: string) => <li>{item}</li>)}
                     </ul>
                     <Row><h6>请配置分配规则</h6></Row>
                 </nav>
