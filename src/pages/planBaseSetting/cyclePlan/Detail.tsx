@@ -146,18 +146,24 @@ export default function CyclePlanDetail(): React.ReactNode {
             dataIndex: 'plateWeight'
         },
         {
-            key: 'description',
+            key: 'storageMaterialDescription',
             title: '库存备料',
             width: 100,
             fixed: "right",
-            dataIndex: 'description'
+            dataIndex: 'storageMaterialDescription',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
-            key: 'description',
+            key: 'processMaterialDescription',
             title: '生产备料',
             width: 100,
             fixed: "right",
-            dataIndex: 'description'
+            dataIndex: 'processMaterialDescription',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
             key: 'description',
