@@ -10,7 +10,8 @@ import { groupBy } from "ali-react-table"
 interface CountProps {
     totalNumber: number
     totalGroupNum: number
-    totalWeight: string
+    totalWeight_s: string
+    totalWeight_w: string
     totalHolesNum: number
 }
 
@@ -21,7 +22,13 @@ export default function ManualDistribute(): ReactElement {
     const [form] = Form.useForm()
     const [workshopForm] = Form.useForm()
     const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([])
-    const [counts, setCounts] = useState<CountProps>({ totalNumber: 0, totalGroupNum: 0, totalWeight: "0", totalHolesNum: 0 })
+    const [counts, setCounts] = useState<CountProps>({
+        totalNumber: 0,
+        totalGroupNum: 0,
+        totalWeight_s: "0",
+        totalWeight_w: "0",
+        totalHolesNum: 0
+    })
     const [status, setStatus] = useState<number>(1)
 
     const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -76,12 +83,13 @@ export default function ManualDistribute(): ReactElement {
         if (status === 1) {
             const newCounts = selectedRowKeys.reduce((result: CountProps, item: any) => ({
                 totalNumber: result.totalNumber + parseFloat(item.number || "0"),
-                totalWeight: Number((parseFloat(result.totalWeight) + parseFloat(item.totalWeight || "0"))).toFixed(4),
+                totalWeight_s: Number((parseFloat(result.totalWeight_s) + parseFloat(item.totalWeight || "0"))).toFixed(4),
                 totalHolesNum: result.totalHolesNum + (parseFloat(item.holesNum || "0") * item.number)
             }), {
                 totalNumber: 0,
                 totalGroupNum: 0,
-                totalWeight: 0,
+                totalWeight_s: 0,
+                totalWeight_w: 0,
                 totalHolesNum: 0
             })
             setSelectedRowKeys(selectedRowKeys)
@@ -94,11 +102,12 @@ export default function ManualDistribute(): ReactElement {
             }, [])
             const newCounts = selectRows.reduce((result: CountProps, item: any) => ({
                 totalGroupNum: result.totalGroupNum + parseFloat(item.segmentGroupNum || "0"),
-                totalWeight: Number((parseFloat(result.totalWeight) + parseFloat(item.singleGroupWeight || "0"))).toFixed(4)
+                totalWeight_w: Number((parseFloat(result.totalWeight_w) + parseFloat(item.singleGroupWeight || "0"))).toFixed(4)
             }), {
                 totalNumber: 0,
                 totalGroupNum: 0,
-                totalWeight: 0,
+                totalWeight_s: 0,
+                totalWeight_w: 0,
                 totalHolesNum: 0
             })
             setSelectedRowKeys(selectedRowKeys)
@@ -205,7 +214,8 @@ export default function ManualDistribute(): ReactElement {
                 <span style={{ fontWeight: 600 }}>合计：</span>
                 {status === 1 && <span><label>总件数：</label>{counts.totalNumber}</span>}
                 {status === 2 && <span><label>总组数：</label>{counts.totalGroupNum}</span>}
-                <span><label>总重量(t)：</label>{counts.totalWeight}</span>
+                {status === 1 && <span><label>总重量(t)：</label>{counts.totalWeight_s}</span>}
+                {status === 2 && <span><label>总重量(t)：</label>{counts.totalWeight_w}</span>}
                 {status === 1 && <span><label>总孔数：</label>{counts.totalHolesNum}</span>}
             </Space>
         </Row>
