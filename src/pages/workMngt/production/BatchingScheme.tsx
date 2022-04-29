@@ -32,6 +32,18 @@ export default function BatchingScheme(): React.ReactNode {
             reject(error)
         }
     }), {  })
+    
+    // 材料汇总
+    const { run: getPurchaseBatchingScheme, data: PurchaseBatchingSchemeData, loading: lodingPurchaseBatchingScheme } = useRequest<{ [key: string]: any }>((spec: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/getLoftingSchemeStatistics`, {
+                produceId: params.id
+            });
+            resole(result?.records || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), {  })
 
     return (
         <Spin spinning={loading}>
@@ -61,7 +73,7 @@ export default function BatchingScheme(): React.ReactNode {
                             }
                         },
                         ...MaterialSummary,
-                    ]} dataSource={(IngredientData as any) || []}  scroll={{ y: 400 }}
+                    ]} dataSource={(PurchaseBatchingSchemeData as any) || []}  scroll={{ y: 400 }}
                 />
                 <DetailTitle key={"detail"} title="配料方案" />
                 <div className='export_wrapper'>
@@ -113,8 +125,8 @@ export default function BatchingScheme(): React.ReactNode {
                 current={1}
                 size={(IngredientData as any).length}
                 total={(IngredientData as any).length}
-                url={`/tower-supply/produceIngredients/programme/${params.id}`}
-                serchObj={{}}
+                url={status === 1 ? `/tower-supply/purchaseBatchingScheme/batcher/summary` : `/tower-supply/produceIngredients/programme/${params.id}`}
+                serchObj={status === 1 ? {produceId: params.id} : {}}
                 closeExportList={() => { setIsExportStoreList(false) }}
             /> : null}
         </Spin>
