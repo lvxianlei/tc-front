@@ -164,7 +164,10 @@ export default function CyclePlanDetail(): React.ReactNode {
             title: '周期计划备注',
             width: 100,
             fixed: "right",
-            dataIndex: 'description'
+            dataIndex: 'description',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
             title: "操作",

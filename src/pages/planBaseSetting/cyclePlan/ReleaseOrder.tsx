@@ -37,7 +37,10 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
             title: '批次号',
             width: 100,
             fixed: "left",
-            dataIndex: 'productionBatchNo'
+            dataIndex: 'productionBatchNo',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
             key: 'issuedNumber',
@@ -201,7 +204,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 }}
                 sourceKey='planBoards'
                 tableProps={{
-                    rowKey:(record: any) => `${record.id}-${record.index}`,
+                    rowKey:(record: any,index) => `${record.id}-${index}`,
                     pagination:false,
                     rowSelection: {
                         type: "checkbox",
@@ -209,8 +212,8 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         onChange: SelectChange
                     }
                 }}
-                columns={columns}
                 
+                columns={columns}
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>
