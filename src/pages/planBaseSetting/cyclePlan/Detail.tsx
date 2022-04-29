@@ -374,13 +374,13 @@ export default function CyclePlanDetail(): React.ReactNode {
                             setSelectedKeys(selectedKeys);
                             setSelectedRows(selectedRows);
                             const totalHoles = selectedRows.reduce((pre: any,cur: { totalHolesNum: any; })=>{
-                                return pre + cur.totalHolesNum
+                                return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalHolesNum!==null?cur.totalHolesNum:0) 
                             },0)
                             const totalNumber = selectedRows.reduce((pre: any,cur: { totalProcessNum: any; })=>{
-                                return pre + cur.totalProcessNum
+                                return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalProcessNum!==null?cur.totalProcessNum:0 )
                             },0)
-                            const totalWeight = selectedRows.reduce((pre: string,cur: { totalWeight: string; })=>{
-                                return parseFloat(pre) + parseFloat(cur.totalWeight)
+                            const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
+                                return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)
                             },0)
                             setDetail({
                                 ...detail,
