@@ -78,6 +78,8 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                     return <InputNumber
                                         value={record.purchasePlanNumber}
                                         key={index}
+                                        max={999}
+                                        min={0}
                                         onChange={(value: number) => {
                                             setNumber(++number)
                                             setValues({
