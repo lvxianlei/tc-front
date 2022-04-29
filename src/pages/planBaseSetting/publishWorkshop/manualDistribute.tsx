@@ -136,6 +136,8 @@ export default function ManualDistribute(): ReactElement {
                         id: item.id,
                         workshopId: workshop.workshopId,
                         weldingId: item.weldingId,
+                        componentId: item.componentId,
+                        issueOrderId: params.id,
                         workshopName: listData.find((item: any) => item.id === workshop.workshopId).name,
                         type: status
                     })))
