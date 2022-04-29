@@ -1151,7 +1151,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     <span className='textLabel'>总利用率：</span><span className='textValue'>{ item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).calculation : 0}%</span>
                                                                 </div>
                                                             </div>
-                                                            <div style={{width: document.documentElement.clientWidth - 1000}}>
+                                                            <div style={{width: document.documentElement.clientWidth - 1020}} className="alternativeWrapper">
                                                                 <CommonTable
                                                                     size="small"
                                                                     columns={[
@@ -1175,7 +1175,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     scroll={{ x: 1200, y: 200 }}
                                                                 />
                                                             </div>
-                                                            <div className='title_wrapper' style={{width: document.documentElement.clientWidth - 1038}}>
+                                                            <div className='title_wrapper' style={{width: document.documentElement.clientWidth - 1028}}>
                                                                 <div>备选方案</div>
                                                                 <div>
                                                                     <span>排序</span>
@@ -1190,7 +1190,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     </Select>
                                                                 </div>
                                                             </div>
-                                                            <div style={{width: document.documentElement.clientWidth - 1000}}>
+                                                            <div style={{width: document.documentElement.clientWidth - 1020}} className="alternativeWrapper">
                                                                 <CommonTable
                                                                     size="small"
                                                                     columns={[

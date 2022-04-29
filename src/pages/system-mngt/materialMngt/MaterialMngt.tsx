@@ -125,10 +125,10 @@ export default function MaterialMngt(): React.ReactNode {
 
     const close = () => {
         setVisible(false);
-        setMaterialList([]);
+        // setMaterialList([]);
         setDetailData({});
         form.resetFields();
-        setCode('');
+        // setCode('');
     }
 
     const save = () => {

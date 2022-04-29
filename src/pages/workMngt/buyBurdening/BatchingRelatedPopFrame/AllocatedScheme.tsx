@@ -15,7 +15,7 @@ export default function AllocatedScheme(props: EditProps): JSX.Element {
         <Modal
             title={'已配方案'}
             visible={props?.visible}
-            width={1000}
+            width={1200}
             maskClosable={false}
             onCancel={() => {
                 props?.hanleInheritSure({
