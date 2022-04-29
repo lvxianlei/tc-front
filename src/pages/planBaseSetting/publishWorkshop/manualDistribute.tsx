@@ -26,8 +26,8 @@ export default function ManualDistribute(): ReactElement {
 
     const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-aps/workshop/config/welding`);
-            resole(result || [])
+            const result: any = await RequestUtil.get(`/tower-aps/productionUnit?size=1000`);
+            resole(result.records || [])
         } catch (error) {
             reject(error)
         }
@@ -115,8 +115,8 @@ export default function ManualDistribute(): ReactElement {
                 <Form.Item name="workshopId" label="生产/组焊车间" rules={[{ required: true, message: "请选择生产/组焊车间..." }]}>
                     <Select>
                         {listData.map((item: any) => <Select.Option
-                            key={item.weldingWorkshopId}
-                            value={item.weldingWorkshopId}>{item.weldingWorkshopName}</Select.Option>)}
+                            key={item.id}
+                            value={item.id}>{item.name}</Select.Option>)}
                     </Select>
                 </Form.Item>
             </Form>,
@@ -127,7 +127,7 @@ export default function ManualDistribute(): ReactElement {
                         id: item.id,
                         workshopId: workshop.workshopId,
                         weldingId: item.weldingId,
-                        workshopName: listData.find((item: any) => item.weldingWorkshopId === workshop.workshopId).name,
+                        workshopName: listData.find((item: any) => item.id === workshop.workshopId).name,
                         type: status
                     })))
                     resove(true)
