@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Input, Select,  Modal, message} from 'antd';
+import { Button, Input, Select,  Modal, message, Form} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -11,6 +11,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
     const [ visible, setVisible] = useState<boolean>(false)
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [ selectedRows, setSelectedRows ] = useState<any[]>([]);
+    const [ detail, setDetail ] = useState<any>({totalHoles: 0 ,totalNumber:0 , totalWeight:'0'});
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({
         productTypeId: productTypeOptions && productTypeOptions.length>0 && productTypeOptions[0].id,
         configId: params?.configId
@@ -684,11 +685,30 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
+        const totalHoles = selectedRows.reduce((pre,cur)=>{
+			return pre + cur.totalHolesNum
+		},0)
+        const totalNumber = selectedRows.reduce((pre,cur)=>{
+			return pre + cur.totalProcessNum
+		},0)
+        const totalWeight = selectedRows.reduce((pre,cur)=>{
+			return parseFloat(pre) + parseFloat(cur.totalWeight)
+		},0)
+        setDetail({
+            totalHoles,
+            totalNumber,
+            totalWeight
+        })
     }
     return <>
         <Modal visible={ visible } title='添加下达单' okText="确认" onOk={ async ()=>{
             if(selectedKeys.length>0){
-                await RequestUtil.post(`/tower-aps/cyclePlan/issueOrder`,selectedRows).then(()=>{
+                await RequestUtil.post(`/tower-aps/cyclePlan/issueOrder`,selectedRows.map((item:any)=>{
+                    return{
+                        ...item,
+                        cyclePlanId: params.id,
+                    }
+                })).then(()=>{
                     message.success('添加成功！')
                 })
                 setSelectedKeys([])
@@ -711,7 +731,10 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 requestData={{
                     configId: params?.configId
                 }}
+                
                 tableProps={{
+                    rowKey:'index',
+                    pagination:false,
                     rowSelection: {
                         type: "checkbox",
                         selectedRowKeys: selectedKeys,
@@ -723,7 +746,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>
-                            合计：总件数： {data?.totalNumber}  总孔数：{data?.totalHoles}  总重量（t）：{data?.totalWeight || "0.00"}
+                            合计：总件数： {detail?.totalNumber}  总孔数：{detail?.totalHoles}  总重量（t）：{detail?.totalWeight || "0.00"}
                         </span>
                     </>
                 }}
@@ -747,19 +770,21 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                     {
                         name: "productTypeId",
                         label: "产品类型",
-                        children:<Select placeholder="请选择" defaultValue={productTypeOptions&&productTypeOptions[0].id} getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                            {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                return <Select.Option key={index} value={id}>
-                                    {name}
-                                </Select.Option>
-                            })}
-                        </Select>
+                        children:
+                        <Form.Item initialValue={productTypeOptions&&productTypeOptions[0].id} name='productTypeId'>
+                            <Select placeholder="请选择"  getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={index} value={id}>
+                                        {name}
+                                    </Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
                     },
                 ]}
                 onFilterSubmit={(values: any) => {
                     values.configId = params?.configId
-                    values.productTypeId = values?.productTypeId?values.productTypeId:productTypeOptions&&productTypeOptions[0].id
-                    console.log(values)
+                    setFilterValue(values)
                     return values;
                 }}
                 

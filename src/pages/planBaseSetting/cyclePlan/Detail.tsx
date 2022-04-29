@@ -219,12 +219,15 @@ export default function CyclePlanDetail(): React.ReactNode {
         <Modal visible={ visible } title='周期计划备注' okText="确认" onOk={ async ()=>{
                 await formRef.validateFields()
                 const value = formRef.getFieldsValue(true)
-                const submitData = {
-                    id: params.id,
-                    description: value?.description
-                }
-                await RequestUtil.post(`/tower-aps/cyclePlan/cycleDescription`,[submitData]).then(()=>{
-                    message.success('编辑成功！')
+
+                const submitData = selectedKeys.map((item:any)=>{
+                    return {
+                        id: item,
+                        description: value?.description
+                    }
+                })
+                await RequestUtil.post(`/tower-aps/cyclePlan/cycleDescription`,submitData).then(()=>{
+                    message.success('备注添加成功！')
                 })
                 setVisible(false)
                 await run()
@@ -342,7 +345,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                     <ReleaseOrder run={run} data={detail}/>
                     <Button type="primary" ghost onClick={() => {
                         setVisible(true)
-                    }} disabled={!(selectedKeys.length===1)}>周期计划备注</Button>
+                    }} disabled={!(selectedKeys.length > 0)}>周期计划备注</Button>
                 </Space>
                 <div>
                     <Space>
@@ -361,6 +364,21 @@ export default function CyclePlanDetail(): React.ReactNode {
                         onChange: (selectedKeys: React.Key[], selectedRows: any) => {
                             setSelectedKeys(selectedKeys);
                             setSelectedRows(selectedRows);
+                            const totalHoles = selectedRows.reduce((pre: any,cur: { totalHolesNum: any; })=>{
+                                return pre + cur.totalHolesNum
+                            },0)
+                            const totalNumber = selectedRows.reduce((pre: any,cur: { totalProcessNum: any; })=>{
+                                return pre + cur.totalProcessNum
+                            },0)
+                            const totalWeight = selectedRows.reduce((pre: string,cur: { totalWeight: string; })=>{
+                                return parseFloat(pre) + parseFloat(cur.totalWeight)
+                            },0)
+                            setDetail({
+                                ...detail,
+                                totalHoles,
+                                totalNumber,
+                                totalWeight
+                            })
                         }
                     }}
                     components={{
