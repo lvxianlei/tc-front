@@ -11,7 +11,7 @@ export default function SampleDraw(): React.ReactNode {
     const history = useHistory();
     const [filterValue, setFilterValue] = useState({});
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
-    const [selectedRows, setSelectedRows] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [form] = Form.useForm();
     const [factoryForm] = Form.useForm();
     const { run } = useRequest((option) => new Promise(async (resole, reject) => {
@@ -153,12 +153,19 @@ export default function SampleDraw(): React.ReactNode {
     }
 
     const cancelFactory = () => {
+        if (!selectedRows.some((item: any) => item.factoryName)) {
+            message.error(`杆塔${selectedRows[0].productCategoryName}未分配厂区，不可以取消分配厂区`)
+            return
+        }
         Modal.confirm({
             title: "取消分配厂区",
             content: "是否取消分配厂区？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    await run(selectedRows.map((item: any) => ({ id: item.id, productionBatchNo: item.productionBatchNo })))
+                    await run(selectedRows.map((item: any) => ({
+                        id: item.id,
+                        productionBatchNo: item.productionBatchNo
+                    })))
                     setSelectedKeys([])
                     setSelectedRows([])
                     history.go(0)

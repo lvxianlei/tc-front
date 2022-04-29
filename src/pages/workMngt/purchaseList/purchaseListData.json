@@ -160,12 +160,12 @@
             "type": "number"
         },
         {
-            "title": "单重（吨）",
+            "title": "单重（kg）",
             "dataIndex": "singleWeight",
             "type": "number"
         },
         {
-            "title": "汇总重量（吨）",
+            "title": "汇总重量（kg）",
             "dataIndex": "weight",
             "type": "number"
         },
