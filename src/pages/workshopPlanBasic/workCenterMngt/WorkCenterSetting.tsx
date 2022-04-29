@@ -53,8 +53,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const { data: equipmentList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100&operatingStatus=0`);
-            const resultData: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=100&operatingStatus=1`);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=1000&operatingStatus=0`);
+            const resultData: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=1000&operatingStatus=1`);
             const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/equipment?workCenterInfoId=${id}`);
             const data = [...result?.records, ...resultData?.records]?.filter((item: any) => !list.some((ele: any) => ele === item.id));
             resole(data)
@@ -65,7 +65,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const { data: processList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/product/process?size=100`);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/product/process?size=1000`);
             resole(result?.records)
         } catch (error) {
             reject(error)
@@ -111,7 +111,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         // var newArr = allMaterialList.filter((item: any, index: any, self: any) => {
         //     return e === item.materialName
         // })
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/material?materialName=${e}`);
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/material?size=1000&materialName=${e}`);
         const workCenterRelations = form.getFieldsValue(true)?.workCenterRelations;
         workCenterRelations[index] = {
             ...workCenterRelations[index],
