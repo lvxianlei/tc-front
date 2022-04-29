@@ -173,6 +173,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 await RequestUtil.post(`/tower-aps/cyclePlan/issueOrder`,selectedRows.map((item:any)=>{
                     return{
                         ...item,
+                        issueOrderId: item.id,
                         cyclePlanId: params.id,
                     }
                 })).then(()=>{
@@ -208,7 +209,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         onChange: SelectChange
                     }
                 }}
-                columns={...columns}
+                columns={columns}
                 
                 extraOperation={(data: any) => {
                     return <>
