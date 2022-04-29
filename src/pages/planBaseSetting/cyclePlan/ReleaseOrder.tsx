@@ -37,7 +37,10 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
             title: '批次号',
             width: 100,
             fixed: "left",
-            dataIndex: 'productionBatchNo'
+            dataIndex: 'productionBatchNo',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
             key: 'issuedNumber',
@@ -152,15 +155,15 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
-        const totalHoles = selectedRows.reduce((pre,cur)=>{
-			return pre + cur.totalHolesNum
-		},0)
-        const totalNumber = selectedRows.reduce((pre,cur)=>{
-			return pre + cur.totalProcessNum
-		},0)
-        const totalWeight = selectedRows.reduce((pre,cur)=>{
-			return parseFloat(pre) + parseFloat(cur.totalWeight)
-		},0)
+        const totalHoles = selectedRows.reduce((pre: any,cur: { totalHolesNum: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalHolesNum!==null?cur.totalHolesNum:0) 
+        },0)
+        const totalNumber = selectedRows.reduce((pre: any,cur: { totalProcessNum: any; })=>{
+            return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalProcessNum!==null?cur.totalProcessNum:0 )
+        },0)
+        const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)
+        },0)
         setDetail({
             totalHoles,
             totalNumber,
@@ -201,7 +204,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 }}
                 sourceKey='planBoards'
                 tableProps={{
-                    rowKey:(record: any) => `${record.id}-${record.index}`,
+                    rowKey:(record: any,index) => `${record.id}-${index}`,
                     pagination:false,
                     rowSelection: {
                         type: "checkbox",
@@ -209,8 +212,8 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         onChange: SelectChange
                     }
                 }}
-                columns={columns}
                 
+                columns={columns}
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>
