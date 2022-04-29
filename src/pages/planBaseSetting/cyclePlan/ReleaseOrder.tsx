@@ -109,7 +109,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
         {
             key: 'totalWeight',
             title: '技术下达重量（t）',
-            width: 100,
+            width: 150,
             dataIndex: 'totalWeight'
         },
         {
