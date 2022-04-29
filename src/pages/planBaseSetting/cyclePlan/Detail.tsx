@@ -146,25 +146,34 @@ export default function CyclePlanDetail(): React.ReactNode {
             dataIndex: 'plateWeight'
         },
         {
-            key: 'description',
+            key: 'storageMaterialDescription',
             title: '库存备料',
             width: 100,
             fixed: "right",
-            dataIndex: 'description'
+            dataIndex: 'storageMaterialDescription',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
-            key: 'description',
+            key: 'processMaterialDescription',
             title: '生产备料',
             width: 100,
             fixed: "right",
-            dataIndex: 'description'
+            dataIndex: 'processMaterialDescription',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
             key: 'description',
             title: '周期计划备注',
             width: 100,
             fixed: "right",
-            dataIndex: 'description'
+            dataIndex: 'description',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
             title: "操作",
@@ -219,12 +228,15 @@ export default function CyclePlanDetail(): React.ReactNode {
         <Modal visible={ visible } title='周期计划备注' okText="确认" onOk={ async ()=>{
                 await formRef.validateFields()
                 const value = formRef.getFieldsValue(true)
-                const submitData = {
-                    id: params.id,
-                    description: value?.description
-                }
-                await RequestUtil.post(`/tower-aps/cyclePlan/cycleDescription`,[submitData]).then(()=>{
-                    message.success('编辑成功！')
+
+                const submitData = selectedKeys.map((item:any)=>{
+                    return {
+                        id: item,
+                        description: value?.description
+                    }
+                })
+                await RequestUtil.post(`/tower-aps/cyclePlan/cycleDescription`,submitData).then(()=>{
+                    message.success('备注添加成功！')
                 })
                 setVisible(false)
                 await run()
@@ -339,10 +351,10 @@ export default function CyclePlanDetail(): React.ReactNode {
                 </Form>
                 <DetailTitle title="周期计划下达单"/>
                 <Space>
-                    <ReleaseOrder run={run}/>
+                    <ReleaseOrder run={run} data={detail}/>
                     <Button type="primary" ghost onClick={() => {
                         setVisible(true)
-                    }} disabled={!(selectedKeys.length===1)}>周期计划备注</Button>
+                    }} disabled={!(selectedKeys.length > 0)}>周期计划备注</Button>
                 </Space>
                 <div>
                     <Space>
@@ -361,6 +373,21 @@ export default function CyclePlanDetail(): React.ReactNode {
                         onChange: (selectedKeys: React.Key[], selectedRows: any) => {
                             setSelectedKeys(selectedKeys);
                             setSelectedRows(selectedRows);
+                            const totalHoles = selectedRows.reduce((pre: any,cur: { totalHolesNum: any; })=>{
+                                return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalHolesNum!==null?cur.totalHolesNum:0) 
+                            },0)
+                            const totalNumber = selectedRows.reduce((pre: any,cur: { totalProcessNum: any; })=>{
+                                return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalProcessNum!==null?cur.totalProcessNum:0 )
+                            },0)
+                            const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
+                                return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)
+                            },0)
+                            setDetail({
+                                ...detail,
+                                totalHoles,
+                                totalNumber,
+                                totalWeight
+                            })
                         }
                     }}
                     components={{

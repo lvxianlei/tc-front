@@ -1,19 +1,29 @@
 import React, { FC, useCallback, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { DatePicker, Dropdown, Input, Menu, Radio, Spin } from "antd"
+import { DatePicker, Dropdown, Input, Menu, Radio, Row, Space, Spin } from "antd"
 import { DownOutlined } from "@ant-design/icons"
 import { SearchTable as Page } from "../../common"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
 import { tableHeader, commonHeader } from "./data.json"
 import style from "./index.module.less"
-
+interface CountObjProps {
+    totalProcessNum: number
+    totalHolesNum: number
+    totalWeight: number
+}
 export default () => {
     const history = useHistory()
     const [columns, setColumns] = useState<any[]>(tableHeader)
     const [status, setStatus] = useState<string>()
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({});
     const [filterStatus, setFilterStatus] = useState<{ [key: string]: any }>({})
+    const [selectRows, setSelectRows] = useState<any[]>([])
+    const [countObj, setCountObj] = useState<CountObjProps>({
+        totalProcessNum: 0,
+        totalHolesNum: 0,
+        totalWeight: 0
+    })
     const { loading: loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-aps/workshop/config/planBoard?size=1000`)
@@ -68,21 +78,56 @@ export default () => {
                         })
                     })
                 })))])
-                return dataSource.planBoards.records.map((item: any, index: number) => ({ ...item, onlyId: `${item.id}-${index}` }))
+                return ({
+                    ...dataSource.planBoards,
+                    records: dataSource.planBoards.records.map((item: any, index: number) => ({
+                        ...item,
+                        onlyId: `${item.id}-${index}`
+                    }))
+                })
             }}
             columns={columns}
+            tableProps={{
+                rowSelection: {
+                    type: "checkbox",
+                    selectedRowKeys: selectRows,
+                    onChange: (selectRowKeys: any[], selectedRows: any[]) => {
+                        const newCounts = selectedRows.reduce((result: CountObjProps, item: any) => ({
+                            totalProcessNum: result.totalProcessNum + parseFloat(item.totalProcessNum || "0"),
+                            totalHolesNum: result.totalHolesNum + parseFloat(item.totalHolesNum || "0"),
+                            totalWeight: result.totalWeight + parseFloat(item.totalWeight || "0")
+                        }), {
+                            totalProcessNum: 0,
+                            totalHolesNum: 0,
+                            totalWeight: 0
+                        })
+                        setSelectRows(selectRowKeys)
+                        setCountObj(newCounts)
+                    }
+                }
+            }}
             extraOperation={
-                <Radio.Group
-                    value={status}
-                    onChange={(event) => {
-                        setStatus(event.target.value)
-                        setFilterValue({ ...filterValue, productTypeId: event.target.value })
-                    }}
-                >
-                    {data?.map((item: any) => <Radio.Button
-                        key={item.productTypeId}
-                        value={item.productTypeId}>{item.productType}</Radio.Button>)}
-                </Radio.Group>
+                <>
+                    <Radio.Group
+                        value={status}
+                        onChange={(event) => {
+                            setStatus(event.target.value)
+                            setFilterValue({ ...filterValue, productTypeId: event.target.value })
+                        }}
+                    >
+                        {data?.map((item: any) => <Radio.Button
+                            key={item.productTypeId}
+                            value={item.productTypeId}>{item.productType}</Radio.Button>)}
+                    </Radio.Group>
+                    <Row style={{ width: "100%", paddingLeft: 20 }}>
+                        <Space>
+                            <span style={{ fontWeight: 600 }}>合计：</span>
+                            <span>总件数：</span>{countObj.totalProcessNum}
+                            <span>总孔数：</span>{countObj.totalHolesNum}
+                            <span>总重量：</span>{countObj.totalWeight}
+                        </Space>
+                    </Row>
+                </>
             }
             searchFormItems={[
                 {

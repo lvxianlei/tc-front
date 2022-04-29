@@ -122,7 +122,7 @@ export default function CyclePlanConfig(): React.ReactNode {
                     <Form.Item name="cyclePlan" label="周期计划类型" rules={[
                         {
                             required:true,
-                            message:"请填写周期计划部门"
+                            message:"请填写周期计划类型"
                         },
                         {
                             pattern: /^[^\s]*$/,
