@@ -41,16 +41,14 @@
             "dataIndex": "factoryName"
         },
         {
-            "title": "审批时间",
+            "title": "审批日期",
             "dataIndex": "approvalTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
             "title": "客户交货日期",
-            "dataIndex": "customerDeliveryTime",
-            "type": "date",
-            "format": "YYYY-MM-DD"
+            "dataIndex": "customerDeliveryTime"
         },
         {
             "title": "计划交货日期",
