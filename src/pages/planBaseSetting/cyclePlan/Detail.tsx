@@ -289,14 +289,14 @@ export default function CyclePlanDetail(): React.ReactNode {
                         await run()
                     }}>保存</Button>
                     <Button type="primary" ghost onClick={async () => {
-                            await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
+                            await RequestUtil.get(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
                             message.success("备料确认已下发！")
                             await run()
                     }}>备料确认</Button>
                     <Popconfirm
                         title="下发后不可取消，是否下发周期计划？"
                         onConfirm={async () => {
-                            await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
+                            await RequestUtil.post(`/tower-aps/cyclePlan/issue/${params.id}`)
                             message.success("下发成功！")
                             await run()
                         }}
