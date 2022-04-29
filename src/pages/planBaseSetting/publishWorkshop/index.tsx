@@ -43,8 +43,7 @@ export default () => {
 
     const handleAuto = async () => {
         const result = await run(selectedRowKeys)
-        console.log(result)
-        if (result?.length) {
+        if (result?.data === "405") {
             Modal.warn({
                 title: "快速分配车间",
                 icon: null,

@@ -24,6 +24,11 @@ export default function DistributedTech(): React.ReactNode {
     const [dataSource, setDataSource] = useState<IPlanSchedule[]>([])
     const params = useParams<{ ids: string }>()
 
+    const unitChange = async (value: string) => {
+        const result: ILink[] = await RequestUtil.get(`/tower-aps/productionLink/link/${value}`);
+        setLinkList(result || [])
+    }
+    
     const { loading, data } = useRequest<IUnit[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: IUnit[] = await RequestUtil.get(`/tower-aps/productionUnit/list`);
@@ -34,8 +39,10 @@ export default function DistributedTech(): React.ReactNode {
                     index: index
                 }
             }))
+
             if (result.length === 1) {
                 form.setFieldsValue({ unitId: result[0].id })
+                console.log(result, result[0].id)
                 unitChange(result[0].id);
             }
             resole(result)
@@ -107,12 +114,6 @@ export default function DistributedTech(): React.ReactNode {
             dataIndex: 'issueDescription'
         }
     ]
-
-    const unitChange = async (value: string) => {
-        const result: ILink[] = await RequestUtil.get(`/tower-aps/productionLink/link/${value}`);
-        setLinkList(result || [])
-    }
-
 
     const SelectChange = (selectedRowKeys: number[], selectedRows: IPlanSchedule[]): void => {
         setSelectedKeys(selectedRowKeys);
