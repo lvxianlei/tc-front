@@ -719,7 +719,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                     }
                 }}
                 columns={columns}
-                sourceKey='planBoards.records'
+                sourceKey='planBoards'
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>
